@@ -64,6 +64,8 @@
 //                      | Charles Korthout | 2.30  | 13-07-2026     | Resolve include/import hrefs against the element base URI (external entities).          |
 //                      | Charles Korthout | 2.31   | 14-07-2026     | xsl:package root support (name/version); fn:transform registered in the static context |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.32   | 01-08-2026     | use-when/static contexts run with IsXsltMode so fn:system-property is available        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -146,6 +148,9 @@ public sealed class Stylesheet
         // containing stylesheet module, taking xml:base into account.
         ctx.BaseUri = explicitBaseUri ?? GetEffectiveBaseUri(elem);
         ctx.IsStaticEvaluation = true;
+        // use-when/static expressions are evaluated by the XSLT processor: fn:system-property
+        // must be available (XSLT 3.0 §3.13.3 — use-when-0103/0104, shadow-002..004).
+        ctx.IsXsltMode = true;
         Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(ctx);
         // fn:transform is available in static expressions (XSLT 3.0 §24.1), e.g. a
         // static variable whose value is used in an xsl:use-when attribute.

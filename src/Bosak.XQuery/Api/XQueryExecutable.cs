@@ -27,6 +27,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 29-07-2026     | Typed external-variable binding check (XPTY0004); undeclared prefixes unbound at runtime |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 01-08-2026     | fn:load-xquery-module registered; module sources seeded onto the evaluation context |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 01-08-2026     | Decimal formats applied; module-local decimal formats in module runtime contexts    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -52,7 +56,9 @@ public sealed record CompiledUserFunction(
     IReadOnlyDictionary<string, string>? ModuleNamespaces = null,
     string? ModuleBaseUri = null,
     string? ModuleDefaultElementNamespace = null,
-    string? ModuleDefaultCollation = null);
+    string? ModuleDefaultCollation = null,
+    IReadOnlyDictionary<(string LocalName, string NamespaceUri), DecimalFormat>? ModuleDecimalFormats = null,
+    DecimalFormat? ModuleDefaultDecimalFormat = null);
 
 /// <summary>A user variable declaration compiled to an executable body module (null for external).
 /// The optional module fields mirror <see cref="CompiledUserFunction"/>.</summary>
@@ -65,7 +71,9 @@ public sealed record CompiledUserVariable(
     IReadOnlyDictionary<string, string>? ModuleNamespaces = null,
     string? ModuleBaseUri = null,
     string? ModuleDefaultElementNamespace = null,
-    string? ModuleDefaultCollation = null);
+    string? ModuleDefaultCollation = null,
+    IReadOnlyDictionary<(string LocalName, string NamespaceUri), DecimalFormat>? ModuleDecimalFormats = null,
+    DecimalFormat? ModuleDefaultDecimalFormat = null);
 
 /// <summary>
 /// A compiled, thread-safe XQuery that can be evaluated against a context document.
@@ -76,17 +84,20 @@ public sealed class XQueryExecutable
     private readonly XQueryStaticContext _staticContext;
     private readonly IReadOnlyList<CompiledUserFunction> _userFunctions;
     private readonly IReadOnlyList<CompiledUserVariable> _userVariables;
+    private readonly IReadOnlyList<XQueryModuleSource> _moduleSources;
 
     internal XQueryExecutable(
         IrModule module,
         XQueryStaticContext staticContext,
         IReadOnlyList<CompiledUserFunction>? userFunctions = null,
-        IReadOnlyList<CompiledUserVariable>? userVariables = null)
+        IReadOnlyList<CompiledUserVariable>? userVariables = null,
+        IReadOnlyList<XQueryModuleSource>? moduleSources = null)
     {
         _module = module;
         _staticContext = staticContext;
         _userFunctions = userFunctions ?? [];
         _userVariables = userVariables ?? [];
+        _moduleSources = moduleSources ?? [];
     }
 
     /// <summary>
@@ -134,6 +145,35 @@ public sealed class XQueryExecutable
         // Populate the standard function library once per execution context.
         if (!ctx.SkipStandardFunctionPopulation)
             FunctionLibrary.Populate(ctx);
+
+        // fn:load-xquery-module is an XQuery-only function: it is registered here (not in
+        // the shared XPath library) and resolves modules through the sources registered
+        // with the compiler (XQueryCompiler.WithModule), seeded onto the context.
+        ctx.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "load-xquery-module",
+            Arity = 1,
+            ParameterTypes = [XdmValueKind.String],
+            ReturnType = XdmValueKind.Map,
+            Implementation = XQueryModuleLoader.Load1
+        });
+        ctx.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "load-xquery-module",
+            Arity = 2,
+            ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+            ReturnType = XdmValueKind.Map,
+            Implementation = XQueryModuleLoader.Load2
+        });
+        foreach (var source in _moduleSources)
+        {
+            if (!ctx.XQueryModuleSources.TryGetValue(source.Uri, out var candidates))
+                ctx.XQueryModuleSources[source.Uri] = new List<(string?, string)> { (source.Location, source.Source) };
+            else if (!candidates.Any(c => c.Source == source.Source && c.Location == source.Location))
+                candidates.Add((source.Location, source.Source));
+        }
 
         if (!string.IsNullOrEmpty(_staticContext.DefaultElementNamespace))
             ctx.DefaultElementNamespace = _staticContext.DefaultElementNamespace;
@@ -237,6 +277,13 @@ public sealed class XQueryExecutable
                 throw new InvalidOperationException($"XPTY0004: The value of the external variable '${v.LocalName}' does not match the declared type '{v.TypeName}'.");
         }
 
+        // Decimal-format declarations (declare (default )?decimal-format) feed
+        // fn:format-number's named and default formats.
+        foreach (var ((localName, nsUri), decimalFormat) in _staticContext.DecimalFormats)
+            ctx.WithDecimalFormat(localName, nsUri, decimalFormat);
+        if (_staticContext.DeclaredDefaultDecimalFormat is not null)
+            ctx.DefaultDecimalFormat = _staticContext.DeclaredDefaultDecimalFormat;
+
         // Output declarations (declare option output:* "...") become the static
         // serialization parameters consumed by fn:serialize.
         var outputOptions = _staticContext.Options
@@ -270,10 +317,13 @@ public sealed class XQueryExecutable
         var savedDefaultNs = callCtx.DefaultElementNamespace;
         var savedBaseUri = callCtx.BaseUri;
         var savedCollation = callCtx.DefaultCollation;
+        var savedDefaultFormat = callCtx.DefaultDecimalFormat;
+        var savedFormats = callCtx.SnapshotDecimalFormats();
         try
         {
             ApplyModuleContext(callCtx, function.ModuleNamespaces, function.ModuleBaseUri,
-                function.ModuleDefaultElementNamespace, function.ModuleDefaultCollation);
+                function.ModuleDefaultElementNamespace, function.ModuleDefaultCollation,
+                function.ModuleDecimalFormats, function.ModuleDefaultDecimalFormat);
             return VmEngine.InvokeFunctionItem(
                 new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
                 callCtx, args);
@@ -284,6 +334,8 @@ public sealed class XQueryExecutable
             callCtx.DefaultElementNamespace = savedDefaultNs;
             callCtx.BaseUri = savedBaseUri;
             callCtx.DefaultCollation = savedCollation;
+            callCtx.DefaultDecimalFormat = savedDefaultFormat;
+            callCtx.RestoreDecimalFormats(savedFormats);
         }
     }
 
@@ -296,10 +348,13 @@ public sealed class XQueryExecutable
         var savedDefaultNs = ctx.DefaultElementNamespace;
         var savedBaseUri = ctx.BaseUri;
         var savedCollation = ctx.DefaultCollation;
+        var savedDefaultFormat = ctx.DefaultDecimalFormat;
+        var savedFormats = ctx.SnapshotDecimalFormats();
         try
         {
             ApplyModuleContext(ctx, variable.ModuleNamespaces, variable.ModuleBaseUri,
-                variable.ModuleDefaultElementNamespace, variable.ModuleDefaultCollation);
+                variable.ModuleDefaultElementNamespace, variable.ModuleDefaultCollation,
+                variable.ModuleDecimalFormats, variable.ModuleDefaultDecimalFormat);
             return VmEngine.Execute(variable.Body!, ctx);
         }
         finally
@@ -308,6 +363,8 @@ public sealed class XQueryExecutable
             ctx.DefaultElementNamespace = savedDefaultNs;
             ctx.BaseUri = savedBaseUri;
             ctx.DefaultCollation = savedCollation;
+            ctx.DefaultDecimalFormat = savedDefaultFormat;
+            ctx.RestoreDecimalFormats(savedFormats);
         }
     }
 
@@ -316,7 +373,9 @@ public sealed class XQueryExecutable
         IReadOnlyDictionary<string, string> namespaces,
         string? baseUri,
         string? defaultElementNamespace,
-        string? defaultCollation)
+        string? defaultCollation,
+        IReadOnlyDictionary<(string LocalName, string NamespaceUri), DecimalFormat>? decimalFormats = null,
+        DecimalFormat? defaultDecimalFormat = null)
     {
         foreach (var (prefix, nsUri) in namespaces)
         {
@@ -329,6 +388,13 @@ public sealed class XQueryExecutable
             ctx.DefaultElementNamespace = defaultElementNamespace;
         if (!string.IsNullOrEmpty(defaultCollation))
             ctx.DefaultCollation = defaultCollation;
+        // The declaring module's decimal-format declarations apply within its bodies
+        // (decimal-format-21: a library module's format is used by its format-number calls).
+        if (decimalFormats is not null)
+            foreach (var ((localName, nsUri), fmt) in decimalFormats)
+                ctx.WithDecimalFormat(localName, nsUri, fmt);
+        if (defaultDecimalFormat is not null)
+            ctx.DefaultDecimalFormat = defaultDecimalFormat;
     }
 
     // Atomizes node items in an external variable's value for strict type checking

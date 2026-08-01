@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 0.12  | 29-07-2026     | Parentless-namespace-node marker: parent axis and Parent honor it |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13  | 29-07-2026     | xml:id/id attributes are IDs only when the value is a valid NCName (fn-id-25) |
+//                      | Charles Korthout | 0.14  | 01-08-2026     | xml:id values normalized (trim) before NCName validation (key-076)            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1233,13 +1234,14 @@ public sealed class XDocumentNode : IXdmNode
                 return true;
         }
 
-        // Infoset fallback: attributes named "id" (no namespace) or "xml:id" are IDs —
-        // but only when the value is a valid NCName (fn-id-25: "789x" and " a123 "
-        // are not valid xml:id values and must not match).
+        // Infoset fallback: attributes named "id" (no namespace) or "xml:id" are IDs when
+        // the value is a valid NCName after xml:id normalization (attribute-value
+        // normalization for type ID removes leading/trailing whitespace): key-076's
+        // xml:id="id3 " is an ID; fn-id-25's "789x" is not a valid NCName either way.
         if (attr.Name.LocalName == "id" && attr.Name.NamespaceName.Length == 0)
-            return IsValidNCName(attr.Value);
+            return IsValidNCName(attr.Value.Trim());
         if (attr.Name.LocalName == "id" && attr.Name.NamespaceName == "http://www.w3.org/XML/1998/namespace")
-            return IsValidNCName(attr.Value);
+            return IsValidNCName(attr.Value.Trim());
 
         return false;
     }

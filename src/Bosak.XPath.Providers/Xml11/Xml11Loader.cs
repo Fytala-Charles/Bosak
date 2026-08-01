@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 07-07-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 12-07-2026     | Avoid infinite loop when malformed markup yields an empty attribute name                 |
 //                      | Charles Korthout | 0.3   | 12-07-2026     | Annotate loaded elements with the original namespace prefix from the XML source.        |
+//                      | Charles Korthout | 0.4   | 01-08-2026     | xml:id attribute values whitespace-collapsed at load (ID attribute normalization)       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -87,6 +88,7 @@ public static class Xml11Loader
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri);
         var doc = XDocument.Load(reader, loadOptions);
         AnnotateOriginalPrefixes(doc, rewritten, baseUri);
+        NormalizeXmlIdValues(doc);
         if (isXml11)
         {
             doc.AddAnnotation(Xml11Annotation.Instance);
@@ -106,6 +108,7 @@ public static class Xml11Loader
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
         AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
+        NormalizeXmlIdValues(doc);
         if (isXml11)
         {
             doc.AddAnnotation(Xml11Annotation.Instance);
@@ -125,9 +128,32 @@ public static class Xml11Loader
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
         AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
+        NormalizeXmlIdValues(doc);
         doc.AddAnnotation(Xml11Annotation.Instance);
         FinalizeXml11Document(doc);
         return doc;
+    }
+
+    /// <summary>
+    /// Applies attribute-value normalization for ID-typed attributes: the value of an
+    /// <c>xml:id</c> attribute is whitespace-collapsed (leading/trailing whitespace
+    /// removed, internal runs collapsed to a single space), matching how an ID-typed
+    /// attribute is normalized by a validating processor (fn-doc-37, key-076).
+    /// </summary>
+    private static void NormalizeXmlIdValues(XDocument doc)
+    {
+        foreach (var el in doc.Descendants())
+        {
+            foreach (var attr in el.Attributes().ToList())
+            {
+                if (attr.Name.LocalName == "id" && attr.Name.NamespaceName == "http://www.w3.org/XML/1998/namespace")
+                {
+                    var normalized = string.Join(' ', attr.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+                    if (normalized != attr.Value)
+                        attr.Value = normalized;
+                }
+            }
+        }
     }
 
     /// <summary>

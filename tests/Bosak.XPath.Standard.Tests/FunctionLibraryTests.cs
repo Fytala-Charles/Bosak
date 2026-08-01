@@ -59,6 +59,7 @@
 //                      | Charles Korthout | 2.23  | 27-07-2026     | 15 try/catch tests: named codes, clause order, wildcards, err vars, static bypass |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.24  | 28-07-2026     | 10 name-test/kind-test unit tests |
+//                      | Charles Korthout | 2.25  | 01-08-2026     | fn:serialize expectations follow omit-xml-declaration=yes default (Serialization 3.1) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -2358,27 +2359,27 @@ public class FunctionLibraryTests
     public void Serialize_Element()
     {
         var result = EvalStr("serialize(parse-xml('<root><item>hello</item></root>')/root)");
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root><item>hello</item></root>", result);
+        Assert.Equal("<root><item>hello</item></root>", result);
     }
 
     [Fact]
     public void Serialize_Document()
     {
         var result = EvalStr("serialize(parse-xml('<root><item>hello</item></root>'))");
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root><item>hello</item></root>", result);
+        Assert.Equal("<root><item>hello</item></root>", result);
     }
 
     [Fact]
     public void Serialize_Atomic()
     {
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>42", EvalStr("serialize(42)"));
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>hello", EvalStr("serialize('hello')"));
+        Assert.Equal("42", EvalStr("serialize(42)"));
+        Assert.Equal("hello", EvalStr("serialize('hello')"));
     }
 
     [Fact]
     public void Serialize_EmptySequence()
     {
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", EvalStr("serialize(())"));
+        Assert.Equal("", EvalStr("serialize(())"));
     }
 
     // ------------------------------------------------------------------
@@ -2493,7 +2494,7 @@ public class FunctionLibraryTests
     {
         const string paramsDoc = "'<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\">"
                                  + "<output:method value=\"xml\"/><output:item-separator value=\"|\"/></output:serialization-parameters>'";
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>1|2|3", EvalStr($"serialize(1 to 3, parse-xml({paramsDoc}))"));
+        Assert.Equal("1|2|3", EvalStr($"serialize(1 to 3, parse-xml({paramsDoc}))"));
     }
 
     [Fact]
@@ -2512,7 +2513,7 @@ public class FunctionLibraryTests
             "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><output:use-character-maps><output:character-map character=\"$\" map-string=\"a\"/><output:character-map character=\"$\" map-string=\"b\"/></output:use-character-maps></output:serialization-parameters>'))"));
         Assert.Contains("SEPM0018", ex3.Message);
         // Vendor-namespace parameter is ignored
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?><e/>", EvalStr(
+        Assert.Equal("<e/>", EvalStr(
             "serialize(parse-xml('<e/>'), parse-xml('<output:serialization-parameters xmlns:output=\"http://www.w3.org/2010/xslt-xquery-serialization\"><v:x value=\"yes\" xmlns:v=\"http://vendor.example.com/\"/></output:serialization-parameters>'))"));
     }
 

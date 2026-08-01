@@ -8,6 +8,14 @@
 // LICENSE              : License.txt
 //                      | Charles Korthout | 6.17  | 27-07-2026     | GetErrorDetails handles XPathErrorException from the XPath/XQuery fn:error |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.18  | 01-08-2026     | EvaluateAvt compiles/evaluates with element-level xsl:version=1.0 backwards mode    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.19  | 01-08-2026     | Top-level xsl:comment/PI mark principal-result content (comment-only results kept)  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.20  | 01-08-2026     | copy-namespaces=no keeps the element's own prefix (default ns over axis-order prefix)|
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.21  | 01-08-2026     | Global variable select/body honors the element's version=1.0 backwards mode          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4838,6 +4846,10 @@ public sealed class TransformEngine
                     }
                     else
                     {
+                        // A comment written to the principal result tree counts as
+                        // content (seqtor-101: a comment-only result is not "absent").
+                        if (ReferenceEquals(_currentContainer, _resultDocument))
+                            MarkPrincipalOutputContent();
                         _currentContainer.Add(new XComment(commentText));
                     }
                     break;
@@ -4868,6 +4880,8 @@ public sealed class TransformEngine
                     }
                     else
                     {
+                        if (ReferenceEquals(_currentContainer, _resultDocument))
+                            MarkPrincipalOutputContent();
                         _currentContainer.Add(new XProcessingInstruction(piName, piData));
                     }
                     break;
@@ -6606,15 +6620,20 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(expr) && !IsOnlyWhitespaceAndComments(expr))
                     {
                         ValidateXPathPrefixes(expr, nsMap ?? new Dictionary<string, string>());
+                        // An xsl:version="1.0" element puts its AVT expressions into XPath 1.0
+                        // backwards-compatible mode for both compilation and evaluation
+                        // (version-014: string(3 + '2') = '5' under xsl:version="1.0").
+                        bool avtBackwards = contextElement != null && IsEffectiveBackwardsCompatible(contextElement);
                         XPath31Expression compiled;
-                        if (needsOptions)
+                        if (needsOptions || avtBackwards)
                         {
                             var options = new CompileOptions
                             {
                                 Namespaces = nsMap,
                                 DefaultElementNamespace = defaultNs,
                                 DefiningElementDefaultNamespace = definingNs,
-                                BaseUri = avtBaseUri
+                                BaseUri = avtBaseUri,
+                                BackwardsCompatible = avtBackwards
                             };
                             compiled = XPath31Expression.Compile(expr, options);
                         }
@@ -6622,9 +6641,20 @@ public sealed class TransformEngine
                         {
                             compiled = XPath31Expression.Compile(expr);
                         }
-                        var result = compiled.Evaluate(_context);
+                        var savedBackwardsCompatible = _context.BackwardsCompatible;
+                        XdmValue result;
+                        try
+                        {
+                            if (contextElement != null)
+                                _context.BackwardsCompatible = avtBackwards;
+                            result = compiled.Evaluate(_context);
+                        }
+                        finally
+                        {
+                            _context.BackwardsCompatible = savedBackwardsCompatible;
+                        }
                         string exprValue;
-                        if (contextElement != null && IsEffectiveBackwardsCompatible(contextElement))
+                        if (avtBackwards)
                         {
                             // XSLT 1.0 backwards compatibility: AVT expression value is the
                             // string value of the first item, or empty for an empty sequence.
@@ -7708,13 +7738,15 @@ public sealed class TransformEngine
     /// </summary>
     private void AddRequiredNamespaceDeclarations(IXdmNode source, XElement target)
     {
-        // Element's own namespace
+        // Element's own namespace: declare it with the element's own prefix — the default
+        // namespace when the element is unprefixed in the source — even when another
+        // in-scope prefix is bound to the same URI (copy-4901 / Saxon bug 2209).
         if (!string.IsNullOrEmpty(source.NamespaceUri))
         {
-            var prefix = GetPrefixForNamespace(source, source.NamespaceUri);
-            if (prefix == "")
+            var prefix = GetSourceElementPrefix(source);
+            if (string.IsNullOrEmpty(prefix))
                 target.SetAttributeValue("xmlns", source.NamespaceUri);
-            else if (!string.IsNullOrEmpty(prefix))
+            else
                 target.SetAttributeValue(XNamespace.Xmlns + prefix, source.NamespaceUri);
         }
 
@@ -7732,6 +7764,27 @@ public sealed class TransformEngine
                     target.SetAttributeValue(XNamespace.Xmlns + attrPrefix, attrNode.NamespaceUri);
             }
         }
+    }
+
+    /// <summary>
+    /// Returns the prefix the source element uses for its own name: the original XML
+    /// source prefix when known (loaded documents carry <see cref="OriginalPrefixAnnotation"/>),
+    /// otherwise the default namespace when the element's namespace is the in-scope
+    /// default, falling back to any in-scope prefix.
+    /// </summary>
+    private static string GetSourceElementPrefix(IXdmNode node)
+    {
+        if (node is XDocumentNode xdn && xdn.UnderlyingObject is XElement el)
+        {
+            var original = el.Annotation<OriginalPrefixAnnotation>()?.Prefix;
+            if (original != null)
+                return original;
+            var defaultNs = el.GetDefaultNamespace();
+            if (!string.IsNullOrEmpty(defaultNs.NamespaceName) && defaultNs.NamespaceName == el.Name.NamespaceName)
+                return string.Empty;
+            return el.GetPrefixOfNamespace(el.Name.Namespace) ?? string.Empty;
+        }
+        return node.Prefix;
     }
 
     /// <summary>
@@ -9329,30 +9382,42 @@ public sealed class TransformEngine
                     }
                     try
                     {
-                        if (!string.IsNullOrEmpty(select))
+                        // The variable's own version attribute puts its select/body into
+                        // XPath 1.0 backwards-compatible mode (xslt-compat-011: a global
+                        // variable declared version="1.0" under a 2.0 stylesheet).
+                        var savedBc = _context.BackwardsCompatible;
+                        try
                         {
-                            // A global variable is out of scope within its own declaration.
-                            // Detect direct self-reference in the select expression (including
-                            // references from inline function bodies) before evaluation.
-                            if (SelectReferencesVariable(select, info.Element, localName, namespaceUri))
-                                throw new InvalidOperationException($"XPST0008: Variable ${localName} is out of scope in its own declaration.");
+                            _context.BackwardsCompatible = IsEffectiveBackwardsCompatible(info.Element);
+                            if (!string.IsNullOrEmpty(select))
+                            {
+                                // A global variable is out of scope within its own declaration.
+                                // Detect direct self-reference in the select expression (including
+                                // references from inline function bodies) before evaluation.
+                                if (SelectReferencesVariable(select, info.Element, localName, namespaceUri))
+                                    throw new InvalidOperationException($"XPST0008: Variable ${localName} is out of scope in its own declaration.");
 
-                            var compiled = CompileXPath(select, info.Element);
-                            value = compiled.Evaluate(_context);
+                                var compiled = CompileXPath(select, info.Element);
+                                value = compiled.Evaluate(_context);
+                            }
+                            else
+                            {
+                                // Global variable/parameter bodies are evaluated in a temporary output state.
+                                var savedOutputUri = _context.CurrentOutputUri;
+                                _context.CurrentOutputUri = null;
+                                try
+                                {
+                                    value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                                }
+                                finally
+                                {
+                                    _context.CurrentOutputUri = savedOutputUri;
+                                }
+                            }
                         }
-                        else
+                        finally
                         {
-                            // Global variable/parameter bodies are evaluated in a temporary output state.
-                            var savedOutputUri = _context.CurrentOutputUri;
-                            _context.CurrentOutputUri = null;
-                            try
-                            {
-                                value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
-                            }
-                            finally
-                            {
-                                _context.CurrentOutputUri = savedOutputUri;
-                            }
+                            _context.BackwardsCompatible = savedBc;
                         }
                         value = ConvertVariableValue(value, info.AsType);
                     }

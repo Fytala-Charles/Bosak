@@ -33,6 +33,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 29-07-2026     | XQST0070 reserved dfn; external fn decls; comments stripped from type text; constructor span skipping |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 01-08-2026     | Library-module context item declaration type recorded for fn:load-xquery-module      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 01-08-2026     | declare decimal-format (XQST0097/0098/0111/0114) and boundary-space (XQST0068)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -41,6 +45,7 @@ using System.Text;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Parser.Lexer;
+using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.XQuery.Compiler;
 
@@ -192,7 +197,8 @@ public sealed class XQueryParser
         if (string.IsNullOrWhiteSpace(remaining))
             throw new ParseException("XPST0003: Query body is missing.", _position);
 
-        var bodyAst = XPathParser.Parse(remaining, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
+        var bodyAst = XPathParser.Parse(remaining, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings,
+            boundarySpaceStrip: _boundarySpaceStrip);
         return new XQueryParseResult(context, bodyAst);
     }
 
@@ -392,6 +398,40 @@ public sealed class XQueryParser
             return true;
         }
 
+        if (TryMatchPhrase("boundary-space"))
+        {
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+            SkipWhitespace();
+            var spaceMode = ReadNCName();
+            if (spaceMode is not ("strip" or "preserve"))
+                throw new ParseException($"XPST0003: Expected 'strip' or 'preserve' after 'declare boundary-space' but found '{spaceMode}'.", _position);
+            SkipWhitespace();
+            ExpectChar(';');
+            // XQST0068: the boundary-space policy must not be declared twice (boundaryspacedeclerr-1).
+            if (context.BoundarySpaceStrip is not null)
+                throw new ParseException("XQST0068: More than one boundary-space declaration.", _position);
+            context = context.WithBoundarySpace(spaceMode == "strip");
+            _boundarySpaceStrip = spaceMode == "strip";
+            return true;
+        }
+
+        if (TryMatchPhrase("default", "decimal-format"))
+        {
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+            ParseDecimalFormatDeclaration(ref context, isDefault: true);
+            return true;
+        }
+
+        if (TryMatchPhrase("decimal-format"))
+        {
+            if (_seenSecondPhaseDecl)
+                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+            ParseDecimalFormatDeclaration(ref context, isDefault: false);
+            return true;
+        }
+
         if (TryMatchPhrase("base-uri"))
         {
             if (_seenSecondPhaseDecl)
@@ -430,15 +470,16 @@ public sealed class XQueryParser
         }
 
         // A library module may declare the context item (type constraint and/or external);
-        // an initial or default value in a library module is XQST0113. The declaration is
-        // parsed and validated but its type constraint is not enforced at runtime.
+        // an initial or default value in a library module is XQST0113. The declared type
+        // is recorded so fn:load-xquery-module can validate a supplied context item.
         if (_isLibraryModule && TryMatchPhrase("context", "item"))
         {
             SkipWhitespace();
+            string? contextItemType = null;
             if (TryMatchLiteral("as"))
             {
                 SkipWhitespace();
-                ReadSequenceTypeText();
+                contextItemType = ReadSequenceTypeText();
             }
             SkipWhitespace();
             bool hasValue = false;
@@ -469,6 +510,7 @@ public sealed class XQueryParser
             // XQST0113: an initial or default value is not allowed in a library module.
             if (hasValue)
                 throw new ParseException("XQST0113: A context item declaration in a library module must not specify an initial or default value.", _position);
+            context = context.WithContextItemType(contextItemType);
             return true;
         }
 
@@ -476,6 +518,126 @@ public sealed class XQueryParser
         _position = savedPosition;
         return false;
     }
+
+    /// <summary>
+    /// Parses a decimal-format declaration (named or default form) after the
+    /// <c>declare (default )?decimal-format</c> keywords, applying the XQuery 3.1 §4.10
+    /// validations: unknown property XPST0003, multi-character value XQST0097, duplicate
+    /// property XQST0114, conflicting separator values XQST0098, duplicate declaration XQST0111.
+    /// </summary>
+    private void ParseDecimalFormatDeclaration(ref XQueryStaticContext context, bool isDefault)
+    {
+        SkipWhitespace();
+        string? fmtLocal = null;
+        string? fmtNs = null;
+        if (!isDefault)
+        {
+            var (prefix, local, eqNameUri) = ReadQName();
+            fmtLocal = local;
+            fmtNs = eqNameUri ?? (prefix is null ? string.Empty
+                : context.Namespaces.TryGetValue(prefix, out var prefixNs) ? prefixNs
+                : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
+            SkipWhitespace();
+            // A bare name with no property bindings uses all defaults.
+            if (_position < _source.Length && _source[_position] == ';')
+            {
+                _position++;
+                RegisterDecimalFormat(ref context, isDefault, fmtLocal, fmtNs, new DecimalFormat());
+                return;
+            }
+        }
+
+        var format = new DecimalFormat();
+        var seenProps = new HashSet<string>(StringComparer.Ordinal);
+        while (true)
+        {
+            string prop = ReadNCName();
+            // XQST0114: a decimal-format property must not appear twice in one declaration.
+            if (!seenProps.Add(prop))
+                throw new ParseException($"XQST0114: The decimal-format property '{prop}' is specified more than once.", _position);
+            SkipWhitespace();
+            ExpectLiteral("=");
+            SkipWhitespace();
+            string value = ReadStringLiteral();
+            SkipWhitespace();
+            // XQST0097: single-character properties hold exactly one character
+            // (infinity and NaN are multi-character strings by design); zero-digit must
+            // additionally be a character with digit value 0 (decimal-format-909err/910err/35),
+            // and the picture digit sign must not itself be a digit.
+            switch (prop)
+            {
+                case "decimal-separator": format.DecimalSeparator = CheckSingleChar(prop, value); break;
+                case "grouping-separator": format.GroupingSeparator = CheckSingleChar(prop, value); break;
+                case "infinity": format.Infinity = value; break;
+                case "minus-sign": format.MinusSign = CheckSingleChar(prop, value); break;
+                case "NaN": format.NaN = value; break;
+                case "percent": format.Percent = CheckSingleChar(prop, value); break;
+                case "per-mille": format.PerMille = CheckSingleChar(prop, value); break;
+                case "zero-digit":
+                    if (value.Length != 1 || char.GetNumericValue(value[0]) != 0.0)
+                        throw new ParseException($"XQST0097: The zero-digit property value '{value}' is not a character with digit value 0.", _position);
+                    format.ZeroDigit = value;
+                    break;
+                case "digit":
+                    if (value.Length != 1 || char.IsDigit(value[0]))
+                        throw new ParseException($"XQST0097: The digit property value '{value}' must be a single non-digit character.", _position);
+                    format.Digit = value;
+                    break;
+                case "pattern-separator": format.PatternSeparator = CheckSingleChar(prop, value); break;
+                case "exponent-separator": format.ExponentSeparator = CheckSingleChar(prop, value); break;
+                default:
+                    // currency-symbol (an XSLT-only property) and any other name are
+                    // not valid in an XQuery decimal format (decimal-format-07).
+                    throw new ParseException($"XPST0003: Unknown decimal-format property '{prop}'.", _position);
+            }
+            if (_position < _source.Length && _source[_position] == ';')
+            {
+                _position++;
+                break;
+            }
+        }
+
+        // XQST0098: the two separators must be distinct and must not be digits
+        // (decimal-format-901err/912err); the exponent separator must not be the percent
+        // or per-mille character either (numberformat111 — ambiguous in pictures).
+        if (format.DecimalSeparator == format.GroupingSeparator
+            || IsDigitChar(format.DecimalSeparator) || IsDigitChar(format.GroupingSeparator))
+            throw new ParseException("XQST0098: The decimal-separator and grouping-separator must be different characters and must not be digits.", _position);
+        if (format.ExponentSeparator == format.Percent || format.ExponentSeparator == format.PerMille)
+            throw new ParseException("XQST0098: The exponent-separator must not be the percent or per-mille character.", _position);
+
+        RegisterDecimalFormat(ref context, isDefault, fmtLocal, fmtNs, format);
+    }
+
+    private void RegisterDecimalFormat(ref XQueryStaticContext context, bool isDefault, string? fmtLocal, string? fmtNs, DecimalFormat format)
+    {
+        if (isDefault)
+        {
+            // XQST0111: the default decimal format must not be declared twice
+            // (decimal-format-903err).
+            if (context.DeclaredDefaultDecimalFormat is not null)
+                throw new ParseException("XQST0111: More than one default decimal-format declaration.", _position);
+            context = context.WithDeclaredDefaultDecimalFormat(format);
+        }
+        else
+        {
+            // XQST0111: a named decimal format must not be declared twice
+            // (decimal-format-904err).
+            if (context.DecimalFormats.ContainsKey((fmtLocal!, fmtNs!)))
+                throw new ParseException($"XQST0111: The decimal format '{fmtLocal}' is declared more than once.", _position);
+            context = context.WithDecimalFormat(fmtLocal!, fmtNs!, format);
+        }
+    }
+
+    private string CheckSingleChar(string prop, string value)
+    {
+        if (value.Length != 1)
+            throw new ParseException($"XQST0097: The decimal-format property '{prop}' value '{value}' is not exactly one character.", _position);
+        return value;
+    }
+
+    private static bool IsDigitChar(string s)
+        => s.Length == 1 && char.IsDigit(s[0]);
 
     private bool TryParseFunctionDeclaration(ref XQueryStaticContext context)
     {
@@ -801,6 +963,9 @@ public sealed class XQueryParser
     private readonly HashSet<string> _declaredNamespacePrefixes = new(StringComparer.Ordinal);
     private bool _isLibraryModule;
     private bool _xml11LineEndings;
+    // Boundary-space policy from the prolog (declare boundary-space strip|preserve);
+    // the spec default is strip. Threaded into constructor scans of this module.
+    private bool _boundarySpaceStrip = true;
     private readonly List<(string Prefix, string Local, string Value, int Position)> _pendingOptions = new();
 
     // Matches a sequence of prolog keywords, each separated by optional whitespace/comments.
@@ -1217,7 +1382,8 @@ public sealed class XQueryParser
         // An empty (or comment-only) function body is the empty sequence (XQuery 3.1).
         if (string.IsNullOrWhiteSpace(StripComments(inner)))
             return new SequenceExpressionNode(Array.Empty<XPathAstNode>());
-        return XPathParser.Parse(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
+        return XPathParser.Parse(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings,
+            boundarySpaceStrip: _boundarySpaceStrip);
     }
 
     // Scans an expression up to the top-level terminator and parses it with the XPath parser.
@@ -1255,7 +1421,8 @@ public sealed class XQueryParser
             if (c == terminator && depth == 0)
             {
                 var inner = _source[start.._position];
-                return XPathParser.ParseExprSingle(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings);
+                return XPathParser.ParseExprSingle(inner, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings,
+                    boundarySpaceStrip: _boundarySpaceStrip);
             }
             if (c is '(' or '[' or '{') depth++;
             else if (c is ')' or ']' or '}') depth--;

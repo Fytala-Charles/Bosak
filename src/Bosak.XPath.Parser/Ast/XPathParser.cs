@@ -87,6 +87,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.41  | 29-07-2026     | Constructor steps after /; '<' after slash is XPST0003; schema-attribute and namespace-node() kind-test errors |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.42  | 01-08-2026     | Boundary-space policy flag (strip default; preserve keeps whitespace-only runs)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -107,6 +109,9 @@ public sealed class XPathParser
     private readonly string _source;
     private readonly bool _allowFullFlwor;
     private bool _xml11LineEndings;
+    // Boundary-space policy for direct element constructors: true = strip (the spec
+    // default), false = preserve whitespace-only text runs at content boundaries.
+    private bool _boundarySpaceStrip = true;
     private int _position;
     // > 0 while parsing a map-constructor key: '*:local' name tests are no longer
     // greedy — the entry ':' must follow the local name (map{* :b}, MapConstructor-020).
@@ -152,7 +157,7 @@ public sealed class XPathParser
     /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax (multiple for/let/where/order-by clauses). Default is false (XPath-only FLWOR).</param>
     /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending
     /// normalization; when false (default), references produce their exact characters.</param>
-    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false)
+    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
         var tokens = new List<Token>();
@@ -160,7 +165,7 @@ public sealed class XPathParser
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
             tokens.Add(tok);
 
-        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings };
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip };
         return parser.ParseExpression();
     }
 
@@ -172,7 +177,7 @@ public sealed class XPathParser
     /// <param name="xpath">The XPath expression to parse.</param>
     /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax. Default is false.</param>
     /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending normalization.</param>
-    public static XPathAstNode ParseExprSingle(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false)
+    public static XPathAstNode ParseExprSingle(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
         var tokens = new List<Token>();
@@ -180,7 +185,7 @@ public sealed class XPathParser
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
             tokens.Add(tok);
 
-        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings };
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip };
         var result = parser.ParseExprSingle();
         if (!parser.IsAtEnd)
             throw new ParseException($"XPST0003: Unexpected token {parser.Current.Kind} after the expression.", parser.Current.Start);
@@ -2506,9 +2511,10 @@ public sealed class XPathParser
             {
                 // Text containing a character/entity reference is never boundary whitespace.
                 // A plain whitespace-only literal run IS boundary whitespace and is stripped
-                // (unless xml:space="preserve"). Enclosed expressions never pass through
-                // here, so a whitespace-only {' '} result is always preserved.
-                if (textHasReference || xmlSpacePreserve || !IsXmlWhitespaceOnly(text.ToString()))
+                // when the boundary-space policy is strip (the default), unless
+                // xml:space="preserve". Enclosed expressions never pass through here, so a
+                // whitespace-only {' '} result is always preserved.
+                if (textHasReference || xmlSpacePreserve || !_boundarySpaceStrip || !IsXmlWhitespaceOnly(text.ToString()))
                 {
                     content.Add(textHasReference
                         ? new SignificantTextNode(text.ToString())

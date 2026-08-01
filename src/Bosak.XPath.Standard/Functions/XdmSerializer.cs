@@ -15,6 +15,9 @@
 //                      | Charles Korthout | 0.2   | 25-07-2026     | Serialization 3.1 fidelity: declaration/doctype matrix, html-family rules, adaptive constructor forms, JSON char-maps, CDATA/indent/namespace fixup, undeclare-prefixes |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 28-07-2026     | Omit redundant xmlns declarations; guard xmlns="" double-write when self-declared |
+//                      | Charles Korthout | 0.4   | 01-08-2026     | omit-xml-declaration defaults to true (Serialization 3.1 §3; copy-5101)          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 01-08-2026     | HTML matrix: version-dependent void lists, boolean attrs, script raw text, CDATA islands, xhtml prefix normalization |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -37,11 +40,27 @@ internal static class XdmSerializer
     /// <summary>Namespace URI carried by xmlns declaration attributes.</summary>
     private const string XmlnsNs = "http://www.w3.org/2000/xmlns/";
 
-    /// <summary>HTML void elements (serialized without an end tag by the html method).</summary>
+    /// <summary>HTML5 void elements (serialized without an end tag by the html method).</summary>
     private static readonly HashSet<string> HtmlVoidElements = new(StringComparer.OrdinalIgnoreCase)
     {
-        "area", "base", "br", "col", "embed", "hr", "img", "input",
+        "area", "base", "br", "col", "embed", "hr", "img", "input", "keygen",
         "link", "meta", "param", "source", "track", "wbr"
+    };
+
+    /// <summary>HTML 4.0 void elements: unlike the HTML5 list, this includes frame and
+    /// isindex but not keygen, basefont, bgsound, source, track or wbr.</summary>
+    private static readonly HashSet<string> Html40VoidElements = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "area", "base", "br", "col", "embed", "frame", "hr",
+        "img", "input", "isindex", "link", "meta", "param"
+    };
+
+    /// <summary>HTML boolean attributes, written in minimized form (name only) when the
+    /// attribute value equals the attribute name ignoring case (Serialization 3.1 §6.1.7).</summary>
+    private static readonly HashSet<string> HtmlBooleanAttributes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "checked", "compact", "declare", "defer", "disabled", "ismap",
+        "multiple", "nohref", "noresize", "noshade", "nowrap", "readonly", "selected"
     };
 
     // =====================================================================================
@@ -55,7 +74,7 @@ internal static class XdmSerializer
         public string Version = "1.0";
         public string? Encoding;
         public bool Indent;
-        public bool OmitXmlDeclaration;
+        public bool OmitXmlDeclaration = true;            // Serialization 3.1 §3: default "yes"
         public bool? Standalone;                          // null = omit
         public string? ItemSeparator;                     // null = default (" " for xml family)
         public Dictionary<string, string>? CharacterMaps; // single-char key → replacement
@@ -174,8 +193,8 @@ internal static class XdmSerializer
     /// Builds serialization parameters from an <c>output:serialization-parameters</c>
     /// document (the <c>output:parameter-document</c> option).
     /// </summary>
-    internal static SerializationParameters ParametersFromElementForm(IXdmNode document)
-        => ParseElementOptions(UnwrapDocument(document));
+    internal static SerializationParameters ParametersFromElementForm(IXdmNode document, SerializationParameters? baseParams = null)
+        => ParseElementOptions(UnwrapDocument(document), baseParams);
 
     /// <summary>
     /// Builds serialization parameters from static output declarations
@@ -852,7 +871,8 @@ internal static class XdmSerializer
             writer.Raw("<!DOCTYPE html>");
         }
         else if (p.Method == "html" && p.HtmlVersion is null && firstIsHtml
-                 && decimal.TryParse(p.Version, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
+                 && decimal.TryParse(p.Version, NumberStyles.Float, CultureInfo.InvariantCulture, out var fallbackVersion)
+                 && fallbackVersion >= 5)
         {
             writer.Raw("<!DOCTYPE html>");
         }
@@ -966,6 +986,9 @@ internal static class XdmSerializer
         private readonly StringBuilder _sb = new();
         private bool _metaInjected;
         private int _xmlSpacePreserve;
+        // Set while writing the content of a foreign-namespace "XML island" element:
+        // its direct text children serialize as CDATA sections (HTML §6.1.7).
+        private bool _foreignIslandCdata;
         private readonly List<(string Prefix, string Uri)> _nsScopes = new();
 
         public NodeWriter(SerializationParameters p) => _p = p;
@@ -974,6 +997,12 @@ internal static class XdmSerializer
 
         /// <summary>Writes an atomic value's string form with text-node escaping.</summary>
         public void Text(string s) => WriteTextContent(s);
+
+        /// <summary>Writes text as a CDATA section, splitting any embedded <c>]]&gt;</c> terminator.</summary>
+        private void WriteCdataText(string s)
+        {
+            _sb.Append("<![CDATA[").Append(s.Replace("]]>", "]]]]><![CDATA[>", StringComparison.Ordinal)).Append("]]>");
+        }
 
         public override string ToString() => _sb.ToString();
 
@@ -1000,7 +1029,12 @@ internal static class XdmSerializer
                     WriteElement(node, depth, suppressIndent);
                     break;
                 case XdmNodeKind.Text:
-                    WriteTextContent(node.StringValue);
+                    // A text child of a foreign-namespace element whose parent is an HTML
+                    // element serializes as a CDATA section (html-18/19a).
+                    if (_foreignIslandCdata)
+                        WriteCdataText(node.StringValue);
+                    else
+                        WriteTextContent(node.StringValue);
                     break;
                 case XdmNodeKind.Comment:
                     _sb.Append("<!--").Append(node.StringValue).Append("-->");
@@ -1029,7 +1063,13 @@ internal static class XdmSerializer
                          || (_p.HtmlVersion is null
                              && decimal.TryParse(_p.Version, NumberStyles.Float, CultureInfo.InvariantCulture, out var docVersion)
                              && docVersion >= 5);
-            bool dropXhtmlPrefix = _p.Method == "html" && html5 && element.Prefix.Length > 0 && element.NamespaceUri == "http://www.w3.org/1999/xhtml";
+            // HTML 5 prefix normalization: elements in the XHTML namespace (html and
+            // xhtml methods) — and any namespace at all for the xhtml method — serialize
+            // with their local name and a default-namespace declaration (Serialization-xhtml-50/51/52).
+            bool dropXhtmlPrefix = html5 && element.Prefix.Length > 0
+                && (_p.Method == "xhtml"
+                    ? element.NamespaceUri.Length > 0
+                    : _p.Method == "html" && element.NamespaceUri == "http://www.w3.org/1999/xhtml");
             if (dropXhtmlPrefix)
                 effectivePrefix = "";
             string name = effectivePrefix.Length > 0 ? effectivePrefix + ":" + element.LocalName : element.LocalName;
@@ -1093,9 +1133,13 @@ internal static class XdmSerializer
             foreach (var attrValue in element.Attributes())
             {
                 var attr = attrValue.NodeValue;
-                // A prefixed XHTML declaration is redundant once the element is rewritten
-                // to the default-namespace form (HTML5).
-                if (dropXhtmlPrefix && IsNamespaceDeclaration(attr) && attr.StringValue == "http://www.w3.org/1999/xhtml")
+                // Prefix normalization (HTML5): a prefixed namespace declaration is redundant
+                // once the element is rewritten to the default-namespace form — unless one of
+                // the element's attributes actually uses that prefix (xhtml-50/51/52).
+                if (dropXhtmlPrefix && IsNamespaceDeclaration(attr)
+                    && (attr.LocalName == "xmlns" && attr.NamespaceUri.Length == 0
+                        ? attr.StringValue == element.NamespaceUri
+                        : !UsesAttributePrefix(element, attr.LocalName)))
                     continue;
                 if (attr.LocalName == "space" && attr.Prefix == "xml" && attr.StringValue == "preserve")
                     entersPreserve = true;
@@ -1117,8 +1161,15 @@ internal static class XdmSerializer
                     else if (attr.NamespaceUri == XmlnsNs)
                         _nsScopes.Add((attr.LocalName, declValue));
                 }
-                _sb.Append(' ').Append(AttributeName(attr)).Append("=\"");
+                _sb.Append(' ').Append(AttributeName(attr));
                 var attrText = isXml11Undeclaration ? "" : attr.StringValue;
+                // HTML boolean attributes minimize to the bare name when the value equals
+                // the name ignoring case (Serialization-html-12/13: selected="SELECTED").
+                if (_p.Method == "html"
+                    && HtmlBooleanAttributes.Contains(attr.LocalName)
+                    && attrText.Equals(attr.LocalName, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                _sb.Append("=\"");
                 // HTML URI attributes are percent-encoded unless escape-uri-attributes is off.
                 if (_p.Method == "html" && _p.EscapeUriAttributes && IsUriAttribute(attr.LocalName))
                     attrText = EscapeUri(attrText);
@@ -1145,15 +1196,47 @@ internal static class XdmSerializer
                 children.Add(childValue.NodeValue);
 
             bool isHtml = _p.Method == "html";
-            bool isVoid = isHtml && HtmlVoidElements.Contains(element.LocalName);
+            // Version-dependent HTML void lists (Serialization 3.1 §6.1.4): frame and
+            // isindex are void in HTML 4.0 only; keygen, basefont and bgsound are HTML5-era.
+            bool htmlVoidElement = html5
+                ? HtmlVoidElements.Contains(element.LocalName)
+                : Html40VoidElements.Contains(element.LocalName);
+            bool inXhtmlNs = element.NamespaceUri == "http://www.w3.org/1999/xhtml";
+            bool foreignNs = element.NamespaceUri.Length > 0 && !inXhtmlNs;
+            // The bare void form (no end tag) applies to the html method only: in HTML5
+            // regardless of namespace, in HTML 4.0 only for no-namespace elements (html-3).
+            bool isVoid = isHtml && htmlVoidElement && !foreignNs && (html5 || !inXhtmlNs);
             bool injectingMeta = InjectMeta(element);
+            // A foreign-namespace element whose parent is an HTML element has its text
+            // children serialized as CDATA sections (Serialization 3.1 §6.1.7, html-18/19a);
+            // the rule does not recurse into nested foreign elements.
+            bool parentForeignIsland = _foreignIslandCdata;
+            bool foreignIsland = isHtml && foreignNs && !parentForeignIsland;
 
             if (children.Count == 0 && !injectingMeta && !isVoid)
             {
-                // HTML: non-void elements always get a separate end tag (no self-closing).
-                // XHTML: only the HTML void elements self-close; others get an end tag.
-                if (isHtml || _p.Method == "xhtml")
+                if (isHtml && htmlVoidElement && inXhtmlNs && !html5)
                 {
+                    // HTML 4.0: an XHTML-namespace void element serializes as XML (html-3).
+                    _sb.Append("/>");
+                }
+                else if (_p.Method == "xhtml" && htmlVoidElement
+                         && (inXhtmlNs || (html5 && element.NamespaceUri.Length == 0)))
+                {
+                    // XHTML void elements self-close with a space: HTML5 recognizes them
+                    // in no namespace as well (xhtml-2); HTML 4.0 only in the XHTML
+                    // namespace (xhtml-1a).
+                    _sb.Append(" />");
+                }
+                else if (isHtml && foreignNs)
+                {
+                    // HTML "XML islands": foreign-namespace empty elements self-close
+                    // XML-style (Serialization-html-5/6).
+                    _sb.Append("/>");
+                }
+                else if (isHtml || _p.Method == "xhtml")
+                {
+                    // HTML/XHTML: non-void empty elements get a separate end tag.
                     _sb.Append("></").Append(name).Append('>');
                 }
                 else
@@ -1190,10 +1273,13 @@ internal static class XdmSerializer
             // HTML: listed elements in no namespace get raw (unescaped) text; namespaced
             // ones keep CDATA sections. Under HTML5, CDATA survives only in foreign
             // (non-XHTML) content — XHTML-namespace and no-namespace listed content is raw.
-            bool rawHtmlText = _p.Method == "html" && InCdataList(element)
-                && (html5
-                    ? element.NamespaceUri is "" or "http://www.w3.org/1999/xhtml"
-                    : element.NamespaceUri.Length == 0);
+            // HTML script and style content is always raw (Serialization 3.1 §6.1.9).
+            bool rawHtmlText = _p.Method == "html"
+                && (IsRawTextHtmlElement(element)
+                    || (InCdataList(element)
+                        && (html5
+                            ? element.NamespaceUri is "" or "http://www.w3.org/1999/xhtml"
+                            : element.NamespaceUri.Length == 0)));
             bool cdataHtml = _p.Method == "html" && InCdataList(element)
                 && (html5
                     ? element.NamespaceUri is not ("" or "http://www.w3.org/1999/xhtml")
@@ -1207,37 +1293,48 @@ internal static class XdmSerializer
                                  && children.Count > 0
                                  && ElementOnlyContent(children);
 
-            if (indentContent)
+            var savedForeignIslandCdata = _foreignIslandCdata;
+            _foreignIslandCdata = foreignIsland;
+            try
             {
-                foreach (var child in children)
+                if (indentContent)
                 {
+                    foreach (var child in children)
+                    {
+                        _sb.Append('\n');
+                        for (int i = 0; i <= depth; i++)
+                            _sb.Append("   ");
+                        // Suppression propagates to the whole subtree (not just the listed element).
+                        WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
+                    }
                     _sb.Append('\n');
-                    for (int i = 0; i <= depth; i++)
+                    for (int i = 0; i < depth; i++)
                         _sb.Append("   ");
-                    // Suppression propagates to the whole subtree (not just the listed element).
-                    WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
                 }
-                _sb.Append('\n');
-                for (int i = 0; i < depth; i++)
-                    _sb.Append("   ");
-            }
-            else if (cdata || cdataHtml)
-            {
-                WriteCdataChildren(children, depth, suppressIndent);
-            }
-            else if (rawHtmlText)
-            {
-                WriteRawTextChildren(children, depth, suppressIndent);
-            }
-            else
-            {
-                foreach (var child in children)
+                else if (cdata || cdataHtml)
                 {
-                    // A pre-existing content-type meta is replaced by the injected one.
-                    if (injectingMeta && IsContentTypeMeta(child))
-                        continue;
-                    WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
+                    WriteCdataChildren(children, depth, suppressIndent);
                 }
+                else if (rawHtmlText)
+                {
+                    // Raw text content: only script/style nests raw elements (attributes and
+                    // text unescaped); listed (cdata-section) elements nest normal elements.
+                    WriteRawTextChildren(children, depth, suppressIndent, rawNesting: IsRawTextHtmlElement(element));
+                }
+                else
+                {
+                    foreach (var child in children)
+                    {
+                        // A pre-existing content-type meta is replaced by the injected one.
+                        if (injectingMeta && IsContentTypeMeta(child))
+                            continue;
+                        WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
+                    }
+                }
+            }
+            finally
+            {
+                _foreignIslandCdata = savedForeignIslandCdata;
             }
 
             if (entersPreserve)
@@ -1280,15 +1377,69 @@ internal static class XdmSerializer
             return false;
         }
 
-        private void WriteRawTextChildren(List<IXdmNode> children, int depth, bool suppressIndent)
+        private void WriteRawTextChildren(List<IXdmNode> children, int depth, bool suppressIndent, bool rawNesting)
         {
             foreach (var child in children)
             {
                 if (child.NodeKind == XdmNodeKind.Text)
                     _sb.Append(child.StringValue);
+                else if (child.NodeKind == XdmNodeKind.Element && rawNesting)
+                    WriteRawElement(child);
                 else
                     WriteNode(child, depth + 1, suppressIndent || IsSuppressed(child));
             }
+        }
+
+        /// <summary>
+        /// Writes an element nested inside an HTML raw-text element (script/style): start
+        /// and end tags are written literally, but neither text nor attribute values are
+        /// escaped (Serialization-html-9/10 — "&amp;" stays "&" inside raw-text content).
+        /// </summary>
+        private void WriteRawElement(IXdmNode element)
+        {
+            string name = QualifiedName(element);
+            _sb.Append('<').Append(name);
+            foreach (var attrValue in element.Attributes())
+            {
+                var attr = attrValue.NodeValue;
+                _sb.Append(' ').Append(AttributeName(attr)).Append("=\"").Append(attr.StringValue).Append('"');
+            }
+            var children = new List<IXdmNode>();
+            foreach (var childValue in element.Children())
+                children.Add(childValue.NodeValue);
+            if (children.Count == 0 && HtmlVoidElements.Contains(element.LocalName))
+                return;
+            _sb.Append('>');
+            foreach (var child in children)
+            {
+                if (child.NodeKind == XdmNodeKind.Text)
+                    _sb.Append(child.StringValue);
+                else if (child.NodeKind == XdmNodeKind.Element)
+                    WriteRawElement(child);
+                else
+                    WriteNode(child, 0, suppressIndent: false);
+            }
+            _sb.Append("</").Append(name).Append('>');
+        }
+
+        // HTML raw-text elements (Serialization 3.1 §6.1.9): script and style content is
+        // not escaped when the element is in no namespace or the XHTML namespace.
+        private static bool IsRawTextHtmlElement(IXdmNode element)
+            => (element.LocalName.Equals("script", StringComparison.OrdinalIgnoreCase)
+                || element.LocalName.Equals("style", StringComparison.OrdinalIgnoreCase))
+               && element.NamespaceUri is "" or "http://www.w3.org/1999/xhtml";
+
+        // Whether any attribute of the element carries the given namespace prefix: a
+        // declaration for it must be kept even under HTML5 prefix normalization.
+        private static bool UsesAttributePrefix(IXdmNode element, string prefix)
+        {
+            foreach (var attrValue in element.Attributes())
+            {
+                var attr = attrValue.NodeValue;
+                if (attr.NamespaceUri.Length > 0 && attr.NamespaceUri != XmlnsNs && attr.Prefix == prefix)
+                    return true;
+            }
+            return false;
         }
 
         // HTML attributes known to carry URIs (Serialization 3.1 §7.4.13).
@@ -1464,8 +1615,9 @@ internal static class XdmSerializer
         {
             // Normalization-form applies to source text before character mapping.
             s = ApplyNormalizationForm(s, _p.NormalizationForm);
-            foreach (char c in s)
+            for (int i = 0; i < s.Length; i++)
             {
+                char c = s[i];
                 if (_p.CharacterMaps is not null && _p.CharacterMaps.TryGetValue(c.ToString(), out var replacement))
                 {
                     _sb.Append(replacement);
@@ -1473,7 +1625,14 @@ internal static class XdmSerializer
                 }
                 switch (c)
                 {
-                    case '&': _sb.Append("&amp;"); break;
+                    case '&':
+                        // HTML: an ampersand immediately followed by a left curly brace is
+                        // not escaped (Serialization 3.1 §6.1.9 — Serialization-html-11).
+                        if (_p.Method == "html" && i + 1 < s.Length && s[i + 1] == '{')
+                            _sb.Append('&');
+                        else
+                            _sb.Append("&amp;");
+                        break;
                     case '<': _sb.Append("&lt;"); break;
                     case '"': _sb.Append("&quot;"); break;
                     case '\t': _sb.Append("&#x9;"); break;

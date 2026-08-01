@@ -107,7 +107,6 @@ class Program
         "dtd",
         "namespace_axis",
         "disabling_output_escaping",
-        "XSD_1.1",
         "built_in_derived_types",
         "HTML5",
         "HTML4",
@@ -167,6 +166,8 @@ class Program
         "include-0702b", "mode-0801b",
         // Collection registry / fn:collection not implemented
         "collection-004", "collection-005", "collection-006",
+        // XSD 1.1 character class subtraction ([a-d-b-c]) is not implemented
+        "regex-syntax-0056a", "regex-syntax-0086a",
         // Java extension functions are not supported
         "evaluate-008",
         // xsl:iterate is not implemented
@@ -457,6 +458,10 @@ class Program
                 envDefaultCollation = loadedEnv.DefaultCollation;
             }
 
+            // Collections declared in the environment (both default and named) are made
+            // available to fn:collection / fn:uri-collection (collection-001..003).
+            var envCollections = LoadCollections(envToLoad, testSetDir, catalogDir, ns);
+
             // Register secondary packages declared in the environment so that
             // fn:transform can resolve package-name / package-version options.
             Bosak.Xslt.Api.XsltFunctionLibrary.ClearPackages();
@@ -626,6 +631,8 @@ class Program
             if (string.IsNullOrEmpty(xslDoc.BaseUri))
                 xslDoc.AddAnnotation(baseUri);
             var evalContext = new Bosak.XPath.Runtime.Vm.EvaluationContext();
+            foreach (var (colKey, colDocs) in envCollections)
+                evalContext.Collections[colKey] = colDocs;
             if (!string.IsNullOrEmpty(envDefaultCollation))
                 evalContext.DefaultCollation = envDefaultCollation;
             evalContext.BaseUri = baseUri;
@@ -838,6 +845,8 @@ class Program
             Console.WriteLine($"  FAIL {name}: {ex.Message}");
             if (ex is NullReferenceException)
                 Console.WriteLine(ex.StackTrace);
+            if (Environment.GetEnvironmentVariable("XSLT_CONFORMANCE_DEBUG") == "1")
+                Console.WriteLine(ex.ToString());
             return TestResult.Fail;
         }
     }
@@ -954,6 +963,42 @@ class Program
     static XDocument LoadDocumentFromText(string xml, string baseUri)
     {
         return Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri, baseUri);
+    }
+
+    /// <summary>
+    /// Reads the <c>&lt;collection&gt;</c> declarations of an environment into a
+    /// URI-keyed map of document path lists. A declared collection with no resolvable
+    /// sources is registered with an empty list — it is available but empty
+    /// (XSLT catalog environments such as collection-e01/e03).
+    /// </summary>
+    static Dictionary<string, List<string>> LoadCollections(XElement? envElem, string testSetDir, string catalogDir, XNamespace ns)
+    {
+        var collections = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        if (envElem == null) return collections;
+
+        foreach (var colElem in envElem.Elements(ns + "collection"))
+        {
+            string key = colElem.Attribute("uri")?.Value ?? "";
+            var docs = new List<string>();
+            foreach (var source in colElem.Elements(ns + "source"))
+            {
+                var file = source.Attribute("file")?.Value;
+                var sourceUri = source.Attribute("uri")?.Value;
+                if (file != null)
+                {
+                    var path = Path.Combine(testSetDir, file);
+                    if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
+                    if (File.Exists(path))
+                        docs.Add(Path.GetFullPath(path));
+                }
+                else if (sourceUri != null)
+                {
+                    docs.Add(sourceUri);
+                }
+            }
+            collections[key] = docs;
+        }
+        return collections;
     }
 
     static (IXdmNode? SourceNode, string? DefaultCollation) LoadEnvironment(XElement envElem, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)

@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.18  | 29-07-2026     | External param prefix binding prefers the param element's own namespace |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.19  | 01-08-2026     | Admit declare boundary-space and decimal-format declarations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -280,10 +282,11 @@ internal sealed class TestExecutor
         RegexOptions.Compiled);
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function
-    // namespace, default collation, default order empty, ordering, base-uri, option,
-    // variable, function, module import, and version declarations are supported).
+    // namespace, default collation, default order empty, ordering, boundary-space,
+    // decimal-format, base-uri, option, variable, function, module import, and version
+    // declarations are supported).
     private static readonly Regex UnsupportedPrologRegex = new(
-        @"\bdeclare\s+(boundary-space|default\s+decimal-format|copy-namespaces|context|decimal-format|construction)\b" +
+        @"\bdeclare\s+(copy-namespaces|context|construction)\b" +
         @"|\bimport\s+schema\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

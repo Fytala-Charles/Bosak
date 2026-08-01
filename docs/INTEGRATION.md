@@ -4,16 +4,31 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 29 July 2026
-> **Bosak baseline:** 1,660 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,510 passed / 0 failed / 2,311 skipped (92.74% / 100% of runnable tests) — XQuery routing enabled; 216 XQuery conformance gaps recorded as reasoned skips
+> **Last updated:** 1 August 2026
+> **Bosak baseline:** 1,677 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,741 passed / 0 failed / 2,080 skipped (93.46% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented
 > **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
-> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features
+> **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, fn:load-xquery-module
 
 ---
 
 ## 0. Recent Changes
 
+- **2026-08-01 (c)** — XQuery: **`declare decimal-format` / `declare boundary-space` prolog support** — prod/DecimalFormatDecl **41/0**, prod/BoundarySpaceDecl **28/0**, fn-load-xquery-module **61/0**.
+  - Named and default decimal formats with the full XQST0097/0098/0111/0114 validation matrix; declarations feed fn:format-number named/default resolution, with module-local formats applied around library-module bodies (decimal-format-21).
+  - `declare boundary-space strip|preserve` (XQST0068 on duplicate) threads into direct-constructor whitespace handling: preserve keeps whitespace-only runs at content boundaries.
+  - **HTML/XHTML serialization matrix**: version-dependent void-element lists (frame/isindex are HTML 4.0-only), XHTML void self-closing, foreign-namespace "XML islands" (self-close + CDATA text), boolean attribute minimization, script/style raw text, HTML5 prefix normalization, doctype fallback gated to version ≥ 5 — all six ser/* sets green (html 64, xhtml 49, xml 39, text 18, json 73, adaptive 87).
+- **2026-08-01 (b)** — XQuery: **fn:load-xquery-module implemented** — dynamic library-module loading (F&O 3.1 §15.3.1): fn-load-xquery-module set **58 passed / 0 failed / 25 skipped**.
+  - Module URIs resolve via compiler-registered sources (`XQueryCompiler.WithModule`, seeded onto the evaluation context as `XQueryModuleSources`) with `location-hints` candidate selection and a filesystem fallback; the transitive import closure is compiled through the existing library-module pipeline.
+  - The result map exposes the target module's PUBLIC variables and functions only: `map{"variables": map{QName → value}, "functions": map{QName → map{arity → function item}}}`. Function items invoke against the module's own evaluation context (context item, externals, lazy variables).
+  - Options map: `variables` (external-only, type-checked FOQM0005, non-external ignored), `context-item` (validated against the module's declared context item type), `xquery-version` (numeric; unsupported → FOQM0006), `location-hints`; full error-code matrix (FOQM0001/0002/0003/0005/0006, XPDY0002, XPTY0004) — module initializer errors propagate unchanged.
+  - Recorded gaps: `declare decimal-format` / `declare boundary-space` prolog support (3 tests skipped, matching the dedicated sets).
+- **2026-08-01** — XSLT: **conformance sweep closed** — 19 engine/harness fixes, XSLT 3.0 suite at **7,109 passed / 0 failed / 7,491 skipped**; QT3 unchanged at **29,510/0**; unit tests **1,665/0**.
+  - `fn:system-property` is available in use-when and other static expressions (`IsXsltMode` on static contexts); `fn:current` raises XPST0017 there.
+  - Pattern keyword disambiguation: `union`/`intersect`/`except` after `/`, `@`, `::` is a NameTest.
+  - XPath 1.0 backwards compatibility honored on element-level `xsl:version="1.0"` AVTs, global variable declarations, and for function-argument first-item rules and numeric conversions; `fn:namespace-uri`/`fn:string` take the first sequence item in BC mode.
+  - Environment-declared collections are available to `fn:collection`/`fn:uri-collection`; a declared-but-empty collection returns the empty sequence.
+  - Comment/PI-only result trees are preserved; `xs:QName()` atomizes node arguments; `xml:id` values are whitespace-collapsed at load; timezone `[z]` drops whole-hour minutes when the full form exceeds the width modifier; unknown calendars fall back to `[Calendar: AD]` in XSLT mode; `suppress-indentation` covers descendants; `copy-namespaces="no"` keeps the element's own prefix; bare `fn:serialize` omits the XML declaration while static output declarations include it; `fn:round` uses exact rational scaling at extreme magnitudes.
 - **2026-07-29** — XQuery: **residual-cluster sweep closed** (REQ-066): QT3 **29,510 passed / 0 failed** (from 29,427; +83 passing; gaps 216, −83).
   - Stable order-by (index-decorated sort — `List<T>.Sort` is unstable); switch no-match-on-error with cardinality pre-checks and empty-matches-empty; array atomization and recursive content flattening; min/max boolean and date/time family rules.
   - Computed elements apply the default element namespace (xmlns="" materialized); constructor-local prefixes propagate; constructor/`()` steps after `/` with `<`-after-slash XPST0003; schema kind-test grammar/runtime error split; implicit namespace-node() is XQST0134 in XQuery.
@@ -104,7 +119,7 @@
   - Recorded gaps: static-analysis errors (XPST0008/XPST0017 in unexecuted bodies), `sudoku` (too slow under the interpreter), functx `get-matches`/`remove-elements` edges; 487 reasoned skips total.
 - **2026-07-25** — XQuery 3.1 Phase 4 start: **output declarations + serialization round-out** (REQ-049): QT3 **26,299 passed / 0 failed** (from 25,928; +371).
   - `declare option output:* "..."` prolog with QName/EQName option names, prolog ordering rules (namespace declarations precede options), and static validations (XQST0109/XQST0110/XQST0066/XPST0003/XPST0081); XQuery comments `(: :)` skipped in the prolog.
-  - Static output parameters flow to `fn:serialize` (per-call parameters override); map-form parameters default omit-xml-declaration=true while element/default forms emit the XML declaration; `output:parameter-document` resolves lazily through the document loader (prolog options take precedence).
+  - Static output parameters flow to `fn:serialize` (per-call parameters override). Two `omit-xml-declaration` defaults apply by context: bare `fn:serialize` (no static output declarations) defaults to `yes` (the declaration is omitted, per Serialization 3.1), while queries with static output declarations (`declare option output:*`) follow the XSLT/XQuery host-language default of including the declaration (`no`); `output:parameter-document` resolves lazily through the document loader (prolog options take precedence).
   - Serializer driven to Serialization 3.1 fidelity: declaration/DOCTYPE matrix, html/html5/xhtml variants, adaptive constructor-form atomics, JSON character maps, CDATA rules, indent/suppress-indentation/xml:space, namespace fixup with a declaration scope stack, XML 1.1 namespace undeclarations (undeclare-prefixes), and XML 1.1 line-ending normalization gated on the test's xml-version.
   - QT3 fully green: all six ser/* method sets (38+18+45+40+73+87), fn/serialize 168/0, OptionDecl 41/0, OptionDecl.serialization 36/0, Comment 72/0.
   - Supporting fixes: attribute normalization is literal-only with xml:id collapse; map keys distinguish string-family subtypes from g* date types; inline-function instance-of uses declared types; XML 1.1 character references and namespace undeclarations honored end-to-end.

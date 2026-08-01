@@ -66,6 +66,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.19  | 29-07-2026     | 22 residual-sweep tests (switch, arrays, min, steps, stable sort, error codes) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 01-08-2026     | 5 xs:QName constructor atomization tests (nodes, attributes, empty, function-lookup-008) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.21  | 01-08-2026     | Output-declaration tests use explicit omit-xml-declaration (spec default is omit) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.22  | 01-08-2026     | 5 fn:load-xquery-module tests (result map, externals, context item, error codes) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.23  | 01-08-2026     | 7 decimal-format/boundary-space declaration tests (module-local, validation) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1129,6 +1137,8 @@ public class PlaceholderTests
         var ctx = new XQueryContext();
         var result = executable.Evaluate(ctx);
 
+        // Static output declarations follow the host-language default: the XML
+        // declaration is included unless omit-xml-declaration is set (Serialization-xml-01).
         Assert.Equal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>1|2|3", result.StringValue);
     }
 
@@ -1152,6 +1162,7 @@ public class PlaceholderTests
         var compiler = new XQueryCompiler();
         var executable = compiler.Compile(
             "declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n" +
+            "declare option output:omit-xml-declaration \"no\";\n" +
             "declare option output:standalone \"yes\";\n" +
             "fn:serialize(<a/>)");
         var ctx = new XQueryContext();
@@ -2819,6 +2830,259 @@ public class PlaceholderTests
             .Evaluate(new XQueryContext());
 
         Assert.Equal("f's value", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_XsQNameConstructor_AtomizesElementNodeArgument()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("xs:QName(<function>fn:concat</function>)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        Assert.Equal("concat", result.QNameValue.LocalName);
+        Assert.Equal("http://www.w3.org/2005/xpath-functions", result.QNameValue.NamespaceUri);
+    }
+
+    [Fact]
+    public void XQuery_XsQNameConstructor_AtomizesAttributeNodeArgument()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("let $e := <e a='fn:string-length'/> return xs:QName($e/@a)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+        Assert.Equal("string-length", result.QNameValue.LocalName);
+        Assert.Equal("http://www.w3.org/2005/xpath-functions", result.QNameValue.NamespaceUri);
+    }
+
+    [Fact]
+    public void XQuery_XsQNameConstructor_EmptySequenceReturnsEmpty()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("empty(xs:QName(()))")
+            .Evaluate(new XQueryContext());
+
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_XsQNameConstructor_IntegerArgumentRejected()
+    {
+        var compiler = new XQueryCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile("xs:QName(123)")
+            .Evaluate(new XQueryContext()));
+
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_FunctionLookup008Shape_LookupApplyOverElementNodes()
+    {
+        // XSLT function-lookup-008 (Saxon bug 4723): fn:apply passes the element nodes
+        // from the array to fn:concat after atomizing the xs:QName constructor input.
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile(
+                "let $x := <r><function>fn:concat</function><arguments><arg>a</arg><arg>b</arg><arg>c</arg></arguments></r> " +
+                "return function-lookup(xs:QName($x/function), count($x/arguments/arg)) => apply(array { $x/arguments/arg })")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("abc", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_LoadXQueryModule_VariablesAndFunctions()
+    {
+        const string ns = "http://example.com/lib";
+        var compiler = new XQueryCompiler().WithModule(ns, """
+            module namespace lib = "http://example.com/lib";
+            declare variable $lib:greeting as xs:string := "hello";
+            declare function lib:greet($name as xs:string) as xs:string { $lib:greeting || ", " || $name };
+            """);
+
+        var result = compiler.Compile(
+                $"let $m := fn:load-xquery-module(\"{ns}\") " +
+                $"return ($m(\"variables\")(QName(\"{ns}\", \"greeting\")), $m(\"functions\")(QName(\"{ns}\", \"greet\"))(1)(\"world\"))")
+            .Evaluate(new XQueryContext());
+
+        var items = ToStrings(result);
+        Assert.Equal(new List<string> { "hello", "hello, world" }, items);
+    }
+
+    [Fact]
+    public void XQuery_LoadXQueryModule_ExternalVariableSuppliedAndDefault()
+    {
+        const string ns = "http://example.com/ev";
+        var compiler = new XQueryCompiler().WithModule(ns, """
+            module namespace ev = "http://example.com/ev";
+            declare variable $ev:a as xs:integer external := 11;
+            declare variable $ev:b as xs:string := "that";
+            """);
+
+        // Supplied value overrides the external default; supplying a value for the
+        // non-external $ev:b is silently ignored (fn-load-xquery-module-021).
+        var result = compiler.Compile(
+                $"let $m := fn:load-xquery-module(\"{ns}\", map{{\"variables\": map{{QName(\"{ns}\", \"a\"): 42, QName(\"{ns}\", \"b\"): \"other\"}}}}) " +
+                $"return ($m(\"variables\")(QName(\"{ns}\", \"a\")), $m(\"variables\")(QName(\"{ns}\", \"b\")))")
+            .Evaluate(new XQueryContext());
+
+        var items = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item.ToString());
+        Assert.Equal(new List<string> { "42", "that" }, items);
+    }
+
+    [Fact]
+    public void XQuery_LoadXQueryModule_FunctionSeesModuleContextItem()
+    {
+        const string ns = "http://example.com/cim";
+        var compiler = new XQueryCompiler().WithModule(ns, """
+            module namespace cim = "http://example.com/cim";
+            declare variable $cim:context := .;
+            declare function cim:child-name() as xs:string { name($cim:context/*) };
+            """);
+
+        var result = compiler.Compile(
+                $"let $m := fn:load-xquery-module(\"{ns}\", map{{\"context-item\": <a><b/></a>}}) " +
+                $"return $m(\"functions\")(QName(\"{ns}\", \"child-name\"))(0)()")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("b", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_LoadXQueryModule_ErrorCodes()
+    {
+        var compiler = new XQueryCompiler().WithModule("http://example.com/valid",
+            "module namespace v = \"http://example.com/valid\"; declare variable $v:x external;");
+
+        // FOQM0001: empty module URI
+        var ex1 = Assert.ThrowsAny<Exception>(() => new XQueryCompiler().Compile("fn:load-xquery-module(\"\")").Evaluate(new XQueryContext()));
+        Assert.Contains("FOQM0001", ex1.Message);
+
+        // FOQM0002: unresolvable module URI
+        var ex2 = Assert.ThrowsAny<Exception>(() => new XQueryCompiler().Compile("fn:load-xquery-module(\"http://nonexistent/module\")").Evaluate(new XQueryContext()));
+        Assert.Contains("FOQM0002", ex2.Message);
+
+        // FOQM0003: source that is not a library module
+        var compiler3 = new XQueryCompiler().WithModule("http://example.com/not-lib", "1 + 1");
+        var ex3 = Assert.ThrowsAny<Exception>(() => compiler3.Compile("fn:load-xquery-module(\"http://example.com/not-lib\")").Evaluate(new XQueryContext()));
+        Assert.Contains("FOQM0003", ex3.Message);
+
+        // XPDY0002: external variable without a supplied value or default
+        var ex4 = Assert.ThrowsAny<Exception>(() => compiler.Compile("fn:load-xquery-module(\"http://example.com/valid\")").Evaluate(new XQueryContext()));
+        Assert.Contains("XPDY0002", ex4.Message);
+    }
+
+    [Fact]
+    public void XQuery_LoadXQueryModule_WrongExternalType_FOQM0005()
+    {
+        const string ns = "http://example.com/ev5";
+        var compiler = new XQueryCompiler().WithModule(ns, """
+            module namespace ev = "http://example.com/ev5";
+            declare variable $ev:s as xs:string external := "x";
+            """);
+
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile(
+                $"fn:load-xquery-module(\"{ns}\", map{{\"variables\": map{{QName(\"{ns}\", \"s\"): 1234}}}})")
+            .Evaluate(new XQueryContext()));
+        Assert.Contains("FOQM0005", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_DecimalFormatDecl_NamedFormatUsedByFormatNumber()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile(
+                "declare decimal-format local:df minus-sign=\"-\" percent=\"%\" decimal-separator=\".\"; " +
+                "format-number(0.4857,'###.###%', 'local:df')")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("48.57%", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_DecimalFormatDecl_DefaultFormatUsedByFormatNumber()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile(
+                "declare default decimal-format zero-digit=\"0\" grouping-separator=\",\" decimal-separator=\".\"; " +
+                "format-number(2392.14*36.58,'000,000.000000')")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("087,504.481200", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_DecimalFormatDecl_ModuleLocalFormat()
+    {
+        // A library module's decimal-format declaration applies within that module's
+        // function bodies (decimal-format-21).
+        const string ns = "http://example.com/dfd";
+        var compiler = new XQueryCompiler().WithModule(ns, """
+            module namespace m = "http://example.com/dfd";
+            declare decimal-format m:f grouping-separator="'";
+            declare function m:do() as xs:string { format-number(123456.789,'#''###''###.###', 'm:f') };
+            """);
+        var result = compiler.Compile(
+                "import module namespace m = \"http://example.com/dfd\"; " +
+                "declare decimal-format df001 grouping-separator=\"!\"; " +
+                "format-number(123456.789,'#!###!###.###','df001')||'-'||m:do()")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("123!456.789-123'456.789", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_DecimalFormatDecl_ValidationErrors()
+    {
+        // XQST0097: multi-character property value
+        var ex1 = Assert.ThrowsAny<Exception>(() => new XQueryCompiler()
+            .Compile("declare default decimal-format digit=\"one\"; true()").Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0097", ex1.Message);
+
+        // XQST0098: identical separators
+        var ex2 = Assert.ThrowsAny<Exception>(() => new XQueryCompiler()
+            .Compile("declare default decimal-format decimal-separator=\"!\" grouping-separator=\"!\"; true()").Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0098", ex2.Message);
+
+        // XQST0111: duplicate default declaration
+        var ex3 = Assert.ThrowsAny<Exception>(() => new XQueryCompiler()
+            .Compile("declare default decimal-format digit='$'; declare default decimal-format minus-sign='_'; true()").Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0111", ex3.Message);
+
+        // XQST0114: duplicate property in one declaration
+        var ex4 = Assert.ThrowsAny<Exception>(() => new XQueryCompiler()
+            .Compile("declare namespace a=\"http://a.com/\"; declare decimal-format a:one digit='$' zero-digit=\"0\" minus-sign=\"_\" digit='#'; true()").Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0114", ex4.Message);
+    }
+
+    [Fact]
+    public void XQuery_BoundarySpaceDecl_PreserveKeepsWhitespace()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("declare boundary-space preserve; fn:serialize(<a> z {\"abc\"}</a>)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("<a> z abc</a>", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_BoundarySpaceDecl_StripIsDefault()
+    {
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("fn:serialize(<a> {\"abc\"} </a>)")
+            .Evaluate(new XQueryContext());
+
+        Assert.Equal("<a>abc</a>", result.StringValue);
+    }
+
+    [Fact]
+    public void XQuery_BoundarySpaceDecl_DuplicateDeclaration_XQST0068()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() => new XQueryCompiler()
+            .Compile("declare boundary-space preserve; declare boundary-space strip; \"abc\"").Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0068", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

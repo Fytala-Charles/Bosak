@@ -10,6 +10,16 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.75  | 28-07-2026     | in-scope-prefixes/namespace-uri-for-prefix skip non-propagating ancestor bindings |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.76  | 01-08-2026     | xs:QName constructor atomizes nodes, unwraps singletons, maps empty to empty       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.77  | 01-08-2026     | fn:current rejected in static (use-when) expressions — XPST0017                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.78  | 01-08-2026     | Declared-empty collection returns (); XSLT-mode calendar fallback [Calendar: AD]     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.79  | 01-08-2026     | fn:round exact rational scaling for extreme magnitudes (math-3701)                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.80  | 01-08-2026     | fn:namespace-uri/fn:string take the FIRST sequence item in backwards-compat mode     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -191,6 +201,7 @@
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Net.Http;
@@ -3097,7 +3108,8 @@ public static class FunctionLibrary
                 items.Add(item);
             if (items.Count == 0)
                 return XdmValue.FromString(string.Empty);
-            if (items.Count > 1)
+            // XPath 1.0 backwards compatibility uses the string value of the first item.
+            if (items.Count > 1 && !ctx.BackwardsCompatible)
                 throw new InvalidOperationException("XPTY0004");
             return XdmValue.FromString(items[0].ToString());
         }
@@ -3832,6 +3844,10 @@ public static class FunctionLibrary
     {
         if (!ctx.IsXsltMode)
             throw new InvalidOperationException("XPST0017: Function fn:current is available only in XSLT.");
+        // fn:current is not in the static function library (XSLT 3.0 §24.1): it cannot be
+        // called from use-when or other static expressions.
+        if (ctx.IsStaticEvaluation)
+            throw new InvalidOperationException("XPST0017: Function fn:current is not available in static expressions.");
         return ctx.CurrentItem;
     }
 
@@ -4489,6 +4505,29 @@ public static class FunctionLibrary
     private static XdmValue XsQNameConstructor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
+
+        // Constructor functions atomize their argument (F&O §18.1): the empty sequence
+        // yields the empty sequence, a singleton sequence unwraps, and a node yields its
+        // typed value (xs:untypedAtomic) — function-lookup-008: xs:QName(function) with
+        // an element node argument.
+        if (arg.IsSequence && arg.SequenceValue is not null)
+        {
+            XdmValue? single = null;
+            foreach (var item in XdmSequence.FromSource(arg.SequenceValue))
+            {
+                if (single is not null)
+                    throw new InvalidOperationException("XPTY0004");
+                single = item;
+            }
+            if (single is null)
+                return XdmValue.Undefined;
+            arg = single.Value;
+        }
+        if (arg.IsUndefined)
+            return XdmValue.Undefined;
+        if (arg.IsNode)
+            arg = XdmValue.FromString(arg.NodeValue.StringValue, "untypedAtomic");
+
         if (arg.Kind != XdmValueKind.String)
             throw new InvalidOperationException("XPTY0004");
 
@@ -4553,17 +4592,20 @@ public static class FunctionLibrary
 
     // Static serialization parameters from the query's output declarations. An
     // output:parameter-document option resolves (lazily) to element-form parameters over
-    // which the remaining output declarations take precedence.
+    // which the remaining output declarations take precedence. Unlike bare fn:serialize
+    // (which omits the XML declaration), the XSLT/XQuery output-declaration default
+    // includes it (Serialization-xml-01, K2-Serialization-22/24).
     private static XdmSerializer.SerializationParameters BuildStaticSerializationParameters(EvaluationContext ctx)
     {
         var dict = ctx.StaticOutputParameters!;
+        var staticDefault = new XdmSerializer.SerializationParameters { OmitXmlDeclaration = false };
         XdmSerializer.SerializationParameters? baseParams = null;
         if (dict.TryGetValue(("http://www.w3.org/2010/xslt-xquery-serialization", "parameter-document"), out var paramDocUri))
         {
             var doc = ctx.LoadDocument(paramDocUri);
-            baseParams = XdmSerializer.ParametersFromElementForm(doc);
+            baseParams = XdmSerializer.ParametersFromElementForm(doc, staticDefault);
         }
-        return XdmSerializer.ParametersFromOutputDictionary(dict, baseParams);
+        return XdmSerializer.ParametersFromOutputDictionary(dict, baseParams ?? staticDefault);
     }
 
     private static XdmValue ParseXmlFragment_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -6506,12 +6548,10 @@ public static class FunctionLibrary
         string key = uri ?? "";
         if (ctx.Collections.TryGetValue(key, out var docs))
         {
-            if (docs.Count == 0)
-            {
-                if (string.IsNullOrEmpty(uri))
-                    throw new InvalidOperationException("FODC0003: Default collection is not available");
-                throw new InvalidOperationException($"FODC0002: Collection not available: {uri}");
-            }
+            // A declared collection is available even when it contains no documents:
+            // fn:collection / fn:uri-collection then return the empty sequence
+            // (collection-003's empty default collection). FODC0002/FODC0003 apply only
+            // to collections that are not declared at all.
             if (returnUris)
             {
                 var uris = new List<XdmValue>(docs.Count);
@@ -7055,9 +7095,13 @@ public static class FunctionLibrary
             int count = 0;
             foreach (var x in XdmSequence.FromSource(arg.SequenceValue!))
             {
-                first = x;
+                // XPath 1.0 backwards compatibility keeps the FIRST item of the
+                // sequence (string-003); do not overwrite it with later items.
+                if (count == 0)
+                    first = x;
                 count++;
-                if (!backwardsCompatible && count > 1) break;
+                if (count > 1 && !backwardsCompatible)
+                    break;
             }
             if (count == 0) return null;
             if (!backwardsCompatible && count > 1)
@@ -8969,21 +9013,58 @@ public static class FunctionLibrary
         }
 
         // fn:round rounds to nearest; ties are rounded toward positive infinity.
-        double factor = precision >= 0 ? Math.Pow(10.0, precision) : Math.Pow(10.0, -precision);
-        double scaled = precision >= 0 ? value * factor : value / factor;
-        if (double.IsInfinity(scaled))
+        // For magnitudes where the exact-decimal path above does not apply, compute
+        // value * 10^precision exactly with rational arithmetic so the rounded integer
+        // converts back to the nearest double of the exact result (math-3701: 9.9e-99
+        // rounds to the double whose shortest form is 1.0E-98, not 1.0000000000000001E-98).
+        return RoundDoubleExact(value, precision);
+    }
+
+    /// <summary>
+    /// Rounds a double to <paramref name="precision"/> decimal places using exact
+    /// BigInteger rational arithmetic: the double is decomposed as mantissa × 2^exp and
+    /// scaled by 10^precision exactly; fn:round is floor(scaled + 0.5). The rounded
+    /// integer is converted back by formatting the exact decimal and parsing to the
+    /// nearest double (.NET parses correctly rounded).
+    /// </summary>
+    private static double RoundDoubleExact(double value, int precision)
+    {
+        if (value == 0.0)
             return value;
 
-        double floor = Math.Floor(scaled);
-        double ceil = Math.Ceiling(scaled);
-        double diffFloor = scaled - floor;
-        double diffCeil = ceil - scaled;
-        if (diffFloor < diffCeil)
-            return precision >= 0 ? floor / factor : floor * factor;
-        if (diffCeil < diffFloor)
-            return precision >= 0 ? ceil / factor : ceil * factor;
-        // Exactly halfway: round toward positive infinity.
-        return precision >= 0 ? ceil / factor : ceil * factor;
+        long bits = BitConverter.DoubleToInt64Bits(value);
+        int rawExp = (int)((bits >> 52) & 0x7FF);
+        long mantissa = bits & 0xFFFFFFFFFFFFFL;
+        int exp = rawExp == 0 ? -1074 : rawExp - 1075;
+        if (rawExp != 0)
+            mantissa |= 1L << 52;
+        var numerator = new BigInteger(bits < 0 ? -mantissa : mantissa);
+        var denominator = BigInteger.One;
+
+        // scaled = value * 10^precision = mantissa * 2^(exp+precision) * 5^precision.
+        if (precision >= 0)
+            numerator *= BigInteger.Pow(5, precision);
+        else
+            denominator = BigInteger.Pow(5, -precision);
+        int binExp = exp + precision;
+        if (binExp >= 0)
+            numerator <<= binExp;
+        else
+            denominator <<= -binExp;
+
+        // fn:round = floor(scaled + 0.5); BigInteger division truncates toward zero,
+        // so negative non-exact quotients need a true-floor adjustment.
+        var twoN = (numerator << 1) + denominator;
+        var twoD = denominator << 1;
+        var q0 = BigInteger.Divide(twoN, twoD);
+        if (twoN.Sign < 0 && twoN != q0 * twoD)
+            q0 -= BigInteger.One;
+
+        // Result = q0 * 10^-precision as an exact decimal string, parsed to the
+        // nearest double.
+        string result = q0.ToString(CultureInfo.InvariantCulture)
+            + "E" + (-precision).ToString(CultureInfo.InvariantCulture);
+        return double.Parse(result, NumberStyles.Float, CultureInfo.InvariantCulture);
     }
 
     private static decimal RoundDecimal(decimal value, int precision)
@@ -9638,24 +9719,24 @@ public static class FunctionLibrary
     }
 
     private static XdmValue FormatDate_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Date);
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Date, ctx.IsXsltMode);
 
     private static XdmValue FormatDate_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Date);
+        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Date, ctx.IsXsltMode);
 
     private static XdmValue FormatTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Time);
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Time, ctx.IsXsltMode);
 
     private static XdmValue FormatTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Time);
+        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Time, ctx.IsXsltMode);
 
     private static XdmValue FormatDateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.DateTime);
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.DateTime, ctx.IsXsltMode);
 
     private static XdmValue FormatDateTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.DateTime);
+        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.DateTime, ctx.IsXsltMode);
 
-    private static XdmValue FormatDateTime(XdmValue value, string picture, string? language, string? calendar, string? place, DateTimeComponents components)
+    private static XdmValue FormatDateTime(XdmValue value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode)
     {
         if (value.IsUndefined)
             return XdmValue.FromString(string.Empty);
@@ -9668,7 +9749,7 @@ public static class FunctionLibrary
             _ => throw new InvalidOperationException("XPTY0004")
         };
 
-        string result = FormatDateTimeEngine.Format(xdt, picture, language, calendar, place, components);
+        string result = FormatDateTimeEngine.Format(xdt, picture, language, calendar, place, components, isXsltMode);
         return XdmValue.FromString(result);
     }
 

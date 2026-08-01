@@ -42,6 +42,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.5   | 29-07-2026     | Variable initializers exclude the variable being declared (XPST0008 self-reference) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.6   | 01-08-2026     | Registered module sources flow to the executable for fn:load-xquery-module           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.7   | 01-08-2026     | ModuleRuntimeContext carries decimal formats for module-local format declarations    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -50,6 +54,7 @@ using Bosak.XPath.Compiler.Optimizer;
 using Bosak.XPath.Core;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
+using Bosak.XPath.Runtime.Vm;
 using Bosak.XQuery.Compiler;
 
 namespace Bosak.XQuery.Api;
@@ -137,7 +142,8 @@ public sealed class XQueryCompiler
                 var libVisibility = BuildVisibility(libContext, moduleGraph);
                 var libRuntimeContext = new ModuleRuntimeContext(
                     libContext.Namespaces, libContext.BaseUri,
-                    libContext.DefaultElementNamespace, libContext.DefaultCollation);
+                    libContext.DefaultElementNamespace, libContext.DefaultCollation,
+                    libContext.DecimalFormats, libContext.DeclaredDefaultDecimalFormat);
                 CompileModuleDeclarations(
                     libContext, moduleGraph, moduleNamespaces, libVisibility,
                     optimizer, userFunctions, userVariables, libRuntimeContext);
@@ -148,7 +154,7 @@ public sealed class XQueryCompiler
         var lowerer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast) };
         var module = lowerer.Lower(optimized);
 
-        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables);
+        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources);
     }
 
     private static EmptyOrder? ToEmptyOrder(bool? least)
@@ -160,7 +166,9 @@ public sealed class XQueryCompiler
         IReadOnlyDictionary<string, string> Namespaces,
         string? BaseUri,
         string? DefaultElementNamespace,
-        string? DefaultCollation);
+        string? DefaultCollation,
+        IReadOnlyDictionary<(string LocalName, string NamespaceUri), DecimalFormat> DecimalFormats,
+        DecimalFormat? DeclaredDefaultDecimalFormat);
 
     private sealed record VisibilitySet(
         HashSet<(string Ns, string Local, int Arity)> Functions,
@@ -332,7 +340,9 @@ public sealed class XQueryCompiler
                 moduleRuntimeContext?.Namespaces,
                 moduleRuntimeContext?.BaseUri,
                 moduleRuntimeContext?.DefaultElementNamespace,
-                moduleRuntimeContext?.DefaultCollation));
+                moduleRuntimeContext?.DefaultCollation,
+                moduleRuntimeContext?.DecimalFormats,
+                moduleRuntimeContext?.DeclaredDefaultDecimalFormat));
         }
         foreach (var v in context.UserVariables)
         {
@@ -357,7 +367,9 @@ public sealed class XQueryCompiler
                 moduleRuntimeContext?.Namespaces,
                 moduleRuntimeContext?.BaseUri,
                 moduleRuntimeContext?.DefaultElementNamespace,
-                moduleRuntimeContext?.DefaultCollation));
+                moduleRuntimeContext?.DefaultCollation,
+                moduleRuntimeContext?.DecimalFormats,
+                moduleRuntimeContext?.DeclaredDefaultDecimalFormat));
         }
     }
 

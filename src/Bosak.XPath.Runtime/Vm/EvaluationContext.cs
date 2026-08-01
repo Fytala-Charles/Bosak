@@ -51,6 +51,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.12  | 29-07-2026     | Constructor-local namespace tracking for materialization on built elements |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.13  | 01-08-2026     | Added XQueryModuleSources registry for fn:load-xquery-module resolution |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.14  | 01-08-2026     | Snapshot/restore helpers for module-local decimal formats |
+//                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -259,6 +264,15 @@ public sealed class EvaluationContext
     /// documents in the collection. Used by fn:collection and fn:uri-collection.
     /// </summary>
     public Dictionary<string, IReadOnlyList<string>> Collections { get; } = new();
+
+    /// <summary>
+    /// XQuery library-module sources available to fn:load-xquery-module, keyed by the
+    /// module's target namespace URI. Each entry lists candidate sources with an optional
+    /// location hint (matched by the import's <c>at</c> clause or the load options'
+    /// <c>location-hints</c>). When no candidate matches a requested URI, the loader falls
+    /// back to treating the URI as a filesystem path relative to the static base URI.
+    /// </summary>
+    public Dictionary<string, List<(string? Location, string Source)>> XQueryModuleSources { get; } = new(StringComparer.Ordinal);
 
     /// <summary>
     /// Optional post-processor applied to documents loaded through <see cref="DocumentLoader"/>.
@@ -698,6 +712,21 @@ public sealed class EvaluationContext
         if (_namedDecimalFormats.TryGetValue((localName, namespaceUri), out var fmt))
             return fmt;
         return null;
+    }
+
+    /// <summary>
+    /// Copies the current named decimal formats for save/restore around module-context
+    /// switches (a library module's decimal-format declarations apply only within that module).
+    /// </summary>
+    public Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> SnapshotDecimalFormats()
+        => new(_namedDecimalFormats);
+
+    /// <summary>Replaces the named decimal formats with a previously snapshotted set.</summary>
+    public void RestoreDecimalFormats(Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> snapshot)
+    {
+        _namedDecimalFormats.Clear();
+        foreach (var kv in snapshot)
+            _namedDecimalFormats[kv.Key] = kv.Value;
     }
 
     // ------------------------------------------------------------------

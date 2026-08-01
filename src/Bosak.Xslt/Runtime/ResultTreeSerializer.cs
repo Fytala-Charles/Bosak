@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 1.21  | 13-07-2026     | BC rule: version 1.0 + implicit result tree infers xml, not xhtml (backwards-019).     |
 //                      | Charles Korthout | 1.22  | 13-07-2026     | Restrict attribute minimization to recognized HTML boolean attributes.                 |
 //                      | Charles Korthout | 1.23  | 15-07-2026     | XML method uses raw serializer for suppress-indentation; raw serializer honors the list  |
+//                      | Charles Korthout | 1.24  | 01-08-2026     | suppress-indentation applies to descendants, not the element's own start tag           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3068,12 +3069,12 @@ public static class ResultTreeSerializer
         return NormalizeSurrogatePairEntities(sb.ToString());
     }
 
-    private static void SerializeRawNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
+    private static void SerializeRawNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings, bool ancestorSuppressed = false)
     {
         switch (node)
         {
             case XElement elem:
-                SerializeRawElement(writer, elem, props, depth, inScopeBindings);
+                SerializeRawElement(writer, elem, props, depth, inScopeBindings, ancestorSuppressed);
                 break;
             case XCData cdata:
                 WriteCdataText(writer, cdata.Value);
@@ -3096,7 +3097,7 @@ public static class ResultTreeSerializer
         }
     }
 
-    private static void SerializeRawElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
+    private static void SerializeRawElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings, bool ancestorSuppressed = false)
     {
         // Determine the namespace bindings that should be in scope on this element.
         var targetContext = element.Annotation<NamespaceInheritanceContext>();
@@ -3275,11 +3276,13 @@ public static class ResultTreeSerializer
         writer.Write('>');
 
         bool hasElementChildren = children.Any(c => c is XElement);
-        bool suppressThis = IsSuppressIndentationElement(element.Name, props);
+        // suppress-indentation applies to the whole content of a listed element,
+        // descendants included (output-0232: whitespace is suppressed inside <p> but
+        // not before <p> itself).
+        bool suppressThis = ancestorSuppressed || IsSuppressIndentationElement(element.Name, props);
         foreach (var child in children)
         {
             if (props.Indent && hasElementChildren && child is XElement childElem
-                && !IsSuppressIndentationElement(childElem.Name, props)
                 && !suppressThis)
             {
                 writer.WriteLine();
@@ -3287,7 +3290,7 @@ public static class ResultTreeSerializer
             }
             // Each child gets a fresh copy of the in-scope bindings; namespace
             // declarations do not leak from one sibling to the next.
-            SerializeRawNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
+            SerializeRawNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings), suppressThis);
         }
 
         if (props.Indent && hasElementChildren && !suppressThis)

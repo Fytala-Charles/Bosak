@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Bracket escapes, default widths, roman/alpha/timezone/week-of-month fixes             |
 //                      | Charles Korthout | 0.7   | 15-07-2026     | Tier-2l: timezone §9.8.4.2, fractional seconds, ISO week-in-month, German names       |
 //                      | Charles Korthout | 0.8   | 16-07-2026     | Tier-2l: week-in-month boundary fix, [Z99] zero-padding, namespaced unknown calendars |
+//                      | Charles Korthout | 0.9   | 01-08-2026     | [z] with explicit width drops whole-hour minutes when full form exceeds max width  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,7 +34,7 @@ internal enum DateTimeComponents { Date, Time, DateTime }
 
 internal static class FormatDateTimeEngine
 {
-    public static string Format(XPathDateTime value, string picture, string? language, string? calendar, string? place, DateTimeComponents components)
+    public static string Format(XPathDateTime value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode = false)
     {
         bool hasEra = ContainsEraMarker(picture);
         var sb = new StringBuilder();
@@ -66,7 +67,7 @@ internal static class FormatDateTimeEngine
                 throw FormatError("FOFD1340");
 
             string marker = picture[(bracket + 1)..close];
-            sb.Append(FormatMarker(value, marker, components, language, calendar, hasEra));
+            sb.Append(FormatMarker(value, marker, components, language, calendar, hasEra, isXsltMode));
             pos = close + 1;
         }
 
@@ -116,7 +117,7 @@ internal static class FormatDateTimeEngine
         return new InvalidOperationException(code);
     }
 
-    private static string FormatMarker(XPathDateTime value, string marker, DateTimeComponents components, string? language, string? calendar, bool hasEra)
+    private static string FormatMarker(XPathDateTime value, string marker, DateTimeComponents components, string? language, string? calendar, bool hasEra, bool isXsltMode)
     {
         // Remove all whitespace from the marker content (whitespace within a variable marker is ignored)
         marker = new string(marker.Where(c => !char.IsWhiteSpace(c)).ToArray());
@@ -156,8 +157,9 @@ internal static class FormatDateTimeEngine
 
         bool languageFallback = !IsLanguageSupported(language);
 
-        // Validate calendar argument (invalid/unknown EQName is an error)
-        ValidateCalendar(calendar);
+        // Validate calendar argument (invalid/unknown EQName is an error in XPath mode;
+        // in XSLT mode an unknown bare calendar falls back to AD with a marker).
+        bool calendarFallback = ValidateCalendar(calendar, isXsltMode);
 
         // Validate component is available for the value type
         ValidateComponentAvailable(component, components);
@@ -178,11 +180,14 @@ internal static class FormatDateTimeEngine
             'f' => FormatFractionalSeconds(value, presentation, minWidth, maxWidth),
             'P' => FormatAmPm(value, presentation, minWidth, maxWidth),
             'Z' => FormatTimezone(value, presentation, minWidth, maxWidth),
-            'z' => FormatTimezoneGmt(value, presentation, minWidth, maxWidth),
+            'z' => FormatTimezoneGmt(value, presentation, minWidth, maxWidth, widthSpec is not null),
             'C' => "ISO",
             'E' => value.Year > 0 ? "AD" : "BC",
             _ => throw FormatError("FOFD1340")
         };
+
+        if (calendarFallback)
+            result = $"[Calendar: AD]{result}";
 
         if (languageFallback)
             result = $"[Language: en]{result}";
@@ -259,20 +264,28 @@ internal static class FormatDateTimeEngine
         return true;
     }
 
-    private static void ValidateCalendar(string? calendar)
+    private static bool ValidateCalendar(string? calendar, bool isXsltMode)
     {
         if (string.IsNullOrEmpty(calendar))
-            return;
+            return false;
         if (!TryParseCalendarName(calendar, out string? ns, out string? localName))
             throw FormatError("FOFD1340");
         bool knownLocal = localName.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
                           localName.Equals("Gregorian", StringComparison.OrdinalIgnoreCase) ||
                           localName.Equals("ISO", StringComparison.OrdinalIgnoreCase) ||
                           localName.Equals("ISO8601", StringComparison.OrdinalIgnoreCase);
-        // Unknown calendars in no namespace are an error; calendars with a namespace URI are
-        // accepted as an implementation-defined fallback to the default (Gregorian) calendar.
+        // Unknown calendars in no namespace: XSLT 2.0 §16.5.2 requires falling back to
+        // the default (AD) calendar with a [Calendar: AD] marker (format-date-en-033);
+        // in XPath/XQuery mode the same argument is an error (QT3 format-date-en155).
+        // Calendars with a namespace URI are accepted as an implementation-defined
+        // fallback to the default (Gregorian) calendar.
         if (string.IsNullOrEmpty(ns) && !knownLocal)
-            throw FormatError("FOFD1340");
+        {
+            if (!isXsltMode)
+                throw FormatError("FOFD1340");
+            return true;
+        }
+        return false;
     }
 
     private static void ValidateComponentAvailable(char component, DateTimeComponents components)
@@ -928,12 +941,12 @@ internal static class FormatDateTimeEngine
     }
 
     private static string FormatTimezone(XPathDateTime value, string presentation, int minWidth, int maxWidth)
-        => FormatTimezoneCore(value, presentation, gmtPrefix: false);
+        => FormatTimezoneCore(value, presentation, gmtPrefix: false, explicitWidth: false, maxWidth: int.MaxValue);
 
-    private static string FormatTimezoneGmt(XPathDateTime value, string presentation, int minWidth, int maxWidth)
-        => FormatTimezoneCore(value, presentation, gmtPrefix: true);
+    private static string FormatTimezoneGmt(XPathDateTime value, string presentation, int minWidth, int maxWidth, bool explicitWidth)
+        => FormatTimezoneCore(value, presentation, gmtPrefix: true, explicitWidth, maxWidth);
 
-    private static string FormatTimezoneCore(XPathDateTime value, string presentation, bool gmtPrefix)
+    private static string FormatTimezoneCore(XPathDateTime value, string presentation, bool gmtPrefix, bool explicitWidth, int maxWidth)
     {
         // Detect the optional trailing "t" modifier (zero offset prints as Z).
         bool flagT = presentation.Length > 0 && (presentation[^1] == 't' || presentation[^1] == 'T');
@@ -978,19 +991,19 @@ internal static class FormatDateTimeEngine
         }
 
         Rune? zeroDigit = DetectZeroDigit(pres);
-        string asciiResult = FormatTimezoneDigits(pres, hours, minutes, negative, gmtPrefix);
+        string asciiResult = FormatTimezoneDigits(pres, hours, minutes, negative, gmtPrefix, maxWidth, explicitWidth);
         if (zeroDigit.HasValue)
             asciiResult = MapDigits(asciiResult, zeroDigit.Value);
         return asciiResult;
     }
 
-    private static string FormatTimezoneDigits(string presentation, int hours, int minutes, bool negative, bool gmtPrefix)
+    private static string FormatTimezoneDigits(string presentation, int hours, int minutes, bool negative, bool gmtPrefix, int maxWidth, bool explicitWidth)
     {
         string sign = negative ? "-" : "+";
         string prefix = gmtPrefix ? "GMT" + sign : sign;
 
         if (string.IsNullOrEmpty(presentation))
-            return FormatDefaultTimezone(hours, minutes, negative, gmtPrefix, separator: ":");
+            return FormatDefaultTimezone(hours, minutes, negative, gmtPrefix, separator: ":", maxWidth, explicitWidth);
 
         // Tokenize the presentation into digit groups and separators.
         var groups = new List<string>();
@@ -1063,11 +1076,19 @@ internal static class FormatDateTimeEngine
         return prefix + hourStr2 + sep + minuteStr2;
     }
 
-    private static string FormatDefaultTimezone(int hours, int minutes, bool negative, bool gmtPrefix, string separator)
+    private static string FormatDefaultTimezone(int hours, int minutes, bool negative, bool gmtPrefix, string separator, int maxWidth = int.MaxValue, bool explicitWidth = false)
     {
         string sign = negative ? "-" : "+";
         string prefix = gmtPrefix ? "GMT" + sign : sign;
-        return prefix + hours.ToString("00", CultureInfo.InvariantCulture)
+        string hourStr = hours.ToString("00", CultureInfo.InvariantCulture);
+        // Component z with an explicit width modifier: whole-hour offsets drop the
+        // minutes when the full sign+hh:mm form would exceed the maximum width
+        // (format-date-016 [z,6-6] and QT3 format-time-018 [z,2-6] keep GMT-14:00;
+        // format-date-017 [z,2-2] gives GMT-14 — Erratum E29).
+        if (explicitWidth && minutes == 0
+            && sign.Length + hourStr.Length + separator.Length + 2 > maxWidth)
+            return prefix + hourStr;
+        return prefix + hourStr
             + separator + minutes.ToString("00", CultureInfo.InvariantCulture);
     }
 

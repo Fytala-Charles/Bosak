@@ -22,10 +22,15 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 29-07-2026     | UndeclaredPrefixes tracking for namespace undeclarations (declare namespace p = "") |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 01-08-2026     | ContextItemTypeName records the library-module context item type declaration         |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 01-08-2026     | DecimalFormats/DeclaredDefaultDecimalFormat/BoundarySpaceStrip prolog state          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Ast;
+using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.XQuery.Compiler;
 
@@ -74,6 +79,7 @@ public sealed class XQueryStaticContext
     private readonly List<UserVariableDeclaration> _userVariables;
     private readonly List<ModuleImport> _importedModules;
     private readonly HashSet<string> _undeclaredPrefixes;
+    private readonly Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> _decimalFormats;
 
     /// <summary>
     /// Creates a static context with the standard XQuery namespace prefixes pre-bound.
@@ -99,6 +105,7 @@ public sealed class XQueryStaticContext
         _userVariables = new List<UserVariableDeclaration>();
         _importedModules = new List<ModuleImport>();
         _undeclaredPrefixes = new HashSet<string>(StringComparer.Ordinal);
+        _decimalFormats = new Dictionary<(string, string), DecimalFormat>();
     }
 
     private XQueryStaticContext(
@@ -115,7 +122,11 @@ public sealed class XQueryStaticContext
         string? defaultCollation,
         string? baseUri,
         string? moduleNamespaceUri,
-        bool? defaultEmptyOrderLeast)
+        bool? defaultEmptyOrderLeast,
+        string? contextItemTypeName,
+        Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> decimalFormats,
+        DecimalFormat? declaredDefaultDecimalFormat,
+        bool? boundarySpaceStrip)
     {
         _namespaces = namespaces;
         _variables = variables;
@@ -125,12 +136,16 @@ public sealed class XQueryStaticContext
         _userVariables = userVariables;
         _importedModules = importedModules;
         _undeclaredPrefixes = undeclaredPrefixes;
+        _decimalFormats = decimalFormats;
         DefaultElementNamespace = defaultElementNamespace;
         DefaultFunctionNamespace = defaultFunctionNamespace;
         DefaultCollation = defaultCollation;
         BaseUri = baseUri;
         ModuleNamespaceUri = moduleNamespaceUri;
         DefaultEmptyOrderLeast = defaultEmptyOrderLeast;
+        ContextItemTypeName = contextItemTypeName;
+        DeclaredDefaultDecimalFormat = declaredDefaultDecimalFormat;
+        BoundarySpaceStrip = boundarySpaceStrip;
     }
 
     /// <summary>
@@ -165,6 +180,51 @@ public sealed class XQueryStaticContext
     /// null for the main module.
     /// </summary>
     public string? ModuleNamespaceUri { get; private init; }
+
+    /// <summary>
+    /// The declared context item type of a library module
+    /// (<c>declare context item as T external;</c>); null when the module does not
+    /// declare one. Used by fn:load-xquery-module to validate the supplied context item.
+    /// </summary>
+    public string? ContextItemTypeName { get; private init; }
+
+    /// <summary>Creates a new context with the declared context item type set.</summary>
+    public XQueryStaticContext WithContextItemType(string? typeName)
+        => CloneWith(contextItemTypeName: typeName);
+
+    /// <summary>
+    /// The named decimal formats declared in the prolog
+    /// (<c>declare decimal-format p:name …</c>), keyed by expanded name.
+    /// </summary>
+    public IReadOnlyDictionary<(string LocalName, string NamespaceUri), DecimalFormat> DecimalFormats => _decimalFormats;
+
+    /// <summary>
+    /// The default decimal format declared in the prolog
+    /// (<c>declare default decimal-format …</c>); null when not declared.
+    /// </summary>
+    public DecimalFormat? DeclaredDefaultDecimalFormat { get; private init; }
+
+    /// <summary>
+    /// The boundary-space policy for direct element constructors
+    /// (<c>declare boundary-space strip|preserve</c>): true = strip, false = preserve,
+    /// null = not declared (spec default is strip).
+    /// </summary>
+    public bool? BoundarySpaceStrip { get; private init; }
+
+    /// <summary>Creates a new context with a named decimal format declaration added.</summary>
+    public XQueryStaticContext WithDecimalFormat(string localName, string namespaceUri, DecimalFormat format)
+    {
+        var copy = new Dictionary<(string, string), DecimalFormat>(_decimalFormats) { [(localName, namespaceUri)] = format };
+        return CloneWith(decimalFormats: copy);
+    }
+
+    /// <summary>Creates a new context with the default decimal format declaration set.</summary>
+    public XQueryStaticContext WithDeclaredDefaultDecimalFormat(DecimalFormat format)
+        => CloneWith(declaredDefaultDecimalFormat: format);
+
+    /// <summary>Creates a new context with the boundary-space policy set.</summary>
+    public XQueryStaticContext WithBoundarySpace(bool strip)
+        => CloneWith(boundarySpaceStrip: strip);
 
     /// <summary>
     /// Returns a read-only view of the namespace bindings (prefix → URI).
@@ -319,7 +379,11 @@ public sealed class XQueryStaticContext
         string? defaultCollation = null,
         string? baseUri = null,
         string? moduleNamespaceUri = null,
-        bool? defaultEmptyOrderLeast = null)
+        bool? defaultEmptyOrderLeast = null,
+        string? contextItemTypeName = null,
+        Dictionary<(string LocalName, string NamespaceUri), DecimalFormat>? decimalFormats = null,
+        DecimalFormat? declaredDefaultDecimalFormat = null,
+        bool? boundarySpaceStrip = null)
     {
         return new XQueryStaticContext(
             namespaces ?? _namespaces,
@@ -335,6 +399,10 @@ public sealed class XQueryStaticContext
             defaultCollation ?? DefaultCollation,
             baseUri ?? BaseUri,
             moduleNamespaceUri ?? ModuleNamespaceUri,
-            defaultEmptyOrderLeast ?? DefaultEmptyOrderLeast);
+            defaultEmptyOrderLeast ?? DefaultEmptyOrderLeast,
+            contextItemTypeName ?? ContextItemTypeName,
+            decimalFormats ?? _decimalFormats,
+            declaredDefaultDecimalFormat ?? DeclaredDefaultDecimalFormat,
+            boundarySpaceStrip ?? BoundarySpaceStrip);
     }
 }

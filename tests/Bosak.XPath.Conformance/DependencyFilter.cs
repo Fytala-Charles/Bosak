@@ -46,7 +46,6 @@ internal sealed class DependencyFilter
         "advanced-uca-fallback",
         "olson-timezone",
         "arbitraryPrecisionDecimal",
-        "fn-load-xquery-module",
     };
 
     // Spec tokens that Bosak supports (XPath versions)

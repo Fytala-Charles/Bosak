@@ -147,6 +147,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.82  | 29-07-2026     | Residual sweep: stable order-by; array atomize/flatten; default-ns computed names; div duration rule |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.83  | 01-08-2026     | XPath 1.0 BC: numeric fn args truncate to first item and convert via fn:number       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.84  | 01-08-2026     | BC first-item truncation for all singleton params; pre-atomization type pass-through |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -5515,6 +5519,10 @@ public static class VmEngine
     /// </summary>
     private static double ToDoubleOrNaN(XdmValue value)
     {
+        // XPath 1.0 backwards compatibility: a multi-item sequence converts via its
+        // first item (backwards-024: 1 + (6 to 10) = 7); the empty sequence gives NaN.
+        if (value.IsSequence && value.SequenceValue is not null)
+            value = FirstItemOrUndefined(value);
         value = Atomize(value);
         return value.Kind switch
         {
@@ -8271,6 +8279,12 @@ public static class VmEngine
             }
         }
 
+        // XPath 1.0 backwards compatibility (XSLT 3.0 §3.9.1): an argument to a singleton
+        // parameter is truncated to its first item (xpath-compat-0301, string-003/031);
+        // a numeric parameter additionally converts as by fn:number.
+        bool bcTruncate = context?.BackwardsCompatible == true && !allowsMultiple;
+        bool bcNumeric = bcTruncate && IsNumericTypeName(type);
+
         if (items.Count == 0)
         {
             if (allowsEmpty)
@@ -8278,11 +8292,28 @@ public static class VmEngine
             throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
         }
         if (items.Count > 1 && !allowsMultiple)
-            throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
+        {
+            if (bcTruncate)
+            {
+                items.RemoveRange(1, items.Count - 1);
+            }
+            else
+            {
+                throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
+            }
+        }
 
         var converted = new List<XdmValue>(items.Count);
         foreach (var item in items)
         {
+            // An item that already matches the target type passes through unchanged —
+            // checked before atomization so node items survive node-typed parameters
+            // (e.g. a node truncated to a node()? parameter in backwards-compatible mode).
+            if (ValueMatchesType(item, type, context))
+            {
+                converted.Add(item);
+                continue;
+            }
             // Element/text/document/attribute nodes atomize to xs:untypedAtomic; comment,
             // processing-instruction, and namespace nodes atomize to xs:string (which is
             // not cast to numeric types by function conversion — K2-FunctionProlog-18/20).
@@ -8318,6 +8349,12 @@ public static class VmEngine
             {
                 converted.Add(promoted);
             }
+            else if (bcNumeric)
+            {
+                // backwards-022: round(concat(...)) under version="1.0" — xs:string and
+                // xs:boolean arguments convert to xs:double via fn:number semantics.
+                converted.Add(XdmValue.FromDouble(ToDoubleOrNaN(atomic)));
+            }
             else
             {
                 throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
@@ -8352,6 +8389,21 @@ public static class VmEngine
             _ => false
         };
         return promotable && TryCast(value, type, out result);
+    }
+
+    /// <summary>
+    /// True when the (occurrence-stripped) sequence-type name is a numeric type:
+    /// xs:numeric or one of the numeric primitives. Used for XPath 1.0 backwards-
+    /// compatible argument conversion (XSLT 3.0 §3.9.1).
+    /// </summary>
+    private static bool IsNumericTypeName(string type)
+    {
+        var t = type.StartsWith("xs:", StringComparison.OrdinalIgnoreCase) ? type[3..] : type;
+        return t.Equals("numeric", StringComparison.OrdinalIgnoreCase)
+            || t.Equals("double", StringComparison.OrdinalIgnoreCase)
+            || t.Equals("float", StringComparison.OrdinalIgnoreCase)
+            || t.Equals("decimal", StringComparison.OrdinalIgnoreCase)
+            || t.Equals("integer", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

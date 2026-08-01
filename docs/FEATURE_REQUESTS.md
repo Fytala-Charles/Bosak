@@ -1,6 +1,6 @@
 # Bosak Cross-Application Feature Requests
 
-> **Living Registry** — Last updated: 2026-07-29 (XQuery: **VarDecl.external + NamespaceDecl + Annotation + Literal + CombinedErrorCodes + MapConstructor + AllowingEmpty + CompNamespaceConstructor + HigherOrderFunctions + dayTimeDurations + residual sweep closed** (17 → 0, 11 → 0, 24 → 0, 16 → 0, 17 → 0, 15 → 0, 14 → 0, 11 → 0, 11 → 0, 27 → 0, 83 → 0); QT3 now **29,510 passed / 0 failed** (92.74%); unit tests **1,660/0**; XSLT baseline unchanged)
+> **Living Registry** — Last updated: 2026-08-01 (XSLT conformance sweep closed: **0 failing tests**; **fn:load-xquery-module implemented**; **`declare decimal-format` / `declare boundary-space` prolog support** incl. module-local formats and full validation matrix; **HTML/XHTML serialization matrix fixed** (version-dependent void lists, boolean attributes, script/style raw text, CDATA XML islands, XHTML prefix normalization) — prod/DecimalFormatDecl **41/0**, prod/BoundarySpaceDecl **28/0**, all six ser/* sets green; QT3 **29,741 passed / 0 failed / 2,080 skipped** (93.46%); unit tests **1,677/0**)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

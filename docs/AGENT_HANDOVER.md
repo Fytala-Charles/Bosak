@@ -1,5 +1,110 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-08-01 (third session)
+**Commit:** previous `1a553d4` (+ uncommitted XSLT sweep and fn:load-xquery-module work)
+**Current focus:** **`declare decimal-format` / `declare boundary-space` prolog support plus the HTML/XHTML serialization matrix** — prod/DecimalFormatDecl went 1/40 → **41 passed / 0 failed**, prod/BoundarySpaceDecl 2/26 → **28 passed / 0 failed**, the three recorded fn-load-xquery-module skips (040/045/046) now pass (set: **61/0/22**), and admitting the previously prolog-gated serialization tests drove the ser sets from 45/40 passing to **method-html 64/0, method-xhtml 49/0, method-xml 39/0, method-text 18/0, method-json 73/0, method-adaptive 87/0**. QT3 went from **29,571 passed / 0 failed / 2,250 skipped (92.74%)** to **29,741 passed / 0 failed / 2,080 skipped (93.46%)** (+170 passing). Full `dotnet test Bosak.sln` passes: **1,677 unit tests / 0 failed** (+7 new).
+
+## This Session Changes (prolog declarations + serialization matrix)
+
+1. **`declare decimal-format`** — named and default forms with the full §4.10 validation matrix: unknown property **XPST0003** (currency-symbol is XSLT-only, decimal-format-07), multi-character single-char property **XQST0097**, zero-digit must have digit value 0 (909err/910err/35), digit sign must not be a digit, duplicate property **XQST0114**, identical-or-digit separators **XQST0098** (plus exponent-separator vs percent/per-mille, numberformat111), duplicate declaration **XQST0111**. Declared formats flow into fn:format-number's named/default resolution.
+2. **Module-local decimal formats** — `ModuleRuntimeContext` now carries a library module's formats; function bodies and variable initializers apply them with save/restore (decimal-format-21: a library module's format-number uses its own declaration).
+3. **`declare boundary-space`** — `strip` (the spec default) and `preserve`; duplicate declaration is **XQST0068**. The policy threads from the prolog through `XPathParser` into direct-constructor content scanning: with preserve, whitespace-only literal runs at content boundaries become text nodes (all 28 set tests pass).
+4. **HTML/XHTML serialization matrix** — the previously prolog-gated ser tests exposed a family of serializer gaps, now fixed:
+   - Version-dependent void-element lists: HTML 4.0 includes `frame`/`isindex`, HTML5 includes `keygen`/`basefont`/`bgsound`/`source`/`track`/`wbr`; the bare void form applies in HTML5 regardless of namespace but in HTML 4.0 only for no-namespace elements (html-3).
+   - XHTML void elements self-close `<area />` (HTML5 also in no namespace, xhtml-2; HTML 4.0 only in the XHTML namespace, xhtml-1a).
+   - HTML "XML islands": foreign-namespace empty elements self-close `<magic/>` (html-5/6); foreign elements whose parent is HTML serialize text as CDATA sections, non-recursively (html-18/19a).
+   - Boolean attribute minimization (`selected="SELECTED"` → `selected`, html-12/13); `&` not escaped before `{` in HTML attributes (html-11); script/style content fully raw including nested elements (html-9/10).
+   - HTML5 prefix normalization for the xhtml method: any namespaced element serializes with a default-namespace declaration (xhtml-50/51/52), dropping redundant prefixed declarations unless an attribute uses the prefix.
+   - HTML doctype fallback now fires only for effective version ≥ 5 (html-1/2/45 expect none at 4.0).
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/{Parser/XQueryParser,Compiler/XQueryStaticContext,Api/XQueryCompiler,Api/XQueryExecutable}.cs`
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`, `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`
+- `src/Bosak.XPath.Standard/Functions/XdmSerializer.cs`
+- `tests/Bosak.XPath.Conformance/{TestExecutor,ConformanceRunner}.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+7)
+
+## Next Recommended Step
+
+1. **XSD 1.1 regex character class subtraction** — unskips regex-syntax-0056a/0086a (XSLT) and QT3 regex coverage.
+2. **QT3 residual singles/pairs sweep** — ~40 scattered `fn:*`, `op:*`, `app:*` entries.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-01 (second session)
+**Commit:** previous `1a553d4` (+ uncommitted XSLT sweep from the first session)
+**Current focus:** **fn:load-xquery-module implemented** (the last feature-level XQuery gap): dynamic library-module loading per F&O 3.1 §15.3.1 — URI resolution with location hints, transitive import closure, external-variable and context-item binding from the options map, and the result map of public declarations. The fn-load-xquery-module set went from fully skipped to **58 passed / 0 failed / 25 skipped**; QT3 went from **29,510 passed / 0 failed / 2,311 skipped (92.74%)** to **29,571 passed / 0 failed / 2,250 skipped (92.89%)** (+61 passing). Full `dotnet test Bosak.sln` passes: **1,670 unit tests / 0 failed** (+5 new).
+
+## This Session Changes (fn:load-xquery-module)
+
+1. **New `XQueryModuleLoader`** (`src/Bosak.XQuery/Api/XQueryModuleLoader.cs`) — resolves the module URI via `EvaluationContext.XQueryModuleSources` (seeded from `XQueryCompiler.WithModule` registrations; filesystem fallback against the static base URI), parses and validates the library module (FOQM0003), resolves the transitive import closure, compiles it through the existing library-module pipeline via a synthetic importing wrapper, and returns `map{"variables": …, "functions": …}` with the target module's PUBLIC declarations only (imported modules' declarations are excluded, fn-load-xquery-module-023/025).
+2. **Options map semantics** — `variables` (external declarations only; wrong type is **FOQM0005**, non-external entries silently ignored), `context-item` (checked against the module's declared context item type → **FOQM0005**), `location-hints` (candidate selection), `xquery-version` (numeric only — **XPTY0004**; unsupported version is **FOQM0006**), `static-parameters`/`vendor-options` (accepted; must be QName-keyed maps), unknown options ignored. Empty URI is **FOQM0001**, unresolvable **FOQM0002**, unsupplied external variable **XPDY0002**, module initializer errors pass through (FOAR0001).
+3. **Function items invoke against the module's own evaluation context** (its lazy variable resolver, bound externals, and option context item) — not the caller's — so bodies referencing module variables resolve at call time (fn-load-xquery-module-016/028).
+4. **Parser/static-context** — the library-module `declare context item as T external` type is now recorded (`XQueryStaticContext.ContextItemTypeName`) for the FOQM0005 check.
+5. **Recorded gaps** — fn-load-xquery-module-040/045/046 registered as reasoned skips: their modules need `declare decimal-format` / `declare boundary-space` prolog support, which is already a recorded gap in the dedicated sets (prod/DecimalFormatDecl, prod/BoundarySpaceDecl).
+6. **Harness** — `fn-load-xquery-module` removed from the unsupported-feature list; the -9xx `satisfied="false"` variants skip as designed.
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/Api/{XQueryModuleLoader,XQueryCompiler,XQueryExecutable}.cs` (loader is new)
+- `src/Bosak.XQuery/{Compiler/XQueryStaticContext,Parser/XQueryParser}.cs`
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (`XQueryModuleSources` registry)
+- `tests/Bosak.XPath.Conformance/{DependencyFilter,ConformanceRunner}.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+5)
+
+## Next Recommended Step
+
+1. **`declare decimal-format` / `declare boundary-space` prolog support** — unblocks the 3 recorded load-xquery-module skips plus the dedicated sets (prod/DecimalFormatDecl ~40, prod/BoundarySpaceDecl ~26).
+2. **XSD 1.1 regex character class subtraction** — unskips regex-syntax-0056a/0086a (XSLT) and QT3 regex coverage.
+3. **QT3 residual singles/pairs sweep** — ~40 scattered `fn:*`, `op:*`, `app:*` entries.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-01
+**Commit:** `1a553d4` (previous: docs(handover): record residual sweep commit hash 2a0cb37)
+**Current focus:** **XSLT conformance sweep closed** — a fresh full run surfaced 32 failing tests (the July 4 log's 177 was stale; xml-version, collations, tunnel, normalize-unicode had been fixed by the July XQuery sessions). **19 engine/harness fixes** brought the W3C XSLT 3.0 suite to **0 failing tests**: XSLT conformance now **7,109 passed / 0 failed / 7,491 skipped (14,600 total, 100% of runnable)**. QT3 unchanged at **29,510 passed / 0 failed / 2,311 skipped (92.74%)** — full QT3 re-run confirms zero regressions. Full `dotnet test Bosak.sln` passes: **1,665 unit tests / 0 failed** (+5 new QName tests).
+
+## This Session Changes (XSLT conformance sweep)
+
+1. **fn:system-property in static expressions** — use-when/static evaluation contexts now run with `IsXsltMode=true` (XSLT 3.0 §3.13.3); `fn:current` conversely raises XPST0017 in static contexts (shadow-002..004, use-when-0103/0104/0106/0212/0421, version-001/002/025, system-property-013/014a/021).
+2. **Pattern keyword disambiguation** — in match patterns, `union`/`intersect`/`except` directly after `/`, `@`, or `::` is a NameTest, not an operator (match-038: `match="/ union /*"` is a rooted path over the element named "union").
+3. **XPath 1.0 backwards compatibility** — three gaps closed: AVTs on elements with `xsl:version="1.0"` compile and evaluate in BC mode (version-014); global variable `select`/body honors the element's `version="1.0"` (xslt-compat-011); BC function arguments truncate to the first item for ALL singleton parameter types (not just numeric) and convert strings/booleans to double via fn:number for numeric parameters (backwards-022/024, xpath-compat-0301, string-031); `fn:namespace-uri`/`fn:string` take the FIRST sequence item in BC mode (string-003).
+4. **Collections** — the XSLT harness populates `EvaluationContext.Collections` from environment `<collection>` entries; a declared-but-empty collection returns () instead of FODC0002/0003 (collection-001..003).
+5. **Comment/PI-only result trees** — top-level `xsl:comment`/`xsl:processing-instruction` now mark the principal result as having content, so a comment-only result is not treated as absent (seqtor-101: `<!---->` survives).
+6. **xs:QName constructor atomization** — the `xs:QName()` type constructor atomizes its argument per F&O §18.1: nodes yield their typed value, singleton sequences unwrap, empty yields empty (function-lookup-008 — the session's starting point; also fixes the XQuery shape).
+7. **xml:id normalization** — `xml:id` attribute values are whitespace-collapsed at document load (ID attribute normalization, fn-doc-37), and the ID check validates the normalized value as NCName (key-076's `xml:id="id3 "`; fn-id-25's invalid values still rejected).
+8. **Timezone `[z]` width rule** — component `z` with an explicit width modifier drops the minutes of whole-hour offsets when the full `±hh:mm` form would exceed the maximum width (format-date-017 `[z,2-2]` → `GMT-14`; `[z]`, `[z,6-6]`, `[z,2-6]`, `[z0]` unchanged — Erratum E29).
+9. **XSLT calendar fallback** — an unknown bare calendar in `format-date/dateTime/time` falls back to AD with a `[Calendar: AD]` prefix in XSLT mode (format-date-en-033); XPath/XQuery mode keeps FOFD1340 (QT3 format-date-en155).
+10. **suppress-indentation subtrees** — indentation suppression now applies to the whole content of a listed element, descendants included, but not before the element's own start tag (output-0232, result-document-0284).
+11. **copy-namespaces="no" prefix fidelity** — copied elements keep their own prefix (the default namespace for unprefixed elements) instead of an axis-order-dependent generated prefix (copy-4901 / Saxon bug 2209).
+12. **fn:serialize omit-xml-declaration defaults** — bare `fn:serialize` defaults to omitting the XML declaration (copy-5101); static output declarations (`declare option output:*`) follow the host-language default of including it (Serialization-xml-01, K2-Serialization-22/24).
+13. **fn:round exact scaling** — `fn:round` at extreme magnitudes computes `value × 10^precision` with exact BigInteger rational arithmetic, so the rounded result is the nearest double to the exact decimal (math-3701: `round(9.9e-99, 99)` → `1.0E-98`).
+14. **Harness** — `XSD_1.1` removed from the unsupported-feature list (the engine claims XSD 1.1: type-available-0151 skips, 0151a runs); `regex-syntax-0056a/0086a` registered as reasoned skips (XSD 1.1 character class subtraction not implemented); `XSLT_CONFORMANCE_DEBUG=1` prints full stack traces for failures.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/{FunctionLibrary,FormatDateTimeEngine,XdmSerializer}.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Providers/{XDocument/XDocumentNode,Xml11/Xml11Loader}.cs`
+- `src/Bosak.Xslt/{Stylesheet/Stylesheet,Runtime/TransformEngine,Runtime/ResultTreeSerializer,Patterns/PatternCompiler}.cs`
+- `tests/Bosak.Xslt.Conformance/Program.cs`, `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`, `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (+5)
+
+## Remaining XSLT Conformance Notes
+
+All 234 test sets run with 0 failures; skips are the standing bulk categories (streaming, schema-aware, packages, XSD 1.1 regex class subtraction, deep-recursion guards, upstream test defects). The unit-test suite and QT3 are fully green.
+
+## Next Recommended Step
+
+1. **fn:load-xquery-module** — the only remaining feature-level XQuery gap of size (~2,000 bulk QT3 skips include it).
+2. **XSD 1.1 regex character class subtraction** — would unskip regex-syntax-0056a/0086a (XSLT) and any QT3 regex-subtraction coverage.
+3. **QT3 residual singles/pairs sweep** — ~40 scattered `fn:*`, `op:*`, `app:*` entries.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-07-29
 **Commit:** `2a0cb37` (feat(xquery): residual-cluster sweep — stable order-by, switch semantics, arrays, min/max, error codes)
 **Current focus:** **Residual-cluster sweep closed** (83 gaps → 0): a broad sweep across AxisStep, VarDecl, StepExpr, SwitchExpr, PathExpr, ArrayTest, DefaultNamespaceDecl, fn:id/idref, fn:in-scope-prefixes, fn:min, fn:base-uri, fn:doc, fn:generate-id, xs:error, and op/divide-dayTimeDuration. QT3 went from **29,427 passed / 0 failed / 2,394 skipped (92.48%)** to **29,510 passed / 0 failed / 2,311 skipped (92.74%)** (+83 passing). Full `dotnet test Bosak.sln` passes: **1,660 unit tests / 0 failed**; XSLT baseline unchanged.

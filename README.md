@@ -156,7 +156,7 @@ flowchart TB
 |-------|-------------|--------|
 | 1 | XPath 3.1 Core — compiler + VM + standard functions | ✅ Complete |
 | 2 | XSLT 2.0/3.0 — template matching, sequence constructors, `fn:transform()` | ✅ Complete — full option surface + QT3 Tier-2m (117/124 passed, 7 skipped) |
-| 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries, full core FLWOR | 🚧 Phase 2 complete (all core FLWOR clauses); QT3 wired (22,947/0); Phase 3 constructors next |
+| 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries, full core FLWOR | 🚧 Phase 4 (constructors, modules, serialization, HOF, `fn:load-xquery-module`); QT3 wired (29,571/0) |
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | 📋 Planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
 
@@ -222,8 +222,8 @@ The harness:
 
 | Metric | Value |
 |--------|-------|
-| **XPath (QT3)** | 428 test sets, ~32,000 tests |
-| Pass Rate (XPath) | **67.94%** (21,632 passed / 305 failed / 9,884 skipped); **98.61%** of runnable tests pass |
+| **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
+| Pass Rate (XPath+XQuery) | **29,741 passed / 0 failed / 2,080 skipped** (93.46%); **100%** of runnable tests pass |
 | **XSLT 3.0** | 234 test sets, 14,600 tests |
 | Pass Rate (XSLT) | **7,109 passed / 0 failed / 7,491 skipped** — 100% of runnable tests pass |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |

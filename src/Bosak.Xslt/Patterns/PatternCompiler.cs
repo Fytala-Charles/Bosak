@@ -39,6 +39,7 @@
 //                      | Charles Korthout | 2.5   | 26-06-2026     | Check URI for doc()/document() match patterns                                           |
 //                      | Charles Korthout | 2.6   | 05-07-2026     | Disallow reverse axes in match patterns (XTSE0340); fixes version-023a                |
 //                      | Charles Korthout | 2.7   | 14-07-2026     | namespace-node() match pattern support; fixes snapshot-0102a                           |
+//                      | Charles Korthout | 2.8   | 01-08-2026     | union/intersect/except after / @ :: are NameTests, not operators; fixes match-038      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2494,6 +2495,8 @@ public sealed class PatternCompiler
     /// <summary>
     /// Splits text on a word separator (like "except" or "intersect") only at the top level.
     /// The separator must be surrounded by non-word characters or string boundaries.
+    /// A word directly preceded by '/', '@', or ':' is a NameTest, not an operator —
+    /// match-038: '/ union /*' is a rooted path over the element named "union".
     /// </summary>
     private static string[] SplitTopLevel(string text, string separator)
     {
@@ -2512,6 +2515,10 @@ public sealed class PatternCompiler
                 bool rightBoundary = i + separator.Length == text.Length || !char.IsLetterOrDigit(text[i + separator.Length]);
                 if (leftBoundary && rightBoundary)
                 {
+                    int prev = i - 1;
+                    while (prev >= 0 && char.IsWhiteSpace(text[prev])) prev--;
+                    if (prev >= 0 && (text[prev] == '/' || text[prev] == '@' || text[prev] == ':'))
+                        continue;
                     parts.Add(text[start..i].Trim());
                     start = i + separator.Length;
                     i += separator.Length - 1;
