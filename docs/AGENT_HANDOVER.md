@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-01 (third session)
-**Commit:** previous `1a553d4` (+ uncommitted XSLT sweep and fn:load-xquery-module work)
+**Commit:** `7b36f29` (feat(xslt+xquery): conformance sweep — XSLT zero-failing suite, fn:load-xquery-module, prolog declarations, HTML serialization matrix)
 **Current focus:** **`declare decimal-format` / `declare boundary-space` prolog support plus the HTML/XHTML serialization matrix** — prod/DecimalFormatDecl went 1/40 → **41 passed / 0 failed**, prod/BoundarySpaceDecl 2/26 → **28 passed / 0 failed**, the three recorded fn-load-xquery-module skips (040/045/046) now pass (set: **61/0/22**), and admitting the previously prolog-gated serialization tests drove the ser sets from 45/40 passing to **method-html 64/0, method-xhtml 49/0, method-xml 39/0, method-text 18/0, method-json 73/0, method-adaptive 87/0**. QT3 went from **29,571 passed / 0 failed / 2,250 skipped (92.74%)** to **29,741 passed / 0 failed / 2,080 skipped (93.46%)** (+170 passing). Full `dotnet test Bosak.sln` passes: **1,677 unit tests / 0 failed** (+7 new).
 
 ## This Session Changes (prolog declarations + serialization matrix)
@@ -34,7 +34,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-01 (second session)
-**Commit:** previous `1a553d4` (+ uncommitted XSLT sweep from the first session)
+**Commit:** `7b36f29` (feat(xslt+xquery): conformance sweep — XSLT zero-failing suite, fn:load-xquery-module, prolog declarations, HTML serialization matrix)
 **Current focus:** **fn:load-xquery-module implemented** (the last feature-level XQuery gap): dynamic library-module loading per F&O 3.1 §15.3.1 — URI resolution with location hints, transitive import closure, external-variable and context-item binding from the options map, and the result map of public declarations. The fn-load-xquery-module set went from fully skipped to **58 passed / 0 failed / 25 skipped**; QT3 went from **29,510 passed / 0 failed / 2,311 skipped (92.74%)** to **29,571 passed / 0 failed / 2,250 skipped (92.89%)** (+61 passing). Full `dotnet test Bosak.sln` passes: **1,670 unit tests / 0 failed** (+5 new).
 
 ## This Session Changes (fn:load-xquery-module)
@@ -64,7 +64,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-01
-**Commit:** `1a553d4` (previous: docs(handover): record residual sweep commit hash 2a0cb37)
+**Commit:** `7b36f29` (feat(xslt+xquery): conformance sweep — XSLT zero-failing suite, fn:load-xquery-module, prolog declarations, HTML serialization matrix)
 **Current focus:** **XSLT conformance sweep closed** — a fresh full run surfaced 32 failing tests (the July 4 log's 177 was stale; xml-version, collations, tunnel, normalize-unicode had been fixed by the July XQuery sessions). **19 engine/harness fixes** brought the W3C XSLT 3.0 suite to **0 failing tests**: XSLT conformance now **7,109 passed / 0 failed / 7,491 skipped (14,600 total, 100% of runnable)**. QT3 unchanged at **29,510 passed / 0 failed / 2,311 skipped (92.74%)** — full QT3 re-run confirms zero regressions. Full `dotnet test Bosak.sln` passes: **1,665 unit tests / 0 failed** (+5 new QName tests).
 
 ## This Session Changes (XSLT conformance sweep)
