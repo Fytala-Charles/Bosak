@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-03
-**Commit:** (pending — this session)
+**Commit:** `ef18226` (feat(xpath+xslt): XSD 1.1 regex hyphen rules, environment stylesheets, engine conformance sweep)
 **Current focus:** **XSD 1.1 regex hyphen rules + XSLT harness environment stylesheets** — the recorded "XSD 1.1 regex character class subtraction not implemented" gap turned out to be stale: the engine already implements the XSD 1.1 rule (`-` is a subtraction operator only when immediately followed by `[`; `[a-d-b-c]` = `{a-d,'-',b-c}`). The real blocker was that the XSLT harness never ran test cases whose principal stylesheet is supplied by the referenced `<environment>` — ~4,800 tests silently skipped across 100+ sets. Enabling them (plus environment static `<param>` and a `unicode-version` dependency check) drove a conformance-sweep of newly-surfaced engine gaps. XSLT suite: **8,340 passed / 0 failed / 6,260 skipped** (14,600 total, 100% of runnable; was 7,109/0/7,491 — +1,231 passing). QT3: **29,745 passed / 0 failed / 2,076 skipped (93.48%)** (+4). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed** (+18 new).
 
 ## This Session Changes (regex + environment-stylesheet sweep)
