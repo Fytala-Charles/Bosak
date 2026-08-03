@@ -4,16 +4,23 @@
 # Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 1 August 2026
-> **Bosak baseline:** 1,677 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,741 passed / 0 failed / 2,080 skipped (93.46% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented
-> **XSLT baseline:** 7,109 passed / 0 failed / 7,491 skipped — 100% of runnable W3C XSLT 3.0 tests pass
+> **Last updated:** 3 August 2026
+> **Bosak baseline:** 1,695 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** 29,745 passed / 0 failed / 2,076 skipped (93.48% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented
+> **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, fn:load-xquery-module
 
 ---
 
 ## 0. Recent Changes
 
+- **2026-08-03** — XPath/XSLT: **XSD 1.1 regex hyphen rules + environment-stylesheet conformance sweep** (REQ-067/068/069). XSLT suite **8,340 passed / 0 failed / 6,260 skipped** (was 7,109/0 — +1,231 passing); QT3 **29,745/0** (+4); unit tests **1,695/0** (+18).
+  - The recorded "XSD 1.1 regex class subtraction" gap was stale: the engine already implements the XSD 1.1 rule (`-` is a subtraction operator only immediately before `[`; `[a-d-b-c]` = `{a-d,'-',b-c}`). regex-syntax-0056a/0086a unskipped (set **986/0/4**).
+  - **Harness**: test cases whose principal stylesheet comes from the referenced `<environment>` now run (~4,800 tests across 100+ sets), plus environment static `<param>` support and `unicode-version` dependency handling (regex-classes pins 6.0 → skipped; unicode-90 pins 9.0 → runs).
+  - **`\i`/`\c`** use the explicit XML 1.0 (5th ed) `NameStartChar`/`NameChar` ranges per XSD 1.1 (regex-syntax-0986/0987, QT3 re00987) — category-`So` characters such as U+212E are initial name characters.
+  - **Engine**: accumulator `initial-value` sees global parameters (accumulator-052); fn:path keeps steps below a parentless root with sibling indices (accessor-059..064, QT3 fo-test-fn-path-006/008/009); `element()`/`attribute()` kind tests honor `Q{uri}local` and default-element/no-namespace rules (json-to-xml-escape-*); fn:xml-to-json rejects multi-element documents (FOJS0006); fn:snapshot#0; detached-copy document-order stability (square-array-014); fn:stream-available + fn:unparsed-entity-* (QT3 harness registers fn:transform only — XSLT-only functions stay XPST0017 in XPath).
+  - **XSLT engine**: xsl:where-populated filters emptiness per item (§8.4: childless elements, zero-length attribute/text/comment/PI values, zero-length strings/binaries, empty maps/arrays); xsl:fork (sequential prongs); xsl:assert (XTMM9001 default / custom error codes / try-catch, also in function bodies; `enable_assertions="false"` skips); XTDE1480 temporary-output-state tracking for xsl:result-document (variable/param/function/key/accumulator/attribute-set content); apply-templates treats arrays/maps as single items and the built-in rule applies templates to their members (arrays-301/302).
+  - **Serialization**: XHTML attributes escape `"` as `&#34;` and C1 controls as `&#NNN;` (output-0102/0103); HTML5 keeps foreign-namespace prefixes for elements (except svg/MathML/XHTML which take the default-namespace form) and attributes, declaring bindings on the host element (output-0602/0603).
 - **2026-08-01 (c)** — XQuery: **`declare decimal-format` / `declare boundary-space` prolog support** — prod/DecimalFormatDecl **41/0**, prod/BoundarySpaceDecl **28/0**, fn-load-xquery-module **61/0**.
   - Named and default decimal formats with the full XQST0097/0098/0111/0114 validation matrix; declarations feed fn:format-number named/default resolution, with module-local formats applied around library-module bodies (decimal-format-21).
   - `declare boundary-space strip|preserve` (XQST0068 on duplicate) threads into direct-constructor whitespace handling: preserve keeps whitespace-only runs at content boundaries.

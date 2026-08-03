@@ -67,6 +67,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.28  | 29-07-2026     | Switch desugar: error-tolerant case comparisons; operand/case cardinality checks |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.29  | 03-08-2026     | Kind-test args: NamespaceTest for Q{uri}local and for unprefixed element() names      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1221,16 +1223,46 @@ public sealed class IrLowerer
                 if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument))
                 {
                     var kindArg = node.NodeTest.KindTestArgument;
-                    // A prefixed name-test argument (prefix:local or prefix:*) also gets its
-                    // namespace checked (raising XPST0081 for an unbound prefix, K2-NameTest-66/72).
-                    int argColon = kindArg.IndexOf(':');
-                    if (argColon > 0 && !kindArg.StartsWith("Q{", StringComparison.Ordinal))
+                    if (kindArg.StartsWith("Q{", StringComparison.Ordinal))
                     {
-                        int argNsPoolIdx = AddToLiteralPool(kindArg[..argColon]);
-                        int nsTestReg = AllocRegister();
-                        Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
-                        FreeRegister(axisReg);
-                        axisReg = nsTestReg;
+                        // Q{uri}local argument: check the literal namespace URI first,
+                        // then the local name via the NameTest below.
+                        var closeBrace = kindArg.IndexOf('}');
+                        if (closeBrace > 2)
+                        {
+                            int qNsPoolIdx = AddToLiteralPool(kindArg[2..closeBrace]);
+                            int qNsTestReg = AllocRegister();
+                            Emit(IrOpCode.NamespaceTest, (ushort)qNsTestReg, (ushort)axisReg, operand: qNsPoolIdx);
+                            FreeRegister(axisReg);
+                            axisReg = qNsTestReg;
+                            kindArg = "*:" + kindArg[(closeBrace + 1)..];
+                        }
+                    }
+                    else
+                    {
+                        // A prefixed name-test argument (prefix:local or prefix:*) also gets its
+                        // namespace checked (raising XPST0081 for an unbound prefix, K2-NameTest-66/72).
+                        int argColon = kindArg.IndexOf(':');
+                        if (argColon > 0)
+                        {
+                            int argNsPoolIdx = AddToLiteralPool(kindArg[..argColon]);
+                            int nsTestReg = AllocRegister();
+                            Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
+                            FreeRegister(axisReg);
+                            axisReg = nsTestReg;
+                        }
+                        else if (kindArg != "*" && node.NodeTest.Name == "element")
+                        {
+                            // An unprefixed element() argument uses the default element
+                            // namespace (empty prefix), like unprefixed path name tests
+                            // (json-to-xml-escape-001: element(string) must not match a
+                            // namespaced element).
+                            int argNsPoolIdx = AddToLiteralPool("");
+                            int nsTestReg = AllocRegister();
+                            Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
+                            FreeRegister(axisReg);
+                            axisReg = nsTestReg;
+                        }
                     }
                     int argPoolIdx = AddToLiteralPool(kindArg);
                     afterTestReg = AllocRegister();

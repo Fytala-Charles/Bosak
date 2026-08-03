@@ -151,6 +151,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.84  | 01-08-2026     | BC first-item truncation for all singleton params; pre-atomization type pass-through |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.85  | 03-08-2026     | element()/attribute() kind tests honor Q{uri}local and default-element/no-namespace rules |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.86  | 03-08-2026     | Document-order sort computes keys in sequence order (detached-tree sequence stability) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3680,15 +3684,18 @@ public static class VmEngine
             // Use a stable sort by document order. Namespace nodes of the same element
             // share the same DocumentOrder (they are ordered by the owner element), so
             // preserving their original sequence order keeps the namespace axis order
-            // (xml first, then root-to-current) intact.
-            var indexed = nodes.Select((n, i) => (Node: n, Index: i)).ToList();
+            // (xml first, then root-to-current) intact. Document-order keys are computed
+            // eagerly in sequence order first: parentless trees receive their tree
+            // sequence on first access, and computing keys inside the comparator would
+            // assign them in comparison order, scrambling detached copies (square-array-014).
+            var indexed = nodes.Select((n, i) => (Node: n, Index: i, OrderKey: n.NodeValue!.DocumentOrder)).ToList();
             indexed.Sort((a, b) =>
             {
                 bool aDoc = a.Node.NodeValue!.Document is not null;
                 bool bDoc = b.Node.NodeValue!.Document is not null;
                 if (aDoc != bDoc)
                     return aDoc ? -1 : 1;
-                int cmp = a.Node.NodeValue.DocumentOrder.CompareTo(b.Node.NodeValue.DocumentOrder);
+                int cmp = a.OrderKey.CompareTo(b.OrderKey);
                 if (cmp != 0)
                     return cmp;
                 return a.Index.CompareTo(b.Index);
@@ -7631,26 +7638,49 @@ public static class VmEngine
                 var typePart = inner.Substring(3).Trim();
                 return IsElementTypeCompatible(typePart);
             }
-            // element(name) or element(name, T) → check name match (basic, no namespace).
+            // element(name) or element(name, T) → check name match.
             // Use the case-preserved type string so local names such as 'A' are not lowercased.
             var casePreserved = GetCasePreservedTypeName(typeName);
             var cpInner = casePreserved.Substring(8, casePreserved.Length - 9).Trim();
             var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
-                var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                if (value.NodeValue.LocalName != testLocalName)
-                    return false;
-                // A prefixed element name also matches on the resolved namespace URI when a
-                // resolution context is available (K2-DirectConElemNamespace-79: element(P:L)
-                // distinguishes URL1 from URL2); context-less checks stay local-name-only.
-                if (namePart.Contains(':') && context is not null)
+                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
-                    var namePrefix = namePart[..namePart.IndexOf(':')];
-                    if (!context.TryResolveNamespace(namePrefix, out var nameNs))
-                        throw new InvalidOperationException($"XPST0081: Prefix '{namePrefix}' is not declared.");
-                    if (value.NodeValue.NamespaceUri != nameNs)
+                    // Q{uri}local — match namespace URI and local name exactly.
+                    var closeBrace = namePart.IndexOf('}');
+                    if (closeBrace > 2)
+                    {
+                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                            value.NodeValue.NamespaceUri != namePart[2..closeBrace])
+                            return false;
+                    }
+                }
+                else
+                {
+                    var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
+                    if (value.NodeValue.LocalName != testLocalName)
                         return false;
+                    if (namePart.Contains(':'))
+                    {
+                        // A prefixed element name also matches on the resolved namespace URI when a
+                        // resolution context is available (K2-DirectConElemNamespace-79: element(P:L)
+                        // distinguishes URL1 from URL2); context-less checks stay local-name-only.
+                        if (context is not null)
+                        {
+                            var namePrefix = namePart[..namePart.IndexOf(':')];
+                            if (!context.TryResolveNamespace(namePrefix, out var nameNs))
+                                throw new InvalidOperationException($"XPST0081: Prefix '{namePrefix}' is not declared.");
+                            if (value.NodeValue.NamespaceUri != nameNs)
+                                return false;
+                        }
+                    }
+                    else if (value.NodeValue.NamespaceUri != (context?.DefaultElementNamespace ?? ""))
+                    {
+                        // An unprefixed element name uses the default element namespace
+                        // (or no namespace when none is declared).
+                        return false;
+                    }
                 }
             }
             if (inner.Contains(','))
@@ -7682,18 +7712,40 @@ public static class VmEngine
             var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
-                var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                if (value.NodeValue.LocalName != testLocalName)
-                    return false;
-                // A prefixed attribute name also matches on the resolved namespace URI when a
-                // resolution context is available; context-less checks stay local-name-only.
-                if (namePart.Contains(':') && context is not null)
+                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
-                    var namePrefix = namePart[..namePart.IndexOf(':')];
-                    if (!context.TryResolveNamespace(namePrefix, out var nameNs))
-                        throw new InvalidOperationException($"XPST0081: Prefix '{namePrefix}' is not declared.");
-                    if (value.NodeValue.NamespaceUri != nameNs)
+                    // Q{uri}local — match namespace URI and local name exactly.
+                    var closeBrace = namePart.IndexOf('}');
+                    if (closeBrace > 2)
+                    {
+                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                            value.NodeValue.NamespaceUri != namePart[2..closeBrace])
+                            return false;
+                    }
+                }
+                else
+                {
+                    var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
+                    if (value.NodeValue.LocalName != testLocalName)
                         return false;
+                    if (namePart.Contains(':'))
+                    {
+                        // A prefixed attribute name also matches on the resolved namespace URI when a
+                        // resolution context is available; context-less checks stay local-name-only.
+                        if (context is not null)
+                        {
+                            var namePrefix = namePart[..namePart.IndexOf(':')];
+                            if (!context.TryResolveNamespace(namePrefix, out var nameNs))
+                                throw new InvalidOperationException($"XPST0081: Prefix '{namePrefix}' is not declared.");
+                            if (value.NodeValue.NamespaceUri != nameNs)
+                                return false;
+                        }
+                    }
+                    else if (value.NodeValue.NamespaceUri != "")
+                    {
+                        // An unprefixed attribute name always matches no namespace.
+                        return false;
+                    }
                 }
             }
             if (inner.Contains(','))

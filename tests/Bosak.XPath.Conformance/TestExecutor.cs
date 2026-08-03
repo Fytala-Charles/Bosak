@@ -42,6 +42,7 @@
 //                      | Charles Korthout | 0.18  | 29-07-2026     | External param prefix binding prefers the param element's own namespace |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.19  | 01-08-2026     | Admit declare boundary-space and decimal-format declarations |
+//                      | Charles Korthout | 0.20  | 03-08-2026     | Register only fn:transform (PopulateTransformOnly); XSLT-only functions stay XPST0017 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -90,7 +91,9 @@ internal sealed class TestExecutor
         var ctx = xqContext?.EvaluationContext ?? new EvaluationContext();
         FunctionLibrary.Populate(ctx);
         // fn:transform lives in the XSLT layer; register it so the fn-transform test set runs.
-        Bosak.Xslt.Api.XsltFunctionLibrary.Populate(ctx);
+        // The XSLT-only functions (stream-available, unparsed-entity-*) must stay
+        // unavailable here: pure XPath/XQuery expects XPST0017 for them (K-FunctionCallExpr-23/24).
+        Bosak.Xslt.Api.XsltFunctionLibrary.PopulateTransformOnly(ctx);
 
         if (environment is not null)
         {

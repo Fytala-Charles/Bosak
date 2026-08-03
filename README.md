@@ -223,9 +223,9 @@ The harness:
 | Metric | Value |
 |--------|-------|
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
-| Pass Rate (XPath+XQuery) | **29,741 passed / 0 failed / 2,080 skipped** (93.46%); **100%** of runnable tests pass |
+| Pass Rate (XPath+XQuery) | **29,745 passed / 0 failed / 2,076 skipped** (93.48%); **100%** of runnable tests pass |
 | **XSLT 3.0** | 234 test sets, 14,600 tests |
-| Pass Rate (XSLT) | **7,109 passed / 0 failed / 7,491 skipped** — 100% of runnable tests pass |
+| Pass Rate (XSLT) | **8,340 passed / 0 failed / 6,260 skipped** — 100% of runnable tests pass |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |
 | Unsupported Features | Schema awareness, XQuery-only, XML 1.1, streaming, principal `xsl:package`/`xsl:use-package` |
 

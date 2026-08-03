@@ -198,6 +198,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.78  | 29-07-2026     | min/max booleans and FORG0006; fn:error empty arg; generate-id checks; base-uri static fallback |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.79  | 03-08-2026     | fn:path keeps steps below a parentless root (Q{...}root()/...) and indexes text/comment/PI siblings |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.80  | 03-08-2026     | fn:xml-to-json rejects documents with more than one element child (FOJS0006) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.81  | 03-08-2026     | fn:snapshot#0 (context-item form; square-array-010/018/019/117/118) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -2230,6 +2236,13 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = Outermost
             },
+            [(Namespaces.Fn, "snapshot", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "snapshot", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Node,
+                Implementation = Snapshot_0
+            },
             [(Namespaces.Fn, "snapshot", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "snapshot", Arity = 1,
@@ -3463,6 +3476,15 @@ public static class FunctionLibrary
             current = current.Parent;
         }
         return false;
+    }
+
+    private static XdmValue Snapshot_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        // fn:snapshot() with no argument is fn:snapshot(.); an absent context item is XPDY0002.
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002");
+        return Snapshot(ctx, new[] { item });
     }
 
     private static XdmValue Snapshot(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -4738,9 +4760,9 @@ public static class FunctionLibrary
                 XdmNodeKind.Attribute => string.IsNullOrEmpty(current.NamespaceUri)
                 ? $"@{current.LocalName}"
                 : $"@Q{{{current.NamespaceUri}}}{current.LocalName}",
-                XdmNodeKind.Text => "text()[1]",
-                XdmNodeKind.Comment => "comment()[1]",
-                XdmNodeKind.ProcessingInstruction => $"processing-instruction({current.LocalName})[1]",
+                XdmNodeKind.Text => $"text()[{GetSiblingIndex(current)}]",
+                XdmNodeKind.Comment => $"comment()[{GetSiblingIndex(current)}]",
+                XdmNodeKind.ProcessingInstruction => $"processing-instruction({current.LocalName})[{GetSiblingIndex(current)}]",
                 XdmNodeKind.Namespace => string.IsNullOrEmpty(current.LocalName)
                 ? "namespace::*[Q{http://www.w3.org/2005/xpath-functions}local-name()=\"\"]"
                 : $"namespace::{current.LocalName}",
@@ -4761,7 +4783,15 @@ public static class FunctionLibrary
         }
 
         if (!reachedDocument)
-            return "Q{http://www.w3.org/2005/xpath-functions}root()";
+        {
+            // The walk ended at a parentless root node that is not a document: its own
+            // step is replaced by the fn:root() designator; steps below the root are
+            // kept (F&O fn:path — accessor-059: Q{...}root()/Q{}inner[1]).
+            segments.RemoveAt(segments.Count - 1);
+            segments.Reverse();
+            var suffix = string.Join("/", segments);
+            return "Q{http://www.w3.org/2005/xpath-functions}root()" + (suffix.Length == 0 ? "" : "/" + suffix);
+        }
 
         segments.Reverse();
         return "/" + string.Join("/", segments);
@@ -4784,6 +4814,12 @@ public static class FunctionLibrary
                 {
                     if (sibling.NodeValue.NamespaceUri == node.NamespaceUri &&
                         sibling.NodeValue.LocalName == node.LocalName)
+                        index++;
+                }
+                else if (node.NodeKind == XdmNodeKind.ProcessingInstruction)
+                {
+                    // fn:path indexes processing instructions among same-named siblings.
+                    if (sibling.NodeValue.LocalName == node.LocalName)
                         index++;
                 }
                 else
@@ -11898,13 +11934,16 @@ public static class FunctionLibrary
         IXdmNode? root = null;
         if (node.NodeKind == XdmNodeKind.Document)
         {
+            // fn:xml-to-json requires the document to contain exactly one element child
+            // (FOJS0006 otherwise — xml-to-json-C001: two top-level j:string elements).
             foreach (var child in node.Axis(XdmAxis.Child))
             {
                 var childNode = child.NodeValue!;
                 if (childNode.NodeKind == XdmNodeKind.Element)
                 {
+                    if (root is not null)
+                        throw new InvalidOperationException("FOJS0006: Document node has more than one element child");
                     root = childNode;
-                    break;
                 }
             }
             if (root is null)

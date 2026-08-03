@@ -198,6 +198,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.16  | 19-07-2026     | xsl:analyze-string adapts to new flags-aware ParseRegexFlags/ValidateAndTranslatePattern |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.17  | 03-08-2026     | Accumulator contexts see global params; where-populated per-item emptiness (XSLT §8.4);  |
+//                      |                  |       |                | xsl:fork (sequential prongs); xsl:assert evaluated (ExecuteAssert, incl. function bodies);|
+//                      |                  |       |                | XTDE1480 temporary-output-state tracking; accumulator rule bodies via general engine     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -223,7 +227,7 @@ namespace Bosak.Xslt.Runtime;
 public sealed class TransformEngine
 {
     private readonly Stylesheet.Stylesheet _stylesheet;
-    private readonly EvaluationContext _context;
+    private EvaluationContext _context;
 
     /// <summary>
     /// The XSLT version supported by this processor. Used when deciding whether
@@ -386,6 +390,24 @@ public sealed class TransformEngine
     // documents and to detect attempts to write to the principal output URI while
     // a secondary result document is active.
     private readonly Stack<ResultDocumentFrame> _resultDocumentStack = new();
+
+    // Counts active temporary output states (XSLT 3.0 §2.4: xsl:variable, xsl:param,
+    // xsl:function, xsl:key, xsl:accumulator-rule, and xsl:attribute-set content).
+    // xsl:result-document is a dynamic error (XTDE1480) in this state.
+    private int _temporaryOutputDepth;
+
+    private TemporaryOutputScope EnterTemporaryOutputState() => new(this);
+
+    private readonly struct TemporaryOutputScope : IDisposable
+    {
+        private readonly TransformEngine _engine;
+        public TemporaryOutputScope(TransformEngine engine)
+        {
+            _engine = engine;
+            _engine._temporaryOutputDepth++;
+        }
+        public void Dispose() => _engine._temporaryOutputDepth--;
+    }
 
     // Set to true once a top-level xsl:result-document with no @href has closed the
     // principal output; any further output to the principal result tree is an error.
@@ -1775,7 +1797,7 @@ public sealed class TransformEngine
         // Nodes not visited by the accumulator (e.g. attributes/text matched indirectly)
         // return the initial value for before and after.
         var initialCompiled = CompileXPath(acc.InitialValue, acc.Element);
-        return initialCompiled.Evaluate(new EvaluationContext());
+        return initialCompiled.Evaluate(CreateAccumulatorEvaluationContext());
     }
 
     /// <summary>
@@ -1943,6 +1965,8 @@ public sealed class TransformEngine
         if (rulePair.Rule == null)
             return current;
 
+        // xsl:accumulator-rule content is evaluated in a temporary output state.
+        using var temporaryOutputState = EnterTemporaryOutputState();
         var ruleCtx = CreateAccumulatorEvaluationContext(node, current);
         XdmValue newValue;
         if (!string.IsNullOrEmpty(rulePair.Rule.Select))
@@ -1951,7 +1975,19 @@ public sealed class TransformEngine
         }
         else
         {
-            newValue = EvaluateAccumulatorRuleBody(rulePair.Rule.Element, ruleCtx);
+            // Evaluate the sequence-constructor body through the general instruction
+            // engine (call-template, choose, text, etc.) with the accumulator rule
+            // context swapped in so $value and the accumulator functions resolve.
+            var savedEngineContext = _context;
+            try
+            {
+                _context = ruleCtx;
+                newValue = EvaluateSequenceConstructor(rulePair.Rule.Element, XdmValue.FromNode(node), wrapInDocumentNode: false);
+            }
+            finally
+            {
+                _context = savedEngineContext;
+            }
         }
         return ConvertVariableValue(newValue, acc.As);
     }
@@ -1983,6 +2019,17 @@ public sealed class TransformEngine
                 continue;
             if (_context.TryGetVariable(localName, out var varValue, ns))
                 ctx.WithVariable(localName, varValue, ns);
+        }
+        // Externally supplied global parameters are bound directly on the main context
+        // and never enter the lazy resolver, so they must be copied explicitly
+        // (accumulator-052: initial-value="$start").
+        foreach (var (name, _) in _stylesheet.GetAllGlobalParameters())
+        {
+            var (localName, ns) = ExpandVariableName(_stylesheet.Root, name);
+            if (_evaluatingGlobals.Contains((localName, ns)))
+                continue;
+            if (_context.TryGetVariable(localName, out var paramValue, ns))
+                ctx.WithVariable(localName, paramValue, ns);
         }
 
         if (focusNode != null)
@@ -2247,6 +2294,7 @@ public sealed class TransformEngine
         try
         {
             _context.CurrentOutputUri = null;
+            using var temporaryOutputState = EnterTemporaryOutputState();
 
             if (cacheKey.HasValue && _xsltFunctionCache.TryGetValue(cacheKey.Value, out var cached))
                 return cached;
@@ -2360,6 +2408,7 @@ public sealed class TransformEngine
             // Function-local variable bodies are evaluated in a temporary output state.
             var savedOutputUri = _context.CurrentOutputUri;
             _context.CurrentOutputUri = null;
+            using var temporaryOutputState = EnterTemporaryOutputState();
             try
             {
                 varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
@@ -3554,8 +3603,11 @@ public sealed class TransformEngine
                         break;
                     }
                 case "assert":
-                    // xsl:assert is accepted but not yet evaluated in function bodies.
+                    ExecuteAssert(instruction, contextItem);
                     break;
+                case "result-document":
+                    // xsl:function bodies are always a temporary output state (XSLT 3.0 §11.4).
+                    throw new InvalidOperationException("XTDE1480: xsl:result-document cannot be used in temporary output state");
                 default:
                     // Unknown XSLT instruction in function body: ignore
                     break;
@@ -3796,15 +3848,7 @@ public sealed class TransformEngine
                 }
                 else
                 {
-                    var rule = FindBestTemplate(item, resolvedMode);
-                    if (rule != null)
-                    {
-                        ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: pos, last: last);
-                    }
-                    else
-                    {
-                        ApplyBuiltInRulesForAtomic(item, resolvedMode);
-                    }
+                    ProcessNonNodeItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
                 }
                 pos++;
             }
@@ -3897,15 +3941,7 @@ public sealed class TransformEngine
                 }
                 else
                 {
-                    var rule = FindBestTemplate(item, resolvedMode);
-                    if (rule != null)
-                    {
-                        ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: pos, last: last);
-                    }
-                    else
-                    {
-                        ApplyBuiltInRulesForAtomic(item, resolvedMode);
-                    }
+                    ProcessNonNodeItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
                 }
                 pos++;
             }
@@ -4171,10 +4207,12 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            // Check for content (sequence constructor as default value)
+                            // Check for content (sequence constructor as default value).
+                            // Default parameter content is evaluated in a temporary output state.
                             var contentNodes = child.Nodes().ToList();
                             if (contentNodes.Count > 0)
                             {
+                                using var temporaryOutputState = EnterTemporaryOutputState();
                                 paramValue = EvaluateSequenceConstructor(child, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(paramAs));
                             }
                             else
@@ -5043,9 +5081,11 @@ public sealed class TransformEngine
                     {
                         var compiled = CompileXPath(wpSelect, instruction);
                         var result = compiled.Evaluate(_context);
-                        if (IsPopulated(result))
+                        // xsl:where-populated discards each "empty" item individually.
+                        var keptItems = EnumerateItems(result).Where(IsPopulated).ToList();
+                        if (keptItems.Count > 0)
                         {
-                            CopyToResult(result, separateAtomicsWithSpace: true);
+                            CopyToResult(XdmValue.FromSequence(MaterializedSequence.FromList(keptItems)), separateAtomicsWithSpace: true);
                         }
                         break;
                     }
@@ -5083,7 +5123,8 @@ public sealed class TransformEngine
                                             // xsl:on-empty is handled after the populated check.
                                             break;
                                         }
-                                        if (localName == "sequence" || localName == "document")
+                                        if (localName == "sequence" || localName == "document" ||
+                                            localName == "map" || localName == "map-entry")
                                         {
                                             _sequenceAccumulator = new ListSequenceAccumulator(wpAccumulator);
                                             try
@@ -5117,9 +5158,12 @@ public sealed class TransformEngine
                         _lastAddedWasAtomic = savedLastAtomic;
                     }
 
-                    if (IsPopulated(XdmValue.FromSequence(MaterializedSequence.FromList(resultItems))))
+                    // xsl:where-populated discards each "empty" item individually
+                    // (empty elements, zero-length text, empty maps, ...).
+                    var populatedItems = resultItems.Where(IsPopulated).ToList();
+                    if (populatedItems.Count > 0)
                     {
-                        CopyToResult(XdmValue.FromSequence(MaterializedSequence.FromList(resultItems)), separateAtomicsWithSpace: true);
+                        CopyToResult(XdmValue.FromSequence(MaterializedSequence.FromList(populatedItems)), separateAtomicsWithSpace: true);
                     }
                     else
                     {
@@ -5510,6 +5554,7 @@ public sealed class TransformEngine
                             // Variable bodies are evaluated in a temporary output state.
                             var savedOutputUri = _context.CurrentOutputUri;
                             _context.CurrentOutputUri = null;
+                            using var temporaryOutputState = EnterTemporaryOutputState();
                             try
                             {
                                 varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
@@ -5545,6 +5590,7 @@ public sealed class TransformEngine
                             // Parameter default-value bodies are evaluated in a temporary output state.
                             var savedOutputUri = _context.CurrentOutputUri;
                             _context.CurrentOutputUri = null;
+                            using var temporaryOutputState = EnterTemporaryOutputState();
                             try
                             {
                                 varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
@@ -6062,9 +6108,7 @@ public sealed class TransformEngine
                 break;
 
             case "assert":
-                // xsl:assert is accepted but not yet evaluated. Full support requires
-                // an enable-assertions switch; tests that disable assertions rely on
-                // this no-op behaviour.
+                ExecuteAssert(instruction, contextItem);
                 break;
 
             case "perform-sort":
@@ -6142,6 +6186,18 @@ public sealed class TransformEngine
                     var href = EvaluateAvt(hrefRaw ?? string.Empty, instruction);
                     bool isPrincipal = string.IsNullOrEmpty(href);
                     ExecuteResultDocument(instruction, contextItem, isPrincipal);
+                    break;
+                }
+
+            case "fork":
+                {
+                    // Non-streaming evaluation of xsl:fork: the prongs are evaluated
+                    // sequentially and their results concatenate in prong order
+                    // (XSLT 3.0 §8.3).
+                    foreach (var prong in instruction.Elements())
+                    {
+                        ExecuteXsltInstruction(prong, contextItem);
+                    }
                     break;
                 }
 
@@ -6229,6 +6285,9 @@ public sealed class TransformEngine
 
             var prevContainer = _currentContainer;
             _currentContainer = target;
+
+            // xsl:attribute-set content is evaluated in a temporary output state.
+            using var temporaryOutputState = EnterTemporaryOutputState();
 
             // Attribute sets are evaluated with only top-level variables/parameters in
             // scope; local template variables must not be visible. Save the current
@@ -7174,13 +7233,14 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Determines whether an XDM value is populated for the purposes of
-    /// <c>xsl:where-populated</c>. A sequence is populated if it contains at
-    /// least one item that is not "empty": document and element nodes are empty
-    /// when they have no children (elements with only namespace declarations are
-    /// also empty); text, comment, and processing-instruction nodes are empty
-    /// when their string value is zero-length. Attribute and namespace nodes do
-    /// not make a sequence populated. Atomic values are populated, but arrays are
-    /// populated only if at least one member is populated.
+    /// <c>xsl:where-populated</c> (XSLT 3.0 §8.4). Each item is considered
+    /// individually: document and element nodes are empty when they have no
+    /// children (attributes and namespace declarations do not prevent emptiness);
+    /// attribute, text, comment, and processing-instruction nodes are empty when
+    /// their string value is zero-length; atomic values are empty when their string
+    /// value is zero-length (this covers xs:string, xs:untypedAtomic, and the
+    /// String-kind hexBinary/base64Binary annotations); maps are empty when they
+    /// have no entries; arrays are populated when at least one member is populated.
     /// </summary>
     private bool IsPopulated(XdmValue value)
     {
@@ -7197,6 +7257,9 @@ public sealed class TransformEngine
             return false;
         }
 
+        if (value.IsMap)
+            return value.MapValue.Count > 0;
+
         if (value.IsNode && value.NodeValue != null)
             return IsPopulatedNode(value.NodeValue);
 
@@ -7210,9 +7273,9 @@ public sealed class TransformEngine
             return false;
         }
 
-        // Single atomic value. An empty string is treated as empty; all other
-        // atomic values are populated. Maps and function items other than arrays
-        // are considered populated.
+        // Single atomic value. A zero-length string value is empty (xs:string,
+        // xs:untypedAtomic, and String-kind binary annotations); all other atomic
+        // values and function items are populated.
         return value.Kind != XdmValueKind.String || value.StringValue.Length > 0;
     }
 
@@ -7224,13 +7287,13 @@ public sealed class TransformEngine
                 return node.Axis(XdmAxis.Child).GetEnumerator().MoveNext();
             case XdmNodeKind.Element:
                 // For xsl:where-populated, an element is empty unless it has children;
-                // attributes do not make it populated.
+                // attributes and namespace declarations do not make it populated.
                 return node.Axis(XdmAxis.Child).GetEnumerator().MoveNext();
             case XdmNodeKind.Text:
             case XdmNodeKind.Comment:
             case XdmNodeKind.ProcessingInstruction:
-                return node.StringValue.Length > 0;
             case XdmNodeKind.Attribute:
+                return node.StringValue.Length > 0;
             case XdmNodeKind.Namespace:
                 return false;
             default:
@@ -8494,6 +8557,41 @@ public sealed class TransformEngine
     /// effective <c>on-no-match</c> behavior of the mode. Deep-skip and shallow-skip
     /// modes suppress atomic output; other behaviors output the string value.
     /// </summary>
+    /// <summary>
+    /// Processes a non-node item selected by xsl:apply-templates: the best-matching
+    /// template rule fires when one matches; otherwise the built-in rule applies.
+    /// For arrays and maps the built-in rule applies templates to the members
+    /// (XSLT 3.0 §6.8), for atomic values it emits the text value per on-no-match.
+    /// </summary>
+    private void ProcessNonNodeItem(XdmValue item, string mode, Dictionary<string, XdmValue>? callParams, Dictionary<string, XdmValue>? incomingTunnelParams, int position, int last)
+    {
+        var rule = FindBestTemplate(item, mode);
+        if (rule != null)
+        {
+            ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: position, last: last);
+            return;
+        }
+        if (item.IsArray && item.ArrayValue != null)
+        {
+            // Built-in rule for arrays: apply templates to the members (arrays-301/302).
+            int memberLast = item.ArrayValue.Count;
+            int memberPos = 1;
+            foreach (var member in item.ArrayValue.Values)
+                ProcessNonNodeItem(member, mode, callParams, incomingTunnelParams, memberPos++, memberLast);
+            return;
+        }
+        if (item.IsMap && item.MapValue != null)
+        {
+            // Built-in rule for maps: apply templates to the values.
+            int memberLast = item.MapValue.Count;
+            int memberPos = 1;
+            foreach (var value in item.MapValue.Values)
+                ProcessNonNodeItem(value, mode, callParams, incomingTunnelParams, memberPos++, memberLast);
+            return;
+        }
+        ApplyBuiltInRulesForAtomic(item, mode);
+    }
+
     private void ApplyBuiltInRulesForAtomic(XdmValue item, string mode)
     {
         var modeDef = _stylesheet.GetModeDefinition(mode);
@@ -9006,7 +9104,12 @@ public sealed class TransformEngine
                     try
                     {
                         if (keyDef.HasUseContent)
-                            KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex, n => EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false));
+                            KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex, n =>
+                            {
+                                // xsl:key content is evaluated in a temporary output state.
+                                using var temporaryOutputState = EnterTemporaryOutputState();
+                                return EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false);
+                            });
                         else
                             KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
                     }
@@ -9405,6 +9508,7 @@ public sealed class TransformEngine
                                 // Global variable/parameter bodies are evaluated in a temporary output state.
                                 var savedOutputUri = _context.CurrentOutputUri;
                                 _context.CurrentOutputUri = null;
+                                using var temporaryOutputState = EnterTemporaryOutputState();
                                 try
                                 {
                                     value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
@@ -9783,13 +9887,9 @@ public sealed class TransformEngine
             return;
         }
 
-        if (value.IsArray && value.ArrayValue != null)
-        {
-            foreach (var member in value.ArrayValue.Values)
-                FlattenSelectedItemsCore(member, result);
-            return;
-        }
-
+        // An array (or map) selected for xsl:apply-templates is a single item: templates
+        // matching .[. instance of array(*)] / .[. instance of map(*)] fire on it
+        // (square-array-019). Members are addressed explicitly with ?* / map:get.
         result.Add(value);
     }
 
@@ -10148,10 +10248,32 @@ public sealed class TransformEngine
     /// <summary>
     /// Evaluates the <c>error-code</c> attribute of <c>xsl:message</c>.
     /// </summary>
+    /// <summary>
+    /// Evaluates <c>xsl:assert</c> (XSLT 3.0 §23.1): the test expression's effective
+    /// boolean value must be true; otherwise a dynamic error is raised whose code comes
+    /// from the error-code AVT (default XTMM9001) and whose value is the message produced
+    /// by @select or the contained sequence constructor.
+    /// </summary>
+    private void ExecuteAssert(XElement instruction, XdmValue contextItem)
+    {
+        var assertTest = instruction.Attribute("test")?.Value ?? "false()";
+        bool assertPassed = CompileXPath(assertTest, instruction)
+            .Evaluate(_context).EffectiveBooleanValue();
+        if (!assertPassed)
+        {
+            var assertValue = BuildMessageValue(instruction, contextItem);
+            var assertCode = EvaluateAvt(
+                instruction.Attribute("error-code")?.Value ?? "XTMM9001", instruction).Trim();
+            var (assertNs, assertLocal) = ExpandAssertErrorCode(assertCode, instruction);
+            throw new Bosak.XPath.Runtime.Vm.XPathErrorException(
+                assertNs, assertLocal, string.Empty,
+                $"xsl:assert evaluation failed: {SerializeMessageValue(assertValue)}", assertValue);
+        }
+    }
+
     private string EvaluateMessageErrorCode(XElement instruction)
     {
-        var codeAttr = instruction.Attribute("error-code")?.Value;
-        if (string.IsNullOrEmpty(codeAttr))
+        var codeAttr = instruction.Attribute("error-code")?.Value;        if (string.IsNullOrEmpty(codeAttr))
             return "XTMM9000";
 
         var expanded = EvaluateAvt(codeAttr, instruction).Trim();
@@ -10180,6 +10302,31 @@ public sealed class TransformEngine
         }
 
         return $"Q{{}}{expanded}";
+    }
+
+    /// <summary>
+    /// Expands an <c>xsl:assert/@error-code</c> value (after AVT evaluation) to its
+    /// namespace URI and local name. Unprefixed codes are in the standard error
+    /// namespace; prefixed names resolve against the instruction's in-scope namespaces.
+    /// </summary>
+    private static (string NamespaceUri, string LocalName) ExpandAssertErrorCode(string expanded, XElement instruction)
+    {
+        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
+        if (expanded.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var close = expanded.IndexOf('}');
+            if (close >= 2)
+                return (expanded[2..close], expanded[(close + 1)..]);
+        }
+        var colon = expanded.IndexOf(':');
+        if (colon >= 0)
+        {
+            var ns = instruction.GetNamespaceOfPrefix(expanded[..colon]);
+            return ns == null
+                ? throw new InvalidOperationException("XTDE0040")
+                : (ns.NamespaceName, expanded[(colon + 1)..]);
+        }
+        return (ErrNs, expanded);
     }
 
     /// <summary>
@@ -11982,6 +12129,7 @@ public sealed class TransformEngine
                 // xsl:with-param sequence-constructor content is evaluated in a temporary output state.
                 var savedOutputUri = _context.CurrentOutputUri;
                 _context.CurrentOutputUri = null;
+                using var temporaryOutputState = EnterTemporaryOutputState();
                 try
                 {
                     wpValue = EvaluateSequenceConstructor(wp, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(wp.Attribute("as")?.Value));
@@ -13910,6 +14058,12 @@ public sealed class TransformEngine
     /// </summary>
     private void ExecuteResultDocument(XElement instruction, XdmValue contextItem, bool isPrincipal)
     {
+        // xsl:result-document is not allowed while evaluating the content of
+        // xsl:variable, xsl:param, xsl:function, xsl:key, xsl:accumulator-rule, or
+        // xsl:attribute-set (temporary output state, XSLT 3.0 §11.4).
+        if (_temporaryOutputDepth > 0)
+            throw new InvalidOperationException("XTDE1480: xsl:result-document cannot be used in temporary output state");
+
         var hrefRaw = instruction.Attribute("href")?.Value;
         var href = EvaluateAvt(hrefRaw ?? string.Empty, instruction);
         // @href is resolved against the base output URI when one is known; otherwise
@@ -16629,6 +16783,7 @@ public sealed class TransformEngine
             {
                 var savedOutputUri = _context.CurrentOutputUri;
                 _context.CurrentOutputUri = null;
+                using var temporaryOutputState = EnterTemporaryOutputState();
                 try
                 {
                     pvalue = EvaluateSequenceConstructor(p, _context.ContextItem, wrapInDocumentNode: string.IsNullOrEmpty(pas));
@@ -16897,6 +17052,7 @@ public sealed class TransformEngine
             {
                 var savedOutputUri = _context.CurrentOutputUri;
                 _context.CurrentOutputUri = null;
+                using var temporaryOutputState = EnterTemporaryOutputState();
                 try
                 {
                     wpValue = EvaluateSequenceConstructor(wp, _context.ContextItem, wrapInDocumentNode: string.IsNullOrEmpty(wpAs));

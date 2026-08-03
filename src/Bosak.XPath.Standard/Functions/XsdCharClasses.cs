@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 15-07-2026     | Sorted \s literal (Complement requires normalized input); FORX0002 on empty char class  |
 //                      | Charles Korthout | 0.3   | 19-07-2026     | XPath 'i' flag: case-fold during translation; \p{} escapes unaffected (caselessmatch12-14) |
 //                      | Charles Korthout | 0.4   | 19-07-2026     | XPath 'i' flag: use RegexOptions.IgnoreCase, wrap class atoms in (?-i:)                 |
+//                      | Charles Korthout | 0.5   | 03-08-2026     | \i/\c use explicit XML 1.0 5e NameStartChar/NameChar ranges (XSD 1.1; regex-syntax-0986/7) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -142,10 +143,10 @@ internal static class XsdCharClasses
             case 'W': return WordNonChars();
             case 's': return [0x09, 0x09, 0x0A, 0x0A, 0x0D, 0x0D, 0x20, 0x20];
             case 'S': return Complement([0x09, 0x09, 0x0A, 0x0A, 0x0D, 0x0D, 0x20, 0x20]);
-            case 'i': return Union(Union(UnicodeData90.GetCategoryRanges("L")!, UnicodeData90.GetCategoryRanges("Nl")!), [0x3A, 0x3A, 0x5F, 0x5F]);
-            case 'I': return Complement(Union(Union(UnicodeData90.GetCategoryRanges("L")!, UnicodeData90.GetCategoryRanges("Nl")!), [0x3A, 0x3A, 0x5F, 0x5F]));
-            case 'c': return NameChars();
-            case 'C': return Complement(NameChars());
+            case 'i': return CopyOf(NameStartCharRanges);
+            case 'I': return Complement(NameStartCharRanges);
+            case 'c': return CopyOf(NameCharRanges);
+            case 'C': return Complement(NameCharRanges);
             default:
                 throw new InvalidOperationException("FORX0002");
         }
@@ -158,13 +159,28 @@ internal static class XsdCharClasses
         UnicodeData90.GetCategoryRanges("P")!, UnicodeData90.GetCategoryRanges("Z")!),
         UnicodeData90.GetCategoryRanges("C")!);
 
-    private static int[]? _nameChars;
+    // \i = NameStartChar (XML 1.0 5th edition): ':' | [A-Z] | '_' | [a-z] | [#xC0-#xD6] |
+    // [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] |
+    // [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] |
+    // [#x10000-#xEFFFF]. The explicit ranges (not Unicode categories) are the XSD 1.1
+    // definition; they deliberately include unassigned code points inside the listed
+    // blocks (regex-syntax-0986: U+212E ESTIMATED SYMBOL is an initial name character).
+    private static readonly int[] NameStartCharRanges =
+    [
+        0x3A, 0x3A, 0x41, 0x5A, 0x5F, 0x5F, 0x61, 0x7A, 0xC0, 0xD6, 0xD8, 0xF6,
+        0xF8, 0x2FF, 0x370, 0x37D, 0x37F, 0x1FFF, 0x200C, 0x200D, 0x2070, 0x218F,
+        0x2C00, 0x2FEF, 0x3001, 0xD7FF, 0xF900, 0xFDCF, 0xFDF0, 0xFFFD, 0x10000, 0xEFFFF
+    ];
 
-    // \c = L | M | N | {':', '_', '-', '.', U+00B7, U+203F..U+2040}
-    private static int[] NameChars() => _nameChars ??= Union(Union(Union(
-        UnicodeData90.GetCategoryRanges("L")!, UnicodeData90.GetCategoryRanges("M")!),
-        UnicodeData90.GetCategoryRanges("N")!),
-        [0x2D, 0x2E, 0x3A, 0x3A, 0x5F, 0x5F, 0xB7, 0xB7, 0x203F, 0x2040]);
+    // \c = NameChar (XML 1.0 5th edition): NameStartChar | '-' | '.' | [0-9] | #xB7 |
+    // [#x0300-#x036F] | [#x203F-#x2040] (regex-syntax-0987).
+    private static readonly int[] NameCharRanges =
+    [
+        0x2D, 0x2E, 0x30, 0x3A, 0x41, 0x5A, 0x5F, 0x5F, 0x61, 0x7A, 0xB7, 0xB7,
+        0xC0, 0xD6, 0xD8, 0xF6, 0xF8, 0x2FF, 0x300, 0x36F, 0x370, 0x37D, 0x37F, 0x1FFF,
+        0x200C, 0x200D, 0x203F, 0x2040, 0x2070, 0x218F, 0x2C00, 0x2FEF, 0x3001, 0xD7FF,
+        0xF900, 0xFDCF, 0xFDF0, 0xFFFD, 0x10000, 0xEFFFF
+    ];
 
     private static int[] CopyOf(int[] set)
     {

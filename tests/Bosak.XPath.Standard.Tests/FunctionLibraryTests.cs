@@ -60,6 +60,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.24  | 28-07-2026     | 10 name-test/kind-test unit tests |
 //                      | Charles Korthout | 2.25  | 01-08-2026     | fn:serialize expectations follow omit-xml-declaration=yes default (Serialization 3.1) |
+//                      | Charles Korthout | 2.26  | 03-08-2026     | XSD 1.1 hyphen rules + explicit \i/\c NameStartChar/NameChar range tests                |
+//                      | Charles Korthout | 2.27  | 03-08-2026     | fn:path parentless-tree tests; element/attribute kind-test ns tests; xml-to-json FOJS0006 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
@@ -679,6 +681,61 @@ public class FunctionLibraryTests
         var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
         var result = XPath31Expression.Compile("fn:namespace-uri()").Evaluate(node);
         Assert.Equal("", result.ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // fn:path on trees not rooted at a document node (accessor-059..064)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Path_ParentlessTree_UsesRootDesignator()
+    {
+        var elem = new System.Xml.Linq.XElement("doc", new System.Xml.Linq.XElement("inner", "text"));
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(elem);
+        Assert.Equal("Q{http://www.w3.org/2005/xpath-functions}root()",
+            XPath31Expression.Compile("fn:path(.)").Evaluate(node).ToString());
+        Assert.Equal("Q{http://www.w3.org/2005/xpath-functions}root()/Q{}inner[1]",
+            XPath31Expression.Compile("fn:path(inner)").Evaluate(node).ToString());
+        Assert.Equal("Q{http://www.w3.org/2005/xpath-functions}root()/Q{}inner[1]/text()[1]",
+            XPath31Expression.Compile("fn:path(inner/text())").Evaluate(node).ToString());
+    }
+
+    [Fact]
+    public void Path_TextSiblingIndex()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<p>a<b/>c</p>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        Assert.Equal("/Q{}p[1]/text()[2]",
+            XPath31Expression.Compile("fn:path(p/text()[2])").Evaluate(node).ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // element()/attribute() kind-test namespace rules (json-to-xml-escape-*)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ElementKindTest_HonorsNamespaces()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<string xmlns=\"http://www.w3.org/2005/xpath-functions\">x</string>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        Assert.Equal("true", XPath31Expression.Compile("/* instance of element(Q{http://www.w3.org/2005/xpath-functions}string)").Evaluate(node).ToString());
+        // Without a default element namespace, element(string) matches no-namespace only.
+        Assert.Equal("false", XPath31Expression.Compile("/* instance of element(string)").Evaluate(node).ToString());
+        Assert.Equal("true", XPath31Expression.Compile("/* instance of element(*)").Evaluate(node).ToString());
+    }
+
+    [Fact]
+    public void AttributeKindTest_UnprefixedMeansNoNamespace()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root a=\"1\" ns:b=\"2\" xmlns:ns=\"http://example.com\"/>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var options = new Bosak.XPath.Api.CompileOptions
+        {
+            Namespaces = new Dictionary<string, string> { ["ns"] = "http://example.com" }
+        };
+        Assert.Equal("true", XPath31Expression.Compile("/*/@a instance of attribute(a)").Evaluate(node).ToString());
+        Assert.Equal("false", XPath31Expression.Compile("/*/@ns:b instance of attribute(b)", options).Evaluate(node).ToString());
+        Assert.Equal("true", XPath31Expression.Compile("/*/@ns:b instance of attribute(Q{http://example.com}b)", options).Evaluate(node).ToString());
     }
 
     [Fact]
@@ -3284,6 +3341,43 @@ public class FunctionLibraryTests
     }
 
     [Fact]
+    public void XmlToJson_DocumentWithTwoElementChildren_RaisesFOJS0006()
+    {
+        // xml-to-json-C001: a document with more than one element child is invalid input.
+        var doc = new System.Xml.Linq.XDocument(
+            new System.Xml.Linq.XElement("__xdm_doc__",
+                new System.Xml.Linq.XElement("{http://www.w3.org/2005/xpath-functions}string", "a"),
+                new System.Xml.Linq.XElement("{http://www.w3.org/2005/xpath-functions}string", "b")));
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("xml-to-json(.)").Evaluate(node));
+        Assert.Contains("FOJS0006", ex.Message);
+    }
+
+    [Fact]
+    public void Snapshot_NoArgument_SnapshotsContextItem()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a/><b/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("string(/root/a/snapshot()/local-name())").Evaluate(node);
+        Assert.Equal("a", result.ToString());
+        // The snapshot is a copy: it is not the same node as the source element.
+        var same = XPath31Expression.Compile("/root/a/snapshot() is /root/a").Evaluate(node);
+        Assert.Equal("false", same.ToString());
+    }
+
+    [Fact]
+    public void CopyOf_DocumentOrderSort_PreservesSourceOrderOfDetachedCopies()
+    {
+        // square-array-014: nodes copied out of a document keep their source order when a
+        // path expression sorts them into document order (detached-tree sequence numbers
+        // must be assigned in sequence order, not comparison order).
+        var doc = System.Xml.Linq.XDocument.Parse("<root><t/><a/><z/></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("string-join(/root/*/copy-of()/local-name(), ',')").Evaluate(node);
+        Assert.Equal("t,a,z", result.ToString());
+    }
+
+    [Fact]
     public void XmlToJson_Number_SmallNegativeExponent_ExpandsToDecimal()
     {
         // Doubles in [1e-6, 1e6) use decimal notation, not scientific.
@@ -3667,6 +3761,48 @@ public class FunctionLibraryTests
         // Reference to a group that does not exist yet is rejected.
         var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(@"fn:matches('qwerty', '(foo)(\7)')"));
         Assert.Contains("FORX0002", ex.Message);
+    }
+
+    [Fact]
+    public void Matches_Xsd11_HyphenRules()
+    {
+        // XSD 1.1: '-' is a subtraction operator only when immediately followed by '[';
+        // anywhere else it is a range operator or a literal hyphen (regex-syntax-0056a).
+        // [^a-d-b-c] = complement of {a-d, '-', b-c}: 'x' matches, 'b' and '-' do not.
+        Assert.Equal("true", EvalStr(@"fn:matches('x', '^([^a-d-b-c])$')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('b', '^([^a-d-b-c])$')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('-', '^([^a-d-b-c])$')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('a', '^([^a-d-b-c])$')"));
+        // regex-syntax-0086a: [a-c-1-4x-z-7-9] = {a-c} + {'-'} + {1-4} + {x-z} + {7-9}.
+        Assert.Equal("true", EvalStr(@"fn:matches('a-1x-7', '^([a-c-1-4x-z-7-9]*)$')"));
+        Assert.Equal("true", EvalStr(@"fn:matches('c-4z-9', '^([a-c-1-4x-z-7-9]*)$')"));
+        Assert.Equal("true", EvalStr(@"fn:matches('', '^([a-c-1-4x-z-7-9]*)$')"));
+        // re00102: [a-a-x-x] = {a, '-', x}.
+        Assert.Equal("true", EvalStr(@"fn:matches('a-x', '^([a-a-x-x]+)$')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('a-b', '^([a-a-x-x]+)$')"));
+        // re00071: a range whose end point is an unescaped '-' is an error.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate(@"fn:matches('qwerty', '[a--b]')"));
+        Assert.Contains("FORX0002", ex.Message);
+    }
+
+    [Fact]
+    public void Matches_NameCharEscapes_UseExplicitXsd11Ranges()
+    {
+        // XSD 1.1: \i = NameStartChar and \c = NameChar per the explicit XML 1.0 (5th ed)
+        // ranges, not Unicode general categories. U+212E ESTIMATED SYMBOL (category So)
+        // lies inside the NameStartChar range #x2070-#x218F (regex-syntax-0986/0987).
+        Assert.Equal("true", EvalStr(@"fn:matches(codepoints-to-string(8494), '^[\i]$')"));
+        Assert.Equal("true", EvalStr(@"fn:matches(codepoints-to-string(8494), '^[\c]$')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('[', '^[\i]$')"));
+        // re00987: U+00A1 INVERTED EXCLAMATION MARK is not a name character.
+        Assert.Equal("false", EvalStr(@"fn:matches(codepoints-to-string(161), '^[\c]$')"));
+        // '-', '.' and digits are NameChar but not NameStartChar.
+        Assert.Equal("true", EvalStr(@"fn:matches('.', '^[\c]$')"));
+        Assert.Equal("true", EvalStr(@"fn:matches('5', '^[\c]$')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('.', '^[\i]$')"));
+        Assert.Equal("false", EvalStr(@"fn:matches('5', '^[\i]$')"));
+        // Astral members (#x10000-#xEFFFF) match as whole code points.
+        Assert.Equal("true", EvalStr(@"fn:matches(codepoints-to-string(65536), '^[\c]$')"));
     }
 
     [Fact]

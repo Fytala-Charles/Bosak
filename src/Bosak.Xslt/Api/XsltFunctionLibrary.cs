@@ -20,6 +20,8 @@
 //                      | Charles Korthout | 0.6   | 15-07-2026     | global-context-item default wrapper, xslt-version type validation, xslt-version override  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 21-07-2026     | Set IsXsltMode=true in fn:transform nested EvaluationContext                             |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 03-08-2026     | fn:stream-available#1: open stream + read to root element; false on any failure          |
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
@@ -48,6 +50,54 @@ public static class XsltFunctionLibrary
     /// </summary>
     public static void Populate(EvaluationContext context)
     {
+        PopulateTransformOnly(context);
+        context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "stream-available",
+            Arity = 1,
+            ParameterTypes = [XdmValueKind.String],
+            ReturnType = XdmValueKind.Boolean,
+            Implementation = StreamAvailable_1
+        });
+        // fn:unparsed-entity-uri / fn:unparsed-entity-public-id: the XDocument-based
+        // node providers do not expose DTD unparsed-entity declarations, so the lookup
+        // always yields the empty sequence (correct whenever no unparsed entities are
+        // declared, which is all documents the providers can report on).
+        foreach (var localName in new[] { "unparsed-entity-uri", "unparsed-entity-public-id" })
+        {
+            context.RegisterFunction(new FunctionSignature
+            {
+                NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+                LocalName = localName,
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                Implementation = UnparsedEntity_Empty
+            });
+            context.RegisterFunction(new FunctionSignature
+            {
+                NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+                LocalName = localName,
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node],
+                ReturnType = XdmValueKind.String,
+                Implementation = UnparsedEntity_Empty
+            });
+        }
+    }
+
+    private static XdmValue UnparsedEntity_Empty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.Undefined;
+
+    /// <summary>
+    /// Registers only <c>fn:transform</c> (an F&amp;O function available in every host
+    /// language). Used where the XSLT-only functions (<c>fn:stream-available</c>,
+    /// <c>fn:unparsed-entity-uri</c>, <c>fn:unparsed-entity-public-id</c>) must remain
+    /// unavailable (XPST0017 in pure XPath/XQuery contexts).
+    /// </summary>
+    public static void PopulateTransformOnly(EvaluationContext context)
+    {
         context.RegisterFunction(new FunctionSignature
         {
             NamespaceUri = "http://www.w3.org/2005/xpath-functions",
@@ -57,6 +107,59 @@ public static class XsltFunctionLibrary
             ReturnType = XdmValueKind.Map,
             Implementation = Transform_1
         });
+    }
+
+    /// <summary>
+    /// XSLT 3.0 <c>fn:stream-available($uri)</c>: true when the processor can open a
+    /// stream to the (resolved) URI and start reading an XML document — that is, the
+    /// resource exists and a root element start tag can be read. Any failure (missing
+    /// resource, non-XML content, no root element) yields false; the function never
+    /// raises an error. Relative URIs resolve against the static base URI.
+    /// </summary>
+    private static XdmValue StreamAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (arg.IsUndefined || (arg.IsSequence && arg.SequenceValue is not null &&
+            !arg.SequenceValue.GetEnumerator().MoveNext()))
+            return XdmValue.FromBoolean(false);
+        string uri = arg.ToString();
+        if (uri.Length == 0)
+            return XdmValue.FromBoolean(false);
+        try
+        {
+            string resolved = uri;
+            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+            {
+                if (string.IsNullOrEmpty(ctx.BaseUri))
+                    return XdmValue.FromBoolean(false);
+                resolved = new Uri(new Uri(ctx.BaseUri), uri).AbsoluteUri;
+            }
+            var u = new Uri(resolved);
+            if (!u.IsFile)
+                return XdmValue.FromBoolean(false);
+            var path = u.LocalPath;
+            if (!File.Exists(path))
+                return XdmValue.FromBoolean(false);
+            // Read only as far as the root element start; a truncated document still
+            // counts as available (stream-available-004), while non-XML content and
+            // DTD-only documents do not (003, 006).
+            var settings = new System.Xml.XmlReaderSettings
+            {
+                DtdProcessing = System.Xml.DtdProcessing.Ignore,
+                XmlResolver = null
+            };
+            using var reader = System.Xml.XmlReader.Create(path, settings);
+            while (reader.Read())
+            {
+                if (reader.NodeType == System.Xml.XmlNodeType.Element)
+                    return XdmValue.FromBoolean(true);
+            }
+            return XdmValue.FromBoolean(false);
+        }
+        catch
+        {
+            return XdmValue.FromBoolean(false);
+        }
     }
 
     /// <summary>

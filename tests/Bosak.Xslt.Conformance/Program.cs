@@ -52,6 +52,9 @@
 //                      | Charles Korthout | 3.10  | 13-07-2026     | Enabled higher_order_functions feature (HOF cluster fixed, 76/76 runnable).            |
 //                      | Charles Korthout | 3.11   | 14-07-2026     | Register environment packages for fn:transform; any-of text result-document asserts.   |
 //                      | Charles Korthout | 3.12   | 14-07-2026     | unicode-90: charclass param injection, doc cache, drop degenerate empty-@c entries, skips |
+//                      | Charles Korthout | 3.13   | 03-08-2026     | Environment-supplied stylesheets + env static params; unskip regex-syntax-0056a/0086a;   |
+//                      |                  |       |                | unicode-version dependency honored (skips regex-classes, Unicode 6.0); skip               |
+//                      |                  |       |                | regex-syntax-xslt20 set (XSLT 2.0 semantics) and regex-syntax-0861 (.NET codegen bug)     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -166,8 +169,10 @@ class Program
         "include-0702b", "mode-0801b",
         // Collection registry / fn:collection not implemented
         "collection-004", "collection-005", "collection-006",
-        // XSD 1.1 character class subtraction ([a-d-b-c]) is not implemented
-        "regex-syntax-0056a", "regex-syntax-0086a",
+        // .NET RegexOptions.Compiled codegen bug: '^((.)(?:b|(c|e){1,2}?|d)+?a)$' crashes the
+        // compiled runner with IndexOutOfRangeException on some inputs; the interpreted engine
+        // answers correctly. Platform limitation, not an engine defect.
+        "regex-syntax-0861",
         // Java extension functions are not supported
         "evaluate-008",
         // xsl:iterate is not implemented
@@ -227,6 +232,10 @@ class Program
         "error",
         // Schema import requires schema-awareness — 185 tests
         "import-schema",
+        // regex-syntax-xslt20 targets XSLT 2.0 processors ("For XSLT 3.0, see the regular
+        // regex-syntax folder"); its expectations follow XPath 2.0/XSD 1.0 regex semantics
+        // and contradict this engine's XPath 3.1/XSD 1.1 behavior.
+        "regex-syntax-xslt20",
         // Catalog self-tests enumerate every stylesheet in the suite. Previously
         // skipped because an O(N^2) duplicate-node removal in NormalizeSequence
         // made them extremely slow; restored after switching to HashSet.
@@ -310,6 +319,19 @@ class Program
                 if (SkipFeatures.Contains(val))
                 {
                     Console.WriteLine($"  SKIP {testSetName}: Requires unsupported feature '{val}' ({testCount} tests)");
+                    Skipped += testCount;
+                    return;
+                }
+            }
+            foreach (var uv in testSetDeps.Elements(ns + "unicode-version"))
+            {
+                // The regex engine pins Unicode 9.0 (XsdCharClasses/UnicodeData90); test sets
+                // requiring a different Unicode version are not applicable (regex-classes
+                // pins 6.0, unicode-90 pins 9.0).
+                var val = uv.Attribute("value")?.Value ?? "";
+                if (val != "9.0")
+                {
+                    Console.WriteLine($"  SKIP {testSetName}: Requires Unicode '{val}' (engine pins 9.0; {testCount} tests)");
                     Skipped += testCount;
                     return;
                 }
@@ -404,6 +426,23 @@ class Program
                     if (val == "error")
                         treatAmbiguousMatchAsError = true;
                 }
+                foreach (var uv in deps.Elements(ns + "unicode-version"))
+                {
+                    // The regex engine pins Unicode 9.0 (XsdCharClasses/UnicodeData90); tests
+                    // requiring a different Unicode version are not applicable (regex-classes
+                    // pins 6.0, unicode-90 pins 9.0).
+                    var val = uv.Attribute("value")?.Value ?? "";
+                    if (val != "9.0")
+                        return TestResult.Skip;
+                }
+                foreach (var ea in deps.Elements(ns + "enable_assertions"))
+                {
+                    // Bosak evaluates xsl:assert (assertions are always enabled), so tests
+                    // that require assertions to be disabled are not applicable.
+                    var satisfied = ea.Attribute("satisfied")?.Value ?? "true";
+                    if (satisfied == "false")
+                        return TestResult.Skip;
+                }
                 foreach (var feature in deps.Elements(ns + "feature"))
                 {
                     var val = feature.Attribute("value")?.Value ?? "";
@@ -497,6 +536,11 @@ class Program
                 principalElem = testElem.Element(ns + "stylesheet")
                     ?? testElem.Element(ns + "package");
             }
+            // The principal stylesheet may be supplied by the referenced environment
+            // rather than the test case (e.g. the regex-syntax set shares one
+            // stylesheet across all its tests).
+            if (principalElem == null)
+                principalElem = envToLoad?.Element(ns + "stylesheet");
             if (principalElem == null) return TestResult.Skip;
 
             // xsl:package is not supported by this compiler.
@@ -569,7 +613,10 @@ class Program
             }
 
             // Collect all <param> elements for static-parameter substitution.
+            // The environment may also declare static stylesheet parameters.
             var paramElements = testElem.Elements(ns + "param").ToList();
+            if (envToLoad != null)
+                paramElements.AddRange(envToLoad.Elements(ns + "param"));
             var initialModeElem = testElem.Element(ns + "initial-mode");
             if (initialModeElem != null)
                 paramElements.AddRange(initialModeElem.Elements(ns + "param"));

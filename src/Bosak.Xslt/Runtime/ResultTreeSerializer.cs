@@ -46,6 +46,9 @@
 //                      | Charles Korthout | 1.23  | 15-07-2026     | XML method uses raw serializer for suppress-indentation; raw serializer honors the list  |
 //                      | Charles Korthout | 1.24  | 01-08-2026     | suppress-indentation applies to descendants, not the element's own start tag           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.25  | 03-08-2026     | XHTML attributes: quote as &#34;, C1 controls as char refs; HTML5 keeps foreign        |
+//                      |                  |       |                | element/attribute prefixes (svg/MathML elements take the default-namespace form)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -1992,22 +1995,101 @@ public static class ResultTreeSerializer
         var localName = element.Name.LocalName;
         var isEmpty = !element.Nodes().Any();
         var isRawContent = IsHtmlRawContentElement(localName);
+        var elemNs = element.Name.NamespaceName;
+
+        // HTML5 serialization preserves prefixes for foreign-namespace elements and
+        // attributes (output-0602c/0603a-c); HTML 4 and XHTML-namespace content keep
+        // the prefix-less form with a default namespace declaration.
+        bool html5 = props.HtmlVersion == "5.0";
+        var localBindings = new Dictionary<string, string>(inScopeBindings);
+        var declarationsToEmit = new List<(string Prefix, string Uri)>();
+        var attributeDeclarations = new List<(string Prefix, string Uri)>();
+        string? elemPrefix = null;
+        if (html5)
+        {
+            // Fold this element's own prefixed xmlns:* declarations into the local scope
+            // (default xmlns declarations are handled by the default-namespace path below).
+            // Declarations for the XHTML, SVG, and MathML namespaces are not emitted on
+            // elements: those elements take the default-namespace form (output-0602a/b);
+            // the bindings remain available for prefixed attributes (output-0603a/b).
+            foreach (var nsAttr in element.Attributes().Where(a => a.IsNamespaceDeclaration))
+            {
+                var declPrefix = nsAttr.Name.LocalName == "xmlns" ? "" : nsAttr.Name.LocalName;
+                if (declPrefix.Length == 0)
+                    continue;
+                if (!localBindings.TryGetValue(declPrefix, out var existing) || existing != nsAttr.Value)
+                {
+                    localBindings[declPrefix] = nsAttr.Value;
+                    if (nsAttr.Value != "http://www.w3.org/1999/xhtml" &&
+                        nsAttr.Value != "http://www.w3.org/2000/svg" &&
+                        nsAttr.Value != "http://www.w3.org/1998/Math/MathML")
+                    {
+                        declarationsToEmit.Add((declPrefix, nsAttr.Value));
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(elemNs) && elemNs != "http://www.w3.org/1999/xhtml" &&
+                elemNs != "http://www.w3.org/2000/svg" && elemNs != "http://www.w3.org/1998/Math/MathML")
+            {
+                // A foreign-namespace element keeps a declared in-scope prefix (output-0602c).
+                // XHTML, SVG, and MathML elements take the default-namespace form instead.
+                elemPrefix = FindHtml5Prefix(elemNs, localBindings);
+            }
+        }
 
         writer.Write('<');
+        if (elemPrefix != null)
+        {
+            writer.Write(elemPrefix);
+            writer.Write(':');
+        }
         writer.Write(localName);
 
-        var elemNs = element.Name.NamespaceName;
-        if (!string.IsNullOrEmpty(elemNs) && inScopeBindings.GetValueOrDefault("") != elemNs)
+        // Namespace declarations gathered above (own declarations and generated prefixes).
+        foreach (var (declPrefix, declUri) in declarationsToEmit)
+        {
+            writer.Write(declPrefix.Length == 0 ? " xmlns=\"" : $" xmlns:{declPrefix}=\"");
+            writer.Write(declUri);
+            writer.Write('"');
+        }
+
+        if (elemPrefix == null && !string.IsNullOrEmpty(elemNs) && inScopeBindings.GetValueOrDefault("") != elemNs)
         {
             writer.Write(" xmlns=\"");
             writer.Write(elemNs);
             writer.Write('"');
             inScopeBindings[""] = elemNs;
+            localBindings[""] = elemNs;
         }
 
         foreach (var attr in element.Attributes().Where(a => !a.IsNamespaceDeclaration))
         {
             writer.Write(' ');
+            var attrNs = attr.Name.NamespaceName;
+            if (html5 && !string.IsNullOrEmpty(attrNs))
+            {
+                // Foreign-namespace attribute: keep its prefix (output-0603a/b/c).
+                var attrPrefix = FindHtml5Prefix(attrNs, localBindings)
+                    ?? DeclareHtml5Prefix(attrNs, localBindings, declarationsToEmit);
+                bool isSpecialNs = attrNs == "http://www.w3.org/1999/xhtml" ||
+                    attrNs == "http://www.w3.org/2000/svg" ||
+                    attrNs == "http://www.w3.org/1998/Math/MathML";
+                if (isSpecialNs)
+                {
+                    // XHTML/SVG/MathML prefix bindings are not emitted as element
+                    // declarations (elements take the default-namespace form), so the
+                    // binding is declared on the attribute's host element instead.
+                    bool declaredHere = element.Attributes().Any(a => a.IsNamespaceDeclaration &&
+                        (a.Name.LocalName == "xmlns" ? "" : a.Name.LocalName) == attrPrefix && a.Value == attrNs) ||
+                        attributeDeclarations.Any(d => d.Prefix == attrPrefix);
+                    if (!declaredHere)
+                        attributeDeclarations.Add((attrPrefix, attrNs));
+                }
+                // Other foreign bindings are emitted as element declarations (folded
+                // above), so they are already in scope for the attribute.
+                writer.Write(attrPrefix);
+                writer.Write(':');
+            }
             writer.Write(attr.Name.LocalName);
             // HTML attribute minimization: a recognized boolean attribute whose value
             // equals its name (case-insensitive) is written without the value
@@ -2026,6 +2108,15 @@ public static class ResultTreeSerializer
             writer.Write('"');
         }
 
+        // Namespace (re)declarations for prefixed foreign attributes, emitted after the
+        // attributes themselves (output-0603a: xmlns:svg on the host element).
+        foreach (var (declPrefix, declUri) in attributeDeclarations)
+        {
+            writer.Write($" xmlns:{declPrefix}=\"");
+            writer.Write(declUri);
+            writer.Write('"');
+        }
+
         if (isEmpty)
         {
             if (IsHtmlEmptyElement(localName) || IsHtmlVoidElement(localName))
@@ -2036,6 +2127,11 @@ public static class ResultTreeSerializer
             {
                 writer.Write('>');
                 writer.Write("</");
+                if (elemPrefix != null)
+                {
+                    writer.Write(elemPrefix);
+                    writer.Write(':');
+                }
                 writer.Write(localName);
                 writer.Write('>');
             }
@@ -2044,7 +2140,7 @@ public static class ResultTreeSerializer
 
         writer.Write('>');
 
-        var childBindings = new Dictionary<string, string>(inScopeBindings);
+        var childBindings = new Dictionary<string, string>(localBindings);
         if (isRawContent)
         {
             foreach (var child in element.Nodes())
@@ -2077,8 +2173,39 @@ public static class ResultTreeSerializer
         }
 
         writer.Write("</");
+        if (elemPrefix != null)
+        {
+            writer.Write(elemPrefix);
+            writer.Write(':');
+        }
         writer.Write(localName);
         writer.Write('>');
+    }
+
+    /// <summary>Finds a non-default in-scope prefix bound to <paramref name="uri"/>, or null.</summary>
+    private static string? FindHtml5Prefix(string uri, Dictionary<string, string> bindings)
+    {
+        foreach (var (prefix, boundUri) in bindings)
+        {
+            if (boundUri == uri && prefix.Length > 0)
+                return prefix;
+        }
+        return null;
+    }
+
+    /// <summary>Generates a fresh prefix for <paramref name="uri"/>, records it in the
+    /// local scope, and queues its declaration for emission on the current element.</summary>
+    private static string DeclareHtml5Prefix(string uri, Dictionary<string, string> bindings, List<(string Prefix, string Uri)> declarations)
+    {
+        int n = 1;
+        string candidate;
+        do
+        {
+            candidate = "ns" + n++;
+        } while (bindings.ContainsKey(candidate));
+        bindings[candidate] = uri;
+        declarations.Add((candidate, uri));
+        return candidate;
     }
 
     private static void WriteHtmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool applyCharacterMap = true)
@@ -2161,7 +2288,7 @@ public static class ResultTreeSerializer
                 WriteCdataText(writer, cdata.Value);
                 break;
             case XText text:
-                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
+                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -2190,7 +2317,7 @@ public static class ResultTreeSerializer
                 WriteXhtmlElement(writer, elem, props, depth, inScopeBindings);
                 break;
             case XText text:
-                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
+                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -2249,7 +2376,7 @@ public static class ResultTreeSerializer
             (!inScopeBindings.TryGetValue("", out _) || inScopeBindings[""] != defaultUri))
         {
             writer.Write(" xmlns=\"");
-            WriteXmlEscaped(writer, defaultUri, props, isAttribute: true, applyCharacterMap: false);
+            WriteXmlEscaped(writer, defaultUri, props, isAttribute: true, applyCharacterMap: false, xhtmlMode: true);
             writer.Write('"');
             inScopeBindings[""] = defaultUri;
         }
@@ -2300,7 +2427,7 @@ public static class ResultTreeSerializer
             if (isUri)
                 value = EscapeUriAttribute(value);
             // Character maps do not apply to URI-valued attributes when URI escaping is enabled.
-            WriteXmlEscaped(writer, value, props, isAttribute: true, applyCharacterMap: !isUri);
+            WriteXmlEscaped(writer, value, props, isAttribute: true, applyCharacterMap: !isUri, xhtmlMode: true);
             writer.Write('"');
         }
 
@@ -2350,7 +2477,7 @@ public static class ResultTreeSerializer
                     // Unrepresentable characters are emitted as ordinary text and escaped
                     // as numeric character references by WriteXmlEscaped. Such split-out text
                     // nodes must not be altered by character maps.
-                    WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
+                    WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
                 }
                 else if (child is XElement childElem)
                 {
@@ -2391,7 +2518,7 @@ public static class ResultTreeSerializer
         writer.Write('>');
     }
 
-    private static void WriteXmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool isAttribute = false, bool applyCharacterMap = true)
+    private static void WriteXmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool isAttribute = false, bool applyCharacterMap = true, bool xhtmlMode = false)
     {
         var map = applyCharacterMap ? props.CharacterMap : null;
         var form = applyCharacterMap ? TryGetNormalizationForm(props) : null;
@@ -2407,6 +2534,21 @@ public static class ResultTreeSerializer
             foreach (var rune in normalized.EnumerateRunes())
             {
                 var cp = rune.Value;
+                // The XHTML output method uses numeric character references for the
+                // delimiting quotation mark (output-0102c/0103c) and for C1 control
+                // characters U+0080-U+009F (output-0102e/0103b/0103e).
+                if (xhtmlMode && isAttribute && cp == '"')
+                {
+                    writer.Write("&#34;");
+                    continue;
+                }
+                if (xhtmlMode && cp is >= 0x80 and <= 0x9F)
+                {
+                    writer.Write("&#");
+                    writer.Write(cp);
+                    writer.Write(';');
+                    continue;
+                }
                 switch (cp)
                 {
                     case '<':
@@ -2478,7 +2620,7 @@ public static class ResultTreeSerializer
                 writer.Write(" xmlns:");
                 writer.Write(prefix);
                 writer.Write("=\"");
-                WriteXmlEscaped(writer, uri, props, isAttribute: true, applyCharacterMap: false);
+                WriteXmlEscaped(writer, uri, props, isAttribute: true, applyCharacterMap: false, xhtmlMode: true);
                 writer.Write('"');
                 inScopeBindings[prefix] = uri;
             }
@@ -2497,7 +2639,7 @@ public static class ResultTreeSerializer
                 writer.Write(" xmlns:");
                 writer.Write(prefix);
                 writer.Write("=\"");
-                WriteXmlEscaped(writer, attr.Value, props, isAttribute: true, applyCharacterMap: false);
+                WriteXmlEscaped(writer, attr.Value, props, isAttribute: true, applyCharacterMap: false, xhtmlMode: true);
                 writer.Write('"');
                 inScopeBindings[prefix] = attr.Value;
             }
@@ -2513,7 +2655,7 @@ public static class ResultTreeSerializer
             writer.Write(" xmlns:");
             writer.Write(prefix);
             writer.Write("=\"");
-            WriteXmlEscaped(writer, uri, props, isAttribute: true, applyCharacterMap: false);
+            WriteXmlEscaped(writer, uri, props, isAttribute: true, applyCharacterMap: false, xhtmlMode: true);
             writer.Write('"');
             inScopeBindings[prefix] = uri;
         }

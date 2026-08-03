@@ -60,6 +60,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.21  | 29-07-2026     | Drop 83 residual-cluster gap entries (implemented or stale) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.22  | 03-08-2026     | Drop re00987 (\c uses explicit NameChar ranges now; test passes) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -135,10 +137,6 @@ internal sealed class ConformanceRunner
         ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         // app/XMark.xml (1 tests)
         ["XMark-Q19"] = "XQuery conformance gap (app/XMark): see AGENT_HANDOVER REQ-045",
-        // app/fo-spec-examples.xml (3 tests)
-        ["fo-test-fn-path-006"] = "XQuery conformance gap (app/fo-spec-examples): see AGENT_HANDOVER REQ-045",
-        ["fo-test-fn-path-008"] = "XQuery conformance gap (app/fo-spec-examples): see AGENT_HANDOVER REQ-045",
-        ["fo-test-fn-path-009"] = "XQuery conformance gap (app/fo-spec-examples): see AGENT_HANDOVER REQ-045",
         // array/flatten.xml (1 tests)
         ["array-flatten-010"] = "XQuery conformance gap (array/flatten): see AGENT_HANDOVER REQ-045",
         // array/sort.xml (3 tests)
@@ -193,8 +191,6 @@ internal sealed class ConformanceRunner
         // fn/json-doc.xml (2 tests)
         ["json-doc-028"] = "XQuery conformance gap (fn:json-doc): see AGENT_HANDOVER REQ-045",
         ["json-doc-035"] = "XQuery conformance gap (fn:json-doc): see AGENT_HANDOVER REQ-045",
-        // fn/matches.re.xml (1 tests)
-        ["re00987"] = "XQuery conformance gap (fn:matches.re): see AGENT_HANDOVER REQ-045",
         // fn/max.xml (8 tests)
         ["cbcl-max-001"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
         ["cbcl-max-002"] = "XQuery conformance gap (fn:max): see AGENT_HANDOVER REQ-045",
