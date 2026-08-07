@@ -157,6 +157,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.87  | 07-08-2026     | Dropped VM-level constructor attribute normalization: the parser already normalizes raw whitespace and exempts character references (K2-Serialization-6, xml-to-json-051) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.88  | 07-08-2026     | Comparison strictness sweep: same-type binary (hex/base64) comparisons order by decoded octets, mixed binary/non-binary XPTY0004; duration ordering honors the dynamic subtype annotation (plain xs:duration XPTY0004); general comparisons flatten nested arrays; unary minus on untypedAtomic yields xs:double; idiv raises FOAR0002 when the result exceeds xs:long range |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.89  | 07-08-2026     | NamespaceTest Q{}* sentinel (never the default element ns); EQName xs type names in ValueMatchesType/ApplyFunctionConversion; element/attribute(*, prefixed-T) kind tests validate the schema type (XPST0008/XPST0081) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1907,7 +1911,13 @@ public static class VmEngine
                         string prefix = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
                         XdmValue filtered;
-                        if (context.TryResolveNamespace(prefix, out var nsUri))
+                        if (prefix == "Q{}")
+                        {
+                            // Sentinel from a Q{}* wildcard: match the empty namespace
+                            // unconditionally (never the default element namespace).
+                            filtered = FilterNodes(input, n => n.NamespaceUri == "");
+                        }
+                        else if (context.TryResolveNamespace(prefix, out var nsUri))
                         {
                             filtered = FilterNodes(input, n => n.NamespaceUri == nsUri);
                         }
@@ -3015,8 +3025,13 @@ public static class VmEngine
         {
             if (value.IsArray)
             {
+                // General-comparison atomization flattens array members recursively,
+                // so a nested array contributes its own atomized members (GenCompEq-8).
                 foreach (var member in value.ArrayValue.Values)
-                    yield return member;
+                {
+                    foreach (var flattened in EnumerateItemsForComparison(member))
+                        yield return flattened;
+                }
             }
             else
             {
@@ -3032,8 +3047,8 @@ public static class VmEngine
         {
             if (item.IsArray)
             {
-                foreach (var member in item.ArrayValue.Values)
-                    yield return member;
+                foreach (var flattened in EnumerateItemsForComparison(item))
+                    yield return flattened;
             }
             else
             {
@@ -4691,6 +4706,10 @@ public static class VmEngine
             double result = l / r;
             if (double.IsNaN(result) || double.IsInfinity(result))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            // The xs:integer result is backed by long; a quotient beyond its range is
+            // an overflow (cbcl-numeric-idivide-002).
+            if (result >= 9223372036854775808.0 || result < -9223372036854775808.0)
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
             return XdmValue.FromInteger((long)result);
         }
 
@@ -4707,6 +4726,10 @@ public static class VmEngine
             double result = l / r;
             if (double.IsNaN(result) || double.IsInfinity(result))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            // The xs:integer result is backed by long; a quotient beyond its range is
+            // an overflow (cbcl-numeric-idivide-002).
+            if (result >= 9223372036854775808.0 || result < -9223372036854775808.0)
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
             return XdmValue.FromInteger((long)result);
         }
 
@@ -4722,6 +4745,8 @@ public static class VmEngine
                 throw new InvalidOperationException("FOAR0001: Division by zero.");
             float result = l / r;
             if (float.IsNaN(result) || float.IsInfinity(result))
+                throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+            if (result >= 9223372036854775808.0 || result < -9223372036854775808.0)
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
             return XdmValue.FromInteger((long)result);
         }
@@ -4796,6 +4821,11 @@ public static class VmEngine
 
         if (context.BackwardsCompatible)
             return XdmValue.FromDouble(-ToDoubleOrNaN(value));
+
+        // XPath 3.1 §3.1.5: an xs:untypedAtomic operand is converted to xs:double
+        // before negation (op-numeric-unary-minus-1).
+        if (IsUntypedAtomic(value))
+            return XdmValue.FromDouble(-ToDouble(value));
 
         if (value.Kind == XdmValueKind.Duration)
         {
@@ -5043,8 +5073,11 @@ public static class VmEngine
         {
             var (lMonths, lSeconds) = NormalizeDuration(left.DurationValue);
             var (rMonths, rSeconds) = NormalizeDuration(right.DurationValue);
-            var lSub = GetDurationSubtype(left.DurationValue);
-            var rSub = GetDurationSubtype(right.DurationValue);
+            // The dynamic subtype (schema annotation) decides orderability: a plain
+            // xs:duration is unordered even when its value carries only year/month or
+            // only day/time parts (cbcl-value-greater-than-002/006/010).
+            var lSub = GetDurationSubtype(left);
+            var rSub = GetDurationSubtype(right);
 
             bool isEquality = op is IrOpCode.Equal or IrOpCode.ValueEqual
                               or IrOpCode.NotEqual or IrOpCode.ValueNotEqual;
@@ -5160,6 +5193,33 @@ public static class VmEngine
                 : false;
         }
 
+        // Binary comparison: xs:hexBinary / xs:base64Binary values are stored as
+        // annotated strings. Comparison is defined only between two values of the same
+        // binary type and orders by the decoded octets, not the lexical form
+        // (op-base64Binary-less-than-17/25, op-hexBinary-greater-than-25).
+        bool leftIsBinary = IsBinaryTypedString(left);
+        bool rightIsBinary = IsBinaryTypedString(right);
+        if (leftIsBinary || rightIsBinary)
+        {
+            if (!leftIsBinary || !rightIsBinary
+                || !string.Equals(left.SchemaTypeName, right.SchemaTypeName, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "XPTY0004: Comparison is only defined between two xs:hexBinary or two xs:base64Binary values.");
+            }
+            int bcmp = CompareBinaryValues(left, right);
+            return op switch
+            {
+                IrOpCode.Equal or IrOpCode.ValueEqual => bcmp == 0,
+                IrOpCode.NotEqual or IrOpCode.ValueNotEqual => bcmp != 0,
+                IrOpCode.LessThan or IrOpCode.ValueLessThan => bcmp < 0,
+                IrOpCode.LessThanOrEqual or IrOpCode.ValueLessThanOrEqual => bcmp <= 0,
+                IrOpCode.GreaterThan or IrOpCode.ValueGreaterThan => bcmp > 0,
+                IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => bcmp >= 0,
+                _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+            };
+        }
+
         // Atomized nodes become strings; try numeric parsing for untyped values
         string lStr = left.ToString();
         string rStr = right.ToString();
@@ -5234,6 +5294,28 @@ public static class VmEngine
             IrOpCode.GreaterThanOrEqual or IrOpCode.ValueGreaterThanOrEqual => cmp2 >= 0,
             _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
         };
+    }
+
+    /// <summary>
+    /// True when the value is an xs:hexBinary or xs:base64Binary atomic, which this
+    /// engine stores as an <see cref="XdmValueKind.String"/> value carrying the binary
+    /// schema-type annotation.
+    /// </summary>
+    private static bool IsBinaryTypedString(XdmValue value)
+        => value.Kind == XdmValueKind.String
+           && (value.SchemaTypeName?.Equals("hexBinary", StringComparison.OrdinalIgnoreCase) == true
+               || value.SchemaTypeName?.Equals("base64Binary", StringComparison.OrdinalIgnoreCase) == true);
+
+    /// <summary>
+    /// Compares two same-type binary values by their decoded octets (unsigned,
+    /// lexicographic). Callers must ensure both values share one binary schema type.
+    /// </summary>
+    private static int CompareBinaryValues(XdmValue left, XdmValue right)
+    {
+        bool isHex = left.SchemaTypeName!.Equals("hexBinary", StringComparison.OrdinalIgnoreCase);
+        byte[] lBytes = isHex ? Convert.FromHexString(left.StringValue) : Convert.FromBase64String(left.StringValue);
+        byte[] rBytes = isHex ? Convert.FromHexString(right.StringValue) : Convert.FromBase64String(right.StringValue);
+        return ((ReadOnlySpan<byte>)lBytes).SequenceCompareTo(rBytes);
     }
 
     private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, EvaluationContext context)
@@ -7266,6 +7348,23 @@ public static class VmEngine
     }
 
     /// <summary>
+    /// Maps an EQName atomic type name in the XML Schema namespace
+    /// (<c>Q{http://www.w3.org/2001/XMLSchema}integer</c>) to the equivalent
+    /// <c>xs:</c>-prefixed form (eqname-004: EQName parameter types in user function
+    /// declarations). Any other EQName is returned unchanged.
+    /// </summary>
+    private static string NormalizeEQNameTypeName(string typeName)
+    {
+        if (typeName.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int close = typeName.IndexOf('}');
+            if (close > 2 && string.Equals(typeName[2..close].Trim(), "http://www.w3.org/2001/XMLSchema", StringComparison.Ordinal))
+                return string.Concat("xs:", typeName.AsSpan(close + 1));
+        }
+        return typeName;
+    }
+
+    /// <summary>
     /// Extracts the local name from a sequence type string, stripping an optional
     /// xs:/xsd: prefix or Q{uri} EQName wrapper. Used for case-sensitive checks
     /// where the lower-cased normalized form is no longer sufficient.
@@ -7419,6 +7518,33 @@ public static class VmEngine
         return typeName is "untypedatomic" or "anyatomictype" or "anysimpletype" or "anytype";
     }
 
+    // Validates the schema type name of an element(name, T) / attribute(name, T) test.
+    // A prefixed or URI-qualified T must resolve to a built-in schema type: XPST0081 for
+    // an undeclared prefix, XPST0008 for an unknown type (static-context-1). Unprefixed
+    // names keep the lenient local interpretation used for element-type compatibility.
+    private static void ValidateKindTestSchemaType(string typeName, EvaluationContext? context)
+    {
+        if (context is null)
+            return;
+        var s = GetCasePreservedTypeName(typeName);
+        int open = s.IndexOf('(');
+        int close = s.LastIndexOf(')');
+        if (open < 0 || close <= open)
+            return;
+        var inner = s.Substring(open + 1, close - open - 1);
+        int comma = inner.IndexOf(',');
+        if (comma < 0)
+            return;
+        var typePart = inner[(comma + 1)..].Trim();
+        if (typePart.EndsWith('?'))
+            typePart = typePart[..^1].TrimEnd();
+        if (typePart.Length == 0 || typePart == "*")
+            return;
+        if (!typePart.Contains(':') && !typePart.StartsWith("Q{", StringComparison.Ordinal))
+            return;
+        ValidateKindTestTypeName(typePart, context);
+    }
+
     // Validates a schema type name used in a kind test (element(foo, T) / attribute(foo, T)):
     // the name must resolve (XPST0081 for an undeclared prefix) and must designate a known
     // built-in schema type (XPST0008 otherwise, since no schemas are imported).
@@ -7545,7 +7671,7 @@ public static class VmEngine
         var unwrapped = typeName.Trim();
         while (unwrapped.Length > 1 && unwrapped[0] == '(' && FindMatchingParen(unwrapped, 0) == unwrapped.Length - 1)
             unwrapped = unwrapped[1..^1].Trim();
-        typeName = unwrapped;
+        typeName = NormalizeEQNameTypeName(unwrapped);
 
         // empty-sequence() only matches the empty sequence.
         if (typeName.Trim().Equals("empty-sequence()", StringComparison.OrdinalIgnoreCase))
@@ -7631,6 +7757,7 @@ public static class VmEngine
 
         if (normalized.StartsWith("element(") && normalized.EndsWith(')'))
         {
+            ValidateKindTestSchemaType(typeName, context);
             if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Element)
                 return false;
             var inner = normalized.Substring(8, normalized.Length - 9).Trim();
@@ -7698,6 +7825,7 @@ public static class VmEngine
 
         if (normalized.StartsWith("attribute(") && normalized.EndsWith(')'))
         {
+            ValidateKindTestSchemaType(typeName, context);
             if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Attribute)
                 return false;
             var inner = normalized.Substring(10, normalized.Length - 11).Trim();
@@ -8273,7 +8401,7 @@ public static class VmEngine
         if (ValueMatchesType(value, targetType, context))
             return value;
 
-        var type = targetType.Trim();
+        var type = NormalizeEQNameTypeName(targetType.Trim());
         while (type.Length > 1 && type[0] == '(' && FindMatchingParen(type, 0) == type.Length - 1)
             type = type[1..^1].Trim();
 
@@ -9995,6 +10123,20 @@ public static class VmEngine
                 return leftNaN ? nanRank : -nanRank;
             }
             return l.CompareTo(r);
+        }
+
+        // xs:hexBinary / xs:base64Binary (annotated strings) order by their decoded
+        // octets; mixing binary types or binary with non-binary is a type error
+        // (base64Binary-lt-15/gt-15).
+        if (IsBinaryTypedString(left) || IsBinaryTypedString(right))
+        {
+            if (!IsBinaryTypedString(left) || !IsBinaryTypedString(right)
+                || !string.Equals(left.SchemaTypeName, right.SchemaTypeName, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    $"XPTY0004: Cannot compare {left.Kind} with {right.Kind} in an order by clause.");
+            }
+            return CompareBinaryValues(left, right);
         }
 
         if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String)

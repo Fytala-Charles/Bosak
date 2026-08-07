@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 29-07-2026     | excludeVariable parameter for initializer self-reference checks |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 07-08-2026     | Collect statically unresolvable names for the evaluation-time check (XPST0008/XPST0081/XPST0017); catch clauses bind the err:* variables |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Parser;
@@ -35,6 +37,40 @@ namespace Bosak.XQuery.Compiler;
 internal static class ModuleVisibilityValidator
 {
     /// <summary>
+    /// Names referenced by a validated body that could not be resolved statically:
+    /// variables that are neither lexically bound nor declared globals, variable names
+    /// with an undeclared prefix, and calls into the local-functions namespace that match
+    /// no declared user function. Because the host may still supply external variables
+    /// (and functions) through the evaluation context, these candidates are re-checked
+    /// against the fully populated context at evaluation time — only then is XPST0008
+    /// (undefined variable), XPST0081 (undeclared prefix), or XPST0017 (unknown function)
+    /// raised. This keeps static errors static even for code paths that are never executed
+    /// (dead branches, uncalled function bodies) without rejecting externally supplied names.
+    /// </summary>
+    internal sealed class UnresolvedNameReferences
+    {
+        /// <summary>Variable names whose prefix does not resolve in the prolog: (prefix, local).</summary>
+        public HashSet<(string Prefix, string Local)> PrefixedVariables { get; } = new();
+
+        /// <summary>Unresolvable variable references: (local, namespaceUri, display form).</summary>
+        public HashSet<(string Local, string NamespaceUri, string Display)> Variables { get; } = new();
+
+        /// <summary>Static calls/references into the local-functions namespace: (local, arity).</summary>
+        public HashSet<(string Local, int Arity)> LocalFunctions { get; } = new();
+
+        /// <summary>True when no unresolved names were collected.</summary>
+        public bool IsEmpty => PrefixedVariables.Count == 0 && Variables.Count == 0 && LocalFunctions.Count == 0;
+
+        /// <summary>Merges another body's collected references into this set.</summary>
+        public void Merge(UnresolvedNameReferences other)
+        {
+            foreach (var v in other.PrefixedVariables) PrefixedVariables.Add(v);
+            foreach (var v in other.Variables) Variables.Add(v);
+            foreach (var f in other.LocalFunctions) LocalFunctions.Add(f);
+        }
+    }
+
+    /// <summary>
     /// Validates one compiled body (the main query body, a user function body, or a global
     /// variable initializer) against the visibility sets of its declaring module.
     /// </summary>
@@ -49,7 +85,9 @@ internal static class ModuleVisibilityValidator
     /// it that is not shadowed by a lexical binding raises XPST0008 — a variable is not in
     /// scope within its own initializer (K-InternalVariablesWith-15b).
     /// </param>
-    public static void Validate(
+    /// <returns>The names that could not be resolved statically, for the deferred
+    /// evaluation-time check against externally supplied bindings.</returns>
+    public static UnresolvedNameReferences Validate(
         XPathAstNode body,
         XQueryStaticContext moduleContext,
         IReadOnlyCollection<string> moduleNamespaces,
@@ -65,10 +103,14 @@ internal static class ModuleVisibilityValidator
                 walker.BindLexical(name);
         }
         walker.Walk(body);
+        return walker.Report;
     }
 
     private sealed class Walker
     {
+        private const string LocalFunctionsNamespace = "http://www.w3.org/2005/xquery-local-functions";
+        private const string ErrorsNamespace = "http://www.w3.org/2005/xqt-errors";
+
         private readonly XQueryStaticContext _moduleContext;
         private readonly IReadOnlyCollection<string> _moduleNamespaces;
         private readonly IReadOnlySet<(string Ns, string Local, int Arity)> _visibleFunctions;
@@ -76,6 +118,8 @@ internal static class ModuleVisibilityValidator
         private readonly (string Local, string Ns)? _excludeVariable;
         private readonly List<HashSet<(string Prefix, string Local)>> _boundLexical = new();
         private readonly List<HashSet<(string Ns, string Local)>> _boundResolved = new();
+        private readonly List<Dictionary<string, string>> _namespaceScopes = new();
+        private readonly UnresolvedNameReferences _report = new();
 
         public Walker(
             XQueryStaticContext moduleContext,
@@ -90,6 +134,9 @@ internal static class ModuleVisibilityValidator
             _visibleVariables = visibleVariables;
             _excludeVariable = excludeVariable;
         }
+
+        /// <summary>The unresolved names collected while walking the body.</summary>
+        public UnresolvedNameReferences Report => _report;
 
         // ------------------------------------------------------------------
         // Bound-name tracking (lexical scoping approximation; the engine itself
@@ -130,8 +177,10 @@ internal static class ModuleVisibilityValidator
                 var prefix = lexicalName[..colon];
                 var local = lexicalName[(colon + 1)..];
                 _boundLexical[^1].Add((prefix, local));
-                if (_moduleContext.Namespaces.TryGetValue(prefix, out var resolvedNs))
+                if (ResolvePrefix(prefix) is { } resolvedNs)
                     _boundResolved[^1].Add((resolvedNs, local));
+                else
+                    _report.PrefixedVariables.Add((prefix, local)); // XPST0081 candidate (binding site)
             }
             else
             {
@@ -140,13 +189,48 @@ internal static class ModuleVisibilityValidator
         }
 
         private void Bind(string? prefix, string? local)
+            => Bind(prefix, local, null);
+
+        // Binds a variable; <paramref name="resolvedNs"/> carries the namespace of the
+        // Q{uri}local binding form (already expanded by the parser).
+        private void Bind(string? prefix, string? local, string? resolvedNs)
         {
             if (string.IsNullOrEmpty(local))
                 return;
             EnsureScope();
             _boundLexical[^1].Add((prefix ?? "", local));
-            if (!string.IsNullOrEmpty(prefix) && _moduleContext.Namespaces.TryGetValue(prefix, out var ns))
-                _boundResolved[^1].Add((ns, local));
+            if (!string.IsNullOrEmpty(resolvedNs))
+            {
+                _boundResolved[^1].Add((resolvedNs, local));
+                return;
+            }
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                if (ResolvePrefix(prefix) is { } ns)
+                    _boundResolved[^1].Add((ns, local));
+                else
+                    _report.PrefixedVariables.Add((prefix, local)); // XPST0081 candidate (binding site)
+            }
+        }
+
+        // Binds a variable by its already-resolved namespace (catch-clause error variables).
+        private void BindResolved(string ns, string local)
+        {
+            EnsureScope();
+            _boundResolved[^1].Add((ns, local));
+        }
+
+        // Resolves a namespace prefix: innermost constructor-local declarations first
+        // (a direct element constructor's xmlns:p bindings are in scope for its enclosed
+        // expressions — K2-DirectConElemNamespace-33), then the prolog bindings.
+        private string? ResolvePrefix(string prefix)
+        {
+            for (int i = _namespaceScopes.Count - 1; i >= 0; i--)
+            {
+                if (_namespaceScopes[i].TryGetValue(prefix, out var ns))
+                    return ns;
+            }
+            return _moduleContext.Namespaces.TryGetValue(prefix, out var moduleNs) ? moduleNs : null;
         }
 
         private void EnsureScope()
@@ -171,23 +255,60 @@ internal static class ModuleVisibilityValidator
             return false;
         }
 
+        private bool IsLexicallyBound(string prefix, string local)
+        {
+            var key = (prefix, local);
+            foreach (var scope in _boundLexical)
+            {
+                if (scope.Contains(key))
+                    return true;
+            }
+            return false;
+        }
+
         // ------------------------------------------------------------------
         // Visibility checks
         // ------------------------------------------------------------------
 
         private void CheckFunction(string? ns, string local, int arity)
         {
-            if (string.IsNullOrEmpty(ns) || !_moduleNamespaces.Contains(ns))
+            if (string.IsNullOrEmpty(ns))
                 return;
-            if (!_visibleFunctions.Contains((ns, local, arity)))
-                throw new ParseException($"XPST0017: Function {{{ns}}}{local}#{arity} is not visible in this module.", 0);
+            if (_moduleNamespaces.Contains(ns))
+            {
+                if (!_visibleFunctions.Contains((ns, local, arity)))
+                    throw new ParseException($"XPST0017: Function {{{ns}}}{local}#{arity} is not visible in this module.", 0);
+                return;
+            }
+            // A static call into the local-functions namespace must name a declared user
+            // function (XPST0017, K2-FunctionProlog-38). Deferred to evaluation time, when
+            // the registered function signatures are known.
+            if (ns == LocalFunctionsNamespace && !_visibleFunctions.Contains((ns, local, arity)))
+                _report.LocalFunctions.Add((local, arity));
         }
 
         private void CheckVariable(VariableReferenceNode node)
         {
             string? ns = node.NamespaceUri;
+            bool prefixUnresolved = false;
             if (string.IsNullOrEmpty(ns) && !string.IsNullOrEmpty(node.Prefix))
-                _moduleContext.Namespaces.TryGetValue(node.Prefix, out ns);
+            {
+                if (ResolvePrefix(node.Prefix) is { } resolved)
+                    ns = resolved;
+                else
+                    prefixUnresolved = true;
+            }
+
+            if (prefixUnresolved)
+            {
+                // The prefix does not resolve in the prolog: XPST0081. When the name is
+                // lexically bound under the same lexical form, the binding site has
+                // already reported the undeclared prefix.
+                if (!IsLexicallyBound(node.Prefix!, node.LocalName))
+                    _report.PrefixedVariables.Add((node.Prefix!, node.LocalName));
+                return;
+            }
+
             ns ??= string.Empty;
             if (!IsBound(node, ns) && _excludeVariable is { } excluded
                 && excluded.Local == node.LocalName && excluded.Ns == ns)
@@ -195,12 +316,26 @@ internal static class ModuleVisibilityValidator
                 throw new ParseException(
                     $"XPST0008: Variable ${(node.Prefix is null ? "" : node.Prefix + ":")}{node.LocalName} is not defined in the initializer of the variable being declared.", 0);
             }
-            if (!_moduleNamespaces.Contains(ns) || IsBound(node, ns))
+            if (IsBound(node, ns))
                 return;
+            if (_moduleNamespaces.Contains(ns))
+            {
+                if (!_visibleVariables.Contains((ns, node.LocalName)))
+                {
+                    throw new ParseException(
+                        $"XPST0008: Variable ${(node.Prefix is null ? "" : node.Prefix + ":")}{node.LocalName} is not visible in this module.", 0);
+                }
+                return;
+            }
+            // Neither lexically bound nor a declared global: a static error (XPST0008)
+            // unless the host binds the variable externally. Collected and re-checked
+            // against the evaluation context (K-FunctionProlog-37/38, K-LetExprWithout-1).
             if (!_visibleVariables.Contains((ns, node.LocalName)))
             {
-                throw new ParseException(
-                    $"XPST0008: Variable ${(node.Prefix is null ? "" : node.Prefix + ":")}{node.LocalName} is not visible in this module.", 0);
+                var display = node.Prefix is not null
+                    ? node.Prefix + ":" + node.LocalName
+                    : ns.Length == 0 ? node.LocalName : $"Q{{{ns}}}{node.LocalName}";
+                _report.Variables.Add((node.LocalName, ns, display));
             }
         }
 
@@ -255,8 +390,9 @@ internal static class ModuleVisibilityValidator
                     foreach (var b in fe.Bindings)
                     {
                         Walk(b.Expression);
-                        Bind(b.VariablePrefix, b.VariableName);
-                        Bind(null, b.PositionalVariableName);
+                        Bind(b.VariablePrefix, b.VariableName, b.VariableNamespaceUri);
+                        if (b.PositionalVariableName is not null)
+                            BindLexical(b.PositionalVariableName);
                     }
                     Walk(fe.ReturnExpression);
                     PopScope();
@@ -266,7 +402,7 @@ internal static class ModuleVisibilityValidator
                     foreach (var b in le.Bindings)
                     {
                         Walk(b.Expression);
-                        Bind(b.VariablePrefix, b.VariableName);
+                        Bind(b.VariablePrefix, b.VariableName, b.VariableNamespaceUri);
                     }
                     Walk(le.Body);
                     PopScope();
@@ -276,8 +412,9 @@ internal static class ModuleVisibilityValidator
                     foreach (var b in qe.Bindings)
                     {
                         Walk(b.Expression);
-                        Bind(b.VariablePrefix, b.VariableName);
-                        Bind(null, b.PositionalVariableName);
+                        Bind(b.VariablePrefix, b.VariableName, b.VariableNamespaceUri);
+                        if (b.PositionalVariableName is not null)
+                            BindLexical(b.PositionalVariableName);
                     }
                     Walk(qe.SatisfiesExpression);
                     PopScope();
@@ -310,12 +447,36 @@ internal static class ModuleVisibilityValidator
                     break;
                 case ArrowExprNode arrow:
                     Walk(arrow.Source);
-                    Walk(arrow.Target);
+                    // An arrow target call gains the source as its implicit first
+                    // argument: $x => local:f($a) calls local:f#2 (numberformat122).
+                    if (arrow.Target is FunctionCallNode arrowCall)
+                    {
+                        CheckFunction(arrowCall.NamespaceUri, arrowCall.LocalName, arrowCall.Arguments.Count + 1);
+                        foreach (var arg in arrowCall.Arguments)
+                            Walk(arg);
+                    }
+                    else
+                    {
+                        Walk(arrow.Target);
+                    }
                     break;
                 case TryCatchNode tc:
                     Walk(tc.TryExpression);
                     foreach (var c in tc.Clauses)
+                    {
+                        // The catch clause implicitly binds the error record variables
+                        // ($err:code, $err:description, ...) in the errors namespace.
+                        PushScope();
+                        BindResolved(ErrorsNamespace, "code");
+                        BindResolved(ErrorsNamespace, "description");
+                        BindResolved(ErrorsNamespace, "value");
+                        BindResolved(ErrorsNamespace, "module");
+                        BindResolved(ErrorsNamespace, "line-number");
+                        BindResolved(ErrorsNamespace, "column-number");
+                        BindResolved(ErrorsNamespace, "additional");
                         Walk(c.Expression);
+                        PopScope();
+                    }
                     break;
                 case StringConstructorNode sc:
                     foreach (var p in sc.Parts)
@@ -336,12 +497,31 @@ internal static class ModuleVisibilityValidator
                     PopScope();
                     break;
                 case DirectElementConstructorNode elem:
-                    foreach (var a in elem.Attributes)
-                        foreach (var p in a.ValueParts)
+                    {
+                        // A direct element constructor's xmlns:p declarations are in scope
+                        // for all its enclosed expressions, regardless of attribute order
+                        // (K2-DirectConElemNamespace-33).
+                        Dictionary<string, string>? ctorNamespaces = null;
+                        foreach (var a in elem.Attributes)
+                        {
+                            if (a.Prefix == "xmlns" && a.ValueParts.Count == 1
+                                && a.ValueParts[0] is StringLiteralNode nsLiteral)
+                            {
+                                ctorNamespaces ??= new Dictionary<string, string>(StringComparer.Ordinal);
+                                ctorNamespaces[a.Name] = nsLiteral.Value;
+                            }
+                        }
+                        if (ctorNamespaces is not null)
+                            _namespaceScopes.Add(ctorNamespaces);
+                        foreach (var a in elem.Attributes)
+                            foreach (var p in a.ValueParts)
+                                Walk(p);
+                        foreach (var p in elem.Content)
                             Walk(p);
-                    foreach (var p in elem.Content)
-                        Walk(p);
-                    break;
+                        if (ctorNamespaces is not null)
+                            _namespaceScopes.RemoveAt(_namespaceScopes.Count - 1);
+                        break;
+                    }
                 case ComputedElementConstructorNode n:
                     if (n.NameExpression is not null) Walk(n.NameExpression);
                     Walk(n.ContentExpression);
@@ -382,12 +562,12 @@ internal static class ModuleVisibilityValidator
                     foreach (var c in ts.Cases)
                     {
                         PushScope();
-                        Bind(c.VariablePrefix, c.VariableName);
+                        Bind(c.VariablePrefix, c.VariableName, c.VariableNamespaceUri);
                         Walk(c.Return);
                         PopScope();
                     }
                     PushScope();
-                    Bind(ts.DefaultVariablePrefix, ts.DefaultVariableName);
+                    Bind(ts.DefaultVariablePrefix, ts.DefaultVariableName, ts.DefaultVariableNamespaceUri);
                     Walk(ts.Default);
                     PopScope();
                     break;
@@ -422,15 +602,16 @@ internal static class ModuleVisibilityValidator
                     foreach (var b in forClause.Bindings)
                     {
                         Walk(b.Expression);
-                        Bind(b.VariablePrefix, b.VariableName);
-                        Bind(null, b.PositionalVariableName);
+                        Bind(b.VariablePrefix, b.VariableName, b.VariableNamespaceUri);
+                        if (b.PositionalVariableName is not null)
+                            BindLexical(b.PositionalVariableName);
                     }
                     break;
                 case LetClauseNode letClause:
                     foreach (var b in letClause.Bindings)
                     {
                         Walk(b.Expression);
-                        Bind(b.VariablePrefix, b.VariableName);
+                        Bind(b.VariablePrefix, b.VariableName, b.VariableNamespaceUri);
                     }
                     break;
                 case WhereClauseNode whereClause:
@@ -444,32 +625,47 @@ internal static class ModuleVisibilityValidator
                     foreach (var s in groupClause.Specs)
                     {
                         if (s.KeyExpression is not null)
+                        {
+                            // A grouping spec with ':= expr' introduces a new variable
+                            // binding (in scope for subsequent clauses and the return);
+                            // without it the spec re-groups an existing, already bound
+                            // variable. All pre-grouping variables stay bound either way.
                             Walk(s.KeyExpression);
+                            Bind(s.Prefix, s.VariableName, s.NamespaceUri);
+                        }
                     }
-                    // All pre-grouping variables stay bound after the grouping.
                     break;
                 case CountClauseNode countClause:
-                    Bind(countClause.Prefix, countClause.VariableName);
+                    Bind(countClause.Prefix, countClause.VariableName, countClause.NamespaceUri);
                     break;
                 case WindowClauseNode windowClause:
                     Walk(windowClause.InExpression);
-                    Bind(windowClause.Prefix, windowClause.VariableName);
-                    WalkWindowCondition(windowClause.StartCondition);
+                    Bind(windowClause.Prefix, windowClause.VariableName, windowClause.NamespaceUri);
+                    // Window condition variables stay in scope for the end condition's
+                    // when expression and for the rest of the FLWOR (TumblingWindowExpr530:
+                    // return ($w, $s, $x, $sp, $sn, $e, $y, $ep, $en)).
+                    BindWindowConditionVariables(windowClause.StartCondition);
+                    Walk(windowClause.StartCondition.WhenExpression);
                     if (windowClause.EndCondition is not null)
-                        WalkWindowCondition(windowClause.EndCondition);
+                    {
+                        BindWindowConditionVariables(windowClause.EndCondition);
+                        Walk(windowClause.EndCondition.WhenExpression);
+                    }
                     break;
             }
         }
 
-        private void WalkWindowCondition(WindowCondition condition)
+        private void BindWindowConditionVariables(WindowCondition condition)
         {
-            PushScope();
-            Bind(null, condition.CurrentItemVariable);
-            Bind(null, condition.PositionalVariable);
-            Bind(null, condition.PreviousItemVariable);
-            Bind(null, condition.NextItemVariable);
-            Walk(condition.WhenExpression);
-            PopScope();
+            // The parser keeps the lexical name forms (plain, prefix:local, Q{uri}local).
+            if (condition.CurrentItemVariable is not null)
+                BindLexical(condition.CurrentItemVariable);
+            if (condition.PositionalVariable is not null)
+                BindLexical(condition.PositionalVariable);
+            if (condition.PreviousItemVariable is not null)
+                BindLexical(condition.PreviousItemVariable);
+            if (condition.NextItemVariable is not null)
+                BindLexical(condition.NextItemVariable);
         }
     }
 }

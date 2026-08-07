@@ -46,6 +46,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.7   | 01-08-2026     | ModuleRuntimeContext carries decimal formats for module-local format declarations    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.8   | 07-08-2026     | Library-module context item type declarations flow to the executable for initial context item validation (contextDecl-054) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.9   | 07-08-2026     | Statically unresolvable names collected from all bodies flow to the executable's evaluation-time check |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -116,11 +120,13 @@ public sealed class XQueryCompiler
         // 3. Resolve function-call namespaces using the static context derived from the prolog.
         var resolvedBody = ResolveFunctionNamespaces(parseResult.Body, parseResult.StaticContext);
 
-        // 3b. Validate module-namespace references (public visibility, imports not transitive).
+        // 3b. Validate module-namespace references (public visibility, imports not transitive)
+        //     and collect statically unresolvable names for the evaluation-time check.
+        var unresolvedNames = new ModuleVisibilityValidator.UnresolvedNameReferences();
         var mainVisibility = BuildVisibility(parseResult.StaticContext, moduleGraph);
-        ModuleVisibilityValidator.Validate(
+        unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
             resolvedBody, parseResult.StaticContext, moduleNamespaces,
-            mainVisibility.Functions, mainVisibility.Variables);
+            mainVisibility.Functions, mainVisibility.Variables));
 
         // 4. Optimize the AST.
         var optimizer = new XPathOptimizer();
@@ -131,7 +137,7 @@ public sealed class XQueryCompiler
         var userVariables = new List<CompiledUserVariable>();
         CompileModuleDeclarations(
             parseResult.StaticContext, moduleGraph, moduleNamespaces, mainVisibility,
-            optimizer, userFunctions, userVariables, moduleRuntimeContext: null);
+            optimizer, userFunctions, userVariables, moduleRuntimeContext: null, unresolvedNames);
 
         // 4c. Compile every loaded library module's declarations with its own static context.
         foreach (var (ns, modules) in moduleGraph)
@@ -146,7 +152,7 @@ public sealed class XQueryCompiler
                     libContext.DecimalFormats, libContext.DeclaredDefaultDecimalFormat);
                 CompileModuleDeclarations(
                     libContext, moduleGraph, moduleNamespaces, libVisibility,
-                    optimizer, userFunctions, userVariables, libRuntimeContext);
+                    optimizer, userFunctions, userVariables, libRuntimeContext, unresolvedNames);
             }
         }
 
@@ -154,7 +160,17 @@ public sealed class XQueryCompiler
         var lowerer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast) };
         var module = lowerer.Lower(optimized);
 
-        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources);
+        // The context item type declared by each loaded library module constrains the
+        // initial context item at evaluation time (XQuery 3.1 §4.14; contextDecl-054).
+        var libraryModuleContextItemTypes = moduleGraph.Values
+            .SelectMany(modules => modules)
+            .Select(m => m.StaticContext.ContextItemTypeName)
+            .Where(t => t is not null)
+            .Distinct(StringComparer.Ordinal)
+            .Cast<string>()
+            .ToList();
+
+        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources, libraryModuleContextItemTypes, unresolvedNames);
     }
 
     private static EmptyOrder? ToEmptyOrder(bool? least)
@@ -320,14 +336,15 @@ public sealed class XQueryCompiler
         XPathOptimizer optimizer,
         List<CompiledUserFunction> userFunctions,
         List<CompiledUserVariable> userVariables,
-        ModuleRuntimeContext? moduleRuntimeContext)
+        ModuleRuntimeContext? moduleRuntimeContext,
+        ModuleVisibilityValidator.UnresolvedNameReferences unresolvedNames)
     {
         foreach (var fn in context.UserFunctions)
         {
             var fnBodyAst = ResolveFunctionNamespaces(fn.Body, context);
-            ModuleVisibilityValidator.Validate(
+            unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
                 fnBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
-                fn.Parameters.Select(p => p.Name));
+                fn.Parameters.Select(p => p.Name)));
             var fnModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
                 .Lower(optimizer.Optimize(fnBodyAst));
             userFunctions.Add(new CompiledUserFunction(
@@ -352,9 +369,9 @@ public sealed class XQueryCompiler
                 var varBodyAst = ResolveFunctionNamespaces(v.Body, context);
                 // A variable is not in scope within its own initializer (XPST0008,
                 // K-InternalVariablesWith-15b).
-                ModuleVisibilityValidator.Validate(
+                unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
                     varBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
-                    excludeVariable: (v.LocalName, v.NamespaceUri));
+                    excludeVariable: (v.LocalName, v.NamespaceUri)));
                 varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
                     .Lower(optimizer.Optimize(varBodyAst));
                 // A declared type is enforced strictly on the initializer: atomization plus

@@ -39,6 +39,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.5   | 07-08-2026     | base-uri URILiteral whitespace-normalized per fn:normalize-space (base-URI-18/22/23)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 07-08-2026     | Version declaration without 'version' clause: 'xquery encoding "utf-8";' (XQuery 3.0+) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -90,7 +92,8 @@ public sealed class XQueryParser
         // not a version declaration (e.g. 'xquery gt xquery').
         int beforeVersionDecl = _position;
         bool versionDeclParsed = false;
-        if (TryMatchLiteral("xquery") && TryMatchLiteral("version"))
+        bool xqueryKeyword = TryMatchLiteral("xquery");
+        if (xqueryKeyword && TryMatchLiteral("version"))
         {
             SkipWhitespace();
             var versionLiteral = ReadStringLiteral();
@@ -110,6 +113,21 @@ public sealed class XQueryParser
                 SkipWhitespace();
             }
 
+            ExpectChar(';');
+            SkipWhitespace();
+            versionDeclParsed = true;
+        }
+        else if (xqueryKeyword && TryMatchLiteral("encoding"))
+        {
+            // XQuery 3.0+: the 'version' clause may be omitted — 'xquery encoding "utf-8";'
+            // is a valid version declaration (version_declaration-023-v3). The leading
+            // 'xquery' was already consumed by the failed first alternative.
+            SkipWhitespace();
+            var encoding = ReadStringLiteral();
+            // XQST0087: the encoding name must match the XML EncName production.
+            if (!IsValidEncodingName(encoding))
+                throw new ParseException($"XQST0087: Encoding '{encoding}' is not supported.", _position);
+            SkipWhitespace();
             ExpectChar(';');
             SkipWhitespace();
             versionDeclParsed = true;

@@ -89,6 +89,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.42  | 01-08-2026     | Boundary-space policy flag (strip default; preserve keeps whitespace-only runs)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.43  | 07-08-2026     | EQName ':'-after-brace XPST0003 and xmlns-URI XQST0070; namespace-decl URI whitespace accepted; PI target NCName check; inline-function duplicate params compare expanded names; group-by 'as' requires ':='; reserved function names rejected in calls |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.44  | 07-08-2026     | Q{uri}:* name test is malformed — XPST0003 (nametest-23)                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -543,6 +547,10 @@ public sealed class XPathParser
                 Advance();
                 var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
                 declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
+                // A type declaration in a grouping spec is only allowed together with a
+                // ':= value' clause (GroupingSpec ::= "$" VarName (TypeDeclaration? ":=" ExprSingle)? ...).
+                if (Current.Kind != TokenKind.Assign)
+                    throw new ParseException("XPST0003: A type declaration in a 'group by' spec requires a ':= value' clause.", Current.Start);
             }
 
             XPathAstNode? keyExpression = null;
@@ -1533,6 +1541,10 @@ public sealed class XPathParser
             if (Current.Kind == TokenKind.Colon && Peek(1).Kind == TokenKind.Star &&
                 (_mapKeyDepth == 0 || Peek(2).Kind == TokenKind.Colon))
             {
+                // A braced URI literal is never followed by a colon: Q{uri}:* is malformed
+                // (nametest-23; the URI-qualified wildcard form is Q{uri}*).
+                if (name.StartsWith("Q{", StringComparison.Ordinal))
+                    throw new ParseException($"XPST0003: A braced URI literal must not be followed by ':*' ('{name}:*').", Current.Start);
                 Advance(); // ':'
                 Advance(); // '*'
                 return new NodeTest(NameTestKind.NamespaceAny, name);
@@ -2009,6 +2021,10 @@ public sealed class XPathParser
         var name = GetString(Current);
         var (prefix, local, nsUri) = SplitQName(name);
         ThrowIfRemovedFunction(nsUri, local, start);
+        // An unprefixed call to a reserved function name is a syntax error
+        // (function-call-reserved-function-names-005: empty-sequence()).
+        if (string.IsNullOrEmpty(nsUri))
+            ThrowIfReservedFunctionName(prefix, local, start);
         Advance();
         var args = ParseArgumentList();
         return WithSpan(new FunctionCallNode(local, args, prefix, nsUri), start, End);
@@ -2094,11 +2110,14 @@ public sealed class XPathParser
             } while (Match(TokenKind.Comma));
             Expect(TokenKind.RParen);
 
-            // Check for duplicate parameter names (XQST0039)
-            var seenNames = new HashSet<string>();
+            // Check for duplicate parameter names (XQST0039). EQName forms are
+            // normalized first: $Q{ }a and $a both expand to ('', 'a') (eqname-913).
+            var seenNames = new HashSet<(string NsOrPrefix, string Local)>();
             foreach (var param in parameters)
             {
-                if (!seenNames.Add(param.Name))
+                var (pPrefix, pLocal, pNs) = SplitQName(param.Name);
+                var key = (pNs ?? pPrefix ?? "", pLocal);
+                if (!seenNames.Add(key))
                     throw new ParseException($"XQST0039: Duplicate parameter name ${param.Name} in inline function.", start);
             }
         }
@@ -2404,6 +2423,11 @@ public sealed class XPathParser
         var target = _source[targetStart..pos];
         if (target.Equals("xml", StringComparison.OrdinalIgnoreCase))
             throw ConstructorError("processing instruction target 'xml' is reserved", targetStart);
+        // The target is an NCName: anything other than whitespace or the closing '?>'
+        // directly after it (e.g. '|' or ':') is a syntax error (K2-DirectConOther-21/22).
+        if (pos >= _source.Length || (!char.IsWhiteSpace(_source[pos]) &&
+            !(_source[pos] == '?' && pos + 1 < _source.Length && _source[pos + 1] == '>')))
+            throw ConstructorError($"invalid character after processing instruction target '{target}'", pos);
 
         SkipConstructorWhitespace(ref pos);
         int close = _source.IndexOf("?>", pos, StringComparison.Ordinal);
@@ -2679,12 +2703,9 @@ public sealed class XPathParser
                 pos++;
                 FlushText();
                 var result = parts;
-                if (isNamespaceDecl)
-                {
-                    var uri = string.Concat(result.OfType<StringLiteralNode>().Select(p => p.Value));
-                    if (uri.Any(char.IsWhiteSpace))
-                        throw new ParseException($"XQST0046: Invalid character in namespace URI '{uri}'.", ctorStart);
-                }
+                // A namespace declaration URI is validated only for being a literal
+                // (XQST0022 above); its characters are not restricted — XQST0046 is an
+                // implementation option and xs:anyURI accepts spaces (eqname-009).
                 return result;
             }
             if (c == '{')
@@ -3025,7 +3046,7 @@ public sealed class XPathParser
 
     private static (string? Prefix, string Local, string? NamespaceUri) SplitQName(string qname)
     {
-        // Braced URI literal: Q{uri}localname or Q{uri}prefix:local
+        // Braced URI literal: Q{uri}localname
         // The empty URI form Q{}local is permitted and means "no namespace".
         // Whitespace in the URI part is not significant: leading/trailing whitespace
         // is stripped and internal runs are collapsed to a single space.
@@ -3038,9 +3059,15 @@ public sealed class XPathParser
                 if (qname[2..closeBrace].Contains('{'))
                     throw new ParseException($"XPST0003: Braces are not allowed in the URI part of an EQName ('{qname}').", 0);
                 string nsUri = NormalizeEQNameUri(ExpandEQNameRefs(qname[2..closeBrace]));
+                // The xmlns namespace must not appear in any EQName (eqname-910).
+                if (nsUri == "http://www.w3.org/2000/xmlns/")
+                    throw new ParseException($"XQST0070: The namespace URI '{nsUri}' is reserved and must not be used in an EQName.", 0);
                 string rest = qname[(closeBrace + 1)..];
-                int restColon = rest.IndexOf(':');
-                return restColon < 0 ? (null, rest, nsUri) : (rest[..restColon], rest[(restColon + 1)..], nsUri);
+                // A braced URI literal is followed by a single NCName only: a colon
+                // after '}' is a syntax error (eqname-901/904).
+                if (rest.Contains(':'))
+                    throw new ParseException($"XPST0003: A braced URI literal must be followed by a local name only, not '{qname}'.", 0);
+                return (null, rest, nsUri);
             }
         }
 

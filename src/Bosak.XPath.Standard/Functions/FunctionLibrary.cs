@@ -208,6 +208,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.83  | 07-08-2026     | fn:json-doc(())/fn:unparsed-text(-lines)(()) return (), unparsed-text-available(()) false; fn:resolve-uri keeps literal IRI characters (fn-resolve-uri-30) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.84  | 07-08-2026     | Argument type strictness: fn:concat rejects multi-item arguments (XPTY0004, K2-ConcatFunc); fn:collation-key and fn:unparsed-text-available require string-typed arguments (XPTY0004); fn:data#0 raises XPDY0002 with no context item (K2-DataFunc-4) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -5081,10 +5083,15 @@ public static class FunctionLibrary
     }
 
     private static XdmValue CollationKey_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => CollationKey(AtomizedString(args[0]), string.Empty);
+        => CollationKey(RequireString(PromoteUriToString(args[0])), string.Empty);
 
     private static XdmValue CollationKey_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => CollationKey(AtomizedString(args[0]), AtomizedString(args[1]));
+        => CollationKey(RequireString(PromoteUriToString(args[0])), RequireString(PromoteUriToString(args[1])));
+
+    // xs:anyURI promotes to xs:string under the function conversion rules (collation-key-006);
+    // other non-string atomic types are rejected by RequireString (collation-key-901).
+    private static XdmValue PromoteUriToString(XdmValue value)
+        => value.Kind == XdmValueKind.Uri ? XdmValue.FromString(value.StringValue) : value;
 
     private static XdmValue CollationKey(string value, string collation)
     {
@@ -6886,14 +6893,18 @@ public static class FunctionLibrary
         // FO31: an empty-sequence $href yields false (fn-unparsed-text-available-053).
         if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.False;
-        return UnparsedTextAvailable(AtomizedString(args[0]), null, ctx);
+        // The $href argument is xs:string?: a non-string atomic value is a type error
+        // (fn-unparsed-text-available-008).
+        return UnparsedTextAvailable(RequireString(PromoteUriToString(args[0])), null, ctx);
     }
 
     private static XdmValue UnparsedTextAvailable_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.False;
-        return UnparsedTextAvailable(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
+        // $href and $encoding are xs:string?: non-string atomic values are type errors
+        // (fn-unparsed-text-available-008/010).
+        return UnparsedTextAvailable(RequireString(PromoteUriToString(args[0])), RequireString(PromoteUriToString(args[1])), ctx);
     }
 
     private static XdmValue UnparsedTextAvailable(string href, string? encoding, EvaluationContext ctx)
@@ -7903,7 +7914,22 @@ public static class FunctionLibrary
     {
         var sb = new StringBuilder();
         foreach (var arg in args)
+        {
+            // Each fn:concat argument is xs:anyAtomicType?: atomization must yield at
+            // most one atomic value, so a multi-item argument is a type error
+            // (K2-ConcatFunc-1/2/3).
+            if (arg.IsSequence && arg.SequenceValue is not null)
+            {
+                int count = 0;
+                foreach (var unused in XdmSequence.FromSource(arg.SequenceValue))
+                {
+                    if (++count > 1)
+                        throw new InvalidOperationException(
+                            "XPTY0004: fn:concat arguments must atomize to a single atomic value or the empty sequence.");
+                }
+            }
             sb.Append(AtomizedString(arg));
+        }
         return XdmValue.FromString(sb.ToString());
     }
 
@@ -10260,7 +10286,12 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Data_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => Data(ctx.ContextItem);
+    {
+        // fn:data() is fn:data(.); an absent context item is XPDY0002 (K2-DataFunc-4).
+        if (ctx.ContextItem.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:data() called with no context item.");
+        return Data(ctx.ContextItem);
+    }
 
     private static XdmValue Data_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => Data(args[0]);

@@ -20,6 +20,8 @@
 //                      | Charles Korthout | 0.8   | 16-07-2026     | Tier-2l: week-in-month boundary fix, [Z99] zero-padding, namespaced unknown calendars |
 //                      | Charles Korthout | 0.9   | 01-08-2026     | [z] with explicit width drops whole-hour minutes when full form exceeds max width  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 07-08-2026     | [ZN] timezone names, $place Olson timezone adjustment, [f] optional-digit zero strip |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
@@ -36,6 +38,7 @@ internal static class FormatDateTimeEngine
 {
     public static string Format(XPathDateTime value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode = false)
     {
+        value = AdjustToPlace(value, place, components);
         bool hasEra = ContainsEraMarker(picture);
         var sb = new StringBuilder();
         int pos = 0;
@@ -595,6 +598,18 @@ internal static class FormatDateTimeEngine
             digits = frac;
         }
 
+        // Optional digit positions that would only contribute trailing zeros are dropped:
+        // 0.12 with [f99#] gives "12", not "120" (millisecs-006). At least the mandatory
+        // digits (and any explicit minimum width) remain: 0.5 with [f1###,2-3] gives "50"
+        // (millisecs-026), 0.1 with [f1###,3-3] gives "100" (millisecs-025).
+        if (info.Optional > 0 && digits.Length > effectiveMin && digits[^1] == '0')
+        {
+            int keep = digits.Length;
+            while (keep > effectiveMin && digits[keep - 1] == '0')
+                keep--;
+            digits = digits[..keep];
+        }
+
         // Build output: map digits to correct family, interleaving with separators from presentation
         var mappedDigits = new StringBuilder();
         foreach (char c in digits)
@@ -941,7 +956,91 @@ internal static class FormatDateTimeEngine
     }
 
     private static string FormatTimezone(XPathDateTime value, string presentation, int minWidth, int maxWidth)
-        => FormatTimezoneCore(value, presentation, gmtPrefix: false, explicitWidth: false, maxWidth: int.MaxValue);
+    {
+        // F&O 9.8.4.2: with first presentation modifier N the timezone is output (where
+        // possible) as a timezone name, for example EST or CET, rather than numerically.
+        if (presentation.Length > 0 && presentation[0] is 'N' or 'n')
+            return FormatTimezoneName(value, presentation);
+        return FormatTimezoneCore(value, presentation, gmtPrefix: false, explicitWidth: false, maxWidth: int.MaxValue);
+    }
+
+    private static string FormatTimezoneName(XPathDateTime value, string presentation)
+    {
+        if (!value.HasTimezone)
+            return "";
+
+        // Well-known civil timezone abbreviations for common offsets; offsets without a
+        // conventional name fall back to the numeric ±HH:MM form used by the [Z] component.
+        string? name = value.TimezoneOffsetMinutes switch
+        {
+            0 => "GMT",
+            -600 => "HST",
+            -300 or -240 => "ET",
+            330 => "IST",
+            _ => null
+        };
+
+        if (name is null)
+        {
+            var offset = TimeSpan.FromMinutes(value.TimezoneOffsetMinutes);
+            bool negative = offset < TimeSpan.Zero;
+            var abs = negative ? -offset : offset;
+            return FormatDefaultTimezone(abs.Hours, abs.Minutes, negative, gmtPrefix: false, separator: ":");
+        }
+
+        return presentation switch
+        {
+            "n" or "nn" or "nnn" => name.ToLowerInvariant(),
+            "Nn" or "NNn" => char.ToUpperInvariant(name[0]) + name[1..].ToLowerInvariant(),
+            _ => name
+        };
+    }
+
+    /// <summary>
+    /// F&amp;O 9.8.4.3: when the $place argument is a timezone name recognized by the
+    /// implementation (an Olson/IANA name such as "America/New_York"), the value being
+    /// formatted is adjusted to the timezone offset applicable in that timezone. The
+    /// adjustment is daylight-saving aware for dateTime values; a time value has no date,
+    /// so the zone's standard offset applies (format-time-025c expects EST, not EDT).
+    /// Unrecognized places (for example the country code "us") leave the value unchanged.
+    /// </summary>
+    private static XPathDateTime AdjustToPlace(XPathDateTime value, string? place, DateTimeComponents components)
+    {
+        if (string.IsNullOrEmpty(place) || !value.HasTimezone || components == DateTimeComponents.Date)
+            return value;
+
+        TimeZoneInfo zone;
+        try
+        {
+            zone = TimeZoneInfo.FindSystemTimeZoneById(place);
+        }
+        catch (Exception)
+        {
+            return value;
+        }
+
+        if (components == DateTimeComponents.Time)
+        {
+            int newOffset = (int)zone.BaseUtcOffset.TotalMinutes;
+            int shift = newOffset - value.TimezoneOffsetMinutes;
+            int minuteOfDay = ((value.Hour * 60 + value.Minute + shift) % 1440 + 1440) % 1440;
+            return new XPathDateTime(value.Year, value.Month, value.Day, minuteOfDay / 60, minuteOfDay % 60,
+                value.Second, value.Millisecond, newOffset, hasTimezone: true);
+        }
+
+        if (!value.IsRepresentableAsDateTimeOffset)
+            return value;
+        try
+        {
+            return TimeZoneInfo.ConvertTime(value.ToDateTimeOffset(), zone).ToXPathDateTime(hasTimezone: true);
+        }
+        catch (Exception)
+        {
+            // Conversion at the outer limits of the DateTimeOffset range can overflow;
+            // leave such values unadjusted.
+            return value;
+        }
+    }
 
     private static string FormatTimezoneGmt(XPathDateTime value, string presentation, int minWidth, int maxWidth, bool explicitWidth)
         => FormatTimezoneCore(value, presentation, gmtPrefix: true, explicitWidth, maxWidth);

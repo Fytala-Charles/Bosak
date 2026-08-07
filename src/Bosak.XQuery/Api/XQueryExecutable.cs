@@ -33,6 +33,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.0   | 07-08-2026     | Relative/empty declared base-uri resolved against ambient static base URI (K2-BaseURIProlog-4) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.1   | 07-08-2026     | Initial context item validated against imported library modules' context item type declarations (XPTY0004, contextDecl-054) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.2   | 07-08-2026     | Evaluation-time check of statically unresolvable names (XPST0008/XPST0081/XPST0017)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -87,19 +91,25 @@ public sealed class XQueryExecutable
     private readonly IReadOnlyList<CompiledUserFunction> _userFunctions;
     private readonly IReadOnlyList<CompiledUserVariable> _userVariables;
     private readonly IReadOnlyList<XQueryModuleSource> _moduleSources;
+    private readonly IReadOnlyList<string> _libraryModuleContextItemTypes;
+    private readonly ModuleVisibilityValidator.UnresolvedNameReferences? _unresolvedNames;
 
     internal XQueryExecutable(
         IrModule module,
         XQueryStaticContext staticContext,
         IReadOnlyList<CompiledUserFunction>? userFunctions = null,
         IReadOnlyList<CompiledUserVariable>? userVariables = null,
-        IReadOnlyList<XQueryModuleSource>? moduleSources = null)
+        IReadOnlyList<XQueryModuleSource>? moduleSources = null,
+        IReadOnlyList<string>? libraryModuleContextItemTypes = null,
+        ModuleVisibilityValidator.UnresolvedNameReferences? unresolvedNames = null)
     {
         _module = module;
         _staticContext = staticContext;
         _userFunctions = userFunctions ?? [];
         _userVariables = userVariables ?? [];
         _moduleSources = moduleSources ?? [];
+        _libraryModuleContextItemTypes = libraryModuleContextItemTypes ?? [];
+        _unresolvedNames = unresolvedNames is { IsEmpty: true } ? null : unresolvedNames;
     }
 
     /// <summary>
@@ -126,6 +136,21 @@ public sealed class XQueryExecutable
         try
         {
             ApplyStaticContext(evaluationContext);
+
+            // XQuery 3.1 §4.14: the initial context item must satisfy the context item
+            // type declared by every imported library module (contextDecl-054).
+            if (!evaluationContext.ContextItem.IsUndefined)
+            {
+                foreach (var contextItemType in _libraryModuleContextItemTypes)
+                {
+                    if (!VmEngine.ValueMatchesType(evaluationContext.ContextItem, contextItemType, evaluationContext))
+                        throw new InvalidOperationException(
+                            $"XPTY0004: The initial context item does not match the context item type '{contextItemType}' declared in an imported library module.");
+                }
+            }
+
+            ValidateUnresolvedNames(evaluationContext);
+
             return VmEngine.Execute(_module, evaluationContext);
         }
         // Unwrap global-variable error markers so callers see the original error.
@@ -139,6 +164,34 @@ public sealed class XQueryExecutable
             evaluationContext.DefaultElementNamespace = savedDefaultNs;
             evaluationContext.BaseUri = savedBaseUri;
             evaluationContext.DefaultCollation = savedCollation;
+        }
+    }
+
+    // Names that the compiler could not resolve statically (undeclared variables, undeclared
+    // variable-name prefixes, unknown local-namespace function calls) are re-checked here,
+    // where externally supplied variables and registered functions are visible. Static errors
+    // must surface even when the offending code path is never executed (errors-and-optimization-7,
+    // K-FunctionProlog-37/38, K2-FunctionProlog-38, K-LetExprWithout-1).
+    private void ValidateUnresolvedNames(EvaluationContext ctx)
+    {
+        if (_unresolvedNames is null)
+            return;
+        foreach (var (prefix, local) in _unresolvedNames.PrefixedVariables)
+        {
+            if (!ctx.TryResolveNamespace(prefix, out var ns))
+                throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+            if (!ctx.TryGetBoundVariable(local, out _, ns))
+                throw new InvalidOperationException($"XPST0008: Variable ${prefix}:{local} is not defined.");
+        }
+        foreach (var (local, ns, display) in _unresolvedNames.Variables)
+        {
+            if (!ctx.TryGetBoundVariable(local, out _, ns))
+                throw new InvalidOperationException($"XPST0008: Variable ${display} is not defined.");
+        }
+        foreach (var (local, arity) in _unresolvedNames.LocalFunctions)
+        {
+            if (!ctx.TryResolveFunction("http://www.w3.org/2005/xquery-local-functions", local, arity, out _))
+                throw new InvalidOperationException($"XPST0017: Function {{http://www.w3.org/2005/xquery-local-functions}}{local}#{arity} not found.");
         }
     }
 

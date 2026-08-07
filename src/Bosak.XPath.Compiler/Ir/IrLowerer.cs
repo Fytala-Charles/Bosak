@@ -69,6 +69,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.29  | 03-08-2026     | Kind-test args: NamespaceTest for Q{uri}local and for unprefixed element() names      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.30  | 07-08-2026     | Cast targets: xs:anySimpleType XPST0080, xs:untyped/xs:anyType XQST0052; Q{}* sentinel |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1205,7 +1207,13 @@ public sealed class IrLowerer
                 FreeRegister(axisReg);
                 axisReg = afterTestReg;
 
-                int nsPoolIdx = AddToLiteralPool(node.NodeTest.NamespaceUri ?? node.NodeTest.Name ?? ""); // URI or prefix
+                // Q{}* (explicitly no namespace) must not resolve to the default element
+                // namespace at runtime — emit the sentinel the VM matches against the
+                // empty namespace URI unconditionally (eqname-013).
+                string nsOperand = node.NodeTest.NamespaceUri is { Length: 0 }
+                    ? "Q{}"
+                    : node.NodeTest.NamespaceUri ?? node.NodeTest.Name ?? ""; // URI or prefix
+                int nsPoolIdx = AddToLiteralPool(nsOperand);
                 afterTestReg = AllocRegister();
                 Emit(IrOpCode.NamespaceTest, (ushort)afterTestReg, (ushort)axisReg, operand: nsPoolIdx);
                 FreeRegister(axisReg);
@@ -1486,8 +1494,14 @@ public sealed class IrLowerer
     private static void ValidateCastTarget(string typeName)
     {
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "");
-        if (normalized is "anyatomictype" or "notation")
+        // XPST0080: the abstract types are not valid cast/castable targets
+        // (K-SeqExprCastable-5a: xs:anySimpleType).
+        if (normalized is "anyatomictype" or "anysimpletype" or "notation")
             throw new InvalidOperationException($"XPST0080: '{typeName}' is an abstract type and cannot be used in 'cast' or 'castable as' expressions.");
+        // XQST0052: the target must be an atomic type; xs:untyped and xs:anyType are
+        // not atomic (K-SeqExprCastable-6a: xs:untyped).
+        if (normalized is "untyped" or "anytype")
+            throw new InvalidOperationException($"XQST0052: '{typeName}' is not an atomic type and cannot be used in 'cast' or 'castable as' expressions.");
     }
 
     private int LowerInstanceOf(InstanceOfNode node, int? targetReg)
