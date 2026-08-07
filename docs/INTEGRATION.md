@@ -1,7 +1,12 @@
+<div align="center">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak integration guide">
+  <br><br>
+  <h1>Bosak XPath / XSLT / XQuery — Integration Guide</h1>
+  <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
+</div>
+
 <!-- Bosak XPath / XSLT — General Integration Guide -->
 <!-- Living document: updated with each significant Bosak change. -->
-
-# Bosak XPath / XSLT / XQuery — Integration Guide
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 3 August 2026

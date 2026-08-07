@@ -93,6 +93,15 @@ UCA `alternate=blanked` maps to `CompareOptions.IgnoreSymbols`. Due to .NET `IsP
 - **Timezone adjustment**: `adjust-time-to-timezone` produces incorrect offsets in some cases.
 - **Decimal precision**: .NET `decimal` is fixed-precision (28-29 significant digits). XPath decimal literals and arithmetic that exceed this range are rounded; tests that expect exact results beyond this range cannot pass without an arbitrary-precision decimal implementation.
 
+## Documentation Style (Fytala Docs Kit)
+
+Public-facing Markdown follows the Fytala branding contract in `docs/DOCUMENTATION_STYLE_GUIDE.md` (kit version recorded in `.fytala-docs.json`; canonical assets under `assets/`, renderer settings in `.vscode/settings.json` and `.crossnote/`). Verify rendered output with `docs/DOCUMENTATION_RENDERER_TEST.md`.
+
+**Rules:**
+- Canonical docs (`README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`) use the branded banner header with meaningful `alt` text; internal handover notes may use a compact heading.
+- Mermaid diagrams embed the Fytala `classDef` palette (`current` / `platform` / `external` / `planned`) and use anchors + `fytala-figure-caption` captions when referenceable.
+- Do not hand-edit kit-managed assets (`assets/css`, `assets/logos`, `assets/images/brand-swatches`, `.crossnote`); sync them from the Prime docs-kit and keep SHA-256 hashes matching its manifest.
+
 ## XML Documentation
 
 All projects generate documentation files (`<GenerateDocumentationFile>true</GenerateDocumentationFile>`). Public APIs must have triple-slash XML comments.

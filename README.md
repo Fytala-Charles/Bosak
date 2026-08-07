@@ -1,13 +1,9 @@
 <div align="center">
-  <img src="./assets/logos/fytala-logo-color-dark.svg" width="120" alt="Fytala">
+  <img src="assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak XPath engine">
   <br><br>
-  <h1 style="color:#2F4F4F; font-family:Poppins,Segoe UI,sans-serif; margin:0;">Bosak XPath</h1>
-  <p style="color:#556B2F; font-family:Poppins,Segoe UI,sans-serif; font-size:1.1rem; margin:0.5rem 0 0;">
-    A high-performance, XDM-first XPath 3.1 + XSLT 3.0 engine for .NET, with XQuery 3.1 in progress
-  </p>
+  <h1>Bosak XPath</h1>
+  <p>A high-performance, XDM-first XPath 3.1 + XSLT 3.0 engine for .NET, with XQuery 3.1 in progress</p>
 </div>
-
-<br>
 
 <div align="center">
 
@@ -117,6 +113,12 @@ flowchart TB
     LOWERER --> VM
     VM --> XDM
     FUNCS --> VM
+
+    classDef current fill:#F0FFF0,stroke:#518D8F,color:#2F4F4F,stroke-width:2px
+    classDef external fill:#FFFFFF,stroke:#293F5F,color:#2F4F4F
+
+    class LEXER,PARSER,OPTIMIZER,LOWERER,VM,FUNCS current
+    class XPATH,XDM external
 ```
 
 ### Layer Stack

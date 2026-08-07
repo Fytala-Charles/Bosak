@@ -190,9 +190,13 @@ th, td{
   border-bottom: 1px solid rgba(0,0,0,.06);
 }
 thead th{
-  background: var(--accent-1);
-  color: #fff;
+  background: var(--header-bg);
+  color: var(--header-fg);
   text-align: left;
+}
+thead th a,
+thead th code{
+  color: inherit;
 }
 tbody tr:nth-child(even){ background: rgba(0,0,0,.02); }
 

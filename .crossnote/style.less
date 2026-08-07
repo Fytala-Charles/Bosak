@@ -1,0 +1,27 @@
+/*
+ * Fytala workspace theme for Markdown Preview Enhanced.
+ * Inline the canonical stylesheet so previews and exports use the same brand rules.
+ */
+@import (inline) "../assets/css/fytala-markdown.css";
+
+/*
+ * Preview-critical overrides live here as well as in the canonical stylesheet.
+ * Markdown Preview Enhanced watches this file, but not changes to imported files.
+ */
+html body table thead th {
+  background-color: #2F4F4F !important;
+  color: #E8F4EE !important;
+}
+
+html body table thead th a,
+html body table thead th code {
+  color: inherit !important;
+}
+
+html body .mermaid {
+  background-color: #FFFFFF !important;
+}
+
+html body .mermaid > svg {
+  background-color: #FFFFFF !important;
+}

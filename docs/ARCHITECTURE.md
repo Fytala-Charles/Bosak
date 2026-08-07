@@ -1,13 +1,9 @@
 <div align="center">
-  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak architecture">
   <br><br>
-  <h1 style="color:#2F4F4F; font-family:Poppins,Segoe UI,sans-serif; margin:0;">Bosak XPath Architecture</h1>
-  <p style="color:#556B2F; font-family:Poppins,Segoe UI,sans-serif; font-size:1rem; margin:0.5rem 0 0;">
-    Technical design document — XPath 3.1 register-VM engine
-  </p>
+  <h1>Bosak XPath Architecture</h1>
+  <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
-
-<br>
 
 ---
 
@@ -27,6 +23,8 @@ A high-performance .NET implementation of **XPath 3.1** (with forward-compatibil
 ---
 
 ## High-Level Architecture
+
+<a id="architecture-layer-stack"></a>
 
 ```mermaid
 flowchart TB
@@ -83,7 +81,17 @@ flowchart TB
     CP --> PR
     PR --> XC
     XC --> NP
+
+    classDef current fill:#F0FFF0,stroke:#518D8F,color:#2F4F4F,stroke-width:2px
+    classDef external fill:#FFFFFF,stroke:#293F5F,color:#2F4F4F
+    classDef planned fill:#FDF2CF,stroke:#556B2F,color:#2F4F4F,stroke-dasharray:5 5
+
+    class EXP,COMP,ECTX,FN,MATH,MAP,ARR,XS,VM,FD,SO,ASTO,IRL,LEX,PAR,AST,XV,XN,XSQ,XAV,XD,XMLD,X11 current
+    class JIT,STR planned
+    class CUST external
 ```
+
+<p class="fytala-figure-caption"><strong>Layer stack.</strong> Dependency direction across the Bosak XPath engine, from the public API down to pluggable node providers; streaming and IL JIT remain planned.</p>
 
 ---
 
@@ -209,6 +217,10 @@ flowchart LR
     AST_IN["Optimized AST"]
     IR["IR Instructions<br/>+ Literal Pool"]
     AST_IN -->|LowerNode| IR
+
+    classDef current fill:#F0FFF0,stroke:#518D8F,color:#2F4F4F,stroke-width:2px
+
+    class AST_IN,IR current
 ```
 
 Example IR for `//book[price > 10]`:
@@ -250,6 +262,10 @@ flowchart TD
     CTX --> VM
     VM --> IP
     VM --> OUT
+
+    classDef current fill:#F0FFF0,stroke:#518D8F,color:#2F4F4F,stroke-width:2px
+
+    class IR,REG,IP,CTX,OUT,VM current
 ```
 
 **Design**:
@@ -393,6 +409,8 @@ All XML parsing in the XSLT pipeline (stylesheets, source documents, `doc()`, `p
 
 XSLT is implemented as a **thin compiler/runtime layer** on top of the existing XPath stack. The XPath engine (parser, compiler, VM, XDM) handles all expression evaluation; XSLT adds stylesheet parsing, pattern compilation, template dispatch, and result-tree construction.
 
+<a id="architecture-xslt-layer"></a>
+
 ```mermaid
 flowchart TB
     subgraph XSLT_API["📢 XSLT Public API"]
@@ -426,7 +444,15 @@ flowchart TB
     XSLT_CP --> C
     XSLT_RT --> V
     XSLT_RT --> X
+
+    classDef current fill:#F0FFF0,stroke:#518D8F,color:#2F4F4F,stroke-width:2px
+    classDef platform fill:#E8F4EE,stroke:#5178A8,color:#2F4F4F
+
+    class XC,XE,XT,TE,TT,BRT,SL,PC,IC current
+    class P,C,V,X platform
 ```
+
+<p class="fytala-figure-caption"><strong>XSLT layer.</strong> The XSLT compiler and runtime sit as a thin layer on the shared Bosak XPath stack.</p>
 
 ### XSLT Project Structure
 
@@ -524,6 +550,8 @@ The Transform Engine walks this instruction tree, evaluating XPath expressions v
 
 XQuery 3.1 is implemented as a **thin compiler layer** on top of the existing XPath stack. The XPath engine (parser, optimizer, IR lowerer, VM, and XDM) handles all expression evaluation; XQuery adds a top-level parser for the prolog and query body, a static context, and (in later phases) constructors and serialization.
 
+<a id="architecture-xquery-layer"></a>
+
 ```mermaid
 flowchart TB
     subgraph XQ_API["📢 XQuery Public API"]
@@ -551,7 +579,15 @@ flowchart TB
     XO --> XL
     XL --> XV
     XV --> XX
+
+    classDef current fill:#F0FFF0,stroke:#518D8F,color:#2F4F4F,stroke-width:2px
+    classDef platform fill:#E8F4EE,stroke:#5178A8,color:#2F4F4F
+
+    class QC,QX,QCTX,QP,SC current
+    class XP,XO,XL,XV,XX platform
 ```
+
+<p class="fytala-figure-caption"><strong>XQuery layer.</strong> The XQuery prolog parser and static context compile down to the shared Bosak XPath stack.</p>
 
 ### XQuery Project Structure
 

@@ -39,7 +39,7 @@ const fytalaMermaidTheme = {
   tertiaryColor: '#FDF2CF',
 
   /* Background */
-  background: '#E8F4EE',
+  background: '#FFFFFF',
 
   /* Text */
   mainBkg: '#F0FFF0',

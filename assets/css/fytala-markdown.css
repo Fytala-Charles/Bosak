@@ -43,6 +43,9 @@
   --code-bg: var(--color-light-1);
   --blockquote-bg: var(--accent-6);
   --table-border: var(--color-light-2);
+  --table-header-bg: var(--color-dark-2);
+  --table-header-fg: var(--color-light-2);
+  --diagram-bg: #fff;
 }
 
 /* ---------- Global Layout ---------- */
@@ -167,10 +170,18 @@ th, td {
   text-align: left;
 }
 
-th {
-  background-color: var(--accent-1);
-  color: #fff;
+thead th,
+table thead th {
+  background-color: var(--table-header-bg) !important;
+  color: var(--table-header-fg) !important;
   font-weight: 600;
+}
+
+thead th a,
+table thead th a,
+thead th code,
+table thead th code {
+  color: inherit !important;
 }
 
 tbody tr:nth-child(even) {
@@ -208,13 +219,42 @@ img {
 
 /* Container */
 .mermaid {
-  background: var(--color-light-1);
-  border-radius: var(--radius);
+  background: var(--diagram-bg);
+  border-radius: var(--radius-sm);
   padding: 1rem;
   margin: 1.5rem 0;
-  border: var(--border);
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(81, 141, 143, 0.35);
+  box-shadow: 0 1px 4px rgba(47, 79, 79, 0.06);
   text-align: center;
+}
+
+/* Semantic figures used by controlled HTML/PDF renderers. */
+.fytala-figure {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid rgba(81, 141, 143, 0.35);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(47, 79, 79, 0.06);
+}
+
+.fytala-figure-caption,
+.fytala-figure figcaption {
+  margin: -0.75rem 0 1.5rem;
+  color: var(--accent-3);
+  font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.fytala-figure-caption strong,
+.fytala-figure figcaption strong {
+  font-style: normal;
+  font-weight: 600;
 }
 
 /* ---- Flowchart / Graph ---- */

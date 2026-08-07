@@ -1,0 +1,9 @@
+{
+  "markdown.styles": [
+    "assets/css/fytala-markdown.css"
+  ],
+  "markdown-pdf.styles": [
+    "assets/css/fytala-markdown.css"
+  ],
+  "markdown-pdf.stylesRelativePathFile": false
+}
