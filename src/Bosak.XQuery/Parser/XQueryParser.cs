@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 01-08-2026     | declare decimal-format (XQST0097/0098/0111/0114) and boundary-space (XQST0068)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 07-08-2026     | base-uri URILiteral whitespace-normalized per fn:normalize-space (base-URI-18/22/23)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -437,7 +439,11 @@ public sealed class XQueryParser
             if (_seenSecondPhaseDecl)
                 throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
-            string uri = ReadStringLiteral();
+            // URILiteral whitespace is normalized per the fn:normalize-space rules
+            // (XQ 3.1 §2.4.5): leading/trailing whitespace is stripped and internal
+            // whitespace runs (incl. character references such as &#xa;) collapse
+            // to a single space (base-URI-18/22/23).
+            string uri = NormalizeModuleUri(ReadStringLiteral());
             SkipWhitespace();
             ExpectChar(';');
             // XQST0032: the base URI must not be declared twice.
@@ -930,8 +936,9 @@ public sealed class XQueryParser
         return isPrivate;
     }
 
-    // Module namespace URIs and location hints get whitespace normalization: leading and
-    // trailing whitespace is removed and internal whitespace runs collapse to a single space.
+    // Module namespace URIs, location hints, and base URI declarations get whitespace
+    // normalization: leading and trailing whitespace is removed and internal whitespace
+    // runs collapse to a single space.
     internal static string NormalizeModuleUri(string uri)
     {
         var trimmed = uri.Trim();

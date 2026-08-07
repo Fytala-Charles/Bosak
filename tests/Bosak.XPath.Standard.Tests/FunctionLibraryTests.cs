@@ -63,6 +63,8 @@
 //                      | Charles Korthout | 2.26  | 03-08-2026     | XSD 1.1 hyphen rules + explicit \i/\c NameStartChar/NameChar range tests                |
 //                      | Charles Korthout | 2.27  | 03-08-2026     | fn:path parentless-tree tests; element/attribute kind-test ns tests; xml-to-json FOJS0006 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.28  | 07-08-2026     | xml-to-json escaped content copies valid escapes unchanged (QT3 xml-to-json-071) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3410,11 +3412,12 @@ public class FunctionLibraryTests
     }
 
     [Fact]
-    public void XmlToJson_EscapedString_UnescapesUnicodeEscape()
+    public void XmlToJson_EscapedString_CopiesUnicodeEscapeUnchanged()
     {
-        // escaped="true" marks JSON-escaped content; \uXXXX must be decoded on output.
+        // escaped="true" marks JSON-escaped content; valid escape sequences are copied to
+        // the output unchanged, not decoded (F+O 3.1 §17.5.4; QT3 xml-to-json-071).
         var json = Evaluate("xml-to-json(parse-xml('<string xmlns=\"http://www.w3.org/2005/xpath-functions\" escaped=\"true\">\\u0041bc</string>'))");
-        Assert.Equal("\"Abc\"", json.StringValue);
+        Assert.Equal("\"\\u0041bc\"", json.StringValue);
     }
 
     [Fact]

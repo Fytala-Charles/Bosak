@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 01-08-2026     | Decimal formats applied; module-local decimal formats in module runtime contexts    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.0   | 07-08-2026     | Relative/empty declared base-uri resolved against ambient static base URI (K2-BaseURIProlog-4) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -178,8 +180,24 @@ public sealed class XQueryExecutable
         if (!string.IsNullOrEmpty(_staticContext.DefaultElementNamespace))
             ctx.DefaultElementNamespace = _staticContext.DefaultElementNamespace;
 
-        if (!string.IsNullOrEmpty(_staticContext.BaseUri))
-            ctx.BaseUri = _staticContext.BaseUri;
+        if (_staticContext.BaseUri is not null)
+        {
+            // XQuery 3.1 §4.5: a relative URILiteral in the base URI declaration is made
+            // absolute by resolving it against the ambient static base URI (the one already
+            // present on the evaluation context). An empty URILiteral therefore inherits
+            // the ambient base URI (K2-BaseURIProlog-4/5).
+            string declared = _staticContext.BaseUri;
+            if (!FunctionLibrary.IsAbsoluteUri(declared)
+                && Uri.TryCreate(ctx.BaseUri, UriKind.Absolute, out var ambientBase)
+                && Uri.TryCreate(ambientBase, declared, out var resolvedBase))
+            {
+                ctx.BaseUri = resolvedBase.ToString();
+            }
+            else if (declared.Length > 0)
+            {
+                ctx.BaseUri = declared;
+            }
+        }
 
         if (!string.IsNullOrEmpty(_staticContext.DefaultCollation))
             ctx.DefaultCollation = _staticContext.DefaultCollation;

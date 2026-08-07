@@ -204,6 +204,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.81  | 03-08-2026     | fn:snapshot#0 (context-item form; square-array-010/018/019/117/118) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.82  | 07-08-2026     | fn:xml-to-json: indent option pretty-prints; @escaped allowed on any j:* element (bug 29917); escaped content copies valid escapes unchanged (xml-to-json-057/065/071) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.83  | 07-08-2026     | fn:json-doc(())/fn:unparsed-text(-lines)(()) return (), unparsed-text-available(()) false; fn:resolve-uri keeps literal IRI characters (fn-resolve-uri-30) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3821,6 +3825,12 @@ public static class FunctionLibrary
         try
         {
             var resolved = new Uri(new Uri(baseUri), relative).AbsoluteUri;
+            // IRI support: .NET percent-encodes non-ASCII characters in AbsoluteUri, but
+            // fn:resolve-uri keeps IRI characters literal (fn-resolve-uri-30). Restore the
+            // literal non-ASCII characters of the inputs; percent-encodings already present
+            // in the inputs stay encoded (fn-resolve-uri-31).
+            resolved = RestoreLiteralIriCharacters(resolved, relative);
+            resolved = RestoreLiteralIriCharacters(resolved, baseUri);
             // RFC 3986: network-path references like //g have empty path.
             // .NET normalizes empty path to "/", so strip trailing "/" when
             // the relative URI is //authority with no path.
@@ -3843,6 +3853,36 @@ public static class FunctionLibrary
                 return baseUri.Substring(0, lastSlash + 1) + relative;
             return relative;
         }
+    }
+
+    /// <summary>
+    /// Replaces the percent-encoded UTF-8 forms of the non-ASCII characters that appear
+    /// literally in <paramref name="source"/> with the characters themselves.
+    /// </summary>
+    private static string RestoreLiteralIriCharacters(string resolved, string source)
+    {
+        for (int i = 0; i < source.Length; i++)
+        {
+            char c = source[i];
+            if (c <= 0x7F)
+                continue;
+            string literal;
+            if (char.IsHighSurrogate(c) && i + 1 < source.Length && char.IsLowSurrogate(source[i + 1]))
+            {
+                literal = source.Substring(i, 2);
+                i++;
+            }
+            else if (char.IsSurrogate(c))
+            {
+                continue; // A lone surrogate is not a valid IRI character.
+            }
+            else
+            {
+                literal = c.ToString();
+            }
+            resolved = resolved.Replace(Uri.EscapeDataString(literal), literal);
+        }
+        return resolved;
     }
 
     private static XdmValue Not(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -6656,10 +6696,19 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedText_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(AtomizedString(args[0]), null, ctx);
+    {
+        // FO31: an empty-sequence $href yields the empty sequence.
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return UnparsedText(AtomizedString(args[0]), null, ctx);
+    }
 
     private static XdmValue UnparsedText_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedText(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
+    {
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return UnparsedText(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
+    }
 
     private static readonly HttpClient _httpClient = new HttpClient();
 
@@ -6833,10 +6882,19 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedTextAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(AtomizedString(args[0]), null, ctx);
+    {
+        // FO31: an empty-sequence $href yields false (fn-unparsed-text-available-053).
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.False;
+        return UnparsedTextAvailable(AtomizedString(args[0]), null, ctx);
+    }
 
     private static XdmValue UnparsedTextAvailable_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextAvailable(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
+    {
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.False;
+        return UnparsedTextAvailable(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
+    }
 
     private static XdmValue UnparsedTextAvailable(string href, string? encoding, EvaluationContext ctx)
     {
@@ -6891,10 +6949,19 @@ public static class FunctionLibrary
     }
 
     private static XdmValue UnparsedTextLines_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextLines(args[0].ToString(), null, ctx);
+    {
+        // FO31: an empty-sequence $href yields the empty sequence.
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return UnparsedTextLines(args[0].ToString(), null, ctx);
+    }
 
     private static XdmValue UnparsedTextLines_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => UnparsedTextLines(args[0].ToString(), args[1].ToString(), ctx);
+    {
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return UnparsedTextLines(args[0].ToString(), args[1].ToString(), ctx);
+    }
 
     private static XdmValue UnparsedTextLines(string href, string? encoding, EvaluationContext ctx)
     {
@@ -11964,14 +12031,15 @@ public static class FunctionLibrary
     }
 
     private static void XmlNodeToJsonString(IXdmNode node, StringBuilder sb, JsonOptions options)
-        => XmlNodeToJsonString(node, sb, options, isMapEntry: false);
+        => XmlNodeToJsonString(node, sb, options, isMapEntry: false, depth: 0);
 
     /// <summary>
     /// Serializes one element of the JSON XML representation (F+O 3.1 §17.5.4), validating
     /// the input against the schema rules: unknown elements/attributes, misplaced text,
     /// duplicate keys, invalid numbers and invalid escape sequences raise FOJS0006/FOJS0007.
+    /// With indent=true the output is pretty-printed (the layout is implementation-defined).
     /// </summary>
-    private static void XmlNodeToJsonString(IXdmNode node, StringBuilder sb, JsonOptions options, bool isMapEntry)
+    private static void XmlNodeToJsonString(IXdmNode node, StringBuilder sb, JsonOptions options, bool isMapEntry, int depth = 0)
     {
         if (node.NamespaceUri != JsonXmlNs)
             throw new InvalidOperationException($"FOJS0006: Element {{{node.NamespaceUri}}}{node.LocalName} is not in the JSON XML namespace");
@@ -11979,9 +12047,10 @@ public static class FunctionLibrary
         bool isString = localName == "string";
         bool escaped = false;
 
-        // Validate attributes: @key/@escaped-key are allowed on any element (only used
-        // when the parent is a map); @escaped only on j:string; namespace declarations
-        // and XML/XSI attributes are ignored (xml-to-json-D-001/D-002/D-302).
+        // Validate attributes: @key/@escaped-key/@escaped are allowed on any element
+        // (bug 29917; xml-to-json-064/065); @key/@escaped-key only take effect for map
+        // entries, @escaped only on j:string. Namespace declarations and XML/XSI
+        // attributes are ignored (xml-to-json-D-001/D-002/D-302).
         foreach (var attr in node.Attributes())
         {
             var attrNode = attr.NodeValue!;
@@ -11999,8 +12068,8 @@ public static class FunctionLibrary
                 case "escaped-key":
                     _ = ParseJsonXmlBoolean(attrValue, "escaped-key");
                     break;
-                case "escaped" when isString:
-                    escaped = ParseJsonXmlBoolean(attrValue, "escaped");
+                case "escaped":
+                    escaped = ParseJsonXmlBoolean(attrValue, "escaped") && isString;
                     break;
                 default:
                     throw new InvalidOperationException($"FOJS0006: Attribute @{attrName} is not allowed on j:{localName}");
@@ -12010,54 +12079,67 @@ public static class FunctionLibrary
         switch (localName)
         {
             case "map":
-                sb.Append('{');
-                var first = true;
-                var seenKeys = new HashSet<string>();
-                foreach (var child in ElementChildrenOnly(node, localName))
                 {
-                    if (!first) sb.Append(',');
-                    first = false;
-                    var childNode = child.NodeValue!;
-                    string? entryKey = null;
-                    bool entryEscapedKey = false;
-                    foreach (var attr in childNode.Attributes())
+                    var entries = ElementChildrenOnly(node, localName);
+                    sb.Append('{');
+                    var first = true;
+                    var seenKeys = new HashSet<string>();
+                    foreach (var child in entries)
                     {
-                        var attrNode = attr.NodeValue!;
-                        if (attrNode.LocalName == "key")
-                            entryKey = attrNode.StringValue;
-                        else if (attrNode.LocalName == "escaped-key")
-                            entryEscapedKey = ParseJsonXmlBoolean(attrNode.StringValue, "escaped-key");
+                        if (!first) sb.Append(',');
+                        first = false;
+                        if (options.Indent) AppendJsonIndent(sb, depth + 1);
+                        var childNode = child.NodeValue!;
+                        string? entryKey = null;
+                        bool entryEscapedKey = false;
+                        foreach (var attr in childNode.Attributes())
+                        {
+                            var attrNode = attr.NodeValue!;
+                            if (attrNode.LocalName == "key")
+                                entryKey = attrNode.StringValue;
+                            else if (attrNode.LocalName == "escaped-key")
+                                entryEscapedKey = ParseJsonXmlBoolean(attrNode.StringValue, "escaped-key");
+                        }
+                        if (entryKey is null)
+                            throw new InvalidOperationException("FOJS0006: Missing key attribute in map entry");
+                        // Duplicate detection compares the unescaped key (xml-to-json-D-501..503);
+                        // the output copies valid escape sequences unchanged (xml-to-json-071).
+                        var rawKey = entryEscapedKey ? UnescapeJsonContentStrict(entryKey) : entryKey;
+                        if (!seenKeys.Add(rawKey))
+                            throw new InvalidOperationException($"FOJS0006: Duplicate key '{rawKey}' in map");
+                        sb.Append('"');
+                        sb.Append(entryEscapedKey ? CopyEscapedJsonContent(entryKey) : XmlToJsonEscape(entryKey));
+                        sb.Append(options.Indent ? "\": " : "\":");
+                        XmlNodeToJsonString(childNode, sb, options, isMapEntry: true, depth + 1);
                     }
-                    if (entryKey is null)
-                        throw new InvalidOperationException("FOJS0006: Missing key attribute in map entry");
-                    var rawKey = entryEscapedKey ? UnescapeJsonContentStrict(entryKey) : entryKey;
-                    if (!seenKeys.Add(rawKey))
-                        throw new InvalidOperationException($"FOJS0006: Duplicate key '{rawKey}' in map");
-                    sb.Append('"');
-                    sb.Append(XmlToJsonEscape(rawKey));
-                    sb.Append("\":");
-                    XmlNodeToJsonString(childNode, sb, options, isMapEntry: true);
+                    if (options.Indent && !first) AppendJsonIndent(sb, depth);
+                    sb.Append('}');
+                    break;
                 }
-                sb.Append('}');
-                break;
             case "array":
-                sb.Append('[');
-                first = true;
-                foreach (var child in ElementChildrenOnly(node, localName))
                 {
-                    if (!first) sb.Append(',');
-                    first = false;
-                    XmlNodeToJsonString(child.NodeValue!, sb, options);
+                    var items = ElementChildrenOnly(node, localName);
+                    sb.Append('[');
+                    var first = true;
+                    foreach (var child in items)
+                    {
+                        if (!first) sb.Append(',');
+                        first = false;
+                        if (options.Indent) AppendJsonIndent(sb, depth + 1);
+                        XmlNodeToJsonString(child.NodeValue!, sb, options, isMapEntry: false, depth + 1);
+                    }
+                    if (options.Indent && !first) AppendJsonIndent(sb, depth);
+                    sb.Append(']');
+                    break;
                 }
-                sb.Append(']');
-                break;
             case "string":
                 {
                     var content = ElementTextContent(node, localName);
-                    if (escaped)
-                        content = UnescapeJsonContentStrict(content);
                     sb.Append('"');
-                    sb.Append(XmlToJsonEscape(content));
+                    // escaped="true": valid escape sequences are copied to the output
+                    // unchanged; only unescaped characters that JSON requires to be
+                    // escaped are escaped (xml-to-json-071/072/073).
+                    sb.Append(escaped ? CopyEscapedJsonContent(content) : XmlToJsonEscape(content));
                     sb.Append('"');
                     break;
                 }
@@ -12148,6 +12230,62 @@ public static class FunctionLibrary
             "false" or "0" => false,
             _ => throw new InvalidOperationException($"FOJS0006: Invalid value '{value}' for @{attributeName}")
         };
+
+    /// <summary>
+    /// Appends a newline followed by two spaces per depth level (fn:xml-to-json with
+    /// indent=true; the exact layout is implementation-defined — xml-to-json-056/057).
+    /// </summary>
+    private static void AppendJsonIndent(StringBuilder sb, int depth)
+        => sb.Append('\n').Append(' ', depth * 2);
+
+    /// <summary>
+    /// Processes escaped="true" string content or an escaped-key attribute value
+    /// (fn:xml-to-json): valid escape sequences are copied to the output unchanged
+    /// (preserving the hex digit case); unescaped characters that JSON requires to be
+    /// escaped are escaped. Invalid escape sequences raise FOJS0007 (xml-to-json-071..078).
+    /// </summary>
+    private static string CopyEscapedJsonContent(string content)
+    {
+        if (!content.Contains('\\'))
+            return XmlToJsonEscape(content);
+        var sb = new StringBuilder(content.Length + 8);
+        int i = 0;
+        int runStart = 0;
+        while (i < content.Length)
+        {
+            if (content[i] != '\\')
+            {
+                i++;
+                continue;
+            }
+            // Escape the plain run preceding this escape sequence.
+            if (i > runStart)
+                sb.Append(XmlToJsonEscape(content[runStart..i]));
+            if (i + 1 >= content.Length)
+                throw new InvalidOperationException("FOJS0007: Trailing backslash in escaped string content");
+            char esc = content[i + 1];
+            switch (esc)
+            {
+                case '"' or '\\' or '/' or 'b' or 'f' or 'n' or 'r' or 't':
+                    sb.Append('\\').Append(esc);
+                    i += 2;
+                    break;
+                case 'u':
+                    if (i + 5 >= content.Length
+                        || !int.TryParse(content.Substring(i + 2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
+                        throw new InvalidOperationException($"FOJS0007: Invalid \\u escape in '{content}'");
+                    sb.Append(content, i, 6);
+                    i += 6;
+                    break;
+                default:
+                    throw new InvalidOperationException($"FOJS0007: Invalid escape sequence '\\{esc}'");
+            }
+            runStart = i;
+        }
+        if (runStart < content.Length)
+            sb.Append(XmlToJsonEscape(content[runStart..]));
+        return sb.ToString();
+    }
 
     /// <summary>
     /// Strictly unescapes JSON escape sequences in escaped="true" string content or an
@@ -12265,10 +12403,21 @@ public static class FunctionLibrary
     }
 
     private static XdmValue JsonDoc_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => JsonDoc(ctx, AtomizedString(args[0]), JsonOptions.Default);
+    {
+        // FO31: an empty-sequence $href yields the empty sequence (json-doc-035).
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return JsonDoc(ctx, AtomizedString(args[0]), JsonOptions.Default);
+    }
 
     private static XdmValue JsonDoc_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => JsonDoc(ctx, AtomizedString(args[0]), ParseJsonOptions(args[1]));
+    {
+        // Options are validated eagerly even when $href is empty (json-doc-028).
+        var options = ParseJsonOptions(args[1]);
+        if (args[0].IsUndefined || IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
+        return JsonDoc(ctx, AtomizedString(args[0]), options);
+    }
 
     private static XdmValue JsonDoc(EvaluationContext ctx, string uri, JsonOptions options)
     {

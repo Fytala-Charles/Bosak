@@ -64,6 +64,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.23  | 07-08-2026     | Drop 46 stale gap entries (probe-verified passing); 148 entries remain |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.24  | 07-08-2026     | Fallback static base URI is the test-set file (K2-BaseURIProlog-5); drop 16 fixed entries (serialization char-refs, xml-to-json, base-uri/URI cluster) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -173,9 +175,6 @@ internal sealed class ConformanceRunner
         // fn/function-name.xml (2 tests)
         ["fn-function-name-013"] = "XQuery conformance gap (fn:function-name): see AGENT_HANDOVER REQ-045",
         ["fn-function-name-014"] = "XQuery conformance gap (fn:function-name): see AGENT_HANDOVER REQ-045",
-        // fn/json-doc.xml (2 tests)
-        ["json-doc-028"] = "XQuery conformance gap (fn:json-doc): see AGENT_HANDOVER REQ-045",
-        ["json-doc-035"] = "XQuery conformance gap (fn:json-doc): see AGENT_HANDOVER REQ-045",
         // fn/node-name.xml (1 test)
         ["fn-node-name-26"] = "XQuery conformance gap (fn:node-name): see AGENT_HANDOVER REQ-045",
         // fn/parse-xml.xml (2 tests)
@@ -183,8 +182,6 @@ internal sealed class ConformanceRunner
         ["parse-xml-017"] = "XQuery conformance gap (fn:parse-xml): see AGENT_HANDOVER REQ-045",
         // fn/path.xml (1 test)
         ["path009"] = "XQuery conformance gap (fn:path): see AGENT_HANDOVER REQ-045",
-        // fn/resolve-uri.xml (1 test)
-        ["fn-resolve-uri-30"] = "XQuery conformance gap (fn:resolve-uri): see AGENT_HANDOVER REQ-045",
         // fn/sort.xml (3 tests)
         ["fn-sort-collation-1"] = "XQuery conformance gap (fn:sort): see AGENT_HANDOVER REQ-045",
         ["fn-sort-collation-2"] = "XQuery conformance gap (fn:sort): see AGENT_HANDOVER REQ-045",
@@ -194,12 +191,7 @@ internal sealed class ConformanceRunner
         ["fn-unparsed-text-available-010"] = "XQuery conformance gap (fn:unparsed-text-available): see AGENT_HANDOVER REQ-045",
         ["fn-unparsed-text-available-012"] = "XQuery conformance gap (fn:unparsed-text-available): see AGENT_HANDOVER REQ-045",
         // fn/unparsed-text.xml (1 test)
-        ["fn-unparsed-text-054a"] = "XQuery conformance gap (fn:unparsed-text): see AGENT_HANDOVER REQ-045",
-        // fn/xml-to-json.xml (4 tests)
-        ["xml-to-json-051"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
-        ["xml-to-json-057"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
-        ["xml-to-json-065"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
-        ["xml-to-json-071"] = "XQuery conformance gap (fn:xml-to-json): see AGENT_HANDOVER REQ-045",
+        ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
         // misc/ErrorsAndOptimization.xml (1 test)
         ["errors-and-optimization-7"] = "XQuery conformance gap (misc:ErrorsAndOptimization): see AGENT_HANDOVER REQ-045",
         // misc/StaticContext.xml (1 test)
@@ -240,12 +232,6 @@ internal sealed class ConformanceRunner
         ["cbcl-numeric-idivide-002"] = "XQuery conformance gap (op:numeric-integer-divide): see AGENT_HANDOVER REQ-045",
         // op/numeric-unary-minus.xml (1 test)
         ["op-numeric-unary-minus-1"] = "XQuery conformance gap (op:numeric-unary-minus): see AGENT_HANDOVER REQ-045",
-        // prod/BaseURIDecl.xml (5 tests)
-        ["K2-BaseURIProlog-4"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
-        ["K2-BaseURIProlog-5"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
-        ["base-URI-18"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
-        ["base-URI-22"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
-        ["base-URI-23"] = "XQuery conformance gap (BaseURIDecl): see AGENT_HANDOVER REQ-045",
         // prod/CastableExpr.xml (2 tests)
         ["K-SeqExprCastable-5a"] = "XQuery conformance gap (CastableExpr): see AGENT_HANDOVER REQ-045",
         ["K-SeqExprCastable-6a"] = "XQuery conformance gap (CastableExpr): see AGENT_HANDOVER REQ-045",
@@ -312,11 +298,6 @@ internal sealed class ConformanceRunner
         ["K2-sequenceExprTypeswitch-9"] = "XQuery conformance gap (TypeswitchExpr): see AGENT_HANDOVER REQ-045",
         // prod/VersionDecl.xml (1 test)
         ["version_declaration-023-v3"] = "XQuery conformance gap (VersionDecl): see AGENT_HANDOVER REQ-045",
-        // ser/method-xml.xml (4 tests)
-        ["K2-Serialization-10"] = "XQuery conformance gap (ser/method-xml): see AGENT_HANDOVER REQ-045",
-        ["K2-Serialization-5"] = "XQuery conformance gap (ser/method-xml): see AGENT_HANDOVER REQ-045",
-        ["K2-Serialization-6"] = "XQuery conformance gap (ser/method-xml): see AGENT_HANDOVER REQ-045",
-        ["K2-Serialization-9"] = "XQuery conformance gap (ser/method-xml): see AGENT_HANDOVER REQ-045",
     };
 
     public ConformanceRunner(string suitePath, string? setFilter = null, string? testFilter = null)
@@ -456,15 +437,16 @@ internal sealed class ConformanceRunner
 
             // FOTS convention: tests without an explicit environment resolve relative
             // resource URIs against the test-set file's directory (fn-parse-json-101..105).
-            // Referenced environments that do not declare a static-base-uri also fall back
-            // to the test-set directory so fn:transform relative URIs resolve correctly.
+            // The fallback static base URI is the test-set FILE itself (K2-BaseURIProlog-5:
+            // static-base-uri() ends with "prod/BaseURIDecl.xml"); relative resource
+            // resolution is identical because file URIs resolve against the parent directory.
             if (env is null)
             {
-                env = new TestEnvironment { BaseUri = new Uri(baseDir + Path.DirectorySeparatorChar).AbsoluteUri };
+                env = new TestEnvironment { BaseUri = new Uri(path).AbsoluteUri };
             }
             else if (string.IsNullOrEmpty(env.BaseUri))
             {
-                env.BaseUri = new Uri(baseDir + Path.DirectorySeparatorChar).AbsoluteUri;
+                env.BaseUri = new Uri(path).AbsoluteUri;
             }
 
             // Dependency check. Tests whose only unsupported dependencies are positive

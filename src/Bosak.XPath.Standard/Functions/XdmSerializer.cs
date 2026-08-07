@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 01-08-2026     | HTML matrix: version-dependent void lists, boolean attrs, script raw text, CDATA islands, xhtml prefix normalization |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 07-08-2026     | XML/XHTML: escape NEL (#x85), LS (#x2028) and C1 controls (#x7F-#x9F) as character references in text and attribute content (K2-Serialization-5/6/9/10) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -1604,6 +1606,11 @@ internal static class XdmSerializer
                         // XML 1.1: control characters other than tab/LF/CR serialize as char refs.
                         if (c < ' ' && c is not ('\t' or '\n'))
                             _sb.Append("&#x").Append(((int)c).ToString("X", CultureInfo.InvariantCulture)).Append(';');
+                        // XML/XHTML: NEL, LINE SEPARATOR, and the C1 control range serialize as
+                        // character references so they survive re-parsing (Serialization 3.1 §4;
+                        // K2-Serialization-5/9/10).
+                        else if ((_p.Method is "xml" or "xhtml") && (c is >= '\u007F' and <= '\u009F' or '\u2028'))
+                            _sb.Append("&#x").Append(((int)c).ToString("X", CultureInfo.InvariantCulture)).Append(';');
                         else
                             _sb.Append(c);
                         break;
@@ -1641,6 +1648,11 @@ internal static class XdmSerializer
                     default:
                         // XML 1.1: remaining control characters serialize as char refs.
                         if (c < ' ')
+                            _sb.Append("&#x").Append(((int)c).ToString("X", CultureInfo.InvariantCulture)).Append(';');
+                        // XML/XHTML: NEL, LINE SEPARATOR, and the C1 control range serialize as
+                        // character references so they survive re-parsing (Serialization 3.1 §4;
+                        // K2-Serialization-6/9).
+                        else if ((_p.Method is "xml" or "xhtml") && (c is >= '\u007F' and <= '\u009F' or '\u2028'))
                             _sb.Append("&#x").Append(((int)c).ToString("X", CultureInfo.InvariantCulture)).Append(';');
                         else
                             _sb.Append(c);

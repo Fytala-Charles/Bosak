@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 3 August 2026
+> **Last updated:** 7 August 2026
 > **Bosak baseline:** 1,695 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** 29,745 passed / 0 failed / 2,076 skipped (93.48% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
@@ -19,6 +19,13 @@
 
 ## 0. Recent Changes
 
+- **2026-08-07** — XQuery/XPath: **base-URI / URI-resolution conformance cluster** (QT3 residual sweep).
+  - `declare base-uri` URILiterals are whitespace-normalized per the fn:normalize-space rules (XQ 3.1 §2.4.5): leading/trailing whitespace is stripped and internal whitespace runs (including `&#xa;` character references) collapse to a single space (base-URI-18/22/23).
+  - A relative or empty declared base URI is made absolute by resolving it against the ambient static base URI (XQ 3.1 §4.5) instead of replacing/ignoring it (K2-BaseURIProlog-4; K2-BaseURIProlog-5 additionally needs the QT3 harness fallback base URI to be the test-set file URI rather than its directory).
+  - fn:json-doc(()) returns the empty sequence for both arities; the options map is still validated eagerly (json-doc-028/035).
+  - fn:unparsed-text / fn:unparsed-text-lines with an empty-sequence href return the empty sequence, and fn:unparsed-text-available returns false (FO31; fn-unparsed-text-available-053/054) — previously the empty href was resolved against the static base URI and probed as a resource.
+  - fn:resolve-uri keeps non-ASCII IRI characters of the inputs literal in the result while leaving existing percent-encodings intact (fn-resolve-uri-30; fn-resolve-uri-31 regression-checked).
+  - fn-unparsed-text-054a remains a known gap by environment: timeanddate.com fronts .NET HttpClient with a Cloudflare JS challenge (`Cf-Mitigated: challenge`, HTTP 403) regardless of request headers, while curl passes — not fixable engine-side.
 - **2026-08-03** — XPath/XSLT: **XSD 1.1 regex hyphen rules + environment-stylesheet conformance sweep** (REQ-067/068/069). XSLT suite **8,340 passed / 0 failed / 6,260 skipped** (was 7,109/0 — +1,231 passing); QT3 **29,745/0** (+4); unit tests **1,695/0** (+18).
   - The recorded "XSD 1.1 regex class subtraction" gap was stale: the engine already implements the XSD 1.1 rule (`-` is a subtraction operator only immediately before `[`; `[a-d-b-c]` = `{a-d,'-',b-c}`). regex-syntax-0056a/0086a unskipped (set **986/0/4**).
   - **Harness**: test cases whose principal stylesheet comes from the referenced `<environment>` now run (~4,800 tests across 100+ sets), plus environment static `<param>` support and `unicode-version` dependency handling (regex-classes pins 6.0 → skipped; unicode-90 pins 9.0 → runs).

@@ -155,6 +155,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.86  | 03-08-2026     | Document-order sort computes keys in sequence order (detached-tree sequence stability) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.87  | 07-08-2026     | Dropped VM-level constructor attribute normalization: the parser already normalizes raw whitespace and exempts character references (K2-Serialization-6, xml-to-json-051) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1325,10 +1327,13 @@ public static class VmEngine
                             for (int i = attr.FirstPart; i < attr.FirstPart + attr.PartCount; i++)
                             {
                                 var part = ctorInfo.Parts[i];
-                                // Whitespace normalization (tab/CR/LF → space) applies to
-                                // LITERAL parts only; enclosed-expression values are preserved.
+                                // The parser normalizes raw whitespace (tab/CR/LF → space) in
+                                // literal parts at scan time; characters introduced by character
+                                // references (e.g. &#x9;) must survive verbatim (XML 1.0 §3.3.3;
+                                // K2-Serialization-6), so no further normalization happens here.
+                                // Enclosed-expression values are never normalized.
                                 valueParts.Add(part.Kind == ConstructPartKind.Literal
-                                    ? NormalizeConstructorAttributeValue((string)literalPool[part.Index]!)
+                                    ? (string)literalPool[part.Index]!
                                     : JoinAtomizedItems(registers[instr.RegisterB + part.Index], " "));
                             }
                             var value = string.Concat(valueParts);
@@ -9587,13 +9592,6 @@ public static class VmEngine
         }
         return string.Join(separator, parts);
     }
-
-    /// <summary>Collapses whitespace runs and trims (fn:normalize-space semantics).</summary>
-    // XQuery 3.1 §3.9.1.1: direct constructor attribute values are normalized by
-    // replacing each whitespace character (#x9, #xA, #xD) with a space — no
-    // collapsing or trimming (a whitespace-only value is preserved).
-    private static string NormalizeConstructorAttributeValue(string value)
-        => value.Replace('\t', ' ').Replace('\n', ' ').Replace('\r', ' ');
 
     /// <summary>
     /// Accumulates computed-constructor content items, applying the XQuery content rules:
