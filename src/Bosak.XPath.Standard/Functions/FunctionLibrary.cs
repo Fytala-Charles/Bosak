@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.81  | 07-08-2026     | fn:filter applies function conversion to xs:boolean; fn:parse-xml(()) returns (); namespace-uri-for-prefix returns xs:anyURI |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.82  | 14-08-2026     | fn:sort/array:sort fall back to EvaluationContext.DefaultCollation when no collation argument is supplied |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -3383,7 +3385,9 @@ public static class FunctionLibrary
     private static XdmValue Sort(EvaluationContext ctx, XdmValue input, XdmValue? collation, XdmValue? keyFunc)
     {
         var items = AsSequence(input).ToList();
-        string? collationUri = collation is not null && !collation.Value.IsUndefined ? collation.ToString() : null;
+        string? collationUri = collation is not null && !IsEmptySequence(collation.Value)
+            ? collation.ToString()
+            : (string.IsNullOrEmpty(ctx.DefaultCollation) ? null : ctx.DefaultCollation);
         var keyed = new List<(XdmValue Key, XdmValue Item, int Index)>();
         for (int i = 0; i < items.Count; i++)
         {
@@ -8350,7 +8354,9 @@ public static class FunctionLibrary
         foreach (var item in arr.Values)
             items.Add(item);
 
-        string? collationUri = collation is not null && !collation.Value.IsUndefined ? collation.ToString() : null;
+        string? collationUri = collation is not null && !IsEmptySequence(collation.Value)
+            ? collation.ToString()
+            : (string.IsNullOrEmpty(ctx.DefaultCollation) ? null : ctx.DefaultCollation);
         var keyed = new List<(XdmValue Key, XdmValue Item, int Index)>();
         for (int i = 0; i < items.Count; i++)
         {

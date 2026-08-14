@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 07-08-2026     | Version declaration without 'version' clause: 'xquery encoding "utf-8";' (XQuery 3.0+) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 14-08-2026     | Store default collation URI resolved against the static base URI (K-CollationProlog-1) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -378,9 +380,11 @@ public sealed class XQueryParser
                 throw new ParseException("XQST0038: More than one default collation declaration.", _position);
             // XQST0038: the collation must be known to the implementation (XQST0038_3,
             // XQST0046_06 — an unsupported or malformed collation URI is the same error).
-            if (!IsSupportedCollation(ResolveCollationUri(uri, context.BaseUri)))
+            // Store the resolved absolute URI so fn:default-collation() reports it correctly.
+            string resolvedUri = ResolveCollationUri(uri, context.BaseUri);
+            if (!IsSupportedCollation(resolvedUri))
                 throw new ParseException($"XQST0038: Collation '{uri}' is not supported.", _position);
-            context = context.WithDefaultCollation(uri);
+            context = context.WithDefaultCollation(resolvedUri);
             return true;
         }
 

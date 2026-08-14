@@ -165,6 +165,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.91  | 07-08-2026     | Coarse named-function return type: Undefined means empty-sequence() (xs-error-006/007) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.92  | 14-08-2026     | Order-by string comparisons use per-spec collation (default or explicit) instead of ordinal |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -10164,14 +10166,14 @@ public static class VmEngine
             var keyX = keyIndex < x.Length ? x[keyIndex] : XdmValue.Undefined;
             var keyY = keyIndex < y.Length ? y[keyIndex] : XdmValue.Undefined;
 
-            int cmp = CompareOrderByValues(keyX, keyY, info.EmptyOrder[i], context);
+            int cmp = CompareOrderByValues(keyX, keyY, info.EmptyOrder[i], info.CollationUri[i], context);
             if (cmp != 0)
                 return info.Descending[i] ? -cmp : cmp;
         }
         return 0;
     }
 
-    private static int CompareOrderByValues(XdmValue left, XdmValue right, EmptyOrder emptyOrder, EvaluationContext context)
+    private static int CompareOrderByValues(XdmValue left, XdmValue right, EmptyOrder emptyOrder, string? collationUri, EvaluationContext context)
     {
         left = Atomize(left);
         right = Atomize(right);
@@ -10228,7 +10230,8 @@ public static class VmEngine
 
         if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String)
         {
-            return string.CompareOrdinal(left.StringValue, right.StringValue);
+            string effectiveCollation = ResolveCollationUri(collationUri ?? context.DefaultCollation ?? "", context.BaseUri);
+            return CompareStrings(left.StringValue, right.StringValue, effectiveCollation, context);
         }
 
         if (left.Kind == XdmValueKind.Boolean && right.Kind == XdmValueKind.Boolean)

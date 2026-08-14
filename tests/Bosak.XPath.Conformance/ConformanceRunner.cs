@@ -66,6 +66,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 14-08-2026     | Drop 25 stale KnownXQueryGaps entries (wave 3 fixes verified passing); 39 XQuery gap entries remain |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.25  | 14-08-2026     | Drop 8 collation-related KnownXQueryGaps entries after implementing default-collation fallback |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 07-08-2026     | Fallback static base URI is the test-set file (K2-BaseURIProlog-5); drop 16 fixed entries (serialization char-refs, xml-to-json, base-uri/URI cluster) |
 //                      |==================|=======|================|=========================================================================================
@@ -135,10 +137,6 @@ internal sealed class ConformanceRunner
         ["d1e66070"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         ["d1e66081"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
-        // array/sort.xml (3 tests)
-        ["array-sort-collation-1"] = "XQuery conformance gap (array/sort): see AGENT_HANDOVER REQ-045",
-        ["array-sort-collation-2"] = "XQuery conformance gap (array/sort): see AGENT_HANDOVER REQ-045",
-        ["array-sort-collation-3"] = "XQuery conformance gap (array/sort): see AGENT_HANDOVER REQ-045",
         // fn/analyze-string.xml (1 test)
         ["analyzeString-028"] = "XQuery conformance gap (fn:analyze-string): see AGENT_HANDOVER REQ-045",
         // fn/collection.xml (3 tests)
@@ -155,17 +153,10 @@ internal sealed class ConformanceRunner
         ["fn-node-name-26"] = "XQuery conformance gap (fn:node-name): see AGENT_HANDOVER REQ-045",
         // fn/path.xml (1 test)
         ["path009"] = "XQuery conformance gap (fn:path): see AGENT_HANDOVER REQ-045",
-        // fn/sort.xml (3 tests)
-        ["fn-sort-collation-1"] = "XQuery conformance gap (fn:sort): see AGENT_HANDOVER REQ-045",
-        ["fn-sort-collation-2"] = "XQuery conformance gap (fn:sort): see AGENT_HANDOVER REQ-045",
-        ["fn-sort-collation-3"] = "XQuery conformance gap (fn:sort): see AGENT_HANDOVER REQ-045",
         // fn/unparsed-text-available.xml (1 test)
         ["fn-unparsed-text-available-012"] = "Upstream defect: expects XPTY0004 for ()/$encoding, valid per the published xs:string? signature (qt4cg suite has the corrected variant)",
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
-        // prod/DefaultCollationDecl.xml (2 tests)
-        ["K-CollationProlog-1"] = "XQuery conformance gap (DefaultCollationDecl): see AGENT_HANDOVER REQ-045",
-        ["defaultcolldecl-6"] = "XQuery conformance gap (DefaultCollationDecl): see AGENT_HANDOVER REQ-045",
         // prod/DirAttributeList.xml (2 tests)
         ["K2-DirectConElemAttr-42"] = "XQuery conformance gap (DirAttributeList): see AGENT_HANDOVER REQ-045",
         ["K2-DirectConElemAttr-43"] = "XQuery conformance gap (DirAttributeList): see AGENT_HANDOVER REQ-045",
