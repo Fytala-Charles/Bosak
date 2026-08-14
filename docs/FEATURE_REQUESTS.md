@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-> **Living Registry** — Last updated: 2026-08-03 (XSD 1.1 regex hyphen rules verified; XSLT harness environment stylesheets enabled — regex-syntax **986/0/4**, ~4,800 tests unskipped; engine sweep: `\i`/`\c` explicit NameStartChar/NameChar ranges, accumulator global params, fn:path parentless trees, kind-test namespaces, xml-to-json FOJS0006, snapshot#0, detached-copy doc-order, where-populated per-item rules, xsl:fork, xsl:assert, XTDE1480, arrays/maps template rules, XHTML &#34;/C1 escaping, HTML5 foreign prefixes; XSLT **8,340 passed / 0 failed / 6,260 skipped**; QT3 **29,745 passed / 0 failed / 2,076 skipped** (93.48%); unit tests **1,695/0**)
+> **Living Registry** — Last updated: 2026-08-14 (QT3 sweep wave 3 — function items, constructors, validation, environment variables; engine sweep: named function-item subtyping with kind-derived signatures, FOTY0013 on function comparisons, array atomization in function conversion, fn:filter xs:boolean conversion, fn:parse-xml(()) empty sequence, namespace-uri-for-prefix xs:anyURI, empty enclosed expressions, whitespace between constructor attributes, XML 1.0 line-ending normalization, strict-validation whitespace stripping, switch-case NaN equality, subscript int-range guard; QT3 **29,873 passed / 0 failed / 1,948 skipped** (93.88%); unit tests **1,695/0**)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---

@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 29-07-2026     | Content ns declarations win over name prefixes (generated prefixes); xmlns:xml omitted; parentless ns nodes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 07-08-2026     | Strict validation strips whitespace-only text nodes in element-only schema content (ForExprType009) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -583,6 +585,29 @@ public static class XDocumentProvider
         {
             throw new XmlSchemaValidationException(
                 $"Document validation failed against the supplied schema(s):\n{string.Join("\n", errors)}");
+        }
+        StripElementOnlyContentWhitespace(document);
+    }
+
+    /// <summary>
+    /// Removes whitespace-only text nodes from elements whose validated schema type has
+    /// element-only content. A validating XDM construction discards such whitespace
+    /// (XDM §3.3.1.1), so strictly validated source documents match the whitespace-free
+    /// trees the QT3 expectations assume (ForExprType009, orderData.xml).
+    /// </summary>
+    private static void StripElementOnlyContentWhitespace(XDocument document)
+    {
+        foreach (var element in document.Descendants())
+        {
+            if (element.GetSchemaInfo()?.SchemaElement?.ElementSchemaType is not XmlSchemaComplexType complexType
+                || complexType.ContentType != XmlSchemaContentType.ElementOnly)
+                continue;
+            foreach (var text in element.Nodes().OfType<XText>()
+                         .Where(t => string.IsNullOrWhiteSpace(t.Value))
+                         .ToList())
+            {
+                text.Remove();
+            }
         }
     }
 

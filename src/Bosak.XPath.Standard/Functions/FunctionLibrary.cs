@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.80  | 01-08-2026     | fn:namespace-uri/fn:string take the FIRST sequence item in backwards-compat mode     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.81  | 07-08-2026     | fn:filter applies function conversion to xs:boolean; fn:parse-xml(()) returns (); namespace-uri-for-prefix returns xs:anyURI |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -3307,11 +3309,10 @@ public static class FunctionLibrary
         foreach (var item in AsSequence(args[0]))
         {
             var pred = VmEngine.InvokeFunctionItem(func, ctx, new[] { item });
-            if (pred.IsUndefined)
-                throw new InvalidOperationException("XPTY0004");
-            if (pred.Kind != XdmValueKind.Boolean)
-                throw new InvalidOperationException("XPTY0004");
-            if (pred.BooleanValue)
+            // fn:filter converts the predicate result to xs:boolean by the function
+            // conversion rules (atomize, then cast untypedAtomic) — not by effective
+            // boolean value (filter-006: an element atomizing to "0" must not be kept).
+            if (VmEngine.ApplyFunctionConversion(pred, "xs:boolean", ctx).BooleanValue)
                 result.Add(item);
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
@@ -4632,6 +4633,10 @@ public static class FunctionLibrary
 
     private static XdmValue ParseXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
+        // An empty-sequence argument returns the empty sequence; FODC0006 is reserved
+        // for a non-well-formed (including empty-string) input (parse-xml-016/017).
+        if (IsEmptySequence(args[0]))
+            return XdmValue.Undefined;
         string xml = AtomizedString(args[0]);
         if (string.IsNullOrEmpty(xml))
             throw new InvalidOperationException("FODC0006: fn:parse-xml argument must not be empty.");
@@ -12762,7 +12767,7 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
 
         if (prefix == "xml")
-            return XdmValue.FromString("http://www.w3.org/XML/1998/namespace");
+            return XdmValue.FromString("http://www.w3.org/XML/1998/namespace", "anyURI");
 
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
@@ -12790,7 +12795,9 @@ public static class FunctionLibrary
                             // xmlns="" undeclares the default namespace.
                             if (attr.Value == "" && prefix == "")
                                 return XdmValue.Undefined;
-                            return XdmValue.FromString(attr.Value);
+                            // fn:namespace-uri-for-prefix returns xs:anyURI? — the type
+                            // annotation matters for map value type tests (analyzeString-028).
+                            return XdmValue.FromString(attr.Value, "anyURI");
                         }
                     }
                 }

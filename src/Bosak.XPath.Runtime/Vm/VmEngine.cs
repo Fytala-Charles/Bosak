@@ -161,6 +161,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.89  | 07-08-2026     | NamespaceTest Q{}* sentinel (never the default element ns); EQName xs type names in ValueMatchesType/ApplyFunctionConversion; element/attribute(*, prefixed-T) kind tests validate the schema type (XPST0008/XPST0081) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.90  | 07-08-2026     | General comparisons on function items raise FOTY0013; named function items subtype-check against coarse kind-derived signatures (instanceof134); ApplyFunctionConversion (now public) atomizes array arguments into their members (FunctionCall-022) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.91  | 07-08-2026     | Coarse named-function return type: Undefined means empty-sequence() (xs-error-006/007) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -5367,6 +5371,11 @@ public static class VmEngine
                 if (atomizedL.IsUndefined || atomizedR.IsUndefined)
                     continue;
 
+                // Function items cannot be atomized: a comparison involving one is
+                // FOTY0013 (inline-fn-031: comparing two inline functions with '=').
+                if (atomizedL.IsFunction || atomizedR.IsFunction)
+                    throw new InvalidOperationException("FOTY0013: A comparison operand must not be a function item.");
+
                 // XPath 1.0 backwards compatibility coercion rules
                 if (context.BackwardsCompatible)
                 {
@@ -8218,20 +8227,29 @@ public static class VmEngine
             return false;
 
         if (func is NamedFunctionItem named
-            && context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.ArityValue, out var sig)
-            && sig.ParameterTypeNames != null)
+            && context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.ArityValue, out var sig))
         {
-            if (sig.ParameterTypeNames.Count != testParamTypes.Length)
+            // Precise declared sequence types when the signature provides them; otherwise
+            // derive a coarse but sound approximation from the kind-level metadata
+            // (Sequence → item()*, Function → function(*), ...) so built-ins such as
+            // filter#2 subtype-check structurally instead of by arity alone
+            // (instanceof132/133/134).
+            var actualParams = sig.ParameterTypeNames ?? CoarseParameterTypeNames(sig, named.ArityValue);
+            if (actualParams.Count != testParamTypes.Length)
                 return false;
             // Parameter types are contravariant: test param must be a subtype of the actual param.
             for (int i = 0; i < testParamTypes.Length; i++)
             {
-                var actualParam = sig.ParameterTypeNames[i] ?? "item()*";
+                var actualParam = actualParams[i] ?? "item()*";
                 if (!IsSequenceTypeSubtype(testParamTypes[i], actualParam))
                     return false;
             }
             // Return type is covariant: actual return must be a subtype of the test return.
-            var actualReturn = sig.ReturnTypeName ?? "item()*";
+            // A signature whose return kind is Undefined never returns a value (fn:error, xs:error);
+            // that is equivalent to empty-sequence(), which is a subtype of every sequence type
+            // (xs-error-006/007).
+            var actualReturn = sig.ReturnTypeName
+                ?? (sig.ReturnType == XdmValueKind.Undefined ? "empty-sequence()" : CoarseKindTypeName(sig.ReturnType));
             return IsSequenceTypeSubtype(actualReturn, testReturnType);
         }
 
@@ -8252,6 +8270,45 @@ public static class VmEngine
 
         return ValueMatchesType(value, typeName);
     }
+
+    /// <summary>
+    /// Builds coarse parameter sequence-type names from a signature's kind-level metadata,
+    /// sized to the referenced arity (a variadic registration such as fn:concat may carry
+    /// fewer kinds than the referenced arity — the extras default to <c>item()*</c>).
+    /// </summary>
+    private static IReadOnlyList<string?> CoarseParameterTypeNames(FunctionSignature sig, int arity)
+    {
+        var names = new string?[arity];
+        for (int i = 0; i < arity; i++)
+            names[i] = CoarseKindTypeName(i < sig.ParameterTypes.Count ? sig.ParameterTypes[i] : XdmValueKind.Sequence);
+        return names;
+    }
+
+    /// <summary>
+    /// Maps a kind-level parameter/return type to a coarse sequence-type name for
+    /// function-item subtyping when no precise declared type name is registered.
+    /// </summary>
+    private static string CoarseKindTypeName(XdmValueKind kind) => kind switch
+    {
+        XdmValueKind.String => "xs:string",
+        XdmValueKind.Integer => "xs:integer",
+        XdmValueKind.Decimal => "xs:decimal",
+        XdmValueKind.Double => "xs:double",
+        XdmValueKind.Float => "xs:float",
+        XdmValueKind.Boolean => "xs:boolean",
+        XdmValueKind.Uri => "xs:anyURI",
+        XdmValueKind.QName => "xs:QName",
+        XdmValueKind.Date => "xs:date",
+        XdmValueKind.Time => "xs:time",
+        XdmValueKind.DateTime => "xs:dateTime",
+        XdmValueKind.Duration => "xs:duration",
+        XdmValueKind.Binary => "xs:base64Binary",
+        XdmValueKind.Node => "node()",
+        XdmValueKind.Function => "function(*)",
+        XdmValueKind.Map => "map(*)",
+        XdmValueKind.Array => "array(*)",
+        _ => "item()*",
+    };
 
     /// <summary>
     /// Matches a map or array value against a typed function test <c>function(A) as R</c>.
@@ -8396,7 +8453,7 @@ public static class VmEngine
     /// sequence type: subtype substitution, node atomization, untypedAtomic casting,
     /// numeric promotion, and URI promotion. Raises XPTY0004 when no rule applies.
     /// </summary>
-    internal static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
+    public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
     {
         if (ValueMatchesType(value, targetType, context))
             return value;
@@ -8456,11 +8513,11 @@ public static class VmEngine
             if (value.IsSequence && value.SequenceValue != null)
             {
                 foreach (var item in XdmSequence.FromSource(value.SequenceValue))
-                    items.Add(item);
+                    AddConversionItems(item, items);
             }
             else
             {
-                items.Add(value);
+                AddConversionItems(value, items);
             }
         }
 
@@ -8551,6 +8608,36 @@ public static class VmEngine
         if (converted.Count == 1)
             return converted[0];
         return XdmValue.FromSequence(MaterializedSequence.FromList(converted));
+    }
+
+    /// <summary>
+    /// Collects the items of a function-conversion input, expanding arrays into their
+    /// (recursively atomized) members: the function conversion rules atomize the
+    /// supplied value, and atomizing an array yields the atomization of its members
+    /// (FunctionCall-022: an array argument to an xs:integer* parameter contributes
+    /// its members).
+    /// </summary>
+    private static void AddConversionItems(XdmValue item, List<XdmValue> items)
+    {
+        if (item.IsArray && item.ArrayValue is not null)
+        {
+            foreach (var member in item.ArrayValue.Values)
+            {
+                if (member.IsUndefined)
+                    continue;
+                if (member.IsSequence && member.SequenceValue is not null)
+                {
+                    foreach (var inner in XdmSequence.FromSource(member.SequenceValue))
+                        AddConversionItems(inner, items);
+                }
+                else
+                {
+                    AddConversionItems(member, items);
+                }
+            }
+            return;
+        }
+        items.Add(item);
     }
 
     private static bool TryPromoteNumericOrUri(XdmValue value, string type, out XdmValue result)

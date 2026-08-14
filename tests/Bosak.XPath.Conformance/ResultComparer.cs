@@ -42,6 +42,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.1   | 28-07-2026     | Canonical comparison omits redundant namespace declarations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.2   | 07-08-2026     | assert-type accepts empty-sequence() and optional cardinalities for empty results (fn-function-name-013/014) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -555,14 +557,31 @@ internal static class ResultComparer
         if (caughtException is not null)
             return new TestOutcome(TestOutcomeKind.Failed, $"assert-type failed. Unexpected error: {caughtException.Message}");
 
-        if (actual.IsUndefined)
-            return new TestOutcome(TestOutcomeKind.Failed, $"assert-type failed. Expected {expectedType}, got empty sequence");
-
         // Parse cardinality suffix
         bool allowMany = expectedType.EndsWith("*");
         bool allowOneOrMore = expectedType.EndsWith("+");
         bool allowZeroOrOne = expectedType.EndsWith("?");
         string baseType = expectedType.TrimEnd('*', '+', '?');
+
+        // empty-sequence() is satisfied precisely by the empty sequence
+        // (fn-function-name-013/014: fn:function-name of an anonymous function).
+        if (baseType == "empty-sequence()")
+        {
+            bool isEmpty = actual.IsUndefined ||
+                (actual.IsSequence && actual.SequenceValue is not null &&
+                 !XdmSequence.FromSource(actual.SequenceValue).GetEnumerator().MoveNext());
+            return isEmpty
+                ? new TestOutcome(TestOutcomeKind.Passed, null)
+                : new TestOutcome(TestOutcomeKind.Failed, $"assert-type failed. Expected {expectedType}, got non-empty sequence");
+        }
+
+        if (actual.IsUndefined)
+        {
+            // The empty sequence also satisfies any optional cardinality (* or ?).
+            if (allowMany || allowZeroOrOne)
+                return new TestOutcome(TestOutcomeKind.Passed, null);
+            return new TestOutcome(TestOutcomeKind.Failed, $"assert-type failed. Expected {expectedType}, got empty sequence");
+        }
 
         // Materialize sequence to check cardinality and item types
         List<XdmValue> items = new();

@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 15-07-2026     | Absolutize the suite path so relative invocations yield file:/// document URIs           |
 //                      | Charles Korthout | 0.4   | 19-07-2026     | Added optional test-name filter argument for targeted cbcl-style runs                    |
 //                      | Charles Korthout | 0.5   | 26-07-2026     | Run the conformance suite on a dedicated 512MB-stack thread for deep recursion (function-declaration-007, numberformat121) |
+//                      | Charles Korthout | 0.6   | 07-08-2026     | Set QTTEST/QTTEST2/QTTESTEMPTY process variables for the fn-environment-variable test sets |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -29,6 +30,14 @@ internal class Program
 
     static int Main(string[] args)
     {
+        // The fn-environment-variable / fn-available-environment-variables test sets
+        // require these process variables (their catalog comments specify exactly these
+        // values); set them as the documented `QTTEST="42" QTTEST2="other" QTTESTEMPTY=
+        // ./test-harness` invocation would.
+        Environment.SetEnvironmentVariable("QTTEST", "42");
+        Environment.SetEnvironmentVariable("QTTEST2", "other");
+        Environment.SetEnvironmentVariable("QTTESTEMPTY", "");
+
         string suitePath = args.Length > 0 ? args[0] : "tests/qt3tests";
         // Absolutize so document URIs derived from suite files are stable file:/// URIs
         // (relative paths triggered UriFormatException in XDocumentProvider.LoadXml).

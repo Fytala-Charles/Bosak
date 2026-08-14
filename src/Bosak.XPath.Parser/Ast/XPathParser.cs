@@ -93,6 +93,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.44  | 07-08-2026     | Q{uri}:* name test is malformed — XPST0003 (nametest-23)                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.45  | 07-08-2026     | Empty enclosed expressions allowed (XQ31); whitespace required between constructor attributes (XPST0003); XML 1.0 line-ending normalization for literal characters in XQuery string literals |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -2465,7 +2467,9 @@ public sealed class XPathParser
 
         while (true)
         {
+            int wsStart = pos;
             SkipConstructorWhitespace(ref pos);
+            bool hadWhitespace = pos != wsStart;
             if (pos >= _source.Length)
                 throw ConstructorError("unterminated element constructor", ctorStart);
             char c = _source[pos];
@@ -2480,6 +2484,9 @@ public sealed class XPathParser
                 return new DirectElementConstructorNode(tagLocal, tagPrefix, attributes, content);
             }
 
+            // Whitespace is required between two attributes (K2-DirectConElemAttr-48/51).
+            if (attributes.Count > 0 && !hadWhitespace)
+                throw ConstructorError("expected whitespace between attributes", pos);
             var (attrPrefix, attrLocal) = ScanConstructorQName(ref pos, ctorStart);
             SkipConstructorWhitespace(ref pos);
             if (pos >= _source.Length || _source[pos] != '=')
@@ -2767,10 +2774,9 @@ public sealed class XPathParser
                 {
                     var inner = _source[exprStart..pos];
                     pos++;
-                    // An enclosed expression with no tokens at all (pure whitespace) is a
-                    // syntax error; a comment-only expression evaluates to the empty sequence.
-                    if (string.IsNullOrWhiteSpace(inner))
-                        throw new ParseException("XPST0003: An enclosed expression must not be empty.", exprStart);
+                    // XQuery 3.1 allows an empty enclosed expression ("{" Expr? "}"):
+                    // it evaluates to the empty sequence (Constr-attr-enclexpr-10/11,
+                    // K2-DirectConElemContent-26a). A comment-only expression does the same.
                     if (string.IsNullOrWhiteSpace(StripXQueryComments(inner)))
                         return new SequenceExpressionNode(Array.Empty<XPathAstNode>());
                     return Parse(inner, _allowFullFlwor);
@@ -3176,6 +3182,17 @@ public sealed class XPathParser
                 if (inner[i] == '&' && _allowFullFlwor)
                 {
                     sb.Append(ExpandCharReference(inner, ref i));
+                    continue;
+                }
+                // XML 1.0 end-of-line normalization (XQuery 3.1 A.2.2) applies to the
+                // literal characters of the query text: #xD#xA and lone #xD become #xA.
+                // Characters produced by character references are exact and never
+                // normalized (line-ending-Q002/Q003). XML 1.1 mode normalizes below.
+                if (inner[i] == '\r' && _allowFullFlwor && !_xml11LineEndings)
+                {
+                    sb.Append('\n');
+                    if (i + 1 < inner.Length && inner[i + 1] == '\n')
+                        i++;
                     continue;
                 }
                 sb.Append(inner[i]);

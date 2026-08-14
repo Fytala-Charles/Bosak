@@ -636,6 +636,13 @@ public sealed class IrLowerer
             foreach (var value in clause.Values)
             {
                 var eq = new BinaryExpressionNode(new VariableReferenceNode(tmp), BinaryOperator.Eq, value);
+                // XQuery 3.0 §3.12.2: for the purposes of switch comparison, NaN is
+                // equal to NaN (switch-011) — detected via the self-inequality idiom.
+                XPathAstNode comparison = new BinaryExpressionNode(eq, BinaryOperator.Or,
+                    new BinaryExpressionNode(
+                        new BinaryExpressionNode(new VariableReferenceNode(tmp), BinaryOperator.Ne, new VariableReferenceNode(tmp)),
+                        BinaryOperator.And,
+                        new BinaryExpressionNode(value, BinaryOperator.Ne, value)));
                 // XQuery 3.0 §3.12.2: a case whose comparison raises an error does not
                 // match (switch-006/007: decimal operand vs a current-time() case); but a
                 // multi-item case operand is XPTY0004 before that rule applies (switch-902).
@@ -660,7 +667,7 @@ public sealed class IrLowerer
                             BinaryOperator.And,
                             new FunctionCallNode("empty", new XPathAstNode[] { value })),
                         BinaryOperator.Or,
-                        new TryCatchNode(eq,
+                        new TryCatchNode(comparison,
                             new[] { new TryCatchClause(new[] { new CatchCodePattern(null, null, null) }, new BooleanLiteralNode(false)) })));
                 condition = condition is null ? guarded : new BinaryExpressionNode(condition, BinaryOperator.Or, guarded);
             }
@@ -1353,7 +1360,10 @@ public sealed class IrLowerer
         int resultReg = AllocRegister();
 
         // Check if this is a numeric subscript like [1] or [last()]
-        if (predicateExpr is IntegerLiteralNode subscript)
+        // (only when the literal fits the IR int operand — larger values take the
+        // general predicate path, where the positional comparison is done in double
+        // without truncation; filter-limits-003: 'a'[4294967297]).
+        if (predicateExpr is IntegerLiteralNode subscript && subscript.Value is >= int.MinValue and <= int.MaxValue)
         {
             Emit(IrOpCode.Subscript, (ushort)resultReg, (ushort)sequenceReg, operand: (int)subscript.Value);
             return resultReg;
