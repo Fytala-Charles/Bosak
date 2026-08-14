@@ -11,13 +11,20 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 14 August 2026
 > **Bosak baseline:** 1,695 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,898 passed / 0 failed / 1,923 skipped (93.96% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented
+> **QT3 baseline:** 29,906 passed / 0 failed / 1,915 skipped (93.98% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented; default collation honored by fn:sort, array:sort and order-by clauses
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, fn:load-xquery-module
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-14** — XPath/XQuery: **default collation sorting cluster** — `fn:sort`, `array:sort` and FLWOR `order by` clauses now honor the default or explicit collation.
+  - `CompareOrderByValues` resolves the effective collation URI (default or explicit) and compares string keys with `CompareStrings` instead of ordinal comparison.
+  - `fn:sort` and `array:sort` fall back to `EvaluationContext.DefaultCollation` when the collation argument is the empty sequence or omitted.
+  - `declare default collation` stores the URI resolved against the static base URI, so `fn:default-collation()` reports the absolute URI.
+  - Removed 8 stale collation-related `KnownXQueryGaps` entries (`fn-sort-collation-*`, `array-sort-collation-*`, `K-CollationProlog-1`, `defaultcolldecl-6`).
+  - QT3: **29,906/0/1,915** (93.98%); unit tests: **1,695/0**.
 
 - **2026-08-14** — XPath/XQuery: **QT3 sweep wave 3** — function items, constructors, validation, environment variables.
   - Named function items subtype-check against coarse kind-derived signatures (`instanceof132/133/134`); a `Undefined` return kind is treated as `empty-sequence()` (`xs-error-006/007`, `fn:error`).

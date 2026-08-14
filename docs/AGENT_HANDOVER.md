@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
+**Commit:** `2361504` (feat(xquery+stdlib): default collation honored by fn:sort, array:sort and order-by clauses)
+**Current focus:** **Default collation support in sorting and order-by clauses** — the previously recorded collation cluster (`fn-sort-collation-*`, `array-sort-collation-*`, `K-CollationProlog-1`, `defaultcolldecl-6`) was caused by three gaps: order-by comparisons used ordinal string comparison, `fn:sort`/`array:sort` ignored `EvaluationContext.DefaultCollation` when no collation argument was supplied, and `declare default collation` stored the unresolved URI literal. Fixing these made the 8 known-gap tests pass and kept the suite at zero failures. QT3: **29,906 passed / 0 failed / 1,915 skipped (93.98%)** (+8 passing, −8 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (collation sorting cluster)
+
+1. **Order-by clauses honor the effective collation** (`VmEngine.cs`) — `CompareOrderByValues` now resolves the order-by collation URI (or `EvaluationContext.DefaultCollation`) and compares string keys with `CompareStrings` instead of `CompareOrdinal`.
+2. **`fn:sort` and `array:sort` default to the context collation** (`FunctionLibrary.cs`) — when the collation argument is the empty sequence, null, or undefined, the functions fall back to `ctx.DefaultCollation`; an empty-sequence argument is detected with `IsEmptySequence`.
+3. **`declare default collation` stores the resolved URI** (`XQueryParser.cs`) — the URI literal is resolved against the static base URI before validation and storage, so `fn:default-collation()` reports the absolute URI.
+4. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed the 8 collation-related `KnownXQueryGaps` entries.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `src/Bosak.XQuery/Parser/XQueryParser.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining ~1,915 skips are mostly unsupported dependencies and a handful of named gaps.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-14
 **Commit:** `b1fc270` (feat(runtime+xquery+conformance): QT3 sweep wave 3 — function items, constructors, validation, environment variables)
 **Current focus:** **QT3 conformance wave 3 + XQuery constructor/validation edge cases** — the uncommitted work from 2026-08-07 added a cluster of fixes around function-item subtyping, XQuery direct constructors, strict-schema whitespace, and harness assertions. The coarse named-function subtyping change initially regressed `xs-error-006/007`; treating a signature whose return kind is `Undefined` as `empty-sequence()` restored zero failures. A gap-cleanup probe then dropped 25 stale `KnownXQueryGaps` entries that are now passing. QT3: **29,898 passed / 0 failed / 1,923 skipped (93.96%)** (+153 passing, −153 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
