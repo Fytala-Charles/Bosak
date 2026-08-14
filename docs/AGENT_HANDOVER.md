@@ -1,5 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-08-14
+**Commit:** `b1fc270` (feat(runtime+xquery+conformance): QT3 sweep wave 3 — function items, constructors, validation, environment variables)
+**Current focus:** **QT3 conformance wave 3 + XQuery constructor/validation edge cases** — the uncommitted work from 2026-08-07 added a cluster of fixes around function-item subtyping, XQuery direct constructors, strict-schema whitespace, and harness assertions. The coarse named-function subtyping change initially regressed `xs-error-006/007`; treating a signature whose return kind is `Undefined` as `empty-sequence()` restored zero failures. QT3: **29,873 passed / 0 failed / 1,948 skipped (93.88%)** (+128 passing, −128 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (QT3 sweep wave 3)
+
+1. **Named function items use coarse kind-derived subtyping** (`VmEngine.cs`) — built-ins whose signatures carry no declared sequence-type names now produce sound structural function tests (`filter#2` instance-of, `instanceof132/133/134`). A return kind of `Undefined` maps to `empty-sequence()` so `xs:error#1` and `fn:error` instance-of checks pass (`xs-error-006/007`).
+2. **Function items in comparisons raise FOTY0013** (`VmEngine.cs`) — `inline-fn-031` and similar tests now fail with the correct error code instead of an incorrect boolean result.
+3. **ApplyFunctionConversion atomizes array arguments** (`VmEngine.cs`) — an array passed to an `xs:integer*` parameter contributes its members (`FunctionCall-022`); the helper is now public.
+4. **fn:filter / fn:parse-xml / namespace-uri-for-prefix** (`FunctionLibrary.cs`) — `fn:filter` converts the predicate to `xs:boolean` by function conversion rules; `fn:parse-xml(())` returns `()`; `fn:namespace-uri-for-prefix` returns `xs:anyURI` (affects map value type tests such as `analyzeString-028`).
+5. **XQuery constructor and literal fixes** (`XPathParser.cs`) — whitespace is required between two direct element attributes (**XPST0003**, `K2-DirectConElemAttr-48/51`); empty enclosed expressions evaluate to the empty sequence; XML 1.0 line-ending normalization applies to literal characters in string literals.
+6. **Strict schema validation strips element-only whitespace** (`XDocumentProvider.cs`) — after validating a source document, whitespace-only text nodes are removed from elements whose schema type has element-only content, matching QT3 expectations (`ForExprType009`, `orderData.xml`).
+7. **Switch-case NaN equality and predicate subscript guard** (`IrLowerer.cs`) — `switch` treats `NaN = NaN` (`switch-011`); predicate literals outside the `int` range take the general predicate path instead of truncating (`filter-limits-003`).
+8. **Conformance harness improvements** (`Program.cs`, `ResultComparer.cs`) — sets `QTTEST`/`QTTEST2`/`QTTESTEMPTY` process variables for the environment-variable test sets; `assert-type` accepts `empty-sequence()` and optional cardinalities for empty results (`fn-function-name-013/014`).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-08-03
 **Commit:** `ef18226` (feat(xpath+xslt): XSD 1.1 regex hyphen rules, environment stylesheets, engine conformance sweep)
 **Current focus:** **XSD 1.1 regex hyphen rules + XSLT harness environment stylesheets** — the recorded "XSD 1.1 regex character class subtraction not implemented" gap turned out to be stale: the engine already implements the XSD 1.1 rule (`-` is a subtraction operator only when immediately followed by `[`; `[a-d-b-c]` = `{a-d,'-',b-c}`). The real blocker was that the XSLT harness never ran test cases whose principal stylesheet is supplied by the referenced `<environment>` — ~4,800 tests silently skipped across 100+ sets. Enabling them (plus environment static `<param>` and a `unicode-version` dependency check) drove a conformance-sweep of newly-surfaced engine gaps. XSLT suite: **8,340 passed / 0 failed / 6,260 skipped** (14,600 total, 100% of runnable; was 7,109/0/7,491 — +1,231 passing). QT3: **29,745 passed / 0 failed / 2,076 skipped (93.48%)** (+4). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed** (+18 new).
