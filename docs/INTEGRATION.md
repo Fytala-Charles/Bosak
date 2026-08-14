@@ -11,7 +11,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 14 August 2026
 > **Bosak baseline:** 1,695 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,873 passed / 0 failed / 1,948 skipped (93.88% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented
+> **QT3 baseline:** 29,898 passed / 0 failed / 1,923 skipped (93.96% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, fn:load-xquery-module
 
@@ -27,7 +27,8 @@
   - Strict schema validation strips whitespace-only text nodes from element-only schema content (`ForExprType009`).
   - Switch-case comparison treats **NaN = NaN** (`switch-011`); predicate subscripts use the general path when the literal exceeds `int` range (`filter-limits-003`).
   - Conformance harness sets `QTTEST`/`QTTEST2`/`QTTESTEMPTY` for the environment-variable test sets; `assert-type` accepts `empty-sequence()` and optional cardinalities for empty results.
-  - QT3: **29,873/0/1,948** (93.88%); unit tests: **1,695/0**.
+  - Gap-cleanup probe dropped 25 stale `KnownXQueryGaps` entries that are now passing after the wave 3 fixes.
+  - QT3: **29,898/0/1,923** (93.96%); unit tests: **1,695/0**.
 
 - **2026-08-07** — XQuery/XPath: **base-URI / URI-resolution conformance cluster** (QT3 residual sweep).
   - `declare base-uri` URILiterals are whitespace-normalized per the fn:normalize-space rules (XQ 3.1 §2.4.5): leading/trailing whitespace is stripped and internal whitespace runs (including `&#xa;` character references) collapse to a single space (base-URI-18/22/23).

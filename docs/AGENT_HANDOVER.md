@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-14
 **Commit:** `b1fc270` (feat(runtime+xquery+conformance): QT3 sweep wave 3 — function items, constructors, validation, environment variables)
-**Current focus:** **QT3 conformance wave 3 + XQuery constructor/validation edge cases** — the uncommitted work from 2026-08-07 added a cluster of fixes around function-item subtyping, XQuery direct constructors, strict-schema whitespace, and harness assertions. The coarse named-function subtyping change initially regressed `xs-error-006/007`; treating a signature whose return kind is `Undefined` as `empty-sequence()` restored zero failures. QT3: **29,873 passed / 0 failed / 1,948 skipped (93.88%)** (+128 passing, −128 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+**Current focus:** **QT3 conformance wave 3 + XQuery constructor/validation edge cases** — the uncommitted work from 2026-08-07 added a cluster of fixes around function-item subtyping, XQuery direct constructors, strict-schema whitespace, and harness assertions. The coarse named-function subtyping change initially regressed `xs-error-006/007`; treating a signature whose return kind is `Undefined` as `empty-sequence()` restored zero failures. A gap-cleanup probe then dropped 25 stale `KnownXQueryGaps` entries that are now passing. QT3: **29,898 passed / 0 failed / 1,923 skipped (93.96%)** (+153 passing, −153 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (QT3 sweep wave 3)
 
