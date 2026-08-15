@@ -24,6 +24,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.82  | 14-08-2026     | fn:sort/array:sort fall back to EvaluationContext.DefaultCollation when no collation argument is supplied |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.83  | 14-08-2026     | fn:deep-equal ignores comments and processing instructions when comparing element children |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -10997,7 +10999,13 @@ public static class FunctionLibrary
     {
         var list = new List<IXdmNode>();
         foreach (var item in sequence)
-            list.Add(item.NodeValue);
+        {
+            var node = item.NodeValue;
+            // fn:deep-equal ignores comments and processing instructions when comparing element children.
+            if (node.NodeKind == XdmNodeKind.Comment || node.NodeKind == XdmNodeKind.ProcessingInstruction)
+                continue;
+            list.Add(node);
+        }
         return list;
     }
 

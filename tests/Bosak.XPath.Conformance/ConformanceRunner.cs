@@ -68,6 +68,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.25  | 14-08-2026     | Drop 8 collation-related KnownXQueryGaps entries after implementing default-collation fallback |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.26  | 14-08-2026     | Drop 5 deep-equal KnownXQueryGaps entries after ignoring comments/PIs in element children |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 07-08-2026     | Fallback static base URI is the test-set file (K2-BaseURIProlog-5); drop 16 fixed entries (serialization char-refs, xml-to-json, base-uri/URI cluster) |
 //                      |==================|=======|================|=========================================================================================
@@ -120,9 +122,6 @@ internal sealed class ConformanceRunner
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
         // app/Duplicates.xml (1 test)
         ["duplicates-maps-2"] = "XQuery conformance gap (app/Duplicates): see AGENT_HANDOVER REQ-045",
-        // app/FunctxFn.xml (2 tests)
-        ["functx-fn-deep-equal-5"] = "XQuery conformance gap (app/FunctxFn): see AGENT_HANDOVER REQ-045",
-        ["functx-fn-deep-equal-all"] = "XQuery conformance gap (app/FunctxFn): see AGENT_HANDOVER REQ-045",
         // app/UseCaseR.xml (1 test)
         ["rdb-queries-results-q9"] = "XQuery conformance gap (app/UseCaseR): see AGENT_HANDOVER REQ-045",
         // app/UseCaseR31.xml (4 tests)
@@ -143,10 +142,6 @@ internal sealed class ConformanceRunner
         ["cbcl-collection-002"] = "XQuery conformance gap (fn:collection): see AGENT_HANDOVER REQ-045",
         ["cbcl-collection-003"] = "XQuery conformance gap (fn:collection): see AGENT_HANDOVER REQ-045",
         ["cbcl-collection-004"] = "XQuery conformance gap (fn:collection): see AGENT_HANDOVER REQ-045",
-        // fn/deep-equal.xml (3 tests)
-        ["K2-SeqDeepEqualFunc-21"] = "XQuery conformance gap (fn:deep-equal): see AGENT_HANDOVER REQ-045",
-        ["K2-SeqDeepEqualFunc-23"] = "XQuery conformance gap (fn:deep-equal): see AGENT_HANDOVER REQ-045",
-        ["cbcl-deep-equal-001"] = "XQuery conformance gap (fn:deep-equal): see AGENT_HANDOVER REQ-045",
         // fn/distinct-values.xml (1 test)
         ["cbcl-distinct-values-002b"] = "XQuery conformance gap (fn:distinct-values): see AGENT_HANDOVER REQ-045",
         // fn/node-name.xml (1 test)
