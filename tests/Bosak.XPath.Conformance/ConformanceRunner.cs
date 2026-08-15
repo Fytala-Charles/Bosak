@@ -78,6 +78,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.30  | 15-08-2026     | Drop 5 collection/UseCaseR31 KnownXQueryGaps entries fixed by query-based collections |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 07-08-2026     | Fallback static base URI is the test-set file (K2-BaseURIProlog-5); drop 16 fixed entries (serialization char-refs, xml-to-json, base-uri/URI cluster) |
 //                      |==================|=======|================|=========================================================================================
@@ -149,9 +151,8 @@ internal sealed class ConformanceRunner
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
         // prod/DirElemContent.xml (1 test)
         ["cbcl-ns-fixup-1"] = "XQuery conformance gap (DirElemContent): see AGENT_HANDOVER REQ-045",
-        // prod/NameTest.xml (2 tests)
+        // prod/NameTest.xml (1 test)
         ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): keywords usable as element names in expression positions (tokenizer-torture)",
-        ["NodeTest004"] = "XQuery conformance gap (NameTest): schema-aware element type assertion element(Root)",
     };
 
     public ConformanceRunner(string suitePath, string? setFilter = null, string? testFilter = null)

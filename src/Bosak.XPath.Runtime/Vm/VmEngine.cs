@@ -169,6 +169,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.93  | 14-08-2026     | Direct attribute constructors include comment/PI string values in attribute values (K2-DirectConElemAttr-42/43); raise XQDY0092 for invalid xml:space (K2-DirectConOther-65) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.94  | 15-08-2026     | ValueMatchesType preserves case for nested kind tests in document-node(element(...)) (NodeTest004) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -7928,7 +7930,9 @@ public static class VmEngine
             }
             if (childElems.Count != 1)
                 return false;
-            var inner = normalized.Substring("document-node(".Length, normalized.Length - "document-node(".Length - 1);
+            // Preserve the original case of the nested kind test (e.g. element(Root)).
+            var casePreserved = GetCasePreservedTypeName(typeName);
+            var inner = casePreserved.Substring("document-node(".Length, casePreserved.Length - "document-node(".Length - 1);
             return ValueMatchesType(XdmValue.FromNode(childElems[0].NodeValue!), inner, context);
         }
 
