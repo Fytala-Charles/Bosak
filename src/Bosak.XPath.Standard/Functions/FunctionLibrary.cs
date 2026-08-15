@@ -26,6 +26,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.83  | 14-08-2026     | fn:deep-equal ignores comments and processing instructions when comparing element children |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.84  | 14-08-2026     | map:merge default duplicates option is use-first (F+O 3.1 §14.5.1) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -7974,9 +7976,9 @@ public static class FunctionLibrary
         var maps = Materialize(args[0]);
 
         // F+O 3.1 §14.5.1: the options map may carry a 'duplicates' entry selecting
-        // the duplicate-key strategy: use-first | use-last (default) | use-any |
+        // the duplicate-key strategy: use-first (default) | use-last | use-any |
         // combine | reject. An empty-sequence options argument is a type error.
-        string duplicates = "use-last";
+        string duplicates = "use-first";
         if (args.Length > 1)
         {
             var opts = args[1];

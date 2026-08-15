@@ -72,6 +72,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.27  | 14-08-2026     | Drop 3 direct-constructor attribute KnownXQueryGaps entries (comment/PI attribute values, xml:space validation) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.28  | 14-08-2026     | Drop 5 map:merge KnownXQueryGaps entries after correcting default duplicates option to use-first |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 07-08-2026     | Fallback static base URI is the test-set file (K2-BaseURIProlog-5); drop 16 fixed entries (serialization char-refs, xml-to-json, base-uri/URI cluster) |
 //                      |==================|=======|================|=========================================================================================
@@ -131,12 +133,7 @@ internal sealed class ConformanceRunner
         ["UseCaseR31-012"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         ["UseCaseR31-026"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         ["UseCaseR31-027"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
-        // app/Walmsley.xml (6 tests)
-        ["d1e66015"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
-        ["d1e66026"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
-        ["d1e66048"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
-        ["d1e66070"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
-        ["d1e66081"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
+        // app/Walmsley.xml (1 test)
         ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         // fn/analyze-string.xml (1 test)
         ["analyzeString-028"] = "XQuery conformance gap (fn:analyze-string): see AGENT_HANDOVER REQ-045",
