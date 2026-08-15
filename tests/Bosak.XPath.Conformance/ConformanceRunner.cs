@@ -85,6 +85,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.25  | 07-08-2026     | Drop 66 fixed entries (type-strictness, EQName/static errors, format-dateTime); fn-unparsed-text-available-012 re-recorded as upstream defect |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.32  | 15-08-2026     | Drop 2 UseCaseR31 KnownXQueryGaps entries after map missing-key fix and map-to-function coercion |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -132,9 +134,6 @@ internal sealed class ConformanceRunner
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
         // app/UseCaseR.xml (1 test)
         ["rdb-queries-results-q9"] = "XQuery conformance gap (app/UseCaseR): see AGENT_HANDOVER REQ-045",
-        // app/UseCaseR31.xml (2 tests)
-        ["UseCaseR31-009"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
-        ["UseCaseR31-012"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         // app/Walmsley.xml (1 test)
         ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         // fn/analyze-string.xml (1 test)

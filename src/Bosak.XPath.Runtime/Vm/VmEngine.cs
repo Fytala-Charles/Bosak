@@ -170,6 +170,7 @@
 //                      | Charles Korthout | 2.93  | 14-08-2026     | Direct attribute constructors include comment/PI string values in attribute values (K2-DirectConElemAttr-42/43); raise XQDY0092 for invalid xml:space (K2-DirectConOther-65) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.94  | 15-08-2026     | ValueMatchesType preserves case for nested kind tests in document-node(element(...)) (NodeTest004) |
+//                      | Charles Korthout | 2.95  | 15-08-2026     | Map dynamic calls return empty sequence for missing keys; map/array coercion to function types (UseCaseR31) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3524,7 +3525,7 @@ public static class VmEngine
             var map = funcValue.MapValue;
             if (map.TryGetValue(key, out var value))
                 return value;
-            return XdmValue.Undefined;
+            return XdmValue.FromSequence(XdmSequence.Empty);
         }
 
         if (funcValue.IsArray)
@@ -8362,6 +8363,32 @@ public static class VmEngine
     }
 
     /// <summary>
+    /// Like <see cref="MapOrArrayMatchesFunctionType"/> but used for function coercion:
+    /// a map or array can be coerced to a one-argument function type even when the
+    /// target return type does not allow an empty sequence, because a missing key
+    /// will raise XPTY0004 at call time rather than at the coercion point.
+    /// </summary>
+    private static bool MapOrArrayCoercibleToFunctionType(XdmValue value, string[] testParamTypes, string testReturnType)
+    {
+        if (testParamTypes.Length != 1)
+            return false;
+        string domain = value.IsMap ? "xs:anyAtomicType" : "xs:integer";
+        if (!IsSequenceTypeSubtype(testParamTypes[0], domain))
+            return false;
+        if (value.IsMap)
+        {
+            foreach (var v in value.MapValue.Values)
+                if (!ValueMatchesType(v, testReturnType))
+                    return false;
+            return true;
+        }
+        foreach (var member in value.ArrayValue.Values)
+            if (!ValueMatchesType(member, testReturnType))
+                return false;
+        return true;
+    }
+
+    /// <summary>
     /// Applies kind-level function conversion to the arguments of a dynamically invoked
     /// named function: node atomization, untypedAtomic casting, numeric promotion, and
     /// URI promotion; anything else raises XPTY0004 (higher-order-functions-064).
@@ -8603,6 +8630,16 @@ public static class VmEngine
                 {
                     converted.Add(atomic);
                 }
+            }
+            else if (isFunctionTest && (atomic.IsMap || atomic.IsArray)
+                && !type.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
+                && TryParseFunctionType(type, out var mapCoercionParamTypes, out var mapCoercionReturnType)
+                && !(mapCoercionParamTypes.Length == 1 && mapCoercionParamTypes[0] == "*")
+                && MapOrArrayCoercibleToFunctionType(atomic, mapCoercionParamTypes, mapCoercionReturnType))
+            {
+                var capturedValue = atomic;
+                var inner = new DelegateFunctionItem(1, (ctx, args) => InvokeFunctionItem(capturedValue, ctx, args));
+                converted.Add(XdmValue.FromFunction(new CoercedFunctionItem(inner, mapCoercionParamTypes, mapCoercionReturnType)));
             }
             else if (IsUntypedAtomicValue(atomic) && TryCast(atomic, type, out var casted))
             {

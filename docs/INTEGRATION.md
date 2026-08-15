@@ -11,13 +11,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 15 August 2026
 > **Bosak baseline:** 1,695 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,929 passed / 0 failed / 1,892 skipped (94.05% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented; default collation honored by fn:sort, array:sort and order-by clauses; fn:deep-equal ignores comments and processing instructions in element children; direct attribute constructors include comment/PI string values and validate xml:space; map:merge defaults to use-first per F&O 3.1; environment collections declared via <collection><query> are evaluated by the QT3 harness; document-node(element(...)) instance-of checks preserve nested kind-test case
+> **QT3 baseline:** 29,931 passed / 0 failed / 1,890 skipped (94.06% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented; default collation honored by fn:sort, array:sort and order-by clauses; fn:deep-equal ignores comments and processing instructions in element children; direct attribute constructors include comment/PI string values and validate xml:space; map:merge defaults to use-first per F&O 3.1; environment collections declared via <collection><query> are evaluated by the QT3 harness; document-node(element(...)) instance-of checks preserve nested kind-test case; **UseCaseR31 cluster**: map dynamic calls return empty sequence for missing keys; maps and arrays can be coerced to typed function items
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, fn:load-xquery-module
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-15** — XPath/XQuery: **UseCaseR31 cluster** — map dynamic calls now return the empty sequence for missing keys instead of `Undefined`, and maps/arrays can be coerced to typed function items so they can be passed as `function(T) as R` arguments.
+  - `InvokeFunctionItem` for maps returns `XdmSequence.Empty` when a key is absent, so subsequent path steps such as `$index(.)/title` evaluate to `()` rather than raising `XPDY0002`.
+  - `ApplyFunctionConversion` wraps a map or array in a `CoercedFunctionItem` (backed by a `DelegateFunctionItem`) when the target type is a one-argument function type whose parameter and value types are compatible, applying argument and return-type conversion at each call.
+  - Removed 2 `KnownXQueryGaps` entries: `UseCaseR31-009` and `UseCaseR31-012`.
+  - QT3: **29,931/0/1,890** (94.06%); unit tests: **1,695/0**.
 
 - **2026-08-15** — XPath/XQuery: **NameTest `document-node(element(...))` fix** — `instance of document-node(element(Root))` now preserves the case of the nested element kind test when matching the document element.
   - `ValueMatchesType` extracts the nested `element(...)` kind test from the case-preserved type string instead of the lowercased normalized string, so local names such as `Root` match correctly.
