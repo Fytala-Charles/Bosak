@@ -74,6 +74,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.28  | 14-08-2026     | Drop 5 map:merge KnownXQueryGaps entries after correcting default duplicates option to use-first |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.29  | 15-08-2026     | Evaluate query-based environment collections; drop stale duplicates-maps-2 gap |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.30  | 15-08-2026     | Drop 5 collection/UseCaseR31 KnownXQueryGaps entries fixed by query-based collections |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 07-08-2026     | Fallback static base URI is the test-set file (K2-BaseURIProlog-5); drop 16 fixed entries (serialization char-refs, xml-to-json, base-uri/URI cluster) |
 //                      |==================|=======|================|=========================================================================================
@@ -124,23 +128,15 @@ internal sealed class ConformanceRunner
     {
         // app/CatalogCheck.xml (1 test)
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
-        // app/Duplicates.xml (1 test)
-        ["duplicates-maps-2"] = "XQuery conformance gap (app/Duplicates): see AGENT_HANDOVER REQ-045",
         // app/UseCaseR.xml (1 test)
         ["rdb-queries-results-q9"] = "XQuery conformance gap (app/UseCaseR): see AGENT_HANDOVER REQ-045",
-        // app/UseCaseR31.xml (4 tests)
+        // app/UseCaseR31.xml (2 tests)
         ["UseCaseR31-009"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         ["UseCaseR31-012"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
-        ["UseCaseR31-026"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
-        ["UseCaseR31-027"] = "XQuery conformance gap (app/UseCaseR31): see AGENT_HANDOVER REQ-045",
         // app/Walmsley.xml (1 test)
         ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         // fn/analyze-string.xml (1 test)
         ["analyzeString-028"] = "XQuery conformance gap (fn:analyze-string): see AGENT_HANDOVER REQ-045",
-        // fn/collection.xml (3 tests)
-        ["cbcl-collection-002"] = "XQuery conformance gap (fn:collection): see AGENT_HANDOVER REQ-045",
-        ["cbcl-collection-003"] = "XQuery conformance gap (fn:collection): see AGENT_HANDOVER REQ-045",
-        ["cbcl-collection-004"] = "XQuery conformance gap (fn:collection): see AGENT_HANDOVER REQ-045",
         // fn/distinct-values.xml (1 test)
         ["cbcl-distinct-values-002b"] = "XQuery conformance gap (fn:distinct-values): see AGENT_HANDOVER REQ-045",
         // fn/node-name.xml (1 test)

@@ -55,6 +55,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.14  | 01-08-2026     | Snapshot/restore helpers for module-local decimal formats |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.15  | 15-08-2026     | Added CollectionValues for query-based environment collections in QT3 harness        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -264,6 +265,14 @@ public sealed class EvaluationContext
     /// documents in the collection. Used by fn:collection and fn:uri-collection.
     /// </summary>
     public Dictionary<string, IReadOnlyList<string>> Collections { get; } = new();
+
+    /// <summary>
+    /// Precomputed collection values declared by environment &lt;collection&gt;&lt;query&gt; elements.
+    /// Keys are collection URIs (empty string for the default collection); values are the
+    /// already-evaluated XDM sequences. Checked before <see cref="Collections"/> by
+    /// fn:collection / fn:uri-collection.
+    /// </summary>
+    public Dictionary<string, XdmValue> CollectionValues { get; } = new();
 
     /// <summary>
     /// XQuery library-module sources available to fn:load-xquery-module, keyed by the

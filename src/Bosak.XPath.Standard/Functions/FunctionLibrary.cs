@@ -218,6 +218,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.84  | 07-08-2026     | Argument type strictness: fn:concat rejects multi-item arguments (XPTY0004, K2-ConcatFunc); fn:collation-key and fn:unparsed-text-available require string-typed arguments (XPTY0004); fn:data#0 raises XPDY0002 with no context item (K2-DataFunc-4) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.85  | 15-08-2026     | fn:collection/fn:uri-collection honor EvaluationContext.CollectionValues for query-based collections |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -6642,6 +6644,26 @@ public static class FunctionLibrary
     private static XdmValue ResolveCollection(string? uri, EvaluationContext ctx, bool returnUris)
     {
         string key = uri ?? "";
+        if (ctx.CollectionValues.TryGetValue(key, out var precomputed))
+        {
+            // Environment collections declared via <collection><query> are evaluated by the
+            // harness and stored as ready-made XDM sequences. They take precedence over the
+            // document-path Collections dictionary.
+            if (returnUris)
+            {
+                var uris = new List<XdmValue>();
+                foreach (var item in FlattenValue(precomputed))
+                {
+                    if (item.IsNode)
+                        uris.Add(XdmValue.FromString(item.NodeValue.DocumentUri, "anyURI"));
+                    else
+                        uris.Add(XdmValue.FromString("", "anyURI"));
+                }
+                return XdmValue.FromSequence(MaterializedSequence.FromList(uris));
+            }
+            return precomputed;
+        }
+
         if (ctx.Collections.TryGetValue(key, out var docs))
         {
             // A declared collection is available even when it contains no documents:
@@ -6689,6 +6711,21 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(uri))
             throw new InvalidOperationException("FODC0003: Default collection is not available");
         throw new InvalidOperationException($"FODC0002: Collection not available: {uri}");
+    }
+
+    private static IEnumerable<XdmValue> FlattenValue(XdmValue value)
+    {
+        if (value.IsUndefined)
+            yield break;
+        if (value.IsSequence)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                yield return item;
+        }
+        else
+        {
+            yield return value;
+        }
     }
 
     private static string ResolveUriAgainstBase(string uri, string? baseUri)

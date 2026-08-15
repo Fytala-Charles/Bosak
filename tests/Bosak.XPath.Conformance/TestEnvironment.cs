@@ -25,11 +25,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 29-07-2026     | Prefixed <param> names resolve namespaces in scope on the param element itself |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 15-08-2026     | Evaluate <collection><query> environment declarations into EvaluationContext.CollectionValues |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
@@ -46,6 +49,8 @@ internal sealed class TestEnvironment
     public List<DecimalFormatEntry> DecimalFormats { get; } = new();
     /// <summary>Collection URI -> list of document file paths/URIs. Empty string key = default collection.</summary>
     public Dictionary<string, List<string>> Collections { get; } = new();
+    /// <summary>Collection URI -> query expression for environment &lt;collection&gt;&lt;query&gt; declarations.</summary>
+    public Dictionary<string, string> CollectionQueries { get; } = new();
     public string? DefaultCollation { get; set; }
     public string? BaseUri { get; set; }
     /// <summary>The select expression of an inline <c>&lt;context-item select="..."/&gt;</c>, if any.</summary>
@@ -123,6 +128,7 @@ internal sealed class TestEnvironment
             string? uri = (string?)colElem.Attribute("uri");
             string key = uri ?? "";
             var docs = new List<string>();
+            var queryParts = new List<string>();
             foreach (var source in colElem.Elements(ns + "source"))
             {
                 string? file = (string?)source.Attribute("file");
@@ -140,7 +146,16 @@ internal sealed class TestEnvironment
                     docs.Add(sourceUri);
                 }
             }
-            env.Collections[key] = docs;
+            foreach (var query in colElem.Elements(ns + "query"))
+            {
+                string? queryText = (string?)query;
+                if (!string.IsNullOrWhiteSpace(queryText))
+                    queryParts.Add(queryText!);
+            }
+            if (docs.Count > 0)
+                env.Collections[key] = docs;
+            if (queryParts.Count > 0)
+                env.CollectionQueries[key] = string.Join(",", queryParts);
         }
 
         foreach (var nsElem in element.Elements(ns + "namespace"))
@@ -328,6 +343,15 @@ internal sealed class TestEnvironment
         foreach (var kvp in Collections)
         {
             ctx.Collections[kvp.Key] = kvp.Value;
+        }
+
+        // Evaluate <collection><query> declarations in the prepared environment and register
+        // the resulting XDM sequences as precomputed collection values.
+        foreach (var kvp in CollectionQueries)
+        {
+            var compiled = XPath31Expression.Compile(kvp.Value);
+            var result = compiled.Evaluate(ctx);
+            ctx.CollectionValues[kvp.Key] = result;
         }
 
         foreach (var df in DecimalFormats)
