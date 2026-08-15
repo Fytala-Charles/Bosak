@@ -28,6 +28,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.84  | 14-08-2026     | map:merge default duplicates option is use-first (F+O 3.1 §14.5.1) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.85  | 15-08-2026     | fn:*-from-dateTime/date/time declare ParameterTypeNames so nodes are atomized |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -1860,6 +1862,7 @@ public static class FunctionLibrary
                 LocalName = "year-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
+                ParameterTypeNames = ["xs:dateTime?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = YearFromDateTime
             },
@@ -1869,6 +1872,7 @@ public static class FunctionLibrary
                 LocalName = "month-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
+                ParameterTypeNames = ["xs:dateTime?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = MonthFromDateTime
             },
@@ -1888,6 +1892,7 @@ public static class FunctionLibrary
                 LocalName = "hours-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
+                ParameterTypeNames = ["xs:dateTime?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = HoursFromDateTime
             },
@@ -1897,6 +1902,7 @@ public static class FunctionLibrary
                 LocalName = "minutes-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
+                ParameterTypeNames = ["xs:dateTime?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = MinutesFromDateTime
             },
@@ -1906,6 +1912,7 @@ public static class FunctionLibrary
                 LocalName = "seconds-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
+                ParameterTypeNames = ["xs:dateTime?"],
                 ReturnType = XdmValueKind.Decimal,
                 Implementation = SecondsFromDateTime
             },
@@ -1915,6 +1922,7 @@ public static class FunctionLibrary
                 LocalName = "timezone-from-dateTime",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.DateTime],
+                ParameterTypeNames = ["xs:dateTime?"],
                 ReturnType = XdmValueKind.Duration,
                 Implementation = TimezoneFromDateTime
             },
@@ -1926,6 +1934,7 @@ public static class FunctionLibrary
                 LocalName = "year-from-date",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Date],
+                ParameterTypeNames = ["xs:date?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = YearFromDate
             },
@@ -1935,6 +1944,7 @@ public static class FunctionLibrary
                 LocalName = "month-from-date",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Date],
+                ParameterTypeNames = ["xs:date?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = MonthFromDate
             },
@@ -1944,6 +1954,7 @@ public static class FunctionLibrary
                 LocalName = "day-from-date",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Date],
+                ParameterTypeNames = ["xs:date?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = DayFromDate
             },
@@ -1953,6 +1964,7 @@ public static class FunctionLibrary
                 LocalName = "timezone-from-date",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Date],
+                ParameterTypeNames = ["xs:date?"],
                 ReturnType = XdmValueKind.Duration,
                 Implementation = TimezoneFromDate
             },
@@ -1964,6 +1976,7 @@ public static class FunctionLibrary
                 LocalName = "hours-from-time",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Time],
+                ParameterTypeNames = ["xs:time?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = HoursFromTime
             },
@@ -1973,6 +1986,7 @@ public static class FunctionLibrary
                 LocalName = "minutes-from-time",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Time],
+                ParameterTypeNames = ["xs:time?"],
                 ReturnType = XdmValueKind.Integer,
                 Implementation = MinutesFromTime
             },
@@ -1982,6 +1996,7 @@ public static class FunctionLibrary
                 LocalName = "seconds-from-time",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Time],
+                ParameterTypeNames = ["xs:time?"],
                 ReturnType = XdmValueKind.Decimal,
                 Implementation = SecondsFromTime
             },
@@ -1991,6 +2006,7 @@ public static class FunctionLibrary
                 LocalName = "timezone-from-time",
                 Arity = 1,
                 ParameterTypes = [XdmValueKind.Time],
+                ParameterTypeNames = ["xs:time?"],
                 ReturnType = XdmValueKind.Duration,
                 Implementation = TimezoneFromTime
             },

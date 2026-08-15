@@ -78,6 +78,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.30  | 15-08-2026     | Drop 5 collection/UseCaseR31 KnownXQueryGaps entries fixed by query-based collections |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.31  | 15-08-2026     | Drop rdb-queries-results-q9 (UseCaseR) after atomizing *-from-date functions |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -132,8 +134,6 @@ internal sealed class ConformanceRunner
     {
         // app/CatalogCheck.xml (1 test)
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
-        // app/UseCaseR.xml (1 test)
-        ["rdb-queries-results-q9"] = "XQuery conformance gap (app/UseCaseR): see AGENT_HANDOVER REQ-045",
         // app/Walmsley.xml (1 test)
         ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         // fn/analyze-string.xml (1 test)

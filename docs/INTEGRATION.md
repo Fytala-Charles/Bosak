@@ -11,13 +11,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 15 August 2026
 > **Bosak baseline:** 1,695 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,931 passed / 0 failed / 1,890 skipped (94.06% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented; default collation honored by fn:sort, array:sort and order-by clauses; fn:deep-equal ignores comments and processing instructions in element children; direct attribute constructors include comment/PI string values and validate xml:space; map:merge defaults to use-first per F&O 3.1; environment collections declared via <collection><query> are evaluated by the QT3 harness; document-node(element(...)) instance-of checks preserve nested kind-test case; **UseCaseR31 cluster**: map dynamic calls return empty sequence for missing keys; maps and arrays can be coerced to typed function items
+> **QT3 baseline:** 29,932 passed / 0 failed / 1,889 skipped (94.07% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented; default collation honored by fn:sort, array:sort and order-by clauses; fn:deep-equal ignores comments and processing instructions in element children; direct attribute constructors include comment/PI string values and validate xml:space; map:merge defaults to use-first per F&O 3.1; environment collections declared via <collection><query> are evaluated by the QT3 harness; document-node(element(...)) instance-of checks preserve nested kind-test case; **UseCaseR31 cluster**: map dynamic calls return empty sequence for missing keys; maps and arrays can be coerced to typed function items; **date/time extraction cluster**: fn:*-from-dateTime/date/time declare ParameterTypeNames so nodes are atomized and cast to xs:dateTime/xs:date/xs:time
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, fn:load-xquery-module
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-15** — XPath/XQuery: **date/time extraction cluster** — `fn:*-from-dateTime`, `fn:*-from-date`, and `fn:*-from-time` now declare `ParameterTypeNames` so node arguments are atomized and cast to `xs:dateTime`, `xs:date`, or `xs:time` before component extraction.
+  - `FunctionLibrary` adds `ParameterTypeNames` to `fn:year-from-dateTime`, `fn:month-from-dateTime`, `fn:day-from-dateTime`, `fn:hours-from-dateTime`, `fn:minutes-from-dateTime`, `fn:seconds-from-dateTime`, `fn:timezone-from-dateTime`, `fn:year-from-date`, `fn:month-from-date`, `fn:day-from-date`, `fn:timezone-from-date`, `fn:hours-from-time`, `fn:minutes-from-time`, `fn:seconds-from-time`, and `fn:timezone-from-time`.
+  - Removed 1 stale `KnownXQueryGaps` entry: `rdb-queries-results-q9` (app/UseCaseR).
+  - Reverted the unverified `FirstStepRequiresContext` helper in `IrLowerer`; the simpler `StepNode` check for context-item loading is restored while the nested `let`/`for` runtime issue behind `Catalog004` is investigated separately.
+  - QT3: **29,932/0/1,889** (94.07%); unit tests: **1,695/0**.
 
 - **2026-08-15** — XPath/XQuery: **UseCaseR31 cluster** — map dynamic calls now return the empty sequence for missing keys instead of `Undefined`, and maps/arrays can be coerced to typed function items so they can be passed as `function(T) as R` arguments.
   - `InvokeFunctionItem` for maps returns `XdmSequence.Empty` when a key is absent, so subsequent path steps such as `$index(.)/title` evaluate to `()` rather than raising `XPDY0002`.
