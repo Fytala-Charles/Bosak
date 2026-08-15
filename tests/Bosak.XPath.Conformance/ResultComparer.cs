@@ -44,6 +44,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.2   | 07-08-2026     | assert-type accepts empty-sequence() and optional cardinalities for empty results (fn-function-name-013/014) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.3   | 15-08-2026     | assert-eq unwraps singleton sequences so single-item QName sequences compare correctly |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -178,7 +180,9 @@ internal static class ResultComparer
         {
             var ctx = NewAssertContext();
             var expected = XPath31Expression.Compile(expectedExpr).Evaluate(ctx);
-            if (ValuesEqual(actual, expected))
+            // assert-eq compares values: a singleton sequence is equivalent to its single item
+            // (e.g. fn:node-name() returning a sequence of one QName vs the expected QName).
+            if (ValuesEqual(UnwrapSingleton(actual), UnwrapSingleton(expected)))
                 return new TestOutcome(TestOutcomeKind.Passed, null);
 
             return new TestOutcome(TestOutcomeKind.Failed,

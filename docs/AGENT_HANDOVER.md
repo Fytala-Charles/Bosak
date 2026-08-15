@@ -1,6 +1,28 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
+**Commit:** `TBD` (fix(conformance): assert-eq unwraps singleton sequences for QName comparison)
+**Current focus:** **assert-eq singleton-sequence unwrapping** — the known-gap probe showed `fn-node-name-26` still failed. The engine was returning the correct `QName` (`namespace=http://www.w3.org/XML/1998/namespace, localName=space, prefix=xml`), but the QT3 harness's `CompareAssertEq` compared the actual singleton sequence against the expected bare `QName` by string serialization first, producing `xml:space` vs `space`. Since `ValuesEqual` only applies QName-aware comparison when both operands are atomic QNames, the sequence wrapper caused a false failure. `CompareAssertEq` now unwraps singleton sequences before calling `ValuesEqual`, matching the existing `assert-true`/`assert-false` and `DeepEqual` semantics. `fn-node-name-26` now passes. The fresh known-gaps probe shows the remaining 9 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,933 passed / 0 failed / 1,888 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 9 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (assert-eq cluster)
+
+1. **assert-eq unwraps singleton sequences** (`ResultComparer.cs`) — `CompareAssertEq` calls `UnwrapSingleton` on both the actual and expected values before `ValuesEqual`, so a single-item `QName` sequence is compared as a bare `QName` using namespace URI and local name.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `fn-node-name-26` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 9 admitted gaps are `analyzeString-028`, `cbcl-distinct-values-002b`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-15
 **Commit:** `2ff6236` (fix(stdlib): date/time extraction functions declare ParameterTypeNames so nodes are atomized)
 **Current focus:** **date/time extraction cluster** — the known-gap probe showed `rdb-queries-results-q9` still failed. The test passes `end_date` elements to `fn:year-from-date`, `fn:month-from-date`, and `fn:day-from-date`. The function implementations accessed `.DateValue` directly on the argument, which fails when the argument is a node. Adding `ParameterTypeNames` (`xs:dateTime?`, `xs:date?`, `xs:time?`) to all `fn:*-from-dateTime`, `fn:*-from-date`, and `fn:*-from-time` functions makes the runtime apply function conversion rules, atomizing nodes to `xs:untypedAtomic` and casting them to the expected atomic type before the implementation extracts the component. `rdb-queries-results-q9` now passes. The fresh known-gaps probe shows the remaining 10 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-node-name-26`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,932 passed / 0 failed / 1,889 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 10 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
