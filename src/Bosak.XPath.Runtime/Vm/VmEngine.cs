@@ -167,6 +167,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.92  | 14-08-2026     | Order-by string comparisons use per-spec collation (default or explicit) instead of ordinal |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.93  | 14-08-2026     | Direct attribute constructors include comment/PI string values in attribute values (K2-DirectConElemAttr-42/43); raise XQDY0092 for invalid xml:space (K2-DirectConOther-65) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1342,9 +1344,17 @@ public static class VmEngine
                                 // references (e.g. &#x9;) must survive verbatim (XML 1.0 §3.3.3;
                                 // K2-Serialization-6), so no further normalization happens here.
                                 // Enclosed-expression values are never normalized.
-                                valueParts.Add(part.Kind == ConstructPartKind.Literal
-                                    ? (string)literalPool[part.Index]!
-                                    : JoinAtomizedItems(registers[instr.RegisterB + part.Index], " "));
+                                switch (part.Kind)
+                                {
+                                    case ConstructPartKind.Literal:
+                                    case ConstructPartKind.Comment:
+                                    case ConstructPartKind.ProcessingInstruction:
+                                        valueParts.Add((string)literalPool[part.Index]!);
+                                        break;
+                                    default:
+                                        valueParts.Add(JoinAtomizedItems(registers[instr.RegisterB + part.Index], " "));
+                                        break;
+                                }
                             }
                             var value = string.Concat(valueParts);
 
@@ -1352,6 +1362,11 @@ public static class VmEngine
                             // (the xml:id specification; K2-DirectConElem-51).
                             if (attr.LocalName == "id" && attr.Prefix == "xml")
                                 value = string.Join(' ', value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+
+                            // XQDY0092: xml:space must be "default" or "preserve" (XQ 3.1 §3.9.2).
+                            if (attr.LocalName == "space" && attr.Prefix == "xml" && value != "default" && value != "preserve")
+                                throw new InvalidOperationException("XQDY0092: The value of xml:space must be 'default' or 'preserve'.");
+
                             evaluatedAttrs.Add((attr.LocalName, attr.Prefix, value));
                         }
 

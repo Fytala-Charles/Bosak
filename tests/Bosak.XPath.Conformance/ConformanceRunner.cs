@@ -70,6 +70,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.26  | 14-08-2026     | Drop 5 deep-equal KnownXQueryGaps entries after ignoring comments/PIs in element children |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.27  | 14-08-2026     | Drop 3 direct-constructor attribute KnownXQueryGaps entries (comment/PI attribute values, xml:space validation) |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 07-08-2026     | Fallback static base URI is the test-set file (K2-BaseURIProlog-5); drop 16 fixed entries (serialization char-refs, xml-to-json, base-uri/URI cluster) |
 //                      |==================|=======|================|=========================================================================================
@@ -152,13 +154,8 @@ internal sealed class ConformanceRunner
         ["fn-unparsed-text-available-012"] = "Upstream defect: expects XPTY0004 for ()/$encoding, valid per the published xs:string? signature (qt4cg suite has the corrected variant)",
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
-        // prod/DirAttributeList.xml (2 tests)
-        ["K2-DirectConElemAttr-42"] = "XQuery conformance gap (DirAttributeList): see AGENT_HANDOVER REQ-045",
-        ["K2-DirectConElemAttr-43"] = "XQuery conformance gap (DirAttributeList): see AGENT_HANDOVER REQ-045",
         // prod/DirElemContent.xml (1 test)
         ["cbcl-ns-fixup-1"] = "XQuery conformance gap (DirElemContent): see AGENT_HANDOVER REQ-045",
-        // prod/DirectConstructor.xml (1 test)
-        ["K2-DirectConOther-65"] = "XQuery conformance gap (DirectConstructor): see AGENT_HANDOVER REQ-045",
         // prod/NameTest.xml (2 tests)
         ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): keywords usable as element names in expression positions (tokenizer-torture)",
         ["NodeTest004"] = "XQuery conformance gap (NameTest): schema-aware element type assertion element(Root)",
