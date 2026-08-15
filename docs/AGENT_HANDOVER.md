@@ -1,6 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
+**Commit:** `bbd5047` (fix(runtime): UseCaseR31 cluster — map missing keys return empty sequence; map/array coercion to typed function items)
+**Current focus:** **UseCaseR31 cluster** — the known-gap probe showed `UseCaseR31-009` and `UseCaseR31-012` still failed. `UseCaseR31-009` was caused by map dynamic calls returning `Undefined` for missing keys; a subsequent path step `/title` on `Undefined` raised `XPDY0002`. Returning the empty sequence for a missing key makes the path evaluate to `()`. `UseCaseR31-012` was caused by missing function coercion for maps: a map passed as the `function(xs:string) as xs:string` argument to `local:play` was rejected with `XPTY0004`. `ApplyFunctionConversion` now wraps a map or array in a `CoercedFunctionItem` (backed by a `DelegateFunctionItem`) when the target type is a compatible one-argument function type. Removing the two `KnownXQueryGaps` entries kept the suite at zero failures. QT3: **29,931 passed / 0 failed / 1,890 skipped (94.06%)** (+2 passing, −2 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (UseCaseR31 cluster)
+
+1. **Map dynamic calls return empty sequence for missing keys** (`VmEngine.cs`) — `InvokeFunctionItem` for maps returns `XdmValue.FromSequence(XdmSequence.Empty)` instead of `XdmValue.Undefined` when a key is not present, so path steps such as `$index(.)/title` do not raise `XPDY0002`.
+2. **Map/array coercion to typed function items** (`VmEngine.cs`) — `ApplyFunctionConversion` now recognizes maps and arrays as coercible to one-argument function types, wrapping them in a `CoercedFunctionItem` so argument and return-type conversion happen at each call.
+3. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `UseCaseR31-009` and `UseCaseR31-012` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 11 known-gap failures are `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-node-name-26`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, `rdb-queries-results-q9`, and `d1e74610`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-15
 **Commit:** `d28bafb` (fix(runtime): preserve case of nested kind tests in document-node(element(...)) instance-of checks)
 **Current focus:** **NameTest `document-node(element(...))` case preservation** — the known-gap probe showed `NodeTest004` still failed. The `instance of` type matcher lowercased the entire type string before extracting the nested `element(...)` kind test inside `document-node(...)`, so `document-node(element(Root))` was checked against `element(root)` and the document element `Root` did not match. `ValueMatchesType` now uses the case-preserved type string for the nested kind test, and `NodeTest004` passes. The remaining `K2-NameTest-5` gap is a pathological tokenizer-torture test from an obsolete W3C note that expects XPTY0004/XPDY0002 but is currently rejected with XPST0003; broadening the parser to accept keywords as NCNames in that expression would be risky, so it stays a documented gap. QT3: **29,929 passed / 0 failed / 1,892 skipped (94.05%)** (+1 passing, −1 skip). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
