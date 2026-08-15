@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
-**Commit:** `TBD` (fix(stdlib): date/time extraction functions declare ParameterTypeNames so nodes are atomized)
+**Commit:** `2ff6236` (fix(stdlib): date/time extraction functions declare ParameterTypeNames so nodes are atomized)
 **Current focus:** **date/time extraction cluster** — the known-gap probe showed `rdb-queries-results-q9` still failed. The test passes `end_date` elements to `fn:year-from-date`, `fn:month-from-date`, and `fn:day-from-date`. The function implementations accessed `.DateValue` directly on the argument, which fails when the argument is a node. Adding `ParameterTypeNames` (`xs:dateTime?`, `xs:date?`, `xs:time?`) to all `fn:*-from-dateTime`, `fn:*-from-date`, and `fn:*-from-time` functions makes the runtime apply function conversion rules, atomizing nodes to `xs:untypedAtomic` and casting them to the expected atomic type before the implementation extracts the component. `rdb-queries-results-q9` now passes. The fresh known-gaps probe shows the remaining 10 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-node-name-26`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,932 passed / 0 failed / 1,889 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 10 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 **Note:** the `FirstStepRequiresContext` helper added during the `Catalog004` investigation was reverted; it did not fix the nested `let`/`for` runtime issue and is too risky to keep unverified. `Catalog004` remains an admitted gap pending further diagnosis.
