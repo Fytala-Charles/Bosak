@@ -1,5 +1,31 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-08-15
+**Commit:** `8adf8eb` (feat(conformance): evaluate query-based environment collections in QT3 harness)
+**Current focus:** **Query-based environment collections** — the known-gap probe showed the `fn:collection` cluster (`cbcl-collection-002/003/004`) and two `UseCaseR31` tests (`UseCaseR31-026/027`) still failed. The QT3 harness only parsed `<collection><source file="...">` environment declarations; `<collection><query>...</query>` declarations were ignored, leaving the registered collections empty. Adding a `CollectionValues` precomputed-collection dictionary to `EvaluationContext`, wiring it into `fn:collection`/`fn:uri-collection`, and evaluating the query expressions in `TestEnvironment.ApplyTo` made the 5 tests pass. The stale `duplicates-maps-2` entry was also removed. QT3: **29,928 passed / 0 failed / 1,893 skipped (94.05%)** (+6 passing, −6 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (query-based collections cluster)
+
+1. **`EvaluationContext.CollectionValues`** (`EvaluationContext.cs`) — new dictionary keyed by collection URI holding ready-made XDM sequences for query-based collections.
+2. **`fn:collection` / `fn:uri-collection` check `CollectionValues` first** (`FunctionLibrary.cs`) — `ResolveCollection` returns precomputed sequences before falling back to the document-path `Collections` dictionary; `fn:uri-collection` returns document URIs for node items and empty `xs:anyURI` values for non-node items.
+3. **QT3 harness evaluates `<collection><query>`** (`TestEnvironment.cs`) — parses query children, concatenates multiple queries with `,`, and evaluates them with `XPath31Expression` in the prepared environment (after namespaces, sources, base URI, and URI mapping).
+4. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `cbcl-collection-002/003/004`, `UseCaseR31-026/027`, and the stale `duplicates-maps-2` entries.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining ~1,893 skips are mostly unsupported dependencies plus named gaps in `fn:analyze-string` (1), `UseCaseR31` (2), `NameTest` (2), `Walmsley` sort (`d1e74610`), `fn:distinct-values`, `fn:node-name`, `fn:path`, `fn:unparsed-text-available`, `cbcl-ns-fixup-1`, `Catalog004`, and `rdb-queries-results-q9`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-08-14
 **Commit:** `3244575` (feat(stdlib): map:merge default duplicates option is use-first per F+O 3.1)
 **Current focus:** **`map:merge` default duplicate handling** — the known-gap probe showed the Walmsley map:merge cluster (`d1e66015/26/48/70/81`) still failed. The F&O 3.1 specification defines the default `duplicates` option for `map:merge` as `use-first`, but the implementation was defaulting to `use-last`. Changing the default made the 5 tests pass and kept the suite at zero failures. The remaining Walmsley failure (`d1e74610`) is a sort-serialization edge case unrelated to `map:merge`. QT3: **29,922 passed / 0 failed / 1,899 skipped (94.03%)** (+5 passing, −5 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
