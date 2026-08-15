@@ -1,6 +1,28 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
+**Commit:** `3244575` (feat(stdlib): map:merge default duplicates option is use-first per F+O 3.1)
+**Current focus:** **`map:merge` default duplicate handling** — the known-gap probe showed the Walmsley map:merge cluster (`d1e66015/26/48/70/81`) still failed. The F&O 3.1 specification defines the default `duplicates` option for `map:merge` as `use-first`, but the implementation was defaulting to `use-last`. Changing the default made the 5 tests pass and kept the suite at zero failures. The remaining Walmsley failure (`d1e74610`) is a sort-serialization edge case unrelated to `map:merge`. QT3: **29,922 passed / 0 failed / 1,899 skipped (94.03%)** (+5 passing, −5 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (map:merge cluster)
+
+1. **`map:merge` defaults to `use-first`** (`FunctionLibrary.cs`) — the `duplicates` option now defaults to `use-first` per F&O 3.1 §14.5.1 instead of `use-last`.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed the 5 Walmsley map:merge-related `KnownXQueryGaps` entries (`d1e66015`, `d1e66026`, `d1e66048`, `d1e66070`, `d1e66081`).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining ~1,899 skips are mostly unsupported dependencies plus named gaps in `fn:collection` (3), `fn:analyze-string` (1), `UseCaseR31` (4), `NameTest` (2), `Walmsley` sort (`d1e74610`), and a handful of singles.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-14
 **Commit:** `66137c5` (feat(runtime): direct attribute constructors preserve comment/PI string values and validate xml:space)
 **Current focus:** **Direct constructor attribute values** — the known-gap probe showed the direct-constructor cluster (`K2-DirectConElemAttr-42/43`, `K2-DirectConOther-65`) still failed. Attribute value constructors containing a direct comment or processing instruction (`attr="{<!-- comment -->}"` or `attr="{<?target data?>}"`) produced empty attribute values because the runtime treated those parts as evaluated register values instead of literal string values. Additionally, `xml:space="   preserve"` was serialized as `xml:space="preserve"`; the fix now raises **XQDY0092** for invalid `xml:space` values, which the test accepts as an alternative to the literal value. Removing the 3 known-gap entries kept the suite at zero failures. QT3: **29,917 passed / 0 failed / 1,904 skipped (94.02%)** (+6 passing, −6 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
