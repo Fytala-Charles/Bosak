@@ -1,6 +1,28 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
+**Commit:** `d28bafb` (fix(runtime): preserve case of nested kind tests in document-node(element(...)) instance-of checks)
+**Current focus:** **NameTest `document-node(element(...))` case preservation** — the known-gap probe showed `NodeTest004` still failed. The `instance of` type matcher lowercased the entire type string before extracting the nested `element(...)` kind test inside `document-node(...)`, so `document-node(element(Root))` was checked against `element(root)` and the document element `Root` did not match. `ValueMatchesType` now uses the case-preserved type string for the nested kind test, and `NodeTest004` passes. The remaining `K2-NameTest-5` gap is a pathological tokenizer-torture test from an obsolete W3C note that expects XPTY0004/XPDY0002 but is currently rejected with XPST0003; broadening the parser to accept keywords as NCNames in that expression would be risky, so it stays a documented gap. QT3: **29,929 passed / 0 failed / 1,892 skipped (94.05%)** (+1 passing, −1 skip). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (NodeTest004 fix)
+
+1. **`document-node(element(...))` preserves nested kind-test case** (`VmEngine.cs`) — `ValueMatchesType` uses `GetCasePreservedTypeName` when extracting the inner `element(...)` type from `document-node(element(...))`, so local names keep their original case.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `NodeTest004` from `KnownXQueryGaps`; `K2-NameTest-5` remains as a documented tokenizer-torture gap.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining ~1,892 skips are mostly unsupported dependencies plus named gaps in `fn:analyze-string` (1), `UseCaseR31` (2), `NameTest` (1: `K2-NameTest-5`), `Walmsley` sort (`d1e74610`), `fn:distinct-values`, `fn:node-name`, `fn:path`, `fn:unparsed-text-available`, `cbcl-ns-fixup-1`, `Catalog004`, and `rdb-queries-results-q9`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-15
 **Commit:** `8adf8eb` (feat(conformance): evaluate query-based environment collections in QT3 harness)
 **Current focus:** **Query-based environment collections** — the known-gap probe showed the `fn:collection` cluster (`cbcl-collection-002/003/004`) and two `UseCaseR31` tests (`UseCaseR31-026/027`) still failed. The QT3 harness only parsed `<collection><source file="...">` environment declarations; `<collection><query>...</query>` declarations were ignored, leaving the registered collections empty. Adding a `CollectionValues` precomputed-collection dictionary to `EvaluationContext`, wiring it into `fn:collection`/`fn:uri-collection`, and evaluating the query expressions in `TestEnvironment.ApplyTo` made the 5 tests pass. The stale `duplicates-maps-2` entry was also removed. QT3: **29,928 passed / 0 failed / 1,893 skipped (94.05%)** (+6 passing, −6 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
