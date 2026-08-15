@@ -11,13 +11,19 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 14 August 2026
 > **Bosak baseline:** 1,695 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** 29,911 passed / 0 failed / 1,910 skipped (94.00% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented; default collation honored by fn:sort, array:sort and order-by clauses; fn:deep-equal ignores comments and processing instructions in element children
+> **QT3 baseline:** 29,917 passed / 0 failed / 1,904 skipped (94.02% / 100% of runnable tests) — XQuery routing enabled; fn:load-xquery-module, decimal-format and boundary-space declarations implemented; default collation honored by fn:sort, array:sort and order-by clauses; fn:deep-equal ignores comments and processing instructions in element children; direct attribute constructors include comment/PI string values and validate xml:space
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, fn:load-xquery-module
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-14** — XPath/XQuery: **direct constructor attribute cluster** — direct attribute constructors now correctly include comment/PI string values and raise **XQDY0092** for invalid `xml:space` values.
+  - The `ConstructElement` attribute-value loop treats `Comment` and `ProcessingInstruction` parts as literal string values (their node content), concatenating them with literal text and atomized expression values.
+  - A constructed `xml:space` attribute whose value is not exactly `default` or `preserve` now raises **XQDY0092**.
+  - Removed 3 stale `KnownXQueryGaps` entries (`K2-DirectConElemAttr-42/43`, `K2-DirectConOther-65`).
+  - QT3: **29,917/0/1,904** (94.02%); unit tests: **1,695/0**.
 
 - **2026-08-14** — XPath/XQuery: **fn:deep-equal comment/PI cluster** — `fn:deep-equal` now ignores comments and processing instructions when comparing the children of element nodes, per F&O 3.1.
   - `ToNodeList` filters out `Comment` and `ProcessingInstruction` nodes from element child lists before the node-for-node comparison.

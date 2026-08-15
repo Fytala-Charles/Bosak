@@ -1,6 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
+**Commit:** `66137c5` (feat(runtime): direct attribute constructors preserve comment/PI string values and validate xml:space)
+**Current focus:** **Direct constructor attribute values** — the known-gap probe showed the direct-constructor cluster (`K2-DirectConElemAttr-42/43`, `K2-DirectConOther-65`) still failed. Attribute value constructors containing a direct comment or processing instruction (`attr="{<!-- comment -->}"` or `attr="{<?target data?>}"`) produced empty attribute values because the runtime treated those parts as evaluated register values instead of literal string values. Additionally, `xml:space="   preserve"` was serialized as `xml:space="preserve"`; the fix now raises **XQDY0092** for invalid `xml:space` values, which the test accepts as an alternative to the literal value. Removing the 3 known-gap entries kept the suite at zero failures. QT3: **29,917 passed / 0 failed / 1,904 skipped (94.02%)** (+6 passing, −6 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (direct constructor attribute cluster)
+
+1. **Comment and PI string values are included in attribute values** (`VmEngine.cs`) — the `ConstructElement` attribute-value loop now treats `ConstructPartKind.Comment` and `ConstructPartKind.ProcessingInstruction` parts as literal string values from the literal pool, concatenating them with literal text and atomized expression values.
+2. **`xml:space` values are validated** (`VmEngine.cs`) — a constructed `xml:space` attribute whose value is not exactly `default` or `preserve` now raises **XQDY0092** (matching the test's `any-of` error alternative).
+3. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed the 3 direct-constructor-related `KnownXQueryGaps` entries (`K2-DirectConElemAttr-42/43`, `K2-DirectConOther-65`).
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining ~1,904 skips are mostly unsupported dependencies plus named gaps in `fn:collection`, `fn:analyze-string`, `UseCaseR31`, `Walmsley`, `NameTest`, and a handful of singles.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-14
 **Commit:** `bff28af` (feat(stdlib): fn:deep-equal ignores comments and PIs in element children)
 **Current focus:** **fn:deep-equal node comparison** — the known-gap probe showed the deep-equal cluster (`K2-SeqDeepEqualFunc-21/23`, `cbcl-deep-equal-001`, `functx-fn-deep-equal-5`, `functx-fn-deep-equal-all`) still failed because element children were compared node-for-node without filtering out comments and processing instructions. The spec requires these to be ignored during element-content comparison. Adding the filter made the 5 tests pass and kept the suite at zero failures. QT3: **29,911 passed / 0 failed / 1,910 skipped (94.00%)** (+5 passing, −5 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
