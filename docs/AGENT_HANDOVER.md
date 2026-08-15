@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
-**Commit:** `TBD` (fix(conformance): assert-eq unwraps singleton sequences for QName comparison)
+**Commit:** `376124d` (fix(conformance): assert-eq unwraps singleton sequences for QName comparison)
 **Current focus:** **assert-eq singleton-sequence unwrapping** — the known-gap probe showed `fn-node-name-26` still failed. The engine was returning the correct `QName` (`namespace=http://www.w3.org/XML/1998/namespace, localName=space, prefix=xml`), but the QT3 harness's `CompareAssertEq` compared the actual singleton sequence against the expected bare `QName` by string serialization first, producing `xml:space` vs `space`. Since `ValuesEqual` only applies QName-aware comparison when both operands are atomic QNames, the sequence wrapper caused a false failure. `CompareAssertEq` now unwraps singleton sequences before calling `ValuesEqual`, matching the existing `assert-true`/`assert-false` and `DeepEqual` semantics. `fn-node-name-26` now passes. The fresh known-gaps probe shows the remaining 9 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,933 passed / 0 failed / 1,888 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 9 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (assert-eq cluster)
