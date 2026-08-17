@@ -39,6 +39,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.4   | 25-07-2026     | Exposed XML 1.1 prefixed namespace undeclarations                                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.5   | 15-08-2026     | GetXPathParent falls back to XDocument for document-level PIs/comments (path009)       |
+//                      | Charles Korthout | 2.6   | 17-08-2026     | Restrict fallback to PI/comment nodes to avoid XDocument self-loop (fn-doc hang)       |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 28-07-2026     | Namespace axis skips non-propagating ancestor bindings; redundant xmlns omitted in ToXmlString |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 29-07-2026     | Parentless-namespace-node marker: parent axis and Parent honor it |
@@ -784,6 +787,11 @@ public sealed class XDocumentNode : IXdmNode
         }
         if (node is XElement elem && elem.Document is not null && elem.Document.Root == elem)
             return elem.Document;
+        // LINQ-to-XML reports Parent as null for document-level PIs and comments
+        // (only the root element gets a parent via the special case above). Fall back
+        // to the owning document when the node is still part of a document tree.
+        if (node is XProcessingInstruction or XComment && node.Parent is null && node.Document is not null)
+            return node.Document;
         return null;
     }
 

@@ -1,5 +1,30 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-08-17
+**Commit:** `90116c9` (fix(providers): fn:path returns correct step for document-level PIs/comments; avoid XDocument self-loop)
+**Current focus:** **fn:path document-level PI/comment cluster** — the known-gap probe showed `path009` still failed. `fn:path` on a document-level processing instruction returned `Q{http://www.w3.org/2005/xpath-functions}root()` because `XDocumentNode.GetXPathParent` returned `null` for top-level PIs/comments (LINQ-to-XML sets `Parent` to `null` for document-level nodes). Adding a fallback to the owning `XDocument` makes `fn:path` emit `/processing-instruction(xml-stylesheet)[1]`. The first fallback accidentally applied to `XDocument` itself (`XDocument.Document` returns itself), creating a self-referential loop that hung `fn-doc` and unit tests; restricting the fallback to `XProcessingInstruction` and `XComment` fixes the loop. `path009` now passes. The fresh known-gaps probe shows the remaining 8 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,934 passed / 0 failed / 1,887 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 8 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (fn:path cluster)
+
+1. **GetXPathParent falls back to XDocument for document-level PIs/comments** (`XDocumentNode.cs`) — when `XObject.Parent` is `null` but the node is part of a document, return `node.Document` so `fn:path` constructs the correct step. The fallback is restricted to `XProcessingInstruction` and `XComment` to prevent `XDocument.Document` from returning the document node itself and causing an infinite ancestor loop.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `path009` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 8 admitted gaps are `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-08-15
 **Commit:** `376124d` (fix(conformance): assert-eq unwraps singleton sequences for QName comparison)
 **Current focus:** **assert-eq singleton-sequence unwrapping** — the known-gap probe showed `fn-node-name-26` still failed. The engine was returning the correct `QName` (`namespace=http://www.w3.org/XML/1998/namespace, localName=space, prefix=xml`), but the QT3 harness's `CompareAssertEq` compared the actual singleton sequence against the expected bare `QName` by string serialization first, producing `xml:space` vs `space`. Since `ValuesEqual` only applies QName-aware comparison when both operands are atomic QNames, the sequence wrapper caused a false failure. `CompareAssertEq` now unwraps singleton sequences before calling `ValuesEqual`, matching the existing `assert-true`/`assert-false` and `DeepEqual` semantics. `fn-node-name-26` now passes. The fresh known-gaps probe shows the remaining 9 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,933 passed / 0 failed / 1,888 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 9 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
