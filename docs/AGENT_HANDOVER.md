@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
+**Commit:** `1c685b0` (fix(stdlib): fn:analyze-string result element declares fn namespace explicitly (analyzeString-028))
+**Current focus:** **fn:analyze-string in-scope-prefixes cluster** — `analyzeString-028` expected the `fn:analyze-string-result` element to have two in-scope prefixes (`fn` and `xml`). The element was constructed with an `XNamespace`-qualified name, but LINQ to XML does not materialize an `xmlns:fn` attribute until serialization, so `fn:in-scope-prefixes` only saw the implicit `xml` prefix. `AnalyzeString` now adds an explicit `xmlns:fn` namespace declaration to the result element. `analyzeString-028` passes. Targeted verification of the remaining 5 admitted gaps (`cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,937 passed / 0 failed / 1,884 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports 5 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (analyze-string cluster)
+
+1. **`fn:analyze-string` result element declares `fn` namespace explicitly** (`FunctionLibrary.cs`) — `AnalyzeString` adds an `xmlns:fn="http://www.w3.org/2005/xpath-functions"` attribute to the root `fn:analyze-string-result` element so in-scope namespace reporting includes the `fn` prefix.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `analyzeString-028` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 5 admitted gaps are `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, and `Catalog004`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-17
 **Commit:** `2a2dafe` (fix(conformance): assert-xml strips trailing whitespace after last element in multi-root fragments)
 **Current focus:** **assert-xml trailing-whitespace cluster** — the known-gap probe showed `d1e74610` still failed. The actual sorted result matched the expected XML tree, but the expected `assert-xml` CDATA ended with a newline before `]]>`; `ResultComparer.NormalizeXml` wrapped the multi-root fragment in a temporary `<__x__>` element and preserved that trailing newline as a text node, while the actual result had no trailing whitespace. `NormalizeXml` now strips trailing whitespace from the wrapped fragment when the last non-whitespace character is an element's closing `>`, so formatting whitespace after the result tree is ignored. `d1e74610` now passes. The fresh known-gaps probe was interrupted at `fn-codepoints-to-string`, but targeted verification of `d1e74610`, `app-Walmsley`, `fn-json-to-xml`, and `prod-DirElemContent` shows no regressions. Expected QT3: **29,936 passed / 0 failed / 1,885 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe should report the 6 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
