@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
+**Commit:** `c1b31a0` (fix(providers): namespace fixup for clashing attribute prefixes (cbcl-ns-fixup-1))
+**Current focus:** **namespace fixup cluster** — `cbcl-ns-fixup-1` constructs `<root>{ $x/@*, $y/@* }</root>` where `$x/@*` and `$y/@*` both use the prefix `ns` but are bound to different URIs. `ConstructElement` previously added only one `xmlns:ns` declaration, so `fn:in-scope-prefixes` reported 2 prefixes instead of 3. The helper now tracks `prefix -> URI` mappings and, when two attributes share a prefix with different URIs, generates a new prefix for the second URI and annotates the attribute so its reported prefix matches the declaration. Targeted verification of the remaining 4 admitted gaps (`cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,938 passed / 0 failed / 1,883 skipped (94.08%)** (+1 passing, −1 skip); the known-gaps probe reports 4 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (namespace fixup cluster)
+
+1. **Handle clashing attribute prefixes in XQuery element constructors** (`XDocumentProvider.cs`) — `ConstructElement` tracks declared `prefix -> URI` bindings. When an attribute's prefix is already bound to a different URI, a generated prefix is allocated for the attribute's URI and recorded via `AttributePrefixAnnotation` so `name()`/`node-name()` remain consistent.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `cbcl-ns-fixup-1` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 4 admitted gaps are `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `K2-NameTest-5`, and `Catalog004`. The most actionable is `Catalog004` (nested `let`/`for` context-item issue), though it may require runtime tuple/context plumbing.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-17
 **Commit:** `1c685b0` (fix(stdlib): fn:analyze-string result element declares fn namespace explicitly (analyzeString-028))
 **Current focus:** **fn:analyze-string in-scope-prefixes cluster** — `analyzeString-028` expected the `fn:analyze-string-result` element to have two in-scope prefixes (`fn` and `xml`). The element was constructed with an `XNamespace`-qualified name, but LINQ to XML does not materialize an `xmlns:fn` attribute until serialization, so `fn:in-scope-prefixes` only saw the implicit `xml` prefix. `AnalyzeString` now adds an explicit `xmlns:fn` namespace declaration to the result element. `analyzeString-028` passes. Targeted verification of the remaining 5 admitted gaps (`cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,937 passed / 0 failed / 1,884 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports 5 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
