@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
-**Commit:** `TBD` (fix(conformance): assert-xml strips trailing whitespace after last element in multi-root fragments)
+**Commit:** `2a2dafe` (fix(conformance): assert-xml strips trailing whitespace after last element in multi-root fragments)
 **Current focus:** **assert-xml trailing-whitespace cluster** — the known-gap probe showed `d1e74610` still failed. The actual sorted result matched the expected XML tree, but the expected `assert-xml` CDATA ended with a newline before `]]>`; `ResultComparer.NormalizeXml` wrapped the multi-root fragment in a temporary `<__x__>` element and preserved that trailing newline as a text node, while the actual result had no trailing whitespace. `NormalizeXml` now strips trailing whitespace from the wrapped fragment when the last non-whitespace character is an element's closing `>`, so formatting whitespace after the result tree is ignored. `d1e74610` now passes. The fresh known-gaps probe was interrupted at `fn-codepoints-to-string`, but targeted verification of `d1e74610`, `app-Walmsley`, `fn-json-to-xml`, and `prod-DirElemContent` shows no regressions. Expected QT3: **29,936 passed / 0 failed / 1,885 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe should report the 6 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (assert-xml cluster)
