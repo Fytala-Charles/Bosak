@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
+**Commit:** `TBD` (fix(conformance): assert-xml strips trailing whitespace after last element in multi-root fragments)
+**Current focus:** **assert-xml trailing-whitespace cluster** — the known-gap probe showed `d1e74610` still failed. The actual sorted result matched the expected XML tree, but the expected `assert-xml` CDATA ended with a newline before `]]>`; `ResultComparer.NormalizeXml` wrapped the multi-root fragment in a temporary `<__x__>` element and preserved that trailing newline as a text node, while the actual result had no trailing whitespace. `NormalizeXml` now strips trailing whitespace from the wrapped fragment when the last non-whitespace character is an element's closing `>`, so formatting whitespace after the result tree is ignored. `d1e74610` now passes. The fresh known-gaps probe was interrupted at `fn-codepoints-to-string`, but targeted verification of `d1e74610`, `app-Walmsley`, `fn-json-to-xml`, and `prod-DirElemContent` shows no regressions. Expected QT3: **29,936 passed / 0 failed / 1,885 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe should report the 6 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (assert-xml cluster)
+
+1. **Strip trailing whitespace in multi-root `assert-xml` fragments** (`ResultComparer.cs`) — after canonicalizing a wrapped multi-root fragment, trailing whitespace that follows the final element `>` is removed. Real text content after the final element is preserved because trimming only happens when the last non-space character is `>`.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `d1e74610` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `tests/Bosak.XPath.Conformance/ResultComparer.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 6 admitted gaps are `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, and `Catalog004`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-17
 **Commit:** `e3f46da` (fix(stdlib): unparsed-text-available#2 raises XPTY0004 on empty $encoding)
 **Current focus:** **unparsed-text-available $encoding cardinality cluster** — the known-gap probe showed `fn-unparsed-text-available-012` still failed. The test expects **XPTY0004** when the 2-argument form receives an empty sequence as `$encoding`. `UnparsedTextAvailable_2` was using `RequireString`, which silently converts an empty sequence to `string.Empty`; switching to `RequireStringRequired` for the `$encoding` argument makes the empty sequence raise **XPTY0004** while keeping `unparsed-text-available((), "utf-8")` returning `false`. `fn-unparsed-text-available-012` now passes. The fresh known-gaps probe shows the remaining 7 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,935 passed / 0 failed / 1,886 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 7 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 

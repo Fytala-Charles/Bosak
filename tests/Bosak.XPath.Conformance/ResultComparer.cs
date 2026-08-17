@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 2.2   | 07-08-2026     | assert-type accepts empty-sequence() and optional cardinalities for empty results (fn-function-name-013/014) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.3   | 15-08-2026     | assert-eq unwraps singleton sequences so single-item QName sequences compare correctly |
+//                      | Charles Korthout | 2.4   | 17-08-2026     | NormalizeXml strips trailing whitespace after the last element in multi-root fragments (d1e74610) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1007,7 +1008,22 @@ internal static class ResultComparer
                 int start = canonical.IndexOf(startTag, StringComparison.Ordinal);
                 int end = canonical.LastIndexOf(endTag, StringComparison.Ordinal);
                 if (start >= 0 && end > start)
-                    return canonical.Substring(start + startTag.Length, end - start - startTag.Length);
+                {
+                    string extracted = canonical.Substring(start + startTag.Length, end - start - startTag.Length);
+                    // Strip trailing whitespace that is only formatting after the last element
+                    // (e.g. a newline before ]]> in the expected CDATA). Real text content after
+                    // the final element is preserved because we only trim when the last non-space
+                    // character is the closing '>' of an element.
+                    if (!string.IsNullOrWhiteSpace(extracted))
+                    {
+                        int lastNonSpace = extracted.Length - 1;
+                        while (lastNonSpace >= 0 && char.IsWhiteSpace(extracted[lastNonSpace]))
+                            lastNonSpace--;
+                        if (lastNonSpace >= 0 && extracted[lastNonSpace] == '>')
+                            extracted = extracted.Substring(0, lastNonSpace + 1);
+                    }
+                    return extracted;
+                }
                 return canonical;
             }
             catch

@@ -84,6 +84,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.33  | 15-08-2026     | Drop path009 after GetXPathParent handles document-level PIs/comments |
 //                      | Charles Korthout | 1.34  | 17-08-2026     | Drop fn-unparsed-text-available-012 after encoding cardinality check |
+//                      | Charles Korthout | 1.35  | 17-08-2026     | Drop d1e74610 after stripping trailing whitespace in assert-xml multi-root fragments |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
@@ -139,8 +140,6 @@ internal sealed class ConformanceRunner
     {
         // app/CatalogCheck.xml (1 test)
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
-        // app/Walmsley.xml (1 test)
-        ["d1e74610"] = "XQuery conformance gap (app/Walmsley): see AGENT_HANDOVER REQ-045",
         // fn/analyze-string.xml (1 test)
         ["analyzeString-028"] = "XQuery conformance gap (fn:analyze-string): see AGENT_HANDOVER REQ-045",
         // fn/distinct-values.xml (1 test)
