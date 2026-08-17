@@ -88,6 +88,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.36  | 17-08-2026     | Drop analyzeString-028 after adding explicit fn namespace declaration |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.37  | 17-08-2026     | Drop cbcl-ns-fixup-1 after namespace fixup for clashing attribute prefixes |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -147,8 +149,7 @@ internal sealed class ConformanceRunner
         ["cbcl-distinct-values-002b"] = "XQuery conformance gap (fn:distinct-values): see AGENT_HANDOVER REQ-045",
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
-        // prod/DirElemContent.xml (1 test)
-        ["cbcl-ns-fixup-1"] = "XQuery conformance gap (DirElemContent): see AGENT_HANDOVER REQ-045",
+        // prod/DirElemContent.xml (0 tests)
         // prod/NameTest.xml (1 test)
         ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): keywords usable as element names in expression positions (tokenizer-torture)",
     };

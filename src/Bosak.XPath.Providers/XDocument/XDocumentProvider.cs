@@ -33,6 +33,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 07-08-2026     | Strict validation strips whitespace-only text nodes in element-only schema content (ForExprType009) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13  | 17-08-2026     | ConstructElement handles clashing attribute prefixes via generated prefixes and attribute annotations (cbcl-ns-fixup-1) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -96,7 +98,8 @@ public static class XDocumentProvider
 
         // Declare prefixes so serialization uses the source prefixes rather than generated ones.
         // Explicit xmlns declarations in the constructor always win over generated ones.
-        var declared = new HashSet<string>(StringComparer.Ordinal);
+        var declared = new HashSet<string>(StringComparer.Ordinal);          // reserved prefixes
+        var declaredUris = new Dictionary<string, string>(StringComparer.Ordinal); // prefix -> URI bindings on the element
         foreach (var attr in spec.Attributes)
         {
             if (attr.Prefix == "xmlns")
@@ -125,30 +128,86 @@ public static class XDocumentProvider
             for (int i = 1; ; i++)
             {
                 var candidate = $"ns{i}";
-                if (!declared.Contains(candidate))
+                if (!declared.Contains(candidate) && !declaredUris.ContainsKey(candidate))
                     return candidate;
             }
         }
 
-        void Declare(string? prefix, string? nsUri, bool impliedByAttributeName = false)
+        // Adds a namespace declaration for the supplied prefix/URI if one is needed and
+        // returns the actual prefix used. If the requested prefix is already bound to a
+        // different URI, a generated prefix is allocated for this URI instead.
+        string? Declare(string? prefix, string? nsUri, bool impliedByAttributeName = false)
         {
             if (string.IsNullOrEmpty(nsUri))
-                return;
+                return null;
+
             if (prefix is null)
             {
-                if (declared.Add(""))
+                if (declared.Contains(""))
+                {
+                    // Default namespace will be supplied by the explicit xmlns attribute;
+                    // keep the tag unprefixed.
+                    return "";
+                }
+                if (declaredUris.TryGetValue("", out var existingDefaultUri))
+                {
+                    return existingDefaultUri == nsUri ? "" : null;
+                }
+                if (declaredUris.TryAdd("", nsUri))
+                {
                     element.Add(new XAttribute("xmlns", nsUri));
+                    declared.Add("");
+                    return "";
+                }
             }
-            else if (prefix is not ("xml" or "xmlns") && declared.Add(prefix))
+
+            if (prefix is ("xml" or "xmlns"))
+                return null;
+
+            // An explicit xmlns:prefix attribute in the constructor reserves that prefix.
+            // The URI is assumed to match; if it does not, the query is in error and the
+            // explicit declaration wins.
+            string p = prefix!;
+
+            // An explicit xmlns:prefix attribute in the constructor reserves that prefix.
+            // The URI is assumed to match; if it does not, the query is in error and the
+            // explicit declaration wins.
+            if (declared.Contains(p) && !declaredUris.ContainsKey(p))
+                return p;
+
+            if (declaredUris.TryAdd(p, nsUri))
             {
-                var declAttr = new XAttribute(XNamespace.Xmlns + prefix, nsUri);
+                var declAttr = new XAttribute(XNamespace.Xmlns + p, nsUri);
                 // Bindings implied by an attribute's name are part of this element's
                 // in-scope namespaces but do not propagate to nested constructors.
                 if (impliedByAttributeName)
                     declAttr.AddAnnotation(new NonPropagatingNamespaceBinding());
                 element.Add(declAttr);
+                declared.Add(p);
+                return p;
             }
+
+            if (declaredUris[p] == nsUri)
+                return p;
+
+            // Prefix is bound to a different URI; reuse an existing prefix for this URI
+            // or generate a new one.
+            foreach (var (existingPrefix, existingUri) in declaredUris)
+            {
+                if (existingUri == nsUri)
+                    return existingPrefix;
+            }
+
+            string newPrefix = GeneratePrefix();
+            var newDeclAttr = new XAttribute(XNamespace.Xmlns + newPrefix, nsUri);
+            if (impliedByAttributeName)
+                newDeclAttr.AddAnnotation(new NonPropagatingNamespaceBinding());
+            element.Add(newDeclAttr);
+            declaredUris[newPrefix] = nsUri;
+            declared.Add(newPrefix);
+            return newPrefix;
         }
+
         // Tag: a conflicting name-implied prefix is replaced by a generated one.
         if (spec.Prefix is not null && contentNsDecls.TryGetValue(spec.Prefix, out var tagDeclUri)
             && tagDeclUri != (spec.NamespaceUri ?? string.Empty))
@@ -175,13 +234,17 @@ public static class XDocumentProvider
             {
                 // Attribute name: a prefix redeclared by a content namespace declaration
                 // with a different URI is replaced by a generated prefix (nscons-010).
+                string? actualPrefix;
                 if (attr.Prefix is not null && contentNsDecls.TryGetValue(attr.Prefix, out var attrDeclUri)
                     && attrDeclUri != (attr.NamespaceUri ?? string.Empty))
-                    Declare(GeneratePrefix(), attr.NamespaceUri, impliedByAttributeName: true);
+                    actualPrefix = Declare(GeneratePrefix(), attr.NamespaceUri, impliedByAttributeName: true);
                 else
-                    Declare(attr.Prefix, attr.NamespaceUri, impliedByAttributeName: true);
+                    actualPrefix = Declare(attr.Prefix, attr.NamespaceUri, impliedByAttributeName: true);
                 XNamespace ans = attr.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attr.NamespaceUri);
-                element.Add(new XAttribute(ans + attr.LocalName, attr.Value));
+                var newAttr = new XAttribute(ans + attr.LocalName, attr.Value);
+                if (!string.IsNullOrEmpty(actualPrefix))
+                    newAttr.AddAnnotation(new AttributePrefixAnnotation(actualPrefix));
+                element.Add(newAttr);
             }
         }
 
@@ -221,12 +284,16 @@ public static class XDocumentProvider
                     // different-URI redeclarations were already rejected by the runtime (XQDY0102).
                     if (nsDeclPrefix.Length == 0)
                     {
-                        if (declared.Add(""))
+                        if (!declared.Contains("") && declaredUris.TryAdd("", nsDeclUri))
+                        {
                             element.Add(new XAttribute("xmlns", nsDeclUri));
+                            declared.Add("");
+                        }
                     }
-                    else if (declared.Add(nsDeclPrefix))
+                    else if (!declared.Contains(nsDeclPrefix) && declaredUris.TryAdd(nsDeclPrefix, nsDeclUri))
                     {
                         element.Add(new XAttribute(XNamespace.Xmlns + nsDeclPrefix, nsDeclUri));
+                        declared.Add(nsDeclPrefix);
                     }
                     break;
                 default:
