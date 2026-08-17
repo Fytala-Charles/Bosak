@@ -164,9 +164,6 @@ public static class XDocumentProvider
             if (prefix is ("xml" or "xmlns"))
                 return null;
 
-            // An explicit xmlns:prefix attribute in the constructor reserves that prefix.
-            // The URI is assumed to match; if it does not, the query is in error and the
-            // explicit declaration wins.
             string p = prefix!;
 
             // An explicit xmlns:prefix attribute in the constructor reserves that prefix.
