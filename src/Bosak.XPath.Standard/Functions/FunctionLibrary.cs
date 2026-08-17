@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.85  | 15-08-2026     | fn:*-from-dateTime/date/time declare ParameterTypeNames so nodes are atomized |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.86  | 17-08-2026     | unparsed-text-available#2 raises XPTY0004 on empty $encoding (fn-unparsed-text-available-012) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -6968,9 +6970,11 @@ public static class FunctionLibrary
     {
         if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.False;
-        // $href and $encoding are xs:string?: non-string atomic values are type errors
-        // (fn-unparsed-text-available-008/010).
-        return UnparsedTextAvailable(RequireString(PromoteUriToString(args[0])), RequireString(PromoteUriToString(args[1])), ctx);
+        // $href is xs:string?: non-string atomic values are type errors
+        // (fn-unparsed-text-available-008/010). $encoding, when supplied, must be a
+        // single string; the empty sequence raises XPTY0004
+        // (fn-unparsed-text-available-012).
+        return UnparsedTextAvailable(RequireString(PromoteUriToString(args[0])), RequireStringRequired(args[1]), ctx);
     }
 
     private static XdmValue UnparsedTextAvailable(string href, string? encoding, EvaluationContext ctx)
