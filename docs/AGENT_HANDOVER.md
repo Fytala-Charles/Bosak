@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
-**Commit:** `90116c9` (fix(providers): fn:path returns correct step for document-level PIs/comments; avoid XDocument self-loop)
+**Commit:** `6b2c2df` (fix(providers): fn:path returns correct step for document-level PIs/comments; avoid XDocument self-loop)
 **Current focus:** **fn:path document-level PI/comment cluster** — the known-gap probe showed `path009` still failed. `fn:path` on a document-level processing instruction returned `Q{http://www.w3.org/2005/xpath-functions}root()` because `XDocumentNode.GetXPathParent` returned `null` for top-level PIs/comments (LINQ-to-XML sets `Parent` to `null` for document-level nodes). Adding a fallback to the owning `XDocument` makes `fn:path` emit `/processing-instruction(xml-stylesheet)[1]`. The first fallback accidentally applied to `XDocument` itself (`XDocument.Document` returns itself), creating a self-referential loop that hung `fn-doc` and unit tests; restricting the fallback to `XProcessingInstruction` and `XComment` fixes the loop. `path009` now passes. The fresh known-gaps probe shows the remaining 8 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,934 passed / 0 failed / 1,887 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 8 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (fn:path cluster)
