@@ -32,6 +32,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.86  | 17-08-2026     | unparsed-text-available#2 raises XPTY0004 on empty $encoding (fn-unparsed-text-available-012) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.87  | 17-08-2026     | fn:analyze-string result element declares fn namespace explicitly (analyzeString-028) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -223,6 +225,8 @@
 //                      | Charles Korthout | 5.84  | 07-08-2026     | Argument type strictness: fn:concat rejects multi-item arguments (XPTY0004, K2-ConcatFunc); fn:collation-key and fn:unparsed-text-available require string-typed arguments (XPTY0004); fn:data#0 raises XPDY0002 with no context item (K2-DataFunc-4) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.85  | 15-08-2026     | fn:collection/fn:uri-collection honor EvaluationContext.CollectionValues for query-based collections |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.87  | 17-08-2026     | fn:analyze-string result element declares fn namespace explicitly (analyzeString-028) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4927,7 +4931,8 @@ public static class FunctionLibrary
     private static XdmValue AnalyzeString(string value, string pattern, string flags)
     {
         XNamespace fn = "http://www.w3.org/2005/xpath-functions";
-        var result = new XElement(fn + "analyze-string-result");
+        var result = new XElement(fn + "analyze-string-result",
+            new XAttribute(XNamespace.Xmlns + "fn", fn.NamespaceName));
 
         if (string.IsNullOrEmpty(value))
             return XdmValue.FromNode(new XDocumentNode(result));

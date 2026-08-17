@@ -86,6 +86,8 @@
 //                      | Charles Korthout | 1.34  | 17-08-2026     | Drop fn-unparsed-text-available-012 after encoding cardinality check |
 //                      | Charles Korthout | 1.35  | 17-08-2026     | Drop d1e74610 after stripping trailing whitespace in assert-xml multi-root fragments |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.36  | 17-08-2026     | Drop analyzeString-028 after adding explicit fn namespace declaration |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -140,8 +142,7 @@ internal sealed class ConformanceRunner
     {
         // app/CatalogCheck.xml (1 test)
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
-        // fn/analyze-string.xml (1 test)
-        ["analyzeString-028"] = "XQuery conformance gap (fn:analyze-string): see AGENT_HANDOVER REQ-045",
+        // fn/analyze-string.xml (0 tests)
         // fn/distinct-values.xml (1 test)
         ["cbcl-distinct-values-002b"] = "XQuery conformance gap (fn:distinct-values): see AGENT_HANDOVER REQ-045",
         // fn/unparsed-text.xml (1 test)
