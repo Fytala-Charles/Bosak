@@ -90,6 +90,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.37  | 17-08-2026     | Drop cbcl-ns-fixup-1 after namespace fixup for clashing attribute prefixes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.38  | 18-08-2026     | Drop cbcl-distinct-values-002b after distinct-values respects XSD string type families |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -145,8 +147,7 @@ internal sealed class ConformanceRunner
         // app/CatalogCheck.xml (1 test)
         ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
         // fn/analyze-string.xml (0 tests)
-        // fn/distinct-values.xml (1 test)
-        ["cbcl-distinct-values-002b"] = "XQuery conformance gap (fn:distinct-values): see AGENT_HANDOVER REQ-045",
+        // fn/distinct-values.xml (0 tests)
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
         // prod/DirElemContent.xml (0 tests)

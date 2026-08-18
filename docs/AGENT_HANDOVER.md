@@ -1,5 +1,30 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-08-18
+**Commit:** fix(stdlib): fn:distinct-values respects XSD string type families (cbcl-distinct-values-002b)
+**Current focus:** **distinct-values cluster** — `cbcl-distinct-values-002b` mixes many XSD string-stored types (`xs:string`, `xs:untypedAtomic`, `xs:anyURI`, `xs:gYear`, `xs:hexBinary`, `xs:base64Binary`, etc.) whose lexical forms collide. `TypedStringValuesEqual` previously compared all `XdmValueKind.String` values by lexical string, so `xs:gYear("2008")`, `xs:hexBinary("2008")`, `xs:base64Binary("2008")`, and `xs:string("2008")` were incorrectly collapsed. The helper now partitions string-stored values into XSD type families: the string family compares by string; g\* subtypes compare on the timeline only within the same subtype; binary types compare by decoded octets; cross-family values are distinct. Targeted verification of the remaining 3 admitted gaps (`fn-unparsed-text-054a`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,939 passed / 0 failed / 1,882 skipped (94.08%)** (+1 passing, −1 skip); the known-gaps probe reports 3 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (distinct-values cluster)
+
+1. **Distinguish XSD string type families in `fn:distinct-values` / `fn:index-of`** (`FunctionLibrary.cs`) — `TypedStringValuesEqual` now classifies `XdmValueKind.String` values into `String`, `GDate`, `HexBinary`, `Base64Binary`, and `Other` families. Only values within the same family are compared; g\* subtypes use timeline equality only when the subtype matches; binary types decode and compare octets.
+2. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `cbcl-distinct-values-002b` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 3 admitted gaps are `fn-unparsed-text-054a`, `K2-NameTest-5`, and `Catalog004`. The most actionable is `Catalog004` (nested `let`/`for` context-item issue), though it may require runtime tuple/context plumbing.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-08-17
 **Commit:** `c1b31a0` (fix(providers): namespace fixup for clashing attribute prefixes (cbcl-ns-fixup-1))
 **Current focus:** **namespace fixup cluster** — `cbcl-ns-fixup-1` constructs `<root>{ $x/@*, $y/@* }</root>` where `$x/@*` and `$y/@*` both use the prefix `ns` but are bound to different URIs. `ConstructElement` previously added only one `xmlns:ns` declaration, so `fn:in-scope-prefixes` reported 2 prefixes instead of 3. The helper now tracks `prefix -> URI` mappings and, when two attributes share a prefix with different URIs, generates a new prefix for the second URI and annotates the attribute so its reported prefix matches the declaration. Targeted verification of the remaining 4 admitted gaps (`cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,938 passed / 0 failed / 1,883 skipped (94.08%)** (+1 passing, −1 skip); the known-gaps probe reports 4 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.

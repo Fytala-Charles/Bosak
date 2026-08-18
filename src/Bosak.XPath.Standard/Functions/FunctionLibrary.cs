@@ -34,6 +34,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.87  | 17-08-2026     | fn:analyze-string result element declares fn namespace explicitly (analyzeString-028) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.88  | 18-08-2026     | fn:distinct-values distinguishes XSD string type families (gYear/binary/string) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -7668,16 +7670,59 @@ public static class FunctionLibrary
 
     private static bool TypedStringValuesEqual(XdmValue a, XdmValue b, string collation, int implicitTimezoneOffsetMinutes)
     {
-        // g* date values (stored as annotated strings) compare on the timeline; a value
-        // without a timezone uses the implicit timezone from the dynamic context.
-        var aSubtype = GDateSubtypeName(a.SchemaTypeName);
-        if (aSubtype is not null && aSubtype == GDateSubtypeName(b.SchemaTypeName))
+        // Values stored as XdmValueKind.String cover several XSD type families. Two values
+        // are equal only when they belong to the same family and the family-specific equality
+        // rule says so. Cross-family values (e.g. xs:gYear vs xs:string, xs:hexBinary vs
+        // xs:base64Binary) are not comparable and are therefore distinct.
+        var aFamily = StringTypeFamily(a.SchemaTypeName);
+        var bFamily = StringTypeFamily(b.SchemaTypeName);
+
+        if (aFamily != bFamily)
+            return false;
+
+        switch (aFamily)
         {
-            var cmp = VmEngine.CompareDateTimeValues(a, b, aSubtype, implicitTimezoneOffsetMinutes);
-            return cmp.HasValue ? cmp.Value == 0 : string.CompareOrdinal(a.StringValue, b.StringValue) == 0;
+            case StringTypeFamilyKind.String:
+                return CompareStrings(a.StringValue, b.StringValue, collation) == 0;
+
+            case StringTypeFamilyKind.GDate:
+                var aSubtype = GDateSubtypeName(a.SchemaTypeName);
+                var bSubtype = GDateSubtypeName(b.SchemaTypeName);
+                if (aSubtype is null || aSubtype != bSubtype)
+                    return false;
+                var cmp = VmEngine.CompareDateTimeValues(a, b, aSubtype, implicitTimezoneOffsetMinutes);
+                return cmp.HasValue ? cmp.Value == 0 : string.CompareOrdinal(a.StringValue, b.StringValue) == 0;
+
+            case StringTypeFamilyKind.HexBinary:
+                return BinaryValueEquals(a.StringValue, b.StringValue, fromHex: true);
+
+            case StringTypeFamilyKind.Base64Binary:
+                return BinaryValueEquals(a.StringValue, b.StringValue, fromHex: false);
+
+            case StringTypeFamilyKind.Other:
+                // Unknown annotated string types compare only when they share the exact type name.
+                return string.Equals(a.SchemaTypeName, b.SchemaTypeName, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(a.StringValue, b.StringValue, StringComparison.Ordinal);
+
+            default:
+                return false;
         }
-        return CompareStrings(a.StringValue, b.StringValue, collation) == 0;
     }
+
+    private enum StringTypeFamilyKind { String, GDate, HexBinary, Base64Binary, Other }
+
+    private static StringTypeFamilyKind StringTypeFamily(string? schemaTypeName) => schemaTypeName?.ToLowerInvariant() switch
+    {
+        null or "" or "string" or "untypedatomic" or "anyuri"
+            or "normalizedstring" or "token" or "language" or "nmtoken" or "nmtokens"
+            or "name" or "ncname" or "id" or "idref" or "idrefs" or "entity" or "entities"
+            => StringTypeFamilyKind.String,
+        "gyear" or "gyearmonth" or "gmonth" or "gmonthday" or "gday"
+            => StringTypeFamilyKind.GDate,
+        "hexbinary" => StringTypeFamilyKind.HexBinary,
+        "base64binary" => StringTypeFamilyKind.Base64Binary,
+        _ => StringTypeFamilyKind.Other
+    };
 
     private static string? GDateSubtypeName(string? schemaTypeName) => schemaTypeName?.ToLowerInvariant() switch
     {
@@ -7688,6 +7733,21 @@ public static class FunctionLibrary
         "gday" => "gDay",
         _ => null
     };
+
+    private static bool BinaryValueEquals(string a, string b, bool fromHex)
+    {
+        try
+        {
+            var bytesA = fromHex ? Convert.FromHexString(a) : Convert.FromBase64String(a);
+            var bytesB = fromHex ? Convert.FromHexString(b) : Convert.FromBase64String(b);
+            return bytesA.SequenceEqual(bytesB);
+        }
+        catch
+        {
+            // If the lexical forms cannot be decoded, fall back to exact lexical comparison.
+            return string.Equals(a, b, StringComparison.Ordinal);
+        }
+    }
 
     private static bool BothNaN(XdmValue a, XdmValue b)
     {
