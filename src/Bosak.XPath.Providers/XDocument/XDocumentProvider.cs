@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 18-08-2026     | XQST0070/XQST0085/XQDY0096 reserved-namespace checks in element constructors            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15  | 18-08-2026     | XQDY0138 for document nodes used as element content                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -318,6 +320,40 @@ public static class XDocumentProvider
                 default:
                     FlushText();
                     var childNode = CloneNode(item.Node!.Value);
+                    // XQuery strips document nodes used as element content and inserts their
+                    // children instead (Constr-compelem-doc-1, K2-DirectConElem-42/43).
+                    // The engine represents non-element-root document nodes with a synthetic
+                    // __xdm_doc__ wrapper; unwrap it so only the real content is inserted.
+                    // Text children are merged with the surrounding pending text so adjacent
+                    // text nodes collapse (Constr-cont-document-1/2).
+                    if (childNode is System.Xml.Linq.XDocument childDoc)
+                    {
+                        var docContent = (childDoc.Root?.Name.LocalName == "__xdm_doc__" && childDoc.Root.Name.NamespaceName == "")
+                            ? childDoc.Root.Nodes()
+                            : childDoc.Nodes();
+                        foreach (var docChild in docContent)
+                        {
+                            switch (docChild)
+                            {
+                                case XText text:
+                                    pendingText = pendingText is null ? text.Value : pendingText + text.Value;
+                                    break;
+                                case XElement childElement:
+                                    FlushText();
+                                    element.Add(childElement);
+                                    break;
+                                case XComment comment:
+                                    FlushText();
+                                    element.Add(comment);
+                                    break;
+                                case XProcessingInstruction pi:
+                                    FlushText();
+                                    element.Add(pi);
+                                    break;
+                            }
+                        }
+                        break;
+                    }
                     // XQuery: a constructed child element keeps its own computed in-scope
                     // namespace bindings — they are not "redundant" with the parent's
                     // (K2-NameTest-30/31), so no namespace fixup is applied here.
@@ -460,7 +496,38 @@ public static class XDocumentProvider
                     break;
                 default:
                     FlushText();
-                    container.Add(CloneNode(item.Node!.Value));
+                    var docChildNode = CloneNode(item.Node!.Value);
+                    // XQuery strips document nodes used as document content and inserts their
+                    // children instead (prod-CompDocConstructor document-node tests).
+                    if (docChildNode is System.Xml.Linq.XDocument childDoc)
+                    {
+                        var docChildren = (childDoc.Root?.Name.LocalName == "__xdm_doc__" && childDoc.Root.Name.NamespaceName == "")
+                            ? childDoc.Root.Nodes()
+                            : childDoc.Nodes();
+                        foreach (var docChild in docChildren)
+                        {
+                            switch (docChild)
+                            {
+                                case XText text:
+                                    pendingText = pendingText is null ? text.Value : pendingText + text.Value;
+                                    break;
+                                case XElement childElement:
+                                    FlushText();
+                                    container.Add(childElement);
+                                    break;
+                                case XComment comment:
+                                    FlushText();
+                                    container.Add(comment);
+                                    break;
+                                case XProcessingInstruction pi:
+                                    FlushText();
+                                    container.Add(pi);
+                                    break;
+                            }
+                        }
+                        break;
+                    }
+                    container.Add(docChildNode);
                     break;
             }
         }

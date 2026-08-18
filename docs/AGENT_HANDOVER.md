@@ -1,6 +1,32 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(providers): strip document nodes used as element/document content to match XQuery constructor semantics
+**Current focus:** **QT3 skip-cluster cleanup — document-node cluster** — after clusters 3 and 1 were fixed, the next largest actionable skip group was the 20-test `ArgumentException: A node of type Document cannot be added to content` cluster. The root cause: `XDocumentProvider.ConstructElement` and `ConstructDocument` passed document nodes straight to LINQ-to-XML, which rejects them. XQuery semantics require document nodes in element/document content to be *stripped* and their children inserted into the surrounding content sequence. The fix unwraps document nodes, merges leading/trailing text with the surrounding `pendingText` so adjacent text nodes collapse, and inserts elements/comments/PIs directly. Targeted verification shows ~17 previously skipped tests now pass (e.g., `Constr-compelem-doc-1`, `K2-DirectConElem-42/43`, `Constr-cont-document-1/2`).
+
+Expected QT3: **~30,001 passed / 0 failed / ~1,820 skipped** (+~17 passing, −~17 skips) based on targeted verification. Full `dotnet test Bosak.sln` passes: **1,699 unit tests / 0 failed**. Targeted verification of the affected test sets (`prod-CompDocConstructor`, `prod-CompElemConstructor`, `prod-DirElemConstructor`, `prod-DirElemContent`) shows **0 failures**; remaining skips are unsupported dependencies or known gaps.
+
+## This Session Changes (document-node cluster)
+
+1. **Strip document nodes in element content** (`XDocumentProvider.cs`) — `ConstructElement` now detects when a content child is a document node, unwraps the engine's synthetic `__xdm_doc__` wrapper if present, and merges the document's text children with the surrounding `pendingText` so text-node adjacency is preserved.
+2. **Strip document nodes in document content** (`XDocumentProvider.cs`) — `ConstructDocument` applies the same stripping logic when a document constructor's content includes a document node.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster work by probing the remaining ~1,820 skips. The next actionable clusters are likely the `group by`/`order by` interleaving `NotSupportedException` group (~14 tests), the `does-not-exist.txt` / URI path `IOException` groups, and the JSONTestSuite path issues.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(conformance): load external `<test file="..."/>` queries and raise spec error codes for reserved namespace bindings
 **Current focus:** **QT3 skip-cluster cleanup** — the user asked to tackle two of the 1,880 skipped QT3 validations: cluster 3 (`ArgumentException` on empty queries caused by `<test file="..."/>` not being loaded) and cluster 1 (`ArgumentException` on reserved namespace prefix/URI mistakes because they were surfacing as raw .NET errors instead of XQuery spec error codes).
 
