@@ -40,13 +40,17 @@
 //                      | Charles Korthout | 0.27  | 12-07-2026     | Updated default-output tests to expect the XML declaration.                              |
 //                      | Charles Korthout | 0.28  | 15-07-2026     | Removed temporary debug tests used during fn:transform Tier-2m investigation.            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.29  | 18-08-2026     | Added fn:transform FOXT0002 missing-source and result-document text-capture tests     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
 using System.Xml.Linq;
+using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Standard.Functions;
 using Bosak.Xslt.Api;
 using Xunit;
 
@@ -2169,6 +2173,55 @@ Welcome to this document on XHTML.
         System.IO.File.Delete(mainPath);
         var doc = XDocument.Parse(result);
         Assert.Equal("from-template", doc.Descendants("output").Single().Value);
+    }
+
+    [Fact]
+    public void FnTransform_MissingSource_RaisesFOXT0002()
+    {
+        // fn-transform-err-1: fn:transform with a stylesheet-location but no source-node
+        // and no initial-template must raise FOXT0002, not a raw ArgumentException.
+        var xsl = "<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template match='/'><output/></xsl:template></xsl:stylesheet>";
+        var path = WriteTempXsl(xsl);
+        try
+        {
+            var uri = new Uri(path).AbsoluteUri;
+            var query = $"fn:transform(map{{\"stylesheet-location\": \"{uri}\"}})";
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            XsltFunctionLibrary.PopulateTransformOnly(ctx);
+            var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(query).Evaluate(ctx));
+            Assert.Contains("FOXT0002", ex.Message);
+        }
+        finally
+        {
+            System.IO.File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void FnTransform_ResultDocumentTextContent_IsCaptured()
+    {
+        // fn-transform-2: a secondary xsl:result-document whose content is a text node
+        // must be captured in the result map without a LINQ "Non-whitespace characters
+        // cannot be added to content" error.
+        var query = @"
+let $xsl := ""<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='2.0'>
+  <xsl:template name='main'>
+    <xsl:result-document href='out.xml'>sect1</xsl:result-document>
+  </xsl:template>
+</xsl:stylesheet>""
+return fn:transform(map{""stylesheet-text"": $xsl,
+                       ""initial-template"": fn:QName('', 'main'),
+                       ""source-node"": fn:parse-xml('<doc/>'),
+                       ""base-output-uri"": ""http://example.com/result.xml""})";
+
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        XsltFunctionLibrary.PopulateTransformOnly(ctx);
+        var result = XPath31Expression.Compile(query).Evaluate(ctx);
+        Assert.True(result.IsMap);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("http://example.com/out.xml"), out var doc));
+        Assert.Equal("sect1", doc.NodeValue.StringValue);
     }
 
     [Fact]

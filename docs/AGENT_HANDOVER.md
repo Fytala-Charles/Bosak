@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(xslt): fn:transform missing source raises FOXT0002; result-document text capture uses __xdm_doc__ wrapper
+**Current focus:** **QT3 skip-cluster cleanup — fn-transform cluster** — `fn-transform-err-1` no longer fails with a raw `ArgumentException` for a missing source document; `TransformEngine` now raises `FOXT0002`. `fn-transform-2` no longer fails with LINQ's "Non-whitespace characters cannot be added to content" when a secondary `xsl:result-document` contains a text node: the capture path now uses the synthetic `__xdm_doc__` wrapper for non-single-element content, matching the XDM document constructor behavior.
+
+Expected QT3: **30,332 passed / 0 failed / 1,489 skipped (95.32%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,710 unit tests / 0 failed**. Targeted verification: `fn-transform` 120/0/4.
+
+## This Session Changes (fn-transform cluster)
+
+1. **FOXT0002 for missing source document** (`TransformEngine.cs`) — the guard that requires a source document when no initial template/selection is supplied now throws `InvalidOperationException("FOXT0002: ...")` instead of `ArgumentException`.
+2. **Result-document capture wraps text content** (`TransformEngine.cs`) — when `_captureResultDocuments` is enabled, the secondary-result capture path now mirrors `XDocumentProvider.ConstructDocument`: content that is not a single root element is wrapped in the synthetic `__xdm_doc__` element before being placed in an `XDocument`, so non-whitespace text nodes are accepted.
+3. **Regression tests** (`StylesheetTests.cs`) — `FnTransform_MissingSource_RaisesFOXT0002` and `FnTransform_ResultDocumentTextContent_IsCaptured`.
+
+## Files Changed (this session)
+
+- `src/Bosak.Xslt/Runtime/TransformEngine.cs`
+- `tests/Bosak.Xslt.Tests/StylesheetTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup with the remaining small groups: the `NotSupportedException: Only one order by clause is supported` cluster (2 tests), the `XML 1.1 prefixed namespace undeclaration` pair, the `compare-042` collation residual, and the platform-limitation groups (decimal precision, DateTimeOffset year -2, `OutOfMemoryException` codepoints).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(compiler): support placeholder arguments in arrow static calls (ArrowPostfix-108)
 **Current focus:** **QT3 skip-cluster cleanup — arrow partial-application cluster** — `LowerArrow` now detects `ArgumentPlaceholderNode` in a static arrow target such as `"$" => concat(?)` and emits a `Curry` instead of a direct `Call`. The arrow source becomes the first argument, placeholders remain unfixed, and the result is a curried function item. `prod-ArrowPostfix` now passes **42/0/0**.
 

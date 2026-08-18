@@ -202,6 +202,10 @@
 //                      |                  |       |                | xsl:fork (sequential prongs); xsl:assert evaluated (ExecuteAssert, incl. function bodies);|
 //                      |                  |       |                | XTDE1480 temporary-output-state tracking; accumulator rule bodies via general engine     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.18  | 18-08-2026     | Missing source document raises FOXT0002 instead of ArgumentException (fn-transform-err-1) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.19  | 18-08-2026     | fn:transform result-document capture uses __xdm_doc__ wrapper for non-single-element content (fn-transform-2) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -666,7 +670,7 @@ public sealed class TransformEngine
         // xsl:initial-template (with any namespace prefix).
         var implicitInitialTemplate = string.IsNullOrEmpty(initialTemplate) ? FindInitialTemplateName() : null;
         if (source == null && initialMatchSelection == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null)
-            throw new ArgumentException("A source document is required unless an initial template is specified.", nameof(source));
+            throw new InvalidOperationException("FOXT0002: A source document is required unless an initial template is specified.");
 
         // XTDE3086: a required global context item must be supplied.
         if (_stylesheet.GlobalContextItemUse == "required" && source == null)
@@ -14328,10 +14332,24 @@ public sealed class TransformEngine
                 else
                 {
                     var capturedDoc = new XDocument();
-                    foreach (var node in temp!.Nodes().ToList())
+                    var tempNodes = temp!.Nodes().ToList();
+                    // LINQ documents allow a single root element; XDM document nodes allow
+                    // arbitrary content. Use the synthetic __xdm_doc__ wrapper when the
+                    // result-document content is not a single root element so that text
+                    // nodes such as "sect1" do not trigger a LINQ "Non-whitespace
+                    // characters cannot be added to content" error (fn-transform-2).
+                    var singleElementRoot = tempNodes.Count == 1 && tempNodes[0] is XElement;
+                    XContainer captureTarget = capturedDoc;
+                    if (!singleElementRoot)
+                    {
+                        var wrapper = new XElement("__xdm_doc__");
+                        capturedDoc.Add(wrapper);
+                        captureTarget = wrapper;
+                    }
+                    foreach (var node in tempNodes)
                     {
                         node.Remove();
-                        capturedDoc.Add(node);
+                        captureTarget.Add(node);
                     }
                     capturedValue = XdmValue.FromNode(new XDocumentNode(capturedDoc));
                 }
