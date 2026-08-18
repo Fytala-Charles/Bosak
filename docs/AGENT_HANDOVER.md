@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(standard): wrap JsonDoc DocumentLoader failures as FOUT1170 (json-doc-error-028..032)
+**Current focus:** **QT3 skip-cluster cleanup — fn-json-doc error cluster** — `JsonDoc` in `FunctionLibrary.cs` now wraps the `EvaluationContext.DocumentLoader` path in the same try/catch used for direct file loads. Previously, when the conformance harness's document loader could not resolve an invalid or unreachable URI, raw `IOException`/`FileNotFoundException`/`DirectoryNotFoundException` bubbles escaped and were recorded as unexpected-error skips. The loader path now converts any non-`InvalidOperationException` into `InvalidOperationException("FOUT1170: Cannot load JSON document {uri}")`, so the five `json-doc-error-028..032` tests pass. A unit regression test (`JsonDoc_DocumentLoaderThrows_WrapsAsFOUT1170`) guards the behavior.
+
+Expected QT3: **30,009 passed / 0 failed / 1,813 skipped** (+5 passing, −5 skips) relative to the previous verified baseline. Full `dotnet test Bosak.sln` passes: **1,704 unit tests / 0 failed**. Targeted verification of the affected test set (`fn-json-doc`) shows **61 passed / 0 failed / 7 skipped** (the remaining skips are unsupported dependencies). The full sweep is again interrupted by `app-CatalogCheck`, which appears to hang/timeout before producing a final summary, so the total is derived from the previous documented sweep plus the verified targeted delta. The next actionable clusters are the `misc-JsonTestSuite` missing-test-data group (~318 skips) and the `app-CatalogCheck` full-sweep hang/timeout.
+
+## This Session Changes (fn-json-doc cluster)
+
+1. **Wrap `DocumentLoader` failures in `JsonDoc`** (`FunctionLibrary.cs`) — the `ctx.DocumentLoader(uri)` branch is now inside a `try/catch` that rethrows `InvalidOperationException` unchanged and maps any other exception to `FOUT1170`.
+2. **Regression test** (`FunctionLibraryTests.cs`) — `JsonDoc_DocumentLoaderThrows_WrapsAsFOUT1170` asserts that a custom document loader throwing `IOException` results in an `InvalidOperationException` containing `FOUT1170`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup by deciding between the `misc-JsonTestSuite` missing-test-data cluster (318 skips — likely a test-data infrastructure issue) and investigating the `app-CatalogCheck` full-sweep hang.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(compiler): support where/let clauses after group by and order by; reject unsupported let-before-order-by after group by
 **Current focus:** **QT3 skip-cluster cleanup — group-by/order-by cluster** — `IrLowerer` now supports `where` and `let` clauses after `group by` and after `order by`. Previously these post-grouping/post-ordering clauses were rejected by the lowerer's validation gate. The implementation emits `JumpIfFalse` for `where` and stores `let` bindings inside `LowerFlworBodyIteration`, restoring scoped variable names after each iteration. For `group by` followed by `order by`, a `let` whose variable is referenced by the order-by key cannot be evaluated before re-keying in the current lowerer; a targeted guard detects this pattern and throws `NotSupportedException` (recorded as a skip) instead of producing an `XPST0008` failure at runtime.
 

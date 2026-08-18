@@ -36,6 +36,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.88  | 18-08-2026     | fn:distinct-values distinguishes XSD string type families (gYear/binary/string) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.89  | 18-08-2026     | fn:json-doc wraps DocumentLoader failures as FOUT1170 (json-doc-error-028..032)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -12614,8 +12616,19 @@ public static class FunctionLibrary
         }
         else if (ctx.DocumentLoader is not null)
         {
-            var node = ctx.DocumentLoader(uri);
-            json = node.StringValue;
+            try
+            {
+                var node = ctx.DocumentLoader(uri);
+                json = node.StringValue;
+            }
+            catch (InvalidOperationException)
+            {
+                throw;
+            }
+            catch
+            {
+                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+            }
         }
         else
         {

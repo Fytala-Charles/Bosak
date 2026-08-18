@@ -65,6 +65,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.28  | 07-08-2026     | xml-to-json escaped content copies valid escapes unchanged (QT3 xml-to-json-071) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.29  | 18-08-2026     | fn:json-doc DocumentLoader IO failure wraps to FOUT1170 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3471,6 +3473,19 @@ public class FunctionLibraryTests
         {
             File.Delete(path);
         }
+    }
+
+    [Fact]
+    public void JsonDoc_DocumentLoaderThrows_WrapsAsFOUT1170()
+    {
+        // json-doc-error-028..032: a DocumentLoader that cannot resolve the URI
+        // must surface as FOUT1170, not as a raw .NET IO exception.
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx.DocumentLoader = _ => throw new System.IO.IOException("simulated IO failure");
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            XPath31Expression.Compile("json-doc('http://example.org/json/fails')").Evaluate(ctx));
+        Assert.Contains("FOUT1170", ex.Message);
     }
 
     [Fact]
