@@ -1,6 +1,47 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(conformance): load external `<test file="..."/>` queries and raise spec error codes for reserved namespace bindings
+**Current focus:** **QT3 skip-cluster cleanup** — the user asked to tackle two of the 1,880 skipped QT3 validations: cluster 3 (`ArgumentException` on empty queries caused by `<test file="..."/>` not being loaded) and cluster 1 (`ArgumentException` on reserved namespace prefix/URI mistakes because they were surfacing as raw .NET errors instead of XQuery spec error codes).
+
+- **Cluster 3 (empty-query `ArgumentException`):** `TestCase.FromElement` only read the inline text of `<test>` and ignored the `file` attribute. Tests whose real XQuery lives in an external `.xq` file were passed to `XQueryCompiler` as an empty string, triggering `ArgumentException.ThrowIfNullOrEmpty(query)`. `TestCase.cs` now loads `<test file="..."/>` relative to the test-set base directory.
+- **Cluster 1 (namespace prefix edge cases):** reserved-namespace mistakes (XML/XMLNS namespace URI, empty prefix binding) were being handed to LINQ-to-XML and surfaced as raw `ArgumentException`. The parser, `XDocumentProvider`, and VM engine now raise the correct spec codes:
+  - `XQST0070` for default element namespace declarations bound to XML/XMLNS namespace URIs.
+  - `XQDY0096` for computed element names using the XMLNS namespace URI or binding a non-`xml` prefix to the XML namespace URI.
+  - `XQST0085` for prefixed namespace declarations bound to the empty namespace URI (`xmlns:foo=""`).
+  - `XQDY0101` for namespace constructors bound to the XMLNS namespace URI.
+- Three genuinely unsupported XML 1.1 prefixed namespace undeclaration tests (`XQST0085b`, `K2-Serialization-20`, `K2-Serialization-21`) and three newly exposed external-file tests (`currencysvg`, `extvardeclwithtype-23`, `K2-DirectConElemAttr-75`) are now documented in `KnownXQueryGaps`.
+
+Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 skips). Full `dotnet test Bosak.sln` passes: **1,699 unit tests / 0 failed**. Targeted verification of the affected test sets (`prod-DefaultNamespaceDecl`, `prod-CompElemConstructor`, `prod-CompNamespaceConstructor`, `prod-DirElemContent.namespace`, `misc-CombinedErrorCodes`, `prod-VarDecl.external`, `prod-DirAttributeList`, `prod-DirElemConstructor`, `method-xml`, `app-Demos`) shows **0 failures**; remaining skips are unsupported dependencies or the newly documented known gaps.
+
+## This Session Changes (QT3 skip-cluster cleanup)
+
+1. **Load external `<test file="..."/>` query files** (`TestCase.cs`) — `ReadTestExpression` resolves the `file` attribute against the test-set base directory and returns the file contents. Inline query text continues to work when no `file` attribute is present.
+2. **Reserved-namespace validation in default element namespace declarations** (`XQueryParser.cs`) — `declare default element namespace "..."` now raises `XQST0070` if the URI is the XML or XMLNS namespace URI.
+3. **Reserved-namespace validation in computed element constructors** (`XDocumentProvider.cs`) — `ConstructElement` now raises `XQDY0096` for XMLNS namespace element URIs and for non-`xml` prefixes bound to the XML namespace URI; attribute namespace declarations raise `XQST0085` for empty URIs on prefixed bindings and `XQST0070` for bindings to the XMLNS namespace URI; default namespace declarations raise `XQST0070` for XML/XMLNS namespace URIs.
+4. **Reserved-namespace validation in computed namespace constructors** (`VmEngine.cs`) — namespace constructors now raise `XQDY0101` when binding any prefix to the XMLNS namespace URI.
+5. **Known-gap cleanup / additions** (`ConformanceRunner.cs`) — removed the `ArgumentException`-based skips for the fixed clusters; added the six tests above as documented known gaps with descriptive reasons.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XQuery/Parser/XQueryParser.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `tests/Bosak.XPath.Conformance/TestCase.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster work by probing the remaining ~1,837 skips for the next actionable cluster. Likely candidates are still dominated by unsupported dependencies (schema awareness, `xmlschema-1.1`, `XQTS-1`, etc.), but smaller actionable groups may remain among serialization, grouping, or JSON-related skips.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(parser): treat `if` as conditional only when followed by `(`; otherwise parse as name test (K2-NameTest-5)
 **Current focus:** **if-keyword-as-name cluster** — `K2-NameTest-5` is the last actionable QT3 engine gap. The test contains the tokenizer-torture expression `if(if) then then else else-...` and expects a runtime `XPTY0004`/`XPDY0002`. `XPathParser.ParseExprSingle` unconditionally routed `TokenKind.KeywordIf` to `ParseIfExpr()`, so the inner `if` (followed by `)`) caused `XPST0003: Expected LParen but found RParen`. The parser now gates `KeywordIf` on `Peek(1).Kind == TokenKind.LParen`, letting bare `if` fall through to `ParseOrExpr` as an ordinary name/name test (consistent with `for`/`let` gating). `K2-NameTest-5` now passes. Expected QT3: **29,941 passed / 0 failed / 1,880 skipped (94.09%)** (+1 passing, −1 skip); the known-gaps probe reports 1 admitted failure (`fn-unparsed-text-054a` — external Cloudflare block, not an engine gap). Full `dotnet test Bosak.sln` passes: **1,699 unit tests / 0 failed**.
 

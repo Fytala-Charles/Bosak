@@ -103,6 +103,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.32  | 15-08-2026     | Drop 2 UseCaseR31 KnownXQueryGaps entries after map missing-key fix and map-to-function coercion |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.33  | 18-08-2026     | KnownXQueryGaps: XML 1.1 prefixed namespace undeclaration (XQST0085b, K2-Serialization-20/21) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -151,6 +153,15 @@ internal sealed class ConformanceRunner
         // fn/distinct-values.xml (0 tests)
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
+        // prod/CompNamespaceConstructor.xml / ser/method-xml.xml / misc/CombinedErrorCodes.xml
+        // XML 1.1 prefixed namespace undeclaration (xmlns:p="") is not yet supported.
+        ["K2-Serialization-20"] = "XML 1.1 prefixed namespace undeclaration (xmlns:p=\"\") is not yet supported",
+        ["K2-Serialization-21"] = "XML 1.1 prefixed namespace undeclaration (xmlns:p=\"\") is not yet supported",
+        ["XQST0085b"] = "XML 1.1 prefixed namespace undeclaration (xmlns:foo=\"\") is not yet supported",
+        // Tests whose queries are now loaded from external files but still fail on unimplemented features.
+        ["currencysvg"] = "Whitespace normalization in mixed SVG attribute/content values is not yet exact",
+        ["extvardeclwithtype-23"] = "External variable declared type validation against element(Variable) is not yet supported",
+        ["K2-DirectConElemAttr-75"] = "Direct attribute constructor text-node/comment/PI whitespace normalization is not yet exact",
         // prod/DirElemContent.xml (0 tests)
         // prod/NameTest.xml (0 tests)
     };

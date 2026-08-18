@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 27-07-2026     | Parse <module> catalog entries (uri, location, resolved file path)                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 18-08-2026     | Load <test file="..."> query text from referenced file                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -47,11 +49,26 @@ internal sealed class TestCase
         Modules = modules;
     }
 
+    private static string ReadTestExpression(XElement? testElement, string baseDirectory)
+    {
+        if (testElement is null)
+            return "";
+
+        string? file = (string?)testElement.Attribute("file");
+        if (!string.IsNullOrEmpty(file))
+        {
+            string resolvedPath = Path.IsPathRooted(file) ? file! : Path.Combine(baseDirectory, file!);
+            return File.Exists(resolvedPath) ? File.ReadAllText(resolvedPath) : "";
+        }
+
+        return (string?)testElement ?? "";
+    }
+
     public static TestCase FromElement(XElement element, XNamespace ns, IEnumerable<Dependency> inheritedDependencies, string baseDirectory)
     {
         string name = (string?)element.Attribute("name") ?? "unknown";
         string description = (string?)element.Element(ns + "description") ?? "";
-        string expression = (string?)element.Element(ns + "test") ?? "";
+        string expression = ReadTestExpression(element.Element(ns + "test"), baseDirectory);
 
         var dependencies = new List<Dependency>(inheritedDependencies);
         var ownDependencies = new List<Dependency>();

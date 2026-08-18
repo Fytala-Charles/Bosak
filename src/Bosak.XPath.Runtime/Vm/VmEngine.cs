@@ -174,6 +174,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.96  | 18-08-2026     | ApplyAxis/PathStepMap treat empty-sequence input as empty instead of XPDY0002 (Catalog004) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.97  | 18-08-2026     | XQDY0101 for namespace constructor bound to XMLNS namespace (nscons-020)                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1280,6 +1282,8 @@ public static class VmEngine
                                     throw new InvalidOperationException("XQDY0101: The 'xml' prefix must only be bound to the XML namespace URI.");
                                 if (nsPrefix != "xml" && uri == "http://www.w3.org/XML/1998/namespace")
                                     throw new InvalidOperationException("XQDY0101: The XML namespace URI must only be bound to the 'xml' prefix.");
+                                if (uri == "http://www.w3.org/2000/xmlns/")
+                                    throw new InvalidOperationException("XQDY0101: A namespace constructor must not bind a prefix to the XMLNS namespace URI.");
                                 if (uri.Length == 0 && nsPrefix.Length > 0)
                                     throw new InvalidOperationException("XQDY0101: A namespace constructor with a non-empty prefix must not have an empty URI.");
                                 if (nsPrefix.Length > 0 && !IsValidNcName(nsPrefix))

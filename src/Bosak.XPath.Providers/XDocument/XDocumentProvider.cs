@@ -35,6 +35,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13  | 17-08-2026     | ConstructElement handles clashing attribute prefixes via generated prefixes and attribute annotations (cbcl-ns-fixup-1) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14  | 18-08-2026     | XQST0070/XQST0085/XQDY0096 reserved-namespace checks in element constructors            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -87,6 +89,13 @@ public static class XDocumentProvider
     public static IXdmNode ConstructElement(XdmElementSpec spec)
     {
         ArgumentNullException.ThrowIfNull(spec);
+
+        // XQDY0096: a constructed element must not be in the XMLNS namespace, and a non-'xml'
+        // prefix must not be bound to the XML namespace URI (comp-elem-bad-name-2/3).
+        if (spec.NamespaceUri == "http://www.w3.org/2000/xmlns/")
+            throw new InvalidOperationException("XQDY0096: A computed element name must not use the XMLNS namespace URI.");
+        if (spec.NamespaceUri == "http://www.w3.org/XML/1998/namespace" && spec.Prefix is not (null or "xml"))
+            throw new InvalidOperationException("XQDY0096: A computed element name must not bind a non-'xml' prefix to the XML namespace URI.");
 
         XNamespace ns = spec.NamespaceUri is null ? XNamespace.None : XNamespace.Get(spec.NamespaceUri);
         var element = new XElement(ns + spec.LocalName);
@@ -220,11 +229,24 @@ public static class XDocumentProvider
                 // xmlns:xmlns is a reserved-namespace error (XQDY0074).
                 if (attr.LocalName == "xmlns")
                     throw new InvalidOperationException("XQDY0074: The 'xmlns' prefix must not be declared.");
-                if (attr.LocalName != "xml")
-                    element.Add(new XAttribute(XNamespace.Xmlns + attr.LocalName, attr.Value));
+                if (attr.LocalName == "xml")
+                    continue;
+                // XQST0085: in XML 1.0 a prefixed namespace declaration must not bind to
+                // the empty namespace URI (Constr-namespace-13/16). XML 1.1 undeclarations
+                // are not yet supported here.
+                if (attr.Value.Length == 0)
+                    throw new InvalidOperationException($"XQST0085: The prefix '{attr.LocalName}' cannot be bound to the empty namespace name.");
+                // XQST0070: no prefix may be bound to the XMLNS namespace URI.
+                if (attr.Value == "http://www.w3.org/2000/xmlns/")
+                    throw new InvalidOperationException($"XQST0070: The prefix '{attr.LocalName}' cannot be bound to the XMLNS namespace URI.");
+                element.Add(new XAttribute(XNamespace.Xmlns + attr.LocalName, attr.Value));
             }
             else if (attr.LocalName == "xmlns" && attr.Prefix is null)
             {
+                // XQST0070: the default namespace must not be the XML or XMLNS namespace
+                // (K2-DirectConElem-36, defaultnamespacedeclerr-3/5/7).
+                if (attr.Value is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
+                    throw new InvalidOperationException($"XQST0070: The default namespace must not be the reserved namespace '{attr.Value}'.");
                 element.Add(new XAttribute("xmlns", attr.Value));
             }
             else

@@ -43,6 +43,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.7   | 14-08-2026     | Store default collation URI resolved against the static base URI (K-CollationProlog-1) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 18-08-2026     | XQST0070 for default element namespace bound to XML/XMLNS namespace                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -333,6 +335,10 @@ public sealed class XQueryParser
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
+            // XQST0070: the default element namespace must not be the XML or XMLNS
+            // namespace (defaultnamespacedeclerr-3/5/7).
+            if (uri is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
+                throw new ParseException($"XQST0070: The default element namespace must not be the reserved namespace '{uri}'.", _position);
             // XQST0066: the default element namespace must not be declared twice.
             if (context.DefaultElementNamespace is not null)
                 throw new ParseException("XQST0066: More than one default element namespace declaration.", _position);
