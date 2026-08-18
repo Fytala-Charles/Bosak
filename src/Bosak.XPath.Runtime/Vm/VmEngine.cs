@@ -172,6 +172,8 @@
 //                      | Charles Korthout | 2.94  | 15-08-2026     | ValueMatchesType preserves case for nested kind tests in document-node(element(...)) (NodeTest004) |
 //                      | Charles Korthout | 2.95  | 15-08-2026     | Map dynamic calls return empty sequence for missing keys; map/array coercion to function types (UseCaseR31) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.96  | 18-08-2026     | ApplyAxis/PathStepMap treat empty-sequence input as empty instead of XPDY0002 (Catalog004) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -696,7 +698,14 @@ public static class VmEngine
                     {
                         var sequence = registers[instr.RegisterB];
                         if (sequence.IsUndefined)
-                            throw new InvalidOperationException("XPDY0002: An axis step requires a context item.");
+                        {
+                            // Empty sequence input to a path step simply produces an empty
+                            // sequence; the real "no context item" case is caught earlier by
+                            // LoadContextItem.
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                            ip++;
+                            break;
+                        }
                         int rhsEntry = instr.Operand;
 
                         var items = MaterializeSequence(sequence);
@@ -3201,7 +3210,11 @@ public static class VmEngine
     private static XdmValue ApplyAxis(XdmValue input, XdmAxis axis)
     {
         if (input.IsUndefined)
-            throw new InvalidOperationException("XPDY0002: An axis step requires a context item.");
+        {
+            // An empty-sequence input to a path step (e.g. doc(())/*) produces an empty
+            // sequence; the real "no context item" case is already caught by LoadContextItem.
+            return XdmValue.Undefined;
+        }
         if (input.IsAtomic)
             throw new InvalidOperationException("XPTY0020: An axis step requires a context item that is a node.");
 

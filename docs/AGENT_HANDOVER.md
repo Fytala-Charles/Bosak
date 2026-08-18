@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(runtime): axis steps over empty sequence input return empty instead of XPDY0002 (Catalog004)
+**Current focus:** **axis-step cluster** — `Catalog004` failed with `XPDY0002: An axis step requires a context item` inside a nested `let`/`for` FLWOR. Investigation showed the error was not a lost context item: one `<fots:schema>` in the QT3 catalog has no `@file` attribute, so `$schema/@file` evaluates to the empty sequence, `resolve-uri((), ...)` returns empty, `doc(())` returns `XdmValue.Undefined`, and the following child step `/*` received the empty-sequence sentinel and misinterpreted it as a missing context item. `ApplyAxis` and `PathStepMap` in `VmEngine.cs` now treat an `Undefined` input as an empty result; the real "absent context item" case is still caught earlier by `LoadContextItem`. `Catalog004` now passes. Expected QT3: **29,940 passed / 0 failed / 1,881 skipped (94.09%)** (+1 passing, −1 skip); the known-gaps probe should report 2 admitted failures (`fn-unparsed-text-054a`, `K2-NameTest-5`). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
+
+## This Session Changes (axis-step cluster)
+
+1. **Treat empty-sequence input to axis steps as empty** (`VmEngine.cs`) — `ApplyAxis` and the `PathStepMap` VM handler no longer raise `XPDY0002` when the step input is `XdmValue.Undefined` (the empty-sequence sentinel). Path shapes such as `doc(())/*` and the nested FLWOR in `Catalog004` now evaluate to `()`.
+2. **Regression tests** (`PlaceholderTests.cs`) — added `XQuery_AxisStep_OverEmptySequence_FromDocReturnsEmpty`, `XQuery_AxisStep_OverMissingAttribute_File_Catalog004Shape`, and a context-item preservation sanity check for multi-clause FLWOR.
+3. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `Catalog004` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 residual singles/pairs sweep — the remaining 2 admitted gaps are `fn-unparsed-text-054a` (external Cloudflare block, not an engine gap) and `K2-NameTest-5` (tokenizer-torture for keywords used as element names). `K2-NameTest-5` is the only actionable engine gap left.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(stdlib): fn:distinct-values respects XSD string type families (cbcl-distinct-values-002b)
 **Current focus:** **distinct-values cluster** — `cbcl-distinct-values-002b` mixes many XSD string-stored types (`xs:string`, `xs:untypedAtomic`, `xs:anyURI`, `xs:gYear`, `xs:hexBinary`, `xs:base64Binary`, etc.) whose lexical forms collide. `TypedStringValuesEqual` previously compared all `XdmValueKind.String` values by lexical string, so `xs:gYear("2008")`, `xs:hexBinary("2008")`, `xs:base64Binary("2008")`, and `xs:string("2008")` were incorrectly collapsed. The helper now partitions string-stored values into XSD type families: the string family compares by string; g\* subtypes compare on the timeline only within the same subtype; binary types compare by decoded octets; cross-family values are distinct. Targeted verification of the remaining 3 admitted gaps (`fn-unparsed-text-054a`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,939 passed / 0 failed / 1,882 skipped (94.08%)** (+1 passing, −1 skip); the known-gaps probe reports 3 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 

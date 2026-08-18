@@ -92,6 +92,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.38  | 18-08-2026     | Drop cbcl-distinct-values-002b after distinct-values respects XSD string type families |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.39  | 18-08-2026     | Drop Catalog004 after axis steps treat empty-sequence input as empty instead of XPDY0002 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -144,8 +146,7 @@ internal sealed class ConformanceRunner
     /// </summary>
     private static readonly Dictionary<string, string> KnownXQueryGaps = new(StringComparer.Ordinal)
     {
-        // app/CatalogCheck.xml (1 test)
-        ["Catalog004"] = "XQuery conformance gap (app/CatalogCheck): see AGENT_HANDOVER REQ-045",
+        // app/CatalogCheck.xml (0 tests)
         // fn/analyze-string.xml (0 tests)
         // fn/distinct-values.xml (0 tests)
         // fn/unparsed-text.xml (1 test)

@@ -74,6 +74,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.23  | 01-08-2026     | 7 decimal-format/boundary-space declaration tests (module-local, validation) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.24  | 18-08-2026     | Axis-step over empty sequence and Catalog004-shaped regression tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -3083,6 +3085,41 @@ public class PlaceholderTests
         var ex = Assert.ThrowsAny<Exception>(() => new XQueryCompiler()
             .Compile("declare boundary-space preserve; declare boundary-space strip; \"abc\"").Evaluate(new XQueryContext()));
         Assert.Contains("XQST0068", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_AxisStep_OverEmptySequence_FromDocReturnsEmpty()
+    {
+        // Regression for Catalog004: doc(())/* must return the empty sequence, not
+        // raise XPDY0002. The empty-sequence sentinel (XdmValue.Undefined) is a valid
+        // input to a path step and simply propagates as empty.
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("count(doc(())/*)").Evaluate(new XQueryContext());
+        Assert.Equal(0L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_AxisStep_OverMissingAttribute_File_Catalog004Shape()
+    {
+        // Catalog004 shape: a missing @file produces an empty sequence; the following
+        // child step must evaluate to empty rather than XPDY0002.
+        var compiler = new XQueryCompiler();
+        var result = compiler.Compile("let $x := <schema/> return count(doc($x/@file)/*)")
+            .Evaluate(new XQueryContext());
+        Assert.Equal(0L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_Flwor_ContextItemPreservedInWhereAndReturn()
+    {
+        // Sanity check: the outer context item remains visible in where/return clauses
+        // of a desugared multi-clause FLWOR after let/for bindings.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("let $x := (1,2,3) for $y in $x where string(.) = '1' return $y");
+        var ctx = new XQueryContext();
+        ctx.WithContextItem(XdmValue.FromInteger(1));
+        var result = executable.Evaluate(ctx);
+        Assert.Equal(new[] { 1L, 2L, 3L }, ToIntegers(result));
     }
 
     private static List<long> ToIntegers(XdmValue value)
