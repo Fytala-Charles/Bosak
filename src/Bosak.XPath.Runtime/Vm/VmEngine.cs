@@ -176,6 +176,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.97  | 18-08-2026     | XQDY0101 for namespace constructor bound to XMLNS namespace (nscons-020)                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.98  | 18-08-2026     | Clamped function arity int.MaxValue raises FOAR0002 (fn-function-arity-017/fn-function-name-018) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3254,6 +3256,11 @@ public static class VmEngine
     private static FunctionItem ResolveNamedFunctionTuple(ValueTuple<string, int> tuple, EvaluationContext context)
     {
         var (localName, nsUri) = ResolveFunctionName(tuple.Item1, context);
+        // An arity clamped to int.MaxValue in the parser indicates an out-of-range literal
+        // (e.g. fn:concat#340282366920938463463374607431768211456); surface FOAR0002 instead
+        // of resolving against a variadic fallback and returning an impossible arity.
+        if (tuple.Item2 == int.MaxValue)
+            throw new InvalidOperationException($"FOAR0002: Function {{{nsUri}}}{localName}#{tuple.Item2} arity exceeds the implementation limit.");
         if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out _))
             throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName}#{tuple.Item2} not found.");
         return new NamedFunctionItem(nsUri, localName, tuple.Item2)
@@ -3274,6 +3281,10 @@ public static class VmEngine
     {
         if (named.DefiningContext != null)
             return named;
+        // An arity clamped to int.MaxValue in the parser indicates an out-of-range literal;
+        // surface FOAR0002 instead of resolving against a variadic fallback.
+        if (named.Arity == int.MaxValue)
+            throw new InvalidOperationException($"FOAR0002: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.Arity} arity exceeds the implementation limit.");
         if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.Arity, out _))
             throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.Arity} not found.");
         return named with

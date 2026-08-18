@@ -97,6 +97,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.45  | 07-08-2026     | Empty enclosed expressions allowed (XQ31); whitespace required between constructor attributes (XPST0003); XML 1.0 line-ending normalization for literal characters in XQuery string literals |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.46  | 18-08-2026     | Named-function-ref arity > Int32 clamps to int.MaxValue so resolution fails with FOAR0002 (fn-function-arity-017/fn-function-name-018) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -2045,7 +2047,14 @@ public sealed class XPathParser
         Advance(); // name
         Advance(); // #
         var arityTok = Expect(TokenKind.IntegerLiteral);
-        var arity = int.Parse(GetString(arityTok), CultureInfo.InvariantCulture);
+        var arityText = GetString(arityTok);
+        if (!int.TryParse(arityText, NumberStyles.Integer, CultureInfo.InvariantCulture, out var arity))
+        {
+            // Arity literal exceeds Int32 (e.g. fn:concat#340282366920938463463374607431768211456).
+            // No real function has this arity; clamp to int.MaxValue so function resolution
+            // fails with FOAR0002 instead of a parser OverflowException.
+            arity = int.MaxValue;
+        }
         return WithSpan(new NamedFunctionRefNode(local, arity, prefix, nsUri), start, End);
     }
 

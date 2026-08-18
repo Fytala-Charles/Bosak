@@ -1,6 +1,36 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(parser/runtime): huge named-function-ref arity clamps to int.MaxValue and raises FOAR0002 (fn-function-arity-017, fn-function-name-018)
+**Current focus:** **QT3 skip-cluster cleanup — function-arity overflow cluster** — `fn:concat#340282366920938463463374607431768211456` caused the parser to overflow `Int32` when reading the arity literal. `XPathParser.ParseNamedFunctionRef` now falls back to `int.MaxValue` when `int.TryParse` fails, and `VmEngine` resolves an arity of `int.MaxValue` as `FOAR0002` instead of matching a variadic fallback. The two affected QT3 tests now pass.
+
+Expected QT3: **30,329 passed / 0 failed / 1,492 skipped (95.31%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,707 unit tests / 0 failed**. Targeted verification: `fn-function-arity` 21/0/2, `fn-function-name` 25/0/1.
+
+## This Session Changes (function-arity overflow cluster)
+
+1. **Clamp out-of-range arity literals** (`XPathParser.cs`) — `ParseNamedFunctionRef` uses `int.TryParse` and clamps overflow to `int.MaxValue` so the parser does not throw `OverflowException`.
+2. **Surface FOAR0002 for clamped arity** (`VmEngine.cs`) — `ResolveNamedFunctionTuple` and `ResolveNamedFunctionItem` now raise `FOAR0002` when the arity is `int.MaxValue`, matching the QT3 expectation.
+3. **Regression tests** (`FunctionLibraryTests.cs`) — `FunctionArity_HugeArity_RaisesFOAR0002` and `FunctionName_HugeArity_RaisesFOAR0002`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup with the remaining small groups: the `NotSupportedException: Only one order by clause is supported` cluster (2 tests), the `XML 1.1 prefixed namespace undeclaration` pair, the `ArgumentPlaceholderNode` unsupported AST cluster, and the `fn-transform` / `compare-042` / document-node residuals.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(harness): skip app-CatalogCheck catalog-consistency set to allow full QT3 sweep to complete
 **Current focus:** **QT3 skip-cluster cleanup — app-CatalogCheck hang** — the `app-CatalogCheck` set is a catalog-consistency (meta) set: each test case loads the entire QT3 catalog and all 428 referenced test-set files. Running it caused the full conformance sweep to hang/timeout before producing a final summary. The harness now records the 14 tests in this set as skipped with the reason "Catalog consistency checks load the full QT3 corpus per test; skipped to avoid hang". With this blocker removed, a full end-to-end QT3 sweep completes cleanly at **30,327 passed / 0 failed / 1,494 skipped (95.30%)**.
 

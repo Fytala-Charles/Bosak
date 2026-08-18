@@ -69,6 +69,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.30  | 18-08-2026     | fn:json-doc relative URI base-URI resolution regression test |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.31  | 18-08-2026     | Huge named-function-ref arity raises FOAR0002 (fn-function-arity-017 / fn-function-name-018) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3513,6 +3515,24 @@ public class FunctionLibraryTests
         {
             Directory.Delete(dir, true);
         }
+    }
+
+    [Fact]
+    public void FunctionArity_HugeArity_RaisesFOAR0002()
+    {
+        // fn-function-arity-017: arity literal exceeds Int32 range.
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("function-arity(fn:concat#340282366920938463463374607431768211456)"));
+        Assert.Contains("FOAR0002", ex.Message);
+    }
+
+    [Fact]
+    public void FunctionName_HugeArity_RaisesFOAR0002()
+    {
+        // fn-function-name-018: arity literal exceeds Int32 range.
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("function-name(fn:concat#340282366920938463463374607431768211456)"));
+        Assert.Contains("FOAR0002", ex.Message);
     }
 
     [Fact]
