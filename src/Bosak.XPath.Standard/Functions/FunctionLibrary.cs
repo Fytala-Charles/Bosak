@@ -40,6 +40,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.90  | 18-08-2026     | fn:json-doc resolves relative URIs against base URI and reads local JSON files as text |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.91  | 18-08-2026     | UCA alternate=blanked + strength=identical uses codepoint tie-break (compare-042) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -5288,7 +5290,18 @@ public static class FunctionLibrary
     public static int CompareStrings(string s1, string s2, string collation)
     {
         if (TryParseUca(collation, out var uca))
+        {
+            // UCA alternate=blanked + strength=identical: spaces are ignored for ordering
+            // but a final codepoint comparison decides equality (compare-042).
+            if (uca.IsIdenticalBlanked)
+            {
+                int blankedResult = uca.CompareInfo.Compare(s1, s2, uca.Options);
+                if (blankedResult != 0)
+                    return blankedResult;
+                return string.Equals(s1, s2, StringComparison.Ordinal) ? 0 : CompareCodepoints(s1, s2);
+            }
             return uca.CompareInfo.Compare(s1, s2, uca.Options);
+        }
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return string.Compare(ToAsciiLower(s1), ToAsciiLower(s2), StringComparison.Ordinal);
         var comparison = GetStringComparison(collation);
@@ -5386,7 +5399,7 @@ public static class FunctionLibrary
     private static IEqualityComparer<string> GetCollationEqualityComparer(string collation)
     {
         if (TryParseUca(collation, out var uca))
-            return new UcaStringComparer(uca.CompareInfo, uca.Options);
+            return new UcaStringComparer(uca.CompareInfo, uca.Options, uca.IsIdenticalBlanked);
         return GetStringComparer(collation);
     }
 
@@ -5421,41 +5434,52 @@ public static class FunctionLibrary
         }
 
         var culture = CultureInfo.GetCultureInfo(lang);
+        var isIdentical = string.Equals(strength, "identical", StringComparison.OrdinalIgnoreCase);
         var options = strength.ToLowerInvariant() switch
         {
             "primary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
             "secondary" => CompareOptions.IgnoreCase,
             "tertiary" => CompareOptions.None,
             "quaternary" => CompareOptions.None,
-            "identical" => CompareOptions.Ordinal,
+            // CompareOptions.Ordinal cannot be combined with IgnoreSymbols; keep a
+            // separate flag so CompareStrings can apply the identical-level tie-break.
+            "identical" => alternateBlanked ? CompareOptions.None : CompareOptions.Ordinal,
             _ => CompareOptions.None,
         };
 
         if (alternateBlanked)
             options |= CompareOptions.IgnoreSymbols;
 
-        info = new UcaCollationInfo(lang, strength, options, culture.CompareInfo);
+        info = new UcaCollationInfo(lang, strength, options, culture.CompareInfo, isIdentical && alternateBlanked);
         return true;
     }
 
-    private readonly record struct UcaCollationInfo(string Lang, string Strength, CompareOptions Options, CompareInfo CompareInfo);
+    private readonly record struct UcaCollationInfo(string Lang, string Strength, CompareOptions Options, CompareInfo CompareInfo, bool IsIdenticalBlanked);
 
     private sealed class UcaStringComparer : IEqualityComparer<string>
     {
         private readonly CompareInfo _compareInfo;
         private readonly CompareOptions _options;
+        private readonly bool _identicalBlanked;
 
-        public UcaStringComparer(CompareInfo compareInfo, CompareOptions options)
+        public UcaStringComparer(CompareInfo compareInfo, CompareOptions options, bool identicalBlanked = false)
         {
             _compareInfo = compareInfo;
             _options = options;
+            _identicalBlanked = identicalBlanked;
         }
 
         public bool Equals(string? x, string? y)
-            => _compareInfo.Compare(x, y, _options) == 0;
+        {
+            // alternate=blanked + strength=identical: ignored characters still make
+            // the strings unequal at the identical level (compare-042).
+            if (_identicalBlanked)
+                return string.Equals(x, y, StringComparison.Ordinal);
+            return _compareInfo.Compare(x, y, _options) == 0;
+        }
 
         public int GetHashCode(string obj)
-            => _compareInfo.GetSortKey(obj, _options).GetHashCode();
+            => _identicalBlanked ? StringComparer.Ordinal.GetHashCode(obj) : _compareInfo.GetSortKey(obj, _options).GetHashCode();
     }
 
     private static XdmValue NormalizeSpace_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

@@ -71,6 +71,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.31  | 18-08-2026     | Huge named-function-ref arity raises FOAR0002 (fn-function-arity-017 / fn-function-name-018) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.32  | 18-08-2026     | UCA alternate=blanked + strength=identical codepoint tie-break test (compare-042) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -1307,6 +1309,16 @@ public class FunctionLibraryTests
 
     [Fact]
     public void Compare_Greater() => Assert.Equal("1", EvalStr("fn:compare('b','a')"));
+
+    [Fact]
+    public void Compare_UcaIdenticalBlanked_NotEqual()
+    {
+        // compare-042: alternate=blanked + strength=identical must not combine
+        // CompareOptions.Ordinal with IgnoreSymbols; a codepoint tie-break makes the
+        // strings unequal.
+        var result = Evaluate("fn:compare('database', 'data base', 'http://www.w3.org/2013/collation/UCA?lang=en;alternate=blanked;strength=identical')");
+        Assert.NotEqual(0, result.IntegerValue);
+    }
 
     // ------------------------------------------------------------------
     // URI encoding functions
