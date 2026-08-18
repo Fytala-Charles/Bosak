@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(stdlib): resolve fn:json-doc relative URIs against base URI and read local JSON files as text
+**Current focus:** **QT3 skip-cluster cleanup — misc-JsonTestSuite cluster** — `JsonDoc` now resolves relative URIs against `EvaluationContext.BaseUri` before loading, and when the resolved URI points to a local file it reads the file as plain text instead of routing it through the XML `DocumentLoader`. The root cause of the 318 skipped `misc-JsonTestSuite` tests was that the test cases use relative URIs such as `JSONTestSuite/test_parsing/...`; without base-URI resolution these were resolved against the process working directory (`D:\Development\Bosak`), so the files were not found. The fix brings the entire `misc-JsonTestSuite` set to **318 passed / 0 failed / 0 skipped**.
+
+Expected QT3: **30,327 passed / 0 failed / 1,495 skipped** (+318 passing, −318 skips) relative to the previous verified baseline. Full `dotnet test Bosak.sln` passes: **1,705 unit tests / 0 failed**. Targeted verification: `fn-json-doc` remains **61/0/7**; `misc-JsonTestSuite` is **318/0/0**. The full sweep is still interrupted by `app-CatalogCheck`, which hangs/timeouts before producing a final summary, so the total is derived from the previous documented sweep plus the verified targeted deltas. The remaining largest actionable cluster is the `app-CatalogCheck` full-sweep hang.
+
+## This Session Changes (misc-JsonTestSuite cluster)
+
+1. **Resolve relative URIs in `JsonDoc`** (`FunctionLibrary.cs`) — `JsonDoc` now calls `ResolveUriAgainstBase(uri, ctx.BaseUri)` before looking up the `ResourceUriMapper`, checking for a local file, or invoking `DocumentLoader`. This mirrors `fn:doc` and `fn:unparsed-text` behavior.
+2. **Read local JSON files as text** (`FunctionLibrary.cs`) — when the resolved URI is an absolute `file:` URI whose local path exists, `JsonDoc` reads it directly with `File.ReadAllText`. This avoids sending JSON resources through the XML `DocumentLoader`, which cannot parse JSON.
+3. **Regression test** (`FunctionLibraryTests.cs`) — `JsonDoc_RelativeUri_ResolvesAgainstBaseUri` asserts that `json-doc('test.json')` resolves the relative URI against `ctx.BaseUri` and returns the parsed value.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Investigate the `app-CatalogCheck` full-sweep hang/timeout; it is the only remaining blocker preventing a clean end-to-end QT3 summary. After that, probe the next smaller actionable skip clusters (e.g., the `does-not-exist.txt` IO exceptions, `ArgumentException` document-node residuals if any remain, or platform-limitation groups).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(standard): wrap JsonDoc DocumentLoader failures as FOUT1170 (json-doc-error-028..032)
 **Current focus:** **QT3 skip-cluster cleanup — fn-json-doc error cluster** — `JsonDoc` in `FunctionLibrary.cs` now wraps the `EvaluationContext.DocumentLoader` path in the same try/catch used for direct file loads. Previously, when the conformance harness's document loader could not resolve an invalid or unreachable URI, raw `IOException`/`FileNotFoundException`/`DirectoryNotFoundException` bubbles escaped and were recorded as unexpected-error skips. The loader path now converts any non-`InvalidOperationException` into `InvalidOperationException("FOUT1170: Cannot load JSON document {uri}")`, so the five `json-doc-error-028..032` tests pass. A unit regression test (`JsonDoc_DocumentLoaderThrows_WrapsAsFOUT1170`) guards the behavior.
 

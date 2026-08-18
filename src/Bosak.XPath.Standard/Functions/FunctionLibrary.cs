@@ -38,6 +38,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.89  | 18-08-2026     | fn:json-doc wraps DocumentLoader failures as FOUT1170 (json-doc-error-028..032)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.90  | 18-08-2026     | fn:json-doc resolves relative URIs against base URI and reads local JSON files as text |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -12600,8 +12602,13 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(uri))
             throw new InvalidOperationException("FOUT1170: Invalid URI");
 
+        // Resolve relative URIs against the static base URI before loading, so that
+        // QT3 test-sets such as misc-JsonTestSuite find their JSON files next to the
+        // test-set file instead of in the process working directory.
+        string resolvedUri = ResolveUriAgainstBase(uri, ctx.BaseUri);
+
         string json;
-        var mappedPath = ctx.ResourceUriMapper?.Invoke(uri);
+        var mappedPath = ctx.ResourceUriMapper?.Invoke(uri) ?? ctx.ResourceUriMapper?.Invoke(resolvedUri);
         if (mappedPath is not null)
         {
             // The suite maps this (typically http:) URI to a local JSON resource file.
@@ -12614,11 +12621,24 @@ public static class FunctionLibrary
                 throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
             }
         }
+        else if (Uri.TryCreate(resolvedUri, UriKind.Absolute, out var resolvedUriObj) && resolvedUriObj.IsFile && File.Exists(resolvedUriObj.LocalPath))
+        {
+            // Local JSON file: read as plain text. This avoids routing JSON resources
+            // through the XML document loader (which is what ctx.DocumentLoader does).
+            try
+            {
+                json = File.ReadAllText(resolvedUriObj.LocalPath);
+            }
+            catch
+            {
+                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+            }
+        }
         else if (ctx.DocumentLoader is not null)
         {
             try
             {
-                var node = ctx.DocumentLoader(uri);
+                var node = ctx.DocumentLoader(resolvedUri);
                 json = node.StringValue;
             }
             catch (InvalidOperationException)
@@ -12634,7 +12654,7 @@ public static class FunctionLibrary
         {
             try
             {
-                json = File.ReadAllText(uri);
+                json = File.ReadAllText(resolvedUri);
             }
             catch
             {

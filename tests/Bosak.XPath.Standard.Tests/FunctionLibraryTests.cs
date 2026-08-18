@@ -67,6 +67,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.29  | 18-08-2026     | fn:json-doc DocumentLoader IO failure wraps to FOUT1170 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.30  | 18-08-2026     | fn:json-doc relative URI base-URI resolution regression test |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3486,6 +3488,31 @@ public class FunctionLibraryTests
         var ex = Assert.Throws<InvalidOperationException>(() =>
             XPath31Expression.Compile("json-doc('http://example.org/json/fails')").Evaluate(ctx));
         Assert.Contains("FOUT1170", ex.Message);
+    }
+
+    [Fact]
+    public void JsonDoc_RelativeUri_ResolvesAgainstBaseUri()
+    {
+        // misc-JsonTestSuite pattern: a relative URI is resolved against the static
+        // base URI and the JSON file is read as plain text (not through the XML
+        // document loader).
+        var dir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        Directory.CreateDirectory(dir);
+        var fileName = "test.json";
+        var path = Path.Combine(dir, fileName);
+        File.WriteAllText(path, "{\"x\":2}");
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.BaseUri = new Uri(path).AbsoluteUri;
+            var result = XPath31Expression.Compile("json-doc('test.json')?x").Evaluate(ctx);
+            Assert.Equal(2.0, result.DoubleValue);
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
     }
 
     [Fact]
