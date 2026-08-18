@@ -49,6 +49,8 @@
 //                      | Charles Korthout | 1.12  | 20-07-2026     | Added PathStep_RequiresNodeContextItem test                                              |
 //                      | Charles Korthout | 1.13  | 20-07-2026     | Added QNameCast_ResolvesPrefixedNamespace and XsQNameConstructor_UsesDefaultElementNamespace tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.14  | 18-08-2026     | Added IfKeyword_ParseAsNameTestWhenNotConditional test (K2-NameTest-5) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -638,6 +640,16 @@ public class ApiTests
 
         var exFor = Assert.Throws<InvalidOperationException>(() => Eval("for"));
         Assert.Contains("XPDY0002", exFor.Message);
+    }
+
+    [Fact]
+    public void IfKeyword_ParseAsNameTestWhenNotConditional()
+    {
+        // K2-NameTest-5: 'if' is the conditional keyword only when followed by '('.
+        // A bare 'if' parses as a path step and raises XPDY0002 because there is
+        // no context item, not XPST0003.
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval("if"));
+        Assert.Contains("XPDY0002", ex.Message);
     }
 
     [Fact]

@@ -91,6 +91,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.43  | 07-08-2026     | EQName ':'-after-brace XPST0003 and xmlns-URI XQST0070; namespace-decl URI whitespace accepted; PI target NCName check; inline-function duplicate params compare expanded names; group-by 'as' requires ':='; reserved function names rejected in calls |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.44  | 18-08-2026     | Treat 'if' as conditional only when followed by '('; otherwise name test (K2-NameTest-5) |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.44  | 07-08-2026     | Q{uri}:* name test is malformed — XPST0003 (nametest-23)                            |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.45  | 07-08-2026     | Empty enclosed expressions allowed (XQ31); whitespace required between constructor attributes (XPST0003); XML 1.0 line-ending normalization for literal characters in XQuery string literals |
@@ -312,7 +314,9 @@ public sealed class XPathParser
             TokenKind.KeywordFor when _allowFullFlwor && IsWindowKeyword(Peek(1)) => ParseForExpr(),
             TokenKind.KeywordLet when Peek(1).Kind == TokenKind.Dollar => ParseLetExpr(),
             TokenKind.KeywordSome or TokenKind.KeywordEvery => ParseQuantifiedExpr(),
-            TokenKind.KeywordIf => ParseIfExpr(),
+            // 'if' is the conditional keyword only when followed by '('. Otherwise it
+            // is an ordinary name (e.g., a name test) (K2-NameTest-5).
+            TokenKind.KeywordIf when Peek(1).Kind == TokenKind.LParen => ParseIfExpr(),
             TokenKind.KeywordTry => ParseTryExpr(),
             // switch/typeswitch are XQuery-only ExprSingle forms; 'switch'/'typeswitch'
             // followed by '(' anywhere else remains an ordinary name (K2-NameTest-*).

@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(parser): treat `if` as conditional only when followed by `(`; otherwise parse as name test (K2-NameTest-5)
+**Current focus:** **if-keyword-as-name cluster** — `K2-NameTest-5` is the last actionable QT3 engine gap. The test contains the tokenizer-torture expression `if(if) then then else else-...` and expects a runtime `XPTY0004`/`XPDY0002`. `XPathParser.ParseExprSingle` unconditionally routed `TokenKind.KeywordIf` to `ParseIfExpr()`, so the inner `if` (followed by `)`) caused `XPST0003: Expected LParen but found RParen`. The parser now gates `KeywordIf` on `Peek(1).Kind == TokenKind.LParen`, letting bare `if` fall through to `ParseOrExpr` as an ordinary name/name test (consistent with `for`/`let` gating). `K2-NameTest-5` now passes. Expected QT3: **29,941 passed / 0 failed / 1,880 skipped (94.09%)** (+1 passing, −1 skip); the known-gaps probe reports 1 admitted failure (`fn-unparsed-text-054a` — external Cloudflare block, not an engine gap). Full `dotnet test Bosak.sln` passes: **1,699 unit tests / 0 failed**.
+
+## This Session Changes (if-keyword-as-name cluster)
+
+1. **Gate `if` conditional parsing on a following `(`** (`XPathParser.cs`) — `ParseExprSingle` now calls `ParseIfExpr()` only when `KeywordIf` is followed by `TokenKind.LParen`; otherwise `if` is parsed as a name test through `ParseOrExpr`.
+2. **Regression test** (`ApiTests.cs`) — added `IfKeyword_ParseAsNameTestWhenNotConditional` to verify `if` without a following `(` is accepted as a name test.
+3. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `K2-NameTest-5` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. The QT3 residual singles/pairs sweep is complete. Only `fn-unparsed-text-054a` remains as a documented non-engine gap. No further actionable engine gaps are known. Consider declaring the XQuery conformance sweep complete and shifting focus to any new feature work or KnownXQueryGaps cleanup (e.g., addressing the remaining skipped groups such as unsupported `group by`/`order by` interleaving, schema awareness, or JSONTestSuite path issues) if desired.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(runtime): axis steps over empty sequence input return empty instead of XPDY0002 (Catalog004)
 **Current focus:** **axis-step cluster** — `Catalog004` failed with `XPDY0002: An axis step requires a context item` inside a nested `let`/`for` FLWOR. Investigation showed the error was not a lost context item: one `<fots:schema>` in the QT3 catalog has no `@file` attribute, so `$schema/@file` evaluates to the empty sequence, `resolve-uri((), ...)` returns empty, `doc(())` returns `XdmValue.Undefined`, and the following child step `/*` received the empty-sequence sentinel and misinterpreted it as a missing context item. `ApplyAxis` and `PathStepMap` in `VmEngine.cs` now treat an `Undefined` input as an empty result; the real "absent context item" case is still caught earlier by `LoadContextItem`. `Catalog004` now passes. Expected QT3: **29,940 passed / 0 failed / 1,881 skipped (94.09%)** (+1 passing, −1 skip); the known-gaps probe should report 2 admitted failures (`fn-unparsed-text-054a`, `K2-NameTest-5`). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 

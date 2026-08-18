@@ -152,8 +152,7 @@ internal sealed class ConformanceRunner
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
         // prod/DirElemContent.xml (0 tests)
-        // prod/NameTest.xml (1 test)
-        ["K2-NameTest-5"] = "XQuery conformance gap (NameTest): keywords usable as element names in expression positions (tokenizer-torture)",
+        // prod/NameTest.xml (0 tests)
     };
 
     public ConformanceRunner(string suitePath, string? setFilter = null, string? testFilter = null)
