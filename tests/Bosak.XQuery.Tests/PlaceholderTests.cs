@@ -76,6 +76,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24  | 18-08-2026     | Axis-step over empty sequence and Catalog004-shaped regression tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.25  | 18-08-2026     | Where clauses after group by and order by regression tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -388,6 +390,58 @@ public class PlaceholderTests
         Assert.True(result.IsSequence, "Expected a sequence result.");
         var items = ToIntegers(result);
         Assert.Equal(new[] { 1L, 1L, 0L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_WhereAfterGroupBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4, 5, 6) group by $g := $i mod 3 where count($i) gt 1 order by $g return ($g, count($i))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 0L, 2L, 1L, 2L, 2L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_WhereAfterOrderBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4, 5, 6) group by $g := $i mod 3 order by $g where count($i) gt 1 return ($g, count($i))");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 0L, 2L, 1L, 2L, 2L, 2L }, items);
+    }
+
+    [Fact]
+    public void XQuery_OrderBy_WhereAfterOrderBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (5, 1, 4, 2, 3) order by $i where $i gt 2 return $i");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 3L, 4L, 5L }, items);
+    }
+
+    [Fact]
+    public void XQuery_GroupBy_LetAfterGroupBy()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("for $i in (1, 2, 3, 4, 5, 6) group by $g := $i mod 3 let $c := count($i) where $c gt 1 order by $g return ($g, $c)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence, "Expected a sequence result.");
+        var items = ToIntegers(result);
+        Assert.Equal(new[] { 0L, 2L, 1L, 2L, 2L, 2L }, items);
     }
 
     [Fact]

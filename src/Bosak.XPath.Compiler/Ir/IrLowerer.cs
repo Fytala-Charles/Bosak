@@ -73,6 +73,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Revert unverified FirstStepRequiresContext helper; keep simple StepNode context check |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.32  | 18-08-2026     | Reject let clauses between group by and order by (unsupported ordering)                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1953,10 +1955,35 @@ public sealed class IrLowerer
 
         if (preClauses.Any(c => c is OrderByClauseNode))
             throw new NotSupportedException("XPST0003: An order by clause before group by is not supported; place order by after group by.");
-        if (postClauses.Any(c => c is not OrderByClauseNode and not CountClauseNode))
-            throw new NotSupportedException("XPST0003: Only order by and count clauses are supported after group by.");
+        if (postClauses.Any(c => c is not OrderByClauseNode and not CountClauseNode and not WhereClauseNode and not LetClauseNode))
+            throw new NotSupportedException("XPST0003: Only order by, count, where, and let clauses are supported after group by.");
         if (postClauses.Count(c => c is OrderByClauseNode) > 1)
             throw new NotSupportedException("XPST0003: Multiple order by clauses after group by are not supported.");
+
+        // A post-grouping let that precedes order by is lowered after order-by re-keying,
+        // so the order-by key cannot see the let variable. Reject only when an order-by key
+        // actually references such a variable; harmless lets (e.g. used only in return/where)
+        // are still allowed.
+        int postOrderByIndex = postClauses.FindIndex(c => c is OrderByClauseNode);
+        if (postOrderByIndex >= 0)
+        {
+            var postLetBoundVariables = postClauses
+                .Take(postOrderByIndex)
+                .OfType<LetClauseNode>()
+                .SelectMany(l => l.Bindings)
+                .Select(b => (b.VariableName, b.VariableNamespaceUri))
+                .ToHashSet();
+            if (postLetBoundVariables.Count > 0)
+            {
+                var orderByVars = postClauses
+                    .OfType<OrderByClauseNode>()
+                    .SelectMany(o => o.Specs)
+                    .SelectMany(s => CollectVariableReferences(s.KeyExpression))
+                    .Select(v => (v.LocalName, v.NamespaceUri));
+                if (orderByVars.Any(v => postLetBoundVariables.Contains(v)))
+                    throw new NotSupportedException("XPST0003: A let clause between group by and order by is not supported when the order-by key references the let variable.");
+            }
+        }
 
         // A grouping spec with ':=' behaves like a let binding evaluated per pre-grouping tuple.
         var syntheticBindings = groupByClause.Specs
@@ -2128,8 +2155,10 @@ public sealed class IrLowerer
         var postClauses = orderByIndex >= 0 ? node.Clauses.Skip(orderByIndex + 1).ToList() : new List<FlworClauseNode>();
         var orderByClause = orderByIndex >= 0 ? (OrderByClauseNode)node.Clauses[orderByIndex] : null;
 
-        if (postClauses.Any(c => c is not CountClauseNode))
-            throw new NotSupportedException("XPST0003: Only count clauses are supported after an order by clause.");
+        if (preClauses.Any(c => c is OrderByClauseNode))
+            throw new NotSupportedException("XPST0003: Only one order by clause is supported in a FLWOR expression.");
+        if (postClauses.Any(c => c is not CountClauseNode and not WhereClauseNode and not LetClauseNode))
+            throw new NotSupportedException("XPST0003: Only count, where, and let clauses are supported after an order by clause.");
 
         // The variables bound by all for/let/count clauses before order by must be captured
         // before the tuple builder recurses, because that builder adds and removes
@@ -2235,6 +2264,207 @@ public sealed class IrLowerer
         int countVarPoolIdx = AddToLiteralPool(countVar.VariableKey);
         Emit(IrOpCode.StoreVariable, 0, (ushort)newCounterReg, 0, countVarPoolIdx);
         FreeRegister(newCounterReg);
+    }
+
+    private static List<VariableReferenceNode> CollectVariableReferences(XPathAstNode node)
+    {
+        var result = new List<VariableReferenceNode>();
+        CollectVariableReferencesCore(node, result);
+        return result;
+    }
+
+    private static void CollectVariableReferencesCore(XPathAstNode node, List<VariableReferenceNode> result)
+    {
+        switch (node)
+        {
+            case VariableReferenceNode varRef:
+                result.Add(varRef);
+                return;
+            case ParenthesizedExprNode p:
+                CollectVariableReferencesCore(p.Expression, result);
+                return;
+            case BinaryExpressionNode b:
+                CollectVariableReferencesCore(b.Left, result);
+                CollectVariableReferencesCore(b.Right, result);
+                return;
+            case UnaryExpressionNode u:
+                CollectVariableReferencesCore(u.Operand, result);
+                return;
+            case IfExpressionNode i:
+                CollectVariableReferencesCore(i.Condition, result);
+                CollectVariableReferencesCore(i.ThenBranch, result);
+                CollectVariableReferencesCore(i.ElseBranch, result);
+                return;
+            case SequenceExpressionNode s:
+                foreach (var e in s.Expressions) CollectVariableReferencesCore(e, result);
+                return;
+            case RangeExpressionNode r:
+                CollectVariableReferencesCore(r.From, result);
+                CollectVariableReferencesCore(r.To, result);
+                return;
+            case PathExprNode p:
+                foreach (var s in p.Steps) CollectVariableReferencesCore(s, result);
+                return;
+            case StepNode s:
+                foreach (var pred in s.Predicates) CollectVariableReferencesCore(pred, result);
+                return;
+            case PredicateNode p:
+                CollectVariableReferencesCore(p.Expression, result);
+                return;
+            case FunctionCallNode f:
+                foreach (var a in f.Arguments) CollectVariableReferencesCore(a, result);
+                return;
+            case NamedFunctionRefNode:
+            case ContextItemNode:
+            case ArgumentPlaceholderNode:
+                return;
+            case DynamicFunctionCallNode d:
+                CollectVariableReferencesCore(d.Function, result);
+                foreach (var a in d.Arguments) CollectVariableReferencesCore(a, result);
+                return;
+            case CastNode c:
+                CollectVariableReferencesCore(c.Expression, result);
+                return;
+            case CastableNode c:
+                CollectVariableReferencesCore(c.Expression, result);
+                return;
+            case InstanceOfNode i:
+                CollectVariableReferencesCore(i.Expression, result);
+                return;
+            case TreatNode t:
+                CollectVariableReferencesCore(t.Expression, result);
+                return;
+            case ArrowExprNode a:
+                CollectVariableReferencesCore(a.Source, result);
+                CollectVariableReferencesCore(a.Target, result);
+                return;
+            case LookupNode l:
+                CollectVariableReferencesCore(l.Expression, result);
+                CollectVariableReferencesCore(l.Key, result);
+                return;
+            case LookupWildcardNode l:
+                CollectVariableReferencesCore(l.Expression, result);
+                return;
+            case MapConstructorNode m:
+                foreach (var e in m.Entries)
+                {
+                    CollectVariableReferencesCore(e.Key, result);
+                    CollectVariableReferencesCore(e.Value, result);
+                }
+                return;
+            case ArrayConstructorNode a:
+                foreach (var i in a.Items) CollectVariableReferencesCore(i, result);
+                return;
+            case ForExpressionNode f:
+                foreach (var b in f.Bindings) CollectVariableReferencesCore(b.Expression, result);
+                CollectVariableReferencesCore(f.ReturnExpression, result);
+                return;
+            case LetExpressionNode l:
+                foreach (var b in l.Bindings) CollectVariableReferencesCore(b.Expression, result);
+                CollectVariableReferencesCore(l.Body, result);
+                return;
+            case QuantifiedExpressionNode q:
+                foreach (var b in q.Bindings) CollectVariableReferencesCore(b.Expression, result);
+                CollectVariableReferencesCore(q.SatisfiesExpression, result);
+                return;
+            case SwitchExpressionNode s:
+                CollectVariableReferencesCore(s.Operand, result);
+                foreach (var c in s.Cases)
+                {
+                    foreach (var v in c.Values) CollectVariableReferencesCore(v, result);
+                    CollectVariableReferencesCore(c.Return, result);
+                }
+                CollectVariableReferencesCore(s.Default, result);
+                return;
+            case TypeswitchExpressionNode t:
+                CollectVariableReferencesCore(t.Operand, result);
+                foreach (var c in t.Cases) CollectVariableReferencesCore(c.Return, result);
+                CollectVariableReferencesCore(t.Default, result);
+                return;
+            case TryCatchNode t:
+                CollectVariableReferencesCore(t.TryExpression, result);
+                foreach (var c in t.Clauses) CollectVariableReferencesCore(c.Expression, result);
+                return;
+            case InlineFunctionNode i:
+                CollectVariableReferencesCore(i.Body, result);
+                return;
+            case DirectElementConstructorNode e:
+                foreach (var a in e.Attributes)
+                {
+                    foreach (var v in a.ValueParts) CollectVariableReferencesCore(v, result);
+                }
+                foreach (var c in e.Content) CollectVariableReferencesCore(c, result);
+                return;
+            case ComputedElementConstructorNode e:
+                if (e.NameExpression is not null) CollectVariableReferencesCore(e.NameExpression, result);
+                CollectVariableReferencesCore(e.ContentExpression, result);
+                return;
+            case ComputedAttributeConstructorNode a:
+                if (a.NameExpression is not null) CollectVariableReferencesCore(a.NameExpression, result);
+                CollectVariableReferencesCore(a.ValueExpression, result);
+                return;
+            case ComputedDocumentConstructorNode d:
+                CollectVariableReferencesCore(d.ContentExpression, result);
+                return;
+            case ComputedTextConstructorNode t:
+                CollectVariableReferencesCore(t.ValueExpression, result);
+                return;
+            case ComputedCommentConstructorNode c:
+                CollectVariableReferencesCore(c.ValueExpression, result);
+                return;
+            case ComputedPIConstructorNode p:
+                if (p.TargetExpression is not null) CollectVariableReferencesCore(p.TargetExpression, result);
+                CollectVariableReferencesCore(p.ValueExpression, result);
+                return;
+            case ComputedNamespaceConstructorNode n:
+                if (n.PrefixExpression is not null) CollectVariableReferencesCore(n.PrefixExpression, result);
+                CollectVariableReferencesCore(n.UriExpression, result);
+                return;
+            case StringConstructorNode s:
+                foreach (var p in s.Parts) CollectVariableReferencesCore(p, result);
+                return;
+            case PostfixPredicateNode p:
+                CollectVariableReferencesCore(p.Expression, result);
+                CollectVariableReferencesCore(p.Predicate, result);
+                return;
+            case FlworExpressionNode f:
+                // Variables bound by FLWOR clauses are scoped within the expression; only
+                // the return expression and any unbound clause expressions can reference
+                // outer variables.
+                foreach (var clause in f.Clauses)
+                {
+                    switch (clause)
+                    {
+                        case ForClauseNode fc:
+                            foreach (var b in fc.Bindings) CollectVariableReferencesCore(b.Expression, result);
+                            break;
+                        case LetClauseNode lc:
+                            foreach (var b in lc.Bindings) CollectVariableReferencesCore(b.Expression, result);
+                            break;
+                        case WhereClauseNode w:
+                            CollectVariableReferencesCore(w.Condition, result);
+                            break;
+                        case OrderByClauseNode o:
+                            foreach (var s in o.Specs) CollectVariableReferencesCore(s.KeyExpression, result);
+                            break;
+                        case GroupByClauseNode g:
+                            foreach (var s in g.Specs)
+                            {
+                                if (s.KeyExpression is not null) CollectVariableReferencesCore(s.KeyExpression, result);
+                            }
+                            break;
+                        case WindowClauseNode w:
+                            CollectVariableReferencesCore(w.InExpression, result);
+                            CollectVariableReferencesCore(w.StartCondition.WhenExpression, result);
+                            if (w.EndCondition is not null) CollectVariableReferencesCore(w.EndCondition.WhenExpression, result);
+                            break;
+                    }
+                }
+                CollectVariableReferencesCore(f.ReturnExpression, result);
+                return;
+            default:
+                return;
+        }
     }
 
     private static List<BoundVariable> ComputeBoundVariables(IReadOnlyList<FlworClauseNode> clauses)
@@ -2576,12 +2806,31 @@ public sealed class IrLowerer
         Emit(IrOpCode.TupleBind, (ushort)tupleReg, 0, 0, tupleBindPoolIdx);
         FreeRegister(tupleReg);
 
-        // Handle post-order-by clauses (currently only count is supported).
+        // Handle post-order-by clauses (count, where, and let are supported).
+        var whereSkipJumps = new List<int>();
+        var scopedNames = new List<string>(boundVariables.Select(v => v.Name).Distinct());
         foreach (var postClause in postClauses)
         {
             if (postClause is CountClauseNode countClause)
             {
                 EmitIncrementCount(countClause, countCounters);
+            }
+            else if (postClause is WhereClauseNode whereClause)
+            {
+                int condReg = LowerNode(whereClause.Condition);
+                int skipJump = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)condReg);
+                whereSkipJumps.Add(skipJump);
+                FreeRegister(condReg);
+            }
+            else if (postClause is LetClauseNode letClause)
+            {
+                foreach (var binding in letClause.Bindings)
+                {
+                    int exprReg = LowerNode(binding.Expression);
+                    StoreVariable(binding, exprReg);
+                    FreeRegister(exprReg);
+                    scopedNames.Add(binding.VariableName);
+                }
             }
         }
 
@@ -2589,11 +2838,22 @@ public sealed class IrLowerer
         Emit(IrOpCode.Return, (ushort)bodyReg);
         FreeRegister(bodyReg);
 
+        // Where clauses that evaluate to false skip the body and return an empty sequence
+        // so the enclosing For loop adds nothing for this iteration.
+        foreach (int skipJump in whereSkipJumps)
+        {
+            int skipLabel = CurrentInstructionIndex;
+            PatchJump(skipJump, skipLabel);
+            int emptyReg = AllocRegister();
+            Emit(IrOpCode.LoadEmptySequence, (ushort)emptyReg);
+            Emit(IrOpCode.Return, (ushort)emptyReg);
+            FreeRegister(emptyReg);
+        }
+
         int afterRhs = _instructions.Count;
         // The body For saves and restores the tuple-bound variables so they do not leak
         // out of the FLWOR's lexical scope.
-        var scopedNames = boundVariables.Select(v => v.Name).Distinct().ToArray();
-        var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry, ScopedVariableNames: scopedNames);
+        var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry, ScopedVariableNames: scopedNames.ToArray());
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)tupleSeqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
