@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(providers): computed attribute xml:space validation raises XQDY0092 (K2-ComputeConAttr-60)
+**Current focus:** **QT3 skip-cluster cleanup — xml:space computed-attribute cluster** — `XDocumentProvider.ConstructAttribute` now validates `xml:space` values at construction time and raises `XQDY0092` for anything other than `default` or `preserve`. Previously the invalid value was accepted and only failed later when LINQ's `XmlWellFormedWriter` serialized the attribute, surfacing as a harness `ArgumentException`.
+
+Expected QT3: **30,334 passed / 0 failed / 1,487 skipped (95.32%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,712 unit tests / 0 failed**. Targeted verification: `prod-CompAttrConstructor` (`K2-ComputeConAttr-60`) 1/0/0.
+
+## This Session Changes (xml:space computed-attribute cluster)
+
+1. **Validate xml:space in computed attributes** (`XDocumentProvider.cs`) — `ConstructAttribute` checks `NamespaceUri == "http://www.w3.org/XML/1998/namespace" && LocalName == "space"` and raises `XQDY0092` for invalid values.
+2. **Regression test** (`PlaceholderTests.cs`) — `ComputedAttribute_XmlSpaceInvalid_RaisesXQDY0092`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup with the remaining small groups: the `NotSupportedException: Only one order by clause is supported` cluster (2 tests), the `XML 1.1 prefixed namespace undeclaration` pair, and the platform-limitation groups (decimal precision, DateTimeOffset year -2, `OutOfMemoryException` codepoints).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(stdlib): UCA alternate=blanked + strength=identical uses codepoint tie-break (compare-042)
 **Current focus:** **QT3 skip-cluster cleanup — UCA identical/blanked cluster** — `fn:compare` with a UCA collation `strength=identical;alternate=blanked` previously combined `CompareOptions.Ordinal` with `CompareOptions.IgnoreSymbols`, which .NET rejects. `TryParseUca` now keeps those options separate and records an `IsIdenticalBlanked` flag; `CompareStrings` applies a final codepoint tie-break after the blanked comparison, and `UcaStringComparer` uses ordinal equality for that combination. `compare-042` now passes.
 

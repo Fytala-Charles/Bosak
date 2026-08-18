@@ -78,6 +78,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.25  | 18-08-2026     | Where clauses after group by and order by regression tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.26  | 18-08-2026     | Computed attribute xml:space XQDY0092 regression test (K2-ComputeConAttr-60) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -3174,6 +3176,17 @@ public class PlaceholderTests
         ctx.WithContextItem(XdmValue.FromInteger(1));
         var result = executable.Evaluate(ctx);
         Assert.Equal(new[] { 1L, 2L, 3L }, ToIntegers(result));
+    }
+
+    [Fact]
+    public void ComputedAttribute_XmlSpaceInvalid_RaisesXQDY0092()
+    {
+        // K2-ComputeConAttr-60: attribute xml:space {"DEFAULT"} must raise XQDY0092
+        // at construction time, not a LINQ ArgumentException during serialization.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<a> { attribute xml:space {\"DEFAULT\"} } </a>");
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.Evaluate(new XQueryContext()));
+        Assert.Contains("XQDY0092", ex.Message);
     }
 
     private static List<long> ToIntegers(XdmValue value)

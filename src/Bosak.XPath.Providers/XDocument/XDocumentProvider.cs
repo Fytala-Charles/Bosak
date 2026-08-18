@@ -39,6 +39,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.15  | 18-08-2026     | XQDY0138 for document nodes used as element content                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.16  | 18-08-2026     | XQDY0092 for invalid xml:space in computed attributes (K2-ComputeConAttr-60)            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -437,6 +439,12 @@ public static class XDocumentProvider
     public static IXdmNode ConstructAttribute(XdmAttributeValue attribute)
     {
         ArgumentNullException.ThrowIfNull(attribute);
+        // XQDY0092: xml:space must be "default" or "preserve" (XQ 3.1 §3.9.2). Validate
+        // here so the error is raised at construction time instead of surfacing as a
+        // LINQ ArgumentException during serialization (K2-ComputeConAttr-60).
+        if (attribute.NamespaceUri == "http://www.w3.org/XML/1998/namespace" && attribute.LocalName == "space" &&
+            attribute.Value != "default" && attribute.Value != "preserve")
+            throw new InvalidOperationException("XQDY0092: The value of xml:space must be 'default' or 'preserve'.");
         XNamespace ns = attribute.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attribute.NamespaceUri);
         var xattr = new XAttribute(ns + attribute.LocalName, attribute.Value);
         // LINQ attributes cannot carry a prefix; record it as an annotation so the
