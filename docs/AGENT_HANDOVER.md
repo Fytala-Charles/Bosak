@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(compiler): support placeholder arguments in arrow static calls (ArrowPostfix-108)
+**Current focus:** **QT3 skip-cluster cleanup — arrow partial-application cluster** — `LowerArrow` now detects `ArgumentPlaceholderNode` in a static arrow target such as `"$" => concat(?)` and emits a `Curry` instead of a direct `Call`. The arrow source becomes the first argument, placeholders remain unfixed, and the result is a curried function item. `prod-ArrowPostfix` now passes **42/0/0**.
+
+Expected QT3: **30,330 passed / 0 failed / 1,491 skipped (95.31%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,708 unit tests / 0 failed**. Targeted verification: `prod-ArrowPostfix` 42/0/0.
+
+## This Session Changes (arrow partial-application cluster)
+
+1. **Arrow partial application** (`IrLowerer.cs`) — when a `FunctionCallNode` arrow target contains an `ArgumentPlaceholderNode`, `LowerArrow` builds a `Curry` descriptor with the arrow source fixed in position 0 and placeholders marked `-1`, loads the named function item, and emits `IrOpCode.Curry`.
+2. **Regression test** (`ApiTests.cs`) — `ArrowPartialApplication_PlaceholderArg` asserts `"$" => concat(?)` applied to `3` returns `"$3"`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `tests/Bosak.XPath.Api.Tests/ApiTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup with the remaining small groups: the `NotSupportedException: Only one order by clause is supported` cluster (2 tests), the `XML 1.1 prefixed namespace undeclaration` pair, the `fn-transform` / `compare-042` / document-node residuals, and the platform-limitation groups.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(parser/runtime): huge named-function-ref arity clamps to int.MaxValue and raises FOAR0002 (fn-function-arity-017, fn-function-name-018)
 **Current focus:** **QT3 skip-cluster cleanup — function-arity overflow cluster** — `fn:concat#340282366920938463463374607431768211456` caused the parser to overflow `Int32` when reading the arity literal. `XPathParser.ParseNamedFunctionRef` now falls back to `int.MaxValue` when `int.TryParse` fails, and `VmEngine` resolves an arity of `int.MaxValue` as `FOAR0002` instead of matching a variadic fallback. The two affected QT3 tests now pass.
 

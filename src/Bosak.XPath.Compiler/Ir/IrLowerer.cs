@@ -75,6 +75,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.32  | 18-08-2026     | Reject let clauses between group by and order by (unsupported ordering)                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.33  | 18-08-2026     | Arrow partial application: support placeholder arguments in => static calls (ArrowPostfix-108) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1566,12 +1568,55 @@ public sealed class IrLowerer
                     }
 
                     int argCount = staticCall.Arguments.Count + 1;
-                    var argRegs = new int[argCount];
-                    argRegs[0] = sourceReg;
-                    for (int i = 0; i < staticCall.Arguments.Count; i++)
-                        argRegs[i + 1] = LowerNode(staticCall.Arguments[i]);
+                    bool hasPlaceholders = staticCall.Arguments.Any(a => a is ArgumentPlaceholderNode);
+                    if (hasPlaceholders)
+                    {
+                        // Partial application with the arrow source as the first argument:
+                        // $x => concat(?) produces a curried function item with one placeholder.
+                        var descriptor = new int[argCount];
+                        descriptor[0] = sourceReg;
+                        var argRegs = new List<int>();
+                        for (int i = 0; i < staticCall.Arguments.Count; i++)
+                        {
+                            if (staticCall.Arguments[i] is ArgumentPlaceholderNode)
+                            {
+                                descriptor[i + 1] = -1;
+                            }
+                            else
+                            {
+                                int argReg = LowerNode(staticCall.Arguments[i]);
+                                descriptor[i + 1] = argReg;
+                                argRegs.Add(argReg);
+                            }
+                        }
 
-                    int firstArgReg = PackArgumentsConsecutive(argRegs);
+                        int funcReg = AllocRegister();
+                        int funcRefPoolIdx;
+                        if (!string.IsNullOrEmpty(staticCall.NamespaceUri))
+                        {
+                            funcRefPoolIdx = AddToLiteralPool(new NamedFunctionItem(staticCall.NamespaceUri, staticCall.LocalName, argCount));
+                        }
+                        else
+                        {
+                            string refQName = string.IsNullOrEmpty(staticCall.Prefix)
+                                ? staticCall.LocalName
+                                : $"{staticCall.Prefix}:{staticCall.LocalName}";
+                            funcRefPoolIdx = AddToLiteralPool((refQName, argCount));
+                        }
+                        Emit(IrOpCode.LoadFunction, (ushort)funcReg, operand: funcRefPoolIdx);
+                        int descPoolIdx = AddToLiteralPool(descriptor);
+                        Emit(IrOpCode.Curry, (ushort)resultReg, (ushort)funcReg, operand: descPoolIdx);
+                        FreeRegister(funcReg);
+                        foreach (var r in argRegs) FreeRegister(r);
+                        return resultReg;
+                    }
+
+                    var argRegs2 = new int[argCount];
+                    argRegs2[0] = sourceReg;
+                    for (int i = 0; i < staticCall.Arguments.Count; i++)
+                        argRegs2[i + 1] = LowerNode(staticCall.Arguments[i]);
+
+                    int firstArgReg = PackArgumentsConsecutive(argRegs2);
                     Emit(IrOpCode.Call, (ushort)resultReg, (ushort)firstArgReg, (ushort)argCount, funcPoolIdx);
                     return resultReg;
                 }

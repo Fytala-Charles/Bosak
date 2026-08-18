@@ -51,6 +51,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.14  | 18-08-2026     | Added IfKeyword_ParseAsNameTestWhenNotConditional test (K2-NameTest-5) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.15  | 18-08-2026     | Added ArrowPartialApplication_PlaceholderArg test (ArrowPostfix-108) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -732,5 +734,14 @@ public class ApiTests
         Assert.Equal(XdmValueKind.QName, result.Kind);
         Assert.Equal("http://example.com/defelementns", result.QNameValue.NamespaceUri);
         Assert.Equal("ncname", result.QNameValue.LocalName);
+    }
+
+    [Fact]
+    public void ArrowPartialApplication_PlaceholderArg()
+    {
+        // ArrowPostfix-108: "$" => concat(?) produces a curried function that
+        // concatenates the arrow source with the placeholder argument.
+        var result = Eval("let $usd := \"$\" => concat(?) return $usd(3)");
+        Assert.Equal("$3", result.StringValue);
     }
 }
