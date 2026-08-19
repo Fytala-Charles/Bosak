@@ -60,6 +60,7 @@ class Program
                 .WithHandler<HoverHandler>()
                 .WithHandler<DefinitionHandler>()
                 .WithHandler<EvaluateXPathHandler>()
+                .WithHandler<EvaluateXQueryHandler>()
                 .WithHandler<TransformXsltHandler>();
         }).ConfigureAwait(false);
 

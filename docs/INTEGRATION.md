@@ -19,6 +19,8 @@
 
 ## 0. Recent Changes
 
+- **2026-08-18** — Language Server: **XQuery language support** — the extension and language server now handle XQuery documents (`.xq`/`.xqy`/`.xquery`): syntax highlighting, diagnostics via `XQueryCompiler`, keyword/constructor completion, hover, go-to-definition for XQuery functions/variables, document symbols for top-level XQuery declarations, and a `bosak/runXQuery` command backed by a new `bosak/evaluateXQuery` LSP request.
+
 - **2026-08-18** — Language Server: **hover, go-to-definition, document symbols, and evaluate/transform commands** — the language server now supports hover (function signatures/descriptions for XPath functions), go-to-definition (user-defined XSLT functions/variables/params/named templates), document symbols (an outline of top-level XSLT declarations), and two custom requests: `bosak/evaluateXPath` (evaluate the current `.xpath` document) and `bosak/transformXslt` (run the current stylesheet against a chosen source XML document). The extension's context-menu commands are wired to these. A new `Bosak.LanguageServer.Tests` project covers the handlers; the language server builds separately from `Bosak.sln`.
 
 - **2026-08-18** — XPath/XQuery: **XML 1.1 namespace undeclaration** — element constructors now accept `xmlns:p=""` in XML 1.1 mode, recording it as a `PrefixedNamespaceUndeclarations` annotation instead of raising `XQST0085`. An `Xml11Mode` flag was added to `EvaluationContext`/`XdmElementSpec`, set by the harness for `xml-version=1.1` tests. `XQST0085b`, `K2-Serialization-20`, and `K2-Serialization-21` now pass; the two XML 1.1-only character-name tests are documented as a known gap (the .NET `XDocument` provider cannot hold those names natively).

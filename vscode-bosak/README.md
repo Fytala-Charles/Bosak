@@ -4,14 +4,15 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
 ## Features
 
-- **Syntax highlighting** for XPath (`.xpath`) and XSLT (`.xsl`, `.xslt`) files
-- **Realtime diagnostics** — compile errors for XPath expressions and XSLT stylesheets
-- **Auto-completion** — XPath functions, axes, keywords and XSLT instructions
-- **Hover** — function signatures and descriptions for XPath functions
-- **Go to definition** — jump to user-defined XSLT functions, variables, parameters, and named templates
-- **Document outline** — top-level XSLT declarations (templates, functions, variables, keys, output, imports)
+- **Syntax highlighting** for XPath (`.xpath`), XSLT (`.xsl`, `.xslt`), and XQuery (`.xq`, `.xqy`, `.xquery`) files
+- **Realtime diagnostics** — compile errors for XPath expressions, XSLT stylesheets, and XQuery documents
+- **Auto-completion** — XPath functions, axes, keywords, XSLT instructions, and XQuery keywords
+- **Hover** — function signatures and descriptions for XPath/XQuery functions
+- **Go to definition** — jump to user-defined XSLT functions, variables, parameters, and named templates; XQuery functions and variables
+- **Document outline** — top-level XSLT declarations (templates, functions, variables, keys, output, imports) and XQuery declarations (modules, imports, functions, variables)
 - **Evaluate XPath** — run the current `.xpath` file and show the result
 - **Run XSLT Transformation** — run the current stylesheet against a selected source XML document
+- **Run XQuery** — run the current `.xq` file and show the result
 
 ---
 

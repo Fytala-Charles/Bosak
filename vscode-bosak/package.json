@@ -26,7 +26,8 @@
   ],
   "activationEvents": [
     "onLanguage:xpath",
-    "onLanguage:xslt"
+    "onLanguage:xslt",
+    "onLanguage:xquery"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -53,6 +54,19 @@
           ".xslt"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "xquery",
+        "aliases": [
+          "XQuery",
+          "xquery"
+        ],
+        "extensions": [
+          ".xq",
+          ".xqy",
+          ".xquery"
+        ],
+        "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
@@ -68,6 +82,11 @@
         "embeddedLanguages": {
           "meta.embedded.block.xpath": "xpath"
         }
+      },
+      {
+        "language": "xquery",
+        "scopeName": "source.xquery",
+        "path": "./syntaxes/xquery.tmLanguage.json"
       }
     ],
     "configuration": {
@@ -106,6 +125,11 @@
         "command": "bosak.transformXslt",
         "title": "Run XSLT Transformation",
         "category": "Bosak"
+      },
+      {
+        "command": "bosak.runXQuery",
+        "title": "Run XQuery",
+        "category": "Bosak"
       }
     ],
     "menus": {
@@ -119,6 +143,11 @@
           "command": "bosak.transformXslt",
           "when": "editorLangId == xslt",
           "group": "1_bosak@2"
+        },
+        {
+          "command": "bosak.runXQuery",
+          "when": "editorLangId == xquery",
+          "group": "1_bosak@3"
         }
       ]
     }

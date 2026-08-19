@@ -60,6 +60,8 @@ public class TextDocumentSyncHandler : TextDocumentSyncHandlerBase
             return "xslt";
         if (path.EndsWith(".xpath"))
             return "xpath";
+        if (path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery"))
+            return "xquery";
         return "xml";
     }
 

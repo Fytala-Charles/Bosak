@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** feat(vscode): add XQuery language support (`.xq`/`.xqy`/`.xquery`)
+**Current focus:** **VS Code extension — XQuery language support** — the extension and language server now handle XQuery documents: a new TextMate grammar, XQuery keyword/constructor completion, XQuery diagnostics via `XQueryCompiler`, XQuery document symbols (modules, imports, functions, variables) and go-to-definition, and a `bosak/runXQuery` command backed by a new `bosak/evaluateXQuery` LSP request.
+
+Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged), plus **20 language-server tests / 0 failed**. QT3 unchanged at **30,344 / 0 / 1,477**.
+
+## This Session Changes (XQuery language support)
+
+1. **Extension** (`vscode-bosak`) — added the `xquery` language contribution (`.xq`/`.xqy`/`.xquery`), a TextMate grammar (`syntaxes/xquery.tmLanguage.json`), activation on XQuery documents, and a `bosak/runXQuery` context-menu command.
+2. **Language server** — `TextDocumentSyncHandler` recognizes XQuery files; `DiagnosticsHandler` validates XQuery via `XQueryCompiler`; `CompletionHandler` adds XQuery keywords/constructors; `DocumentSymbolHandler` scans top-level XQuery declarations; `DefinitionHandler` resolves XQuery function/variable references; `EvaluationHandler` adds the `bosak/evaluateXQuery` request; `Program.cs` registers `EvaluateXQueryHandler`; `Bosak.LanguageServer.csproj` references `Bosak.XQuery`.
+3. **Tests** (`XQueryHandlerTests.cs`) — evaluate success/error, go-to-definition for function and variable, document symbols.
+
+## Files Changed (this session)
+
+- `vscode-bosak/package.json`, `vscode-bosak/src/extension.ts`, `vscode-bosak/syntaxes/xquery.tmLanguage.json` (new), `vscode-bosak/README.md`
+- `src/Bosak.LanguageServer/Program.cs`, `TextDocumentSyncHandler.cs`, `DiagnosticsHandler.cs`, `CompletionHandler.cs`, `DocumentSymbolHandler.cs`, `DefinitionHandler.cs`, `EvaluationHandler.cs`, `Bosak.LanguageServer.csproj`
+- `tests/Bosak.LanguageServer.Tests/XQueryHandlerTests.cs` (new)
+- `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md`, `README.md`
+
+## Next Recommended Step
+
+1. The VS Code extension now covers XPath, XSLT, and XQuery. Remaining extension gaps: semantic tokens and code actions. The next major engine topic is schema awareness (largest remaining QT3 block).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** feat(languageserver): add hover, go-to-definition, document symbols, and evaluate/transform commands
 **Current focus:** **VS Code extension features** — the language server now supports hover, go-to-definition, document symbols, and two custom commands: `bosak/evaluateXPath` (evaluate the current `.xpath` document) and `bosak/transformXslt` (run the current stylesheet against a selected source XML document). The previously placeholder context-menu commands in `extension.ts` are now wired to these LSP requests. A `Bosak.LanguageServer.Tests` project covers all handlers.
 

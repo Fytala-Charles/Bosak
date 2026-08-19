@@ -166,7 +166,7 @@ flowchart TB
 
 ## VS Code Extension
 
-A Language Server Protocol (LSP) implementation and VS Code extension provide IDE features for XPath and XSLT development.
+A Language Server Protocol (LSP) implementation and VS Code extension provide IDE features for XPath, XSLT, and XQuery development — syntax highlighting, diagnostics, completion, hover, go-to-definition, document outline, and evaluate/run commands.
 
 ### Quick Install
 

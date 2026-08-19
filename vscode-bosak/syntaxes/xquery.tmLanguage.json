@@ -1,0 +1,92 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "XQuery",
+  "scopeName": "source.xquery",
+  "fileTypes": [".xq", ".xqy", ".xquery"],
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#string" },
+    { "include": "#number" },
+    { "include": "#operator" },
+    { "include": "#constructor" },
+    { "include": "#function" },
+    { "include": "#variable" },
+    { "include": "#axis" },
+    { "include": "#node-test" },
+    { "include": "#keyword" }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.block.xquery",
+          "begin": "\\(:",
+          "end": ":\\)",
+          "patterns": [
+            { "include": "#comment" }
+          ]
+        }
+      ]
+    },
+    "string": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.xquery",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            { "name": "constant.character.escape.xquery", "match": "\\\\." }
+          ]
+        },
+        {
+          "name": "string.quoted.single.xquery",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            { "name": "constant.character.escape.xquery", "match": "\\\\." }
+          ]
+        }
+      ]
+    },
+    "number": {
+      "name": "constant.numeric.xquery",
+      "match": "\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b"
+    },
+    "operator": {
+      "name": "keyword.operator.xquery",
+      "match": "\\b(or|and|div|idiv|mod|union|intersect|except|to|is|eq|ne|lt|le|gt|ge)\\b|!=|<=|>=|<<|>>|:=|\\|\\||[+\-*/|=<>!|]"
+    },
+    "constructor": {
+      "name": "keyword.other.constructor.xquery",
+      "match": "\\b(element|attribute|text|comment|processing-instruction|document|namespace)\\s*(?=\\{|\\w)"
+    },
+    "function": {
+      "patterns": [
+        {
+          "name": "support.function.xquery",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9._-]*(?::[a-zA-Z_][a-zA-Z0-9._-]*)?)\\s*(?=\\()"
+        }
+      ]
+    },
+    "variable": {
+      "name": "variable.other.xquery",
+      "match": "\\$[a-zA-Z_][a-zA-Z0-9._-]*(?::[a-zA-Z_][a-zA-Z0-9._-]*)?"
+    },
+    "axis": {
+      "name": "keyword.other.axis.xquery",
+      "match": "\\b(child|descendant|attribute|self|descendant-or-self|following-sibling|following|namespace|parent|ancestor|preceding-sibling|preceding|ancestor-or-self)\\s*::"
+    },
+    "node-test": {
+      "patterns": [
+        {
+          "name": "support.type.node.xquery",
+          "match": "\\b(node|text|comment|processing-instruction|document-node|element|attribute|schema-element|schema-attribute)\\s*(?=\\()"
+        }
+      ]
+    },
+    "keyword": {
+      "name": "keyword.control.xquery",
+      "match": "\\b(declare|xquery|version|encoding|module|namespace|import|schema|default|element|function|variable|option|collation|base-uri|boundary-space|construction|copy-namespaces|decimal-format|empty|order|ordering|external|for|let|where|group|by|order|by|stable|ascending|descending|greatest|least|some|every|satisfies|return|if|then|else|switch|case|typeswitch|try|catch|allowing|count|at|in|as|instance|of|cast|castable|treat|validate|lax|strict|skip|tumbling|sliding|window|start|end|when|previous|next|current)\\b"
+    }
+  }
+}

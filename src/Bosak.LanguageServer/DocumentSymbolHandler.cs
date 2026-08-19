@@ -61,8 +61,13 @@ public class DocumentSymbolHandler : DocumentSymbolHandlerBase
             return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
 
         var path = request.TextDocument.Uri.Path?.ToLowerInvariant() ?? string.Empty;
-        if (!path.EndsWith(".xsl") && !path.EndsWith(".xslt"))
+        bool isXslt = path.EndsWith(".xsl") || path.EndsWith(".xslt");
+        bool isXQuery = path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery");
+        if (!isXslt && !isXQuery)
             return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
+
+        if (isXQuery)
+            return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(GetXQuerySymbols(text)));
 
         XDocument doc;
         try
@@ -85,6 +90,54 @@ public class DocumentSymbolHandler : DocumentSymbolHandlerBase
         }
 
         return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
+    }
+
+    /// <summary>
+    /// Scans XQuery source text for top-level declarations (module namespace, imports,
+    /// functions, variables) and produces outline symbols.
+    /// </summary>
+    private static List<SymbolInformationOrDocumentSymbol> GetXQuerySymbols(string text)
+    {
+        var symbols = new List<SymbolInformationOrDocumentSymbol>();
+        var declarations = System.Text.RegularExpressions.Regex.Matches(
+            text,
+            @"^\s*(module\s+namespace|import\s+module|declare\s+function|declare\s+variable|declare\s+namespace|declare\s+default\s+element\s+namespace|declare\s+default\s+collation|declare\s+option)\s+(\$?[a-zA-Z_][a-zA-Z0-9._-]*(?::[a-zA-Z_][a-zA-Z0-9._-]*)?)",
+            System.Text.RegularExpressions.RegexOptions.Multiline);
+        foreach (System.Text.RegularExpressions.Match m in declarations)
+        {
+            var kind = m.Groups[1].Value;
+            var name = m.Groups[2].Value;
+            var display = kind.StartsWith("declare function", StringComparison.Ordinal) ? $"function {name}"
+                : kind.StartsWith("declare variable", StringComparison.Ordinal) ? $"variable {name}"
+                : kind.StartsWith("module namespace", StringComparison.Ordinal) ? $"module {name}"
+                : kind.StartsWith("import module", StringComparison.Ordinal) ? $"import {name}"
+                : name;
+            var symbolKind = kind.StartsWith("declare function", StringComparison.Ordinal) ? SymbolKind.Function
+                : kind.StartsWith("declare variable", StringComparison.Ordinal) ? SymbolKind.Variable
+                : kind.StartsWith("module namespace", StringComparison.Ordinal) ? SymbolKind.Module
+                : kind.StartsWith("import module", StringComparison.Ordinal) ? SymbolKind.Package
+                : SymbolKind.Property;
+            symbols.Add(new SymbolInformationOrDocumentSymbol(new DocumentSymbol
+            {
+                Name = display,
+                Kind = symbolKind,
+                Range = OffsetToRange(text, m.Index),
+                SelectionRange = OffsetToRange(text, m.Index),
+            }));
+        }
+        return symbols;
+    }
+
+    private static OmniSharp.Extensions.LanguageServer.Protocol.Models.Range OffsetToRange(string text, int offset)
+    {
+        int line = 0, col = 0;
+        for (int i = 0; i < offset && i < text.Length; i++)
+        {
+            if (text[i] == '\n') { line++; col = 0; }
+            else col++;
+        }
+        return new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(
+            new Position(line, col), new Position(line, col + 1));
     }
 
     private static SymbolInformationOrDocumentSymbol? CreateSymbol(XElement element)
@@ -256,7 +309,10 @@ public class DocumentSymbolHandler : DocumentSymbolHandlerBase
         {
             DocumentSelector = new TextDocumentSelector(
                 new TextDocumentFilter { Pattern = "**/*.xsl" },
-                new TextDocumentFilter { Pattern = "**/*.xslt" }
+                new TextDocumentFilter { Pattern = "**/*.xslt" },
+                new TextDocumentFilter { Pattern = "**/*.xq" },
+                new TextDocumentFilter { Pattern = "**/*.xqy" },
+                new TextDocumentFilter { Pattern = "**/*.xquery" }
             ),
         };
     }

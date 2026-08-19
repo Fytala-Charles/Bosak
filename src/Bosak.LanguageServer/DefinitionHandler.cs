@@ -59,18 +59,63 @@ public class DefinitionHandler : DefinitionHandlerBase
             return Task.FromResult<LocationOrLocationLinks?>(null);
 
         var path = request.TextDocument.Uri.Path?.ToLowerInvariant() ?? string.Empty;
-        if (!path.EndsWith(".xsl") && !path.EndsWith(".xslt"))
+        bool isXslt = path.EndsWith(".xsl") || path.EndsWith(".xslt");
+        bool isXQuery = path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery");
+        if (!isXslt && !isXQuery)
             return Task.FromResult<LocationOrLocationLinks?>(null);
 
         var word = HoverHandler.GetWordAt(text, request.Position.Line, request.Position.Character);
         if (string.IsNullOrEmpty(word))
             return Task.FromResult<LocationOrLocationLinks?>(null);
 
-        var location = FindDefinition(text, word, request.TextDocument.Uri);
+        var location = isXQuery
+            ? FindXQueryDefinition(text, word, request.TextDocument.Uri)
+            : FindDefinition(text, word, request.TextDocument.Uri);
         if (location is null)
             return Task.FromResult<LocationOrLocationLinks?>(null);
 
         return Task.FromResult<LocationOrLocationLinks?>(new LocationOrLocationLinks(location));
+    }
+
+    /// <summary>
+    /// Finds the definition location of a function or variable in an XQuery document by
+    /// scanning for <c>declare function name(</c> and <c>declare variable $name</c>.
+    /// </summary>
+    internal static Location? FindXQueryDefinition(string text, string word, DocumentUri uri)
+    {
+        // Variable reference ($name) — search declare variable $name.
+        if (word.StartsWith("$", StringComparison.Ordinal))
+        {
+            var varName = word[1..];
+            var match = System.Text.RegularExpressions.Regex.Match(
+                text, @"declare\s+variable\s+\$" + System.Text.RegularExpressions.Regex.Escape(varName) + @"\b");
+            if (match.Success)
+                return OffsetToLocation(text, match.Index, uri);
+            return null;
+        }
+
+        // Function call — search declare function name(.
+        var fnMatch = System.Text.RegularExpressions.Regex.Match(
+            text, @"declare\s+function\s+" + System.Text.RegularExpressions.Regex.Escape(word) + @"\s*\(");
+        if (fnMatch.Success)
+            return OffsetToLocation(text, fnMatch.Index, uri);
+        return null;
+    }
+
+    private static Location OffsetToLocation(string text, int offset, DocumentUri uri)
+    {
+        int line = 0, col = 0;
+        for (int i = 0; i < offset && i < text.Length; i++)
+        {
+            if (text[i] == '\n') { line++; col = 0; }
+            else col++;
+        }
+        return new Location
+        {
+            Uri = uri,
+            Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(
+                new Position(line, col), new Position(line, col + 1))
+        };
     }
 
     /// <summary>
@@ -146,7 +191,10 @@ public class DefinitionHandler : DefinitionHandlerBase
         {
             DocumentSelector = new TextDocumentSelector(
                 new TextDocumentFilter { Pattern = "**/*.xsl" },
-                new TextDocumentFilter { Pattern = "**/*.xslt" }
+                new TextDocumentFilter { Pattern = "**/*.xslt" },
+                new TextDocumentFilter { Pattern = "**/*.xq" },
+                new TextDocumentFilter { Pattern = "**/*.xqy" },
+                new TextDocumentFilter { Pattern = "**/*.xquery" }
             ),
         };
     }

@@ -35,6 +35,7 @@ public class CompletionHandler : CompletionHandlerBase
     private static readonly IReadOnlyList<CompletionItem> XsltElements;
     private static readonly IReadOnlyList<CompletionItem> XPathAxes;
     private static readonly IReadOnlyList<CompletionItem> XPathKeywords;
+    private static readonly IReadOnlyList<CompletionItem> XQueryKeywords;
 
     static CompletionHandler()
     {
@@ -42,6 +43,7 @@ public class CompletionHandler : CompletionHandlerBase
         XsltElements = BuildXsltElementCompletions();
         XPathAxes = BuildXPathAxisCompletions();
         XPathKeywords = BuildXPathKeywordCompletions();
+        XQueryKeywords = BuildXQueryKeywordCompletions();
     }
 
     /// <summary>
@@ -61,6 +63,12 @@ public class CompletionHandler : CompletionHandlerBase
             items.AddRange(XPathFunctions);
             items.AddRange(XPathAxes);
             items.AddRange(XPathKeywords);
+        }
+        else if (path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery"))
+        {
+            items.AddRange(XPathFunctions);
+            items.AddRange(XPathAxes);
+            items.AddRange(XQueryKeywords);
         }
         else if (path.EndsWith(".xpath"))
         {
@@ -98,7 +106,10 @@ public class CompletionHandler : CompletionHandlerBase
             DocumentSelector = new TextDocumentSelector(
                 new TextDocumentFilter { Pattern = "**/*.xsl" },
                 new TextDocumentFilter { Pattern = "**/*.xslt" },
-                new TextDocumentFilter { Pattern = "**/*.xpath" }
+                new TextDocumentFilter { Pattern = "**/*.xpath" },
+                new TextDocumentFilter { Pattern = "**/*.xq" },
+                new TextDocumentFilter { Pattern = "**/*.xqy" },
+                new TextDocumentFilter { Pattern = "**/*.xquery" }
             ),
             TriggerCharacters = new Container<string>("", ":", "$", "("),
         };
@@ -333,6 +344,35 @@ public class CompletionHandler : CompletionHandlerBase
             Label = k,
             Kind = CompletionItemKind.Keyword,
             Detail = "XPath keyword",
+            InsertText = k,
+        }).ToList();
+    }
+
+    private static List<CompletionItem> BuildXQueryKeywordCompletions()
+    {
+        var keywords = new[]
+        {
+            "declare", "xquery", "version", "encoding", "module", "namespace",
+            "import", "schema", "default", "element", "function", "variable",
+            "option", "collation", "base-uri", "boundary-space", "construction",
+            "copy-namespaces", "decimal-format", "empty", "order", "ordering",
+            "external", "for", "let", "where", "group", "by", "order",
+            "stable", "ascending", "descending", "greatest", "least", "some",
+            "every", "satisfies", "return", "if", "then", "else", "switch",
+            "case", "typeswitch", "try", "catch", "allowing", "count", "at",
+            "in", "as", "instance", "of", "cast", "castable", "treat",
+            "validate", "lax", "strict", "skip", "tumbling", "sliding",
+            "window", "start", "end", "when", "previous", "next", "current",
+            // Constructors
+            "element", "attribute", "document", "text", "comment",
+            "processing-instruction", "namespace",
+        };
+
+        return keywords.Select(k => new CompletionItem
+        {
+            Label = k,
+            Kind = CompletionItemKind.Keyword,
+            Detail = "XQuery keyword",
             InsertText = k,
         }).ToList();
     }

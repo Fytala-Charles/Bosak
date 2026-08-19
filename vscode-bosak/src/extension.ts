@@ -34,14 +34,21 @@ export function activate(context: vscode.ExtensionContext): void {
         documentSelector: [
             { scheme: 'file', language: 'xpath' },
             { scheme: 'file', language: 'xslt' },
+            { scheme: 'file', language: 'xquery' },
             { scheme: 'file', pattern: '**/*.xsl' },
             { scheme: 'file', pattern: '**/*.xslt' },
+            { scheme: 'file', pattern: '**/*.xq' },
+            { scheme: 'file', pattern: '**/*.xqy' },
+            { scheme: 'file', pattern: '**/*.xquery' },
         ],
         synchronize: {
             fileEvents: [
                 vscode.workspace.createFileSystemWatcher('**/*.xsl'),
                 vscode.workspace.createFileSystemWatcher('**/*.xslt'),
                 vscode.workspace.createFileSystemWatcher('**/*.xpath'),
+                vscode.workspace.createFileSystemWatcher('**/*.xq'),
+                vscode.workspace.createFileSystemWatcher('**/*.xqy'),
+                vscode.workspace.createFileSystemWatcher('**/*.xquery'),
             ],
         },
     };
@@ -58,7 +65,8 @@ export function activate(context: vscode.ExtensionContext): void {
     // Register commands
     context.subscriptions.push(
         vscode.commands.registerCommand('bosak.evaluateXPath', evaluateXPath),
-        vscode.commands.registerCommand('bosak.transformXslt', transformXslt)
+        vscode.commands.registerCommand('bosak.transformXslt', transformXslt),
+        vscode.commands.registerCommand('bosak.runXQuery', runXQuery)
     );
 }
 
@@ -144,6 +152,36 @@ async function evaluateXPath(): Promise<void> {
         }
     } catch (err) {
         vscode.window.showErrorMessage(`XPath evaluation failed: ${err}`);
+    }
+}
+
+async function runXQuery(): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor || editor.document.languageId !== 'xquery') {
+        vscode.window.showInformationMessage('Open an XQuery file to run.');
+        return;
+    }
+    if (!client) {
+        vscode.window.showErrorMessage('Bosak language server is not running.');
+        return;
+    }
+
+    try {
+        const result = await client.sendRequest<{ result?: string; error?: string }>(
+            'bosak/evaluateXQuery',
+            { textDocument: { uri: editor.document.uri.toString() } }
+        );
+        if (result.error) {
+            vscode.window.showErrorMessage(`XQuery evaluation failed: ${result.error}`);
+        } else {
+            const doc = await vscode.workspace.openTextDocument({
+                content: result.result ?? '',
+                language: 'text'
+            });
+            await vscode.window.showTextDocument(doc, { preview: true });
+        }
+    } catch (err) {
+        vscode.window.showErrorMessage(`XQuery evaluation failed: ${err}`);
     }
 }
 

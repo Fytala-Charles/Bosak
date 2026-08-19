@@ -108,7 +108,10 @@ public class HoverHandler : HoverHandlerBase
             DocumentSelector = new TextDocumentSelector(
                 new TextDocumentFilter { Pattern = "**/*.xsl" },
                 new TextDocumentFilter { Pattern = "**/*.xslt" },
-                new TextDocumentFilter { Pattern = "**/*.xpath" }
+                new TextDocumentFilter { Pattern = "**/*.xpath" },
+                new TextDocumentFilter { Pattern = "**/*.xq" },
+                new TextDocumentFilter { Pattern = "**/*.xqy" },
+                new TextDocumentFilter { Pattern = "**/*.xquery" }
             ),
         };
     }

@@ -83,12 +83,32 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
         {
             ValidateXslt(text, diagnostics);
         }
+        else if (path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery"))
+        {
+            ValidateXQuery(text, diagnostics);
+        }
         else if (path.EndsWith(".xpath"))
         {
             ValidateXPath(text, diagnostics);
         }
 
         return diagnostics;
+    }
+
+    private static void ValidateXQuery(string text, List<Diagnostic> diagnostics)
+    {
+        try
+        {
+            new Bosak.XQuery.Api.XQueryCompiler().Compile(text);
+        }
+        catch (Bosak.XPath.Parser.ParseException ex)
+        {
+            diagnostics.Add(CreateDiagnostic(ex.Message, 0, 0, DiagnosticSeverity.Error));
+        }
+        catch (Exception ex)
+        {
+            diagnostics.Add(CreateDiagnostic(ex.Message, 0, 0, DiagnosticSeverity.Error));
+        }
     }
 
     private static void ValidateXPath(string text, List<Diagnostic> diagnostics)
