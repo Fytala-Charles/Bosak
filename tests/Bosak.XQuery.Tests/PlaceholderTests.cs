@@ -3240,6 +3240,45 @@ public class PlaceholderTests
     }
 
     [Fact]
+    public void Flwor_GroupBy_LetBeforeOrderBy_ReferencedByKey()
+    {
+        // use-case-groupby-Q6 shape: a let between group by and order by whose value the
+        // order-by key references.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "for $x in (1, 2, 3, 4, 5, 6) " +
+            "group by $g := $x mod 2 " +
+            "let $total := sum($x) " +
+            "where $total > 4 " +
+            "order by $total descending " +
+            "return $g || \":\" || $total");
+        var result = executable.Evaluate(new XQueryContext());
+        // Groups: g=0 -> (2,4,6) total 12; g=1 -> (1,3,5) total 9.
+        // Both totals > 4; ordered descending by total.
+        Assert.Equal(new[] { "0:12", "1:9" }, ToStrings(result));
+    }
+
+    [Fact]
+    public void Flwor_GroupBy_WindowAfterGroupBy()
+    {
+        // TumblingWindowExpr545 shape: a tumbling window clause after group by operates
+        // on the grouped sequence.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "for $c in (1, 5, 2, 6, 3, 7) " +
+            "group by $g := $c mod 2 " +
+            "for tumbling window $w in $c " +
+            "start $first next $second when $first < $second " +
+            "end $last next $beyond when $last > $beyond " +
+            "return string($first) || \"-\" || string($last)");
+        var result = executable.Evaluate(new XQueryContext());
+        // Groups: g=1 -> (1,5,3,7); g=0 -> (2,6).
+        // For g=1: start 1 next 5 (1<5), end 5 next 3 (5>3) => 1-5; start 3 next 7, end 7 => 3-7.
+        // For g=0: start 2 next 6, end 6 => 2-6.
+        Assert.Equal(3, ToStrings(result).Count);
+    }
+
+    [Fact]
     public void DirectAttributeValue_LiteralSpacesArePreserved()
     {
         // K2-DirectConOther-58/68: literal spaces inside an attribute value are

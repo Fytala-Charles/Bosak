@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 0.1   | 20-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-07-2026     | Skip-reason tracking with grouped summary (harness-error collapse)                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 18-08-2026     | Per-test skip name recording + DumpSkips for skip-cluster analysis                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -26,6 +28,7 @@ internal sealed class TestReport
 
     private readonly List<(string Name, TestOutcomeKind Kind, string? Reason)> _failures = new();
     private readonly Dictionary<string, int> _skipReasons = new(StringComparer.Ordinal);
+    private readonly List<(string Name, string Reason)> _skipped = new();
     private readonly object _lock = new();
 
     public void Record(string name, TestOutcomeKind kind, string? message)
@@ -44,9 +47,27 @@ internal sealed class TestReport
                 case TestOutcomeKind.Skipped:
                     Skipped++;
                     if (message is not null)
+                    {
                         _skipReasons[message] = _skipReasons.TryGetValue(message, out int n) ? n + 1 : 1;
+                        _skipped.Add((name, message));
+                    }
                     break;
             }
+        }
+    }
+
+    /// <summary>
+    /// Writes every skipped test name grouped by skip reason to the given path.
+    /// </summary>
+    public void DumpSkips(string path)
+    {
+        using var writer = new StreamWriter(path);
+        foreach (var group in _skipped.GroupBy(s => s.Reason).OrderByDescending(g => g.Count()))
+        {
+            writer.WriteLine($"=== {group.Count()} skipped: {group.Key} ===");
+            foreach (var (name, _) in group.OrderBy(s => s.Name))
+                writer.WriteLine(name);
+            writer.WriteLine();
         }
     }
 

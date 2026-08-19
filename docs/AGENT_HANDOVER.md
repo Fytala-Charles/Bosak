@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(compiler): let between group by and order by evaluated during re-keying; for/window after group by lowered as nested FLWOR (use-case-groupby-Q6, TumblingWindowExpr545)
+**Current focus:** **QT3 skip-cluster cleanup — group-by post-clause cluster** — the group-by path now reuses the `LowerFlworRekeyStage` machinery: `let` clauses between `group by` and `order by` are evaluated during the re-key pass so order-by keys can reference them, and `for`/`window` clauses after `group by` are lowered as a nested FLWOR evaluated per group with the grouped bindings in scope. The two `NotSupportedException` guards are removed. `use-case-groupby-Q6` and `TumblingWindowExpr545` now pass.
+
+Expected QT3: **30,340 passed / 0 failed / 1,481 skipped (95.34%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,719 unit tests / 0 failed**. Targeted verification: `prod-GroupByClause` 36/0/0, `prod-WindowClause` 132/0/3.
+
+## This Session Changes (group-by post-clause cluster)
+
+1. **Let between group by and order by** (`IrLowerer.cs`) — the re-key pass for an `order by` after `group by` now routes through `LowerFlworRekeyStage` with the intervening `let`/`where`/`count` clauses, so order-by keys see let-bound values.
+2. **For/window after group by** (`IrLowerer.cs`) — the remainder starting at the first `for`/`window`/`group by` after the group by is lowered as a nested `FlworExpressionNode` evaluated per group with the grouped bindings in scope.
+3. **Harness skip dump** (`TestReport.cs`, `Program.cs`) — the `BOSAK_QT3_DUMP_SKIPS` environment variable writes every skipped test name grouped by reason, which is how the two guard-hitting tests were located.
+4. **Regression tests** (`PlaceholderTests.cs`) — `Flwor_GroupBy_LetBeforeOrderBy_ReferencedByKey` and `Flwor_GroupBy_WindowAfterGroupBy`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `tests/Bosak.XPath.Conformance/TestReport.cs`
+- `tests/Bosak.XPath.Conformance/Program.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup with the remaining small groups: the `XML 1.1 prefixed namespace undeclaration` pair, the `extvardeclwithtype-23` external-variable type validation, and the platform-limitation groups (decimal precision, DateTimeOffset year -2, `OutOfMemoryException` codepoints).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(compiler): support multiple order by clauses per FLWOR via stable-sort re-key stages (orderBy65/66)
 **Current focus:** **QT3 skip-cluster cleanup — multiple order by cluster** — `LowerFlworWithTuples` now splits FLWOR clauses at every `order by` and chains sort stages: build+sort for the first `order by`, then a re-key stage per additional `order by` that rebinds the tuple variables, processes intermediate `count`/`where`/`let` clauses, evaluates the new keys, and stable-sorts again. `orderBy65` and `orderBy66` now pass.
 

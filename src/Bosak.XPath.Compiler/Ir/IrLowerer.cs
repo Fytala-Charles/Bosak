@@ -2002,35 +2002,8 @@ public sealed class IrLowerer
 
         if (preClauses.Any(c => c is OrderByClauseNode))
             throw new NotSupportedException("XPST0003: An order by clause before group by is not supported; place order by after group by.");
-        if (postClauses.Any(c => c is not OrderByClauseNode and not CountClauseNode and not WhereClauseNode and not LetClauseNode))
-            throw new NotSupportedException("XPST0003: Only order by, count, where, and let clauses are supported after group by.");
         if (postClauses.Count(c => c is OrderByClauseNode) > 1)
             throw new NotSupportedException("XPST0003: Multiple order by clauses after group by are not supported.");
-
-        // A post-grouping let that precedes order by is lowered after order-by re-keying,
-        // so the order-by key cannot see the let variable. Reject only when an order-by key
-        // actually references such a variable; harmless lets (e.g. used only in return/where)
-        // are still allowed.
-        int postOrderByIndex = postClauses.FindIndex(c => c is OrderByClauseNode);
-        if (postOrderByIndex >= 0)
-        {
-            var postLetBoundVariables = postClauses
-                .Take(postOrderByIndex)
-                .OfType<LetClauseNode>()
-                .SelectMany(l => l.Bindings)
-                .Select(b => (b.VariableName, b.VariableNamespaceUri))
-                .ToHashSet();
-            if (postLetBoundVariables.Count > 0)
-            {
-                var orderByVars = postClauses
-                    .OfType<OrderByClauseNode>()
-                    .SelectMany(o => o.Specs)
-                    .SelectMany(s => CollectVariableReferences(s.KeyExpression))
-                    .Select(v => (v.LocalName, v.NamespaceUri));
-                if (orderByVars.Any(v => postLetBoundVariables.Contains(v)))
-                    throw new NotSupportedException("XPST0003: A let clause between group by and order by is not supported when the order-by key references the let variable.");
-            }
-        }
 
         // A grouping spec with ':=' behaves like a let binding evaluated per pre-grouping tuple.
         var syntheticBindings = groupByClause.Specs
@@ -2080,87 +2053,46 @@ public sealed class IrLowerer
         int iterationReg = groupedSeqReg;
 
         // An order by after group by is evaluated against the grouped bindings,
-        // so the tuples must be re-keyed in a second pass before sorting.
-        var postOrderByClause = postClauses.OfType<OrderByClauseNode>().FirstOrDefault();
-        if (postOrderByClause is not null)
+        // so the tuples must be re-keyed in a second pass before sorting. Let clauses
+        // between the group by and the order by are evaluated during the re-key pass so
+        // the order-by keys can reference them (use-case-groupby-Q6).
+        int postOrderByIndex = postClauses.FindIndex(c => c is OrderByClauseNode);
+        if (postOrderByIndex >= 0)
         {
-            int rekeyedSeqReg = AllocRegister();
-            LowerFlworRekeyForOrderBy(groupedSeqReg, boundVariables, postOrderByClause, rekeyedSeqReg);
+            var preOrderByClauses = postClauses.Take(postOrderByIndex).ToList();
+            var postOrderByClause = (OrderByClauseNode)postClauses[postOrderByIndex];
+
+            int rekeyedSeqReg = LowerFlworRekeyStage(groupedSeqReg, boundVariables, preOrderByClauses, postOrderByClause, countCounters);
             FreeRegister(groupedSeqReg);
 
-            int sortedSeqReg = AllocRegister();
-            var orderByInfo = new OrderByInfo(
-                boundVariables.Count,
-                postOrderByClause.Specs.Count,
-                postOrderByClause.Specs.Select(s => s.Descending).ToArray(),
-                postOrderByClause.Specs.Select(s => ResolveEmptyOrder(s.EmptyOrder)).ToArray(),
-                postOrderByClause.Specs.Select(s => s.CollationUri).ToArray());
-            int orderByPoolIdx = AddToLiteralPool(orderByInfo);
-            Emit(IrOpCode.OrderBy, (ushort)sortedSeqReg, (ushort)rekeyedSeqReg, 0, orderByPoolIdx);
-            FreeRegister(rekeyedSeqReg);
-            iterationReg = sortedSeqReg;
+            // The re-keyed tuples carry the let/count bindings added between group by and
+            // order by, so subsequent stages see them as ordinary variables.
+            boundVariables.AddRange(ComputeBoundVariables(preOrderByClauses));
 
-            postClauses = postClauses.Where(c => c is not OrderByClauseNode).ToList();
+            iterationReg = EmitOrderBySorted(rekeyedSeqReg, boundVariables.Count, postOrderByClause);
+            FreeRegister(rekeyedSeqReg);
+
+            postClauses = postClauses.Skip(postOrderByIndex + 1).ToList();
+        }
+
+        // A for/window clause after group by starts a nested FLWOR that is evaluated per
+        // group with the grouped bindings in scope (TumblingWindowExpr545). The prefix of
+        // count/where/let clauses is handled inline; the remainder becomes the nested
+        // FLWOR's clause list.
+        int firstUnsupportedPost = postClauses.FindIndex(c => c is ForClauseNode or WindowClauseNode or GroupByClauseNode);
+        XPathAstNode returnExpression = node.ReturnExpression;
+        if (firstUnsupportedPost >= 0)
+        {
+            var remainder = postClauses.Skip(firstUnsupportedPost).ToList();
+            postClauses = postClauses.Take(firstUnsupportedPost).ToList();
+            returnExpression = new FlworExpressionNode(remainder, returnExpression);
         }
 
         // Iterate over (possibly sorted) grouped tuples, bind variables, handle post clauses, evaluate body.
-        LowerFlworBodyIteration(iterationReg, boundVariables, postClauses, node.ReturnExpression, resultReg, countCounters);
+        LowerFlworBodyIteration(iterationReg, boundVariables, postClauses, returnExpression, resultReg, countCounters);
 
         FreeRegister(iterationReg);
         return resultReg;
-    }
-
-    private void LowerFlworRekeyForOrderBy(
-        int groupedSeqReg,
-        IReadOnlyList<BoundVariable> boundVariables,
-        OrderByClauseNode orderByClause,
-        int resultReg)
-    {
-        int forIdx = _instructions.Count;
-        Emit(IrOpCode.For, (ushort)resultReg, (ushort)groupedSeqReg, 0, 0);
-
-        int jumpIdx = _instructions.Count;
-        Emit(IrOpCode.Jump, 0, 0, 0, 0);
-
-        int rhsEntry = _instructions.Count;
-
-        // Bind the grouped tuple to the original variables so the order by keys
-        // are evaluated against the grouped bindings.
-        int tupleReg = AllocRegister();
-        int tupleVarPoolIdx = AddToLiteralPool("__flwor_tuple");
-        Emit(IrOpCode.LoadVariable, (ushort)tupleReg, 0, 0, tupleVarPoolIdx);
-
-        var tupleBindInfo = new TupleBindInfo(boundVariables.Select(v => (v.Name, v.Prefix, v.NamespaceUri)).ToArray());
-        int tupleBindPoolIdx = AddToLiteralPool(tupleBindInfo);
-        Emit(IrOpCode.TupleBind, (ushort)tupleReg, 0, 0, tupleBindPoolIdx);
-        FreeRegister(tupleReg);
-
-        // Build a new tuple: [var1, var2, ..., key1, key2, ...]
-        int newTupleReg = AllocRegister();
-        Emit(IrOpCode.Array, (ushort)newTupleReg);
-
-        foreach (var var in boundVariables)
-        {
-            int varReg = LoadVariable(var);
-            Emit(IrOpCode.ArrayAdd, (ushort)newTupleReg, (ushort)varReg);
-            FreeRegister(varReg);
-        }
-
-        foreach (var spec in orderByClause.Specs)
-        {
-            int keyReg = LowerNode(spec.KeyExpression);
-            Emit(IrOpCode.ArrayAdd, (ushort)newTupleReg, (ushort)keyReg);
-            FreeRegister(keyReg);
-        }
-
-        Emit(IrOpCode.Return, (ushort)newTupleReg);
-        FreeRegister(newTupleReg);
-
-        int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry);
-        int poolIdx = AddToLiteralPool(info);
-        PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)groupedSeqReg, 0, poolIdx);
-        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
     }
 
     private int LowerFlworWithoutOrderBy(FlworExpressionNode node, int resultReg)

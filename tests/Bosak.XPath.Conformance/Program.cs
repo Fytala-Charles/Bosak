@@ -17,6 +17,8 @@
 //                      | Charles Korthout | 0.5   | 26-07-2026     | Run the conformance suite on a dedicated 512MB-stack thread for deep recursion (function-declaration-007, numberformat121) |
 //                      | Charles Korthout | 0.6   | 07-08-2026     | Set QTTEST/QTTEST2/QTTESTEMPTY process variables for the fn-environment-variable test sets |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 18-08-2026     | BOSAK_QT3_DUMP_SKIPS env var writes per-test skip details grouped by reason           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Diagnostics;
@@ -80,6 +82,14 @@ internal class Program
         report.PrintSummary();
         Console.WriteLine();
         Console.WriteLine($"Elapsed: {stopwatch.Elapsed.TotalSeconds:F2}s");
+
+        // Optional per-test skip dump for skip-cluster analysis.
+        var dumpSkipsPath = Environment.GetEnvironmentVariable("BOSAK_QT3_DUMP_SKIPS");
+        if (!string.IsNullOrEmpty(dumpSkipsPath))
+        {
+            report.DumpSkips(dumpSkipsPath);
+            Console.WriteLine($"Skip details written to {dumpSkipsPath}");
+        }
 
         return report.Failed > 0 ? 2 : 0;
     }
