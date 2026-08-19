@@ -14,6 +14,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 18-08-2026     | Register DocumentSymbolHandler, HoverHandler, and DefinitionHandler                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 18-08-2026     | Register custom EvaluateXPathHandler and TransformXsltHandler requests                     |
+//                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Threading.Tasks;
@@ -55,7 +58,9 @@ class Program
                 .WithHandler<CompletionHandler>()
                 .WithHandler<DocumentSymbolHandler>()
                 .WithHandler<HoverHandler>()
-                .WithHandler<DefinitionHandler>();
+                .WithHandler<DefinitionHandler>()
+                .WithHandler<EvaluateXPathHandler>()
+                .WithHandler<TransformXsltHandler>();
         }).ConfigureAwait(false);
 
         await server.WaitForExit.ConfigureAwait(false);

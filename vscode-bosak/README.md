@@ -10,7 +10,8 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 - **Hover** — function signatures and descriptions for XPath functions
 - **Go to definition** — jump to user-defined XSLT functions, variables, parameters, and named templates
 - **Document outline** — top-level XSLT declarations (templates, functions, variables, keys, output, imports)
-- **Context-menu commands** — Evaluate XPath, Run XSLT Transformation *(WIP)*
+- **Evaluate XPath** — run the current `.xpath` file and show the result
+- **Run XSLT Transformation** — run the current stylesheet against a selected source XML document
 
 ---
 

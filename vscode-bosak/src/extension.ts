@@ -123,10 +123,28 @@ async function evaluateXPath(): Promise<void> {
         vscode.window.showInformationMessage('Open an XPath file to evaluate.');
         return;
     }
+    if (!client) {
+        vscode.window.showErrorMessage('Bosak language server is not running.');
+        return;
+    }
 
-    const expression = editor.document.getText();
-    // TODO: Invoke Bosak evaluation via LSP custom message or CLI
-    vscode.window.showInformationMessage(`Evaluate: ${expression.substring(0, 50)}...`);
+    try {
+        const result = await client.sendRequest<{ result?: string; error?: string }>(
+            'bosak/evaluateXPath',
+            { textDocument: { uri: editor.document.uri.toString() } }
+        );
+        if (result.error) {
+            vscode.window.showErrorMessage(`XPath evaluation failed: ${result.error}`);
+        } else {
+            const doc = await vscode.workspace.openTextDocument({
+                content: result.result ?? '',
+                language: 'text'
+            });
+            await vscode.window.showTextDocument(doc, { preview: true });
+        }
+    } catch (err) {
+        vscode.window.showErrorMessage(`XPath evaluation failed: ${err}`);
+    }
 }
 
 async function transformXslt(): Promise<void> {
@@ -135,8 +153,40 @@ async function transformXslt(): Promise<void> {
         vscode.window.showInformationMessage('Open an XSLT file to transform.');
         return;
     }
+    if (!client) {
+        vscode.window.showErrorMessage('Bosak language server is not running.');
+        return;
+    }
 
-    const xsltPath = editor.document.uri.fsPath;
-    // TODO: Prompt for source XML and invoke transformation
-    vscode.window.showInformationMessage(`Transform: ${xsltPath}`);
+    const picked = await vscode.window.showOpenDialog({
+        canSelectFiles: true,
+        canSelectFolders: false,
+        canSelectMany: false,
+        filters: { 'XML files': ['xml'], 'All files': ['*'] },
+        openLabel: 'Select source XML document'
+    });
+    if (!picked || picked.length === 0) {
+        return;
+    }
+
+    try {
+        const result = await client.sendRequest<{ result?: string; error?: string }>(
+            'bosak/transformXslt',
+            {
+                textDocument: { uri: editor.document.uri.toString() },
+                sourcePath: picked[0].fsPath
+            }
+        );
+        if (result.error) {
+            vscode.window.showErrorMessage(`XSLT transformation failed: ${result.error}`);
+        } else {
+            const doc = await vscode.workspace.openTextDocument({
+                content: result.result ?? '',
+                language: 'xml'
+            });
+            await vscode.window.showTextDocument(doc, { preview: true });
+        }
+    } catch (err) {
+        vscode.window.showErrorMessage(`XSLT transformation failed: ${err}`);
+    }
 }

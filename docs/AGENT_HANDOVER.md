@@ -1,6 +1,42 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** feat(languageserver): add hover, go-to-definition, document symbols, and evaluate/transform commands
+**Current focus:** **VS Code extension features** — the language server now supports hover, go-to-definition, document symbols, and two custom commands: `bosak/evaluateXPath` (evaluate the current `.xpath` document) and `bosak/transformXslt` (run the current stylesheet against a selected source XML document). The previously placeholder context-menu commands in `extension.ts` are now wired to these LSP requests. A `Bosak.LanguageServer.Tests` project covers all handlers.
+
+Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged), plus **15 language-server tests / 0 failed**. QT3 unchanged at **30,344 / 0 / 1,477**.
+
+## This Session Changes (VS Code extension features)
+
+1. **Hover** (`HoverHandler.cs`) — hovering over an XPath function name shows its signature and a short description.
+2. **Go to definition** (`DefinitionHandler.cs`) — resolves `$variable` references, named-template references, and function calls to their declarations.
+3. **Document symbols** (`DocumentSymbolHandler.cs`) — outlines top-level XSLT declarations.
+4. **Custom evaluation requests** (`EvaluationHandler.cs`) — `bosak/evaluateXPath` evaluates the current document's XPath expression; `bosak/transformXslt` runs the current stylesheet against a chosen source XML file.
+5. **Command wiring** (`extension.ts`) — the `bosak.evaluateXPath` and `bosak.transformXslt` commands now invoke the LSP requests and open the result in a new editor.
+6. **Test project** (`tests/Bosak.LanguageServer.Tests/`) — xUnit tests for all handlers.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/Program.cs`
+- `src/Bosak.LanguageServer/HoverHandler.cs` (new)
+- `src/Bosak.LanguageServer/DefinitionHandler.cs` (new)
+- `src/Bosak.LanguageServer/DocumentSymbolHandler.cs` (new)
+- `src/Bosak.LanguageServer/EvaluationHandler.cs` (new)
+- `src/Bosak.LanguageServer/Bosak.LanguageServer.csproj` (InternalsVisibleTo for tests)
+- `vscode-bosak/src/extension.ts`
+- `vscode-bosak/README.md`
+- `tests/Bosak.LanguageServer.Tests/` (new project)
+- `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md`, `README.md`
+
+## Next Recommended Step
+
+1. Continue VS Code extension work: add XQuery language support (`.xq`/`.xqy` files) and semantic tokens. After that, the next major engine topic is schema awareness.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** feat(languageserver): add hover, go-to-definition, and document symbols
 **Current focus:** **VS Code extension features** — the language server gained three new LSP capabilities: **hover** (function signatures and descriptions for XPath functions), **go-to-definition** (jump to user-defined XSLT functions, variables, parameters, and named templates), and **document symbols** (an outline of top-level XSLT declarations). A new `Bosak.LanguageServer.Tests` project covers the handlers. The language server builds separately from `Bosak.sln` (it is not a solution member); its tests run via `dotnet test tests/Bosak.LanguageServer.Tests`.
 
