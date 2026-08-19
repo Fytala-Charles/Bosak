@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.2   | 07-08-2026     | Evaluation-time check of statically unresolvable names (XPST0008/XPST0081/XPST0017)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.3   | 18-08-2026     | Main-module function bodies use the main module's static default element namespace (extvardeclwithtype-23) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Compiler.Ir;
@@ -272,6 +274,10 @@ public sealed class XQueryExecutable
         }
 
         // User-declared functions dispatch through a compiled InlineFunctionItem body.
+        // Main-module function bodies use the main module's static default element
+        // namespace, not a namespace leaked from an enclosing direct element constructor
+        // (extvardeclwithtype-23).
+        var mainModuleDefaultElementNamespace = _staticContext.DefaultElementNamespace;
         foreach (var fn in _userFunctions)
         {
             var captured = fn;
@@ -284,7 +290,7 @@ public sealed class XQueryExecutable
                 ReturnType = XdmValueKind.External,
                 ParameterTypeNames = captured.ParameterTypes,
                 ReturnTypeName = captured.ReturnType,
-                Implementation = (callCtx, args) => InvokeWithModuleContext(captured, callCtx, args)
+                Implementation = (callCtx, args) => InvokeWithModuleContext(captured, callCtx, args, mainModuleDefaultElementNamespace)
             });
         }
 
@@ -376,13 +382,26 @@ public sealed class XQueryExecutable
     // Invokes a user function body, applying the declaring library module's runtime static
     // context (namespaces, base URI, default element namespace, default collation) when the
     // function was declared in a library module (cbcl-module-002: module-local base URIs).
-    private static XdmValue InvokeWithModuleContext(CompiledUserFunction function, EvaluationContext callCtx, ReadOnlySpan<XdmValue> args)
+    private static XdmValue InvokeWithModuleContext(CompiledUserFunction function, EvaluationContext callCtx, ReadOnlySpan<XdmValue> args, string? mainModuleDefaultElementNamespace)
     {
         if (function.ModuleNamespaces is null)
         {
-            return VmEngine.InvokeFunctionItem(
-                new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
-                callCtx, args);
+            // Main-module function: evaluate the body with the main module's static default
+            // element namespace, so an enclosing direct element constructor's default
+            // namespace does not leak into the function body's type tests and name
+            // resolution (extvardeclwithtype-23).
+            var savedMainDefaultNs = callCtx.DefaultElementNamespace;
+            try
+            {
+                callCtx.DefaultElementNamespace = mainModuleDefaultElementNamespace;
+                return VmEngine.InvokeFunctionItem(
+                    new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
+                    callCtx, args);
+            }
+            finally
+            {
+                callCtx.DefaultElementNamespace = savedMainDefaultNs;
+            }
         }
         var snapshot = callCtx.SnapshotNamespaces();
         var savedDefaultNs = callCtx.DefaultElementNamespace;

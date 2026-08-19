@@ -1,6 +1,36 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(xquery): main-module function bodies use the main module's static default element namespace (extvardeclwithtype-23)
+**Current focus:** **QT3 skip-cluster cleanup — external variable declared-type cluster** — `XQueryExecutable.InvokeWithModuleContext` now restores the main module's static default element namespace around main-module function calls. Previously, a direct element constructor's `xmlns="..."` declaration at the call site leaked into the called function's body, causing `element(Variable)` type tests to expect the wrong namespace and raise `XPTY0004`. `extvardeclwithtype-23` now passes.
+
+Expected QT3: **30,341 passed / 0 failed / 1,480 skipped (95.35%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,720 unit tests / 0 failed**. Targeted verification: `prod-VarDecl.external` (`extvardeclwithtype-23`) 1/0/0.
+
+## This Session Changes (external variable declared-type cluster)
+
+1. **Static default element namespace isolation for main-module functions** (`XQueryExecutable.cs`) — main-module function calls now save/restore `EvaluationContext.DefaultElementNamespace`, using the main module's static value (`_staticContext.DefaultElementNamespace`) for the body.
+2. **Regression test** (`PlaceholderTests.cs`) — `FunctionCall_UsesModuleStaticDefaultElementNamespace`.
+3. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `extvardeclwithtype-23` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XQuery/Api/XQueryExecutable.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. The remaining QT3 skips are non-engine: platform limits (decimal precision, DateTimeOffset year −2, codepoints OOM), XML 1.1 support (namespace undeclaration, character names), upstream defects, external resources, and intentional harness skips. Consider the QT3 skip-cluster cleanup complete, or tackle the XML 1.1 provider support as a larger feature.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(compiler): let between group by and order by evaluated during re-keying; for/window after group by lowered as nested FLWOR (use-case-groupby-Q6, TumblingWindowExpr545)
 **Current focus:** **QT3 skip-cluster cleanup — group-by post-clause cluster** — the group-by path now reuses the `LowerFlworRekeyStage` machinery: `let` clauses between `group by` and `order by` are evaluated during the re-key pass so order-by keys can reference them, and `for`/`window` clauses after `group by` are lowered as a nested FLWOR evaluated per group with the grouped bindings in scope. The two `NotSupportedException` guards are removed. `use-case-groupby-Q6` and `TumblingWindowExpr545` now pass.
 

@@ -84,6 +84,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.28  | 18-08-2026     | Multiple order by clauses regression tests (orderBy65/66 shapes) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.29  | 18-08-2026     | Group-by post-clause and module static default-element-namespace regression tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -3289,6 +3291,29 @@ public class PlaceholderTests
         var elem = (Bosak.XPath.Providers.Xml.XDocumentNode)result.NodeValue;
         var attrValue = ((System.Xml.Linq.XElement)elem.UnderlyingObject).Attribute("attribute")!.Value;
         Assert.Equal("   a", attrValue);
+    }
+
+    [Fact]
+    public void FunctionCall_UsesModuleStaticDefaultElementNamespace()
+    {
+        // extvardeclwithtype-23: a declared function's body uses the main module's
+        // static default element namespace, not a namespace leaked from an enclosing
+        // direct element constructor at the call site.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare variable $inputDocument := (/); " +
+            "declare function local:report() as xs:integer { " +
+            "  let $v as element(Variable)* := $inputDocument/xml/Variable return count($v) " +
+            "}; " +
+            "<body xmlns=\"http://www.w3.org/1999/xhtml/\">{ local:report() }</body>");
+        var doc = new System.Xml.Linq.XDocument(new System.Xml.Linq.XElement("xml", new System.Xml.Linq.XElement("Variable")));
+        var ctx = new XQueryContext();
+        ctx.WithContextItem(XdmValue.FromNode(new Bosak.XPath.Providers.Xml.XDocumentNode(doc)));
+        var result = executable.Evaluate(ctx);
+        // The Variable element is in no namespace; the function's static default element
+        // namespace is empty, so element(Variable) matches it despite the caller's
+        // xmlns="http://www.w3.org/1999/xhtml/".
+        Assert.Equal("1", result.ToString());
     }
 
     [Fact]

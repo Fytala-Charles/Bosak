@@ -98,6 +98,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.41  | 18-08-2026     | Drop currencysvg and K2-DirectConElemAttr-75 after attribute whitespace/namespace fixes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.42  | 18-08-2026     | Drop extvardeclwithtype-23 after static default element namespace fix |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -162,8 +164,6 @@ internal sealed class ConformanceRunner
         ["K2-Serialization-20"] = "XML 1.1 prefixed namespace undeclaration (xmlns:p=\"\") is not yet supported",
         ["K2-Serialization-21"] = "XML 1.1 prefixed namespace undeclaration (xmlns:p=\"\") is not yet supported",
         ["XQST0085b"] = "XML 1.1 prefixed namespace undeclaration (xmlns:foo=\"\") is not yet supported",
-        // Tests whose queries are now loaded from external files but still fail on unimplemented features.
-        ["extvardeclwithtype-23"] = "External variable declared type validation against element(Variable) is not yet supported",
         // prod/DirElemContent.xml (0 tests)
         // prod/NameTest.xml (0 tests)
     };
