@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** feat(languageserver): add hover, go-to-definition, and document symbols
+**Current focus:** **VS Code extension features** — the language server gained three new LSP capabilities: **hover** (function signatures and descriptions for XPath functions), **go-to-definition** (jump to user-defined XSLT functions, variables, parameters, and named templates), and **document symbols** (an outline of top-level XSLT declarations). A new `Bosak.LanguageServer.Tests` project covers the handlers. The language server builds separately from `Bosak.sln` (it is not a solution member); its tests run via `dotnet test tests/Bosak.LanguageServer.Tests`.
+
+Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged), plus **11 language-server tests / 0 failed**. QT3 unchanged at **30,344 / 0 / 1,477**.
+
+## This Session Changes (VS Code extension features)
+
+1. **Hover** (`HoverHandler.cs`) — hovering over an XPath function name shows its signature and a short description. A curated metadata map covers the most commonly used functions; others fall back to a generic signature.
+2. **Go to definition** (`DefinitionHandler.cs`) — resolves `$variable` references, named-template references, and function calls to their `xsl:variable`/`xsl:param`/`xsl:template`/`xsl:function` declarations in the current stylesheet.
+3. **Document symbols** (`DocumentSymbolHandler.cs`) — outlines top-level XSLT declarations (templates, functions, variables, keys, decimal formats, character maps, accumulators, modes, attribute sets, output, imports/includes).
+4. **Test project** (`tests/Bosak.LanguageServer.Tests/`) — new xUnit project covering the three handlers.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/Program.cs`
+- `src/Bosak.LanguageServer/HoverHandler.cs` (new)
+- `src/Bosak.LanguageServer/DefinitionHandler.cs` (new)
+- `src/Bosak.LanguageServer/DocumentSymbolHandler.cs` (new)
+- `src/Bosak.LanguageServer/Bosak.LanguageServer.csproj` (InternalsVisibleTo for tests)
+- `tests/Bosak.LanguageServer.Tests/` (new project)
+- `vscode-bosak/README.md`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue VS Code extension work: add XQuery language support (`.xq`/`.xqy` files), semantic tokens, and implement the placeholder commands (Evaluate XPath, Run XSLT Transformation). After that, the next major engine topic is schema awareness.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** feat(providers): XML 1.1 prefixed namespace undeclarations in element constructors (XQST0085b, K2-Serialization-20/21)
 **Current focus:** **XML 1.1 support — namespace undeclaration** — `XDocumentProvider.ConstructElement` now accepts `xmlns:p=""` in XML 1.1 mode and records a `PrefixedNamespaceUndeclarations` annotation instead of raising XQST0085. The existing namespace-axis and serialization infrastructure already understands the annotation. An `Xml11Mode` flag was added to `EvaluationContext` and `XdmElementSpec` and is set by the harness for `xml-version=1.1` tests. The two XML 1.1-only character-name tests (`XML10-4ed-Excluded-char-1-new`, `XML11-1ed-Included-char-1-new`) are documented as a known gap: .NET's `XDocument` cannot hold those names natively, and the harness's assert-xml comparison re-parses serialized output with `XDocument.Parse`, which rejects them.
 

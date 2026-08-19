@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 08-06-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 18-08-2026     | Register DocumentSymbolHandler, HoverHandler, and DefinitionHandler                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Threading.Tasks;
@@ -50,7 +52,10 @@ class Program
                 })
                 .WithHandler<TextDocumentSyncHandler>()
                 .WithHandler<DiagnosticsHandler>()
-                .WithHandler<CompletionHandler>();
+                .WithHandler<CompletionHandler>()
+                .WithHandler<DocumentSymbolHandler>()
+                .WithHandler<HoverHandler>()
+                .WithHandler<DefinitionHandler>();
         }).ConfigureAwait(false);
 
         await server.WaitForExit.ConfigureAwait(false);

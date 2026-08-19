@@ -7,6 +7,9 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 - **Syntax highlighting** for XPath (`.xpath`) and XSLT (`.xsl`, `.xslt`) files
 - **Realtime diagnostics** — compile errors for XPath expressions and XSLT stylesheets
 - **Auto-completion** — XPath functions, axes, keywords and XSLT instructions
+- **Hover** — function signatures and descriptions for XPath functions
+- **Go to definition** — jump to user-defined XSLT functions, variables, parameters, and named templates
+- **Document outline** — top-level XSLT declarations (templates, functions, variables, keys, output, imports)
 - **Context-menu commands** — Evaluate XPath, Run XSLT Transformation *(WIP)*
 
 ---

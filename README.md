@@ -134,7 +134,7 @@ flowchart TB
 | **Node Providers** | `Bosak.XPath.Providers` | `XDocument`, `XmlDocument`, streaming adapters *(planned)* |
 | **XSLT** | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
 | **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, `XQueryExecutable`, `XQueryParser`, `XQueryStaticContext`; full core FLWOR + direct and computed constructors + switch/typeswitch + output declarations and serialization + user-defined functions/variables + library modules; QT3 wired (30,344/0/1,477) |
-| **Language Server** | `Bosak.LanguageServer` | LSP server for XPath / XSLT diagnostics & completions |
+| **Language Server** | `Bosak.LanguageServer` | LSP server for XPath / XSLT — diagnostics, completions, hover, go-to-definition, document outline |
 | **VS Code Extension** | `vscode-bosak/` | TypeScript client for the language server |
 
 ---

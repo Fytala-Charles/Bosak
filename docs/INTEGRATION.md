@@ -19,6 +19,8 @@
 
 ## 0. Recent Changes
 
+- **2026-08-18** — Language Server: **hover, go-to-definition, and document symbols** — the language server now supports hover (function signatures/descriptions for XPath functions), go-to-definition (user-defined XSLT functions/variables/params/named templates), and document symbols (an outline of top-level XSLT declarations). A new `Bosak.LanguageServer.Tests` project covers the handlers; the language server builds separately from `Bosak.sln`.
+
 - **2026-08-18** — XPath/XQuery: **XML 1.1 namespace undeclaration** — element constructors now accept `xmlns:p=""` in XML 1.1 mode, recording it as a `PrefixedNamespaceUndeclarations` annotation instead of raising `XQST0085`. An `Xml11Mode` flag was added to `EvaluationContext`/`XdmElementSpec`, set by the harness for `xml-version=1.1` tests. `XQST0085b`, `K2-Serialization-20`, and `K2-Serialization-21` now pass; the two XML 1.1-only character-name tests are documented as a known gap (the .NET `XDocument` provider cannot hold those names natively).
   - Added regression tests in `PlaceholderTests.cs`: `DirectConstructor_Xml11PrefixedNamespaceUndeclaration`, `DirectConstructor_Xml10PrefixedNamespaceUndeclaration_StillErrors`.
   - Targeted verification: `misc-CombinedErrorCodes` (`XQST0085b`) 1/0/0, `method-xml` (`K2-Serialization-20/21`) 2/0/0.
