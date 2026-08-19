@@ -99,6 +99,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.46  | 18-08-2026     | Named-function-ref arity > Int32 clamps to int.MaxValue so resolution fails with FOAR0002 (fn-function-arity-017/fn-function-name-018) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.47  | 18-08-2026     | Normalize line endings before XML attribute-value whitespace normalization (K2-DirectConElemAttr-75) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -2762,8 +2764,24 @@ public sealed class XPathParser
                 // A raw '<' is never allowed literally in an attribute value (use '&lt;').
                 throw ConstructorError("attribute values must not contain a literal '<'", pos);
             }
-            // XML attribute-value normalization: raw whitespace becomes a space.
-            text.Append(c is '\t' or '\n' or '\r' ? ' ' : c);
+            // XML 1.0 §2.11 line-ending normalization (\r\n and lone \r become \n),
+            // then XML attribute-value normalization (§3.3.3) turns the newline into
+            // a single space. Whitespace runs within a literal are preserved as-is;
+            // character references are already expanded verbatim by the '&' branch.
+            if (c == '\r')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '\n')
+                    pos++;
+                text.Append(' ');
+            }
+            else if (c is '\t' or '\n' or ' ')
+            {
+                text.Append(' ');
+            }
+            else
+            {
+                text.Append(c);
+            }
             pos++;
         }
     }

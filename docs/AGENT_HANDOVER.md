@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(parser/runtime): normalize line endings in direct attribute values; computed attribute names ignore default element namespace (K2-DirectConElemAttr-75, currencysvg)
+**Current focus:** **QT3 skip-cluster cleanup — attribute whitespace/namespace cluster** — `XPathParser.ScanConstructorAttributeValue` now applies XML 1.0 §2.11 line-ending normalization (`\r\n` and lone `\r` become `\n`) before the §3.3.3 attribute-value whitespace normalization, so a Windows line ending between value parts produces exactly one space instead of two. Literal whitespace runs within a single text part are preserved. `VmEngine.ResolveComputedName` no longer applies the default element namespace to unprefixed computed attribute names. `K2-DirectConElemAttr-75` and `currencysvg` now pass and are removed from `KnownXQueryGaps`.
+
+Expected QT3: **30,336 passed / 0 failed / 1,485 skipped (95.33%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,715 unit tests / 0 failed**. Targeted verification: `K2-DirectConElemAttr-75` 1/0/0, `currencysvg` 1/0/0, plus the previously regressed `K2-DirectConOther-49/58/59/60/68/69` all pass.
+
+## This Session Changes (attribute whitespace/namespace cluster)
+
+1. **Line-ending normalization in attribute values** (`XPathParser.cs`) — `\r\n` and lone `\r` are normalized to `\n` before the XML attribute-value whitespace-to-space mapping, so each line ending produces exactly one space. Whitespace runs inside a literal part are preserved.
+2. **Computed attribute names ignore default element namespace** (`VmEngine.cs`) — `ResolveComputedName` returns a null namespace for unprefixed computed attribute names.
+3. **Regression tests** (`PlaceholderTests.cs`) — `DirectAttributeValue_LineEndingNormalization`, `DirectAttributeValue_LiteralSpacesArePreserved`, and `ComputedAttribute_UnprefixedNameIgnoresDefaultElementNamespace`.
+4. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `currencysvg` and `K2-DirectConElemAttr-75` from `KnownXQueryGaps`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Parser/Ast/XPathParser.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup with the remaining small groups: the `NotSupportedException: Only one order by clause is supported` cluster (2 tests), the `XML 1.1 prefixed namespace undeclaration` pair, and the platform-limitation groups (decimal precision, DateTimeOffset year -2, `OutOfMemoryException` codepoints).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(providers): computed attribute xml:space validation raises XQDY0092 (K2-ComputeConAttr-60)
 **Current focus:** **QT3 skip-cluster cleanup — xml:space computed-attribute cluster** — `XDocumentProvider.ConstructAttribute` now validates `xml:space` values at construction time and raises `XQDY0092` for anything other than `default` or `preserve`. Previously the invalid value was accepted and only failed later when LINQ's `XmlWellFormedWriter` serialized the attribute, surfacing as a harness `ArgumentException`.
 

@@ -178,6 +178,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.98  | 18-08-2026     | Clamped function arity int.MaxValue raises FOAR0002 (fn-function-arity-017/fn-function-name-018) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.99  | 18-08-2026     | Unprefixed computed attribute names do not use the default element namespace (currencysvg) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -10118,6 +10120,10 @@ public static class VmEngine
         }
         if (!IsValidNcName(text))
             throw new InvalidOperationException($"XQDY0074: Invalid {construct} name '{text}'.");
+        // Unprefixed computed element names use the default element namespace; unprefixed
+        // computed attribute names do not (currencysvg).
+        if (construct == "attribute")
+            return (text, null, null);
         return (text, null, string.IsNullOrEmpty(context.DefaultElementNamespace) ? null : context.DefaultElementNamespace);
     }
 

@@ -80,6 +80,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.26  | 18-08-2026     | Computed attribute xml:space XQDY0092 regression test (K2-ComputeConAttr-60) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.27  | 18-08-2026     | Attribute whitespace collapse and computed attribute default-namespace regression tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -3187,6 +3189,46 @@ public class PlaceholderTests
         var executable = compiler.Compile("<a> { attribute xml:space {\"DEFAULT\"} } </a>");
         var ex = Assert.Throws<InvalidOperationException>(() => executable.Evaluate(new XQueryContext()));
         Assert.Contains("XQDY0092", ex.Message);
+    }
+
+    [Fact]
+    public void DirectAttributeValue_LineEndingNormalization()
+    {
+        // K2-DirectConElemAttr-75: \r\n between attribute-value parts normalizes to a
+        // single space (XML 1.0 §2.11 + §3.3.3), not two spaces.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<e attribute=\"{'a'}\r\n{'b'}\r\ntextNode\r\n{'c'}\" />");
+        var result = executable.Evaluate(new XQueryContext());
+        var elem = (Bosak.XPath.Providers.Xml.XDocumentNode)result.NodeValue;
+        var attrValue = ((System.Xml.Linq.XElement)elem.UnderlyingObject).Attribute("attribute")!.Value;
+        Assert.Equal("a b textNode c", attrValue);
+    }
+
+    [Fact]
+    public void DirectAttributeValue_LiteralSpacesArePreserved()
+    {
+        // K2-DirectConOther-58/68: literal spaces inside an attribute value are
+        // preserved (XML attribute-value normalization does not collapse them).
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<e attribute=\"   a\" />");
+        var result = executable.Evaluate(new XQueryContext());
+        var elem = (Bosak.XPath.Providers.Xml.XDocumentNode)result.NodeValue;
+        var attrValue = ((System.Xml.Linq.XElement)elem.UnderlyingObject).Attribute("attribute")!.Value;
+        Assert.Equal("   a", attrValue);
+    }
+
+    [Fact]
+    public void ComputedAttribute_UnprefixedNameIgnoresDefaultElementNamespace()
+    {
+        // currencysvg: a computed attribute with an unprefixed name must not use the
+        // default element namespace.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("declare default element namespace \"http://www.w3.org/2000/svg\"; <path>{ attribute {\"d\"} {\"M0,0\"} }</path>");
+        var result = executable.Evaluate(new XQueryContext());
+        var elem = (Bosak.XPath.Providers.Xml.XDocumentNode)result.NodeValue;
+        var attr = ((System.Xml.Linq.XElement)elem.UnderlyingObject).Attribute("d")!;
+        Assert.Equal("M0,0", attr.Value);
+        Assert.Equal("", attr.Name.NamespaceName);
     }
 
     private static List<long> ToIntegers(XdmValue value)
