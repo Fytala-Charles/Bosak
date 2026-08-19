@@ -82,6 +82,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.27  | 18-08-2026     | Attribute whitespace collapse and computed attribute default-namespace regression tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.28  | 18-08-2026     | Multiple order by clauses regression tests (orderBy65/66 shapes) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -3202,6 +3204,39 @@ public class PlaceholderTests
         var elem = (Bosak.XPath.Providers.Xml.XDocumentNode)result.NodeValue;
         var attrValue = ((System.Xml.Linq.XElement)elem.UnderlyingObject).Attribute("attribute")!.Value;
         Assert.Equal("a b textNode c", attrValue);
+    }
+
+    [Fact]
+    public void Flwor_MultipleOrderBy_Adjacent()
+    {
+        // orderBy65 shape: two consecutive order by clauses. The stable second sort
+        // determines the final order.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "for $x in (3, 1, 2) order by $x descending order by $x ascending return $x");
+        var result = executable.Evaluate(new XQueryContext());
+        Assert.Equal(new[] { 1L, 2L, 3L }, ToIntegers(result));
+    }
+
+    [Fact]
+    public void Flwor_MultipleOrderBy_WithCountAndLetBetween()
+    {
+        // orderBy66 shape: order by, count, let, then a second order by whose key
+        // references the let-bound variable.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "for $i in 1 to 10 " +
+            "order by -$i " +
+            "count $count " +
+            "let $e := <e i=\"{$i}\" pos=\"{$count}\"/> " +
+            "order by number($e/@i) " +
+            "where $count gt 8 " +
+            "return string($e/@pos)");
+        var result = executable.Evaluate(new XQueryContext());
+        // After order by -$i: i = 10..1, count = 1..10.
+        // After order by number($e/@i): sorted by i ascending.
+        // where count gt 8 keeps i = 1,2 (count 10,9).
+        Assert.Equal(new[] { "10", "9" }, ToStrings(result));
     }
 
     [Fact]

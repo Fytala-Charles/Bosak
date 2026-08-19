@@ -77,6 +77,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.33  | 18-08-2026     | Arrow partial application: support placeholder arguments in => static calls (ArrowPostfix-108) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.34  | 18-08-2026     | Multiple order by clauses per FLWOR via stable-sort re-key stages (orderBy65/66) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -2185,63 +2187,208 @@ public sealed class IrLowerer
 
     private int LowerFlworWithTuples(FlworExpressionNode node, int resultReg)
     {
-        // Find the last order by clause (-1 if there is none).
-        int orderByIndex = -1;
-        for (int i = node.Clauses.Count - 1; i >= 0; i--)
+        // Find all order by clause indices.
+        var orderByIndices = new List<int>();
+        for (int i = 0; i < node.Clauses.Count; i++)
         {
             if (node.Clauses[i] is OrderByClauseNode)
-            {
-                orderByIndex = i;
-                break;
-            }
+                orderByIndices.Add(i);
         }
 
-        var preClauses = orderByIndex >= 0 ? node.Clauses.Take(orderByIndex).ToList() : node.Clauses.ToList();
-        var postClauses = orderByIndex >= 0 ? node.Clauses.Skip(orderByIndex + 1).ToList() : new List<FlworClauseNode>();
-        var orderByClause = orderByIndex >= 0 ? (OrderByClauseNode)node.Clauses[orderByIndex] : null;
+        // Split clauses into segments separated by order by clauses.
+        // segments[0] = clauses before the first order by; segments[k] = clauses between
+        // orderBys[k-1] and orderBys[k]; segments[M] = clauses after the last order by.
+        var segments = new List<List<FlworClauseNode>>();
+        var orderBys = new List<OrderByClauseNode>();
+        int prev = 0;
+        foreach (int idx in orderByIndices)
+        {
+            segments.Add(node.Clauses.Skip(prev).Take(idx - prev).ToList());
+            orderBys.Add((OrderByClauseNode)node.Clauses[idx]);
+            prev = idx + 1;
+        }
+        segments.Add(node.Clauses.Skip(prev).ToList());
 
-        if (preClauses.Any(c => c is OrderByClauseNode))
-            throw new NotSupportedException("XPST0003: Only one order by clause is supported in a FLWOR expression.");
-        if (postClauses.Any(c => c is not CountClauseNode and not WhereClauseNode and not LetClauseNode))
-            throw new NotSupportedException("XPST0003: Only count, where, and let clauses are supported after an order by clause.");
-
-        // The variables bound by all for/let/count clauses before order by must be captured
-        // before the tuple builder recurses, because that builder adds and removes
-        // variables as it unwinds.
-        var boundVariables = ComputeBoundVariables(preClauses);
+        // Clauses after an order by (both between order by clauses and after the last
+        // one) are restricted to count, where, and let.
+        for (int k = 1; k < segments.Count; k++)
+        {
+            foreach (var c in segments[k])
+            {
+                if (c is not CountClauseNode and not WhereClauseNode and not LetClauseNode)
+                    throw new NotSupportedException("XPST0003: Only count, where, and let clauses are supported after an order by clause.");
+            }
+        }
 
         // Each count clause needs a compiler-managed integer counter that persists
         // across tuple-builder invocations inside the For loops.
         var countCounters = PrecomputeCountCounters(node.Clauses);
         InitializeCountCounters(countCounters);
 
-        // Build a sequence of tuples: [var1, var2, ..., key1, key2, ...]
+        // Stage 1: build a sequence of tuples [var1, var2, ..., key1, key2, ...] and sort.
+        var boundVariables = ComputeBoundVariables(segments[0]);
         int tupleSeqReg = AllocRegister();
         var recursionBoundVariables = new List<BoundVariable>();
-        LowerFlworTupleBuilder(preClauses, orderByClause, tupleSeqReg, recursionBoundVariables, countCounters);
+        LowerFlworTupleBuilder(segments[0], orderBys.Count > 0 ? orderBys[0] : null, tupleSeqReg, recursionBoundVariables, countCounters);
 
         int iterationReg = tupleSeqReg;
-        if (orderByClause is not null)
+        if (orderBys.Count > 0)
         {
-            // Apply OrderBy.
-            int sortedTupleSeqReg = AllocRegister();
-            var orderByInfo = new OrderByInfo(
-                boundVariables.Count,
-                orderByClause.Specs.Count,
-                orderByClause.Specs.Select(s => s.Descending).ToArray(),
-                orderByClause.Specs.Select(s => ResolveEmptyOrder(s.EmptyOrder)).ToArray(),
-                orderByClause.Specs.Select(s => s.CollationUri).ToArray());
-            int orderByPoolIdx = AddToLiteralPool(orderByInfo);
-            Emit(IrOpCode.OrderBy, (ushort)sortedTupleSeqReg, (ushort)tupleSeqReg, 0, orderByPoolIdx);
-            FreeRegister(tupleSeqReg);
-            iterationReg = sortedTupleSeqReg;
+            int sortedReg = EmitOrderBySorted(iterationReg, boundVariables.Count, orderBys[0]);
+            FreeRegister(iterationReg);
+            iterationReg = sortedReg;
         }
+
+        // Re-key stages: each additional order by clause re-sorts the tuple stream by its
+        // own keys. Stable sorting preserves the previous order for equal keys, matching
+        // XQuery 3.0 semantics for consecutive order by clauses.
+        for (int k = 1; k < orderBys.Count; k++)
+        {
+            int rekeyedReg = LowerFlworRekeyStage(iterationReg, boundVariables, segments[k], orderBys[k], countCounters);
+            FreeRegister(iterationReg);
+            boundVariables.AddRange(ComputeBoundVariables(segments[k]));
+            int sortedReg = EmitOrderBySorted(rekeyedReg, boundVariables.Count, orderBys[k]);
+            FreeRegister(rekeyedReg);
+            iterationReg = sortedReg;
+        }
+
+        // Post-order-by clauses: empty when there is no order by (the tuple builder
+        // already processed every clause).
+        var postClauses = orderBys.Count == 0
+            ? new List<FlworClauseNode>()
+            : segments[segments.Count - 1];
 
         // Iterate over tuples, bind variables, handle post-order-by clauses, evaluate body.
         LowerFlworBodyIteration(iterationReg, boundVariables, postClauses, node.ReturnExpression, resultReg, countCounters);
 
         FreeRegister(iterationReg);
         return resultReg;
+    }
+
+    private int EmitOrderBySorted(int tupleSeqReg, int variableCount, OrderByClauseNode orderByClause)
+    {
+        int sortedTupleSeqReg = AllocRegister();
+        var orderByInfo = new OrderByInfo(
+            variableCount,
+            orderByClause.Specs.Count,
+            orderByClause.Specs.Select(s => s.Descending).ToArray(),
+            orderByClause.Specs.Select(s => ResolveEmptyOrder(s.EmptyOrder)).ToArray(),
+            orderByClause.Specs.Select(s => s.CollationUri).ToArray());
+        int orderByPoolIdx = AddToLiteralPool(orderByInfo);
+        Emit(IrOpCode.OrderBy, (ushort)sortedTupleSeqReg, (ushort)tupleSeqReg, 0, orderByPoolIdx);
+        return sortedTupleSeqReg;
+    }
+
+    /// <summary>
+    /// Lowers a re-key stage for a FLWOR with multiple order by clauses: iterates the
+    /// previous stage's sorted tuples, rebinds their variables, processes the
+    /// intermediate count/where/let clauses, evaluates the next order by's keys, and
+    /// emits a new tuple stream [vars..., keys...] ready for the next sort.
+    /// </summary>
+    private int LowerFlworRekeyStage(
+        int inputTupleSeqReg,
+        IReadOnlyList<BoundVariable> inputBoundVariables,
+        IReadOnlyList<FlworClauseNode> intermediateClauses,
+        OrderByClauseNode orderByClause,
+        List<CountCounterInfo> countCounters)
+    {
+        int newTupleSeqReg = AllocRegister();
+
+        int forIdx = _instructions.Count;
+        Emit(IrOpCode.For, (ushort)newTupleSeqReg, (ushort)inputTupleSeqReg, 0, 0);
+
+        int jumpIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0);
+
+        int rhsEntry = _instructions.Count;
+
+        // Bind the input tuple to the previous stage's variables.
+        int tupleReg = AllocRegister();
+        int tupleVarPoolIdx = AddToLiteralPool("__flwor_tuple");
+        Emit(IrOpCode.LoadVariable, (ushort)tupleReg, 0, 0, tupleVarPoolIdx);
+        var tupleBindInfo = new TupleBindInfo(inputBoundVariables.Select(v => (v.Name, v.Prefix, v.NamespaceUri)).ToArray());
+        int tupleBindPoolIdx = AddToLiteralPool(tupleBindInfo);
+        Emit(IrOpCode.TupleBind, (ushort)tupleReg, 0, 0, tupleBindPoolIdx);
+        FreeRegister(tupleReg);
+
+        // Process intermediate clauses, tracking newly added variables so they are
+        // captured in the re-keyed tuple.
+        var addedVars = new List<BoundVariable>();
+        var whereSkipJumps = new List<int>();
+        foreach (var clause in intermediateClauses)
+        {
+            if (clause is CountClauseNode countClause)
+            {
+                EmitIncrementCount(countClause, countCounters);
+                addedVars.Add(new BoundVariable(countClause.VariableName, countClause.Prefix, countClause.NamespaceUri));
+            }
+            else if (clause is WhereClauseNode whereClause)
+            {
+                int condReg = LowerNode(whereClause.Condition);
+                int skipJump = EmitJumpPlaceholder(IrOpCode.JumpIfFalse, (ushort)condReg);
+                whereSkipJumps.Add(skipJump);
+                FreeRegister(condReg);
+            }
+            else if (clause is LetClauseNode letClause)
+            {
+                foreach (var binding in letClause.Bindings)
+                {
+                    int exprReg = LowerNode(binding.Expression);
+                    StoreVariable(binding, exprReg);
+                    FreeRegister(exprReg);
+                    addedVars.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+                }
+            }
+            else
+            {
+                throw new NotSupportedException($"XPST0003: {clause.GetType().Name} is not supported between order by clauses.");
+            }
+        }
+
+        // Build the re-keyed tuple [vars..., keys...].
+        int newTupleReg = AllocRegister();
+        Emit(IrOpCode.Array, (ushort)newTupleReg);
+        foreach (var var in inputBoundVariables)
+        {
+            int varReg = LoadVariable(var);
+            Emit(IrOpCode.ArrayAdd, (ushort)newTupleReg, (ushort)varReg);
+            FreeRegister(varReg);
+        }
+        foreach (var var in addedVars)
+        {
+            int varReg = LoadVariable(var);
+            Emit(IrOpCode.ArrayAdd, (ushort)newTupleReg, (ushort)varReg);
+            FreeRegister(varReg);
+        }
+        foreach (var spec in orderByClause.Specs)
+        {
+            int keyReg = LowerNode(spec.KeyExpression);
+            Emit(IrOpCode.ArrayAdd, (ushort)newTupleReg, (ushort)keyReg);
+            FreeRegister(keyReg);
+        }
+        Emit(IrOpCode.Return, (ushort)newTupleReg);
+        FreeRegister(newTupleReg);
+
+        // Where clauses that evaluate to false skip this tuple (the enclosing For adds
+        // nothing for the iteration).
+        foreach (int skipJump in whereSkipJumps)
+        {
+            int skipLabel = CurrentInstructionIndex;
+            PatchJump(skipJump, skipLabel);
+            int emptyReg = AllocRegister();
+            Emit(IrOpCode.LoadEmptySequence, (ushort)emptyReg);
+            Emit(IrOpCode.Return, (ushort)emptyReg);
+            FreeRegister(emptyReg);
+        }
+
+        int afterRhs = _instructions.Count;
+        var scopedNames = inputBoundVariables.Select(v => v.Name).Concat(addedVars.Select(v => v.Name)).Distinct().ToArray();
+        var info = new QuantifiedLoopInfo("__flwor_tuple", rhsEntry, ScopedVariableNames: scopedNames);
+        int poolIdx = AddToLiteralPool(info);
+        PatchInstruction(forIdx, IrOpCode.For, (ushort)newTupleSeqReg, (ushort)inputTupleSeqReg, 0, poolIdx);
+        PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+
+        return newTupleSeqReg;
     }
 
     private readonly record struct CountCounterInfo(CountClauseNode Clause, string CounterName);

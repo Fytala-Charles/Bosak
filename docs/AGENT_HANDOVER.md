@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** fix(compiler): support multiple order by clauses per FLWOR via stable-sort re-key stages (orderBy65/66)
+**Current focus:** **QT3 skip-cluster cleanup — multiple order by cluster** — `LowerFlworWithTuples` now splits FLWOR clauses at every `order by` and chains sort stages: build+sort for the first `order by`, then a re-key stage per additional `order by` that rebinds the tuple variables, processes intermediate `count`/`where`/`let` clauses, evaluates the new keys, and stable-sorts again. `orderBy65` and `orderBy66` now pass.
+
+Expected QT3: **30,338 passed / 0 failed / 1,483 skipped (95.34%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,717 unit tests / 0 failed**. Targeted verification: `prod-OrderByClause` 201/0/4 (orderBy65/66 pass), `prod-GroupByClause` 35/0/1 (unchanged).
+
+## This Session Changes (multiple order by cluster)
+
+1. **Segment FLWOR clauses at each order by** (`IrLowerer.cs`) — `LowerFlworWithTuples` splits the clause list into segments separated by `OrderByClauseNode`s and chains a sort stage per order by clause.
+2. **Re-key stages** (`IrLowerer.cs`) — `LowerFlworRekeyStage` iterates the previous stage's sorted tuples, rebinds their variables via `TupleBind`, processes intermediate `count`/`where`/`let` clauses (capturing newly bound variables in the new tuple), evaluates the next order by's keys, and emits a new tuple stream for the next stable sort.
+3. **Regression tests** (`PlaceholderTests.cs`) — `Flwor_MultipleOrderBy_Adjacent` and `Flwor_MultipleOrderBy_WithCountAndLetBetween`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. Continue the QT3 skip-cluster cleanup with the remaining small groups: the `XML 1.1 prefixed namespace undeclaration` pair, the `let`-between-`group by`-and-`order by` guard, the `Only order by, count, where, and let clauses are supported after group by` residual, the `extvardeclwithtype-23` external-variable type validation, and the platform-limitation groups.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(parser/runtime): normalize line endings in direct attribute values; computed attribute names ignore default element namespace (K2-DirectConElemAttr-75, currencysvg)
 **Current focus:** **QT3 skip-cluster cleanup — attribute whitespace/namespace cluster** — `XPathParser.ScanConstructorAttributeValue` now applies XML 1.0 §2.11 line-ending normalization (`\r\n` and lone `\r` become `\n`) before the §3.3.3 attribute-value whitespace normalization, so a Windows line ending between value parts produces exactly one space instead of two. Literal whitespace runs within a single text part are preserved. `VmEngine.ResolveComputedName` no longer applies the default element namespace to unprefixed computed attribute names. `K2-DirectConElemAttr-75` and `currencysvg` now pass and are removed from `KnownXQueryGaps`.
 
