@@ -89,6 +89,9 @@ internal sealed class TestExecutor
 
         var xqContext = routeXQuery ? new XQueryContext() : null;
         var ctx = xqContext?.EvaluationContext ?? new EvaluationContext();
+        // XML 1.1 tests (xml-version dependency) enable XML 1.1 constructor semantics
+        // (prefixed namespace undeclarations) in addition to line-ending normalization.
+        ctx.Xml11Mode = xml11LineEndings;
         FunctionLibrary.Populate(ctx);
         // fn:transform lives in the XSLT layer; register it so the fn-transform test set runs.
         // The XSLT-only functions (stream-available, unparsed-entity-*) must stay

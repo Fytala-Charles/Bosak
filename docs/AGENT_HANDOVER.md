@@ -1,6 +1,41 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
+**Commit:** feat(providers): XML 1.1 prefixed namespace undeclarations in element constructors (XQST0085b, K2-Serialization-20/21)
+**Current focus:** **XML 1.1 support — namespace undeclaration** — `XDocumentProvider.ConstructElement` now accepts `xmlns:p=""` in XML 1.1 mode and records a `PrefixedNamespaceUndeclarations` annotation instead of raising XQST0085. The existing namespace-axis and serialization infrastructure already understands the annotation. An `Xml11Mode` flag was added to `EvaluationContext` and `XdmElementSpec` and is set by the harness for `xml-version=1.1` tests. The two XML 1.1-only character-name tests (`XML10-4ed-Excluded-char-1-new`, `XML11-1ed-Included-char-1-new`) are documented as a known gap: .NET's `XDocument` cannot hold those names natively, and the harness's assert-xml comparison re-parses serialized output with `XDocument.Parse`, which rejects them.
+
+Expected QT3: **30,344 passed / 0 failed / 1,477 skipped (95.35%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,722 unit tests / 0 failed**. Targeted verification: `misc-CombinedErrorCodes` (`XQST0085b`) 1/0/0, `method-xml` (`K2-Serialization-20/21`) 2/0/0, plus `prod-CompNamespaceConstructor` and `prod-DirElemContent.namespace` unchanged.
+
+## This Session Changes (XML 1.1 namespace undeclaration)
+
+1. **Xml11Mode flag** (`EvaluationContext.cs`, `XdmElementSpec.cs`) — added an `Xml11Mode` flag carried from the harness (`xml-version=1.1` dependency) through to element construction.
+2. **Accept prefixed namespace undeclarations** (`XDocumentProvider.cs`) — `ConstructElement` treats `xmlns:p=""` as an undeclaration (recorded via `PrefixedNamespaceUndeclarations`) when `spec.Xml11Mode` is set.
+3. **Known-gap cleanup** (`ConformanceRunner.cs`) — removed `XQST0085b`/`K2-Serialization-20`/`K2-Serialization-21`; documented the two XML 1.1 character-name tests as a known gap.
+4. **Regression tests** (`PlaceholderTests.cs`) — `DirectConstructor_Xml11PrefixedNamespaceUndeclaration` and `DirectConstructor_Xml10PrefixedNamespaceUndeclaration_StillErrors`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`
+- `src/Bosak.XPath.Core/Xdm/XdmElementSpec.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`
+- `tests/Bosak.XPath.Conformance/TestExecutor.cs`
+- `tests/Bosak.XPath.Conformance/ConformanceRunner.cs`
+- `tests/Bosak.XQuery.Tests/PlaceholderTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+- `README.md`
+
+## Next Recommended Step
+
+1. The QT3 skip-cluster cleanup is now complete for engine-actionable gaps. The remaining skips are platform limits, test-data/schema-awareness dependencies, intentional harness skips, and the documented XML 1.1 character-name gap. Next roadmap candidates: schema awareness (largest remaining QT3 block), VS Code extension features (hover/definition/symbols), or the streaming provider.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-18
 **Commit:** fix(xquery): main-module function bodies use the main module's static default element namespace (extvardeclwithtype-23)
 **Current focus:** **QT3 skip-cluster cleanup — external variable declared-type cluster** — `XQueryExecutable.InvokeWithModuleContext` now restores the main module's static default element namespace around main-module function calls. Previously, a direct element constructor's `xmlns="..."` declaration at the call site leaked into the called function's body, causing `element(Variable)` type tests to expect the wrong namespace and raise `XPTY0004`. `extvardeclwithtype-23` now passes.
 

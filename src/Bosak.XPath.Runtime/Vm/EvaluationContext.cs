@@ -226,6 +226,13 @@ public sealed class EvaluationContext
     public bool IsXsltMode { get; set; }
 
     /// <summary>
+    /// When true, XML 1.1 semantics apply: prefixed namespace undeclarations
+    /// (<c>xmlns:p=""</c>) are accepted in element constructors instead of raising
+    /// XQST0085. This is set by the host based on the document's declared XML version.
+    /// </summary>
+    public bool Xml11Mode { get; set; }
+
+    /// <summary>
     /// The implicit timezone offset in minutes used when a date, time, or dateTime value
     /// has no explicit timezone. Defaults to UTC (0 minutes).
     /// </summary>

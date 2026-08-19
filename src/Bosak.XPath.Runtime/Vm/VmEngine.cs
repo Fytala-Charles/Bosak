@@ -1157,7 +1157,7 @@ public static class VmEngine
                                 AppendConstructorLocalNamespaces(accumulator.Content, accumulator.Attributes, context, prefix);
                                 if (context.ElementConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
-                                var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri);
+                                var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri, context.Xml11Mode);
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                                 break;
                             }
@@ -1616,7 +1616,7 @@ public static class VmEngine
                                 "Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
                         }
 
-                        var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri);
+                        var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri, context.Xml11Mode);
                         registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                         ip++;
                         break;

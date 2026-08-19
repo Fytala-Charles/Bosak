@@ -236,10 +236,20 @@ public static class XDocumentProvider
                 if (attr.LocalName == "xml")
                     continue;
                 // XQST0085: in XML 1.0 a prefixed namespace declaration must not bind to
-                // the empty namespace URI (Constr-namespace-13/16). XML 1.1 undeclarations
-                // are not yet supported here.
+                // the empty namespace URI (Constr-namespace-13/16). In XML 1.1 mode this is
+                // a prefixed namespace undeclaration (XQST0085b): record it as an annotation
+                // so the namespace axis and serialization hide the prefix in this subtree.
                 if (attr.Value.Length == 0)
-                    throw new InvalidOperationException($"XQST0085: The prefix '{attr.LocalName}' cannot be bound to the empty namespace name.");
+                {
+                    if (!spec.Xml11Mode)
+                        throw new InvalidOperationException($"XQST0085: The prefix '{attr.LocalName}' cannot be bound to the empty namespace name.");
+                    var undecl = element.Annotation<PrefixedNamespaceUndeclarations>() ?? new PrefixedNamespaceUndeclarations();
+                    if (!undecl.Prefixes.Contains(attr.LocalName))
+                        undecl.Prefixes.Add(attr.LocalName);
+                    if (!element.Annotations<PrefixedNamespaceUndeclarations>().Any())
+                        element.AddAnnotation(undecl);
+                    continue;
+                }
                 // XQST0070: no prefix may be bound to the XMLNS namespace URI.
                 if (attr.Value == "http://www.w3.org/2000/xmlns/")
                     throw new InvalidOperationException($"XQST0070: The prefix '{attr.LocalName}' cannot be bound to the XMLNS namespace URI.");

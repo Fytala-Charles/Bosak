@@ -3317,6 +3317,35 @@ public class PlaceholderTests
     }
 
     [Fact]
+    public void DirectConstructor_Xml11PrefixedNamespaceUndeclaration()
+    {
+        // XQST0085b: in XML 1.1 mode, a prefixed namespace declaration bound to the empty
+        // URI is an undeclaration, not an XQST0085 error.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<a xmlns:foo=\"http://www.w3.org/\"><b xmlns:foo=\"\" /></a>");
+        var ctx = new XQueryContext();
+        ctx.EvaluationContext.Xml11Mode = true;
+        var result = executable.Evaluate(ctx);
+        var elem = (Bosak.XPath.Providers.Xml.XDocumentNode)result.NodeValue;
+        var root = (System.Xml.Linq.XElement)elem.UnderlyingObject;
+        var child = root.Elements().Single();
+        // The child has a recorded undeclaration for the 'foo' prefix.
+        var undecl = child.Annotation<Bosak.XPath.Providers.Xml.PrefixedNamespaceUndeclarations>();
+        Assert.NotNull(undecl);
+        Assert.Contains("foo", undecl.Prefixes);
+    }
+
+    [Fact]
+    public void DirectConstructor_Xml10PrefixedNamespaceUndeclaration_StillErrors()
+    {
+        // In XML 1.0 mode, xmlns:foo="" remains an XQST0085 error.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<a xmlns:foo=\"http://www.w3.org/\"><b xmlns:foo=\"\" /></a>");
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.Evaluate(new XQueryContext()));
+        Assert.Contains("XQST0085", ex.Message);
+    }
+
+    [Fact]
     public void ComputedAttribute_UnprefixedNameIgnoresDefaultElementNamespace()
     {
         // currencysvg: a computed attribute with an unprefixed name must not use the

@@ -63,10 +63,12 @@ public sealed record XdmAttributeValue(string LocalName, string? Prefix, string?
 /// <param name="Attributes">The computed attributes.</param>
 /// <param name="Content">The content items in document order.</param>
 /// <param name="BaseUri">The static base URI of the query, annotated on the constructed element.</param>
+/// <param name="Xml11Mode">When true, XML 1.1 semantics apply (prefixed namespace undeclarations are accepted).</param>
 public sealed record XdmElementSpec(
     string LocalName,
     string? Prefix,
     string? NamespaceUri,
     IReadOnlyList<XdmAttributeValue> Attributes,
     IReadOnlyList<XdmContentItem> Content,
-    string? BaseUri = null);
+    string? BaseUri = null,
+    bool Xml11Mode = false);

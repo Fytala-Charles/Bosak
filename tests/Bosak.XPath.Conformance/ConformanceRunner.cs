@@ -100,6 +100,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.42  | 18-08-2026     | Drop extvardeclwithtype-23 after static default element namespace fix |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.43  | 18-08-2026     | Drop XML 1.1 namespace undeclaration entries; document XML 1.1-only name chars as known gap |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -160,10 +162,11 @@ internal sealed class ConformanceRunner
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
         // prod/CompNamespaceConstructor.xml / ser/method-xml.xml / misc/CombinedErrorCodes.xml
-        // XML 1.1 prefixed namespace undeclaration (xmlns:p="") is not yet supported.
-        ["K2-Serialization-20"] = "XML 1.1 prefixed namespace undeclaration (xmlns:p=\"\") is not yet supported",
-        ["K2-Serialization-21"] = "XML 1.1 prefixed namespace undeclaration (xmlns:p=\"\") is not yet supported",
-        ["XQST0085b"] = "XML 1.1 prefixed namespace undeclaration (xmlns:foo=\"\") is not yet supported",
+        // misc/XMLEdition.xml: XML 1.1-only name characters (U+037F, U+017F) cannot be held by
+        // .NET's XDocument without encode/decode plumbing, and the harness's assert-xml
+        // comparison re-parses serialized output with XDocument.Parse which rejects them.
+        ["XML10-4ed-Excluded-char-1-new"] = "XML 1.1-only name characters are not supported by the .NET XDocument provider",
+        ["XML11-1ed-Included-char-1-new"] = "XML 1.1-only name characters are not supported by the .NET XDocument provider",
         // prod/DirElemContent.xml (0 tests)
         // prod/NameTest.xml (0 tests)
     };
