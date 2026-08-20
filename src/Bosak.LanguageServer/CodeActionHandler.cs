@@ -28,6 +28,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 20-08-2026     | Added XQuery unclosed curly brace quick fix                                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 20-08-2026     | Added declare default element namespace quick fix                                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -181,6 +183,34 @@ public class CodeActionHandler : CodeActionHandlerBase
                 PositionToLineColumn(text, RangeToOffset(text, range.End))));
         }
 
+        // Offer to declare a default element namespace when an unprefixed element
+        // constructor is present and no default element namespace is declared.
+        if (HasUnprefixedElementConstructor(text) &&
+            !text.Contains("declare default element namespace"))
+        {
+            actions.Add(new CommandOrCodeAction(new CodeAction
+            {
+                Title = "Declare default element namespace",
+                Kind = CodeActionKind.QuickFix,
+                Edit = new WorkspaceEdit
+                {
+                    Changes = new Dictionary<DocumentUri, IEnumerable<TextEdit>>
+                    {
+                        [uri] = new[]
+                        {
+                            new TextEdit
+                            {
+                                NewText = "declare default element namespace \"\";\n",
+                                Range = new Range(
+                                    GetXQueryPrologInsertPosition(text),
+                                    GetXQueryPrologInsertPosition(text)),
+                            }
+                        }
+                    }
+                }
+            }));
+        }
+
         return actions;
     }
 
@@ -312,6 +342,12 @@ public class CodeActionHandler : CodeActionHandlerBase
         }
 
         return prefixes;
+    }
+
+    private static bool HasUnprefixedElementConstructor(string text)
+    {
+        // Match an element constructor start tag with no prefix: <name ... > or <name/>.
+        return Regex.IsMatch(text, @"<[a-zA-Z_][a-zA-Z0-9._-]*(?![:])");
     }
 
     private static (int OpenBraces, int CloseBraces) CountCurlyBraces(string text, Range range)

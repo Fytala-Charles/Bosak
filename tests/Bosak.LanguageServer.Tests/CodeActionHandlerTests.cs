@@ -26,6 +26,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 20-08-2026     | Added tests for XQuery unclosed curly brace action                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 20-08-2026     | Added tests for declare default element namespace action                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -188,6 +190,49 @@ public class CodeActionHandlerTests
 
         Assert.NotNull(result);
         Assert.DoesNotContain(result!, c => c.CodeAction?.Title == "Close missing curly brace");
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQueryOffersDefaultElementNamespace()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "<root/>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Declare default element namespace");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal("declare default element namespace \"\";\n", edit.NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQuerySkipsDefaultElementNamespaceWhenDeclared()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "declare default element namespace \"http://example.com\";\n<root/>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        Assert.DoesNotContain(result!, c => c.CodeAction?.Title == "Declare default element namespace");
     }
 
     [Fact]
