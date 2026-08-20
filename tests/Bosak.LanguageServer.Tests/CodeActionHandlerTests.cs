@@ -1,0 +1,161 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 20 August 2026
+// PURPOSE              : Unit tests for the language-server code action handler.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : License.txt
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Linq;
+using Bosak.LanguageServer;
+using OmniSharp.Extensions.LanguageServer.Protocol;
+using OmniSharp.Extensions.LanguageServer.Protocol.Models;
+using Range = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
+using Xunit;
+
+namespace Bosak.LanguageServer.Tests;
+
+public class CodeActionHandlerTests
+{
+    [Fact]
+    public async System.Threading.Tasks.Task XQueryOffersNamespaceDeclarationForUnknownPrefix()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "my:foo()";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Declare namespace 'my'");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single();
+        Assert.Equal("declare namespace my = \"\";\n", edit.Value.First().NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQuerySkipsPrefixAlreadyDeclared()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "declare namespace my = \"http://example.com\";\nmy:foo()";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(1, 0), new Position(1, 10)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        Assert.DoesNotContain(result!, c => c.CodeAction?.Title == "Declare namespace 'my'");
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XsltOffersNamespaceDeclarationForUnknownPrefix()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xslt").ToString();
+        const string text = "<root><my:child/></root>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xslt")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Declare namespace 'my'");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single();
+        Assert.Equal(" xmlns:my=\"\"", edit.Value.First().NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XsltSkipsXslPrefix()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xslt").ToString();
+        const string text = "<xsl:stylesheet version=\"3.0\"></xsl:stylesheet>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xslt")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        Assert.DoesNotContain(result!, c => c.CodeAction?.Title.Contains("xsl") == true);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XsltOffersRootNamespaceFixFromDiagnostic()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xslt").ToString();
+        const string text = "<stylesheet version=\"3.0\"></stylesheet>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xslt")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext
+            {
+                Diagnostics = new Container<Diagnostic>(
+                    new Diagnostic
+                    {
+                        Message = "Expected xsl:stylesheet root element"
+                    })
+            }
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Add XSLT namespace to root element");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single();
+        Assert.Equal(" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"", edit.Value.First().NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ReturnsEmptyForUnsupportedDocument()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/unknown.txt").ToString();
+        documents.Update(uri, "my:foo()");
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/unknown.txt")),
+            Range = new Range(new Position(0, 0), new Position(0, 8)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        Assert.Empty(result!);
+    }
+}

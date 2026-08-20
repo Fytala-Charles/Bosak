@@ -137,7 +137,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-025 | *(internal)* | `xsl:attribute-set` / `xsl:use-attribute-sets` support | Required for `next-match-012` and broader XSLT 3.0 conformance; attribute sets accumulate across imports/includes; `xsl:use-attribute-sets` now whitelisted on literal result elements (XTSE0805 fix) | **Implemented** | TBD | Charles Korthout | 2026-06-26 |
 | REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
-| REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1, XSLT 3.0, and XQuery 3.1 development: syntax highlighting, semantic tokens, realtime diagnostics, auto-completion, hover, go-to-definition, document symbols, evaluate/run commands | **Implemented** | 0.1.3 | Charles Korthout | 2026-08-20 |
+| REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1, XSLT 3.0, and XQuery 3.1 development: syntax highlighting, semantic tokens, realtime diagnostics, auto-completion, hover, go-to-definition, document symbols, code actions, evaluate/run commands | **Implemented** | 0.1.3 | Charles Korthout | 2026-08-20 |
 | REQ-029 | *(internal)* | `xsl:where-populated`, `xsl:on-empty`, and `xsl:on-non-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests and full `on-empty`/`on-non-empty` clusters; where-populated filters empty nodes, on-empty provides fallback content, on-non-empty provides content when non-empty | **Implemented** | TBD | Charles Korthout | 2026-06-25 |
 | REQ-030 | *(internal)* | XSLT `@as` type coercion and atomization | Required for as-0101 through as-1602 conformance tests; `xsl:variable`, `xsl:param`, `xsl:function`, `xsl:with-param` `@as` attribute must coerce/atomize per XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-031 | *(internal)* | XSLT `base-uri` cluster conformance | `document('')`, `fn:base-uri()`, `fn:static-base-uri()`, and `xml:base` propagation through copies must match XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
@@ -1066,6 +1066,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
    - `DefinitionHandler`: go-to-definition for XSLT/XQuery functions, variables, templates
    - `DocumentSymbolHandler`: outline for XSLT and XQuery declarations
    - `SemanticTokensHandler`: semantic highlighting for function calls, variables, XSLT instructions, XQuery keywords, type names, namespace prefixes, numbers, and operators
+   - `CodeActionHandler`: quick fixes for undeclared namespace prefixes in XQuery/XSLT and missing `xsl` namespace on the XSLT root element
    - `EvaluationHandler`: custom LSP requests to evaluate XPath, run XSLT, and run XQuery
    - `DocumentManager`: in-memory store of open document contents
 2. **`vscode-bosak`** — TypeScript VS Code extension client:
@@ -1086,6 +1087,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 - [x] Go-to-definition resolves XSLT/XQuery functions and variables
 - [x] Document symbols show outline for XSLT and XQuery
 - [x] Semantic tokens highlight functions, variables, keywords, types, namespaces, and operators
+- [x] Code actions offer quick fixes for undeclared namespace prefixes and missing XSLT namespace
 - [x] Context-menu commands evaluate XPath, run XSLT, and run XQuery
 - [x] All 1,708 unit tests still pass
 
@@ -1107,6 +1109,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 |------|-------|----------|-----------|
 | 2026-06-08 | Charles Korthout / Kimi | Implemented | Initial LSP server + VS Code extension |
 | 2026-08-18 | Charles Korthout / Kimi | Extended | XQuery language support, hover, go-to-definition, document symbols, evaluate/transform/run commands |
+| 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions for undeclared namespaces in XQuery/XSLT and missing XSLT root namespace |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Semantic tokens for XPath/XQuery/XSLT; extension version 0.1.3 |
 
 ---
