@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
+**Commit:** `4833c5a` feat(languageserver): react to XPST0081 diagnostics with namespace declaration action
+**Current focus:** **VS Code extension — code actions (diagnostic-driven)** — `CodeActionHandler` now also reacts to `XPST0081: Prefix 'prefix' is not declared` diagnostics produced for XPath expressions inside XSLT attributes (`select`, `test`, `match`, `use-when`). It offers a quick fix to declare that prefix on the stylesheet root (`xmlns:prefix=""`). This complements the existing text-scan-based prefix detection and gives users a code action directly tied to the reported error.
+
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **35 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+
+## This Session Changes (XPST0081 code action)
+
+1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — added `GetUndeclaredPrefixesFromDiagnostics`, which extracts the prefix from `XPST0081: Prefix 'prefix' is not declared` diagnostics and merges it into the set of prefixes eligible for a namespace declaration quick fix.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XsltOffersNamespaceDeclarationFromXpst0081Diagnostic`, verifying that an `XPST0081` diagnostic on an XSLT `match` attribute produces a `Declare namespace 'my'` action.
+3. **Documentation** — `docs/INTEGRATION.md` and `docs/FEATURE_REQUESTS.md` (REQ-028) updated.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/CodeActionHandler.cs`
+- `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs`
+- `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Push the diagnostic-driven code action.
+2. Continue VS Code extension work by adding more code actions (e.g., fixes for `XQST0085` namespace undeclaration in XQuery direct constructors, importing a missing XQuery module, or correcting common XPath syntax errors) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-20
 **Commit:** `154c93b` feat(languageserver): add XSLT root rename and version quick fixes
 **Current focus:** **VS Code extension — code actions (continued)** — the `CodeActionHandler` now renames a bare `<stylesheet>`/`<transform>` root to `<xsl:stylesheet>`/`<xsl:transform>`, adds the required `xmlns:xsl="http://www.w3.org/1999/XSL/Transform"` namespace declaration, and also renames the matching closing tag. A new quick fix adds a missing `version="3.0"` attribute to `xsl:stylesheet`/`xsl:transform`. `DiagnosticsHandler` emits a warning for a missing XSLT root `version`. These actions are covered by seven language-server unit tests.
 
