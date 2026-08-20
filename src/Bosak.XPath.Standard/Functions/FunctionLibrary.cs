@@ -42,6 +42,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.91  | 18-08-2026     | UCA alternate=blanked + strength=identical uses codepoint tie-break (compare-042) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.92  | 19-08-2026     | Register schema simple-type constructor functions for user-defined types (qischema030) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -248,6 +250,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Functions;
@@ -3117,6 +3120,40 @@ public static class FunctionLibrary
             if (context.IsStaticEvaluation && sig.NamespaceUri == Namespaces.Fn && XsltDynamicFunctions.Contains(sig.LocalName))
                 continue;
             context.RegisterFunction(sig);
+        }
+
+        // Register constructor functions for simple types declared in imported schemas.
+        // XSD-derived simple types (e.g. hat:hatsize) are available as Q{uri}local#1
+        // constructors just like the built-in xs:* constructors (qischema030).
+        if (context.SchemaSet is not null)
+        {
+            foreach (XmlSchemaType schemaType in context.SchemaSet.GlobalTypes.Values)
+            {
+                if (schemaType is not XmlSchemaSimpleType simpleType)
+                    continue;
+                if (schemaType.QualifiedName.Namespace == Namespaces.Xs)
+                    continue; // Built-in xs:* constructors are already registered.
+                if (string.IsNullOrEmpty(schemaType.QualifiedName.Namespace))
+                    continue; // No namespace; not a valid constructor target.
+
+                string ns = schemaType.QualifiedName.Namespace;
+                string local = schemaType.QualifiedName.Name;
+                if (context.TryResolveFunction(ns, local, 1, out _))
+                    continue; // Already registered, e.g. from a loaded module.
+
+                var typeName = $"Q{{{ns}}}{local}";
+                context.RegisterFunction(new FunctionSignature
+                {
+                    NamespaceUri = ns,
+                    LocalName = local,
+                    Arity = 1,
+                    ParameterTypes = [XdmValueKind.Undefined],
+                    ParameterTypeNames = ["xs:anyAtomicType?"],
+                    ReturnType = XdmValueKind.Undefined,
+                    ReturnTypeName = typeName,
+                    Implementation = (ctx, args) => UserDefinedTypeConstructor(ctx, args, typeName)
+                });
+            }
         }
 
         // Set up default document loader if not already configured
@@ -6003,6 +6040,18 @@ public static class FunctionLibrary
     private static XdmValue XsENTITIES(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "ENTITIES");
 
+    /// <summary>
+    /// Constructor function for a user-defined schema simple type. Atomizes the argument
+    /// and casts it to the target type using the schema validator (qischema030).
+    /// </summary>
+    private static XdmValue UserDefinedTypeConstructor(EvaluationContext ctx, ReadOnlySpan<XdmValue> args, string typeName)
+    {
+        var arg = args[0];
+        if (arg.IsUndefined)
+            return XdmValue.Undefined;
+        return VmEngine.Cast(arg, typeName, ctx);
+    }
+
     // ------------------------------------------------------------------
     // math:* functions
     // ------------------------------------------------------------------
@@ -8731,11 +8780,16 @@ public static class FunctionLibrary
         {
             // XDM §2.7.2: typed value of comments and PIs is xs:string;
             // for elements, attributes, text, and document nodes in the untyped
-            // case it is xs:untypedAtomic.
+            // case it is xs:untypedAtomic; for schema-validated nodes it is the
+            // PSVI typed value, and element-only/empty complex types raise FOTY0012.
             var node = value.NodeValue;
             if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment)
                 return XdmValue.FromString(node.StringValue);
-            return XdmValue.FromString(node.StringValue, "untypedAtomic");
+            if (node.SchemaTypeAnnotation is null)
+                return XdmValue.FromString(node.StringValue, "untypedAtomic");
+            if (node.HasNoTypedValue)
+                throw new InvalidOperationException("FOTY0012: Cannot atomize a node that has no typed value.");
+            return node.TypedValue;
         }
 
         if (value.IsSequence)

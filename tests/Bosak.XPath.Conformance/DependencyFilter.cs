@@ -33,15 +33,15 @@ namespace Bosak.XPath.Conformance;
 
 internal sealed class DependencyFilter
 {
-    // Features that Bosak XPath 3.1 does NOT support
+    // Features that Bosak XPath 3.1 does NOT support.
+    // Note: QT3 uses camelCased feature names such as "schemaImport" and "schemaValidation".
     private static readonly HashSet<string> UnsupportedFeatures = new(StringComparer.OrdinalIgnoreCase)
     {
-        "schemaAware",
-        "schema-import",
-        "schema-validation",
+        "schemaValidation",     // validate expression not yet implemented
+        "schema-validation",    // canonical/hyphenated alias
+        "schema-location-hint", // remote schema location hints not supported
         "static-typing",
         "staticTyping",
-        "typedData",
         "xpath-1.0-compatibility",
         "advanced-uca-fallback",
         "olson-timezone",

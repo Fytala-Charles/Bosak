@@ -102,6 +102,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.43  | 18-08-2026     | Drop XML 1.1 namespace undeclaration entries; document XML 1.1-only name chars as known gap |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.44  | 19-08-2026     | Document cbcl-schema-element/attribute kind tests as known XQuery gap                     |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Drop NodeTest004 after fixing document-node(element(...)) nested kind-test case preservation |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
@@ -169,6 +171,19 @@ internal sealed class ConformanceRunner
         ["XML11-1ed-Included-char-1-new"] = "XML 1.1-only name characters are not supported by the .NET XDocument provider",
         // prod/DirElemContent.xml (0 tests)
         // prod/NameTest.xml (0 tests)
+        // prod/SchemaImport.xml: schema-element() / schema-attribute() kind tests are not yet
+        // implemented in the XDocument-backed schema-aware pipeline.
+        ["cbcl-schema-element-1"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-2"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-3"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-4"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-5"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-6"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-7"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-8"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-element-9"] = "schema-element() kind test not supported by the XDocument provider",
+        ["cbcl-schema-attribute-1"] = "schema-attribute() kind test not supported by the XDocument provider",
+        ["cbcl-schema-attribute-2"] = "schema-attribute() kind test not supported by the XDocument provider",
     };
 
     public ConformanceRunner(string suitePath, string? setFilter = null, string? testFilter = null)
@@ -351,13 +366,6 @@ internal sealed class ConformanceRunner
             if (!depsSupported)
             {
                 report.Record(testCase.Name, TestOutcomeKind.Skipped, "Unsupported dependency");
-                continue;
-            }
-
-            // Skip schema-aware tests for now
-            if (testCase.Dependencies.Any(d => d.Type == "feature" && d.Value.Contains("schema")))
-            {
-                report.Record(testCase.Name, TestOutcomeKind.Skipped, "Schema awareness not supported");
                 continue;
             }
 

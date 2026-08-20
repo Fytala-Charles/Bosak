@@ -64,6 +64,13 @@ public sealed record ModuleImport(
     IReadOnlyList<string> LocationHints,
     int Position);
 
+/// <summary>A schema import declaration (<c>import schema namespace p = "uri" at "loc", ...;</c>).</summary>
+public sealed record SchemaImport(
+    string? Prefix,
+    string? NamespaceUri,
+    IReadOnlyList<string> LocationHints,
+    int Position);
+
 /// <summary>
 /// The static context derived from an XQuery prolog. It is immutable after construction
 /// and is used during compilation to resolve QNames and during execution to configure the
@@ -78,6 +85,7 @@ public sealed class XQueryStaticContext
     private readonly List<UserFunctionDeclaration> _userFunctions;
     private readonly List<UserVariableDeclaration> _userVariables;
     private readonly List<ModuleImport> _importedModules;
+    private readonly List<SchemaImport> _importedSchemas;
     private readonly HashSet<string> _undeclaredPrefixes;
     private readonly Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> _decimalFormats;
 
@@ -104,6 +112,7 @@ public sealed class XQueryStaticContext
         _userFunctions = new List<UserFunctionDeclaration>();
         _userVariables = new List<UserVariableDeclaration>();
         _importedModules = new List<ModuleImport>();
+        _importedSchemas = new List<SchemaImport>();
         _undeclaredPrefixes = new HashSet<string>(StringComparer.Ordinal);
         _decimalFormats = new Dictionary<(string, string), DecimalFormat>();
     }
@@ -116,6 +125,7 @@ public sealed class XQueryStaticContext
         List<UserFunctionDeclaration> userFunctions,
         List<UserVariableDeclaration> userVariables,
         List<ModuleImport> importedModules,
+        List<SchemaImport> importedSchemas,
         HashSet<string> undeclaredPrefixes,
         string? defaultElementNamespace,
         string? defaultFunctionNamespace,
@@ -135,6 +145,7 @@ public sealed class XQueryStaticContext
         _userFunctions = userFunctions;
         _userVariables = userVariables;
         _importedModules = importedModules;
+        _importedSchemas = importedSchemas;
         _undeclaredPrefixes = undeclaredPrefixes;
         _decimalFormats = decimalFormats;
         DefaultElementNamespace = defaultElementNamespace;
@@ -256,6 +267,9 @@ public sealed class XQueryStaticContext
     /// <summary>Returns a read-only view of the module import declarations in prolog order.</summary>
     public IReadOnlyList<ModuleImport> ImportedModules => _importedModules;
 
+    /// <summary>Returns a read-only view of the schema import declarations in prolog order.</summary>
+    public IReadOnlyList<SchemaImport> ImportedSchemas => _importedSchemas;
+
     /// <summary>
     /// Prefixes explicitly undeclared in the prolog (<c>declare namespace p = "";</c>) and not
     /// later redeclared. The runtime context must unbind these (K2-NamespaceProlog-4/9).
@@ -290,6 +304,13 @@ public sealed class XQueryStaticContext
     {
         var copy = new List<ModuleImport>(_importedModules) { import };
         return CloneWith(importedModules: copy);
+    }
+
+    /// <summary>Creates a new context with a schema import declaration appended.</summary>
+    public XQueryStaticContext WithImportedSchema(SchemaImport import)
+    {
+        var copy = new List<SchemaImport>(_importedSchemas) { import };
+        return CloneWith(importedSchemas: copy);
     }
 
     /// <summary>Creates a new context with the library module target namespace set.</summary>
@@ -373,6 +394,7 @@ public sealed class XQueryStaticContext
         List<UserFunctionDeclaration>? userFunctions = null,
         List<UserVariableDeclaration>? userVariables = null,
         List<ModuleImport>? importedModules = null,
+        List<SchemaImport>? importedSchemas = null,
         HashSet<string>? undeclaredPrefixes = null,
         string? defaultElementNamespace = null,
         string? defaultFunctionNamespace = null,
@@ -393,6 +415,7 @@ public sealed class XQueryStaticContext
             userFunctions ?? _userFunctions,
             userVariables ?? _userVariables,
             importedModules ?? _importedModules,
+            importedSchemas ?? _importedSchemas,
             undeclaredPrefixes ?? _undeclaredPrefixes,
             defaultElementNamespace ?? DefaultElementNamespace,
             defaultFunctionNamespace ?? DefaultFunctionNamespace,

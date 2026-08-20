@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 1.7   | 14-08-2026     | Store default collation URI resolved against the static base URI (K-CollationProlog-1) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 18-08-2026     | XQST0070 for default element namespace bound to XML/XMLNS namespace                    |
+//                      | Charles Korthout | 1.9   | 19-08-2026     | Parse 'import schema default element namespace' and apply it to static context        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -171,6 +172,7 @@ public sealed class XQueryParser
         // We only consume namespace declarations that are needed for the
         // XPath parser's static context.
         while (TryParsePrologDeclaration(ref context)
+               || TryParseSchemaImport(ref context)
                || TryParseModuleImport(ref context)
                || TryParseFunctionDeclaration(ref context)
                || TryParseVariableDeclaration(ref context))
@@ -282,6 +284,82 @@ public sealed class XQueryParser
         if (importPrefix is not null)
             context = context.WithNamespace(importPrefix, importNs);
         context = context.WithImportedModule(new ModuleImport(importPrefix, importNs, locationHints, _position));
+        return true;
+    }
+
+    private bool TryParseSchemaImport(ref XQueryStaticContext context)
+    {
+        int savedPosition = _position;
+        SkipWhitespace();
+        if (!TryMatchLiteral("import") || !TryMatchLiteral("schema"))
+        {
+            _position = savedPosition;
+            return false;
+        }
+
+        // Schema imports are phase-1 declarations and must precede variable, function, option,
+        // and context item declarations.
+        if (_seenSecondPhaseDecl)
+            throw new ParseException("XPST0003: Schema imports must precede variable, function, option, and context item declarations.", _position);
+
+        SkipWhitespace();
+        string? importPrefix = null;
+        string? importNs = null;
+        bool isDefaultElementNamespace = false;
+        if (TryMatchLiteral("namespace"))
+        {
+            SkipWhitespace();
+            importPrefix = ReadNCName();
+            SkipWhitespace();
+            ExpectLiteral("=");
+            SkipWhitespace();
+            importNs = NormalizeModuleUri(ReadStringLiteral());
+            SkipWhitespace();
+        }
+        else if (TryMatchPhrase("default", "element", "namespace"))
+        {
+            SkipWhitespace();
+            importNs = NormalizeModuleUri(ReadStringLiteral());
+            SkipWhitespace();
+            isDefaultElementNamespace = true;
+        }
+        else
+        {
+            SkipWhitespace();
+            importNs = NormalizeModuleUri(ReadStringLiteral());
+            SkipWhitespace();
+        }
+
+        var locationHints = new List<string>();
+        if (TryMatchLiteral("at"))
+        {
+            do
+            {
+                SkipWhitespace();
+                locationHints.Add(NormalizeModuleUri(ReadStringLiteral()));
+                SkipWhitespace();
+            } while (TryMatchChar(','));
+        }
+        ExpectChar(';');
+
+        // XQST0057: a schema import that specifies a prefix must not specify the empty target namespace.
+        if (importPrefix is not null && importNs == "")
+            throw new ParseException("XQST0057: A schema import must not bind a prefix to the empty namespace URI.", _position);
+        // XQST0070: the prefixes xml and xmlns must not be (re)bound by a schema import.
+        if (importPrefix == "xmlns"
+            || (importPrefix == "xml" && importNs != "http://www.w3.org/XML/1998/namespace"))
+        {
+            throw new ParseException($"XQST0070: The prefix '{importPrefix}' must not be bound by a schema import.", _position);
+        }
+        // XQST0059: a schema import must have a target namespace or be default element namespace.
+        if (importNs is null)
+            throw new ParseException("XPST0003: A schema import must specify a target namespace or 'default element namespace'.", _position);
+
+        if (importPrefix is not null)
+            context = context.WithNamespace(importPrefix, importNs);
+        else if (isDefaultElementNamespace)
+            context = context.WithDefaultElementNamespace(importNs);
+        context = context.WithImportedSchema(new SchemaImport(importPrefix, importNs, locationHints, _position));
         return true;
     }
 

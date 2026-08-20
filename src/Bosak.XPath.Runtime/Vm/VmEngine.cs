@@ -178,13 +178,20 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.98  | 18-08-2026     | Clamped function arity int.MaxValue raises FOAR0002 (fn-function-arity-017/fn-function-name-018) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.99  | 19-08-2026     | Schema-aware: user-defined schema types in ValueMatchesType/ApplyFunctionConversion; pass context to atomic type match |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.100 | 19-08-2026     | InstanceOf accepts prefixed user-defined schema types; ConvertSchemaValue keeps integer kind for integer subtypes |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.99  | 18-08-2026     | Unprefixed computed attribute names do not use the default element namespace (currencysvg) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Schema;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -1940,8 +1947,8 @@ public static class VmEngine
                         var input = registers[instr.RegisterB];
                         ValidateKindTestTypeName(typeName, context);
                         var filtered = FilterNodes(input, n => n.NodeKind == XdmNodeKind.Attribute
-                            ? IsAttributeTypeCompatible(typeName)
-                            : IsElementTypeCompatible(typeName));
+                            ? IsAttributeTypeCompatible(typeName, context, n)
+                            : IsElementTypeCompatible(typeName, context, n));
                         registers[instr.RegisterA] = filtered;
                         ip++;
                         break;
@@ -3575,11 +3582,19 @@ public static class VmEngine
 
         if (value.IsNode)
         {
-            // Namespace nodes have an xs:string typed value; all other (untyped) nodes
-            // atomize to xs:untypedAtomic (XDM §2.7.2, nscons-012).
-            return value.NodeValue.NodeKind == XdmNodeKind.Namespace
-                ? XdmValue.FromString(value.NodeValue.StringValue)
-                : XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+            var node = value.NodeValue;
+            // XDM §2.7.2: comments and PIs atomize to xs:string; namespace nodes too.
+            // Untyped nodes atomize to xs:untypedAtomic. Schema-validated nodes return
+            // their PSVI typed value; element-only/empty complex types raise FOTY0012.
+            if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment)
+                return XdmValue.FromString(node.StringValue);
+            if (node.NodeKind == XdmNodeKind.Namespace)
+                return XdmValue.FromString(node.StringValue);
+            if (node.SchemaTypeAnnotation is null)
+                return XdmValue.FromString(node.StringValue, "untypedAtomic");
+            if (node.HasNoTypedValue)
+                throw new InvalidOperationException("FOTY0012: Cannot atomize a node that has no typed value.");
+            return node.TypedValue;
         }
 
         if (value.IsArray && value.ArrayValue is not null)
@@ -5833,16 +5848,7 @@ public static class VmEngine
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
 
-        // An unprefixed type name resolves against the default element namespace: when it
-        // is set and is not the XML Schema namespace, the name is not a built-in type
-        // (XQST0052, K2-DefaultNamespaceProlog-12a — '2 cast as byte' under the XSL namespace).
-        if (!typeName.Contains(':') && !typeName.StartsWith("Q{", StringComparison.Ordinal)
-            && context is not null
-            && !string.IsNullOrEmpty(context.DefaultElementNamespace)
-            && context.DefaultElementNamespace != "http://www.w3.org/2001/XMLSchema")
-        {
-            throw new InvalidOperationException($"XQST0052: The type '{typeName}' is not a known simple type in the namespace '{context.DefaultElementNamespace}'.");
-        }
+        var (resolvedNs, resolvedLocal) = ResolveTypeQName(typeName, context);
 
         // A prefixed type name resolves via the in-scope namespaces (constructor-local
         // declarations included): the XML Schema namespace maps to the bare type.
@@ -5852,9 +5858,8 @@ public static class VmEngine
             var typePrefix = normalized[..colon];
             if (context is not null && context.TryResolveNamespace(typePrefix, out var resolvedTypeNs))
             {
-                if (resolvedTypeNs != "http://www.w3.org/2001/XMLSchema")
-                    throw new InvalidOperationException("XPST0051");
-                normalized = normalized[(colon + 1)..];
+                if (resolvedTypeNs == "http://www.w3.org/2001/XMLSchema")
+                    normalized = normalized[(colon + 1)..];
             }
             else
             {
@@ -5886,10 +5891,58 @@ public static class VmEngine
             value = enumerator.Current;
         }
 
-        // Atomize nodes before casting
+        // Atomize nodes before casting (use PSVI typed value for schema-validated nodes).
         if (value.IsNode)
         {
-            value = XdmValue.FromString(value.NodeValue.StringValue);
+            value = Atomize(value);
+        }
+
+        // Schema-imported simple types (not built-in xs:*): validate the lexical value and produce a typed value.
+        if (resolvedNs != XmlSchema.Namespace && TryGetSchemaSimpleType(resolvedNs, resolvedLocal, context, out var schemaSimpleType))
+        {
+            try
+            {
+                string lexical = value.ToString() ?? string.Empty;
+                var nsResolver = new XmlNamespaceManager(new NameTable());
+                object parsed = schemaSimpleType.Datatype.ParseValue(lexical, new NameTable(), nsResolver);
+                bool hasTz = LexicalHasTimezone(lexical);
+                if (schemaSimpleType.Datatype.Variety == XmlSchemaDatatypeVariety.List && parsed is System.Collections.IEnumerable list && parsed is not string)
+                {
+                    var items = new List<XdmValue>();
+                    foreach (object? item in list)
+                    {
+                        if (item is not null)
+                            items.Add(ConvertSchemaValue(item, schemaSimpleType.Datatype, schemaSimpleType, hasTz));
+                    }
+                    result = XdmValue.FromSequence(MaterializedSequence.FromList(items));
+                    return true;
+                }
+                result = ConvertSchemaValue(parsed, schemaSimpleType.Datatype, schemaSimpleType, hasTz);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // An unprefixed type name resolves against the default element namespace: when it
+        // is set and is not the XML Schema namespace, the name is not a built-in type
+        // (XQST0052, K2-DefaultNamespaceProlog-12a — '2 cast as byte' under the XSL namespace).
+        if (!typeName.Contains(':') && !typeName.StartsWith("Q{", StringComparison.Ordinal)
+            && context is not null
+            && !string.IsNullOrEmpty(context.DefaultElementNamespace)
+            && context.DefaultElementNamespace != "http://www.w3.org/2001/XMLSchema")
+        {
+            throw new InvalidOperationException($"XQST0052: The type '{typeName}' is not a known simple type in the namespace '{context.DefaultElementNamespace}'.");
+        }
+
+        // Prefixed name that is not xs:* and not a schema type is XPST0051.
+        if (resolvedNs != "http://www.w3.org/2001/XMLSchema"
+            && typeName.Contains(':')
+            && !typeName.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException("XPST0051");
         }
 
         // Schema type cast restrictions: some typed values can only cast to specific types
@@ -7219,14 +7272,24 @@ public static class VmEngine
         else if (typeName.Contains(':') && !typeName.Contains('(') && !typeName.Contains('{'))
         {
             // A prefixed type name resolves via the in-scope namespaces: the XML Schema
-            // namespace maps to the bare type; any other (or undeclared) prefix errors.
+            // namespace maps to the bare type; a non-XS prefix is valid only when it names
+            // a user-defined schema simple type.
             int colon = typeName.IndexOf(':');
             var typePrefix = typeName[..colon];
             if (context is not null && context.TryResolveNamespace(typePrefix, out var resolvedTypeNs))
             {
-                if (resolvedTypeNs != "http://www.w3.org/2001/XMLSchema")
+                if (resolvedTypeNs == "http://www.w3.org/2001/XMLSchema")
+                {
+                    effective = normalized[(normalized.IndexOf(':') + 1)..];
+                }
+                else if (IsUserDefinedSchemaType(typeName, context, out _))
+                {
+                    effective = typeName;
+                }
+                else
+                {
                     throw new InvalidOperationException("XPST0051");
-                effective = normalized[(normalized.IndexOf(':') + 1)..];
+                }
             }
             else
             {
@@ -7323,8 +7386,8 @@ public static class VmEngine
         }
 
         // Atomic type names: must be in the XML Schema namespace (either via xs: prefix
-        // or via the default element/type namespace).
-        if (!IsKnownAtomicTypeName(effective))
+        // or via the default element/type namespace) or a user-defined schema simple type.
+        if (!IsKnownAtomicTypeName(effective) && !IsUserDefinedSchemaType(effective, context, out _))
             throw new InvalidOperationException("XPST0051");
 
         // xs:QName is case-sensitive: only the exact local name "QName" is valid.
@@ -7556,25 +7619,284 @@ public static class VmEngine
         return false;
     }
 
-    private static bool IsElementTypeCompatible(string typeName)
+    private static bool IsElementTypeCompatible(string typeName, EvaluationContext? context, IXdmNode node)
     {
-        typeName = typeName.ToLowerInvariant().Replace("xs:", "").Replace("*", "").Trim();
-        if (typeName.EndsWith('?'))
-            typeName = typeName[..^1].Trim();
-        // In non-schema-aware processing, elements have type xs:anyType / xs:untyped.
-        // xs:anyAtomicType and xs:untypedAtomic are atomic types, not element types.
-        return typeName is "anytype" or "untyped";
+        var (targetNs, targetLocal) = ResolveKindTestTypeName(typeName, context);
+        if (node.SchemaTypeAnnotation is not { } actual)
+        {
+            // Untyped element: only xs:anyType and xs:untyped match.
+            return targetNs == XmlSchema.Namespace && targetLocal.ToLowerInvariant() is "anytype" or "untyped";
+        }
+        return IsSchemaTypeSubtype(context, actual.NamespaceUri, actual.LocalName, targetNs, targetLocal);
     }
 
-    private static bool IsAttributeTypeCompatible(string typeName)
+    private static bool IsAttributeTypeCompatible(string typeName, EvaluationContext? context, IXdmNode node)
     {
-        typeName = typeName.ToLowerInvariant().Replace("xs:", "").Replace("*", "").Trim();
-        if (typeName.EndsWith('?'))
-            typeName = typeName[..^1].Trim();
-        // In non-schema-aware processing, attributes have type xs:untypedAtomic, which
-        // derives from xs:anyAtomicType ⊂ xs:anySimpleType ⊂ xs:anyType.
-        // xs:untyped is an element type, not an attribute type.
-        return typeName is "untypedatomic" or "anyatomictype" or "anysimpletype" or "anytype";
+        var (targetNs, targetLocal) = ResolveKindTestTypeName(typeName, context);
+        if (node.SchemaTypeAnnotation is not { } actual)
+        {
+            // Untyped attribute: xs:untypedAtomic and its supertypes match.
+            return targetNs == XmlSchema.Namespace && targetLocal.ToLowerInvariant() is "untypedatomic" or "anyatomictype" or "anysimpletype" or "anytype";
+        }
+        return IsSchemaTypeSubtype(context, actual.NamespaceUri, actual.LocalName, targetNs, targetLocal);
+    }
+
+    /// <summary>
+    /// Resolves a type name used in <c>element(*, T)</c> / <c>attribute(*, T)</c> to an
+    /// expanded QName. The xs: prefix maps to the XML Schema namespace; prefixed names are
+    /// resolved against the context namespace bindings; unprefixed names use the default
+    /// element namespace when one is declared.
+    /// </summary>
+    private static (string NamespaceUri, string LocalName) ResolveKindTestTypeName(string typeName, EvaluationContext? context)
+    {
+        var s = typeName.Trim().Replace("*", "").Trim();
+        if (s.EndsWith('?'))
+            s = s[..^1].Trim();
+        if (s.StartsWith("xs:", StringComparison.OrdinalIgnoreCase))
+            return (XmlSchema.Namespace, s[3..]);
+        if (s.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int close = s.IndexOf('}');
+            string ns = close > 2 ? s[2..close] : string.Empty;
+            string local = close >= 0 ? s[(close + 1)..] : s;
+            return (ns, local);
+        }
+        int colon = s.IndexOf(':');
+        if (colon > 0)
+        {
+            string prefix = s[..colon];
+            if (context is null || !context.TryResolveNamespace(prefix, out var ns))
+                throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+            return (ns, s[(colon + 1)..]);
+        }
+        return (context?.DefaultElementNamespace ?? string.Empty, s);
+    }
+
+    /// <summary>
+    /// Resolves a lexical type name (xs:local, Q{uri}local, prefix:local, or unprefixed local)
+    /// to an expanded QName using the in-scope namespace bindings and default element namespace.
+    /// </summary>
+    private static (string NamespaceUri, string LocalName) ResolveTypeQName(string typeName, EvaluationContext? context)
+    {
+        var s = typeName.Trim();
+        if (s.EndsWith('?') || s.EndsWith('*') || s.EndsWith('+'))
+            s = s[..^1].TrimEnd();
+        if (s.StartsWith("xs:", StringComparison.OrdinalIgnoreCase))
+            return (XmlSchema.Namespace, s[3..]);
+        if (s.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int close = s.IndexOf('}');
+            string ns = close > 2 ? s[2..close] : string.Empty;
+            string local = close >= 0 ? s[(close + 1)..] : s;
+            return (ns, local);
+        }
+        int colon = s.IndexOf(':');
+        if (colon > 0)
+        {
+            string prefix = s[..colon];
+            if (context is null || !context.TryResolveNamespace(prefix, out var ns))
+                throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+            return (ns, s[(colon + 1)..]);
+        }
+        return (context?.DefaultElementNamespace ?? string.Empty, s);
+    }
+
+    /// <summary>
+    /// Looks up a type by expanded QName in the evaluation context's schema set.
+    /// Returns true when the type is present and is a simple type with a datatype.
+    /// </summary>
+    private static bool TryGetSchemaSimpleType(string namespaceUri, string localName, EvaluationContext? context, [NotNullWhen(true)] out XmlSchemaSimpleType? simpleType)
+    {
+        simpleType = null;
+        if (context?.SchemaSet is null)
+            return false;
+        if (context.SchemaSet.GlobalTypes[new XmlQualifiedName(localName, namespaceUri)] is not XmlSchemaSimpleType simple)
+            return false;
+        simpleType = simple;
+        return simpleType.Datatype is not null;
+    }
+
+    /// <summary>
+    /// Returns true when the sequence-type name denotes a user-defined schema simple type
+    /// (i.e. not a built-in xs:* type) that is present in the evaluation context's schema set.
+    /// </summary>
+    private static bool IsUserDefinedSchemaType(string typeName, EvaluationContext? context, [NotNullWhen(true)] out XmlSchemaSimpleType? simpleType)
+    {
+        simpleType = null;
+        if (context?.SchemaSet is null)
+            return false;
+        var (ns, local) = ResolveTypeQName(typeName, context);
+        if (ns == XmlSchema.Namespace)
+            return false;
+        return TryGetSchemaSimpleType(ns, local, context, out simpleType);
+    }
+
+    /// <summary>
+    /// Walks a derived schema type up to its built-in XML Schema base and returns the
+    /// local name, or null when no built-in base can be reached.
+    /// </summary>
+    private static string? GetBuiltInBaseTypeName(XmlSchemaType type)
+    {
+        var visited = new HashSet<XmlSchemaType>();
+        var current = type;
+        while (current is not null && visited.Add(current))
+        {
+            if (current.QualifiedName.Namespace == XmlSchema.Namespace)
+                return current.QualifiedName.Name;
+            current = current.BaseXmlSchemaType;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Converts a .NET value returned by <see cref="XmlSchemaDatatype.ParseValue"/> into an
+    /// <see cref="XdmValue"/> with the appropriate schema-type annotation.
+    /// </summary>
+    private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true)
+    {
+        string typeName = schemaType.QualifiedName.Name;
+        string typeNs = schemaType.QualifiedName.Namespace;
+
+        if (typeNs != XmlSchema.Namespace)
+        {
+            // User-defined type: derive the annotation from the ultimate built-in base type.
+            typeName = GetBuiltInBaseTypeName(schemaType) ?? "untypedAtomic";
+        }
+
+        switch (value)
+        {
+            case bool b:
+                return XdmValue.FromBoolean(b);
+            case decimal d:
+                return XdmValue.FromDecimal(d, typeName);
+            case float f:
+                return XdmValue.FromFloat(f);
+            case double d:
+                return XdmValue.FromDouble(d);
+            case byte u8: return XdmValue.FromInteger(u8, typeName);
+            case sbyte i8: return XdmValue.FromInteger(i8, typeName);
+            case short i16: return XdmValue.FromInteger(i16, typeName);
+            case ushort u16: return XdmValue.FromInteger(u16, typeName);
+            case int i32: return XdmValue.FromInteger(i32, typeName);
+            case uint u32:
+                return XdmValue.FromInteger((long)u32, typeName);
+            case long i64:
+                return XdmValue.FromInteger(i64, typeName);
+            case ulong u64:
+                if (u64 <= (ulong)long.MaxValue)
+                    return XdmValue.FromInteger((long)u64, typeName);
+                return XdmValue.FromDecimal(u64, typeName);
+            case DateTime dt:
+                return ConvertSchemaDateTime(dt, typeName, hasTimezone);
+            case DateTimeOffset dto:
+                return ConvertSchemaDateTime(dto.DateTime, typeName, hasTimezone);
+            case XmlQualifiedName qn:
+                return XdmValue.FromQName(new XsQName(qn.Namespace, qn.Name));
+            case string s:
+                return XdmValue.FromString(s, typeName);
+            case byte[] bytes:
+                // XdmValue stores binary types as annotated strings.
+                string text = typeName.Equals("hexBinary", StringComparison.OrdinalIgnoreCase)
+                    ? Convert.ToHexString(bytes)
+                    : Convert.ToBase64String(bytes);
+                return XdmValue.FromString(text, typeName);
+            case TimeSpan ts:
+                // xs:dayTimeDuration / xs:yearMonthDuration are represented as strings in Bosak.
+                return XdmValue.FromDuration(ts.ToString(), typeName);
+            default:
+                return XdmValue.FromString(value.ToString() ?? string.Empty, typeName);
+        }
+    }
+
+    private static XdmValue ConvertSchemaDateTime(DateTime dt, string typeName, bool hasTimezone)
+    {
+        var offset = dt.Kind == DateTimeKind.Unspecified ? TimeSpan.Zero : TimeZoneInfo.Local.GetUtcOffset(dt);
+        var dto = new DateTimeOffset(dt, offset);
+        return typeName.ToLowerInvariant() switch
+        {
+            "date" => XdmValue.FromDate(dto, hasTimezone),
+            "time" => XdmValue.FromTime(dto, hasTimezone),
+            "gyear" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYear"),
+            "gyearmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYearMonth"),
+            "gmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonth"),
+            "gmonthday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonthDay"),
+            "gday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gDay"),
+            _ => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: typeName)
+        };
+    }
+
+    /// <summary>
+    /// Returns true when a schema-validated lexical date/time value carries an explicit
+    /// timezone (trailing <c>Z</c> or <c>+/-hh:mm</c>).
+    /// </summary>
+    private static bool LexicalHasTimezone(string? lexical)
+    {
+        if (string.IsNullOrEmpty(lexical))
+            return false;
+        var s = lexical.AsSpan().Trim();
+        if (s.EndsWith("Z".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            return true;
+        // Match a trailing +hh:mm or -hh:mm timezone offset.
+        if (s.Length >= 6)
+        {
+            char c = s[^6];
+            if ((c == '+' || c == '-') && s[^3] == ':')
+            {
+                for (int i = s.Length - 5; i < s.Length - 3; i++)
+                {
+                    if (!char.IsDigit(s[i]))
+                        return false;
+                }
+                for (int i = s.Length - 2; i < s.Length; i++)
+                {
+                    if (!char.IsDigit(s[i]))
+                        return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true when the schema type <paramref name="actualNs"/>:<paramref name="actualLocal"/>
+    /// equals or derives from <paramref name="targetNs"/>:<paramref name="targetLocal"/>.
+    /// </summary>
+    private static bool IsSchemaTypeSubtype(EvaluationContext? context, string actualNs, string actualLocal, string targetNs, string targetLocal)
+    {
+        if (string.Equals(actualNs, targetNs, StringComparison.Ordinal)
+            && string.Equals(actualLocal, targetLocal, StringComparison.Ordinal))
+            return true;
+
+        // Built-in atomic type hierarchy.
+        if (targetNs == XmlSchema.Namespace && actualNs == XmlSchema.Namespace)
+            return IsAtomicTypeSubtype(actualLocal, targetLocal);
+
+        // User-defined or mixed: walk the schema-set type hierarchy.
+        if (context?.SchemaSet is null)
+            return false;
+
+        try
+        {
+            var actualQName = new XmlQualifiedName(actualLocal, actualNs);
+            var actualType = context.SchemaSet.GlobalTypes[actualQName] as XmlSchemaType;
+            if (actualType is null)
+                return false;
+            var targetQName = new XmlQualifiedName(targetLocal, targetNs);
+            var visited = new HashSet<XmlSchemaType>();
+            var current = actualType;
+            while (current is not null && visited.Add(current))
+            {
+                if (current.QualifiedName == targetQName)
+                    return true;
+                current = current.BaseXmlSchemaType;
+            }
+        }
+        catch
+        {
+            // Ignore schema-lookup errors and fall through to false.
+        }
+        return false;
     }
 
     // Validates the schema type name of an element(name, T) / attribute(name, T) test.
@@ -7606,7 +7928,7 @@ public static class VmEngine
 
     // Validates a schema type name used in a kind test (element(foo, T) / attribute(foo, T)):
     // the name must resolve (XPST0081 for an undeclared prefix) and must designate a known
-    // built-in schema type (XPST0008 otherwise, since no schemas are imported).
+    // built-in schema type or a type declared in an imported schema (XPST0008 otherwise).
     private static void ValidateKindTestTypeName(string typeName, EvaluationContext context)
     {
         string local;
@@ -7634,8 +7956,11 @@ public static class VmEngine
                 local = typeName;
             }
         }
-        if (ns != "http://www.w3.org/2001/XMLSchema" || !BuiltInSchemaTypes.Contains(local))
-            throw new InvalidOperationException($"XPST0008: The type '{typeName}' is not declared.");
+        if (ns == "http://www.w3.org/2001/XMLSchema" && BuiltInSchemaTypes.Contains(local))
+            return;
+        if (context.SchemaSet is not null && context.SchemaSet.GlobalTypes[new XmlQualifiedName(local, ns)] is XmlSchemaType)
+            return;
+        throw new InvalidOperationException($"XPST0008: The type '{typeName}' is not declared.");
     }
 
     /// <summary>The built-in XML Schema type names (XSD 1.0 + 1.1) plus the XPath types.</summary>
@@ -7827,7 +8152,7 @@ public static class VmEngine
             if (inner.StartsWith("*, "))
             {
                 var typePart = inner.Substring(3).Trim();
-                return IsElementTypeCompatible(typePart);
+                return IsElementTypeCompatible(typePart, context, value.NodeValue);
             }
             // element(name) or element(name, T) → check name match.
             // Use the case-preserved type string so local names such as 'A' are not lowercased.
@@ -7877,7 +8202,7 @@ public static class VmEngine
             if (inner.Contains(','))
             {
                 var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
-                return IsElementTypeCompatible(typePart);
+                return IsElementTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
         }
@@ -7895,7 +8220,7 @@ public static class VmEngine
             if (inner.StartsWith("*, "))
             {
                 var typePart = inner.Substring(3).Trim();
-                return IsAttributeTypeCompatible(typePart);
+                return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
             }
             // attribute(name) or attribute(name, T) → check name match.
             // Use the case-preserved type string so local names keep their original case.
@@ -7943,7 +8268,7 @@ public static class VmEngine
             if (inner.Contains(','))
             {
                 var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
-                return IsAttributeTypeCompatible(typePart);
+                return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
         }
@@ -8074,6 +8399,11 @@ public static class VmEngine
 
         if (normalized is "array(*)" or "array")
             return value.IsArray;
+
+        // User-defined schema simple types: a value matches when it is atomic and can be
+        // cast to the type under XSD facet rules (qischema040 parameter/return validation).
+        if (IsUserDefinedSchemaType(typeName, context, out _))
+            return value.IsAtomic && TryCast(value, typeName, context, out _);
 
         return ItemInstanceOf(value, normalized);
     }
@@ -8640,7 +8970,7 @@ public static class VmEngine
             var atomic = item.IsNode && item.NodeValue.NodeKind is XdmNodeKind.Element or XdmNodeKind.Text or XdmNodeKind.Document or XdmNodeKind.Attribute
                 ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic")
                 : item;
-            if (ValueMatchesType(atomic, type))
+            if (ValueMatchesType(atomic, type, context))
             {
                 converted.Add(atomic);
             }
@@ -8678,6 +9008,12 @@ public static class VmEngine
             else if (TryPromoteNumericOrUri(atomic, type, out var promoted))
             {
                 converted.Add(promoted);
+            }
+            else if (IsUserDefinedSchemaType(type, context, out _) && TryCast(atomic, type, context, out var schemaCasted))
+            {
+                // Derived schema simple types (e.g. hat:hatsize) accept values that can be
+                // cast to them under XSD facet rules (qischema040).
+                converted.Add(schemaCasted);
             }
             else if (bcNumeric)
             {

@@ -62,6 +62,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using System.IO;
 using System.Xml;
+using System.Xml.Schema;
 
 namespace Bosak.XPath.Runtime.Vm;
 
@@ -165,6 +166,16 @@ public sealed class EvaluationContext
 
     // Document cache for fn:doc / fn:collection identity
     private readonly Dictionary<string, IXdmNode> _documentCache;
+
+    // XML Schema set for schema-aware kind tests and typed values.
+    private XmlSchemaSet? _schemaSet;
+
+    /// <summary>
+    /// Optional resolver used to load schemas referenced by <c>import schema</c>.
+    /// Arguments are the target namespace URI and the ordered location hints;
+    /// returns a stream for the schema content or null when the schema cannot be located.
+    /// </summary>
+    public Func<string, IReadOnlyList<string>, Stream?>? SchemaResolver { get; set; }
 
     // Stable snapshot for current-dateTime / current-date / current-time
     private DateTimeOffset? _currentDateTimeSnapshot;
@@ -544,6 +555,37 @@ public sealed class EvaluationContext
         _namespaces.Remove(prefix);
         return this;
     }
+
+    // ------------------------------------------------------------------
+    // Schemas
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Gets or sets the compiled XML Schema set available to schema-aware operations.
+    /// </summary>
+    public XmlSchemaSet? SchemaSet
+    {
+        get => _schemaSet;
+        set => _schemaSet = value;
+    }
+
+    /// <summary>
+    /// Looks up a global element declaration in the compiled schema set, if any.
+    /// </summary>
+    public XmlSchemaElement? GetSchemaElement(string namespaceUri, string localName)
+        => _schemaSet?.GlobalElements[new XmlQualifiedName(localName, namespaceUri)] as XmlSchemaElement;
+
+    /// <summary>
+    /// Looks up a global attribute declaration in the compiled schema set, if any.
+    /// </summary>
+    public XmlSchemaAttribute? GetSchemaAttribute(string namespaceUri, string localName)
+        => _schemaSet?.GlobalAttributes[new XmlQualifiedName(localName, namespaceUri)] as XmlSchemaAttribute;
+
+    /// <summary>
+    /// Looks up a global type definition in the compiled schema set, if any.
+    /// </summary>
+    public XmlSchemaType? GetSchemaType(string namespaceUri, string localName)
+        => _schemaSet?.GlobalTypes[new XmlQualifiedName(localName, namespaceUri)] as XmlSchemaType;
 
     // Constructor-local namespace declarations (xmlns on enclosing constructors, applied
     // via the DeclareNamespace opcode). Elements built inside a constructor materialize

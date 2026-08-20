@@ -43,6 +43,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.19  | 01-08-2026     | Admit declare boundary-space and decimal-format declarations |
 //                      | Charles Korthout | 0.20  | 03-08-2026     | Register only fn:transform (PopulateTransformOnly); XSLT-only functions stay XPST0017 |
+//                      | Charles Korthout | 0.21  | 19-08-2026     | Admit schema imports (import schema) in the XQuery prolog gate                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -289,11 +290,10 @@ internal sealed class TestExecutor
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function
     // namespace, default collation, default order empty, ordering, boundary-space,
-    // decimal-format, base-uri, option, variable, function, module import, and version
-    // declarations are supported).
+    // decimal-format, base-uri, option, variable, function, module import, schema import,
+    // and version declarations are supported).
     private static readonly Regex UnsupportedPrologRegex = new(
-        @"\bdeclare\s+(copy-namespaces|context|construction)\b" +
-        @"|\bimport\s+schema\b",
+        @"\bdeclare\s+(copy-namespaces|context|construction)\b",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <summary>

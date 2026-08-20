@@ -72,6 +72,13 @@ public interface IXdmNode
     /// </summary>
     bool IsId => false;
 
+    /// <summary>
+    /// Gets the schema type annotation of this node as an expanded QName, or null when the
+    /// node is untyped (e.g. an unvalidated document or a node constructed without schema
+    /// validation). The namespace URI is empty for nodes without a schema type.
+    /// </summary>
+    (string NamespaceUri, string LocalName)? SchemaTypeAnnotation => null;
+
     /// <summary>Gets the parent node, or null if this is the root.</summary>
     IXdmNode? Parent { get; }
 

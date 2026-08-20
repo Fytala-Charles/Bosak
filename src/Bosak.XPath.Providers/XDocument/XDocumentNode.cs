@@ -42,6 +42,8 @@
 //                      | Charles Korthout | 2.5   | 15-08-2026     | GetXPathParent falls back to XDocument for document-level PIs/comments (path009)       |
 //                      | Charles Korthout | 2.6   | 17-08-2026     | Restrict fallback to PI/comment nodes to avoid XDocument self-loop (fn-doc hang)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.7   | 19-08-2026     | Preserve timezone in schema-validated typed values (qischema003)                       |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 28-07-2026     | Namespace axis skips non-propagating ancestor bindings; redundant xmlns omitted in ToXmlString |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 29-07-2026     | Parentless-namespace-node marker: parent axis and Parent honor it |
@@ -51,8 +53,10 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
@@ -259,7 +263,7 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
-    public XdmValue TypedValue => XdmValue.FromString(StringValue);
+    public XdmValue TypedValue => GetTypedValue();
 
     /// <summary>
     /// Gets a value indicating whether this node has no typed value per XDM.
@@ -287,6 +291,191 @@ public sealed class XDocumentNode : IXdmNode
     }
 
     /// <summary>
+    /// Returns the typed value of this node when PSVI annotations are available from schema
+    /// validation; otherwise falls back to the string value as <c>xs:untypedAtomic</c>.
+    /// </summary>
+    private XdmValue GetTypedValue()
+    {
+        if (_isNamespaceNode)
+            return XdmValue.FromString(StringValue);
+
+        IXmlSchemaInfo? info = _node switch
+        {
+            XElement e => e.GetSchemaInfo(),
+            XAttribute a => a.GetSchemaInfo(),
+            _ => null
+        };
+        if (info?.SchemaType is null)
+            return XdmValue.FromString(StringValue);
+
+        // For complex types with simple content, the member type carries the simple datatype.
+        XmlSchemaSimpleType? simpleType = info.MemberType as XmlSchemaSimpleType
+            ?? info.SchemaType as XmlSchemaSimpleType;
+        XmlSchemaType? annotationType = simpleType ?? info.SchemaType;
+        XmlSchemaDatatype? datatype = simpleType?.Datatype;
+
+        // Complex types with simple content (e.g. extension of xs:decimal with attributes)
+        // do not surface the simple type via MemberType; the compiled complex type exposes
+        // the simple datatype directly.
+        if (simpleType is null && info.SchemaType is XmlSchemaComplexType complexType
+            && complexType.ContentType == XmlSchemaContentType.TextOnly)
+        {
+            datatype = complexType.Datatype;
+        }
+
+        if (datatype is null)
+            return XdmValue.FromString(StringValue);
+
+        try
+        {
+            var nsResolver = _node as IXmlNamespaceResolver ?? new XmlNamespaceManager(new NameTable());
+            object parsed = datatype.ParseValue(StringValue, new NameTable(), nsResolver);
+            bool hasTz = LexicalHasTimezone(StringValue);
+            if (datatype.Variety == XmlSchemaDatatypeVariety.List && parsed is System.Collections.IEnumerable list && parsed is not string)
+            {
+                var items = new List<XdmValue>();
+                foreach (object? item in list)
+                {
+                    if (item is not null)
+                        items.Add(ConvertSchemaValue(item, datatype, annotationType ?? simpleType!, hasTz));
+                }
+                return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+            }
+            return ConvertSchemaValue(parsed, datatype, annotationType ?? simpleType!, hasTz);
+        }
+        catch
+        {
+            return XdmValue.FromString(StringValue);
+        }
+    }
+
+    /// <summary>
+    /// Converts a .NET value returned by <see cref="XmlSchemaDatatype.ParseValue"/> into an
+    /// <see cref="XdmValue"/> with the appropriate schema-type annotation.
+    /// </summary>
+    private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true)
+    {
+        string typeName = schemaType.QualifiedName.Name;
+        string typeNs = schemaType.QualifiedName.Namespace;
+
+        if (typeNs != XmlSchema.Namespace)
+        {
+            // User-defined type: derive the annotation from the ultimate built-in base type.
+            typeName = GetBuiltInBaseTypeName(schemaType) ?? "untypedAtomic";
+        }
+
+        switch (value)
+        {
+            case bool b:
+                return XdmValue.FromBoolean(b);
+            case decimal d:
+                return XdmValue.FromDecimal(d, typeName);
+            case float f:
+                return XdmValue.FromFloat(f);
+            case double d:
+                return XdmValue.FromDouble(d);
+            case byte u8: return XdmValue.FromInteger(u8, typeName);
+            case sbyte i8: return XdmValue.FromInteger(i8, typeName);
+            case short i16: return XdmValue.FromInteger(i16, typeName);
+            case ushort u16: return XdmValue.FromInteger(u16, typeName);
+            case int i32: return XdmValue.FromInteger(i32, typeName);
+            case uint u32:
+                return XdmValue.FromInteger((long)u32, typeName);
+            case long i64:
+                return XdmValue.FromInteger(i64, typeName);
+            case ulong u64:
+                if (u64 <= (ulong)long.MaxValue)
+                    return XdmValue.FromInteger((long)u64, typeName);
+                return XdmValue.FromDecimal(u64, typeName);
+            case DateTime dt:
+                return ConvertDateTime(dt, typeName, hasTimezone);
+            case DateTimeOffset dto:
+                return ConvertDateTime(dto.DateTime, typeName, hasTimezone);
+            case XmlQualifiedName qn:
+                return XdmValue.FromQName(new XsQName(qn.Namespace, qn.Name));
+            case string s:
+                return XdmValue.FromString(s, typeName);
+            case byte[] bytes:
+                // XdmValue stores binary types as annotated strings.
+                string text = typeName.Equals("hexBinary", StringComparison.OrdinalIgnoreCase)
+                    ? Convert.ToHexString(bytes)
+                    : Convert.ToBase64String(bytes);
+                return XdmValue.FromString(text, typeName);
+            case TimeSpan ts:
+                // xs:dayTimeDuration / xs:yearMonthDuration are represented as strings in Bosak.
+                return XdmValue.FromDuration(ts.ToString(), typeName);
+            default:
+                return XdmValue.FromString(value.ToString() ?? string.Empty, typeName);
+        }
+    }
+
+    private static XdmValue ConvertDateTime(DateTime dt, string typeName, bool hasTimezone)
+    {
+        var offset = dt.Kind == DateTimeKind.Unspecified ? TimeSpan.Zero : TimeZoneInfo.Local.GetUtcOffset(dt);
+        var dto = new DateTimeOffset(dt, offset);
+        return typeName.ToLowerInvariant() switch
+        {
+            "date" => XdmValue.FromDate(dto, hasTimezone),
+            "time" => XdmValue.FromTime(dto, hasTimezone),
+            "gyear" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYear"),
+            "gyearmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYearMonth"),
+            "gmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonth"),
+            "gmonthday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonthDay"),
+            "gday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gDay"),
+            _ => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: typeName)
+        };
+    }
+
+    /// <summary>
+    /// Returns true when a schema-validated lexical date/time value carries an explicit
+    /// timezone (trailing <c>Z</c> or <c>+/-hh:mm</c>).
+    /// </summary>
+    private static bool LexicalHasTimezone(string? lexical)
+    {
+        if (string.IsNullOrEmpty(lexical))
+            return false;
+        var s = lexical.AsSpan().Trim();
+        if (s.EndsWith("Z".AsSpan(), StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (s.Length >= 6)
+        {
+            char c = s[^6];
+            if ((c == '+' || c == '-') && s[^3] == ':')
+            {
+                for (int i = s.Length - 5; i < s.Length - 3; i++)
+                {
+                    if (!char.IsDigit(s[i]))
+                        return false;
+                }
+                for (int i = s.Length - 2; i < s.Length; i++)
+                {
+                    if (!char.IsDigit(s[i]))
+                        return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Walks a derived schema type up to its built-in XML Schema base and returns the
+    /// local name, or null when no built-in base can be reached.
+    /// </summary>
+    private static string? GetBuiltInBaseTypeName(XmlSchemaType type)
+    {
+        var visited = new HashSet<XmlSchemaType>();
+        var current = type;
+        while (current is not null && visited.Add(current))
+        {
+            if (current.QualifiedName.Namespace == XmlSchema.Namespace)
+                return current.QualifiedName.Name;
+            current = current.BaseXmlSchemaType;
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Gets a value indicating whether this node has the XDM is-id property.
     /// For elements this is true when the typed value is a single xs:ID atomic value
     /// (including derived types, union members and singleton lists of xs:ID).
@@ -294,6 +483,29 @@ public sealed class XDocumentNode : IXdmNode
     /// <c>xml:id</c> attributes even when no schema is available.
     /// </summary>
     public bool IsId => ComputeIsId();
+
+    public (string NamespaceUri, string LocalName)? SchemaTypeAnnotation => GetSchemaTypeAnnotation();
+
+    private (string NamespaceUri, string LocalName)? GetSchemaTypeAnnotation()
+    {
+        if (_isNamespaceNode)
+            return null;
+
+        IXmlSchemaInfo? info = _node switch
+        {
+            XElement e => e.GetSchemaInfo(),
+            XAttribute a => a.GetSchemaInfo(),
+            _ => null
+        };
+        if (info?.SchemaType is not { } schemaType)
+            return null;
+
+        var qn = schemaType.QualifiedName;
+        // Report the dynamic type annotation (member type for simple content of complex types).
+        if (info.MemberType is not null)
+            qn = info.MemberType.QualifiedName;
+        return (qn.Namespace, qn.Name);
+    }
 
     public bool IsSameNode(IXdmNode other)
     {

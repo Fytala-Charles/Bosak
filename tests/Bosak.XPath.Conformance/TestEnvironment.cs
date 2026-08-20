@@ -334,6 +334,19 @@ internal sealed class TestEnvironment
             ctx.BaseUri = BaseUri;
         }
 
+        // Make environment schemas available for schema-aware XQuery/XPath operations.
+        if (Schemas.Count > 0)
+        {
+            ctx.SchemaSet = BuildSchemaSet();
+            ctx.SchemaResolver = (ns, hints) =>
+            {
+                var schema = Schemas.FirstOrDefault(s => s.Uri == ns);
+                if (schema is not null && File.Exists(schema.FilePath))
+                    return File.OpenRead(schema.FilePath);
+                return null;
+            };
+        }
+
         if (UriMap.Count > 0)
         {
             var previous = ctx.ResourceUriMapper;

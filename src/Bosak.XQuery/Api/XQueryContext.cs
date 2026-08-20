@@ -14,6 +14,7 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.IO;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 
@@ -50,6 +51,17 @@ public sealed class XQueryContext
     public XQueryContext WithVariable(string name, XdmValue value)
     {
         EvaluationContext.WithVariable(name, value);
+        return this;
+    }
+
+    /// <summary>
+    /// Registers a resolver used to load schemas referenced by <c>import schema</c>.
+    /// </summary>
+    /// <param name="resolver">A function that receives the target namespace URI and location hints and returns a schema stream, or null if not found.</param>
+    /// <returns>This context for fluent chaining.</returns>
+    public XQueryContext WithSchemaResolver(Func<string, IReadOnlyList<string>, Stream?> resolver)
+    {
+        EvaluationContext.SchemaResolver = resolver;
         return this;
     }
 }

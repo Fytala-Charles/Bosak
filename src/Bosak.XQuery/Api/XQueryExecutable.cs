@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Xml;
+using System.Xml.Schema;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -197,6 +199,74 @@ public sealed class XQueryExecutable
         }
     }
 
+    /// <summary>
+    /// Builds a compiled <see cref="XmlSchemaSet"/> from the schema imports declared in the
+    /// prolog, using the supplied resolver to fetch each schema document.
+    /// </summary>
+    private static XmlSchemaSet BuildSchemaSet(IReadOnlyList<SchemaImport> imports, Func<string, IReadOnlyList<string>, System.IO.Stream?>? resolver)
+    {
+        var schemaSet = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        var errors = new List<string>();
+        schemaSet.ValidationEventHandler += (sender, e) =>
+        {
+            if (e.Severity == XmlSeverityType.Error)
+                errors.Add(e.Message);
+        };
+
+        foreach (var import in imports)
+        {
+            string targetNs = import.NamespaceUri ?? "";
+            var hints = import.LocationHints;
+            System.IO.Stream? stream = null;
+            string? resolvedLocation = null;
+
+            if (resolver is not null)
+            {
+                stream = resolver(targetNs, hints);
+            }
+
+            if (stream is null && hints.Count > 0)
+            {
+                foreach (var hint in hints)
+                {
+                    if (Uri.TryCreate(hint, UriKind.Absolute, out var uri) && uri.Scheme != "file")
+                    {
+                        // Only file:// hints are supported in this first iteration.
+                        continue;
+                    }
+                    string path = uri?.LocalPath ?? hint;
+                    if (System.IO.File.Exists(path))
+                    {
+                        stream = System.IO.File.OpenRead(path);
+                        resolvedLocation = path;
+                        break;
+                    }
+                }
+            }
+
+            if (stream is null)
+            {
+                throw new InvalidOperationException($"XQST0059: Unable to locate schema for namespace '{targetNs}'.");
+            }
+
+            using (stream)
+            {
+                using var reader = System.Xml.XmlReader.Create(stream);
+                var schema = XmlSchema.Read(reader, null);
+                if (schema is null)
+                    throw new InvalidOperationException($"XQST0059: Unable to read schema for namespace '{targetNs}'.");
+                schemaSet.Add(schema);
+            }
+        }
+
+        schemaSet.Compile();
+        if (errors.Count > 0)
+        {
+            throw new InvalidOperationException($"Schema compilation failed:\n{string.Join("\n", errors)}");
+        }
+        return schemaSet;
+    }
+
     private void ApplyStaticContext(EvaluationContext ctx)
     {
         // Populate the standard function library once per execution context.
@@ -267,6 +337,14 @@ public sealed class XQueryExecutable
         // predeclared bindings of the runtime context (K2-NamespaceProlog-4/9).
         foreach (var prefix in _staticContext.UndeclaredPrefixes)
             ctx.RemoveNamespace(prefix);
+
+        // Load schemas imported by the prolog. If the execution context already carries a
+        // schema set (e.g. supplied by the test harness), use it; otherwise build one
+        // from the imported schema declarations via the registered resolver.
+        if (ctx.SchemaSet is null && _staticContext.ImportedSchemas.Count > 0)
+        {
+            ctx.SchemaSet = BuildSchemaSet(_staticContext.ImportedSchemas, ctx.SchemaResolver);
+        }
 
         foreach (var ((localName, nsUri), value) in _staticContext.Variables)
         {
