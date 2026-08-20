@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 20-08-2026     | Added import module namespace action for XQuery function calls                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 20-08-2026     | Added XPath syntax-error quick fixes for unclosed brackets and strings                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +83,10 @@ public class CodeActionHandler : CodeActionHandlerBase
         else if (path.EndsWith(".xsl") || path.EndsWith(".xslt"))
         {
             actions.AddRange(GetXsltCodeActions(text, range, request.TextDocument.Uri, diagnostics));
+        }
+        else if (path.EndsWith(".xpath"))
+        {
+            actions.AddRange(GetXPathCodeActions(text, range, request.TextDocument.Uri));
         }
 
         return Task.FromResult<CommandOrCodeActionContainer?>(new CommandOrCodeActionContainer(actions));
@@ -158,6 +164,54 @@ public class CodeActionHandler : CodeActionHandlerBase
                 uri,
                 prefix,
                 GetXQueryPrologInsertPosition(text)));
+        }
+
+        return actions;
+    }
+
+    private static List<CommandOrCodeAction> GetXPathCodeActions(string text, Range range, DocumentUri uri)
+    {
+        var actions = new List<CommandOrCodeAction>();
+        var endOffset = RangeToOffset(text, range.End);
+        var insertPosition = PositionToLineColumn(text, endOffset);
+
+        var (openParens, closeParens, openBrackets, closeBrackets, inSingleQuote, inDoubleQuote) =
+            CountBracketsAndQuotes(text, range);
+
+        if (openParens > closeParens)
+        {
+            actions.Add(CreateInsertTextAction(
+                uri,
+                "Close missing parenthesis",
+                new string(')', openParens - closeParens),
+                insertPosition));
+        }
+
+        if (openBrackets > closeBrackets)
+        {
+            actions.Add(CreateInsertTextAction(
+                uri,
+                "Close missing square bracket",
+                new string(']', openBrackets - closeBrackets),
+                insertPosition));
+        }
+
+        if (inSingleQuote)
+        {
+            actions.Add(CreateInsertTextAction(
+                uri,
+                "Close single-quoted string",
+                "'",
+                insertPosition));
+        }
+
+        if (inDoubleQuote)
+        {
+            actions.Add(CreateInsertTextAction(
+                uri,
+                "Close double-quoted string",
+                "\"",
+                insertPosition));
         }
 
         return actions;
@@ -243,6 +297,93 @@ public class CodeActionHandler : CodeActionHandlerBase
         }
 
         return prefixes;
+    }
+
+    private static (int OpenParens, int CloseParens, int OpenBrackets, int CloseBrackets, bool InSingleQuote, bool InDoubleQuote)
+        CountBracketsAndQuotes(string text, Range range)
+    {
+        int startOffset = RangeToOffset(text, range.Start);
+        int endOffset = RangeToOffset(text, range.End);
+        int openParens = 0, closeParens = 0, openBrackets = 0, closeBrackets = 0;
+        bool inSingleQuote = false, inDoubleQuote = false;
+
+        for (int i = startOffset; i < endOffset && i < text.Length; i++)
+        {
+            char c = text[i];
+            if (inSingleQuote)
+            {
+                if (c == '\'')
+                {
+                    if (i + 1 < text.Length && text[i + 1] == '\'')
+                    {
+                        i++;
+                        continue;
+                    }
+                    inSingleQuote = false;
+                }
+                continue;
+            }
+
+            if (inDoubleQuote)
+            {
+                if (c == '\"')
+                {
+                    if (i + 1 < text.Length && text[i + 1] == '\"')
+                    {
+                        i++;
+                        continue;
+                    }
+                    inDoubleQuote = false;
+                }
+                continue;
+            }
+
+            if (c == '\'')
+            {
+                inSingleQuote = true;
+                continue;
+            }
+
+            if (c == '\"')
+            {
+                inDoubleQuote = true;
+                continue;
+            }
+
+            switch (c)
+            {
+                case '(': openParens++; break;
+                case ')': closeParens++; break;
+                case '[': openBrackets++; break;
+                case ']': closeBrackets++; break;
+            }
+        }
+
+        return (openParens, closeParens, openBrackets, closeBrackets, inSingleQuote, inDoubleQuote);
+    }
+
+    private static CommandOrCodeAction CreateInsertTextAction(
+        DocumentUri uri, string title, string newText, Position position)
+    {
+        return new CommandOrCodeAction(new CodeAction
+        {
+            Title = title,
+            Kind = CodeActionKind.QuickFix,
+            Edit = new WorkspaceEdit
+            {
+                Changes = new Dictionary<DocumentUri, IEnumerable<TextEdit>>
+                {
+                    [uri] = new[]
+                    {
+                        new TextEdit
+                        {
+                            NewText = newText,
+                            Range = new Range(position, position),
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private static HashSet<string> GetUndeclaredPrefixesFromDiagnostics(List<Diagnostic> diagnostics)

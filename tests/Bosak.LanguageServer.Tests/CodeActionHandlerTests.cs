@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 20-08-2026     | Added tests for XQuery import-module-namespace action                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 20-08-2026     | Added tests for XPath syntax-error close actions                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -318,6 +320,97 @@ public class CodeActionHandlerTests
         Assert.NotNull(action);
         var edit = action!.Edit!.Changes!.Single().Value.First();
         Assert.Equal(" xmlns:my=\"\"", edit.NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XPathOffersCloseParenthesis()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/expr.xpath").ToString();
+        const string text = "fn:concat('a', 'b'";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/expr.xpath")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Close missing parenthesis");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal(")", edit.NewText);
+        Assert.Equal(0, edit.Range.Start.Line);
+        Assert.Equal(text.Length, edit.Range.Start.Character);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XPathOffersCloseSquareBracket()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/expr.xpath").ToString();
+        const string text = "a[b";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/expr.xpath")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Close missing square bracket");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal("]", edit.NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XPathOffersCloseSingleQuote()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/expr.xpath").ToString();
+        const string text = "'abc";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/expr.xpath")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Close single-quoted string");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal("'", edit.NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XPathDoesNotOfferActionForBalancedExpression()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/expr.xpath").ToString();
+        const string text = "fn:concat('a', 'b')";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/expr.xpath")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        Assert.DoesNotContain(result!, c => c.CodeAction?.Title.Contains("Close") == true);
     }
 
     [Fact]
