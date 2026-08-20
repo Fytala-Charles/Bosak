@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
+**Commit:** *(pending)* feat(languageserver): add XSLT code lens
+**Current focus:** **VS Code extension — XSLT code lens** — `CodeLensHandler` now recognizes `.xsl` and `.xslt` files and returns a single lens titled **Run XSLT transformation** with command `bosak.transformXslt`. The lens reuses the existing VS Code command that prompts for a source XML document and runs the transformation via the custom LSP request. XPath and XQuery lenses continue to evaluate eagerly as before.
+
+Expected state: **1,731 unit tests / 0 failed** in the main solution; **60 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+
+## This Session Changes (XSLT code lens)
+
+1. **`CodeLensHandler`** (`src/Bosak.LanguageServer/CodeLensHandler.cs`) — added XSLT detection in `GetDocumentLanguage`; the document selector pattern now includes `.xsl` and `.xslt`; for XSLT documents the handler returns a non-evaluating lens with title **Run XSLT transformation** and command `bosak.transformXslt`, passing the document URI as the command argument.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` adds tests for `.xsl` and `.xslt` documents returning the transform lens.
+3. **Documentation** — `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/CodeLensHandler.cs`
+- `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`
+- `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Commit and push the XSLT code lens feature.
+2. Continue VS Code extension work (e.g., add a code lens for XSLT that evaluates a default `source-document` when an `xsl:source-document` or similar hint is present, add richer XSLT symbol/outline support, or switch to an engine topic such as XML 1.1 support in the `XDocument` provider).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-20
 **Commit:** `fee2236` feat(languageserver,vscode): send serializable evaluation result from executeCommand
 **Current focus:** **VS Code extension — serializable execute-command result** — the `ExecuteCommandHandler` now sends a custom `bosak/evaluationResult` LSP notification containing `{ language, result, error }` instead of using `window/showMessage`. The VS Code extension listens for this notification and opens the result in a preview editor (or shows an error message). This restores the editor-preview behavior while keeping the `workspace/executeCommand` path.
 

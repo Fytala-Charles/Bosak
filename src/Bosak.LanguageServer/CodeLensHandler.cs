@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 20 August 2026
-// PURPOSE              : Provides code lenses for XPath and XQuery documents showing the evaluated result.
+// PURPOSE              : Provides code lenses for XPath, XQuery, and XSLT documents.
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Added XQuery document support                                                            |
+//                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT document support                                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -32,8 +33,9 @@ using Range = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
 namespace Bosak.LanguageServer;
 
 /// <summary>
-/// Provides code lenses for XPath and XQuery documents by evaluating the expression and
-/// showing the serialized result above the document.
+/// Provides code lenses for XPath, XQuery, and XSLT documents. XPath and XQuery lenses
+/// evaluate the document and show the serialized result; XSLT lenses provide a command
+/// to run the transformation because XSLT requires an external source document.
 /// </summary>
 public class CodeLensHandler : CodeLensHandlerBase
 {
@@ -64,11 +66,9 @@ public class CodeLensHandler : CodeLensHandlerBase
         if (!_documents.TryGet(uri.ToString(), out var text))
             return Task.FromResult<CodeLensContainer?>(new CodeLensContainer(Array.Empty<CodeLens>()));
 
-        var (result, error) = EvaluateDocument(text, language);
-        var title = error is null
-            ? $"= {Truncate(result!, MaxTitleLength)}"
-            : $"{language} error: {Truncate(error, MaxTitleLength)}";
-        var commandName = language == "XPath" ? "bosak.evaluateXPath" : "bosak.evaluateXQuery";
+        var (title, commandName) = language == "XSLT"
+            ? ("Run XSLT transformation", "bosak.transformXslt")
+            : GetEvaluatedLens(text, language);
 
         var lenses = new List<CodeLens>
         {
@@ -105,7 +105,7 @@ public class CodeLensHandler : CodeLensHandlerBase
         return new CodeLensRegistrationOptions
         {
             DocumentSelector = new TextDocumentSelector(
-                new TextDocumentFilter { Pattern = "**/*.{xpath,xq,xqy,xquery}" }),
+                new TextDocumentFilter { Pattern = "**/*.{xpath,xq,xqy,xquery,xsl,xslt}" }),
             ResolveProvider = false,
         };
     }
@@ -117,7 +117,19 @@ public class CodeLensHandler : CodeLensHandlerBase
             return "XPath";
         if (path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery"))
             return "XQuery";
+        if (path.EndsWith(".xsl") || path.EndsWith(".xslt"))
+            return "XSLT";
         return null;
+    }
+
+    private static (string Title, string CommandName) GetEvaluatedLens(string text, string language)
+    {
+        var (result, error) = EvaluateDocument(text, language);
+        var title = error is null
+            ? $"= {Truncate(result!, MaxTitleLength)}"
+            : $"{language} error: {Truncate(error, MaxTitleLength)}";
+        var commandName = language == "XPath" ? "bosak.evaluateXPath" : "bosak.evaluateXQuery";
+        return (title, commandName);
     }
 
     private static (string? Result, string? Error) EvaluateDocument(string text, string language)

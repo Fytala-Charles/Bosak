@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Added XQuery lens tests                                                                  |
+//                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT lens tests                                                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
@@ -62,6 +63,46 @@ public class CodeLensHandlerTests
         Assert.NotNull(lens.Command);
         Assert.StartsWith("= 3", lens.Command!.Title);
         Assert.Equal("bosak.evaluateXQuery", lens.Command.Name);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ReturnsXsltTransformLensForXslDocument()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xsl").ToString();
+        documents.Update(uri, "<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'/>");
+
+        var handler = new CodeLensHandler(documents);
+        var result = await handler.Handle(new CodeLensParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xsl"))
+        }, default);
+
+        Assert.NotNull(result);
+        var lens = Assert.Single(result!);
+        Assert.NotNull(lens.Command);
+        Assert.Equal("Run XSLT transformation", lens.Command!.Title);
+        Assert.Equal("bosak.transformXslt", lens.Command.Name);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ReturnsXsltTransformLensForXsltDocument()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xslt").ToString();
+        documents.Update(uri, "<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'/>");
+
+        var handler = new CodeLensHandler(documents);
+        var result = await handler.Handle(new CodeLensParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xslt"))
+        }, default);
+
+        Assert.NotNull(result);
+        var lens = Assert.Single(result!);
+        Assert.NotNull(lens.Command);
+        Assert.Equal("Run XSLT transformation", lens.Command!.Title);
+        Assert.Equal("bosak.transformXslt", lens.Command.Name);
     }
 
     [Fact]
