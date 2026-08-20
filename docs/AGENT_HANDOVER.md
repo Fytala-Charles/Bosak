@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** *(pending)* feat(languageserver): extend code lens to XQuery documents
+**Commit:** `8e31515` feat(languageserver): extend code lens to XQuery documents
 **Current focus:** **VS Code extension — code lens (XQuery)** — the code lens now supports `.xq`, `.xqy`, and `.xquery` documents in addition to `.xpath`. XQuery files are evaluated via `XQueryCompiler`, while XPath files continue to use `XPath31Expression`; the lens title prefixes errors with the detected language (`XPath error:` or `XQuery error:`), and the command name is `bosak.evaluateXPath` or `bosak.evaluateXQuery` accordingly. Unsupported file types receive an empty lens container.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **54 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
