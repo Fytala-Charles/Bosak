@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `f4bff0c` feat(runtime,standard,query): schema-awareness sweep — user-defined schema simple types
+**Commit:** `a4f5a86` feat(runtime,standard,query): schema-awareness sweep — user-defined schema simple types
 **Current focus:** **Schema awareness closure** — the user-defined schema simple-type sweep is finalized. `FunctionLibrary.Populate` registers constructor functions for non-`xs:*` simple types from `EvaluationContext.SchemaSet`; `ValueMatchesType`, `ApplyFunctionConversion`, and `instance of` accept prefixed user-defined schema types; schema-validated typed values keep the integer XDM kind for integer-derived types and remain typed as date/time values. Full QT3 sweep is now **29,929 passed / 0 failed / 1,892 skipped** (94.05%). The 162 remaining schema-awareness skips are documented known gaps (list/union types, QName/NOTATION casts, `schema-element()`/`schema-attribute()` kind tests). Unit tests: **1,708 / 0 failed / 0 skipped**.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution, QT3 **29,929 / 0 / 1,892**.
