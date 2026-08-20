@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** *(pending)* feat(languageserver): wire execute command handler for XPath/XQuery evaluation
+**Commit:** `7a50e28` feat(languageserver,vscode): wire executeCommand handler for XPath/XQuery evaluation
 **Current focus:** **VS Code extension — execute command** — the language server now implements `workspace/executeCommand` for `bosak.evaluateXPath` and `bosak.evaluateXQuery`. Code-lens clicks and command-palette actions send the command with the document URI; the server evaluates the document and reports the result or error via `window/showMessage`. The VS Code extension registers both command IDs and routes them through `workspace/executeCommand`.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **58 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
