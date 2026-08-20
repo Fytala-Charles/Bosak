@@ -1,15 +1,15 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `2d2d86a` feat(languageserver): use standard XML namespace URI for xml prefix declarations
-**Current focus:** **VS Code extension — code actions (xml prefix)** — `CreateDeclareNamespaceAction` now special-cases the reserved `xml` prefix. For both XQuery and XSLT, declaring `xml` inserts the standard XML namespace URI (`http://www.w3.org/XML/1998/namespace`) instead of an empty placeholder. This avoids producing an invalid `declare namespace xml = "";` or `xmlns:xml=""` declaration when the user invokes the action on an `xml:lang`-style reference.
+**Commit:** `b2bbbbc` feat(languageserver): add XQuery unclosed curly brace quick fix
+**Current focus:** **VS Code extension — code actions (curly braces)** — `CodeActionHandler` now detects unclosed curly braces in XQuery documents (`.xq`/`.xqy`/`.xquery`). It scans the selected range while ignoring content inside string literals and offers a quick fix that inserts the missing `}` characters at the end of the range. This targets the common mistake of opening an enclosed expression in a direct element constructor (`<elem>{expr`) and forgetting the closing brace.
 
-Expected state: **1,708 unit tests / 0 failed** in the main solution; **45 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **47 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
 
-## This Session Changes (xml prefix code action)
+## This Session Changes (curly brace code action)
 
-1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — `CreateDeclareNamespaceAction` checks whether the prefix is `xml` and uses the standard XML namespace URI in the generated declaration.
-2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XQueryUsesStandardUriForXmlPrefix` and `XsltUsesStandardUriForXmlPrefix`.
+1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — added `CountCurlyBraces` helper and extended `GetXQueryCodeActions` to emit a "Close missing curly brace" insert action when there are more opening `{` than closing `}` in the selected range.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XQueryOffersCloseCurlyBrace` and `XQueryDoesNotOfferCloseCurlyBraceWhenBalanced`.
 3. **Documentation** — `docs/INTEGRATION.md` and `docs/FEATURE_REQUESTS.md` (REQ-028) updated.
 
 ## Files Changed (this session)
@@ -20,8 +20,8 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **45 langu
 
 ## Next Recommended Step
 
-1. Push the xml prefix fix.
-2. Continue VS Code extension work by adding more code actions (e.g., a `declare default element namespace` fix, detecting unbalanced curly braces in XQuery, or adding a code lens to evaluate XPath expressions) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
+1. Push the curly brace code action.
+2. Continue VS Code extension work by adding more code actions (e.g., a `declare default element namespace` fix, a code lens to evaluate XPath expressions, or a quick fix for missing `return` clauses) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
 
 ---
 
