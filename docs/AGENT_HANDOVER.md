@@ -1,15 +1,15 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `384266f` feat(languageserver): add XQST0085 remove-empty-namespace-declaration code action
-**Current focus:** **VS Code extension — code actions (XQST0085)** — `CodeActionHandler` now reacts to `XQST0085: The prefix 'prefix' cannot be bound to the empty namespace name` diagnostics in XQuery direct element constructors. It offers a quick fix that removes the offending `xmlns:prefix=""` (or `xmlns:prefix=''`) attribute from the element. The edit range includes the leading whitespace so the start tag remains well-formed.
+**Commit:** `45a5198` feat(languageserver): add import module namespace code action for XQuery function calls
+**Current focus:** **VS Code extension — code actions (module import)** — `CodeActionHandler` now offers an `import module namespace` quick fix for XQuery prefixes that are used in function calls (`my:foo()`). This is separate from the existing `declare namespace` action, which is still offered for non-call prefixed names such as variables. The import action inserts `import module namespace prefix = "";` at the prolog position.
 
-Expected state: **1,708 unit tests / 0 failed** in the main solution; **37 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **39 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
 
-## This Session Changes (XQST0085 code action)
+## This Session Changes (module import code action)
 
-1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — `GetXQueryCodeActions` now receives diagnostics and calls `GetInvalidNamespaceUndeclarationPrefixes` to extract prefixes from `XQST0085` messages. `CreateRemoveEmptyNamespaceDeclarationAction` builds a delete edit for the offending attribute, supporting both double-quoted and single-quoted empty values.
-2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XQueryOffersRemoveInvalidEmptyNamespaceDeclaration` and `XQueryOffersRemoveInvalidEmptyNamespaceDeclarationSingleQuotes`, verifying the edit range and empty replacement text.
+1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — added `GetFunctionCallPrefixesInRange` to detect prefixed names followed by `(` within the selected range. `GetXQueryCodeActions` offers `CreateImportModuleNamespaceAction` for each such prefix that is not already declared or imported. `CreateImportModuleNamespaceAction` builds an insert edit at the XQuery prolog position.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XQueryOffersImportModuleNamespaceForFunctionCall` and `XQueryDoesNotOfferImportModuleForNonFunctionPrefix`.
 3. **Documentation** — `docs/INTEGRATION.md` and `docs/FEATURE_REQUESTS.md` (REQ-028) updated.
 
 ## Files Changed (this session)
@@ -20,8 +20,8 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **37 langu
 
 ## Next Recommended Step
 
-1. Push the XQST0085 code action.
-2. Continue VS Code extension work by adding more code actions (e.g., importing a missing XQuery module, correcting common XPath syntax errors, or suggesting a missing `xml` namespace prefix) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
+1. Push the import module code action.
+2. Continue VS Code extension work by adding more code actions (e.g., correcting common XPath syntax errors, suggesting a missing `xml` namespace prefix, or adding a `declare default element namespace` fix) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
 
 ---
 
