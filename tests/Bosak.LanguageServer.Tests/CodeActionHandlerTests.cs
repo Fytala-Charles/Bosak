@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 20-08-2026     | Added tests for XPath syntax-error close actions                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 20-08-2026     | Added tests for standard XML namespace URI on xml prefix declarations                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -55,6 +57,29 @@ public class CodeActionHandlerTests
         Assert.NotNull(action);
         var edit = action!.Edit!.Changes!.Single();
         Assert.Equal("declare namespace my = \"\";\n", edit.Value.First().NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQueryUsesStandardUriForXmlPrefix()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "xml:lang";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Declare namespace 'xml'");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single();
+        Assert.Equal("declare namespace xml = \"http://www.w3.org/XML/1998/namespace\";\n", edit.Value.First().NewText);
     }
 
     [Fact]
@@ -209,6 +234,29 @@ public class CodeActionHandlerTests
         Assert.NotNull(action);
         var edit = action!.Edit!.Changes!.Single();
         Assert.Equal(" xmlns:my=\"\"", edit.Value.First().NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XsltUsesStandardUriForXmlPrefix()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xslt").ToString();
+        const string text = "<root><xml:child/></root>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xslt")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Declare namespace 'xml'");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single();
+        Assert.Equal(" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"", edit.Value.First().NewText);
     }
 
     [Fact]

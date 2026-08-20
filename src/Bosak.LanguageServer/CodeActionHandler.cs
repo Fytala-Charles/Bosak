@@ -24,6 +24,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 20-08-2026     | Added XPath syntax-error quick fixes for unclosed brackets and strings                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 20-08-2026     | Use standard XML namespace URI for xml prefix declarations                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -459,9 +461,12 @@ public class CodeActionHandler : CodeActionHandlerBase
     private static CommandOrCodeAction CreateDeclareNamespaceAction(
         DocumentUri uri, string prefix, bool isXQuery, Position insertPosition)
     {
+        var uriValue = prefix == "xml"
+            ? "http://www.w3.org/XML/1998/namespace"
+            : string.Empty;
         string newText = isXQuery
-            ? $"declare namespace {prefix} = \"\";\n"
-            : $" xmlns:{prefix}=\"\"";
+            ? $"declare namespace {prefix} = \"{uriValue}\";\n"
+            : $" xmlns:{prefix}=\"{uriValue}\"";
 
         return new CommandOrCodeAction(new CodeAction
         {

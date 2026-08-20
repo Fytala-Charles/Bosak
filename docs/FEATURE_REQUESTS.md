@@ -1109,6 +1109,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 |------|-------|----------|-----------|
 | 2026-06-08 | Charles Korthout / Kimi | Implemented | Initial LSP server + VS Code extension |
 | 2026-08-18 | Charles Korthout / Kimi | Extended | XQuery language support, hover, go-to-definition, document symbols, evaluate/transform/run commands |
+| 2026-08-20 | Charles Korthout / Kimi | Extended | Namespace declarations use the standard XML namespace URI for the reserved `xml` prefix |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions close unclosed XPath parentheses, brackets, and string literals |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions offer `import module namespace` for XQuery function-call prefixes |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions remove invalid empty namespace declarations (`XQST0085`) in XQuery |
