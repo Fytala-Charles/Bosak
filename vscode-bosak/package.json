@@ -127,6 +127,11 @@
         "category": "Bosak"
       },
       {
+        "command": "bosak.evaluateXQuery",
+        "title": "Evaluate XQuery Expression",
+        "category": "Bosak"
+      },
+      {
         "command": "bosak.runXQuery",
         "title": "Run XQuery",
         "category": "Bosak"

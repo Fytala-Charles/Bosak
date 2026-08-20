@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-> **Living Registry** — Last updated: 2026-08-20 (Code lens extended to XQuery documents — `.xq`/`.xqy`/`.xquery` evaluate and show result/error; language-server tests pass 54/0; unit tests pass 1,708/0; QT3 29,929/0/1,892)
+> **Living Registry** — Last updated: 2026-08-20 (Execute command handler implements `workspace/executeCommand` for `bosak.evaluateXPath` and `bosak.evaluateXQuery`; server reports result/error via `window/showMessage`; VS Code extension routes lens clicks and command-palette commands; language-server tests pass 58/0; unit tests pass 1,708/0; QT3 29,929/0/1,892)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -137,7 +137,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-025 | *(internal)* | `xsl:attribute-set` / `xsl:use-attribute-sets` support | Required for `next-match-012` and broader XSLT 3.0 conformance; attribute sets accumulate across imports/includes; `xsl:use-attribute-sets` now whitelisted on literal result elements (XTSE0805 fix) | **Implemented** | TBD | Charles Korthout | 2026-06-26 |
 | REQ-026 | *(internal)* | Nested `xsl:use-when` evaluation | `use-when="false()"` on nested XSLT instructions and LREs was ignored; now stripped during stylesheet load | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
 | REQ-027 | Customer B | Publish Bosak packages to NuGet feed | Customer B.DataBridge.Application.BodMapping package-references Bosak.Xslt and Bosak.XPath.Providers, but Bosak projects lack NuGet metadata | **Implemented** | TBD | Charles Korthout | 2026-06-07 |
-| REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1, XSLT 3.0, and XQuery 3.1 development: syntax highlighting, semantic tokens, realtime diagnostics, auto-completion, hover, go-to-definition, document symbols, code actions, code lens for `.xpath` results, evaluate/run commands | **Implemented** | 0.1.3 | Charles Korthout | 2026-08-20 |
+| REQ-028 | Bosak / Fytala Stack | VS Code Language Server Extension | IDE support for XPath 3.1, XSLT 3.0, and XQuery 3.1 development: syntax highlighting, semantic tokens, realtime diagnostics, auto-completion, hover, go-to-definition, document symbols, code actions, code lens for `.xpath`/XQuery results, evaluate/run commands, executeCommand handler | **Implemented** | 0.1.3 | Charles Korthout | 2026-08-20 |
 | REQ-029 | *(internal)* | `xsl:where-populated`, `xsl:on-empty`, and `xsl:on-non-empty` support | Required for copy-1213/1214/1215/1216/1217 conformance tests and full `on-empty`/`on-non-empty` clusters; where-populated filters empty nodes, on-empty provides fallback content, on-non-empty provides content when non-empty | **Implemented** | TBD | Charles Korthout | 2026-06-25 |
 | REQ-030 | *(internal)* | XSLT `@as` type coercion and atomization | Required for as-0101 through as-1602 conformance tests; `xsl:variable`, `xsl:param`, `xsl:function`, `xsl:with-param` `@as` attribute must coerce/atomize per XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
 | REQ-031 | *(internal)* | XSLT `base-uri` cluster conformance | `document('')`, `fn:base-uri()`, `fn:static-base-uri()`, and `xml:base` propagation through copies must match XSLT 3.0 spec | **Implemented** | TBD | Charles Korthout | 2026-06-11 |
@@ -1068,6 +1068,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
    - `SemanticTokensHandler`: semantic highlighting for function calls, variables, XSLT instructions, XQuery keywords, type names, namespace prefixes, numbers, and operators
    - `CodeActionHandler`: quick fixes for XPath syntax errors (unclosed parentheses, brackets, string literals), XQuery unclosed curly braces and default element namespace declaration, undeclared namespace prefixes in XQuery/XSLT (including `XPST0081` diagnostic-driven fixes), XQuery `import module namespace` for function-call prefixes, removal of invalid empty namespace declarations (`XQST0085`), promotion of bare `<stylesheet>`/`<transform>` roots to `xsl:*`, and missing `version` attribute on `xsl:stylesheet`/`xsl:transform`
    - `CodeLensHandler`: evaluates `.xpath`, `.xq`, `.xqy`, and `.xquery` documents and displays the serialized result (or error message) as a code lens at the top of the file
+   - `ExecuteCommandHandler`: implements `workspace/executeCommand` for `bosak.evaluateXPath` and `bosak.evaluateXQuery`; evaluates the document and reports result/error via `window/showMessage`
    - `EvaluationHandler`: custom LSP requests to evaluate XPath, run XSLT, and run XQuery
    - `DocumentManager`: in-memory store of open document contents
 2. **`vscode-bosak`** — TypeScript VS Code extension client:
@@ -1090,6 +1091,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 - [x] Semantic tokens highlight functions, variables, keywords, types, namespaces, and operators
 - [x] Code actions offer quick fixes for XPath/XQuery syntax errors (unclosed brackets, strings, curly braces), XQuery `declare default element namespace`, undeclared namespace prefixes (including XPST0081 diagnostic-driven fixes), XQuery `import module namespace`, invalid XQuery empty namespace declarations (XQST0085), missing XSLT namespace, and missing XSLT version attribute
 - [x] Code lens evaluates `.xpath`, `.xq`, `.xqy`, and `.xquery` documents and shows the result or error above the document
+- [x] `workspace/executeCommand` handles `bosak.evaluateXPath` and `bosak.evaluateXQuery` and reports result/error via `window/showMessage`
 - [x] Context-menu commands evaluate XPath, run XSLT, and run XQuery
 - [x] All 1,708 unit tests still pass
 
@@ -1123,6 +1125,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Semantic tokens for XPath/XQuery/XSLT; extension version 0.1.3 |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code lens evaluates `.xpath` documents and displays the result or error at the top of the file |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code lens extended to XQuery documents (`.xq`/`.xqy`/`.xquery`) |
+| 2026-08-20 | Charles Korthout / Kimi | Extended | `workspace/executeCommand` handler for `bosak.evaluateXPath`/`bosak.evaluateXQuery`; VS Code extension routes lens and command-palette commands through it |
 
 ---
 

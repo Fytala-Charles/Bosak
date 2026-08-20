@@ -1,6 +1,38 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
+**Commit:** *(pending)* feat(languageserver): wire execute command handler for XPath/XQuery evaluation
+**Current focus:** **VS Code extension — execute command** — the language server now implements `workspace/executeCommand` for `bosak.evaluateXPath` and `bosak.evaluateXQuery`. Code-lens clicks and command-palette actions send the command with the document URI; the server evaluates the document and reports the result or error via `window/showMessage`. The VS Code extension registers both command IDs and routes them through `workspace/executeCommand`.
+
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **58 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+
+## This Session Changes (execute command)
+
+1. **`ExecuteCommandHandler`** (`src/Bosak.LanguageServer/ExecuteCommandHandler.cs`) — new handler implementing `workspace/executeCommand`. Accepts `bosak.evaluateXPath` and `bosak.evaluateXQuery`, evaluates via `XPath31Expression` or `XQueryCompiler`, and sends `window/showMessage` notifications through the injected `IResponseRouter`.
+2. **`Program.cs`** — registers `ExecuteCommandHandler`.
+3. **Tests** — `tests/Bosak.LanguageServer.Tests/ExecuteCommandHandlerTests.cs` adds tests for XPath/XQuery result notifications, unknown command, and missing argument.
+4. **VS Code extension** — `vscode-bosak/src/extension.ts` registers `bosak.evaluateXQuery` and routes both `bosak.evaluateXPath` and `bosak.evaluateXQuery` through `workspace/executeCommand`; `vscode-bosak/package.json` declares the new command.
+5. **Documentation** — `README.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/ExecuteCommandHandler.cs` (new)
+- `src/Bosak.LanguageServer/Program.cs`
+- `tests/Bosak.LanguageServer.Tests/ExecuteCommandHandlerTests.cs` (new)
+- `vscode-bosak/src/extension.ts`
+- `vscode-bosak/package.json`
+- `README.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Commit and push the execute command feature.
+2. Continue VS Code extension work (e.g., make the execute-command response return a serializable result so the client can open a result editor, add an XSLT code lens with source-document picker, or switch to an engine topic such as XML 1.1 support in the `XDocument` provider).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-20
 **Commit:** `8e31515` feat(languageserver): extend code lens to XQuery documents
 **Current focus:** **VS Code extension — code lens (XQuery)** — the code lens now supports `.xq`, `.xqy`, and `.xquery` documents in addition to `.xpath`. XQuery files are evaluated via `XQueryCompiler`, while XPath files continue to use `XPath31Expression`; the lens title prefixes errors with the detected language (`XPath error:` or `XQuery error:`), and the command name is `bosak.evaluateXPath` or `bosak.evaluateXQuery` accordingly. Unsupported file types receive an empty lens container.
 

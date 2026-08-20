@@ -65,8 +65,9 @@ export function activate(context: vscode.ExtensionContext): void {
     // Register commands
     context.subscriptions.push(
         vscode.commands.registerCommand('bosak.evaluateXPath', evaluateXPath),
-        vscode.commands.registerCommand('bosak.transformXslt', transformXslt),
-        vscode.commands.registerCommand('bosak.runXQuery', runXQuery)
+        vscode.commands.registerCommand('bosak.evaluateXQuery', runXQuery),
+        vscode.commands.registerCommand('bosak.runXQuery', runXQuery),
+        vscode.commands.registerCommand('bosak.transformXslt', transformXslt)
     );
 }
 
@@ -137,19 +138,10 @@ async function evaluateXPath(): Promise<void> {
     }
 
     try {
-        const result = await client.sendRequest<{ result?: string; error?: string }>(
-            'bosak/evaluateXPath',
-            { textDocument: { uri: editor.document.uri.toString() } }
-        );
-        if (result.error) {
-            vscode.window.showErrorMessage(`XPath evaluation failed: ${result.error}`);
-        } else {
-            const doc = await vscode.workspace.openTextDocument({
-                content: result.result ?? '',
-                language: 'text'
-            });
-            await vscode.window.showTextDocument(doc, { preview: true });
-        }
+        await client.sendRequest('workspace/executeCommand', {
+            command: 'bosak.evaluateXPath',
+            arguments: [editor.document.uri.toString()]
+        });
     } catch (err) {
         vscode.window.showErrorMessage(`XPath evaluation failed: ${err}`);
     }
@@ -167,19 +159,10 @@ async function runXQuery(): Promise<void> {
     }
 
     try {
-        const result = await client.sendRequest<{ result?: string; error?: string }>(
-            'bosak/evaluateXQuery',
-            { textDocument: { uri: editor.document.uri.toString() } }
-        );
-        if (result.error) {
-            vscode.window.showErrorMessage(`XQuery evaluation failed: ${result.error}`);
-        } else {
-            const doc = await vscode.workspace.openTextDocument({
-                content: result.result ?? '',
-                language: 'text'
-            });
-            await vscode.window.showTextDocument(doc, { preview: true });
-        }
+        await client.sendRequest('workspace/executeCommand', {
+            command: 'bosak.evaluateXQuery',
+            arguments: [editor.document.uri.toString()]
+        });
     } catch (err) {
         vscode.window.showErrorMessage(`XQuery evaluation failed: ${err}`);
     }

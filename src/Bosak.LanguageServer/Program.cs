@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.5   | 20-08-2026     | Register CodeActionHandler                                                               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 20-08-2026     | Register CodeLensHandler                                                                 |
+//                      | Charles Korthout | 0.7   | 20-08-2026     | Register ExecuteCommandHandler                                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -65,6 +66,7 @@ class Program
                 .WithHandler<SemanticTokensHandler>()
                 .WithHandler<CodeActionHandler>()
                 .WithHandler<CodeLensHandler>()
+                .WithHandler<ExecuteCommandHandler>()
                 .WithHandler<EvaluateXPathHandler>()
                 .WithHandler<EvaluateXQueryHandler>()
                 .WithHandler<TransformXsltHandler>();

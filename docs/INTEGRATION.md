@@ -19,6 +19,13 @@
 
 ## 0. Recent Changes
 
+- **2026-08-20** — Language Server: **execute command** — the language server now implements `workspace/executeCommand` for `bosak.evaluateXPath` and `bosak.evaluateXQuery`. Clicking a code lens (or invoking the command palette action) sends the command with the document URI; the server evaluates the document and reports the result or error via `window/showMessage`. The VS Code extension registers both command IDs and routes them to `workspace/executeCommand`.
+  - New handler: `src/Bosak.LanguageServer/ExecuteCommandHandler.cs`.
+  - Registration in `src/Bosak.LanguageServer/Program.cs`.
+  - New tests in `tests/Bosak.LanguageServer.Tests/ExecuteCommandHandlerTests.cs`.
+  - Updated client: `vscode-bosak/src/extension.ts` and `vscode-bosak/package.json`.
+  - Language-server tests: **58 passed / 0 failed / 0 skipped** (+4).
+
 - **2026-08-20** — Language Server: **code lens (XPath + XQuery)** — `.xpath`, `.xq`, `.xqy`, and `.xquery` documents now display a code lens at the top of the file that evaluates the expression and shows the serialized result (or error) above the document. The lens uses `XPath31Expression` for `.xpath` files and `XQueryCompiler` for XQuery files; the command name is `bosak.evaluateXPath` or `bosak.evaluateXQuery` respectively. Unsupported file types receive an empty lens container.
   - Handler: `src/Bosak.LanguageServer/CodeLensHandler.cs`.
   - Registration in `src/Bosak.LanguageServer/Program.cs`.
