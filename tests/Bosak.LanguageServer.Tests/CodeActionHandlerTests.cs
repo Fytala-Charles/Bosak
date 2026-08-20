@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 20-08-2026     | Added tests for XQST0085 remove-empty-namespace-declaration action                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 20-08-2026     | Added tests for XQuery import-module-namespace action                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -71,6 +73,49 @@ public class CodeActionHandlerTests
 
         Assert.NotNull(result);
         Assert.DoesNotContain(result!, c => c.CodeAction?.Title == "Declare namespace 'my'");
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQueryOffersImportModuleNamespaceForFunctionCall()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "my:foo()";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Import module namespace 'my'");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal("import module namespace my = \"\";\n", edit.NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQueryDoesNotOfferImportModuleForNonFunctionPrefix()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "$my:var";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext()
+        }, default);
+
+        Assert.NotNull(result);
+        Assert.DoesNotContain(result!, c => c.CodeAction?.Title == "Import module namespace 'my'");
     }
 
     [Fact]

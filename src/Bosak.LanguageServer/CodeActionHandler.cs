@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 20-08-2026     | Added XQST0085 remove-empty-namespace-declaration quick fix                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 20-08-2026     | Added import module namespace action for XQuery function calls                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -145,6 +147,19 @@ public class CodeActionHandler : CodeActionHandlerBase
                 actions.Add(action);
         }
 
+        // Offer to import a module namespace for prefixes used in function calls.
+        foreach (var prefix in GetFunctionCallPrefixesInRange(text, range))
+        {
+            if (text.Contains($"declare namespace {prefix}") ||
+                text.Contains($"import module namespace {prefix}"))
+                continue;
+
+            actions.Add(CreateImportModuleNamespaceAction(
+                uri,
+                prefix,
+                GetXQueryPrologInsertPosition(text)));
+        }
+
         return actions;
     }
 
@@ -198,6 +213,30 @@ public class CodeActionHandler : CodeActionHandlerBase
         foreach (Match m in PrefixedNameRegex.Matches(text))
         {
             if (m.Index >= startOffset && m.Index < endOffset)
+            {
+                prefixes.Add(m.Groups["prefix"].Value);
+            }
+        }
+
+        return prefixes;
+    }
+
+    private static HashSet<string> GetFunctionCallPrefixesInRange(string text, Range range)
+    {
+        var prefixes = new HashSet<string>(StringComparer.Ordinal);
+        int startOffset = RangeToOffset(text, range.Start);
+        int endOffset = RangeToOffset(text, range.End);
+
+        foreach (Match m in PrefixedNameRegex.Matches(text))
+        {
+            if (m.Index < startOffset || m.Index >= endOffset)
+                continue;
+
+            int after = m.Index + m.Length;
+            while (after < text.Length && char.IsWhiteSpace(text[after]))
+                after++;
+
+            if (after < text.Length && text[after] == '(')
             {
                 prefixes.Add(m.Groups["prefix"].Value);
             }
@@ -296,6 +335,30 @@ public class CodeActionHandler : CodeActionHandlerBase
                         new TextEdit
                         {
                             NewText = newText,
+                            Range = new Range(insertPosition, insertPosition),
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private static CommandOrCodeAction CreateImportModuleNamespaceAction(
+        DocumentUri uri, string prefix, Position insertPosition)
+    {
+        return new CommandOrCodeAction(new CodeAction
+        {
+            Title = $"Import module namespace '{prefix}'",
+            Kind = CodeActionKind.QuickFix,
+            Edit = new WorkspaceEdit
+            {
+                Changes = new Dictionary<DocumentUri, IEnumerable<TextEdit>>
+                {
+                    [uri] = new[]
+                    {
+                        new TextEdit
+                        {
+                            NewText = $"import module namespace {prefix} = \"\";\n",
                             Range = new Range(insertPosition, insertPosition),
                         }
                     }
