@@ -1,15 +1,15 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `4833c5a` feat(languageserver): react to XPST0081 diagnostics with namespace declaration action
-**Current focus:** **VS Code extension — code actions (diagnostic-driven)** — `CodeActionHandler` now also reacts to `XPST0081: Prefix 'prefix' is not declared` diagnostics produced for XPath expressions inside XSLT attributes (`select`, `test`, `match`, `use-when`). It offers a quick fix to declare that prefix on the stylesheet root (`xmlns:prefix=""`). This complements the existing text-scan-based prefix detection and gives users a code action directly tied to the reported error.
+**Commit:** `384266f` feat(languageserver): add XQST0085 remove-empty-namespace-declaration code action
+**Current focus:** **VS Code extension — code actions (XQST0085)** — `CodeActionHandler` now reacts to `XQST0085: The prefix 'prefix' cannot be bound to the empty namespace name` diagnostics in XQuery direct element constructors. It offers a quick fix that removes the offending `xmlns:prefix=""` (or `xmlns:prefix=''`) attribute from the element. The edit range includes the leading whitespace so the start tag remains well-formed.
 
-Expected state: **1,708 unit tests / 0 failed** in the main solution; **35 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **37 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
 
-## This Session Changes (XPST0081 code action)
+## This Session Changes (XQST0085 code action)
 
-1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — added `GetUndeclaredPrefixesFromDiagnostics`, which extracts the prefix from `XPST0081: Prefix 'prefix' is not declared` diagnostics and merges it into the set of prefixes eligible for a namespace declaration quick fix.
-2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XsltOffersNamespaceDeclarationFromXpst0081Diagnostic`, verifying that an `XPST0081` diagnostic on an XSLT `match` attribute produces a `Declare namespace 'my'` action.
+1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — `GetXQueryCodeActions` now receives diagnostics and calls `GetInvalidNamespaceUndeclarationPrefixes` to extract prefixes from `XQST0085` messages. `CreateRemoveEmptyNamespaceDeclarationAction` builds a delete edit for the offending attribute, supporting both double-quoted and single-quoted empty values.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XQueryOffersRemoveInvalidEmptyNamespaceDeclaration` and `XQueryOffersRemoveInvalidEmptyNamespaceDeclarationSingleQuotes`, verifying the edit range and empty replacement text.
 3. **Documentation** — `docs/INTEGRATION.md` and `docs/FEATURE_REQUESTS.md` (REQ-028) updated.
 
 ## Files Changed (this session)
@@ -20,8 +20,8 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **35 langu
 
 ## Next Recommended Step
 
-1. Push the diagnostic-driven code action.
-2. Continue VS Code extension work by adding more code actions (e.g., fixes for `XQST0085` namespace undeclaration in XQuery direct constructors, importing a missing XQuery module, or correcting common XPath syntax errors) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
+1. Push the XQST0085 code action.
+2. Continue VS Code extension work by adding more code actions (e.g., importing a missing XQuery module, correcting common XPath syntax errors, or suggesting a missing `xml` namespace prefix) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
 
 ---
 
