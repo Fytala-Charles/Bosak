@@ -1,6 +1,37 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
+**Commit:** (pending) feat(languageserver): add semantic tokens for XPath/XQuery/XSLT
+**Current focus:** **VS Code extension — semantic tokens** — the language server now provides semantic highlighting for XPath, XQuery, and XSLT documents. Tokens are emitted for function calls (`fn:concat`), variable references (`$var`), XSLT instructions (`xsl:*`), XQuery keywords, type names (`xs:string`), namespace prefixes, number literals, and XPath operators. The `vscode-bosak` extension is bumped to **0.1.3**. Client-side wiring is automatic because `vscode-languageclient` uses the server's advertised `textDocument/semanticTokens` capability.
+
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **27 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+
+## This Session Changes (semantic tokens)
+
+1. **`SemanticTokensHandler`** (`src/Bosak.LanguageServer/SemanticTokensHandler.cs`) — new handler implementing `textDocument/semanticTokens/full` and `/range`. Scans document text with regexes and pushes tokens onto the LSP `SemanticTokensBuilder`.
+2. **`Program.cs`** — registers `SemanticTokensHandler`.
+3. **`vscode-bosak/package.json`** — version bumped to **0.1.3**.
+4. **Tests** — `tests/Bosak.LanguageServer.Tests/SemanticTokensHandlerTests.cs` adds tests for function calls, variables, XSLT instructions, XQuery keywords, type names, number literals, and the full `Handle` pipeline.
+5. **Documentation** — `README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), `docs/INTEGRATION.md`, and `docs/AGENT_HANDOVER.md` updated.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/SemanticTokensHandler.cs` (new)
+- `src/Bosak.LanguageServer/Program.cs`
+- `vscode-bosak/package.json`
+- `tests/Bosak.LanguageServer.Tests/SemanticTokensHandlerTests.cs` (new)
+- `README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Commit and push the semantic tokens feature.
+2. Continue VS Code extension with **code actions** (e.g., quick fixes for common XPath/XSLT diagnostics) or start the next engine topic (XML 1.1 support in the XDocument provider).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-20
 **Commit:** `a4f5a86` feat(runtime,standard,query): schema-awareness sweep — user-defined schema simple types
 **Current focus:** **Schema awareness closure** — the user-defined schema simple-type sweep is finalized. `FunctionLibrary.Populate` registers constructor functions for non-`xs:*` simple types from `EvaluationContext.SchemaSet`; `ValueMatchesType`, `ApplyFunctionConversion`, and `instance of` accept prefixed user-defined schema types; schema-validated typed values keep the integer XDM kind for integer-derived types and remain typed as date/time values. Full QT3 sweep is now **29,929 passed / 0 failed / 1,892 skipped** (94.05%). The 162 remaining schema-awareness skips are documented known gaps (list/union types, QName/NOTATION casts, `schema-element()`/`schema-attribute()` kind tests). Unit tests: **1,708 / 0 failed / 0 skipped**.
 

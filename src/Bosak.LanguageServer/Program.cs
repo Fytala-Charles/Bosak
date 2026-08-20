@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 18-08-2026     | Register DocumentSymbolHandler, HoverHandler, and DefinitionHandler                        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 18-08-2026     | Register custom EvaluateXPathHandler and TransformXsltHandler requests                     |
+//                      | Charles Korthout | 0.4   | 20-08-2026     | Register SemanticTokensHandler                                                           |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -59,6 +60,7 @@ class Program
                 .WithHandler<DocumentSymbolHandler>()
                 .WithHandler<HoverHandler>()
                 .WithHandler<DefinitionHandler>()
+                .WithHandler<SemanticTokensHandler>()
                 .WithHandler<EvaluateXPathHandler>()
                 .WithHandler<EvaluateXQueryHandler>()
                 .WithHandler<TransformXsltHandler>();
