@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** *(pending)* feat(languageserver,vscode): send serializable evaluation result from executeCommand
+**Commit:** `fee2236` feat(languageserver,vscode): send serializable evaluation result from executeCommand
 **Current focus:** **VS Code extension — serializable execute-command result** — the `ExecuteCommandHandler` now sends a custom `bosak/evaluationResult` LSP notification containing `{ language, result, error }` instead of using `window/showMessage`. The VS Code extension listens for this notification and opens the result in a preview editor (or shows an error message). This restores the editor-preview behavior while keeping the `workspace/executeCommand` path.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **58 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
