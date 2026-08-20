@@ -1,15 +1,15 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `34b370f` feat(languageserver): add XPath syntax-error quick fixes for unclosed brackets and strings
-**Current focus:** **VS Code extension — code actions (XPath syntax)** — `CodeActionHandler` now handles `.xpath` files and offers quick fixes for common unclosed-token errors: missing closing parenthesis `)`, missing closing square bracket `]`, and unclosed single-quoted/double-quoted string literals. The fixes scan the selected range, ignore content inside existing strings, and respect XPath's quote-escaping convention (`''` and `""`). Insertions are made at the end of the selected range.
+**Commit:** `2d2d86a` feat(languageserver): use standard XML namespace URI for xml prefix declarations
+**Current focus:** **VS Code extension — code actions (xml prefix)** — `CreateDeclareNamespaceAction` now special-cases the reserved `xml` prefix. For both XQuery and XSLT, declaring `xml` inserts the standard XML namespace URI (`http://www.w3.org/XML/1998/namespace`) instead of an empty placeholder. This avoids producing an invalid `declare namespace xml = "";` or `xmlns:xml=""` declaration when the user invokes the action on an `xml:lang`-style reference.
 
-Expected state: **1,708 unit tests / 0 failed** in the main solution; **43 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **45 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
 
-## This Session Changes (XPath syntax code actions)
+## This Session Changes (xml prefix code action)
 
-1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — added a `.xpath` branch in `Handle`, a new `GetXPathCodeActions` method, and helpers `CountBracketsAndQuotes` and `CreateInsertTextAction`. The handler detects unbalanced parentheses, square brackets, and unclosed string delimiters and emits insert edits with the missing closing characters.
-2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XPathOffersCloseParenthesis`, `XPathOffersCloseSquareBracket`, `XPathOffersCloseSingleQuote`, and `XPathDoesNotOfferActionForBalancedExpression`.
+1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — `CreateDeclareNamespaceAction` checks whether the prefix is `xml` and uses the standard XML namespace URI in the generated declaration.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XQueryUsesStandardUriForXmlPrefix` and `XsltUsesStandardUriForXmlPrefix`.
 3. **Documentation** — `docs/INTEGRATION.md` and `docs/FEATURE_REQUESTS.md` (REQ-028) updated.
 
 ## Files Changed (this session)
@@ -20,8 +20,8 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **43 langu
 
 ## Next Recommended Step
 
-1. Push the XPath syntax code actions.
-2. Continue VS Code extension work by adding more code actions (e.g., suggesting a missing `xml` namespace prefix, adding a `declare default element namespace` fix, or detecting unbalanced curly braces) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
+1. Push the xml prefix fix.
+2. Continue VS Code extension work by adding more code actions (e.g., a `declare default element namespace` fix, detecting unbalanced curly braces in XQuery, or adding a code lens to evaluate XPath expressions) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
 
 ---
 
