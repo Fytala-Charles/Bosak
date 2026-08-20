@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
+**Commit:** *(pending)* feat(languageserver): add code lens for XPath document evaluation
+**Current focus:** **VS Code extension — code lens** — `.xpath` documents now display a code lens at line 0 that evaluates the document's XPath expression and shows the serialized result or error message above the document. The handler implements `textDocument/codeLens` and `codeLens/resolve`, is registered in `Program.cs`, and is covered by three unit tests.
+
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **52 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+
+## This Session Changes (code lens)
+
+1. **`CodeLensHandler`** (`src/Bosak.LanguageServer/CodeLensHandler.cs`) — new handler implementing `textDocument/codeLens` and `codeLens/resolve`. Restricted to `.xpath` files via registration options; evaluates the document text with `XPath31Expression.Compile(...).Evaluate(ctx)` and returns a single lens whose command title shows `= <result>` or `XPath error: <message>`.
+2. **`Program.cs`** — registers `CodeLensHandler`.
+3. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` adds tests for an `.xpath` document returning a result lens, a non-`.xpath` document returning an empty container, and an invalid expression returning an error lens.
+4. **Documentation** — `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/CodeLensHandler.cs` (new)
+- `src/Bosak.LanguageServer/Program.cs`
+- `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` (new)
+- `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Commit and push the code lens feature.
+2. Continue VS Code extension work (e.g., add a code lens for XQuery documents, wire a command to refresh the XPath lens on demand, or begin the next engine topic such as XML 1.1 support in the `XDocument` provider).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-20
 **Commit:** `2e226ca` feat(languageserver): add declare default element namespace code action
 **Current focus:** **VS Code extension — code actions (default element namespace)** — `CodeActionHandler` now offers a `declare default element namespace` quick fix for XQuery documents that contain unprefixed element constructors (e.g., `<root/>`) and do not already declare a default element namespace. The fix inserts `declare default element namespace "";` at the prolog position, giving users a placeholder to fill in the target namespace URI.
 
