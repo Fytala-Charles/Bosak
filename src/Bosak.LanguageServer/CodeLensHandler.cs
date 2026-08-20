@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 20 August 2026
-// PURPOSE              : Provides code lenses for XPath documents showing the evaluated result.
+// PURPOSE              : Provides code lenses for XPath and XQuery documents showing the evaluated result.
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 20-08-2026     | Added XQuery document support                                                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -20,6 +21,7 @@ using System.Threading.Tasks;
 using Bosak.XPath.Api;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using Bosak.XQuery.Api;
 using Newtonsoft.Json.Linq;
 using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
@@ -30,7 +32,7 @@ using Range = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
 namespace Bosak.LanguageServer;
 
 /// <summary>
-/// Provides code lenses for XPath documents by evaluating the expression and
+/// Provides code lenses for XPath and XQuery documents by evaluating the expression and
 /// showing the serialized result above the document.
 /// </summary>
 public class CodeLensHandler : CodeLensHandlerBase
@@ -55,14 +57,18 @@ public class CodeLensHandler : CodeLensHandlerBase
         CodeLensParams request, CancellationToken cancellationToken)
     {
         var uri = request.TextDocument.Uri;
-        if (!IsXPathDocument(uri))
+        var language = GetDocumentLanguage(uri);
+        if (language is null)
             return Task.FromResult<CodeLensContainer?>(new CodeLensContainer(Array.Empty<CodeLens>()));
 
         if (!_documents.TryGet(uri.ToString(), out var text))
             return Task.FromResult<CodeLensContainer?>(new CodeLensContainer(Array.Empty<CodeLens>()));
 
-        var (result, error) = EvaluateXPath(text);
-        var title = error is null ? $"= {Truncate(result!, MaxTitleLength)}" : $"XPath error: {Truncate(error, MaxTitleLength)}";
+        var (result, error) = EvaluateDocument(text, language);
+        var title = error is null
+            ? $"= {Truncate(result!, MaxTitleLength)}"
+            : $"{language} error: {Truncate(error, MaxTitleLength)}";
+        var commandName = language == "XPath" ? "bosak.evaluateXPath" : "bosak.evaluateXQuery";
 
         var lenses = new List<CodeLens>
         {
@@ -72,7 +78,7 @@ public class CodeLensHandler : CodeLensHandlerBase
                 Command = new Command
                 {
                     Title = title,
-                    Name = "bosak.evaluateXPath",
+                    Name = commandName,
                     Arguments = new JArray(uri.ToString()),
                 }
             }
@@ -99,25 +105,35 @@ public class CodeLensHandler : CodeLensHandlerBase
         return new CodeLensRegistrationOptions
         {
             DocumentSelector = new TextDocumentSelector(
-                new TextDocumentFilter { Pattern = "**/*.xpath" }),
+                new TextDocumentFilter { Pattern = "**/*.{xpath,xq,xqy,xquery}" }),
             ResolveProvider = false,
         };
     }
 
-    private static bool IsXPathDocument(DocumentUri uri)
+    private static string? GetDocumentLanguage(DocumentUri uri)
     {
         var path = uri.Path?.ToLowerInvariant() ?? string.Empty;
-        return path.EndsWith(".xpath");
+        if (path.EndsWith(".xpath"))
+            return "XPath";
+        if (path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery"))
+            return "XQuery";
+        return null;
     }
 
-    private static (string? Result, string? Error) EvaluateXPath(string text)
+    private static (string? Result, string? Error) EvaluateDocument(string text, string language)
     {
         try
         {
-            var ctx = new EvaluationContext();
-            FunctionLibrary.Populate(ctx);
-            var value = XPath31Expression.Compile(text).Evaluate(ctx);
-            return (value.ToString(), null);
+            if (language == "XPath")
+            {
+                var ctx = new EvaluationContext();
+                FunctionLibrary.Populate(ctx);
+                var value = XPath31Expression.Compile(text).Evaluate(ctx);
+                return (value.ToString(), null);
+            }
+
+            var result = new XQueryCompiler().Compile(text).Evaluate(new XQueryContext());
+            return (result.ToString(), null);
         }
         catch (Exception ex)
         {

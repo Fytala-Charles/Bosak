@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 20 August 2026
-// PURPOSE              : Unit tests for the language-server XPath code-lens handler.
+// PURPOSE              : Unit tests for the language-server XPath and XQuery code-lens handler.
 // SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
 //
 // COPYRIGHT            : Fytala
@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 20-08-2026     | Added XQuery lens tests                                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
@@ -44,7 +45,7 @@ public class CodeLensHandlerTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ReturnsEmptyForNonXPathDocument()
+    public async System.Threading.Tasks.Task ReturnsLensWithXQueryResultForXQueryDocument()
     {
         var documents = new DocumentManager();
         var uri = DocumentUri.FromFileSystemPath("C:/test/query.xquery").ToString();
@@ -54,6 +55,26 @@ public class CodeLensHandlerTests
         var result = await handler.Handle(new CodeLensParams
         {
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xquery"))
+        }, default);
+
+        Assert.NotNull(result);
+        var lens = Assert.Single(result!);
+        Assert.NotNull(lens.Command);
+        Assert.StartsWith("= 3", lens.Command!.Title);
+        Assert.Equal("bosak.evaluateXQuery", lens.Command.Name);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ReturnsEmptyForUnsupportedDocument()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/notes.txt").ToString();
+        documents.Update(uri, "1 + 2");
+
+        var handler = new CodeLensHandler(documents);
+        var result = await handler.Handle(new CodeLensParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/notes.txt"))
         }, default);
 
         Assert.NotNull(result);
@@ -77,5 +98,24 @@ public class CodeLensHandlerTests
         var lens = Assert.Single(result!);
         Assert.NotNull(lens.Command);
         Assert.StartsWith("XPath error:", lens.Command!.Title);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ReturnsLensWithErrorForInvalidXQuery()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        documents.Update(uri, "for $x in 1 to");
+
+        var handler = new CodeLensHandler(documents);
+        var result = await handler.Handle(new CodeLensParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq"))
+        }, default);
+
+        Assert.NotNull(result);
+        var lens = Assert.Single(result!);
+        Assert.NotNull(lens.Command);
+        Assert.StartsWith("XQuery error:", lens.Command!.Title);
     }
 }

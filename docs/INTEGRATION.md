@@ -19,11 +19,11 @@
 
 ## 0. Recent Changes
 
-- **2026-08-20** — Language Server: **code lens** — `.xpath` documents now display a code lens at the top of the file that evaluates the XPath expression and shows the serialized result (or error) above the document. The lens is registered for `textDocument/codeLens`, evaluates via `XPath31Expression.Compile(text).Evaluate(ctx)`, and reports the result in the lens command title. Non-`.xpath` documents receive an empty lens container.
-  - New handler: `src/Bosak.LanguageServer/CodeLensHandler.cs`.
+- **2026-08-20** — Language Server: **code lens (XPath + XQuery)** — `.xpath`, `.xq`, `.xqy`, and `.xquery` documents now display a code lens at the top of the file that evaluates the expression and shows the serialized result (or error) above the document. The lens uses `XPath31Expression` for `.xpath` files and `XQueryCompiler` for XQuery files; the command name is `bosak.evaluateXPath` or `bosak.evaluateXQuery` respectively. Unsupported file types receive an empty lens container.
+  - Handler: `src/Bosak.LanguageServer/CodeLensHandler.cs`.
   - Registration in `src/Bosak.LanguageServer/Program.cs`.
-  - New tests in `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`.
-  - Language-server tests: **52 passed / 0 failed / 0 skipped** (+3).
+  - Tests in `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`.
+  - Language-server tests: **54 passed / 0 failed / 0 skipped** (+2).
 
 - **2026-08-20** — Language Server: **code actions** — the language server now provides quick fixes for common namespace, stylesheet, XPath, and XQuery syntax issues. For XPath documents (`.xpath`) it offers to close unclosed parentheses, square brackets, and string literals. For XQuery documents it offers to declare an undeclared namespace prefix (`declare namespace prefix = "";`), to declare a default element namespace when unprefixed element constructors are present (`declare default element namespace "";`), to remove an invalid `xmlns:prefix=""` empty namespace declaration that triggers `XQST0085`, to import a module namespace for prefixes used in function calls (`import module namespace prefix = "";`), and to close unclosed curly braces in direct element constructors. For XSLT documents it offers to declare an undeclared prefix on the root element (`xmlns:prefix=""`), to promote a bare `<stylesheet>`/`<transform>` root to `<xsl:stylesheet>`/`<xsl:transform>` with the required `xsl` namespace, to add a missing `version="3.0"` attribute, and to react to `XPST0081` diagnostics by offering a namespace declaration for the prefix named in the diagnostic. Namespace declarations for the reserved `xml` prefix use the standard XML namespace URI (`http://www.w3.org/XML/1998/namespace`). `DiagnosticsHandler` now emits a warning when the XSLT root lacks `version`. The handler implements `textDocument/codeAction` and `codeAction/resolve`; the `vscode-bosak` client uses the edits automatically.
   - New handler: `src/Bosak.LanguageServer/CodeActionHandler.cs`.

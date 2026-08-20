@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
+**Commit:** *(pending)* feat(languageserver): extend code lens to XQuery documents
+**Current focus:** **VS Code extension — code lens (XQuery)** — the code lens now supports `.xq`, `.xqy`, and `.xquery` documents in addition to `.xpath`. XQuery files are evaluated via `XQueryCompiler`, while XPath files continue to use `XPath31Expression`; the lens title prefixes errors with the detected language (`XPath error:` or `XQuery error:`), and the command name is `bosak.evaluateXPath` or `bosak.evaluateXQuery` accordingly. Unsupported file types receive an empty lens container.
+
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **54 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+
+## This Session Changes (XQuery code lens)
+
+1. **`CodeLensHandler`** (`src/Bosak.LanguageServer/CodeLensHandler.cs`) — extended to detect document language from the file extension. Added `GetDocumentLanguage` helper and `EvaluateDocument` branching between XPath (`XPath31Expression`) and XQuery (`XQueryCompiler`). Updated registration options to cover `.xpath`, `.xq`, `.xqy`, and `.xquery`.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` adds XQuery result and XQuery error tests, and the non-supported-document test now uses `.txt`.
+3. **Documentation** — `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/CodeLensHandler.cs`
+- `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`
+- `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Commit and push the XQuery code lens extension.
+2. Continue VS Code extension work (e.g., wire an execute-command handler so clicking the lens refreshes/executes the evaluation, add a code lens for XSLT that requires a source document picker, or begin the next engine topic such as XML 1.1 support in the `XDocument` provider).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-20
 **Commit:** `5af86a2` feat(languageserver): add code lens for XPath document evaluation
 **Current focus:** **VS Code extension — code lens** — `.xpath` documents now display a code lens at line 0 that evaluates the document's XPath expression and shows the serialized result or error message above the document. The handler implements `textDocument/codeLens` and `codeLens/resolve`, is registered in `Program.cs`, and is covered by three unit tests.
 

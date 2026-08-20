@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-> **Living Registry** — Last updated: 2026-08-20 (Code lens for `.xpath` documents evaluates the expression and shows the serialized result or error; language-server tests pass 52/0; unit tests pass 1,708/0; QT3 29,929/0/1,892)
+> **Living Registry** — Last updated: 2026-08-20 (Code lens extended to XQuery documents — `.xq`/`.xqy`/`.xquery` evaluate and show result/error; language-server tests pass 54/0; unit tests pass 1,708/0; QT3 29,929/0/1,892)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -1067,7 +1067,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
    - `DocumentSymbolHandler`: outline for XSLT and XQuery declarations
    - `SemanticTokensHandler`: semantic highlighting for function calls, variables, XSLT instructions, XQuery keywords, type names, namespace prefixes, numbers, and operators
    - `CodeActionHandler`: quick fixes for XPath syntax errors (unclosed parentheses, brackets, string literals), XQuery unclosed curly braces and default element namespace declaration, undeclared namespace prefixes in XQuery/XSLT (including `XPST0081` diagnostic-driven fixes), XQuery `import module namespace` for function-call prefixes, removal of invalid empty namespace declarations (`XQST0085`), promotion of bare `<stylesheet>`/`<transform>` roots to `xsl:*`, and missing `version` attribute on `xsl:stylesheet`/`xsl:transform`
-   - `CodeLensHandler`: evaluates `.xpath` documents and displays the serialized result (or error message) as a code lens at the top of the file
+   - `CodeLensHandler`: evaluates `.xpath`, `.xq`, `.xqy`, and `.xquery` documents and displays the serialized result (or error message) as a code lens at the top of the file
    - `EvaluationHandler`: custom LSP requests to evaluate XPath, run XSLT, and run XQuery
    - `DocumentManager`: in-memory store of open document contents
 2. **`vscode-bosak`** — TypeScript VS Code extension client:
@@ -1089,7 +1089,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 - [x] Document symbols show outline for XSLT and XQuery
 - [x] Semantic tokens highlight functions, variables, keywords, types, namespaces, and operators
 - [x] Code actions offer quick fixes for XPath/XQuery syntax errors (unclosed brackets, strings, curly braces), XQuery `declare default element namespace`, undeclared namespace prefixes (including XPST0081 diagnostic-driven fixes), XQuery `import module namespace`, invalid XQuery empty namespace declarations (XQST0085), missing XSLT namespace, and missing XSLT version attribute
-- [x] Code lens evaluates `.xpath` documents and shows the result or error above the document
+- [x] Code lens evaluates `.xpath`, `.xq`, `.xqy`, and `.xquery` documents and shows the result or error above the document
 - [x] Context-menu commands evaluate XPath, run XSLT, and run XQuery
 - [x] All 1,708 unit tests still pass
 
@@ -1122,6 +1122,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions for undeclared namespaces in XQuery/XSLT and missing XSLT root namespace |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Semantic tokens for XPath/XQuery/XSLT; extension version 0.1.3 |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code lens evaluates `.xpath` documents and displays the result or error at the top of the file |
+| 2026-08-20 | Charles Korthout / Kimi | Extended | Code lens extended to XQuery documents (`.xq`/`.xqy`/`.xquery`) |
 
 ---
 
