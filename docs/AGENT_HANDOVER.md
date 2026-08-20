@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** (pending) feat(languageserver): add semantic tokens for XPath/XQuery/XSLT
+**Commit:** `e649d84` feat(languageserver): add semantic tokens for XPath/XQuery/XSLT
 **Current focus:** **VS Code extension — semantic tokens** — the language server now provides semantic highlighting for XPath, XQuery, and XSLT documents. Tokens are emitted for function calls (`fn:concat`), variable references (`$var`), XSLT instructions (`xsl:*`), XQuery keywords, type names (`xs:string`), namespace prefixes, number literals, and XPath operators. The `vscode-bosak` extension is bumped to **0.1.3**. Client-side wiring is automatic because `vscode-languageclient` uses the server's advertised `textDocument/semanticTokens` capability.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **27 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
