@@ -1,6 +1,35 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
+**Commit:** `a64a14e` feat(languageserver): add code actions for namespace quick fixes in XQuery and XSLT
+**Current focus:** **VS Code extension — code actions** — the language server now provides quick fixes for common namespace issues. In XQuery it offers to declare an undeclared namespace prefix (`declare namespace prefix = "";`). In XSLT it offers to declare an undeclared prefix on the root element (`xmlns:prefix=""`) and to add the required `xsl` namespace to a root element that is missing it (`xmlns:xsl="http://www.w3.org/1999/XSL/Transform"`). The handler implements `textDocument/codeAction` plus `codeAction/resolve`, is registered in `Program.cs`, and is covered by six new unit tests.
+
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **33 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+
+## This Session Changes (code actions)
+
+1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — new handler implementing `textDocument/codeAction` and `codeAction/resolve`. Scans the selected range for prefixed names and returns quick-fix edits for missing namespace declarations; for XSLT it also offers a fix for a missing `xsl` namespace on the root element when the diagnostic mentions `xsl:stylesheet` or `xsl:transform`.
+2. **`Program.cs`** — registers `CodeActionHandler`.
+3. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds six tests covering XQuery prefix declaration, XQuery skip for already-declared prefixes, XSLT prefix declaration, XSLT skip for the `xsl` prefix, XSLT root-namespace fix from a diagnostic, and empty results for unsupported documents.
+4. **Documentation** — `README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/INTEGRATION.md` updated.
+
+## Files Changed (this session)
+
+- `src/Bosak.LanguageServer/CodeActionHandler.cs` (new)
+- `src/Bosak.LanguageServer/Program.cs`
+- `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` (new)
+- `README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Push the code actions feature.
+2. Continue VS Code extension work by expanding code actions (e.g., fixes for `XQST0085` namespace undeclaration, missing `version` attribute on `xsl:stylesheet`, or importing a missing XQuery module) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-20
 **Commit:** `e649d84` feat(languageserver): add semantic tokens for XPath/XQuery/XSLT
 **Current focus:** **VS Code extension — semantic tokens** — the language server now provides semantic highlighting for XPath, XQuery, and XSLT documents. Tokens are emitted for function calls (`fn:concat`), variable references (`$var`), XSLT instructions (`xsl:*`), XQuery keywords, type names (`xs:string`), namespace prefixes, number literals, and XPath operators. The `vscode-bosak` extension is bumped to **0.1.3**. Client-side wiring is automatic because `vscode-languageclient` uses the server's advertised `textDocument/semanticTokens` capability.
 
