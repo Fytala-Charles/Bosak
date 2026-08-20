@@ -1066,7 +1066,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
    - `DefinitionHandler`: go-to-definition for XSLT/XQuery functions, variables, templates
    - `DocumentSymbolHandler`: outline for XSLT and XQuery declarations
    - `SemanticTokensHandler`: semantic highlighting for function calls, variables, XSLT instructions, XQuery keywords, type names, namespace prefixes, numbers, and operators
-   - `CodeActionHandler`: quick fixes for undeclared namespace prefixes in XQuery/XSLT (including `XPST0081` diagnostic-driven fixes), promotion of bare `<stylesheet>`/`<transform>` roots to `xsl:*`, and missing `version` attribute on `xsl:stylesheet`/`xsl:transform`
+   - `CodeActionHandler`: quick fixes for undeclared namespace prefixes in XQuery/XSLT (including `XPST0081` diagnostic-driven fixes), removal of invalid empty namespace declarations (`XQST0085`), promotion of bare `<stylesheet>`/`<transform>` roots to `xsl:*`, and missing `version` attribute on `xsl:stylesheet`/`xsl:transform`
    - `EvaluationHandler`: custom LSP requests to evaluate XPath, run XSLT, and run XQuery
    - `DocumentManager`: in-memory store of open document contents
 2. **`vscode-bosak`** — TypeScript VS Code extension client:
@@ -1087,7 +1087,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 - [x] Go-to-definition resolves XSLT/XQuery functions and variables
 - [x] Document symbols show outline for XSLT and XQuery
 - [x] Semantic tokens highlight functions, variables, keywords, types, namespaces, and operators
-- [x] Code actions offer quick fixes for undeclared namespace prefixes (including XPST0081 diagnostic-driven fixes), missing XSLT namespace, and missing XSLT version attribute
+- [x] Code actions offer quick fixes for undeclared namespace prefixes (including XPST0081 diagnostic-driven fixes), invalid XQuery empty namespace declarations (XQST0085), missing XSLT namespace, and missing XSLT version attribute
 - [x] Context-menu commands evaluate XPath, run XSLT, and run XQuery
 - [x] All 1,708 unit tests still pass
 
@@ -1109,6 +1109,7 @@ Build a Language Server Protocol (LSP) implementation and VS Code extension:
 |------|-------|----------|-----------|
 | 2026-06-08 | Charles Korthout / Kimi | Implemented | Initial LSP server + VS Code extension |
 | 2026-08-18 | Charles Korthout / Kimi | Extended | XQuery language support, hover, go-to-definition, document symbols, evaluate/transform/run commands |
+| 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions remove invalid empty namespace declarations (`XQST0085`) in XQuery |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions react to XPST0081 diagnostics to declare the reported prefix in XSLT |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions for XSLT root `<stylesheet>`/`<transform>` rename and missing `version` attribute |
 | 2026-08-20 | Charles Korthout / Kimi | Extended | Code actions for undeclared namespaces in XQuery/XSLT and missing XSLT root namespace |

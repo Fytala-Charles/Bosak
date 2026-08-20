@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 20-08-2026     | Added test for XPST0081 diagnostic-driven namespace declaration                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 20-08-2026     | Added tests for XQST0085 remove-empty-namespace-declaration action                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -69,6 +71,74 @@ public class CodeActionHandlerTests
 
         Assert.NotNull(result);
         Assert.DoesNotContain(result!, c => c.CodeAction?.Title == "Declare namespace 'my'");
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQueryOffersRemoveInvalidEmptyNamespaceDeclaration()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "<root xmlns:p=\"\"></root>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext
+            {
+                Diagnostics = new Container<Diagnostic>(
+                    new Diagnostic
+                    {
+                        Message = "XQST0085: The prefix 'p' cannot be bound to the empty namespace name."
+                    })
+            }
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Remove invalid xmlns:p declaration");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal(string.Empty, edit.NewText);
+        Assert.Equal(0, edit.Range.Start.Line);
+        Assert.Equal(5, edit.Range.Start.Character);
+        Assert.Equal(0, edit.Range.End.Line);
+        Assert.Equal(16, edit.Range.End.Character);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XQueryOffersRemoveInvalidEmptyNamespaceDeclarationSingleQuotes()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
+        const string text = "<root xmlns:p=''></root>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext
+            {
+                Diagnostics = new Container<Diagnostic>(
+                    new Diagnostic
+                    {
+                        Message = "XQST0085: The prefix 'p' cannot be bound to the empty namespace name."
+                    })
+            }
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Remove invalid xmlns:p declaration");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal(string.Empty, edit.NewText);
+        Assert.Equal(0, edit.Range.Start.Line);
+        Assert.Equal(5, edit.Range.Start.Character);
+        Assert.Equal(0, edit.Range.End.Line);
+        Assert.Equal(16, edit.Range.End.Character);
     }
 
     [Fact]

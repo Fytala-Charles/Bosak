@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 20-08-2026     | Added XPST0081 diagnostic-driven namespace declaration action                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 20-08-2026     | Added XQST0085 remove-empty-namespace-declaration quick fix                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +36,10 @@ namespace Bosak.LanguageServer;
 
 /// <summary>
 /// Provides code actions (quick fixes) for XPath, XQuery, and XSLT documents.
-/// Currently supports declaring an undeclared namespace prefix, adding the
-/// XSLT namespace to a malformed stylesheet root, and adding the required
-/// XSLT version attribute.
+/// Currently supports declaring an undeclared namespace prefix, removing an
+/// invalid empty namespace declaration in XQuery, adding the XSLT namespace
+/// to a malformed stylesheet root, and adding the required XSLT version
+/// attribute.
 /// </summary>
 public class CodeActionHandler : CodeActionHandlerBase
 {
@@ -71,7 +74,7 @@ public class CodeActionHandler : CodeActionHandlerBase
 
         if (path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery"))
         {
-            actions.AddRange(GetXQueryCodeActions(text, range, request.TextDocument.Uri));
+            actions.AddRange(GetXQueryCodeActions(text, range, request.TextDocument.Uri, diagnostics));
         }
         else if (path.EndsWith(".xsl") || path.EndsWith(".xslt"))
         {
@@ -115,7 +118,8 @@ public class CodeActionHandler : CodeActionHandlerBase
         };
     }
 
-    private static List<CommandOrCodeAction> GetXQueryCodeActions(string text, Range range, DocumentUri uri)
+    private static List<CommandOrCodeAction> GetXQueryCodeActions(
+        string text, Range range, DocumentUri uri, List<Diagnostic> diagnostics)
     {
         var actions = new List<CommandOrCodeAction>();
         var prefixes = GetPrefixedNamesInRange(text, range);
@@ -130,6 +134,15 @@ public class CodeActionHandler : CodeActionHandlerBase
                 prefix,
                 isXQuery: true,
                 insertPosition: GetXQueryPrologInsertPosition(text)));
+        }
+
+        // XQST0085: an XML 1.0 prefixed namespace declaration cannot bind to the
+        // empty namespace URI. Offer to remove the offending xmlns:prefix="" attribute.
+        foreach (var prefix in GetInvalidNamespaceUndeclarationPrefixes(diagnostics))
+        {
+            var action = CreateRemoveEmptyNamespaceDeclarationAction(uri, text, prefix);
+            if (action != null)
+                actions.Add(action);
         }
 
         return actions;
@@ -206,6 +219,61 @@ public class CodeActionHandler : CodeActionHandlerBase
         }
 
         return prefixes;
+    }
+
+    private static HashSet<string> GetInvalidNamespaceUndeclarationPrefixes(List<Diagnostic> diagnostics)
+    {
+        var prefixes = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var diagnostic in diagnostics)
+        {
+            var match = Regex.Match(diagnostic.Message, @"XQST0085[^']*'(?<prefix>[a-zA-Z_][a-zA-Z0-9._-]*)' cannot be bound to the empty namespace name");
+            if (match.Success)
+            {
+                prefixes.Add(match.Groups["prefix"].Value);
+            }
+        }
+
+        return prefixes;
+    }
+
+    private static CommandOrCodeAction? CreateRemoveEmptyNamespaceDeclarationAction(
+        DocumentUri uri, string text, string prefix)
+    {
+        // Match the offending attribute, including the leading whitespace so that
+        // removing it does not leave double spaces inside the start tag.
+        var pattern = $"(?<=\\s)xmlns:{Regex.Escape(prefix)}=\"\"";
+        var match = Regex.Match(text, pattern);
+        if (!match.Success)
+        {
+            pattern = $"(?<=\\s)xmlns:{Regex.Escape(prefix)}=''";
+            match = Regex.Match(text, pattern);
+        }
+
+        if (!match.Success)
+            return null;
+
+        var start = PositionToLineColumn(text, match.Index - 1);
+        var end = PositionToLineColumn(text, match.Index + match.Length);
+
+        return new CommandOrCodeAction(new CodeAction
+        {
+            Title = $"Remove invalid xmlns:{prefix} declaration",
+            Kind = CodeActionKind.QuickFix,
+            Edit = new WorkspaceEdit
+            {
+                Changes = new Dictionary<DocumentUri, IEnumerable<TextEdit>>
+                {
+                    [uri] = new[]
+                    {
+                        new TextEdit
+                        {
+                            NewText = string.Empty,
+                            Range = new Range(start, end),
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private static CommandOrCodeAction CreateDeclareNamespaceAction(
