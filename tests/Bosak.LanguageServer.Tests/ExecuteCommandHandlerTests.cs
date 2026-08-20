@@ -22,7 +22,6 @@ using MediatR;
 using Newtonsoft.Json.Linq;
 using OmniSharp.Extensions.JsonRpc;
 using OmniSharp.Extensions.LanguageServer.Protocol;
-using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using Xunit;
 
@@ -31,7 +30,7 @@ namespace Bosak.LanguageServer.Tests;
 public class ExecuteCommandHandlerTests
 {
     [Fact]
-    public async System.Threading.Tasks.Task ExecuteXPathCommandSendsResultNotification()
+    public async System.Threading.Tasks.Task ExecuteXPathCommandSendsEvaluationResultNotification()
     {
         var documents = new DocumentManager();
         var uri = DocumentUri.FromFileSystemPath("C:/test/expr.xpath").ToString();
@@ -42,17 +41,18 @@ public class ExecuteCommandHandlerTests
         await handler.Handle(new ExecuteCommandParams
         {
             Command = "bosak.evaluateXPath",
-            Arguments = new Newtonsoft.Json.Linq.JArray(uri)
+            Arguments = new JArray(uri)
         }, default);
 
         Assert.Single(router.Notifications);
-        Assert.Equal("window/showMessage", router.Notifications[0].Method);
-        Assert.Equal(MessageType.Info, router.Notifications[0].Params.Type);
-        Assert.Contains("3", router.Notifications[0].Params.Message);
+        Assert.Equal("bosak/evaluationResult", router.Notifications[0].Method);
+        Assert.Equal("XPath", router.Notifications[0].Params["language"]?.Value<string>());
+        Assert.Equal("3", router.Notifications[0].Params["result"]?.Value<string>());
+        Assert.Null(router.Notifications[0].Params["error"]?.Value<string>());
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ExecuteXQueryCommandSendsResultNotification()
+    public async System.Threading.Tasks.Task ExecuteXQueryCommandSendsEvaluationResultNotification()
     {
         var documents = new DocumentManager();
         var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
@@ -63,17 +63,18 @@ public class ExecuteCommandHandlerTests
         await handler.Handle(new ExecuteCommandParams
         {
             Command = "bosak.evaluateXQuery",
-            Arguments = new Newtonsoft.Json.Linq.JArray(uri)
+            Arguments = new JArray(uri)
         }, default);
 
         Assert.Single(router.Notifications);
-        Assert.Equal("window/showMessage", router.Notifications[0].Method);
-        Assert.Equal(MessageType.Info, router.Notifications[0].Params.Type);
-        Assert.Contains("3", router.Notifications[0].Params.Message);
+        Assert.Equal("bosak/evaluationResult", router.Notifications[0].Method);
+        Assert.Equal("XQuery", router.Notifications[0].Params["language"]?.Value<string>());
+        Assert.Equal("3", router.Notifications[0].Params["result"]?.Value<string>());
+        Assert.Null(router.Notifications[0].Params["error"]?.Value<string>());
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ExecuteUnknownCommandSendsErrorNotification()
+    public async System.Threading.Tasks.Task ExecuteUnknownCommandSendsErrorEvaluationResultNotification()
     {
         var documents = new DocumentManager();
         var uri = DocumentUri.FromFileSystemPath("C:/test/expr.xpath").ToString();
@@ -84,17 +85,18 @@ public class ExecuteCommandHandlerTests
         await handler.Handle(new ExecuteCommandParams
         {
             Command = "bosak.unknown",
-            Arguments = new Newtonsoft.Json.Linq.JArray(uri)
+            Arguments = new JArray(uri)
         }, default);
 
         Assert.Single(router.Notifications);
-        Assert.Equal("window/showMessage", router.Notifications[0].Method);
-        Assert.Equal(MessageType.Error, router.Notifications[0].Params.Type);
-        Assert.Contains("Unknown command", router.Notifications[0].Params.Message);
+        Assert.Equal("bosak/evaluationResult", router.Notifications[0].Method);
+        Assert.Null(router.Notifications[0].Params["language"]?.Value<string>());
+        Assert.Null(router.Notifications[0].Params["result"]?.Value<string>());
+        Assert.Contains("Unknown command", router.Notifications[0].Params["error"]?.Value<string>());
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task ExecuteCommandWithMissingArgumentSendsErrorNotification()
+    public async System.Threading.Tasks.Task ExecuteCommandWithMissingArgumentSendsErrorEvaluationResultNotification()
     {
         var documents = new DocumentManager();
         var router = new FakeResponseRouter();
@@ -105,14 +107,15 @@ public class ExecuteCommandHandlerTests
         }, default);
 
         Assert.Single(router.Notifications);
-        Assert.Equal("window/showMessage", router.Notifications[0].Method);
-        Assert.Equal(MessageType.Error, router.Notifications[0].Params.Type);
-        Assert.Contains("document URI", router.Notifications[0].Params.Message);
+        Assert.Equal("bosak/evaluationResult", router.Notifications[0].Method);
+        Assert.Null(router.Notifications[0].Params["language"]?.Value<string>());
+        Assert.Null(router.Notifications[0].Params["result"]?.Value<string>());
+        Assert.Contains("document URI", router.Notifications[0].Params["error"]?.Value<string>());
     }
 
     private sealed class FakeResponseRouter : IResponseRouter
     {
-        public List<(string Method, ShowMessageParams Params)> Notifications { get; } = new();
+        public List<(string Method, JObject Params)> Notifications { get; } = new();
 
         public void SendNotification(string method)
         {
@@ -121,9 +124,9 @@ public class ExecuteCommandHandlerTests
 
         public void SendNotification<T>(string method, T @params)
         {
-            if (@params is ShowMessageParams showMessage)
+            if (@params is JObject jobject)
             {
-                Notifications.Add((method, showMessage));
+                Notifications.Add((method, jobject));
             }
         }
 

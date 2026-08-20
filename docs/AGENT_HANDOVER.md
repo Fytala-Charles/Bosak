@@ -1,32 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `7a50e28` feat(languageserver,vscode): wire executeCommand handler for XPath/XQuery evaluation
-**Current focus:** **VS Code extension — execute command** — the language server now implements `workspace/executeCommand` for `bosak.evaluateXPath` and `bosak.evaluateXQuery`. Code-lens clicks and command-palette actions send the command with the document URI; the server evaluates the document and reports the result or error via `window/showMessage`. The VS Code extension registers both command IDs and routes them through `workspace/executeCommand`.
+**Commit:** *(pending)* feat(languageserver,vscode): send serializable evaluation result from executeCommand
+**Current focus:** **VS Code extension — serializable execute-command result** — the `ExecuteCommandHandler` now sends a custom `bosak/evaluationResult` LSP notification containing `{ language, result, error }` instead of using `window/showMessage`. The VS Code extension listens for this notification and opens the result in a preview editor (or shows an error message). This restores the editor-preview behavior while keeping the `workspace/executeCommand` path.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **58 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
 
-## This Session Changes (execute command)
+## This Session Changes (serializable result)
 
-1. **`ExecuteCommandHandler`** (`src/Bosak.LanguageServer/ExecuteCommandHandler.cs`) — new handler implementing `workspace/executeCommand`. Accepts `bosak.evaluateXPath` and `bosak.evaluateXQuery`, evaluates via `XPath31Expression` or `XQueryCompiler`, and sends `window/showMessage` notifications through the injected `IResponseRouter`.
-2. **`Program.cs`** — registers `ExecuteCommandHandler`.
-3. **Tests** — `tests/Bosak.LanguageServer.Tests/ExecuteCommandHandlerTests.cs` adds tests for XPath/XQuery result notifications, unknown command, and missing argument.
-4. **VS Code extension** — `vscode-bosak/src/extension.ts` registers `bosak.evaluateXQuery` and routes both `bosak.evaluateXPath` and `bosak.evaluateXQuery` through `workspace/executeCommand`; `vscode-bosak/package.json` declares the new command.
-5. **Documentation** — `README.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
+1. **`ExecuteCommandHandler`** (`src/Bosak.LanguageServer/ExecuteCommandHandler.cs`) — sends `bosak/evaluationResult` with `{ language, result, error }` for all command outcomes (success, evaluation error, missing argument, unknown command, document not open).
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/ExecuteCommandHandlerTests.cs` updated to assert the `bosak/evaluationResult` payload.
+3. **VS Code extension** — `vscode-bosak/src/extension.ts` registers a notification handler for `bosak/evaluationResult` that opens a preview editor on success or shows an error message on failure.
+4. **Documentation** — `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
 
 ## Files Changed (this session)
 
-- `src/Bosak.LanguageServer/ExecuteCommandHandler.cs` (new)
-- `src/Bosak.LanguageServer/Program.cs`
-- `tests/Bosak.LanguageServer.Tests/ExecuteCommandHandlerTests.cs` (new)
+- `src/Bosak.LanguageServer/ExecuteCommandHandler.cs`
+- `tests/Bosak.LanguageServer.Tests/ExecuteCommandHandlerTests.cs`
 - `vscode-bosak/src/extension.ts`
-- `vscode-bosak/package.json`
-- `README.md`, `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
 
 ## Next Recommended Step
 
-1. Commit and push the execute command feature.
-2. Continue VS Code extension work (e.g., make the execute-command response return a serializable result so the client can open a result editor, add an XSLT code lens with source-document picker, or switch to an engine topic such as XML 1.1 support in the `XDocument` provider).
+1. Commit and push the serializable result feature.
+2. Continue VS Code extension work (e.g., add an XSLT code lens with a source-document picker, or switch to an engine topic such as XML 1.1 support in the `XDocument` provider).
 
 ---
 

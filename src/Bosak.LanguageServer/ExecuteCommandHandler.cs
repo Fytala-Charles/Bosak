@@ -23,7 +23,6 @@ using Bosak.XQuery.Api;
 using MediatR;
 using Newtonsoft.Json.Linq;
 using OmniSharp.Extensions.JsonRpc;
-using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Workspace;
@@ -58,41 +57,49 @@ public class ExecuteCommandHandler : ExecuteCommandHandlerBase
         var command = request.Command;
         var args = request.Arguments;
 
+        string? language;
+        string? result = null;
+        string? error = null;
+
         if (args is null || args.Count == 0 || args[0] is not JValue { Type: JTokenType.String } value)
         {
-            ShowMessage(MessageType.Error, "Execute command requires a document URI as the first argument.");
-            return Task.FromResult(Unit.Value);
-        }
-
-        var uri = value.Value?.ToString() ?? string.Empty;
-        if (!_documents.TryGet(uri, out var text))
-        {
-            ShowMessage(MessageType.Error, "Document is not open.");
-            return Task.FromResult(Unit.Value);
-        }
-
-        var language = command switch
-        {
-            "bosak.evaluateXPath" => "XPath",
-            "bosak.evaluateXQuery" => "XQuery",
-            _ => null
-        };
-
-        if (language is null)
-        {
-            ShowMessage(MessageType.Error, $"Unknown command: {command}");
-            return Task.FromResult(Unit.Value);
-        }
-
-        var (result, error) = language == "XPath" ? EvaluateXPath(text) : EvaluateXQuery(text);
-        if (error is null)
-        {
-            ShowMessage(MessageType.Info, $"{language} result: {Truncate(result!, 200)}");
+            language = null;
+            error = "Execute command requires a document URI as the first argument.";
         }
         else
         {
-            ShowMessage(MessageType.Error, $"{language} error: {Truncate(error, 200)}");
+            var uri = value.Value?.ToString() ?? string.Empty;
+            if (!_documents.TryGet(uri, out var text))
+            {
+                language = null;
+                error = "Document is not open.";
+            }
+            else
+            {
+                language = command switch
+                {
+                    "bosak.evaluateXPath" => "XPath",
+                    "bosak.evaluateXQuery" => "XQuery",
+                    _ => null
+                };
+
+                if (language is null)
+                {
+                    error = $"Unknown command: {command}";
+                }
+                else
+                {
+                    (result, error) = language == "XPath" ? EvaluateXPath(text) : EvaluateXQuery(text);
+                }
+            }
         }
+
+        _router.SendNotification("bosak/evaluationResult", new JObject
+        {
+            ["language"] = language,
+            ["result"] = result,
+            ["error"] = error
+        });
 
         return Task.FromResult(Unit.Value);
     }
@@ -107,11 +114,6 @@ public class ExecuteCommandHandler : ExecuteCommandHandlerBase
         {
             Commands = new Container<string>("bosak.evaluateXPath", "bosak.evaluateXQuery")
         };
-    }
-
-    private void ShowMessage(MessageType type, string message)
-    {
-        _router.SendNotification("window/showMessage", new ShowMessageParams { Type = type, Message = message });
     }
 
     private static (string? Result, string? Error) EvaluateXPath(string text)
@@ -140,12 +142,5 @@ public class ExecuteCommandHandler : ExecuteCommandHandlerBase
         {
             return (null, ex.Message);
         }
-    }
-
-    private static string Truncate(string value, int maxLength)
-    {
-        if (string.IsNullOrEmpty(value) || value.Length <= maxLength)
-            return value ?? string.Empty;
-        return value[..(maxLength - 3)] + "...";
     }
 }

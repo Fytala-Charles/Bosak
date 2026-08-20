@@ -62,6 +62,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
     client.start();
 
+    // Register notification handler for evaluation results
+    client.onNotification('bosak/evaluationResult', handleEvaluationResult);
+
     // Register commands
     context.subscriptions.push(
         vscode.commands.registerCommand('bosak.evaluateXPath', evaluateXPath),
@@ -124,6 +127,30 @@ function getServerPath(context: vscode.ExtensionContext): string | undefined {
     }
 
     return undefined;
+}
+
+interface EvaluationResult {
+    language?: string;
+    result?: string;
+    error?: string;
+}
+
+function handleEvaluationResult(payload: EvaluationResult): void {
+    if (payload.error) {
+        const label = payload.language ? `${payload.language} evaluation` : 'Evaluation';
+        vscode.window.showErrorMessage(`${label} failed: ${payload.error}`);
+        return;
+    }
+
+    if (payload.result === undefined) {
+        return;
+    }
+
+    const language = payload.language === 'XQuery' ? 'xquery' : 'text';
+    vscode.workspace.openTextDocument({
+        content: payload.result,
+        language
+    }).then(doc => vscode.window.showTextDocument(doc, { preview: true }));
 }
 
 async function evaluateXPath(): Promise<void> {
