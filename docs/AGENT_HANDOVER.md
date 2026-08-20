@@ -1,15 +1,15 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `45a5198` feat(languageserver): add import module namespace code action for XQuery function calls
-**Current focus:** **VS Code extension — code actions (module import)** — `CodeActionHandler` now offers an `import module namespace` quick fix for XQuery prefixes that are used in function calls (`my:foo()`). This is separate from the existing `declare namespace` action, which is still offered for non-call prefixed names such as variables. The import action inserts `import module namespace prefix = "";` at the prolog position.
+**Commit:** `34b370f` feat(languageserver): add XPath syntax-error quick fixes for unclosed brackets and strings
+**Current focus:** **VS Code extension — code actions (XPath syntax)** — `CodeActionHandler` now handles `.xpath` files and offers quick fixes for common unclosed-token errors: missing closing parenthesis `)`, missing closing square bracket `]`, and unclosed single-quoted/double-quoted string literals. The fixes scan the selected range, ignore content inside existing strings, and respect XPath's quote-escaping convention (`''` and `""`). Insertions are made at the end of the selected range.
 
-Expected state: **1,708 unit tests / 0 failed** in the main solution; **39 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+Expected state: **1,708 unit tests / 0 failed** in the main solution; **43 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
 
-## This Session Changes (module import code action)
+## This Session Changes (XPath syntax code actions)
 
-1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — added `GetFunctionCallPrefixesInRange` to detect prefixed names followed by `(` within the selected range. `GetXQueryCodeActions` offers `CreateImportModuleNamespaceAction` for each such prefix that is not already declared or imported. `CreateImportModuleNamespaceAction` builds an insert edit at the XQuery prolog position.
-2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XQueryOffersImportModuleNamespaceForFunctionCall` and `XQueryDoesNotOfferImportModuleForNonFunctionPrefix`.
+1. **`CodeActionHandler`** (`src/Bosak.LanguageServer/CodeActionHandler.cs`) — added a `.xpath` branch in `Handle`, a new `GetXPathCodeActions` method, and helpers `CountBracketsAndQuotes` and `CreateInsertTextAction`. The handler detects unbalanced parentheses, square brackets, and unclosed string delimiters and emits insert edits with the missing closing characters.
+2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs` adds `XPathOffersCloseParenthesis`, `XPathOffersCloseSquareBracket`, `XPathOffersCloseSingleQuote`, and `XPathDoesNotOfferActionForBalancedExpression`.
 3. **Documentation** — `docs/INTEGRATION.md` and `docs/FEATURE_REQUESTS.md` (REQ-028) updated.
 
 ## Files Changed (this session)
@@ -20,8 +20,8 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **39 langu
 
 ## Next Recommended Step
 
-1. Push the import module code action.
-2. Continue VS Code extension work by adding more code actions (e.g., correcting common XPath syntax errors, suggesting a missing `xml` namespace prefix, or adding a `declare default element namespace` fix) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
+1. Push the XPath syntax code actions.
+2. Continue VS Code extension work by adding more code actions (e.g., suggesting a missing `xml` namespace prefix, adding a `declare default element namespace` fix, or detecting unbalanced curly braces) or start the next engine topic (XML 1.1 support in the `XDocument` provider).
 
 ---
 
