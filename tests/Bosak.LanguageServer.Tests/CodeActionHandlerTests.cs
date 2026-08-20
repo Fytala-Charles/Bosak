@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 20-08-2026     | Added tests for XSLT root rename and version quick fixes                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -136,8 +138,39 @@ public class CodeActionHandlerTests
         Assert.NotNull(result);
         var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Add XSLT namespace to root element");
         Assert.NotNull(action);
-        var edit = action!.Edit!.Changes!.Single();
-        Assert.Equal(" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"", edit.Value.First().NewText);
+        var edits = action!.Edit!.Changes!.Single().Value.ToList();
+        Assert.Contains("xsl:", edits.Select(e => e.NewText));
+        Assert.Contains(" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"", edits.Select(e => e.NewText));
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XsltOffersVersionFixFromDiagnostic()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xslt").ToString();
+        const string text = "<xsl:stylesheet></xsl:stylesheet>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xslt")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext
+            {
+                Diagnostics = new Container<Diagnostic>(
+                    new Diagnostic
+                    {
+                        Message = "Missing required version attribute on xsl:stylesheet."
+                    })
+            }
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Add XSLT version 3.0 attribute");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal(" version=\"3.0\"", edit.NewText);
     }
 
     [Fact]

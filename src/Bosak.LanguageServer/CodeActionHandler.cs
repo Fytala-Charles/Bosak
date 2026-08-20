@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Fixed namespace/usings and added code action resolve handler                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT root prefix rename and missing version quick fixes                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +32,9 @@ namespace Bosak.LanguageServer;
 
 /// <summary>
 /// Provides code actions (quick fixes) for XPath, XQuery, and XSLT documents.
-/// Currently supports declaring an undeclared namespace prefix and adding the
-/// XSLT namespace to a malformed stylesheet root.
+/// Currently supports declaring an undeclared namespace prefix, adding the
+/// XSLT namespace to a malformed stylesheet root, and adding the required
+/// XSLT version attribute.
 /// </summary>
 public class CodeActionHandler : CodeActionHandlerBase
 {
@@ -155,6 +158,12 @@ public class CodeActionHandler : CodeActionHandlerBase
             actions.Add(CreateFixXsltNamespaceAction(uri, text));
         }
 
+        // Offer to add the required version attribute when the diagnostic is present.
+        if (diagnostics.Any(d => d.Message.Contains("Missing required version attribute")))
+        {
+            actions.Add(CreateFixXsltVersionAction(uri, text));
+        }
+
         return actions;
     }
 
@@ -206,9 +215,66 @@ public class CodeActionHandler : CodeActionHandlerBase
 
     private static CommandOrCodeAction CreateFixXsltNamespaceAction(DocumentUri uri, string text)
     {
-        // Try to locate the root element start tag.
-        var match = Regex.Match(text, @"<([a-zA-Z_][a-zA-Z0-9._-]*)");
-        Position position = PositionToLineColumn(text, match.Success ? match.Index + match.Length : 0);
+        var edits = new List<TextEdit>();
+
+        // Try to locate the root element start tag, optionally already prefixed.
+        var match = Regex.Match(text, @"<([a-zA-Z_][a-zA-Z0-9._-]*:)?(stylesheet|transform)\b");
+        if (match.Success)
+        {
+            var prefixGroup = match.Groups[1];
+            var localName = match.Groups[2].Value;
+            int tagNameEnd = match.Index + match.Length;
+
+            if (!prefixGroup.Success)
+            {
+                // The root is <stylesheet> or <transform> without the xsl prefix.
+                // Insert "xsl:" immediately after the opening "<".
+                edits.Add(new TextEdit
+                {
+                    NewText = "xsl:",
+                    Range = new Range(
+                        PositionToLineColumn(text, match.Index + 1),
+                        PositionToLineColumn(text, match.Index + 1))
+                });
+
+                // Rename the matching closing tag as well.
+                var close = Regex.Match(text, $"</{localName}>");
+                if (close.Success)
+                {
+                    edits.Add(new TextEdit
+                    {
+                        NewText = "xsl:",
+                        Range = new Range(
+                            PositionToLineColumn(text, close.Index + 2),
+                            PositionToLineColumn(text, close.Index + 2))
+                    });
+                }
+            }
+
+            if (!text.Contains("xmlns:xsl"))
+            {
+                edits.Add(new TextEdit
+                {
+                    NewText = " xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"",
+                    Range = new Range(
+                        PositionToLineColumn(text, tagNameEnd),
+                        PositionToLineColumn(text, tagNameEnd))
+                });
+            }
+        }
+        else
+        {
+            // Fallback: locate any root element start tag and add the namespace attribute.
+            var fallback = Regex.Match(text, @"<([a-zA-Z_][a-zA-Z0-9._-]*)");
+            int tagNameEnd = fallback.Index + fallback.Length;
+            edits.Add(new TextEdit
+            {
+                NewText = " xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"",
+                Range = new Range(
+                    PositionToLineColumn(text, tagNameEnd),
+                    PositionToLineColumn(text, tagNameEnd))
+            });
+        }
 
         return new CommandOrCodeAction(new CodeAction
         {
@@ -218,11 +284,32 @@ public class CodeActionHandler : CodeActionHandlerBase
             {
                 Changes = new Dictionary<DocumentUri, IEnumerable<TextEdit>>
                 {
+                    [uri] = edits
+                }
+            }
+        });
+    }
+
+    private static CommandOrCodeAction CreateFixXsltVersionAction(DocumentUri uri, string text)
+    {
+        // Find the root element start tag and insert version after the tag name.
+        var match = Regex.Match(text, @"<([a-zA-Z_:][a-zA-Z0-9._:-]*)\b");
+        int tagNameEnd = match.Index + match.Length;
+        var position = PositionToLineColumn(text, tagNameEnd);
+
+        return new CommandOrCodeAction(new CodeAction
+        {
+            Title = "Add XSLT version 3.0 attribute",
+            Kind = CodeActionKind.QuickFix,
+            Edit = new WorkspaceEdit
+            {
+                Changes = new Dictionary<DocumentUri, IEnumerable<TextEdit>>
+                {
                     [uri] = new[]
                     {
                         new TextEdit
                         {
-                            NewText = " xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"",
+                            NewText = " version=\"3.0\"",
                             Range = new Range(position, position),
                         }
                     }

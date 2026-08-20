@@ -19,10 +19,11 @@
 
 ## 0. Recent Changes
 
-- **2026-08-20** — Language Server: **code actions** — the language server now provides quick fixes for common namespace issues. For XQuery documents it offers to declare an undeclared namespace prefix (`declare namespace prefix = "";`). For XSLT documents it offers to declare an undeclared prefix on the root element (`xmlns:prefix=""`) and to add the `xsl` namespace to a root element missing it (`xmlns:xsl="http://www.w3.org/1999/XSL/Transform"`). The handler implements `textDocument/codeAction` and `codeAction/resolve`; the `vscode-bosak` client uses the edits automatically.
+- **2026-08-20** — Language Server: **code actions** — the language server now provides quick fixes for common namespace and stylesheet issues. For XQuery documents it offers to declare an undeclared namespace prefix (`declare namespace prefix = "";`). For XSLT documents it offers to declare an undeclared prefix on the root element (`xmlns:prefix=""`), to promote a bare `<stylesheet>`/`<transform>` root to `<xsl:stylesheet>`/`<xsl:transform>` with the required `xsl` namespace, and to add a missing `version="3.0"` attribute. `DiagnosticsHandler` now emits a warning when the XSLT root lacks `version`. The handler implements `textDocument/codeAction` and `codeAction/resolve`; the `vscode-bosak` client uses the edits automatically.
   - New handler: `src/Bosak.LanguageServer/CodeActionHandler.cs`.
+  - Updated handler: `src/Bosak.LanguageServer/DiagnosticsHandler.cs`.
   - New tests in `tests/Bosak.LanguageServer.Tests/CodeActionHandlerTests.cs`.
-  - Language-server tests: **33 passed / 0 failed / 0 skipped** (+6).
+  - Language-server tests: **34 passed / 0 failed / 0 skipped** (+1).
 
 - **2026-08-20** — Language Server: **semantic tokens** — the language server now provides semantic highlighting for XPath, XQuery, and XSLT documents. Tokens are emitted for function calls, variables, XSLT instructions (`xsl:*`), XQuery keywords, type names (`xs:*`), namespace prefixes, number literals, and XPath operators. The `vscode-bosak` extension version is bumped to **0.1.3**; no client-side wiring is required because `vscode-languageclient` uses the server's advertised `textDocument/semanticTokens` capability automatically.
   - New handler: `src/Bosak.LanguageServer/SemanticTokensHandler.cs`.

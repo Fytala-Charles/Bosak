@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 08-06-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 20-08-2026     | Added missing xsl:stylesheet version diagnostic                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -155,6 +157,12 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
             diagnostics.Add(CreateDiagnostic(
                 "Expected xsl:stylesheet or xsl:transform as the root element.",
                 0, 0, DiagnosticSeverity.Error));
+        }
+        else if (root.Attribute("version") == null)
+        {
+            diagnostics.Add(CreateDiagnostic(
+                "Missing required version attribute on xsl:stylesheet.",
+                0, 0, DiagnosticSeverity.Warning));
         }
 
         // Validate XPath expressions in select, test, match attributes
