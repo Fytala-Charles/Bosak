@@ -26,6 +26,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 20-08-2026     | Use standard XML namespace URI for xml prefix declarations                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 20-08-2026     | Added XQuery unclosed curly brace quick fix                                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -168,6 +170,17 @@ public class CodeActionHandler : CodeActionHandlerBase
                 GetXQueryPrologInsertPosition(text)));
         }
 
+        // Offer to close unclosed curly braces in XQuery direct constructors.
+        var (openBraces, closeBraces) = CountCurlyBraces(text, range);
+        if (openBraces > closeBraces)
+        {
+            actions.Add(CreateInsertTextAction(
+                uri,
+                "Close missing curly brace",
+                new string('}', openBraces - closeBraces),
+                PositionToLineColumn(text, RangeToOffset(text, range.End))));
+        }
+
         return actions;
     }
 
@@ -299,6 +312,65 @@ public class CodeActionHandler : CodeActionHandlerBase
         }
 
         return prefixes;
+    }
+
+    private static (int OpenBraces, int CloseBraces) CountCurlyBraces(string text, Range range)
+    {
+        int startOffset = RangeToOffset(text, range.Start);
+        int endOffset = RangeToOffset(text, range.End);
+        int openBraces = 0, closeBraces = 0;
+        bool inSingleQuote = false, inDoubleQuote = false;
+
+        for (int i = startOffset; i < endOffset && i < text.Length; i++)
+        {
+            char c = text[i];
+            if (inSingleQuote)
+            {
+                if (c == '\'')
+                {
+                    if (i + 1 < text.Length && text[i + 1] == '\'')
+                    {
+                        i++;
+                        continue;
+                    }
+                    inSingleQuote = false;
+                }
+                continue;
+            }
+
+            if (inDoubleQuote)
+            {
+                if (c == '\"')
+                {
+                    if (i + 1 < text.Length && text[i + 1] == '\"')
+                    {
+                        i++;
+                        continue;
+                    }
+                    inDoubleQuote = false;
+                }
+                continue;
+            }
+
+            if (c == '\'')
+            {
+                inSingleQuote = true;
+                continue;
+            }
+
+            if (c == '\"')
+            {
+                inDoubleQuote = true;
+                continue;
+            }
+
+            if (c == '{')
+                openBraces++;
+            else if (c == '}')
+                closeBraces++;
+        }
+
+        return (openBraces, closeBraces);
     }
 
     private static (int OpenParens, int CloseParens, int OpenBrackets, int CloseBrackets, bool InSingleQuote, bool InDoubleQuote)
