@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Added tests for XSLT root rename and version quick fixes                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 20-08-2026     | Added test for XPST0081 diagnostic-driven namespace declaration                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -171,6 +173,36 @@ public class CodeActionHandlerTests
         Assert.NotNull(action);
         var edit = action!.Edit!.Changes!.Single().Value.First();
         Assert.Equal(" version=\"3.0\"", edit.NewText);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task XsltOffersNamespaceDeclarationFromXpst0081Diagnostic()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xslt").ToString();
+        const string text = "<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"my:foo\"/></xsl:stylesheet>";
+        documents.Update(uri, text);
+
+        var handler = new CodeActionHandler(documents);
+        var result = await handler.Handle(new CodeActionParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xslt")),
+            Range = new Range(new Position(0, 0), new Position(0, text.Length)),
+            Context = new CodeActionContext
+            {
+                Diagnostics = new Container<Diagnostic>(
+                    new Diagnostic
+                    {
+                        Message = "match: XPST0081: Prefix 'my' is not declared."
+                    })
+            }
+        }, default);
+
+        Assert.NotNull(result);
+        var action = result!.Select(c => c.CodeAction).FirstOrDefault(a => a?.Title == "Declare namespace 'my'");
+        Assert.NotNull(action);
+        var edit = action!.Edit!.Changes!.Single().Value.First();
+        Assert.Equal(" xmlns:my=\"\"", edit.NewText);
     }
 
     [Fact]

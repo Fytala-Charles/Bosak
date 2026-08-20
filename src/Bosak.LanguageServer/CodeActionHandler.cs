@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT root prefix rename and missing version quick fixes                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 20-08-2026     | Added XPST0081 diagnostic-driven namespace declaration action                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Generic;
 using System.Linq;
@@ -138,6 +140,12 @@ public class CodeActionHandler : CodeActionHandlerBase
         var actions = new List<CommandOrCodeAction>();
         var prefixes = GetPrefixedNamesInRange(text, range);
 
+        // Also react to XPST0081 diagnostics that name an undeclared prefix.
+        foreach (var prefix in GetUndeclaredPrefixesFromDiagnostics(diagnostics))
+        {
+            prefixes.Add(prefix);
+        }
+
         foreach (var prefix in prefixes)
         {
             if (prefix == "xsl")
@@ -179,6 +187,21 @@ public class CodeActionHandler : CodeActionHandlerBase
             if (m.Index >= startOffset && m.Index < endOffset)
             {
                 prefixes.Add(m.Groups["prefix"].Value);
+            }
+        }
+
+        return prefixes;
+    }
+
+    private static HashSet<string> GetUndeclaredPrefixesFromDiagnostics(List<Diagnostic> diagnostics)
+    {
+        var prefixes = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var diagnostic in diagnostics)
+        {
+            var match = Regex.Match(diagnostic.Message, @"XPST0081[^']*'(?<prefix>[a-zA-Z_][a-zA-Z0-9._-]*)' is not declared");
+            if (match.Success)
+            {
+                prefixes.Add(match.Groups["prefix"].Value);
             }
         }
 
