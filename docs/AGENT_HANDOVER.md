@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
-**Commit:** `<pending>` — schema-aware `fn:json-to-xml` validation and kind-test fixes
+**Commit:** `f83cfb8` — schema-aware `fn:json-to-xml` validation and kind-test fixes
 **Current focus:** **`fn:json-to-xml` cluster** — `validate:=true()` is now supported and drives schema validation against the embedded W3C schema-for-JSON; `validate:=true()` + `duplicates:='retain'` raises `FOJS0005`; schema/duplicate-key failures map to `FOJS0003`. `VmEngine.ValueMatchesType` now recognizes parameterized kind tests (`document-node(...)`, `schema-element(...)`) including `document-node(schema-element(...))` and preserves original case for schema type names in `element(name, type)`. XQuery now resolves `import schema "http://www.w3.org/2005/xpath-functions"` to the embedded JSON schema. This closes the QT3 `fn-json-to-xml` residual cluster.
 
 Expected state: **1,765 unit tests / 0 failed / 0 skipped**; **`fn-json-to-xml` 86 passed / 0 failed / 8 skipped** (skips are unsupported dependencies). Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
