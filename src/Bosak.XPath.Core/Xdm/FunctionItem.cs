@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4    | 29-07-2026     | NamedFunctionItem.CapturedBaseUri for per-module static-base-uri capture           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5    | 21-08-2026     | NamedFunctionItem.CapturedNamespaces for namespace-sensitive constructor functions   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -63,6 +65,13 @@ public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, in
     /// function item resolve against it rather than the call-site base URI (xqhof16/18).
     /// </summary>
     public string? CapturedBaseUri { get; init; }
+
+    /// <summary>
+    /// The in-scope namespace bindings captured when the function item was materialized.
+    /// Constructor functions for namespace-sensitive schema types resolve lexical prefixes
+    /// using these bindings rather than the call-site bindings (CastAs-UnionType-13/14/15).
+    /// </summary>
+    public Dictionary<string, string>? CapturedNamespaces { get; init; }
 }
 
 /// <summary>

@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 20-07-2026     | Added HasNoTypedValue accessor for FOTY0012 in fn:data()                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 21-08-2026     | Added SchemaElementDeclaration, SchemaAttributeDeclaration, and IsNilled accessors          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -78,6 +80,25 @@ public interface IXdmNode
     /// validation). The namespace URI is empty for nodes without a schema type.
     /// </summary>
     (string NamespaceUri, string LocalName)? SchemaTypeAnnotation => null;
+
+    /// <summary>
+    /// Gets the name of the schema element declaration that validated this element node,
+    /// or null when the node is not schema-validated. Substitution-group members return
+    /// their own declaration name; the consumer can walk the substitution group to the head.
+    /// </summary>
+    (string NamespaceUri, string LocalName)? SchemaElementDeclaration => null;
+
+    /// <summary>
+    /// Gets the name of the schema attribute declaration that validated this attribute node,
+    /// or null when the node is not schema-validated.
+    /// </summary>
+    (string NamespaceUri, string LocalName)? SchemaAttributeDeclaration => null;
+
+    /// <summary>
+    /// Gets a value indicating whether this element node is nilled (<c>xsi:nil="true"</c>)
+    /// according to its schema element declaration.
+    /// </summary>
+    bool IsNilled => false;
 
     /// <summary>Gets the parent node, or null if this is the root.</summary>
     IXdmNode? Parent { get; }

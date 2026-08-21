@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 1.3   | 25-07-2026     | Added ConstructComputed opcode and ComputedConstructorKind for XQuery computed constructors |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 28-07-2026     | KindTestType opcode for schema-typed kind tests |
+//                      | Charles Korthout | 1.3   | 21-08-2026     | SchemaElementTest and SchemaAttributeTest opcodes                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -123,7 +124,9 @@ public enum IrOpCode : byte
     KindTest,
     NamespaceTest,
     KindTestType,
-    
+    SchemaElementTest,
+    SchemaAttributeTest,
+
     // ---- Predicates / Filtering ---------------------------------------
     Filter,
     Subscript,          // [n]

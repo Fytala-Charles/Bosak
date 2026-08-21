@@ -47,6 +47,8 @@
 //                      | Charles Korthout | 2.3   | 15-08-2026     | assert-eq unwraps singleton sequences so single-item QName sequences compare correctly |
 //                      | Charles Korthout | 2.4   | 17-08-2026     | NormalizeXml strips trailing whitespace after the last element in multi-root fragments (d1e74610) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.5   | 21-08-2026     | NormalizeXml falls back to XML 1.1 parsing; canonical serialization decodes encoded names |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -1002,44 +1004,70 @@ internal static class ResultComparer
                 const string wrapper = "__x__";
                 string wrapped = $"<{wrapper}>{xml}</{wrapper}>";
                 var doc = XDocument.Parse(wrapped, LoadOptions.PreserveWhitespace);
-                string canonical = CanonicalSerialize(doc.Root!, ignorePrefixes);
-                string startTag = $"<{wrapper}>";
-                string endTag = $"</{wrapper}>";
-                int start = canonical.IndexOf(startTag, StringComparison.Ordinal);
-                int end = canonical.LastIndexOf(endTag, StringComparison.Ordinal);
-                if (start >= 0 && end > start)
-                {
-                    string extracted = canonical.Substring(start + startTag.Length, end - start - startTag.Length);
-                    // Strip trailing whitespace that is only formatting after the last element
-                    // (e.g. a newline before ]]> in the expected CDATA). Real text content after
-                    // the final element is preserved because we only trim when the last non-space
-                    // character is the closing '>' of an element.
-                    if (!string.IsNullOrWhiteSpace(extracted))
-                    {
-                        int lastNonSpace = extracted.Length - 1;
-                        while (lastNonSpace >= 0 && char.IsWhiteSpace(extracted[lastNonSpace]))
-                            lastNonSpace--;
-                        if (lastNonSpace >= 0 && extracted[lastNonSpace] == '>')
-                            extracted = extracted.Substring(0, lastNonSpace + 1);
-                    }
-                    return extracted;
-                }
-                return canonical;
+                return ExtractWrappedCanonical(xml, doc.Root!, wrapper, ignorePrefixes);
             }
             catch
             {
-                // If wrapping also fails, try as a single element for backward compatibility.
+                // XML 1.1-only name characters (e.g. U+037F, U+017F) cannot be parsed
+                // by .NET's XML 1.0 reader. Force XML 1.1 parsing and decode the names
+                // during canonicalization.
                 try
                 {
-                    var el = XElement.Parse(xml, LoadOptions.PreserveWhitespace);
-                    return CanonicalSerialize(el, ignorePrefixes);
+                    var doc = Xml11Loader.ParseXml11(xml, LoadOptions.PreserveWhitespace);
+                    return CanonicalSerialize(doc.Root!, ignorePrefixes);
                 }
                 catch
                 {
-                    return xml;
+                    try
+                    {
+                        const string wrapper = "__x__";
+                        string wrapped = $"<{wrapper}>{xml}</{wrapper}>";
+                        var doc = Xml11Loader.ParseXml11(wrapped, LoadOptions.PreserveWhitespace);
+                        return ExtractWrappedCanonical(xml, doc.Root!, wrapper, ignorePrefixes);
+                    }
+                    catch
+                    {
+                        // If wrapping also fails, try as a single element for backward compatibility.
+                        try
+                        {
+                            var el = XElement.Parse(xml, LoadOptions.PreserveWhitespace);
+                            return CanonicalSerialize(el, ignorePrefixes);
+                        }
+                        catch
+                        {
+                            return xml;
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private static string ExtractWrappedCanonical(string originalXml, XElement wrappedRoot, string wrapper, bool ignorePrefixes)
+    {
+        string canonical = CanonicalSerialize(wrappedRoot, ignorePrefixes);
+        string startTag = $"<{wrapper}>";
+        string endTag = $"</{wrapper}>";
+        int start = canonical.IndexOf(startTag, StringComparison.Ordinal);
+        int end = canonical.LastIndexOf(endTag, StringComparison.Ordinal);
+        if (start >= 0 && end > start)
+        {
+            string extracted = canonical.Substring(start + startTag.Length, end - start - startTag.Length);
+            // Strip trailing whitespace that is only formatting after the last element
+            // (e.g. a newline before ]]> in the expected CDATA). Real text content after
+            // the final element is preserved because we only trim when the last non-space
+            // character is the closing '>' of an element.
+            if (!string.IsNullOrWhiteSpace(extracted))
+            {
+                int lastNonSpace = extracted.Length - 1;
+                while (lastNonSpace >= 0 && char.IsWhiteSpace(extracted[lastNonSpace]))
+                    lastNonSpace--;
+                if (lastNonSpace >= 0 && extracted[lastNonSpace] == '>')
+                    extracted = extracted.Substring(0, lastNonSpace + 1);
+            }
+            return extracted;
+        }
+        return canonical;
     }
 
     /// <summary>
@@ -1111,9 +1139,20 @@ internal static class ResultComparer
     }
 
     private static string CanonicalName(XName name, bool ignorePrefixes)
-        => ignorePrefixes && name.NamespaceName.Length > 0
-            ? "{" + name.NamespaceName + "}" + name.LocalName
-            : name.ToString();
+    {
+        string localName = Xml11NameCodec.DecodeName(name.LocalName);
+        if (ignorePrefixes && name.NamespaceName.Length > 0)
+            return "{" + name.NamespaceName + "}" + localName;
+
+        string original = name.ToString();
+        if (original.Contains(':'))
+        {
+            int colon = original.IndexOf(':');
+            string prefix = original.Substring(0, colon);
+            return prefix + ":" + localName;
+        }
+        return localName;
+    }
 
     private static void CanonicalSerializeAttribute(StringBuilder sb, XAttribute a, bool ignorePrefixes)
     {

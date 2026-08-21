@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.16  | 18-08-2026     | XQDY0092 for invalid xml:space in computed attributes (K2-ComputeConAttr-60)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.17  | 21-08-2026     | Encode XML 1.1-only name characters in constructed element/attribute names              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -102,12 +104,20 @@ public static class XDocumentProvider
             throw new InvalidOperationException("XQDY0096: A computed element name must not bind a non-'xml' prefix to the XML namespace URI.");
 
         XNamespace ns = spec.NamespaceUri is null ? XNamespace.None : XNamespace.Get(spec.NamespaceUri);
-        var element = new XElement(ns + spec.LocalName);
+        // XML 1.1 allows name characters that .NET's XML 1.0 name checker rejects.
+        // Encode them so the element can be stored in an XName; XDocumentNode decodes
+        // them back when reporting LocalName/Prefix and when serializing.
+        string encodedLocalName = Xml11NameCodec.EncodeName(spec.LocalName);
+        var element = new XElement(ns + encodedLocalName);
 
         // The constructed element's base URI is the static base URI of the query
         // (honored by XDocumentNode.ResolveXmlBase through the string annotation).
         if (!string.IsNullOrEmpty(spec.BaseUri))
             element.AddAnnotation(spec.BaseUri);
+
+        // Mark XML 1.1 constructed trees so the adapter knows to decode encoded names.
+        if (spec.Xml11Mode)
+            element.AddAnnotation(Xml11Annotation.Instance);
 
         // Declare prefixes so serialization uses the source prefixes rather than generated ones.
         // Explicit xmlns declarations in the constructor always win over generated ones.
@@ -274,7 +284,8 @@ public static class XDocumentProvider
                 else
                     actualPrefix = Declare(attr.Prefix, attr.NamespaceUri, impliedByAttributeName: true);
                 XNamespace ans = attr.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attr.NamespaceUri);
-                var newAttr = new XAttribute(ans + attr.LocalName, attr.Value);
+                string encodedAttrLocalName = Xml11NameCodec.EncodeName(attr.LocalName);
+                var newAttr = new XAttribute(ans + encodedAttrLocalName, attr.Value);
                 if (!string.IsNullOrEmpty(actualPrefix))
                     newAttr.AddAnnotation(new AttributePrefixAnnotation(actualPrefix));
                 element.Add(newAttr);
@@ -456,7 +467,8 @@ public static class XDocumentProvider
             attribute.Value != "default" && attribute.Value != "preserve")
             throw new InvalidOperationException("XQDY0092: The value of xml:space must be 'default' or 'preserve'.");
         XNamespace ns = attribute.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attribute.NamespaceUri);
-        var xattr = new XAttribute(ns + attribute.LocalName, attribute.Value);
+        string encodedAttrLocalName = Xml11NameCodec.EncodeName(attribute.LocalName);
+        var xattr = new XAttribute(ns + encodedAttrLocalName, attribute.Value);
         // LINQ attributes cannot carry a prefix; record it as an annotation so the
         // free-standing attribute still reports its constructed prefix.
         if (!string.IsNullOrEmpty(attribute.Prefix))

@@ -39,6 +39,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.3   | 18-08-2026     | Main-module function bodies use the main module's static default element namespace (extvardeclwithtype-23) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.4   | 21-08-2026     | Apply prolog namespace bindings to the runtime evaluation context (schema-import prefixes) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -330,7 +332,7 @@ public sealed class XQueryExecutable
         foreach (var (prefix, nsUri) in _staticContext.Namespaces)
         {
             if (!string.IsNullOrEmpty(prefix))
-                ctx.WithNamespace(prefix, nsUri);
+                ctx = ctx.WithNamespace(prefix, nsUri);
         }
 
         // Namespace undeclarations (declare namespace p = "") must also unbind the

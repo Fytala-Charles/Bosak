@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 19-08-2026     | User-defined schema type constructor, cast, instance-of, and timezone preservation tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 21-08-2026     | Schema-element and schema-attribute kind-test matching tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -183,9 +185,10 @@ public class SchemaTypedValueTests
         FunctionLibrary.Populate(ctx);
 
         var result = XPath31Expression.Compile("ex:age(21)").Evaluate(ctx);
-        // The constructor validates against the integer-derived schema type; the XDM kind
-        // stays Decimal until full integer-subtype preservation is implemented.
-        Assert.Equal(21m, result.DecimalValue);
+        // The constructor validates against the integer-derived schema type and preserves
+        // the integer XDM kind.
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(21L, result.IntegerValue);
     }
 
     [Fact]
@@ -209,9 +212,10 @@ public class SchemaTypedValueTests
         FunctionLibrary.Populate(ctx);
 
         var result = XPath31Expression.Compile("21 cast as ex:age").Evaluate(ctx);
-        // The cast validates against the integer-derived schema type; the XDM kind stays
-        // Decimal until full integer-subtype preservation is implemented.
-        Assert.Equal(21m, result.DecimalValue);
+        // The cast validates against the integer-derived schema type and preserves the
+        // integer XDM kind.
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(21L, result.IntegerValue);
     }
 
     [Fact]
@@ -280,6 +284,84 @@ public class SchemaTypedValueTests
         var result = XPath31Expression.Compile("xs:date('2003-02-02') cast as ex:date2003").Evaluate(ctx);
         Assert.Equal(XdmValueKind.Date, result.Kind);
         Assert.Equal("2003-02-02", result.ToString());
+    }
+
+    [Fact]
+    public void SchemaElementKindTest_MatchesElementDeclaration()
+    {
+        var (doc, ctx) = LoadValidatedNilledDocument();
+        var head = FindElement(doc, "schema-element-head");
+        Assert.True(VmEngine.ValueMatchesType(head, "schema-element(tc:schema-element-head)", ctx));
+    }
+
+    [Fact]
+    public void SchemaElementKindTest_NilledSubstitutionGroupMemberMatchesHead()
+    {
+        var (doc, ctx) = LoadValidatedNilledDocument();
+        var nilled = FindElement(doc, "schema-element-group-nillable", isNilled: true);
+        Assert.True(VmEngine.ValueMatchesType(nilled, "schema-element(tc:schema-element-head)", ctx));
+    }
+
+    [Fact]
+    public void SchemaAttributeKindTest_MatchesAttributeDeclaration()
+    {
+        var (doc, ctx) = LoadValidatedNilledDocument();
+        var elem = FindElement(doc, "schema-attribute");
+        XdmValue attr = default;
+        foreach (var item in elem.NodeValue!.Axis(XdmAxis.Attribute))
+        {
+            if (item.NodeValue?.LocalName == "x")
+            {
+                attr = item;
+                break;
+            }
+        }
+        Assert.NotEqual(default(XdmValue), attr);
+        Assert.True(VmEngine.ValueMatchesType(attr, "schema-attribute(tc:x)", ctx));
+    }
+
+    [Fact]
+    public void SchemaElementKindTest_WrongElementDoesNotMatch()
+    {
+        var (doc, ctx) = LoadValidatedNilledDocument();
+        var elem = FindElement(doc, "schema-element-nillable-head");
+        Assert.False(VmEngine.ValueMatchesType(elem, "schema-element(tc:schema-element-head)", ctx));
+    }
+
+    private static (IXdmNode Doc, EvaluationContext Ctx) LoadValidatedNilledDocument()
+    {
+        var schemaSet = new XmlSchemaSet();
+        string schemaPath = Path.GetFullPath("../../../../qt3tests/fn/nilled/validate.xsd");
+        string docPath = Path.GetFullPath("../../../../qt3tests/fn/nilled/validate.xml");
+        using (var stream = File.OpenRead(schemaPath))
+        using (var reader = XmlReader.Create(stream))
+        {
+            schemaSet.Add(XmlSchema.Read(reader, null)!);
+        }
+        schemaSet.Compile();
+
+        var doc = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+        var ctx = new EvaluationContext();
+        ctx.SchemaSet = schemaSet;
+        ctx = ctx.WithNamespace("tc", "http://www.w3.org/XQueryTest/testcases");
+        FunctionLibrary.Populate(ctx);
+        return (doc, ctx);
+    }
+
+    private static XdmValue FindElement(IXdmNode doc, string localName, bool isNilled = false)
+    {
+        foreach (var item in doc.Axis(XdmAxis.Descendant))
+        {
+            var node = item.NodeValue;
+            if (node is null || node.NodeKind != XdmNodeKind.Element)
+                continue;
+            if (node.LocalName != localName)
+                continue;
+            if (node.IsNilled != isNilled)
+                continue;
+            return item;
+        }
+        throw new InvalidOperationException($"Element {localName} (nilled={isNilled}) not found.");
     }
 
     private static XmlSchemaSet LoadInlineSchema(string schemaXml)

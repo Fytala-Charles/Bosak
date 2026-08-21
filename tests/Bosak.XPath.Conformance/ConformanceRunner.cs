@@ -115,6 +115,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.33  | 18-08-2026     | KnownXQueryGaps: XML 1.1 prefixed namespace undeclaration (XQST0085b, K2-Serialization-20/21) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.34  | 21-08-2026     | Drop cbcl-schema-element/attribute-* after implementing schema kind tests                  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.35  | 21-08-2026     | Drop XML 1.1-only name-character gaps after implementing encode/decode construction        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -164,26 +168,9 @@ internal sealed class ConformanceRunner
         // fn/unparsed-text.xml (1 test)
         ["fn-unparsed-text-054a"] = "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap",
         // prod/CompNamespaceConstructor.xml / ser/method-xml.xml / misc/CombinedErrorCodes.xml
-        // misc/XMLEdition.xml: XML 1.1-only name characters (U+037F, U+017F) cannot be held by
-        // .NET's XDocument without encode/decode plumbing, and the harness's assert-xml
-        // comparison re-parses serialized output with XDocument.Parse which rejects them.
-        ["XML10-4ed-Excluded-char-1-new"] = "XML 1.1-only name characters are not supported by the .NET XDocument provider",
-        ["XML11-1ed-Included-char-1-new"] = "XML 1.1-only name characters are not supported by the .NET XDocument provider",
+        // misc/XMLEdition.xml (0 tests)
         // prod/DirElemContent.xml (0 tests)
         // prod/NameTest.xml (0 tests)
-        // prod/SchemaImport.xml: schema-element() / schema-attribute() kind tests are not yet
-        // implemented in the XDocument-backed schema-aware pipeline.
-        ["cbcl-schema-element-1"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-2"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-3"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-4"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-5"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-6"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-7"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-8"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-element-9"] = "schema-element() kind test not supported by the XDocument provider",
-        ["cbcl-schema-attribute-1"] = "schema-attribute() kind test not supported by the XDocument provider",
-        ["cbcl-schema-attribute-2"] = "schema-attribute() kind test not supported by the XDocument provider",
     };
 
     public ConformanceRunner(string suitePath, string? setFilter = null, string? testFilter = null)

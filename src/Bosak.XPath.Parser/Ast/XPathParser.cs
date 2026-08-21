@@ -101,6 +101,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.47  | 18-08-2026     | Normalize line endings before XML attribute-value whitespace normalization (K2-DirectConElemAttr-75) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.48  | 21-08-2026     | Preserve Q{uri}local EQName form for user-defined sequence types in ParseTypeNameAndParens |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -3502,16 +3504,23 @@ public sealed class XPathParser
 
         // If the input was a braced URI literal (e.g. Q{http://www.w3.org/2001/XMLSchema}double),
         // restore the conventional prefix so that downstream sequence-type processing can
-        // recognise standard type families (xs:*, map:*, array:*).
-        if (string.IsNullOrEmpty(prefix) && !string.IsNullOrEmpty(nsUri))
+        // recognise standard type families (xs:*, map:*, array:*). For other namespaces
+        // (including the empty namespace Q{}local), preserve the EQName lexical form so that
+        // the namespace is not lost when the type string is reconstructed from (prefix,local).
+        if (string.IsNullOrEmpty(prefix) && nsUri is not null)
         {
             prefix = nsUri switch
             {
                 "http://www.w3.org/2001/XMLSchema" => "xs",
                 "http://www.w3.org/2005/xpath-functions/map" => "map",
                 "http://www.w3.org/2005/xpath-functions/array" => "array",
-                _ => prefix
+                _ => null
             };
+
+            if (prefix is null)
+            {
+                local = $"Q{{{nsUri}}}{local}";
+            }
         }
 
         // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), element(foo), etc.

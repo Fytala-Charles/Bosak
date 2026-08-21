@@ -73,6 +73,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 15-08-2026     | Revert unverified FirstStepRequiresContext helper; keep simple StepNode context check |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.32  | 21-08-2026     | Emit SchemaElementTest/SchemaAttributeTest for schema-aware kind tests                   |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.32  | 18-08-2026     | Reject let clauses between group by and order by (unsupported ordering)                |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.33  | 18-08-2026     | Arrow partial application: support placeholder arguments in => static calls (ArrowPostfix-108) |
@@ -1236,74 +1238,90 @@ public sealed class IrLowerer
             }
             else if (node.NodeTest.Kind == NameTestKind.KindTest)
             {
-                namePoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "node");
-                Emit(IrOpCode.KindTest, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
-                FreeRegister(axisReg);
-                axisReg = afterTestReg;
-
-                // If the kind test has an argument (e.g. processing-instruction('name')),
-                // emit a NameTest to filter by that name.
-                if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument))
+                // Schema-aware kind tests are handled by dedicated opcodes that consult the
+                // compiled schema set at runtime (substitution groups, nillability, and
+                // type derivation).
+                if (node.NodeTest.Name is "schema-element" or "schema-attribute")
                 {
-                    var kindArg = node.NodeTest.KindTestArgument;
-                    if (kindArg.StartsWith("Q{", StringComparison.Ordinal))
-                    {
-                        // Q{uri}local argument: check the literal namespace URI first,
-                        // then the local name via the NameTest below.
-                        var closeBrace = kindArg.IndexOf('}');
-                        if (closeBrace > 2)
-                        {
-                            int qNsPoolIdx = AddToLiteralPool(kindArg[2..closeBrace]);
-                            int qNsTestReg = AllocRegister();
-                            Emit(IrOpCode.NamespaceTest, (ushort)qNsTestReg, (ushort)axisReg, operand: qNsPoolIdx);
-                            FreeRegister(axisReg);
-                            axisReg = qNsTestReg;
-                            kindArg = "*:" + kindArg[(closeBrace + 1)..];
-                        }
-                    }
-                    else
-                    {
-                        // A prefixed name-test argument (prefix:local or prefix:*) also gets its
-                        // namespace checked (raising XPST0081 for an unbound prefix, K2-NameTest-66/72).
-                        int argColon = kindArg.IndexOf(':');
-                        if (argColon > 0)
-                        {
-                            int argNsPoolIdx = AddToLiteralPool(kindArg[..argColon]);
-                            int nsTestReg = AllocRegister();
-                            Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
-                            FreeRegister(axisReg);
-                            axisReg = nsTestReg;
-                        }
-                        else if (kindArg != "*" && node.NodeTest.Name == "element")
-                        {
-                            // An unprefixed element() argument uses the default element
-                            // namespace (empty prefix), like unprefixed path name tests
-                            // (json-to-xml-escape-001: element(string) must not match a
-                            // namespaced element).
-                            int argNsPoolIdx = AddToLiteralPool("");
-                            int nsTestReg = AllocRegister();
-                            Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
-                            FreeRegister(axisReg);
-                            axisReg = nsTestReg;
-                        }
-                    }
-                    int argPoolIdx = AddToLiteralPool(kindArg);
-                    afterTestReg = AllocRegister();
-                    Emit(IrOpCode.NameTest, (ushort)afterTestReg, (ushort)axisReg, operand: argPoolIdx);
+                    var opcode = node.NodeTest.Name == "schema-element"
+                        ? IrOpCode.SchemaElementTest
+                        : IrOpCode.SchemaAttributeTest;
+                    namePoolIdx = AddToLiteralPool(node.NodeTest.KindTestArgument ?? "");
+                    Emit(opcode, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
                     FreeRegister(axisReg);
                     axisReg = afterTestReg;
                 }
-
-                // If the kind test carries a schema type name (element(foo, xs:integer)),
-                // emit a KindTestType filter (validates the type name and checks type
-                // compatibility: unknown type names raise XPST0008 at evaluation time).
-                if (!string.IsNullOrEmpty(node.NodeTest.KindTestTypeName))
+                else
                 {
-                    int typePoolIdx = AddToLiteralPool(node.NodeTest.KindTestTypeName);
-                    afterTestReg = AllocRegister();
-                    Emit(IrOpCode.KindTestType, (ushort)afterTestReg, (ushort)axisReg, operand: typePoolIdx);
+                    namePoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "node");
+                    Emit(IrOpCode.KindTest, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
                     FreeRegister(axisReg);
                     axisReg = afterTestReg;
+
+                    // If the kind test has an argument (e.g. processing-instruction('name')),
+                    // emit a NameTest to filter by that name.
+                    if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument))
+                    {
+                        var kindArg = node.NodeTest.KindTestArgument;
+                        if (kindArg.StartsWith("Q{", StringComparison.Ordinal))
+                        {
+                            // Q{uri}local argument: check the literal namespace URI first,
+                            // then the local name via the NameTest below.
+                            var closeBrace = kindArg.IndexOf('}');
+                            if (closeBrace > 2)
+                            {
+                                int qNsPoolIdx = AddToLiteralPool(kindArg[2..closeBrace]);
+                                int qNsTestReg = AllocRegister();
+                                Emit(IrOpCode.NamespaceTest, (ushort)qNsTestReg, (ushort)axisReg, operand: qNsPoolIdx);
+                                FreeRegister(axisReg);
+                                axisReg = qNsTestReg;
+                                kindArg = "*:" + kindArg[(closeBrace + 1)..];
+                            }
+                        }
+                        else
+                        {
+                            // A prefixed name-test argument (prefix:local or prefix:*) also gets its
+                            // namespace checked (raising XPST0081 for an unbound prefix, K2-NameTest-66/72).
+                            int argColon = kindArg.IndexOf(':');
+                            if (argColon > 0)
+                            {
+                                int argNsPoolIdx = AddToLiteralPool(kindArg[..argColon]);
+                                int nsTestReg = AllocRegister();
+                                Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
+                                FreeRegister(axisReg);
+                                axisReg = nsTestReg;
+                            }
+                            else if (kindArg != "*" && node.NodeTest.Name == "element")
+                            {
+                                // An unprefixed element() argument uses the default element
+                                // namespace (empty prefix), like unprefixed path name tests
+                                // (json-to-xml-escape-001: element(string) must not match a
+                                // namespaced element).
+                                int argNsPoolIdx = AddToLiteralPool("");
+                                int nsTestReg = AllocRegister();
+                                Emit(IrOpCode.NamespaceTest, (ushort)nsTestReg, (ushort)axisReg, operand: argNsPoolIdx);
+                                FreeRegister(axisReg);
+                                axisReg = nsTestReg;
+                            }
+                        }
+                        int argPoolIdx = AddToLiteralPool(kindArg);
+                        afterTestReg = AllocRegister();
+                        Emit(IrOpCode.NameTest, (ushort)afterTestReg, (ushort)axisReg, operand: argPoolIdx);
+                        FreeRegister(axisReg);
+                        axisReg = afterTestReg;
+                    }
+
+                    // If the kind test carries a schema type name (element(foo, xs:integer)),
+                    // emit a KindTestType filter (validates the type name and checks type
+                    // compatibility: unknown type names raise XPST0008 at evaluation time).
+                    if (!string.IsNullOrEmpty(node.NodeTest.KindTestTypeName))
+                    {
+                        int typePoolIdx = AddToLiteralPool(node.NodeTest.KindTestTypeName);
+                        afterTestReg = AllocRegister();
+                        Emit(IrOpCode.KindTestType, (ushort)afterTestReg, (ushort)axisReg, operand: typePoolIdx);
+                        FreeRegister(axisReg);
+                        axisReg = afterTestReg;
+                    }
                 }
             }
 

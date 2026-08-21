@@ -44,6 +44,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.92  | 19-08-2026     | Register schema simple-type constructor functions for user-defined types (qischema030) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.93  | 21-08-2026     | Declare ParameterTypeNames/ReturnTypeName for built-in list constructors (IDREFS/NMTOKENS/ENTITIES) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -167,13 +169,15 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | FunctionLibrary.Populate sets default CollationComparer for XPath value comparisons     |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 5.54  | 19-07-2026     | fn:compare now validates arguments with RequireString (XPTY0004 for non-string atomics) |
+//                      | Charles Korthout | 5.55  | 19-07-2026     | fn:compare now validates arguments with RequireString (XPTY0004 for non-string atomics) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.55  | 19-07-2026     | fn:iri-to-uri now validates argument with RequireString (XPTY0004 for non-string/many items) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.56  | 19-07-2026     | fn:substring-before/after resolve relative collation URIs against EvaluationContext.BaseUri |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.57  | 19-07-2026     | fn:doc/fn:doc-available now validate URI argument with RequireString (XPTY0004)          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.58  | 21-08-2026     | fn:function-lookup captures in-scope namespace bindings for dynamic constructor calls   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
@@ -2588,19 +2592,28 @@ public static class FunctionLibrary
             [(Namespaces.Xs, "IDREFS", 1)] = new()
             {
                 NamespaceUri = Namespaces.Xs, LocalName = "IDREFS", Arity = 1,
-                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ParameterTypeNames = ["xs:anyAtomicType?"],
+                ReturnType = XdmValueKind.Sequence,
+                ReturnTypeName = "xs:IDREF*",
                 Implementation = XsIDREFS
             },
             [(Namespaces.Xs, "NMTOKENS", 1)] = new()
             {
                 NamespaceUri = Namespaces.Xs, LocalName = "NMTOKENS", Arity = 1,
-                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ParameterTypeNames = ["xs:anyAtomicType?"],
+                ReturnType = XdmValueKind.Sequence,
+                ReturnTypeName = "xs:NMTOKEN*",
                 Implementation = XsNMTOKENS
             },
             [(Namespaces.Xs, "ENTITIES", 1)] = new()
             {
                 NamespaceUri = Namespaces.Xs, LocalName = "ENTITIES", Arity = 1,
-                ParameterTypes = [XdmValueKind.Undefined], ReturnType = XdmValueKind.Sequence,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ParameterTypeNames = ["xs:anyAtomicType?"],
+                ReturnType = XdmValueKind.Sequence,
+                ReturnTypeName = "xs:ENTITY*",
                 Implementation = XsENTITIES
             },
             // ----- math:* functions -------------------------------------------
@@ -6126,7 +6139,8 @@ public static class FunctionLibrary
                 CapturedContextItem = ctx.ContextItem,
                 CapturedContextPosition = ctx.ContextPosition,
                 CapturedContextSize = ctx.ContextSize,
-                CapturedBaseUri = ctx.BaseUri
+                CapturedBaseUri = ctx.BaseUri,
+                CapturedNamespaces = ctx.SnapshotNamespaces()
             });
         return XdmValue.Undefined;
     }

@@ -1,5 +1,91 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-08-21
+**Commit:** uncommitted (base: 7bdafbc) — schema-aware XSD list/union simple types, residual namespace-context and restriction-of-union fixes
+**Current focus:** **Schema-aware XSD list/union simple types** — residual `prod-CastExpr.schema` failures `CastAs-UnionType-13/14/15` (namespace context for dynamic constructor calls) and `CastAs-UnionType-17` (restriction-of-union SequenceType raises `XPST0051`) are now fixed. Remaining failures are the pre-existing QName/NOTATION/timezone cluster.
+
+Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; QT3 `prod-CastExpr.schema` at **117 passed / 12 failed / 1 skipped**; `prod-CastableExpr UnionType` at **29/0**; `prod-CastableExpr ListType` at **18/0**. A full QT3 sweep is still pending to update the overall baseline.
+
+## This Session Changes (schema-aware list/union residual fixes)
+
+1. **Dynamic constructor namespace context** (`src/Bosak.XPath.Core/Xdm/FunctionItem.cs`, `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`, `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - `NamedFunctionItem` now carries `CapturedNamespaces`: the in-scope namespace bindings from where the function item was materialized.
+   - `FunctionLookup`, `ResolveNamedFunctionTuple`, and `ResolveNamedFunctionItem` populate `CapturedNamespaces` via `EvaluationContext.SnapshotNamespaces()`.
+   - `InvokeFunctionItemCore` restores the captured namespace bindings for the duration of a `NamedFunctionItem` dynamic call. Constructor functions for namespace-sensitive schema types therefore resolve lexical prefixes using the static definition context, not the call-site context (`CastAs-UnionType-13/14/15`).
+   - Headers bumped to 0.5, 5.58, and 2.108 respectively.
+
+2. **Restriction-of-union/list SequenceType rejection** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Added `IsRestrictionOfUnionOrList` helper.
+   - `ItemInstanceOf` now raises `XPST0051` when a SequenceType item type is a user-defined simple type derived by restriction from a union or list type (`CastAs-UnionType-17`).
+
+3. **Documentation** — Updated `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`, and `docs/AGENT_HANDOVER.md`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/FunctionItem.cs`
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. The list/union cluster is now substantially closed. Remaining `prod-CastExpr.schema` failures (12) are the pre-existing QName/NOTATION/timezone cluster (`qname-cast-3/4`, `notation-cast-3`, `casthcds12/30/31/32/33/42`, `user-defined-8/9/11`). Decide whether to tackle that cluster next or move to another residual cluster (e.g., `fn:idref`, `fn:nilled`, decimal `orderBy` normalization, windowing date/time arithmetic).
+2. Run a fresh full QT3 sweep to confirm the new baseline and update `KnownXQueryGaps` if needed.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-21
+**Commit:** uncommitted (base: 7bdafbc) — schema-aware XSD list/union simple types
+**Current focus:** **Schema-aware XSD list/union simple types** — `VmEngine.TryCastToSchemaType` now recursively handles unions, lists, and restrictions of those varieties; sequence-type subtyping is schema-aware for user-defined atomic/list/union return types; typed `xs:QName` values are preserved when cast through namespace-sensitive unions. This closes the bulk of the QT3 `prod-CastExpr.schema` list/union cluster.
+
+Expected state: **1,759 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; QT3 `prod-CastExpr.schema` at **110 passed / 19 failed / 1 skipped**; `prod-CastableExpr UnionType` at **29/0**; `prod-CastableExpr ListType` at **18/0**. A full QT3 sweep is running to update the overall baseline.
+
+## This Session Changes (schema-aware list/union casts)
+
+1. **Runtime schema cast recursion** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Added `SchemaTypeVariety`, `GetSchemaTypeVariety`, `GetUnionBaseType`, `GetListBaseType`, `GetUnionMemberTypes`, `GetListItemType`, `IsIntegerTypeName`, `IsNamespaceSensitiveTypeName`, `ValidateSchemaAtomicValue`, `ValidateSchemaListValue`, `CreateNamespaceResolver`, and `TryCastToSchemaType` to recursively cast to unions, lists, and atomic restrictions using XPath cast semantics.
+   - `TryCast` routes user-defined simple types through `TryCastToSchemaType`.
+   - `ValueMatchesType` accepts user-defined list/union types by delegating to `TryCastToSchemaType`.
+   - Sequence-type subtyping (`IsSequenceTypeSubtype`/`IsBaseTypeSubtype`) now consults the schema set so function coercion works for union/list return types (`CastAs-UnionType-18/26/32`, `CastAs-ListType-26/27/32`).
+   - Typed `xs:QName` values are preserved when cast through `sensitiveUnion` and related union types (`CastAs-UnionType-20/25`).
+   - Header change-history bumped to 2.107.
+
+2. **Providers/PSVI** (`src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`) —
+   - `GetTypedValue` now selects the actual union member type from `IXmlSchemaInfo.MemberType` so schema-validated union element values keep the correct XDM kind.
+
+3. **Regression tests** (`tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`) —
+   - Added tests covering union cast member selection, list tokenization, list-of-unions, `instance of` for union/list types, schema-validated union element typed values, QName-to-union casts, and function coercion for union/list constructor functions.
+   - Header change-history bumped to 0.4.
+
+4. **Documentation** — Updated `docs/FEATURE_REQUESTS.md` (REQ-070), `docs/INTEGRATION.md`, and `docs/AGENT_HANDOVER.md`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`
+- `tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. Address the remaining `prod-CastExpr.schema` failures (19). The open issues are concentrated in:
+   - Pre-existing QName/NOTATION/timezone failures (`qname-cast-3/4`, `notation-cast-3`, `casthcds12/30/31/32/33/42`, `user-defined-8/9/11`) — these are separate clusters, not list/union specific.
+   - Namespace-context dynamic casts (`CastAs-UnionType-13/14/15`) — constructors currently use the dynamic evaluation context instead of the static definition context for resolving lexical prefixes.
+   - `instance of` restrictions of union types (`CastAs-UnionType-17`) — should raise `XPST0051` statically; parser/compiler change.
+   - `unionOfLists` with QName-prefix tokens (`CastAs-UnionType-28/29/30`) — prefix resolution inside list-of-union tokenization.
+   - Pre-existing non-union/list failures (`qname-cast-3/4`, `notation-cast-3`, `casthcds12/30/31/32/33/42`, `user-defined-8/9/11`).
+2. Run a fresh full QT3 sweep to confirm the new baseline and update `KnownXQueryGaps` if needed.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-08-20
 **Commit:** 173cfda docs: add XSLT code lens backlog feature requests and handover sync
 **Current focus:** **QT3 skipped clusters** — ready to pick up the next tier of skipped W3C QT3 tests after VS Code restart. Before restart, the XSLT code lens backlog was captured as living feature requests (REQ-071, REQ-072, REQ-073) and the handover documentation was synchronized.
