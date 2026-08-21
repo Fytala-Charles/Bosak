@@ -1,6 +1,50 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Commit:** `cb9bbb4` — schema-aware QName/NOTATION cast cluster fixes
+**Current focus:** **Schema-aware QName/NOTATION casts** — the residual `prod-CastExpr.schema` QName/NOTATION cluster (`qname-cast-3/4`, `notation-cast-3`, `user-defined-8/9/11`) is now fixed. Mixed-case schema prefixes no longer trigger spurious `XPST0081`; user-defined `xs:NOTATION` restrictions can be constructed and cast from lexical forms; and `XQST0034` conflicts between user-declared functions and schema simple-type constructor functions are detected at runtime registration. `CastAs-UnionType-20` is also restored by rejecting `xs:QName` values when casting to `xs:string`-derived subtypes such as `xs:NCName`, so union types correctly prefer the `xs:QName` member.
+
+Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; QT3 `prod-CastExpr.schema` at **123 passed / 6 failed / 1 skipped**; `prod-CastableExpr UnionType` at **29/0**; `prod-CastableExpr ListType` at **18/0**. The remaining six `prod-CastExpr.schema` failures are pre-existing timezone/float-formatting issues (`casthcds12/30/31/32/33/42`). A fresh full QT3 sweep is running to update the overall baseline.
+
+## This Session Changes (schema-aware QName/NOTATION cast fixes)
+
+1. **Prefix-case handling in `TryCast`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Type-name prefix resolution now uses the original-case prefix from `typeName` instead of the lowercased `normalized` string. Mixed-case schema prefixes such as `myType` no longer raise `XPST0081` when resolving `myType:QNameBased` or `myType:sizeType` (`qname-cast-3/4`, `user-defined-8/9`).
+   - Header bumped to 2.109.
+
+2. **Namespace-sensitive user-defined type casts** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - `TryCastToSchemaType` now parses `xs:QName`- and `xs:NOTATION`-derived user-defined types directly via the schema datatype, bypassing the abstract built-in `xs:NOTATION` cast path.
+   - String inputs are validated against the user-defined facets and converted to `XsQName`, preserving the original lexical prefix when it resolves to the value's namespace URI (`notation-cast-3`).
+   - Typed `xs:QName`/`xs:NOTATION` values continue to be validated against user-defined facets and returned unchanged.
+
+3. **Reject QName-to-string-subtype casts** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - `xs:NCName`, `xs:Name`, `xs:NMTOKEN`, `xs:language`, `xs:normalizedString`, `xs:token`, `xs:ID`, `xs:IDREF`, and `xs:ENTITY` now require `value.Kind == XdmValueKind.String`. `xs:QName` values are no longer silently stringified to these subtypes, so union types such as `xs:NCName | xs:QName` correctly select the `xs:QName` member for a QName input (`CastAs-UnionType-20`).
+
+4. **XQST0034 constructor-function conflicts** (`src/Bosak.XQuery/Api/XQueryExecutable.cs`) —
+   - Before registering user-declared functions, `ApplyStaticContext` checks the imported schema set for a conflicting simple-type constructor function with the same expanded QName and arity 1, raising `XQST0034` if found (`user-defined-11`).
+   - Header bumped to 2.5.
+
+5. **Documentation** — Updated `docs/FEATURE_REQUESTS.md` (REQ-070), `docs/INTEGRATION.md`, and `docs/AGENT_HANDOVER.md`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `src/Bosak.XQuery/Api/XQueryExecutable.cs`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/INTEGRATION.md`
+- `docs/AGENT_HANDOVER.md`
+
+## Next Recommended Step
+
+1. The QName/NOTATION cluster is now closed. Remaining `prod-CastExpr.schema` failures (6) are pre-existing timezone/float-formatting issues (`casthcds12/30/31/32/33/42`) that are unrelated to schema-aware casts.
+2. Wait for the pending full QT3 sweep to finish, then update the overall baseline and `KnownXQueryGaps` if needed.
+3. Pick the next residual cluster to tackle (e.g., `fn:idref`, `fn:nilled`, decimal `orderBy` normalization, windowing date/time arithmetic, or the `casthcds` timezone/float issues).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-21
 **Commit:** uncommitted (base: 7bdafbc) — schema-aware XSD list/union simple types, residual namespace-context and restriction-of-union fixes
 **Current focus:** **Schema-aware XSD list/union simple types** — residual `prod-CastExpr.schema` failures `CastAs-UnionType-13/14/15` (namespace context for dynamic constructor calls) and `CastAs-UnionType-17` (restriction-of-union SequenceType raises `XPST0051`) are now fixed. Remaining failures are the pre-existing QName/NOTATION/timezone cluster.
 
