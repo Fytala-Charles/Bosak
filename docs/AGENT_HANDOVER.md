@@ -1,6 +1,43 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Commit:** `df522ee` — break recursion in FunctionItemInstanceOf and IsSchemaTypeSequenceSubtype
+**Current focus:** **Runtime recursion fixes** — the full QT3 conformance sweep that was aborting with a stack overflow in `FunctionItemInstanceOf` now completes. The recursive `ValueMatchesType` fallback for unresolved function items was replaced by an arity-only match, and the `IsSchemaTypeSequenceSubtype` → `IsSequenceTypeSubtype` → `IsSchemaAwareSequenceSubtype` cycle for atomic schema types was broken by handling `item()`, `xs:anyAtomicType`, union-test membership, and the built-in atomic hierarchy directly.
+
+Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; full QT3 sweep **30,761 passed / 138 failed / 922 skipped** (96.67%). `prod-CastExpr.schema` remains **123/6/1**; `prod-CastableExpr UnionType` **29/0/0**; `prod-CastableExpr ListType` **18/0/0**; `fn-for-each` **64/0/2**; `fn-function-lookup` **669/0/5**; `prod-InstanceofExpr` **305/3/1** (residual `XPST0051` static-validation gaps: `instanceof114/115/120`). The remaining failures are concentrated in `fn:nilled`, `json-to-xml`, `fn:idref`, decimal `orderBy` normalization, windowing date/time arithmetic, and a few schema-aware SequenceType static-error cases.
+
+## This Session Changes (runtime recursion fixes)
+
+1. **FunctionItemInstanceOf arity-only fallback** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Replaced the recursive `return ValueMatchesType(value, typeName, context);` fallback with `TryGetFunctionArity(value, ...) == testParamTypes.Length`. This prevents `ValueMatchesType` from re-entering `FunctionItemInstanceOf` for the same function item and typed function test.
+   - Header bumped to 2.78.
+
+2. **IsSchemaTypeSequenceSubtype non-recursive fallback** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - The default (atomic) case no longer calls `IsSequenceTypeSubtype(actualName, testTypeName, context)`, which re-entered `IsSchemaAwareSequenceSubtype` with a fresh visited set and recursed forever.
+   - Directly returns `true` for `item()` and `xs:anyAtomicType` tests; checks union-test membership by testing the actual atomic type against each union member; and falls back to `IsBaseTypeSubtype` for the built-in atomic hierarchy.
+   - Restores previously stack-overflowing schema-aware function-type instance-of tests (`instanceof136`–`instanceof141`).
+   - Header bumped to 2.79.
+
+3. **Documentation** — Updated `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, and `docs/FEATURE_REQUESTS.md`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`
+- `docs/FEATURE_REQUESTS.md`
+
+## Next Recommended Step
+
+1. The stack overflow blocking the full QT3 sweep is resolved. The overall baseline is now **30,761/138/922**.
+2. The largest remaining failure clusters are `fn:nilled`, `json-to-xml`, `fn:idref`, decimal `orderBy` normalization, windowing date/time arithmetic, and static `XPST0051` rejection of invalid list/union SequenceTypes (`instanceof114/115/120`, `typeswitch-114/115`).
+3. Pick the next residual cluster to tackle (e.g., `fn:nilled` or decimal `orderBy` normalization).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-21
 **Commit:** `cb9bbb4` — schema-aware QName/NOTATION cast cluster fixes
 **Current focus:** **Schema-aware QName/NOTATION casts** — the residual `prod-CastExpr.schema` QName/NOTATION cluster (`qname-cast-3/4`, `notation-cast-3`, `user-defined-8/9/11`) is now fixed. Mixed-case schema prefixes no longer trigger spurious `XPST0081`; user-defined `xs:NOTATION` restrictions can be constructed and cast from lexical forms; and `XQST0034` conflicts between user-declared functions and schema simple-type constructor functions are detected at runtime registration. `CastAs-UnionType-20` is also restored by rejecting `xs:QName` values when casting to `xs:string`-derived subtypes such as `xs:NCName`, so union types correctly prefer the `xs:QName` member.
 
