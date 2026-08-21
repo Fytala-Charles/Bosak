@@ -1,6 +1,49 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Commit:** `3c25b2f` — honor PSVI nilled status in fn:nilled, fn:data, and element tests
+**Current focus:** **`fn:nilled` cluster** — `fn:nilled` now uses the PSVI `IsNil` annotation; `fn:data` returns the PSVI typed value for schema-validated nodes (empty for nilled elements); and `element(*, T)` / `element(N, T)` kind tests reject nilled elements while the nillable form `element(*, T?)` / `element(N, T?)` accepts them. This closes the QT3 `fn-nilled` residual cluster.
+
+Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; full QT3 sweep **30,780 passed / 119 failed / 922 skipped** (96.73%). `fn-nilled` is now **60/0/4** (skips are unsupported dependencies). `prod-CastExpr.schema` remains **123/6/1**; `prod-CastableExpr UnionType` **29/0/0**; `prod-CastableExpr ListType` **18/0/0**; `fn-for-each` **64/0/2**; `fn-function-lookup` **669/0/5**; `prod-InstanceofExpr` **305/3/1**. Remaining failures are concentrated in `json-to-xml`, `fn:idref`, decimal `orderBy` normalization, windowing date/time arithmetic, and a few schema-aware SequenceType static-error cases.
+
+## This Session Changes (fn:nilled cluster)
+
+1. **`fn:nilled` honors PSVI** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - `NilledOfNode` returns `node.IsNilled` for element nodes instead of always `false`.
+   - `fn:data` returns `node.TypedValue` for schema-validated element/attribute nodes, producing the empty sequence for nilled elements (XDM §2.7.2).
+   - Header bumped to 5.88.
+
+2. **Nilled elements have empty typed value** (`src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`) —
+   - `GetTypedValue` returns `XdmValue.Undefined` for nilled elements.
+   - `HasNoTypedValue` returns `false` for nilled elements so `fn:data` returns `()` rather than raising `FOTY0012`.
+   - Header bumped to 0.17.
+
+3. **Typed element tests and nilled elements** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - `IsElementTypeCompatible` rejects nilled elements for `element(*, T)` / `element(N, T)` but accepts them when the type is marked nillable with `?` (`element(*, T?)` / `element(N, T?)`).
+   - Header bumped to 2.110.
+
+4. **Documentation** — Updated `docs/AGENT_HANDOVER.md`, `docs/INTEGRATION.md`, and `docs/FEATURE_REQUESTS.md`.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`
+- `docs/FEATURE_REQUESTS.md`
+
+## Next Recommended Step
+
+1. The `fn:nilled` cluster is closed. The overall baseline is now **30,780/119/922**.
+2. The largest remaining failure clusters are `json-to-xml`, `fn:idref`, decimal `orderBy` normalization, windowing date/time arithmetic, and static `XPST0051` rejection of invalid list/union SequenceTypes (`instanceof114/115/120`, `typeswitch-114/115`).
+3. Pick the next residual cluster to tackle.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-21
 **Commit:** `df522ee` — break recursion in FunctionItemInstanceOf and IsSchemaTypeSequenceSubtype
 **Current focus:** **Runtime recursion fixes** — the full QT3 conformance sweep that was aborting with a stack overflow in `FunctionItemInstanceOf` now completes. The recursive `ValueMatchesType` fallback for unresolved function items was replaced by an arity-only match, and the `IsSchemaTypeSequenceSubtype` → `IsSequenceTypeSubtype` → `IsSchemaAwareSequenceSubtype` cycle for atomic schema types was broken by handling `item()`, `xs:anyAtomicType`, union-test membership, and the built-in atomic hierarchy directly.
 
