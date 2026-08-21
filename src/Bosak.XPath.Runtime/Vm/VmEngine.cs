@@ -200,6 +200,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.108 | 21-08-2026     | Capture/restore namespaces for NamedFunctionItem dynamic calls; reject restrictions of union/list types in SequenceType (XPST0051) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.109 | 21-08-2026     | Schema-aware QName/NOTATION cast fixes; preserve prefixes, reject QName to string-subtype casts, XQST0034 constructor conflicts |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -5994,19 +5996,27 @@ public static class VmEngine
         var (resolvedNs, resolvedLocal) = ResolveTypeQName(typeName, context);
 
         // A prefixed type name resolves via the in-scope namespaces (constructor-local
-        // declarations included): the XML Schema namespace maps to the bare type.
-        if (normalized.Contains(':') && !normalized.Contains('{'))
+        // declarations included). If the prefix is bound to the XML Schema namespace,
+        // normalize to the bare local name so the built-in type switch can match it.
+        // Use the original-case prefix here; prefixes are case-sensitive and the
+        // normalized string has been lowercased.
+        if (typeName.Contains(':') && !typeName.Contains('{', StringComparison.Ordinal))
         {
-            int colon = normalized.IndexOf(':');
-            var typePrefix = normalized[..colon];
-            if (context is not null && context.TryResolveNamespace(typePrefix, out var resolvedTypeNs))
+            string original = typeName.Trim();
+            if (original.EndsWith('?') || original.EndsWith('*') || original.EndsWith('+'))
+                original = original[..^1].TrimEnd();
+            int colon = original.IndexOf(':');
+            if (colon > 0)
             {
-                if (resolvedTypeNs == "http://www.w3.org/2001/XMLSchema")
-                    normalized = normalized[(colon + 1)..];
-            }
-            else
-            {
-                throw new InvalidOperationException($"XPST0081: Prefix '{typePrefix}' is not declared.");
+                var typePrefix = original[..colon];
+                if (context is not null && context.TryResolveNamespace(typePrefix, out var resolvedTypeNs))
+                {
+                    if (resolvedTypeNs == "http://www.w3.org/2001/XMLSchema")
+                        normalized = original[(colon + 1)..].ToLowerInvariant();
+                }
+                // Non-XS prefixes are schema types or unknown; do not throw here:
+                // ResolveTypeQName already reports XPST0081 for undeclared prefixes,
+                // and the schema-type path below handles user-defined types.
             }
         }
 
@@ -6813,6 +6823,10 @@ public static class VmEngine
             case "idref":
             case "entity":
             {
+                // xs:string-derived atomic types only accept string/untypedAtomic values
+                // (QName and other atomic kinds are not castable to these subtypes).
+                if (value.Kind != XdmValueKind.String)
+                    return false;
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[\p{L}_][\w.\-]*$"))
                 {
@@ -6824,6 +6838,8 @@ public static class VmEngine
 
             case "name":
             {
+                if (value.Kind != XdmValueKind.String)
+                    return false;
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[\p{L}_:][\w.:\-]*$"))
                 {
@@ -6835,6 +6851,8 @@ public static class VmEngine
 
             case "nmtoken":
             {
+                if (value.Kind != XdmValueKind.String)
+                    return false;
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[\w.:\-]+$"))
                 {
@@ -6846,6 +6864,8 @@ public static class VmEngine
 
             case "language":
             {
+                if (value.Kind != XdmValueKind.String)
+                    return false;
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$"))
                 {
@@ -6857,6 +6877,8 @@ public static class VmEngine
 
             case "normalizedstring":
             {
+                if (value.Kind != XdmValueKind.String)
+                    return false;
                 string s = value.ToString();
                 // XML Schema whiteSpace="replace": replace tab, CR, LF with space
                 s = s.Replace('\r', ' ').Replace('\n', ' ').Replace('\t', ' ');
@@ -6865,6 +6887,8 @@ public static class VmEngine
             }
             case "token":
             {
+                if (value.Kind != XdmValueKind.String)
+                    return false;
                 string s = value.ToString();
                 // XML Schema whiteSpace="collapse": replace tab/CR/LF with space,
                 // trim leading/trailing spaces, collapse internal runs of spaces
@@ -8246,57 +8270,77 @@ public static class VmEngine
                     // must use the source lexical string.
                     string originalLexical = value.ToString() ?? string.Empty;
 
-                    // QName/NOTATION values are already typed. They only match target types whose
-                    // built-in base is QName/NOTATION; validate the lexical form and keep the
-                    // original XDM value so prefix and namespace information are preserved.
-                    if (value.Kind == XdmValueKind.QName)
+                    // Namespace-sensitive types (QName, NOTATION) cannot always be cast through
+                    // the built-in xs:* path: xs:NOTATION is abstract, and even for xs:QName the
+                    // user-defined facets must be validated against the original lexical form.
+                    // Parse the lexical form directly with the schema datatype so in-scope namespace
+                    // bindings are available, then preserve the original prefix in the resulting
+                    // QName value for correct serialization.
+                    if (IsNamespaceSensitiveTypeName(baseTypeName))
                     {
-                        if (!IsNamespaceSensitiveTypeName(baseTypeName))
-                            return false;
-
-                        // A typed QName/NOTATION value is already valid. Built-in xs:QName/xs:NOTATION
-                        // do not impose facets, so return it directly. For user-defined restrictions of
-                        // these types, validate against the facets using a namespace resolver that binds
-                        // a synthetic prefix to the value's namespace URI, since the original prefix may
-                        // no longer be in scope (CastAs-UnionType-25).
-                        if (schemaSimpleType.QualifiedName.Namespace == XmlSchema.Namespace
-                            && (schemaSimpleType.QualifiedName.Name == "QName" || schemaSimpleType.QualifiedName.Name == "NOTATION"))
+                        // A typed QName/NOTATION value is already valid. Validate it against the
+                        // user-defined facets and keep the original XDM value so prefix and
+                        // namespace information are preserved.
+                        if (value.Kind == XdmValueKind.QName)
                         {
-                            result = value;
-                            return true;
-                        }
-
-                        try
-                        {
-                            var qname = value.QNameValue;
-                            var syntheticResolver = CreateNamespaceResolver(context);
-                            if (syntheticResolver is XmlNamespaceManager manager && !string.IsNullOrEmpty(qname.NamespaceUri))
+                            try
                             {
-                                manager.AddNamespace("__q", qname.NamespaceUri);
-                                schemaSimpleType.Datatype!.ParseValue($"__q:{qname.LocalName}", new NameTable(), manager);
+                                var qname = value.QNameValue;
+                                var syntheticResolver = CreateNamespaceResolver(context);
+                                if (syntheticResolver is XmlNamespaceManager manager && !string.IsNullOrEmpty(qname.NamespaceUri))
+                                {
+                                    manager.AddNamespace("__q", qname.NamespaceUri);
+                                    schemaSimpleType.Datatype!.ParseValue($"__q:{qname.LocalName}", new NameTable(), manager);
+                                }
+                                else
+                                {
+                                    schemaSimpleType.Datatype!.ParseValue(originalLexical, new NameTable(), CreateNamespaceResolver(context));
+                                }
+                                result = value;
+                                return true;
                             }
-                            else
+                            catch
                             {
-                                schemaSimpleType.Datatype!.ParseValue(originalLexical, new NameTable(), CreateNamespaceResolver(context));
+                                return false;
                             }
-                            result = value;
-                            return true;
                         }
-                        catch
+
+                        // String (or untypedAtomic) input: parse with the schema datatype and
+                        // preserve the original prefix when it resolves to the value's namespace.
+                        if (value.Kind == XdmValueKind.String)
                         {
-                            return false;
+                            try
+                            {
+                                var stringNsResolver = CreateNamespaceResolver(context);
+                                object stringParsed = schemaSimpleType.Datatype!.ParseValue(originalLexical, new NameTable(), stringNsResolver);
+                                if (stringParsed is XmlQualifiedName qn)
+                                {
+                                    string prefix = string.Empty;
+                                    int colon = originalLexical.IndexOf(':');
+                                    if (colon > 0 && context is not null)
+                                    {
+                                        string origPrefix = originalLexical[..colon];
+                                        if (context.TryResolveNamespace(origPrefix, out var origNs) && origNs == qn.Namespace)
+                                            prefix = origPrefix;
+                                    }
+                                    result = XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix));
+                                    return true;
+                                }
+                            }
+                            catch
+                            {
+                                return false;
+                            }
                         }
+
+                        return false;
                     }
 
                     if (!TryCast(value, $"xs:{baseTypeName}", context, out var casted))
                         return false;
 
                     // Validate the user-defined facets by parsing with the actual schema type.
-                    // Use the casted value's lexical form for most types; preserve the original
-                    // lexical form for namespace-sensitive types so prefixes can be resolved.
-                    string validationLexical = IsNamespaceSensitiveTypeName(baseTypeName)
-                        ? originalLexical
-                        : (casted.ToString() ?? string.Empty);
+                    string validationLexical = casted.ToString() ?? string.Empty;
                     var nsResolver = CreateNamespaceResolver(context);
                     object parsed = schemaSimpleType.Datatype!.ParseValue(validationLexical, new NameTable(), nsResolver);
 

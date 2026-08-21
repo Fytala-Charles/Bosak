@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.4   | 21-08-2026     | Apply prolog namespace bindings to the runtime evaluation context (schema-import prefixes) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.5   | 21-08-2026     | Detect XQST0034 conflicts between user-declared functions and schema simple-type constructor functions |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -360,6 +362,17 @@ public sealed class XQueryExecutable
         var mainModuleDefaultElementNamespace = _staticContext.DefaultElementNamespace;
         foreach (var fn in _userFunctions)
         {
+            // XQST0034: a user-declared function must not have the same expanded QName and
+            // arity as a constructor function implicitly declared for an imported schema simple type.
+            if (fn.Parameters.Count == 1
+                && ctx.SchemaSet is not null
+                && !string.IsNullOrEmpty(fn.NamespaceUri)
+                && fn.NamespaceUri != "http://www.w3.org/2001/XMLSchema"
+                && ctx.SchemaSet.GlobalTypes[new XmlQualifiedName(fn.LocalName, fn.NamespaceUri)] is XmlSchemaSimpleType)
+            {
+                throw new InvalidOperationException($"XQST0034: Function '{fn.LocalName}' with arity 1 conflicts with the constructor function for the schema type '{fn.LocalName}'.");
+            }
+
             var captured = fn;
             ctx.RegisterFunction(new FunctionSignature
             {
