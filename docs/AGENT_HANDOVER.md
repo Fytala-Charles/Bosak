@@ -1,6 +1,37 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Current focus:** **schema-aware SequenceType XPST0051 cluster** — `VmEngine.InstanceOf` now rejects all user-defined simple types that are not atomic as SequenceType item types: direct list types, restrictions of list types, restrictions of union types, and union types that transitively contain a list-type member (including built-in list types such as `xs:NMTOKENS`). Union types whose members are purely atomic (possibly via nested unions of atomic types) remain valid item types. This closes the QT3 `prod-InstanceofExpr` residual failures (`instanceof114`, `instanceof115`, `instanceof120`) and the `prod-TypeswitchExpr` residual failures (`typeswitch-114`, `typeswitch-115`).
+
+Expected state: **1,775 unit tests / 0 failed / 0 skipped**; **`prod-InstanceofExpr` 308 passed / 0 failed / 1 skipped**; **`prod-TypeswitchExpr` 72 passed / 0 failed / 1 skipped**. Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
+
+## This Session Changes (schema-aware SequenceType XPST0051 cluster)
+
+1. **SequenceType item-type validation in `VmEngine.InstanceOf`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Replaced the narrow `IsRestrictionOfUnionOrList` check with `IsDisallowedSequenceTypeItemType`.
+   - The new helper uses `GetSchemaTypeVariety` to reject list varieties outright.
+   - For union varieties, it rejects restrictions of unions and unions whose members transitively contain a list type (recursively scanning member types via `GetUnionMemberTypes`).
+   - Union types whose membership is purely atomic (including nested atomic unions) remain valid item types.
+   - Header bumped to 2.111.
+
+2. **Unit tests** (`tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`) —
+   - Updated `ListInstanceOf_AcceptsMatchingStringValue` → `ListInstanceOf_RejectsListTypeAsSequenceTypeItemType` (now asserts `XPST0051`).
+   - `UnionContainingListInstanceOf_ThrowsXpst0051`
+   - `UnionContainingBuiltInListInstanceOf_ThrowsXpst0051`
+   - `UnionOfAtomicInstanceOf_BracedUriLiteralAcceptsMatchingValue`
+   - Header bumped to 0.7.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`
+- `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`
+- `docs/FEATURE_REQUESTS.md`
+
+---
+
+**Date:** 2026-08-21
 **Commit:** `243c3cd` — schema-aware `fn:idref` PSVI support and name() prefix selection
 **Current focus:** **`fn:idref` cluster** — `IXdmNode.IsIdref` exposes the XDM *is-idrefs* property for schema-validated nodes. `XDocumentNode` computes it from PSVI: `xs:IDREF`/`xs:IDREFS`, derived restrictions and lists, unions where the selected member is `xs:IDREF`, and complex types with simple content whose base is an IDREF-bearing simple type. Nilled IDREF elements report `false`. `FunctionLibrary.CollectIdrefElements` now consults `IsIdref` instead of relying only on DTD declarations or attribute names, so schema-validated IDREF/IDREFS attributes and elements are collected. `XDocumentNode.Prefix` prefers the empty prefix when the element's namespace is also bound as the default namespace, so `fn:name()` returns the unprefixed lexical form used in the source document. This closes the QT3 `fn-idref` residual cluster.
 

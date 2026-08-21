@@ -208,6 +208,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.110 | 21-08-2026     | element(*, T) and element(N, T) kind tests reject nilled elements; fn:nilled uses PSVI IsNil |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.111 | 21-08-2026     | Reject non-atomic user-defined schema types as SequenceType item types (XPST0051)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -7560,9 +7562,10 @@ public static class VmEngine
         if (!IsKnownAtomicTypeName(effective) && !IsUserDefinedSchemaType(effective, context, out userSchemaType))
             throw new InvalidOperationException("XPST0051");
 
-        // A user-defined simple type that is a restriction of a union or list type is not
-        // allowed as an item type in a SequenceType (CastAs-UnionType-17).
-        if (userSchemaType is not null && IsRestrictionOfUnionOrList(userSchemaType))
+        // A SequenceType item type must denote an atomic type. User-defined simple types whose
+        // variety is list, or union types that are restrictions or contain a list member,
+        // are not allowed.
+        if (userSchemaType is not null && IsDisallowedSequenceTypeItemType(userSchemaType, context))
             throw new InvalidOperationException("XPST0051");
 
         // xs:QName is case-sensitive: only the exact local name "QName" is valid.
@@ -7991,23 +7994,51 @@ public static class VmEngine
     }
 
     /// <summary>
-    /// Returns true when the schema type is derived by restriction from a union or list type.
-    /// Such types are not valid as item types in a SequenceType (XPST0051).
+    /// Returns true when the schema simple type is not allowed as an item type in a
+    /// SequenceType. List types and restrictions of union/list types are always disallowed;
+    /// union types are disallowed if they are derived by restriction or transitively contain
+    /// a list type member.
     /// </summary>
-    private static bool IsRestrictionOfUnionOrList(XmlSchemaSimpleType type)
+    private static bool IsDisallowedSequenceTypeItemType(XmlSchemaSimpleType type, EvaluationContext? context)
     {
-        if (type.Content is not XmlSchemaSimpleTypeRestriction restriction)
+        var variety = GetSchemaTypeVariety(type);
+        if (variety == SchemaTypeVariety.List)
+            return true;
+
+        if (variety == SchemaTypeVariety.Union)
+        {
+            // A restriction of a union type is not a valid SequenceType item type.
+            if (type.Content is XmlSchemaSimpleTypeRestriction)
+                return true;
+
+            // A union type that transitively contains a list type member is disallowed.
+            return UnionContainsListType(type, context, new HashSet<XmlSchemaSimpleType>());
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true when the union type (or any of its member union types) contains a list
+    /// type member, directly or transitively.
+    /// </summary>
+    private static bool UnionContainsListType(XmlSchemaSimpleType type, EvaluationContext? context, HashSet<XmlSchemaSimpleType> visited)
+    {
+        if (!visited.Add(type))
             return false;
 
-        XmlSchemaSimpleType? baseType = restriction.BaseType as XmlSchemaSimpleType
-            ?? type.BaseXmlSchemaType as XmlSchemaSimpleType;
-        if (baseType is null)
-            return false;
+        foreach (var member in GetUnionMemberTypes(type, context))
+        {
+            if (member is null)
+                continue;
 
-        if (baseType.Content is XmlSchemaSimpleTypeUnion || baseType.Datatype?.Variety == XmlSchemaDatatypeVariety.Union)
-            return true;
-        if (baseType.Content is XmlSchemaSimpleTypeList || baseType.Datatype?.Variety == XmlSchemaDatatypeVariety.List)
-            return true;
+            var memberVariety = GetSchemaTypeVariety(member);
+            if (memberVariety == SchemaTypeVariety.List)
+                return true;
+
+            if (memberVariety == SchemaTypeVariety.Union && UnionContainsListType(member, context, visited))
+                return true;
+        }
 
         return false;
     }

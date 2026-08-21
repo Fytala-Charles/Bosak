@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.5   | 21-08-2026     | Added braced-URI-literal instance-of regression for CastAs-UnionType-28/29/30             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 21-08-2026     | Added regression tests for namespace-context dynamic constructor calls and XPST0051 on restriction-of-union |
+//                      | Charles Korthout | 0.7   | 21-08-2026     | Added XPST0051 tests for list types and union types containing list members as SequenceType item types |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
@@ -140,11 +141,47 @@ public class SchemaListUnionTests
     }
 
     [Fact]
-    public void ListInstanceOf_AcceptsMatchingStringValue()
+    public void ListInstanceOf_RejectsListTypeAsSequenceTypeItemType()
     {
+        // A list type is not a valid item type in a SequenceType (XPST0051).
         var ctx = LoadUnionListContext();
 
-        var result = XPath31Expression.Compile("'1 2 3' instance of s:intListType1").Evaluate(ctx);
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            XPath31Expression.Compile("'1 2 3' instance of s:intListType1").Evaluate(ctx));
+        Assert.Contains("XPST0051", ex.Message);
+    }
+
+    [Fact]
+    public void UnionContainingListInstanceOf_ThrowsXpst0051()
+    {
+        // A union type that contains a list type member is not a valid SequenceType item type.
+        var ctx = LoadUnionListContext();
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            XPath31Expression.Compile("1 instance of s:impureUnionType").Evaluate(ctx));
+        Assert.Contains("XPST0051", ex.Message);
+    }
+
+    [Fact]
+    public void UnionContainingBuiltInListInstanceOf_ThrowsXpst0051()
+    {
+        // A union type that transitively contains a built-in list type member is disallowed.
+        var ctx = LoadUnionListContext();
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            XPath31Expression.Compile("85 instance of s:unionOfListsAndAtomic").Evaluate(ctx));
+        Assert.Contains("XPST0051", ex.Message);
+    }
+
+    [Fact]
+    public void UnionOfAtomicInstanceOf_BracedUriLiteralAcceptsMatchingValue()
+    {
+        // Positive regression: a braced-URI-literal union of atomic types is a valid item type.
+        var ctx = LoadUnionListContext();
+
+        var result = XPath31Expression.Compile(
+            "123.12 instance of Q{http://www.w3.org/XQueryTest/unionListDefined}myUnionType1")
+            .Evaluate(ctx);
         Assert.True(result.BooleanValue);
     }
 
