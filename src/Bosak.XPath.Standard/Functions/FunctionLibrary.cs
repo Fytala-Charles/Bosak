@@ -46,6 +46,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.93  | 21-08-2026     | Declare ParameterTypeNames/ReturnTypeName for built-in list constructors (IDREFS/NMTOKENS/ENTITIES) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.94  | 21-08-2026     | fn:idref honors PSVI is-idrefs property for schema-validated IDREF/IDREFS nodes         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -6576,25 +6578,47 @@ public static class FunctionLibrary
     {
         if (node.NodeKind == XdmNodeKind.Element)
         {
-            // Without schema/DTD processing no attribute is typed as xs:IDREF; by
-            // analogy with our fn:id treatment of "id"/"xml:id", an attribute named
-            // "idref" (no namespace) is treated as IDREF-typed.
-            foreach (var attr in node.Attributes("idref", ""))
+            // Schema-validated IDREF-typed elements (including derived list/union types).
+            if (node.IsIdref)
             {
-                var tokens = ParseIdTokens(AtomizedString(attr));
+                var tokens = ParseIdTokens(node.StringValue);
                 if (tokens.Overlaps(ids))
-                    result.Add(attr);
+                    result.Add(XdmValue.FromNode(node));
             }
-            if (dtdInfo.IdrefAttributes.TryGetValue(node.LocalName, out var dtdIdrefAttrs))
+
+            foreach (var attr in node.Attributes())
             {
-                foreach (var attrName in dtdIdrefAttrs)
+                if (!attr.IsNode)
+                    continue;
+
+                var attrNode = attr.NodeValue!;
+
+                // Schema-validated IDREF/IDREFS attributes.
+                if (attrNode.IsIdref)
                 {
-                    foreach (var attr in node.Attributes(attrName, ""))
-                    {
-                        var tokens = ParseIdTokens(AtomizedString(attr));
-                        if (tokens.Overlaps(ids))
-                            result.Add(attr);
-                    }
+                    var tokens = ParseIdTokens(AtomizedString(attr));
+                    if (tokens.Overlaps(ids))
+                        result.Add(attr);
+                    continue;
+                }
+
+                // Without schema/DTD processing no attribute is typed as xs:IDREF; by
+                // analogy with our fn:id treatment of "id"/"xml:id", an attribute named
+                // "idref" (no namespace) is treated as IDREF-typed.
+                if (attrNode.LocalName == "idref" && attrNode.NamespaceUri == "")
+                {
+                    var tokens = ParseIdTokens(AtomizedString(attr));
+                    if (tokens.Overlaps(ids))
+                        result.Add(attr);
+                    continue;
+                }
+
+                if (dtdInfo.IdrefAttributes.TryGetValue(node.LocalName, out var dtdIdrefAttrs)
+                    && dtdIdrefAttrs.Contains(attrNode.LocalName))
+                {
+                    var tokens = ParseIdTokens(AtomizedString(attr));
+                    if (tokens.Overlaps(ids))
+                        result.Add(attr);
                 }
             }
         }

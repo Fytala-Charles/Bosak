@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 21-08-2026     | Added SchemaElementDeclaration, SchemaAttributeDeclaration, and IsNilled accessors          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 21-08-2026     | Added IsIdref accessor for schema-validated IDREF nodes                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -73,6 +75,12 @@ public interface IXdmNode
     /// (its typed value is a single xs:ID atomic value, or it is an ID-typed attribute).
     /// </summary>
     bool IsId => false;
+
+    /// <summary>
+    /// Gets a value indicating whether this node has the XDM is-idrefs property
+    /// (its typed value contains one or more xs:IDREF atomic values, or it is an IDREF-typed attribute).
+    /// </summary>
+    bool IsIdref => false;
 
     /// <summary>
     /// Gets the schema type annotation of this node as an expanded QName, or null when the

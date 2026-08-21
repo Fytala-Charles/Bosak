@@ -75,8 +75,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.33  | 21-08-2026     | json-to-xml validate=true PSVI type annotation tests (FOJS0003/FOJS0005) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.34  | 21-08-2026     | Schema-aware fn:idref IsIdref tests (IDREF, IDREFS, nillable, union, complex simple content) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.IO;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -4062,6 +4067,177 @@ public class FunctionLibraryTests
         Assert.Single(items);
         Assert.Equal("R", items[0].NodeValue!.LocalName);
     }
+
+    // ------------------------------------------------------------------
+    // fn:idref with schema-validated nodes (PSVI is-idrefs property)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Idref_SchemaValidatedAttribute_XsIdref_IsIdref()
+    {
+        var schema = new XmlSchemaSet();
+        schema.Add("", XmlReader.Create(new StringReader(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "  <xs:element name='root'>" +
+            "    <xs:complexType>" +
+            "      <xs:attribute name='id' type='xs:ID'/>" +
+            "      <xs:attribute name='ref' type='xs:IDREF'/>" +
+            "    </xs:complexType>" +
+            "  </xs:element>" +
+            "</xs:schema>")));
+        schema.Compile();
+
+        var doc = XDocument.Parse("<root id='abc' ref='abc'/>");
+        doc.Validate(schema, (sender, e) => throw new InvalidOperationException(e.Message), addSchemaInfo: true);
+
+        var attr = doc.Root!.Attribute("ref")!;
+        Assert.True(new XDocumentNode(attr).IsIdref);
+    }
+
+    [Fact]
+    public void Idref_SchemaValidatedElement_XsIdref_IsIdref()
+    {
+        var schema = new XmlSchemaSet();
+        schema.Add("", XmlReader.Create(new StringReader(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "  <xs:element name='root'>" +
+            "    <xs:complexType>" +
+            "      <xs:sequence>" +
+            "        <xs:element name='id' type='xs:ID'/>" +
+            "        <xs:element name='ref' type='xs:IDREF'/>" +
+            "      </xs:sequence>" +
+            "    </xs:complexType>" +
+            "  </xs:element>" +
+            "</xs:schema>")));
+        schema.Compile();
+
+        var doc = XDocument.Parse("<root><id>abc</id><ref>abc</ref></root>");
+        doc.Validate(schema, (sender, e) => throw new InvalidOperationException(e.Message), addSchemaInfo: true);
+
+        Assert.True(new XDocumentNode(doc.Root!.Element("ref")!).IsIdref);
+    }
+
+    [Fact]
+    public void Idref_SchemaValidatedElement_NilledIdref_IsNotIdref()
+    {
+        var schema = new XmlSchemaSet();
+        schema.Add("", XmlReader.Create(new StringReader(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "  <xs:element name='ref' nillable='true' type='xs:IDREF'/>" +
+            "</xs:schema>")));
+        schema.Compile();
+
+        var doc = XDocument.Parse("<ref xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:nil='true'/>");
+        doc.Validate(schema, (sender, e) => throw new InvalidOperationException(e.Message), addSchemaInfo: true);
+
+        Assert.False(new XDocumentNode(doc.Root!).IsIdref);
+    }
+
+    [Fact]
+    public void Idref_SchemaValidatedElement_UnionWithIdrefValue_IsIdref()
+    {
+        // xs:integer is placed before xs:IDREF so that the IDREF member is selected
+        // for the lexical value "abc".
+        var schema = new XmlSchemaSet();
+        schema.Add("", XmlReader.Create(new StringReader(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "  <xs:simpleType name='IntOrIdref'>" +
+            "    <xs:union memberTypes='xs:integer xs:IDREF'/>" +
+            "  </xs:simpleType>" +
+            "  <xs:element name='root'>" +
+            "    <xs:complexType>" +
+            "      <xs:sequence>" +
+            "        <xs:element name='id' type='xs:ID'/>" +
+            "        <xs:element name='ref' type='IntOrIdref'/>" +
+            "      </xs:sequence>" +
+            "    </xs:complexType>" +
+            "  </xs:element>" +
+            "</xs:schema>")));
+        schema.Compile();
+
+        var doc = XDocument.Parse("<root><id>abc</id><ref>abc</ref></root>");
+        doc.Validate(schema, (sender, e) => throw new InvalidOperationException(e.Message), addSchemaInfo: true);
+
+        Assert.True(new XDocumentNode(doc.Root!.Element("ref")!).IsIdref);
+    }
+
+    [Fact]
+    public void Idref_SchemaValidatedElement_UnionWithNCNameValue_IsNotIdref()
+    {
+        var schema = new XmlSchemaSet();
+        schema.Add("", XmlReader.Create(new StringReader(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "  <xs:simpleType name='NCNameOrIdref'>" +
+            "    <xs:union memberTypes='xs:NCName xs:IDREF'/>" +
+            "  </xs:simpleType>" +
+            "  <xs:element name='ref' type='NCNameOrIdref'/>" +
+            "</xs:schema>")));
+        schema.Compile();
+
+        var doc = XDocument.Parse("<ref>name</ref>");
+        doc.Validate(schema, (sender, e) => throw new InvalidOperationException(e.Message), addSchemaInfo: true);
+
+        Assert.False(new XDocumentNode(doc.Root!).IsIdref);
+    }
+
+    [Fact]
+    public void Idref_SchemaValidatedElement_ComplexSimpleContentIdref_IsIdref()
+    {
+        var schema = new XmlSchemaSet();
+        schema.Add("", XmlReader.Create(new StringReader(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "  <xs:complexType name='IdrefContent'>" +
+            "    <xs:simpleContent>" +
+            "      <xs:extension base='xs:IDREF'>" +
+            "        <xs:attribute name='extra' type='xs:string'/>" +
+            "      </xs:extension>" +
+            "    </xs:simpleContent>" +
+            "  </xs:complexType>" +
+            "  <xs:element name='root'>" +
+            "    <xs:complexType>" +
+            "      <xs:sequence>" +
+            "        <xs:element name='id' type='xs:ID'/>" +
+            "        <xs:element name='ref' type='IdrefContent'/>" +
+            "      </xs:sequence>" +
+            "    </xs:complexType>" +
+            "  </xs:element>" +
+            "</xs:schema>")));
+        schema.Compile();
+
+        var doc = XDocument.Parse("<root><id>abc</id><ref extra='x'>abc</ref></root>");
+        doc.Validate(schema, (sender, e) => throw new InvalidOperationException(e.Message), addSchemaInfo: true);
+
+        Assert.True(new XDocumentNode(doc.Root!.Element("ref")!).IsIdref);
+    }
+
+    [Fact]
+    public void Idref_SchemaValidatedElement_ListOfRestrictedIdref_IsIdref()
+    {
+        var schema = new XmlSchemaSet();
+        schema.Add("", XmlReader.Create(new StringReader(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "  <xs:simpleType name='RestrictedIdref'>" +
+            "    <xs:restriction base='xs:IDREF'/>" +
+            "  </xs:simpleType>" +
+            "  <xs:simpleType name='IdrefList'>" +
+            "    <xs:list itemType='RestrictedIdref'/>" +
+            "  </xs:simpleType>" +
+            "  <xs:element name='root'>" +
+            "    <xs:complexType>" +
+            "      <xs:sequence>" +
+            "        <xs:element name='id' type='xs:ID' maxOccurs='unbounded'/>" +
+            "        <xs:element name='refs' type='IdrefList'/>" +
+            "      </xs:sequence>" +
+            "    </xs:complexType>" +
+            "  </xs:element>" +
+            "</xs:schema>")));
+        schema.Compile();
+
+        var doc = XDocument.Parse("<root><id>abc</id><id>def</id><refs>abc def</refs></root>");
+        doc.Validate(schema, (sender, e) => throw new InvalidOperationException(e.Message), addSchemaInfo: true);
+
+        Assert.True(new XDocumentNode(doc.Root!.Element("refs")!).IsIdref);
+    }
 }
 
 
@@ -4912,4 +5088,5 @@ public class Tier2lFormatDateTimeIntegerTests
     public void FormatInteger_CjkKanji()
         => Assert.Equal("1=一|2=二|3=三|4=四|5=五|6=六|7=七|8=八|9=九|10=十|11=十一|12=十二|13=十三|14=十四|15=十五|16=十六|17=十七|18=十八|19=十九|20=二十|21=二十一|22=二十二|23=二十三|151=百五十一|302=三百二|469=四百六十九|2025=二千二十五",
             EvalStr("string-join(for $i in (1 to 23, 151, 302, 469, 2025) return concat($i, '=', format-integer($i, '一')), '|')"));
+
 }

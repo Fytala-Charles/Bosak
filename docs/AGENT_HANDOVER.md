@@ -1,6 +1,50 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Commit:** `ed22490` — schema-aware `fn:idref` PSVI support and name() prefix selection
+**Current focus:** **`fn:idref` cluster** — `IXdmNode.IsIdref` exposes the XDM *is-idrefs* property for schema-validated nodes. `XDocumentNode` computes it from PSVI: `xs:IDREF`/`xs:IDREFS`, derived restrictions and lists, unions where the selected member is `xs:IDREF`, and complex types with simple content whose base is an IDREF-bearing simple type. Nilled IDREF elements report `false`. `FunctionLibrary.CollectIdrefElements` now consults `IsIdref` instead of relying only on DTD declarations or attribute names, so schema-validated IDREF/IDREFS attributes and elements are collected. `XDocumentNode.Prefix` prefers the empty prefix when the element's namespace is also bound as the default namespace, so `fn:name()` returns the unprefixed lexical form used in the source document. This closes the QT3 `fn-idref` residual cluster.
+
+Expected state: **1,772 unit tests / 0 failed / 0 skipped**; **`fn-idref` 54 passed / 0 failed / 0 skipped**. Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
+
+## This Session Changes (fn:idref cluster)
+
+1. **`IXdmNode.IsIdref` property** (`src/Bosak.XPath.Core/Xdm/IXdmNode.cs`) —
+   - Added default `bool IsIdref => false` accessor for the XDM *is-idrefs* property.
+
+2. **PSVI-based `IsIdref` in the XDocument provider** (`src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`) —
+   - `ComputeIsIdref` returns `true` for attributes and elements whose effective simple type is a definite IDREF type (`xs:IDREF`/`xs:IDREFS`, derived restrictions/lists).
+   - Union and list-of-union types are recognized when the actual typed value contains an `xs:IDREF` atomic value (selected union member), per XDM §5.7.
+   - Complex types with simple content resolve the underlying simple type via `BaseXmlSchemaType` (with a built-in fallback), so `IDREF-content` elements are recognized.
+   - Nilled elements (`info.IsNil`) report `false`.
+   - `Prefix`/`EncodedPrefix` prefer the empty prefix for elements whose namespace is the in-scope default namespace.
+   - Header bumped.
+
+3. **`fn:idref` uses `IsIdref`** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - `CollectIdrefElements` checks `node.IsIdref` for both elements and attributes, replacing the previous DTD-only / name-based heuristic.
+   - Header bumped.
+
+4. **Unit tests** (`tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`) —
+   - `Idref_SchemaValidatedAttribute_XsIdref_IsIdref`
+   - `Idref_SchemaValidatedElement_XsIdref_IsIdref`
+   - `Idref_SchemaValidatedElement_NilledIdref_IsNotIdref`
+   - `Idref_SchemaValidatedElement_UnionWithIdrefValue_IsIdref`
+   - `Idref_SchemaValidatedElement_UnionWithNCNameValue_IsNotIdref`
+   - `Idref_SchemaValidatedElement_ComplexSimpleContentIdref_IsIdref`
+   - `Idref_SchemaValidatedElement_ListOfRestrictedIdref_IsIdref`
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Core/Xdm/IXdmNode.cs`
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`
+- `docs/FEATURE_REQUESTS.md`
+
+---
+
+**Date:** 2026-08-21
 **Commit:** `f83cfb8` — schema-aware `fn:json-to-xml` validation and kind-test fixes
 **Current focus:** **`fn:json-to-xml` cluster** — `validate:=true()` is now supported and drives schema validation against the embedded W3C schema-for-JSON; `validate:=true()` + `duplicates:='retain'` raises `FOJS0005`; schema/duplicate-key failures map to `FOJS0003`. `VmEngine.ValueMatchesType` now recognizes parameterized kind tests (`document-node(...)`, `schema-element(...)`) including `document-node(schema-element(...))` and preserves original case for schema type names in `element(name, type)`. XQuery now resolves `import schema "http://www.w3.org/2005/xpath-functions"` to the embedded JSON schema. This closes the QT3 `fn-json-to-xml` residual cluster.
 

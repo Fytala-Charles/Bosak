@@ -59,6 +59,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.17  | 21-08-2026     | Nilled elements have an empty typed value and are not element(*, T)-compatible          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.18  | 21-08-2026     | Added IsIdref property using PSVI for schema-validated IDREF nodes                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -243,7 +245,7 @@ public sealed class XDocumentNode : IXdmNode
                 return string.Empty;
             return _node switch
             {
-                XElement e => Decode(e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty),
+                XElement e => Decode(GetElementPrefix(e)),
                 XAttribute a => Decode(a.Annotation<AttributePrefixAnnotation>()?.Prefix
                     ?? (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty),
                 _ => string.Empty
@@ -259,12 +261,31 @@ public sealed class XDocumentNode : IXdmNode
                 return string.Empty;
             return _node switch
             {
-                XElement e => e.GetPrefixOfNamespace(e.Name.Namespace) ?? string.Empty,
+                XElement e => GetElementPrefix(e),
                 XAttribute a => a.Annotation<AttributePrefixAnnotation>()?.Prefix
                     ?? (a.Parent as XElement)?.GetPrefixOfNamespace(a.Name.Namespace) ?? string.Empty,
                 _ => string.Empty
             };
         }
+    }
+
+    /// <summary>
+    /// Returns the preferred prefix for an element. If the element's namespace is bound
+    /// to the default namespace in scope, the empty prefix is returned so that fn:name()
+    /// matches the unprefixed lexical form used in the source document.
+    /// </summary>
+    private static string GetElementPrefix(XElement element)
+    {
+        var ns = element.Name.Namespace;
+        if (ns == XNamespace.None)
+            return string.Empty;
+
+        // Prefer the empty prefix when the default namespace binds this URI.
+        var defaultNs = element.GetDefaultNamespace();
+        if (defaultNs == ns)
+            return string.Empty;
+
+        return element.GetPrefixOfNamespace(ns) ?? string.Empty;
     }
 
     public string StringValue
@@ -548,6 +569,13 @@ public sealed class XDocumentNode : IXdmNode
     /// <c>xml:id</c> attributes even when no schema is available.
     /// </summary>
     public bool IsId => ComputeIsId();
+
+    /// <summary>
+    /// Gets a value indicating whether this node has the XDM is-idrefs property.
+    /// For elements and attributes this is true when the typed value contains one or more
+    /// xs:IDREF atomic values (including derived types, union members and lists of xs:IDREF).
+    /// </summary>
+    public bool IsIdref => ComputeIsIdref();
 
     public (string NamespaceUri, string LocalName)? SchemaTypeAnnotation => GetSchemaTypeAnnotation();
 
@@ -1660,6 +1688,238 @@ public sealed class XDocumentNode : IXdmNode
         }
 
         return type.TypeCode == XmlTypeCode.Id;
+    }
+
+    private bool ComputeIsIdref()
+    {
+        if (_isNamespaceNode)
+            return false;
+
+        if (_node is XAttribute attr)
+            return IsIdrefAttribute(attr);
+
+        if (_node is XElement element)
+            return IsIdrefElement(element);
+
+        return false;
+    }
+
+    private static bool IsIdrefAttribute(XAttribute attr)
+    {
+        var info = attr.GetSchemaInfo();
+        if (info is null)
+            return false;
+        return IsIdrefFromSchemaInfo(info, attr.Value);
+    }
+
+    private static bool IsIdrefElement(XElement element)
+    {
+        var info = element.GetSchemaInfo();
+        if (info is null || info.IsNil)
+            return false;
+        return IsIdrefFromSchemaInfo(info, element.Value);
+    }
+
+    /// <summary>
+    /// Determines whether a schema-validated node has the is-idrefs property.
+    /// Definite IDREF types (IDREF, IDREFS, and derived restrictions/lists where every
+    /// value is an IDREF) are recognized without inspecting the lexical value.
+    /// Union and list-of-union types that may contain IDREF values require the actual
+    /// typed value to contain at least one IDREF atomic value.
+    /// </summary>
+    private static bool IsIdrefFromSchemaInfo(IXmlSchemaInfo info, string lexicalValue)
+    {
+        var effectiveType = GetEffectiveSimpleType(info);
+        if (effectiveType is null)
+            return false;
+
+        if (IsDefiniteIdrefSchemaType(effectiveType))
+            return true;
+
+        if (MayContainIdref(effectiveType))
+            return ListOrUnionContainsIdref(effectiveType, lexicalValue);
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns the effective simple type for an element or attribute node. For simple types
+    /// this is the type itself; for complex types with simple content this is the base
+    /// simple type of the simple content extension/restriction.
+    /// </summary>
+    private static XmlSchemaSimpleType? GetEffectiveSimpleType(IXmlSchemaInfo info)
+    {
+        // Prefer the declared schema type when it is (or may be) an IDREF-bearing
+        // union or list, because the selected MemberType/SchemaType can be a non-IDREF
+        // member of a union while the actual lexical value still matches an IDREF member.
+        var declaredType = info.SchemaElement?.ElementSchemaType ?? info.SchemaAttribute?.AttributeSchemaType;
+        if (declaredType is XmlSchemaSimpleType declaredSimple
+            && MayContainIdref(declaredSimple))
+            return declaredSimple;
+
+        if (info.MemberType is XmlSchemaSimpleType memberSimple)
+            return memberSimple;
+
+        if (info.SchemaType is XmlSchemaSimpleType actualSimple)
+            return actualSimple;
+
+        if (info.SchemaType is XmlSchemaComplexType complex
+            && complex.ContentType == XmlSchemaContentType.TextOnly)
+        {
+            // For complex types with simple content the base type is the underlying
+            // simple type. .NET exposes it via BaseXmlSchemaType for both extension
+            // and restriction derivations.
+            if (complex.BaseXmlSchemaType is XmlSchemaSimpleType baseSimple)
+                return baseSimple;
+
+            // Fallback: resolve a built-in base type from the simple content model.
+            var simpleContent = complex.ContentModel?.Content;
+            XmlQualifiedName? baseName = simpleContent switch
+            {
+                XmlSchemaSimpleContentExtension ext => ext.BaseTypeName,
+                XmlSchemaSimpleContentRestriction restr => restr.BaseTypeName,
+                _ => null
+            };
+
+            if (baseName is not null && !baseName.IsEmpty)
+            {
+                try
+                {
+                    return XmlSchemaType.GetBuiltInSimpleType(baseName);
+                }
+                catch
+                {
+                    // Not a built-in type; cannot resolve further without the schema set.
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static bool IsDefiniteIdrefSchemaType(XmlSchemaType? type)
+    {
+        if (type is null)
+            return false;
+
+        if (type.TypeCode == XmlTypeCode.Idref)
+            return true;
+
+        if (type is XmlSchemaSimpleType simple && simple.Datatype is { } datatype)
+        {
+            if (datatype.TypeCode == XmlTypeCode.Idref)
+                return true;
+
+            if (datatype.Variety == XmlSchemaDatatypeVariety.List)
+            {
+                var itemType = (simple.Content as XmlSchemaSimpleTypeList)?.BaseItemType;
+                if (itemType is not null && IsDefiniteIdrefSchemaType(itemType))
+                    return true;
+            }
+        }
+
+        var baseType = type.BaseXmlSchemaType;
+        if (baseType is not null && baseType != type)
+            return IsDefiniteIdrefSchemaType(baseType);
+
+        return false;
+    }
+
+    private static bool MayContainIdref(XmlSchemaSimpleType type)
+    {
+        if (type.Datatype is not { } datatype)
+            return false;
+
+        if (datatype.TypeCode == XmlTypeCode.Idref)
+            return true;
+
+        if (datatype.Variety == XmlSchemaDatatypeVariety.List)
+        {
+            var itemType = (type.Content as XmlSchemaSimpleTypeList)?.BaseItemType;
+            if (itemType is not null)
+                return IsDefiniteIdrefSchemaType(itemType) || MayContainIdref(itemType);
+        }
+
+        if (datatype.Variety == XmlSchemaDatatypeVariety.Union)
+        {
+            if (type.Content is XmlSchemaSimpleTypeUnion union && union.BaseMemberTypes is not null)
+            {
+                foreach (var member in union.BaseMemberTypes)
+                {
+                    if (member is not null &&
+                        (IsDefiniteIdrefSchemaType(member) || MayContainIdref(member)))
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static bool ListOrUnionContainsIdref(XmlSchemaSimpleType type, string lexicalValue)
+    {
+        if (type.Datatype is not { } datatype)
+            return false;
+
+        if (datatype.TypeCode == XmlTypeCode.Idref)
+            return true;
+
+        if (datatype.Variety == XmlSchemaDatatypeVariety.List)
+        {
+            var itemType = (type.Content as XmlSchemaSimpleTypeList)?.BaseItemType;
+            if (itemType is null)
+                return false;
+            var tokens = lexicalValue.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var token in tokens)
+            {
+                if (TokenIsIdref(itemType, token))
+                    return true;
+            }
+            return false;
+        }
+
+        if (datatype.Variety == XmlSchemaDatatypeVariety.Union)
+            return TokenIsIdref(type, lexicalValue);
+
+        return false;
+    }
+
+    private static bool TokenIsIdref(XmlSchemaSimpleType type, string token)
+    {
+        if (IsDefiniteIdrefSchemaType(type))
+            return true;
+
+        if (type.Datatype?.Variety != XmlSchemaDatatypeVariety.Union)
+            return false;
+
+        if (type.Content is not XmlSchemaSimpleTypeUnion union || union.BaseMemberTypes is null)
+            return false;
+
+        foreach (var member in union.BaseMemberTypes)
+        {
+            if (member is null)
+                continue;
+            if (TokenMatchesSchemaType(token, member))
+                return IsDefiniteIdrefSchemaType(member);
+        }
+
+        return false;
+    }
+
+    private static bool TokenMatchesSchemaType(string token, XmlSchemaSimpleType type)
+    {
+        try
+        {
+            var datatype = type.Datatype;
+            if (datatype is null)
+                return false;
+            datatype.ParseValue(token, new NameTable(), new XmlNamespaceManager(new NameTable()));
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
