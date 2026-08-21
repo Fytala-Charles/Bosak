@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** *(pending)* docs: add XSLT code lens backlog feature requests and handover sync
+**Commit:** 173cfda docs: add XSLT code lens backlog feature requests and handover sync
 **Current focus:** **QT3 skipped clusters** — ready to pick up the next tier of skipped W3C QT3 tests after VS Code restart. Before restart, the XSLT code lens backlog was captured as living feature requests (REQ-071, REQ-072, REQ-073) and the handover documentation was synchronized.
 
 Expected state: **1,731 unit tests / 0 failed**; **61 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
