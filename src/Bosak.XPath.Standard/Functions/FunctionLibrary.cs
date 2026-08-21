@@ -244,10 +244,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.88  | 21-08-2026     | fn:nilled honors PSVI nilled status; fn:data returns PSVI typed value for schema-validated nodes |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.89  | 21-08-2026     | fn:json-to-xml validate=true performs schema validation against built-in JSON schema   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Net.Http;
@@ -11589,9 +11592,43 @@ public static class FunctionLibrary
 
     private static readonly string JsonXmlNs = "http://www.w3.org/2005/xpath-functions";
 
-    private readonly record struct JsonOptions(bool Liberal, string Duplicates, bool Escape, bool Indent, XdmValue? Fallback = null)
+    private static readonly Lazy<XmlSchemaSet> JsonSchemaSetInternal = new(() =>
     {
-        public static JsonOptions Default => new(false, "use-first", false, false, null);
+        var assembly = typeof(FunctionLibrary).Assembly;
+        const string resourceName = "Bosak.XPath.Standard.Resources.schema-for-json.xsd";
+        using var stream = assembly.GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException($"Embedded JSON schema resource '{resourceName}' not found.");
+        using var reader = XmlReader.Create(stream);
+        var schema = XmlSchema.Read(reader, null)
+            ?? throw new InvalidOperationException($"Failed to read embedded JSON schema '{resourceName}'.");
+        var schemaSet = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        schemaSet.Add(schema);
+        schemaSet.Compile();
+        return schemaSet;
+    });
+
+    /// <summary>
+    /// The W3C schema-for-JSON used by <c>fn:json-to-xml</c> when <c>validate:=true()</c>.
+    /// Exposed so that XQuery <c>import schema</c> declarations for the JSON namespace can be
+    /// satisfied without requiring an external schema file.
+    /// </summary>
+    internal static XmlSchemaSet JsonSchemaSet => JsonSchemaSetInternal.Value;
+
+    /// <summary>
+    /// Returns a stream over the embedded schema-for-json.xsd resource. The caller owns the
+    /// stream and must dispose it.
+    /// </summary>
+    internal static Stream GetJsonSchemaStream()
+    {
+        var assembly = typeof(FunctionLibrary).Assembly;
+        const string resourceName = "Bosak.XPath.Standard.Resources.schema-for-json.xsd";
+        return assembly.GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException($"Embedded JSON schema resource '{resourceName}' not found.");
+    }
+
+    private readonly record struct JsonOptions(bool Liberal, string Duplicates, bool Escape, bool Indent, bool Validate, bool DuplicatesExplicit, XdmValue? Fallback = null)
+    {
+        public static JsonOptions Default => new(false, "use-first", false, false, false, false, null);
     }
 
     private static JsonOptions ParseJsonOptions(XdmValue? options, bool forJsonToXml = false)
@@ -11619,7 +11656,7 @@ public static class FunctionLibrary
                 : dupStr is "use-first" or "use-last" or "reject";
             if (!valid)
                 throw new InvalidOperationException("FOJS0005: Invalid duplicates option");
-            result = result with { Duplicates = dupStr };
+            result = result with { Duplicates = dupStr, DuplicatesExplicit = true };
         }
         if (map.TryGetValue(XdmValue.FromString("escape"), out var escape))
             result = result with { Escape = escape.BooleanValue };
@@ -11628,10 +11665,10 @@ public static class FunctionLibrary
         if (map.TryGetValue(XdmValue.FromString("validate"), out var validate))
         {
             // fn:json-to-xml only: requests schema validation of the result. The
-            // value must be a single xs:boolean (json-to-xml-error-020/021/022);
-            // the option is accepted but ignored — this processor is not schema-aware.
+            // value must be a single xs:boolean (json-to-xml-error-020/021/022).
             if (validate.Kind != XdmValueKind.Boolean)
                 throw new InvalidOperationException("XPTY0004: The validate option must be a single xs:boolean");
+            result = result with { Validate = validate.BooleanValue };
         }
         if (map.TryGetValue(XdmValue.FromString("fallback"), out var fallback))
         {
@@ -11648,6 +11685,12 @@ public static class FunctionLibrary
         // The escape and fallback options cannot be combined (json-doc-027).
         if (result.Escape && result.Fallback is { IsUndefined: false })
             throw new InvalidOperationException("FOJS0005: The escape and fallback options cannot be combined");
+
+        // Validation is incompatible with explicitly retaining duplicate keys
+        // (json-to-xml-error-042). When validate is requested without an explicit
+        // duplicates option, duplicates are detected by schema validation instead.
+        if (result.Validate && result.DuplicatesExplicit && result.Duplicates == "retain")
+            throw new InvalidOperationException("FOJS0005: The validate option cannot be combined with duplicates='retain'");
 
         return result;
     }
@@ -12242,6 +12285,21 @@ public static class FunctionLibrary
         // call (json-to-xml-041); XDocumentNode reads this string annotation.
         if (!string.IsNullOrEmpty(ctx.BaseUri))
             xdoc.AddAnnotation(ctx.BaseUri);
+
+        if (options.Validate)
+        {
+            try
+            {
+                XDocumentProvider.ValidateXDocument(xdoc, JsonSchemaSet);
+            }
+            catch (XmlSchemaValidationException)
+            {
+                // Validation failures, including duplicate keys that escaped the
+                // duplicates option, are reported as FOJS0003 (json-to-xml-error-028).
+                throw new InvalidOperationException("FOJS0003: JSON could not be validated against the XML schema for JSON");
+            }
+        }
+
         return XdmValue.FromNode(new XDocumentNode(xdoc));
     }
 

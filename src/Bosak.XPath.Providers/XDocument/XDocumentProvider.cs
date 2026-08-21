@@ -43,6 +43,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.17  | 21-08-2026     | Encode XML 1.1-only name characters in constructed element/attribute names              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.18  | 21-08-2026     | Expose ValidateXDocument for in-memory schema validation (fn:json-to-xml validate)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -770,6 +772,24 @@ public static class XDocumentProvider
                 $"Document validation failed against the supplied schema(s):\n{string.Join("\n", errors)}");
         }
         StripElementOnlyContentWhitespace(document);
+    }
+
+    /// <summary>
+    /// Validates an in-memory <see cref="XDocument"/> against the supplied XML Schema set
+    /// and attaches PSVI annotations (<see cref="XElement.GetSchemaInfo()"/>) to every
+    /// node. On success, whitespace-only text nodes inside element-only schema content are
+    /// stripped to match XDM validating construction rules. On failure, a
+    /// <see cref="XmlSchemaValidationException"/> is thrown.
+    /// </summary>
+    /// <param name="document">The document to validate. It is modified in place.</param>
+    /// <param name="schemaSet">The compiled schema set to validate against.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="document"/> or <paramref name="schemaSet"/> is null.</exception>
+    /// <exception cref="XmlSchemaValidationException">If validation produces any errors.</exception>
+    public static void ValidateXDocument(XDocument document, XmlSchemaSet schemaSet)
+    {
+        if (document is null) throw new ArgumentNullException(nameof(document));
+        if (schemaSet is null) throw new ArgumentNullException(nameof(schemaSet));
+        ValidateDocument(document, schemaSet);
     }
 
     /// <summary>

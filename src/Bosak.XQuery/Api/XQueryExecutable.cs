@@ -250,7 +250,18 @@ public sealed class XQueryExecutable
 
             if (stream is null)
             {
-                throw new InvalidOperationException($"XQST0059: Unable to locate schema for namespace '{targetNs}'.");
+                // The XPath/XQuery JSON namespace is defined by the standard; satisfy the
+                // import from the built-in schema-for-json even when no external file is
+                // supplied (json-to-xml-045/046/047 and similar schema-import tests).
+                if (targetNs == "http://www.w3.org/2005/xpath-functions")
+                {
+                    stream = FunctionLibrary.GetJsonSchemaStream();
+                }
+
+                if (stream is null)
+                {
+                    throw new InvalidOperationException($"XQST0059: Unable to locate schema for namespace '{targetNs}'.");
+                }
             }
 
             using (stream)

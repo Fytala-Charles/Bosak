@@ -292,6 +292,7 @@ Implementation of:
 - **map namespace**: `map:merge`, `map:get`, etc.
 - **array namespace**: `array:size`, `array:get`, etc.
 - **xs constructors**: Type constructors cast/validate values.
+- **JSON functions**: `fn:json-to-xml` and `fn:xml-to-json` are implemented in `FunctionLibrary`. `fn:json-to-xml` embeds the W3C schema-for-JSON (`src/Bosak.XPath.Standard/Resources/schema-for-json.xsd`) and, when `validate:=true()` is supplied, validates the generated `XDocument` through `XDocumentProvider.ValidateXDocument`, producing PSVI annotations. `element(name, type)` and `document-node(schema-element(...))` kind tests in `VmEngine.ValueMatchesType` consume those PSVI annotations.
 
 Each function is implemented as a static method conforming to a delegate signature:
 ```csharp

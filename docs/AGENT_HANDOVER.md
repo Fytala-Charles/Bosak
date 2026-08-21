@@ -1,6 +1,60 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Commit:** `<pending>` — schema-aware `fn:json-to-xml` validation and kind-test fixes
+**Current focus:** **`fn:json-to-xml` cluster** — `validate:=true()` is now supported and drives schema validation against the embedded W3C schema-for-JSON; `validate:=true()` + `duplicates:='retain'` raises `FOJS0005`; schema/duplicate-key failures map to `FOJS0003`. `VmEngine.ValueMatchesType` now recognizes parameterized kind tests (`document-node(...)`, `schema-element(...)`) including `document-node(schema-element(...))` and preserves original case for schema type names in `element(name, type)`. XQuery now resolves `import schema "http://www.w3.org/2005/xpath-functions"` to the embedded JSON schema. This closes the QT3 `fn-json-to-xml` residual cluster.
+
+Expected state: **1,765 unit tests / 0 failed / 0 skipped**; **`fn-json-to-xml` 86 passed / 0 failed / 8 skipped** (skips are unsupported dependencies). Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
+
+## This Session Changes (fn:json-to-xml cluster)
+
+1. **Schema-aware `fn:json-to-xml` validation** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - Embedded `tests/qt3tests/fn/json-to-xml/schema-for-json.xsd` as `src/Bosak.XPath.Standard/Resources/schema-for-json.xsd`.
+   - Added `Validate` field to `JsonOptions` and wired `validate:=true()` to `XDocumentProvider.ValidateXDocument` against the embedded schema.
+   - `validate:=true()` + explicit `duplicates='retain'` raises `FOJS0005` (json-to-xml-error-042).
+   - Schema validation failures, including duplicate JSON keys, are mapped to `FOJS0003` (json-to-xml-error-028).
+   - Header bumped.
+
+2. **Public XDocument validation API** (`src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`) —
+   - Exposed `ValidateXDocument` so `Bosak.XPath.Standard` can validate an in-memory `XDocument` with PSVI annotations.
+   - Header bumped.
+
+3. **Built-in JSON schema import for XQuery** (`src/Bosak.XQuery/Api/XQueryExecutable.cs`) —
+   - Added `FunctionLibrary.JsonSchemaSet` / `GetJsonSchemaStream` and built-in resolution for `import schema "http://www.w3.org/2005/xpath-functions"` via `XQueryExecutable.BuildSchemaSet` (uses `InternalsVisibleTo("Bosak.XQuery")`).
+   - Header bumped.
+
+4. **`TestEnvironment` JSON schema resolution** (`tests/Bosak.XPath.Conformance/TestEnvironment.cs`) —
+   - Resolves the JSON namespace schema when a QT3 environment declares `<schema uri="http://www.w3.org/2005/xpath-functions" role="import"/>`.
+
+5. **`VmEngine.ValueMatchesType` kind-test fixes** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - `IsKnownSequenceTypeName` now recognizes parameterized kind tests (`document-node(...)`, `schema-element(...)`, etc.).
+   - Added `document-node(schema-element(...))` support.
+   - Preserved original case for schema type names in `element(name, type)` (fixes `stringType`, `nullType`, etc.).
+
+6. **Unit tests** (`tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`) —
+   - `JsonToXml_ValidateTrue_NumberTypedAsDouble`
+   - `JsonToXml_ValidateTrue_DuplicateKeys_RaisesFOJS0003`
+   - `JsonToXml_ValidateTrue_ExplicitRetain_RaisesFOJS0005`
+   - `JsonToXml_ValidateNotBoolean_RaisesXPTY0004` (existing)
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`
+- `src/Bosak.XPath.Standard/Bosak.XPath.Standard.csproj`
+- `src/Bosak.XPath.Standard/Resources/schema-for-json.xsd`
+- `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`
+- `src/Bosak.XQuery/Api/XQueryExecutable.cs`
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Conformance/TestEnvironment.cs`
+- `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`
+- `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`
+- `docs/FEATURE_REQUESTS.md`
+- `docs/ARCHITECTURE.md`
+
+---
+
+**Date:** 2026-08-21
 **Commit:** `3c25b2f` — honor PSVI nilled status in fn:nilled, fn:data, and element tests
 **Current focus:** **`fn:nilled` cluster** — `fn:nilled` now uses the PSVI `IsNil` annotation; `fn:data` returns the PSVI typed value for schema-validated nodes (empty for nilled elements); and `element(*, T)` / `element(N, T)` kind tests reject nilled elements while the nillable form `element(*, T?)` / `element(N, T?)` accepts them. This closes the QT3 `fn-nilled` residual cluster.
 

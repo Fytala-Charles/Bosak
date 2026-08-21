@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 15-08-2026     | Evaluate <collection><query> environment declarations into EvaluationContext.CollectionValues |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 21-08-2026     | Resolve role='import' for built-in JSON namespace schema (fn:json-to-xml validate tests) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -42,6 +44,8 @@ namespace Bosak.XPath.Conformance;
 
 internal sealed class TestEnvironment
 {
+    private const string JsonXmlNamespace = "http://www.w3.org/2005/xpath-functions";
+
     public List<SourceDocument> Sources { get; } = new();
     public List<SourceSchema> Schemas { get; } = new();
     public List<NamespaceBinding> Namespaces { get; } = new();
@@ -92,12 +96,19 @@ internal sealed class TestEnvironment
         {
             string? file = (string?)schema.Attribute("file");
             string? uri = (string?)schema.Attribute("uri");
-            if (file is not null)
+            string? resolvedFile = file;
+            if (resolvedFile is null && uri == JsonXmlNamespace)
             {
-                string path = Path.IsPathRooted(file) ? file : Path.Combine(baseDir, file);
+                // The QT3 json-ns environment declares a schema import for the JSON XML
+                // namespace without a file hint; locate the bundled schema-for-json.xsd.
+                resolvedFile = ResolveJsonSchemaPath(baseDir, suitePath);
+            }
+            if (resolvedFile is not null)
+            {
+                string path = Path.IsPathRooted(resolvedFile) ? resolvedFile : Path.Combine(baseDir, resolvedFile);
                 if (!File.Exists(path))
                 {
-                    path = Path.Combine(suitePath, file);
+                    path = Path.Combine(suitePath, resolvedFile);
                 }
                 env.Schemas.Add(new SourceSchema(uri, path));
             }
@@ -406,10 +417,37 @@ internal sealed class TestEnvironment
         {
             using var stream = File.OpenRead(schema.FilePath);
             using var reader = XmlReader.Create(stream, null, new Uri(schema.FilePath).AbsoluteUri);
-            schemaSet.Add(XmlSchema.Read(reader, null));
+            var xsd = XmlSchema.Read(reader, null)
+                ?? throw new InvalidOperationException($"Failed to read schema from '{schema.FilePath}'.");
+            schemaSet.Add(xsd);
         }
         schemaSet.Compile();
         return schemaSet;
+    }
+
+    /// <summary>
+    /// Locates the W3C schema-for-json.xsd bundled with the QT3 test suite. Shared
+    /// environments are parsed with an empty <paramref name="baseDir"/>, so the schema
+    /// is also searched relative to the suite root. The returned path is absolute so
+    /// the caller can use it directly.
+    /// </summary>
+    private static string? ResolveJsonSchemaPath(string baseDir, string suitePath)
+    {
+        foreach (var relative in new[] { "json-to-xml/schema-for-json.xsd", "fn/json-to-xml/schema-for-json.xsd" })
+        {
+            var candidate = Path.GetFullPath(Path.Combine(baseDir, relative));
+            if (File.Exists(candidate))
+                return candidate;
+        }
+
+        foreach (var relative in new[] { "fn/json-to-xml/schema-for-json.xsd", "json-to-xml/schema-for-json.xsd" })
+        {
+            var candidate = Path.GetFullPath(Path.Combine(suitePath, relative));
+            if (File.Exists(candidate))
+                return candidate;
+        }
+
+        return null;
     }
 }
 

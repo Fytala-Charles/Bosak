@@ -16,4 +16,12 @@
     <ProjectReference Include="..\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\schema-for-json.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.XQuery" />
+  </ItemGroup>
+
 </Project>

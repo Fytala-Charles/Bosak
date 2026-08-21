@@ -7699,13 +7699,25 @@ public static class VmEngine
     }
 
     private static bool IsKnownSequenceTypeName(string name)
-        => name is "node" or "node()" or "element" or "element()" or "attribute" or "attribute()"
+    {
+        if (name is "node" or "node()" or "element" or "element()" or "attribute" or "attribute()"
             or "document-node" or "document-node()" or "text" or "text()" or "comment" or "comment()"
             or "processing-instruction" or "processing-instruction()" or "namespace-node" or "namespace-node()"
             or "item" or "item()"
             or "function" or "function(*)" or "function()"
             or "map" or "map(*)" or "map()"
-            or "array" or "array(*)" or "array()";
+            or "array" or "array(*)" or "array()")
+        {
+            return true;
+        }
+
+        return name.StartsWith("element(", StringComparison.Ordinal)
+            || name.StartsWith("attribute(", StringComparison.Ordinal)
+            || name.StartsWith("document-node(", StringComparison.Ordinal)
+            || name.StartsWith("schema-element(", StringComparison.Ordinal)
+            || name.StartsWith("schema-attribute(", StringComparison.Ordinal)
+            || name.StartsWith("processing-instruction(", StringComparison.Ordinal);
+    }
 
     private static bool IsKnownAtomicTypeName(string name)
         => name is "string" or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
@@ -8771,16 +8783,17 @@ public static class VmEngine
             // element() or element(*) → any element
             if (string.IsNullOrEmpty(inner) || inner == "*")
                 return true;
-            // element(*, T) → check type compatibility
-            if (inner.StartsWith("*, "))
-            {
-                var typePart = inner.Substring(3).Trim();
-                return IsElementTypeCompatible(typePart, context, value.NodeValue);
-            }
             // element(name) or element(name, T) → check name match.
-            // Use the case-preserved type string so local names such as 'A' are not lowercased.
+            // Use the case-preserved type string so local names such as 'A' and schema
+            // type names such as 'stringType' are not lowercased.
             var casePreserved = GetCasePreservedTypeName(typeName);
             var cpInner = casePreserved.Substring(8, casePreserved.Length - 9).Trim();
+            // element(*, T) → check type compatibility
+            if (cpInner.StartsWith("*, "))
+            {
+                var typePart = cpInner.Substring(3).Trim();
+                return IsElementTypeCompatible(typePart, context, value.NodeValue);
+            }
             var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
@@ -8822,9 +8835,9 @@ public static class VmEngine
                     }
                 }
             }
-            if (inner.Contains(','))
+            if (cpInner.Contains(','))
             {
-                var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
+                var typePart = cpInner.Substring(cpInner.IndexOf(',') + 1).Trim();
                 return IsElementTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
@@ -8896,8 +8909,9 @@ public static class VmEngine
             return true;
         }
 
-        // document-node(element(...)) — check document node and its single child element
-        if (normalized.StartsWith("document-node(element(") && normalized.EndsWith(')'))
+        // document-node(element(...)) / document-node(schema-element(...)) — check document
+        // node and match its single child element against the nested kind test.
+        if (normalized.StartsWith("document-node(", StringComparison.Ordinal) && normalized.EndsWith(')'))
         {
             if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Document)
                 return false;
@@ -8909,7 +8923,8 @@ public static class VmEngine
             }
             if (childElems.Count != 1)
                 return false;
-            // Preserve the original case of the nested kind test (e.g. element(Root)).
+            // Preserve the original case of the nested kind test (e.g. element(Root) or
+            // schema-element(j:array)).
             var casePreserved = GetCasePreservedTypeName(typeName);
             var inner = casePreserved.Substring("document-node(".Length, casePreserved.Length - "document-node(".Length - 1);
             return ValueMatchesType(XdmValue.FromNode(childElems[0].NodeValue!), inner, context);

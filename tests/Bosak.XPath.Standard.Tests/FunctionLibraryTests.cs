@@ -73,6 +73,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.32  | 18-08-2026     | UCA alternate=blanked + strength=identical codepoint tie-break test (compare-042) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.33  | 21-08-2026     | json-to-xml validate=true PSVI type annotation tests (FOJS0003/FOJS0005) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -3315,6 +3317,36 @@ public class FunctionLibraryTests
         var ex = Assert.Throws<InvalidOperationException>(
             () => Evaluate("json-to-xml('[\"String\"]', map{'validate':'EMCA-262'})"));
         Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void JsonToXml_ValidateTrue_NumberTypedAsDouble()
+    {
+        // json-to-xml-016: validate=true produces PSVI annotations; the typed value
+        // of j:number is xs:double.
+        const string j = "Q{http://www.w3.org/2005/xpath-functions}";
+        var result = Evaluate(
+            $"let $r := json-to-xml('[1]', map{{'validate':true()}}) " +
+            $"return data($r/{j}array/{j}number) instance of xs:double");
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void JsonToXml_ValidateTrue_DuplicateKeys_RaisesFOJS0003()
+    {
+        // json-to-xml-error-028: duplicate keys fail schema validation.
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("json-to-xml('{\"a\":1,\"b\":2,\"a\":3}', map{'validate':true()})"));
+        Assert.Contains("FOJS0003", ex.Message);
+    }
+
+    [Fact]
+    public void JsonToXml_ValidateTrue_ExplicitRetain_RaisesFOJS0005()
+    {
+        // json-to-xml-error-042: validate=true is incompatible with duplicates='retain'.
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("json-to-xml('{\"A\":1,\"A\":2}', map{'validate':true(),'duplicates':'retain'})"));
+        Assert.Contains("FOJS0005", ex.Message);
     }
 
     [Fact]
