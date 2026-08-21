@@ -180,6 +180,9 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-068 | *(internal)* | XSD 1.1 regex hyphen rules and `\i`/`\c` ranges | Required for XSD 1.1 conformance: `-` is a subtraction operator only immediately before `[` (regex-syntax-0056a/0086a); `\i`/`\c` use the explicit XML 1.0 (5th ed) NameStartChar/NameChar ranges (regex-syntax-0986/0987, QT3 re00987) | **Implemented** | TBD | Charles Korthout | 2026-08-03 |
 | REQ-069 | *(internal)* | Engine conformance cluster exposed by environment stylesheets | Required for XSLT conformance: `xsl:assert` evaluation (XTMM9001/custom codes, try/catch), XTDE1480 temporary-output-state tracking for xsl:result-document, where-populated per-item emptiness rules (XSLT 3.0 §8.4), xsl:fork sequential prongs, fn:stream-available, fn:unparsed-entity-* stubs, accumulator initial-value global-param scope, fn:path on parentless trees with sibling indices, element()/attribute() kind-test namespace rules, fn:xml-to-json FOJS0006 for multi-element documents, XHTML attribute escaping (&#34;, C1 controls), HTML5 foreign-namespace prefixes | **Implemented** | TBD | Charles Korthout | 2026-08-03 |
 | REQ-070 | *(internal)* | Schema awareness — user-defined schema simple types | Register constructor functions for user-defined schema simple types, match/cast them in `ValueMatchesType`/`ApplyFunctionConversion`/`instance of`, keep integer XDM kind for integer-derived typed values; full QT3 sweep 29,929/0/1,892 with `schema-element()`/`schema-attribute()` kind tests, list/union types, and QName/NOTATION casts documented as known gaps | **Implemented** | Phase 4 | Charles Korthout | 2026-08-20 |
+| REQ-071 | Bosak / Fytala Stack | XSLT code lens source-document hint polish | Harden the default source-document hint: add test coverage for single-quoted processing-instruction values, support an XML comment hint alternative, and trim whitespace around the supplied path | **Accepted** | TBD | Charles Korthout | 2026-08-20 |
+| REQ-072 | Bosak / Fytala Stack | XSLT code lens initial-template runner | Detect an `xsl:initial-template` declaration or named template entry point and offer a code lens that runs the transform without requiring a source XML document | **Accepted** | TBD | Charles Korthout | 2026-08-20 |
+| REQ-073 | Bosak / Fytala Stack | Richer XSLT document symbols / outline | Extend `DocumentSymbolHandler` to outline top-level XSLT declarations: templates, functions, variables, parameters, attribute-sets, and key definitions | **Accepted** | TBD | Charles Korthout | 2026-08-20 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -3124,3 +3127,36 @@ After clearing all runnable QT3 and XSLT 3.0 failures, the following capabilitie
 - `D:\Development\Customer A\docs\INTEGRATION.md` — How to consume Bosak from Customer A
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — High-level Bosak architecture and roadmap
 - Project root `AGENTS.md` — Coding conventions for Bosak contributors
+
+---
+
+## 11. VS Code Extension Backlog
+
+### REQ-071: XSLT code lens source-document hint polish
+
+**Requesting Application:** Bosak / Fytala Stack  
+**Submitted:** 2026-08-20  
+**Status:** **Accepted**
+
+Harden the default source-document hint introduced with REQ-028. Acceptance criteria:
+
+- Add unit-test coverage for single-quoted `<?bosak source-document='...'?>` processing instructions.
+- Support an XML comment alternative such as `<!-- bosak:source-document=... -->`.
+- Trim surrounding whitespace from the supplied path.
+- Keep relative-path resolution against the stylesheet directory.
+
+### REQ-072: XSLT code lens initial-template runner
+
+**Requesting Application:** Bosak / Fytala Stack  
+**Submitted:** 2026-08-20  
+**Status:** **Accepted**
+
+Add a second XSLT code lens for stylesheets that declare an `xsl:initial-template` or contain a named template entry point. The lens should run the transform without requiring a source XML document, using the named template as the entry point. This covers the common XSLT 3.0 use case where the stylesheet generates output from parameters alone.
+
+### REQ-073: Richer XSLT document symbols / outline
+
+**Requesting Application:** Bosak / Fytala Stack  
+**Submitted:** 2026-08-20  
+**Status:** **Accepted**
+
+Extend `DocumentSymbolHandler` to provide a richer outline for XSLT documents. Symbols should include top-level declarations: templates (named and matched), functions, variables, parameters, attribute-sets, keys, and output declarations. This improves navigation in large stylesheets.
