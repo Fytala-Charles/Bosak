@@ -1,6 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Commit:** `1f0b022` — Reject non-atomic user-defined schema types as SequenceType item types (XPST0051)
 **Current focus:** **schema-aware SequenceType XPST0051 cluster** — `VmEngine.InstanceOf` now rejects all user-defined simple types that are not atomic as SequenceType item types: direct list types, restrictions of list types, restrictions of union types, and union types that transitively contain a list-type member (including built-in list types such as `xs:NMTOKENS`). Union types whose members are purely atomic (possibly via nested unions of atomic types) remain valid item types. This closes the QT3 `prod-InstanceofExpr` residual failures (`instanceof114`, `instanceof115`, `instanceof120`) and the `prod-TypeswitchExpr` residual failures (`typeswitch-114`, `typeswitch-115`).
 
 Expected state: **1,775 unit tests / 0 failed / 0 skipped**; **`prod-InstanceofExpr` 308 passed / 0 failed / 1 skipped**; **`prod-TypeswitchExpr` 72 passed / 0 failed / 1 skipped**. Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
