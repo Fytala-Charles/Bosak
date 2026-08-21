@@ -206,6 +206,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.109 | 21-08-2026     | Schema-aware QName/NOTATION cast fixes; preserve prefixes, reject QName to string-subtype casts, XQST0034 constructor conflicts |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.110 | 21-08-2026     | element(*, T) and element(N, T) kind tests reject nilled elements; fn:nilled uses PSVI IsNil |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -7795,6 +7797,11 @@ public static class VmEngine
     private static bool IsElementTypeCompatible(string typeName, EvaluationContext? context, IXdmNode node)
     {
         var (targetNs, targetLocal) = ResolveKindTestTypeName(typeName, context);
+        // element(*, T?) / element(N, T?) explicitly allow nilled elements (fn-nilled-40/42/43/49/53);
+        // element(*, T) / element(N, T) do not (fn-nilled-44/45/46).
+        bool nillableType = typeName.TrimEnd().EndsWith("?");
+        if (node.IsNilled)
+            return nillableType;
         if (node.SchemaTypeAnnotation is not { } actual)
         {
             // Untyped element: only xs:anyType and xs:untyped match.

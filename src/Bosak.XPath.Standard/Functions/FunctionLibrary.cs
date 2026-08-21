@@ -242,6 +242,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.87  | 17-08-2026     | fn:analyze-string result element declares fn namespace explicitly (analyzeString-028) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.88  | 21-08-2026     | fn:nilled honors PSVI nilled status; fn:data returns PSVI typed value for schema-validated nodes |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -7578,9 +7580,11 @@ public static class FunctionLibrary
     private static XdmValue NilledOfNode(IXdmNode node)
     {
         // fn:nilled is defined only for element nodes. For all other node kinds it
-        // returns the empty sequence; for elements it returns false unless the
-        // element is schema-validated with xsi:nil="true" (not supported here).
-        return node.NodeKind == XdmNodeKind.Element ? XdmValue.False : XdmValue.Undefined;
+        // returns the empty sequence; for elements it returns true when the node is
+        // nilled according to its PSVI annotation, otherwise false.
+        if (node.NodeKind != XdmNodeKind.Element)
+            return XdmValue.Undefined;
+        return node.IsNilled ? XdmValue.True : XdmValue.False;
     }
 
     // ------------------------------------------------------------------
@@ -10541,14 +10545,17 @@ public static class FunctionLibrary
         {
             // XDM §2.7.2: typed value of comments and PIs is xs:string;
             // for elements, attributes, text, and document nodes in the untyped
-            // case it is xs:untypedAtomic. Complex element-only/empty elements
-            // have no typed value and raise FOTY0012.
+            // case it is xs:untypedAtomic. Schema-validated nodes return their
+            // PSVI typed value (empty for nilled elements). Complex element-only/
+            // empty elements have no typed value and raise FOTY0012.
             var node = value.NodeValue;
             if (node.HasNoTypedValue)
                 throw new InvalidOperationException("FOTY0012: The argument node does not have a typed value.");
             // XDM §2.7.2: namespace nodes also have an xs:string typed value (nscons-012).
             if (node.NodeKind is XdmNodeKind.ProcessingInstruction or XdmNodeKind.Comment or XdmNodeKind.Namespace)
                 return XdmValue.FromString(node.StringValue);
+            if (node.SchemaTypeAnnotation is not null)
+                return node.TypedValue;
             return XdmValue.FromString(node.StringValue, "untypedAtomic");
         }
 

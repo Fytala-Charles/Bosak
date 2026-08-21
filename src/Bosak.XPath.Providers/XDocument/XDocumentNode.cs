@@ -57,6 +57,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.16  | 21-08-2026     | Annotate PSVI typed values for XSD union types using the selected member type            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.17  | 21-08-2026     | Nilled elements have an empty typed value and are not element(*, T)-compatible          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -292,13 +294,17 @@ public sealed class XDocumentNode : IXdmNode
     /// Gets a value indicating whether this node has no typed value per XDM.
     /// For elements this is true when schema validation produced a complex type
     /// with element-only or empty content (no simple typed value), which means
-    /// <c>fn:data()</c> must raise FOTY0012.
+    /// <c>fn:data()</c> must raise FOTY0012. Nilled elements always have an empty
+    /// typed value, so this returns <c>false</c> for them.
     /// </summary>
     public bool HasNoTypedValue
     {
         get
         {
             if (_node is not XElement element)
+                return false;
+
+            if (element.GetSchemaInfo()?.IsNil ?? false)
                 return false;
 
             var info = element.GetSchemaInfo();
@@ -328,6 +334,11 @@ public sealed class XDocumentNode : IXdmNode
             XAttribute a => a.GetSchemaInfo(),
             _ => null
         };
+
+        // XDM §2.7.2: the typed value of a nilled element is the empty sequence.
+        if (info is { IsNil: true })
+            return XdmValue.Undefined;
+
         if (info?.SchemaType is null)
             return XdmValue.FromString(StringValue);
 
