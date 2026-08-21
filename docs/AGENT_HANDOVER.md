@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
-**Commit:** `ed22490` — schema-aware `fn:idref` PSVI support and name() prefix selection
+**Commit:** `243c3cd` — schema-aware `fn:idref` PSVI support and name() prefix selection
 **Current focus:** **`fn:idref` cluster** — `IXdmNode.IsIdref` exposes the XDM *is-idrefs* property for schema-validated nodes. `XDocumentNode` computes it from PSVI: `xs:IDREF`/`xs:IDREFS`, derived restrictions and lists, unions where the selected member is `xs:IDREF`, and complex types with simple content whose base is an IDREF-bearing simple type. Nilled IDREF elements report `false`. `FunctionLibrary.CollectIdrefElements` now consults `IsIdref` instead of relying only on DTD declarations or attribute names, so schema-validated IDREF/IDREFS attributes and elements are collected. `XDocumentNode.Prefix` prefers the empty prefix when the element's namespace is also bound as the default namespace, so `fn:name()` returns the unprefixed lexical form used in the source document. This closes the QT3 `fn-idref` residual cluster.
 
 Expected state: **1,772 unit tests / 0 failed / 0 skipped**; **`fn-idref` 54 passed / 0 failed / 0 skipped**. Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
