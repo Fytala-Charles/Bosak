@@ -137,6 +137,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.77  | 29-07-2026     | ApplyAxis raises XPTY0019 for atomic items in a path step's input sequence |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.78  | 21-08-2026     | FunctionItemInstanceOf avoids recursive ValueMatchesType fallback; arity-only for unresolved items |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.79  | 21-08-2026     | IsSchemaTypeSequenceSubtype breaks recursive IsSequenceTypeSubtype fallback for atomic types |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.78  | 29-07-2026     | Singleton-sequence unwrap for map/array/function-typed call parameters |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.79  | 29-07-2026     | Computed namespace prefix type check (XPTY0004); ns decls not XQTY0024 content; ns nodes atomize to xs:string |
@@ -9283,7 +9287,11 @@ public static class VmEngine
             return IsSequenceTypeSubtype(inline.ReturnType ?? "item()*", testReturnType, context);
         }
 
-        return ValueMatchesType(value, typeName, context);
+        // Other function items (delegates, curried/coerced items, or named functions whose
+        // signature cannot be resolved): precise parameter/return types are unavailable, so
+        // match on arity only. Calling ValueMatchesType here would re-enter FunctionItemInstanceOf
+        // for the same function item and type, causing unbounded recursion.
+        return TryGetFunctionArity(value, out var arity) && arity == testParamTypes.Length;
     }
 
     /// <summary>
@@ -9879,17 +9887,43 @@ public static class VmEngine
 
             default:
             {
-                // An atomic type denotes a single item. Check direct derivation first;
-                // if that fails, delegate to the general sequence subtype check so that
-                // non-schema tests such as item()* are handled as well. The visited set
-                // prevents infinite recursion when the test type is itself a schema type.
+                // An atomic type denotes a single item. Direct schema derivation is checked
+                // above; remaining non-schema supertypes are item() and xs:anyAtomicType.
+                // Do NOT call IsSequenceTypeSubtype here with the original testTypeName: when
+                // testTypeName resolves to the same schema type it would re-enter
+                // IsSchemaAwareSequenceSubtype and recurse forever because each call starts
+                // with a fresh visited set.
                 var (testNs, testLocal) = ResolveTypeQName(testTypeName, context);
                 var actualQName = actualSchemaType.QualifiedName;
                 if (IsSchemaTypeSubtype(context, actualQName.Namespace, actualQName.Name, testNs, testLocal))
                     return true;
 
-                string actualName = FormatSchemaTypeName(actualSchemaType);
-                return IsSequenceTypeSubtype(actualName, testTypeName, context);
+                string testNorm = testLocal.ToLowerInvariant();
+                if (testNs == XmlSchema.Namespace && testNorm is "anyatomictype")
+                    return true;
+                if (testNs == string.Empty && testNorm is "item" or "item()")
+                    return true;
+
+                // A schema union test accepts any value whose type is a subtype of at least
+                // one of its member types (e.g. xs:date is a subtype of union(xs:date, xs:time)).
+                if (TryGetSchemaSimpleTypeExpanded(testNs, testLocal, context, out var testSchemaType)
+                    && GetSchemaTypeVariety(testSchemaType) == SchemaTypeVariety.Union)
+                {
+                    string actualName = FormatSchemaTypeName(actualSchemaType);
+                    foreach (var member in GetUnionMemberTypes(testSchemaType, context))
+                    {
+                        if (member is null)
+                            continue;
+                        if (IsSchemaAwareSequenceSubtype(context, actualName, FormatSchemaTypeName(member)))
+                            return true;
+                    }
+                }
+
+                // Built-in atomic hierarchy (e.g. xs:int is a subtype of xs:decimal).
+                string actualNorm = FormatSchemaTypeName(actualSchemaType).ToLowerInvariant();
+                if (actualNorm.StartsWith("xs:"))
+                    actualNorm = actualNorm[3..];
+                return IsBaseTypeSubtype(actualNorm, testNorm);
             }
         }
     }
