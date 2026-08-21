@@ -1,27 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** *(pending)* feat(languageserver): add XSLT code lens
-**Current focus:** **VS Code extension — XSLT code lens** — `CodeLensHandler` now recognizes `.xsl` and `.xslt` files and returns a single lens titled **Run XSLT transformation** with command `bosak.transformXslt`. The lens reuses the existing VS Code command that prompts for a source XML document and runs the transformation via the custom LSP request. XPath and XQuery lenses continue to evaluate eagerly as before.
+**Commit:** *(pending)* feat(languageserver): add default source-document hint to XSLT code lens
+**Current focus:** **VS Code extension — XSLT code lens default source** — `CodeLensHandler` now parses a `<?bosak source-document="..."?>` processing instruction in `.xsl`/`.xslt` files. When the hint is present, the lens title shows the source file name (e.g., **Run XSLT transformation (input.xml)**) and the `bosak.transformXslt` command receives the resolved source path as a second argument, so the VS Code client can run the transform without prompting. If the hint is absent, the existing picker-based lens remains unchanged.
 
-Expected state: **1,731 unit tests / 0 failed** in the main solution; **60 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
+Expected state: **1,731 unit tests / 0 failed** in the main solution; **61 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
 
-## This Session Changes (XSLT code lens)
+## This Session Changes (XSLT default source hint)
 
-1. **`CodeLensHandler`** (`src/Bosak.LanguageServer/CodeLensHandler.cs`) — added XSLT detection in `GetDocumentLanguage`; the document selector pattern now includes `.xsl` and `.xslt`; for XSLT documents the handler returns a non-evaluating lens with title **Run XSLT transformation** and command `bosak.transformXslt`, passing the document URI as the command argument.
-2. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` adds tests for `.xsl` and `.xslt` documents returning the transform lens.
-3. **Documentation** — `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
+1. **`CodeLensHandler`** (`src/Bosak.LanguageServer/CodeLensHandler.cs`) — added `DefaultSourceRegex` and `TryGetDefaultSourceDocument`; for XSLT documents with a `<?bosak source-document="..."?>` processing instruction, the lens title includes the source file name and the command arguments include both the stylesheet URI and the resolved absolute source path (relative paths are resolved against the stylesheet directory).
+2. **VS Code client** (`vscode-bosak/src/extension.ts`) — `transformXslt` now accepts optional `uri` and `sourcePath` arguments; when `sourcePath` is supplied it is used directly, otherwise the file picker is shown as before.
+3. **Tests** — `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` adds a test for an XSLT document with a default source processing instruction, asserting the lens title, command name, and resolved source path argument.
+4. **Documentation** — `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md` (REQ-028), and `docs/AGENT_HANDOVER.md` updated.
 
 ## Files Changed (this session)
 
 - `src/Bosak.LanguageServer/CodeLensHandler.cs`
+- `vscode-bosak/src/extension.ts`
 - `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`
 - `docs/INTEGRATION.md`, `docs/FEATURE_REQUESTS.md`, `docs/AGENT_HANDOVER.md`
 
 ## Next Recommended Step
 
-1. Commit and push the XSLT code lens feature.
-2. Continue VS Code extension work (e.g., add a code lens for XSLT that evaluates a default `source-document` when an `xsl:source-document` or similar hint is present, add richer XSLT symbol/outline support, or switch to an engine topic such as XML 1.1 support in the `XDocument` provider).
+1. Commit and push the default-source XSLT code lens feature.
+2. Continue VS Code extension work (e.g., support single-quoted processing-instruction values, add an XML comment hint alternative, richer XSLT symbol/outline support, or switch to an engine topic such as XML 1.1 support in the `XDocument` provider).
 
 ---
 

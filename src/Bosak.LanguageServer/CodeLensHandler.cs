@@ -13,10 +13,13 @@
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Added XQuery document support                                                            |
 //                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT document support                                                              |
+//                      | Charles Korthout | 0.4   | 20-08-2026     | Added default source-document hint for XSLT code lens                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Bosak.XPath.Api;
@@ -66,9 +69,29 @@ public class CodeLensHandler : CodeLensHandlerBase
         if (!_documents.TryGet(uri.ToString(), out var text))
             return Task.FromResult<CodeLensContainer?>(new CodeLensContainer(Array.Empty<CodeLens>()));
 
-        var (title, commandName) = language == "XSLT"
-            ? ("Run XSLT transformation", "bosak.transformXslt")
-            : GetEvaluatedLens(text, language);
+        string title;
+        string commandName;
+        JArray arguments;
+        if (language == "XSLT")
+        {
+            commandName = "bosak.transformXslt";
+            if (TryGetDefaultSourceDocument(text, uri, out var defaultSourcePath))
+            {
+                var fileName = Path.GetFileName(defaultSourcePath!);
+                title = $"Run XSLT transformation ({Truncate(fileName, MaxTitleLength - 29)})";
+                arguments = new JArray(uri.ToString(), defaultSourcePath!);
+            }
+            else
+            {
+                title = "Run XSLT transformation";
+                arguments = new JArray(uri.ToString());
+            }
+        }
+        else
+        {
+            (title, commandName) = GetEvaluatedLens(text, language);
+            arguments = new JArray(uri.ToString());
+        }
 
         var lenses = new List<CodeLens>
         {
@@ -79,7 +102,7 @@ public class CodeLensHandler : CodeLensHandlerBase
                 {
                     Title = title,
                     Name = commandName,
-                    Arguments = new JArray(uri.ToString()),
+                    Arguments = arguments,
                 }
             }
         };
@@ -150,6 +173,37 @@ public class CodeLensHandler : CodeLensHandlerBase
         catch (Exception ex)
         {
             return (null, ex.Message);
+        }
+    }
+
+    private static readonly Regex DefaultSourceRegex = new(
+        @"<\?bosak\s+source-document\s*=\s*(?:""([^""]*)""|'([^']*)')\s*\?>",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    private static bool TryGetDefaultSourceDocument(
+        string text, DocumentUri uri, out string? resolvedSourcePath)
+    {
+        resolvedSourcePath = null;
+        var match = DefaultSourceRegex.Match(text);
+        if (!match.Success)
+            return false;
+
+        var raw = match.Groups[1].Success ? match.Groups[1].Value : match.Groups[2].Value;
+        if (string.IsNullOrWhiteSpace(raw))
+            return false;
+
+        try
+        {
+            var localPath = new Uri(uri.ToString()).LocalPath;
+            var baseDirectory = Path.GetDirectoryName(localPath) ?? string.Empty;
+            resolvedSourcePath = Path.IsPathRooted(raw) || string.IsNullOrEmpty(baseDirectory)
+                ? raw
+                : Path.GetFullPath(Path.Combine(baseDirectory, raw));
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 

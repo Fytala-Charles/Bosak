@@ -195,34 +195,45 @@ async function runXQuery(): Promise<void> {
     }
 }
 
-async function transformXslt(): Promise<void> {
-    const editor = vscode.window.activeTextEditor;
-    if (!editor || editor.document.languageId !== 'xslt') {
-        vscode.window.showInformationMessage('Open an XSLT file to transform.');
-        return;
+async function transformXslt(uri?: string, sourcePath?: string): Promise<void> {
+    let targetUri: string;
+    if (uri) {
+        targetUri = uri;
+    } else {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor || editor.document.languageId !== 'xslt') {
+            vscode.window.showInformationMessage('Open an XSLT file to transform.');
+            return;
+        }
+        targetUri = editor.document.uri.toString();
     }
+
     if (!client) {
         vscode.window.showErrorMessage('Bosak language server is not running.');
         return;
     }
 
-    const picked = await vscode.window.showOpenDialog({
-        canSelectFiles: true,
-        canSelectFolders: false,
-        canSelectMany: false,
-        filters: { 'XML files': ['xml'], 'All files': ['*'] },
-        openLabel: 'Select source XML document'
-    });
-    if (!picked || picked.length === 0) {
-        return;
+    let targetSourcePath = sourcePath;
+    if (!targetSourcePath) {
+        const picked = await vscode.window.showOpenDialog({
+            canSelectFiles: true,
+            canSelectFolders: false,
+            canSelectMany: false,
+            filters: { 'XML files': ['xml'], 'All files': ['*'] },
+            openLabel: 'Select source XML document'
+        });
+        if (!picked || picked.length === 0) {
+            return;
+        }
+        targetSourcePath = picked[0].fsPath;
     }
 
     try {
         const result = await client.sendRequest<{ result?: string; error?: string }>(
             'bosak/transformXslt',
             {
-                textDocument: { uri: editor.document.uri.toString() },
-                sourcePath: picked[0].fsPath
+                textDocument: { uri: targetUri },
+                sourcePath: targetSourcePath
             }
         );
         if (result.error) {

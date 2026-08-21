@@ -19,6 +19,12 @@
 
 ## 0. Recent Changes
 
+- **2026-08-20** — Language Server: **XSLT code lens default source document** — `.xsl` and `.xslt` files that contain a `<?bosak source-document="..."?>` processing instruction now show a code lens titled **Run XSLT transformation (file.xml)**. The lens command (`bosak.transformXslt`) receives both the stylesheet URI and the resolved absolute source path, so the VS Code client runs the transformation without prompting. Relative source paths are resolved against the stylesheet directory; if the processing instruction is absent, the existing picker-based lens is used.
+  - Handler: `src/Bosak.LanguageServer/CodeLensHandler.cs`.
+  - Client: `vscode-bosak/src/extension.ts`.
+  - Tests in `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`.
+  - Language-server tests: **61 passed / 0 failed / 0 skipped** (+1).
+
 - **2026-08-20** — Language Server: **execute command with serializable result** — the language server now implements `workspace/executeCommand` for `bosak.evaluateXPath` and `bosak.evaluateXQuery`. Clicking a code lens (or invoking the command palette action) sends the command with the document URI; the server evaluates the document and sends the serialized result or error back to the client via a `bosak/evaluationResult` notification. The VS Code extension registers both command IDs, routes them through `workspace/executeCommand`, and opens the result in a preview editor (or shows an error message).
   - Handler: `src/Bosak.LanguageServer/ExecuteCommandHandler.cs`.
   - Registration in `src/Bosak.LanguageServer/Program.cs`.
