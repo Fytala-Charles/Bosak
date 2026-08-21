@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** *(pending)* feat(languageserver): add default source-document hint to XSLT code lens
+**Commit:** d07690e feat(languageserver,vscode): default source-document hint for XSLT code lens
 **Current focus:** **VS Code extension — XSLT code lens default source** — `CodeLensHandler` now parses a `<?bosak source-document="..."?>` processing instruction in `.xsl`/`.xslt` files. When the hint is present, the lens title shows the source file name (e.g., **Run XSLT transformation (input.xml)**) and the `bosak.transformXslt` command receives the resolved source path as a second argument, so the VS Code client can run the transform without prompting. If the hint is absent, the existing picker-based lens remains unchanged.
 
 Expected state: **1,731 unit tests / 0 failed** in the main solution; **61 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
