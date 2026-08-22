@@ -1,6 +1,30 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
+**Commit:** `245f90b` — schema-aware list/union regression tests and headers
+**Current focus:** **schema-aware list/union function-conversion cluster** — the remaining schema-aware residuals around attribute kind tests, union function conversion, unprefixed user-defined type names in instance-of, and element schema-type subtyping are now covered by regression tests. `VmEngine` already preserves case for the type part of `attribute(*, T)` kind tests; treats union types with membership semantics in `ValueMatchesType`; has a dedicated union-type branch in `ApplyFunctionConversion` that casts `xs:untypedAtomic` to the first matching member (rejecting namespace-sensitive unions with `XPTY0117`) and rejects non-matching values with `XPTY0004`; accepts unprefixed user-defined schema types via the default element namespace in `InstanceOf`; and handles `element(*, T1)` / `attribute(*, T1)` subtyping through the schema type hierarchy in `IsSequenceTypeSubtype`.
+
+Expected state: **1,813 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,851 passed / 22 failed / 948 skipped** (96.95%). Targeted verification: `prod-FLWORExpr` 21/0/28; `prod-FunctionCall` 120/0/32.
+
+## This Session Changes (schema-aware list/union residuals)
+
+1. **Regression tests** (`tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`) —
+   - `AttributeKindTest_CasePreservedUserDefinedType`: a typed attribute with a mixed-case user-defined enumeration type matches `attribute(*, T)`.
+   - `UnionFunctionConversion_UntypedAtomicAcceptedByNonNamespaceSensitiveUnion`: `xs:untypedAtomic` matching a member of a non-namespace-sensitive union passes function conversion.
+   - `UnionFunctionConversion_NonMatchingDecimalIsRejected`: a value that is not an instance of any union member is rejected with `XPTY0004`.
+   - `UnionFunctionConversion_NamespaceSensitiveUnionRejectsUntypedAtomic`: `xs:untypedAtomic` cannot be cast to a namespace-sensitive union (`XPTY0117`).
+   - `InstanceOf_UnprefixedUserDefinedTypeUsesDefaultElementNamespace`: unprefixed user-defined schema simple types in the default element namespace are valid atomic item types.
+   - `IsSequenceTypeSubtype_ElementSchemaTypeSubtyping`: `element(*, restrictedUnion)` is a subtype of `element(*, approximateDate)` via the schema type hierarchy.
+   - Header bumped to 0.11.
+
+2. **File header update** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Change-history row 2.116 records the schema-aware list/union cluster fixes.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-22
 **Commit:** `63e0a96` — op-numeric-add parser ambiguity / union named-member cast fix
 **Current focus:** **op-numeric-add / union named-member cluster** — `XPathParser.ParseSingleType` now treats `*` and `+` after a cast/castable target type as the surrounding additive/multiplicative operator when a valid operand follows, while still raising `XPST0003` for standalone occurrence indicators like `'string' cast as xs:string*` (`K-SeqExprCast-1/2`). `VmEngine.GetUnionMemberTypes` now returns both anonymous inline member types (`BaseTypes`) and named member types referenced via `@memberTypes`, so unions such as `t:integer-or-nothing` (`xs:integer` plus an empty-string `xs:string` restriction) can cast values that match the named member. This closes the QT3 `op-numeric-add` failures `op-numeric-add-13`–`op-numeric-add-16` and several other union/cast-related residuals.
 
