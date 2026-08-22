@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 22-08-2026     | Added regression tests for schema-aware attribute kind tests and union function conversion |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 22-08-2026     | Added regression tests for XPTY0117 on namespace-sensitive atomic function conversion     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -738,5 +740,67 @@ public class SchemaListUnionTests
         })!;
 
         Assert.True(actual);
+    }
+
+    [Fact]
+    public void FunctionConversion_UntypedAtomicToQName_RaisesXpty0117()
+    {
+        // Regression for CastAsNamespaceSensitiveType-1/2 and CastAs675a:
+        // function conversion must not implicitly cast xs:untypedAtomic to xs:QName.
+        var ctx = new EvaluationContext().WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+        var value = XdmValue.FromString("xs:integer", "untypedAtomic");
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            VmEngine.ApplyFunctionConversion(value, "xs:QName", ctx));
+        Assert.Contains("XPTY0117", ex.Message);
+    }
+
+    [Fact]
+    public void FunctionConversion_UntypedAtomicToNotation_RaisesXpty0117()
+    {
+        // Regression: xs:untypedAtomic cannot be implicitly cast to xs:NOTATION (also namespace-sensitive).
+        var ctx = new EvaluationContext().WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+        var value = XdmValue.FromString("value1", "untypedAtomic");
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            VmEngine.ApplyFunctionConversion(value, "xs:NOTATION", ctx));
+        Assert.Contains("XPTY0117", ex.Message);
+    }
+
+    [Fact]
+    public void FunctionConversion_UntypedAtomicToQNameDerivedRestriction_RaisesXpty0117()
+    {
+        // Regression: xs:untypedAtomic cannot be implicitly cast to a user-defined restriction of xs:QName.
+        var ctx = LoadUserDefinedTypesContext();
+        var value = XdmValue.FromString("value1", "untypedAtomic");
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            VmEngine.ApplyFunctionConversion(value, "t:QNameBased", ctx));
+        Assert.Contains("XPTY0117", ex.Message);
+    }
+
+    [Fact]
+    public void FunctionConversion_TypedQNameToQName_Succeeds()
+    {
+        // Sanity check: a typed xs:QName value still passes function conversion to xs:QName.
+        var ctx = new EvaluationContext().WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+        var value = XdmValue.FromQName(new XsQName("integer", "http://www.w3.org/2001/XMLSchema", "xs"));
+
+        var result = VmEngine.ApplyFunctionConversion(value, "xs:QName", ctx);
+        Assert.Equal(XdmValueKind.QName, result.Kind);
+    }
+
+    [Fact]
+    public void FunctionConversion_ElementNodeToQNameParameter_RaisesXpty0117()
+    {
+        // Regression for CastAsNamespaceSensitiveType-2: an element node atomizes to xs:untypedAtomic,
+        // and function conversion to xs:QName must raise XPTY0117.
+        var ctx = new EvaluationContext().WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+        var elementNode = new XDocumentNode(XDocument.Parse("<tag>xs:integer</tag>").Root!);
+        var value = XdmValue.FromNode(elementNode);
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            VmEngine.ApplyFunctionConversion(value, "xs:QName", ctx));
+        Assert.Contains("XPTY0117", ex.Message);
     }
 }

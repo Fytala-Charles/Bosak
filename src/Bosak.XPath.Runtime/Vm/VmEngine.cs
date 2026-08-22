@@ -218,6 +218,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.116 | 22-08-2026     | Schema-aware list/union fixes: attribute kind-test case preservation, union function conversion, default-ns instance-of, element schema subtyping |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.117 | 22-08-2026     | Function conversion raises XPTY0117 when xs:untypedAtomic is supplied to namespace-sensitive atomic types (CastAs675a, CastAsNamespaceSensitiveType) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -8307,6 +8309,29 @@ public static class VmEngine
     }
 
     /// <summary>
+    /// Returns true when the sequence type name denotes a namespace-sensitive atomic type
+    /// (xs:QName, xs:NOTATION, a user-defined restriction of those, or a union containing one).
+    /// </summary>
+    private static bool IsNamespaceSensitiveTargetType(string typeName, EvaluationContext? context)
+    {
+        var t = typeName.Trim();
+        if (t.Length > 0 && "?+*".Contains(t[^1]))
+            t = t[..^1].TrimEnd();
+        while (t.Length > 1 && t[0] == '(' && FindMatchingParen(t, 0) == t.Length - 1)
+            t = t[1..^1].Trim();
+
+        if (t.StartsWith("xs:", StringComparison.OrdinalIgnoreCase))
+            t = t[3..];
+        if (IsNamespaceSensitiveTypeName(t))
+            return true;
+
+        if (IsUserDefinedSchemaType(typeName, context, out var schemaType))
+            return IsNamespaceSensitiveSchemaType(schemaType, context);
+
+        return false;
+    }
+
+    /// <summary>
     /// Validates a singleton atomic value against the facets of a schema simple type.
     /// Returns false when parsing/validation fails.
     /// </summary>
@@ -9839,9 +9864,6 @@ public static class VmEngine
     /// </summary>
     public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
     {
-        if (ValueMatchesType(value, targetType, context))
-            return value;
-
         var type = NormalizeEQNameTypeName(targetType.Trim());
         while (type.Length > 1 && type[0] == '(' && FindMatchingParen(type, 0) == type.Length - 1)
             type = type[1..^1].Trim();
@@ -9890,6 +9912,14 @@ public static class VmEngine
             // An occurrence-wrapped parenthesized function test: (function(...) as ...)?
             isFunctionTest = type.StartsWith("function(", StringComparison.OrdinalIgnoreCase);
         }
+
+        // XPath 3.1 function conversion: xs:untypedAtomic cannot be implicitly cast to a
+        // namespace-sensitive atomic type such as xs:QName or xs:NOTATION (XPTY0117).
+        if (!value.IsSequence && IsUntypedAtomicValue(value) && IsNamespaceSensitiveTargetType(type, context))
+            throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
+
+        if (ValueMatchesType(value, targetType, context))
+            return value;
 
         var items = new List<XdmValue>();
         if (!value.IsUndefined)
@@ -9994,6 +10024,12 @@ public static class VmEngine
                     }
                 }
                 throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
+            }
+            else if (IsUntypedAtomicValue(atomic) && IsNamespaceSensitiveTargetType(type, context))
+            {
+                // XPath 3.1 function conversion: xs:untypedAtomic cannot be implicitly cast to a
+                // namespace-sensitive type such as xs:QName or xs:NOTATION (XPTY0117).
+                throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
             }
             else if (IsUntypedAtomicValue(atomic) && TryCast(atomic, type, context, out var casted))
             {
