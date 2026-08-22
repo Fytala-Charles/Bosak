@@ -103,6 +103,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.48  | 21-08-2026     | Preserve Q{uri}local EQName form for user-defined sequence types in ParseTypeNameAndParens |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.49  | 22-08-2026     | ParseSingleType treats * and + after a cast target as operators when an operand follows |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -3465,8 +3467,28 @@ public sealed class XPathParser
         if (Match(TokenKind.Question))
             return (prefix, local, OccurrenceIndicator.ZeroOrOne);
         if (Current.Kind is TokenKind.Star or TokenKind.Plus)
-            throw new ParseException("XPST0003: '*' and '+' are not allowed as occurrence indicators in 'cast' or 'castable as' expressions.", Current.Start);
+        {
+            // '*' and '+' are not valid occurrence indicators in a SingleType. If the next token
+            // can start a new operand, treat them as the surrounding additive/multiplicative
+            // operator rather than raising an occurrence-indicator error.
+            if (!CanStartUnaryExpr(Peek(1).Kind))
+                throw new ParseException("XPST0003: '*' and '+' are not allowed as occurrence indicators in 'cast' or 'castable as' expressions.", Current.Start);
+        }
         return (prefix, local, OccurrenceIndicator.One);
+    }
+
+    private static bool CanStartUnaryExpr(TokenKind kind)
+    {
+        return kind switch
+        {
+            TokenKind.Plus or TokenKind.Minus or TokenKind.Star or TokenKind.Name or
+            TokenKind.Dollar or TokenKind.LParen or TokenKind.StringLiteral or
+            TokenKind.IntegerLiteral or TokenKind.DecimalLiteral or TokenKind.DoubleLiteral or
+            TokenKind.Dot or TokenKind.DotDot or TokenKind.At or
+            TokenKind.Slash or TokenKind.SlashSlash or
+            TokenKind.KeywordFunction or TokenKind.KeywordMap or TokenKind.KeywordArray => true,
+            _ => false,
+        };
     }
 
     private (string? Prefix, string Local, bool HasParens) ParseTypeNameAndParens()

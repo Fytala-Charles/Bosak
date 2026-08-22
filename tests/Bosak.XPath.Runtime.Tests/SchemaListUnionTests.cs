@@ -26,6 +26,8 @@
 //                      | Charles Korthout | 0.8   | 21-08-2026     | Added regression tests for casting schema-validated xs:decimal nodes to atomic values    |
 //                      | Charles Korthout | 0.9   | 22-08-2026     | Added regression tests for derived string/numeric/union casts and date serialization   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 22-08-2026     | Added regression tests for union with named @memberTypes members                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -568,5 +570,44 @@ public class SchemaListUnionTests
         schemaSet.Add(XmlSchema.Read(reader, null)!);
         schemaSet.Compile();
         return schemaSet;
+    }
+
+    private static EvaluationContext LoadUserDefinedTypesContext()
+    {
+        var schemaSet = new XmlSchemaSet();
+        string schemaPath = Path.GetFullPath("../../../../qt3tests/docs/userdefined.xsd");
+        using var stream = File.OpenRead(schemaPath);
+        using var reader = XmlReader.Create(stream);
+        schemaSet.Add(XmlSchema.Read(reader, null)!);
+        schemaSet.Compile();
+
+        var ctx = new EvaluationContext();
+        ctx.SchemaSet = schemaSet;
+        ctx = ctx.WithNamespace("t", "http://www.w3.org/XQueryTest/userDefinedTypes");
+        ctx = ctx.WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+        FunctionLibrary.Populate(ctx);
+        return ctx;
+    }
+
+    [Fact]
+    public void UnionCast_NamedMemberType_SelectsNamedMember()
+    {
+        // Regression for QT3 op-numeric-add-14/15: a union defined with both a named
+        // @memberTypes member (xs:integer) and an inline member must consider the named member.
+        var ctx = LoadUserDefinedTypesContext();
+
+        var result = XPath31Expression.Compile("15 cast as t:integer-or-nothing").Evaluate(ctx);
+        Assert.Equal(XdmValueKind.Integer, result.Kind);
+        Assert.Equal(15L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void UnionCast_NamedMemberType_EmptyStringSelectsInlineMember()
+    {
+        var ctx = LoadUserDefinedTypesContext();
+
+        var result = XPath31Expression.Compile("'' cast as t:integer-or-nothing").Evaluate(ctx);
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("", result.StringValue);
     }
 }

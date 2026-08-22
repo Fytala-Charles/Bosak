@@ -1,6 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
+**Commit:** TBD — op-numeric-add parser ambiguity / union named-member cast fix
+**Current focus:** **op-numeric-add / union named-member cluster** — `XPathParser.ParseSingleType` now treats `*` and `+` after a cast/castable target type as the surrounding additive/multiplicative operator when a valid operand follows, while still raising `XPST0003` for standalone occurrence indicators like `'string' cast as xs:string*` (`K-SeqExprCast-1/2`). `VmEngine.GetUnionMemberTypes` now returns both anonymous inline member types (`BaseTypes`) and named member types referenced via `@memberTypes`, so unions such as `t:integer-or-nothing` (`xs:integer` plus an empty-string `xs:string` restriction) can cast values that match the named member. This closes the QT3 `op-numeric-add` failures `op-numeric-add-13`–`op-numeric-add-16` and several other union/cast-related residuals.
+
+Expected state: **1,806 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,842 passed / 31 failed / 948 skipped** (96.92%). Targeted verification: `op-numeric-add` 155/0/11; `prod-CastableExpr` remains 951/0/8.
+
+## This Session Changes (op-numeric-add / union named-member cluster)
+
+1. **`XPathParser.ParseSingleType` operator disambiguation** (`src/Bosak.XPath.Parser/Ast/XPathParser.cs`) —
+   - `*`/`+` after a SingleType are no longer unconditionally rejected as occurrence indicators.
+   - If the following token can start a new operand (`CanStartUnaryExpr`), the operator is left for the enclosing additive/multiplicative expression.
+   - Standalone `*`/`+` (e.g., `cast as xs:string*`) still raise `XPST0003`.
+   - Header bumped to 1.49.
+
+2. **`VmEngine.GetUnionMemberTypes` named-member fix** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Collects both `union.BaseTypes` (inline anonymous members) and `union.MemberTypes` (named members including built-in `xs:*` types).
+   - Previously only `BaseTypes` were returned, so unions with a named `xs:integer` member and an inline string member could not cast integer values.
+   - Header bumped to 2.115.
+
+3. **Regression tests** —
+   - `tests/Bosak.XPath.Parser.Tests/ParserTests.cs`: four tests covering `cast as` followed by `+`/`*` operators and standalone occurrence indicators.
+   - `tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`: two tests for `t:integer-or-nothing` union casts.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-22
 **Commit:** `5c18c78` — cast/castable array/map atomization
 **Current focus:** **castable cluster** — `VmEngine.TryCast`, the `Cast` opcode, and the `Castable` opcode now atomize operands through a shared `AtomizeForCast` helper. Arrays are recursively flattened and their members atomized; maps and function items raise `FOTY0013` as required by XPath 3.1 §18.2.1. `castable as` propagates type errors (`FOTY0013`, `XPTY0004`) rather than swallowing them as `false`. This fixes the QT3 `prod-CastableExpr` failures `CastableAs665`–`CastableAs668` (`[5] castable as xs:integer`, `map{} castable as xs:integer`, nested arrays with empty members, and nested arrays containing maps). `TryCast` also continues to update its `result` to the atomized value so that casts of a typed node to its own type return the atomic typed value (preserving the earlier orderBy decimal normalization fix).
 

@@ -214,6 +214,8 @@
 //                      | Charles Korthout | 2.113 | 22-08-2026     | Derived string/numeric/union cast fixes: numeric→string subtypes, XSD canonical pattern validation, list cast restrictions, date/duration serialization |
 //                      | Charles Korthout | 2.114 | 22-08-2026     | Cast/castable atomize arrays recursively and raise FOTY0013 for maps/function items      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.115 | 22-08-2026     | GetUnionMemberTypes returns both named @memberTypes and inline BaseTypes members         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -8158,40 +8160,39 @@ public static class VmEngine
 
     private static XmlSchemaSimpleType[] GetUnionMemberTypes(XmlSchemaSimpleType type, EvaluationContext? context)
     {
-        if (type.Content is XmlSchemaSimpleTypeUnion union)
+        if (type.Content is not XmlSchemaSimpleTypeUnion union)
+            return Array.Empty<XmlSchemaSimpleType>();
+
+        var members = new List<XmlSchemaSimpleType>();
+
+        // Anonymous/local member types defined inline.
+        for (int i = 0; i < union.BaseTypes.Count; i++)
         {
-            if (union.BaseTypes.Count > 0)
+            if (union.BaseTypes[i] is XmlSchemaSimpleType member)
+                members.Add(member);
+        }
+
+        // Named member types referenced via @memberTypes (including built-in xs:* types).
+        if (union.MemberTypes is not null && context?.SchemaSet is not null)
+        {
+            foreach (XmlQualifiedName qn in union.MemberTypes)
             {
-                var members = new XmlSchemaSimpleType[union.BaseTypes.Count];
-                for (int i = 0; i < union.BaseTypes.Count; i++)
+                if (context.SchemaSet.GlobalTypes[qn] is XmlSchemaSimpleType member)
                 {
-                    if (union.BaseTypes[i] is XmlSchemaSimpleType member)
-                        members[i] = member;
+                    members.Add(member);
                 }
-                return members;
-            }
-            if (union.MemberTypes is not null && context?.SchemaSet is not null)
-            {
-                var members = new List<XmlSchemaSimpleType>();
-                foreach (XmlQualifiedName qn in union.MemberTypes)
+                else if (qn.Namespace == XmlSchema.Namespace)
                 {
-                    if (context.SchemaSet.GlobalTypes[qn] is XmlSchemaSimpleType member)
-                    {
-                        members.Add(member);
-                    }
-                    else if (qn.Namespace == XmlSchema.Namespace)
-                    {
-                        // Built-in XML Schema member types are not always present in the
-                        // schema set's GlobalTypes table; resolve them directly.
-                        var builtIn = XmlSchemaType.GetBuiltInSimpleType(qn);
-                        if (builtIn is not null)
-                            members.Add(builtIn);
-                    }
+                    // Built-in XML Schema member types are not always present in the
+                    // schema set's GlobalTypes table; resolve them directly.
+                    var builtIn = XmlSchemaType.GetBuiltInSimpleType(qn);
+                    if (builtIn is not null)
+                        members.Add(builtIn);
                 }
-                return members.ToArray();
             }
         }
-        return Array.Empty<XmlSchemaSimpleType>();
+
+        return members.ToArray();
     }
 
     private static XmlSchemaSimpleType? GetListItemType(XmlSchemaSimpleType type)

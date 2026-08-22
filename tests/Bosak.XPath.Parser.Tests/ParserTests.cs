@@ -18,6 +18,8 @@
 //                      | Charles Korthout | 0.6   | 20-07-2026     | Added LetExpr and consecutive-let-keyword regression tests                               |
 //                      | Charles Korthout | 0.7   | 20-07-2026     | Added TreatExpr and unclosed-sequence-type-paren regression tests                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 22-08-2026     | Added cast-as followed by +/* operator regression tests                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -496,6 +498,41 @@ public class ParserTests
         Assert.IsType<VariableReferenceNode>(node.Expression);
         Assert.Equal("string", node.TypeName);
         Assert.Equal("xs", node.Prefix);
+    }
+
+    [Fact]
+    public void CastExpr_FollowedByAdditiveOperator_ParsesAsBinaryExpression()
+    {
+        // Regression for QT3 op-numeric-add-13: the '+' after the cast target type is the
+        // additive operator, not an occurrence indicator.
+        var node = AssertParse<BinaryExpressionNode>("15 cast as xs:integer + 15");
+        Assert.IsType<CastNode>(node.Left);
+        Assert.Equal(BinaryOperator.Plus, node.Operator);
+    }
+
+    [Fact]
+    public void CastExpr_FollowedByStarOperator_ParsesAsBinaryExpression()
+    {
+        // The '*' after the cast target type can be the multiplication operator when an operand follows.
+        var node = AssertParse<BinaryExpressionNode>("3 cast as xs:integer * 4");
+        Assert.IsType<CastNode>(node.Left);
+        Assert.Equal(BinaryOperator.Multiply, node.Operator);
+    }
+
+    [Fact]
+    public void CastExpr_StarOccurrenceIndicatorWithoutOperand_RaisesXPST0003()
+    {
+        // Standalone '*' after a SingleType is still a syntax error (K-SeqExprCast-1).
+        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse("'string' cast as xs:string*"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void CastExpr_PlusOccurrenceIndicatorWithoutOperand_RaisesXPST0003()
+    {
+        // Standalone '+' after a SingleType is still a syntax error (K-SeqExprCast-2).
+        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse("'string' cast as xs:string+"));
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     [Fact]
