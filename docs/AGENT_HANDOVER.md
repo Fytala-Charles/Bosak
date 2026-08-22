@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** TBD — op-numeric-add parser ambiguity / union named-member cast fix
+**Commit:** `63e0a96` — op-numeric-add parser ambiguity / union named-member cast fix
 **Current focus:** **op-numeric-add / union named-member cluster** — `XPathParser.ParseSingleType` now treats `*` and `+` after a cast/castable target type as the surrounding additive/multiplicative operator when a valid operand follows, while still raising `XPST0003` for standalone occurrence indicators like `'string' cast as xs:string*` (`K-SeqExprCast-1/2`). `VmEngine.GetUnionMemberTypes` now returns both anonymous inline member types (`BaseTypes`) and named member types referenced via `@memberTypes`, so unions such as `t:integer-or-nothing` (`xs:integer` plus an empty-string `xs:string` restriction) can cast values that match the named member. This closes the QT3 `op-numeric-add` failures `op-numeric-add-13`–`op-numeric-add-16` and several other union/cast-related residuals.
 
 Expected state: **1,806 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,842 passed / 31 failed / 948 skipped** (96.92%). Targeted verification: `op-numeric-add` 155/0/11; `prod-CastableExpr` remains 951/0/8.
