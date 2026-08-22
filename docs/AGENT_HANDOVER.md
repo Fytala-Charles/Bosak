@@ -1,6 +1,34 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
+**Commit:** `e7e3f4b` — TryCast returns atomized node value for xs:T($node) casts
+**Current focus:** **orderBy decimal normalization cluster** — `VmEngine.TryCast` now updates the `result` variable to the atomized node value before checking the target type. Previously, when a schema-validated node was cast to its own typed value (for example, `xs:decimal($x)` where `$x` is an `xs:decimal` element), the function returned the original element node instead of the decimal atomic value, because `result` was initialized to the input node and never updated after atomization. This fixes the QT3 `prod-OrderByClause` residual failures `orderBy26`, `orderBy36`, `orderBy46`, `orderBy56`, `orderBy62`, `orderBy64`, and `orderBy65`, and restores correct behavior for any `xs:T($node)` constructor cast over a typed node.
+
+Expected state: **1,777 unit tests / 0 failed / 0 skipped**; **`prod-OrderByClause` 205 passed / 0 failed / 0 skipped**; **full QT3 sweep 30,831 passed / 68 failed / 922 skipped** (96.89%).
+
+## This Session Changes (orderBy decimal normalization cluster)
+
+1. **`VmEngine.TryCast` atomization fix** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - After atomizing a node input, `result` is now set to the atomized value.
+   - This ensures that target-type matches (e.g., decimal → decimal, date → date, untypedAtomic → untypedAtomic) return the atomic typed value, not the original node.
+   - Header bumped to 2.112.
+
+2. **Regression tests** (`tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`) —
+   - `Cast_TypedDecimalElement_ReturnsDecimalAtomicValue`
+   - `Cast_TypedDecimalElementInForExpression_ReturnsDecimalSequence`
+   - Header bumped to 0.8.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`
+- `tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`
+- `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`
+- `docs/FEATURE_REQUESTS.md`
+
+---
+
+**Date:** 2026-08-21
 **Commit:** `1f0b022` — Reject non-atomic user-defined schema types as SequenceType item types (XPST0051)
 **Current focus:** **schema-aware SequenceType XPST0051 cluster** — `VmEngine.InstanceOf` now rejects all user-defined simple types that are not atomic as SequenceType item types: direct list types, restrictions of list types, restrictions of union types, and union types that transitively contain a list-type member (including built-in list types such as `xs:NMTOKENS`). Union types whose members are purely atomic (possibly via nested unions of atomic types) remain valid item types. This closes the QT3 `prod-InstanceofExpr` residual failures (`instanceof114`, `instanceof115`, `instanceof120`) and the `prod-TypeswitchExpr` residual failures (`typeswitch-114`, `typeswitch-115`).
 
