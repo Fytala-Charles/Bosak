@@ -39,6 +39,7 @@
 //                      | Charles Korthout | 1.9   | 20-07-2026     | FormatXPathFloat expands R-scientific to fixed-point inside the decimal range (1e-6)   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.1   | 25-07-2026     | FromDecimal normalizes negative zero (XPath decimals have no -0)                        |
+//                      | Charles Korthout | 2.2   | 22-08-2026     | Format gYear/gMonth/gDay/etc. schema-type annotations correctly in ToString           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -511,7 +512,7 @@ public readonly struct XdmValue
             XdmValueKind.Function => "(function)",
             XdmValueKind.Map => "(map)",
             XdmValueKind.Array => "(array)",
-            XdmValueKind.DateTime => FormatXPathDateTime(DateTimeXPathValue, true),
+            XdmValueKind.DateTime => FormatDateTimeBySchemaType(DateTimeXPathValue, _schemaTypeName),
             XdmValueKind.Date => FormatXPathDateTime(DateXPathValue, false),
             XdmValueKind.Time => FormatXPathTime(TimeXPathValue),
             XdmValueKind.QName => ((XsQName)_reference!).ToString(),
@@ -710,6 +711,24 @@ public readonly struct XdmValue
         if (xdt.HasTimezone)
             result += xdt.FormatTimezone();
         return result;
+    }
+
+    /// <summary>
+    /// Formats a dateTime-stored value according to its schema type annotation.
+    /// gYear, gYearMonth, gMonth, gMonthDay, and gDay values are stored internally
+    /// as a full <see cref="XPathDateTime"/> but must serialize in their specific form.
+    /// </summary>
+    private static string FormatDateTimeBySchemaType(XPathDateTime xdt, string? schemaTypeName)
+    {
+        return schemaTypeName?.ToLowerInvariant() switch
+        {
+            "gyear" => $"{xdt.FormatYear()}{xdt.FormatTimezone()}",
+            "gyearmonth" => $"{xdt.FormatYear()}-{xdt.Month:00}{xdt.FormatTimezone()}",
+            "gmonth" => $"--{xdt.Month:00}{xdt.FormatTimezone()}",
+            "gmonthday" => $"--{xdt.Month:00}-{xdt.Day:00}{xdt.FormatTimezone()}",
+            "gday" => $"---{xdt.Day:00}{xdt.FormatTimezone()}",
+            _ => FormatXPathDateTime(xdt, true)
+        };
     }
 
     private static string FormatXPathSeconds(int second, int millisecond)

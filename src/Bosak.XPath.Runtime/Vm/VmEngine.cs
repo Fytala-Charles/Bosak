@@ -211,6 +211,7 @@
 //                      | Charles Korthout | 2.111 | 21-08-2026     | Reject non-atomic user-defined schema types as SequenceType item types (XPST0051)     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.112 | 21-08-2026     | TryCast updates result to atomized node value so xs:T($node) returns the typed value   |
+//                      | Charles Korthout | 2.113 | 22-08-2026     | Derived string/numeric/union cast fixes: numeric→string subtypes, XSD canonical pattern validation, list cast restrictions, date/duration serialization |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
@@ -6888,8 +6889,8 @@ public static class VmEngine
 
             case "normalizedstring":
             {
-                if (value.Kind != XdmValueKind.String)
-                    return false;
+                // XPath 3.1 §17.3: casting to xs:string (or a subtype) from any atomic
+                // type is permitted by first converting to xs:string.
                 string s = value.ToString();
                 // XML Schema whiteSpace="replace": replace tab, CR, LF with space
                 s = s.Replace('\r', ' ').Replace('\n', ' ').Replace('\t', ' ');
@@ -6898,8 +6899,8 @@ public static class VmEngine
             }
             case "token":
             {
-                if (value.Kind != XdmValueKind.String)
-                    return false;
+                // XPath 3.1 §17.3: casting to xs:string (or a subtype) from any atomic
+                // type is permitted by first converting to xs:string.
                 string s = value.ToString();
                 // XML Schema whiteSpace="collapse": replace tab/CR/LF with space,
                 // trim leading/trailing spaces, collapse internal runs of spaces
@@ -7235,6 +7236,44 @@ public static class VmEngine
         if (s.Contains('D')) return true;
         if (tIdx < 0) return false;
         return s.IndexOf('H', tIdx) >= 0 || s.IndexOf('M', tIdx) >= 0 || s.IndexOf('S', tIdx) >= 0;
+    }
+
+    /// <summary>
+    /// Converts a .NET <see cref="TimeSpan"/> to an XSD <c>xs:duration</c> lexical string.
+    /// </summary>
+    private static string TimeSpanToXsdDuration(TimeSpan ts)
+    {
+        bool negative = ts.Ticks < 0;
+        if (negative) ts = ts.Negate();
+
+        int days = ts.Days;
+        int hours = ts.Hours;
+        int minutes = ts.Minutes;
+        int seconds = ts.Seconds;
+        int milliseconds = ts.Milliseconds;
+
+        var sb = new System.Text.StringBuilder();
+        if (negative) sb.Append('-');
+        sb.Append('P');
+        if (days > 0) sb.Append(days).Append('D');
+        bool hasTime = hours > 0 || minutes > 0 || seconds > 0 || milliseconds > 0 || days == 0;
+        if (hasTime)
+        {
+            sb.Append('T');
+            if (hours > 0) sb.Append(hours).Append('H');
+            if (minutes > 0) sb.Append(minutes).Append('M');
+            if (seconds > 0 || milliseconds > 0 || (hours == 0 && minutes == 0))
+            {
+                sb.Append(seconds);
+                if (milliseconds > 0)
+                {
+                    string frac = milliseconds.ToString("000").TrimEnd('0');
+                    sb.Append('.').Append(frac);
+                }
+                sb.Append('S');
+            }
+        }
+        return sb.ToString();
     }
 
     public static bool IsValidBase64(string s)
@@ -8201,6 +8240,119 @@ public static class VmEngine
     }
 
     /// <summary>
+    /// Returns the XSD canonical lexical representation of an atomic value for validating
+    /// pattern facets on derived atomic types. This differs from XPath <c>fn:string</c>
+    /// (and from <see cref="XdmValue.ToString"/>) for decimals (always have a decimal point)
+    /// and doubles/floats (always use scientific notation with one leading digit).
+    /// </summary>
+    private static string GetXsdCanonicalLexical(XdmValue value)
+    {
+        return value.Kind switch
+        {
+            XdmValueKind.Decimal => FormatXsdCanonicalDecimal(value.DecimalValue),
+            XdmValueKind.Double => FormatXsdCanonicalDouble(value.DoubleValue),
+            XdmValueKind.Float => FormatXsdCanonicalFloat((float)value.DoubleValue),
+            _ => value.ToString() ?? string.Empty
+        };
+    }
+
+    private static string FormatXsdCanonicalDecimal(decimal value)
+    {
+        // XSD canonical decimal requires a decimal point with digits on both sides.
+        string s = value.ToString(CultureInfo.InvariantCulture);
+        if (!s.Contains('.'))
+            s += ".0";
+        return s;
+    }
+
+    private static string FormatXsdCanonicalDouble(double value)
+    {
+        if (double.IsPositiveInfinity(value)) return "INF";
+        if (double.IsNegativeInfinity(value)) return "-INF";
+        if (double.IsNaN(value)) return "NaN";
+        if (value == 0.0) return double.IsNegative(value) ? "-0.0E0" : "0.0E0";
+
+        // XPath/XSD canonical double uses scientific notation with one digit before
+        // the decimal point and a mandatory exponent.
+        string s = value.ToString("R", CultureInfo.InvariantCulture);
+        if (!s.Contains('E') && !s.Contains('e'))
+        {
+            bool negative = s.StartsWith('-');
+            if (negative) s = s[1..];
+            var digits = s.Replace(".", "");
+            int decimalPos = s.IndexOf('.');
+            if (decimalPos < 0) decimalPos = digits.Length;
+            int exponent = decimalPos - 1;
+            string mantissa = digits.Insert(1, ".");
+            mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+            if (!mantissa.Contains('.')) mantissa += ".0";
+            s = (negative ? "-" : "") + mantissa + "E" + exponent;
+        }
+        else
+        {
+            s = NormalizeXsdScientific(s);
+        }
+        return s;
+    }
+
+    private static string FormatXsdCanonicalFloat(float value)
+    {
+        if (float.IsPositiveInfinity(value)) return "INF";
+        if (float.IsNegativeInfinity(value)) return "-INF";
+        if (float.IsNaN(value)) return "NaN";
+        if (value == 0.0f) return float.IsNegative(value) ? "-0.0E0" : "0.0E0";
+
+        string s = value.ToString("R", CultureInfo.InvariantCulture);
+        if (!s.Contains('E') && !s.Contains('e'))
+        {
+            bool negative = s.StartsWith('-');
+            if (negative) s = s[1..];
+            var digits = s.Replace(".", "");
+            int decimalPos = s.IndexOf('.');
+            if (decimalPos < 0) decimalPos = digits.Length;
+            int exponent = decimalPos - 1;
+            string mantissa = digits.Insert(1, ".");
+            mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+            if (!mantissa.Contains('.')) mantissa += ".0";
+            s = (negative ? "-" : "") + mantissa + "E" + exponent;
+        }
+        else
+        {
+            s = NormalizeXsdScientific(s);
+        }
+        return s;
+    }
+
+    /// <summary>
+    /// Normalizes a scientific-notation string to XSD canonical form: one non-zero digit
+    /// before the decimal point, no trailing zeros in the mantissa, and no leading zeros
+    /// or plus sign in the exponent.
+    /// </summary>
+    private static string NormalizeXsdScientific(string s)
+    {
+        s = s.Replace("E+", "E");
+        int eIdx = s.IndexOf('E');
+        if (eIdx < 0) eIdx = s.IndexOf('e');
+        if (eIdx <= 0) return s;
+
+        string mantissa = s[..eIdx];
+        string exp = s[(eIdx + 1)..];
+        bool negative = mantissa.StartsWith('-');
+        if (negative) mantissa = mantissa[1..];
+
+        mantissa = mantissa.TrimEnd('0').TrimEnd('.');
+        if (!mantissa.Contains('.')) mantissa += ".0";
+
+        bool expNegative = exp.StartsWith('-');
+        if (expNegative) exp = exp[1..];
+        exp = exp.TrimStart('0');
+        if (string.IsNullOrEmpty(exp)) exp = "0";
+        if (expNegative) exp = "-" + exp;
+
+        return (negative ? "-" : "") + mantissa + "E" + exp;
+    }
+
+    /// <summary>
     /// Builds an <see cref="XmlNamespaceManager"/> from the evaluation context's namespace
     /// bindings for use by schema validation that needs to resolve lexical prefixes.
     /// </summary>
@@ -8281,7 +8433,10 @@ public static class VmEngine
                     }
                     else
                     {
-                        items.Add(value);
+                        // A single non-string atomic value cannot be cast to a list type;
+                        // list casts require a string/untypedAtomic lexical form to tokenize
+                        // (cbcl-castable-impure-009/019).
+                        return false;
                     }
                 }
 
@@ -8397,7 +8552,9 @@ public static class VmEngine
                         return false;
 
                     // Validate the user-defined facets by parsing with the actual schema type.
-                    string validationLexical = casted.ToString() ?? string.Empty;
+                    // XSD pattern facets are matched against the canonical lexical representation
+                    // of the value, not the XPath string value (CastableAs653-658).
+                    string validationLexical = GetXsdCanonicalLexical(casted);
                     var nsResolver = CreateNamespaceResolver(context);
                     object parsed = schemaSimpleType.Datatype!.ParseValue(validationLexical, new NameTable(), nsResolver);
 
@@ -8470,8 +8627,9 @@ public static class VmEngine
                     : Convert.ToBase64String(bytes);
                 return XdmValue.FromString(text, typeName);
             case TimeSpan ts:
-                // xs:dayTimeDuration / xs:yearMonthDuration are represented as strings in Bosak.
-                return XdmValue.FromDuration(ts.ToString(), typeName);
+                // xs:duration values parsed by .NET come back as TimeSpan; convert back to
+                // the XSD lexical duration form (cbcl-cast-derived-001).
+                return XdmValue.FromDuration(TimeSpanToXsdDuration(ts), typeName);
             default:
                 return XdmValue.FromString(value.ToString() ?? string.Empty, typeName);
         }

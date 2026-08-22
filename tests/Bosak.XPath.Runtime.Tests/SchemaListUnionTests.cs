@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 0.7   | 21-08-2026     | Added XPST0051 tests for list types and union types containing list members as SequenceType item types |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 21-08-2026     | Added regression tests for casting schema-validated xs:decimal nodes to atomic values    |
+//                      | Charles Korthout | 0.9   | 22-08-2026     | Added regression tests for derived string/numeric/union casts and date serialization   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
@@ -290,6 +291,113 @@ public class SchemaListUnionTests
         ctx = ctx.WithNamespace("s", "http://www.w3.org/XQueryTest/unionListDefined");
         FunctionLibrary.Populate(ctx);
         return ctx;
+    }
+
+    private static EvaluationContext LoadDerivedContext()
+    {
+        var schemaSet = new XmlSchemaSet();
+        string schemaPath = Path.GetFullPath("../../../../qt3tests/prod/CastExpr/derived.xsd");
+        using var stream = File.OpenRead(schemaPath);
+        using var reader = XmlReader.Create(stream);
+        schemaSet.Add(XmlSchema.Read(reader, null)!);
+        schemaSet.Compile();
+
+        var ctx = new EvaluationContext();
+        ctx.SchemaSet = schemaSet;
+        ctx = ctx.WithNamespace("d", "http://www.w3.org/XQueryTest/derivedTypes");
+        ctx = ctx.WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+        FunctionLibrary.Populate(ctx);
+        return ctx;
+    }
+
+    [Fact]
+    public void Cast_IntegerToNormalizedString_Succeeds()
+    {
+        // Regression for cbcl-normalizedstring-003: xs:normalizedString(5) must succeed.
+        var result = XPath31Expression.Compile("xs:normalizedString(5)").Evaluate(new EvaluationContext());
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("5", result.StringValue);
+        Assert.Equal("normalizedString", result.SchemaTypeName);
+    }
+
+    [Fact]
+    public void Cast_IntegerToToken_Succeeds()
+    {
+        // Regression for cbcl-token-003: xs:token(5) must succeed.
+        var result = XPath31Expression.Compile("xs:token(5)").Evaluate(new EvaluationContext());
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("5", result.StringValue);
+        Assert.Equal("token", result.SchemaTypeName);
+    }
+
+    [Fact]
+    public void Castable_IntegerToNormalizedString_IsTrue()
+    {
+        // Regression for cbcl-normalizedstring-005: 5 castable as xs:normalizedString.
+        var result = XPath31Expression.Compile("5 castable as xs:normalizedString").Evaluate(new EvaluationContext());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Castable_IntegerToToken_IsTrue()
+    {
+        // Regression for cbcl-token-005: 5 castable as xs:token.
+        var result = XPath31Expression.Compile("5 castable as xs:token").Evaluate(new EvaluationContext());
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Castable_IntegerToCanonicalDecimal_IsTrue()
+    {
+        // Regression for CastableAs653: pattern facets are checked against XSD canonical
+        // lexical representation, so 12 is castable as d:canonicalDecimal.
+        var ctx = LoadDerivedContext();
+        var result = XPath31Expression.Compile("12 castable as d:canonicalDecimal").Evaluate(ctx);
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Castable_DoubleToCanonicalDouble_IsTrue()
+    {
+        // Regression for CastableAs655: 93.7 is castable as d:canonicalDouble because the
+        // canonical lexical form uses scientific notation.
+        var ctx = LoadDerivedContext();
+        var result = XPath31Expression.Compile("93.7 castable as d:canonicalDouble").Evaluate(ctx);
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Castable_ZeroDoubleToCanonicalDouble_IsTrue()
+    {
+        // Regression for CastableAs657: 0.0e0 is castable as d:canonicalDouble.
+        var ctx = LoadDerivedContext();
+        var result = XPath31Expression.Compile("0.0e0 castable as d:canonicalDouble").Evaluate(ctx);
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Castable_DecimalToImpureUnionType_IsFalse()
+    {
+        // Regression for cbcl-castable-impure-009: a single xs:decimal cannot be cast to a
+        // union whose list member requires a string lexical form.
+        var ctx = LoadUnionListContext();
+        var result = XPath31Expression.Compile("xs:decimal(\"1\") castable as s:impureUnionType").Evaluate(ctx);
+        Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Cast_DerivedDateTimeTypes_PreserveLexicalForm()
+    {
+        // Regression for cbcl-cast-derived-001: casts to derived gYear/gMonth/gDay/etc.
+        // types must serialize in their specific lexical form, not as full xs:dateTime.
+        var ctx = LoadDerivedContext();
+        var result = XPath31Expression.Compile(
+            "string-join((\"---01\" cast as d:gDay, \"--12-25\" cast as d:gMonthDay, " +
+            "\"--12\" cast as d:gMonth, \"2004\" cast as d:gYear, \"2004-02\" cast as d:gYearMonth, " +
+            "\"P1D\" cast as d:duration), ' ')")
+            .Evaluate(ctx);
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("---01 --12-25 --12 2004 2004-02 P1D", result.StringValue);
     }
 
     [Fact]
