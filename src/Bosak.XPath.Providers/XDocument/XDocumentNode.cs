@@ -62,6 +62,7 @@
 //                      | Charles Korthout | 0.18  | 21-08-2026     | Added IsIdref property using PSVI for schema-validated IDREF nodes                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.19  | 22-08-2026     | Preserve lexical timezone offsets in schema-validated date/time typed values            |
+//                      | Charles Korthout | 0.20  | 23-08-2026     | QName/NOTATION typed values with in-scope resolver; declared schema type; xsi:type ID/IDREF detection |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -385,7 +386,7 @@ public sealed class XDocumentNode : IXdmNode
 
         try
         {
-            var nsResolver = _node as IXmlNamespaceResolver ?? new XmlNamespaceManager(new NameTable());
+            var nsResolver = CreateInScopeNamespaceResolver();
             object parsed = datatype.ParseValue(StringValue, new NameTable(), nsResolver);
             bool hasTz = LexicalHasTimezone(StringValue);
             if (datatype.Variety == XmlSchemaDatatypeVariety.List && parsed is System.Collections.IEnumerable list && parsed is not string)
@@ -413,6 +414,41 @@ public sealed class XDocumentNode : IXdmNode
         {
             return XdmValue.FromString(StringValue);
         }
+    }
+
+    /// <summary>
+    /// Builds an <see cref="IXmlNamespaceResolver"/> that contains the in-scope namespace
+    /// bindings for the current node. This is required when schema validation returns
+    /// <c>xs:QName</c>/<c>xs:NOTATION</c> values, because <see cref="XmlSchemaDatatype.ParseValue"/>
+    /// only resolves prefixes that are present in the supplied resolver.
+    /// </summary>
+    private IXmlNamespaceResolver CreateInScopeNamespaceResolver()
+    {
+        var manager = new XmlNamespaceManager(new NameTable());
+        manager.AddNamespace("xml", "http://www.w3.org/XML/1998/namespace");
+
+        XObject? current = _node;
+        while (current is not null)
+        {
+            if (current is XElement el)
+            {
+                foreach (XAttribute attr in el.Attributes())
+                {
+                    if (attr.IsNamespaceDeclaration)
+                    {
+                        string prefix = attr.Name.LocalName;
+                        if (prefix == "xmlns")
+                            prefix = string.Empty;
+                        // The nearest declaration wins; ignore outer redeclarations.
+                        if (!manager.HasNamespace(prefix))
+                            manager.AddNamespace(prefix, attr.Value);
+                    }
+                }
+            }
+            current = current.Parent;
+        }
+
+        return manager;
     }
 
     /// <summary>
@@ -479,7 +515,19 @@ public sealed class XDocumentNode : IXdmNode
                 }
                 return ConvertDateTime(dt, typeName, hasTimezone);
             case XmlQualifiedName qn:
-                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace));
+            {
+                string qnType = typeName;
+                if (GetBuiltInBaseTypeName(schemaType) is "NOTATION")
+                    qnType = "NOTATION";
+                string prefix = string.Empty;
+                if (lexicalValue is not null)
+                {
+                    int colon = lexicalValue.IndexOf(':');
+                    if (colon > 0)
+                        prefix = lexicalValue[..colon];
+                }
+                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), qnType);
+            }
             case string s:
                 return XdmValue.FromString(s, typeName);
             case byte[] bytes:
@@ -627,10 +675,10 @@ public sealed class XDocumentNode : IXdmNode
         if (info?.SchemaType is not { } schemaType)
             return null;
 
+        // Report the declared schema type as the dynamic type annotation. The PSVI member type
+        // may be a transient union member, while XPath/XQuery expects the declared type name
+        // for type matching (schema-element tests, instanceof on validated nodes).
         var qn = schemaType.QualifiedName;
-        // Report the dynamic type annotation (member type for simple content of complex types).
-        if (info.MemberType is not null)
-            qn = info.MemberType.QualifiedName;
         return (qn.Namespace, qn.Name);
     }
 
@@ -1687,15 +1735,20 @@ public sealed class XDocumentNode : IXdmNode
     private static bool IsIdElement(XElement element)
     {
         var info = element.GetSchemaInfo();
-        if (info is null)
-            return false;
+        if (info is not null)
+        {
+            if (info.IsNil)
+                return false;
 
-        if (info.IsNil)
-            return false;
+            if (IsIdSchemaType(info.MemberType, element.Value))
+                return true;
+            if (IsIdSchemaType(info.SchemaType, element.Value))
+                return true;
+        }
 
-        if (IsIdSchemaType(info.MemberType, element.Value))
-            return true;
-        if (IsIdSchemaType(info.SchemaType, element.Value))
+        // Schema-less but typed via xsi:type: an element whose xsi:type attribute resolves
+        // to xs:ID is treated as an ID element (app-spec-examples fo-test-fn-id-002).
+        if (ResolveXsiType(element) is { } xsiType && IsXsIdType(xsiType))
             return true;
 
         return false;
@@ -1724,6 +1777,54 @@ public sealed class XDocumentNode : IXdmNode
         return type.TypeCode == XmlTypeCode.Id;
     }
 
+    /// <summary>
+    /// Resolves the value of an <c>xsi:type</c> attribute on <paramref name="element"/> to an
+    /// expanded QName, or <c>null</c> if the attribute is not present or not a valid QName.
+    /// </summary>
+    private static (string NamespaceUri, string LocalName)? ResolveXsiType(XElement element)
+    {
+        const string XsiNs = "http://www.w3.org/2001/XMLSchema-instance";
+        var xsiType = element.Attribute(XNamespace.Get(XsiNs) + "type");
+        if (xsiType is null)
+            return null;
+        return ResolveQName(xsiType.Value, element);
+    }
+
+    /// <summary>
+    /// Resolves a lexical QName using the in-scope namespace bindings of <paramref name="element"/>.
+    /// Unprefixed names use the default element namespace; prefixed names use the binding for
+    /// that prefix. Returns an empty namespace URI when the prefix is undeclared.
+    /// </summary>
+    private static (string NamespaceUri, string LocalName) ResolveQName(string lexical, XElement element)
+    {
+        int colon = lexical.IndexOf(':');
+        if (colon >= 0)
+        {
+            string prefix = lexical[..colon];
+            string local = lexical[(colon + 1)..];
+            string ns = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+            return (ns, local);
+        }
+        else
+        {
+            string ns = element.GetDefaultNamespace()?.NamespaceName ?? string.Empty;
+            return (ns, lexical);
+        }
+    }
+
+    /// <summary>
+    /// Returns true when the expanded QName denotes the XML Schema <c>xs:ID</c> type.
+    /// </summary>
+    private static bool IsXsIdType((string NamespaceUri, string LocalName) qn)
+        => qn.NamespaceUri == XmlSchema.Namespace && qn.LocalName == "ID";
+
+    /// <summary>
+    /// Returns true when the expanded QName denotes the XML Schema <c>xs:IDREF</c> or
+    /// <c>xs:IDREFS</c> type.
+    /// </summary>
+    private static bool IsXsIdrefType((string NamespaceUri, string LocalName) qn)
+        => qn.NamespaceUri == XmlSchema.Namespace && (qn.LocalName == "IDREF" || qn.LocalName == "IDREFS");
+
     private bool ComputeIsIdref()
     {
         if (_isNamespaceNode)
@@ -1741,17 +1842,23 @@ public sealed class XDocumentNode : IXdmNode
     private static bool IsIdrefAttribute(XAttribute attr)
     {
         var info = attr.GetSchemaInfo();
-        if (info is null)
-            return false;
-        return IsIdrefFromSchemaInfo(info, attr.Value);
+        if (info is not null && IsIdrefFromSchemaInfo(info, attr.Value))
+            return true;
+        return false;
     }
 
     private static bool IsIdrefElement(XElement element)
     {
         var info = element.GetSchemaInfo();
-        if (info is null || info.IsNil)
-            return false;
-        return IsIdrefFromSchemaInfo(info, element.Value);
+        if (info is not null && !info.IsNil && IsIdrefFromSchemaInfo(info, element.Value))
+            return true;
+
+        // Schema-less but typed via xsi:type: an element whose xsi:type attribute resolves
+        // to xs:IDREF/xs:IDREFS is treated as an IDREF element (app-spec-examples fo-test-fn-idref-001/002).
+        if (ResolveXsiType(element) is { } xsiType && IsXsIdrefType(xsiType))
+            return true;
+
+        return false;
     }
 
     /// <summary>

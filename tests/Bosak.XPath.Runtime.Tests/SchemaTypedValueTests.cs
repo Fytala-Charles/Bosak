@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 21-08-2026     | Schema-element and schema-attribute kind-test matching tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 22-08-2026     | Regression tests for xsi:type ID/IDREF, language cast, and NOTATION instance-of          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -362,6 +364,84 @@ public class SchemaTypedValueTests
             return item;
         }
         throw new InvalidOperationException($"Element {localName} (nilled={isNilled}) not found.");
+    }
+
+    [Fact]
+    public void LanguageCast_AcceptsBooleanOperand()
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        var result = XPath31Expression.Compile("true() cast as xs:language").Evaluate(ctx);
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.Equal("language", result.SchemaTypeName);
+        Assert.Equal("true", result.StringValue);
+    }
+
+    [Fact]
+    public void XsiTypeIdElement_IsRecognizedAsId()
+    {
+        var doc = XDocument.Parse(
+            "<employee xml:id='ID1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "<empnr xsi:type='xs:ID'>E1</empnr>" +
+            "</employee>");
+        var docNode = new XDocumentNode(doc);
+        IXdmNode? employee = null;
+        foreach (var item in docNode.Axis(XdmAxis.Child))
+        {
+            employee = item.NodeValue;
+            break;
+        }
+        Assert.NotNull(employee);
+        IXdmNode? empnr = null;
+        foreach (var item in employee.Axis(XdmAxis.Child))
+        {
+            if (item.NodeValue.NodeKind == XdmNodeKind.Element)
+            {
+                empnr = item.NodeValue;
+                break;
+            }
+        }
+        Assert.NotNull(empnr);
+        Assert.True(empnr.IsId, "empnr with xsi:type='xs:ID' should be an ID element");
+    }
+
+    [Fact]
+    public void XsiTypeIdrefElement_IsRecognizedAsIdref()
+    {
+        var doc = XDocument.Parse(
+            "<employee xml:id='ID1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+            "<deputy xsi:type='xs:IDREF'>E1</deputy>" +
+            "</employee>");
+        var deputyNode = new XDocumentNode(doc.Root!.Element(XNamespace.None + "deputy")!);
+        Assert.True(deputyNode.IsIdref, "deputy with xsi:type='xs:IDREF' should be an IDREF element");
+    }
+
+    [Fact]
+    public void SchemaValidatedNotationValue_IsInstanceOfNotation()
+    {
+        var schemaSet = LoadInlineSchema(@"
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+           targetNamespace='http://www.w3.org/XQueryTest/Cast/Notation'
+           xmlns:nt='http://www.w3.org/XQueryTest/Cast/Notation'>
+  <xs:notation name='jpg' public='image/jpeg' system='viewer.exe'/>
+  <xs:notation name='png' public='image/png' system='viewer.exe'/>
+  <xs:simpleType name='pictures'>
+    <xs:restriction base='xs:NOTATION'>
+      <xs:enumeration value='nt:jpg'/>
+      <xs:enumeration value='nt:png'/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name='notation' type='nt:pictures'/>
+</xs:schema>");
+
+        var xdoc = XDocument.Parse(
+            "<nt:notation xmlns:nt='http://www.w3.org/XQueryTest/Cast/Notation'>nt:jpg</nt:notation>");
+        xdoc.Validate(schemaSet, null, addSchemaInfo: true);
+
+        var node = new XDocumentNode(xdoc.Root!);
+        var typed = node.TypedValue;
+        Assert.Equal(XdmValueKind.QName, typed.Kind);
+        Assert.Equal("NOTATION", typed.SchemaTypeName);
     }
 
     private static XmlSchemaSet LoadInlineSchema(string schemaXml)

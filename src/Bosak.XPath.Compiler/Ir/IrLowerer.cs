@@ -82,6 +82,7 @@
 //                      | Charles Korthout | 1.34  | 18-08-2026     | Multiple order by clauses per FLWOR via stable-sort re-key stages (orderBy65/66) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.35  | 22-08-2026     | Lower ValidateExpressionNode to Validate opcode |
+//                      | Charles Korthout | 1.36  | 23-08-2026     | Validate opcode literal pool carries optional target type name for validate type QName |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -1567,8 +1568,9 @@ public sealed class IrLowerer
     {
         int exprReg = LowerNode(node.Expression);
         int resultReg = targetReg ?? AllocRegister();
-        int modePoolIdx = AddToLiteralPool(node.Mode ?? "");
-        Emit(IrOpCode.Validate, (ushort)resultReg, (ushort)exprReg, 0, modePoolIdx);
+        string typeName = string.IsNullOrEmpty(node.TypePrefix) ? (node.TypeName ?? "") : $"{node.TypePrefix}:{node.TypeName}";
+        int infoPoolIdx = AddToLiteralPool((node.Mode ?? "", typeName));
+        Emit(IrOpCode.Validate, (ushort)resultReg, (ushort)exprReg, 0, infoPoolIdx);
         return resultReg;
     }
 

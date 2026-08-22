@@ -223,6 +223,7 @@
 //                      | Charles Korthout | 2.118 | 22-08-2026     | Validate opcode for XQuery validate expressions |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.119 | 22-08-2026     | Validate opcode reads mode; lax with no schema returns operand unchanged |
+//                      | Charles Korthout | 2.120 | 23-08-2026     | Schema-aware validate: built-in schema set, validate type QName, PSVI annotations, xsi:type ID/IDREF, NOTATION instance-of |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
@@ -231,11 +232,13 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Ast;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Functions;
 
 namespace Bosak.XPath.Runtime.Vm;
@@ -2632,8 +2635,8 @@ public static class VmEngine
                 case IrOpCode.Validate:
                     {
                         var value = registers[instr.RegisterB];
-                        var mode = (string)literalPool[instr.Operand]!;
-                        registers[instr.RegisterA] = ValidateNode(value, mode, context);
+                        var (mode, typeName) = ((string Mode, string TypeName))literalPool[instr.Operand]!;
+                        registers[instr.RegisterA] = ValidateNode(value, mode, typeName, context);
                         ip++;
                         break;
                     }
@@ -3108,25 +3111,35 @@ public static class VmEngine
         return new[] { sequence };
     }
 
+    private static readonly XmlSchemaSet s_builtInSchemaSet = CreateBuiltInSchemaSet();
+
+    private static XmlSchemaSet CreateBuiltInSchemaSet()
+    {
+        var ss = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        ss.Compile();
+        return ss;
+    }
+
     /// <summary>
     /// Validates the node returned by a <c>validate</c> expression against the compiled
     /// schema set on the evaluation context. Returns the validated node and raises
     /// <c>XQTY0030</c> when the operand is not a valid validation root, <c>XQST0075</c>
     /// when no schema is available for a strict validation, <c>XQDY0027</c> when validation
-    /// fails. Lax validation with no available schema returns the operand unchanged.
+    /// fails. Lax validation with no available schema is still run against the built-in schema
+    /// set so that <c>xsi:type</c> annotations are honoured.
     /// </summary>
-    private static XdmValue ValidateNode(XdmValue value, string mode, EvaluationContext context)
+    private static XdmValue ValidateNode(XdmValue value, string mode, string typeName, EvaluationContext context)
     {
         var items = MaterializeSequence(value);
         if (items.Length != 1 || !items[0].IsNode || items[0].NodeValue!.NodeKind is not (XdmNodeKind.Element or XdmNodeKind.Document))
             throw new InvalidOperationException("XQTY0030: The operand of a validate expression must be a single document or element node.");
 
         var item = items[0];
-        if (context.SchemaSet is null)
+        XmlSchemaSet schemaSetToUse = context.SchemaSet ?? s_builtInSchemaSet;
+        if (context.SchemaSet is null && (mode != "lax" || !string.IsNullOrEmpty(typeName)))
         {
-            // XQuery 3.1 §3.13.2: lax validation with no available schema is a no-op.
-            if (mode == "lax")
-                return item;
+            // XQuery 3.1 §3.13.2: only lax validation without a target type may proceed
+            // without a user schema; strict/default validation requires one.
             throw new InvalidOperationException("XQST0075: A validate expression requires a schema, but no schema is available.");
         }
 
@@ -3138,15 +3151,97 @@ public static class VmEngine
                 hasErrors = true;
         };
 
-        using var stringReader = new System.IO.StringReader(node.ToXmlString());
-        using var xmlReader = System.Xml.XmlReader.Create(stringReader);
-        var doc = System.Xml.Linq.XDocument.Load(xmlReader, System.Xml.Linq.LoadOptions.None);
-        doc.Validate(context.SchemaSet, handler);
+        // Validation creates a new XDM value with PSVI annotations. Preserve the original
+        // document URI if the operand was a document node; element inputs conceptually return
+        // the validated root element.
+        string documentUri = item.NodeValue.NodeKind == XdmNodeKind.Document ? item.NodeValue.DocumentUri : string.Empty;
 
-        if (hasErrors)
-            throw new InvalidOperationException("XQDY0027: Validation of the validate expression operand failed.");
+        XDocument doc;
+        if (mode == "lax" && string.IsNullOrEmpty(typeName))
+        {
+            // Lax validation: use an XmlReader with schema validation so undeclared elements
+            // are warnings, not errors. Only XmlSeverityType.Error is fatal.
+            var settings = new System.Xml.XmlReaderSettings
+            {
+                ValidationType = System.Xml.ValidationType.Schema,
+                Schemas = schemaSetToUse,
+                ValidationFlags = System.Xml.Schema.XmlSchemaValidationFlags.ProcessSchemaLocation
+                    | System.Xml.Schema.XmlSchemaValidationFlags.ReportValidationWarnings,
+                DtdProcessing = System.Xml.DtdProcessing.Prohibit,
+            };
+            settings.ValidationEventHandler += handler;
+            using var stringReader = new System.IO.StringReader(node.ToXmlString());
+            using var validatingReader = System.Xml.XmlReader.Create(stringReader, settings);
+            doc = System.Xml.Linq.XDocument.Load(validatingReader, System.Xml.Linq.LoadOptions.None);
+            if (hasErrors)
+                throw new InvalidOperationException("XQDY0027: Validation of the validate expression operand failed.");
+        }
+        else
+        {
+            using var stringReader = new System.IO.StringReader(node.ToXmlString());
+            using var xmlReader = System.Xml.XmlReader.Create(stringReader);
+            doc = System.Xml.Linq.XDocument.Load(xmlReader, System.Xml.Linq.LoadOptions.None);
 
-        return item;
+            // validate type QName { ... }: force the root element to be validated against the
+            // named type by injecting an xsi:type attribute. This is required for tests such as
+            // CastAs-UnionType-33 where the element has no matching global element declaration.
+            if (!string.IsNullOrEmpty(typeName) && doc.Root is not null)
+            {
+                var (typeNs, typeLocal) = ResolveValidateTypeName(typeName, context);
+                const string XsiNs = "http://www.w3.org/2001/XMLSchema-instance";
+                const string XsNs = "http://www.w3.org/2001/XMLSchema";
+                string typePrefix = typeNs == XsNs ? "xs" : GenerateUniquePrefix(doc.Root, "t");
+                doc.Root.SetAttributeValue(XNamespace.Get(XsiNs) + "type", $"{typePrefix}:{typeLocal}");
+                doc.Root.SetAttributeValue(XNamespace.Xmlns + typePrefix, typeNs);
+                doc.Root.SetAttributeValue(XNamespace.Xmlns + "xsi", XsiNs);
+            }
+
+            // addSchemaInfo: true is required to populate XElement.GetSchemaInfo() / PSVI
+            // annotations used by fn:id, fn:idref, schema-element(), and typed value access.
+            doc.Validate(schemaSetToUse, handler, addSchemaInfo: true);
+
+            if (hasErrors)
+                throw new InvalidOperationException("XQDY0027: Validation of the validate expression operand failed.");
+        }
+
+        if (item.NodeValue.NodeKind == XdmNodeKind.Document)
+        {
+            var validatedDoc = new XDocumentNode(doc);
+            validatedDoc.SetDocumentUri(documentUri);
+            return XdmValue.FromNode(validatedDoc);
+        }
+
+        var validatedRoot = new XDocumentNode(doc.Root!);
+        return XdmValue.FromNode(validatedRoot);
+    }
+
+    private static (string NamespaceUri, string LocalName) ResolveValidateTypeName(string typeName, EvaluationContext context)
+    {
+        if (typeName.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int closeBrace = typeName.IndexOf('}');
+            if (closeBrace > 2)
+                return (typeName[2..closeBrace], typeName[(closeBrace + 1)..]);
+        }
+
+        int colon = typeName.IndexOf(':');
+        string prefix = colon >= 0 ? typeName[..colon] : "";
+        string local = colon >= 0 ? typeName[(colon + 1)..] : typeName;
+        if (!context.TryResolveNamespace(prefix, out var nsUri))
+            throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+        return (nsUri, local);
+    }
+
+    private static string GenerateUniquePrefix(XElement element, string basePrefix)
+    {
+        int index = 0;
+        string prefix;
+        do
+        {
+            prefix = index == 0 ? basePrefix : $"{basePrefix}{index}";
+            index++;
+        } while (element.GetNamespaceOfPrefix(prefix) is not null);
+        return prefix;
     }
 
     /// <summary>
@@ -7007,8 +7102,8 @@ public static class VmEngine
 
             case "language":
             {
-                if (value.Kind != XdmValueKind.String)
-                    return false;
+                // XPath 3.1 §17.3: casting to xs:string (and its subtypes) is permitted
+                // from any atomic type by first converting to xs:string.
                 string s = CollapseWhitespace(value.ToString());
                 if (Regex.IsMatch(s, @"^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$"))
                 {
@@ -7889,7 +7984,9 @@ public static class VmEngine
             or "item" or "item()"
             or "function" or "function(*)" or "function()"
             or "map" or "map(*)" or "map()"
-            or "array" or "array(*)" or "array()")
+            or "array" or "array(*)" or "array()"
+            or "schema-element" or "schema-element()"
+            or "schema-attribute" or "schema-attribute()")
         {
             return true;
         }
@@ -7949,7 +8046,9 @@ public static class VmEngine
             "base64binary" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("base64Binary", StringComparison.OrdinalIgnoreCase) == true,
             "anyuri" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("anyURI", StringComparison.OrdinalIgnoreCase) == true,
             "untypedatomic" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("untypedAtomic", StringComparison.OrdinalIgnoreCase) == true,
-            "notation" => false, // xs:NOTATION is abstract and cannot be instantiated in XDM
+            "notation" => (value.Kind == XdmValueKind.QName || value.Kind == XdmValueKind.String)
+                && value.SchemaTypeName is not null
+                && IsAtomicTypeSubtype(value.SchemaTypeName, "notation"),
             "node" => value.IsNode,
             "element" or "element()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Element,
             "attribute" or "attribute()" => value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Attribute,
@@ -8123,6 +8222,8 @@ public static class VmEngine
     {
         simpleType = null;
         if (context?.SchemaSet is null)
+            return false;
+        if (typeName.Contains('('))
             return false;
         var (ns, local) = ResolveTypeQName(typeName, context);
         if (ns == XmlSchema.Namespace)
@@ -8744,7 +8845,7 @@ public static class VmEngine
 
                     // Annotate with the built-in base type, matching existing behavior for
                     // user-defined atomic types (e.g. unrestrictedInteger is stored as integer).
-                    result = ConvertSchemaValue(parsed, schemaSimpleType.Datatype, schemaSimpleType, LexicalHasTimezone(validationLexical));
+                    result = ConvertSchemaValue(parsed, schemaSimpleType.Datatype, schemaSimpleType, LexicalHasTimezone(validationLexical), validationLexical);
                     return true;
                 }
                 catch
@@ -8759,7 +8860,7 @@ public static class VmEngine
     /// Converts a .NET value returned by <see cref="XmlSchemaDatatype.ParseValue"/> into an
     /// <see cref="XdmValue"/> with the appropriate schema-type annotation.
     /// </summary>
-    private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true)
+    private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true, string? lexicalValue = null)
     {
         string typeName = schemaType.QualifiedName.Name;
         string typeNs = schemaType.QualifiedName.Namespace;
@@ -8801,7 +8902,19 @@ public static class VmEngine
             case DateTimeOffset dto:
                 return ConvertSchemaDateTime(dto.DateTime, typeName, hasTimezone);
             case XmlQualifiedName qn:
-                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace));
+            {
+                string qnType = typeName;
+                if (GetBuiltInBaseTypeName(schemaType) is "NOTATION")
+                    qnType = "NOTATION";
+                string prefix = string.Empty;
+                if (lexicalValue is not null)
+                {
+                    int colon = lexicalValue.IndexOf(':');
+                    if (colon > 0)
+                        prefix = lexicalValue[..colon];
+                }
+                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), qnType);
+            }
             case string s:
                 return XdmValue.FromString(s, typeName);
             case byte[] bytes:
@@ -10024,12 +10137,10 @@ public static class VmEngine
                 converted.Add(item);
                 continue;
             }
-            // Element/text/document/attribute nodes atomize to xs:untypedAtomic; comment,
-            // processing-instruction, and namespace nodes atomize to xs:string (which is
-            // not cast to numeric types by function conversion — K2-FunctionProlog-18/20).
-            var atomic = item.IsNode && item.NodeValue.NodeKind is XdmNodeKind.Element or XdmNodeKind.Text or XdmNodeKind.Document or XdmNodeKind.Attribute
-                ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic")
-                : item;
+            // XPath 3.1 function conversion atomizes argument items. This also covers
+            // comment/processing-instruction/namespace nodes, which atomize to xs:string
+            // and are therefore not promoted to numeric types (K2-FunctionProlog-18/20).
+            var atomic = Atomize(item);
             if (ValueMatchesType(atomic, type, context))
             {
                 converted.Add(atomic);
@@ -10085,7 +10196,7 @@ public static class VmEngine
                 // namespace-sensitive type such as xs:QName or xs:NOTATION (XPTY0117).
                 throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
             }
-            else if (IsUntypedAtomicValue(atomic) && TryCast(atomic, type, context, out var casted))
+            else if (IsUntypedAtomicValue(atomic) && !IsKnownSequenceTypeName(type) && TryCast(atomic, type, context, out var casted))
             {
                 converted.Add(casted);
             }

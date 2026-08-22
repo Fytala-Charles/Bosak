@@ -40,6 +40,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.1   | 25-07-2026     | FromDecimal normalizes negative zero (XPath decimals have no -0)                        |
 //                      | Charles Korthout | 2.2   | 22-08-2026     | Format gYear/gMonth/gDay/etc. schema-type annotations correctly in ToString           |
+//                      | Charles Korthout | 2.3   | 23-08-2026     | Added FromQName(XsQName, string schemaTypeName) overload for schema-typed QNames/NOTATIONs |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -186,6 +187,10 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromQName(XsQName value)
         => new(XdmValueKind.QName, reference: value);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromQName(XsQName value, string schemaTypeName)
+        => new(XdmValueKind.QName, reference: value, schemaTypeName: schemaTypeName);
 
     // ------------------------------------------------------------------
     // Accessors

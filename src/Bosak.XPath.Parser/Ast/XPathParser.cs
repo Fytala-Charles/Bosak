@@ -108,6 +108,7 @@
 //                      | Charles Korthout | 1.50  | 22-08-2026     | Parse XQuery validate expressions (strict/lax/no mode) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.51  | 22-08-2026     | Treat 'validate' as a contextual XQuery keyword (Name token) |
+//                      | Charles Korthout | 1.52  | 23-08-2026     | Parse XQuery validate type QName { Expr } syntax |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1432,7 +1433,7 @@ public sealed class XPathParser
         if (_allowFullFlwor && Current.Kind == TokenKind.Name
             && GetString(Current) == "validate"
             && (Peek(1).Kind == TokenKind.LBrace
-                || (Peek(1).Kind == TokenKind.Name && GetString(Peek(1)) is "strict" or "lax")))
+                || (Peek(1).Kind == TokenKind.Name && GetString(Peek(1)) is "strict" or "lax" or "type")))
         {
             return ParsePostfixExpr();
         }
@@ -2052,6 +2053,8 @@ public sealed class XPathParser
         Advance();
 
         string? mode = null;
+        string? typePrefix = null;
+        string? typeName = null;
         if (Current.Kind == TokenKind.Name)
         {
             var modeName = GetString(Current);
@@ -2060,6 +2063,15 @@ public sealed class XPathParser
                 mode = modeName;
                 Advance();
             }
+            else if (modeName == "type")
+            {
+                Advance();
+                var (prefix, local, hasParens) = ParseTypeNameAndParens();
+                if (hasParens)
+                    throw new ParseException("XPST0003: Type name in 'validate type' must not be parenthesised.", Current.Start);
+                typePrefix = prefix;
+                typeName = local;
+            }
         }
 
         Expect(TokenKind.LBrace);
@@ -2067,7 +2079,7 @@ public sealed class XPathParser
             throw new ParseException("XPST0003: A validate expression must have a non-empty operand.", Current.Start);
         var body = ParseExpr();
         Expect(TokenKind.RBrace);
-        return WithSpan(new ValidateExpressionNode(body, mode), start, End);
+        return WithSpan(new ValidateExpressionNode(body, mode, typeName, typePrefix), start, End);
     }
 
     private FunctionCallNode ParseFunctionCall(int start)
