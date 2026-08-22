@@ -1,6 +1,39 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
+**Commit:** `f4a982f` — Preserve lexical timezone offsets in schema-validated date/time typed values
+**Current focus:** **schema-validated date/time timezone preservation cluster** — `XDocumentNode.GetTypedValue` now re-parses the lexical string for `xs:date`, `xs:time`, `xs:dateTime`, `xs:dateTimeStamp`, and the `g*` date/time types using `XmlConvert.ToDateTimeOffset`, preserving the original timezone offset instead of normalizing to the local offset. This fixes the QT3 `prod-CastExpr.schema` failures `casthcds30`–`casthcds34` (the `casthcds32`–`casthcds34` offset corruption and the `casthcds30`/`casthcds31` cast errors caused by UTC `DateTime` values), and the `prod-WindowClause` `WindowingUseCase*` residual failures that expected `Z` outputs. The `AGENTS.md` known limitation for `adjust-time-to-timezone` has been removed because the underlying issue was in typed-value construction, not the adjust functions themselves.
+
+Expected state: **1,792 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,832 passed / 41 failed / 948 skipped** (96.89%). Targeted verification: `casthcds30`–`casthcds34` 5/5; `prod-WindowClause` `WindowingUseCase*` 38/0/0; `fn-adjust-time-to-timezone` 42/0/0; `fn-adjust-date-to-timezone` 41/0/0; `fn-adjust-dateTime-to-timezone` 48/0/0.
+
+## This Session Changes (schema date/time timezone preservation cluster)
+
+1. **`XDocumentNode` schema date/time typed values** (`src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`) —
+   - `ConvertSchemaValue` accepts an optional `lexicalValue` and, for date/time-typed values, re-parses the original lexical string with `XmlConvert.ToDateTimeOffset` before constructing the `XdmValue`.
+   - This preserves explicit offsets such as `+05:00` and avoids the `ArgumentException` thrown when `XmlSchemaDatatype.ParseValue` returns a UTC `DateTime` and the old code supplied the local offset to `DateTimeOffset`.
+   - A new `ConvertDateTime(DateTimeOffset, ...)` overload handles all date/time subtypes; the existing `DateTime` overload delegates to it.
+   - Header bumped to 0.19.
+
+2. **Regression tests** (`tests/Bosak.XPath.Core.Tests/SchemaDateTimeTypedValueTests.cs`) —
+   - Six tests covering `xs:date`, `xs:dateTime`, and `xs:time` with UTC and non-local offsets, plus `xs:dateTime` → `xs:time`/`xs:date` casts.
+
+3. **Known limitations** (`AGENTS.md`) —
+   - Removed the `adjust-time-to-timezone` limitation; the targeted adjust-* test sets all pass.
+
+## Files Changed (this session)
+
+- `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`
+- `tests/Bosak.XPath.Core.Tests/SchemaDateTimeTypedValueTests.cs`
+- `AGENTS.md`
+- `docs/AGENT_HANDOVER.md`
+- `docs/INTEGRATION.md`
+- `docs/FEATURE_REQUESTS.md`
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-22
 **Commit:** `56335f6` — docs: record orderBy decimal normalization handover (current working tree modifies cast code)
 **Current focus:** **schema-derived string/numeric/union cast cluster** — `VmEngine.TryCastToSchemaType` and related cast helpers now handle derived atomic string subtypes (`xs:normalizedString`, `xs:token`, etc.) from numeric operands by converting to string first, validate derived atomic type pattern facets against XSD canonical lexical forms (`12` → `"12.0"`, `93.7` → `"9.37E1"`), reject single non-string atomic values for list type casts, and convert `TimeSpan` values from schema parsing back to XSD duration lexical form. `XdmValue.ToString()` now respects `gYear`/`gYearMonth`/`gMonth`/`gMonthDay`/`gDay` schema type annotations and formats accordingly. The conformance runner now skips `app-Demos` and `app-XMark` (heavy demo/benchmark sets that dominate unattended sweeps) and `cbcl-codepoints-to-string-021` (an implementation-defined range-limit test that enumerates billions of integers).
 

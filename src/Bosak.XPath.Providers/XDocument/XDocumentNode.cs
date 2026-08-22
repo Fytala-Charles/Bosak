@@ -61,6 +61,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.18  | 21-08-2026     | Added IsIdref property using PSVI for schema-validated IDREF nodes                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.19  | 22-08-2026     | Preserve lexical timezone offsets in schema-validated date/time typed values            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -402,10 +404,10 @@ public sealed class XDocumentNode : IXdmNode
                 // by the schema validator. MemberType carries the resolved simple type.
                 if (info.MemberType is XmlSchemaSimpleType memberType)
                 {
-                    return ConvertSchemaValue(parsed, memberType.Datatype ?? datatype, memberType, hasTz);
+                    return ConvertSchemaValue(parsed, memberType.Datatype ?? datatype, memberType, hasTz, StringValue);
                 }
             }
-            return ConvertSchemaValue(parsed, datatype, annotationType ?? simpleType!, hasTz);
+            return ConvertSchemaValue(parsed, datatype, annotationType ?? simpleType!, hasTz, StringValue);
         }
         catch
         {
@@ -417,7 +419,9 @@ public sealed class XDocumentNode : IXdmNode
     /// Converts a .NET value returned by <see cref="XmlSchemaDatatype.ParseValue"/> into an
     /// <see cref="XdmValue"/> with the appropriate schema-type annotation.
     /// </summary>
-    private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true)
+    /// <param name="lexicalValue">The original lexical string, used for date/time values so the
+    /// timezone offset is preserved instead of being normalized to the local offset.</param>
+    private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true, string? lexicalValue = null)
     {
         string typeName = schemaType.QualifiedName.Name;
         string typeNs = schemaType.QualifiedName.Namespace;
@@ -454,10 +458,26 @@ public sealed class XDocumentNode : IXdmNode
                 if (u64 <= (ulong)long.MaxValue)
                     return XdmValue.FromInteger((long)u64, typeName);
                 return XdmValue.FromDecimal(u64, typeName);
-            case DateTime dt:
-                return ConvertDateTime(dt, typeName, hasTimezone);
             case DateTimeOffset dto:
-                return ConvertDateTime(dto.DateTime, typeName, hasTimezone);
+                return ConvertDateTime(dto, typeName, hasTimezone);
+            case DateTime dt:
+                // Re-parse the lexical form for date/time values so the original timezone offset
+                // is preserved. XmlSchemaDatatype.ParseValue normalizes the returned DateTime to
+                // local/UTC and drops the explicit offset, which corrupts values like +05:00 and
+                // throws for UTC DateTime values.
+                if (lexicalValue is not null && IsDateTimeTypeName(typeName))
+                {
+                    try
+                    {
+                        return ConvertDateTime(XmlConvert.ToDateTimeOffset(lexicalValue), typeName, hasTimezone);
+                    }
+                    catch (FormatException)
+                    {
+                        // Fall through to the DateTime-based conversion if the lexical value is
+                        // not a supported date/time lexical form.
+                    }
+                }
+                return ConvertDateTime(dt, typeName, hasTimezone);
             case XmlQualifiedName qn:
                 return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace));
             case string s:
@@ -476,11 +496,19 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
-    private static XdmValue ConvertDateTime(DateTime dt, string typeName, bool hasTimezone)
-    {
-        var offset = dt.Kind == DateTimeKind.Unspecified ? TimeSpan.Zero : TimeZoneInfo.Local.GetUtcOffset(dt);
-        var dto = new DateTimeOffset(dt, offset);
-        return typeName.ToLowerInvariant() switch
+    private static bool IsDateTimeTypeName(string typeName)
+        => typeName.Equals("dateTime", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("dateTimeStamp", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("date", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("time", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("gYear", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("gYearMonth", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("gMonth", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("gMonthDay", StringComparison.OrdinalIgnoreCase)
+            || typeName.Equals("gDay", StringComparison.OrdinalIgnoreCase);
+
+    private static XdmValue ConvertDateTime(DateTimeOffset dto, string typeName, bool hasTimezone)
+        => typeName.ToLowerInvariant() switch
         {
             "date" => XdmValue.FromDate(dto, hasTimezone),
             "time" => XdmValue.FromTime(dto, hasTimezone),
@@ -491,6 +519,12 @@ public sealed class XDocumentNode : IXdmNode
             "gday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gDay"),
             _ => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: typeName)
         };
+
+    private static XdmValue ConvertDateTime(DateTime dt, string typeName, bool hasTimezone)
+    {
+        var offset = dt.Kind == DateTimeKind.Unspecified ? TimeSpan.Zero : TimeZoneInfo.Local.GetUtcOffset(dt);
+        var dto = new DateTimeOffset(dt, offset);
+        return ConvertDateTime(dto, typeName, hasTimezone);
     }
 
     /// <summary>
