@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** TBD — cast/castable array/map atomization
+**Commit:** `5c18c78` — cast/castable array/map atomization
 **Current focus:** **castable cluster** — `VmEngine.TryCast`, the `Cast` opcode, and the `Castable` opcode now atomize operands through a shared `AtomizeForCast` helper. Arrays are recursively flattened and their members atomized; maps and function items raise `FOTY0013` as required by XPath 3.1 §18.2.1. `castable as` propagates type errors (`FOTY0013`, `XPTY0004`) rather than swallowing them as `false`. This fixes the QT3 `prod-CastableExpr` failures `CastableAs665`–`CastableAs668` (`[5] castable as xs:integer`, `map{} castable as xs:integer`, nested arrays with empty members, and nested arrays containing maps). `TryCast` also continues to update its `result` to the atomized value so that casts of a typed node to its own type return the atomic typed value (preserving the earlier orderBy decimal normalization fix).
 
 Expected state: **1,801 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,836 passed / 37 failed / 948 skipped** (96.90%). Targeted verification: `CastableAs665`–`CastableAs668` 4/4; `prod-CastableExpr` 951/0/8; `prod-CastExpr` 2778/2/0 (pre-existing `K2-SeqExprCast-157/158` boolean-to-language failures).
