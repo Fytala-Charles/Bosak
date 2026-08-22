@@ -23,6 +23,8 @@
 //                      | Charles Korthout | 0.6   | 21-08-2026     | Added regression tests for namespace-context dynamic constructor calls and XPST0051 on restriction-of-union |
 //                      | Charles Korthout | 0.7   | 21-08-2026     | Added XPST0051 tests for list types and union types containing list members as SequenceType item types |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 21-08-2026     | Added regression tests for casting schema-validated xs:decimal nodes to atomic values    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -224,6 +226,60 @@ public class SchemaListUnionTests
 
         var result = XPath31Expression.Compile("s:lowercaseName('xs:integer') instance of s:sensitiveUnion").Evaluate(ctx);
         Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Cast_TypedDecimalElement_ReturnsDecimalAtomicValue()
+    {
+        // Regression for prod-OrderByClause orderBy26/36/46/56/62/64/65:
+        // xs:decimal($x) on a schema-validated xs:decimal element must atomize
+        // and return the decimal atomic value, not the original element node.
+        var ctx = LoadOrderDataContext();
+
+        var result = XPath31Expression
+            .Compile("xs:decimal((/DataValues/NegativeNumbers/orderData)[1])")
+            .Evaluate(ctx);
+
+        Assert.Equal(XdmValueKind.Decimal, result.Kind);
+        Assert.Equal("-100000000000000000", result.ToString());
+    }
+
+    [Fact]
+    public void Cast_TypedDecimalElementInForExpression_ReturnsDecimalSequence()
+    {
+        // Regression for prod-OrderByClause decimal normalization:
+        // when xs:decimal($x) is evaluated for every item in a for-expression,
+        // the result sequence must contain decimal atomics, not element nodes.
+        var ctx = LoadOrderDataContext();
+
+        var result = XPath31Expression
+            .Compile("string-join(for $x in /DataValues/NegativeNumbers/orderData return xs:decimal($x), ',')")
+            .Evaluate(ctx);
+
+        Assert.Equal(XdmValueKind.String, result.Kind);
+        Assert.StartsWith("-100000000000000000,-10000000000000000", result.ToString());
+        Assert.EndsWith("-1,0", result.ToString());
+    }
+
+    private static EvaluationContext LoadOrderDataContext()
+    {
+        var schemaSet = new XmlSchemaSet();
+        string schemaPath = Path.GetFullPath("../../../../qt3tests/prod/OrderByClause/orderData.xsd");
+        using (var stream = File.OpenRead(schemaPath))
+        using (var reader = XmlReader.Create(stream))
+            schemaSet.Add(XmlSchema.Read(reader, null)!);
+        schemaSet.Compile();
+
+        string docPath = Path.GetFullPath("../../../../qt3tests/prod/OrderByClause/orderData.xml");
+        var docNode = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+
+        var ctx = new EvaluationContext();
+        ctx.SchemaSet = schemaSet;
+        ctx = ctx.WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+        ctx.DefaultElementNamespace = "http://www.w3.org/XQueryTestOrderBy";
+        ctx = ctx.WithFocus(XdmValue.FromNode(docNode), 1, 1);
+        FunctionLibrary.Populate(ctx);
+        return ctx;
     }
 
     private static EvaluationContext LoadUnionListContext()

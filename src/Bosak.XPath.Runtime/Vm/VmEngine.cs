@@ -210,6 +210,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.111 | 21-08-2026     | Reject non-atomic user-defined schema types as SequenceType item types (XPST0051)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.112 | 21-08-2026     | TryCast updates result to atomized node value so xs:T($node) returns the typed value   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -6056,6 +6058,7 @@ public static class VmEngine
         if (value.IsNode)
         {
             value = Atomize(value);
+            result = value;
         }
 
         // Schema-imported simple types (not built-in xs:*): unions, lists, and atomic
