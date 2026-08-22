@@ -216,6 +216,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.115 | 22-08-2026     | GetUnionMemberTypes returns both named @memberTypes and inline BaseTypes members         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.116 | 22-08-2026     | Schema-aware list/union fixes: attribute kind-test case preservation, union function conversion, default-ns instance-of, element schema subtyping |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -1167,7 +1169,7 @@ public static class VmEngine
                         var value = registers[instr.RegisterA];
                         if (!IsNodeKindTest(enforceInfo.TypeName))
                             value = AtomizeItems(value);
-                        if (!InstanceOf(value, enforceInfo.TypeName, enforceInfo.Occurrence, null, context))
+                        if (!InstanceOf(value, enforceInfo.TypeName, enforceInfo.Occurrence, context.DefaultElementNamespace, context))
                         {
                             throw new InvalidOperationException(
                                 $"{enforceInfo.ErrorCode}: Value does not match the declared type '{enforceInfo.TypeName}'.");
@@ -7588,6 +7590,13 @@ public static class VmEngine
             {
                 effective = normalized;
             }
+            else if (!string.IsNullOrEmpty(defaultElementNamespace)
+                && TryGetSchemaSimpleTypeExpanded(defaultElementNamespace, typeName.Trim(), context, out _))
+            {
+                // Unprefixed user-defined schema simple types in the default element namespace
+                // are valid atomic item types (ForExprType052/053).
+                effective = $"Q{{{defaultElementNamespace}}}{typeName.Trim()}";
+            }
             else
             {
                 // No prefix and the default namespace is not XML Schema: only node kind
@@ -8274,6 +8283,30 @@ public static class VmEngine
             || typeName.Equals("NOTATION", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
+    /// Returns true when a schema simple type (including a union type) is namespace-sensitive:
+    /// its built-in base is xs:QName or xs:NOTATION, or one of its member types is.
+    /// </summary>
+    private static bool IsNamespaceSensitiveSchemaType(XmlSchemaSimpleType type, EvaluationContext? context)
+    {
+        var baseName = GetBuiltInBaseTypeName(type);
+        if (baseName is not null && IsNamespaceSensitiveTypeName(baseName))
+            return true;
+
+        if (GetSchemaTypeVariety(type) == SchemaTypeVariety.Union)
+        {
+            foreach (var member in GetUnionMemberTypes(type, context))
+            {
+                if (member is null)
+                    continue;
+                if (IsNamespaceSensitiveSchemaType(member, context))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Validates a singleton atomic value against the facets of a schema simple type.
     /// Returns false when parsing/validation fails.
     /// </summary>
@@ -8709,7 +8742,12 @@ public static class VmEngine
 
     private static XdmValue ConvertSchemaDateTime(DateTime dt, string typeName, bool hasTimezone)
     {
-        var offset = dt.Kind == DateTimeKind.Unspecified ? TimeSpan.Zero : TimeZoneInfo.Local.GetUtcOffset(dt);
+        var offset = dt.Kind switch
+        {
+            DateTimeKind.Utc => TimeSpan.Zero,
+            DateTimeKind.Local => TimeZoneInfo.Local.GetUtcOffset(dt),
+            _ => TimeSpan.Zero,
+        };
         var dto = new DateTimeOffset(dt, offset);
         return typeName.ToLowerInvariant() switch
         {
@@ -9112,20 +9150,19 @@ public static class VmEngine
             ValidateKindTestSchemaType(typeName, context);
             if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Attribute)
                 return false;
-            var inner = normalized.Substring(10, normalized.Length - 11).Trim();
-            // attribute() or attribute(*) → any attribute
-            if (string.IsNullOrEmpty(inner) || inner == "*")
-                return true;
-            // attribute(*, T) → check type compatibility
-            if (inner.StartsWith("*, "))
-            {
-                var typePart = inner.Substring(3).Trim();
-                return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
-            }
             // attribute(name) or attribute(name, T) → check name match.
             // Use the case-preserved type string so local names keep their original case.
             var casePreserved = GetCasePreservedTypeName(typeName);
             var cpInner = casePreserved.Substring(10, casePreserved.Length - 11).Trim();
+            // attribute() or attribute(*) → any attribute
+            if (string.IsNullOrEmpty(cpInner) || cpInner == "*")
+                return true;
+            // attribute(*, T) → check type compatibility
+            if (cpInner.StartsWith("*, "))
+            {
+                var typePart = cpInner.Substring(3).Trim();
+                return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
+            }
             var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
@@ -9165,9 +9202,9 @@ public static class VmEngine
                     }
                 }
             }
-            if (inner.Contains(','))
+            if (cpInner.Contains(','))
             {
-                var typePart = inner.Substring(inner.IndexOf(',') + 1).Trim();
+                var typePart = cpInner.Substring(cpInner.IndexOf(',') + 1).Trim();
                 return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
@@ -9321,10 +9358,22 @@ public static class VmEngine
             return value.IsArray;
 
         // User-defined schema simple types: a value matches when it can be cast to the type
-        // under XSD facet rules. This covers atomic, list, and union types.
+        // under XSD facet rules. Union types are different: instance-of uses membership
+        // semantics, so the value must already match one of the member types.
         if (IsUserDefinedSchemaType(typeName, context, out var schemaSimpleType)
             && TryGetSchemaSimpleType(schemaSimpleType.QualifiedName.Namespace, schemaSimpleType.QualifiedName.Name, context, out var concreteType))
         {
+            if (GetSchemaTypeVariety(concreteType) == SchemaTypeVariety.Union)
+            {
+                foreach (var member in GetUnionMemberTypes(concreteType, context))
+                {
+                    if (member is null)
+                        continue;
+                    if (ValueMatchesType(value, FormatSchemaTypeName(member), context))
+                        return true;
+                }
+                return false;
+            }
             return TryCastToSchemaType(value, concreteType, context, out _);
         }
 
@@ -9928,7 +9977,25 @@ public static class VmEngine
                 var inner = new DelegateFunctionItem(1, (ctx, args) => InvokeFunctionItem(capturedValue, ctx, args));
                 converted.Add(XdmValue.FromFunction(new CoercedFunctionItem(inner, mapCoercionParamTypes, mapCoercionReturnType)));
             }
-            else if (IsUntypedAtomicValue(atomic) && TryCast(atomic, type, out var casted))
+            else if (IsUserDefinedSchemaType(type, context, out var targetSchemaType)
+                && GetSchemaTypeVariety(targetSchemaType) == SchemaTypeVariety.Union)
+            {
+                // Function conversion to a union type: xs:untypedAtomic is cast to the
+                // first matching member unless the union is namespace-sensitive (XPTY0117);
+                // other values must already be instances of a member type.
+                if (IsUntypedAtomicValue(atomic))
+                {
+                    if (IsNamespaceSensitiveSchemaType(targetSchemaType, context))
+                        throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
+                    if (TryCastToSchemaType(atomic, targetSchemaType, context, out var unionCasted))
+                    {
+                        converted.Add(unionCasted);
+                        continue;
+                    }
+                }
+                throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
+            }
+            else if (IsUntypedAtomicValue(atomic) && TryCast(atomic, type, context, out var casted))
             {
                 converted.Add(casted);
             }
@@ -10091,6 +10158,11 @@ public static class VmEngine
         // User-defined schema simple types (atomic restrictions, unions, and lists) can
         // be related even when their lexical forms differ (e.g. Q{ns}local vs p:local).
         if (context is not null && IsSchemaAwareSequenceSubtype(context, actualType, testType))
+            return true;
+
+        // element(*, T1) / attribute(*, T1) is a subtype of element(*, T2) / attribute(*, T2)
+        // when T1 derives from T2 in the schema type hierarchy (FunctionCall-051).
+        if (context is not null && IsElementOrAttributeSchemaSubtype(actualType, testType, context))
             return true;
 
         return IsBaseTypeSubtype(actual, test);
@@ -10375,6 +10447,84 @@ public static class VmEngine
             return "item()*";
         var inner = arrayType.Substring(6, arrayType.Length - 7).Trim();
         return inner.Length == 0 || inner == "*" ? "item()*" : inner;
+    }
+
+    /// <summary>
+    /// Checks whether an element(N, T1) / attribute(N, T1) sequence type is a subtype of
+    /// another element(N, T2) / attribute(N, T2) type by comparing names and walking the
+    /// schema type hierarchy for the type parts.
+    /// </summary>
+    private static bool IsElementOrAttributeSchemaSubtype(string actualType, string testType, EvaluationContext context)
+    {
+        if (context.SchemaSet is null)
+            return false;
+
+        if (!TryGetElementAttributeKindTestParts(actualType, out var actualKind, out var actualName, out var actualTypePart))
+            return false;
+        if (!TryGetElementAttributeKindTestParts(testType, out var testKind, out var testName, out var testTypePart))
+            return false;
+        if (actualKind != testKind)
+            return false;
+
+        // Name compatibility: the actual name must be at least as specific as the test name.
+        // element(N, T) ≤ element(N, T) and element(N, T) ≤ element(*, T), but not vice versa.
+        if (testName != "*" && actualName != testName)
+            return false;
+
+        // If no type part is specified, the kind/name check is sufficient.
+        if (actualTypePart is null || testTypePart is null)
+            return true;
+
+        try
+        {
+            var (actualNs, actualLocal) = ResolveTypeQName(actualTypePart, context);
+            var (testNs, testLocal) = ResolveTypeQName(testTypePart, context);
+            return IsSchemaTypeSubtype(context, actualNs, actualLocal, testNs, testLocal);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Parses an element(N, T) or attribute(N, T) kind test, returning the kind,
+    /// the name part (or "*"), and the optional type part with original case preserved.
+    /// </summary>
+    private static bool TryGetElementAttributeKindTestParts(string typeName, out string kind, out string name, out string? typePart)
+    {
+        kind = string.Empty;
+        name = string.Empty;
+        typePart = null;
+
+        var s = typeName.Trim();
+        if (s.StartsWith("element(", StringComparison.OrdinalIgnoreCase) && s.EndsWith(')'))
+        {
+            kind = "element";
+            var inner = s.Substring(8, s.Length - 9).Trim();
+            if (string.IsNullOrEmpty(inner) || inner == "*")
+                return true;
+            var parts = SplitTopLevel(inner, ',');
+            name = parts[0].Trim();
+            if (parts.Length > 1)
+                typePart = parts[1].Trim();
+            return true;
+        }
+
+        if (s.StartsWith("attribute(", StringComparison.OrdinalIgnoreCase) && s.EndsWith(')'))
+        {
+            kind = "attribute";
+            var inner = s.Substring(10, s.Length - 11).Trim();
+            if (string.IsNullOrEmpty(inner) || inner == "*")
+                return true;
+            var parts = SplitTopLevel(inner, ',');
+            name = parts[0].Trim();
+            if (parts.Length > 1)
+                typePart = parts[1].Trim();
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

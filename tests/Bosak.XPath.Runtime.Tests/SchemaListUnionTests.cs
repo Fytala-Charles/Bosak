@@ -28,6 +28,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 22-08-2026     | Added regression tests for union with named @memberTypes members                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 22-08-2026     | Added regression tests for schema-aware attribute kind tests and union function conversion |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -609,5 +611,132 @@ public class SchemaListUnionTests
         var result = XPath31Expression.Compile("'' cast as t:integer-or-nothing").Evaluate(ctx);
         Assert.Equal(XdmValueKind.String, result.Kind);
         Assert.Equal("", result.StringValue);
+    }
+
+    [Fact]
+    public void AttributeKindTest_CasePreservedUserDefinedType()
+    {
+        // Regression for schema-aware attribute kind tests:
+        // attribute(*, t:stringBased) must preserve the mixed-case type name so the
+        // typed value matches the user-defined enumeration simple type.
+        var schemaSet = new XmlSchemaSet();
+        string schemaXml = "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' " +
+            "xmlns:t='urn:test' targetNamespace='urn:test' elementFormDefault='qualified'>" +
+            "<xs:simpleType name='stringBased'>" +
+            "<xs:restriction base='xs:string'>" +
+            "<xs:enumeration value='valid value 1'/>" +
+            "</xs:restriction>" +
+            "</xs:simpleType>" +
+            "<xs:element name='root'>" +
+            "<xs:complexType>" +
+            "<xs:attribute name='status' type='t:stringBased'/>" +
+            "</xs:complexType>" +
+            "</xs:element>" +
+            "</xs:schema>";
+        using (var reader = XmlReader.Create(new StringReader(schemaXml)))
+            schemaSet.Add(XmlSchema.Read(reader, null)!);
+        schemaSet.Compile();
+
+        var doc = XDocument.Parse("<root status='valid value 1' xmlns='urn:test'/>");
+        doc.Validate(schemaSet, null, true);
+        var attrNode = new XDocumentNode(doc.Root!.Attribute("status")!);
+        var attr = XdmValue.FromNode(attrNode);
+        Assert.True(attr.IsNode);
+        Assert.Equal(XdmNodeKind.Attribute, attr.NodeValue.NodeKind);
+        Assert.Equal("valid value 1", attr.NodeValue.StringValue);
+        var annotation = attr.NodeValue.SchemaTypeAnnotation;
+        Assert.NotNull(annotation);
+        Assert.Equal("urn:test", annotation!.Value.NamespaceUri);
+        Assert.Equal("stringBased", annotation.Value.LocalName);
+
+        var ctx = new EvaluationContext();
+        ctx.SchemaSet = schemaSet;
+        ctx = ctx.WithNamespace("t", "urn:test");
+
+        var result = XPath31Expression.Compile(". instance of attribute(*, t:stringBased)").Evaluate(ctx.WithFocus(attr, 1, 1));
+        Assert.True(result.BooleanValue);
+
+        // Direct diagnostic: verify the runtime type-compatibility helper returns true.
+        var compat = typeof(VmEngine).GetMethod("IsAttributeTypeCompatible",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static,
+            null,
+            new[] { typeof(string), typeof(EvaluationContext), typeof(Bosak.XPath.Core.Xdm.IXdmNode) },
+            null);
+        Assert.NotNull(compat);
+        bool compatResult = (bool)compat!.Invoke(null, new object[] { "t:stringBased", ctx, attr.NodeValue })!;
+        Assert.True(compatResult);
+    }
+
+    [Fact]
+    public void UnionFunctionConversion_UntypedAtomicAcceptedByNonNamespaceSensitiveUnion()
+    {
+        // Regression for ApplyFunctionConversion union-type branch:
+        // xs:untypedAtomic that matches a member of a non-namespace-sensitive union is accepted.
+        var ctx = LoadUnionListContext();
+        var value = XdmValue.FromString("123", "untypedAtomic");
+
+        var result = VmEngine.ApplyFunctionConversion(value, "s:myUnionType1", ctx);
+        Assert.True(VmEngine.ValueMatchesType(result, "s:myUnionType1", ctx));
+    }
+
+    [Fact]
+    public void UnionFunctionConversion_NonMatchingDecimalIsRejected()
+    {
+        // Regression for ApplyFunctionConversion union-type branch:
+        // a value that is not an instance of any member type is rejected with XPTY0004.
+        var ctx = LoadUnionListContext();
+        var value = XdmValue.FromDecimal(1.5m);
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            VmEngine.ApplyFunctionConversion(value, "s:sensitiveUnion", ctx));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void UnionFunctionConversion_NamespaceSensitiveUnionRejectsUntypedAtomic()
+    {
+        // Regression for ApplyFunctionConversion union-type branch:
+        // xs:untypedAtomic cannot be cast to a namespace-sensitive union (xs:NCName + xs:QName).
+        var ctx = LoadUnionListContext();
+        var value = XdmValue.FromString("foo", "untypedAtomic");
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            VmEngine.ApplyFunctionConversion(value, "s:sensitiveUnion", ctx));
+        Assert.Contains("XPTY0117", ex.Message);
+    }
+
+    [Fact]
+    public void InstanceOf_UnprefixedUserDefinedTypeUsesDefaultElementNamespace()
+    {
+        // Regression for InstanceOf: unprefixed user-defined schema simple types in the
+        // default element namespace are valid atomic item types (ForExprType052/053).
+        var ctx = LoadUnionListContext();
+        ctx.DefaultElementNamespace = "http://www.w3.org/XQueryTest/unionListDefined";
+
+        var result = XPath31Expression.Compile("123 instance of myUnionType1").Evaluate(ctx);
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void IsSequenceTypeSubtype_ElementSchemaTypeSubtyping()
+    {
+        // Regression for IsSequenceTypeSubtype: element(*, T1) is a subtype of element(*, T2)
+        // when T1 derives from T2 in the schema type hierarchy (FunctionCall-051).
+        var ctx = LoadUnionListContext();
+        var method = typeof(VmEngine).GetMethod("IsSequenceTypeSubtype",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static,
+            null,
+            new[] { typeof(string), typeof(string), typeof(EvaluationContext) },
+            null);
+        Assert.NotNull(method);
+
+        bool actual = (bool)method!.Invoke(null, new object[]
+        {
+            "element(*, s:restrictedUnion)",
+            "element(*, s:approximateDate)",
+            ctx
+        })!;
+
+        Assert.True(actual);
     }
 }
