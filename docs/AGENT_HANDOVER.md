@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `f4a982f` — Preserve lexical timezone offsets in schema-validated date/time typed values
+**Commit:** `7c5acde` — Preserve lexical timezone offsets in schema-validated date/time typed values
 **Current focus:** **schema-validated date/time timezone preservation cluster** — `XDocumentNode.GetTypedValue` now re-parses the lexical string for `xs:date`, `xs:time`, `xs:dateTime`, `xs:dateTimeStamp`, and the `g*` date/time types using `XmlConvert.ToDateTimeOffset`, preserving the original timezone offset instead of normalizing to the local offset. This fixes the QT3 `prod-CastExpr.schema` failures `casthcds30`–`casthcds34` (the `casthcds32`–`casthcds34` offset corruption and the `casthcds30`/`casthcds31` cast errors caused by UTC `DateTime` values), and the `prod-WindowClause` `WindowingUseCase*` residual failures that expected `Z` outputs. The `AGENTS.md` known limitation for `adjust-time-to-timezone` has been removed because the underlying issue was in typed-value construction, not the adjust functions themselves.
 
 Expected state: **1,792 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,832 passed / 41 failed / 948 skipped** (96.89%). Targeted verification: `casthcds30`–`casthcds34` 5/5; `prod-WindowClause` `WindowingUseCase*` 38/0/0; `fn-adjust-time-to-timezone` 42/0/0; `fn-adjust-date-to-timezone` 41/0/0; `fn-adjust-dateTime-to-timezone` 48/0/0.
