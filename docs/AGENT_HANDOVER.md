@@ -1,6 +1,31 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
+**Commit:** `296b814` — XPTY0117 for xs:untypedAtomic to namespace-sensitive atomic types in function conversion
+**Current focus:** **namespace-sensitive atomic function-conversion cluster** — `VmEngine.ApplyFunctionConversion` now rejects `xs:untypedAtomic` values supplied to namespace-sensitive atomic types (`xs:QName`, `xs:NOTATION`, and user-defined restrictions of those) with `XPTY0117`, before subtype substitution can silently accept them. A new `IsNamespaceSensitiveTargetType` helper covers built-in and user-defined namespace-sensitive atomic types. This closes the QT3 `prod-CastExpr` failures `CastAs675a`, `CastAsNamespaceSensitiveType-1`, and `CastAsNamespaceSensitiveType-2`.
+
+Expected state: **1,813 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,854 passed / 19 failed / 948 skipped** (96.96%). Targeted verification: `CastAs675a` 1/0/0; `CastAsNamespaceSensitiveType-1` 1/0/0; `CastAsNamespaceSensitiveType-2` 1/0/0.
+
+## This Session Changes (namespace-sensitive atomic function-conversion cluster)
+
+1. **`VmEngine.ApplyFunctionConversion` / `IsNamespaceSensitiveTargetType`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Raises `XPTY0117` when `xs:untypedAtomic` is supplied to `xs:QName`, `xs:NOTATION`, or a user-defined/QName-derived atomic type.
+   - Helper detects namespace-sensitive built-in atomic types and user-defined schema types whose built-in base is `xs:QName` or `xs:NOTATION`.
+   - Header bumped to 2.117.
+
+2. **Regression tests** (`tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs`) —
+   - `FunctionConversion_UntypedAtomicToQName_RaisesXpty0117`
+   - `FunctionConversion_UntypedAtomicToNotation_RaisesXpty0117`
+   - `FunctionConversion_UntypedAtomicToQNameDerivedRestriction_RaisesXpty0117`
+   - `FunctionConversion_TypedQNameToQName_Succeeds`
+   - `FunctionConversion_ElementNodeToQNameParameter_RaisesXpty0117`
+   - Header bumped to 0.12.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-22
 **Commit:** `245f90b` — schema-aware list/union regression tests and headers
 **Current focus:** **schema-aware list/union function-conversion cluster** — the remaining schema-aware residuals around attribute kind tests, union function conversion, unprefixed user-defined type names in instance-of, and element schema-type subtyping are now covered by regression tests. `VmEngine` already preserves case for the type part of `attribute(*, T)` kind tests; treats union types with membership semantics in `ValueMatchesType`; has a dedicated union-type branch in `ApplyFunctionConversion` that casts `xs:untypedAtomic` to the first matching member (rejecting namespace-sensitive unions with `XPTY0117`) and rejects non-matching values with `XPTY0004`; accepts unprefixed user-defined schema types via the default element namespace in `InstanceOf`; and handles `element(*, T1)` / `attribute(*, T1)` subtyping through the schema type hierarchy in `IsSequenceTypeSubtype`.
 
