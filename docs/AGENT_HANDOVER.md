@@ -1,6 +1,28 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
+**Commit:** TBD — cast/castable array/map atomization
+**Current focus:** **castable cluster** — `VmEngine.TryCast`, the `Cast` opcode, and the `Castable` opcode now atomize operands through a shared `AtomizeForCast` helper. Arrays are recursively flattened and their members atomized; maps and function items raise `FOTY0013` as required by XPath 3.1 §18.2.1. `castable as` propagates type errors (`FOTY0013`, `XPTY0004`) rather than swallowing them as `false`. This fixes the QT3 `prod-CastableExpr` failures `CastableAs665`–`CastableAs668` (`[5] castable as xs:integer`, `map{} castable as xs:integer`, nested arrays with empty members, and nested arrays containing maps). `TryCast` also continues to update its `result` to the atomized value so that casts of a typed node to its own type return the atomic typed value (preserving the earlier orderBy decimal normalization fix).
+
+Expected state: **1,801 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,836 passed / 37 failed / 948 skipped** (96.90%). Targeted verification: `CastableAs665`–`CastableAs668` 4/4; `prod-CastableExpr` 951/0/8; `prod-CastExpr` 2778/2/0 (pre-existing `K2-SeqExprCast-157/158` boolean-to-language failures).
+
+## This Session Changes (castable cluster)
+
+1. **`VmEngine.AtomizeForCast` / `IsTypeError`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - New helper recursively atomizes arrays and sequences, atomizes nodes, and raises `FOTY0013` for maps and function items.
+   - `TryCast` calls `AtomizeForCast` at the start and updates `result` to the atomized value.
+   - The `Cast` and `Castable` VM opcodes call `AtomizeForCast` before checking for an empty input sequence.
+   - The `Castable` opcode re-throws type errors (`FOTY*`, `XPTY*`) instead of returning `false`.
+   - Header bumped to 2.114.
+
+2. **Regression tests** (`tests/Bosak.XPath.Runtime.Tests/VmEngineTests.cs`) —
+   - Eleven tests covering arrays that atomize to singletons, all-empty array members that atomize to empty sequences, and maps that raise `FOTY0013` in both `cast as` and `castable as`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-22
 **Commit:** `7c5acde` — Preserve lexical timezone offsets in schema-validated date/time typed values
 **Current focus:** **schema-validated date/time timezone preservation cluster** — `XDocumentNode.GetTypedValue` now re-parses the lexical string for `xs:date`, `xs:time`, `xs:dateTime`, `xs:dateTimeStamp`, and the `g*` date/time types using `XmlConvert.ToDateTimeOffset`, preserving the original timezone offset instead of normalizing to the local offset. This fixes the QT3 `prod-CastExpr.schema` failures `casthcds30`–`casthcds34` (the `casthcds32`–`casthcds34` offset corruption and the `casthcds30`/`casthcds31` cast errors caused by UTC `DateTime` values), and the `prod-WindowClause` `WindowingUseCase*` residual failures that expected `Z` outputs. The `AGENTS.md` known limitation for `adjust-time-to-timezone` has been removed because the underlying issue was in typed-value construction, not the adjust functions themselves.
 

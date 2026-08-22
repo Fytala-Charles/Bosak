@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Lookup operator tests (multi-key order, FOAY0001/XPTY0004, array-as-function, array atomization in general comparison) |
 //                      | Charles Korthout | 0.5   | 19-07-2026     | idiv NaN/INF overflow tests                                                            |
 //                      | Charles Korthout | 0.6   | 19-07-2026     | floating-point mod by zero returns NaN; integer mod by zero raises FOAR0001            |
+//                      | Charles Korthout | 0.7   | 22-08-2026     | Added cast/castable atomization tests for arrays, maps, and empty sequences            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -530,6 +531,69 @@ public class VmEngineTests
     {
         var result = Evaluate("42 cast as xs:string");
         Assert.Equal("42", result.StringValue);
+    }
+
+    [Fact]
+    public void Eval_Cast_ArrayAtomizesToSingleton()
+    {
+        var result = Evaluate("[5] cast as xs:integer");
+        Assert.Equal(5, result.IntegerValue);
+    }
+
+    [Fact]
+    public void Eval_Cast_NestedArrayAtomizesToSingleton()
+    {
+        var result = Evaluate("[[], (), [[3, ()]]] cast as xs:integer");
+        Assert.Equal(3, result.IntegerValue);
+    }
+
+    [Fact]
+    public void Eval_Cast_AllEmptyArrayMembersAtomizeToEmptySequence()
+    {
+        var result = Evaluate("[[], [()], []] cast as xs:integer?");
+        Assert.True(result.IsUndefined);
+    }
+
+    [Fact]
+    public void Eval_Cast_MapRaisesFoty0013()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map{} cast as xs:integer"));
+        Assert.StartsWith("FOTY0013", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_Castable_ArrayAtomizesToSingleton()
+    {
+        var result = Evaluate("[5] castable as xs:integer");
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Eval_Castable_NestedArrayAtomizesToSingleton()
+    {
+        var result = Evaluate("[[], (), [[3, ()]]] castable as xs:integer");
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Eval_Castable_AllEmptyArrayMembersAtomizesToEmptySequence()
+    {
+        var result = Evaluate("[[], [()], []] castable as xs:integer?");
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void Eval_Castable_MapRaisesFoty0013()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("map{} castable as xs:integer"));
+        Assert.StartsWith("FOTY0013", ex.Message);
+    }
+
+    [Fact]
+    public void Eval_Castable_NestedMapRaisesFoty0013()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("[[], (), [[3, map{}]]] castable as xs:integer"));
+        Assert.StartsWith("FOTY0013", ex.Message);
     }
 
     // ------------------------------------------------------------------

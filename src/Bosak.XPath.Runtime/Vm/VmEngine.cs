@@ -212,6 +212,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.112 | 21-08-2026     | TryCast updates result to atomized node value so xs:T($node) returns the typed value   |
 //                      | Charles Korthout | 2.113 | 22-08-2026     | Derived string/numeric/union cast fixes: numeric→string subtypes, XSD canonical pattern validation, list cast restrictions, date/duration serialization |
+//                      | Charles Korthout | 2.114 | 22-08-2026     | Cast/castable atomize arrays recursively and raise FOTY0013 for maps/function items      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
@@ -2520,7 +2521,7 @@ public static class VmEngine
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
-                        var value = registers[instr.RegisterB];
+                        var value = AtomizeForCast(registers[instr.RegisterB]);
                         bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
                         if (isEmpty)
                         {
@@ -2549,7 +2550,7 @@ public static class VmEngine
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
-                        var value = registers[instr.RegisterB];
+                        var value = AtomizeForCast(registers[instr.RegisterB]);
                         bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
                         bool castable;
                         if (isEmpty)
@@ -2566,7 +2567,7 @@ public static class VmEngine
                             {
                                 castable = TryCast(value, typeName, context, out _);
                             }
-                            catch (InvalidOperationException)
+                            catch (InvalidOperationException ex) when (!IsTypeError(ex))
                             {
                                 // castable as returns false for any dynamic error that the cast would raise
                                 // (e.g. FOCA0003, FOAR0002), rather than propagating the exception.
@@ -3701,6 +3702,76 @@ public static class VmEngine
         }
 
         return value;
+    }
+
+    /// <summary>
+    /// Atomizes a value for <c>cast as</c> / <c>castable as</c> operands. Arrays are
+    /// recursively flattened and their members atomized; maps and function items raise
+    /// <c>FOTY0013</c>; sequences have each item atomized and flattened.
+    /// </summary>
+    private static XdmValue AtomizeForCast(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+
+        if (value.IsFunction || value.IsMap)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a function item (including maps)");
+
+        if (value.IsNode)
+            return Atomize(value);
+
+        if (value.IsArray && value.ArrayValue is not null)
+        {
+            var items = new List<XdmValue>();
+            foreach (var member in value.ArrayValue.Values)
+                AppendAtomizedForCast(AtomizeForCast(member), items);
+            return MakeAtomizedSequence(items);
+        }
+
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var items = new List<XdmValue>();
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                AppendAtomizedForCast(AtomizeForCast(item), items);
+            return MakeAtomizedSequence(items);
+        }
+
+        return value;
+    }
+
+    private static void AppendAtomizedForCast(XdmValue atomized, List<XdmValue> items)
+    {
+        if (atomized.IsUndefined)
+            return;
+        if (atomized.IsSequence && atomized.SequenceValue is not null)
+        {
+            foreach (var sub in XdmSequence.FromSource(atomized.SequenceValue))
+                items.Add(sub);
+        }
+        else
+        {
+            items.Add(atomized);
+        }
+    }
+
+    private static XdmValue MakeAtomizedSequence(List<XdmValue> items)
+    {
+        if (items.Count == 0)
+            return XdmValue.Undefined;
+        if (items.Count == 1)
+            return items[0];
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    /// <summary>
+    /// Returns true if the exception represents a type error that must be raised by
+    /// <c>castable as</c> rather than swallowed as a failed cast.
+    /// </summary>
+    private static bool IsTypeError(InvalidOperationException exception)
+    {
+        var message = exception.Message;
+        return message.StartsWith("FOTY", StringComparison.Ordinal)
+            || message.StartsWith("XPTY", StringComparison.Ordinal);
     }
 
     // Atomizes node items in a value (one level; sequence items are mapped individually)
@@ -6031,6 +6102,13 @@ public static class VmEngine
             }
         }
 
+        // Atomize the operand: arrays are recursively flattened, nodes are atomized,
+        // and maps/function items raise FOTY0013 (per XPath 3.1 §18.2.1).
+        // Update result so that casts of a node to its own typed value return the
+        // atomic typed value rather than the original node.
+        value = AtomizeForCast(value);
+        result = value;
+
         // Empty sequence casts to empty sequence for all types
         if (value.IsUndefined)
         {
@@ -6053,13 +6131,6 @@ public static class VmEngine
             var enumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
             enumerator.MoveNext();
             value = enumerator.Current;
-        }
-
-        // Atomize nodes before casting (use PSVI typed value for schema-validated nodes).
-        if (value.IsNode)
-        {
-            value = Atomize(value);
-            result = value;
         }
 
         // Schema-imported simple types (not built-in xs:*): unions, lists, and atomic
