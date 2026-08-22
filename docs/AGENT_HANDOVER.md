@@ -1,5 +1,59 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-08-23
+**Commit:** `de73c15` — schema-aware validate / QName-NOTATION / ID / typed-value cluster
+**Current focus:** **schema-aware validate / QName-NOTATION / ID / typed-value cluster** — `VmEngine.ValidateNode` now validates against the built-in schema set so `validate lax` honors `xsi:type` annotations, supports `validate type QName { Expr }`, returns a new validated `XDocumentNode`, and populates PSVI via `addSchemaInfo`. `XDocumentNode` typed-value construction resolves QName/NOTATION prefixes via an in-scope namespace resolver, preserves the lexical prefix, reports the declared schema type (not the member type) for schema-element tests, and recognizes `xsi:type='xs:ID'` and `xsi:type='xs:IDREF'/'xs:IDREFS'` elements as ID/IDREF even without a schema. `VmEngine` fixes: `xs:language` cast accepts any atomic operand, `xs:NOTATION` instance-of recognizes schema-typed NOTATION values, `IsUserDefinedSchemaType` rejects kind tests containing `(` while still allowing braced-URI names, function conversion atomizes operands, and `TryCast` is skipped for known sequence type names. Parser and IR lowerer support `validate type QName { Expr }`. `XdmValue` adds `FromQName(XsQName, string schemaTypeName)`.
+
+Expected state: **1,825 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,946 passed / 13 failed / 862 skipped** (97.25%). Targeted verification: `CastAsNamespaceSensitiveType-6` 1/0/0; `CastAs-UnionType-33` 1/0/0; `FunctionCall-049` 1/0/0; `qischema061` 1/0/0; `instanceof142` 1/0/0; `fo-test-fn-id-002` 1/0/0; `fo-test-fn-element-with-id-002` 1/0/0; `fo-test-fn-idref-001` 1/0/0; `fo-test-fn-idref-002` 1/0/0.
+
+## This Session Changes (schema-aware validate / QName-NOTATION / ID / typed-value cluster)
+
+1. **`VmEngine.ValidateNode`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Validates against a built-in schema set when no user schema is available so `validate lax` honors `xsi:type` annotations.
+   - Supports `validate type QName { Expr }` by injecting an `xsi:type` attribute on the root element before validation.
+   - Returns a new `XDocumentNode` wrapping the validated tree instead of the original operand.
+   - Populates PSVI annotations via `addSchemaInfo: true`.
+   - Header bumped to 2.120.
+
+2. **`XDocumentNode` typed-value and ID/IDREF helpers** (`src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`) —
+   - Builds an in-scope namespace resolver so schema-parsed `xs:QName`/`xs:NOTATION` values resolve their prefixes.
+   - Preserves the lexical prefix on constructed `XsQName` values.
+   - Reports the declared schema type (not the PSVI member type) for schema-element/attribute kind tests.
+   - Recognizes `xsi:type='xs:ID'` elements as IDs and `xsi:type='xs:IDREF'`/`xs:IDREFS'` elements as IDREFs even without a schema.
+   - Header bumped to 0.20.
+
+3. **`VmEngine` schema and function-conversion fixes** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - `xs:language` cast converts any atomic operand to string first.
+   - `xs:NOTATION` instance-of recognizes schema-typed NOTATION values.
+   - `IsUserDefinedSchemaType` rejects kind tests containing `(` while still allowing braced-URI names.
+   - Function conversion uses `Atomize(item)` instead of forcing `xs:untypedAtomic`.
+   - Skips `TryCast` for known sequence type names during function conversion.
+   - Added `Bosak.XPath.Providers` project reference and `System.Xml.Linq` using.
+
+4. **`validate type` parser / IR support** (`src/Bosak.XPath.Parser/Ast/XPathParser.cs`, `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs`, `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs`) —
+   - `XPathParser` parses `validate type QName { Expr }`.
+   - `ValidateExpressionNode` carries `TypeName`/`TypePrefix`.
+   - `IrLowerer` emits the type name into the Validate opcode literal pool.
+   - Headers bumped to 1.52, 1.14, and 1.36 respectively.
+
+5. **`XdmValue` QName factory overload** (`src/Bosak.XPath.Core/Xdm/XdmValue.cs`) —
+   - New `FromQName(XsQName, string schemaTypeName)` overload preserves schema-type annotations for QName/NOTATION values.
+   - Header bumped to 2.3.
+
+6. **Regression tests** (`tests/Bosak.XPath.Runtime.Tests/SchemaTypedValueTests.cs`) —
+   - `LanguageCast_AcceptsBooleanOperand`
+   - `XsiTypeIdElement_IsRecognizedAsId`
+   - `XsiTypeIdrefElement_IsRecognizedAsIdref`
+   - `SchemaValidatedNotationValue_IsInstanceOfNotation`
+
+## Residual notes
+
+- The remaining 13 QT3 failures are pre-existing or out-of-scope residuals, not new failures introduced by this cluster.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-08-22
 **Commit:** `296b814` — XPTY0117 for xs:untypedAtomic to namespace-sensitive atomic types in function conversion
 **Current focus:** **`fn:load-xquery-module` / `validate` expression cluster** — `fn:load-xquery-module` now propagates schema imports from the loaded module into its evaluation context, so schema-aware XQuery (including the `validate` expression) runs correctly. The XQuery `validate { Expr }` expression is implemented as a contextual keyword: it parses as a validate expression only in XQuery mode and remains a valid `NCName` elsewhere. `validate lax` with no schema returns the operand unchanged; `validate strict`/plain `validate` without a schema raises `XQST0075`; invalid operands raise `XQTY0030`; validation failure raises `XQDY0027`.
