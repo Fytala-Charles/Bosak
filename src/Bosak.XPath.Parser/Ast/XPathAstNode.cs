@@ -42,6 +42,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.12  | 28-07-2026     | NodeTest.KindTestTypeName for schema type names in kind tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.13  | 22-08-2026     | Added ValidateExpressionNode for XQuery validate expressions |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -323,6 +325,9 @@ public sealed record ArrowExprNode(XPathAstNode Source, XPathAstNode Target) : X
 
 /// <summary>Try/catch expression: <c>try { A } catch CodePatternList { B } (catch CodePatternList { C })*</c></summary>
 public sealed record TryCatchNode(XPathAstNode TryExpression, IReadOnlyList<TryCatchClause> Clauses) : XPathAstNode;
+
+/// <summary>XQuery validate expression: <c>validate { Expr }</c> or <c>validate strict|lax { Expr }</c>.</summary>
+public sealed record ValidateExpressionNode(XPathAstNode Expression, string? Mode = null) : XPathAstNode;
 
 /// <summary>One catch clause of a try/catch expression: <c>catch PatternList { Expr }</c>; first matching clause wins.</summary>
 public sealed record TryCatchClause(IReadOnlyList<CatchCodePattern> Patterns, XPathAstNode Expression);

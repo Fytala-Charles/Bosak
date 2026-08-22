@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 01-08-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 22-08-2026     | Inherit caller schema set and compile schemas imported by loaded modules (fn:load-xquery-module schema propagation) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -109,6 +110,16 @@ public static class XQueryModuleLoader
             else
                 existing.AddRange(sources.Where(s => !existing.Any(e => e.Source == s.Source)));
         }
+
+        // Schema imports declared by the loaded library module (and its transitive
+        // imports) must be compiled into the module's own evaluation context, and the
+        // caller's schema resolver/schema set must be inherited so that schema-aware
+        // operations inside the module work (fn-load-xquery-module-050/051/052/056).
+        evalCtx.SchemaResolver = ctx.SchemaResolver;
+        var loadedSchemas = CollectSchemaImports(targetParse, resolved);
+        if (loadedSchemas.Count > 0 || ctx.SchemaSet is not null)
+            evalCtx.SchemaSet = XQueryExecutable.BuildSchemaSet(loadedSchemas, evalCtx, ctx.SchemaSet);
+
         if (options.ContextItem is not null)
             evalCtx.WithFocus(options.ContextItem.Value, 1, 1);
 
@@ -326,6 +337,48 @@ public static class XQueryModuleLoader
             }
         }
         return decls;
+    }
+
+    /// <summary>
+    /// Collects the schema-import declarations of the target module and of every module in
+    /// its import closure, de-duplicated by target namespace.
+    /// </summary>
+    private static List<SchemaImport> CollectSchemaImports(
+        XQueryParseResult targetParse,
+        Dictionary<string, List<(string? Location, string Source)>> resolved)
+    {
+        var imports = new List<SchemaImport>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+
+        void AddImports(IEnumerable<SchemaImport> list)
+        {
+            foreach (var import in list)
+            {
+                string ns = import.NamespaceUri ?? "";
+                if (seen.Add(ns))
+                    imports.Add(import);
+            }
+        }
+
+        AddImports(targetParse.StaticContext.ImportedSchemas);
+        foreach (var (_, sources) in resolved)
+        {
+            foreach (var (_, source) in sources)
+            {
+                XQueryParseResult parse;
+                try
+                {
+                    parse = XQueryParser.Parse(source);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+                AddImports(parse.StaticContext.ImportedSchemas);
+            }
+        }
+
+        return imports;
     }
 
     /// <summary>

@@ -86,8 +86,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.29  | 18-08-2026     | Group-by post-clause and module static default-element-namespace regression tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.30  | 22-08-2026     | Added validate expression and fn:load-xquery-module schema propagation regression tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.IO;
+using System.Text;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XQuery.Api;
@@ -3357,6 +3361,65 @@ public class PlaceholderTests
         var attr = ((System.Xml.Linq.XElement)elem.UnderlyingObject).Attribute("d")!;
         Assert.Equal("M0,0", attr.Value);
         Assert.Equal("", attr.Name.NamespaceName);
+    }
+
+    [Fact]
+    public void XQuery_ValidateExpression_ValidDocument()
+    {
+        const string schema = "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='http://example.com/val' xmlns='http://example.com/val' elementFormDefault='qualified'>" +
+            "<xs:element name='root'><xs:complexType><xs:sequence><xs:element name='child' maxOccurs='unbounded'/></xs:sequence></xs:complexType></xs:element>" +
+            "</xs:schema>";
+        var compiler = new XQueryCompiler();
+        var ctx = new XQueryContext().WithSchemaResolver((ns, hints) =>
+            ns == "http://example.com/val" ? new MemoryStream(Encoding.UTF8.GetBytes(schema)) : null);
+        var result = compiler.Compile(
+                "import schema default element namespace 'http://example.com/val'; " +
+                "validate strict { <root><child/></root> }")
+            .Evaluate(ctx);
+        Assert.Equal(XdmValueKind.Node, result.Kind);
+        Assert.Equal("root", result.NodeValue!.LocalName);
+    }
+
+    [Fact]
+    public void XQuery_ValidateExpression_InvalidDocument_ThrowsXQDY0027()
+    {
+        const string schema = "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='http://example.com/val' xmlns='http://example.com/val' elementFormDefault='qualified'>" +
+            "<xs:element name='root' type='xs:string'/>" +
+            "</xs:schema>";
+        var compiler = new XQueryCompiler();
+        var ctx = new XQueryContext().WithSchemaResolver((ns, hints) =>
+            ns == "http://example.com/val" ? new MemoryStream(Encoding.UTF8.GetBytes(schema)) : null);
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile(
+                "import schema default element namespace 'http://example.com/val'; " +
+                "validate strict { <root><child/></root> }")
+            .Evaluate(ctx));
+        Assert.Contains("XQDY0027", ex.Message);
+    }
+
+    [Fact]
+    public void XQuery_LoadXQueryModule_SchemaImportPropagatedToValidate()
+    {
+        const string schemaNs = "http://example.com/valmod";
+        const string schema = "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='" + schemaNs + "' xmlns='" + schemaNs + "' elementFormDefault='qualified'>" +
+            "<xs:element name='root'><xs:complexType><xs:sequence><xs:element name='child' maxOccurs='unbounded'/></xs:sequence></xs:complexType></xs:element>" +
+            "</xs:schema>";
+        const string moduleNs = "http://example.com/valmod-lib";
+        var compiler = new XQueryCompiler().WithModule(moduleNs, """
+            module namespace m = "http://example.com/valmod-lib";
+            import schema default element namespace "http://example.com/valmod";
+            declare function m:wrap($c) { <root xmlns="http://example.com/valmod">{$c}</root> };
+            declare function m:validate($n) { validate strict { $n } };
+            """);
+        var ctx = new XQueryContext().WithSchemaResolver((ns, hints) =>
+            ns == schemaNs ? new MemoryStream(Encoding.UTF8.GetBytes(schema)) : null);
+        var result = compiler.Compile(
+                $"import schema default element namespace '{schemaNs}'; " +
+                $"let $m := fn:load-xquery-module('{moduleNs}') " +
+                "let $wrapped := $m('functions')(QName('" + moduleNs + "', 'wrap'))(1)(<child/>) " +
+                "return $m('functions')(QName('" + moduleNs + "', 'validate'))(1)($wrapped)")
+            .Evaluate(ctx);
+        Assert.Equal(XdmValueKind.Node, result.Kind);
+        Assert.Equal("root", result.NodeValue!.LocalName);
     }
 
     private static List<long> ToIntegers(XdmValue value)

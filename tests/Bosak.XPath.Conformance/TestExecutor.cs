@@ -45,6 +45,8 @@
 //                      | Charles Korthout | 0.20  | 03-08-2026     | Register only fn:transform (PopulateTransformOnly); XSLT-only functions stay XPST0017 |
 //                      | Charles Korthout | 0.21  | 19-08-2026     | Admit schema imports (import schema) in the XQuery prolog gate                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.22  | 22-08-2026     | Admit validate expressions in the XQuery construct gate                               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -183,7 +185,7 @@ internal sealed class TestExecutor
     /// supports today: prolog-less queries, the basic prolog declarations (namespace,
     /// default element/function namespace, default collation, version), and full FLWOR
     /// (for/let/where/order by/count/group by/window). Queries using constructors,
-    /// switch/typeswitch, try, unordered/ordered, validate, or unsupported prolog forms
+    /// switch/typeswitch, try, unordered/ordered, or unsupported prolog forms
     /// stay skipped. String literals and comments are stripped before matching.
     /// </summary>
     internal static bool CanHandleAsXQuery(string expr)
@@ -284,8 +286,7 @@ internal sealed class TestExecutor
     // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
     // keep their "XQuery syntax not supported" skip instead of being routed.
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
-        @"\bvalidate\s" +
-        @"|\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
+        @"\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
         RegexOptions.Compiled);
 
     // Prolog forms the XQuery parser does NOT support (namespace, default element/function

@@ -220,6 +220,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.117 | 22-08-2026     | Function conversion raises XPTY0117 when xs:untypedAtomic is supplied to namespace-sensitive atomic types (CastAs675a, CastAsNamespaceSensitiveType) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.118 | 22-08-2026     | Validate opcode for XQuery validate expressions |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.119 | 22-08-2026     | Validate opcode reads mode; lax with no schema returns operand unchanged |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -2625,6 +2629,15 @@ public static class VmEngine
                         break;
                     }
 
+                case IrOpCode.Validate:
+                    {
+                        var value = registers[instr.RegisterB];
+                        var mode = (string)literalPool[instr.Operand]!;
+                        registers[instr.RegisterA] = ValidateNode(value, mode, context);
+                        ip++;
+                        break;
+                    }
+
                 // ------------------------------------------------------------------
                 // Sequence functions
                 // ------------------------------------------------------------------
@@ -3093,6 +3106,47 @@ public static class VmEngine
         }
 
         return new[] { sequence };
+    }
+
+    /// <summary>
+    /// Validates the node returned by a <c>validate</c> expression against the compiled
+    /// schema set on the evaluation context. Returns the validated node and raises
+    /// <c>XQTY0030</c> when the operand is not a valid validation root, <c>XQST0075</c>
+    /// when no schema is available for a strict validation, <c>XQDY0027</c> when validation
+    /// fails. Lax validation with no available schema returns the operand unchanged.
+    /// </summary>
+    private static XdmValue ValidateNode(XdmValue value, string mode, EvaluationContext context)
+    {
+        var items = MaterializeSequence(value);
+        if (items.Length != 1 || !items[0].IsNode || items[0].NodeValue!.NodeKind is not (XdmNodeKind.Element or XdmNodeKind.Document))
+            throw new InvalidOperationException("XQTY0030: The operand of a validate expression must be a single document or element node.");
+
+        var item = items[0];
+        if (context.SchemaSet is null)
+        {
+            // XQuery 3.1 §3.13.2: lax validation with no available schema is a no-op.
+            if (mode == "lax")
+                return item;
+            throw new InvalidOperationException("XQST0075: A validate expression requires a schema, but no schema is available.");
+        }
+
+        var node = item.NodeValue;
+        bool hasErrors = false;
+        ValidationEventHandler handler = (sender, e) =>
+        {
+            if (e.Severity == XmlSeverityType.Error)
+                hasErrors = true;
+        };
+
+        using var stringReader = new System.IO.StringReader(node.ToXmlString());
+        using var xmlReader = System.Xml.XmlReader.Create(stringReader);
+        var doc = System.Xml.Linq.XDocument.Load(xmlReader, System.Xml.Linq.LoadOptions.None);
+        doc.Validate(context.SchemaSet, handler);
+
+        if (hasErrors)
+            throw new InvalidOperationException("XQDY0027: Validation of the validate expression operand failed.");
+
+        return item;
     }
 
     /// <summary>

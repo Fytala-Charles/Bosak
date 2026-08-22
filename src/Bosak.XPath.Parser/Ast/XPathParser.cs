@@ -105,6 +105,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.49  | 22-08-2026     | ParseSingleType treats * and + after a cast target as operators when an operand follows |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.50  | 22-08-2026     | Parse XQuery validate expressions (strict/lax/no mode) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.51  | 22-08-2026     | Treat 'validate' as a contextual XQuery keyword (Name token) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1424,6 +1428,15 @@ public sealed class XPathParser
             return ParsePostfixExpr();
         }
 
+        // ValidateExpr (XQuery only) is a primary expression, not a name-test step.
+        if (_allowFullFlwor && Current.Kind == TokenKind.Name
+            && GetString(Current) == "validate"
+            && (Peek(1).Kind == TokenKind.LBrace
+                || (Peek(1).Kind == TokenKind.Name && GetString(Peek(1)) is "strict" or "lax")))
+        {
+            return ParsePostfixExpr();
+        }
+
         // Name test or wildcard in a step context
         // Exclude names followed by LParen (function calls/kind tests already handled)
         // Exclude names followed by Hash (named function refs)
@@ -1881,6 +1894,8 @@ public sealed class XPathParser
 
             case TokenKind.Name:
                 var name = GetString(Current);
+                if (_allowFullFlwor && name == "validate")
+                    return ParseValidateExpression(start);
                 if (_allowFullFlwor && IsComputedConstructorForm(name))
                     return ParseComputedConstructor(start);
                 // OrderedExpr / UnorderedExpr (XQuery only): identity in this engine —
@@ -2028,6 +2043,31 @@ public sealed class XPathParser
             default:
                 throw new ParseException($"XPST0003: Unknown computed constructor '{keyword}'.", start);
         }
+    }
+
+    private XPathAstNode ParseValidateExpression(int start)
+    {
+        if (Current.Kind != TokenKind.Name || GetString(Current) != "validate")
+            throw new ParseException($"XPST0003: Expected 'validate' but found {Current.Kind}.", Current.Start);
+        Advance();
+
+        string? mode = null;
+        if (Current.Kind == TokenKind.Name)
+        {
+            var modeName = GetString(Current);
+            if (modeName is "strict" or "lax")
+            {
+                mode = modeName;
+                Advance();
+            }
+        }
+
+        Expect(TokenKind.LBrace);
+        if (Match(TokenKind.RBrace))
+            throw new ParseException("XPST0003: A validate expression must have a non-empty operand.", Current.Start);
+        var body = ParseExpr();
+        Expect(TokenKind.RBrace);
+        return WithSpan(new ValidateExpressionNode(body, mode), start, End);
     }
 
     private FunctionCallNode ParseFunctionCall(int start)

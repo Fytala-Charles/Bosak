@@ -81,6 +81,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.34  | 18-08-2026     | Multiple order by clauses per FLWOR via stable-sort re-key stages (orderBy65/66) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.35  | 22-08-2026     | Lower ValidateExpressionNode to Validate opcode |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -301,6 +303,7 @@ public sealed class IrLowerer
             CastableNode n => LowerCastable(n, targetReg),
             InstanceOfNode n => LowerInstanceOf(n, targetReg),
             TreatNode n => LowerTreat(n, targetReg),
+            ValidateExpressionNode n => LowerValidate(n, targetReg),
             ArrowExprNode n => LowerArrow(n, targetReg),
             NamedFunctionRefNode n => LowerNamedFunctionRef(n, targetReg),
             DirectElementConstructorNode n => LowerDirectElementConstructor(n, targetReg),
@@ -1557,6 +1560,15 @@ public sealed class IrLowerer
         string typeName = string.IsNullOrEmpty(node.Prefix) ? node.TypeName : $"{node.Prefix}:{node.TypeName}";
         int poolIdx = AddToLiteralPool(typeName);
         Emit(IrOpCode.TreatAs, (ushort)resultReg, (ushort)exprReg, (ushort)node.Occurrence, poolIdx);
+        return resultReg;
+    }
+
+    private int LowerValidate(ValidateExpressionNode node, int? targetReg)
+    {
+        int exprReg = LowerNode(node.Expression);
+        int resultReg = targetReg ?? AllocRegister();
+        int modePoolIdx = AddToLiteralPool(node.Mode ?? "");
+        Emit(IrOpCode.Validate, (ushort)resultReg, (ushort)exprReg, 0, modePoolIdx);
         return resultReg;
     }
 

@@ -34,6 +34,8 @@
 //                      | Charles Korthout | 1.2   | 28-07-2026     | KindTestType opcode for schema-typed kind tests |
 //                      | Charles Korthout | 1.3   | 21-08-2026     | SchemaElementTest and SchemaAttributeTest opcodes                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 22-08-2026     | Added Validate opcode for XQuery validate expressions |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -192,6 +194,7 @@ public enum IrOpCode : byte
     Castable,
     InstanceOf,
     TreatAs,
+    Validate,
     
     // ---- Sequence functions ------------------------------------------
     Count,

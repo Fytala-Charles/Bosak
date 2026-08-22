@@ -42,6 +42,7 @@
 //                      | Charles Korthout | 2.4   | 21-08-2026     | Apply prolog namespace bindings to the runtime evaluation context (schema-import prefixes) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.5   | 21-08-2026     | Detect XQST0034 conflicts between user-declared functions and schema simple-type constructor functions |
+//                      | Charles Korthout | 2.6   | 22-08-2026     | BuildSchemaSet can merge an existing schema set and skip duplicate namespaces (fn:load-xquery-module schema propagation) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -205,9 +206,11 @@ public sealed class XQueryExecutable
 
     /// <summary>
     /// Builds a compiled <see cref="XmlSchemaSet"/> from the schema imports declared in the
-    /// prolog, using the supplied resolver to fetch each schema document.
+    /// prolog, using the evaluation context's resolver to fetch each schema document.
+    /// When <paramref name="mergeWith"/> is supplied, its schemas are added first and any
+    /// import that targets an already-present namespace is skipped.
     /// </summary>
-    private static XmlSchemaSet BuildSchemaSet(IReadOnlyList<SchemaImport> imports, Func<string, IReadOnlyList<string>, System.IO.Stream?>? resolver)
+    internal static XmlSchemaSet BuildSchemaSet(IEnumerable<SchemaImport> imports, EvaluationContext context, XmlSchemaSet? mergeWith = null)
     {
         var schemaSet = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
         var errors = new List<string>();
@@ -217,16 +220,29 @@ public sealed class XQueryExecutable
                 errors.Add(e.Message);
         };
 
+        var addedNamespaces = new HashSet<string>(StringComparer.Ordinal);
+        if (mergeWith is not null)
+        {
+            foreach (XmlSchema existing in mergeWith.Schemas())
+            {
+                schemaSet.Add(existing);
+                addedNamespaces.Add(existing.TargetNamespace ?? "");
+            }
+        }
+
         foreach (var import in imports)
         {
             string targetNs = import.NamespaceUri ?? "";
+            if (!addedNamespaces.Add(targetNs))
+                continue;
+
             var hints = import.LocationHints;
             System.IO.Stream? stream = null;
             string? resolvedLocation = null;
 
-            if (resolver is not null)
+            if (context.SchemaResolver is not null)
             {
-                stream = resolver(targetNs, hints);
+                stream = context.SchemaResolver(targetNs, hints);
             }
 
             if (stream is null && hints.Count > 0)
@@ -358,7 +374,7 @@ public sealed class XQueryExecutable
         // from the imported schema declarations via the registered resolver.
         if (ctx.SchemaSet is null && _staticContext.ImportedSchemas.Count > 0)
         {
-            ctx.SchemaSet = BuildSchemaSet(_staticContext.ImportedSchemas, ctx.SchemaResolver);
+            ctx.SchemaSet = BuildSchemaSet(_staticContext.ImportedSchemas, ctx);
         }
 
         foreach (var ((localName, nsUri), value) in _staticContext.Variables)

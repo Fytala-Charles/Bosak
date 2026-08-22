@@ -26,6 +26,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 29-07-2026     | ScanDirectConstructorLength for prolog-level constructor skipping |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 22-08-2026     | Recognize 'validate' as KeywordValidate |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 22-08-2026     | Treat 'validate' as a contextual XQuery keyword (Name token) to keep it valid in XPath |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -655,6 +659,7 @@ public ref struct XPathLexer
         if (SeqEqual(text, "children")) return TokenKind.Name;
         if (SeqEqual(text, "function")) return TokenKind.KeywordFunction;
         if (SeqEqual(text, "instance")) return TokenKind.KeywordInstance;
+        if (SeqEqual(text, "validate")) return TokenKind.Name; // XQuery
         if (SeqEqual(text, "variable")) return TokenKind.Name; // XQuery
         return TokenKind.Name;
     }

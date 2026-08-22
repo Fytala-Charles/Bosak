@@ -50,6 +50,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.9   | 07-08-2026     | Statically unresolvable names collected from all bodies flow to the executable's evaluation-time check |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.0   | 22-08-2026     | Resolve function namespaces inside XQuery validate expressions |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -459,6 +461,7 @@ public sealed class XQueryCompiler
                 TryExpression = ResolveFunctionNamespaces(tc.TryExpression, context),
                 Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, context) }).ToList()
             },
+            ValidateExpressionNode v => v with { Expression = ResolveFunctionNamespaces(v.Expression, context) },
             StringConstructorNode sc => sc with { Parts = sc.Parts.Select(p => ResolveFunctionNamespaces(p, context)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, context), Key = ResolveFunctionNamespaces(lookup.Key, context) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, context) },

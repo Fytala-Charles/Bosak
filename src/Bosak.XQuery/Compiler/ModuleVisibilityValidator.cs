@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 07-08-2026     | Collect statically unresolvable names for the evaluation-time check (XPST0008/XPST0081/XPST0017); catch clauses bind the err:* variables |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 22-08-2026     | Traversal for ValidateExpressionNode |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Parser;
@@ -477,6 +479,9 @@ internal static class ModuleVisibilityValidator
                         Walk(c.Expression);
                         PopScope();
                     }
+                    break;
+                case ValidateExpressionNode v:
+                    Walk(v.Expression);
                     break;
                 case StringConstructorNode sc:
                     foreach (var p in sc.Parts)

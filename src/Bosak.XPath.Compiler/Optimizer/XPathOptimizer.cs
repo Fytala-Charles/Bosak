@@ -40,6 +40,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 27-07-2026     | Reference-transparent traversal for StringConstructorNode |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 22-08-2026     | Optimize ValidateExpressionNode |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -115,6 +117,7 @@ public sealed class XPathOptimizer
             DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
             FlworExpressionNode flwor => OptimizeFlwor(flwor, ref changed),
             StringConstructorNode n => OptimizeStringConstructor(n, ref changed),
+            ValidateExpressionNode n => OptimizeValidate(n, ref changed),
             _ => node
         };
     }
@@ -133,6 +136,15 @@ public sealed class XPathOptimizer
             return node;
         changed = true;
         return node with { Parts = parts };
+    }
+
+    private XPathAstNode OptimizeValidate(ValidateExpressionNode node, ref bool changed)
+    {
+        var optExpr = OptimizeNode(node.Expression, ref changed);
+        if (optExpr == node.Expression)
+            return node;
+        changed = true;
+        return node with { Expression = optExpr };
     }
 
     private XPathAstNode OptimizeComputedConstructor(XPathAstNode node, ref bool changed)
