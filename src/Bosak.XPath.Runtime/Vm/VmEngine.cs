@@ -229,6 +229,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.122 | 23-08-2026     | document-node() matches empty document nodes; constructed elements have xs:anyType type annotation |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.123 | 23-08-2026     | ApplyFunctionConversion atomizes nodes for atomic/simple targets even when typed value matches (qischema040/qischema040a) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -10100,7 +10102,23 @@ public static class VmEngine
         if (!value.IsSequence && IsUntypedAtomicValue(value) && IsNamespaceSensitiveTargetType(type, context))
             throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
 
-        if (ValueMatchesType(value, targetType, context))
+        // XPath 3.1 function conversion: node values must be atomized when the target
+        // type is not a node kind test, even if the node's typed value could be cast to
+        // the target atomic type (qischema040). Only short-circuit when the value already
+        // matches and nodes are accepted as-is (node kind tests or item()).
+        bool valueContainsNode = value.IsNode;
+        if (!valueContainsNode && value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (item.IsNode)
+                {
+                    valueContainsNode = true;
+                    break;
+                }
+            }
+        }
+        if ((!valueContainsNode || IsNodeKindTestType(type)) && ValueMatchesType(value, targetType, context))
             return value;
 
         var items = new List<XdmValue>();
@@ -10147,7 +10165,11 @@ public static class VmEngine
             // An item that already matches the target type passes through unchanged —
             // checked before atomization so node items survive node-typed parameters
             // (e.g. a node truncated to a node()? parameter in backwards-compatible mode).
-            if (ValueMatchesType(item, type, context))
+            // For atomic/simple targets, nodes must be atomized even if their typed value
+            // matches the target type; node kind tests and item() accept nodes as-is
+            // (qischema040).
+            bool nodeNeedsAtomization = item.IsNode && !IsNodeKindTestType(type);
+            if (!nodeNeedsAtomization && ValueMatchesType(item, type, context))
             {
                 converted.Add(item);
                 continue;
@@ -10511,6 +10533,29 @@ public static class VmEngine
         if (type.QualifiedName.Namespace == XmlSchema.Namespace)
             return $"xs:{type.QualifiedName.Name}";
         return $"Q{{{type.QualifiedName.Namespace}}}{type.QualifiedName.Name}";
+    }
+
+    /// <summary>
+    /// Whether the normalized type name denotes a node kind test (including <c>item()</c>,
+    /// which accepts nodes without atomization during function conversion).
+    /// </summary>
+    private static bool IsNodeKindTestType(string type)
+    {
+        var t = type.Trim().ToLowerInvariant();
+        if (t.Length > 0 && "?+*".Contains(t[^1]))
+            t = t[..^1].TrimEnd();
+        while (t.Length > 1 && t[0] == '(' && FindMatchingParen(t, 0) == t.Length - 1)
+            t = t[1..^1].Trim();
+
+        return t is "item" or "item()" or "node" or "node()" or "element" or "element()"
+            or "attribute" or "attribute()" or "document-node" or "document-node()"
+            or "schema-element" or "schema-attribute" or "text" or "text()"
+            or "comment" or "comment()" or "processing-instruction" or "processing-instruction()"
+            or "namespace-node" or "namespace-node()"
+            || t.StartsWith("element(") || t.StartsWith("attribute(") || t.StartsWith("document-node(")
+            || t.StartsWith("schema-element(") || t.StartsWith("schema-attribute(")
+            || t.StartsWith("text(") || t.StartsWith("comment(") || t.StartsWith("processing-instruction(")
+            || t.StartsWith("namespace-node(");
     }
 
     /// <summary>

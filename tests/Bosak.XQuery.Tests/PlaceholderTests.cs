@@ -92,6 +92,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.32  | 23-08-2026     | Added document-node() and constructed-element type-annotation regression tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.33  | 23-08-2026     | Added function return-type atomization regression tests (qischema040/qischema040a) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -3545,5 +3547,55 @@ public class PlaceholderTests
         var result = executable.Evaluate(ctx);
 
         Assert.False(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_FunctionReturnType_AtomizesElementNode()
+    {
+        // qischema040: a declared function returning an atomic type atomizes a node result
+        // before return-type validation, so the caller receives the atomic value.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare function local:f() as xs:string { <x>hello</x> }; " +
+            "<a>{ local:f() }</a>");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsNode);
+        Assert.Equal("a", result.NodeValue!.LocalName);
+        var childTexts = new List<string>();
+        foreach (var child in result.NodeValue.Axis(Bosak.XPath.Core.Xdm.XdmAxis.Child))
+            if (child.NodeValue?.NodeKind == Bosak.XPath.Core.Xdm.XdmNodeKind.Text)
+                childTexts.Add(child.NodeValue!.StringValue);
+        Assert.Equal(new[] { "hello" }, childTexts);
+    }
+
+    [Fact]
+    public void XQuery_FunctionReturnType_AtomizesElementNodeForNumericPromotion()
+    {
+        // A function returning xs:integer atomizes an element containing an integer string
+        // so arithmetic on the result works.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare function local:f() as xs:integer { <n>42</n> }; " +
+            "local:f() + 1");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.Equal(43L, result.IntegerValue);
+    }
+
+    [Fact]
+    public void XQuery_FunctionReturnType_NodeKindTest_KeepsNode()
+    {
+        // Regression guard: a function returning element() must not atomize its node result.
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare function local:f() as element() { <x>hello</x> }; " +
+            "local:f() instance of element()");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.BooleanValue);
     }
 }
