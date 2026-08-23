@@ -237,6 +237,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.125 | 23-08-2026     | xs:numeric recognized as element/attribute kind-test type; xml:id schema for lax IDREF validation |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.126 | 23-08-2026     | Validate expression raises XQDY0061 for document roots with invalid content model |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -3184,6 +3186,32 @@ public static class VmEngine
         }
 
         var node = item.NodeValue;
+
+        // XQDY0061: a validation root document node must contain exactly one element child
+        // and no text node children. Detect this before serializing, otherwise XDocument.Load
+        // throws a generic XmlException about multiple root elements.
+        if (node.NodeKind == XdmNodeKind.Document)
+        {
+            int elementChildCount = 0;
+            foreach (var childValue in node.Children())
+            {
+                if (childValue.NodeValue is not { } child)
+                    continue;
+                if (child.NodeKind == XdmNodeKind.Element)
+                {
+                    elementChildCount++;
+                }
+                else if (child.NodeKind == XdmNodeKind.Text)
+                {
+                    throw new InvalidOperationException("XQDY0061: The document node of the validation root has an invalid content model.");
+                }
+            }
+            if (elementChildCount != 1)
+            {
+                throw new InvalidOperationException("XQDY0061: The document node of the validation root must have exactly one element child.");
+            }
+        }
+
         var validationErrors = new List<string>();
         bool hasErrors = false;
         ValidationEventHandler handler = (sender, e) =>

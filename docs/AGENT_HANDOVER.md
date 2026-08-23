@@ -1,12 +1,32 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `4d621e4` — schemaValidation / schemaImport cluster closure
-**Current focus:** **schemaValidation / schemaImport cluster** — admit `schemaValidation` in the QT3 dependency filter, fix `validate {}` edge cases (detached root, built-in/lax/strict modes, list/union typed values, anonymous complex simple content), correct schema-aware `fn:deep-equal`, atomize nodes in `fn:string`-family functions, flatten list-typed values in `fn:sum`, validate `fn:analyze-string` output, and close the residual `xs-numeric` kind-test and `fo-test-fn-idref` lax-validation failures. Full QT3 sweep is back to **0 failures**.
+**Commit:** `TBD` — skip-reason analysis + XQDY0061 validate document-content fix
+**Current focus:** **Skip-reason analysis** — audit the 676 post-schemaValidation QT3 skips, identify reclaimable clusters, and fix the low-hanging `XQDY0061` validate document-content errors. The remaining skips are dominated by exact XQuery-version and XSD/XML-version dependencies that are not applicable to this engine, plus a small set of .NET/harness limitations.
 
-Expected state: **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,145 passed / 0 failed / 676 skipped** (97.88%). Targeted verification: `xs-numeric` 22/0/0; `app-spec-examples` idref tests 2/0/0; `prod-ValidateExpr` regression suite green.
+Expected state: **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%).
 
-## This Session Changes (schemaValidation / schemaImport cluster)
+## This Session Changes (skip-reason analysis / XQDY0061 cluster)
+
+1. **Skip-reason dump and categorization** (`tmp/qt3-skips-2026-08-23.txt`, `tmp/analyze_skips*.py`) —
+   - Ran a full QT3 sweep with `BOSAK_QT3_DUMP_SKIPS` to group every skipped test by reason.
+   - Parsed each skipped test's dependencies to find the actual dependency that triggers the skip.
+   - Findings:
+     - **~580+** skips are exact XQuery-version dependencies (`XQ10`, `XQ10+`, `XQ30+`, etc.) that assert pre-3.1 semantics — not reclaimable.
+     - **37** skips are `xml-version=1.0` tests; Bosak uses XML 1.1, so these are intentionally not applicable.
+     - **13** skips are `xsd-version=1.0`; a quick probe showed they fail because Bosak implements XSD 1.1 (e.g., lexical forms that 1.0 rejects).
+     - **16** skips are `staticTyping` feature tests; the engine is dynamic.
+     - **7** skips are `Harness error: XmlSchemaException` from .NET schema-loading limitations (`substitution-020..025`, `validateexpr-28`).
+     - **3** skips were `Unexpected error: XmlException` from `ValidateNode` serializing invalid document roots.
+
+2. **`VmEngine.ValidateNode` raises `XQDY0061` for invalid document roots** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Before serializing a document operand for schema validation, the code now checks that the document node has exactly one element child and no text-node children.
+   - Converts the previous generic `XmlException` harness skips into the spec-mandated `XQDY0061` error.
+   - Restores `validateexpr-29`, `cbcl-validateexpr-13`, and `XQDY0061` (3 tests).
+   - Header bumped to 2.126.
+
+
+## Previous Session Changes (schemaValidation / schemaImport cluster)
 
 1. **`DependencyFilter` admits `schemaValidation`** (`tests/Bosak.XPath.Conformance/DependencyFilter.cs`) —
    - Removed `schemaValidation` / `schema-validation` from `UnsupportedFeatures`.
