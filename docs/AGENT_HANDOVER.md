@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `TBD` — schemaValidation / schemaImport cluster closure
+**Commit:** `4d621e4` — schemaValidation / schemaImport cluster closure
 **Current focus:** **schemaValidation / schemaImport cluster** — admit `schemaValidation` in the QT3 dependency filter, fix `validate {}` edge cases (detached root, built-in/lax/strict modes, list/union typed values, anonymous complex simple content), correct schema-aware `fn:deep-equal`, atomize nodes in `fn:string`-family functions, flatten list-typed values in `fn:sum`, validate `fn:analyze-string` output, and close the residual `xs-numeric` kind-test and `fo-test-fn-idref` lax-validation failures. Full QT3 sweep is back to **0 failures**.
 
 Expected state: **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,145 passed / 0 failed / 676 skipped** (97.88%). Targeted verification: `xs-numeric` 22/0/0; `app-spec-examples` idref tests 2/0/0; `prod-ValidateExpr` regression suite green.
