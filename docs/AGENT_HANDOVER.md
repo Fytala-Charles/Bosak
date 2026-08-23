@@ -1,12 +1,40 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `9390274` — Function return-type atomization for user-defined schema types (qischema040/qischema040a)
-**Current focus:** **function return-type atomization cluster** — `ApplyFunctionConversion` now atomizes node values when the target type is an atomic or user-defined simple type, even if the node's typed value matches the target type. This ensures declared functions returning an atomic type return the atomized value, not the original element node. This closes the QT3 failures `qischema040` and `qischema040a`.
+**Commit:** `fdc04ad` — Allow XPath/XQuery keywords as unprefixed function names (xquery30keywords5)
+**Current focus:** **xquery30keywords5 cluster** — the XPath parser now allows most XPath/XQuery keywords to be used as unprefixed function names when followed by `(` or `#` in a primary-expression context. Reserved function names (`if`, `function`, `map`, `array`, etc.) remain rejected, and `validate`, quantified expressions, `try/catch`, and FLWOR expressions are still recognized when their normal follow tokens (`{`, `$`) are present. This closes the QT3 failure `xquery30keywords5`.
 
-Expected state: **1,838 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,957 passed / 2 failed / 862 skipped** (97.35%). Targeted verification: `qischema040` 1/0/0; `qischema040a` 1/0/0.
+Expected state: **1,840 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,958 passed / 1 failed / 862 skipped** (97.29%). Targeted verification: `xquery30keywords5` 1/0/0.
 
-## This Session Changes (function return-type atomization cluster)
+## This Session Changes (xquery30keywords5 cluster)
+
+1. **`XPathParser.ParseExprSingle` and `XPathParser.ParsePrimaryExpr`** (`src/Bosak.XPath.Parser/Ast/XPathParser.cs`) —
+   - `some`/`every`/`try` now fall through to ordinary expression parsing when followed by `(` or `#`.
+   - `validate` is treated as a validate expression only when not followed by `(` or `#`.
+   - The generic default case routes any keyword token followed by `(` or `#` to `ParseFunctionCall`/`ParseNamedFunctionRef`, excluding reserved function names.
+   - Header bumped to 1.53.
+
+2. **Regression tests** (`tests/Bosak.XPath.Parser.Tests/ParserTests.cs`) —
+   - `Keyword_FunctionCall_Allowed` theory covers ~33 keywords.
+   - `Keyword_NamedFunctionRef_Allowed` covers `and`, `or`, `div`, `for`, `try`, `validate`.
+   - `ValidateExpression_StillParsed_WithBrace`, `QuantifiedExpression_StillParsed_WithVariableBinding`, `TryCatchExpression_StillParsed_WithBrace`, and `FlworExpression_StillParsed_WithVariableBinding` guard against regressions in existing grammar forms.
+   - Header bumped to 0.9.
+
+## Previous Session Changes (function return-type atomization cluster)
+
+1. **`VmEngine.ApplyFunctionConversion` node atomization for atomic targets** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Added `IsNodeKindTestType` helper to detect node kind tests (including `item()`).
+   - Skip the early `ValueMatchesType` short-circuit and the per-item type-match short-circuit when the value contains a node and the target type is not a node kind test.
+   - Node values are now atomized before casting to atomic or user-defined simple types, even if the node's typed value would have matched the target type.
+   - Header bumped to 2.123.
+
+2. **Regression tests** (`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`) —
+   - `XQuery_FunctionReturnType_AtomizesElementNode`: a function declared `as xs:string` that returns an element node produces the atomized string in the caller.
+   - `XQuery_FunctionReturnType_AtomizesElementNodeForNumericPromotion`: a function declared `as xs:integer` that returns an element node can be used in arithmetic.
+   - `XQuery_FunctionReturnType_NodeKindTest_KeepsNode`: a function declared `as element()` still returns the element node unchanged.
+   - Header bumped to 1.33.
+
+## Earlier Session Changes (QName accessor XPTY0004 cluster)
 
 1. **`VmEngine.ApplyFunctionConversion` node atomization for atomic targets** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
    - Added `IsNodeKindTestType` helper to detect node kind tests (including `item()`).
