@@ -49,6 +49,11 @@
 //                      | Charles Korthout | 5.94  | 21-08-2026     | fn:idref honors PSVI is-idrefs property for schema-validated IDREF/IDREFS nodes         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.95  | 23-08-2026     | fn:local-name-from-QName / namespace-uri-from-QName / prefix-from-QName raise XPTY0004 on multi-item sequences |
+//                      | Charles Korthout | 5.96  | 23-08-2026     | Advanced UCA collation parameters: caseFirst, numeric, backwards, caseLevel, alternate=shifted |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.97  | 23-08-2026     | UCA fallback=no rejects unsupported parameters; numeric strength mapping; substring-after numeric guard |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.98  | 23-08-2026     | UCA caseLevel secondary ordering and shifted variable tie-break sign |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -4124,6 +4129,8 @@ public static class FunctionLibrary
         string collation = ctx.DefaultCollation;
         if (TryParseUca(collation, out var uca))
         {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
             int idx = uca.CompareInfo.IndexOf(s, search, uca.Options);
             if (idx < 0)
                 return XdmValue.FromString(string.Empty);
@@ -4154,6 +4161,8 @@ public static class FunctionLibrary
 
         if (TryParseUca(collation, out var uca))
         {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
             int idx = uca.CompareInfo.IndexOf(s, search, uca.Options);
             if (idx < 0)
                 return XdmValue.FromString(string.Empty);
@@ -5207,10 +5216,28 @@ public static class FunctionLibrary
             return XdmValue.FromString(ToAsciiLower(value));
         if (TryParseUca(collation, out var uca))
         {
-            var sortKey = uca.CompareInfo.GetSortKey(value, uca.Options);
+            // caseFirst=upper requests uppercase to sort before lowercase. .NET's default
+            // sort key orders lowercase first, so swapping the case of the source string
+            // before generating the key produces the inverse order.
+            string keyInput = uca.CaseFirst == "upper" ? SwapCase(value) : value;
+            var sortKey = uca.CompareInfo.GetSortKey(keyInput, uca.Options);
             return XdmValue.FromString(Convert.ToHexString(sortKey.KeyData));
         }
         return XdmValue.FromString(value);
+    }
+
+    private static string SwapCase(string value)
+    {
+        var sb = new System.Text.StringBuilder(value.Length);
+        foreach (Rune rune in value.EnumerateRunes())
+        {
+            Rune upper = Rune.ToUpperInvariant(rune);
+            if (upper != rune)
+                sb.Append(upper.ToString());
+            else
+                sb.Append(Rune.ToLowerInvariant(rune).ToString());
+        }
+        return sb.ToString();
     }
 
     private static string ToAsciiLower(string value)
@@ -5349,24 +5376,245 @@ public static class FunctionLibrary
     public static int CompareStrings(string s1, string s2, string collation)
     {
         if (TryParseUca(collation, out var uca))
-        {
-            // UCA alternate=blanked + strength=identical: spaces are ignored for ordering
-            // but a final codepoint comparison decides equality (compare-042).
-            if (uca.IsIdenticalBlanked)
-            {
-                int blankedResult = uca.CompareInfo.Compare(s1, s2, uca.Options);
-                if (blankedResult != 0)
-                    return blankedResult;
-                return string.Equals(s1, s2, StringComparison.Ordinal) ? 0 : CompareCodepoints(s1, s2);
-            }
-            return uca.CompareInfo.Compare(s1, s2, uca.Options);
-        }
+            return CompareUca(s1, s2, uca);
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return string.Compare(ToAsciiLower(s1), ToAsciiLower(s2), StringComparison.Ordinal);
         var comparison = GetStringComparison(collation);
         if (comparison == StringComparison.Ordinal)
             return CompareCodepoints(s1, s2);
         return string.Compare(s1, s2, comparison);
+    }
+
+    private static int CompareUca(string s1, string s2, UcaCollationInfo uca)
+    {
+        if (uca.Numeric)
+            return CompareUcaNumeric(s1, s2, uca);
+        if (uca.CaseLevel)
+            return CompareUcaCaseLevel(s1, s2, uca);
+        if (uca.Backwards)
+            return CompareUcaBackwards(s1, s2, uca);
+        return CompareUcaStandard(s1, s2, uca);
+    }
+
+    private static int CompareUcaStandard(string s1, string s2, UcaCollationInfo uca)
+    {
+        var ignoreSymbols = uca.Alternate is "blanked" or "shifted" ? CompareOptions.IgnoreSymbols : CompareOptions.None;
+        int strengthLevel = GetUcaStrengthLevel(uca.Strength);
+
+        int primary = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace | ignoreSymbols);
+        if (primary != 0 || strengthLevel == 1)
+            return primary;
+
+        int secondary = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreCase | ignoreSymbols);
+        if (secondary != 0 || strengthLevel == 2)
+            return secondary;
+
+        int caseFirst = strengthLevel >= 3 ? ApplyCaseFirst(s1, s2, uca) : 0;
+        if (caseFirst != 0)
+            return caseFirst;
+
+        int tertiary = uca.CompareInfo.Compare(s1, s2, CompareOptions.None | ignoreSymbols);
+        if (tertiary != 0 || strengthLevel == 3)
+            return tertiary;
+
+        // strength quaternary or identical: any remaining variable-level tie-break.
+        return UcaVariableTieBreak(s1, s2, uca);
+    }
+
+    private static int GetUcaStrengthLevel(string strength)
+        => strength.ToLowerInvariant() switch
+        {
+            "primary" => 1,
+            "secondary" => 2,
+            "tertiary" => 3,
+            "quaternary" => 4,
+            "identical" => 5,
+            _ => 3
+        };
+
+    private static int CompareUcaCaseLevel(string s1, string s2, UcaCollationInfo uca)
+    {
+        var ignoreSymbols = uca.Alternate is "blanked" or "shifted" ? CompareOptions.IgnoreSymbols : CompareOptions.None;
+        int strengthLevel = GetUcaStrengthLevel(uca.Strength);
+
+        int primary = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace | ignoreSymbols);
+        if (primary != 0)
+            return primary;
+
+        if (strengthLevel >= 2)
+        {
+            int secondary = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreCase | ignoreSymbols);
+            if (secondary != 0)
+                return secondary;
+        }
+
+        int caseFirst = ApplyCaseFirst(s1, s2, uca);
+        if (caseFirst != 0)
+            return caseFirst;
+
+        int caseOrder = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreNonSpace | ignoreSymbols);
+        if (caseOrder != 0)
+            return caseOrder;
+
+        if (strengthLevel >= 3)
+        {
+            int tertiary = uca.CompareInfo.Compare(s1, s2, CompareOptions.None | ignoreSymbols);
+            if (tertiary != 0)
+                return tertiary;
+        }
+
+        return UcaVariableTieBreak(s1, s2, uca);
+    }
+
+    private static int CompareUcaBackwards(string s1, string s2, UcaCollationInfo uca)
+    {
+        var ignoreSymbols = uca.Alternate is "blanked" or "shifted" ? CompareOptions.IgnoreSymbols : CompareOptions.None;
+
+        int primary = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace | ignoreSymbols);
+        if (primary != 0)
+            return primary;
+
+        int accentForward = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreCase | ignoreSymbols);
+        int baseAndCase = uca.CompareInfo.Compare(s1, s2, CompareOptions.IgnoreNonSpace | ignoreSymbols);
+        if (accentForward != 0 && baseAndCase == 0)
+            return -accentForward;
+
+        int tertiary = uca.CompareInfo.Compare(s1, s2, CompareOptions.None | ignoreSymbols);
+        if (tertiary != 0)
+            return tertiary;
+
+        return UcaVariableTieBreak(s1, s2, uca);
+    }
+
+    private static int CompareUcaNumeric(string s1, string s2, UcaCollationInfo uca)
+    {
+        var tokens1 = TokenizeForNumeric(s1);
+        var tokens2 = TokenizeForNumeric(s2);
+        int i = 0;
+        while (i < tokens1.Count && i < tokens2.Count)
+        {
+            var t1 = tokens1[i];
+            var t2 = tokens2[i];
+            int cmp;
+            if (t1.IsDigits && t2.IsDigits)
+            {
+                cmp = CompareNumericDigitRuns(t1.Text, t2.Text);
+            }
+            else
+            {
+                cmp = CompareUcaStandard(t1.Text, t2.Text, uca);
+            }
+            if (cmp != 0)
+                return cmp;
+            i++;
+        }
+        if (i < tokens1.Count)
+            return 1;
+        if (i < tokens2.Count)
+            return -1;
+        return 0;
+    }
+
+    private static List<(bool IsDigits, string Text)> TokenizeForNumeric(string s)
+    {
+        var tokens = new List<(bool, string)>();
+        if (string.IsNullOrEmpty(s))
+            return tokens;
+        bool inDigits = char.IsDigit(s[0]);
+        var sb = new System.Text.StringBuilder();
+        foreach (char c in s)
+        {
+            bool isDigit = char.IsDigit(c);
+            if (isDigit != inDigits)
+            {
+                tokens.Add((inDigits, sb.ToString()));
+                sb.Clear();
+                inDigits = isDigit;
+            }
+            sb.Append(c);
+        }
+        tokens.Add((inDigits, sb.ToString()));
+        return tokens;
+    }
+
+    private static int CompareNumericDigitRuns(string a, string b)
+    {
+        int i = 0;
+        while (i < a.Length - 1 && a[i] == '0')
+            i++;
+        int j = 0;
+        while (j < b.Length - 1 && b[j] == '0')
+            j++;
+        var trimmedA = a[i..];
+        var trimmedB = b[j..];
+        if (trimmedA.Length != trimmedB.Length)
+            return trimmedA.Length < trimmedB.Length ? -1 : 1;
+        return string.CompareOrdinal(trimmedA, trimmedB);
+    }
+
+    private static int ApplyCaseFirst(string s1, string s2, UcaCollationInfo uca)
+    {
+        if (string.IsNullOrEmpty(uca.CaseFirst))
+            return 0;
+
+        int i1 = 0, i2 = 0;
+        while (i1 < s1.Length && i2 < s2.Length)
+        {
+            int cp1 = char.ConvertToUtf32(s1, i1);
+            int cp2 = char.ConvertToUtf32(s2, i2);
+            var r1 = new Rune(cp1);
+            var r2 = new Rune(cp2);
+            var lower1 = Rune.ToLowerInvariant(r1);
+            var lower2 = Rune.ToLowerInvariant(r2);
+
+            if (lower1 != lower2)
+                return 0;
+
+            if (r1 != r2)
+            {
+                bool isUpper1 = Rune.ToUpperInvariant(r1) == r1 && lower1 != r1;
+                bool isUpper2 = Rune.ToUpperInvariant(r2) == r2 && lower2 != r2;
+                if (isUpper1 != isUpper2)
+                {
+                    if (uca.CaseFirst == "upper")
+                        return isUpper1 ? -1 : 1;
+                    return isUpper1 ? 1 : -1;
+                }
+            }
+
+            i1 += char.IsHighSurrogate(s1[i1]) ? 2 : 1;
+            i2 += char.IsHighSurrogate(s2[i2]) ? 2 : 1;
+        }
+        return 0;
+    }
+
+    private static int UcaVariableTieBreak(string s1, string s2, UcaCollationInfo uca)
+    {
+        bool apply = uca.Alternate switch
+        {
+            "blanked" => string.Equals(uca.Strength, "identical", StringComparison.OrdinalIgnoreCase),
+            "shifted" => string.Equals(uca.Strength, "quaternary", StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(uca.Strength, "identical", StringComparison.OrdinalIgnoreCase),
+            _ => false
+        };
+        if (!apply)
+            return 0;
+        var v1 = ExtractUcaVariableCharacters(s1, uca.CompareInfo);
+        var v2 = ExtractUcaVariableCharacters(s2, uca.CompareInfo);
+        // In shifted UCA, a string that contains more variable characters sorts
+        // before one with fewer, so a greater variable sequence yields a lesser result.
+        return -string.CompareOrdinal(v1, v2);
+    }
+
+    private static string ExtractUcaVariableCharacters(string s, CompareInfo compareInfo)
+    {
+        var sb = new System.Text.StringBuilder();
+        foreach (char c in s)
+        {
+            if (compareInfo.Compare(c.ToString(), string.Empty, CompareOptions.IgnoreSymbols) == 0)
+                sb.Append(c);
+        }
+        return sb.ToString();
     }
 
     private static int CompareCodepoints(string s1, string s2)
@@ -5389,7 +5637,11 @@ public static class FunctionLibrary
     private static bool StringContains(string s, string search, string collation)
     {
         if (TryParseUca(collation, out var uca))
+        {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
             return uca.CompareInfo.IndexOf(s, search, uca.Options) >= 0;
+        }
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return AsciiCaseInsensitiveContains(s, search);
         return s.Contains(search, GetStringComparison(collation));
@@ -5399,6 +5651,9 @@ public static class FunctionLibrary
     {
         if (TryParseUca(collation, out var uca))
         {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
+
             // IsPrefix is unreliable with IgnoreSymbols when both strings start with the same symbol.
             // Use IndexOf and verify the match is at or before the first non-ignorable character.
             int firstNonIgnorable = 0;
@@ -5418,6 +5673,9 @@ public static class FunctionLibrary
     {
         if (TryParseUca(collation, out var uca))
         {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
+
             // IsSuffix is unreliable with IgnoreSymbols for empty source or trailing-symbol edge cases.
             // Use LastIndexOf and verify the match extends to cover the last non-ignorable character.
             int lastMatchPos = uca.CompareInfo.LastIndexOf(s, search, uca.Options);
@@ -5449,7 +5707,11 @@ public static class FunctionLibrary
     private static int StringIndexOf(string s, string search, string collation)
     {
         if (TryParseUca(collation, out var uca))
+        {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
             return uca.CompareInfo.IndexOf(s, search, uca.Options);
+        }
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return AsciiCaseInsensitiveIndexOf(s, search);
         return s.IndexOf(search, GetStringComparison(collation));
@@ -5458,7 +5720,7 @@ public static class FunctionLibrary
     private static IEqualityComparer<string> GetCollationEqualityComparer(string collation)
     {
         if (TryParseUca(collation, out var uca))
-            return new UcaStringComparer(uca.CompareInfo, uca.Options, uca.IsIdenticalBlanked);
+            return new UcaStringComparer(uca, collation);
         return GetStringComparer(collation);
     }
 
@@ -5474,72 +5736,183 @@ public static class FunctionLibrary
 
         string lang = "en";
         string strength = "tertiary";
-        bool alternateBlanked = false;
-        foreach (var param in query.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        string alternate = "";
+        string caseFirst = "";
+        bool numeric = false;
+        bool backwards = false;
+        bool caseLevel = false;
+        bool fallbackNo = false;
+        var rawParams = query.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var param in rawParams)
         {
             int eq = param.IndexOf('=');
-            if (eq < 0) continue;
+            if (eq < 0)
+                continue;
             string key = param[..eq].Trim();
             string val = param[(eq + 1)..].Trim();
+
             if (key == "lang")
                 lang = val;
             else if (key == "strength")
                 strength = val;
-            else if (key == "alternate" && val == "blanked")
-                alternateBlanked = true;
-            else if (string.Equals(key, "fallback", StringComparison.OrdinalIgnoreCase) &&
-                     string.Equals(val, "no", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException("FOCH0002: Unsupported UCA collation (fallback=no)");
+            else if (key == "alternate")
+                alternate = val.ToLowerInvariant();
+            else if (string.Equals(key, "caseFirst", StringComparison.OrdinalIgnoreCase))
+                caseFirst = val.ToLowerInvariant();
+            else if (string.Equals(key, "numeric", StringComparison.OrdinalIgnoreCase))
+                numeric = string.Equals(val, "yes", StringComparison.OrdinalIgnoreCase);
+            else if (string.Equals(key, "backwards", StringComparison.OrdinalIgnoreCase))
+                backwards = string.Equals(val, "yes", StringComparison.OrdinalIgnoreCase);
+            else if (string.Equals(key, "caseLevel", StringComparison.OrdinalIgnoreCase))
+                caseLevel = string.Equals(val, "yes", StringComparison.OrdinalIgnoreCase);
+            else if (string.Equals(key, "fallback", StringComparison.OrdinalIgnoreCase))
+                fallbackNo = string.Equals(val, "no", StringComparison.OrdinalIgnoreCase);
+        }
+
+        // With explicit fallback=no the implementation must reject unsupported parameters
+        // and invalid values (F+O 3.1 §7.3.1). With fallback=yes/absent we stay lenient.
+        if (fallbackNo)
+        {
+            foreach (var param in rawParams)
+            {
+                int eq = param.IndexOf('=');
+                if (eq < 0)
+                    throw new InvalidOperationException("FOCH0002");
+                string key = param[..eq].Trim();
+                string val = param[(eq + 1)..].Trim();
+                string keyLower = key.ToLowerInvariant();
+                string valLower = val.ToLowerInvariant();
+
+                if (keyLower is "version" or "normalization" or "hiraganaquaternary" or "reorder" or "maxvariable")
+                    throw new InvalidOperationException("FOCH0002");
+
+                if (keyLower == "lang")
+                    continue;
+
+                if (keyLower == "strength")
+                {
+                    if (string.IsNullOrEmpty(valLower) ||
+                        !(valLower is "primary" or "secondary" or "tertiary" or "quaternary" or "identical" ||
+                          (int.TryParse(valLower, out int s) && s >= 1 && s <= 5)))
+                        throw new InvalidOperationException("FOCH0002");
+                    continue;
+                }
+
+                if (keyLower == "alternate")
+                {
+                    if (string.IsNullOrEmpty(valLower) || valLower is not ("blanked" or "shifted" or "non-ignorable"))
+                        throw new InvalidOperationException("FOCH0002");
+                    continue;
+                }
+
+                if (keyLower == "casefirst")
+                {
+                    if (string.IsNullOrEmpty(valLower) || valLower is not ("upper" or "lower" or "off"))
+                        throw new InvalidOperationException("FOCH0002");
+                    continue;
+                }
+
+                if (keyLower is "numeric" or "backwards" or "caselevel" or "fallback")
+                {
+                    if (valLower is not ("yes" or "no"))
+                        throw new InvalidOperationException("FOCH0002");
+                    continue;
+                }
+
+                // Any other keyword is unknown.
+                throw new InvalidOperationException("FOCH0002");
+            }
+        }
+
+        // Map numeric strength values (1..5) to named strengths in both modes.
+        if (int.TryParse(strength, out int strengthNum) && strengthNum >= 1 && strengthNum <= 5)
+        {
+            strength = strengthNum switch
+            {
+                1 => "primary",
+                2 => "secondary",
+                3 => "tertiary",
+                4 => "quaternary",
+                5 => "identical",
+                _ => strength
+            };
         }
 
         var culture = CultureInfo.GetCultureInfo(lang);
         var isIdentical = string.Equals(strength, "identical", StringComparison.OrdinalIgnoreCase);
+        var alternateBlanked = alternate == "blanked";
+        var alternateShifted = alternate == "shifted";
+        var alternateIgnored = alternateBlanked || alternateShifted;
+
         var options = strength.ToLowerInvariant() switch
         {
             "primary" => CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace,
             "secondary" => CompareOptions.IgnoreCase,
             "tertiary" => CompareOptions.None,
             "quaternary" => CompareOptions.None,
-            // CompareOptions.Ordinal cannot be combined with IgnoreSymbols; keep a
-            // separate flag so CompareStrings can apply the identical-level tie-break.
-            "identical" => alternateBlanked ? CompareOptions.None : CompareOptions.Ordinal,
+            // CompareOptions.Ordinal cannot be combined with IgnoreSymbols; for shifted/blanked
+            // we rely on the variable tie-break in CompareStrings.
+            "identical" => alternateIgnored ? CompareOptions.None : CompareOptions.Ordinal,
             _ => CompareOptions.None,
         };
 
-        if (alternateBlanked)
+        if (alternateIgnored)
             options |= CompareOptions.IgnoreSymbols;
 
-        info = new UcaCollationInfo(lang, strength, options, culture.CompareInfo, isIdentical && alternateBlanked);
+        info = new UcaCollationInfo(lang, strength, options, culture.CompareInfo, isIdentical && alternateBlanked,
+            caseFirst, numeric, backwards, caseLevel, alternate);
         return true;
     }
 
-    private readonly record struct UcaCollationInfo(string Lang, string Strength, CompareOptions Options, CompareInfo CompareInfo, bool IsIdenticalBlanked);
+    private readonly record struct UcaCollationInfo(
+        string Lang,
+        string Strength,
+        CompareOptions Options,
+        CompareInfo CompareInfo,
+        bool IsIdenticalBlanked,
+        string CaseFirst,
+        bool Numeric,
+        bool Backwards,
+        bool CaseLevel,
+        string Alternate);
 
     private sealed class UcaStringComparer : IEqualityComparer<string>
     {
-        private readonly CompareInfo _compareInfo;
-        private readonly CompareOptions _options;
-        private readonly bool _identicalBlanked;
+        private readonly UcaCollationInfo _uca;
+        private readonly string _collation;
 
-        public UcaStringComparer(CompareInfo compareInfo, CompareOptions options, bool identicalBlanked = false)
+        public UcaStringComparer(UcaCollationInfo uca, string collation)
         {
-            _compareInfo = compareInfo;
-            _options = options;
-            _identicalBlanked = identicalBlanked;
+            _uca = uca;
+            _collation = collation;
         }
 
         public bool Equals(string? x, string? y)
         {
-            // alternate=blanked + strength=identical: ignored characters still make
-            // the strings unequal at the identical level (compare-042).
-            if (_identicalBlanked)
+            if (ReferenceEquals(x, y))
+                return true;
+            if (x is null || y is null)
+                return false;
+            if (_uca.IsIdenticalBlanked)
                 return string.Equals(x, y, StringComparison.Ordinal);
-            return _compareInfo.Compare(x, y, _options) == 0;
+            if (HasAdvancedFlags(_uca))
+                return CompareStrings(x, y, _collation) == 0;
+            return _uca.CompareInfo.Compare(x, y, _uca.Options) == 0;
         }
 
         public int GetHashCode(string obj)
-            => _identicalBlanked ? StringComparer.Ordinal.GetHashCode(obj) : _compareInfo.GetSortKey(obj, _options).GetHashCode();
+        {
+            if (_uca.IsIdenticalBlanked)
+                return StringComparer.Ordinal.GetHashCode(obj);
+            if (HasAdvancedFlags(_uca))
+                return 0;
+            return _uca.CompareInfo.GetSortKey(obj, _uca.Options).GetHashCode();
+        }
     }
+
+    private static bool HasAdvancedFlags(UcaCollationInfo uca)
+        => uca.Numeric || uca.Backwards || uca.CaseLevel || !string.IsNullOrEmpty(uca.CaseFirst) || uca.Alternate == "shifted";
 
     private static XdmValue NormalizeSpace_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {

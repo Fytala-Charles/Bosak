@@ -1,23 +1,34 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `733d075` — Fix cbcl-module-001: reject xs:untypedAtomic in instance-of for user-defined schema types
-**Current focus:** **cbcl-module-001 residual** — `VmEngine.InstanceOf` now uses type-hierarchy semantics for user-defined schema simple types: `xs:untypedAtomic` values are no longer reported as instances of a user-defined simple type just because casting under the target facets succeeds. This closes the final QT3 failure `cbcl-module-001`, bringing the full sweep to **0 failures**.
+**Commit:** `00691af` — Update docs for cbcl-module-001 fix
+**Current focus:** **Advanced UCA collation string functions cluster** — `FunctionLibrary.TryParseUca` now rejects unsupported UCA parameters with `fallback=no` (FOCH0002), maps numeric `strength=1..5`, guards `fn:substring-after` against `numeric=yes`, and corrects `caseLevel` secondary ordering and shifted variable tie-break sign. This closes the remaining QT3 failures in `misc-UCACollation` and dependent string-function sets, bringing the full sweep to **0 failures**.
 
-Expected state: **1,883 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,959 passed / 0 failed / 862 skipped** (97.29%). Targeted verification: `cbcl-module-001` 1/0/0.
+Expected state: **1,883 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,990 passed / 0 failed / 831 skipped** (97.39%). Targeted verification: `misc-UCACollation` 89/0/0; `fn-compare` 96/0/0; `fn-contains` 120/0/0; `fn-starts-with` 64/0/0; `fn-ends-with` 55/0/0; `fn-substring-after` 55/0/0.
 
-## This Session Changes (cbcl-module-001 residual)
+## This Session Changes (advanced UCA collation string functions cluster)
 
-1. **`VmEngine.InstanceOf` untypedAtomic handling** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
-   - For user-defined schema simple types, `InstanceOf` now rejects `xs:untypedAtomic` values before delegating to `ValueMatchesType`.
-   - Cast-based conversion for function parameters/returns is unchanged; only the `instance of` test is tightened.
-   - Header bumped to 2.124.
+1. **`FunctionLibrary.TryParseUca` strict `fallback=no` validation** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - Parses the `fallback` keyword; when `fallback=no`, unknown parameters and unsupported parameters (`version`, `normalization`, `hiraganaQuaternary`, `reorder`, `maxVariable`) raise **FOCH0002**.
+   - Invalid values for supported keys (`strength`, `alternate`, `caseFirst`, `numeric`, `backwards`, `caseLevel`, `fallback`) also raise **FOCH0002** under `fallback=no`.
+   - Numeric `strength=1..5` is mapped to named strengths in both strict and lenient modes.
+   - Header bumped to 5.98.
 
-2. **Regression test** (`tests/Bosak.XPath.Runtime.Tests/SchemaTypedValueTests.cs`) —
-   - `UntypedAtomicValue_IsNotInstanceOfUserDefinedSchemaType` verifies that `data(/root/text())` (an `xs:untypedAtomic`) is not an instance of a user-defined `xs:string` restriction, even when the lexical value satisfies the facets.
-   - Header bumped to 0.5.
+2. **`fn:substring-after` numeric guard** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - `SubstringAfter_2` and `SubstringAfter_3` now throw **FOCH0004** when the UCA collation specifies `numeric=yes`, matching `fn:contains`, `fn:starts-with`, `fn:ends-with`, and `fn:index-of` behavior.
 
-## Previous Session Changes (xquery30keywords5 cluster)
+3. **UCA comparison correctness fixes** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - `CompareUcaCaseLevel` now applies secondary (accent) comparison before the case-level step, with `strengthLevel` gates so `primary` still skips accent-level results.
+   - `UcaVariableTieBreak` now inverts the extracted-variable comparison so a string containing more variable characters sorts **before** one with fewer, matching UCA shifted semantics.
+
+4. **Regression tests** (`tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`) —
+   - `SubstringAfter_UcaNumeric_ThrowsFOCH0004`
+   - `Compare_UcaNumericStrengthMapping`
+   - `UcaFallbackNo_UnsupportedParameter_ThrowsFOCH0002`
+   - `UcaFallbackYes_UnsupportedParameter_IsLenient`
+   - Header bumped to 2.37.
+
+## Previous Session Changes (cbcl-module-001 residual)
 
 1. **`XPathParser.ParseExprSingle` and `XPathParser.ParsePrimaryExpr`** (`src/Bosak.XPath.Parser/Ast/XPathParser.cs`) —
    - `some`/`every`/`try` now fall through to ordinary expression parsing when followed by `(` or `#`.

@@ -79,6 +79,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.35  | 23-08-2026     | fn:local-name-from-QName / fn:namespace-uri-from-QName / fn:prefix-from-QName singleton-sequence XPTY0004 tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.36  | 23-08-2026     | Advanced UCA collation regression tests (caseFirst, numeric, backwards, caseLevel, shifted) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.37  | 23-08-2026     | UCA fallback=no and numeric-strength regression tests |
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -1328,6 +1331,79 @@ public class FunctionLibraryTests
         var result = Evaluate("fn:compare('database', 'data base', 'http://www.w3.org/2013/collation/UCA?lang=en;alternate=blanked;strength=identical')");
         Assert.NotEqual(0, result.IntegerValue);
     }
+
+    [Fact]
+    public void Compare_UcaCaseFirst_Upper()
+        => Assert.Equal("1", EvalStr("fn:compare('database', 'Database', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=tertiary;caseFirst=upper')"));
+
+    [Fact]
+    public void Compare_UcaCaseFirst_Lower()
+        => Assert.Equal("-1", EvalStr("fn:compare('database', 'Database', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=tertiary;caseFirst=lower')"));
+
+    [Fact]
+    public void Compare_UcaNumeric()
+    {
+        Assert.Equal("-1", EvalStr("fn:compare('Chap2', 'Chap10', 'http://www.w3.org/2013/collation/UCA?lang=en;numeric=yes')"));
+        Assert.Equal("-1", EvalStr("fn:compare('Chap2-b', 'Chap10-b', 'http://www.w3.org/2013/collation/UCA?lang=en;numeric=yes')"));
+    }
+
+    [Fact]
+    public void Compare_UcaBackwards()
+        => Assert.Equal("1", EvalStr("fn:compare('DATABÃSE', 'DÃTABASE', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=tertiary;backwards=yes')"));
+
+    [Fact]
+    public void Compare_UcaCaseLevel()
+    {
+        Assert.Equal("0", EvalStr("fn:compare('DATABASE', 'DÃTABASE', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=primary;caseLevel=yes')"));
+        Assert.Equal("1", EvalStr("fn:compare('DATABASE', 'DÃTAbase', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=primary;caseLevel=yes;caseFirst=lower')"));
+    }
+
+    [Fact]
+    public void Compare_UcaAlternateShifted()
+    {
+        Assert.Equal("true", EvalStr("fn:compare('database', 'data base', 'http://www.w3.org/2013/collation/UCA?lang=en;alternate=shifted;strength=tertiary') eq 0"));
+        Assert.Equal("false", EvalStr("fn:compare('database', 'data base', 'http://www.w3.org/2013/collation/UCA?lang=en;alternate=shifted;strength=quaternary') eq 0"));
+    }
+
+    [Fact]
+    public void CollationKey_UcaCaseFirstUpper_Ordered()
+        => Assert.Equal("true", EvalStr("let $C := 'http://www.w3.org/2013/collation/UCA?lang=en;caseFirst=upper' return collation-key('abc', $C) gt collation-key('ABC', $C)"));
+
+    [Fact]
+    public void Contains_UcaAlternateBlanked_IgnoresHyphen()
+        => Assert.Equal("true", EvalStr("fn:contains('abc-def', 'abcdef', 'http://www.w3.org/2013/collation/UCA?lang=en;alternate=blanked')"));
+
+    [Fact]
+    public void SubstringAfter_UcaNumeric_ThrowsFOCH0004()
+    {
+        Assert.Contains("FOCH0004", Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("substring-after('Chap2-b', '2', 'http://www.w3.org/2013/collation/UCA?lang=en;numeric=yes')")).Message);
+        Assert.Contains("FOCH0004", Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("substring-after('Chap2-b', '2', 'http://www.w3.org/2013/collation/UCA?lang=en;numeric=yes')")).Message);
+    }
+
+    [Fact]
+    public void Compare_UcaNumericStrengthMapping()
+    {
+        Assert.Equal("0", EvalStr("fn:compare('abc', 'ABC', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=1')"));
+        Assert.Equal("0", EvalStr("fn:compare('abc', 'ABC', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=2')"));
+        Assert.NotEqual(0, Evaluate("fn:compare('abc', 'ABC', 'http://www.w3.org/2013/collation/UCA?lang=en;strength=3')").IntegerValue);
+    }
+
+    [Fact]
+    public void UcaFallbackNo_UnsupportedParameter_ThrowsFOCH0002()
+    {
+        Assert.Contains("FOCH0002", Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("fn:compare('a', 'b', 'http://www.w3.org/2013/collation/UCA?lang=en;fallback=no;version=7.0')")).Message);
+        Assert.Contains("FOCH0002", Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("fn:compare('a', 'b', 'http://www.w3.org/2013/collation/UCA?lang=en;fallback=no;maxVariable=punct')")).Message);
+        Assert.Contains("FOCH0002", Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("fn:compare('a', 'b', 'http://www.w3.org/2013/collation/UCA?lang=en;fallback=no;unknown=yes')")).Message);
+    }
+
+    [Fact]
+    public void UcaFallbackYes_UnsupportedParameter_IsLenient()
+        => Assert.Equal("0", EvalStr("fn:compare('a', 'a', 'http://www.w3.org/2013/collation/UCA?lang=en;fallback=yes;unknown=yes')"));
 
     // ------------------------------------------------------------------
     // URI encoding functions
