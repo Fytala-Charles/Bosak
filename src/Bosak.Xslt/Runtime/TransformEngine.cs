@@ -206,6 +206,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.19  | 18-08-2026     | fn:transform result-document capture uses __xdm_doc__ wrapper for non-single-element content (fn-transform-2) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.20  | 23-08-2026     | Pass EvaluationContext through ConvertVariableValue for @as prefix resolution; flatten arrays in simple content |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1914,7 +1916,7 @@ public sealed class TransformEngine
     {
         var result = new Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>();
         var initialCtx = CreateAccumulatorEvaluationContext(focusNode: root, value: null);
-        var current = ConvertVariableValue(CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx), acc.As);
+        var current = ConvertVariableValue(CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx), acc.As, context: _context);
 
         var compiledRules = new List<(Stylesheet.AccumulatorRule Rule, Patterns.PatternPredicate Match)>();
         var patternCompiler = new Patterns.PatternCompiler(_context);
@@ -1993,7 +1995,7 @@ public sealed class TransformEngine
                 _context = savedEngineContext;
             }
         }
-        return ConvertVariableValue(newValue, acc.As);
+        return ConvertVariableValue(newValue, acc.As, context: _context);
     }
 
     /// <summary>
@@ -2320,7 +2322,7 @@ public sealed class TransformEngine
             for (int i = 0; i < def.ParameterNames.Count && i < args.Length; i++)
             {
                 var asType = i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null;
-                var converted = ConvertFunctionArgument(args[i], asType);
+                var converted = ConvertFunctionArgument(args[i], asType, _context);
                 var (fpLocal, fpNs) = ExpandVariableName(def.Element, def.ParameterNames[i]);
                 _context.WithVariable(fpLocal, converted, fpNs);
             }
@@ -2348,7 +2350,7 @@ public sealed class TransformEngine
             // XSLT functions have no context item (XSLT 3.0 §9.6).
             // Evaluate the function body with an absent context item.
             var result = EvaluateFunctionBody(def.Element, XdmValue.Undefined);
-            var convertedResult = ConvertVariableValue(result, def.ReturnType);
+            var convertedResult = ConvertVariableValue(result, def.ReturnType, context: _context);
             if (cacheKey.HasValue)
                 _xsltFunctionCache[cacheKey.Value] = convertedResult;
             return convertedResult;
@@ -2422,7 +2424,7 @@ public sealed class TransformEngine
                 _context.CurrentOutputUri = savedOutputUri;
             }
         }
-        return ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
+        return ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, context: _context);
     }
 
     /// <summary>
@@ -4230,7 +4232,7 @@ public sealed class TransformEngine
                     if (required == "yes" && !gotValue)
                         throw new InvalidOperationException($"XTDE0700: No value supplied for required parameter '{paramName}'.");
 
-                    paramValue = ConvertVariableValue(paramValue, paramAs, isParam: true);
+                    paramValue = ConvertVariableValue(paramValue, paramAs, isParam: true, _context);
                     _context.WithVariable(paramLocal, paramValue, paramNs);
                 }
                 else
@@ -4339,11 +4341,11 @@ public sealed class TransformEngine
                 {
                     var result = items.Count == 1 ? items[0] :
                         XdmValue.FromSequence(MaterializedSequence.FromList(items));
-                    typedResult = ConvertVariableValue(result, asType);
+                    typedResult = ConvertVariableValue(result, asType, context: _context);
                 }
                 else
                 {
-                    typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType);
+                    typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context);
                 }
 
                 if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
@@ -4595,7 +4597,7 @@ public sealed class TransformEngine
             result = compiled.Evaluate(_context);
             var asAttr = instruction.Attribute("as")?.Value;
             if (!string.IsNullOrEmpty(asAttr))
-                result = ConvertVariableValue(result, asAttr, isParam: false);
+                result = ConvertVariableValue(result, asAttr, isParam: false, _context);
             return result;
         }
         catch (InvalidOperationException ex) when (IsXPathStaticError(ex))
@@ -5568,7 +5570,7 @@ public sealed class TransformEngine
                                 _context.CurrentOutputUri = savedOutputUri;
                             }
                         }
-                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value);
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, context: _context);
                         _context.WithVariable(varLocal, varValue, varNs);
                     }
                     break;
@@ -5604,7 +5606,7 @@ public sealed class TransformEngine
                                 _context.CurrentOutputUri = savedOutputUri;
                             }
                         }
-                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true);
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true, _context);
                         _context.WithVariable(varLocal, varValue, varNs);
                     }
                     break;
@@ -9446,7 +9448,7 @@ public sealed class TransformEngine
                     {
                         if (staticValue.IsUndefined)
                             throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{localName}'.");
-                        var converted = ConvertVariableValue(staticValue, info.AsType, isParam: info.Element.Name.LocalName == "param");
+                        var converted = ConvertVariableValue(staticValue, info.AsType, isParam: info.Element.Name.LocalName == "param", _context);
                         _context.WithVariable(localName, converted, namespaceUri);
                         return converted;
                     }
@@ -9527,7 +9529,7 @@ public sealed class TransformEngine
                         {
                             _context.BackwardsCompatible = savedBc;
                         }
-                        value = ConvertVariableValue(value, info.AsType);
+                        value = ConvertVariableValue(value, info.AsType, context: _context);
                     }
                     catch (Exception evalEx)
                     {
@@ -9599,7 +9601,7 @@ public sealed class TransformEngine
                             var globalFocus = root != null ? XdmValue.FromNode(root) : XdmValue.Undefined;
                             _context.WithFocus(globalFocus, globalFocus.IsUndefined ? 0 : 1, globalFocus.IsUndefined ? 0 : 1);
                             var value = EvaluateSequenceConstructor(info.Element, globalFocus, wrapInDocumentNode: true);
-                            value = ConvertVariableValue(value, info.AsType);
+                            value = ConvertVariableValue(value, info.AsType, context: _context);
                             _context.WithVariable(name.LocalName, value, name.NamespaceUri);
                         }
                         finally
@@ -12143,7 +12145,7 @@ public sealed class TransformEngine
                     _context.CurrentOutputUri = savedOutputUri;
                 }
             }
-            wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value, isParam: true);
+            wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value, isParam: true, _context);
             if (IsTunnelParameter(wp))
                 tunnelParams[wpKey] = wpValue;
             else
@@ -12211,7 +12213,7 @@ public sealed class TransformEngine
             if (source == null || !source.TryGetValue(paramKey, out var value))
                 continue;
 
-            value = ConvertVariableValue(value, paramAs, isParam: true);
+            value = ConvertVariableValue(value, paramAs, isParam: true, _context);
 
             if (isTunnel)
                 tunnelParams[paramKey] = value;
@@ -12234,14 +12236,14 @@ public sealed class TransformEngine
     /// Converts a function call argument to the required type of an <c>xsl:param</c>,
     /// using the XPath function conversion rules and reporting failures as XPTY0004.
     /// </summary>
-    private static XdmValue ConvertFunctionArgument(XdmValue value, string? asType)
+    private static XdmValue ConvertFunctionArgument(XdmValue value, string? asType, EvaluationContext? context = null)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
 
         try
         {
-            return ConvertVariableValue(value, asType, isParam: true);
+            return ConvertVariableValue(value, asType, isParam: true, context);
         }
         catch (InvalidOperationException ex)
         {
@@ -12356,7 +12358,7 @@ public sealed class TransformEngine
         return -1;
     }
 
-    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false)
+    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false, EvaluationContext? context = null)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
@@ -12455,7 +12457,7 @@ public sealed class TransformEngine
         {
             foreach (var item in items)
             {
-                if (!VmEngine.ValueMatchesType(item, type))
+                if (!VmEngine.ValueMatchesType(item, type, context))
                     throw new InvalidOperationException($"{errorCode}: Value does not match type {originalType}");
             }
             return value;
@@ -12475,14 +12477,14 @@ public sealed class TransformEngine
 
             // Subtype substitution: if the value is already an instance of the declared
             // type (including subtypes such as xs:integer for xs:decimal), use it unchanged.
-            if (VmEngine.ValueMatchesType(atomic, type))
+            if (VmEngine.ValueMatchesType(atomic, type, context))
             {
                 converted.Add(atomic);
             }
             else if (IsUntypedAtomic(atomic))
             {
                 // xs:untypedAtomic values can be cast to the required atomic type.
-                if (VmEngine.TryCast(atomic, type, out var casted))
+                if (VmEngine.TryCast(atomic, type, context, out var casted))
                     converted.Add(casted);
                 else
                     throw new InvalidOperationException($"{errorCode}: Cannot cast untypedAtomic to type {type}");
@@ -12490,7 +12492,7 @@ public sealed class TransformEngine
             else if (IsNumericPromotion(atomic, type))
             {
                 // Numeric promotion: integer/decimal/float -> double, integer/decimal -> float
-                if (VmEngine.TryCast(atomic, type, out var casted))
+                if (VmEngine.TryCast(atomic, type, context, out var casted))
                     converted.Add(casted);
                 else
                     throw new InvalidOperationException($"{errorCode}: Cannot promote value to type {type}");
@@ -12498,7 +12500,7 @@ public sealed class TransformEngine
             else if (IsUriPromotion(atomic, type))
             {
                 // URI promotion: xs:anyURI -> xs:string
-                if (VmEngine.TryCast(atomic, type, out var casted))
+                if (VmEngine.TryCast(atomic, type, context, out var casted))
                     converted.Add(casted);
                 else
                     throw new InvalidOperationException($"{errorCode}: Cannot promote URI to type {type}");
@@ -13707,7 +13709,7 @@ public sealed class TransformEngine
                         {
                             varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                         }
-                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true);
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true, _context);
                         _context.WithVariable(varLocal, varValue, varNs);
                     }
                     break;
@@ -13885,8 +13887,17 @@ public sealed class TransformEngine
                     currentGroup.Add(pendingText);
                     pendingText = null;
                 }
-                // Atomize and cast to string
-                currentGroup.Add(item.ToString());
+                // Atomize and cast to string. Arrays are recursively flattened so that
+                // text value templates such as {array{1,2,3}} produce "1 2 3" (cvt-041).
+                if (item.IsArray)
+                {
+                    foreach (var atom in AtomizeForString(item))
+                        currentGroup.Add(atom);
+                }
+                else
+                {
+                    currentGroup.Add(item.ToString());
+                }
             }
         }
 
@@ -16811,7 +16822,7 @@ public sealed class TransformEngine
                     _context.CurrentOutputUri = savedOutputUri;
                 }
             }
-            pvalue = ConvertVariableValue(pvalue, pas, isParam: true);
+            pvalue = ConvertVariableValue(pvalue, pas, isParam: true, _context);
 
             var paramKey = (plocal, pns);
             if (paramValues.ContainsKey(paramKey))
@@ -17080,9 +17091,9 @@ public sealed class TransformEngine
                     _context.CurrentOutputUri = savedOutputUri;
                 }
             }
-            wpValue = ConvertVariableValue(wpValue, wpAs, isParam: false);
+            wpValue = ConvertVariableValue(wpValue, wpAs, isParam: false, _context);
             if (paramTypeByName.TryGetValue(wpKey, out var paramAs))
-                wpValue = ConvertVariableValue(wpValue, paramAs, isParam: true);
+                wpValue = ConvertVariableValue(wpValue, paramAs, isParam: true, _context);
             newValues[wpKey] = wpValue;
         }
 

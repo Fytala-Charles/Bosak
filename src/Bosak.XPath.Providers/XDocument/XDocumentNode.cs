@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.3   | 25-07-2026     | Prefix annotation preserves prefixes of free-standing computed attributes              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.4   | 23-08-2026     | GetElementPrefix honors OriginalPrefixAnnotation so fn:name() keeps source prefix      |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.4   | 25-07-2026     | Exposed XML 1.1 prefixed namespace undeclarations                                      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.5   | 15-08-2026     | GetXPathParent falls back to XDocument for document-level PIs/comments (path009)       |
@@ -279,15 +281,27 @@ public sealed class XDocumentNode : IXdmNode
     }
 
     /// <summary>
-    /// Returns the preferred prefix for an element. If the element's namespace is bound
-    /// to the default namespace in scope, the empty prefix is returned so that fn:name()
-    /// matches the unprefixed lexical form used in the source document.
+    /// Returns the preferred prefix for an element. If the source document preserved an
+    /// original prefix via <see cref="OriginalPrefixAnnotation"/>, that prefix is used
+    /// when it is still bound to the element's namespace URI; this keeps fn:name() aligned
+    /// with the lexical form from the source even when a default namespace declaration
+    /// for the same URI is in scope (copy-4901).
     /// </summary>
     private static string GetElementPrefix(XElement element)
     {
         var ns = element.Name.Namespace;
         if (ns == XNamespace.None)
             return string.Empty;
+
+        var original = element.Annotation<OriginalPrefixAnnotation>()?.Prefix;
+        if (original != null)
+        {
+            if (original.Length == 0)
+                return string.Empty;
+            var uriForOriginal = element.GetNamespaceOfPrefix(original);
+            if (uriForOriginal?.NamespaceName == ns.NamespaceName)
+                return original;
+        }
 
         // Prefer the empty prefix when the default namespace binds this URI.
         var defaultNs = element.GetDefaultNamespace();

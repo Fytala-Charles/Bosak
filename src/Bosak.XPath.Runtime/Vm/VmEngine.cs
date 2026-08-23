@@ -239,6 +239,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.126 | 23-08-2026     | Validate expression raises XQDY0061 for document roots with invalid content model |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.127 | 23-08-2026     | element(N) defaults to xs:anyType? (nillable) in IsElementOrAttributeSchemaSubtype (hof-034) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -10981,9 +10983,15 @@ public static class VmEngine
         if (testName != "*" && actualName != testName)
             return false;
 
-        // A missing type part defaults to xs:anyType; the wildcard "*" also means xs:anyType.
-        actualTypePart = string.IsNullOrEmpty(actualTypePart) || actualTypePart == "*" ? "xs:anyType" : actualTypePart;
-        testTypePart = string.IsNullOrEmpty(testTypePart) || testTypePart == "*" ? "xs:anyType" : testTypePart;
+        // A missing element type part defaults to xs:anyType? (nillable) per XPath 3.1;
+        // attribute tests default to xs:anyType (attributes cannot be nilled). The wildcard
+        // "*" also means the same default type.
+        actualTypePart = string.IsNullOrEmpty(actualTypePart) || actualTypePart == "*"
+            ? (actualKind == "element" ? "xs:anyType?" : "xs:anyType")
+            : actualTypePart;
+        testTypePart = string.IsNullOrEmpty(testTypePart) || testTypePart == "*"
+            ? (testKind == "element" ? "xs:anyType?" : "xs:anyType")
+            : testTypePart;
 
         // XSD 1.1 nillability marker '?' on the type part: a non-nillable type is a subtype of
         // a nillable one, but a nillable type is not a subtype of a non-nillable one.

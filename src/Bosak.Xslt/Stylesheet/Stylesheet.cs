@@ -66,6 +66,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.32   | 01-08-2026     | use-when/static contexts run with IsXsltMode so fn:system-property is available        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.33  | 23-08-2026     | Pass use-when context to ConvertVariableValue for static param @as prefix resolution   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1184,7 +1186,10 @@ public sealed class Stylesheet
             // empty-sequence defaults for optional types are preserved correctly.
             var asType = elem.Attribute("as")?.Value;
             if (isParam && _externalStaticParameters.ContainsKey(key) && !string.IsNullOrEmpty(asType))
-                value = TransformEngine.ConvertVariableValue(value, asType, isParam);
+            {
+                var ctx = CreateUseWhenContext(elem);
+                value = TransformEngine.ConvertVariableValue(value, asType, isParam, ctx);
+            }
 
             AddStaticVariable(elem, value, ImportPrecedence);
         }
