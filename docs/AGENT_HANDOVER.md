@@ -1,6 +1,37 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
+**Commit:** `fbe20a8` — HOF function-item instance-of for element kind-test result types without schema (hof-039/053)
+**Current focus:** **HOF residuals cluster** — `VmEngine.IsElementOrAttributeSchemaSubtype` now handles function-item `instance of` checks whose return type is an element kind test (`element(e)?`, `element(e, xs:anyAtomicType)`) even when no schema is imported. It strips outer occurrence indicators, defaults a missing type part to `xs:anyType`, honors the nillability `?` marker, and compares built-in schema types without requiring a user schema. `GetDirectSupertypes` now includes `anyatomictype → anysimpletype → anytype → item()` so `xs:anyAtomicType` is recognized as a subtype of `xs:anyType`. This closes the QT3 `misc-HigherOrderFunctions` failures `hof-039` and `hof-053`.
+
+Expected state: **1,827 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,948 passed / 11 failed / 862 skipped** (97.26%). Targeted verification: `hof-039` 1/0/0; `hof-053` 1/0/0.
+
+## This Session Changes (HOF residuals cluster)
+
+1. **`VmEngine.IsElementOrAttributeSchemaSubtype`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Strips outer occurrence indicators (`?`, `*`, `+`) from the candidate and target type strings before parsing kind-test parts.
+   - Defaults a missing type part to `xs:anyType` so `element(e)` and `element(e, xs:anyType)` compare correctly.
+   - Honors the nillability `?` marker on `element(*, T?)` / `element(N, T?)` kind tests.
+   - Compares built-in schema types via `context.SchemaSet.GlobalTypes` fallback even when `context.SchemaSet` is null.
+   - Header bumped to 2.121.
+
+2. **`VmEngine.GetDirectSupertypes`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Adds `anyatomictype → anysimpletype → anytype → item()` so `xs:anyAtomicType` is recognized as a subtype of `xs:anyType`.
+
+3. **Regression tests** (`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`) —
+   - `FunctionItem_InstanceOf_ElementResultTypeWithOptionalMarker_MatchesSupertype`
+   - `FunctionItem_InstanceOf_ElementResultTypeWithAnyAtomicType_MatchesAnyType`
+   - Header bumped to 1.31.
+
+## Residual notes
+
+- The remaining 11 QT3 failures are pre-existing or out-of-scope residuals, not new failures introduced by this cluster.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-23
 **Commit:** `de73c15` — schema-aware validate / QName-NOTATION / ID / typed-value cluster
 **Current focus:** **schema-aware validate / QName-NOTATION / ID / typed-value cluster** — `VmEngine.ValidateNode` now validates against the built-in schema set so `validate lax` honors `xsi:type` annotations, supports `validate type QName { Expr }`, returns a new validated `XDocumentNode`, and populates PSVI via `addSchemaInfo`. `XDocumentNode` typed-value construction resolves QName/NOTATION prefixes via an in-scope namespace resolver, preserves the lexical prefix, reports the declared schema type (not the member type) for schema-element tests, and recognizes `xsi:type='xs:ID'` and `xsi:type='xs:IDREF'/'xs:IDREFS'` elements as ID/IDREF even without a schema. `VmEngine` fixes: `xs:language` cast accepts any atomic operand, `xs:NOTATION` instance-of recognizes schema-typed NOTATION values, `IsUserDefinedSchemaType` rejects kind tests containing `(` while still allowing braced-URI names, function conversion atomizes operands, and `TryCast` is skipped for known sequence type names. Parser and IR lowerer support `validate type QName { Expr }`. `XdmValue` adds `FromQName(XsQName, string schemaTypeName)`.
 
