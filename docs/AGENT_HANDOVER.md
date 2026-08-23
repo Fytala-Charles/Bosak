@@ -1,6 +1,50 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
+**Commit:** `1b73a8e` — Document-node/root() cluster: bare document-node() matches empty docs; constructed elements report xs:anyType
+**Current focus:** **document-node / root() / constructed-element cluster** — `VmEngine.ValueMatchesType` now treats bare `document-node()` as matching any document node, including empty ones created by `document {}`; previously it incorrectly required exactly one child element. XQuery-constructed elements are now annotated with `ConstructedElementAnnotation` and report the XDM type annotation `xs:anyType` when not schema-validated, so `element(*, xs:untyped)` no longer matches `<e/>`. This closes the QT3 failures `K2-NodeRootFunc-8`, `K2-ancestor-or-selfAxis-5`, `K2-ConDocNode-33`, and `K2-DirectConElemContent-35a`.
+
+Expected state: **1,831 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,953 passed / 6 failed / 862 skipped** (97.27%). Targeted verification: `K2-NodeRootFunc-8` 1/0/0; `K2-ancestor-or-selfAxis-5` 1/0/0; `K2-ConDocNode-33` 1/0/0; `K2-DirectConElemContent-35a` 1/0/0.
+
+## This Session Changes (document-node / root() / constructed-element cluster)
+
+1. **`VmEngine.ValueMatchesType` bare `document-node()` handling** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Distinguishes `document-node()` (no inner test) from `document-node(element(...))` / `document-node(schema-element(...))`.
+   - Bare `document-node()` now returns true for any document node, including empty documents.
+   - Parameterized forms still require exactly one child element and match it against the inner kind test.
+   - Header bumped to 2.122.
+
+2. **Constructed element type annotation** (`src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`, `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`, `src/Bosak.XPath.Providers/XDocument/ConstructedElementAnnotation.cs`) —
+   - New `ConstructedElementAnnotation` singleton marks elements created by XQuery direct/computed constructors.
+   - `XDocumentProvider.ConstructElement` applies the annotation to every constructed element.
+   - `CloneNode` already copies annotations, so copied constructed elements retain the annotation.
+   - `XDocumentNode.IsConstructedElement` exposes the marker via the `IXdmNode` interface.
+   - Headers bumped to 0.19 / 0.21 / new file.
+
+3. **`IXdmNode.IsConstructedElement`** (`src/Bosak.XPath.Core/Xdm/IXdmNode.cs`) —
+   - New default interface member so providers can report constructed-element status.
+   - Header bumped to 0.10.
+
+4. **`VmEngine.IsElementTypeCompatible`** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - For elements without a schema type annotation, parsed/unvalidated elements still match `xs:anyType` and `xs:untyped`.
+   - Constructed elements now match only `xs:anyType`, not `xs:untyped` (K2-DirectConElemContent-35a).
+
+5. **Regression tests** (`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`) —
+   - `XQuery_EmptyDocumentConstructor_IsDocumentNode`
+   - `XQuery_RootOfEmptyDocumentConstructor_IsDocumentNode`
+   - `XQuery_AncestorOrSelfOfEmptyDocumentConstructor_IsDocumentNode`
+   - `XQuery_ConstructedElement_IsNotUntyped`
+   - Header bumped to 1.32.
+
+## Residual notes
+
+- The remaining 6 QT3 failures are pre-existing or out-of-scope residuals, not new failures introduced by this cluster.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-08-23
 **Commit:** `fbe20a8` — HOF function-item instance-of for element kind-test result types without schema (hof-039/053)
 **Current focus:** **HOF residuals cluster** — `VmEngine.IsElementOrAttributeSchemaSubtype` now handles function-item `instance of` checks whose return type is an element kind test (`element(e)?`, `element(e, xs:anyAtomicType)`) even when no schema is imported. It strips outer occurrence indicators, defaults a missing type part to `xs:anyType`, honors the nillability `?` marker, and compares built-in schema types without requiring a user schema. `GetDirectSupertypes` now includes `anyatomictype → anysimpletype → anytype → item()` so `xs:anyAtomicType` is recognized as a subtype of `xs:anyType`. This closes the QT3 `misc-HigherOrderFunctions` failures `hof-039` and `hof-053`.
 
