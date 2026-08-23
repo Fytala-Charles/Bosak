@@ -1,12 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `1b73a8e` — Document-node/root() cluster: bare document-node() matches empty docs; constructed elements report xs:anyType
-**Current focus:** **document-node / root() / constructed-element cluster** — `VmEngine.ValueMatchesType` now treats bare `document-node()` as matching any document node, including empty ones created by `document {}`; previously it incorrectly required exactly one child element. XQuery-constructed elements are now annotated with `ConstructedElementAnnotation` and report the XDM type annotation `xs:anyType` when not schema-validated, so `element(*, xs:untyped)` no longer matches `<e/>`. This closes the QT3 failures `K2-NodeRootFunc-8`, `K2-ancestor-or-selfAxis-5`, `K2-ConDocNode-33`, and `K2-DirectConElemContent-35a`.
+**Commit:** `0456079` — QName accessor singleton-sequence XPTY0004 fixes (LocalNameFromQNameFunc010/NamespaceURIFromQNameFunc010)
+**Current focus:** **QName accessor XPTY0004 cluster** — `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName` now atomize their argument with `AtomizeSingleton`, so multi-item sequences raise `XPTY0004` instead of silently taking the first item. Empty sequences still return the empty sequence. This closes the QT3 failures `LocalNameFromQNameFunc010` and `NamespaceURIFromQNameFunc010`.
 
-Expected state: **1,831 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,953 passed / 6 failed / 862 skipped** (97.27%). Targeted verification: `K2-NodeRootFunc-8` 1/0/0; `K2-ancestor-or-selfAxis-5` 1/0/0; `K2-ConDocNode-33` 1/0/0; `K2-DirectConElemContent-35a` 1/0/0.
+Expected state: **1,835 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,955 passed / 4 failed / 862 skipped** (97.33%). Targeted verification: `LocalNameFromQNameFunc010` 1/0/0; `NamespaceURIFromQNameFunc010` 1/0/0.
 
-## This Session Changes (document-node / root() / constructed-element cluster)
+## This Session Changes (QName accessor XPTY0004 cluster)
+
+1. **`FunctionLibrary.AtomizeSingleton` helper** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - Atomizes an XPath sequence and validates that it contains exactly zero or one atomic items.
+   - Raises `XPTY0004` when the atomized sequence has more than one item.
+   - Used by `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName`.
+   - Header bumped to 5.95.
+
+2. **Regression tests** (`tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`) —
+   - Empty sequence returns empty sequence for all three QName accessor functions.
+   - Multi-item sequence raises `XPTY0004` for all three QName accessor functions.
+   - Header bumped to 2.35.
+
+## Previous Session Changes (document-node / root() / constructed-element cluster)
 
 1. **`VmEngine.ValueMatchesType` bare `document-node()` handling** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
    - Distinguishes `document-node()` (no inner test) from `document-node(element(...))` / `document-node(schema-element(...))`.

@@ -30,7 +30,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
 - **XSD Regex with Pinned Unicode 9.0** — Full `\p{X}`/`\P{X}` category and `\p{IsBlock}` support, class subtraction, astral-safe matching
 - **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:analyze-string`, `xsl:where-populated`, `xsl:on-empty`, `xsl:iterate`/`xsl:break`, `fn:transform()`
-- **XQuery 3.1 (Phase 4)** — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate` (`strict`/`lax`/`type QName`), output declarations and serialization, user-defined functions and variables, library modules (`import module` with %public/%private visibility), schema-aware user-defined simple types, QName/NOTATION preservation and ID/IDREF detection, higher-order function item instance-of over element kind tests, empty `document-node()` matching, constructed-element `xs:anyType` annotations; QT3 wired (30,953/6/862)
+- **XQuery 3.1 (Phase 4)** — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate` (`strict`/`lax`/`type QName`), output declarations and serialization, user-defined functions and variables, library modules (`import module` with %public/%private visibility), schema-aware user-defined simple types, QName/NOTATION preservation and ID/IDREF detection, higher-order function item instance-of over element kind tests, empty `document-node()` matching, constructed-element `xs:anyType` annotations, QName accessor singleton-sequence XPTY0004; QT3 wired (30,955/4/862)
 
 ---
 
@@ -158,7 +158,7 @@ flowchart TB
 |-------|-------------|--------|
 | 1 | XPath 3.1 Core — compiler + VM + standard functions | ✅ Complete |
 | 2 | XSLT 2.0/3.0 — template matching, sequence constructors, `fn:transform()` | ✅ Complete — full option surface + QT3 Tier-2m (117/124 passed, 7 skipped) |
-| 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries, full core FLWOR | 🚧 Phase 4 (constructors, modules, serialization, HOF, `fn:load-xquery-module`, schema-aware user-defined simple types, `validate`, QName/NOTATION/ID support); QT3 wired (30,946/13/862) |
+| 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries, full core FLWOR | 🚧 Phase 4 (constructors, modules, serialization, HOF, `fn:load-xquery-module`, schema-aware user-defined simple types, `validate`, QName/NOTATION/ID support, QName accessor singleton-sequence XPTY0004); QT3 wired (30,955/4/862) |
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | 📋 Planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
 
@@ -195,7 +195,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-All 1,825 unit tests pass (0 failures).
+All 1,835 unit tests pass (0 failures).
 
 ---
 
@@ -225,7 +225,7 @@ The harness:
 | Metric | Value |
 |--------|-------|
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
-| Pass Rate (XPath+XQuery) | **29,929 passed / 0 failed / 1,892 skipped** (94.05%); **100%** of runnable tests pass |
+| Pass Rate (XPath+XQuery) | **30,955 passed / 4 failed / 862 skipped** (97.33%); **100%** of runnable tests pass |
 | **XSLT 3.0** | 234 test sets, 14,600 tests |
 | Pass Rate (XSLT) | **8,340 passed / 0 failed / 6,260 skipped** — 100% of runnable tests pass |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |

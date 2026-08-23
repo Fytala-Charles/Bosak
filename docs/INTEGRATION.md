@@ -10,14 +10,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 23 August 2026
-> **Bosak baseline:** 1,831 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** **30,953 passed / 6 failed / 862 skipped** (97.27%). The document-node / root() / constructed-element cluster is implemented: bare `document-node()` now matches any document node, including empty `document {}`; XQuery-constructed elements carry a `ConstructedElementAnnotation` and report the XDM type annotation `xs:anyType` instead of `xs:untyped`. This closes `K2-NodeRootFunc-8`, `K2-ancestor-or-selfAxis-5`, `K2-ConDocNode-33`, and `K2-DirectConElemContent-35a`. The HOF residuals cluster, schema-aware validate / QName-NOTATION / ID / typed-value cluster, `fn:load-xquery-module` / `validate` expression cluster, namespace-sensitive atomic function-conversion cluster, schema-aware list/union cluster, and castable cluster remain in place; conformance-runner skips (`app-Demos`, `app-XMark`, `cbcl-codepoints-to-string-021`) remain in place.
+> **Bosak baseline:** 1,835 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** **30,955 passed / 4 failed / 862 skipped** (97.33%). The QName accessor singleton-sequence XPTY0004 cluster is implemented: `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName` use `AtomizeSingleton` so multi-item sequences raise `XPTY0004`; empty sequences still return the empty sequence. This closes `LocalNameFromQNameFunc010` and `NamespaceURIFromQNameFunc010`. The document-node / root() / constructed-element cluster, HOF residuals cluster, schema-aware validate / QName-NOTATION / ID / typed-value cluster, `fn:load-xquery-module` / `validate` expression cluster, namespace-sensitive atomic function-conversion cluster, schema-aware list/union cluster, and castable cluster remain in place; conformance-runner skips (`app-Demos`, `app-XMark`, `cbcl-codepoints-to-string-021`) remain in place.
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-23** — XPath/XQuery: **QName accessor singleton-sequence XPTY0004 cluster** — `FunctionLibrary` now provides an `AtomizeSingleton` helper used by `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName`. Multi-item sequences raise `XPTY0004`; empty sequences still return the empty sequence. This closes the QT3 failures `LocalNameFromQNameFunc010` and `NamespaceURIFromQNameFunc010`. Full QT3 sweep is **30,955/4/862** (97.33%); unit tests pass **1,835/0**.
+  - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
+  - Regression tests in `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs` (4/4 passing).
+  - Targeted verification: `LocalNameFromQNameFunc010` 1/0/0; `NamespaceURIFromQNameFunc010` 1/0/0.
 
 - **2026-08-23** — XPath/XQuery: **document-node / root() / constructed-element cluster** — `VmEngine.ValueMatchesType` now distinguishes bare `document-node()` from `document-node(element(...))` / `document-node(schema-element(...))`, so empty documents created with `document {}` correctly match `document-node()`. XQuery-constructed elements are now annotated with `ConstructedElementAnnotation`; `XDocumentNode.IsConstructedElement` exposes this and `VmEngine.IsElementTypeCompatible` treats constructed elements as `xs:anyType` rather than `xs:untyped` when no schema validation has occurred. This closes the QT3 failures `K2-NodeRootFunc-8`, `K2-ancestor-or-selfAxis-5`, `K2-ConDocNode-33`, and `K2-DirectConElemContent-35a`. Full QT3 sweep is **30,953/6/862** (97.27%); unit tests pass **1,831/0**.
   - Implementation: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`, `src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs`, `src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`, `src/Bosak.XPath.Providers/XDocument/ConstructedElementAnnotation.cs`, `src/Bosak.XPath.Core/Xdm/IXdmNode.cs`.
