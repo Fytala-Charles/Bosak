@@ -231,6 +231,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.123 | 23-08-2026     | ApplyFunctionConversion atomizes nodes for atomic/simple targets even when typed value matches (qischema040/qischema040a) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.124 | 23-08-2026     | instance-of rejects xs:untypedAtomic for user-defined schema simple types (cbcl-module-001) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -7853,6 +7855,22 @@ public static class VmEngine
         // xs:qname, xs:QNAME, etc. are not known types and must raise XPST0051.
         if (effective == "qname" && GetTypeLocalName(typeName) != "QName")
             throw new InvalidOperationException("XPST0051");
+
+        // User-defined schema simple types use type-hierarchy semantics for instance-of.
+        // xs:untypedAtomic is not a subtype of any user-defined simple type, even though
+        // casting may succeed under XSD facets (cbcl-module-001).
+        if (userSchemaType is not null)
+        {
+            if (!value.IsSequence)
+                return !IsUntypedAtomicValue(value) && ValueMatchesType(value, effective, context);
+
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            {
+                if (IsUntypedAtomicValue(item) || !ValueMatchesType(item, effective, context))
+                    return false;
+            }
+            return true;
+        }
 
         if (!value.IsSequence)
             return ValueMatchesType(value, effective, context);

@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 22-08-2026     | Regression tests for xsi:type ID/IDREF, language cast, and NOTATION instance-of          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 23-08-2026     | Regression test for xs:untypedAtomic not matching user-defined schema simple types       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -442,6 +444,35 @@ public class SchemaTypedValueTests
         var typed = node.TypedValue;
         Assert.Equal(XdmValueKind.QName, typed.Kind);
         Assert.Equal("NOTATION", typed.SchemaTypeName);
+    }
+
+    [Fact]
+    public void UntypedAtomicValue_IsNotInstanceOfUserDefinedSchemaType()
+    {
+        var schemaSet = LoadInlineSchema(@"
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+           targetNamespace='http://example.com/schema'
+           xmlns='http://example.com/schema'>
+  <xs:simpleType name='shortString'>
+    <xs:restriction base='xs:string'>
+      <xs:maxLength value='3'/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>");
+
+        var ctx = new EvaluationContext();
+        ctx.SchemaSet = schemaSet;
+        ctx = ctx.WithNamespace("ex", "http://example.com/schema");
+        FunctionLibrary.Populate(ctx);
+
+        // data() on a text node returns xs:untypedAtomic. Instance-of must use the type
+        // hierarchy, not cast facets, so an untypedAtomic value is not an instance of a
+        // user-defined string restriction even when its lexical form satisfies the facets.
+        var doc = XDocument.Parse("<root>foo</root>");
+        ctx = ctx.WithFocus(XdmValue.FromNode(new XDocumentNode(doc)), 1, 1);
+
+        var result = XPath31Expression.Compile("data(/root/text()) instance of ex:shortString").Evaluate(ctx);
+        Assert.False(result.BooleanValue);
     }
 
     private static XmlSchemaSet LoadInlineSchema(string schemaXml)
