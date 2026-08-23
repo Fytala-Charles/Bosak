@@ -1,12 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `0456079` — QName accessor singleton-sequence XPTY0004 fixes (LocalNameFromQNameFunc010/NamespaceURIFromQNameFunc010)
-**Current focus:** **QName accessor XPTY0004 cluster** — `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName` now atomize their argument with `AtomizeSingleton`, so multi-item sequences raise `XPTY0004` instead of silently taking the first item. Empty sequences still return the empty sequence. This closes the QT3 failures `LocalNameFromQNameFunc010` and `NamespaceURIFromQNameFunc010`.
+**Commit:** `9390274` — Function return-type atomization for user-defined schema types (qischema040/qischema040a)
+**Current focus:** **function return-type atomization cluster** — `ApplyFunctionConversion` now atomizes node values when the target type is an atomic or user-defined simple type, even if the node's typed value matches the target type. This ensures declared functions returning an atomic type return the atomized value, not the original element node. This closes the QT3 failures `qischema040` and `qischema040a`.
 
-Expected state: **1,835 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,955 passed / 4 failed / 862 skipped** (97.33%). Targeted verification: `LocalNameFromQNameFunc010` 1/0/0; `NamespaceURIFromQNameFunc010` 1/0/0.
+Expected state: **1,838 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,957 passed / 2 failed / 862 skipped** (97.35%). Targeted verification: `qischema040` 1/0/0; `qischema040a` 1/0/0.
 
-## This Session Changes (QName accessor XPTY0004 cluster)
+## This Session Changes (function return-type atomization cluster)
+
+1. **`VmEngine.ApplyFunctionConversion` node atomization for atomic targets** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Added `IsNodeKindTestType` helper to detect node kind tests (including `item()`).
+   - Skip the early `ValueMatchesType` short-circuit and the per-item type-match short-circuit when the value contains a node and the target type is not a node kind test.
+   - Node values are now atomized before casting to atomic or user-defined simple types, even if the node's typed value would have matched the target type.
+   - Header bumped to 2.123.
+
+2. **Regression tests** (`tests/Bosak.XQuery.Tests/PlaceholderTests.cs`) —
+   - `XQuery_FunctionReturnType_AtomizesElementNode`: a function declared `as xs:string` that returns an element node produces the atomized string in the caller.
+   - `XQuery_FunctionReturnType_AtomizesElementNodeForNumericPromotion`: a function declared `as xs:integer` that returns an element node can be used in arithmetic.
+   - `XQuery_FunctionReturnType_NodeKindTest_KeepsNode`: a function declared `as element()` still returns the element node unchanged.
+   - Header bumped to 1.33.
+
+## Previous Session Changes (QName accessor XPTY0004 cluster)
 
 1. **`FunctionLibrary.AtomizeSingleton` helper** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
    - Atomizes an XPath sequence and validates that it contains exactly zero or one atomic items.
@@ -19,7 +33,7 @@ Expected state: **1,835 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
    - Multi-item sequence raises `XPTY0004` for all three QName accessor functions.
    - Header bumped to 2.35.
 
-## Previous Session Changes (document-node / root() / constructed-element cluster)
+## Earlier Session Changes (document-node / root() / constructed-element cluster)
 
 1. **`VmEngine.ValueMatchesType` bare `document-node()` handling** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
    - Distinguishes `document-node()` (no inner test) from `document-node(element(...))` / `document-node(schema-element(...))`.

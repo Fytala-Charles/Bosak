@@ -10,14 +10,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 23 August 2026
-> **Bosak baseline:** 1,835 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** **30,955 passed / 4 failed / 862 skipped** (97.33%). The QName accessor singleton-sequence XPTY0004 cluster is implemented: `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName` use `AtomizeSingleton` so multi-item sequences raise `XPTY0004`; empty sequences still return the empty sequence. This closes `LocalNameFromQNameFunc010` and `NamespaceURIFromQNameFunc010`. The document-node / root() / constructed-element cluster, HOF residuals cluster, schema-aware validate / QName-NOTATION / ID / typed-value cluster, `fn:load-xquery-module` / `validate` expression cluster, namespace-sensitive atomic function-conversion cluster, schema-aware list/union cluster, and castable cluster remain in place; conformance-runner skips (`app-Demos`, `app-XMark`, `cbcl-codepoints-to-string-021`) remain in place.
+> **Bosak baseline:** 1,838 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** **30,957 passed / 2 failed / 862 skipped** (97.35%). The function return-type atomization cluster is implemented: `VmEngine.ApplyFunctionConversion` atomizes node values when the target type is an atomic or user-defined simple type, even if the node's typed value matches the target type. This ensures declared functions returning an atomic type return the atomized value rather than the original element node. This closes `qischema040` and `qischema040a`. The QName accessor singleton-sequence XPTY0004 cluster, document-node / root() / constructed-element cluster, HOF residuals cluster, schema-aware validate / QName-NOTATION / ID / typed-value cluster, `fn:load-xquery-module` / `validate` expression cluster, namespace-sensitive atomic function-conversion cluster, schema-aware list/union cluster, and castable cluster remain in place; conformance-runner skips (`app-Demos`, `app-XMark`, `cbcl-codepoints-to-string-021`) remain in place.
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-23** — XPath/XQuery: **function return-type atomization cluster** — `VmEngine.ApplyFunctionConversion` now atomizes node values when the target type is an atomic or user-defined simple type, even if the node's typed value matches the target type. A new `IsNodeKindTestType` helper distinguishes node kind tests (including `item()`) from atomic/simple targets. This closes the QT3 failures `qischema040` and `qischema040a`. Full QT3 sweep is **30,957/2/862** (97.35%); unit tests pass **1,838/0**.
+  - Implementation: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+  - Regression tests in `tests/Bosak.XQuery.Tests/PlaceholderTests.cs` (3/3 passing).
+  - Targeted verification: `qischema040` 1/0/0; `qischema040a` 1/0/0.
 
 - **2026-08-23** — XPath/XQuery: **QName accessor singleton-sequence XPTY0004 cluster** — `FunctionLibrary` now provides an `AtomizeSingleton` helper used by `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName`. Multi-item sequences raise `XPTY0004`; empty sequences still return the empty sequence. This closes the QT3 failures `LocalNameFromQNameFunc010` and `NamespaceURIFromQNameFunc010`. Full QT3 sweep is **30,955/4/862** (97.33%); unit tests pass **1,835/0**.
   - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`.
