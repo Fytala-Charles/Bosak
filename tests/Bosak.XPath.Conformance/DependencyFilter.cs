@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 0.12  | 27-07-2026     | moduleImport feature supported (library modules implemented)                            |
 //                      | Charles Korthout | 0.13  | 23-08-2026     | advanced-uca-fallback feature now supported                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14  | 23-08-2026     | schemaValidation feature now admitted                                                    |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -38,8 +39,6 @@ internal sealed class DependencyFilter
     // Note: QT3 uses camelCased feature names such as "schemaImport" and "schemaValidation".
     private static readonly HashSet<string> UnsupportedFeatures = new(StringComparer.OrdinalIgnoreCase)
     {
-        "schemaValidation",     // validate expression not yet implemented
-        "schema-validation",    // canonical/hyphenated alias
         "schema-location-hint", // remote schema location hints not supported
         "static-typing",
         "staticTyping",

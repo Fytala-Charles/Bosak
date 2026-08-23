@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\schema-for-json.xsd" />
+    <EmbeddedResource Include="Resources\analyze-string.xsd" />
   </ItemGroup>
 
   <ItemGroup>

@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 23-08-2026     | Added IsConstructedElement accessor for XQuery-constructed element type annotations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 23-08-2026     | Added IsComplexType accessor for schema-aware element type comparison |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -71,6 +73,14 @@ public interface IXdmNode
     /// or empty content). When true, <c>fn:data()</c> must raise FOTY0012.
     /// </summary>
     bool HasNoTypedValue => false;
+
+    /// <summary>
+    /// Gets a value indicating whether the schema type annotation of this node
+    /// is a complex type (including complex types with simple, mixed, element-only,
+    /// or empty content). Returns <c>false</c> for simple types and for nodes that
+    /// have no schema type annotation.
+    /// </summary>
+    bool IsComplexType => false;
 
     /// <summary>
     /// Gets a value indicating whether this node has the XDM is-id property

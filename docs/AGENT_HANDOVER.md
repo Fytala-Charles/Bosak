@@ -1,12 +1,50 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `00691af` — Update docs for cbcl-module-001 fix
-**Current focus:** **Advanced UCA collation string functions cluster** — `FunctionLibrary.TryParseUca` now rejects unsupported UCA parameters with `fallback=no` (FOCH0002), maps numeric `strength=1..5`, guards `fn:substring-after` against `numeric=yes`, and corrects `caseLevel` secondary ordering and shifted variable tie-break sign. This closes the remaining QT3 failures in `misc-UCACollation` and dependent string-function sets, bringing the full sweep to **0 failures**.
+**Commit:** `TBD` — schemaValidation / schemaImport cluster closure
+**Current focus:** **schemaValidation / schemaImport cluster** — admit `schemaValidation` in the QT3 dependency filter, fix `validate {}` edge cases (detached root, built-in/lax/strict modes, list/union typed values, anonymous complex simple content), correct schema-aware `fn:deep-equal`, atomize nodes in `fn:string`-family functions, flatten list-typed values in `fn:sum`, validate `fn:analyze-string` output, and close the residual `xs-numeric` kind-test and `fo-test-fn-idref` lax-validation failures. Full QT3 sweep is back to **0 failures**.
 
-Expected state: **1,883 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,990 passed / 0 failed / 831 skipped** (97.39%). Targeted verification: `misc-UCACollation` 89/0/0; `fn-compare` 96/0/0; `fn-contains` 120/0/0; `fn-starts-with` 64/0/0; `fn-ends-with` 55/0/0; `fn-substring-after` 55/0/0.
+Expected state: **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,145 passed / 0 failed / 676 skipped** (97.88%). Targeted verification: `xs-numeric` 22/0/0; `app-spec-examples` idref tests 2/0/0; `prod-ValidateExpr` regression suite green.
 
-## This Session Changes (advanced UCA collation string functions cluster)
+## This Session Changes (schemaValidation / schemaImport cluster)
+
+1. **`DependencyFilter` admits `schemaValidation`** (`tests/Bosak.XPath.Conformance/DependencyFilter.cs`) —
+   - Removed `schemaValidation` / `schema-validation` from `UnsupportedFeatures`.
+
+2. **`VmEngine.ValidateNode` schema-aware validation fixes** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Returns parentless validated elements by removing the temporary document root.
+   - Built-in schema set allows `validate type xs:T {}` against built-in simple types without a user schema.
+   - Lax validation with no schema uses a dynamic `xs:anyType` root declaration so undeclared roots do not fail.
+   - Validates against `xsi:type` annotations, preserves PSVI annotations, and removes injected `xsi:type`/`xmlns` markers from the result.
+   - Includes detailed validation-error messages in `XQDY0027` exceptions.
+
+3. **List / union typed-value handling** (`src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs`) —
+   - `GetTypedValue` expands XSD list values into separate atomic items and selects the union member type for typed-value annotation.
+
+4. **`IsElementTypeCompatible` anonymous complex types** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - Elements whose actual type is an anonymous complex type with simple content now match `element(N, T)` when their base simple type derives from `T`.
+
+5. **Schema-aware `fn:deep-equal`** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - `DeepEqualNode` compares type annotations and treats elements with a user-defined or built-in simple type as compatible with `xs:untypedAtomic` elements only when the typed values are equal.
+   - New `IXdmNode.IsComplexType` property lets the deep-equal logic distinguish complex-only elements.
+
+6. **Node atomization in `fn:string` family** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - `RequireString` and `NormalizeSpace_1` now atomize supplied nodes, raising `FOTY0012` / `XPTY0004` when appropriate.
+
+7. **List-typed values in `fn:sum`** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - List-typed element values are flattened before summation (`cbcl-data-004`).
+
+8. **`fn:analyze-string` schema-validated result** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
+   - The result element is validated against the embedded `analyze-string.xsd`; the resource is embedded in `Bosak.XPath.Standard`.
+
+9. **Residual cluster fixes** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - `xs:numeric` is recognized as a built-in kind-test type and `IsSchemaTypeSubtype` treats it as the XPath 3.1 numeric pseudo-union (`element(*, xs:numeric)` / `attribute(*, xs:numeric)` now pass).
+   - The built-in schema set imports `xml:id` as `xs:ID`, so lax validation resolves IDREFs against `xml:id` values (`fo-test-fn-idref-*`).
+
+10. **Header bumps** —
+    - `VmEngine.cs` → 2.125.
+
+## Previous Session Changes (advanced UCA collation string functions cluster)
 
 1. **`FunctionLibrary.TryParseUca` strict `fallback=no` validation** (`src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs`) —
    - Parses the `fallback` keyword; when `fallback=no`, unknown parameters and unsupported parameters (`version`, `normalization`, `hiraganaQuaternary`, `reorder`, `maxVariable`) raise **FOCH0002**.

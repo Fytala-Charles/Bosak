@@ -66,6 +66,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.21  | 23-08-2026     | IsConstructedElement recognizes constructed elements; document-node() matches empty documents |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.22  | 23-08-2026     | List typed values use item/member types so instance-of checks against xs:integer/float pass |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.23  | 23-08-2026     | Added IsComplexType property for schema-aware deep-equal type-annotation comparison |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -346,6 +350,21 @@ public sealed class XDocumentNode : IXdmNode
     }
 
     /// <summary>
+    /// Gets a value indicating whether the schema type annotation of this node
+    /// is a complex type. Attributes always return <c>false</c> because attribute
+    /// types are always simple.
+    /// </summary>
+    public bool IsComplexType
+    {
+        get
+        {
+            if (_node is not XElement element)
+                return false;
+            return element.GetSchemaInfo()?.SchemaType is XmlSchemaComplexType;
+        }
+    }
+
+    /// <summary>
     /// Returns the typed value of this node when PSVI annotations are available from schema
     /// validation; otherwise falls back to the string value as <c>xs:untypedAtomic</c>.
     /// </summary>
@@ -394,10 +413,35 @@ public sealed class XDocumentNode : IXdmNode
             if (datatype.Variety == XmlSchemaDatatypeVariety.List && parsed is System.Collections.IEnumerable list && parsed is not string)
             {
                 var items = new List<XdmValue>();
+
+                // Determine the declared item type of the list. For a simple list type use the
+                // simple type's content; for a complex type with simple content that extends a
+                // list type (e.g. complexExtendsList) walk through the base schema type.
+                XmlSchemaSimpleType? itemSimpleType = simpleType?.Content is XmlSchemaSimpleTypeList listContent
+                    ? listContent.BaseItemType
+                    : (info.SchemaType is XmlSchemaComplexType complexListType
+                        && complexListType.BaseXmlSchemaType is XmlSchemaSimpleType baseSimpleType
+                        && baseSimpleType.Content is XmlSchemaSimpleTypeList complexListContent
+                        ? complexListContent.BaseItemType
+                        : null);
+
+                XmlSchemaDatatype itemDatatype = itemSimpleType?.Datatype ?? datatype;
+                string[] itemLexicals = SplitListLexicalValue(StringValue);
+                int index = 0;
                 foreach (object? item in list)
                 {
-                    if (item is not null)
-                        items.Add(ConvertSchemaValue(item, datatype, annotationType ?? simpleType!, hasTz));
+                    if (item is null) { index++; continue; }
+
+                    XmlSchemaType itemSchemaType = itemSimpleType ?? annotationType ?? simpleType!;
+                    if (itemSimpleType is not null && itemSimpleType.Datatype?.Variety == XmlSchemaDatatypeVariety.Union)
+                    {
+                        var memberType = InferUnionMemberType(itemLexicals[index], itemSimpleType, nsResolver);
+                        if (memberType is not null)
+                            itemSchemaType = memberType;
+                    }
+
+                    items.Add(ConvertSchemaValue(item, itemDatatype, itemSchemaType, hasTz));
+                    index++;
                 }
                 return XdmValue.FromSequence(MaterializedSequence.FromList(items));
             }
@@ -416,6 +460,40 @@ public sealed class XDocumentNode : IXdmNode
         {
             return XdmValue.FromString(StringValue);
         }
+    }
+
+    /// <summary>
+    /// Splits the lexical value of an XSD list type into its item strings.
+    /// XSD list items are separated by whitespace and leading/trailing whitespace is ignored.
+    /// </summary>
+    private static string[] SplitListLexicalValue(string value)
+        => value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+
+    /// <summary>
+    /// For a union simple type, returns the first member type whose datatype accepts the
+    /// supplied lexical value. This lets the typed value of a list-of-union be annotated
+    /// with the actual member type selected for each item.
+    /// </summary>
+    private static XmlSchemaSimpleType? InferUnionMemberType(string lexicalValue, XmlSchemaSimpleType unionType, IXmlNamespaceResolver? nsResolver)
+    {
+        if (unionType.Content is not XmlSchemaSimpleTypeUnion union)
+            return null;
+
+        foreach (XmlSchemaSimpleType member in union.BaseMemberTypes)
+        {
+            if (member.Datatype is null)
+                continue;
+            try
+            {
+                member.Datatype.ParseValue(lexicalValue, new NameTable(), nsResolver);
+                return member;
+            }
+            catch
+            {
+                // Try the next member type in the union's member-type definition order.
+            }
+        }
+        return null;
     }
 
     /// <summary>
@@ -461,6 +539,15 @@ public sealed class XDocumentNode : IXdmNode
     /// timezone offset is preserved instead of being normalized to the local offset.</param>
     private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true, string? lexicalValue = null)
     {
+        // Values produced by parsing list/union datatypes are wrapped in XmlAtomicValue;
+        // unwrap them so the correct primitive conversion and type annotation are applied.
+        if (value is XmlAtomicValue atomic)
+        {
+            value = atomic.ValueAs(atomic.ValueType, null);
+            if (atomic.XmlType is XmlSchemaSimpleType atomicSchemaType)
+                schemaType = atomicSchemaType;
+        }
+
         string typeName = schemaType.QualifiedName.Name;
         string typeNs = schemaType.QualifiedName.Namespace;
 

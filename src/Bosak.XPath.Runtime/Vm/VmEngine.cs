@@ -218,6 +218,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.116 | 22-08-2026     | Schema-aware list/union fixes: attribute kind-test case preservation, union function conversion, default-ns instance-of, element schema subtyping |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.117 | 23-08-2026     | Validate expression returns parentless elements, cleans up injected xsi:type, checks type existence |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.117 | 22-08-2026     | Function conversion raises XPTY0117 when xs:untypedAtomic is supplied to namespace-sensitive atomic types (CastAs675a, CastAsNamespaceSensitiveType) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.118 | 22-08-2026     | Validate opcode for XQuery validate expressions |
@@ -232,6 +234,8 @@
 //                      | Charles Korthout | 2.123 | 23-08-2026     | ApplyFunctionConversion atomizes nodes for atomic/simple targets even when typed value matches (qischema040/qischema040a) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.124 | 23-08-2026     | instance-of rejects xs:untypedAtomic for user-defined schema simple types (cbcl-module-001) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.125 | 23-08-2026     | xs:numeric recognized as element/attribute kind-test type; xml:id schema for lax IDREF validation |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
@@ -3124,6 +3128,21 @@ public static class VmEngine
     private static XmlSchemaSet CreateBuiltInSchemaSet()
     {
         var ss = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+
+        // XML Schema validation does not automatically treat xml:id as an xs:ID attribute.
+        // Import a schema for the XML namespace that declares xml:id with type xs:ID so that
+        // lax validation can resolve IDREFs that point to xml:id values (fo-test-fn-idref-*).
+        const string XmlIdSchema = """
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                       targetNamespace="http://www.w3.org/XML/1998/namespace">
+              <xs:attribute name="id" type="xs:ID"/>
+            </xs:schema>
+            """;
+        using (var reader = System.Xml.XmlReader.Create(new System.IO.StringReader(XmlIdSchema)))
+        {
+            ss.Add(null, reader);
+        }
+
         ss.Compile();
         return ss;
     }
@@ -3144,7 +3163,20 @@ public static class VmEngine
 
         var item = items[0];
         XmlSchemaSet schemaSetToUse = context.SchemaSet ?? s_builtInSchemaSet;
-        if (context.SchemaSet is null && (mode != "lax" || !string.IsNullOrEmpty(typeName)))
+        if (context.SchemaSet is null && !string.IsNullOrEmpty(typeName))
+        {
+            // validate type Q { ... } may use a built-in XML Schema type without a user schema;
+            // built-in types are always in-scope. Check that the type resolves before deciding
+            // whether a schema is needed.
+            var (builtInNs, builtInLocal) = ResolveValidateTypeName(typeName, context);
+            bool isBuiltInType = builtInNs == XmlSchema.Namespace
+                && XmlSchemaType.GetBuiltInSimpleType(new XmlQualifiedName(builtInLocal, builtInNs)) is not null;
+            if (!isBuiltInType)
+            {
+                throw new InvalidOperationException("XQST0075: A validate expression requires a schema, but no schema is available.");
+            }
+        }
+        else if (context.SchemaSet is null && mode != "lax")
         {
             // XQuery 3.1 §3.13.2: only lax validation without a target type may proceed
             // without a user schema; strict/default validation requires one.
@@ -3152,11 +3184,15 @@ public static class VmEngine
         }
 
         var node = item.NodeValue;
+        var validationErrors = new List<string>();
         bool hasErrors = false;
         ValidationEventHandler handler = (sender, e) =>
         {
             if (e.Severity == XmlSeverityType.Error)
+            {
                 hasErrors = true;
+                validationErrors.Add(e.Message);
+            }
         };
 
         // Validation creates a new XDM value with PSVI annotations. Preserve the original
@@ -3164,25 +3200,60 @@ public static class VmEngine
         // the validated root element.
         string documentUri = item.NodeValue.NodeKind == XdmNodeKind.Document ? item.NodeValue.DocumentUri : string.Empty;
 
+        (string TypeNs, string TypeLocal)? validateType = null;
+        string? usedTypePrefix = null;
+        bool addedTypeNs = false;
+        bool addedXsiNs = false;
+        if (!string.IsNullOrEmpty(typeName))
+        {
+            var (typeNs, typeLocal) = ResolveValidateTypeName(typeName, context);
+            var schemaType = schemaSetToUse.GlobalTypes[new XmlQualifiedName(typeLocal, typeNs)] as XmlSchemaType
+                ?? (typeNs == XmlSchema.Namespace ? XmlSchemaType.GetBuiltInSimpleType(new XmlQualifiedName(typeLocal, typeNs)) : null);
+            if (schemaType is null)
+                throw new InvalidOperationException("XQST0104: The validate type is not defined in the in-scope schema definitions.");
+            validateType = (typeNs, typeLocal);
+        }
+
         XDocument doc;
+        const string XsiNs = "http://www.w3.org/2001/XMLSchema-instance";
         if (mode == "lax" && string.IsNullOrEmpty(typeName))
         {
-            // Lax validation: use an XmlReader with schema validation so undeclared elements
-            // are warnings, not errors. Only XmlSeverityType.Error is fatal.
-            var settings = new System.Xml.XmlReaderSettings
+            // Lax validation: load the document, then validate it. If the root element has no
+            // matching global element declaration and no xsi:type, it is skipped in lax mode,
+            // but its descendants that do have declarations must still be validated. .NET's
+            // schema reader treats an undeclared root as an error, so we supply a dynamic
+            // schema that declares the actual root element as xs:anyType; this makes the root
+            // valid while still validating declared descendants (anyType allows any content but
+            // processes child elements laxly).
+            using (var stringReader = new System.IO.StringReader(node.ToXmlString()))
+            using (var xmlReader = System.Xml.XmlReader.Create(stringReader))
             {
-                ValidationType = System.Xml.ValidationType.Schema,
-                Schemas = schemaSetToUse,
-                ValidationFlags = System.Xml.Schema.XmlSchemaValidationFlags.ProcessSchemaLocation
-                    | System.Xml.Schema.XmlSchemaValidationFlags.ReportValidationWarnings,
-                DtdProcessing = System.Xml.DtdProcessing.Prohibit,
-            };
-            settings.ValidationEventHandler += handler;
-            using var stringReader = new System.IO.StringReader(node.ToXmlString());
-            using var validatingReader = System.Xml.XmlReader.Create(stringReader, settings);
-            doc = System.Xml.Linq.XDocument.Load(validatingReader, System.Xml.Linq.LoadOptions.None);
+                doc = System.Xml.Linq.XDocument.Load(xmlReader, System.Xml.Linq.LoadOptions.None);
+            }
+
+            var xsi = XNamespace.Get(XsiNs);
+            bool rootHasXsiType = doc.Root?.Attribute(xsi + "type") is not null;
+            bool rootHasGlobal = schemaSetToUse.GlobalElements[new XmlQualifiedName(doc.Root?.Name.LocalName ?? "", doc.Root?.Name.NamespaceName ?? "")] is not null;
+
+            XmlSchemaSet laxSchemaSet = schemaSetToUse;
+            if (!rootHasGlobal && !rootHasXsiType && doc.Root is not null)
+            {
+                laxSchemaSet = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+                foreach (XmlSchema existing in schemaSetToUse.Schemas())
+                    laxSchemaSet.Add(existing);
+
+                string targetNsAttr = string.IsNullOrEmpty(doc.Root.Name.NamespaceName)
+                    ? ""
+                    : $" targetNamespace=\"{System.Security.SecurityElement.Escape(doc.Root.Name.NamespaceName)}\"";
+                string schemaXml = $"<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"{targetNsAttr}><xs:element name=\"{System.Security.SecurityElement.Escape(doc.Root.Name.LocalName)}\" type=\"xs:anyType\" /></xs:schema>";
+                using var schemaReader = System.Xml.XmlReader.Create(new System.IO.StringReader(schemaXml));
+                laxSchemaSet.Add(null, schemaReader);
+                laxSchemaSet.Compile();
+            }
+
+            doc.Validate(laxSchemaSet, handler, addSchemaInfo: true);
             if (hasErrors)
-                throw new InvalidOperationException("XQDY0027: Validation of the validate expression operand failed.");
+                throw new InvalidOperationException($"XQDY0027: Validation of the validate expression operand failed: {string.Join("; ", validationErrors)}");
         }
         else
         {
@@ -3193,15 +3264,33 @@ public static class VmEngine
             // validate type QName { ... }: force the root element to be validated against the
             // named type by injecting an xsi:type attribute. This is required for tests such as
             // CastAs-UnionType-33 where the element has no matching global element declaration.
-            if (!string.IsNullOrEmpty(typeName) && doc.Root is not null)
+            if (validateType is not null && doc.Root is not null)
             {
-                var (typeNs, typeLocal) = ResolveValidateTypeName(typeName, context);
-                const string XsiNs = "http://www.w3.org/2001/XMLSchema-instance";
                 const string XsNs = "http://www.w3.org/2001/XMLSchema";
-                string typePrefix = typeNs == XsNs ? "xs" : GenerateUniquePrefix(doc.Root, "t");
-                doc.Root.SetAttributeValue(XNamespace.Get(XsiNs) + "type", $"{typePrefix}:{typeLocal}");
-                doc.Root.SetAttributeValue(XNamespace.Xmlns + typePrefix, typeNs);
-                doc.Root.SetAttributeValue(XNamespace.Xmlns + "xsi", XsiNs);
+                var (typeNs, typeLocal) = validateType.Value;
+
+                if (doc.Root.GetNamespaceOfPrefix("xsi") is null)
+                {
+                    doc.Root.SetAttributeValue(XNamespace.Xmlns + "xsi", XsiNs);
+                    addedXsiNs = true;
+                }
+
+                var existingTypePrefix = doc.Root.Attributes()
+                    .Where(a => a.IsNamespaceDeclaration && a.Value == typeNs)
+                    .Select(a => a.Name.LocalName)
+                    .FirstOrDefault();
+                if (existingTypePrefix is null)
+                {
+                    usedTypePrefix = typeNs == XsNs ? "xs" : GenerateUniquePrefix(doc.Root, "t");
+                    doc.Root.SetAttributeValue(XNamespace.Xmlns + usedTypePrefix, typeNs);
+                    addedTypeNs = true;
+                }
+                else
+                {
+                    usedTypePrefix = existingTypePrefix;
+                }
+
+                doc.Root.SetAttributeValue(XNamespace.Get(XsiNs) + "type", $"{usedTypePrefix}:{typeLocal}");
             }
 
             // addSchemaInfo: true is required to populate XElement.GetSchemaInfo() / PSVI
@@ -3209,7 +3298,27 @@ public static class VmEngine
             doc.Validate(schemaSetToUse, handler, addSchemaInfo: true);
 
             if (hasErrors)
-                throw new InvalidOperationException("XQDY0027: Validation of the validate expression operand failed.");
+                throw new InvalidOperationException($"XQDY0027: Validation of the validate expression operand failed: {string.Join("; ", validationErrors)}");
+
+            // In strict / default validation, the root element must be validated against a
+            // top-level element declaration. Validation against an xsi:type alone (with no
+            // matching element declaration) must still raise XQDY0084.
+            if (validateType is null && (mode == "strict" || mode == "")
+                && doc.Root?.GetSchemaInfo()?.SchemaElement is null)
+            {
+                throw new InvalidOperationException("XQDY0084: The root element does not match a top-level element declaration.");
+            }
+
+            // Remove the injected xsi:type and any namespace declarations we added; the result
+            // of validate type Q { ... } must not expose the temporary xsi:type attribute.
+            if (validateType is not null && doc.Root is not null)
+            {
+                doc.Root.SetAttributeValue(XNamespace.Get(XsiNs) + "type", null);
+                if (addedTypeNs && usedTypePrefix is not null)
+                    doc.Root.SetAttributeValue(XNamespace.Xmlns + usedTypePrefix, null);
+                if (addedXsiNs)
+                    doc.Root.SetAttributeValue(XNamespace.Xmlns + "xsi", null);
+            }
         }
 
         if (item.NodeValue.NodeKind == XdmNodeKind.Document)
@@ -3219,8 +3328,14 @@ public static class VmEngine
             return XdmValue.FromNode(validatedDoc);
         }
 
-        var validatedRoot = new XDocumentNode(doc.Root!);
-        return XdmValue.FromNode(validatedRoot);
+        // For element input, the validated result must be a parentless element. Validation
+        // had to load it as a document root, so detach that root before returning it; this
+        // keeps the PSVI annotations while making the XPath parent axis empty.
+        var validatedRoot = doc.Root;
+        if (validatedRoot is null)
+            throw new InvalidOperationException("XQDY0027: Validation produced no element.");
+        validatedRoot.Remove();
+        return XdmValue.FromNode(new XDocumentNode(validatedRoot));
     }
 
     private static (string NamespaceUri, string LocalName) ResolveValidateTypeName(string typeName, EvaluationContext context)
@@ -8132,7 +8247,42 @@ public static class VmEngine
                 return targetLower is "anytype";
             return targetLower is "anytype" or "untyped";
         }
-        return IsSchemaTypeSubtype(context, actual.NamespaceUri, actual.LocalName, targetNs, targetLocal);
+        if (IsSchemaTypeSubtype(context, actual.NamespaceUri, actual.LocalName, targetNs, targetLocal))
+            return true;
+
+        // element(N, simpleType) also matches an element whose type annotation is a complex
+        // type with simple content whose base simple type derives from that simple type
+        // (cbcl-validateexpr-15).
+        if (context?.SchemaSet is not null)
+        {
+            var actualType = context.SchemaSet.GlobalTypes[new XmlQualifiedName(actual.LocalName, actual.NamespaceUri)] as XmlSchemaType;
+            if (actualType is XmlSchemaComplexType complex && complex.ContentType == XmlSchemaContentType.TextOnly)
+            {
+                if (complex.BaseXmlSchemaType is XmlSchemaSimpleType baseSimple)
+                {
+                    var qn = baseSimple.QualifiedName;
+                    if (IsSchemaTypeSubtype(context, qn.Namespace, qn.Name, targetNs, targetLocal))
+                        return true;
+                }
+            }
+        }
+
+        // Anonymous schema types are reported with an empty SchemaTypeAnnotation. Fall back to
+        // the underlying XElement PSVI so element(N, T) can still match complex types with simple
+        // content whose base simple type derives from T.
+        if (actual.NamespaceUri.Length == 0 && actual.LocalName.Length == 0
+            && node is XDocumentNode xdn && xdn.UnderlyingObject is XElement element
+            && element.GetSchemaInfo()?.SchemaType is XmlSchemaType anonymousType)
+        {
+            if (anonymousType is XmlSchemaComplexType anonComplex && anonComplex.ContentType == XmlSchemaContentType.TextOnly
+                && anonComplex.BaseXmlSchemaType is XmlSchemaSimpleType baseSimple)
+            {
+                var qn = baseSimple.QualifiedName;
+                if (IsSchemaTypeSubtype(context, qn.Namespace, qn.Name, targetNs, targetLocal))
+                    return true;
+            }
+        }
+        return false;
     }
 
     private static bool IsAttributeTypeCompatible(string typeName, EvaluationContext? context, IXdmNode node)
@@ -9028,6 +9178,41 @@ public static class VmEngine
             && string.Equals(actualLocal, targetLocal, StringComparison.Ordinal))
             return true;
 
+        // XPath 3.1 xs:numeric is a pseudo-union of xs:integer, xs:decimal, xs:float and xs:double.
+        // It is not a real XSD type, so treat it as a special compatibility target for built-in
+        // numeric types and for user-defined types that derive from one of them.
+        if (targetNs == XmlSchema.Namespace
+            && targetLocal.Equals("numeric", StringComparison.OrdinalIgnoreCase))
+        {
+            if (IsNumericSchemaType(actualNs, actualLocal))
+                return true;
+
+            if (context?.SchemaSet is not null)
+            {
+                try
+                {
+                    var actualQName = new XmlQualifiedName(actualLocal, actualNs);
+                    if (context.SchemaSet.GlobalTypes[actualQName] is XmlSchemaType actualType)
+                    {
+                        var visited = new HashSet<XmlSchemaType>();
+                        var current = actualType;
+                        while (current is not null && visited.Add(current))
+                        {
+                            if (IsNumericSchemaType(current.QualifiedName.Namespace, current.QualifiedName.Name))
+                                return true;
+                            current = current.BaseXmlSchemaType;
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore schema lookup errors and fall through to false.
+                }
+            }
+
+            return false;
+        }
+
         // Built-in atomic type hierarchy.
         if (targetNs == XmlSchema.Namespace && actualNs == XmlSchema.Namespace)
             return IsAtomicTypeSubtype(actualLocal, targetLocal);
@@ -9058,6 +9243,17 @@ public static class VmEngine
         }
         return false;
     }
+
+    /// <summary>
+    /// Returns true when the expanded schema type name denotes one of the XPath 3.1 numeric
+    /// atomic types (the xs:numeric pseudo-union and its member types).
+    /// </summary>
+    private static bool IsNumericSchemaType(string ns, string local)
+        => ns == XmlSchema.Namespace
+            && local.ToLowerInvariant() is "numeric" or "integer" or "decimal" or "float" or "double"
+                or "nonpositiveinteger" or "negativeinteger" or "long" or "int" or "short" or "byte"
+                or "nonnegativeinteger" or "unsignedlong" or "unsignedint" or "unsignedshort" or "unsignedbyte"
+                or "positiveinteger";
 
     // Validates the schema type name of an element(name, T) / attribute(name, T) test.
     // A prefixed or URI-qualified T must resolve to a built-in schema type: XPST0081 for
@@ -9135,6 +9331,7 @@ public static class VmEngine
         "integer", "nonPositiveInteger", "negativeInteger", "long", "int", "short", "byte",
         "nonNegativeInteger", "unsignedLong", "unsignedInt", "unsignedShort", "unsignedByte",
         "positiveInteger", "dateTimeStamp", "dayTimeDuration", "yearMonthDuration",
+        "numeric",
     };
 
     private static bool IsCastAllowed(string? sourceSchemaType, string targetType)

@@ -55,6 +55,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.98  | 23-08-2026     | UCA caseLevel secondary ordering and shifted variable tie-break sign |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.99  | 23-08-2026     | Schema-aware deep-equal, atomized string functions, list-typed fn:sum, analyze-string.xsd validation |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -5056,6 +5058,10 @@ public static class FunctionLibrary
         if (pos < value.Length)
             result.Add(new XElement(fn + "non-match", value[pos..]));
 
+        // Attach PSVI annotations so that schema-aware tests see typed attributes
+        // (e.g. @nr as xs:positiveInteger) and schema-element tests succeed.
+        var wrapper = new XDocument(result);
+        XDocumentProvider.ValidateXDocument(wrapper, AnalyzeStringSchemaSet);
         return XdmValue.FromNode(new XDocumentNode(result));
     }
 
@@ -5923,7 +5929,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue NormalizeSpace_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromString(NormalizeSpaceString(AtomizedString(args[0])));
+        => XdmValue.FromString(NormalizeSpaceString(RequireString(args[0], ctx.BackwardsCompatible)));
 
     private static string NormalizeSpaceString(string s)
     {
@@ -9081,7 +9087,12 @@ public static class FunctionLibrary
             return string.Empty;
 
         if (value.IsNode)
-            return value.NodeValue.StringValue;
+        {
+            if (backwardsCompatible)
+                return value.NodeValue.StringValue;
+            value = AtomizeValue(value);
+            // AtomizeValue returns Undefined only for empty sequence; fall through to handle it.
+        }
 
         if (value.IsFunction || value.IsMap || value.IsArray)
             throw new InvalidOperationException("FOTY0013");
@@ -9368,14 +9379,31 @@ public static class FunctionLibrary
 
     private static XdmValue Sum(List<XdmValue> items)
     {
+        // Atomize every input item and flatten any list-typed node into its
+        // constituent atomic values (cbcl-data-004: sum of elements whose typed
+        // value is a list of xs:integer).
+        var atomized = new List<XdmValue>();
+        foreach (var item in items)
+        {
+            var a = AtomizeValue(item);
+            if (a.IsSequence)
+            {
+                foreach (var sub in XdmSequence.FromSource(a.SequenceValue!))
+                    atomized.Add(sub);
+            }
+            else
+            {
+                atomized.Add(a);
+            }
+        }
+
         bool allIntegerOrDecimal = true;
         bool anyDouble = false;
         bool anyUntyped = false;
         bool allYearMonthDuration = true;
         bool allDayTimeDuration = true;
-        foreach (var item in items)
+        foreach (var a in atomized)
         {
-            var a = AtomizeValue(item);
             // Only numeric, duration, and xs:untypedAtomic items may be summed;
             // xs:string, xs:boolean and other types are FORG0006.
             if (a.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
@@ -9401,9 +9429,8 @@ public static class FunctionLibrary
         if (allYearMonthDuration)
         {
             long totalMonths = 0;
-            foreach (var item in items)
+            foreach (var a in atomized)
             {
-                var a = AtomizeValue(item);
                 var s = a.Kind == XdmValueKind.Duration ? a.DurationValue : a.ToString();
                 var (years, months, _, _, _, _) = ParseDuration(s);
                 totalMonths += years * 12 + months;
@@ -9414,9 +9441,8 @@ public static class FunctionLibrary
         if (allDayTimeDuration)
         {
             decimal totalSeconds = 0m;
-            foreach (var item in items)
+            foreach (var a in atomized)
             {
-                var a = AtomizeValue(item);
                 var s = a.Kind == XdmValueKind.Duration ? a.DurationValue : a.ToString();
                 var (_, _, days, hours, minutes, seconds) = ParseDuration(s);
                 totalSeconds += days * 86400m + hours * 3600m + minutes * 60m + seconds;
@@ -9426,39 +9452,39 @@ public static class FunctionLibrary
 
         // A duration that survived the homogeneous-type branches above is mixed with
         // an incompatible type (numerics or the other duration subtype): FORG0006.
-        if (items.Any(i => AtomizeValue(i).Kind == XdmValueKind.Duration))
+        if (atomized.Any(a => a.Kind == XdmValueKind.Duration))
             throw new InvalidOperationException(
                 "FORG0006: fn:sum() cannot combine xs:duration with numeric or other duration subtypes");
 
         if (allIntegerOrDecimal)
         {
-            bool allInteger = items.All(item => AtomizeValue(item).Kind == XdmValueKind.Integer);
+            bool allInteger = atomized.All(a => a.Kind == XdmValueKind.Integer);
             if (allInteger)
             {
                 // Sum of a single item is the item itself — keep its type annotation
                 // (e.g. xs:unsignedShort) per the F+O least-common-type rule.
-                if (items.Count == 1)
-                    return AtomizeValue(items[0]);
+                if (atomized.Count == 1)
+                    return atomized[0];
                 long intSum = 0;
-                foreach (var item in items)
-                    intSum += ToIntegerValue(item);
+                foreach (var a in atomized)
+                    intSum += a.IntegerValue;
                 return XdmValue.FromInteger(intSum);
             }
             decimal decSum = 0m;
-            foreach (var item in items)
-                decSum += ToDecimalValue(item);
+            foreach (var a in atomized)
+                decSum += a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DecimalValue;
             return XdmValue.FromDecimal(decSum);
         }
         if (!anyDouble && !anyUntyped)
         {
             float sumF = 0.0f;
-            foreach (var item in items)
-                sumF += (float)ToDoubleValue(item);
+            foreach (var a in atomized)
+                sumF += (float)ToDoubleValue(a);
             return XdmValue.FromFloat(sumF);
         }
         double sumD = 0.0;
-        foreach (var item in items)
-            sumD += ToDoubleValue(item);
+        foreach (var a in atomized)
+            sumD += ToDoubleValue(a);
         return XdmValue.FromDouble(sumD);
     }
 
@@ -11594,8 +11620,33 @@ public static class FunctionLibrary
             return false;
         if (a.NamespaceUri != b.NamespaceUri)
             return false;
-        if (CompareStrings(a.StringValue, b.StringValue, collation) != 0)
-            return false;
+
+        // For element/attribute nodes that are both schema-validated:
+        //   * If both have simple types (including list/union), compare typed values
+        //     and ignore the type annotation name.
+        //   * If either has a complex type, the type annotation name must agree and
+        //     we fall back to string-value comparison (complex types may have element-only,
+        //     mixed, or empty content where typed-value comparison is not appropriate).
+        bool aHasType = a.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && a.SchemaTypeAnnotation.HasValue;
+        bool bHasType = a.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && b.SchemaTypeAnnotation.HasValue;
+        bool useTypedValue = aHasType && bHasType && !a.IsComplexType && !b.IsComplexType;
+        if (aHasType && bHasType && !useTypedValue)
+        {
+            var typeA = a.SchemaTypeAnnotation.Value;
+            var typeB = b.SchemaTypeAnnotation.Value;
+            if (typeA.NamespaceUri != typeB.NamespaceUri || typeA.LocalName != typeB.LocalName)
+                return false;
+        }
+        if (useTypedValue)
+        {
+            if (!DeepEqualValue(a.TypedValue, b.TypedValue, collation, 0))
+                return false;
+        }
+        else
+        {
+            if (CompareStrings(a.StringValue, b.StringValue, collation) != 0)
+                return false;
+        }
 
         if (a.NodeKind == XdmNodeKind.Element)
         {
@@ -12055,6 +12106,28 @@ public static class FunctionLibrary
         return assembly.GetManifestResourceStream(resourceName)
             ?? throw new InvalidOperationException($"Embedded JSON schema resource '{resourceName}' not found.");
     }
+
+    /// <summary>
+    /// The W3C schema for <c>fn:analyze-string-result</c> elements. Used to validate
+    /// the result of <c>fn:analyze-string</c> so that its attributes and elements carry
+    /// the PSVI annotations required by schema-aware tests.
+    /// </summary>
+    private static readonly Lazy<XmlSchemaSet> AnalyzeStringSchemaSetInternal = new(() =>
+    {
+        var assembly = typeof(FunctionLibrary).Assembly;
+        const string resourceName = "Bosak.XPath.Standard.Resources.analyze-string.xsd";
+        using var stream = assembly.GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException($"Embedded analyze-string schema resource '{resourceName}' not found.");
+        using var reader = XmlReader.Create(stream);
+        var schema = XmlSchema.Read(reader, null)
+            ?? throw new InvalidOperationException($"Failed to read embedded analyze-string schema '{resourceName}'.");
+        var schemaSet = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        schemaSet.Add(schema);
+        schemaSet.Compile();
+        return schemaSet;
+    });
+
+    private static XmlSchemaSet AnalyzeStringSchemaSet => AnalyzeStringSchemaSetInternal.Value;
 
     private readonly record struct JsonOptions(bool Liberal, string Duplicates, bool Escape, bool Indent, bool Validate, bool DuplicatesExplicit, XdmValue? Fallback = null)
     {
