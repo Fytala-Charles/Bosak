@@ -77,6 +77,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.34  | 21-08-2026     | Schema-aware fn:idref IsIdref tests (IDREF, IDREFS, nillable, union, complex simple content) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.35  | 23-08-2026     | fn:local-name-from-QName / fn:namespace-uri-from-QName / fn:prefix-from-QName singleton-sequence XPTY0004 tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -1386,6 +1388,37 @@ public class FunctionLibraryTests
         var qn = result.QNameValue;
         Assert.Equal("child", qn.LocalName);
         Assert.Equal("http://default.com", qn.NamespaceUri);
+    }
+
+    [Fact]
+    public void LocalNameFromQName_EmptySequence_ReturnsEmpty()
+    {
+        var result = Evaluate("local-name-from-QName(())");
+        Assert.True(result.IsUndefined || (result.IsSequence && result.SequenceValue is not null));
+    }
+
+    [Fact]
+    public void LocalNameFromQName_MultipleQNames_RaisesXPTY0004()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            Evaluate("local-name-from-QName((QName('http://example.com','a'), QName('http://example.com','b')))"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void NamespaceUriFromQName_MultipleQNames_RaisesXPTY0004()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            Evaluate("namespace-uri-from-QName((QName('http://example.com','a'), QName('http://example.com','b')))"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void PrefixFromQName_MultipleQNames_RaisesXPTY0004()
+    {
+        var ex = Assert.ThrowsAny<Exception>(() =>
+            Evaluate("prefix-from-QName((QName('http://example.com','a'), QName('http://example.com','b')))"));
+        Assert.Contains("XPTY0004", ex.Message);
     }
 
     // ------------------------------------------------------------------

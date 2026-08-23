@@ -48,6 +48,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.94  | 21-08-2026     | fn:idref honors PSVI is-idrefs property for schema-validated IDREF/IDREFS nodes         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.95  | 23-08-2026     | fn:local-name-from-QName / namespace-uri-from-QName / prefix-from-QName raise XPTY0004 on multi-item sequences |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -8848,6 +8850,37 @@ public static class FunctionLibrary
     }
 
     /// <summary>
+    /// Atomizes a value that must be a single atomic value or the empty sequence.
+    /// Multi-item sequences raise <c>XPTY0004</c>; function items raise <c>FOTY0013</c>.
+    /// </summary>
+    private static XdmValue AtomizeSingleton(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a function item, map, or array");
+
+        if (value.IsSequence)
+        {
+            XdmValue single = XdmValue.Undefined;
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            {
+                count++;
+                if (count > 1)
+                    throw new InvalidOperationException("XPTY0004: Expected a single atomic value, but got a sequence of multiple items.");
+                single = item;
+            }
+            if (count == 0)
+                return XdmValue.Undefined;
+            value = single;
+        }
+
+        return AtomizeValue(value);
+    }
+
+    /// <summary>
     /// Atomizes a map key expression. The key must be a single atomic value:
     /// the empty sequence or a multi-item sequence is a type error (XPTY0004),
     /// and function items cannot be atomized (FOTY0013).
@@ -11583,7 +11616,7 @@ public static class FunctionLibrary
 
     private static XdmValue LocalNameFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var atomized = AtomizeValue(args[0]);
+        var atomized = AtomizeSingleton(args[0]);
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = atomized.QNameValue;
@@ -11592,7 +11625,7 @@ public static class FunctionLibrary
 
     private static XdmValue NamespaceUriFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var atomized = AtomizeValue(args[0]);
+        var atomized = AtomizeSingleton(args[0]);
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = atomized.QNameValue;
@@ -11601,7 +11634,7 @@ public static class FunctionLibrary
 
     private static XdmValue PrefixFromQName(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var atomized = AtomizeValue(args[0]);
+        var atomized = AtomizeSingleton(args[0]);
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
         var qn = atomized.QNameValue;
