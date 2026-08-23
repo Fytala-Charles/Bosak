@@ -10,14 +10,19 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 23 August 2026
-> **Bosak baseline:** 1,840 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** **30,958 passed / 1 failed / 862 skipped** (97.29%). The xquery30keywords5 cluster is implemented: `XPathParser` now allows most XPath/XQuery keywords to be used as unprefixed function names when followed by `(` or `#` in a primary-expression context, while preserving validate/quantified/try/FLWOR expressions when their normal follow tokens (`{`, `$`) are present. This closes `xquery30keywords5`. The function return-type atomization cluster, QName accessor singleton-sequence XPTY0004 cluster, document-node / root() / constructed-element cluster, HOF residuals cluster, schema-aware validate / QName-NOTATION / ID / typed-value cluster, `fn:load-xquery-module` / `validate` expression cluster, namespace-sensitive atomic function-conversion cluster, schema-aware list/union cluster, and castable cluster remain in place; conformance-runner skips (`app-Demos`, `app-XMark`, `cbcl-codepoints-to-string-021`) remain in place.
+> **Bosak baseline:** 1,883 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** **30,959 passed / 0 failed / 862 skipped** (97.29%). The cbcl-module-001 residual is fixed: `VmEngine.InstanceOf` now rejects `xs:untypedAtomic` values for user-defined schema simple types, so `instance of` uses type-hierarchy semantics instead of cast facets. The full QT3 sweep now has **0 failures**. The xquery30keywords5 cluster, function return-type atomization cluster, QName accessor singleton-sequence XPTY0004 cluster, document-node / root() / constructed-element cluster, HOF residuals cluster, schema-aware validate / QName-NOTATION / ID / typed-value cluster, `fn:load-xquery-module` / `validate` expression cluster, namespace-sensitive atomic function-conversion cluster, schema-aware list/union cluster, and castable cluster remain in place; conformance-runner skips (`app-Demos`, `app-XMark`, `cbcl-codepoints-to-string-021`) remain in place.
 > **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-23** — XPath/XQuery: **cbcl-module-001 residual fixed** — `VmEngine.InstanceOf` now rejects `xs:untypedAtomic` values when testing against user-defined schema simple types. Previously, cast-based facet checking allowed untypedAtomic text-node values to pass `instance of` for user-defined string restrictions. `instance of` now uses type-hierarchy semantics for these types while function argument/return conversion keeps its cast-based behaviour. This closes the final QT3 failure `cbcl-module-001`; the full QT3 sweep is now **30,959/0/862** (97.29%) with **0 failures**. Unit tests pass **1,883/0**.
+  - Implementation: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.
+  - Regression test in `tests/Bosak.XPath.Runtime.Tests/SchemaTypedValueTests.cs` (1/1 passing).
+  - Targeted verification: `cbcl-module-001` 1/0/0.
 
 - **2026-08-23** — XPath/XQuery: **xquery30keywords5 cluster** — `XPathParser` now allows most XPath/XQuery keywords to be used as unprefixed function names when followed by `(` or `#` in a primary-expression context. Reserved function names (`if`, `function`, `map`, `array`, etc.) remain rejected, and `validate`, quantified expressions, `try/catch`, and FLWOR expressions are still recognized when their normal follow tokens (`{`, `$`) are present. This closes the QT3 failure `xquery30keywords5`. Full QT3 sweep is **30,958/1/862** (97.29%); unit tests pass **1,840/0**.
   - Implementation: `src/Bosak.XPath.Parser/Ast/XPathParser.cs`.

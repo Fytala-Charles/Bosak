@@ -1,12 +1,23 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `fdc04ad` — Allow XPath/XQuery keywords as unprefixed function names (xquery30keywords5)
-**Current focus:** **xquery30keywords5 cluster** — the XPath parser now allows most XPath/XQuery keywords to be used as unprefixed function names when followed by `(` or `#` in a primary-expression context. Reserved function names (`if`, `function`, `map`, `array`, etc.) remain rejected, and `validate`, quantified expressions, `try/catch`, and FLWOR expressions are still recognized when their normal follow tokens (`{`, `$`) are present. This closes the QT3 failure `xquery30keywords5`.
+**Commit:** `733d075` — Fix cbcl-module-001: reject xs:untypedAtomic in instance-of for user-defined schema types
+**Current focus:** **cbcl-module-001 residual** — `VmEngine.InstanceOf` now uses type-hierarchy semantics for user-defined schema simple types: `xs:untypedAtomic` values are no longer reported as instances of a user-defined simple type just because casting under the target facets succeeds. This closes the final QT3 failure `cbcl-module-001`, bringing the full sweep to **0 failures**.
 
-Expected state: **1,840 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,958 passed / 1 failed / 862 skipped** (97.29%). Targeted verification: `xquery30keywords5` 1/0/0.
+Expected state: **1,883 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,959 passed / 0 failed / 862 skipped** (97.29%). Targeted verification: `cbcl-module-001` 1/0/0.
 
-## This Session Changes (xquery30keywords5 cluster)
+## This Session Changes (cbcl-module-001 residual)
+
+1. **`VmEngine.InstanceOf` untypedAtomic handling** (`src/Bosak.XPath.Runtime/Vm/VmEngine.cs`) —
+   - For user-defined schema simple types, `InstanceOf` now rejects `xs:untypedAtomic` values before delegating to `ValueMatchesType`.
+   - Cast-based conversion for function parameters/returns is unchanged; only the `instance of` test is tightened.
+   - Header bumped to 2.124.
+
+2. **Regression test** (`tests/Bosak.XPath.Runtime.Tests/SchemaTypedValueTests.cs`) —
+   - `UntypedAtomicValue_IsNotInstanceOfUserDefinedSchemaType` verifies that `data(/root/text())` (an `xs:untypedAtomic`) is not an instance of a user-defined `xs:string` restriction, even when the lexical value satisfies the facets.
+   - Header bumped to 0.5.
+
+## Previous Session Changes (xquery30keywords5 cluster)
 
 1. **`XPathParser.ParseExprSingle` and `XPathParser.ParsePrimaryExpr`** (`src/Bosak.XPath.Parser/Ast/XPathParser.cs`) —
    - `some`/`every`/`try` now fall through to ordinary expression parsing when followed by `(` or `#`.
