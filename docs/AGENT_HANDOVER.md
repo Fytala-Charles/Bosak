@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `022b8c5` — XSLT gap cluster: @as prefix binding, TVT array serialization, HOF function subtype, copy-4901 prefix preservation, unicode-90 sweep skip
+**Commit:** `a4dcce7` — XSLT gap cluster: @as prefix binding, TVT array serialization, HOF function subtype, copy-4901 prefix preservation, unicode-90 sweep skip
 **Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the three actual failures visible in the partial sweep (as-0116, cvt-041, higher-order-functions-034) and added a harness skip for the nested-closure Fibonacci stack overflow (higher-order-functions-068).
 
 Expected state: **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `unicode-90` excluded from the sweep as very slow).
