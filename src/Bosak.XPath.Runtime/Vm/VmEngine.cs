@@ -225,6 +225,8 @@
 //                      | Charles Korthout | 2.119 | 22-08-2026     | Validate opcode reads mode; lax with no schema returns operand unchanged |
 //                      | Charles Korthout | 2.120 | 23-08-2026     | Schema-aware validate: built-in schema set, validate type QName, PSVI annotations, xsi:type ID/IDREF, NOTATION instance-of |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.121 | 23-08-2026     | HOF function-item instance-of for element kind-test result types without schema (hof-039/053) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -10653,16 +10655,22 @@ public static class VmEngine
     /// <summary>
     /// Checks whether an element(N, T1) / attribute(N, T1) sequence type is a subtype of
     /// another element(N, T2) / attribute(N, T2) type by comparing names and walking the
-    /// schema type hierarchy for the type parts.
+    /// schema type hierarchy for the type parts. Built-in schema types (xs:anyType, etc.)
+    /// are compared even when no user schema is imported (hof-039 / hof-053).
     /// </summary>
     private static bool IsElementOrAttributeSchemaSubtype(string actualType, string testType, EvaluationContext context)
     {
-        if (context.SchemaSet is null)
-            return false;
+        static string StripOuterOccurrence(string s)
+        {
+            s = s.Trim();
+            if (s.Length > 0 && "?+*".Contains(s[^1]))
+                return s[..^1].TrimEnd();
+            return s;
+        }
 
-        if (!TryGetElementAttributeKindTestParts(actualType, out var actualKind, out var actualName, out var actualTypePart))
+        if (!TryGetElementAttributeKindTestParts(StripOuterOccurrence(actualType), out var actualKind, out var actualName, out var actualTypePart))
             return false;
-        if (!TryGetElementAttributeKindTestParts(testType, out var testKind, out var testName, out var testTypePart))
+        if (!TryGetElementAttributeKindTestParts(StripOuterOccurrence(testType), out var testKind, out var testName, out var testTypePart))
             return false;
         if (actualKind != testKind)
             return false;
@@ -10672,9 +10680,21 @@ public static class VmEngine
         if (testName != "*" && actualName != testName)
             return false;
 
-        // If no type part is specified, the kind/name check is sufficient.
-        if (actualTypePart is null || testTypePart is null)
-            return true;
+        // A missing type part defaults to xs:anyType; the wildcard "*" also means xs:anyType.
+        actualTypePart = string.IsNullOrEmpty(actualTypePart) || actualTypePart == "*" ? "xs:anyType" : actualTypePart;
+        testTypePart = string.IsNullOrEmpty(testTypePart) || testTypePart == "*" ? "xs:anyType" : testTypePart;
+
+        // XSD 1.1 nillability marker '?' on the type part: a non-nillable type is a subtype of
+        // a nillable one, but a nillable type is not a subtype of a non-nillable one.
+        bool actualNillable = actualTypePart.EndsWith("?");
+        bool testNillable = testTypePart.EndsWith("?");
+        if (actualNillable && !testNillable)
+            return false;
+
+        if (actualTypePart.EndsWith("?"))
+            actualTypePart = actualTypePart[..^1].TrimEnd();
+        if (testTypePart.EndsWith("?"))
+            testTypePart = testTypePart[..^1].TrimEnd();
 
         try
         {
@@ -10805,7 +10825,9 @@ public static class VmEngine
             "notation" => ["anyatomictype"],
             "hexbinary" => ["anyatomictype"],
             "base64binary" => ["anyatomictype"],
-            "anyatomictype" => ["item()"],
+            "anyatomictype" => ["anysimpletype"],
+            "anysimpletype" => ["anytype"],
+            "anytype" => ["item()"],
             "element()" => ["node()"],
             "attribute()" => ["node()"],
             "text()" => ["node()"],

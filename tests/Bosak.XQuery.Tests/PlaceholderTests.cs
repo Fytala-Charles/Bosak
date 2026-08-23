@@ -88,6 +88,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.30  | 22-08-2026     | Added validate expression and fn:load-xquery-module schema propagation regression tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.31  | 23-08-2026     | Added function-item instance-of regression tests for element kind-test result types (hof-039/hof-053) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.IO;
@@ -3420,6 +3422,52 @@ public class PlaceholderTests
             .Evaluate(ctx);
         Assert.Equal(XdmValueKind.Node, result.Kind);
         Assert.Equal("root", result.NodeValue!.LocalName);
+    }
+
+    [Fact]
+    public void FunctionItem_InstanceOf_ElementResultType_WithSchemaType()
+    {
+        // hof-039: instance-of on a user-defined function whose declared return type is
+        // element(e)? must accept element()/element(e) supertypes and element(e, xs:anyType?)
+        // nillable supertypes, but reject element(*, xs:untyped).
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare function local:f($x as xs:long, $y as xs:NCName) as element(e)? { <e x=\"{$x}\" y=\"{$y}\"/> }; " +
+            "string-join((" +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element()?," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element()*," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(e)*," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(e, xs:anyType?)*," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(*, xs:anyType?)?," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(*, xs:untyped)?" +
+            "), ' ')");
+        var result = executable.Evaluate(new XQueryContext());
+        Assert.Equal("true true true true true false", result.ToString());
+    }
+
+    [Fact]
+    public void FunctionItem_InstanceOf_ElementResultType_WithAnyAtomicType()
+    {
+        // hof-053: instance-of on a user-defined function whose declared return type is
+        // element(e, xs:anyAtomicType) must accept element()/element(e) supertypes and
+        // xs:anyType/xs:anyType? supertypes, but reject element(*, xs:untyped).
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile(
+            "declare function local:f($x as xs:long, $y as xs:NCName) as element(e, xs:anyAtomicType) { <e x=\"{$x}\" y=\"{$y}\"/> }; " +
+            "string-join((" +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element()," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element()+," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element()?," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element()*," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(e)*," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(e, xs:anyType?)*," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(*, xs:anyType?)?," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(e, xs:anyType)*," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(*, xs:anyType)?," +
+            "  local:f#2 instance of function(xs:long, xs:NCName) as element(*, xs:untyped)?" +
+            "), ' ')");
+        var result = executable.Evaluate(new XQueryContext());
+        Assert.Equal("true true true true true true true true true false", result.ToString());
     }
 
     private static List<long> ToIntegers(XdmValue value)
