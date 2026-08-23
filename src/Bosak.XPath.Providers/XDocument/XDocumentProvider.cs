@@ -45,6 +45,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.18  | 21-08-2026     | Expose ValidateXDocument for in-memory schema validation (fn:json-to-xml validate)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.19  | 23-08-2026     | Annotate constructed elements so they report xs:anyType instead of xs:untyped |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -120,6 +122,10 @@ public static class XDocumentProvider
         // Mark XML 1.1 constructed trees so the adapter knows to decode encoded names.
         if (spec.Xml11Mode)
             element.AddAnnotation(Xml11Annotation.Instance);
+
+        // XDM: elements created by an element constructor have type annotation xs:anyType,
+        // while elements parsed from an unvalidated document have type annotation xs:untyped.
+        element.AddAnnotation(ConstructedElementAnnotation.Instance);
 
         // Declare prefixes so serialization uses the source prefixes rather than generated ones.
         // Explicit xmlns declarations in the constructor always win over generated ones.

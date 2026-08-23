@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 21-08-2026     | Added IsIdref accessor for schema-validated IDREF nodes                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 23-08-2026     | Added IsConstructedElement accessor for XQuery-constructed element type annotations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -107,6 +109,14 @@ public interface IXdmNode
     /// according to its schema element declaration.
     /// </summary>
     bool IsNilled => false;
+
+    /// <summary>
+    /// Gets a value indicating whether this element node was created by an XQuery element
+    /// constructor. Constructed elements have the XDM type annotation <c>xs:anyType</c> when
+    /// they are not schema-validated, while elements parsed from an unvalidated document have
+    /// the type annotation <c>xs:untyped</c>.
+    /// </summary>
+    bool IsConstructedElement => false;
 
     /// <summary>Gets the parent node, or null if this is the root.</summary>
     IXdmNode? Parent { get; }

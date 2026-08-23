@@ -227,6 +227,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.121 | 23-08-2026     | HOF function-item instance-of for element kind-test result types without schema (hof-039/053) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.122 | 23-08-2026     | document-node() matches empty document nodes; constructed elements have xs:anyType type annotation |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -8100,8 +8102,15 @@ public static class VmEngine
             return nillableType;
         if (node.SchemaTypeAnnotation is not { } actual)
         {
-            // Untyped element: only xs:anyType and xs:untyped match.
-            return targetNs == XmlSchema.Namespace && targetLocal.ToLowerInvariant() is "anytype" or "untyped";
+            // Untyped parsed element: xs:anyType and xs:untyped both match.
+            // Constructed element (XQuery direct/computed constructor): XDM type annotation
+            // is xs:anyType, so xs:untyped must not match (K2-DirectConElemContent-35a).
+            if (targetNs != XmlSchema.Namespace)
+                return false;
+            var targetLower = targetLocal.ToLowerInvariant();
+            if (node.IsConstructedElement)
+                return targetLower is "anytype";
+            return targetLower is "anytype" or "untyped";
         }
         return IsSchemaTypeSubtype(context, actual.NamespaceUri, actual.LocalName, targetNs, targetLocal);
     }
@@ -9410,6 +9419,14 @@ public static class VmEngine
         {
             if (!value.IsNode || value.NodeValue.NodeKind != XdmNodeKind.Document)
                 return false;
+            // Preserve the original case of the nested kind test (e.g. element(Root) or
+            // schema-element(j:array)).
+            var casePreserved = GetCasePreservedTypeName(typeName);
+            var inner = casePreserved.Substring("document-node(".Length, casePreserved.Length - "document-node(".Length - 1).Trim();
+            // Bare document-node() matches any document node; only the parameterized form
+            // requires exactly one child element and matches it against the inner test.
+            if (string.IsNullOrEmpty(inner))
+                return true;
             var childElems = new List<XdmValue>();
             foreach (var c in value.NodeValue.Axis(XdmAxis.Child))
             {
@@ -9418,10 +9435,6 @@ public static class VmEngine
             }
             if (childElems.Count != 1)
                 return false;
-            // Preserve the original case of the nested kind test (e.g. element(Root) or
-            // schema-element(j:array)).
-            var casePreserved = GetCasePreservedTypeName(typeName);
-            var inner = casePreserved.Substring("document-node(".Length, casePreserved.Length - "document-node(".Length - 1);
             return ValueMatchesType(XdmValue.FromNode(childElems[0].NodeValue!), inner, context);
         }
 

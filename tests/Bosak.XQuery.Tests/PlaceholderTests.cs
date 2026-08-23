@@ -90,9 +90,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.31  | 23-08-2026     | Added function-item instance-of regression tests for element kind-test result types (hof-039/hof-053) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.32  | 23-08-2026     | Added document-node() and constructed-element type-annotation regression tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Ast;
@@ -1971,7 +1975,7 @@ public class PlaceholderTests
     public void XQuery_DeclareVariable_ElementAtomicQuestionMark_Allowed()
     {
         var compiler = new XQueryCompiler();
-        var result = compiler.Compile("declare variable $v as element(*, xs:untyped?)+ := <e/>; exists($v/*)")
+        var result = compiler.Compile("declare variable $v as element(*, xs:anyType?)+ := <e/>; exists($v/*)")
             .Evaluate(new XQueryContext());
 
         Assert.Equal(XdmValueKind.Boolean, result.Kind);
@@ -3492,5 +3496,54 @@ public class PlaceholderTests
             items.Add(item.StringValue);
         }
         return items;
+    }
+
+    [Fact]
+    public void XQuery_EmptyDocumentConstructor_IsDocumentNode()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("document {} instance of document-node()");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_RootOfEmptyDocumentConstructor_IsDocumentNode()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("root(document {()}) instance of document-node()");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void XQuery_AncestorOrSelfOfEmptyDocumentConstructor_IsDocumentNode()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("document {()}/ancestor-or-self::node()");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.True(result.IsSequence);
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item);
+        Assert.Single(items);
+        Assert.Equal(Bosak.XPath.Core.Xdm.XdmNodeKind.Document, items[0].NodeValue.NodeKind);
+    }
+
+    [Fact]
+    public void XQuery_ConstructedElement_IsNotUntyped()
+    {
+        var compiler = new XQueryCompiler();
+        var executable = compiler.Compile("<e/> instance of element(*, xs:untyped)");
+        var ctx = new XQueryContext();
+        var result = executable.Evaluate(ctx);
+
+        Assert.False(result.BooleanValue);
     }
 }

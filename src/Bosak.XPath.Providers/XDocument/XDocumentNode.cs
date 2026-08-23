@@ -64,6 +64,8 @@
 //                      | Charles Korthout | 0.19  | 22-08-2026     | Preserve lexical timezone offsets in schema-validated date/time typed values            |
 //                      | Charles Korthout | 0.20  | 23-08-2026     | QName/NOTATION typed values with in-scope resolver; declared schema type; xsi:type ID/IDREF detection |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.21  | 23-08-2026     | IsConstructedElement recognizes constructed elements; document-node() matches empty documents |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -715,6 +717,16 @@ public sealed class XDocumentNode : IXdmNode
             if (_isNamespaceNode || _node is not XElement element)
                 return false;
             return element.GetSchemaInfo()?.IsNil ?? false;
+        }
+    }
+
+    public bool IsConstructedElement
+    {
+        get
+        {
+            if (_isNamespaceNode || _node is not XElement element)
+                return false;
+            return element.Annotation<ConstructedElementAnnotation>() is not null;
         }
     }
 
