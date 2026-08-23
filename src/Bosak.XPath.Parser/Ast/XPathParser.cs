@@ -110,6 +110,8 @@
 //                      | Charles Korthout | 1.51  | 22-08-2026     | Treat 'validate' as a contextual XQuery keyword (Name token) |
 //                      | Charles Korthout | 1.52  | 23-08-2026     | Parse XQuery validate type QName { Expr } syntax |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.53  | 23-08-2026     | Allow keywords as unprefixed function names when followed by '(' or '#' (xquery30keywords5) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -326,10 +328,16 @@ public sealed class XPathParser
             TokenKind.KeywordFor when Peek(1).Kind == TokenKind.Dollar => ParseForExpr(),
             TokenKind.KeywordFor when _allowFullFlwor && IsWindowKeyword(Peek(1)) => ParseForExpr(),
             TokenKind.KeywordLet when Peek(1).Kind == TokenKind.Dollar => ParseLetExpr(),
+            // 'some'/'every' are quantifier keywords only when not followed by '(' or '#'.
+            // When they are, they are ordinary function names (xquery30keywords5).
+            TokenKind.KeywordSome or TokenKind.KeywordEvery when Peek(1).Kind is TokenKind.LParen or TokenKind.Hash => ParseOrExpr(),
             TokenKind.KeywordSome or TokenKind.KeywordEvery => ParseQuantifiedExpr(),
             // 'if' is the conditional keyword only when followed by '('. Otherwise it
             // is an ordinary name (e.g., a name test) (K2-NameTest-5).
             TokenKind.KeywordIf when Peek(1).Kind == TokenKind.LParen => ParseIfExpr(),
+            // 'try' introduces try/catch only when followed by '{'. When followed by '(' or '#'
+            // it is an ordinary function name (xquery30keywords5).
+            TokenKind.KeywordTry when Peek(1).Kind is TokenKind.LParen or TokenKind.Hash => ParseOrExpr(),
             TokenKind.KeywordTry => ParseTryExpr(),
             // switch/typeswitch are XQuery-only ExprSingle forms; 'switch'/'typeswitch'
             // followed by '(' anywhere else remains an ordinary name (K2-NameTest-*).
@@ -1895,7 +1903,10 @@ public sealed class XPathParser
 
             case TokenKind.Name:
                 var name = GetString(Current);
-                if (_allowFullFlwor && name == "validate")
+                // 'validate' introduces a validate expression only when followed by '{'
+                // (or by 'strict'/'lax'/'type' and then '{'). When followed by '(' or '#'
+                // it is an ordinary function name (xquery30keywords5).
+                if (_allowFullFlwor && name == "validate" && Peek(1).Kind != TokenKind.LParen && Peek(1).Kind != TokenKind.Hash)
                     return ParseValidateExpression(start);
                 if (_allowFullFlwor && IsComputedConstructorForm(name))
                     return ParseComputedConstructor(start);
@@ -1920,13 +1931,6 @@ public sealed class XPathParser
                     return ParseNamedFunctionRef(start);
                 throw new ParseException($"Unexpected name '{name}' in primary expression", start);
 
-            case TokenKind.ValueIs:
-                // 'is' is an operator keyword, but not a reserved function name,
-                // so 'is()' is a valid function call (K-NodeSame-6).
-                if (Peek(1).Kind == TokenKind.LParen)
-                    return ParseFunctionCall(start);
-                throw new ParseException($"Unexpected token {Current.Kind} in primary expression", start);
-
             case TokenKind.Percent:
                 // Annotations on an inline function expression (annotation-3/30/31/32).
                 // Annotations are an XQuery-only grammar extension (inline-fn-016).
@@ -1950,7 +1954,21 @@ public sealed class XPathParser
                 return ParseSquareArrayConstructor(start);
 
             default:
-                throw new ParseException($"Unexpected token {Current.Kind} in primary expression", start);
+                // XQuery allows most keywords to be used as function names when they are
+                // followed by '(' or '#' in a primary-expression context (xquery30keywords5).
+                // Reserved function names (e.g., 'if', 'function', 'map', 'array') remain
+                // rejected; they are handled by dedicated grammar rules above.
+                {
+                    var kwName = GetString(Current);
+                    if (Current.Kind != TokenKind.Name && !ReservedFunctionNames.Contains(kwName))
+                    {
+                        if (Peek(1).Kind == TokenKind.LParen)
+                            return ParseFunctionCall(start);
+                        if (Peek(1).Kind == TokenKind.Hash)
+                            return ParseNamedFunctionRef(start);
+                    }
+                    throw new ParseException($"Unexpected token {Current.Kind} in primary expression", start);
+                }
         }
     }
 

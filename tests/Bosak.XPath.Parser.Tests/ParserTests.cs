@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 22-08-2026     | Added cast-as followed by +/* operator regression tests                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 23-08-2026     | Added keyword-as-unprefixed-function-name regression tests                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -677,5 +679,98 @@ public class ParserTests
         Assert.IsType<ArgumentPlaceholderNode>(call.Arguments[0]);
         var call2 = AssertParse<FunctionCallNode>("fn:exists(?())");
         Assert.IsType<LookupNode>(call2.Arguments[0]);
+    }
+
+    [Theory]
+    [InlineData("and")]
+    [InlineData("or")]
+    [InlineData("div")]
+    [InlineData("mod")]
+    [InlineData("idiv")]
+    [InlineData("union")]
+    [InlineData("intersect")]
+    [InlineData("except")]
+    [InlineData("to")]
+    [InlineData("eq")]
+    [InlineData("ne")]
+    [InlineData("lt")]
+    [InlineData("le")]
+    [InlineData("gt")]
+    [InlineData("ge")]
+    [InlineData("is")]
+    [InlineData("instance")]
+    [InlineData("of")]
+    [InlineData("treat")]
+    [InlineData("cast")]
+    [InlineData("castable")]
+    [InlineData("as")]
+    [InlineData("then")]
+    [InlineData("else")]
+    [InlineData("for")]
+    [InlineData("let")]
+    [InlineData("some")]
+    [InlineData("every")]
+    [InlineData("in")]
+    [InlineData("return")]
+    [InlineData("satisfies")]
+    [InlineData("try")]
+    [InlineData("catch")]
+    [InlineData("validate")]
+    public void Keyword_FunctionCall_Allowed(string keyword)
+    {
+        // xquery30keywords5: most XPath/XQuery keywords can be used as unprefixed
+        // function names when followed by '(' in a primary-expression context.
+        var node = XPathParser.Parse($"{keyword}()", allowFullFlwor: true);
+        var call = Assert.IsType<FunctionCallNode>(node);
+        Assert.Equal(keyword, call.LocalName);
+    }
+
+    [Theory]
+    [InlineData("and")]
+    [InlineData("or")]
+    [InlineData("div")]
+    [InlineData("for")]
+    [InlineData("try")]
+    [InlineData("validate")]
+    public void Keyword_NamedFunctionRef_Allowed(string keyword)
+    {
+        // Keywords can also be used as named function references when followed by '#'.
+        var node = XPathParser.Parse($"{keyword}#0", allowFullFlwor: true);
+        var nf = Assert.IsType<NamedFunctionRefNode>(node);
+        Assert.Equal(keyword, nf.LocalName);
+        Assert.Equal(0, nf.Arity);
+    }
+
+    [Fact]
+    public void ValidateExpression_StillParsed_WithBrace()
+    {
+        // validate{...} must remain a validate expression, not a function call.
+        var node = XPathParser.Parse("validate{<a/>}", allowFullFlwor: true);
+        Assert.IsType<ValidateExpressionNode>(node);
+    }
+
+    [Fact]
+    public void QuantifiedExpression_StillParsed_WithVariableBinding()
+    {
+        // some $x in ... satisfies ... must remain a quantified expression, not a function call.
+        var node = XPathParser.Parse("some $x in (1,2) satisfies $x gt 0", allowFullFlwor: true);
+        Assert.IsType<QuantifiedExpressionNode>(node);
+    }
+
+    [Fact]
+    public void TryCatchExpression_StillParsed_WithBrace()
+    {
+        // try{...} catch * {...} must remain a try/catch expression, not a function call.
+        var node = XPathParser.Parse("try{1 div 0}catch *{0}", allowFullFlwor: true);
+        Assert.IsType<TryCatchNode>(node);
+    }
+
+    [Fact]
+    public void FlworExpression_StillParsed_WithVariableBinding()
+    {
+        // for $x in ... return ... must remain a FLWOR expression, not a function call.
+        // A simple for clause is represented directly as a ForExpressionNode.
+        var node = XPathParser.Parse("for $x in 1 to 3 return $x", allowFullFlwor: true);
+        Assert.IsType<ForExpressionNode>(node);
     }
 }
