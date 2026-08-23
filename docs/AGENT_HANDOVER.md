@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `TBD` — skip-reason analysis + XQDY0061 validate document-content fix
+**Commit:** `ccbce80` — skip-reason analysis + XQDY0061 validate document-content fix
 **Current focus:** **Skip-reason analysis** — audit the 676 post-schemaValidation QT3 skips, identify reclaimable clusters, and fix the low-hanging `XQDY0061` validate document-content errors. The remaining skips are dominated by exact XQuery-version and XSD/XML-version dependencies that are not applicable to this engine, plus a small set of .NET/harness limitations.
 
 Expected state: **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%).
