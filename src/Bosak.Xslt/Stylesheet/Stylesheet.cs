@@ -80,6 +80,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.39  | 24-08-2026     | XTSE0500/0550 template attribute validation; accept #unnamed in template mode list      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.40  | 24-08-2026     | XTSE0280 prefix binding validation for XSLT names and mode tokens                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2345,7 +2347,7 @@ public sealed class Stylesheet
                         throw new InvalidOperationException("XTSE0500: xsl:template with no name attribute must not have a visibility attribute.");
 
                     if (modeAttr != null)
-                        ValidateTemplateModeAttribute(modeAttr.Value);
+                        ValidateTemplateModeAttribute(elem, modeAttr.Value);
                 }
 
                 // XTSE0020: validate lexical names and disallowed attribute values.
@@ -2369,8 +2371,14 @@ public sealed class Stylesheet
                 if (localName == "apply-templates")
                 {
                     var modeAttr = elem.Attribute("mode") ?? elem.Attribute("_mode");
-                    if (modeAttr != null && !IsValidModeValue(modeAttr.Value))
-                        throw new InvalidOperationException($"XTSE0020: Invalid mode value '{modeAttr.Value}' on xsl:apply-templates.");
+                    if (modeAttr != null)
+                    {
+                        var modeVal = modeAttr.Value.Trim();
+                        if (!IsValidModeValue(modeVal))
+                            throw new InvalidOperationException($"XTSE0020: Invalid mode value '{modeVal}' on xsl:apply-templates.");
+                        if (modeVal is not ("#current" or "#default" or "#unnamed" or "#all"))
+                            ValidateXsltName(elem, modeVal, "xsl:apply-templates/@mode");
+                    }
                 }
 
                 // xsl:param tunnel restrictions.
@@ -2509,7 +2517,10 @@ public sealed class Stylesheet
             if (!IsValidNCName(local))
                 throw new InvalidOperationException($"XTSE0020: The local part '{local}' in '{name}' for {construct} is not a valid NCName.");
 
-            var ns = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+            var nsDecl = element.GetNamespaceOfPrefix(prefix);
+            if (nsDecl == null)
+                throw new InvalidOperationException($"XTSE0280: The prefix '{prefix}' in '{name}' for {construct} is not declared.");
+            var ns = nsDecl.NamespaceName;
             return (local, ns);
         }
 
@@ -2630,7 +2641,7 @@ public sealed class Stylesheet
     /// if the list is empty, contains duplicates, contains an invalid token, or
     /// contains <c>#all</c> together with any other value.
     /// </summary>
-    private static void ValidateTemplateModeAttribute(string value)
+    private static void ValidateTemplateModeAttribute(XElement element, string value)
     {
         var trimmed = value.Trim();
         if (string.IsNullOrEmpty(trimmed))
@@ -2663,6 +2674,11 @@ public sealed class Stylesheet
             else if (!IsValidModeValue(token))
             {
                 throw new InvalidOperationException($"XTSE0550: Invalid mode token '{token}' in xsl:template/@mode.");
+            }
+            else
+            {
+                // QName/EQName mode token: ensure any prefix is declared (XTSE0280).
+                ValidateXsltName(element, token, "xsl:template/@mode");
             }
 
             if (!seen.Add(token))
