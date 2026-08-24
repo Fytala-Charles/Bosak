@@ -19,6 +19,10 @@
 
 ## 0. Recent Changes
 
+- **2026-08-24** — XSLT: **XTSE0808 static-error cluster (`error-0808*`)** — `Stylesheet.ValidateInstructionTree` now validates that every non-special token in an `exclude-result-prefixes` value names a namespace prefix that is in scope on the owning element. This covers `xsl:stylesheet`/`xsl:transform/@exclude-result-prefixes` and `xsl:exclude-result-prefixes` on literal result elements. The W3C `error-0808*` cluster is now **3/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.42).
+  - Verification: `error-0808*` 3/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.
+
 - **2026-08-24** — XSLT: **XTSE0710 static-error cluster (`error-0710*`)** — `Stylesheet.ValidateInstructionTree` now validates `use-attribute-sets` references on `xsl:copy`, `xsl:element`, and literal result elements, ensuring every token is a valid EQName and matches a declared `xsl:attribute-set` across the whole stylesheet. The W3C `error-0710*` cluster is now **4/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.41), `src/Bosak.Xslt/Stylesheet/AttributeSetDefinition.cs` (header → 0.2), `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.22).
   - Verification: `error-0710*` 4/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.

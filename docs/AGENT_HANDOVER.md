@@ -1,12 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-24
-**Commit:** `dcc2c74` — XSLT: XTSE0710 use-attribute-sets validation and EQName fixes
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0710*` XTSE0710 cluster and kept the full XSLT sweep at 0 failures.
-**Next cluster:** `error-0808*` (XTSE0808 — invalid `exclude-result-prefixes` tokens), 3 remaining failures.
+**Commit:** `15bbe09` — XSLT: XTSE0808 exclude-result-prefixes prefix binding validation
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0808*` XTSE0808 cluster and kept the full XSLT sweep at 0 failures.
 **Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0710 static error cluster)
+## This Session Changes (XTSE0808 static error cluster)
+
+1. **`exclude-result-prefixes` prefix binding validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - Added `ValidateExcludeResultPrefixesValue` helper: validates that every non-special token in an `exclude-result-prefixes` value is a namespace prefix that is in scope on the owning element.
+   - Extended `XTSE0808` checks to:
+     - `xsl:stylesheet`/`xsl:transform/@exclude-result-prefixes`
+     - `xsl:exclude-result-prefixes` on literal result elements
+   - `#all` and `#default` are recognized and skipped; `#default` is left for `XTSE0809`.
+   - Header bumped: `Stylesheet.cs` → 2.42.
+
+2. **Results** —
+   - `error-0808*` cluster: 3 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,895 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0710 static error cluster)
 
 1. **`use-attribute-sets` reference validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - Added `ValidateUseAttributeSetsValue` helper: validates that a `use-attribute-sets` value is a whitespace-separated list of EQNames and that each name matches a declared `xsl:attribute-set` across the whole stylesheet (imports/includes included).
