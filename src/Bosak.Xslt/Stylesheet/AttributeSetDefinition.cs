@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 07-06-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 24-08-2026     | FromElement parses Q{uri}local EQNames for attribute-set names                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -64,17 +66,30 @@ public sealed class AttributeSetDefinition
         string localName;
         string nsUri;
 
-        int colon = nameVal.IndexOf(':');
-        if (colon >= 0)
+        // EQName form: Q{uri}local
+        if (nameVal.Length > 2 && nameVal[0] == 'Q' && nameVal[1] == '{')
         {
-            var prefix = nameVal.Substring(0, colon);
-            localName = nameVal.Substring(colon + 1);
-            nsUri = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+            int closeBrace = nameVal.IndexOf('}');
+            if (closeBrace < 2 || closeBrace == nameVal.Length - 1)
+                return null;
+
+            nsUri = nameVal.Substring(2, closeBrace - 2);
+            localName = nameVal.Substring(closeBrace + 1);
         }
         else
         {
-            localName = nameVal;
-            nsUri = "";
+            int colon = nameVal.IndexOf(':');
+            if (colon >= 0)
+            {
+                var prefix = nameVal.Substring(0, colon);
+                localName = nameVal.Substring(colon + 1);
+                nsUri = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+            }
+            else
+            {
+                localName = nameVal;
+                nsUri = "";
+            }
         }
 
         var useAttrSets = element.Attribute("use-attribute-sets")?.Value;

@@ -2,10 +2,26 @@
 
 **Date:** 2026-08-24
 **Commit:** uncommitted on `fd49b09` — XSLT: XTSE0280 prefix binding validation for XSLT names and mode tokens
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0280*` XTSE0280 cluster and kept the full XSLT sweep at 0 failures.
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0710*` XTSE0710 cluster and kept the full XSLT sweep at 0 failures.
 **Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0280 static error cluster)
+## This Session Changes (XTSE0710 static error cluster)
+
+1. **`use-attribute-sets` reference validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - Added `ValidateUseAttributeSetsValue` helper: validates that a `use-attribute-sets` value is a whitespace-separated list of EQNames and that each name matches a declared `xsl:attribute-set` across the whole stylesheet (imports/includes included).
+   - Extended `XTSE0710` checks to:
+     - `xsl:copy/@use-attribute-sets`
+     - `xsl:element/@use-attribute-sets`
+     - `xsl:use-attribute-sets` on literal result elements
+   - Refactored the existing top-level `xsl:attribute-set/@use-attribute-sets` check to use the same helper.
+   - Header bumped: `Stylesheet.cs` → 2.41.
+
+2. **Results** —
+   - `error-0710*` cluster: 4 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,895 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0280 static error cluster)
 
 1. **Prefix binding validation for XSLT names and mode tokens** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateXsltName` now raises `XTSE0280` when a prefixed lexical QName uses a prefix that is not in scope on the defining element (e.g. `xsl:template/@name="unknown:name"`, `xsl:attribute-set/@name="unknown:name"`).

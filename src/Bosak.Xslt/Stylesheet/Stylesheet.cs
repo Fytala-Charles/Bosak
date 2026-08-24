@@ -82,6 +82,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.40  | 24-08-2026     | XTSE0280 prefix binding validation for XSLT names and mode tokens                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.41  | 24-08-2026     | XTSE0710 use-attribute-sets validation for copy/element/LRE                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1024,34 +1026,11 @@ public sealed class Stylesheet
         }
 
         // Static validation: xsl:attribute-set/@use-attribute-sets must reference
-        // existing attribute sets (XTSE0710).
-        var allAttrSets = GetAllAttributeSets();
+        // existing attribute sets (XTSE0710). Only enforced in XSLT 2.0 and later.
         foreach (var attrSet in _attributeSets)
         {
-            if (string.IsNullOrWhiteSpace(attrSet.UseAttributeSets))
-                continue;
-            foreach (var name in attrSet.UseAttributeSets.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                var trimmed = name.Trim();
-                if (string.IsNullOrEmpty(trimmed))
-                    continue;
-                string localName;
-                string nsUri;
-                int colon = trimmed.IndexOf(':');
-                if (colon >= 0)
-                {
-                    var prefix = trimmed.Substring(0, colon);
-                    localName = trimmed.Substring(colon + 1);
-                    nsUri = attrSet.Element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
-                }
-                else
-                {
-                    localName = trimmed;
-                    nsUri = "";
-                }
-                if (!allAttrSets.ContainsKey((localName, nsUri)))
-                    throw new InvalidOperationException($"XTSE0710: Attribute set '{trimmed}' is not defined.");
-            }
+            if (!string.IsNullOrWhiteSpace(attrSet.UseAttributeSets) && GetEffectiveVersion(attrSet.Element) >= 2.0)
+                ValidateUseAttributeSetsValue(attrSet.Element, attrSet.UseAttributeSets, "xsl:attribute-set/@use-attribute-sets");
         }
 
         // Static validation: check for disallowed attributes and children on XSLT instructions
@@ -1463,6 +1442,12 @@ public sealed class Stylesheet
                     if (!allowedElementAttributes.Contains(baseName))
                         throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:element.");
                 }
+
+                // XTSE0710: xsl:element/@use-attribute-sets must reference existing attribute sets (XSLT 2.0+).
+                // Only validated on the root stylesheet, where all imports/includes are known.
+                var elementUseAttrSets = elem.Attribute("use-attribute-sets");
+                if (elementUseAttrSets != null && this == _rootStylesheet && GetEffectiveVersion(elem) >= 2.0)
+                    ValidateUseAttributeSetsValue(elem, elementUseAttrSets.Value, "xsl:element/@use-attribute-sets");
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.
@@ -1685,6 +1670,12 @@ public sealed class Stylesheet
                         }
                     }
                 }
+
+                // XTSE0710: xsl:copy/@use-attribute-sets must reference existing attribute sets (XSLT 2.0+).
+                // Only validated on the root stylesheet, where all imports/includes are known.
+                var copyUseAttrSets = elem.Attribute("use-attribute-sets");
+                if (copyUseAttrSets != null && this == _rootStylesheet && GetEffectiveVersion(elem) >= 2.0)
+                    ValidateUseAttributeSetsValue(elem, copyUseAttrSets.Value, "xsl:copy/@use-attribute-sets");
             }
 
             // xsl:function static validation
@@ -2427,6 +2418,80 @@ public sealed class Stylesheet
                     }
                 }
             }
+
+            // XTSE0710: xsl:use-attribute-sets on literal result elements must reference existing attribute sets (XSLT 2.0+).
+            // Only validated on the root stylesheet, where all imports/includes are known.
+            if (!isXsltElement && this == _rootStylesheet && GetEffectiveVersion(elem) >= 2.0)
+            {
+                var lreUseAttrSets = elem.Attribute(XName.Get("use-attribute-sets", XslNamespace));
+                if (lreUseAttrSets != null)
+                    ValidateUseAttributeSetsValue(elem, lreUseAttrSets.Value, "literal result element/@xsl:use-attribute-sets");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates a <c>use-attribute-sets</c> value: a whitespace-separated list of EQNames,
+    /// each of which must match the name of a declared <c>xsl:attribute-set</c>.
+    /// Throws <c>XTSE0710</c> for malformed tokens, undeclared prefixes, or unknown attribute sets.
+    /// </summary>
+    private void ValidateUseAttributeSetsValue(XElement element, string rawValue, string construct)
+    {
+        if (string.IsNullOrWhiteSpace(rawValue))
+            return;
+
+        var allAttrSets = GetAllAttributeSets();
+        var tokens = rawValue.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        foreach (var token in tokens)
+        {
+            var trimmed = token.Trim();
+            if (string.IsNullOrEmpty(trimmed))
+                continue;
+
+            string localName;
+            string nsUri;
+
+            // EQName form: Q{uri}local
+            if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
+            {
+                int closeBrace = trimmed.IndexOf('}');
+                if (closeBrace < 2 || closeBrace == trimmed.Length - 1)
+                    throw new InvalidOperationException($"XTSE0710: Invalid attribute-set name '{trimmed}' in {construct}.");
+
+                nsUri = trimmed.Substring(2, closeBrace - 2);
+                localName = trimmed.Substring(closeBrace + 1);
+                if (!IsValidNCName(localName))
+                    throw new InvalidOperationException($"XTSE0710: Invalid attribute-set name '{trimmed}' in {construct}.");
+            }
+            else
+            {
+                // Lexical QName: [prefix:]local
+                int colon = trimmed.IndexOf(':');
+                if (colon >= 0)
+                {
+                    var prefix = trimmed.Substring(0, colon);
+                    localName = trimmed.Substring(colon + 1);
+                    if (!IsValidNCName(prefix))
+                        throw new InvalidOperationException($"XTSE0710: Invalid prefix '{prefix}' in attribute-set name '{trimmed}' in {construct}.");
+                    if (!IsValidNCName(localName))
+                        throw new InvalidOperationException($"XTSE0710: Invalid local name '{localName}' in attribute-set name '{trimmed}' in {construct}.");
+
+                    var nsDecl = element.GetNamespaceOfPrefix(prefix);
+                    if (nsDecl == null)
+                        throw new InvalidOperationException($"XTSE0710: Prefix '{prefix}' in attribute-set name '{trimmed}' in {construct} is not declared.");
+                    nsUri = nsDecl.NamespaceName;
+                }
+                else
+                {
+                    localName = trimmed;
+                    nsUri = "";
+                    if (!IsValidNCName(localName))
+                        throw new InvalidOperationException($"XTSE0710: Invalid attribute-set name '{trimmed}' in {construct}.");
+                }
+            }
+
+            if (!allAttrSets.ContainsKey((localName, nsUri)))
+                throw new InvalidOperationException($"XTSE0710: Attribute set '{trimmed}' referenced by {construct} is not defined.");
         }
     }
 

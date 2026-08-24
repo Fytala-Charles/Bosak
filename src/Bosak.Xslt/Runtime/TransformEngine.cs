@@ -198,6 +198,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.21  | 23-08-2026     | Map #default/#unnamed initial modes to DefaultMode before XTDE0045 ModeExists check      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.22  | 24-08-2026     | ApplyAttributeSets resolves Q{uri}local EQNames for use-attribute-sets lookup             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -6255,20 +6257,37 @@ public sealed class TransformEngine
             var trimmed = name.Trim();
             if (string.IsNullOrEmpty(trimmed)) continue;
 
-            // Resolve QName
+            // Resolve EQName or lexical QName
             string localName;
             string nsUri;
-            int colon = trimmed.IndexOf(':');
-            if (colon >= 0)
+            if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
             {
-                var prefix = trimmed.Substring(0, colon);
-                localName = trimmed.Substring(colon + 1);
-                nsUri = source.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                int closeBrace = trimmed.IndexOf('}');
+                if (closeBrace >= 2 && closeBrace < trimmed.Length - 1)
+                {
+                    nsUri = trimmed.Substring(2, closeBrace - 2);
+                    localName = trimmed.Substring(closeBrace + 1);
+                }
+                else
+                {
+                    localName = trimmed;
+                    nsUri = "";
+                }
             }
             else
             {
-                localName = trimmed;
-                nsUri = "";
+                int colon = trimmed.IndexOf(':');
+                if (colon >= 0)
+                {
+                    var prefix = trimmed.Substring(0, colon);
+                    localName = trimmed.Substring(colon + 1);
+                    nsUri = source.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                }
+                else
+                {
+                    localName = trimmed;
+                    nsUri = "";
+                }
             }
 
             var key = (localName, nsUri);
