@@ -19,6 +19,10 @@
 
 ## 0. Recent Changes
 
+- **2026-08-24** — XSLT: **XTSE0500/0550 static-error clusters (`error-0500*`, `error-0550*`)** — `Stylesheet.ValidateInstructionTree` now enforces `xsl:template` attribute constraints: a template must have `@match` or `@name`; `@mode`/`@priority` require `@match`; `@visibility` requires `@name`; and `@mode` is validated as a whitespace-separated list of mode names (rejecting empty lists, duplicates, invalid tokens, `#all` with other values, and `#current`). `#unnamed` is correctly accepted. The W3C `error-0500*` cluster is **4/0/0** and `error-0550*` is **6/0/0**; the full XSLT sweep is restored to **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.39).
+  - Verification: `error-0500*` 4/0/0; `error-0550*` 6/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.
+
 - **2026-08-24** — XSLT: **XTSE0120 static-error cluster (`error-0120*`)** — `Stylesheet.ValidateInstructionTree` now raises XTSE0120 when `xsl:stylesheet`, `xsl:transform`, or `xsl:package` contains non-whitespace text node children. The W3C `error-0120*` cluster is now **2/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.38).
   - Verification: `error-0120*` 2/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.

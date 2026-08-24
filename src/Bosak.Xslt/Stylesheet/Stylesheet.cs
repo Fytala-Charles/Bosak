@@ -78,6 +78,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.38  | 24-08-2026     | XTSE0120 top-level text-node validation for xsl:stylesheet/transform/package           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.39  | 24-08-2026     | XTSE0500/0550 template attribute validation; accept #unnamed in template mode list      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2318,6 +2320,32 @@ public sealed class Stylesheet
                             throw new InvalidOperationException($"XTSE0010: xsl:{child.Name.LocalName} is not permitted as a child of xsl:template.");
                         }
                     }
+
+                    // XTSE0500: xsl:template must have match or name; constraints on mode/priority/visibility.
+                    // XTSE0550: mode attribute list validation.
+                    var matchAttr = elem.Attribute("match") ?? elem.Attribute("_match");
+                    var nameAttr = elem.Attribute("name") ?? elem.Attribute("_name");
+                    var hasMatch = matchAttr != null && !string.IsNullOrWhiteSpace(matchAttr.Value);
+                    var hasName = nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value);
+
+                    if (!hasMatch && !hasName)
+                        throw new InvalidOperationException("XTSE0500: xsl:template must have a match or name attribute.");
+
+                    var modeAttr = elem.Attribute("mode") ?? elem.Attribute("_mode");
+                    var priorityAttr = elem.Attribute("priority") ?? elem.Attribute("_priority");
+                    var visibilityAttr = elem.Attribute("visibility") ?? elem.Attribute("_visibility");
+
+                    if (!hasMatch && modeAttr != null)
+                        throw new InvalidOperationException("XTSE0500: xsl:template with no match attribute must not have a mode attribute.");
+
+                    if (!hasMatch && priorityAttr != null)
+                        throw new InvalidOperationException("XTSE0500: xsl:template with no match attribute must not have a priority attribute.");
+
+                    if (!hasName && visibilityAttr != null)
+                        throw new InvalidOperationException("XTSE0500: xsl:template with no name attribute must not have a visibility attribute.");
+
+                    if (modeAttr != null)
+                        ValidateTemplateModeAttribute(modeAttr.Value);
                 }
 
                 // XTSE0020: validate lexical names and disallowed attribute values.
@@ -2594,6 +2622,52 @@ public sealed class Stylesheet
             return IsValidNCName(prefix) && IsValidNCName(local);
         }
         return IsValidNCName(trimmed);
+    }
+
+    /// <summary>
+    /// Validates the <c>mode</c> attribute of an <c>xsl:template</c> element.
+    /// The value is a whitespace-separated list of mode tokens. Throws <c>XTSE0550</c>
+    /// if the list is empty, contains duplicates, contains an invalid token, or
+    /// contains <c>#all</c> together with any other value.
+    /// </summary>
+    private static void ValidateTemplateModeAttribute(string value)
+    {
+        var trimmed = value.Trim();
+        if (string.IsNullOrEmpty(trimmed))
+            throw new InvalidOperationException("XTSE0550: The mode attribute of xsl:template must not be empty.");
+
+        var rawTokens = trimmed.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        if (rawTokens.Length == 0)
+            throw new InvalidOperationException("XTSE0550: The mode attribute of xsl:template must not be empty.");
+
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var raw in rawTokens)
+        {
+            var token = raw.Trim();
+            if (string.IsNullOrEmpty(token))
+                continue;
+
+            if (token == "#all")
+            {
+                if (rawTokens.Length > 1)
+                    throw new InvalidOperationException("XTSE0550: The mode attribute of xsl:template must not contain #all with other values.");
+            }
+            else if (token is "#default" or "#unnamed")
+            {
+                // Valid tokens for xsl:template/@mode.
+            }
+            else if (token == "#current")
+            {
+                throw new InvalidOperationException($"XTSE0550: Invalid mode token '{token}' in xsl:template/@mode.");
+            }
+            else if (!IsValidModeValue(token))
+            {
+                throw new InvalidOperationException($"XTSE0550: Invalid mode token '{token}' in xsl:template/@mode.");
+            }
+
+            if (!seen.Add(token))
+                throw new InvalidOperationException($"XTSE0550: Duplicate mode token '{token}' in xsl:template/@mode.");
+        }
     }
 
     private static bool IsYesNoValue(string value)

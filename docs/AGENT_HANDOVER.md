@@ -1,11 +1,31 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-24
-**Commit:** uncommitted on `e1e92f2` — XTSE0120 top-level text validation (XTSE0010/0020/0090 completed in previous steps)
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0120*` XTSE0120 cluster and kept the full XSLT sweep at 0 failures.
+**Commit:** uncommitted — XTSE0500/0550 template validation (regression fix for `#unnamed` mode)
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0500*` and `error-0550*` XTSE0500/0550 clusters and restored the full XSLT sweep to 0 failures.
 **Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0120 static error cluster)
+## This Session Changes (XTSE0500/0550 static error cluster)
+
+1. **`xsl:template` attribute validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - Added XTSE0500 check inside `ValidateInstructionTree`:
+     - A template must have `@match` or `@name`.
+     - If there is no `@match`, `@mode` and `@priority` are forbidden.
+     - If there is no `@name`, `@visibility` is forbidden.
+   - Added `ValidateTemplateModeAttribute` for XTSE0550:
+     - Rejects an empty mode list, duplicate tokens, and invalid tokens.
+     - Rejects `#all` mixed with other values.
+     - Rejects `#current` (valid only at runtime, not in a template declaration).
+     - Accepts `#default`, `#unnamed`, and valid QNames/EQNames (a regression from an initial over-strict implementation that rejected `#unnamed` has been fixed).
+   - Header bumped: `Stylesheet.cs` → 2.39.
+
+2. **Results** —
+   - `error-0500*` cluster: 4 passed / 0 failed / 0 skipped.
+   - `error-0550*` cluster: 6 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep restored to **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,895 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0120 static error cluster)
 
 1. **Top-level text node validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - Added XTSE0120 check: `xsl:stylesheet`, `xsl:transform`, and `xsl:package` must not have non-whitespace text node children.
