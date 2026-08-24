@@ -84,6 +84,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.41  | 24-08-2026     | XTSE0710 use-attribute-sets validation for copy/element/LRE                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.42  | 24-08-2026     | XTSE0808 exclude-result-prefixes prefix binding validation                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -734,6 +736,10 @@ public sealed class Stylesheet
             {
                 _excludedResultPrefixes.Add(token.Trim());
             }
+
+            // XTSE0808: every prefix token must be bound in scope (XSLT 2.0+).
+            if (GetEffectiveVersion(root) >= 2.0)
+                ValidateExcludeResultPrefixesValue(root, excludePrefixesAttr, "xsl:stylesheet/@exclude-result-prefixes");
         }
 
         // Validate extension-element-prefixes: reserved namespaces are not permitted.
@@ -1402,6 +1408,24 @@ public sealed class Stylesheet
                         or "inherit-namespaces";
                     if (!allowed && !IsForwardsCompatibleElement(elem))
                         throw new InvalidOperationException("XTSE0805");
+                }
+            }
+
+            // XTSE0808: validate exclude-result-prefixes tokens (XSLT 2.0+).
+            if (GetEffectiveVersion(elem) >= 2.0)
+            {
+                if (isXsltElement && localName is "stylesheet" or "transform")
+                {
+                    var erpAttr = elem.Attribute("exclude-result-prefixes");
+                    if (erpAttr != null)
+                        ValidateExcludeResultPrefixesValue(elem, erpAttr.Value, $"xsl:{localName}/@exclude-result-prefixes");
+                }
+                else if (!isXsltElement)
+                {
+                    var erpAttr = elem.Attribute(XName.Get("exclude-result-prefixes", XslNamespace))
+                        ?? elem.Attribute("exclude-result-prefixes");
+                    if (erpAttr != null)
+                        ValidateExcludeResultPrefixesValue(elem, erpAttr.Value, $"literal result element @{erpAttr.Name}");
                 }
             }
 
@@ -2492,6 +2516,28 @@ public sealed class Stylesheet
 
             if (!allAttrSets.ContainsKey((localName, nsUri)))
                 throw new InvalidOperationException($"XTSE0710: Attribute set '{trimmed}' referenced by {construct} is not defined.");
+        }
+    }
+
+    /// <summary>
+    /// Validates an <c>exclude-result-prefixes</c> value: a whitespace-separated list of
+    /// namespace prefixes, <c>#all</c>, or <c>#default</c>. Throws <c>XTSE0808</c> when a
+    /// prefix token has no namespace binding in scope on the owning element.
+    /// </summary>
+    private void ValidateExcludeResultPrefixesValue(XElement element, string rawValue, string construct)
+    {
+        if (string.IsNullOrWhiteSpace(rawValue))
+            return;
+
+        foreach (var token in rawValue.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var prefix = token.Trim();
+            if (string.IsNullOrEmpty(prefix) || prefix == "#all" || prefix == "#default")
+                continue;
+
+            var ns = element.GetNamespaceOfPrefix(prefix);
+            if (ns == null)
+                throw new InvalidOperationException($"XTSE0808: Namespace prefix '{prefix}' used in {construct} has no binding in scope.");
         }
     }
 
