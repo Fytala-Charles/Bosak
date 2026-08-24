@@ -6,16 +6,6 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : License.txt
-//                      | Charles Korthout | 6.17  | 27-07-2026     | GetErrorDetails handles XPathErrorException from the XPath/XQuery fn:error |
-//                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 6.18  | 01-08-2026     | EvaluateAvt compiles/evaluates with element-level xsl:version=1.0 backwards mode    |
-//                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 6.19  | 01-08-2026     | Top-level xsl:comment/PI mark principal-result content (comment-only results kept)  |
-//                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 6.20  | 01-08-2026     | copy-namespaces=no keeps the element's own prefix (default ns over axis-order prefix)|
-//                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 6.21  | 01-08-2026     | Global variable select/body honors the element's version=1.0 backwards mode          |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -196,8 +186,6 @@
 //                      | Charles Korthout | 6.15  | 15-07-2026     | fn:transform: global-context-item, default-mode routing, raw result extraction, absent principal output |
 //                      | Charles Korthout | 6.16  | 21-07-2026     | Set EvaluationContext.IsXsltMode=true for main transform context                          |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 6.16  | 19-07-2026     | xsl:analyze-string adapts to new flags-aware ParseRegexFlags/ValidateAndTranslatePattern |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.17  | 03-08-2026     | Accumulator contexts see global params; where-populated per-item emptiness (XSLT §8.4);  |
 //                      |                  |       |                | xsl:fork (sequential prongs); xsl:assert evaluated (ExecuteAssert, incl. function bodies);|
 //                      |                  |       |                | XTDE1480 temporary-output-state tracking; accumulator rule bodies via general engine     |
@@ -207,6 +195,8 @@
 //                      | Charles Korthout | 6.19  | 18-08-2026     | fn:transform result-document capture uses __xdm_doc__ wrapper for non-single-element content (fn-transform-2) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.20  | 23-08-2026     | Pass EvaluationContext through ConvertVariableValue for @as prefix resolution; flatten arrays in simple content |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.21  | 23-08-2026     | Map #default/#unnamed initial modes to DefaultMode before XTDE0045 ModeExists check      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -659,7 +649,9 @@ public sealed class TransformEngine
         _baseOutputUri = baseOutputUri;
         _context.CurrentOutputUri = baseOutputUri;
         _initialSource = source;
-        _initialMode = initialMode ?? _stylesheet.DefaultMode;
+        _initialMode = string.IsNullOrEmpty(initialMode) || initialMode == "#default" || initialMode == "#unnamed"
+            ? _stylesheet.DefaultMode
+            : ExpandModeName(initialMode, _stylesheet.Root);
         _startedWithNamedTemplate = false;
         _returnRawInitialTemplateResult = rawResult;
         _rawInitialTemplateResult = null;
@@ -839,11 +831,9 @@ public sealed class TransformEngine
             // fn:transform initial-match-selection: apply templates in the initial mode
             // to each item of the supplied selection (XSLT 3.0 §24.2).
             // When no initial mode is supplied, use the stylesheet's default mode.
-            var resolvedInitialMode = string.IsNullOrEmpty(initialMode)
+            var resolvedInitialMode = string.IsNullOrEmpty(initialMode) || initialMode == "#default" || initialMode == "#unnamed"
                 ? _stylesheet.DefaultMode
                 : ExpandModeName(initialMode, _stylesheet.Root);
-            if (resolvedInitialMode == "#unnamed")
-                resolvedInitialMode = "";
             _initialMode = resolvedInitialMode;
             // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
             if (!ModeExists(resolvedInitialMode))
@@ -903,10 +893,9 @@ public sealed class TransformEngine
             {
                 // Start transformation in the specified initial mode.
                 // Expand any namespace prefix in the initial mode name.
-                var resolvedInitialMode = ExpandModeName(initialMode, _stylesheet.Root);
-                // If the mode is #unnamed, treat it as the empty unnamed mode
-                if (resolvedInitialMode == "#unnamed")
-                    resolvedInitialMode = "";
+                var resolvedInitialMode = initialMode == "#default" || initialMode == "#unnamed"
+                    ? _stylesheet.DefaultMode
+                    : ExpandModeName(initialMode, _stylesheet.Root);
                 _initialMode = resolvedInitialMode;
                 // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
                 if (!ModeExists(resolvedInitialMode))

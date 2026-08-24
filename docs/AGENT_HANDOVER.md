@@ -1,12 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `a4dcce7` — XSLT gap cluster: @as prefix binding, TVT array serialization, HOF function subtype, copy-4901 prefix preservation, unicode-90 sweep skip
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the three actual failures visible in the partial sweep (as-0116, cvt-041, higher-order-functions-034) and added a harness skip for the nested-closure Fibonacci stack overflow (higher-order-functions-068).
+**Commit:** `a4a87c7` — XTDE0045 #default/#unnamed initial-mode fix, harness empty-result handling
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `#default`/`#unnamed` initial-mode XTDE0045 cluster in the `error` test set.
+**Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-Expected state: **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `unicode-90` excluded from the sweep as very slow).
+## This Session Changes (XTDE0045 initial-mode cluster)
 
-## This Session Changes (XSLT gap cluster)
+1. **XSLT `#default`/`#unnamed` initial-mode XTDE0045 fix** (`src/Bosak.Xslt/Runtime/TransformEngine.cs`) —
+   - `Transform`, `TransformAsync`, and the initial-template entry path now map `#default` and `#unnamed` to the stylesheet's `DefaultMode` before calling `ModeExists`.
+   - This makes the XTDE0045 "mode does not exist" check apply to the resolved mode, matching the spec for named initial modes.
+   - Fixes `error-0045aa` and `error-0045ab`.
+   - Header bumped: `TransformEngine.cs` → 6.21.
+
+2. **Harness empty/Undefined raw-result handling** (`tests/Bosak.Xslt.Conformance/Program.cs`) —
+   - `ResultAsDocument` now treats an empty or `Undefined` raw result as an empty document node during assertion evaluation.
+   - `assert-string-value` now handles `Undefined` results.
+   - Lets the `not(/node())` assertion in `error-0045aa`/`error-0045ab` pass.
+   - Header bumped: `Program.cs` → 3.16.
+
+## Previous Session Changes (XSLT gap cluster)
 
 1. **XSLT `xsl:variable/@as` prefix binding** (`src/Bosak.Xslt/Runtime/TransformEngine.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ConvertVariableValue` now accepts an `EvaluationContext` and passes it to `ValueMatchesType`/`TryCast` so prefixes such as `xsd:` in `@as="xsd:string"` resolve against the in-scope namespaces.

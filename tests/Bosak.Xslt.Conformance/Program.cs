@@ -60,6 +60,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.15  | 23-08-2026     | Skip unicode-90 set during full sweeps (catalog marks it very slow; 1460 tests)         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.16  | 23-08-2026     | ResultAsDocument treats empty/Undefined raw result as empty document; assert-string-value|
+//                      |                  |       |                | handles Undefined for error-0045aa/ab initial-mode assertions                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1542,7 +1545,7 @@ class Program
         var assertString = resultElem.Name.LocalName == "assert-string-value" ? resultElem : resultElem.Element(ns + "assert-string-value");
         if (assertString != null)
         {
-            return actual.StringValue == assertString.Value;
+            return (actual.IsUndefined ? string.Empty : actual.StringValue) == assertString.Value;
         }
 
         // assert-true
@@ -2334,7 +2337,7 @@ class Program
         try
         {
             var compiled = XPath31Expression.Compile(xpath);
-            var ctx = new EvaluationContext().WithFocus(actual, 1, 1);
+            var ctx = new EvaluationContext().WithFocus(ResultAsDocument(actual), 1, 1);
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)
@@ -2364,6 +2367,11 @@ class Program
     /// </summary>
     static XdmValue ResultAsDocument(XdmValue value)
     {
+        // An empty principal result tree is still a document node for the purposes
+        // of tree assertions such as not(/node()).
+        if (value.IsUndefined)
+            return XdmValue.FromNode(new XDocumentNode(new XDocument()));
+
         if (value.IsNode && value.NodeValue != null && value.NodeValue.NodeKind == XdmNodeKind.Document)
             return value;
 
