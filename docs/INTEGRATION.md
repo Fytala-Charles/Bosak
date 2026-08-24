@@ -19,6 +19,10 @@
 
 ## 0. Recent Changes
 
+- **2026-08-24** — XSLT: **XTSE0090 static-error cluster (`error-0090*`)** — `Stylesheet.ValidateInstructionTree` now enforces the XSLT attribute whitelist (XTSE0090) for `xsl:stylesheet`/`xsl:transform`, `xsl:template`, `xsl:apply-templates`, `xsl:apply-imports`, `xsl:call-template`, `xsl:attribute-set`, and `xsl:key`. The whitelists combine the standard XSLT attributes with element-specific ones, and unknown attributes are ignored in forwards-compatible mode. The W3C `error-0090*` cluster is now **14/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.37).
+  - Verification: `error-0090*` 14/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.
+
 - **2026-08-24** — XSLT: **XTSE0020 static-error cluster (`error-0020*`)** — `Stylesheet.ValidateInstructionTree` name and attribute-value validation now handles `Q{uri}local` EQNames before AVT detection, accepts XML 1.0 fifth edition / XML 1.1 NCName characters (e.g. `Ĳ`), recognizes `xsl:decimal-format/@exponent-separator`, validates decimal-format single-character attributes by Unicode code point count (supporting non-BMP symbols), and ignores unknown decimal-format attributes in forwards-compatible mode. The W3C `error-0020*` cluster is now **11/0/0** and the full XSLT sweep is restored to **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.36).
   - Verification: `error-0020*` 11/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.

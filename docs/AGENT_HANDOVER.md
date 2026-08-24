@@ -1,11 +1,22 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-24
-**Commit:** uncommitted on `1d7824b` — XTSE0020 static error cluster fixes (XTSE0010 completed in previous step)
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0020*` XTSE0020 cluster and restored the full XSLT sweep to 0 failures.
+**Commit:** uncommitted on `8792342` — XTSE0090 static error cluster fixes (XTSE0010/0020 completed in previous steps)
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0090*` XTSE0090 cluster and kept the full XSLT sweep at 0 failures.
 **Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0020 static error cluster)
+## This Session Changes (XTSE0090 static error cluster)
+
+1. **Attribute whitelist validation for XSLT elements** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - Added `ValidateAllowedAttributes` and `AllowedXsltAttributes` helpers.
+   - Added XTSE0090 checks for disallowed unprefixed attributes on `xsl:stylesheet`/`xsl:transform`, `xsl:template`, `xsl:apply-templates`, `xsl:apply-imports`, `xsl:call-template`, `xsl:attribute-set`, and `xsl:key`.
+   - Whitelists start with the standard XSLT attributes (`version`, `use-when`, `expand-text`, `default-mode`, `default-collation`, `xpath-default-namespace`, `exclude-result-prefixes`, `extension-element-prefixes`, `default-validation`, `input-type-annotations`) and add element-specific attributes.
+   - In forwards-compatible mode unknown attributes are ignored, matching existing behavior.
+   - Header bumped: `Stylesheet.cs` → 2.37.
+
+2. **Results** — `error-0090*` cluster: 14 passed / 0 failed / 0 skipped. Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+
+## Previous Session Changes (XTSE0020 static error cluster)
 
 1. **Static name and attribute value validation fixes** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateXsltName` now parses `Q{uri}local` EQName syntax before checking for attribute value templates, so EQNames such as `Q{http://example.com/ns}set1` are no longer rejected as AVTs.

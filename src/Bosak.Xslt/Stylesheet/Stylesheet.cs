@@ -74,6 +74,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.36  | 24-08-2026     | Fix XTSE0020 regressions: EQName/AVT ordering, XML 1.1 NCNames, decimal-format symbols   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.37  | 24-08-2026     | XTSE0090 attribute validation for XSLT elements (stylesheet, template, apply-* etc.)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2116,6 +2118,51 @@ public sealed class Stylesheet
                     }
                 }
 
+                // XTSE0090: validate allowed attributes on XSLT elements that do not yet
+                // have element-specific attribute whitelists elsewhere in this method.
+                if (localName is "stylesheet" or "transform")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                        "id", "default-mode", "default-validation",
+                        "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes"),
+                        IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "template")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                        "match", "name", "mode", "priority", "as", "visibility", "streamable"),
+                        IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "apply-templates")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                        "select", "mode"),
+                        IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "apply-imports")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(),
+                        IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "call-template")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                        "name"),
+                        IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "attribute-set")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                        "name", "use-attribute-sets", "visibility", "streamable"),
+                        IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "key")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                        "name", "match", "use", "collation", "composite"),
+                        IsForwardsCompatibleElement(elem));
+                }
+
                 // xsl:param parent and position validation.
                 if (localName == "param")
                 {
@@ -2563,6 +2610,44 @@ public sealed class Stylesheet
         foreach (var _ in value.EnumerateRunes())
             count++;
         return count;
+    }
+
+    /// <summary>
+    /// Throws <c>XTSE0090</c> if <paramref name="elem"/> has any unprefixed attribute
+    /// that is not in <paramref name="allowedAttributes"/>. In forwards-compatible mode
+    /// unknown attributes are ignored.
+    /// </summary>
+    private static void ValidateAllowedAttributes(XElement elem, string localName, HashSet<string> allowedAttributes, bool forwardsCompatible)
+    {
+        if (forwardsCompatible)
+            return;
+        foreach (var attr in elem.Attributes())
+        {
+            if (attr.IsNamespaceDeclaration)
+                continue;
+            var baseName = attr.Name.LocalName;
+            if (baseName.StartsWith("_"))
+                baseName = baseName.Substring(1);
+            if (attr.Name.NamespaceName == "" && !allowedAttributes.Contains(baseName))
+                throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:{localName}.");
+        }
+    }
+
+    /// <summary>
+    /// Builds an attribute whitelist starting with the XSLT standard attributes and adding
+    /// any element-specific attributes supplied in <paramref name="specificAttributes"/>.
+    /// </summary>
+    private static HashSet<string> AllowedXsltAttributes(params string[] specificAttributes)
+    {
+        var set = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "version", "use-when", "expand-text", "default-mode", "default-collation",
+            "xpath-default-namespace", "exclude-result-prefixes", "extension-element-prefixes",
+            "default-validation", "input-type-annotations"
+        };
+        foreach (var attr in specificAttributes)
+            set.Add(attr);
+        return set;
     }
 
     private static bool IsNewEachTimeValue(string value)
