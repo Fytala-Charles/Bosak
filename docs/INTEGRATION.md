@@ -19,6 +19,10 @@
 
 ## 0. Recent Changes
 
+- **2026-08-24** — XSLT: **XTSE0120 static-error cluster (`error-0120*`)** — `Stylesheet.ValidateInstructionTree` now raises XTSE0120 when `xsl:stylesheet`, `xsl:transform`, or `xsl:package` contains non-whitespace text node children. The W3C `error-0120*` cluster is now **2/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.38).
+  - Verification: `error-0120*` 2/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.
+
 - **2026-08-24** — XSLT: **XTSE0090 static-error cluster (`error-0090*`)** — `Stylesheet.ValidateInstructionTree` now enforces the XSLT attribute whitelist (XTSE0090) for `xsl:stylesheet`/`xsl:transform`, `xsl:template`, `xsl:apply-templates`, `xsl:apply-imports`, `xsl:call-template`, `xsl:attribute-set`, and `xsl:key`. The whitelists combine the standard XSLT attributes with element-specific ones, and unknown attributes are ignored in forwards-compatible mode. The W3C `error-0090*` cluster is now **14/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.37).
   - Verification: `error-0090*` 14/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.

@@ -76,6 +76,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.37  | 24-08-2026     | XTSE0090 attribute validation for XSLT elements (stylesheet, template, apply-* etc.)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.38  | 24-08-2026     | XTSE0120 top-level text-node validation for xsl:stylesheet/transform/package           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2161,6 +2163,17 @@ public sealed class Stylesheet
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
                         "name", "match", "use", "collation", "composite"),
                         IsForwardsCompatibleElement(elem));
+                }
+
+                // XTSE0120: xsl:stylesheet / xsl:transform / xsl:package must not have
+                // non-whitespace text node children.
+                if (localName is "stylesheet" or "transform" or "package")
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                            throw new InvalidOperationException("XTSE0120: xsl:stylesheet must not have text node children.");
+                    }
                 }
 
                 // xsl:param parent and position validation.
