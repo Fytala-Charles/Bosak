@@ -1,8 +1,9 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-24
-**Commit:** uncommitted on `fd49b09` — XSLT: XTSE0280 prefix binding validation for XSLT names and mode tokens
+**Commit:** `dcc2c74` — XSLT: XTSE0710 use-attribute-sets validation and EQName fixes
 **Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0710*` XTSE0710 cluster and kept the full XSLT sweep at 0 failures.
+**Next cluster:** `error-0808*` (XTSE0808 — invalid `exclude-result-prefixes` tokens), 3 remaining failures.
 **Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
 ## This Session Changes (XTSE0710 static error cluster)
