@@ -9,15 +9,24 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 23 August 2026
-> **Bosak baseline:** 1,883 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** **30,959 passed / 0 failed / 862 skipped** (97.29%). The cbcl-module-001 residual is fixed: `VmEngine.InstanceOf` now rejects `xs:untypedAtomic` values for user-defined schema simple types, so `instance of` uses type-hierarchy semantics instead of cast facets. The full QT3 sweep now has **0 failures**. The xquery30keywords5 cluster, function return-type atomization cluster, QName accessor singleton-sequence XPTY0004 cluster, document-node / root() / constructed-element cluster, HOF residuals cluster, schema-aware validate / QName-NOTATION / ID / typed-value cluster, `fn:load-xquery-module` / `validate` expression cluster, namespace-sensitive atomic function-conversion cluster, schema-aware list/union cluster, and castable cluster remain in place; conformance-runner skips (`app-Demos`, `app-XMark`, `cbcl-codepoints-to-string-021`) remain in place.
-> **XSLT baseline:** 8,340 passed / 0 failed / 6,260 skipped — 100% of runnable W3C XSLT 3.0 tests pass
+> **Last updated:** 24 August 2026
+> **Bosak baseline:** 1,895 unit tests passed / 0 failed / 0 skipped
+> **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
+> **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-24** — XSLT: **XTSE0020 static-error cluster (`error-0020*`)** — `Stylesheet.ValidateInstructionTree` name and attribute-value validation now handles `Q{uri}local` EQNames before AVT detection, accepts XML 1.0 fifth edition / XML 1.1 NCName characters (e.g. `Ĳ`), recognizes `xsl:decimal-format/@exponent-separator`, validates decimal-format single-character attributes by Unicode code point count (supporting non-BMP symbols), and ignores unknown decimal-format attributes in forwards-compatible mode. The W3C `error-0020*` cluster is now **11/0/0** and the full XSLT sweep is restored to **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.36).
+  - Verification: `error-0020*` 11/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.
+
+- **2026-08-24** — XSLT: **XTSE0010 static-error cluster (`error-0010*`)** — `Stylesheet.ValidateInstructionTree` now enforces structural constraints: required attributes on `xsl:if`/`xsl:call-template`/`xsl:attribute-set`, `xsl:param` placement and parent context, `xsl:choose` structure, permissible children of `xsl:apply-templates`/`xsl:apply-imports`/`xsl:call-template`, top-level-only declarations, and tolerates unknown top-level XSLT elements as vendor extensions in XSLT 3.0 (and all unknown elements in forwards-compatible mode). Added `character-map`, `output-character`, `fork`, and `accumulator-rule` to the known element set. The W3C `error-0010*` cluster is now **52/0/1** (`error-0010bb` skipped as an upstream forwards-compatibility contradiction); the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.34).
+  - Harness: `tests/Bosak.Xslt.Conformance/Program.cs` now runs normally-skipped test sets when a filter is supplied; `error-0010bb` added to the skip list (header → 3.18).
+  - Verification: `error-0010*` 52/0/1; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.
 
 - **2026-08-23** — XPath/XQuery: **cbcl-module-001 residual fixed** — `VmEngine.InstanceOf` now rejects `xs:untypedAtomic` values when testing against user-defined schema simple types. Previously, cast-based facet checking allowed untypedAtomic text-node values to pass `instance of` for user-defined string restrictions. `instance of` now uses type-hierarchy semantics for these types while function argument/return conversion keeps its cast-based behaviour. This closes the final QT3 failure `cbcl-module-001`; the full QT3 sweep is now **30,959/0/862** (97.29%) with **0 failures**. Unit tests pass **1,883/0**.
   - Implementation: `src/Bosak.XPath.Runtime/Vm/VmEngine.cs`.

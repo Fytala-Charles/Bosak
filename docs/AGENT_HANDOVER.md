@@ -1,11 +1,43 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-23
-**Commit:** `1d7824b` — XTDE0045 #default/#unnamed initial-mode fix, harness empty-result handling
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `#default`/`#unnamed` initial-mode XTDE0045 cluster in the `error` test set.
+**Date:** 2026-08-24
+**Commit:** uncommitted on `1d7824b` — XTSE0020 static error cluster fixes (XTSE0010 completed in previous step)
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0020*` XTSE0020 cluster and restored the full XSLT sweep to 0 failures.
 **Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE0045 initial-mode cluster)
+## This Session Changes (XTSE0020 static error cluster)
+
+1. **Static name and attribute value validation fixes** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateXsltName` now parses `Q{uri}local` EQName syntax before checking for attribute value templates, so EQNames such as `Q{http://example.com/ns}set1` are no longer rejected as AVTs.
+   - `IsValidModeValue` now recognizes `Q{uri}local` EQNames (including whitespace-padded values like ` Q{}s `) before AVT detection.
+   - `IsValidNCName` replaced `XmlConvert.VerifyNCName` with a manual XML 1.0 fifth edition / XML 1.1 NCName check using Unicode categories, so names containing characters such as `Ĳ` are accepted.
+   - `xsl:decimal-format` static validation now permits `exponent-separator`, validates single-character attributes by Unicode code point count (supporting non-BMP symbols), and ignores unknown attributes in forwards-compatible mode instead of raising `XTSE0090`.
+   - Header bumped: `Stylesheet.cs` → 2.36.
+
+2. **Results** — `error-0020*` cluster: 11 passed / 0 failed / 0 skipped. Full XSLT conformance sweep restored to **7,056 passed / 0 failed / 7,544 skipped**.
+
+## Previous Session Changes (XTSE0010 static error cluster)
+
+1. **Static structural validation for XSLT elements** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - Added `ValidateInstructionTree` checks for:
+     - Misplaced instructions at the top level.
+     - Top-level-only declarations used in sequence constructors (e.g. `xsl:template`, `xsl:key`, `xsl:include`, `xsl:import`).
+     - Unknown XSLT elements, tolerated only in forwards-compatible mode or as top-level vendor extensions in XSLT 3.0.
+     - Required attributes on `xsl:if`, `xsl:call-template`, `xsl:attribute-set`.
+     - `xsl:param` parent context and first-child position inside `xsl:template`/`xsl:function`.
+     - `xsl:choose` structure (at least one `xsl:when`, at most one `xsl:otherwise`, correct order, no stray text).
+     - `xsl:apply-templates` / `xsl:apply-imports` / `xsl:call-template` children.
+   - Added `character-map`, `output-character`, `fork`, and `accumulator-rule` to `KnownXsltElementNames`.
+   - Header bumped: `Stylesheet.cs` → 2.34.
+
+2. **Conformance harness targeted-filter support** (`tests/Bosak.Xslt.Conformance/Program.cs`) —
+   - Normally-skipped test sets (including `error`) now run when a filter is supplied on the command line.
+   - `error-0010bb` added to the skip list as an upstream forwards-compatibility contradiction.
+   - Header bumped: `Program.cs` → 3.18.
+
+3. **Results** — `error-0010*` cluster: 52 passed / 0 failed / 1 skipped (`error-0010bb`). Full XSLT conformance sweep remains 7,056 passed / 0 failed / 7,544 skipped.
+
+## Previous Session Changes (XTDE0045 initial-mode cluster)
 
 1. **XSLT `#default`/`#unnamed` initial-mode XTDE0045 fix** (`src/Bosak.Xslt/Runtime/TransformEngine.cs`) —
    - `Transform`, `TransformAsync`, and the initial-template entry path now map `#default` and `#unnamed` to the stylesheet's `DefaultMode` before calling `ModeExists`.

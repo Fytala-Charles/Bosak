@@ -68,6 +68,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.33  | 23-08-2026     | Pass use-when context to ConvertVariableValue for static param @as prefix resolution   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.34  | 24-08-2026     | Static structural validation for XTSE0010 error cluster                               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.35  | 24-08-2026     | XTSE0020 name and attribute value validation (decimal-format, names, tunnel, mode)     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.36  | 24-08-2026     | Fix XTSE0020 regressions: EQName/AVT ordering, XML 1.1 NCNames, decimal-format symbols   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -75,6 +81,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -2011,6 +2018,319 @@ public sealed class Stylesheet
                     }
                 }
             }
+
+            // XTSE0010: structural parent/child validation for XSLT elements.
+            // These checks catch misplaced instructions, required attributes, and unknown
+            // XSLT elements that are not permitted in a non-forwards-compatible stylesheet.
+            if (isXsltElement)
+            {
+                var parent = elem.Parent;
+                bool isTopLevel = parent != null &&
+                    parent.Name.NamespaceName == XslNamespace &&
+                    parent.Name.LocalName is "stylesheet" or "transform" or "package";
+
+                // Unknown XSLT elements are normally a static error. They are ignored when the
+                // stylesheet is in forwards-compatible mode, or when they appear at the top level
+                // of an XSLT 3.0 stylesheet (where unrecognized elements are tolerated as vendor
+                // extensions). In earlier XSLT versions an unrecognized top-level element is an error.
+                if (!KnownXsltElementNames.Contains(localName))
+                {
+                    if (IsForwardsCompatibleElement(elem))
+                    {
+                        // Ignored in forwards-compatible mode.
+                    }
+                    else if (isTopLevel && GetEffectiveVersion(elem) >= 3.0)
+                    {
+                        // Ignored as a possible vendor extension at the top level of an XSLT 3.0 stylesheet.
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException($"XTSE0010: Unknown XSLT element xsl:{localName}.");
+                    }
+                }
+
+                // Top-level context checks.
+                if (parent != null)
+                {
+                    if (isTopLevel)
+                    {
+                        if (!AllowedTopLevelDeclarations.Contains(localName) && !IsForwardsCompatibleElement(elem))
+                            throw new InvalidOperationException($"XTSE0010: xsl:{localName} is not permitted at the top level.");
+                    }
+                    else if (TopLevelOnlyDeclarations.Contains(localName))
+                    {
+                        throw new InvalidOperationException($"XTSE0010: xsl:{localName} must appear at the top level.");
+                    }
+                }
+
+                // xsl:if requires a test attribute.
+                if (localName == "if" && elem.Attribute("test") == null && elem.Attribute("_test") == null)
+                    throw new InvalidOperationException("XTSE0010: xsl:if requires a test attribute.");
+
+                // xsl:call-template requires a name attribute.
+                if (localName == "call-template" && elem.Attribute("name") == null && elem.Attribute("_name") == null)
+                    throw new InvalidOperationException("XTSE0010: xsl:call-template requires a name attribute.");
+
+                // xsl:attribute-set requires a name attribute and only xsl:attribute children.
+                if (localName == "attribute-set")
+                {
+                    if (elem.Attribute("name") == null && elem.Attribute("_name") == null)
+                        throw new InvalidOperationException("XTSE0010: xsl:attribute-set requires a name attribute.");
+
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                            throw new InvalidOperationException("XTSE0010: xsl:attribute-set may only contain xsl:attribute children.");
+                    }
+
+                    foreach (var child in elem.Elements())
+                    {
+                        if (child.Name.NamespaceName != XslNamespace || child.Name.LocalName != "attribute")
+                            throw new InvalidOperationException("XTSE0010: xsl:attribute-set may only contain xsl:attribute children.");
+                    }
+                }
+
+                // Allowed attributes on xsl:strip-space / xsl:preserve-space.
+                if (localName is "strip-space" or "preserve-space")
+                {
+                    foreach (var attr in elem.Attributes())
+                    {
+                        if (attr.IsNamespaceDeclaration) continue;
+                        var baseName = attr.Name.LocalName;
+                        if (baseName.StartsWith("_")) baseName = baseName.Substring(1);
+                        if (attr.Name.NamespaceName == "" && baseName is not "elements" and not "use-when" and not "version" and not "xpath-default-namespace")
+                            throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:{localName}.");
+                    }
+                }
+
+                // Allowed attributes on xsl:include / xsl:import (also enforces @href presence).
+                if (localName is "include" or "import")
+                {
+                    foreach (var attr in elem.Attributes())
+                    {
+                        if (attr.IsNamespaceDeclaration) continue;
+                        var baseName = attr.Name.LocalName;
+                        if (baseName.StartsWith("_")) baseName = baseName.Substring(1);
+                        if (attr.Name.NamespaceName == "" && baseName is not "href" and not "use-when")
+                            throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:{localName}.");
+                    }
+                }
+
+                // xsl:param parent and position validation.
+                if (localName == "param")
+                {
+                    var paramParent = elem.Parent;
+                    if (paramParent != null)
+                    {
+                        bool parentIsXslt = paramParent.Name.NamespaceName == XslNamespace;
+                        var parentName = parentIsXslt ? paramParent.Name.LocalName : null;
+
+                        // xsl:param is only permitted in a small set of parent elements.
+                        if (!parentIsXslt || parentName is not "stylesheet" and not "transform" and not "template" and not "function" and not "iterate")
+                        {
+                            throw new InvalidOperationException("XTSE0010: xsl:param is not permitted in this context.");
+                        }
+
+                        if (parentName is "template" or "function")
+                        {
+                            foreach (var node in paramParent.Nodes())
+                            {
+                                if (node == elem) break;
+                                if (node is XElement preceding)
+                                {
+                                    // xsl:context-item and other xsl:param elements are the only XSLT
+                                    // elements that may precede this xsl:param in a template or function.
+                                    if (preceding.Name.NamespaceName == XslNamespace &&
+                                        (preceding.Name.LocalName == "param" || preceding.Name.LocalName == "context-item"))
+                                        continue;
+
+                                    throw new InvalidOperationException("XTSE0010: xsl:param must appear first inside xsl:template or xsl:function.");
+                                }
+                                if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                                    throw new InvalidOperationException("XTSE0010: xsl:param must appear first inside xsl:template or xsl:function.");
+                            }
+                        }
+                    }
+                }
+
+                // xsl:choose validation.
+                if (localName == "choose")
+                {
+                    int whenCount = 0;
+                    int otherwiseCount = 0;
+                    bool otherwiseSeen = false;
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XText text)
+                        {
+                            if (!string.IsNullOrWhiteSpace(text.Value))
+                                throw new InvalidOperationException("XTSE0010: xsl:choose must not contain text outside xsl:when or xsl:otherwise.");
+                            continue;
+                        }
+
+                        if (node is not XElement child) continue;
+                        if (child.Name.NamespaceName != XslNamespace)
+                            continue;
+
+                        var childName = child.Name.LocalName;
+                        if (childName == "when")
+                        {
+                            if (otherwiseSeen)
+                                throw new InvalidOperationException("XTSE0010: xsl:when must precede xsl:otherwise.");
+                            whenCount++;
+                        }
+                        else if (childName == "otherwise")
+                        {
+                            otherwiseCount++;
+                            otherwiseSeen = true;
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"XTSE0010: xsl:choose may not contain xsl:{childName}.");
+                        }
+                    }
+
+                    if (whenCount == 0)
+                        throw new InvalidOperationException("XTSE0010: xsl:choose must contain at least one xsl:when.");
+                    if (otherwiseCount > 1)
+                        throw new InvalidOperationException("XTSE0010: xsl:choose may contain at most one xsl:otherwise.");
+                }
+
+                // xsl:apply-templates may only contain xsl:sort and xsl:with-param.
+                if (localName == "apply-templates")
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                            throw new InvalidOperationException("XTSE0010: xsl:apply-templates may not contain text nodes.");
+                    }
+
+                    foreach (var child in elem.Elements())
+                    {
+                        if (child.Name.NamespaceName == XslNamespace &&
+                            child.Name.LocalName is not "sort" and not "with-param")
+                        {
+                            throw new InvalidOperationException($"XTSE0010: xsl:apply-templates may not contain xsl:{child.Name.LocalName}.");
+                        }
+                    }
+                }
+
+                // xsl:apply-imports may only contain xsl:with-param.
+                if (localName == "apply-imports")
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                            throw new InvalidOperationException("XTSE0010: xsl:apply-imports may not contain text nodes.");
+                    }
+
+                    foreach (var child in elem.Elements())
+                    {
+                        if (child.Name.NamespaceName != XslNamespace || child.Name.LocalName != "with-param")
+                            throw new InvalidOperationException($"XTSE0010: xsl:apply-imports may not contain xsl:{child.Name.LocalName}.");
+                    }
+                }
+
+                // xsl:call-template may only contain xsl:with-param.
+                if (localName == "call-template")
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                            throw new InvalidOperationException("XTSE0010: xsl:call-template may not contain text nodes.");
+                    }
+
+                    foreach (var child in elem.Elements())
+                    {
+                        if (child.Name.NamespaceName != XslNamespace || child.Name.LocalName != "with-param")
+                            throw new InvalidOperationException($"XTSE0010: xsl:call-template may only contain xsl:with-param children.");
+                    }
+                }
+
+                // xsl:template children may not include xsl:sort or xsl:with-param.
+                if (localName == "template")
+                {
+                    foreach (var child in elem.Elements())
+                    {
+                        if (child.Name.NamespaceName == XslNamespace &&
+                            child.Name.LocalName is "sort" or "with-param")
+                        {
+                            throw new InvalidOperationException($"XTSE0010: xsl:{child.Name.LocalName} is not permitted as a child of xsl:template.");
+                        }
+                    }
+                }
+
+                // XTSE0020: validate lexical names and disallowed attribute values.
+                // Name attributes on declarations and instructions must be legal QNames/EQNames
+                // and must not be attribute value templates.
+                if (localName is "attribute-set" or "key" or "template" or "call-template" or "function" or "decimal-format")
+                {
+                    var nameAttr = elem.Attribute("name");
+                    if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value))
+                        ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name");
+                }
+
+                if (localName is "variable" or "param" or "with-param")
+                {
+                    var nameAttr = elem.Attribute("name") ?? elem.Attribute("_name");
+                    if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value))
+                        ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name");
+                }
+
+                // xsl:apply-templates/@mode must be a valid mode token (QName or #current/#default/#unnamed/#all).
+                if (localName == "apply-templates")
+                {
+                    var modeAttr = elem.Attribute("mode") ?? elem.Attribute("_mode");
+                    if (modeAttr != null && !IsValidModeValue(modeAttr.Value))
+                        throw new InvalidOperationException($"XTSE0020: Invalid mode value '{modeAttr.Value}' on xsl:apply-templates.");
+                }
+
+                // xsl:param tunnel restrictions.
+                if (localName == "param")
+                {
+                    var tunnelAttr = elem.Attribute("tunnel") ?? elem.Attribute("_tunnel");
+                    if (tunnelAttr != null)
+                    {
+                        var tunnelVal = TryParseYesNo(tunnelAttr.Value.Trim());
+                        if (tunnelVal == true)
+                        {
+                            var paramParent = elem.Parent;
+                            if (paramParent != null && paramParent.Name.NamespaceName == XslNamespace &&
+                                paramParent.Name.LocalName is "stylesheet" or "transform" or "function")
+                            {
+                                throw new InvalidOperationException("XTSE0020: xsl:tunnel='yes' is not permitted on a stylesheet or function parameter.");
+                            }
+                        }
+                    }
+                }
+
+                // xsl:decimal-format attribute value validation.
+                if (localName == "decimal-format")
+                {
+                    var forwardsCompatible = IsForwardsCompatibleElement(elem);
+                    foreach (var attr in elem.Attributes())
+                    {
+                        if (attr.IsNamespaceDeclaration) continue;
+                        var baseName = attr.Name.LocalName;
+                        if (baseName.StartsWith("_")) baseName = baseName.Substring(1);
+                        if (attr.Name.NamespaceName != "") continue;
+
+                        if (baseName is "name" or "infinity" or "NaN" or "use-when" or "version")
+                            continue;
+
+                        if (baseName is "decimal-separator" or "grouping-separator" or "minus-sign" or "percent" or "per-mille" or "zero-digit" or "digit" or "pattern-separator" or "exponent-separator")
+                        {
+                            // Use Unicode code point count so non-BMP characters count as one.
+                            if (GetUnicodeCodePointCount(attr.Value) != 1)
+                                throw new InvalidOperationException($"XTSE0020: xsl:decimal-format @{baseName} must be a single character.");
+                        }
+                        else if (!forwardsCompatible)
+                        {
+                            throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:decimal-format.");
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -2020,6 +2340,31 @@ public sealed class Stylesheet
                    or "name" or "streamable" or "sort-before-merge"
                    or "use-accumulators" or "validation" or "type" or "use-when";
     }
+
+    /// <summary>
+    /// XSLT declarations that are only permitted as top-level children of xsl:stylesheet
+    /// or xsl:transform. If any of these appear deeper in the tree, it is a static error.
+    /// </summary>
+    private static readonly HashSet<string> TopLevelOnlyDeclarations = new(StringComparer.Ordinal)
+    {
+        "stylesheet", "transform",
+        "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
+        "attribute-set", "decimal-format", "key", "mode", "accumulator", "template", "function",
+        "global-context-item", "import-schema"
+    };
+
+    /// <summary>
+    /// XSLT elements that are permitted as top-level children of xsl:stylesheet or xsl:transform.
+    /// Any other XSLT element appearing at the top level is a static error (unless the stylesheet
+    /// is in forwards-compatible mode or the element is an unrecognized vendor extension in XSLT 3.0).
+    /// </summary>
+    private static readonly HashSet<string> AllowedTopLevelDeclarations = new(StringComparer.Ordinal)
+    {
+        "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
+        "attribute-set", "character-map", "decimal-format", "key", "mode", "accumulator", "param", "variable",
+        "template", "function", "global-context-item", "use-package", "package", "expose",
+        "import-schema"
+    };
 
     private static bool IsValidMergeSourceName(string name)
     {
@@ -2034,6 +2379,161 @@ public sealed class Stylesheet
             return false;
         var first = name[0];
         return first == '_' || char.IsLetter(first);
+    }
+
+    /// <summary>
+    /// Validates that <paramref name="name"/> is a legal XSLT lexical QName or EQName.
+    /// Returns the local name and namespace URI if valid; otherwise throws <c>XTSE0020</c>.
+    /// </summary>
+    private static (string localName, string namespaceUri) ValidateXsltName(XElement element, string name, string construct)
+    {
+        var trimmed = name.Trim();
+        if (string.IsNullOrEmpty(trimmed))
+            throw new InvalidOperationException($"XTSE0020: The name for {construct} must not be empty.");
+
+        // EQName form: Q{uri}local. EQName syntax takes precedence over attribute value
+        // template detection, so a value like Q{http://example.com/ns}set1 is a valid name.
+        if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
+        {
+            int closeBrace = trimmed.IndexOf('}');
+            if (closeBrace < 2 || closeBrace == trimmed.Length - 1)
+                throw new InvalidOperationException($"XTSE0020: The name '{name}' for {construct} is not a valid EQName.");
+
+            var uri = trimmed.Substring(2, closeBrace - 2);
+            var local = trimmed.Substring(closeBrace + 1);
+            if (!IsValidNCName(local))
+                throw new InvalidOperationException($"XTSE0020: The local part '{local}' in '{name}' for {construct} is not a valid NCName.");
+            return (local, uri);
+        }
+
+        // Reject attribute value templates (e.g. name="{concat('a','b')}").
+        if (IsAvtValue(trimmed))
+            throw new InvalidOperationException($"XTSE0020: The name '{name}' for {construct} must not contain an attribute value template.");
+
+        // Lexical QName: [prefix:]local
+        int colon = trimmed.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = trimmed.Substring(0, colon);
+            var local = trimmed.Substring(colon + 1);
+            if (!IsValidNCName(prefix))
+                throw new InvalidOperationException($"XTSE0020: The prefix '{prefix}' in '{name}' for {construct} is not a valid NCName.");
+            if (!IsValidNCName(local))
+                throw new InvalidOperationException($"XTSE0020: The local part '{local}' in '{name}' for {construct} is not a valid NCName.");
+
+            var ns = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+            return (local, ns);
+        }
+
+        // Simple NCName
+        if (!IsValidNCName(trimmed))
+            throw new InvalidOperationException($"XTSE0020: The name '{name}' for {construct} is not a valid NCName.");
+        return (trimmed, string.Empty);
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> if <paramref name="name"/> is a valid XML NCName.
+    /// Uses the XML 1.0 fifth edition / XML 1.1 name rules, which are more
+    /// permissive than <see cref="XmlConvert.VerifyNCName"/>.
+    /// </summary>
+    private static bool IsValidNCName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return false;
+
+        // First character must be a NameStartChar (excluding ':').
+        int i = 0;
+        if (!IsNameStartChar(name, ref i))
+            return false;
+
+        // Remaining characters must be NameChars (excluding ':').
+        while (i < name.Length)
+        {
+            if (!IsNameChar(name, ref i))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static bool IsNameStartChar(string name, ref int index)
+    {
+        if (index >= name.Length)
+            return false;
+
+        int code = char.ConvertToUtf32(name, index);
+        var category = CharUnicodeInfo.GetUnicodeCategory(code);
+        bool isStart = category is UnicodeCategory.UppercaseLetter
+                                  or UnicodeCategory.LowercaseLetter
+                                  or UnicodeCategory.TitlecaseLetter
+                                  or UnicodeCategory.ModifierLetter
+                                  or UnicodeCategory.OtherLetter
+                                  or UnicodeCategory.LetterNumber
+                       || code == '_';
+
+        if (isStart)
+            index += code > 0xFFFF ? 2 : 1;
+
+        return isStart;
+    }
+
+    private static bool IsNameChar(string name, ref int index)
+    {
+        if (index >= name.Length)
+            return false;
+
+        int code = char.ConvertToUtf32(name, index);
+        var category = CharUnicodeInfo.GetUnicodeCategory(code);
+        bool isChar = category is UnicodeCategory.UppercaseLetter
+                                or UnicodeCategory.LowercaseLetter
+                                or UnicodeCategory.TitlecaseLetter
+                                or UnicodeCategory.ModifierLetter
+                                or UnicodeCategory.OtherLetter
+                                or UnicodeCategory.LetterNumber
+                                or UnicodeCategory.NonSpacingMark
+                                or UnicodeCategory.SpacingCombiningMark
+                                or UnicodeCategory.DecimalDigitNumber
+                                or UnicodeCategory.ConnectorPunctuation
+                     || code == '_' || code == '-' || code == '.';
+
+        if (isChar)
+            index += code > 0xFFFF ? 2 : 1;
+
+        return isChar;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> if <paramref name="value"/> is a valid XSLT mode token.
+    /// Mode names are lexical QNames or the special tokens <c>#current</c>, <c>#default</c>,
+    /// <c>#unnamed</c>, and <c>#all</c>.
+    /// </summary>
+    private static bool IsValidModeValue(string value)
+    {
+        var trimmed = value.Trim();
+        if (trimmed is "#current" or "#default" or "#unnamed" or "#all")
+            return true;
+
+        // EQName form: Q{uri}local. EQName syntax takes precedence over AVT detection.
+        if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
+        {
+            int closeBrace = trimmed.IndexOf('}');
+            if (closeBrace < 2 || closeBrace == trimmed.Length - 1)
+                return false;
+            var local = trimmed.Substring(closeBrace + 1);
+            return IsValidNCName(local);
+        }
+
+        if (IsAvtValue(trimmed))
+            return false;
+
+        int colon = trimmed.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = trimmed.Substring(0, colon);
+            var local = trimmed.Substring(colon + 1);
+            return IsValidNCName(prefix) && IsValidNCName(local);
+        }
+        return IsValidNCName(trimmed);
     }
 
     private static bool IsYesNoValue(string value)
@@ -2051,6 +2551,18 @@ public sealed class Stylesheet
                 return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Returns the number of Unicode code points in <paramref name="value"/>.
+    /// Surrogate pairs representing supplementary characters are counted as one.
+    /// </summary>
+    private static int GetUnicodeCodePointCount(string value)
+    {
+        int count = 0;
+        foreach (var _ in value.EnumerateRunes())
+            count++;
+        return count;
     }
 
     private static bool IsNewEachTimeValue(string value)
@@ -3084,7 +3596,7 @@ public sealed class Stylesheet
     {
         "stylesheet", "transform", "include", "import", "strip-space", "preserve-space",
         "output", "namespace-alias", "attribute-set", "decimal-format", "key", "mode",
-        "accumulator", "variable", "param", "with-param", "template", "function",
+        "accumulator", "accumulator-rule", "variable", "param", "with-param", "template", "function",
         "global-context-item", "context-item", "use-package", "package", "expose",
         "import-schema",
         "apply-templates", "apply-imports", "call-template", "next-match",
@@ -3097,7 +3609,8 @@ public sealed class Stylesheet
         "map", "map-entry", "array",
         "try", "catch", "evaluate", "source-document",
         "iterate", "break", "next-iteration", "on-completion",
-        "where-populated", "on-empty", "on-non-empty", "assert"
+        "where-populated", "on-empty", "on-non-empty", "assert",
+        "character-map", "output-character", "fork"
     };
 
     /// <summary>
