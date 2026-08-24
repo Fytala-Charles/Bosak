@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `a4a87c7` — XTDE0045 #default/#unnamed initial-mode fix, harness empty-result handling
+**Commit:** `1d7824b` — XTDE0045 #default/#unnamed initial-mode fix, harness empty-result handling
 **Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `#default`/`#unnamed` initial-mode XTDE0045 cluster in the `error` test set.
 **Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
