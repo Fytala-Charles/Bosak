@@ -92,6 +92,7 @@
 //                      | Charles Korthout | 2.45  | 25-08-2026     | XTSE0260 validation for XSLT elements required to be empty                             |
 //                      | Charles Korthout | 2.46  | 25-08-2026     | XTSE0350 validation for unbalanced AVT braces                                          |
 //                      | Charles Korthout | 2.47  | 25-08-2026     | XTSE0370 validation for unescaped right braces in AVTs                                |
+//                      | Charles Korthout | 2.48  | 25-08-2026     | XTSE0530 validation for xsl:template/@priority as xs:decimal                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2373,6 +2374,9 @@ public sealed class Stylesheet
                     if (!hasMatch && priorityAttr != null)
                         throw new InvalidOperationException("XTSE0500: xsl:template with no match attribute must not have a priority attribute.");
 
+                    if (priorityAttr != null && !IsValidXsDecimal(priorityAttr.Value))
+                        throw new InvalidOperationException($"XTSE0530: The priority attribute value '{priorityAttr.Value}' is not a valid xs:decimal.");
+
                     if (!hasName && visibilityAttr != null)
                         throw new InvalidOperationException("XTSE0500: xsl:template with no name attribute must not have a visibility attribute.");
 
@@ -2767,6 +2771,22 @@ public sealed class Stylesheet
             index += code > 0xFFFF ? 2 : 1;
 
         return isChar;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> if <paramref name="value"/> is a valid lexical representation
+    /// of <c>xs:decimal</c>. Exponent notation (e.g. <c>2.0e2</c>) is rejected.
+    /// </summary>
+    private static bool IsValidXsDecimal(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return false;
+
+        return decimal.TryParse(
+            value.Trim(),
+            NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint,
+            CultureInfo.InvariantCulture,
+            out _);
     }
 
     /// <summary>

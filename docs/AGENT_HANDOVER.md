@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `62649db` — XSLT: XTSE0370 unescaped right brace validation in AVTs/TVTs
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0370*` XTSE0370 cluster and kept the full XSLT sweep at 0 failures.
+**Commit:** `TBD` — XSLT: XTSE0530 xsl:template/@priority xs:decimal validation
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0530*` XTSE0530 cluster and kept the full XSLT sweep at 0 failures.
 **Expected state:** **1,908 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0370 static error cluster)
+## This Session Changes (XTSE0530 static error cluster)
+
+1. **`xsl:template/@priority` xs:decimal validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now checks that any `xsl:template/@priority` is a valid lexical `xs:decimal` value.
+   - Exponent notation (e.g. `2.0e2`) and non-numeric values are rejected with `XTSE0530`.
+   - Valid decimals such as `2`, `2.0`, `-0.5`, `+3`, and `.5` continue to be accepted.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering invalid and valid priority values.
+   - Headers bumped: `Stylesheet.cs` → 2.48, `StylesheetTests.cs` → 0.33.
+
+2. **Results** —
+   - `error-0530*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,908 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0370 static error cluster)
 
 1. **Unescaped right-brace validation in AVTs/TVTs** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`) —
    - `Stylesheet.SplitAttributeValueTemplate` now raises `XTSE0370` when an unescaped `}` appears in the fixed part of an attribute value template (no matching `{`).

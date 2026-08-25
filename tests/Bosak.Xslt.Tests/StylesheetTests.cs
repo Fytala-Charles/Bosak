@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 0.30  | 25-08-2026     | Added XTSE0260 regression tests for empty XSLT elements                                  |
 //                      | Charles Korthout | 0.31  | 25-08-2026     | Added XTSE0350 regression tests for unbalanced AVT braces                                |
 //                      | Charles Korthout | 0.32  | 25-08-2026     | Added XTSE0370 regression tests for unescaped right braces in AVTs                       |
+//                      | Charles Korthout | 0.33  | 25-08-2026     | Added XTSE0530 regression tests for xsl:template/@priority                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3284,6 +3285,40 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), new EvaluationContext());
         Assert.Contains("att=\"x}y\"", result);
+    }
+
+    [Theory]
+    [InlineData("2.0e2")]
+    [InlineData("1e5")]
+    [InlineData("not-a-number")]
+    public void InvalidTemplatePriority_ThrowsXtse0530(string priorityValue)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='doc' priority=""{priorityValue}""/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0530", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("2")]
+    [InlineData("2.0")]
+    [InlineData("-0.5")]
+    [InlineData("+3")]
+    [InlineData(".5")]
+    public void ValidTemplatePriority_IsAllowed(string priorityValue)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='doc' priority=""{priorityValue}""/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
     }
 
 }
