@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 August 2026
-> **Bosak baseline:** 1,895 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,896 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-25** — XSLT: **XTSE0340 static-error cluster (`error-0340*`)** — `PatternCompiler.ValidatePatternSyntax` now rejects patterns that start with a numeric literal or expression (e.g. `2+2`), path steps that are numeric literals (e.g. `name/1223`), and `processing-instruction()` arguments that are not a valid string literal or NCName (e.g. `processing-instruction(proc:inst-2)`). `Stylesheet.ValidateInstructionTree` performs this validation at stylesheet load time for literal `xsl:template/@match`, `xsl:key/@match`, and `xsl:number/@count`/`@from` attributes. The W3C `error-0340*` cluster is now **3/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Patterns/PatternCompiler.cs` (header → 2.9), `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.44).
+  - Regression tests: `tests/Bosak.Xslt.Tests/PatternCompilerPredicateTests.cs` (+3 tests; header → 0.4).
+  - Verification: `error-0340*` 3/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,896/0.
 
 - **2026-08-25** — XSLT: **XTSE0809 static-error cluster (`error-0809*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE0809` when `exclude-result-prefixes` contains `#default` and the owning element has no default namespace declaration (empty default namespace URI). This completes the `#default` handling left pending by `XTSE0808`. The W3C `error-0809*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.43).

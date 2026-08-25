@@ -88,6 +88,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.43  | 25-08-2026     | XTSE0809 #default in exclude-result-prefixes requires default namespace               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.44  | 25-08-2026     | XTSE0340 early pattern validation for template/key match and number count/from         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -101,6 +103,7 @@ using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Api;
+using Bosak.Xslt.Patterns;
 using Bosak.Xslt.Runtime;
 
 namespace Bosak.Xslt.Stylesheet;
@@ -2375,6 +2378,37 @@ public sealed class Stylesheet
                     var nameAttr = elem.Attribute("name");
                     if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value))
                         ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name");
+                }
+
+                // XTSE0340: validate match patterns on xsl:template and xsl:key, and
+                // count/from patterns on xsl:number. Only literal (non-AVT) attributes are
+                // validated here; AVT values are validated after expansion at compile time.
+                if (localName is "template" or "key")
+                {
+                    var matchAttr = elem.Attribute("match");
+                    if (matchAttr != null && !string.IsNullOrWhiteSpace(matchAttr.Value))
+                    {
+                        var strippedMatch = PatternCompiler.StripXPathComments(matchAttr.Value).Trim();
+                        if (!string.IsNullOrEmpty(strippedMatch))
+                            PatternCompiler.ValidatePatternSyntax(strippedMatch);
+                    }
+                }
+                if (localName == "number")
+                {
+                    var countAttr = elem.Attribute("count");
+                    if (countAttr != null && !string.IsNullOrWhiteSpace(countAttr.Value))
+                    {
+                        var strippedCount = PatternCompiler.StripXPathComments(countAttr.Value).Trim();
+                        if (!string.IsNullOrEmpty(strippedCount))
+                            PatternCompiler.ValidatePatternSyntax(strippedCount);
+                    }
+                    var fromAttr = elem.Attribute("from");
+                    if (fromAttr != null && !string.IsNullOrWhiteSpace(fromAttr.Value))
+                    {
+                        var strippedFrom = PatternCompiler.StripXPathComments(fromAttr.Value).Trim();
+                        if (!string.IsNullOrEmpty(strippedFrom))
+                            PatternCompiler.ValidatePatternSyntax(strippedFrom);
+                    }
                 }
 
                 if (localName is "variable" or "param" or "with-param")

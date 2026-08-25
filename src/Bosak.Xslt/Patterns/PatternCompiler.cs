@@ -40,6 +40,7 @@
 //                      | Charles Korthout | 2.6   | 05-07-2026     | Disallow reverse axes in match patterns (XTSE0340); fixes version-023a                |
 //                      | Charles Korthout | 2.7   | 14-07-2026     | namespace-node() match pattern support; fixes snapshot-0102a                           |
 //                      | Charles Korthout | 2.8   | 01-08-2026     | union/intersect/except after / @ :: are NameTests, not operators; fixes match-038      |
+//                      | Charles Korthout | 2.9   | 25-08-2026     | XTSE0340 validation for numeric pattern starts/steps and PI NCName arguments          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -94,8 +95,10 @@ public sealed class PatternCompiler
 
     /// <summary>
     /// Static validation for constructs that must be rejected at compile time.
+    /// May be called directly from the stylesheet loader for early XTSE0340 reporting.
+    /// The supplied pattern must already have XPath comments stripped and be trimmed.
     /// </summary>
-    private static void ValidatePatternSyntax(string trimmed)
+    public static void ValidatePatternSyntax(string trimmed)
     {
         // 1.  Disallowed functions at pattern start (XTSE0340).
         //     Node tests (document-node, element, attribute, text, comment,
@@ -159,7 +162,18 @@ public sealed class PatternCompiler
             }
         }
 
-        // 2.  Invalid predicate patterns (XTSE0340).
+        // 2.  A pattern must not start with a numeric literal or expression (XTSE0340).
+        //     This catches patterns such as "2+2" which are XPath expressions, not patterns.
+        ValidatePatternStart(trimmed);
+
+        // 3.  A path step must not be a numeric literal (XTSE0340).
+        //     Examples: "name/1223", "1/2".
+        ValidateNumericPathSteps(trimmed);
+
+        // 3b. The argument of processing-instruction() must be a string literal or an NCName (XTSE0340).
+        ValidateProcessingInstructionNames(trimmed);
+
+        // 4.  Invalid predicate patterns (XTSE0340).
         {
             // Parenthesized predicate pattern (.[...])
             if (trimmed.StartsWith("(.[") || trimmed.Contains("|(.["))
@@ -232,6 +246,154 @@ public sealed class PatternCompiler
         //     When the XPath compiler gains static function resolution, this should be
         //     re-enabled with proper context.
 
+    }
+
+    /// <summary>
+    /// Throws <c>XTSE0340</c> when the pattern starts with a numeric literal or expression,
+    /// which can never be a valid pattern.
+    /// </summary>
+    private static void ValidatePatternStart(string trimmed)
+    {
+        var afterPrefix = trimmed;
+        if (afterPrefix.StartsWith("//"))
+            afterPrefix = afterPrefix[2..].TrimStart();
+        else if (afterPrefix.StartsWith("/"))
+            afterPrefix = afterPrefix[1..].TrimStart();
+
+        // Strip axis prefix (e.g., child::, attribute::, descendant::)
+        var axisColon = afterPrefix.IndexOf("::", StringComparison.Ordinal);
+        if (axisColon > 0)
+        {
+            var axisName = afterPrefix[..axisColon];
+            if (IsAxisName(axisName))
+                afterPrefix = afterPrefix[(axisColon + 2)..];
+        }
+
+        if (afterPrefix.Length > 0 && IsNumericLiteralStart(afterPrefix))
+            throw new InvalidOperationException("XTSE0340: A pattern must not start with a numeric literal or expression.");
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when the supplied string begins with a numeric literal token.
+    /// A leading '-' or '.' is only treated as part of the literal when followed by a digit.
+    /// </summary>
+    private static bool IsNumericLiteralStart(string text)
+    {
+        int i = 0;
+        if (i < text.Length && text[i] == '-')
+        {
+            i++;
+            if (i >= text.Length || !char.IsDigit(text[i]))
+                return false;
+        }
+        else if (i < text.Length && text[i] == '.')
+        {
+            i++;
+            if (i >= text.Length || !char.IsDigit(text[i]))
+                return false;
+        }
+        else if (i < text.Length && char.IsDigit(text[i]))
+        {
+            // ok
+        }
+        else
+        {
+            return false;
+        }
+
+        bool hasDigit = false;
+        while (i < text.Length && char.IsDigit(text[i]))
+        {
+            hasDigit = true;
+            i++;
+        }
+        if (i < text.Length && text[i] == '.')
+        {
+            i++;
+            while (i < text.Length && char.IsDigit(text[i]))
+                i++;
+        }
+        return hasDigit;
+    }
+
+    /// <summary>
+    /// Scans a pattern at top level for path steps that are numeric literals and
+    /// throws <c>XTSE0340</c> if one is found.
+    /// </summary>
+    private static void ValidateNumericPathSteps(string trimmed)
+    {
+        var stripped = StripStringLiterals(trimmed);
+        int qDepth = 0;
+        int depth = 0;
+        for (int i = 0; i < stripped.Length; i++)
+        {
+            char c = stripped[i];
+            if (c == 'Q' && i + 1 < stripped.Length && stripped[i + 1] == '{')
+            {
+                qDepth++;
+                i++;
+                continue;
+            }
+            if (qDepth > 0)
+            {
+                if (c == '}') qDepth--;
+                continue;
+            }
+            if (c == '[' || c == '(')
+            {
+                depth++;
+                continue;
+            }
+            if (c == ']' || c == ')')
+            {
+                depth--;
+                continue;
+            }
+            if (depth != 0)
+                continue;
+            if (c == '/')
+            {
+                int j = i + 1;
+                while (j < stripped.Length && char.IsWhiteSpace(stripped[j])) j++;
+                if (j < stripped.Length && IsNumericLiteralStart(stripped[j..]))
+                    throw new InvalidOperationException("XTSE0340: A path step must not be a numeric literal.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates that every occurrence of <c>processing-instruction()</c> in a pattern
+    /// uses either a string literal or a valid NCName as its argument.
+    /// Throws <c>XTSE0340</c> for arguments containing a colon or starting with a digit.
+    /// </summary>
+    private static void ValidateProcessingInstructionNames(string trimmed)
+    {
+        const string func = "processing-instruction(";
+        var stripped = StripStringLiterals(trimmed);
+        int i = 0;
+        while (i < stripped.Length)
+        {
+            int idx = stripped.IndexOf(func, i, StringComparison.Ordinal);
+            if (idx < 0) break;
+            // Ensure it is a whole function name, not part of a longer name.
+            if (idx > 0 && IsNameChar(stripped[idx - 1]))
+            {
+                i = idx + 1;
+                continue;
+            }
+            int open = idx + func.Length - 1;
+            int close = FindMatchingParen(stripped, open);
+            if (close < 0) break;
+            var arg = stripped[(open + 1)..close].Trim();
+            if (!string.IsNullOrEmpty(arg))
+            {
+                bool isStringLiteral = arg.Length >= 2 &&
+                    ((arg[0] == '\'' && arg[^1] == '\'') || (arg[0] == '"' && arg[^1] == '"'));
+                if (!isStringLiteral && (arg.Contains(':') || IsNumericLiteralStart(arg)))
+                    throw new InvalidOperationException("XTSE0340: The argument of processing-instruction() must be a string literal or an NCName.");
+            }
+            i = close + 1;
+        }
     }
 
     /// <summary>

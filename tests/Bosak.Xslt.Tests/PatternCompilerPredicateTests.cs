@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 31-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Added static validation tests for XTSE0340/XPST0017
 //                       | Charles Korthout | 0.3   | 11-06-2026     | Restored key() second-arg restriction test (literal/variable only)                                 |                                    |
+//                      | Charles Korthout | 0.4   | 25-08-2026     | Added XTSE0340 tests for PI names, numeric path steps, and numeric pattern starts          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -180,6 +181,27 @@ public class PatternCompilerPredicateTests
     public void KeyNonLiteralArgument_ThrowsXtse0340()
     {
         var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("key('k', 40+2)//a"));
+        Assert.Contains("XTSE0340", ex.Message);
+    }
+
+    [Fact]
+    public void ProcessingInstructionWithColonArgument_ThrowsXtse0340()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("processing-instruction(proc:inst-2)"));
+        Assert.Contains("XTSE0340", ex.Message);
+    }
+
+    [Fact]
+    public void NumericPathStep_ThrowsXtse0340()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("name/1223"));
+        Assert.Contains("XTSE0340", ex.Message);
+    }
+
+    [Fact]
+    public void NumericPatternStart_ThrowsXtse0340()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("2+2"));
         Assert.Contains("XTSE0340", ex.Message);
     }
 }

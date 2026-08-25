@@ -1,11 +1,27 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `98a4291` — XSLT: XTSE0809 #default in exclude-result-prefixes requires default namespace
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0809*` XTSE0809 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,895 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `cb23e3b` — XSLT: XTSE0340 pattern syntax validation for match/count/from patterns
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0340*` XTSE0340 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,896 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0809 static error cluster)
+## This Session Changes (XTSE0340 static error cluster)
+
+1. **Pattern syntax validation** (`src/Bosak.Xslt/Patterns/PatternCompiler.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - Made `ValidatePatternSyntax` public and extended it to reject:
+     - patterns that start with a numeric literal or expression (e.g. `2+2`);
+     - path steps that are numeric literals (e.g. `name/1223`);
+     - `processing-instruction()` arguments that contain a colon or start with a digit (invalid NCName).
+   - `Stylesheet.ValidateInstructionTree` now calls the new validation early for literal `xsl:template/@match`, `xsl:key/@match`, and `xsl:number/@count`/`@from` attributes so XTSE0340 is raised at stylesheet load time.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/PatternCompilerPredicateTests.cs` for all three error forms.
+   - Headers bumped: `PatternCompiler.cs` → 2.9, `Stylesheet.cs` → 2.44, `PatternCompilerPredicateTests.cs` → 0.4.
+
+2. **Results** —
+   - `error-0340*` cluster: 3 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,896 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0809 static error cluster)
 
 1. **`exclude-result-prefixes` #default validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - Extended `ValidateExcludeResultPrefixesValue` to check `#default`: if the default namespace URI on the owning element is empty, the token is invalid and `XTSE0809` is raised.
