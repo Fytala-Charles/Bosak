@@ -19,6 +19,11 @@
 
 ## 0. Recent Changes
 
+- **2026-08-25** — XSLT: **XTDE0560 dynamic-error cluster (`error-0560*`)** — `TransformEngine` now clears `_currentTemplateRule` while evaluating global variable and parameter bodies, so `xsl:apply-imports` and `xsl:next-match` inside those bodies correctly raise `XTDE0560`. This matches the existing isolation already applied to `xsl:for-each`, `xsl:for-each-group`, and `xsl:call-template`. The W3C `error-0560*` cluster is now **4/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.25).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.34).
+  - Verification: `error-0560*` 4/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,908/0.
+
 - **2026-08-25** — XSLT: **XTSE0530 static-error cluster (`error-0530*`)** — `Stylesheet.ValidateInstructionTree` now validates that `xsl:template/@priority` is a valid lexical `xs:decimal` value. Exponent notation (e.g. `2.0e2`) and non-numeric values are rejected with `XTSE0530`; valid decimals such as `2`, `2.0`, `-0.5`, `+3`, and `.5` continue to be accepted. The W3C `error-0530*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.48).
   - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+8 tests; header → 0.33).

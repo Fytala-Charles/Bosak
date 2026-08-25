@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 0.31  | 25-08-2026     | Added XTSE0350 regression tests for unbalanced AVT braces                                |
 //                      | Charles Korthout | 0.32  | 25-08-2026     | Added XTSE0370 regression tests for unescaped right braces in AVTs                       |
 //                      | Charles Korthout | 0.33  | 25-08-2026     | Added XTSE0530 regression tests for xsl:template/@priority                               |
+//                      | Charles Korthout | 0.34  | 25-08-2026     | Added XTDE0560 regression tests for apply-imports/next-match context                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3319,6 +3320,41 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
         Assert.NotNull(executable);
+    }
+
+    [Theory]
+    [InlineData("apply-imports")]
+    [InlineData("next-match")]
+    public void ApplyImportsInGlobalVariable_ThrowsXtde0560(string instruction)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='g'>
+                <a><xsl:{instruction}/></a>
+            </xsl:variable>
+            <xsl:template match='/'><out><xsl:value-of select=""$g""/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(new XDocument(new XElement("dummy")));
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext()));
+        Assert.Contains("XTDE0560", ex.Message);
+    }
+
+    [Fact]
+    public void ApplyImportsInNamedTemplate_ThrowsXtde0560()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:apply-imports/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(new XDocument(new XElement("dummy")));
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext(), initialTemplate: "main"));
+        Assert.Contains("XTDE0560", ex.Message);
     }
 
 }

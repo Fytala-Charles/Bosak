@@ -201,6 +201,7 @@
 //                      | Charles Korthout | 6.22  | 24-08-2026     | ApplyAttributeSets resolves Q{uri}local EQNames for use-attribute-sets lookup             |
 //                      | Charles Korthout | 6.23  | 25-08-2026     | XTSE0350 validation for unbalanced AVT/TVT braces                                     |
 //                      | Charles Korthout | 6.24  | 25-08-2026     | XTSE0370 validation for unescaped right braces in AVTs/TVTs                            |
+//                      | Charles Korthout | 6.25  | 25-08-2026     | XTDE0560 clear current template rule during global variable/parameter evaluation     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -9475,6 +9476,10 @@ public sealed class TransformEngine
                 var savedModes = new List<string>(_modeStack);
                 savedModes.Reverse();
                 _modeStack.Clear();
+                // Global variables/parameters are not evaluated within a current template rule,
+                // so xsl:apply-imports and xsl:next-match must raise XTDE0560 here.
+                var savedTemplateRule = _currentTemplateRule;
+                _currentTemplateRule = null;
                 try
                 {
                     // Global variables/parameters are evaluated with a singleton focus based
@@ -9563,6 +9568,7 @@ public sealed class TransformEngine
                     _modeStack.Clear();
                     foreach (var m in savedModes)
                         _modeStack.Push(m);
+                    _currentTemplateRule = savedTemplateRule;
                     _evaluatingGlobals.Remove(key);
                 }
             }
@@ -9597,6 +9603,9 @@ public sealed class TransformEngine
                         var savedModes = new List<string>(_modeStack);
                         savedModes.Reverse();
                         _modeStack.Clear();
+                        // Eager parameter evaluation is also outside any current template rule.
+                        var savedTemplateRule = _currentTemplateRule;
+                        _currentTemplateRule = null;
                         try
                         {
                             // Global parameters are evaluated with a singleton focus based
@@ -9614,6 +9623,7 @@ public sealed class TransformEngine
                             _modeStack.Clear();
                             foreach (var m in savedModes)
                                 _modeStack.Push(m);
+                            _currentTemplateRule = savedTemplateRule;
                         }
                     }
                 }
