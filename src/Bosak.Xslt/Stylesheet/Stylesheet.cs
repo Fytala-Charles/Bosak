@@ -107,6 +107,7 @@
 //                      | Charles Korthout | 2.60  | 25-08-2026     | XTSE3140 validation for xsl:try/@select content                        |
 //                      | Charles Korthout | 2.61  | 25-08-2026     | XTSE3150 validation for xsl:catch/@select content                      |
 //                      | Charles Korthout | 2.62  | 25-08-2026     | XTSE3190 validation for duplicate xsl:merge-source names               |
+//                      | Charles Korthout | 2.63  | 25-08-2026     | XTSE3350 validation for duplicate xsl:accumulator names                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -851,6 +852,17 @@ public sealed class Stylesheet
             var def = AccumulatorDefinition.FromElement(acc, this);
             if (def != null)
                 _accumulators.Add(def);
+        }
+
+        // XTSE3350: two accumulators in the same stylesheet module must not share the same expanded name.
+        if (_isRootStylesheet)
+        {
+            var seenAccumulators = new HashSet<string>();
+            foreach (var def in _accumulators)
+            {
+                if (!seenAccumulators.Add(def.ClarkName))
+                    throw new InvalidOperationException($"XTSE3350: duplicate xsl:accumulator name '{def.ClarkName}'.");
+            }
         }
 
         // Parse xsl:strip-space and xsl:preserve-space declarations.

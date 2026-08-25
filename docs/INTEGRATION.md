@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 August 2026
-> **Bosak baseline:** 1,958 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,960 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-25** — XSLT: **XTSE3350 static-error cluster (`error-3350*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE3350` when two `xsl:accumulator` declarations in the same stylesheet module have the same expanded QName. The W3C `error-3350*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.63).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+2 tests; header → 0.50).
+  - Verification: `error-3350*` 1/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,960/0.
 
 - **2026-08-25** — XSLT: **XTSE3190 static-error cluster (`error-3190*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE3190` when two sibling `xsl:merge-source` elements within the same `xsl:merge` have the same effective name (explicit `name` attribute or the default implicit name). The W3C `error-3190*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.62).

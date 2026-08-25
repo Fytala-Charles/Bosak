@@ -1,11 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `0a0a51b` — XSLT: XTSE3190 duplicate xsl:merge-source names
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3190*` XTSE3190 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,958 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE3350 duplicate xsl:accumulator names
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3350*` XTSE3350 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,960 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE3190 static error cluster)
+## This Session Changes (XTSE3350 static error cluster)
+
+1. **`xsl:accumulator` duplicate-name validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE3350` when two `xsl:accumulator` declarations in the same stylesheet module have the same expanded QName.
+   - This matches XSLT 3.0 §18.2.1: all accumulator declarations with the same expanded QName and the same import precedence must be distinct; duplicate declarations in the same module are an error.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering duplicate names and distinct names.
+   - Headers bumped: `Stylesheet.cs` → 2.63, `StylesheetTests.cs` → 0.50.
+
+2. **Results** —
+   - `error-3350*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,960 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE3190 static error cluster)
 
 1. **`xsl:merge-source` duplicate-name validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE3190` when two sibling `xsl:merge-source` elements within the same `xsl:merge` have the same effective name (explicit `name` attribute or the default implicit name).

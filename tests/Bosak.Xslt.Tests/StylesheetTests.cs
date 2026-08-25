@@ -61,6 +61,7 @@
 //                      | Charles Korthout | 0.47  | 25-08-2026     | Added XTSE3140 regression tests for xsl:try/@select content                            |
 //                      | Charles Korthout | 0.48  | 25-08-2026     | Added XTSE3150 regression tests for xsl:catch/@select content                            |
 //                      | Charles Korthout | 0.49  | 25-08-2026     | Added XTSE3190 regression tests for duplicate xsl:merge-source names                     |
+//                      | Charles Korthout | 0.50  | 25-08-2026     | Added XTSE3350 regression tests for duplicate xsl:accumulator names                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3956,6 +3957,46 @@ return fn:transform(map{""stylesheet-text"": $xsl,
                         </xsl:merge-action>
                     </xsl:merge>
                 </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void DuplicateAccumulatorNames_ThrowsXtse3350()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:accumulator name='a' initial-value='0'>
+                <xsl:accumulator-rule match='x' select='$value+1'/>
+            </xsl:accumulator>
+            <xsl:accumulator name='a' initial-value='1'>
+                <xsl:accumulator-rule match='x' select='$value+2'/>
+            </xsl:accumulator>
+            <xsl:template name='main'>
+                <out><x/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE3350", ex.Message);
+    }
+
+    [Fact]
+    public void DistinctAccumulatorNames_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:accumulator name='a' initial-value='0'>
+                <xsl:accumulator-rule match='x' select='$value+1'/>
+            </xsl:accumulator>
+            <xsl:accumulator name='b' initial-value='1'>
+                <xsl:accumulator-rule match='x' select='$value+2'/>
+            </xsl:accumulator>
+            <xsl:template name='main'>
+                <out><x/></out>
             </xsl:template>
         </xsl:stylesheet>";
 
