@@ -103,6 +103,7 @@
 //                      | Charles Korthout | 2.56  | 25-08-2026     | XTSE1040 validation for xsl:perform-sort/@select content               |
 //                      | Charles Korthout | 2.57  | 25-08-2026     | XTSE1222 validation for conflicting xsl:key @composite values          |
 //                      | Charles Korthout | 2.58  | 25-08-2026     | XTSE1430 validation for unbound extension-element-prefixes            |
+//                      | Charles Korthout | 2.59  | 25-08-2026     | XTSE1660 validation for xsl:type on literal result elements            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2058,6 +2059,8 @@ public sealed class Stylesheet
             }
             var typeAttr = elem.Attribute("type") ?? elem.Attribute(XName.Get("type", XslNamespace));
             if (isXsltElement && typeAttr != null && localName != "merge-source")
+                throw new InvalidOperationException("XTSE1660");
+            if (!isXsltElement && elem.Attribute(XName.Get("type", XslNamespace)) != null)
                 throw new InvalidOperationException("XTSE1660");
 
             // xsl:merge validation

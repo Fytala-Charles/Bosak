@@ -57,6 +57,7 @@
 //                      | Charles Korthout | 0.43  | 25-08-2026     | Added XTSE1040 regression tests for xsl:perform-sort/@select content                 |
 //                      | Charles Korthout | 0.44  | 25-08-2026     | Added XTSE1222 regression tests for conflicting xsl:key @composite values              |
 //                      | Charles Korthout | 0.45  | 25-08-2026     | Added XTSE1430 regression tests for unbound extension-element-prefixes               |
+//                      | Charles Korthout | 0.46  | 25-08-2026     | Added XTSE1660 regression tests for xsl:type on literal result elements                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3791,6 +3792,39 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             <xsl:template name='main'>
                 <out>
                     <e xsl:extension-element-prefixes='my'/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void LiteralResultElement_XslType_ThrowsXtse1660()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out xsl:type='xs:untyped'>
+                    <x/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1660", ex.Message);
+    }
+
+    [Fact]
+    public void LiteralResultElement_NoXslType_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out type='text'>
+                    <x/>
                 </out>
             </xsl:template>
         </xsl:stylesheet>";

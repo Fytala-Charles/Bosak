@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `0b56535` — XSLT: XTSE1430 unbound extension-element-prefixes
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1430*` XTSE1430 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,950 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE1660 xsl:type on literal result elements
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1660*` XTSE1660 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,952 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1430 static error cluster)
+## This Session Changes (XTSE1660 static error cluster)
+
+1. **`xsl:type` on literal result elements** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE1660` when a literal result element has an `xsl:type` attribute.
+   - A no-namespace `type` attribute on a literal result element continues to be treated as an ordinary attribute.
+   - This matches XSLT 3.0 §5.4: a non-schema-aware processor must signal a static error for `xsl:type` on a literal result element.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `xsl:type` and a plain `type` attribute.
+   - Headers bumped: `Stylesheet.cs` → 2.59, `StylesheetTests.cs` → 0.46.
+
+2. **Results** —
+   - `error-1660*` cluster: 5 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,952 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1430 static error cluster)
 
 1. **`extension-element-prefixes` namespace binding validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE1430` when `extension-element-prefixes` contains a prefix that is not bound to a namespace, or `#default` when no default namespace is in scope.
