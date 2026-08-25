@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 August 2026
-> **Bosak baseline:** 1,937 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,940 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-25** — XSLT: **XTSE0910 static-error cluster (`error-0910*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE0910` when `xsl:namespace` has a `select` attribute together with content other than `xsl:fallback` instructions, or when it has empty content and no `select` attribute. A `select` attribute with empty content or with only `xsl:fallback` children continues to be accepted. The W3C `error-0910*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.53).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.40).
+  - Verification: `error-0910*` 1/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,940/0.
 
 - **2026-08-25** — XSLT: **XTSE0880 static-error cluster (`error-0880*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE0880` when `xsl:processing-instruction` has both a `select` attribute and non-empty content (text or element children). A `select` attribute with empty content continues to be accepted. The W3C `error-0880*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.52).

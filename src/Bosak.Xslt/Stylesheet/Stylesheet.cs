@@ -97,6 +97,7 @@
 //                      | Charles Korthout | 2.50  | 25-08-2026     | XTSE0840 validation for xsl:attribute/@select with non-empty content    |
 //                      | Charles Korthout | 2.51  | 25-08-2026     | XTSE0870 validation for xsl:value-of/@select and content                |
 //                      | Charles Korthout | 2.52  | 25-08-2026     | XTSE0880 validation for xsl:processing-instruction/@select with content |
+//                      | Charles Korthout | 2.53  | 25-08-2026     | XTSE0910 validation for xsl:namespace/@select and content              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1582,6 +1583,29 @@ public sealed class Stylesheet
                 }
                 if (hasContent)
                     throw new InvalidOperationException("XTSE0880: xsl:processing-instruction must have empty content when the select attribute is present.");
+            }
+
+            // XTSE0910: xsl:namespace/@select is allowed only with empty content or xsl:fallback children;
+            // if select is absent, the element must have non-empty content.
+            if (isXsltElement && localName == "namespace")
+            {
+                bool hasSelect = elem.Attribute("select") != null;
+                bool hasNonFallbackContent = false;
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XElement xelem && xelem.Name.NamespaceName == XslNamespace && xelem.Name.LocalName == "fallback")
+                        continue;
+                    if (node is XElement || node is XText)
+                    {
+                        hasNonFallbackContent = true;
+                        break;
+                    }
+                }
+
+                if (hasSelect && hasNonFallbackContent)
+                    throw new InvalidOperationException("XTSE0910: xsl:namespace must have empty content or only xsl:fallback children when the select attribute is present.");
+                if (!hasSelect && !hasNonFallbackContent)
+                    throw new InvalidOperationException("XTSE0910: xsl:namespace must have a select attribute when its content is empty.");
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.

@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `7ef8f0c` — XSLT: XTSE0880 xsl:processing-instruction select attribute with content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0880*` XTSE0880 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,937 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE0910 xsl:namespace select attribute and content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0910*` XTSE0910 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,940 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0880 static error cluster)
+## This Session Changes (XTSE0910 static error cluster)
+
+1. **`xsl:namespace/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE0910` when `xsl:namespace` has a `select` attribute together with content other than `xsl:fallback` instructions.
+   - It also raises `XTSE0910` when `xsl:namespace` has empty content and no `select` attribute.
+   - A `select` attribute with empty content or with only `xsl:fallback` children continues to be accepted.
+   - This matches XSLT 3.0 §11.7.2: the `select` attribute and sequence constructor are mutually exclusive, except that `xsl:fallback` children are permitted.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` with non-fallback content, empty content without `select`, and content without `select`.
+   - Headers bumped: `Stylesheet.cs` → 2.53, `StylesheetTests.cs` → 0.40.
+
+2. **Results** —
+   - `error-0910*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,940 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0880 static error cluster)
 
 1. **`xsl:processing-instruction/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE0880` when `xsl:processing-instruction` has both a `select` attribute and non-empty content (text or element children).
