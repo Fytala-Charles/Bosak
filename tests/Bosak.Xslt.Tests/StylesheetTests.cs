@@ -50,6 +50,7 @@
 //                      | Charles Korthout | 0.36  | 25-08-2026     | Added XTSE0125 regression tests for default-collation collation URIs                     |
 //                      | Charles Korthout | 0.37  | 25-08-2026     | Added XTSE0840 regression tests for xsl:attribute/@select with content                 |
 //                      | Charles Korthout | 0.38  | 25-08-2026     | Added XTSE0870 regression tests for xsl:value-of/@select and content                   |
+//                      | Charles Korthout | 0.39  | 25-08-2026     | Added XTSE0880 regression tests for xsl:processing-instruction/@select with content     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3524,6 +3525,38 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             <xsl:template name='main'>
                 <out>
                     <xsl:value-of select='3'/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void XslProcessingInstruction_SelectWithContent_ThrowsXtse0880()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:processing-instruction name='pi' select='3'>four</xsl:processing-instruction>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0880", ex.Message);
+    }
+
+    [Fact]
+    public void XslProcessingInstruction_SelectWithoutContent_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:processing-instruction name='pi' select='3'/>
                 </out>
             </xsl:template>
         </xsl:stylesheet>";

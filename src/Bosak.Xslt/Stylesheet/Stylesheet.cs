@@ -96,6 +96,7 @@
 //                      | Charles Korthout | 2.49  | 25-08-2026     | XTSE0125 validation for default-collation collation URIs                |
 //                      | Charles Korthout | 2.50  | 25-08-2026     | XTSE0840 validation for xsl:attribute/@select with non-empty content    |
 //                      | Charles Korthout | 2.51  | 25-08-2026     | XTSE0870 validation for xsl:value-of/@select and content                |
+//                      | Charles Korthout | 2.52  | 25-08-2026     | XTSE0880 validation for xsl:processing-instruction/@select with content |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1565,6 +1566,22 @@ public sealed class Stylesheet
                     throw new InvalidOperationException("XTSE0870: xsl:value-of must have empty content when the select attribute is present.");
                 if (!hasSelect && !hasContent)
                     throw new InvalidOperationException("XTSE0870: xsl:value-of must have a select attribute when its content is empty.");
+            }
+
+            // XTSE0880: xsl:processing-instruction/@select is allowed only when the element has empty content.
+            if (isXsltElement && localName == "processing-instruction" && elem.Attribute("select") != null)
+            {
+                bool hasContent = false;
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XElement || node is XText)
+                    {
+                        hasContent = true;
+                        break;
+                    }
+                }
+                if (hasContent)
+                    throw new InvalidOperationException("XTSE0880: xsl:processing-instruction must have empty content when the select attribute is present.");
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.
