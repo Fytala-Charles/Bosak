@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `0057932` — XSLT: XTSE1015 xsl:sort select attribute and content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1015*` XTSE1015 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,944 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE1040 xsl:perform-sort select attribute and content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1040*` XTSE1040 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,946 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1015 static error cluster)
+## This Session Changes (XTSE1040 static error cluster)
+
+1. **`xsl:perform-sort/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE1040` when `xsl:perform-sort` has a `select` attribute together with content other than `xsl:sort` and `xsl:fallback` instructions.
+   - A `select` attribute with only `xsl:sort` and/or `xsl:fallback` children continues to be accepted.
+   - This matches XSLT 3.0 §13.2: the `select` attribute is permitted only when the element has no content other than `xsl:sort` and `xsl:fallback` instructions.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` with disallowed content and `select` with only `xsl:sort`.
+   - Headers bumped: `Stylesheet.cs` → 2.56, `StylesheetTests.cs` → 0.43.
+
+2. **Results** —
+   - `error-1040*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,946 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1015 static error cluster)
 
 1. **`xsl:sort/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE1015` when `xsl:sort` has a `select` attribute together with non-empty content (text or element children).

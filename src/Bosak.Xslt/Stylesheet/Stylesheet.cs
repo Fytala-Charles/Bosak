@@ -100,6 +100,7 @@
 //                      | Charles Korthout | 2.53  | 25-08-2026     | XTSE0910 validation for xsl:namespace/@select and content              |
 //                      | Charles Korthout | 2.54  | 25-08-2026     | XTSE0940 validation for xsl:comment/@select with non-empty content     |
 //                      | Charles Korthout | 2.55  | 25-08-2026     | XTSE1015 validation for xsl:sort/@select with non-empty content         |
+//                      | Charles Korthout | 2.56  | 25-08-2026     | XTSE1040 validation for xsl:perform-sort/@select content               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1640,6 +1641,27 @@ public sealed class Stylesheet
                 }
                 if (hasContent)
                     throw new InvalidOperationException("XTSE1015: xsl:sort must have empty content when the select attribute is present.");
+            }
+
+            // XTSE1040: xsl:perform-sort/@select may only have xsl:sort and xsl:fallback content.
+            if (isXsltElement && localName == "perform-sort" && elem.Attribute("select") != null)
+            {
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XElement child)
+                    {
+                        if (child.Name.NamespaceName == XslNamespace &&
+                            child.Name.LocalName is "sort" or "fallback")
+                        {
+                            continue;
+                        }
+                        throw new InvalidOperationException("XTSE1040: xsl:perform-sort with a select attribute may only contain xsl:sort and xsl:fallback instructions.");
+                    }
+                    else if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                    {
+                        throw new InvalidOperationException("XTSE1040: xsl:perform-sort with a select attribute may only contain xsl:sort and xsl:fallback instructions.");
+                    }
+                }
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.

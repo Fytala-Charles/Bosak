@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 0.40  | 25-08-2026     | Added XTSE0910 regression tests for xsl:namespace/@select and content                |
 //                      | Charles Korthout | 0.41  | 25-08-2026     | Added XTSE0940 regression tests for xsl:comment/@select with content                 |
 //                      | Charles Korthout | 0.42  | 25-08-2026     | Added XTSE1015 regression tests for xsl:sort/@select with content                     |
+//                      | Charles Korthout | 0.43  | 25-08-2026     | Added XTSE1040 regression tests for xsl:perform-sort/@select content                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3685,6 +3686,43 @@ return fn:transform(map{""stylesheet-text"": $xsl,
                         <xsl:sort select='.'/>
                         <xsl:value-of select='.'/>
                     </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void XslPerformSort_SelectWithDisallowedContent_ThrowsXtse1040()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:perform-sort select='1 to 5'>
+                        <xsl:sort select='.'/>
+                        <xsl:value-of select='.'/>
+                    </xsl:perform-sort>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1040", ex.Message);
+    }
+
+    [Fact]
+    public void XslPerformSort_SelectWithSortOnly_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:perform-sort select='1 to 5'>
+                        <xsl:sort select='.'/>
+                    </xsl:perform-sort>
                 </out>
             </xsl:template>
         </xsl:stylesheet>";
