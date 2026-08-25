@@ -62,6 +62,7 @@
 //                      | Charles Korthout | 0.48  | 25-08-2026     | Added XTSE3150 regression tests for xsl:catch/@select content                            |
 //                      | Charles Korthout | 0.49  | 25-08-2026     | Added XTSE3190 regression tests for duplicate xsl:merge-source names                     |
 //                      | Charles Korthout | 0.50  | 25-08-2026     | Added XTSE3350 regression tests for duplicate xsl:accumulator names                    |
+//                      | Charles Korthout | 0.51  | 25-08-2026     | Added XTSE0760 regression tests for xsl:param inside xsl:function                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3998,6 +3999,63 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             <xsl:template name='main'>
                 <out><x/></out>
             </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void ParamInsideFunction_WithSelect_ThrowsXtse0760()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://my.com/'>
+            <xsl:template match='/'>
+                <out><xsl:apply-templates/></out>
+            </xsl:template>
+            <xsl:function name='my:f'>
+                <xsl:param name='x' select='3'/>
+                <xsl:sequence select='2'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0760", ex.Message);
+    }
+
+    [Fact]
+    public void ParamInsideFunction_WithContent_ThrowsXtse0760()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://my.com/'>
+            <xsl:template match='/'>
+                <out><xsl:apply-templates/></out>
+            </xsl:template>
+            <xsl:function name='my:f'>
+                <xsl:param name='x'>3</xsl:param>
+                <xsl:sequence select='2'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0760", ex.Message);
+    }
+
+    [Fact]
+    public void ParamInsideFunction_Empty_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://my.com/'>
+            <xsl:template match='/'>
+                <out><xsl:apply-templates/></out>
+            </xsl:template>
+            <xsl:function name='my:f'>
+                <xsl:param name='x'/>
+                <xsl:sequence select='2'/>
+            </xsl:function>
         </xsl:stylesheet>";
 
         var compiler = new Api.XsltCompiler();

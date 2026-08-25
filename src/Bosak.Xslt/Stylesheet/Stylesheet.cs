@@ -108,6 +108,7 @@
 //                      | Charles Korthout | 2.61  | 25-08-2026     | XTSE3150 validation for xsl:catch/@select content                      |
 //                      | Charles Korthout | 2.62  | 25-08-2026     | XTSE3190 validation for duplicate xsl:merge-source names               |
 //                      | Charles Korthout | 2.63  | 25-08-2026     | XTSE3350 validation for duplicate xsl:accumulator names                 |
+//                      | Charles Korthout | 2.64  | 25-08-2026     | XTSE0760 validation for xsl:param inside xsl:function                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1764,6 +1765,22 @@ public sealed class Stylesheet
                 }
                 if (hasContent)
                     throw new InvalidOperationException("XTSE3150: xsl:catch must have empty content when the select attribute is present.");
+            }
+
+            // XTSE0760: xsl:param inside xsl:function must be empty and must not have a select attribute.
+            if (isXsltElement && localName == "param")
+            {
+                var parent = elem.Parent;
+                if (parent != null && parent.Name.NamespaceName == XslNamespace && parent.Name.LocalName == "function")
+                {
+                    if (elem.Attribute("select") != null)
+                        throw new InvalidOperationException("XTSE0760: xsl:param inside xsl:function must not have a select attribute.");
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XElement || node is XText)
+                            throw new InvalidOperationException("XTSE0760: xsl:param inside xsl:function must be empty.");
+                    }
+                }
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.

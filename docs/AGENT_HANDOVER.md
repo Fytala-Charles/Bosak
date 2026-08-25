@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `0259b45` — XSLT: XTSE3350 duplicate xsl:accumulator names
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3350*` XTSE3350 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,960 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE0760 xsl:param inside xsl:function
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0760*` XTSE0760 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,963 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE3350 static error cluster)
+## This Session Changes (XTSE0760 static error cluster)
+
+1. **`xsl:param` inside `xsl:function` validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE0760` when an `xsl:param` inside an `xsl:function` has a `select` attribute or non-empty content.
+   - An empty `xsl:param` without a `select` attribute continues to be accepted.
+   - This matches XSLT 3.0 §10.4: parameters of a stylesheet function must not specify a default value.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` on the parameter, content in the parameter, and a valid empty parameter.
+   - Headers bumped: `Stylesheet.cs` → 2.64, `StylesheetTests.cs` → 0.51.
+
+2. **Results** —
+   - `error-0760*` cluster: 2 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,963 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE3350 static error cluster)
 
 1. **`xsl:accumulator` duplicate-name validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE3350` when two `xsl:accumulator` declarations in the same stylesheet module have the same expanded QName.
