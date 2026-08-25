@@ -86,6 +86,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.42  | 24-08-2026     | XTSE0808 exclude-result-prefixes prefix binding validation                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.43  | 25-08-2026     | XTSE0809 #default in exclude-result-prefixes requires default namespace               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2522,7 +2524,9 @@ public sealed class Stylesheet
     /// <summary>
     /// Validates an <c>exclude-result-prefixes</c> value: a whitespace-separated list of
     /// namespace prefixes, <c>#all</c>, or <c>#default</c>. Throws <c>XTSE0808</c> when a
-    /// prefix token has no namespace binding in scope on the owning element.
+    /// prefix token has no namespace binding in scope on the owning element, and
+    /// <c>XTSE0809</c> when <c>#default</c> is used but the owning element has no default
+    /// namespace.
     /// </summary>
     private void ValidateExcludeResultPrefixesValue(XElement element, string rawValue, string construct)
     {
@@ -2532,8 +2536,17 @@ public sealed class Stylesheet
         foreach (var token in rawValue.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
         {
             var prefix = token.Trim();
-            if (string.IsNullOrEmpty(prefix) || prefix == "#all" || prefix == "#default")
+            if (string.IsNullOrEmpty(prefix) || prefix == "#all")
                 continue;
+
+            if (prefix == "#default")
+            {
+                // XTSE0809: #default requires a default namespace in scope on the owning element.
+                var defaultNs = element.GetDefaultNamespace()?.NamespaceName ?? string.Empty;
+                if (string.IsNullOrEmpty(defaultNs))
+                    throw new InvalidOperationException($"XTSE0809: #default used in {construct} but the owning element has no default namespace.");
+                continue;
+            }
 
             var ns = element.GetNamespaceOfPrefix(prefix);
             if (ns == null)
