@@ -67,6 +67,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.53  | 25-08-2026     | Added XTSE1290 regression tests for conflicting xsl:decimal-format declarations          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.54  | 25-08-2026     | Added FODF1280 regression test for unknown decimal-format name                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4205,6 +4207,21 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var compiler = new Api.XsltCompiler { UriResolver = resolver };
         var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl"));
         Assert.Contains("XTSE1290", ex.Message);
+    }
+
+    [Fact]
+    public void FormatNumber_UnknownDecimalFormatName_ThrowsFodf1280()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""undefined"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("FODF1280", ex.Message);
     }
 
 }
