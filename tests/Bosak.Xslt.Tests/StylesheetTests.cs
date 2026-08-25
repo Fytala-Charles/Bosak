@@ -56,6 +56,7 @@
 //                      | Charles Korthout | 0.42  | 25-08-2026     | Added XTSE1015 regression tests for xsl:sort/@select with content                     |
 //                      | Charles Korthout | 0.43  | 25-08-2026     | Added XTSE1040 regression tests for xsl:perform-sort/@select content                 |
 //                      | Charles Korthout | 0.44  | 25-08-2026     | Added XTSE1222 regression tests for conflicting xsl:key @composite values              |
+//                      | Charles Korthout | 0.45  | 25-08-2026     | Added XTSE1430 regression tests for unbound extension-element-prefixes               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3757,6 +3758,40 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             <xsl:key name='k' match='p' use='q' composite='yes'/>
             <xsl:template name='main'>
                 <out><x/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void ExtensionElementPrefixes_UnboundPrefix_ThrowsXtse1430()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://my.com/'>
+            <xsl:template name='main'>
+                <out>
+                    <e xsl:extension-element-prefixes='my your'/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1430", ex.Message);
+    }
+
+    [Fact]
+    public void ExtensionElementPrefixes_BoundPrefix_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:my='http://my.com/'>
+            <xsl:template name='main'>
+                <out>
+                    <e xsl:extension-element-prefixes='my'/>
+                </out>
             </xsl:template>
         </xsl:stylesheet>";
 

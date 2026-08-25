@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `da4e9d3` — XSLT: XTSE1222 duplicate xsl:key composite values
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1222*` XTSE1222 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,948 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE1430 unbound extension-element-prefixes
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1430*` XTSE1430 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,950 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1222 static error cluster)
+## This Session Changes (XTSE1430 static error cluster)
+
+1. **`extension-element-prefixes` namespace binding validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE1430` when `extension-element-prefixes` contains a prefix that is not bound to a namespace, or `#default` when no default namespace is in scope.
+   - The check applies both to the no-namespace attribute on XSLT elements and to the `xsl:extension-element-prefixes` attribute on literal result elements.
+   - This matches XSLT 3.0 §3.6: every prefix listed in `extension-element-prefixes` must be declared in scope.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering an unbound prefix on a literal result element and a bound prefix.
+   - Headers bumped: `Stylesheet.cs` → 2.58, `StylesheetTests.cs` → 0.45.
+
+2. **Results** —
+   - `error-1430*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,950 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1222 static error cluster)
 
 1. **`xsl:key/@composite` conflict validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - The stylesheet compiler now raises `XTSE1222` when two or more `xsl:key` declarations share the same expanded name but have different effective `composite` values.

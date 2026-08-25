@@ -102,6 +102,7 @@
 //                      | Charles Korthout | 2.55  | 25-08-2026     | XTSE1015 validation for xsl:sort/@select with non-empty content         |
 //                      | Charles Korthout | 2.56  | 25-08-2026     | XTSE1040 validation for xsl:perform-sort/@select content               |
 //                      | Charles Korthout | 2.57  | 25-08-2026     | XTSE1222 validation for conflicting xsl:key @composite values          |
+//                      | Charles Korthout | 2.58  | 25-08-2026     | XTSE1430 validation for unbound extension-element-prefixes            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1466,6 +1467,42 @@ public sealed class Stylesheet
                         ?? elem.Attribute("exclude-result-prefixes");
                     if (erpAttr != null)
                         ValidateExcludeResultPrefixesValue(elem, erpAttr.Value, $"literal result element @{erpAttr.Name}");
+                }
+            }
+
+            // XTSE1430: validate extension-element-prefixes tokens are bound to namespaces.
+            {
+                XAttribute? eepAttr;
+                string construct;
+                if (isXsltElement)
+                {
+                    eepAttr = elem.Attribute("extension-element-prefixes");
+                    construct = $"xsl:{localName}/@extension-element-prefixes";
+                }
+                else
+                {
+                    eepAttr = elem.Attribute(XName.Get("extension-element-prefixes", XslNamespace))
+                        ?? elem.Attribute("extension-element-prefixes");
+                    construct = "literal result element @xsl:extension-element-prefixes";
+                }
+
+                if (eepAttr != null && !string.IsNullOrWhiteSpace(eepAttr.Value))
+                {
+                    foreach (var token in eepAttr.Value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        var prefix = token.Trim();
+                        if (prefix == "#default")
+                        {
+                            if (string.IsNullOrEmpty(elem.GetDefaultNamespace().NamespaceName))
+                                throw new InvalidOperationException($"XTSE1430: #default in {construct} is not bound to a default namespace.");
+                        }
+                        else
+                        {
+                            var ns = elem.GetNamespaceOfPrefix(prefix);
+                            if (ns == null || string.IsNullOrEmpty(ns.NamespaceName))
+                                throw new InvalidOperationException($"XTSE1430: Prefix '{prefix}' in {construct} is not bound to a namespace.");
+                        }
+                    }
                 }
             }
 
