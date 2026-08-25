@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `c32b346` — XSLT: XTSE0940 xsl:comment select attribute and content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0940*` XTSE0940 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,942 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE1015 xsl:sort select attribute and content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1015*` XTSE1015 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,944 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0940 static error cluster)
+## This Session Changes (XTSE1015 static error cluster)
+
+1. **`xsl:sort/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE1015` when `xsl:sort` has a `select` attribute together with non-empty content (text or element children).
+   - A `select` attribute with empty content continues to be accepted.
+   - This matches XSLT 3.0 §13.1.1: the `select` attribute is permitted only when the element has empty content.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` with content and `select` with empty content.
+   - Headers bumped: `Stylesheet.cs` → 2.55, `StylesheetTests.cs` → 0.42.
+
+2. **Results** —
+   - `error-1015*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,944 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0940 static error cluster)
 
 1. **`xsl:comment/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE0940` when `xsl:comment` has a `select` attribute together with non-empty content (text or element children).

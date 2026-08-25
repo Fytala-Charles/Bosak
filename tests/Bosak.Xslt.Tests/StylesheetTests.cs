@@ -53,6 +53,7 @@
 //                      | Charles Korthout | 0.39  | 25-08-2026     | Added XTSE0880 regression tests for xsl:processing-instruction/@select with content     |
 //                      | Charles Korthout | 0.40  | 25-08-2026     | Added XTSE0910 regression tests for xsl:namespace/@select and content                |
 //                      | Charles Korthout | 0.41  | 25-08-2026     | Added XTSE0940 regression tests for xsl:comment/@select with content                 |
+//                      | Charles Korthout | 0.42  | 25-08-2026     | Added XTSE1015 regression tests for xsl:sort/@select with content                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3647,6 +3648,44 @@ return fn:transform(map{""stylesheet-text"": $xsl,
                 <my:out>
                     <xsl:comment select=""$p""/>
                 </my:out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void XslSort_SelectWithContent_ThrowsXtse1015()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:for-each select='1 to 5'>
+                        <xsl:sort select='.'>twelve</xsl:sort>
+                        <xsl:value-of select='.'/>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1015", ex.Message);
+    }
+
+    [Fact]
+    public void XslSort_SelectWithoutContent_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:for-each select='1 to 5'>
+                        <xsl:sort select='.'/>
+                        <xsl:value-of select='.'/>
+                    </xsl:for-each>
+                </out>
             </xsl:template>
         </xsl:stylesheet>";
 
