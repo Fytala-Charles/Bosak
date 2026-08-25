@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `26f3a6c` — XSLT: XTSE1295 xsl:decimal-format/@zero-digit
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1295*` XTSE1295 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,965 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** *pending* — XSLT: XTSE1290 conflicting xsl:decimal-format declarations
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1290*` XTSE1290 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,971 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1295 static error cluster)
+## This Session Changes (XTSE1290 static error cluster)
+
+1. **`xsl:decimal-format` conflict validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `GetAllDecimalFormats` now detects XTSE1290 when two `xsl:decimal-format` declarations with the same name (or default format) supply different values for the same attribute at the same import precedence, unless a higher-precedence declaration also defines that attribute.
+   - The check is performed during compilation for the root stylesheet, after all import/include relationships and final import precedences are known.
+   - Decimal format merging was updated so that higher-precedence definitions override lower-precedence ones (imports first, then includes/local, with the lowest `ImportPrecedence` number winning).
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering same-module conflicts, default-format conflicts, identical values, higher-precedence overrides, and conflicting imports/includes at the same precedence.
+   - Headers bumped: `Stylesheet.cs` → 2.66, `StylesheetTests.cs` → 0.53.
+
+2. **Results** —
+   - `error-1290*` cluster: 2 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,971 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1295 static error cluster)
 
 1. **`xsl:decimal-format/@zero-digit` validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - After `xsl:decimal-format` declarations are parsed, the compiler now validates that an explicit `zero-digit` attribute names a Unicode decimal digit whose numeric value is zero (U+0030 by default).

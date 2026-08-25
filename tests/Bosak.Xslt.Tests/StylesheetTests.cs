@@ -65,6 +65,8 @@
 //                      | Charles Korthout | 0.51  | 25-08-2026     | Added XTSE0760 regression tests for xsl:param inside xsl:function                       |
 //                      | Charles Korthout | 0.52  | 25-08-2026     | Added XTSE1295 regression tests for xsl:decimal-format/@zero-digit                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.53  | 25-08-2026     | Added XTSE1290 regression tests for conflicting xsl:decimal-format declarations          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4092,6 +4094,117 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
         Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void DecimalFormat_ConflictingValuesAtSamePrecedence_ThrowsXtse1290()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' decimal-separator='.'/>
+            <xsl:decimal-format name='d' decimal-separator=','/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1290", ex.Message);
+    }
+
+    [Fact]
+    public void DecimalFormat_SameValuesAtSamePrecedence_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' decimal-separator='.'/>
+            <xsl:decimal-format name='d' decimal-separator='.'/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void DecimalFormat_DefaultFormat_ConflictingValuesAtSamePrecedence_ThrowsXtse1290()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format decimal-separator='.'/>
+            <xsl:decimal-format decimal-separator=','/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1290", ex.Message);
+    }
+
+    [Fact]
+    public void DecimalFormat_HigherPrecedenceOverridesLowerValue_Passes()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:import href='base.xsl'/>
+            <xsl:decimal-format name='d' percent='*'/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///base.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' percent='%'/>
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl");
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void DecimalFormat_ConflictingImportsAtSamePrecedence_ThrowsXtse1290()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:import href='base1.xsl'/>
+            <xsl:import href='base2.xsl'/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///base1.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' percent='%'/>
+        </xsl:stylesheet>");
+        resolver.Add("file:///base2.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' percent='*'/>
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl"));
+        Assert.Contains("XTSE1290", ex.Message);
+    }
+
+    [Fact]
+    public void DecimalFormat_ConflictingIncludesAtSamePrecedence_ThrowsXtse1290()
+    {
+        var resolver = new InMemoryResolver();
+        resolver.Add("file:///main.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:include href='helper.xsl'/>
+            <xsl:decimal-format name='d' percent='*'/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>");
+        resolver.Add("file:///helper.xsl", @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' percent='%'/>
+        </xsl:stylesheet>");
+
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(resolver.Resolve("file:///main.xsl", null), "file:///main.xsl"));
+        Assert.Contains("XTSE1290", ex.Message);
     }
 
 }

@@ -111,6 +111,8 @@
 //                      | Charles Korthout | 2.64  | 25-08-2026     | XTSE0760 validation for xsl:param inside xsl:function                  |
 //                      | Charles Korthout | 2.65  | 25-08-2026     | XTSE1295 validation for xsl:decimal-format/@zero-digit numeric value    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.66  | 25-08-2026     | XTSE1290 validation for conflicting xsl:decimal-format declarations    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1088,6 +1090,10 @@ public sealed class Stylesheet
                 if (group.Select(k => k.Composite).Distinct().Count() > 1)
                     throw new InvalidOperationException($"XTSE1222: xsl:key definitions for '{group.Key}' have conflicting @composite values.");
             }
+
+            // XTSE1290: decimal-format declarations with the same name must not supply
+            // conflicting values for the same attribute at the same import precedence.
+            GetAllDecimalFormats();
         }
     }
 
@@ -4110,29 +4116,23 @@ public sealed class Stylesheet
     /// <summary>
     /// Recursively collects all decimal format definitions from this stylesheet, its includes, and its imports.
     /// Later definitions override earlier ones (local &gt; included &gt; imported).
+    /// Conflicting values for the same attribute at the same import precedence raise XTSE1290.
     /// </summary>
     public Dictionary<(string localName, string nsUri), DecimalFormatDefinition> GetAllDecimalFormats()
     {
+        var all = new Dictionary<(string, string), List<DecimalFormatDefinition>>();
+        CollectDecimalFormats(all);
+
+        foreach (var (key, list) in all)
+            ValidateDecimalFormatConflicts(key, list);
+
         var result = new Dictionary<(string, string), DecimalFormat>();
-
-        // Imported first (lowest precedence)
-        foreach (var imported in _imports)
+        foreach (var (key, list) in all)
         {
-            foreach (var (key, def) in imported.GetAllDecimalFormats())
+            // Lower ImportPrecedence number = higher XSLT precedence; process lower-precedence
+            // (higher-numbered) modules first so the highest-precedence module wins.
+            foreach (var def in list.OrderByDescending(d => d.ImportPrecedence))
                 MergeDecimalFormat(result, key, def);
-        }
-
-        // Included next
-        foreach (var included in _includes)
-        {
-            foreach (var (key, def) in included.GetAllDecimalFormats())
-                MergeDecimalFormat(result, key, def);
-        }
-
-        // Local last (highest precedence)
-        foreach (var def in _decimalFormats)
-        {
-            MergeDecimalFormat(result, (def.LocalName, def.NamespaceUri), def);
         }
 
         // Convert back to definitions
@@ -4147,6 +4147,88 @@ public sealed class Stylesheet
             };
         }
         return defs;
+    }
+
+    /// <summary>
+    /// Gathers all <c>xsl:decimal-format</c> definitions from imports, includes, and this stylesheet,
+    /// preserving each declaration's import precedence.
+    /// </summary>
+    private void CollectDecimalFormats(Dictionary<(string, string), List<DecimalFormatDefinition>> all)
+    {
+        foreach (var imported in _imports)
+            imported.CollectDecimalFormats(all);
+
+        foreach (var included in _includes)
+            included.CollectDecimalFormats(all);
+
+        foreach (var def in _decimalFormats)
+        {
+            var key = (def.LocalName, def.NamespaceUri);
+            if (!all.TryGetValue(key, out var list))
+                all[key] = list = new List<DecimalFormatDefinition>();
+            list.Add(def);
+        }
+    }
+
+    /// <summary>
+    /// Validates that no two <c>xsl:decimal-format</c> declarations with the same name and
+    /// the same import precedence supply conflicting values for the same attribute.
+    /// A definition at a higher import precedence for the same attribute overrides lower ones.
+    /// </summary>
+    private static void ValidateDecimalFormatConflicts((string localName, string nsUri) key, List<DecimalFormatDefinition> defs)
+    {
+        var attrDefs = new Dictionary<string, List<DecimalFormatDefinition>>();
+        foreach (var def in defs)
+        {
+            foreach (var attr in def.ExplicitAttributes)
+            {
+                if (!attrDefs.TryGetValue(attr, out var list))
+                    attrDefs[attr] = list = new List<DecimalFormatDefinition>();
+                list.Add(def);
+            }
+        }
+
+        foreach (var (attr, list) in attrDefs)
+        {
+            // Lower ImportPrecedence number = higher XSLT precedence. The effective value comes
+            // from the highest-precedence definition(s); conflicts among those are errors.
+            var minPrecedence = list.Min(d => d.ImportPrecedence);
+            var top = list.Where(d => d.ImportPrecedence == minPrecedence).ToList();
+            if (top.Count < 2)
+                continue;
+
+            var first = GetDecimalFormatAttributeValue(top[0], attr);
+            for (int i = 1; i < top.Count; i++)
+            {
+                if (!first.Equals(GetDecimalFormatAttributeValue(top[i], attr), StringComparison.Ordinal))
+                {
+                    var displayName = string.IsNullOrEmpty(key.localName) ? "(default)" : $"{key.localName}";
+                    throw new InvalidOperationException($"XTSE1290: Conflicting values for xsl:decimal-format '{displayName}' attribute '{attr}' at the same import precedence.");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns the value of a single <c>xsl:decimal-format</c> attribute from a definition.
+    /// </summary>
+    private static string GetDecimalFormatAttributeValue(DecimalFormatDefinition def, string attr)
+    {
+        return attr switch
+        {
+            "decimal-separator" => def.Format.DecimalSeparator,
+            "grouping-separator" => def.Format.GroupingSeparator,
+            "minus-sign" => def.Format.MinusSign,
+            "percent" => def.Format.Percent,
+            "per-mille" => def.Format.PerMille,
+            "zero-digit" => def.Format.ZeroDigit,
+            "digit" => def.Format.Digit,
+            "pattern-separator" => def.Format.PatternSeparator,
+            "exponent-separator" => def.Format.ExponentSeparator,
+            "infinity" => def.Format.Infinity,
+            "NaN" => def.Format.NaN,
+            _ => ""
+        };
     }
 
     private static void MergeDecimalFormat(Dictionary<(string, string), DecimalFormat> result, (string, string) key, DecimalFormatDefinition def)
@@ -4449,6 +4531,8 @@ public sealed class DecimalFormatDefinition
     public DecimalFormat Format { get; init; } = new();
     /// <summary>Attributes explicitly set on this xsl:decimal-format element.</summary>
     public HashSet<string> ExplicitAttributes { get; init; } = new();
+    /// <summary>The import precedence of the stylesheet module that declared this format.</summary>
+    public int ImportPrecedence { get; init; }
 
     public static DecimalFormatDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
@@ -4546,7 +4630,8 @@ public sealed class DecimalFormatDefinition
             LocalName = localName ?? "",
             NamespaceUri = nsUri ?? "",
             Format = format,
-            ExplicitAttributes = explicitAttrs
+            ExplicitAttributes = explicitAttrs,
+            ImportPrecedence = stylesheet.ImportPrecedence
         };
     }
 }
