@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `TBD` — XSLT: XTDE0420 document-node attribute/namespace content
+**Commit:** `7c63112` — XSLT: XTDE0420 document-node attribute/namespace content
 **Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0420*` XTDE0420 cluster and kept the full XSLT sweep at 0 failures.
 **Expected state:** **1,908 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
