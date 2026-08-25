@@ -69,6 +69,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.54  | 25-08-2026     | Added FODF1280 regression test for unknown decimal-format name                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.55  | 25-08-2026     | Added FODF1310 regression tests for duplicate/conflicting percent and per-mille symbols |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4222,6 +4224,38 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
         Assert.Contains("FODF1280", ex.Message);
+    }
+
+    [Fact]
+    public void FormatNumber_PercentAppearsTwice_ThrowsFodf1310()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' pattern-separator='!' />
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""%0.0%"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("FODF1310", ex.Message);
+    }
+
+    [Fact]
+    public void FormatNumber_PercentAndPerMille_ThrowsFodf1310()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' pattern-separator='!' />
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""%0.0&#x2030;"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("FODF1310", ex.Message);
     }
 
 }

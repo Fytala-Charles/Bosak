@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 August 2026
-> **Bosak baseline:** 1,972 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,974 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -19,9 +19,14 @@
 
 ## 0. Recent Changes
 
-- **2026-08-25** — XSLT: **XTDE/FODF1280 cluster (`error-1280*`)** — `format-number` already raised `FODF1280` when the named decimal-format does not exist. The W3C `error-1280*` cluster is now **3/0/0** (XSLT 2.0 variants are skipped as unsupported spec dependencies); the full XSLT sweep remains **7,056/0/7,544**.
+- **2026-08-25** — XSLT: **XTDE/FODF1310 cluster (`error-1310*`)** — `FormatNumberEngine.ParseSubpicture` now raises `FODF1310` (XTDE1310 in XSLT) when a picture subpicture contains a percent sign `%` more than once, a per-mille sign `‰` more than once, or both a percent and a per-mille sign. The W3C `error-1310*` cluster is now **9/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.XPath.Standard/Functions/FormatNumberEngine.cs` (header → 0.4).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+2 tests; header → 0.55).
+  - Verification: `error-1310*` 9/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 1,974/0.
+
+- **2026-08-25** — XSLT: **XTDE/FODF1280 cluster (`error-1280*`)** — `format-number` already raised `FODF1280` when the named decimal-format does not exist. The W3C `error-1280*` cluster is now **3/0/0** (XSLT 2.0 variants are skipped as unsupported spec dependencies); the routine XSLT sweep remains **7,056/0/7,544**.
   - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+1 test; header → 0.54).
-  - Verification: `error-1280*` 3/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,972/0.
+  - Verification: `error-1280*` 3/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 1,972/0.
 
 - **2026-08-25** — XSLT: **XTSE1290 static-error cluster (`error-1290*`)** — `Stylesheet.GetAllDecimalFormats` now validates that no two `xsl:decimal-format` declarations for the same named or default format supply conflicting values for the same attribute at the same import precedence, unless a higher-precedence declaration also defines that attribute. Conflicts raise `XTSE1290`. The W3C `error-1290*` cluster is now **2/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.66).

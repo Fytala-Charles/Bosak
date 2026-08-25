@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `4b4b0f3` — XSLT: XTDE/FODF1280 unknown decimal-format name
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1280*` XTDE/FODF1280 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,972 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `04318d4` — XSLT: XTDE/FODF1310 duplicate/conflicting percent and per-mille symbols in format-number picture
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1310*` XTDE/FODF1310 cluster.
+**Expected state:** **1,974 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE/FODF1280 cluster)
+## This Session Changes (XTDE/FODF1310 cluster)
+
+1. **`format-number` duplicate/conflicting percent and per-mille symbols** —
+   - `FormatNumberEngine.ParseSubpicture` now counts occurrences of the configured percent sign and per-mille sign in each subpicture.
+   - It raises `FODF1310` (reported as `XTDE1310` in XSLT) when the same subpicture contains the percent sign more than once, the per-mille sign more than once, or both percent and per-mille signs together.
+   - It also rejects a subpicture containing the exponent separator more than once, closing a related formatting-token duplication gap.
+   - The W3C `error-1310*` cluster passes with 9/0/0.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for the percent-appears-twice and percent+per-mille cases.
+   - Headers bumped: `FormatNumberEngine.cs` → 0.4, `StylesheetTests.cs` → 0.55.
+
+2. **Results** —
+   - `error-1310*` cluster: 9 passed / 0 failed / 0 skipped.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,974 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE/FODF1280 cluster)
 
 1. **`format-number` unknown decimal-format name** —
    - The runtime already throws `FODF1280` when `format-number` references a named decimal-format that has not been declared.
@@ -15,7 +30,7 @@
 
 2. **Results** —
    - `error-1280*` cluster: 3 passed / 0 failed / 0 skipped.
-   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
    - Unit tests: **1,972 passed / 0 failed / 0 skipped**.
 
 ## Previous Session Changes (XTSE1290 static error cluster)

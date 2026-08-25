@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.2   | 31-05-2026     | Non-numeric atomic cast, grouping-separator fixes, decimal-format merge support          |
 //                      | Charles Korthout | 0.3   | 19-07-2026     | XPTY0004 for non-numeric strings; non-BMP zero-digit support in scientific notation        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 25-08-2026     | FODF1310 for duplicate percent/per-mille or percent+per-mille in a subpicture             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -286,6 +288,16 @@ internal static class FormatNumberEngine
             if (IsDigitSign(sub.Suffix, i, format, out int len) || MatchesAt(sub.Suffix, i, format.DecimalSeparator) || MatchesAt(sub.Suffix, i, format.GroupingSeparator))
                 throw FormatError("FODF1310");
         }
+
+        // A percent sign, per-mille sign, or exponent separator must not appear more than once
+        // in a subpicture, and percent and per-mille must not both appear in the same subpicture.
+        int percentCount = CountOccurrences(picture, format.Percent);
+        int perMilleCount = CountOccurrences(picture, format.PerMille);
+        int exponentCount = CountOccurrences(picture, format.ExponentSeparator);
+        if (percentCount > 1 || perMilleCount > 1 || exponentCount > 1)
+            throw FormatError("FODF1310");
+        if (percentCount > 0 && perMilleCount > 0)
+            throw FormatError("FODF1310");
 
         // Must have at least one actual digit sign in the format token
         int actualDigits = CountAllDigits(sub.IntegerDigits, format) + CountAllDigits(sub.FractionalDigits, format);
@@ -1259,6 +1271,20 @@ internal static class FormatNumberEngine
     private static int IndexOfOrdinal(string text, string pattern)
     {
         return text.IndexOf(pattern, StringComparison.Ordinal);
+    }
+
+    private static int CountOccurrences(string text, string pattern)
+    {
+        if (string.IsNullOrEmpty(pattern))
+            return 0;
+        int count = 0;
+        int index = 0;
+        while ((index = text.IndexOf(pattern, index, StringComparison.Ordinal)) >= 0)
+        {
+            count++;
+            index += pattern.Length;
+        }
+        return count;
     }
 
     private static string MapDigit(char c, DecimalFormat format)
