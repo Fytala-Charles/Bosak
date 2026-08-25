@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `50c1037` — XSLT: XTSE0125 default-collation collation URI validation
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0125*` XTSE0125 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,930 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE0840 xsl:attribute select attribute with content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0840*` XTSE0840 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,932 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0125 static error cluster)
+## This Session Changes (XTSE0840 static error cluster)
+
+1. **`xsl:attribute/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE0840` when `xsl:attribute` has both a `select` attribute and non-empty content (text or element children).
+   - A `select` attribute with empty content continues to be accepted.
+   - This matches XSLT 3.0 §11.3: the `select` attribute is permitted only when the element has empty content.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` with content and `select` with empty content.
+   - Headers bumped: `Stylesheet.cs` → 2.50, `StylesheetTests.cs` → 0.37.
+
+2. **Results** —
+   - `error-0840*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,932 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0125 static error cluster)
 
 1. **`[xsl:]default-collation` validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now checks that any `[xsl:]default-collation` attribute contains a whitespace-separated URI list with at least one collation URI recognized by this implementation.

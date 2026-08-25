@@ -48,6 +48,7 @@
 //                      | Charles Korthout | 0.34  | 25-08-2026     | Added XTDE0560 regression tests for apply-imports/next-match context                     |
 //                      | Charles Korthout | 0.35  | 25-08-2026     | Added XTDE0420 regression tests for document-node attribute/namespace content             |
 //                      | Charles Korthout | 0.36  | 25-08-2026     | Added XTSE0125 regression tests for default-collation collation URIs                     |
+//                      | Charles Korthout | 0.37  | 25-08-2026     | Added XTSE0840 regression tests for xsl:attribute/@select with content                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3445,6 +3446,38 @@ return fn:transform(map{""stylesheet-text"": $xsl,
     public void Stylesheet_KnownDefaultCollation_Passes(string collation)
     {
         var xsl = $"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'\n            default-collation='{collation}'>\n            <xsl:template name='main'><out/></xsl:template>\n        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void XslAttribute_SelectWithContent_ThrowsXtse0840()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:attribute name='a' select='2'>five</xsl:attribute>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0840", ex.Message);
+    }
+
+    [Fact]
+    public void XslAttribute_SelectWithoutContent_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:attribute name='a' select='2'/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
 
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);

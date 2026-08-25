@@ -94,6 +94,7 @@
 //                      | Charles Korthout | 2.47  | 25-08-2026     | XTSE0370 validation for unescaped right braces in AVTs                                |
 //                      | Charles Korthout | 2.48  | 25-08-2026     | XTSE0530 validation for xsl:template/@priority as xs:decimal                           |
 //                      | Charles Korthout | 2.49  | 25-08-2026     | XTSE0125 validation for default-collation collation URIs                |
+//                      | Charles Korthout | 2.50  | 25-08-2026     | XTSE0840 validation for xsl:attribute/@select with non-empty content    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1528,6 +1529,22 @@ public sealed class Stylesheet
                 var elementUseAttrSets = elem.Attribute("use-attribute-sets");
                 if (elementUseAttrSets != null && this == _rootStylesheet && GetEffectiveVersion(elem) >= 2.0)
                     ValidateUseAttributeSetsValue(elem, elementUseAttrSets.Value, "xsl:element/@use-attribute-sets");
+            }
+
+            // XTSE0840: xsl:attribute/@select is allowed only when the element has empty content.
+            if (isXsltElement && localName == "attribute" && elem.Attribute("select") != null)
+            {
+                bool hasContent = false;
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XElement || node is XText)
+                    {
+                        hasContent = true;
+                        break;
+                    }
+                }
+                if (hasContent)
+                    throw new InvalidOperationException("XTSE0840: xsl:attribute must have empty content when the select attribute is present.");
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.
