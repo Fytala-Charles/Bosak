@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 0.35  | 25-08-2026     | Added XTDE0420 regression tests for document-node attribute/namespace content             |
 //                      | Charles Korthout | 0.36  | 25-08-2026     | Added XTSE0125 regression tests for default-collation collation URIs                     |
 //                      | Charles Korthout | 0.37  | 25-08-2026     | Added XTSE0840 regression tests for xsl:attribute/@select with content                 |
+//                      | Charles Korthout | 0.38  | 25-08-2026     | Added XTSE0870 regression tests for xsl:value-of/@select and content                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3475,6 +3476,54 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             <xsl:template name='main'>
                 <out>
                     <xsl:attribute name='a' select='2'/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void XslValueOf_SelectWithContent_ThrowsXtse0870()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:value-of select='3'>four</xsl:value-of>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0870", ex.Message);
+    }
+
+    [Fact]
+    public void XslValueOf_EmptyWithoutSelect_ThrowsXtse0870()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:value-of/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0870", ex.Message);
+    }
+
+    [Fact]
+    public void XslValueOf_EmptyWithSelect_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:value-of select='3'/>
                 </out>
             </xsl:template>
         </xsl:stylesheet>";

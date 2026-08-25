@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `78e0935` — XSLT: XTSE0840 xsl:attribute select attribute with content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0840*` XTSE0840 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,932 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE0870 xsl:value-of select attribute and content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0870*` XTSE0870 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,935 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0840 static error cluster)
+## This Session Changes (XTSE0870 static error cluster)
+
+1. **`xsl:value-of/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE0870` when `xsl:value-of` has a `select` attribute and non-empty content, or when it has empty content and no `select` attribute.
+   - A `select` attribute with empty content continues to be accepted.
+   - This matches XSLT 3.0 §11.4: the `select` attribute is required when the element has empty content and forbidden when it has non-empty content.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` with content, empty content without `select`, and `select` with empty content.
+   - Headers bumped: `Stylesheet.cs` → 2.51, `StylesheetTests.cs` → 0.38.
+
+2. **Results** —
+   - `error-0870*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,935 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0840 static error cluster)
 
 1. **`xsl:attribute/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE0840` when `xsl:attribute` has both a `select` attribute and non-empty content (text or element children).
