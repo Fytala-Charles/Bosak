@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 24 August 2026
+> **Last updated:** 25 August 2026
 > **Bosak baseline:** 1,895 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
@@ -18,6 +18,10 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-25** — XSLT: **XTSE0809 static-error cluster (`error-0809*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE0809` when `exclude-result-prefixes` contains `#default` and the owning element has no default namespace declaration (empty default namespace URI). This completes the `#default` handling left pending by `XTSE0808`. The W3C `error-0809*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.43).
+  - Verification: `error-0809*` 1/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,895/0.
 
 - **2026-08-24** — XSLT: **XTSE0808 static-error cluster (`error-0808*`)** — `Stylesheet.ValidateInstructionTree` now validates that every non-special token in an `exclude-result-prefixes` value names a namespace prefix that is in scope on the owning element. This covers `xsl:stylesheet`/`xsl:transform/@exclude-result-prefixes` and `xsl:exclude-result-prefixes` on literal result elements. The W3C `error-0808*` cluster is now **3/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.42).
