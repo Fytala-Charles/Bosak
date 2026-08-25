@@ -1,11 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `4dcf84d` — XSLT: XTSE3150 xsl:catch select attribute and content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3150*` XTSE3150 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,956 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE3190 duplicate xsl:merge-source names
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3190*` XTSE3190 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,958 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE3150 static error cluster)
+## This Session Changes (XTSE3190 static error cluster)
+
+1. **`xsl:merge-source` duplicate-name validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE3190` when two sibling `xsl:merge-source` elements within the same `xsl:merge` have the same effective name (explicit `name` attribute or the default implicit name).
+   - This matches XSLT 3.0 §13.4.1: all `xsl:merge-source` elements in a merge must have distinct names.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering duplicate names and distinct names.
+   - Headers bumped: `Stylesheet.cs` → 2.62, `StylesheetTests.cs` → 0.49.
+
+2. **Results** —
+   - `error-3190*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,958 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE3150 static error cluster)
 
 1. **`xsl:catch/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE3150` when `xsl:catch` has a `select` attribute together with non-empty content (text or element children).

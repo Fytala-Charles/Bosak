@@ -106,6 +106,7 @@
 //                      | Charles Korthout | 2.59  | 25-08-2026     | XTSE1660 validation for xsl:type on literal result elements            |
 //                      | Charles Korthout | 2.60  | 25-08-2026     | XTSE3140 validation for xsl:try/@select content                        |
 //                      | Charles Korthout | 2.61  | 25-08-2026     | XTSE3150 validation for xsl:catch/@select content                      |
+//                      | Charles Korthout | 2.62  | 25-08-2026     | XTSE3190 validation for duplicate xsl:merge-source names               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2134,6 +2135,15 @@ public sealed class Stylesheet
                         keyCount = count;
                     else if (keyCount != count)
                         throw new InvalidOperationException("XTSE0010: all xsl:merge-source elements must have the same number of xsl:merge-key children");
+                }
+
+                // XTSE3190: sibling xsl:merge-source elements must have distinct names.
+                var mergeSourceNames = new HashSet<string>();
+                foreach (var source in mergeSources)
+                {
+                    var name = source.Attribute("name")?.Value ?? "";
+                    if (!mergeSourceNames.Add(name))
+                        throw new InvalidOperationException($"XTSE3190: duplicate xsl:merge-source name '{name}'.");
                 }
 
                 // Validate child order: merge-source*, merge-action, fallback*
