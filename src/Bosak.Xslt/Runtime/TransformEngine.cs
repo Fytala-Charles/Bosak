@@ -202,6 +202,7 @@
 //                      | Charles Korthout | 6.23  | 25-08-2026     | XTSE0350 validation for unbalanced AVT/TVT braces                                     |
 //                      | Charles Korthout | 6.24  | 25-08-2026     | XTSE0370 validation for unescaped right braces in AVTs/TVTs                            |
 //                      | Charles Korthout | 6.25  | 25-08-2026     | XTDE0560 clear current template rule during global variable/parameter evaluation     |
+//                      | Charles Korthout | 6.26  | 25-08-2026     | XTDE0420 reject attribute/namespace nodes on xsl:copy document content                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -7769,8 +7770,8 @@ public sealed class TransformEngine
                             }
                         }
 
-                        // Namespace nodes are not allowed on document nodes (XTDE0420)
-                        if (tempCollector.Attributes().Any(a => a.IsNamespaceDeclaration))
+                        // Attribute and namespace nodes are not allowed on document nodes (XTDE0420)
+                        if (tempCollector.Attributes().Any())
                         {
                             throw new InvalidOperationException("XTDE0420");
                         }

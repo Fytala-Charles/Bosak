@@ -46,6 +46,7 @@
 //                      | Charles Korthout | 0.32  | 25-08-2026     | Added XTSE0370 regression tests for unescaped right braces in AVTs                       |
 //                      | Charles Korthout | 0.33  | 25-08-2026     | Added XTSE0530 regression tests for xsl:template/@priority                               |
 //                      | Charles Korthout | 0.34  | 25-08-2026     | Added XTDE0560 regression tests for apply-imports/next-match context                     |
+//                      | Charles Korthout | 0.35  | 25-08-2026     | Added XTDE0420 regression tests for document-node attribute/namespace content             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3355,6 +3356,46 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var source = new XDocumentNode(new XDocument(new XElement("dummy")));
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext(), initialTemplate: "main"));
         Assert.Contains("XTDE0560", ex.Message);
+    }
+
+    [Fact]
+    public void XslCopyOfDocument_WithAttributeContent_ThrowsXtde0420()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <a>
+                    <xsl:copy>
+                        <xsl:attribute name='x'>5</xsl:attribute>
+                    </xsl:copy>
+                </a>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(new XDocument(new XElement("root")));
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext()));
+        Assert.Contains("XTDE0420", ex.Message);
+    }
+
+    [Fact]
+    public void XslCopyOfDocument_WithNamespaceContent_ThrowsXtde0420()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <a>
+                    <xsl:copy>
+                        <xsl:namespace name='ns'>http://example.com/</xsl:namespace>
+                    </xsl:copy>
+                </a>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(new XDocument(new XElement("root")));
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext()));
+        Assert.Contains("XTDE0420", ex.Message);
     }
 
 }

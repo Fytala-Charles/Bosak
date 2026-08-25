@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `f1a8b87` — XSLT: XTDE0560 apply-imports/next-match outside current template rule
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0560*` XTDE0560 cluster and kept the full XSLT sweep at 0 failures.
+**Commit:** `TBD` — XSLT: XTDE0420 document-node attribute/namespace content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0420*` XTDE0420 cluster and kept the full XSLT sweep at 0 failures.
 **Expected state:** **1,908 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE0560 dynamic error cluster)
+## This Session Changes (XTDE0420 dynamic error cluster)
+
+1. **Document-node content validation for xsl:copy** (`src/Bosak.Xslt/Runtime/TransformEngine.cs`) —
+   - When `xsl:copy` copies a document node in direct result-tree context, the content sequence is collected into a temporary element and then moved to the result container.
+   - The existing check only rejected namespace declarations; it now rejects any attribute on that temporary collector, which catches both `xsl:attribute` and `xsl:namespace` content.
+   - This raises `XTDE0420` when a document node's content sequence would contain an attribute or namespace node, matching XSLT 3.0 §11.8.1.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering attribute and namespace content.
+   - Headers bumped: `TransformEngine.cs` → 6.26, `StylesheetTests.cs` → 0.35.
+
+2. **Results** —
+   - `error-0420*` cluster: 2 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,908 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE0560 dynamic error cluster)
 
 1. **Apply-imports/next-match context isolation** (`src/Bosak.Xslt/Runtime/TransformEngine.cs`) —
    - Global variable and parameter bodies are no longer evaluated with the caller's current template rule.
