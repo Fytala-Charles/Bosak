@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 August 2026
-> **Bosak baseline:** 1,896 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,905 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-25** — XSLT: **XTSE0260 static-error cluster (`error-0260*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE0260` when a known empty XSLT element (`xsl:include`, `xsl:import`, `xsl:strip-space`, `xsl:preserve-space`, `xsl:output`, `xsl:namespace-alias`, `xsl:decimal-format`, `xsl:output-character`, `xsl:copy-of`, `xsl:mode`, `xsl:import-schema`, `xsl:expose`, `xsl:global-context-item`, and `xsl:context-item`) contains a text node or element child. Elements that may contain a sequence constructor (`xsl:key`, `xsl:sort`, `xsl:accumulator-rule`, `xsl:merge-key`, `xsl:value-of`, `xsl:assert`) are excluded so existing valid tests are not rejected. Comments and processing instructions are still permitted. The W3C `error-0260*` cluster is now **4/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.45).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+7 tests; header → 0.30).
+  - Verification: `error-0260*` 4/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,905/0.
 
 - **2026-08-25** — XSLT: **XTSE0340 static-error cluster (`error-0340*`)** — `PatternCompiler.ValidatePatternSyntax` now rejects patterns that start with a numeric literal or expression (e.g. `2+2`), path steps that are numeric literals (e.g. `name/1223`), and `processing-instruction()` arguments that are not a valid string literal or NCName (e.g. `processing-instruction(proc:inst-2)`). `Stylesheet.ValidateInstructionTree` performs this validation at stylesheet load time for literal `xsl:template/@match`, `xsl:key/@match`, and `xsl:number/@count`/`@from` attributes. The W3C `error-0340*` cluster is now **3/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Patterns/PatternCompiler.cs` (header → 2.9), `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.44).

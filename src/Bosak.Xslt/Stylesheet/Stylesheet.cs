@@ -89,6 +89,7 @@
 //                      | Charles Korthout | 2.43  | 25-08-2026     | XTSE0809 #default in exclude-result-prefixes requires default namespace               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.44  | 25-08-2026     | XTSE0340 early pattern validation for template/key match and number count/from         |
+//                      | Charles Korthout | 2.45  | 25-08-2026     | XTSE0260 validation for XSLT elements required to be empty                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1375,6 +1376,17 @@ public sealed class Stylesheet
             bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
             var localName = elem.Name.LocalName;
 
+            // XTSE0260: XSLT elements that must be empty must not contain text nodes
+            // or element children; comments and processing instructions are allowed.
+            if (isXsltElement && EmptyXsltElementNames.Contains(localName))
+            {
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XText || node is XElement)
+                        throw new InvalidOperationException("XTSE0260");
+                }
+            }
+
             // XTSE0090: static variables and parameters must be declared at the top level.
             if (isXsltElement && localName is "param" or "variable")
             {
@@ -1604,13 +1616,9 @@ public sealed class Stylesheet
                 }
             }
 
-            // xsl:copy-of must be empty (no children)
+            // xsl:copy-of attribute validation
             if (localName == "copy-of")
             {
-                // XTSE0260: xsl:copy-of must not have children
-                if (elem.Elements().Any())
-                    throw new InvalidOperationException("XTSE0260");
-
                 // XTSE0090: xsl:copy-of does not allow invalid attributes
                 foreach (var attr in elem.Attributes())
                 {
@@ -3957,6 +3965,18 @@ public sealed class Stylesheet
         "iterate", "break", "next-iteration", "on-completion",
         "where-populated", "on-empty", "on-non-empty", "assert",
         "character-map", "output-character", "fork"
+    };
+
+    /// <summary>
+    /// The set of XSLT element names that must be empty (no text or element children;
+    /// comments and processing instructions are permitted).
+    /// </summary>
+    private static readonly HashSet<string> EmptyXsltElementNames = new(StringComparer.Ordinal)
+    {
+        "include", "import", "strip-space", "preserve-space", "output",
+        "namespace-alias", "decimal-format", "output-character",
+        "copy-of", "mode", "import-schema", "expose",
+        "global-context-item", "context-item"
     };
 
     /// <summary>

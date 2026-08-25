@@ -41,6 +41,7 @@
 //                      | Charles Korthout | 0.28  | 15-07-2026     | Removed temporary debug tests used during fn:transform Tier-2m investigation.            |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.29  | 18-08-2026     | Added fn:transform FOXT0002 missing-source and result-document text-capture tests     |
+//                      | Charles Korthout | 0.30  | 25-08-2026     | Added XTSE0260 regression tests for empty XSLT elements                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3168,6 +3169,53 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         // U+00FC (u with diaeresis) in NFKD becomes U+0075 U+0308.
         Assert.Contains("\u0075\u0308", result, StringComparison.Ordinal);
         Assert.DoesNotContain("\u00FC", result, StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [InlineData("include")]
+    [InlineData("import")]
+    [InlineData("strip-space")]
+    [InlineData("preserve-space")]
+    [InlineData("copy-of")]
+    public void EmptyXsltElement_WithContent_ThrowsXtse0260(string elementName)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:{elementName}>content</xsl:{elementName}>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0260", ex.Message);
+    }
+
+    [Fact]
+    public void EmptyXsltElement_WithWhitespace_Preservation_ThrowsXtse0260()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:strip-space elements='*' xml:space='preserve'> </xsl:strip-space>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0260", ex.Message);
+    }
+
+    [Fact]
+    public void EmptyXsltElement_WithComment_IsAllowed()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xml'><!-- comment --></xsl:output>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), new EvaluationContext());
+        Assert.Contains("<out/>", result);
     }
 
 }

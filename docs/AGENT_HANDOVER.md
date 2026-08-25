@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `dbe2b0b` — XSLT: XTSE0340 pattern syntax validation for match/count/from patterns
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0340*` XTSE0340 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,896 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** *pending* — XSLT: XTSE0260 empty XSLT element validation
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0260*` XTSE0260 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,905 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0340 static error cluster)
+## This Session Changes (XTSE0260 static error cluster)
+
+1. **Empty XSLT element validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - Added `EmptyXsltElementNames` set for XSLT elements that must be empty (no text or element children; comments and processing instructions are allowed).
+   - `ValidateInstructionTree` now raises `XTSE0260` when any of these elements contains a text node or element child.
+   - Covered elements include `xsl:include`, `xsl:import`, `xsl:strip-space`, `xsl:preserve-space`, `xsl:output`, `xsl:namespace-alias`, `xsl:decimal-format`, `xsl:output-character`, `xsl:copy-of`, `xsl:mode`, `xsl:import-schema`, `xsl:expose`, `xsl:global-context-item`, and `xsl:context-item`. Elements that may contain a sequence constructor (such as `xsl:key`, `xsl:sort`, `xsl:accumulator-rule`, `xsl:merge-key`, `xsl:value-of`, and `xsl:assert`) are excluded from the empty set.
+   - The previous `xsl:copy-of`-specific child check is now handled by the general rule.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering content, whitespace preservation, and comments.
+   - Header bumped: `Stylesheet.cs` → 2.45, `StylesheetTests.cs` → 0.30.
+
+2. **Results** —
+   - `error-0260*` cluster: 4 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,905 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0340 static error cluster)
 
 1. **Pattern syntax validation** (`src/Bosak.Xslt/Patterns/PatternCompiler.cs`, `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - Made `ValidatePatternSyntax` public and extended it to reject:
