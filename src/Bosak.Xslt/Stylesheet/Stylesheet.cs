@@ -98,6 +98,7 @@
 //                      | Charles Korthout | 2.51  | 25-08-2026     | XTSE0870 validation for xsl:value-of/@select and content                |
 //                      | Charles Korthout | 2.52  | 25-08-2026     | XTSE0880 validation for xsl:processing-instruction/@select with content |
 //                      | Charles Korthout | 2.53  | 25-08-2026     | XTSE0910 validation for xsl:namespace/@select and content              |
+//                      | Charles Korthout | 2.54  | 25-08-2026     | XTSE0940 validation for xsl:comment/@select with non-empty content     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1606,6 +1607,22 @@ public sealed class Stylesheet
                     throw new InvalidOperationException("XTSE0910: xsl:namespace must have empty content or only xsl:fallback children when the select attribute is present.");
                 if (!hasSelect && !hasNonFallbackContent)
                     throw new InvalidOperationException("XTSE0910: xsl:namespace must have a select attribute when its content is empty.");
+            }
+
+            // XTSE0940: xsl:comment/@select is allowed only when the element has empty content.
+            if (isXsltElement && localName == "comment" && elem.Attribute("select") != null)
+            {
+                bool hasContent = false;
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XElement || node is XText)
+                    {
+                        hasContent = true;
+                        break;
+                    }
+                }
+                if (hasContent)
+                    throw new InvalidOperationException("XTSE0940: xsl:comment must have empty content when the select attribute is present.");
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.
