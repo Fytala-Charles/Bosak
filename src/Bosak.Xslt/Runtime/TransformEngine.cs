@@ -200,6 +200,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.22  | 24-08-2026     | ApplyAttributeSets resolves Q{uri}local EQNames for use-attribute-sets lookup             |
 //                      | Charles Korthout | 6.23  | 25-08-2026     | XTSE0350 validation for unbalanced AVT/TVT braces                                     |
+//                      | Charles Korthout | 6.24  | 25-08-2026     | XTSE0370 validation for unescaped right braces in AVTs/TVTs                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -6752,9 +6753,8 @@ public sealed class TransformEngine
             }
             else if (value[i] == '}')
             {
-                // Lone } is an error per spec, but treat as literal for robustness
-                sb.Append('}');
-                i++;
+                // Unescaped } in the fixed part of an AVT is a static error.
+                throw new InvalidOperationException("XTSE0370: An unescaped right curly bracket in an attribute value template does not have a matching left curly bracket.");
             }
             else
             {
@@ -14672,6 +14672,12 @@ public sealed class TransformEngine
                 sb.Append('}');
                 i += 2;
                 continue;
+            }
+
+            // Unescaped } in the fixed part of a TVT is a static error.
+            if (text[i] == '}')
+            {
+                throw new InvalidOperationException("XTSE0370: An unescaped right curly bracket in a text value template does not have a matching left curly bracket.");
             }
 
             // {expr} — evaluate XPath expression

@@ -19,6 +19,11 @@
 
 ## 0. Recent Changes
 
+- **2026-08-25** — XSLT: **XTSE0370 static-error cluster (`error-0370*`)** — `Stylesheet.SplitAttributeValueTemplate` and `TransformEngine` now raise `XTSE0370` when an unescaped right curly bracket `}` appears in the fixed part of an attribute value template or text value template without a matching left curly bracket. The `}}` escape continues to produce a literal `}`. The W3C `error-0370*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.47), `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.24).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.32).
+  - Verification: `error-0370*` 1/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,908/0.
+
 - **2026-08-25** — XSLT: **XTSE0350 static-error cluster (`error-0350*`)** — `Stylesheet.SplitAttributeValueTemplate` and `TransformEngine` now raise `XTSE0350` when an unescaped left curly bracket in an attribute value template or text value template has no matching right curly bracket. Previously the unmatched `{` was treated as a literal character. The W3C `error-0350*` cluster is now **2/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.46), `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.23).
   - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.31).

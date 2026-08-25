@@ -43,6 +43,7 @@
 //                      | Charles Korthout | 0.29  | 18-08-2026     | Added fn:transform FOXT0002 missing-source and result-document text-capture tests     |
 //                      | Charles Korthout | 0.30  | 25-08-2026     | Added XTSE0260 regression tests for empty XSLT elements                                  |
 //                      | Charles Korthout | 0.31  | 25-08-2026     | Added XTSE0350 regression tests for unbalanced AVT braces                                |
+//                      | Charles Korthout | 0.32  | 25-08-2026     | Added XTSE0370 regression tests for unescaped right braces in AVTs                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3250,6 +3251,39 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), new EvaluationContext());
         Assert.Contains("att=\"x{a}y\"", result);
+    }
+
+    [Theory]
+    [InlineData("{2+2} and }3")]
+    [InlineData("}literal")]
+    public void UnescapedRightBraceInAvt_ThrowsXtse0370(string avtValue)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out att=""{avtValue}""/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(new XDocument(new XElement("dummy")));
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext()));
+        Assert.Contains("XTSE0370", ex.Message);
+    }
+
+    [Fact]
+    public void EscapedRightBraceInAvt_IsAllowed()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out att=""x}}y""/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), new EvaluationContext());
+        Assert.Contains("att=\"x}y\"", result);
     }
 
 }

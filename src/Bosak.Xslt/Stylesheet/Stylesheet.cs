@@ -91,6 +91,7 @@
 //                      | Charles Korthout | 2.44  | 25-08-2026     | XTSE0340 early pattern validation for template/key match and number count/from         |
 //                      | Charles Korthout | 2.45  | 25-08-2026     | XTSE0260 validation for XSLT elements required to be empty                             |
 //                      | Charles Korthout | 2.46  | 25-08-2026     | XTSE0350 validation for unbalanced AVT braces                                          |
+//                      | Charles Korthout | 2.47  | 25-08-2026     | XTSE0370 validation for unescaped right braces in AVTs                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -353,6 +354,10 @@ public sealed class Stylesheet
                 sb.Append('}');
                 i += 2;
                 continue;
+            }
+            if (avt[i] == '}')
+            {
+                throw new InvalidOperationException("XTSE0370: An unescaped right curly bracket in an attribute value template does not have a matching left curly bracket.");
             }
             if (avt[i] == '{')
             {
