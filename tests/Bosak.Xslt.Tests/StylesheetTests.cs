@@ -47,6 +47,7 @@
 //                      | Charles Korthout | 0.33  | 25-08-2026     | Added XTSE0530 regression tests for xsl:template/@priority                               |
 //                      | Charles Korthout | 0.34  | 25-08-2026     | Added XTDE0560 regression tests for apply-imports/next-match context                     |
 //                      | Charles Korthout | 0.35  | 25-08-2026     | Added XTDE0420 regression tests for document-node attribute/namespace content             |
+//                      | Charles Korthout | 0.36  | 25-08-2026     | Added XTSE0125 regression tests for default-collation collation URIs                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3396,6 +3397,58 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var source = new XDocumentNode(new XDocument(new XElement("root")));
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext()));
         Assert.Contains("XTDE0420", ex.Message);
+    }
+
+    [Fact]
+    public void Stylesheet_UnknownDefaultCollation_ThrowsXtse0125()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            default-collation='mailto:unrecognized.collation@nowhere.com'>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0125", ex.Message);
+    }
+
+    [Fact]
+    public void Stylesheet_AllUnknownDefaultCollationList_ThrowsXtse0125()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            default-collation='http://example.com/collation1 http://example.com/collation2'>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0125", ex.Message);
+    }
+
+    [Fact]
+    public void Stylesheet_DefaultCollationListWithKnownUri_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            default-collation='http://example.com/unknown http://www.w3.org/2005/xpath-functions/collation/codepoint'>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Theory]
+    [InlineData("http://www.w3.org/2005/xpath-functions/collation/codepoint")]
+    [InlineData("http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")]
+    [InlineData("http://www.w3.org/2013/collation/UCA?lang=en;strength=primary")]
+    public void Stylesheet_KnownDefaultCollation_Passes(string collation)
+    {
+        var xsl = $"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'\n            default-collation='{collation}'>\n            <xsl:template name='main'><out/></xsl:template>\n        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
     }
 
 }

@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 August 2026
-> **Bosak baseline:** 1,908 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,930 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-25** — XSLT: **XTSE0125 static-error cluster (`error-0125*`)** — `Stylesheet.ValidateInstructionTree` now validates `[xsl:]default-collation` attributes: the whitespace-separated URI list must contain at least one collation URI recognized by this implementation. The supported URIs are the codepoint collation, the HTML ASCII case-insensitive collation, and any URI starting with the W3C UCA prefix. Relative URIs are resolved against the element's base URI before checking. The W3C `error-0125*` cluster is now **1/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.49).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+6 tests; header → 0.36).
+  - Verification: `error-0125*` 1/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,930/0.
 
 - **2026-08-25** — XSLT: **XTDE0420 dynamic-error cluster (`error-0420*`)** — `TransformEngine.ExecuteSingleCopy` now rejects any attribute on the temporary collector used for `xsl:copy` of a document node, so both `xsl:attribute` and `xsl:namespace` content raise `XTDE0420` instead of silently producing an invalid document node. The W3C `error-0420*` cluster is now **2/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.26).

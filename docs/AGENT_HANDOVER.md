@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `7c63112` — XSLT: XTDE0420 document-node attribute/namespace content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0420*` XTDE0420 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,908 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE0125 default-collation collation URI validation
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0125*` XTSE0125 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,930 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE0420 dynamic error cluster)
+## This Session Changes (XTSE0125 static error cluster)
+
+1. **`[xsl:]default-collation` validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now checks that any `[xsl:]default-collation` attribute contains a whitespace-separated URI list with at least one collation URI recognized by this implementation.
+   - Recognized URIs are the codepoint collation (`http://www.w3.org/2005/xpath-functions/collation/codepoint`), the HTML ASCII case-insensitive collation (`http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive`), and any URI starting with the W3C UCA prefix (`http://www.w3.org/2013/collation/UCA`).
+   - Relative URIs are resolved against the element's base URI before checking, matching the runtime's `ResolveCollationUri` behaviour.
+   - This raises `XTSE0125` when no URI in the list is recognized, per XSLT 3.0 §5.4.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering an unknown URI, a list of unknown URIs, a list with a known URI first, and each supported URI alone.
+   - Headers bumped: `Stylesheet.cs` → 2.49, `StylesheetTests.cs` → 0.36.
+
+2. **Results** —
+   - `error-0125*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,930 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE0420 dynamic error cluster)
 
 1. **Document-node content validation for xsl:copy** (`src/Bosak.Xslt/Runtime/TransformEngine.cs`) —
    - When `xsl:copy` copies a document node in direct result-tree context, the content sequence is collected into a temporary element and then moved to the result container.

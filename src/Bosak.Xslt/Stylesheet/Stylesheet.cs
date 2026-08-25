@@ -93,6 +93,7 @@
 //                      | Charles Korthout | 2.46  | 25-08-2026     | XTSE0350 validation for unbalanced AVT braces                                          |
 //                      | Charles Korthout | 2.47  | 25-08-2026     | XTSE0370 validation for unescaped right braces in AVTs                                |
 //                      | Charles Korthout | 2.48  | 25-08-2026     | XTSE0530 validation for xsl:template/@priority as xs:decimal                           |
+//                      | Charles Korthout | 2.49  | 25-08-2026     | XTSE0125 validation for default-collation collation URIs                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1449,6 +1450,41 @@ public sealed class Stylesheet
                 }
             }
 
+            // XTSE0125: default-collation must resolve to a list containing at least
+            // one collation URI recognized by this implementation (XSLT 2.0+).
+            if (GetEffectiveVersion(elem) >= 2.0)
+            {
+                XAttribute? dcAttr;
+                string construct;
+                if (isXsltElement)
+                {
+                    dcAttr = elem.Attribute("default-collation");
+                    construct = $"xsl:{localName}/@default-collation";
+                }
+                else
+                {
+                    dcAttr = elem.Attribute(XName.Get("default-collation", XslNamespace));
+                    construct = "literal result element @xsl:default-collation";
+                }
+
+                if (dcAttr != null && !string.IsNullOrWhiteSpace(dcAttr.Value))
+                {
+                    var baseUri = GetEffectiveBaseUri(dcAttr.Parent ?? elem);
+                    var tokens = dcAttr.Value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                    bool hasRecognized = false;
+                    foreach (var token in tokens)
+                    {
+                        if (IsSupportedCollationUri(token, baseUri))
+                        {
+                            hasRecognized = true;
+                            break;
+                        }
+                    }
+                    if (!hasRecognized)
+                        throw new InvalidOperationException($"XTSE0125: The value of {construct} contains no recognized collation URI.");
+                }
+            }
+
             // XTSE0020: validate expand-text attribute values. The attribute may
             // appear as no-namespace expand-text on XSLT elements or as
             // xsl:expand-text on literal result elements; it must not be an AVT.
@@ -2600,6 +2636,29 @@ public sealed class Stylesheet
             if (ns == null)
                 throw new InvalidOperationException($"XTSE0808: Namespace prefix '{prefix}' used in {construct} has no binding in scope.");
         }
+    }
+
+    /// <summary>
+    /// Returns whether <paramref name="uri"/> is a collation URI recognized by this
+    /// implementation, optionally resolving a relative URI against <paramref name="baseUri"/>.
+    /// </summary>
+    private static bool IsSupportedCollationUri(string uri, string? baseUri)
+    {
+        string resolved = uri;
+        if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) &&
+            !string.IsNullOrEmpty(baseUri) &&
+            Uri.TryCreate(new Uri(baseUri), uri, out var resolvedUri))
+        {
+            resolved = resolvedUri.AbsoluteUri;
+        }
+
+        if (resolved == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
+            return true;
+        if (resolved == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (resolved.StartsWith("http://www.w3.org/2013/collation/UCA", StringComparison.Ordinal))
+            return true;
+        return false;
     }
 
     private static bool IsMergeSourceAttribute(string baseName)
