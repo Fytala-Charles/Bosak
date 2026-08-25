@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `TBD` — XSLT: XTSE0125 default-collation collation URI validation
+**Commit:** `50c1037` — XSLT: XTSE0125 default-collation collation URI validation
 **Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0125*` XTSE0125 cluster and kept the full XSLT sweep at 0 failures.
 **Expected state:** **1,930 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
