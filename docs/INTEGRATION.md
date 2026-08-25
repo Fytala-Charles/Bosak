@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 25 August 2026
-> **Bosak baseline:** 1,963 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,965 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-25** — XSLT: **XTSE1295 static-error cluster (`error-1295*`)** — `Stylesheet` decimal-format parsing now validates that an explicit `xsl:decimal-format/@zero-digit` is a Unicode decimal digit whose numeric value is zero. Non-digit characters or digits with a non-zero numeric value raise `XTSE1295`. The W3C `error-1295*` cluster is now **2/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.65).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+2 tests; header → 0.52).
+  - Verification: `error-1295*` 2/0/0; full XSLT sweep 7,056/0/7,544; unit tests 1,965/0.
 
 - **2026-08-25** — XSLT: **XTSE0760 static-error cluster (`error-0760*`)** — `Stylesheet.ValidateInstructionTree` now raises `XTSE0760` when an `xsl:param` inside an `xsl:function` has a `select` attribute or non-empty content. The W3C `error-0760*` cluster is now **2/0/0**; the full XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.64).

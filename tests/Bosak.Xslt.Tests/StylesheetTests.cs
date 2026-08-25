@@ -63,6 +63,7 @@
 //                      | Charles Korthout | 0.49  | 25-08-2026     | Added XTSE3190 regression tests for duplicate xsl:merge-source names                     |
 //                      | Charles Korthout | 0.50  | 25-08-2026     | Added XTSE3350 regression tests for duplicate xsl:accumulator names                    |
 //                      | Charles Korthout | 0.51  | 25-08-2026     | Added XTSE0760 regression tests for xsl:param inside xsl:function                       |
+//                      | Charles Korthout | 0.52  | 25-08-2026     | Added XTSE1295 regression tests for xsl:decimal-format/@zero-digit                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -4056,6 +4057,36 @@ return fn:transform(map{""stylesheet-text"": $xsl,
                 <xsl:param name='x'/>
                 <xsl:sequence select='2'/>
             </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void DecimalFormat_ZeroDigitNotZero_ThrowsXtse1295()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' zero-digit='2'/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""d"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1295", ex.Message);
+    }
+
+    [Fact]
+    public void DecimalFormat_ZeroDigitZero_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:decimal-format name='d' zero-digit='0'/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='format-number(12, ""##0"", ""d"")'/></out>
+            </xsl:template>
         </xsl:stylesheet>";
 
         var compiler = new Api.XsltCompiler();

@@ -109,6 +109,7 @@
 //                      | Charles Korthout | 2.62  | 25-08-2026     | XTSE3190 validation for duplicate xsl:merge-source names               |
 //                      | Charles Korthout | 2.63  | 25-08-2026     | XTSE3350 validation for duplicate xsl:accumulator names                 |
 //                      | Charles Korthout | 2.64  | 25-08-2026     | XTSE0760 validation for xsl:param inside xsl:function                  |
+//                      | Charles Korthout | 2.65  | 25-08-2026     | XTSE1295 validation for xsl:decimal-format/@zero-digit numeric value    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -4525,13 +4526,18 @@ public sealed class DecimalFormatDefinition
             }
         }
 
-        // Validate zero-digit is actually a digit (XTSE1295)
+        // Validate zero-digit is actually a digit with numeric value zero (XTSE1295)
         if (explicitAttrs.Contains("zero-digit") && !string.IsNullOrEmpty(format.ZeroDigit))
         {
             var category = format.ZeroDigit.Length == 1
                 ? char.GetUnicodeCategory(format.ZeroDigit[0])
                 : char.GetUnicodeCategory(format.ZeroDigit, 0);
             if (category != System.Globalization.UnicodeCategory.DecimalDigitNumber)
+                throw new InvalidOperationException("XTSE1295");
+            var numericValue = format.ZeroDigit.Length == 1
+                ? char.GetNumericValue(format.ZeroDigit[0])
+                : char.GetNumericValue(format.ZeroDigit, 0);
+            if (numericValue != 0)
                 throw new InvalidOperationException("XTSE1295");
         }
 

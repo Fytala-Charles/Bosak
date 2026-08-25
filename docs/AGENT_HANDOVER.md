@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `df52a12` — XSLT: XTSE0760 xsl:param inside xsl:function
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0760*` XTSE0760 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,963 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** *pending* — XSLT: XTSE1295 xsl:decimal-format/@zero-digit
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1295*` XTSE1295 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,965 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0760 static error cluster)
+## This Session Changes (XTSE1295 static error cluster)
+
+1. **`xsl:decimal-format/@zero-digit` validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - After `xsl:decimal-format` declarations are parsed, the compiler now validates that an explicit `zero-digit` attribute names a Unicode decimal digit whose numeric value is zero (U+0030 by default).
+   - Characters that are not decimal digits, or decimal digits with a non-zero numeric value (for example `2`), raise `XTSE1295`.
+   - This matches XSLT 3.0 §10.3: the `zero-digit` attribute must be a Unicode category `Nd` character with numeric value zero.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering an invalid non-zero digit and a valid zero digit.
+   - Headers bumped: `Stylesheet.cs` → 2.65, `StylesheetTests.cs` → 0.52.
+
+2. **Results** —
+   - `error-1295*` cluster: 2 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,965 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0760 static error cluster)
 
 1. **`xsl:param` inside `xsl:function` validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE0760` when an `xsl:param` inside an `xsl:function` has a `select` attribute or non-empty content.
