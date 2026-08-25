@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `3c563bf` — XSLT: XTSE1040 xsl:perform-sort select attribute and content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1040*` XTSE1040 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,946 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE1222 duplicate xsl:key composite values
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1222*` XTSE1222 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,948 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1040 static error cluster)
+## This Session Changes (XTSE1222 static error cluster)
+
+1. **`xsl:key/@composite` conflict validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - The stylesheet compiler now raises `XTSE1222` when two or more `xsl:key` declarations share the same expanded name but have different effective `composite` values.
+   - This includes keys collected from imported and included stylesheet modules.
+   - This matches XSLT 3.0 §13.2: all `xsl:key` declarations with the same expanded name must have the same effective value for the `composite` attribute.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering conflicting composite values and matching composite values.
+   - Headers bumped: `Stylesheet.cs` → 2.57, `StylesheetTests.cs` → 0.44.
+
+2. **Results** —
+   - `error-1222*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,948 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1040 static error cluster)
 
 1. **`xsl:perform-sort/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE1040` when `xsl:perform-sort` has a `select` attribute together with content other than `xsl:sort` and `xsl:fallback` instructions.

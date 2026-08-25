@@ -55,6 +55,7 @@
 //                      | Charles Korthout | 0.41  | 25-08-2026     | Added XTSE0940 regression tests for xsl:comment/@select with content                 |
 //                      | Charles Korthout | 0.42  | 25-08-2026     | Added XTSE1015 regression tests for xsl:sort/@select with content                     |
 //                      | Charles Korthout | 0.43  | 25-08-2026     | Added XTSE1040 regression tests for xsl:perform-sort/@select content                 |
+//                      | Charles Korthout | 0.44  | 25-08-2026     | Added XTSE1222 regression tests for conflicting xsl:key @composite values              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3724,6 +3725,38 @@ return fn:transform(map{""stylesheet-text"": $xsl,
                         <xsl:sort select='.'/>
                     </xsl:perform-sort>
                 </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void DuplicateKeyComposite_ThrowsXtse1222()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k' match='a' use='b' composite='yes'/>
+            <xsl:key name='k' match='p' use='q' composite='no'/>
+            <xsl:template name='main'>
+                <out><x/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1222", ex.Message);
+    }
+
+    [Fact]
+    public void DuplicateKeySameComposite_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k' match='a' use='b' composite='yes'/>
+            <xsl:key name='k' match='p' use='q' composite='yes'/>
+            <xsl:template name='main'>
+                <out><x/></out>
             </xsl:template>
         </xsl:stylesheet>";
 

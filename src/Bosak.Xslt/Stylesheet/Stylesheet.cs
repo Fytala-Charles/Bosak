@@ -101,6 +101,7 @@
 //                      | Charles Korthout | 2.54  | 25-08-2026     | XTSE0940 validation for xsl:comment/@select with non-empty content     |
 //                      | Charles Korthout | 2.55  | 25-08-2026     | XTSE1015 validation for xsl:sort/@select with non-empty content         |
 //                      | Charles Korthout | 2.56  | 25-08-2026     | XTSE1040 validation for xsl:perform-sort/@select content               |
+//                      | Charles Korthout | 2.57  | 25-08-2026     | XTSE1222 validation for conflicting xsl:key @composite values          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1058,6 +1059,17 @@ public sealed class Stylesheet
 
         // Static validation: check for disallowed attributes and children on XSLT instructions
         ValidateInstructionTree(root);
+
+        // XTSE1222: all xsl:key declarations with the same expanded name must agree on @composite.
+        if (_isRootStylesheet)
+        {
+            var allKeyDefs = GetAllKeyDefinitions();
+            foreach (var group in allKeyDefs.GroupBy(k => k.Name))
+            {
+                if (group.Select(k => k.Composite).Distinct().Count() > 1)
+                    throw new InvalidOperationException($"XTSE1222: xsl:key definitions for '{group.Key}' have conflicting @composite values.");
+            }
+        }
     }
 
     /// <summary>
