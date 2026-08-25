@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 0.44  | 25-08-2026     | Added XTSE1222 regression tests for conflicting xsl:key @composite values              |
 //                      | Charles Korthout | 0.45  | 25-08-2026     | Added XTSE1430 regression tests for unbound extension-element-prefixes               |
 //                      | Charles Korthout | 0.46  | 25-08-2026     | Added XTSE1660 regression tests for xsl:type on literal result elements                |
+//                      | Charles Korthout | 0.47  | 25-08-2026     | Added XTSE3140 regression tests for xsl:try/@select content                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3825,6 +3826,43 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             <xsl:template name='main'>
                 <out type='text'>
                     <x/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void XslTry_SelectWithDisallowedContent_ThrowsXtse3140()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:try select='1 to 10'>
+                        <xsl:value-of select='19'/>
+                        <xsl:catch>22</xsl:catch>
+                    </xsl:try>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE3140", ex.Message);
+    }
+
+    [Fact]
+    public void XslTry_SelectWithCatchOnly_Passes()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:try select='1 to 10'>
+                        <xsl:catch>22</xsl:catch>
+                    </xsl:try>
                 </out>
             </xsl:template>
         </xsl:stylesheet>";

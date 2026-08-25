@@ -104,6 +104,7 @@
 //                      | Charles Korthout | 2.57  | 25-08-2026     | XTSE1222 validation for conflicting xsl:key @composite values          |
 //                      | Charles Korthout | 2.58  | 25-08-2026     | XTSE1430 validation for unbound extension-element-prefixes            |
 //                      | Charles Korthout | 2.59  | 25-08-2026     | XTSE1660 validation for xsl:type on literal result elements            |
+//                      | Charles Korthout | 2.60  | 25-08-2026     | XTSE3140 validation for xsl:try/@select content                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1710,6 +1711,27 @@ public sealed class Stylesheet
                     else if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
                     {
                         throw new InvalidOperationException("XTSE1040: xsl:perform-sort with a select attribute may only contain xsl:sort and xsl:fallback instructions.");
+                    }
+                }
+            }
+
+            // XTSE3140: xsl:try/@select may only contain xsl:catch and xsl:fallback instructions.
+            if (isXsltElement && localName == "try" && elem.Attribute("select") != null)
+            {
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XElement child)
+                    {
+                        if (child.Name.NamespaceName == XslNamespace &&
+                            child.Name.LocalName is "catch" or "fallback")
+                        {
+                            continue;
+                        }
+                        throw new InvalidOperationException("XTSE3140: xsl:try with a select attribute may only contain xsl:catch and xsl:fallback instructions.");
+                    }
+                    else if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                    {
+                        throw new InvalidOperationException("XTSE3140: xsl:try with a select attribute may only contain xsl:catch and xsl:fallback instructions.");
                     }
                 }
             }

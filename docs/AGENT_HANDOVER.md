@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `77fd323` — XSLT: XTSE1660 xsl:type on literal result elements
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1660*` XTSE1660 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,952 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE3140 xsl:try select attribute and content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3140*` XTSE3140 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,954 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1660 static error cluster)
+## This Session Changes (XTSE3140 static error cluster)
+
+1. **`xsl:try/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE3140` when `xsl:try` has a `select` attribute together with content other than `xsl:catch` and `xsl:fallback` instructions.
+   - A `select` attribute with only `xsl:catch` and/or `xsl:fallback` children continues to be accepted.
+   - This matches XSLT 3.0 §14.2: the `select` attribute is permitted only when the element has no content other than `xsl:catch` and `xsl:fallback` instructions.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` with disallowed content and `select` with only `xsl:catch`.
+   - Headers bumped: `Stylesheet.cs` → 2.60, `StylesheetTests.cs` → 0.47.
+
+2. **Results** —
+   - `error-3140*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,954 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1660 static error cluster)
 
 1. **`xsl:type` on literal result elements** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE1660` when a literal result element has an `xsl:type` attribute.
