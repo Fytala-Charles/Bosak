@@ -42,6 +42,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.29  | 18-08-2026     | Added fn:transform FOXT0002 missing-source and result-document text-capture tests     |
 //                      | Charles Korthout | 0.30  | 25-08-2026     | Added XTSE0260 regression tests for empty XSLT elements                                  |
+//                      | Charles Korthout | 0.31  | 25-08-2026     | Added XTSE0350 regression tests for unbalanced AVT braces                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -3216,6 +3217,39 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), new EvaluationContext());
         Assert.Contains("<out/>", result);
+    }
+
+    [Theory]
+    [InlineData("x{3}y{4")]
+    [InlineData("{banana")]
+    public void UnbalancedAvt_ThrowsXtse0350(string avtValue)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out att=""{avtValue}""/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var source = new XDocumentNode(new XDocument(new XElement("dummy")));
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(source, new EvaluationContext()));
+        Assert.Contains("XTSE0350", ex.Message);
+    }
+
+    [Fact]
+    public void BalancedAvt_WithNestedBraces_IsAllowed()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out att=""x{concat('{', 'a', '}')}y""/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), new EvaluationContext());
+        Assert.Contains("att=\"x{a}y\"", result);
     }
 
 }

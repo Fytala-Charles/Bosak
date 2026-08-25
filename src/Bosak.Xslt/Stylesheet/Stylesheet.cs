@@ -90,6 +90,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.44  | 25-08-2026     | XTSE0340 early pattern validation for template/key match and number count/from         |
 //                      | Charles Korthout | 2.45  | 25-08-2026     | XTSE0260 validation for XSLT elements required to be empty                             |
+//                      | Charles Korthout | 2.46  | 25-08-2026     | XTSE0350 validation for unbalanced AVT braces                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -357,11 +358,7 @@ public sealed class Stylesheet
             {
                 int end = FindMatchingAvtBrace(avt, i + 1);
                 if (end < 0)
-                {
-                    sb.Append(avt[i]);
-                    i++;
-                    continue;
-                }
+                    throw new InvalidOperationException("XTSE0350: An unescaped left curly bracket in an attribute value template does not have a matching right curly bracket.");
 
                 var expr = avt.Substring(i + 1, end - i - 1);
                 if (!string.IsNullOrEmpty(expr))

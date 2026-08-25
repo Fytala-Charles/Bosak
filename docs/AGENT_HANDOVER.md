@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `6f68c6c` — XSLT: XTSE0260 empty XSLT element validation
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0260*` XTSE0260 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,905 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE0350 unbalanced AVT/TVT brace validation
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0350*` XTSE0350 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,908 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0260 static error cluster)
+## This Session Changes (XTSE0350 static error cluster)
+
+1. **Unbalanced AVT/TVT brace validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`, `src/Bosak.Xslt/Runtime/TransformEngine.cs`) —
+   - `Stylesheet.SplitAttributeValueTemplate` now raises `XTSE0350` when an unescaped `{` in an attribute value template has no matching `}`.
+   - `TransformEngine.EvaluateAvt` and the text-value-template path now raise `XTSE0350` for an unmatched `{` in TVTs.
+   - Previously the `{` was treated as a literal character, which caused the W3C `error-0350*` tests to fail.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering unbalanced AVTs (`x{3}y{4`, `{banana`) and a balanced case with nested braces.
+   - Headers bumped: `Stylesheet.cs` → 2.46, `TransformEngine.cs` → 6.23, `StylesheetTests.cs` → 0.31.
+
+2. **Results** —
+   - `error-0350*` cluster: 2 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,908 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0260 static error cluster)
 
 1. **Empty XSLT element validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - Added `EmptyXsltElementNames` set for XSLT elements that must be empty (no text or element children; comments and processing instructions are allowed).

@@ -199,6 +199,7 @@
 //                      | Charles Korthout | 6.21  | 23-08-2026     | Map #default/#unnamed initial modes to DefaultMode before XTDE0045 ModeExists check      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.22  | 24-08-2026     | ApplyAttributeSets resolves Q{uri}local EQNames for use-attribute-sets lookup             |
+//                      | Charles Korthout | 6.23  | 25-08-2026     | XTSE0350 validation for unbalanced AVT/TVT braces                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -6683,13 +6684,9 @@ public sealed class TransformEngine
             {
                 int end = FindAvtExprEnd(value, i + 1);
                 if (end < 0)
-                {
-                    sb.Append(value[i]);
-                    i++;
-                }
-                else
-                {
-                    var expr = value.Substring(i + 1, end - i - 1);
+                    throw new InvalidOperationException("XTSE0350: An unescaped left curly bracket in an attribute value template does not have a matching right curly bracket.");
+
+                var expr = value.Substring(i + 1, end - i - 1);
                     if (!string.IsNullOrEmpty(expr) && !IsOnlyWhitespaceAndComments(expr))
                     {
                         ValidateXPathPrefixes(expr, nsMap ?? new Dictionary<string, string>());
@@ -6752,7 +6749,6 @@ public sealed class TransformEngine
                         sb.Append(exprValue);
                     }
                     i = end + 1;
-                }
             }
             else if (value[i] == '}')
             {
