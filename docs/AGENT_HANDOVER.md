@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-25
-**Commit:** `9134436` — XSLT: XTSE3140 xsl:try select attribute and content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3140*` XTSE3140 cluster and kept the full XSLT sweep at 0 failures.
-**Expected state:** **1,954 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE3150 xsl:catch select attribute and content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-3150*` XTSE3150 cluster and kept the full XSLT sweep at 0 failures.
+**Expected state:** **1,956 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **XSLT conformance sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE3140 static error cluster)
+## This Session Changes (XTSE3150 static error cluster)
+
+1. **`xsl:catch/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
+   - `ValidateInstructionTree` now raises `XTSE3150` when `xsl:catch` has a `select` attribute together with non-empty content (text or element children).
+   - A `select` attribute with empty content continues to be accepted.
+   - This matches XSLT 3.0 §14.2: the `select` attribute on `xsl:catch` is permitted only when the element has empty content.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `select` with content and `select` with empty content.
+   - Headers bumped: `Stylesheet.cs` → 2.61, `StylesheetTests.cs` → 0.48.
+
+2. **Results** —
+   - `error-3150*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Full XSLT conformance sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,956 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE3140 static error cluster)
 
 1. **`xsl:try/@select` content validation** (`src/Bosak.Xslt/Stylesheet/Stylesheet.cs`) —
    - `ValidateInstructionTree` now raises `XTSE3140` when `xsl:try` has a `select` attribute together with content other than `xsl:catch` and `xsl:fallback` instructions.

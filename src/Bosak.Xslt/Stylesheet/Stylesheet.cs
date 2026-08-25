@@ -105,6 +105,7 @@
 //                      | Charles Korthout | 2.58  | 25-08-2026     | XTSE1430 validation for unbound extension-element-prefixes            |
 //                      | Charles Korthout | 2.59  | 25-08-2026     | XTSE1660 validation for xsl:type on literal result elements            |
 //                      | Charles Korthout | 2.60  | 25-08-2026     | XTSE3140 validation for xsl:try/@select content                        |
+//                      | Charles Korthout | 2.61  | 25-08-2026     | XTSE3150 validation for xsl:catch/@select content                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1734,6 +1735,22 @@ public sealed class Stylesheet
                         throw new InvalidOperationException("XTSE3140: xsl:try with a select attribute may only contain xsl:catch and xsl:fallback instructions.");
                     }
                 }
+            }
+
+            // XTSE3150: xsl:catch/@select is allowed only when the element has empty content.
+            if (isXsltElement && localName == "catch" && elem.Attribute("select") != null)
+            {
+                bool hasContent = false;
+                foreach (var node in elem.Nodes())
+                {
+                    if (node is XElement || node is XText)
+                    {
+                        hasContent = true;
+                        break;
+                    }
+                }
+                if (hasContent)
+                    throw new InvalidOperationException("XTSE3150: xsl:catch must have empty content when the select attribute is present.");
             }
 
             // XTSE0010 / XTSE0090 / XTSE0020: validate xsl:variable, xsl:param and xsl:with-param.
