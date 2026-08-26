@@ -1,11 +1,27 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `614c9046` — XSLT: XTSE0265 validation for conflicting input-type-annotations across modules
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0265*` XTSE0265 cluster.
-**Expected state:** **2,019 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `a714c3a` — XSLT: XTTE1020 validation for multi-item xsl:sort keys outside XSLT 1.0 BC mode
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1020*` XTTE1020 cluster.
+**Expected state:** **2,022 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0265 cluster)
+## This Session Changes (XTTE1020 cluster)
+
+1. **Detect multi-item `xsl:sort` keys and raise `XTTE1020` outside XSLT 1.0 backwards-compatible mode** —
+   - `TransformEngine.SortItems` and `SortGroups` now atomize each sort-key value and count the resulting items.
+   - If a sort key evaluates to more than one item, the effective version of the `xsl:sort` element is checked. With effective version `< 2.0` (XSLT 1.0 backwards-compatible behavior), the first item is used as the sort key, matching the specification. Otherwise the runtime raises `XTTE1020`.
+   - A new helper `AtomizeSortKeyValue` flattens sequences and arrays and atomizes nodes to strings so the item count is correct.
+   - The W3C `error-1020a` test passes with 1/0/0.
+   - Added 3 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for the `XTTE1020` error path, the XSLT 1.0 first-item fallback, and a single-item key that sorts normally.
+   - Header bumped: `TransformEngine.cs` → 6.30, `StylesheetTests.cs` → 0.68.
+
+2. **Results** —
+   - `error-1020*` cluster: 1 passed / 0 failed / 0 skipped.
+   - `sort` cluster remains **80 passed / 0 failed / 2 skipped**.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,022 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0265 cluster)
 
 1. **Detect conflicting `input-type-annotations` across modules (XTSE0265)** —
    - `Stylesheet` now parses `xsl:stylesheet/@input-type-annotations` on every module. Valid values are `strip`, `preserve`, and `unspecified`.

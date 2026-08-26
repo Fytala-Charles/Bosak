@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 August 2026
-> **Bosak baseline:** 1,989 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 2,022 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-26** — XSLT: **XTTE1020 cluster (`error-1020*`)** — Multi-item `xsl:sort` keys now raise `XTTE1020` outside XSLT 1.0 backwards-compatible mode. `TransformEngine.SortItems` and `SortGroups` atomize each sort-key value and, when the effective version of the `xsl:sort` element is 2.0 or higher, reject sequences containing more than one item. With effective version `< 2.0`, the first item is used, preserving XSLT 1.0 behavior. The W3C `error-1020a` test is now **1/0/0**; the `sort` cluster remains **80/0/2**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.30).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.68).
+  - Verification: `error-1020a` 1/0/0; `sort` 80/0/2; unit tests 2,022/0/0.
 
 - **2026-08-26** — XSLT: **XTSE0265 cluster (`error-0265*`)** — Conflicting `xsl:stylesheet/@input-type-annotations` values across stylesheet modules now raise `XTSE0265`. The implementation parses `strip`, `preserve`, and `unspecified` on every module and validates that no two modules declare different non-`unspecified` values. Matching values and `unspecified` combined with an explicit value continue to be allowed. The W3C `error-0265*` cluster is now **1/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.71).
