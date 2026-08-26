@@ -212,6 +212,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.30  | 26-08-2026     | XTTE1020 for multi-item xsl:sort keys outside XSLT 1.0 backwards-compatible mode          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.31  | 26-08-2026     | XTDE0044 for initial mode without source or global context item                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -706,7 +708,7 @@ public sealed class TransformEngine
         // initial match selection is given, or the stylesheet declares an
         // xsl:initial-template (with any namespace prefix).
         var implicitInitialTemplate = string.IsNullOrEmpty(initialTemplate) ? FindInitialTemplateName() : null;
-        if (source == null && initialMatchSelection == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null)
+        if (source == null && initialMatchSelection == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null && string.IsNullOrEmpty(initialMode))
             throw new InvalidOperationException("FOXT0002: A source document is required unless an initial template is specified.");
 
         // XTDE3086: a required global context item must be supplied.
@@ -942,6 +944,13 @@ public sealed class TransformEngine
                     ? _stylesheet.DefaultMode
                     : ExpandModeName(initialMode, _stylesheet.Root);
                 _initialMode = resolvedInitialMode;
+                // XTDE0044: an explicit initial mode requires an initial match selection or
+                // a supplied global context item. If neither source nor initial-match-selection
+                // nor global-context-item is present, the transformation cannot begin.
+                if (source == null && initialMatchSelection == null && globalContextItem == null)
+                {
+                    throw new InvalidOperationException("XTDE0044: An initial mode requires an initial match selection or global context item.");
+                }
                 // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
                 if (!ModeExists(resolvedInitialMode))
                 {

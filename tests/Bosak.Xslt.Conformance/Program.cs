@@ -67,6 +67,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.18  | 24-08-2026     | Skip error-0010bb (upstream forwards-compatibility test defect)                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.19  | 26-08-2026     | Pass null source for initial-mode tests without source so XTDE0044 is reported            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -838,6 +840,14 @@ class Program
             {
                 // Named-template entry points with no explicit source document have no
                 // initial context item (XSLT 3.0 §6.5 / §9.6).
+                if (rawOutput)
+                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                else
+                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri);
+            }
+            else if (initialModeElem != null)
+            {
+                // Initial mode with no source document: let the runtime detect XTDE0044.
                 if (rawOutput)
                     resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
                 else

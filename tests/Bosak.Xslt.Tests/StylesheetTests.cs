@@ -97,6 +97,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.68  | 26-08-2026     | Added XTTE1020 regression tests for multi-item xsl:sort keys                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.69  | 26-08-2026     | Added XTDE0044 regression tests for initial mode without source                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -2302,6 +2304,59 @@ Welcome to this document on XHTML.
         var v2 = result.IndexOf("<v>2</v>");
         var v3 = result.IndexOf("<v>3</v>");
         Assert.True(v1 < v2 && v2 < v3, "single-item sort key should sort normally");
+    }
+
+    // ------------------------------------------------------------------
+    // Initial mode tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Initial_Mode_Without_Source_Raises_XTDE0044()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/' mode='aMode'>
+                <out><x/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            executable.TransformToString(null, initialMode: "#default"));
+        Assert.Contains("XTDE0044", ex.Message);
+    }
+
+    [Fact]
+    public void Initial_Mode_Unnamed_Without_Source_Raises_XTDE0044()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out><x/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            executable.TransformToString(null, initialMode: "#unnamed"));
+        Assert.Contains("XTDE0044", ex.Message);
+    }
+
+    [Fact]
+    public void Initial_Mode_With_Source_Succeeds()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/' mode='aMode'>
+                <out><x/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source), initialMode: "aMode");
+        Assert.Contains("<out>", result);
+        Assert.Contains("<x/>", result);
     }
 
     private static string WriteTempXsl(string content)
