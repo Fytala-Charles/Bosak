@@ -121,6 +121,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.70  | 26-08-2026     | XTSE1600 validation for circular use-character-maps references                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.71  | 26-08-2026     | XTSE0265 validation for conflicting input-type-annotations across modules              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -728,6 +730,15 @@ public sealed class Stylesheet
 
         Version = versionValue;
 
+        // Parse xsl:stylesheet/@input-type-annotations (strip, preserve, or unspecified).
+        var inputTypeAnnotationsAttr = root.Attribute("input-type-annotations")?.Value?.Trim()?.ToLowerInvariant();
+        if (!string.IsNullOrEmpty(inputTypeAnnotationsAttr))
+        {
+            if (inputTypeAnnotationsAttr != "strip" && inputTypeAnnotationsAttr != "preserve" && inputTypeAnnotationsAttr != "unspecified")
+                throw new InvalidOperationException($"XTSE0020: Invalid value '{inputTypeAnnotationsAttr}' for xsl:stylesheet/@input-type-annotations.");
+            InputTypeAnnotations = inputTypeAnnotationsAttr;
+        }
+
         // Parse xsl:declared-modes on stylesheet/package root
         var declaredModesAttr = root.Attribute("declared-modes")?.Value?.Trim()?.ToLowerInvariant();
         DeclaredModes = declaredModesAttr != "no";
@@ -1117,6 +1128,9 @@ public sealed class Stylesheet
 
             // XTSE1600: character maps must not reference themselves, directly or indirectly.
             ValidateCharacterMapCycles();
+
+            // XTSE0265: conflicting xsl:stylesheet/@input-type-annotations values across modules.
+            ValidateInputTypeAnnotations();
         }
     }
 
@@ -3788,6 +3802,39 @@ public sealed class Stylesheet
         visiting.Remove(name);
     }
 
+    /// <summary>
+    /// Validates that all stylesheet modules agree on the value of
+    /// xsl:stylesheet/@input-type-annotations. Conflicting strip/preserve values across
+    /// modules raise XTSE0265.
+    /// </summary>
+    private void ValidateInputTypeAnnotations()
+    {
+        string? effective = null;
+        ValidateInputTypeAnnotationsCore(this, ref effective);
+    }
+
+    private static void ValidateInputTypeAnnotationsCore(Stylesheet module, ref string? effective)
+    {
+        var value = module.InputTypeAnnotations;
+        if (!string.IsNullOrEmpty(value) && value != "unspecified")
+        {
+            if (effective == null)
+            {
+                effective = value;
+            }
+            else if (effective != value)
+            {
+                throw new InvalidOperationException(
+                    $"XTSE0265: Conflicting xsl:stylesheet/@input-type-annotations values '{effective}' and '{value}'.");
+            }
+        }
+
+        foreach (var import in module._imports)
+            ValidateInputTypeAnnotationsCore(import, ref effective);
+        foreach (var include in module._includes)
+            ValidateInputTypeAnnotationsCore(include, ref effective);
+    }
+
     /// <summary>Top-level xsl:param elements defined in this stylesheet.</summary>
     public IReadOnlyList<XElement> GlobalParameters => _globalParameters;
 
@@ -4461,6 +4508,9 @@ public sealed class Stylesheet
 
     /// <summary>The version attribute of the stylesheet root element.</summary>
     public string? Version { get; private set; }
+
+    /// <summary>The value of xsl:stylesheet/@input-type-annotations, or null if absent.</summary>
+    public string? InputTypeAnnotations { get; private set; }
 
     /// <summary>
     /// Whether the stylesheet is in forwards-compatible mode (declared version greater

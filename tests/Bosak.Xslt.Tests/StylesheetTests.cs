@@ -93,6 +93,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.66  | 26-08-2026     | Added XTSE1600 regression tests for circular use-character-maps references            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.67  | 26-08-2026     | Added XTSE0265 regression tests for input-type-annotations conflicts                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4735,6 +4737,76 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var compiler = new Api.XsltCompiler();
         var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
         Assert.Contains("XTSE1600", ex.Message);
+    }
+
+    [Fact]
+    public void Conflicting_InputTypeAnnotations_Across_Include_Raises_XTSE0265()
+    {
+        var main = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            input-type-annotations='strip'>
+            <xsl:include href='included.xsl'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+        var included = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            input-type-annotations='preserve'>
+            <xsl:template name='sub'><sub/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler
+        {
+            UriResolver = new InlineUriResolver(new Dictionary<string, string> { ["included.xsl"] = included })
+        };
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(main));
+        Assert.Contains("XTSE0265", ex.Message);
+    }
+
+    [Fact]
+    public void Matching_InputTypeAnnotations_Across_Include_Compiles()
+    {
+        var main = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            input-type-annotations='strip'>
+            <xsl:include href='included.xsl'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+        var included = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            input-type-annotations='strip'>
+            <xsl:template name='sub'><sub/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler
+        {
+            UriResolver = new InlineUriResolver(new Dictionary<string, string> { ["included.xsl"] = included })
+        };
+        var executable = compiler.Compile(main);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void Unspecified_InputTypeAnnotations_With_Explicit_Compiles()
+    {
+        var main = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:include href='included.xsl'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+        var included = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            input-type-annotations='preserve'>
+            <xsl:template name='sub'><sub/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler
+        {
+            UriResolver = new InlineUriResolver(new Dictionary<string, string> { ["included.xsl"] = included })
+        };
+        var executable = compiler.Compile(main);
+        Assert.NotNull(executable);
+    }
+
+    private class InlineUriResolver : IXsltUriResolver
+    {
+        private readonly Dictionary<string, string> _documents;
+        public InlineUriResolver(Dictionary<string, string> documents) => _documents = documents;
+        public XDocument Resolve(string href, string? baseUri) =>
+            XDocument.Parse(_documents[href], LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
     }
 
 }
