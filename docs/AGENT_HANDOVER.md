@@ -1,11 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `5f5bbeb` — XSLT: XTDE1360 current() without context item + baseline regression fixes
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1360*` XTDE1360 cluster.
-**Expected state:** **1,982 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `<pending>` — XSLT: XTDE1440 invalid EQName argument to fn:element-available
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1440*` XTDE1440 cluster.
+**Expected state:** **1,985 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE1360 cluster)
+## This Session Changes (XTDE1440 cluster)
+
+1. **`fn:element-available` EQName validation** —
+   - `FunctionLibrary.ElementAvailable` now validates that its argument is a valid EQName.
+   - The `Q{uri}local` form is accepted only when the surrounding braces are syntactically correct and the local part is a valid NCName.
+   - A lexical `prefix:local` QName is accepted only when the prefix is bound to a namespace in the static context.
+   - An unprefixed lexical QName is resolved against the default namespace of the defining element, per the XSLT specification.
+   - An unprefixed local name is accepted only when it is a valid NCName.
+   - Anything else (including an unbound prefix, an empty prefix, or an invalid local part) raises `XTDE1440`.
+   - The W3C `error-1440*` cluster passes with 2/0/0.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for a valid `xsl:value-of` name, an invalid lexical QName, and an invalid prefix produced by `concat`.
+   - Header bumped: `FunctionLibrary.cs` → 5.102, `StylesheetTests.cs` → 0.59.
+
+2. **Results** —
+   - `error-1440*` cluster: 2 passed / 0 failed / 0 skipped.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,985 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE1360 cluster)
 
 1. **`fn:current()` without current item raises `XTDE1360`** —
    - `FunctionLibrary.Current` now throws `XTDE1360` when `EvaluationContext.CurrentItem` is undefined.
@@ -16,9 +34,9 @@
    - Headers bumped: `FunctionLibrary.cs` → 5.101, `TransformEngine.cs` → 6.27, `VmEngine.cs` → 2.128, `StylesheetTests.cs` → 0.58.
 
 2. **Baseline regression fixes** —
-   - `Stylesheet.ValidateInstructionTree` now ignores whitespace-only text nodes when deciding whether an instruction has "content", fixing `use-when-0206` (xsl:attribute with select and whitespace content) and similar cases.
-   - An empty `xsl:value-of` with no `select` attribute is now accepted in XSLT 3.0, fixing `select-7502b` and `construct-node-034`. The existing regression test was updated from expecting `XTSE0870` to expecting success.
-   - Duplicate `xsl:merge-source` name detection now assigns unique default names to sources without an explicit `name`, so ordinary multi-source merges are no longer rejected. This fixes `merge-002`, `merge-003`, etc., and the `result-document` tests that use `xsl:merge`.
+   - `Stylesheet.ValidateInstructionTree` now ignores whitespace-only text nodes when deciding whether an instruction has "content".
+   - An empty `xsl:value-of` with no `select` attribute is now accepted in XSLT 3.0.
+   - Duplicate `xsl:merge-source` name detection now assigns unique default names to sources without an explicit `name`.
 
 3. **Results** —
    - `error-1360*` cluster: 2 passed / 0 failed / 0 skipped.

@@ -77,6 +77,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.58  | 26-08-2026     | Added XTDE1360 regression tests for fn:current without context item                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.59  | 26-08-2026     | Added XTDE1440 regression tests for invalid element-available EQNames                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4398,6 +4400,52 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
         Assert.Contains("XTDE1360", ex.Message);
+    }
+
+    [Fact]
+    public void ElementAvailable_ValidXsElement_ReturnsTrue()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='element-available(""xsl:value-of"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("true", result);
+    }
+
+    [Fact]
+    public void ElementAvailable_InvalidLexicalQName_ThrowsXtde1440()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='element-available(""c#"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1440", ex.Message);
+    }
+
+    [Fact]
+    public void ElementAvailable_InvalidPrefix_ThrowsXtde1440()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:param name='p' select='""2""'/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='element-available(concat($p, "":thing""))'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1440", ex.Message);
     }
 
 }

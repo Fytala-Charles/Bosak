@@ -61,6 +61,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.101 | 26-08-2026     | fn:current raises XTDE1360 when the current item is absent                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.102 | 26-08-2026     | fn:element-available validates its argument as an EQName and raises XTDE1440 when invalid |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4468,6 +4470,65 @@ public static class FunctionLibrary
         return (nsUri, localName);
     }
 
+    /// <summary>
+    /// Parses the argument of <c>fn:element-available</c> as an EQName.
+    /// Raises <c>XTDE1440</c> when the value is not a valid EQName or when a lexical
+    /// QName prefix is not declared in the static context.
+    /// </summary>
+    private static (string nsUri, string localName) ParseElementAvailableName(EvaluationContext ctx, string name, string defaultUri)
+    {
+        if (string.IsNullOrEmpty(name))
+            throw new InvalidOperationException("XTDE1440");
+
+        string nsUri;
+        string localName;
+
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int close = name.IndexOf('}');
+            if (close < 2 || close == name.Length - 1)
+                throw new InvalidOperationException("XTDE1440");
+            nsUri = name.Substring(2, close - 2);
+            if (nsUri.IndexOfAny(new[] { '{', '}' }) >= 0)
+                throw new InvalidOperationException("XTDE1440");
+            localName = name.Substring(close + 1);
+        }
+        else if (name.StartsWith("{"))
+        {
+            // Clark notation {uri}local is not a valid EQName for fn:element-available.
+            throw new InvalidOperationException("XTDE1440");
+        }
+        else
+        {
+            int colon = name.IndexOf(':');
+            if (colon >= 0)
+            {
+                string prefix = name.Substring(0, colon);
+                localName = name.Substring(colon + 1);
+                if (prefix.Length == 0)
+                    throw new InvalidOperationException("XTDE1440");
+                if (!ctx.TryResolveNamespace(prefix, out nsUri))
+                    throw new InvalidOperationException("XTDE1440");
+            }
+            else
+            {
+                nsUri = defaultUri;
+                localName = name;
+            }
+        }
+
+        try
+        {
+            System.Xml.XmlConvert.VerifyNCName(localName);
+        }
+        catch
+        {
+            throw new InvalidOperationException("XTDE1440");
+        }
+
+        return (nsUri, localName);
+    }
+
     private static XdmValue FunctionAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string name = AtomizedString(args[0]);
@@ -4515,7 +4576,7 @@ public static class FunctionLibrary
         // XSLT specifies that element-available uses the default namespace of the
         // defining element, not the XPath default element namespace.
         var defaultUri = ctx.DefiningElementDefaultNamespace ?? ctx.DefaultElementNamespace ?? string.Empty;
-        var (nsUri, localName) = ParseQNameArgument(ctx, name, defaultUri: defaultUri);
+        var (nsUri, localName) = ParseElementAvailableName(ctx, name, defaultUri);
 
         if (nsUri == Namespaces.ExsltCommon && localName == "document")
             return XdmValue.FromBoolean(true);
