@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 August 2026
-> **Bosak baseline:** 1,988 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,989 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-26** — XSLT: **XTDE1500 cluster (`error-1500*`)** — `EvaluationContext` now exposes a `DocumentLoaded` callback that `TransformEngine` uses to track every document URI read during a transformation. When a secondary `xsl:result-document` (or EXSLT `exsl:document`) targets an absolute URI that has already been read, the runtime raises `XTDE1500`. The W3C `error-1500*` cluster is now **1/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (header → 2.16), `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.29).
+  - Regression test: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+1 test; header → 0.62).
+  - Verification: `error-1500*` 1/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 1,989/0.
 
 - **2026-08-26** — XSLT: **XTDE1450 cluster (`error-1450*`)** — `TransformEngine.CopyLiteralElement` now raises `XTDE1450` when an element in an extension-element namespace has no `xsl:fallback` children. If one or more `xsl:fallback` children are present, their content continues to be evaluated in place of the extension element. The W3C `error-1450*` cluster is now **2/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.28).

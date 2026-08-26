@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `2df3100` — XSLT: XTDE1450 extension element without xsl:fallback + EXSLT exsl:document fix
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1450*` XTDE1450 cluster and fixed the DocBook `exsl:document` regression it exposed.
-**Expected state:** **1,988 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `<pending>` — XSLT: XTDE1500 read/write URI conflict detection
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1500*` XTDE1500 cluster.
+**Expected state:** **1,989 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE1450 cluster + EXSLT exsl:document regression fix)
+## This Session Changes (XTDE1500 cluster)
+
+1. **Track read document URIs and raise `XTDE1500` on result-document conflicts** —
+   - `EvaluationContext` now exposes a `DocumentLoaded` callback that is invoked with the resolved absolute URI whenever a document is loaded via `fn:doc` / `document()`, `xsl:source-document`, or registered as the principal source document.
+   - `TransformEngine` subscribes to this callback and accumulates normalized (fragment-stripped) read URIs in a per-transformation set.
+   - When a secondary `xsl:result-document` or EXSLT `exsl:document` resolves to an absolute URI that is in the read set, the runtime raises `XTDE1500`.
+   - The W3C `error-1500*` cluster passes with 1/0/0.
+   - Added regression test in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for a read-then-write conflict.
+   - Header bumped: `EvaluationContext.cs` → 2.16, `TransformEngine.cs` → 6.29, `StylesheetTests.cs` → 0.62.
+
+2. **Results** —
+   - `error-1500*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,989 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE1450 cluster + EXSLT exsl:document regression fix)
 
 1. **`TransformEngine.CopyLiteralElement` raises `XTDE1450` for extension elements without `xsl:fallback`** —
    - When a literal result element belongs to a namespace declared as an extension-element namespace and has no `xsl:fallback` children, the runtime now raises dynamic error `XTDE1450`.

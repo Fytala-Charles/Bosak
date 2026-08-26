@@ -208,6 +208,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.28  | 26-08-2026     | XTDE1450 for extension elements without xsl:fallback; EXSLT exsl:document as result-document |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.29  | 26-08-2026     | Track read document URIs and raise XTDE1500 on result-document write conflict           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -392,6 +394,10 @@ public sealed class TransformEngine
     // Tracks URIs already used by xsl:result-document to detect XTDE1490 duplicates.
     private readonly HashSet<string> _resultDocumentUris = new();
 
+    // Tracks absolute URIs of documents read during this transformation to detect
+    // XTDE1500 read/write conflicts on secondary result documents.
+    private readonly HashSet<string> _readDocumentUris = new(StringComparer.Ordinal);
+
     // Stack of open xsl:result-document contexts. Used to redirect nested result
     // documents and to detect attempts to write to the principal output URI while
     // a secondary result document is active.
@@ -533,6 +539,31 @@ public sealed class TransformEngine
         // static XPath errors (including references to removed functions) are reported
         // even when the variable is never referenced at run time.
         ValidateStaticExpressions();
+    }
+
+    /// <summary>
+    /// Normalizes a document URI for XTDE1500 read/write conflict tracking by resolving
+    /// relative references and stripping any fragment identifier.
+    /// </summary>
+    private static string NormalizeDocumentUri(string uri, string? baseUri = null)
+    {
+        if (string.IsNullOrEmpty(uri))
+            return string.Empty;
+
+        if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(baseUri))
+        {
+            try
+            {
+                uri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
+            }
+            catch (UriFormatException)
+            {
+                // Leave the URI as-is if it cannot be resolved.
+            }
+        }
+
+        var hash = uri.IndexOf('#');
+        return hash >= 0 ? uri[..hash] : uri;
     }
 
     /// <summary>
@@ -736,6 +767,8 @@ public sealed class TransformEngine
 
         // Result-document URIs must be unique within a transformation.
         _resultDocumentUris.Clear();
+        _readDocumentUris.Clear();
+        _context.DocumentLoaded = uri => _readDocumentUris.Add(NormalizeDocumentUri(uri, _context.BaseUri));
         _resultDocumentStack.Clear();
         _principalOutputClosed = false;
         _principalOutputHasContent = false;
@@ -1097,6 +1130,8 @@ public sealed class TransformEngine
 
         // Result-document URIs must be unique within a transformation.
         _resultDocumentUris.Clear();
+        _readDocumentUris.Clear();
+        _context.DocumentLoaded = uri => _readDocumentUris.Add(NormalizeDocumentUri(uri, _context.BaseUri));
         _resultDocumentStack.Clear();
         _capturedResultDocuments.Clear();
         _principalOutputClosed = false;
@@ -14308,6 +14343,15 @@ public sealed class TransformEngine
         {
             if (_resultDocumentUris.Contains(resolvedHref))
                 throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
+
+            // XTDE1500: a secondary result document must not write to a URI that has
+            // already been used to read a document during the same transformation.
+            if (Uri.IsWellFormedUriString(resolvedHref, UriKind.Absolute))
+            {
+                var normalized = NormalizeDocumentUri(resolvedHref);
+                if (_readDocumentUris.Contains(normalized))
+                    throw new InvalidOperationException("XTDE1500: A result document cannot be written to a URI that has already been used to read a document.");
+            }
 
             // A secondary result document must not target the principal output URI.
             var principalOutputUri = _baseOutputUri ?? string.Empty;

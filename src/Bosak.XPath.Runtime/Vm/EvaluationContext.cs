@@ -57,6 +57,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.15  | 15-08-2026     | Added CollectionValues for query-based environment collections in QT3 harness        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.16  | 26-08-2026     | Added DocumentLoaded callback so XSLT can detect XTDE1500 read/write conflicts            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -348,6 +350,12 @@ public sealed class EvaluationContext
     public Dictionary<string, XdmValue>? InitialTemplateTunnelParameters { get; set; }
 
     /// <summary>
+    /// Optional callback invoked with the resolved absolute URI whenever a document
+    /// is loaded or registered. Used by XSLT to detect XTDE1500 read/write conflicts.
+    /// </summary>
+    public Action<string>? DocumentLoaded { get; set; }
+
+    /// <summary>
     /// Loads a document by URI, using the cache and <see cref="DocumentLoader"/>.
     /// </summary>
     public IXdmNode LoadDocument(string uri)
@@ -364,7 +372,10 @@ public sealed class EvaluationContext
             }
 
             if (_documentCache.TryGetValue(uri, out var cached))
+            {
+                DocumentLoaded?.Invoke(uri);
                 return cached;
+            }
 
             // A resource mapper may redirect published (e.g. http:) URIs to local files;
             // the cache key remains the originally requested URI.
@@ -395,6 +406,7 @@ public sealed class EvaluationContext
         if (DocumentPostProcessor != null)
             node = DocumentPostProcessor(node);
         _documentCache[uri] = node;
+        DocumentLoaded?.Invoke(uri);
         return node;
     }
 
@@ -407,7 +419,10 @@ public sealed class EvaluationContext
     public void RegisterDocument(string uri, IXdmNode node)
     {
         if (!string.IsNullOrEmpty(uri))
+        {
             _documentCache[uri] = node;
+            DocumentLoaded?.Invoke(uri);
+        }
     }
 
     // ------------------------------------------------------------------

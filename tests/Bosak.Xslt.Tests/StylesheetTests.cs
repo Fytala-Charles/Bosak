@@ -83,6 +83,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.61  | 26-08-2026     | Added EXSLT exsl:document regression test via fn:transform capture                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.62  | 26-08-2026     | Added XTDE1500 regression tests for read/write URI conflicts                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4514,6 +4516,32 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         Assert.True(result.IsMap);
         Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("http://example.com/sec.xml"), out var doc));
         Assert.Equal("secondary", doc.NodeValue.StringValue);
+    }
+
+    [Fact]
+    public void ResultDocument_ReadThenWriteSameUri_ThrowsXtde1500()
+    {
+        var tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".xml");
+        try
+        {
+            File.WriteAllText(tempFile, "<doc/>");
+            var fileUri = new Uri(tempFile).AbsoluteUri;
+            var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+                <xsl:template name='main'>
+                    <xsl:variable name='a' select=""doc('{fileUri}')""/>
+                    <xsl:result-document href='{{document-uri($a)}}'><boo/></xsl:result-document>
+                </xsl:template>
+            </xsl:stylesheet>";
+
+            var compiler = new Api.XsltCompiler();
+            var executable = compiler.Compile(xsl);
+            var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main", baseOutputUri: "http://example.com/result.xml"));
+            Assert.Contains("XTDE1500", ex.Message);
+        }
+        finally
+        {
+            File.Delete(tempFile);
+        }
     }
 
 }
