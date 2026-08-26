@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `457c5e0` — XSLT: XTDE0044 for initial mode without source or global context item
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0044*` XTDE0044 cluster.
-**Expected state:** **2,025 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `d8343ab` — XSLT: XTSE0620 validation for variable-binding elements with @select and content
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0620*` XTSE0620 cluster.
+**Expected state:** **2,028 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE0044 cluster)
+## This Session Changes (XTSE0620 cluster)
+
+1. **Detect `xsl:variable`, `xsl:param`, and `xsl:with-param` with both `@select` and non-empty content (`XTSE0620`)** —
+   - `Stylesheet.ValidateInstructionTree` now checks every variable-binding element. If the element has a `select` attribute (including a shadow `_select`) and its content is non-empty after stripping whitespace text, comments, and PIs, compilation raises `XTSE0620`.
+   - The check reuses the existing `IsStaticBodyEmpty` helper, so whitespace-only content remains allowed.
+   - The W3C `error-0620*` cluster passes with 2/0/0.
+   - Added 3 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for `xsl:variable`, `xsl:with-param`, and whitespace-only content.
+   - Header bumped: `Stylesheet.cs` → 2.72, `StylesheetTests.cs` → 0.70.
+
+2. **Results** —
+   - `error-0620*` cluster: 2 passed / 0 failed / 0 skipped.
+   - `error` test set: 444 passed / 39 failed / 96 skipped (2 previously failing tests now pass).
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,028 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE0044 cluster)
 
 1. **Raise `XTDE0044` when an explicit initial mode has no source or global context item** —
    - `TransformEngine.Transform` now checks, when an `initialMode` is supplied, that at least one of `source`, `initialMatchSelection`, or `globalContextItem` is present. If all are absent, it raises `XTDE0044` before attempting to apply templates.
