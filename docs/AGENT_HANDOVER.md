@@ -1,18 +1,35 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `be7e6b1` — XSLT: XTDE1428 invalid EQName argument to fn:type-available
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1428*` XTDE1428 cluster.
-**Expected state:** **1,979 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `<pending>` — XSLT: XTDE1360 current() without context item + baseline regression fixes
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1360*` XTDE1360 cluster.
+**Expected state:** **1,982 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE1428 cluster)
+## This Session Changes (XTDE1360 cluster)
+
+1. **`fn:current()` without current item raises `XTDE1360`** —
+   - `FunctionLibrary.Current` now throws `XTDE1360` when `EvaluationContext.CurrentItem` is undefined.
+   - `TransformEngine.ExecuteXsltFunction` clears the current item before evaluating a stylesheet-function body, so `fn:current()` inside an `xsl:function` raises `XTDE1360`.
+   - `VmEngine.InvokeFunctionItem` clears the current item for the duration of a dynamic function-item call, so `fn:current()` invoked through a function reference such as `current#0` raises `XTDE1360`.
+   - The W3C `error-1360*` cluster passes with 2/0/0.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for a valid `current()` inside `xsl:for-each`, `current()` inside `xsl:function`, and `current()` through a function item.
+   - Headers bumped: `FunctionLibrary.cs` → 5.101, `TransformEngine.cs` → 6.27, `VmEngine.cs` → 2.128, `StylesheetTests.cs` → 0.58.
+
+2. **Baseline regression fixes** —
+   - `Stylesheet.ValidateInstructionTree` now ignores whitespace-only text nodes when deciding whether an instruction has "content", fixing `use-when-0206` (xsl:attribute with select and whitespace content) and similar cases.
+   - An empty `xsl:value-of` with no `select` attribute is now accepted in XSLT 3.0, fixing `select-7502b` and `construct-node-034`. The existing regression test was updated from expecting `XTSE0870` to expecting success.
+   - Duplicate `xsl:merge-source` name detection now assigns unique default names to sources without an explicit `name`, so ordinary multi-source merges are no longer rejected. This fixes `merge-002`, `merge-003`, etc., and the `result-document` tests that use `xsl:merge`.
+
+3. **Results** —
+   - `error-1360*` cluster: 2 passed / 0 failed / 0 skipped.
+   - `error-0870*`, `error-0840*`, `error-3190*` targeted clusters remain green.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,982 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE1428 cluster)
 
 1. **`fn:type-available` EQName validation** —
    - `FunctionLibrary.TypeAvailable` now validates that its argument is a valid EQName.
-   - The `Q{uri}local` form is accepted only when the surrounding braces are syntactically correct and the local part is a valid NCName.
-   - A lexical `prefix:local` QName is accepted only when the prefix is bound to a namespace in the static context.
-   - An unprefixed local name is accepted only when it is a valid NCName.
-   - Anything else (including an unbound prefix, an empty prefix, or an invalid local part) raises `XTDE1428`.
    - The W3C `error-1428*` cluster passes with 1/0/0.
    - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for a valid `xs:integer` name and an invalid `foo::bar` EQName.
    - Headers bumped: `FunctionLibrary.cs` → 5.100, `StylesheetTests.cs` → 0.57.

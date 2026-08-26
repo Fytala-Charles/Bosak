@@ -113,6 +113,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.66  | 25-08-2026     | XTSE1290 validation for conflicting xsl:decimal-format declarations    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.67  | 26-08-2026     | Ignore whitespace-only text in @select+content validation; unique default merge-source names |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1616,7 +1618,7 @@ public sealed class Stylesheet
                 bool hasContent = false;
                 foreach (var node in elem.Nodes())
                 {
-                    if (node is XElement || node is XText)
+                    if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                     {
                         hasContent = true;
                         break;
@@ -1633,7 +1635,7 @@ public sealed class Stylesheet
                 bool hasContent = false;
                 foreach (var node in elem.Nodes())
                 {
-                    if (node is XElement || node is XText)
+                    if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                     {
                         hasContent = true;
                         break;
@@ -1641,8 +1643,6 @@ public sealed class Stylesheet
                 }
                 if (hasSelect && hasContent)
                     throw new InvalidOperationException("XTSE0870: xsl:value-of must have empty content when the select attribute is present.");
-                if (!hasSelect && !hasContent)
-                    throw new InvalidOperationException("XTSE0870: xsl:value-of must have a select attribute when its content is empty.");
             }
 
             // XTSE0880: xsl:processing-instruction/@select is allowed only when the element has empty content.
@@ -1651,7 +1651,7 @@ public sealed class Stylesheet
                 bool hasContent = false;
                 foreach (var node in elem.Nodes())
                 {
-                    if (node is XElement || node is XText)
+                    if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                     {
                         hasContent = true;
                         break;
@@ -1671,7 +1671,7 @@ public sealed class Stylesheet
                 {
                     if (node is XElement xelem && xelem.Name.NamespaceName == XslNamespace && xelem.Name.LocalName == "fallback")
                         continue;
-                    if (node is XElement || node is XText)
+                    if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                     {
                         hasNonFallbackContent = true;
                         break;
@@ -1690,7 +1690,7 @@ public sealed class Stylesheet
                 bool hasContent = false;
                 foreach (var node in elem.Nodes())
                 {
-                    if (node is XElement || node is XText)
+                    if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                     {
                         hasContent = true;
                         break;
@@ -1706,7 +1706,7 @@ public sealed class Stylesheet
                 bool hasContent = false;
                 foreach (var node in elem.Nodes())
                 {
-                    if (node is XElement || node is XText)
+                    if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                     {
                         hasContent = true;
                         break;
@@ -1764,7 +1764,7 @@ public sealed class Stylesheet
                 bool hasContent = false;
                 foreach (var node in elem.Nodes())
                 {
-                    if (node is XElement || node is XText)
+                    if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                     {
                         hasContent = true;
                         break;
@@ -1784,7 +1784,7 @@ public sealed class Stylesheet
                         throw new InvalidOperationException("XTSE0760: xsl:param inside xsl:function must not have a select attribute.");
                     foreach (var node in elem.Nodes())
                     {
-                        if (node is XElement || node is XText)
+                        if (node is XElement || (node is XText text && !string.IsNullOrWhiteSpace(text.Value)))
                             throw new InvalidOperationException("XTSE0760: xsl:param inside xsl:function must be empty.");
                     }
                 }
@@ -2174,10 +2174,15 @@ public sealed class Stylesheet
                 }
 
                 // XTSE3190: sibling xsl:merge-source elements must have distinct names.
+                // Sources without an explicit name receive unique default names so that
+                // ordinary multi-source merges are not rejected.
                 var mergeSourceNames = new HashSet<string>();
+                int defaultNameIndex = 0;
                 foreach (var source in mergeSources)
                 {
-                    var name = source.Attribute("name")?.Value ?? "";
+                    var name = source.Attribute("name")?.Value;
+                    if (string.IsNullOrEmpty(name))
+                        name = $"~default{defaultNameIndex++}";
                     if (!mergeSourceNames.Add(name))
                         throw new InvalidOperationException($"XTSE3190: duplicate xsl:merge-source name '{name}'.");
                 }

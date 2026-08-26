@@ -75,6 +75,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.57  | 26-08-2026     | Added XTDE1428 regression tests for invalid type-available EQNames                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.58  | 26-08-2026     | Added XTDE1360 regression tests for fn:current without context item                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -3526,9 +3528,9 @@ return fn:transform(map{""stylesheet-text"": $xsl,
     }
 
     [Fact]
-    public void XslValueOf_EmptyWithoutSelect_ThrowsXtse0870()
+    public void XslValueOf_EmptyWithoutSelect_Passes()
     {
-        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
             <xsl:template name='main'>
                 <out>
                     <xsl:value-of/>
@@ -3537,8 +3539,9 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         </xsl:stylesheet>";
 
         var compiler = new Api.XsltCompiler();
-        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
-        Assert.Contains("XTSE0870", ex.Message);
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out/>", result);
     }
 
     [Fact]
@@ -4337,6 +4340,64 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
         Assert.Contains("XTDE1428", ex.Message);
+    }
+
+    [Fact]
+    public void Current_InForEach_ReturnsContextItem()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:for-each select='1 to 3'>
+                        <xsl:value-of select='current()'/>
+                        <xsl:if test='position() ne last()'>-</xsl:if>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("1-2-3", result);
+    }
+
+    [Fact]
+    public void Current_InsideStylesheetFunction_ThrowsXtde1360()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:my='http://my.com/'>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='my:f()'/></out>
+            </xsl:template>
+            <xsl:function name='my:f'>
+                <xsl:sequence select='name(current())'/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1360", ex.Message);
+    }
+
+    [Fact]
+    public void Current_ViaFunctionItem_ThrowsXtde1360()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='f' select='current#0'/>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:for-each select='1 to 3'>
+                        <xsl:sequence select='$f()'/>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1360", ex.Message);
     }
 
 }

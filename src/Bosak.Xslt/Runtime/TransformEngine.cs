@@ -204,6 +204,8 @@
 //                      | Charles Korthout | 6.25  | 25-08-2026     | XTDE0560 clear current template rule during global variable/parameter evaluation     |
 //                      | Charles Korthout | 6.26  | 25-08-2026     | XTDE0420 reject attribute/namespace nodes on xsl:copy document content                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.27  | 26-08-2026     | ExecuteXsltFunction clears current item so fn:current raises XTDE1360 inside stylesheet functions |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -2304,6 +2306,9 @@ public sealed class TransformEngine
             // xsl:sequence/@select and other XPath expressions must not see
             // the caller's context item.
             _context.WithFocus(XdmValue.Undefined, 0, 0);
+
+            // XSLT functions also have no current item, so fn:current() raises XTDE1360.
+            _context.WithCurrentItem(XdmValue.Undefined);
 
             // Function bodies run in their own variable scope. Remove caller/template
             // variables so an outer function's local variables are not mistaken for

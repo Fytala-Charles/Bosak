@@ -59,6 +59,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.100 | 26-08-2026     | fn:type-available validates its argument as an EQName and raises XTDE1428 when invalid   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.101 | 26-08-2026     | fn:current raises XTDE1360 when the current item is absent                               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4023,6 +4025,8 @@ public static class FunctionLibrary
         // called from use-when or other static expressions.
         if (ctx.IsStaticEvaluation)
             throw new InvalidOperationException("XPST0017: Function fn:current is not available in static expressions.");
+        if (ctx.CurrentItem.IsUndefined)
+            throw new InvalidOperationException("XTDE1360");
         return ctx.CurrentItem;
     }
 

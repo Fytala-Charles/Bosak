@@ -241,6 +241,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.127 | 23-08-2026     | element(N) defaults to xs:anyType? (nillable) in IsElementOrAttributeSchemaSubtype (hof-034) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.128 | 26-08-2026     | InvokeFunctionItem clears current item so fn:current() raises XTDE1360 in dynamic calls |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -3670,10 +3672,14 @@ public static class VmEngine
     {
         // XSLT 3.0 §5.3.4: dynamic function calls clear the current captured substrings
         // (regex groups) and the current output URI for the duration of the call.
+        // They also clear the XSLT current node, so fn:current() raises XTDE1360 when
+        // invoked through a function item.
         var savedRegexGroups = context.RegexGroups;
         var savedOutputUri = context.CurrentOutputUri;
+        var savedCurrentItem = context.CurrentItem;
         context.RegexGroups = null;
         context.CurrentOutputUri = null;
+        context.WithCurrentItem(XdmValue.Undefined);
         try
         {
             return InvokeFunctionItemCore(func, context, args);
@@ -3682,6 +3688,7 @@ public static class VmEngine
         {
             context.RegexGroups = savedRegexGroups;
             context.CurrentOutputUri = savedOutputUri;
+            context.WithCurrentItem(savedCurrentItem);
         }
     }
 
