@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 August 2026
-> **Bosak baseline:** 1,977 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,979 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-26** — XSLT: **XTDE1428 cluster (`error-1428*`)** — `FunctionLibrary.TypeAvailable` now validates that its argument is a valid EQName. It accepts the `Q{uri}local` form, a lexical `prefix:local` QName whose prefix is bound to a namespace in the static context, or an unprefixed local name that is a valid NCName. Anything else (including an unbound prefix, an empty prefix, or an invalid local part) raises `XTDE1428`. The W3C `error-1428*` cluster is now **1/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (header → 5.100).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+2 tests; header → 0.57).
+  - Verification: `error-1428*` 1/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 1,979/0.
 
 - **2026-08-26** — XSLT: **XTDE1390 cluster (`error-1390*`)** — `FunctionLibrary.ExpandXsltPropertyName` now validates that the argument to `fn:system-property` is a valid QName. It accepts the `Q{uri}local` EQName form (requiring a syntactically valid URI and a valid NCName local part), a lexical `prefix:local` QName whose prefix is bound to a namespace in the static context, or an unprefixed local name that is a valid NCName. Anything else raises `XTDE1390`. The W3C `error-1390*` cluster is now **3/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (header → 5.59).

@@ -73,6 +73,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.56  | 26-08-2026     | Added XTDE1390 regression tests for invalid system-property QNames                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.57  | 26-08-2026     | Added XTDE1428 regression tests for invalid type-available EQNames                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4304,6 +4306,37 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
         Assert.Contains("XTDE1390", ex.Message);
+    }
+
+    [Fact]
+    public void TypeAvailable_ValidXsInteger_ReturnsTrue()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='type-available(""xs:integer"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("true", result);
+    }
+
+    [Fact]
+    public void TypeAvailable_InvalidEQName_ThrowsXtde1428()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:param name='t' select='""foo::bar""'/>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='type-available($t)'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1428", ex.Message);
     }
 
 }

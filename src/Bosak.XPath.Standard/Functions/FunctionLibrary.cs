@@ -57,6 +57,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.99  | 23-08-2026     | Schema-aware deep-equal, atomized string functions, list-typed fn:sum, analyze-string.xsd validation |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.100 | 26-08-2026     | fn:type-available validates its argument as an EQName and raises XTDE1428 when invalid   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4376,35 +4378,8 @@ public static class FunctionLibrary
     private static XdmValue TypeAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string name = AtomizedString(args[0]);
-        // For now, return true for common built-in schema types that are always available
-        string localName = name;
-        string? nsUri = null;
-        if (name.StartsWith("Q{"))
-        {
-            // EQName syntax: Q{uri}local
-            int close = name.IndexOf('}');
-            if (close >= 2)
-            {
-                nsUri = name.Substring(2, close - 2);
-                localName = name.Substring(close + 1);
-            }
-        }
-        else if (name.StartsWith("{"))
-        {
-            int close = name.IndexOf('}');
-            if (close > 0)
-            {
-                nsUri = name.Substring(1, close - 1);
-                localName = name.Substring(close + 1);
-            }
-        }
-        else
-        {
-            int colon = name.IndexOf(':');
-            if (colon > 0)
-                localName = name.Substring(colon + 1);
-        }
-        localName = localName.ToLowerInvariant();
+        var (nsUri, localName) = ParseTypeAvailableName(ctx, name);
+        string lowerLocal = localName.ToLowerInvariant();
 
         // If an explicit namespace URI was supplied, the type is only available
         // when it is the XML Schema namespace.
@@ -4427,7 +4402,66 @@ public static class FunctionLibrary
             "unsignedshort", "unsignedbyte", "nonpositiveinteger", "negativeinteger",
             "untyped", "anytype", "anysimpletype", "untypedatomic", "anyatomictype"
         ];
-        return XdmValue.FromBoolean(builtInTypes.Contains(localName));
+        return XdmValue.FromBoolean(builtInTypes.Contains(lowerLocal));
+    }
+
+    /// <summary>
+    /// Parses the argument of <c>fn:type-available</c> as an EQName.
+    /// Raises <c>XTDE1428</c> when the value is not a valid EQName or when a lexical
+    /// QName prefix is not declared in the static context.
+    /// </summary>
+    private static (string nsUri, string localName) ParseTypeAvailableName(EvaluationContext ctx, string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            throw new InvalidOperationException("XTDE1428");
+
+        string nsUri;
+        string localName;
+
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int close = name.IndexOf('}');
+            if (close < 2 || close == name.Length - 1)
+                throw new InvalidOperationException("XTDE1428");
+            nsUri = name.Substring(2, close - 2);
+            if (nsUri.IndexOfAny(new[] { '{', '}' }) >= 0)
+                throw new InvalidOperationException("XTDE1428");
+            localName = name.Substring(close + 1);
+        }
+        else if (name.StartsWith("{"))
+        {
+            // Clark notation {uri}local is not a valid EQName for fn:type-available.
+            throw new InvalidOperationException("XTDE1428");
+        }
+        else
+        {
+            int colon = name.IndexOf(':');
+            if (colon >= 0)
+            {
+                string prefix = name.Substring(0, colon);
+                localName = name.Substring(colon + 1);
+                if (prefix.Length == 0)
+                    throw new InvalidOperationException("XTDE1428");
+                if (!ctx.TryResolveNamespace(prefix, out nsUri))
+                    throw new InvalidOperationException("XTDE1428");
+            }
+            else
+            {
+                nsUri = string.Empty;
+                localName = name;
+            }
+        }
+
+        try
+        {
+            System.Xml.XmlConvert.VerifyNCName(localName);
+        }
+        catch
+        {
+            throw new InvalidOperationException("XTDE1428");
+        }
+
+        return (nsUri, localName);
     }
 
     private static XdmValue FunctionAvailable(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
