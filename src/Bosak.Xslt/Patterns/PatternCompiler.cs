@@ -42,6 +42,8 @@
 //                      | Charles Korthout | 2.8   | 01-08-2026     | union/intersect/except after / @ :: are NameTests, not operators; fixes match-038      |
 //                      | Charles Korthout | 2.9   | 25-08-2026     | XTSE0340 validation for numeric pattern starts/steps and PI NCName arguments          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.0   | 26-08-2026     | Propagate XTDE0640 circularity errors from pattern predicates                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -2342,8 +2344,14 @@ public sealed class PatternCompiler
 
         // Static validation: dry-run predicate against a dummy node to catch XPST0017
         // and other static errors in predicates that might never be evaluated at runtime.
+        // Suppress evaluation of sequence-constructor globals during validation so globals
+        // whose value depends on the source document or pattern matching are not
+        // materialized prematurely (error-0640d), while @select-only globals are still
+        // evaluated normally.
         if (_validationContext != null)
         {
+            var savedSuppress = _validationContext.SuppressLazySequenceConstructorGlobals;
+            _validationContext.SuppressLazySequenceConstructorGlobals = true;
             try
             {
                 var dummyNode = new XDocumentNode(new XElement("__dummy__"));
@@ -2359,6 +2367,10 @@ public sealed class PatternCompiler
                 // Ignore dynamic errors (type errors, missing nodes, etc.) —
                 // these are legitimate for a dummy context and do not indicate
                 // a static pattern problem.
+            }
+            finally
+            {
+                _validationContext.SuppressLazySequenceConstructorGlobals = savedSuppress;
             }
         }
 
@@ -2850,7 +2862,8 @@ public sealed class PatternCompiler
         var msg = ex.Message;
         // XPTY errors during pattern evaluation are dynamic errors, not static errors.
         // In XSLT match patterns, dynamic errors are treated as "does not match".
-        return msg.Contains("XPST") || msg.Contains("XTSE");
+        // XTDE0640 (circularity) is non-recoverable and must propagate.
+        return msg.Contains("XPST") || msg.Contains("XTSE") || msg.StartsWith("XTDE0640:", StringComparison.Ordinal);
     }
 
     /// <summary>

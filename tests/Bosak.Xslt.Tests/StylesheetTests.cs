@@ -105,6 +105,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.72  | 26-08-2026     | Added XTSE0660 regression tests for duplicate named template bindings                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.73  | 26-08-2026     | Added XTDE0640 regression tests for circular key and global variable references             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5085,6 +5087,82 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         };
         var executable = compiler.Compile(main);
         Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void Key_Self_Reference_In_Match_Raises_XTDE0640()
+    {
+        var xslt = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k' match='key(&quot;k&quot;, &quot;x&quot;)' use='.'/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("doc"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xslt);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(source)));
+        Assert.Contains("XTDE0640", ex.Message);
+    }
+
+    [Fact]
+    public void Mutually_Recursive_Keys_Raise_XTDE0640()
+    {
+        var xslt = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k1' match='a' use='key(&quot;k2&quot;, @code)'/>
+            <xsl:key name='k2' match='a' use='key(&quot;k1&quot;, @code)'/>
+            <xsl:template match='/'>
+                <out total='{sum(key(&quot;k1&quot;, &quot;1&quot;)/@value)}'/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root",
+            new XElement("a", new XAttribute("code", "1"), new XAttribute("value", "10"))));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xslt);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(source)));
+        Assert.Contains("XTDE0640", ex.Message);
+    }
+
+    [Fact]
+    public void Key_Use_Circular_Global_Variable_Raises_XTDE0640()
+    {
+        var xslt = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k' match='a' use='@code[.=$p]'/>
+            <xsl:param name='p' select='key(&quot;k&quot;, &quot;2&quot;)'/>
+            <xsl:template match='/'>
+                <out total='{sum(key(&quot;k&quot;, &quot;2&quot;)/@value)}'/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root",
+            new XElement("a", new XAttribute("code", "2"), new XAttribute("value", "10"))));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xslt);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(source)));
+        Assert.Contains("XTDE0640", ex.Message);
+    }
+
+    [Fact]
+    public void Xsl_Try_Does_Not_Catch_XTDE0640()
+    {
+        var xslt = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:err='http://www.w3.org/2005/xqt-errors'>
+            <xsl:variable name='a' select='$b'/>
+            <xsl:variable name='b' select='$a'/>
+            <xsl:template name='xsl:initial-template'>
+                <xsl:try>
+                    <xsl:value-of select='$a'/>
+                    <xsl:catch errors='err:XTDE0640'><out caught='yes'/></xsl:catch>
+                </xsl:try>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xslt);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(new XDocument(new XElement("x")))));
+        Assert.Contains("XTDE0640", ex.Message);
     }
 
     private class InlineUriResolver : IXsltUriResolver

@@ -214,6 +214,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.31  | 26-08-2026     | XTDE0044 for initial mode without source or global context item                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.32  | 26-08-2026     | Detect circular key/global references and raise XTDE0640; propagate through patterns     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.33  | 26-08-2026     | Don't cache suppressed sequence-constructor globals during pattern validation            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -330,6 +334,9 @@ public sealed class TransformEngine
 
     // Key index for key() function lookups — one per document root node
     private List<(IXdmNode DocRoot, KeyIndex Index)>? _keyIndices;
+
+    // Tracks keys currently being built, to detect circular key references (XTDE0640).
+    private readonly HashSet<(IXdmNode DocRoot, string KeyName)> _buildingKeys = new();
 
     // The initial source document supplied to Transform, and the initial mode used
     // to process it. Used to determine accumulator applicability for copied trees.
@@ -1636,6 +1643,17 @@ public sealed class TransformEngine
             || msg.StartsWith("XTSE", StringComparison.Ordinal)
             || msg.Contains("XPST0017", StringComparison.Ordinal)
             || msg.Contains("XTSE", StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Throws a non-recoverable XTDE0640 circularity error. The exception is marked so that
+    /// xsl:try/xsl:catch does not catch it, per XSLT 3.0 §10.1.1.
+    /// </summary>
+    private static void ThrowCircularityError(string kind, string name)
+    {
+        var ex = new InvalidOperationException($"XTDE0640: Circular reference to {kind} '{name}'.");
+        ex.Data["Bosak.GlobalVariableError"] = true;
+        throw ex;
     }
 
     /// <summary>
@@ -8970,6 +8988,10 @@ public sealed class TransformEngine
             if (docRoot == null)
                 return XdmValue.Undefined;
 
+            var buildKey = (docRoot, keyName);
+            if (_buildingKeys.Contains(buildKey))
+                ThrowCircularityError("xsl:key", rawKeyName);
+
             var keyIndex = GetOrBuildKeyIndex(docRoot);
             if (keyIndex == null)
                 return XdmValue.Undefined;
@@ -9013,6 +9035,10 @@ public sealed class TransformEngine
                 }
                 if (!found)
                 {
+                    var buildKey = (candidateDoc, keyName);
+                    if (_buildingKeys.Contains(buildKey))
+                        ThrowCircularityError("xsl:key", rawKeyName);
+
                     var keyIndex = GetOrBuildKeyIndex(candidateDoc);
                     if (keyIndex != null)
                     {
@@ -9117,15 +9143,31 @@ public sealed class TransformEngine
     private KeyIndex? GetOrBuildKeyIndex(IXdmNode docRoot)
     {
         // Find existing index using IsSameNode (wrapper instances may differ).
-        foreach (var (existingDoc, existingIndex) in _keyIndices!)
+        KeyIndex? existingIndex = null;
+        foreach (var (existingDoc, idx) in _keyIndices!)
         {
             if (existingDoc.IsSameNode(docRoot))
-                return existingIndex;
+            {
+                existingIndex = idx;
+                break;
+            }
         }
 
         var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
         if (allKeyDefs.Count == 0)
             return null;
+
+        // If an index exists but a key is still being built for this document, a nested
+        // key() call may need additional keys built before it can return results. Re-run
+        // BuildKeyIndex so unbuilt keys are finished; already-building keys are skipped
+        // to avoid false positives, while the _buildingKeys guard in KeyFunctionImpl detects
+        // actual cycles.
+        if (existingIndex != null)
+        {
+            if (_buildingKeys.Any(k => k.DocRoot.IsSameNode(docRoot)))
+                BuildKeyIndex(docRoot, existingIndex, allKeyDefs);
+            return existingIndex;
+        }
 
         // Build iteratively for this document; add the index first so that
         // recursive key() calls inside xsl:key/@use or match can query it.
@@ -9162,6 +9204,14 @@ public sealed class TransformEngine
         var savedSize = _context.ContextSize;
         try
         {
+            // Group definitions by key name, preserving first-appearance order of names.
+            // This lets us keep a key name in _buildingKeys while all its definitions are
+            // built, so multiple xsl:key definitions with the same name accumulate correctly.
+            var keyNames = allKeyDefs
+                .GroupBy(k => k.Name)
+                .Select(g => (Name: g.Key, Definitions: g.ToList()))
+                .ToList();
+
             int maxIterations = allKeyDefs.Count + 1;
             int previousTotal = -1;
             for (int i = 0; i < maxIterations; i++)
@@ -9171,30 +9221,39 @@ public sealed class TransformEngine
                     break;
                 previousTotal = currentTotal;
 
-                // Clear each key name once per iteration so multiple definitions
-                // with the same name accumulate.
-                var cleared = new HashSet<string>();
-                foreach (var keyDef in allKeyDefs)
+                foreach (var (keyName, definitions) in keyNames)
                 {
-                    if (cleared.Add(keyDef.Name))
-                        keyIndex.ClearKey(keyDef.Name);
-                    var keyCollation = keyCollationMap[keyDef.Name];
+                    var buildKey = (docRoot, keyName);
+
+                    // If this key name is already being built higher up the call stack,
+                    // skip it in this nested rebuild. Direct or indirect self-references
+                    // are detected in KeyFunctionImpl by the _buildingKeys set.
+                    if (_buildingKeys.Contains(buildKey))
+                        continue;
+
+                    keyIndex.ClearKey(keyName);
+                    var keyCollation = keyCollationMap[keyName];
                     var savedKeyCollation = _context.DefaultCollation;
                     _context.DefaultCollation = keyCollation;
+                    _buildingKeys.Add(buildKey);
                     try
                     {
-                        if (keyDef.HasUseContent)
-                            KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex, n =>
-                            {
-                                // xsl:key content is evaluated in a temporary output state.
-                                using var temporaryOutputState = EnterTemporaryOutputState();
-                                return EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false);
-                            });
-                        else
-                            KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
+                        foreach (var keyDef in definitions)
+                        {
+                            if (keyDef.HasUseContent)
+                                KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex, n =>
+                                {
+                                    // xsl:key content is evaluated in a temporary output state.
+                                    using var temporaryOutputState = EnterTemporaryOutputState();
+                                    return EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false);
+                                });
+                            else
+                                KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
+                        }
                     }
                     finally
                     {
+                        _buildingKeys.Remove(buildKey);
                         _context.DefaultCollation = savedKeyCollation;
                     }
                 }
@@ -9506,10 +9565,25 @@ public sealed class TransformEngine
             // dependency. Detect this before looking the variable up, so callers (e.g.
             // function bodies) see a circularity rather than an "undefined variable" error.
             if (_evaluatingGlobals.Contains(key))
-                throw new InvalidOperationException("XPST0008: Circular reference to global variable.");
+                ThrowCircularityError("global variable", localName);
 
             if (_lazyGlobals.TryGetValue(key, out var info))
             {
+                // During pattern validation, skip globals whose value is defined by a
+                // sequence constructor. Evaluating them now would materialize the wrong value
+                // (the validation dummy node is not the real source), and could hide
+                // circularity errors that should be raised at runtime (error-0640d).
+                // Returning Undefined lets the predicate evaluate to a dynamic error that
+                // validation ignores, while simple @select globals like $screen are still
+                // evaluated and cached. The suppression sentinel must not be cached,
+                // otherwise it leaks into the real transformation.
+                if (_context.SuppressLazySequenceConstructorGlobals &&
+                    string.IsNullOrEmpty(info.Element.Attribute("select")?.Value))
+                {
+                    _context.SkipLazyGlobalCacheOnce = true;
+                    return XdmValue.Undefined;
+                }
+
                 // Parameters supplied by the caller are already bound.
                 if (_context.TryGetBoundVariable(localName, out var existing, namespaceUri))
                     return existing;
@@ -9530,7 +9604,7 @@ public sealed class TransformEngine
 
                 // Detect circular references (a global variable referencing itself).
                 if (!_evaluatingGlobals.Add(key))
-                    throw new InvalidOperationException("XPST0008: Circular reference to global variable.");
+                    ThrowCircularityError("global variable", localName);
 
                 // Global variables/parameters are evaluated with a singleton focus based
                 // on the root node of the tree containing the initial context node
@@ -9660,7 +9734,15 @@ public sealed class TransformEngine
                     continue;
 
                 var select = elem.Attribute("select")?.Value;
-                if (string.IsNullOrEmpty(select) && string.IsNullOrEmpty(elem.Attribute("as")?.Value))
+                // Only eagerly evaluate parameters whose default value is an empty sequence
+                // constructor (no content). Parameters with a real sequence-constructor body
+                // must remain lazy so that user-defined templates are compiled before the
+                // body is evaluated; otherwise apply-templates inside the body would use
+                // built-in templates and hide circularities that reference the parameter
+                // (error-0640d).
+                if (string.IsNullOrEmpty(select) &&
+                    string.IsNullOrEmpty(elem.Attribute("as")?.Value) &&
+                    !elem.HasElements)
                 {
                     // Force creation of the empty-document-node default value now.
                     if (_lazyGlobals.TryGetValue(name, out var info))

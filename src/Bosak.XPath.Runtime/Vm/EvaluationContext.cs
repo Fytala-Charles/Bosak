@@ -57,6 +57,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.15  | 15-08-2026     | Added CollectionValues for query-based environment collections in QT3 harness        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.16  | 26-08-2026     | Honor SkipLazyGlobalCacheOnce in TryGetVariable so suppressions don't pollute cache     |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.16  | 26-08-2026     | Added DocumentLoaded callback so XSLT can detect XTDE1500 read/write conflicts            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -111,6 +113,14 @@ public sealed class EvaluationContext
     /// variable) while still letting globals cache normally.
     /// </summary>
     public bool SkipLazyGlobalCacheOnce { get; set; }
+
+    /// <summary>
+    /// When true, the lazy variable resolver will only evaluate globals that have a <c>@select</c>
+    /// attribute. Globals with sequence-constructor bodies are left unresolved. This is used during
+    /// pattern validation so that globals whose value depends on the source document or template
+    /// matching are not materialized prematurely.
+    /// </summary>
+    public bool SuppressLazySequenceConstructorGlobals { get; set; }
 
     /// <summary>
     /// When true, <see cref="Bosak.XPath.Standard.Functions.FunctionLibrary.Populate"/> will not
@@ -477,8 +487,9 @@ public sealed class EvaluationContext
             if (lazyValue != null)
             {
                 value = lazyValue.Value;
-                if (!SuppressLazyGlobalCaching)
+                if (!SuppressLazyGlobalCaching && !SkipLazyGlobalCacheOnce)
                     _evaluatedLazyGlobals[(localName, namespaceUri)] = value;
+                SkipLazyGlobalCacheOnce = false;
                 return true;
             }
         }
