@@ -91,6 +91,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.65  | 26-08-2026     | Added XTSE1590 regression tests for unresolved use-character-maps references          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.66  | 26-08-2026     | Added XTSE1600 regression tests for circular use-character-maps references            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4697,6 +4699,42 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl);
         Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void CharacterMap_Self_Reference_Raises_XTSE1600()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:character-map name='one' use-character-maps='one'>
+                <xsl:output-character character='a' string='aa'/>
+            </xsl:character-map>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1600", ex.Message);
+    }
+
+    [Fact]
+    public void CharacterMap_Indirect_Cycle_Raises_XTSE1600()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:character-map name='one' use-character-maps='two'>
+                <xsl:output-character character='a' string='aa'/>
+            </xsl:character-map>
+            <xsl:character-map name='two' use-character-maps='three'>
+                <xsl:output-character character='b' string='bb'/>
+            </xsl:character-map>
+            <xsl:character-map name='three' use-character-maps='one'>
+                <xsl:output-character character='c' string='cc'/>
+            </xsl:character-map>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1600", ex.Message);
     }
 
 }

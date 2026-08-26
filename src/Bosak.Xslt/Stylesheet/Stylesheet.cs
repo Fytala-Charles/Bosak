@@ -119,6 +119,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.69  | 26-08-2026     | XTSE1590 validation for unresolved use-character-maps references                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.70  | 26-08-2026     | XTSE1600 validation for circular use-character-maps references                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1112,6 +1114,9 @@ public sealed class Stylesheet
             // XTSE1590: every name in xsl:output/@use-character-maps and
             // xsl:character-map/@use-character-maps must resolve to a declared character map.
             ValidateCharacterMapReferences();
+
+            // XTSE1600: character maps must not reference themselves, directly or indirectly.
+            ValidateCharacterMapCycles();
         }
     }
 
@@ -3688,6 +3693,28 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Recursively collects every declared character-map definition from this stylesheet
+    /// module, its imports, and its includes. The returned dictionary maps expanded name to
+    /// definition; later declarations overwrite earlier ones, but duplicate names are
+    /// normally caught by XTSE1580 before this method is called.
+    /// </summary>
+    public Dictionary<string, CharacterMapDefinition> GetAllCharacterMaps()
+    {
+        var maps = new Dictionary<string, CharacterMapDefinition>(_characterMaps);
+        foreach (var import in _imports)
+        {
+            foreach (var (name, def) in import.GetAllCharacterMaps())
+                maps[name] = def;
+        }
+        foreach (var include in _includes)
+        {
+            foreach (var (name, def) in include.GetAllCharacterMaps())
+                maps[name] = def;
+        }
+        return maps;
+    }
+
+    /// <summary>
     /// Validates that every name referenced in xsl:output/@use-character-maps and
     /// xsl:character-map/@use-character-maps resolves to a declared character map.
     /// This is a root-level static check (XTSE1590).
@@ -3729,6 +3756,36 @@ public sealed class Stylesheet
             if (!allNames.Contains(expanded))
                 throw new InvalidOperationException($"XTSE1590: Unresolved character-map reference '{expanded}'.");
         }
+    }
+
+    /// <summary>
+    /// Validates that no character map references itself, directly or indirectly, via
+    /// xsl:character-map/@use-character-maps. This is a root-level static check (XTSE1600).
+    /// </summary>
+    private void ValidateCharacterMapCycles()
+    {
+        var allMaps = GetAllCharacterMaps();
+        var visiting = new HashSet<string>();
+        foreach (var (name, def) in allMaps)
+        {
+            visiting.Clear();
+            DetectCharacterMapCycle(name, def, allMaps, visiting);
+        }
+    }
+
+    private static void DetectCharacterMapCycle(string name, CharacterMapDefinition definition,
+        Dictionary<string, CharacterMapDefinition> allMaps, HashSet<string> visiting)
+    {
+        if (!visiting.Add(name))
+            throw new InvalidOperationException($"XTSE1600: Circular reference in character-map '{name}'.");
+
+        foreach (var used in definition.UseCharacterMaps)
+        {
+            if (allMaps.TryGetValue(used, out var usedDef))
+                DetectCharacterMapCycle(used, usedDef, allMaps, visiting);
+        }
+
+        visiting.Remove(name);
     }
 
     /// <summary>Top-level xsl:param elements defined in this stylesheet.</summary>

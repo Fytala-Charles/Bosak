@@ -19,6 +19,10 @@
 
 ## 0. Recent Changes
 
+- **2026-08-26** — XSLT: **XTSE1600 cluster (`error-1600*`)** — Circular `use-character-maps` references in `xsl:character-map` declarations are now detected at compile time and raise `XTSE1600`. The check covers both direct self-references and indirect cycles, including maps declared in imported or included modules. The W3C `error-1600*` cluster is now **1/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.70).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+2 tests; header → 0.66).
+
 - **2026-08-26** — XSLT: **XTSE1590 cluster (`error-1590*`)** — `xsl:output/@use-character-maps` and `xsl:character-map/@use-character-maps` now raise `XTSE1590` at compile time when a referenced character-map name does not match any `xsl:character-map` declared in the stylesheet (including imported and included modules). The W3C `error-1590*` cluster is now **1/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.69).
   - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.65).
