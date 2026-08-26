@@ -95,6 +95,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.67  | 26-08-2026     | Added XTSE0265 regression tests for input-type-annotations conflicts                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.68  | 26-08-2026     | Added XTTE1020 regression tests for multi-item xsl:sort keys                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -2213,6 +2215,93 @@ Welcome to this document on XHTML.
         var secondPos = result.IndexOf("<x>second</x>");
 
         Assert.True(firstPos < secondPos, "first should come before second (stable sort)");
+    }
+
+    [Fact]
+    public void SortKey_MultiItem_Throws_XTTE1020_In_XSLT2()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each select='root/a'>
+                        <xsl:sort select='(.,.,.)'/>
+                        <v><xsl:value-of select='.'/></v>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("a", "3"),
+                new XElement("a", "1"),
+                new XElement("a", "2")));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            executable.TransformToString(new XDocumentNode(source)));
+        Assert.Contains("XTTE1020", ex.Message);
+    }
+
+    [Fact]
+    public void SortKey_MultiItem_Falls_Back_To_First_Item_In_XSLT1()
+    {
+        var xsl = @"<xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each select='root/a'>
+                        <xsl:sort select='(.,.,.)'/>
+                        <v><xsl:value-of select='.'/></v>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("a", "3"),
+                new XElement("a", "1"),
+                new XElement("a", "2")));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        var v1 = result.IndexOf("<v>1</v>");
+        var v2 = result.IndexOf("<v>2</v>");
+        var v3 = result.IndexOf("<v>3</v>");
+        Assert.True(v1 < v2 && v2 < v3, "XSLT 1.0 backwards-compatible sort should use first item");
+    }
+
+    [Fact]
+    public void SortKey_SingleItem_Does_Not_Throw()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each select='root/a'>
+                        <xsl:sort select='.'/>
+                        <v><xsl:value-of select='.'/></v>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("a", "3"),
+                new XElement("a", "1"),
+                new XElement("a", "2")));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        var v1 = result.IndexOf("<v>1</v>");
+        var v2 = result.IndexOf("<v>2</v>");
+        var v3 = result.IndexOf("<v>3</v>");
+        Assert.True(v1 < v2 && v2 < v3, "single-item sort key should sort normally");
     }
 
     private static string WriteTempXsl(string content)

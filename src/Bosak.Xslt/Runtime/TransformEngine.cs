@@ -210,6 +210,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.29  | 26-08-2026     | Track read document URIs and raise XTDE1500 on result-document write conflict           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.30  | 26-08-2026     | XTTE1020 for multi-item xsl:sort keys outside XSLT 1.0 backwards-compatible mode          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -10787,7 +10789,12 @@ public sealed class TransformEngine
                 var keys = new List<SortKey>();
                 for (int i = 0; i < sortSpecs.Count; i++)
                 {
-                    keys.Add(new SortKey(EvaluateSortKeyValue(sortSpecs[i]), controls[i]));
+                    var rawKey = EvaluateSortKeyValue(sortSpecs[i]);
+                    var atomized = AtomizeSortKeyValue(rawKey);
+                    if (atomized.Count > 1 && !IsEffectiveBackwardsCompatible(sortSpecs[i]))
+                        throw new InvalidOperationException("XTTE1020: sort key value contains more than one item");
+                    var key = atomized.Count == 0 ? XdmValue.Undefined : atomized[0];
+                    keys.Add(new SortKey(key, controls[i]));
                 }
                 keyed.Add(new SortEntry(item, keys, idx));
             }
@@ -10956,6 +10963,40 @@ public sealed class TransformEngine
             return EvaluateSequenceConstructor(spec, _context.ContextItem, wrapInDocumentNode: false);
         }
         return CompileXPath(".", spec).Evaluate(_context);
+    }
+
+    /// <summary>
+    /// Atomizes a candidate sort-key value and returns the resulting atomic items.
+    /// Sequences and arrays are flattened, and nodes are atomized to strings.
+    /// </summary>
+    private static List<XdmValue> AtomizeSortKeyValue(XdmValue value)
+    {
+        var result = new List<XdmValue>();
+        if (value.IsUndefined)
+            return result;
+
+        if (value.IsArray)
+        {
+            foreach (var member in value.ArrayValue.Values)
+                result.AddRange(AtomizeSortKeyValue(member));
+            return result;
+        }
+
+        if (value.IsNode)
+        {
+            result.Add(XdmValue.FromString(value.NodeValue!.StringValue));
+            return result;
+        }
+
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                result.AddRange(AtomizeSortKeyValue(item));
+            return result;
+        }
+
+        result.Add(value);
+        return result;
     }
 
     private InvalidOperationException SortAttributeError(string? rawValue, string staticCode, string dynamicCode)
@@ -11224,7 +11265,12 @@ public sealed class TransformEngine
                 var keys = new List<SortKey>();
                 for (int i = 0; i < sortSpecs.Count; i++)
                 {
-                    keys.Add(new SortKey(EvaluateSortKeyValue(sortSpecs[i]), controls[i]));
+                    var rawKey = EvaluateSortKeyValue(sortSpecs[i]);
+                    var atomized = AtomizeSortKeyValue(rawKey);
+                    if (atomized.Count > 1 && !IsEffectiveBackwardsCompatible(sortSpecs[i]))
+                        throw new InvalidOperationException("XTTE1020: sort key value contains more than one item");
+                    var normalized = atomized.Count == 0 ? XdmValue.Undefined : atomized[0];
+                    keys.Add(new SortKey(normalized, controls[i]));
                 }
                 keyed.Add((key, items, keys, idx));
             }
