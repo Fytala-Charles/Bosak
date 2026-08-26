@@ -123,6 +123,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.71  | 26-08-2026     | XTSE0265 validation for conflicting input-type-annotations across modules              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.72  | 26-08-2026     | XTSE0620 validation for variable-binding elements with @select and content               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1867,6 +1869,11 @@ public sealed class Stylesheet
                             throw new InvalidOperationException($"XTSE0090: Attribute '{attr.Name.LocalName}' is not permitted on xsl:{localName}.");
                     }
                 }
+
+                // XTSE0620: a variable-binding element must not have both a select attribute
+                // and non-empty content (text nodes, element children, etc.).
+                if ((elem.Attribute("select") != null || elem.Attribute("_select") != null) && !IsStaticBodyEmpty(elem))
+                    throw new InvalidOperationException($"XTSE0620: xsl:{localName} must not have both a select attribute and content.");
 
                 if (localName == "param")
                 {

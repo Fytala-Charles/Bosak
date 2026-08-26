@@ -99,6 +99,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.69  | 26-08-2026     | Added XTDE0044 regression tests for initial mode without source                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.70  | 26-08-2026     | Added XTSE0620 regression tests for variable-binding elements with @select+content      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -2357,6 +2359,62 @@ Welcome to this document on XHTML.
         var result = executable.TransformToString(new XDocumentNode(source), initialMode: "aMode");
         Assert.Contains("<out>", result);
         Assert.Contains("<x/>", result);
+    }
+
+    // ------------------------------------------------------------------
+    // XTSE0620: variable-binding elements with select + content
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Variable_With_Select_And_Content_Raises_XTSE0620()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:variable name='x' select='1'>text</xsl:variable>
+                <out/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0620", ex.Message);
+    }
+
+    [Fact]
+    public void With_Param_With_Select_And_Content_Raises_XTSE0620()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:apply-templates>
+                    <xsl:with-param name='p' select='2'>fred</xsl:with-param>
+                </xsl:apply-templates>
+                <out/>
+            </xsl:template>
+            <xsl:template match='doc'>
+                <xsl:param name='p'/>
+                <xsl:value-of select='$p'/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0620", ex.Message);
+    }
+
+    [Fact]
+    public void Variable_With_Select_And_Whitespace_Content_Is_Allowed()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:variable name='x' select='1'>   </xsl:variable>
+                <out><xsl:value-of select='$x'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        Assert.Contains("<out>1</out>", result);
     }
 
     private static string WriteTempXsl(string content)
