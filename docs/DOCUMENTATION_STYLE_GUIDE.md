@@ -23,6 +23,37 @@ The full branding contract applies to these canonical documents:
 
 Internal handover notes and package-level READMEs may use a compact heading without a branded banner. They should still use clear structure, accessible images, and the Fytala palette when they contain custom diagrams.
 
+## About FYTALA
+
+Every Fytala project `README.md` must include an `## About FYTALA` section immediately after the standard header. The section explains the initiative and its values for visitors who land on the repository.
+
+Use the following canonical text, preserving the acronym expansion, emphasis, and blockquotes:
+
+```markdown
+--- 
+## About FYTALA
+
+**FYTALA — Feeling Young, Thriving, Active, Learning Always** — is a personal initiative founded after retirement, driven by the belief that curiosity and learning have no age limit.
+It is about staying engaged, exploring new ideas, and sharing the excitement of technology with others. FYTALA aims to inspire people — especially young people — to discover, understand, and create with technology.
+Not technology for technology’s sake, but technology as a tool to learn, connect, solve problems, and build a better future.
+Its scope is deliberately broad: from software and electronics to engineering, science, artificial intelligence, and whatever comes next.
+
+> Experimenting matters.
+> Making mistakes matters.
+> Understanding *why* something works matters even more.
+
+Every project is an opportunity to learn something new and, hopefully, to help someone else learn as well.
+
+The cable-stayed bridge in the FYTALA logo represents that philosophy. A bridge connects places, but also people, ideas, generations, and fields of knowledge. Its strength comes from many individual elements working together — much like technology itself.
+FYTALA wants to help build those bridges between experience and youthful curiosity, theory and practice, and ideas and real-world creations.
+
+It encourages looking beyond the obvious, asking questions, taking things apart, and building them again in new ways.
+Above all, FYTALA is about keeping the desire to discover alive.
+> Because we never have to stop being curious.
+> We never have to stop creating.
+> And we are never too old — or too young — to learn something new.
+```
+
 ## Standard Header
 
 Use a centered logo, document title, and one-line purpose. Documents below the repository root use `../assets`; the root README uses `assets`.
@@ -127,4 +158,4 @@ Broken assets and inaccessible content may become blocking rules after the conve
 
 ---
 
-*Last updated: 2026-08-04*
+*Last updated: 2026-08-26*
