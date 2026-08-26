@@ -103,6 +103,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.71  | 26-08-2026     | Added XTSE0630 regression tests for duplicate global variable/param bindings              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.72  | 26-08-2026     | Added XTSE0660 regression tests for duplicate named template bindings                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -2463,6 +2465,40 @@ Welcome to this document on XHTML.
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
         Assert.Contains("<out>1</out>", result);
+    }
+
+    // ------------------------------------------------------------------
+    // XTSE0660: duplicate named template bindings
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Duplicate_Named_Templates_At_Same_Precedence_Raises_XTSE0660()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='one'/>
+            <xsl:template name='one'/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0660", ex.Message);
+    }
+
+    [Fact]
+    public void Single_Named_Template_Does_Not_Throw()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='one'><a/></xsl:template>
+            <xsl:template match='/'><out><xsl:call-template name='one'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        Assert.Contains("<out>", result);
+        Assert.Contains("<a", result);
+        Assert.Contains("</out>", result);
     }
 
     private static string WriteTempXsl(string content)

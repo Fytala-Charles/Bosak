@@ -127,6 +127,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.73  | 26-08-2026     | XTSE0630 validation for duplicate global variable/param bindings                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.74  | 26-08-2026     | XTSE0660 validation for duplicate named template bindings                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1218,6 +1220,11 @@ public sealed class Stylesheet
         // same import precedence is an error unless a higher-precedence binding exists.
         if (_isRootStylesheet)
             ValidateGlobalVariableBindings();
+
+        // XTSE0660: more than one named template with the same name and the same
+        // import precedence is an error unless a higher-precedence template exists.
+        if (_isRootStylesheet)
+            ValidateNamedTemplateBindings();
     }
 
     /// <summary>
@@ -3379,6 +3386,10 @@ public sealed class Stylesheet
         if (string.IsNullOrEmpty(name))
             return ("", "");
 
+        // QName-valued attributes are whitespace-collapsed by the XSLT data model,
+        // so leading and trailing space around a lexical or EQName must be ignored.
+        name = name.Trim();
+
         // The empty URI form Q{}local is permitted and means "no namespace".
         if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
         {
@@ -3993,6 +4004,64 @@ public sealed class Stylesheet
                 var name = top[0].Name;
                 var displayName = string.IsNullOrEmpty(name.NamespaceUri) ? name.LocalName : $"{{{name.NamespaceUri}}}{name.LocalName}";
                 throw new InvalidOperationException($"XTSE0630: More than one binding for global variable '{displayName}' at the same import precedence.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Recursively collects named xsl:template declarations in document order, recursing
+    /// into imported and included modules at the point where their xsl:import or
+    /// xsl:include element occurs. Each declaration is tagged with its import precedence
+    /// and a monotonic document-order index.
+    /// </summary>
+    public void CollectNamedTemplatesInDocumentOrder(List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element)> named, ref int order)
+    {
+        foreach (var element in Root.Elements())
+        {
+            var ns = element.Name.NamespaceName;
+            var localName = element.Name.LocalName;
+
+            if (ns == XslNamespace && localName == "import")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } imported })
+                    imported.CollectNamedTemplatesInDocumentOrder(named, ref order);
+            }
+            else if (ns == XslNamespace && localName == "include")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } included })
+                    included.CollectNamedTemplatesInDocumentOrder(named, ref order);
+            }
+            else if (ns == XslNamespace && localName == "template")
+            {
+                var nameAttr = element.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(nameAttr))
+                {
+                    var name = ExpandVariableName(element, nameAttr);
+                    named.Add((ImportPrecedence, order++, name, element));
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates that no named template has more than one binding at the same import
+    /// precedence, unless a higher-precedence binding exists (XTSE0660).
+    /// </summary>
+    private void ValidateNamedTemplateBindings()
+    {
+        var named = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element)>();
+        int order = 0;
+        CollectNamedTemplatesInDocumentOrder(named, ref order);
+
+        foreach (var group in named.GroupBy(n => n.Name))
+        {
+            var minPrecedence = group.Min(n => n.Precedence);
+            var top = group.Where(n => n.Precedence == minPrecedence).ToList();
+            if (top.Count > 1)
+            {
+                var name = top[0].Name;
+                var displayName = string.IsNullOrEmpty(name.NamespaceUri) ? name.LocalName : $"{{{name.NamespaceUri}}}{name.LocalName}";
+                throw new InvalidOperationException($"XTSE0660: More than one named template '{displayName}' at the same import precedence.");
             }
         }
     }

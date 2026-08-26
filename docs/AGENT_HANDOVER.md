@@ -1,11 +1,32 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `356261e` — XSLT: XTSE0630 validation for duplicate global variable/param bindings
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0630*` XTSE0630 cluster.
-**Expected state:** **2,031 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE0660 validation for duplicate named templates; trim QName-valued attributes
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0660*` XTSE0660 cluster.
+**Expected state:** **2,033 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0630 cluster)
+## This Session Changes (XTSE0660 cluster)
+
+1. **Detect duplicate named `xsl:template` declarations at the same import precedence (`XTSE0660`)** —
+   - After `AssignImportPrecedences`, `Stylesheet.ValidateNamedTemplateBindings` collects all named `xsl:template` declarations across the main stylesheet and its imports/includes, preserving each declaration's import precedence.
+   - Declarations are grouped by expanded name. If the group of declarations with the highest import precedence (lowest numeric value) contains more than one template, compilation raises `XTSE0660`.
+   - A higher-precedence template overrides lower-precedence duplicates, so imports/includes that shadow a name do not produce this error.
+   - The W3C `error-0660*` cluster passes with 4/0/0.
+   - Added 2 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for duplicate named templates and a single allowed template.
+   - Header bumped: `Stylesheet.cs` → 2.74, `StylesheetTests.cs` → 0.72.
+
+2. **Trim whitespace from QName-valued attributes before resolving them** —
+   - `Stylesheet.ExpandVariableName` now trims the supplied name string before parsing QNames and EQNames.
+   - This fixes `call-template-0109`, which uses a template name surrounded by whitespace (`name=" Q{}temp "`), and prevents similar failures for other QName-valued attributes.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+
+3. **Results** —
+   - `error-0660*` cluster: 4 passed / 0 failed / 0 skipped.
+   - `error` test set: 451 passed / 32 failed / 96 skipped (4 previously failing tests now pass).
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,033 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0630 cluster)
 
 1. **Detect duplicate global variable/param bindings at the same import precedence (`XTSE0630`)** —
    - After `AssignImportPrecedences`, `Stylesheet.ValidateGlobalVariableBindings` collects all top-level `xsl:param` and `xsl:variable` declarations across the main stylesheet and its imports/includes, preserving each declaration's import precedence.
