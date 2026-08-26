@@ -85,6 +85,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.62  | 26-08-2026     | Added XTDE1500 regression tests for read/write URI conflicts                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.63  | 26-08-2026     | Added XTSE1570 regression tests for xsl:output/@method validation                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -856,6 +858,47 @@ Welcome to this document on XHTML.
             executable.TransformToString(new XDocumentNode(source)));
 
         Assert.Equal("SEPM0009", ex.ErrorCode);
+    }
+
+    [Theory]
+    [InlineData("xml", false)]
+    [InlineData("html", false)]
+    [InlineData("xhtml", false)]
+    [InlineData("text", false)]
+    [InlineData("json", false)]
+    [InlineData("adaptive", false)]
+    [InlineData("Q{http://example.com/}custom", false)]
+    [InlineData("Q{}xml", false)]
+    [InlineData("my:custom", false)]
+    [InlineData("your::xml", true)]
+    [InlineData("{http://example.com/}custom", true)]
+    [InlineData("Q{http://example.com/}", true)]
+    [InlineData("Q{}", true)]
+    [InlineData("Q{http://example.com/}bad:name", true)]
+    [InlineData("unknown:custom", true)]
+    [InlineData("123method", true)]
+    [InlineData("xm l", true)]
+    [InlineData("custom", true)]
+    public void Output_Method_Validation_Enforces_XTSE1570(string method, bool shouldThrow)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0'
+                              xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+                              xmlns:my='http://example.com/'>
+            <xsl:output method='{method}'/>
+            <xsl:template match='/'><doc/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        if (shouldThrow)
+        {
+            var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+            Assert.Contains("XTSE1570", ex.Message);
+        }
+        else
+        {
+            var executable = compiler.Compile(xsl);
+            Assert.NotNull(executable);
+        }
     }
 
     // ------------------------------------------------------------------

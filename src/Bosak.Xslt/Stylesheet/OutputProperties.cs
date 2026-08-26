@@ -29,9 +29,14 @@
 //                      | Charles Korthout | 1.5   | 13-07-2026     | Added EffectiveVersion and ImplicitResultTree for default method inference (BC rule).   |
 //                      | Charles Korthout | 1.6   | 15-07-2026     | Added FromMap to support fn:transform serialization-params option.                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.7   | 26-08-2026     | XTSE1570 validation for xsl:output/@method                                                |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 26-08-2026     | Allow Q{} EQName with no namespace only for supported method names                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
+using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
 
@@ -170,7 +175,9 @@ public sealed class OutputProperties
         var method = element.Attribute("method")?.Value;
         if (!string.IsNullOrEmpty(method))
         {
-            props.Method = method.Trim();
+            var trimmed = method.Trim();
+            ValidateOutputMethod(element, trimmed);
+            props.Method = trimmed;
             props.MethodSpecified = true;
         }
 
@@ -1141,5 +1148,81 @@ public sealed class OutputProperties
             result[key[0]] = valueValue.StringValue;
         }
         return result;
+    }
+
+    /// <summary>
+    /// Validates the <c>method</c> attribute of <c>xsl:output</c> per XTSE1570.
+    /// The value must be a valid EQName. If it is an unprefixed lexical QName,
+    /// it must identify a supported serialization method.
+    /// </summary>
+    private static void ValidateOutputMethod(XElement element, string method)
+    {
+        if (string.IsNullOrEmpty(method))
+            throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+
+        // Q{uri}local EQName form.
+        if (method.StartsWith("Q{"))
+        {
+            int close = method.IndexOf('}');
+            if (close < 2 || close == method.Length - 1)
+                throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+            var uri = method[2..close];
+            var local = method[(close + 1)..];
+            if (uri.Contains('{') || uri.Contains('}'))
+                throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+            try
+            {
+                XmlConvert.VerifyNCName(local);
+            }
+            catch
+            {
+                throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+            }
+            // An EQName in no namespace behaves like an unprefixed lexical QName:
+            // it must identify a supported serialization method.
+            if (string.IsNullOrEmpty(uri) && method is not ("Q{}xml" or "Q{}html" or "Q{}xhtml" or "Q{}text" or "Q{}json" or "Q{}adaptive"))
+                throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+            return;
+        }
+
+        // Reject plain Clark notation {uri}local; only the Q{uri}local EQName form is valid here.
+        if (method.StartsWith("{"))
+            throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+
+        // lexical QName prefix:local
+        int colon = method.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = method[..colon];
+            var local = method[(colon + 1)..];
+            if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local))
+                throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+            try
+            {
+                XmlConvert.VerifyNCName(prefix);
+                XmlConvert.VerifyNCName(local);
+            }
+            catch
+            {
+                throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+            }
+            var ns = element.GetNamespaceOfPrefix(prefix);
+            if (ns == null)
+                throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+            return;
+        }
+
+        // Unprefixed lexical QName: must be a valid NCName and a supported method name.
+        try
+        {
+            XmlConvert.VerifyNCName(method);
+        }
+        catch
+        {
+            throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
+        }
+
+        if (method is not ("xml" or "html" or "xhtml" or "text" or "json" or "adaptive"))
+            throw new InvalidOperationException("XTSE1570: The method attribute of xsl:output must be a valid EQName.");
     }
 }

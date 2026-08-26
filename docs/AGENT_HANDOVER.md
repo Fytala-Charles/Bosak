@@ -1,11 +1,28 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `fb7eeb7` — XSLT: XTDE1500 read/write URI conflict detection
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1500*` XTDE1500 cluster.
-**Expected state:** **1,989 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `TBD` — XSLT: XTSE1570 validation for xsl:output/@method
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1570*` XTSE1570 cluster.
+**Expected state:** **2,007 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE1500 cluster)
+## This Session Changes (XTSE1570 cluster)
+
+1. **Validate `xsl:output/@method` per XTSE1570** —
+   - `OutputProperties.FromElement` now validates the `method` attribute of `xsl:output`.
+   - Accepts the `Q{uri}local` EQName form when the URI is syntactically valid and the local part is a valid NCName. An EQName in no namespace (`Q{}local`) is accepted only when the local name is a supported serialization method (`xml`, `html`, `xhtml`, `text`, `json`, `adaptive`).
+   - Accepts a lexical `prefix:local` QName when both parts are valid NCNames and the prefix is bound to a namespace in the statically-known namespaces of the element.
+   - Accepts an unprefixed lexical QName only when it is a valid NCName and one of the supported serialization methods.
+   - Rejects Clark notation `{uri}local`, malformed `Q{...}` strings, empty local parts, unbound prefixes, invalid NCNames, and unsupported unprefixed method names, raising `XTSE1570`.
+   - The W3C `error-1570*` cluster passes with 1/0/0.
+   - Added regression `Theory` test in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering 18 valid/invalid cases.
+   - Header bumped: `OutputProperties.cs` → 1.8, `StylesheetTests.cs` → 0.63.
+
+2. **Results** —
+   - `error-1570*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,007 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE1500 cluster)
 
 1. **Track read document URIs and raise `XTDE1500` on result-document conflicts** —
    - `EvaluationContext` now exposes a `DocumentLoaded` callback that is invoked with the resolved absolute URI whenever a document is loaded via `fn:doc` / `document()`, `xsl:source-document`, or registered as the principal source document.
