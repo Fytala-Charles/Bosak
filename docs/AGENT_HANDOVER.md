@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `1a2938ae` — XSLT: XTSE1560 validation for conflicting xsl:output attribute values
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1560*` XTSE1560 cluster.
-**Expected state:** **2,007 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `9e6f93b6` — XSLT: XTSE1590 validation for unresolved use-character-maps references
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1590*` XTSE1590 cluster.
+**Expected state:** **2,014 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1560 cluster)
+## This Session Changes (XTSE1590 cluster)
+
+1. **Detect unresolved `use-character-maps` references (XTSE1590)** —
+   - `Stylesheet.ValidateCharacterMapReferences` collects every declared `xsl:character-map` name across the stylesheet (including imports and includes) and validates each name referenced by `xsl:output/@use-character-maps` and `xsl:character-map/@use-character-maps`.
+   - The check is performed at stylesheet compile time, so unused character maps that reference a missing map still raise `XTSE1590`.
+   - The W3C `error-1590*` cluster passes with 1/0/0.
+   - Added 3 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for character-map references, output references, and valid references.
+   - Header bumped: `Stylesheet.cs` → 2.69, `StylesheetTests.cs` → 0.65.
+
+2. **Results** —
+   - `error-1590*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,014 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1560 cluster)
 
 1. **Detect conflicting `xsl:output` attribute values (XTSE1560)** —
    - `OutputProperties.MergeChecked` validates that two `xsl:output` declarations in the same output definition do not explicitly specify different values for the same scalar serialization attribute.
