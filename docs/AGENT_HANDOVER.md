@@ -1,11 +1,27 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `d8343ab` — XSLT: XTSE0620 validation for variable-binding elements with @select and content
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0620*` XTSE0620 cluster.
-**Expected state:** **2,028 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `356261e` — XSLT: XTSE0630 validation for duplicate global variable/param bindings
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0630*` XTSE0630 cluster.
+**Expected state:** **2,031 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0620 cluster)
+## This Session Changes (XTSE0630 cluster)
+
+1. **Detect duplicate global variable/param bindings at the same import precedence (`XTSE0630`)** —
+   - After `AssignImportPrecedences`, `Stylesheet.ValidateGlobalVariableBindings` collects all top-level `xsl:param` and `xsl:variable` declarations across the main stylesheet and its imports/includes, preserving each declaration's import precedence.
+   - Declarations are grouped by expanded name. If the group of declarations with the highest import precedence (lowest numeric value) contains more than one binding, compilation raises `XTSE0630`.
+   - A higher-precedence binding overrides lower-precedence duplicates, so imports/includes that shadow a name do not produce this error.
+   - The W3C `error-0630*` cluster passes with 3/0/0.
+   - Added 3 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for duplicate variables, mixed param/variable duplicates, and a single allowed binding.
+   - Header bumped: `Stylesheet.cs` → 2.73, `StylesheetTests.cs` → 0.71.
+
+2. **Results** —
+   - `error-0630*` cluster: 3 passed / 0 failed / 0 skipped.
+   - `error` test set: 447 passed / 36 failed / 96 skipped (3 previously failing tests now pass).
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,031 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0620 cluster)
 
 1. **Detect `xsl:variable`, `xsl:param`, and `xsl:with-param` with both `@select` and non-empty content (`XTSE0620`)** —
    - `Stylesheet.ValidateInstructionTree` now checks every variable-binding element. If the element has a `select` attribute (including a shadow `_select`) and its content is non-empty after stripping whitespace text, comments, and PIs, compilation raises `XTSE0620`.
