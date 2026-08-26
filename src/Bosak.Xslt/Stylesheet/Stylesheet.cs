@@ -117,6 +117,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.68  | 26-08-2026     | XTSE1560 validation for conflicting xsl:output attribute values                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.69  | 26-08-2026     | XTSE1590 validation for unresolved use-character-maps references                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1106,6 +1108,10 @@ public sealed class Stylesheet
             // XTSE1290: decimal-format declarations with the same name must not supply
             // conflicting values for the same attribute at the same import precedence.
             GetAllDecimalFormats();
+
+            // XTSE1590: every name in xsl:output/@use-character-maps and
+            // xsl:character-map/@use-character-maps must resolve to a declared character map.
+            ValidateCharacterMapReferences();
         }
     }
 
@@ -3664,6 +3670,64 @@ public sealed class Stylesheet
         finally
         {
             visiting.Remove(expandedName);
+        }
+    }
+
+    /// <summary>
+    /// Recursively collects every declared character-map name from this stylesheet module,
+    /// its imports, and its includes.
+    /// </summary>
+    public HashSet<string> GetAllCharacterMapNames()
+    {
+        var names = new HashSet<string>(_characterMaps.Keys);
+        foreach (var import in _imports)
+            names.UnionWith(import.GetAllCharacterMapNames());
+        foreach (var include in _includes)
+            names.UnionWith(include.GetAllCharacterMapNames());
+        return names;
+    }
+
+    /// <summary>
+    /// Validates that every name referenced in xsl:output/@use-character-maps and
+    /// xsl:character-map/@use-character-maps resolves to a declared character map.
+    /// This is a root-level static check (XTSE1590).
+    /// </summary>
+    private void ValidateCharacterMapReferences()
+    {
+        var allNames = GetAllCharacterMapNames();
+        ValidateCharacterMapReferencesCore(this, allNames);
+    }
+
+    private static void ValidateCharacterMapReferencesCore(Stylesheet module, HashSet<string> allNames)
+    {
+        foreach (var def in module._characterMaps.Values)
+        {
+            foreach (var used in def.UseCharacterMaps)
+            {
+                if (!allNames.Contains(used))
+                    throw new InvalidOperationException($"XTSE1590: Unresolved character-map reference '{used}'.");
+            }
+        }
+
+        if (module._outputProperties != null)
+            ValidateOutputCharacterMaps(module._outputProperties, allNames);
+
+        foreach (var named in module._namedOutputProperties.Values)
+            ValidateOutputCharacterMaps(named, allNames);
+
+        foreach (var import in module._imports)
+            ValidateCharacterMapReferencesCore(import, allNames);
+        foreach (var include in module._includes)
+            ValidateCharacterMapReferencesCore(include, allNames);
+    }
+
+    private static void ValidateOutputCharacterMaps(OutputProperties props, HashSet<string> allNames)
+    {
+        foreach (var qname in props.UseCharacterMaps)
+        {
+            var expanded = ExpandQName(qname);
+            if (!allNames.Contains(expanded))
+                throw new InvalidOperationException($"XTSE1590: Unresolved character-map reference '{expanded}'.");
         }
     }
 

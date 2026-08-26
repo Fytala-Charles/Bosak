@@ -19,6 +19,10 @@
 
 ## 0. Recent Changes
 
+- **2026-08-26** — XSLT: **XTSE1590 cluster (`error-1590*`)** — `xsl:output/@use-character-maps` and `xsl:character-map/@use-character-maps` now raise `XTSE1590` at compile time when a referenced character-map name does not match any `xsl:character-map` declared in the stylesheet (including imported and included modules). The W3C `error-1590*` cluster is now **1/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.69).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.65).
+
 - **2026-08-26** — XSLT: **XTSE1560 cluster (`error-1560*`)** — Multiple `xsl:output` declarations in the same output definition now raise `XTSE1560` when they explicitly specify different values for the same scalar attribute. The check applies to both unnamed and named output definitions and covers all scalar serialization attributes except `cdata-section-elements` and `use-character-maps`, which the XSLT specification excludes from this rule. Matching values continue to be allowed, and list-valued attributes continue to be merged. The W3C `error-1560*` cluster is now **2/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/OutputProperties.cs` (header → 1.9), `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.68).
   - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+4 tests; header → 0.64).

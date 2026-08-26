@@ -89,6 +89,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.64  | 26-08-2026     | Added XTSE1560 regression tests for conflicting xsl:output attribute values           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.65  | 26-08-2026     | Added XTSE1590 regression tests for unresolved use-character-maps references          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4648,6 +4650,53 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         {
             File.Delete(tempFile);
         }
+    }
+
+    [Fact]
+    public void CharacterMap_UseCharacterMaps_UnknownName_Raises_XTSE1590()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:character-map name='one' use-character-maps='two'>
+                <xsl:output-character character='a' string='aa'/>
+            </xsl:character-map>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1590", ex.Message);
+    }
+
+    [Fact]
+    public void Output_UseCharacterMaps_UnknownName_Raises_XTSE1590()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output use-character-maps='missing'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1590", ex.Message);
+    }
+
+    [Fact]
+    public void CharacterMap_UseCharacterMaps_ValidReference_Compiles()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:character-map name='base'>
+                <xsl:output-character character='a' string='aa'/>
+            </xsl:character-map>
+            <xsl:character-map name='derived' use-character-maps='base'>
+                <xsl:output-character character='b' string='bb'/>
+            </xsl:character-map>
+            <xsl:output use-character-maps='derived'/>
+            <xsl:template name='main'><out>ab</out></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
     }
 
 }
