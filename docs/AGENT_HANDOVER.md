@@ -1,24 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-25
-**Commit:** `04318d4` — XSLT: XTDE/FODF1310 duplicate/conflicting percent and per-mille symbols in format-number picture
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1310*` XTDE/FODF1310 cluster.
-**Expected state:** **1,974 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Date:** 2026-08-26
+**Commit:** `<pending>` — XSLT: XTDE1390 invalid QName argument to fn:system-property
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1390*` XTDE1390 cluster.
+**Expected state:** **1,977 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE/FODF1310 cluster)
+## This Session Changes (XTDE1390 cluster)
 
-1. **`format-number` duplicate/conflicting percent and per-mille symbols** —
-   - `FormatNumberEngine.ParseSubpicture` now counts occurrences of the configured percent sign and per-mille sign in each subpicture.
-   - It raises `FODF1310` (reported as `XTDE1310` in XSLT) when the same subpicture contains the percent sign more than once, the per-mille sign more than once, or both percent and per-mille signs together.
-   - It also rejects a subpicture containing the exponent separator more than once, closing a related formatting-token duplication gap.
-   - The W3C `error-1310*` cluster passes with 9/0/0.
-   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for the percent-appears-twice and percent+per-mille cases.
-   - Headers bumped: `FormatNumberEngine.cs` → 0.4, `StylesheetTests.cs` → 0.55.
+1. **`fn:system-property` QName validation** —
+   - `FunctionLibrary.ExpandXsltPropertyName` now validates that the argument to `fn:system-property` is a valid QName.
+   - The `Q{uri}local` EQName form is accepted only when the surrounding braces are syntactically correct and the local part is a valid NCName.
+   - A lexical `prefix:local` QName is accepted only when the prefix is bound to a namespace in the static context.
+   - An unprefixed local name is accepted only when it is a valid NCName.
+   - Any other value raises `XTDE1390`.
+   - The W3C `error-1390*` cluster passes with 3/0/0.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for an invalid lexical QName, an unbound prefix, and an empty prefix.
+   - Headers bumped: `FunctionLibrary.cs` → 5.59, `StylesheetTests.cs` → 0.56.
 
 2. **Results** —
-   - `error-1310*` cluster: 9 passed / 0 failed / 0 skipped.
+   - `error-1390*` cluster: 3 passed / 0 failed / 0 skipped.
    - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
-   - Unit tests: **1,974 passed / 0 failed / 0 skipped**.
+   - Unit tests: **1,977 passed / 0 failed / 0 skipped**.
 
 ## Previous Session Changes (XTDE/FODF1280 cluster)
 

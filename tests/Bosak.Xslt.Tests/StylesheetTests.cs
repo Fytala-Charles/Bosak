@@ -71,6 +71,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.55  | 25-08-2026     | Added FODF1310 regression tests for duplicate/conflicting percent and per-mille symbols |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.56  | 26-08-2026     | Added XTDE1390 regression tests for invalid system-property QNames                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4256,6 +4258,52 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
         Assert.Contains("FODF1310", ex.Message);
+    }
+
+    [Fact]
+    public void SystemProperty_InvalidLexicalQName_ThrowsXtde1390()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='system-property(""c#"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1390", ex.Message);
+    }
+
+    [Fact]
+    public void SystemProperty_UnboundPrefix_ThrowsXtde1390()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='system-property(""your:property"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1390", ex.Message);
+    }
+
+    [Fact]
+    public void SystemProperty_EmptyPrefix_ThrowsXtde1390()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:param name='p' select=''/>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='system-property(concat($p, "":prop""))'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1390", ex.Message);
     }
 
 }

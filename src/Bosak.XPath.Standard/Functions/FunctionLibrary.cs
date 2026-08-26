@@ -190,6 +190,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.58  | 21-08-2026     | fn:function-lookup captures in-scope namespace bindings for dynamic constructor calls   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.59  | 26-08-2026     | fn:system-property validates the argument as a QName and raises XTDE1390 when invalid   |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.53  | 19-07-2026     | fn:format-number passes BackwardsCompatible to FormatNumberEngine                            
 //                      | Charles Korthout | 5.54  | 19-07-2026     | fn:zero-or-one returns the single item when given a one-item sequence            |
 //                      |==================|=======|================|=========================================================================================
@@ -4303,28 +4305,54 @@ public static class FunctionLibrary
         // XSLT namespace to the canonical "xsl:" form used by the implementation.
         if (name.StartsWith("xsl:"))
             return name;
+
         // EQName form: Q{http://www.w3.org/1999/XSL/Transform}version
         if (name.StartsWith("Q{") || name.StartsWith("q{"))
         {
             int close = name.IndexOf('}');
-            if (close > 0)
-            {
-                var nsUri = name[2..close];
-                var local = name[(close + 1)..];
-                if (nsUri == Namespaces.Xsl)
-                    return $"xsl:{local}";
-                return name;
-            }
+            if (close <= 2)
+                throw new InvalidOperationException("XTDE1390");
+            var nsUri = name[2..close];
+            var local = name[(close + 1)..];
+            if (string.IsNullOrEmpty(local))
+                throw new InvalidOperationException("XTDE1390");
+            VerifyNCName(local);
+            if (nsUri == Namespaces.Xsl)
+                return $"xsl:{local}";
+            return name;
         }
+
         int colon = name.IndexOf(':');
         if (colon >= 0)
         {
             var prefix = name[..colon];
             var local = name[(colon + 1)..];
-            if (ctx.TryResolveNamespace(prefix, out var nsUri) && nsUri == Namespaces.Xsl)
+            if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local))
+                throw new InvalidOperationException("XTDE1390");
+            VerifyNCName(prefix);
+            VerifyNCName(local);
+            if (!ctx.TryResolveNamespace(prefix, out var nsUri))
+                throw new InvalidOperationException("XTDE1390");
+            if (nsUri == Namespaces.Xsl)
                 return $"xsl:{local}";
+            return name;
         }
+
+        // Unprefixed name: must be a valid NCName, but no prefix resolution is required.
+        VerifyNCName(name);
         return name;
+    }
+
+    private static void VerifyNCName(string name)
+    {
+        try
+        {
+            System.Xml.XmlConvert.VerifyNCName(name);
+        }
+        catch (System.Xml.XmlException)
+        {
+            throw new InvalidOperationException("XTDE1390");
+        }
     }
 
     private static XdmValue AvailableSystemProperties(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
