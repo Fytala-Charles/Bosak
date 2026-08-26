@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `9e6f93b6` — XSLT: XTSE1590 validation for unresolved use-character-maps references
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1590*` XTSE1590 cluster.
-**Expected state:** **2,014 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `59fb2d83` — XSLT: XTSE1600 validation for circular use-character-maps references
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1600*` XTSE1600 cluster.
+**Expected state:** **2,016 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1590 cluster)
+## This Session Changes (XTSE1600 cluster)
+
+1. **Detect circular `use-character-maps` references (XTSE1600)** —
+   - `Stylesheet.ValidateCharacterMapCycles` builds a global view of every declared `xsl:character-map` across the stylesheet and follows each map's `use-character-maps` references recursively. A map that appears twice on the same traversal path raises `XTSE1600`.
+   - The check is performed at stylesheet compile time, so unused cycles are still reported.
+   - The W3C `error-1600*` cluster passes with 1/0/0.
+   - Added 2 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for direct self-reference and indirect cycles.
+   - Header bumped: `Stylesheet.cs` → 2.70, `StylesheetTests.cs` → 0.66.
+
+2. **Results** —
+   - `error-1600*` cluster: 1 passed / 0 failed / 0 skipped.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,016 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1590 cluster)
 
 1. **Detect unresolved `use-character-maps` references (XTSE1590)** —
    - `Stylesheet.ValidateCharacterMapReferences` collects every declared `xsl:character-map` name across the stylesheet (including imports and includes) and validates each name referenced by `xsl:output/@use-character-maps` and `xsl:character-map/@use-character-maps`.
