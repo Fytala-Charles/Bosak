@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 August 2026
-> **Bosak baseline:** 2,022 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 2,025 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -18,6 +18,12 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-26** — XSLT: **XTDE0044 cluster (`error-0044*`)** — Invoking a transformation with an explicit initial mode but no source document, initial-match selection, or global context item now raises `XTDE0044`. `TransformEngine.Transform` checks for the required input after resolving the initial mode, and the `FOXT0002` source-required guard now allows an explicit initial mode to reach this error path. The conformance harness no longer injects a dummy source for initial-mode-only entry points. The W3C `error-0044*` cluster is now **4/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.31).
+  - Harness: `tests/Bosak.Xslt.Conformance/Program.cs` (header → 3.19).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.69).
+  - Verification: `error-0044*` 4/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 2,025/0/0.
 
 - **2026-08-26** — XSLT: **XTTE1020 cluster (`error-1020*`)** — Multi-item `xsl:sort` keys now raise `XTTE1020` outside XSLT 1.0 backwards-compatible mode. `TransformEngine.SortItems` and `SortGroups` atomize each sort-key value and, when the effective version of the `xsl:sort` element is 2.0 or higher, reject sequences containing more than one item. With effective version `< 2.0`, the first item is used, preserving XSLT 1.0 behavior. The W3C `error-1020a` test is now **1/0/0**; the `sort` cluster remains **80/0/2**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.30).

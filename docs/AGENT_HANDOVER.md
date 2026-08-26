@@ -1,11 +1,27 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `a714c3a` — XSLT: XTTE1020 validation for multi-item xsl:sort keys outside XSLT 1.0 BC mode
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1020*` XTTE1020 cluster.
-**Expected state:** **2,022 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `457c5e0` — XSLT: XTDE0044 for initial mode without source or global context item
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0044*` XTDE0044 cluster.
+**Expected state:** **2,025 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTTE1020 cluster)
+## This Session Changes (XTDE0044 cluster)
+
+1. **Raise `XTDE0044` when an explicit initial mode has no source or global context item** —
+   - `TransformEngine.Transform` now checks, when an `initialMode` is supplied, that at least one of `source`, `initialMatchSelection`, or `globalContextItem` is present. If all are absent, it raises `XTDE0044` before attempting to apply templates.
+   - The `FOXT0002` guard for a missing source was relaxed so that an explicit initial mode reaches the new `XTDE0044` path instead of being rejected as a missing source.
+   - The conformance harness no longer injects a dummy source document for initial-mode-only entry points, so the runtime error is surfaced correctly.
+   - The W3C `error-0044*` cluster passes with 4/0/0.
+   - Added 3 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for `#default`, `#unnamed`, and a successful initial-mode-with-source case.
+   - Header bumped: `TransformEngine.cs` → 6.31, `StylesheetTests.cs` → 0.69; conformance harness `Program.cs` → 3.19.
+
+2. **Results** —
+   - `error-0044*` cluster: 4 passed / 0 failed / 0 skipped.
+   - `error` test set: 442 passed / 41 failed / 96 skipped (3 previously failing tests now pass).
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,025 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTTE1020 cluster)
 
 1. **Detect multi-item `xsl:sort` keys and raise `XTTE1020` outside XSLT 1.0 backwards-compatible mode** —
    - `TransformEngine.SortItems` and `SortGroups` now atomize each sort-key value and count the resulting items.
