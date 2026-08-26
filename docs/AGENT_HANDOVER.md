@@ -1,11 +1,37 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-26
-**Commit:** `7dddccd` — XSLT: XTSE0660 validation for duplicate named templates; trim QName-valued attributes
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0660*` XTSE0660 cluster.
+**Date:** 2026-08-27
+**Commit:** `8608884` — XSLT: XTDE0640 circularity detection for keys/globals; pattern validation and lazy global fixes
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0640*` XTDE0640 cluster.
 **Expected state:** **2,033 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0660 cluster)
+## This Session Changes (XTDE0640 cluster)
+
+1. **Detect circular references to `xsl:key` and global variables/parameters (`XTDE0640`)** —
+   - Added `_buildingKeys` to `TransformEngine` to track keys currently being built; direct or indirect self-references now raise `XTDE0640` instead of `XPST0008`.
+   - Key builds are grouped by key name and iterate until the index stabilizes, so dependent keys finish before they are queried while already-building keys are skipped in nested rebuilds to avoid false positives.
+   - Global variable circularity detection now uses `ThrowCircularityError`, marking the exception so `xsl:try/xsl:catch` does not catch it (XSLT 3.0 §10.1.1).
+   - The W3C `error-0640*` cluster passes with 17/0/0.
+   - Added 4 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering global variable circularity, key circularity, and non-circular key dependencies.
+   - Header bumped: `TransformEngine.cs` → 6.33, `StylesheetTests.cs` → 0.73.
+
+2. **Suppress sequence-constructor globals during pattern validation without polluting the lazy-global cache** —
+   - Added `EvaluationContext.SuppressLazySequenceConstructorGlobals`; when true, the lazy variable resolver returns `XdmValue.Undefined` for globals whose value is defined by a sequence constructor, leaving `@select`-only globals like `$screen` to evaluate and cache normally.
+   - Set `SkipLazyGlobalCacheOnce` when returning the suppression sentinel so the sentinel is not cached; `EvaluationContext.TryGetVariable` now honors `SkipLazyGlobalCacheOnce`.
+   - `PatternCompiler` predicate validation sets the suppression flag and propagates `XTDE0640` as a non-recoverable error.
+   - Header bumped: `EvaluationContext.cs` → 2.16, `PatternCompiler.cs` → 3.0.
+
+3. **Avoid eager evaluation of sequence-constructor parameters before template compilation** —
+   - The eager document-node-default path now applies only to parameters with no `@select`, no `@as`, and no content. Parameters with a sequence-constructor body remain lazy so that `xsl:apply-templates` inside the body uses compiled user templates and circularities are detected at runtime (`error-0640d`).
+   - Header bumped: `TransformEngine.cs` → 6.33 (shared with item 1).
+
+4. **Results** —
+   - `error-0640*` cluster: 17 passed / 0 failed / 0 skipped.
+   - `error` test set: previously failing error-0640 cases now pass; overall `error` set remains green.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,033 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0660 cluster)
 
 1. **Detect duplicate named `xsl:template` declarations at the same import precedence (`XTSE0660`)** —
    - After `AssignImportPrecedences`, `Stylesheet.ValidateNamedTemplateBindings` collects all named `xsl:template` declarations across the main stylesheet and its imports/includes, preserving each declaration's import precedence.
