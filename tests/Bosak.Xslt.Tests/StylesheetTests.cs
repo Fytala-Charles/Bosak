@@ -101,6 +101,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.70  | 26-08-2026     | Added XTSE0620 regression tests for variable-binding elements with @select+content      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.71  | 26-08-2026     | Added XTSE0630 regression tests for duplicate global variable/param bindings              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -2409,6 +2411,52 @@ Welcome to this document on XHTML.
                 <xsl:variable name='x' select='1'>   </xsl:variable>
                 <out><xsl:value-of select='$x'/></out>
             </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        Assert.Contains("<out>1</out>", result);
+    }
+
+    // ------------------------------------------------------------------
+    // XTSE0630: duplicate global variable/param bindings
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Duplicate_Global_Variable_At_Same_Precedence_Raises_XTSE0630()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='x' select='1'/>
+            <xsl:variable name='x' select='2'/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0630", ex.Message);
+    }
+
+    [Fact]
+    public void Duplicate_Global_Param_And_Variable_At_Same_Precedence_Raises_XTSE0630()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:param name='glob' select='3'/>
+            <xsl:variable name='glob' select='2'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0630", ex.Message);
+    }
+
+    [Fact]
+    public void Single_Global_Variable_Does_Not_Throw()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='x' select='1'/>
+            <xsl:template match='/'><out><xsl:value-of select='$x'/></out></xsl:template>
         </xsl:stylesheet>";
 
         var compiler = new Api.XsltCompiler();

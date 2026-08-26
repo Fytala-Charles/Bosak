@@ -125,6 +125,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.72  | 26-08-2026     | XTSE0620 validation for variable-binding elements with @select and content               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.73  | 26-08-2026     | XTSE0630 validation for duplicate global variable/param bindings                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1211,6 +1213,11 @@ public sealed class Stylesheet
         // precedence than earlier ones, and imported modules are always lower than their
         // importer. This produces the total order required by XSLT §6.4.
         AssignImportPrecedences();
+
+        // XTSE0630: more than one binding of a global variable with the same name and
+        // same import precedence is an error unless a higher-precedence binding exists.
+        if (_isRootStylesheet)
+            ValidateGlobalVariableBindings();
     }
 
     /// <summary>
@@ -3963,6 +3970,29 @@ public sealed class Stylesheet
             {
                 var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
                 globals.Add((ImportPrecedence, order++, name, element, false));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates that no global variable or parameter has more than one binding at the
+    /// same import precedence, unless a higher-precedence binding exists (XTSE0630).
+    /// </summary>
+    private void ValidateGlobalVariableBindings()
+    {
+        var globals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)>();
+        int order = 0;
+        CollectGlobalsInDocumentOrder(globals, ref order);
+
+        foreach (var group in globals.GroupBy(g => g.Name))
+        {
+            var minPrecedence = group.Min(g => g.Precedence);
+            var top = group.Where(g => g.Precedence == minPrecedence).ToList();
+            if (top.Count > 1)
+            {
+                var name = top[0].Name;
+                var displayName = string.IsNullOrEmpty(name.NamespaceUri) ? name.LocalName : $"{{{name.NamespaceUri}}}{name.LocalName}";
+                throw new InvalidOperationException($"XTSE0630: More than one binding for global variable '{displayName}' at the same import precedence.");
             }
         }
     }
