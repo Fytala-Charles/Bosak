@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 26 August 2026
-> **Bosak baseline:** 1,985 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 1,988 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
 > **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
@@ -19,10 +19,17 @@
 
 ## 0. Recent Changes
 
+- **2026-08-26** — XSLT: **XTDE1450 cluster (`error-1450*`)** — `TransformEngine.CopyLiteralElement` now raises `XTDE1450` when an element in an extension-element namespace has no `xsl:fallback` children. If one or more `xsl:fallback` children are present, their content continues to be evaluated in place of the extension element. The W3C `error-1450*` cluster is now **2/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.28).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+2 tests; header → 0.60).
+  - Verification: `error-1450*` 2/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 1,988/0.
+
+- **2026-08-26** — XSLT: **EXSLT `exsl:document` regression fix** — `TransformEngine.CopyLiteralElement` now recognizes the EXSLT `exsl:document` extension element (in namespace `http://exslt.org/common`) and executes it as `xsl:result-document`. This restores the W3C `docbook-001` test, which uses the DocBook XHTML5 stylesheets and was failing with `XTDE1450` after the extension-element change above. The routine XSLT sweep is now **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.28).
+  - Regression test: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+1 test; header → 0.61).
+  - Verification: `docbook-001` PASS; routine XSLT sweep 7,056/0/7,544; unit tests 1,988/0.
+
 - **2026-08-26** — XSLT: **XTDE1440 cluster (`error-1440*`)** — `FunctionLibrary.ElementAvailable` now validates that its argument is a valid EQName. It accepts the `Q{uri}local` form, a lexical `prefix:local` QName whose prefix is bound to a namespace in the static context, or an unprefixed local name that is a valid NCName (using the default namespace of the defining element). Anything else raises `XTDE1440`. The W3C `error-1440*` cluster is now **2/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
-  - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (header → 5.102).
-  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+3 tests; header → 0.59).
-  - Verification: `error-1440*` 2/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 1,985/0.
 
 - **2026-08-26** — XSLT: **XTDE1360 cluster (`error-1360*`)** — `fn:current()` now raises `XTDE1360` when the current item is absent. The guard is applied in `FunctionLibrary.Current`; `TransformEngine.ExecuteXsltFunction` clears the current item so stylesheet functions have no current node, and `VmEngine.InvokeFunctionItem` clears the current item for dynamic function-item invocations. The W3C `error-1360*` cluster is now **2/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (header → 5.101), `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.27), `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (header → 2.128).

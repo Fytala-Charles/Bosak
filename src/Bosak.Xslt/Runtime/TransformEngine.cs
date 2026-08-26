@@ -206,6 +206,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.27  | 26-08-2026     | ExecuteXsltFunction clears current item so fn:current raises XTDE1360 inside stylesheet functions |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.28  | 26-08-2026     | XTDE1450 for extension elements without xsl:fallback; EXSLT exsl:document as result-document |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -6351,18 +6353,33 @@ public sealed class TransformEngine
         _literalElementDepth++;
 
         // Extension elements are not copied; if they have xsl:fallback children,
-        // the fallback content is evaluated in their place.
+        // the fallback content is evaluated in their place. If there is no fallback,
+        // this is a dynamic error (XTDE1450). Recognized extension elements such as
+        // EXSLT exsl:document are executed directly.
         var extensionNs = GetExtensionElementPrefixes(source);
         if (extensionNs.Contains(source.Name.NamespaceName))
         {
             var xslNs = Stylesheet.Stylesheet.XslNamespace;
             var fallbacks = source.Elements(XName.Get("fallback", xslNs)).ToList();
+
+            // EXSLT common exsl:document is handled as xsl:result-document.
+            if (source.Name.NamespaceName == ExsltCommonNamespace && source.Name.LocalName == "document")
+            {
+                ExecuteResultDocument(source, _context.ContextItem, isPrincipal: false);
+                _literalElementDepth--;
+                return;
+            }
+
             if (fallbacks.Count > 0)
             {
                 foreach (var fb in fallbacks)
                 {
                     ExecuteSequenceConstructorDirect(fb, _context.ContextItem, _currentContainer);
                 }
+            }
+            else
+            {
+                throw new InvalidOperationException("XTDE1450");
             }
             _literalElementDepth--;
             return;

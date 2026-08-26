@@ -1,11 +1,33 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `2011851` — XSLT: XTDE1440 invalid EQName argument to fn:element-available
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1440*` XTDE1440 cluster.
-**Expected state:** **1,985 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `fc52173` — XSLT: XTDE1450 extension element without xsl:fallback + EXSLT exsl:document fix
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1450*` XTDE1450 cluster and fixed the DocBook `exsl:document` regression it exposed.
+**Expected state:** **1,988 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE1440 cluster)
+## This Session Changes (XTDE1450 cluster + EXSLT exsl:document regression fix)
+
+1. **`TransformEngine.CopyLiteralElement` raises `XTDE1450` for extension elements without `xsl:fallback`** —
+   - When a literal result element belongs to a namespace declared as an extension-element namespace and has no `xsl:fallback` children, the runtime now raises dynamic error `XTDE1450`.
+   - If one or more `xsl:fallback` children are present, their content is evaluated in place of the extension element, as before.
+   - The W3C `error-1450*` cluster passes with 2/0/0.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for fallback evaluation and the no-fallback error path.
+   - Header bumped: `TransformEngine.cs` → 6.28, `StylesheetTests.cs` → 0.60.
+
+2. **EXSLT `exsl:document` is executed as `xsl:result-document`** —
+   - The previous change caused the W3C `docbook-001` test to fail with `XTDE1450` because the DocBook XHTML5 stylesheets include `chunker.xsl`, which uses `exsl:document` when `element-available('exsl:document')` returns true.
+   - `CopyLiteralElement` now recognizes the EXSLT `exsl:document` element (namespace `http://exslt.org/common`) and executes it as a non-principal `xsl:result-document`.
+   - This restores `docbook-001` and keeps the routine XSLT sweep at **7,056 passed / 0 failed / 7,544 skipped**.
+   - Added regression test in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` verifying `exsl:document` writes a captured secondary result document via `fn:transform`.
+   - Header bumped: `StylesheetTests.cs` → 0.61.
+
+3. **Results** —
+   - `error-1450*` cluster: 2 passed / 0 failed / 0 skipped.
+   - `docbook-001`: PASS.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **1,988 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE1440 cluster)
 
 1. **`fn:element-available` EQName validation** —
    - `FunctionLibrary.ElementAvailable` now validates that its argument is a valid EQName.

@@ -79,6 +79,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.59  | 26-08-2026     | Added XTDE1440 regression tests for invalid element-available EQNames                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.60  | 26-08-2026     | Added XTDE1450 regression tests for extension elements without xsl:fallback             |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.61  | 26-08-2026     | Added EXSLT exsl:document regression test via fn:transform capture                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4446,6 +4450,70 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
         Assert.Contains("XTDE1440", ex.Message);
+    }
+
+    [Fact]
+    public void ExtensionElement_WithFallback_EvaluatesFallback()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:my='http://my.com/'>
+            <xsl:template name='main'>
+                <out xsl:extension-element-prefixes='my'>
+                    <my:inst>
+                        <xsl:fallback><ok/></xsl:fallback>
+                    </my:inst>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<ok/>", result);
+    }
+
+    [Fact]
+    public void ExtensionElement_WithoutFallback_ThrowsXtde1450()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:my='http://my.com/'>
+            <xsl:template name='main'>
+                <out xsl:extension-element-prefixes='my'>
+                    <my:inst/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1450", ex.Message);
+    }
+
+    [Fact]
+    public void ExsltDocument_ExtensionElement_WritesSecondaryResultDocument()
+    {
+        // EXSLT exsl:document (used by DocBook chunker) is executed as xsl:result-document.
+        var query = @"
+    let $xsl := ""<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+                                    xmlns:exsl='http://exslt.org/common'
+                                    extension-element-prefixes='exsl'
+                                    version='2.0'>
+      <xsl:template name='main'>
+        <out>principal</out>
+        <exsl:document href='sec.xml'><sec>secondary</sec></exsl:document>
+      </xsl:template>
+    </xsl:stylesheet>""
+    return fn:transform(map{""stylesheet-text"": $xsl,
+                           ""initial-template"": fn:QName('', 'main'),
+                           ""source-node"": fn:parse-xml('<doc/>'),
+                           ""base-output-uri"": ""http://example.com/result.xml""})";
+
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        XsltFunctionLibrary.PopulateTransformOnly(ctx);
+        var result = XPath31Expression.Compile(query).Evaluate(ctx);
+        Assert.True(result.IsMap);
+        Assert.True(result.MapValue.TryGetValue(XdmValue.FromString("http://example.com/sec.xml"), out var doc));
+        Assert.Equal("secondary", doc.NodeValue.StringValue);
     }
 
 }
