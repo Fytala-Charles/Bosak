@@ -1,11 +1,27 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-26
-**Commit:** `9b1924d` — XSLT: XTSE1570 validation for xsl:output/@method
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1570*` XTSE1570 cluster.
+**Commit:** `1a2938ae` — XSLT: XTSE1560 validation for conflicting xsl:output attribute values
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-1560*` XTSE1560 cluster.
 **Expected state:** **2,007 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE1570 cluster)
+## This Session Changes (XTSE1560 cluster)
+
+1. **Detect conflicting `xsl:output` attribute values (XTSE1560)** —
+   - `OutputProperties.MergeChecked` validates that two `xsl:output` declarations in the same output definition do not explicitly specify different values for the same scalar serialization attribute.
+   - The check applies to all scalar attributes (e.g., `method`, `indent`, `encoding`, `version`, `html-version`, `standalone`, `media-type`, `build-tree`, `suppress-indentation`) except `cdata-section-elements` and `use-character-maps`, which the XSLT specification excludes from XTSE1560.
+   - The validation is invoked in `Stylesheet` while merging multiple unnamed `xsl:output` declarations and while merging multiple declarations for the same named output.
+   - Matching explicit values continue to be allowed, and list-valued attributes continue to be merged without error.
+   - The W3C `error-1560*` cluster passes with 2/0/0.
+   - Added 4 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for unnamed output conflicts, named output conflicts, matching values, and excluded list-valued attributes.
+   - Header bumped: `OutputProperties.cs` → 1.9, `Stylesheet.cs` → 2.68, `StylesheetTests.cs` → 0.64.
+
+2. **Results** —
+   - `error-1560*` cluster: 2 passed / 0 failed / 0 skipped.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,007 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE1570 cluster)
 
 1. **Validate `xsl:output/@method` per XTSE1570** —
    - `OutputProperties.FromElement` now validates the `method` attribute of `xsl:output`.
