@@ -115,6 +115,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.67  | 26-08-2026     | Ignore whitespace-only text in @select+content validation; unique default merge-source names |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.68  | 26-08-2026     | XTSE1560 validation for conflicting xsl:output attribute values                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -950,15 +952,17 @@ public sealed class Stylesheet
 
         // Parse xsl:output properties. Multiple xsl:output declarations are merged,
         // with later declarations overriding earlier ones for the same property.
+        // Conflicting explicit values for the same scalar attribute raise XTSE1560.
         // Named outputs are stored separately by expanded QName and are used by
         // xsl:result-document via its @format attribute.
         var outputElems = root.Elements(XName.Get("output", XslNamespace)).Where(e => UseWhen(e)).ToList();
         foreach (var oe in outputElems)
         {
-            var props = OutputProperties.FromElement(oe);
+            var explicitProps = OutputProperties.FromElement(oe);
 
             // A parameter document supplies default values; explicit xsl:output attributes
             // override values from the parameter document.
+            var props = explicitProps.Clone();
             var paramDocAttr = oe.Attribute("parameter-document")?.Value;
             if (!string.IsNullOrEmpty(paramDocAttr))
             {
@@ -974,14 +978,20 @@ public sealed class Stylesheet
             {
                 var expandedName = ExpandQName(oe, nameAttr);
                 if (_namedOutputProperties.TryGetValue(expandedName, out var existing))
+                {
+                    OutputProperties.MergeChecked(existing, explicitProps);
                     OutputProperties.Merge(existing, props);
+                }
                 else
+                {
                     _namedOutputProperties[expandedName] = props.Clone();
+                }
             }
             else
             {
                 if (_outputProperties == null)
                     _outputProperties = new OutputProperties();
+                OutputProperties.MergeChecked(_outputProperties, explicitProps);
                 OutputProperties.Merge(_outputProperties, props);
             }
         }

@@ -33,6 +33,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 26-08-2026     | Allow Q{} EQName with no namespace only for supported method names                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 26-08-2026     | Added MergeChecked for XTSE1560 conflicting xsl:output attribute detection                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -729,6 +731,71 @@ public sealed class OutputProperties
         return ch is ' ' or '\r' or '\n' or '-' or '\'' or '(' or ')' or '+' or ',' or '.' or
             '/' or ':' or '=' or '?' or ';' or '!' or '*' or '#' or '@' or '$' or '_' or '%';
     }
+
+    /// <summary>
+    /// Validates that explicitly specified scalar properties in <paramref name="source"/>
+    /// do not conflict with properties already explicitly specified in
+    /// <paramref name="target"/>. Conflicts for the same attribute (other than
+    /// <c>cdata-section-elements</c>, <c>use-character-maps</c>, and the inline
+    /// character map) raise XTSE1560.
+    /// </summary>
+    public static void MergeChecked(OutputProperties target, OutputProperties source)
+    {
+        if (source.MethodSpecified && target.MethodSpecified && target.Method != source.Method)
+            ThrowConflict("method");
+        if (source.OmitXmlDeclarationSpecified && target.OmitXmlDeclarationSpecified && target.OmitXmlDeclaration != source.OmitXmlDeclaration)
+            ThrowConflict("omit-xml-declaration");
+        if (source.IndentSpecified && target.IndentSpecified && target.Indent != source.Indent)
+            ThrowConflict("indent");
+        if (source.EncodingSpecified && target.EncodingSpecified && target.Encoding != source.Encoding)
+            ThrowConflict("encoding");
+        if (source.VersionSpecified && target.VersionSpecified && target.Version != source.Version)
+            ThrowConflict("version");
+        if (source.HtmlVersionSpecified && target.HtmlVersionSpecified && target.HtmlVersion != source.HtmlVersion)
+            ThrowConflict("html-version");
+        if (source.StandaloneSpecified && target.StandaloneSpecified && target.Standalone != source.Standalone)
+            ThrowConflict("standalone");
+        if (source.UndeclarePrefixesSpecified && target.UndeclarePrefixesSpecified && target.UndeclarePrefixes != source.UndeclarePrefixes)
+            ThrowConflict("undeclare-prefixes");
+        if (source.NormalizationFormSpecified && target.NormalizationFormSpecified && target.NormalizationForm != source.NormalizationForm)
+            ThrowConflict("normalization-form");
+        if (source.DoctypeSystemSpecified && target.DoctypeSystemSpecified && target.DoctypeSystem != source.DoctypeSystem)
+            ThrowConflict("doctype-system");
+        if (source.DoctypePublicSpecified && target.DoctypePublicSpecified && target.DoctypePublic != source.DoctypePublic)
+            ThrowConflict("doctype-public");
+        if (source.EscapeUriAttributesSpecified && target.EscapeUriAttributesSpecified && target.EscapeUriAttributes != source.EscapeUriAttributes)
+            ThrowConflict("escape-uri-attributes");
+        if (source.IncludeContentTypeSpecified && target.IncludeContentTypeSpecified && target.IncludeContentType != source.IncludeContentType)
+            ThrowConflict("include-content-type");
+        if (source.MediaTypeSpecified && target.MediaTypeSpecified && target.MediaType != source.MediaType)
+            ThrowConflict("media-type");
+        if (source.ByteOrderMarkSpecified && target.ByteOrderMarkSpecified && target.ByteOrderMark != source.ByteOrderMark)
+            ThrowConflict("byte-order-mark");
+        if (source.JsonNodeOutputMethodSpecified && target.JsonNodeOutputMethodSpecified && target.JsonNodeOutputMethod != source.JsonNodeOutputMethod)
+            ThrowConflict("json-node-output-method");
+        if (source.AllowDuplicateNamesSpecified && target.AllowDuplicateNamesSpecified && target.AllowDuplicateNames != source.AllowDuplicateNames)
+            ThrowConflict("allow-duplicate-names");
+        if (source.EscapeSolidusSpecified && target.EscapeSolidusSpecified && target.EscapeSolidus != source.EscapeSolidus)
+            ThrowConflict("escape-solidus");
+        if (source.ItemSeparatorSpecified && target.ItemSeparatorSpecified && target.ItemSeparator != source.ItemSeparator)
+            ThrowConflict("item-separator");
+        if (source.BuildTreeSpecified && target.BuildTreeSpecified && target.BuildTree != source.BuildTree)
+            ThrowConflict("build-tree");
+        if (source.SuppressIndentationSpecified && target.SuppressIndentationSpecified && !QNameListsEqual(target.SuppressIndentation, source.SuppressIndentation))
+            ThrowConflict("suppress-indentation");
+    }
+
+    private static bool QNameListsEqual(IReadOnlyList<XsQName> a, IReadOnlyList<XsQName> b)
+    {
+        if (a.Count != b.Count) return false;
+        for (int i = 0; i < a.Count; i++)
+            if (a[i].LocalName != b[i].LocalName || a[i].NamespaceUri != b[i].NamespaceUri)
+                return false;
+        return true;
+    }
+
+    private static void ThrowConflict(string attribute)
+        => throw new InvalidOperationException($"XTSE1560: Conflicting explicit values for attribute '{attribute}' in xsl:output declarations.");
 
     /// <summary>
     /// Merges explicitly specified properties from <paramref name="source"/> into

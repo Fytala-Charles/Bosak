@@ -19,6 +19,11 @@
 
 ## 0. Recent Changes
 
+- **2026-08-26** — XSLT: **XTSE1560 cluster (`error-1560*`)** — Multiple `xsl:output` declarations in the same output definition now raise `XTSE1560` when they explicitly specify different values for the same scalar attribute. The check applies to both unnamed and named output definitions and covers all scalar serialization attributes except `cdata-section-elements` and `use-character-maps`, which the XSLT specification excludes from this rule. Matching values continue to be allowed, and list-valued attributes continue to be merged. The W3C `error-1560*` cluster is now **2/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/OutputProperties.cs` (header → 1.9), `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.68).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+4 tests; header → 0.64).
+  - Verification: `error-1560*` 2/0/0; routine XSLT sweep 7,056/0/7,544; unit tests 2,007/0.
+
 - **2026-08-26** — XSLT: **XTSE1570 cluster (`error-1570*`)** — `OutputProperties.FromElement` now validates `xsl:output/@method` per XTSE1570. The value must be a valid EQName: the `Q{uri}local` form (with a syntactically valid URI and NCName local part), a lexical `prefix:local` QName whose prefix is bound to a namespace in scope, or an unprefixed NCName that is one of the supported serialization methods (`xml`, `html`, `xhtml`, `text`, `json`, `adaptive`). An EQName in no namespace (`Q{}local`) is accepted only when the local name is a supported method. Anything else raises `XTSE1570`. The W3C `error-1570*` cluster is now **1/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/OutputProperties.cs` (header → 1.8).
   - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+1 `Theory` with 18 cases; header → 0.63).

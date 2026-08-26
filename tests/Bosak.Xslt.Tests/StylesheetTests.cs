@@ -87,6 +87,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.63  | 26-08-2026     | Added XTSE1570 regression tests for xsl:output/@method validation                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.64  | 26-08-2026     | Added XTSE1560 regression tests for conflicting xsl:output attribute values           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -899,6 +901,67 @@ Welcome to this document on XHTML.
             var executable = compiler.Compile(xsl);
             Assert.NotNull(executable);
         }
+    }
+
+    [Fact]
+    public void Output_Conflicting_Indent_On_Unnamed_Output_Raises_XTSE1560()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output indent='no'/>
+            <xsl:output indent='yes'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1560", ex.Message);
+        Assert.Contains("indent", ex.Message);
+    }
+
+    [Fact]
+    public void Output_Conflicting_Method_On_Named_Output_Raises_XTSE1560()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output name='a' method='xml'/>
+            <xsl:output name='a' method='html'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE1560", ex.Message);
+        Assert.Contains("method", ex.Message);
+    }
+
+    [Fact]
+    public void Output_Matching_Values_On_Multiple_Declarations_Are_Allowed()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output indent='yes' method='xml'/>
+            <xsl:output indent='yes' method='xml'/>
+            <xsl:template name='main'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        Assert.NotNull(executable);
+    }
+
+    [Fact]
+    public void Output_Cdata_Section_Elements_List_Is_Not_XTSE1560()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output cdata-section-elements='a'/>
+            <xsl:output cdata-section-elements='b'/>
+            <xsl:template match='/'><out><a>text</a><b>text</b></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("<a><![CDATA[text]]></a>", result);
+        Assert.Contains("<b><![CDATA[text]]></b>", result);
     }
 
     // ------------------------------------------------------------------
