@@ -1,25 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-27
-**Commit:** `<pending>` — docs: update AGENT_HANDOVER for regex-syntax verification
-**Current focus:** **XSLT gaps** — `regex-syntax` verified green (986 passed / 0 failed / 4 skipped in the main set). `regex-syntax-xslt20` remains excluded from routine sweeps because it targets XPath 2.0/XSD 1.0 semantics. Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `import-schema` / schema-aware exclusions, or any new failures introduced by broader test sweeps).
-**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, and `regex-syntax-xslt20` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**.
+**Commit:** `<pending>` — docs: update AGENT_HANDOVER for import-schema assessment
+**Current focus:** **XSLT gaps** — `import-schema` is not a failure cluster: 204 of 205 tests are skipped because Bosak is not schema-aware. `regex-syntax` and `unicode-90` are verified green. Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `packages`, `dynamic-evaluation`, `streaming`, or run a full catalog sweep to find any hidden failing clusters).
+**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, and `import-schema` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**.
 
-## This Session Changes (regex-syntax verification)
+## This Session Changes (import-schema assessment)
 
-1. **Ran the full `regex-syntax` conformance cluster** —
-   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "regex-syntax"`.
-   - Main `regex-syntax` set: **986 passed / 0 failed / 4 skipped** out of 990 tests.
-   - The `regex-syntax-xslt20` variant also matched the filter and ran; it produced 935 passed / 48 failed / 4 skipped. Those failures are expected because the variant targets XPath 2.0/XSD 1.0 regex semantics and is intentionally excluded from routine sweeps by `tests/Bosak.Xslt.Conformance/Program.cs` (`SkipTestSets`).
-   - No code changes were required; the XPath 3.1/XSD 1.1 regex engine is confirmed correct for the main `regex-syntax` set.
+1. **Ran the full `import-schema` conformance cluster** —
+   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "import-schema"`.
+   - Result: **1 passed / 0 failed / 204 skipped** out of 205 tests.
+   - The single runnable test (`import-schema-191`) passed; the remaining 204 tests are skipped because they declare the `schema_aware` dependency, which Bosak does not support.
+   - No code changes were made; `import-schema` is correctly blocked as a known limitation until schema-awareness is implemented.
 
 2. **Results** —
-   - `regex-syntax` test set: **986 passed / 0 failed / 4 skipped**.
-   - `regex-syntax-xslt20` (targeted-only): 935 passed / 48 failed / 4 skipped — not a regression.
+   - `import-schema` test set: **1 passed / 0 failed / 204 skipped**.
    - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
    - Unit tests: **2,060 passed / 0 failed / 0 skipped**.
 
-## Previous Session Changes (unicode-90 verification)
+## Previous Session Changes (regex-syntax verification)
 
 1. **Cleared the final 15 failing tests across the `error` set** —
    - Added `XTSE1205`/`XTSE1210` validation for `xsl:key` `@use`/content exclusivity and unknown collation in `Stylesheet.ValidateInstructionTree`.
