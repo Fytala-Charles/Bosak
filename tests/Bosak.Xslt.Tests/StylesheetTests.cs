@@ -107,6 +107,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.73  | 26-08-2026     | Added XTDE0640 regression tests for circular key and global variable references             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.74  | 27-08-2026     | Added XTSE0670 regression tests for duplicate sibling xsl:with-param names                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5163,6 +5165,84 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xslt);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(new XDocument(new XElement("x")))));
         Assert.Contains("XTDE0640", ex.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // XTSE0670: duplicate sibling xsl:with-param names
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Duplicate_Call_Template_With_Param_Names_Raise_XTSE0670()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='x'><xsl:param name='y'/></xsl:template>
+            <xsl:template match='doc'>
+                <xsl:call-template name='x'>
+                    <xsl:with-param name='y' select='3'/>
+                    <xsl:with-param name='y' select='4'/>
+                </xsl:call-template>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE0670", ex.Message);
+    }
+
+    [Fact]
+    public void Duplicate_Call_Template_With_Param_QNames_Raise_XTSE0670()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='x'><xsl:param xmlns:x='http://a.uri/' name='x:y'/></xsl:template>
+            <xsl:template match='doc'>
+                <xsl:call-template name='x'>
+                    <xsl:with-param xmlns:a='http://a.uri/' name='a:y' select='3'/>
+                    <xsl:with-param xmlns:b='http://a.uri/' name='b:y' select='4'/>
+                </xsl:call-template>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE0670", ex.Message);
+    }
+
+    [Fact]
+    public void Duplicate_Apply_Templates_With_Param_Names_Raise_XTSE0670()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='doc'>
+                <xsl:apply-templates select='item'>
+                    <xsl:with-param name='x' select='2'/>
+                    <xsl:with-param name='x' select='3'/>
+                </xsl:apply-templates>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE0670", ex.Message);
+    }
+
+    [Fact]
+    public void Different_With_Param_Names_Do_Not_Raise_XTSE0670()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:a='http://a.uri/'>
+            <xsl:template name='x'>
+                <xsl:param name='p1'/>
+                <xsl:param name='p2'/>
+                <out p1='{$p1}' p2='{$p2}'/>
+            </xsl:template>
+            <xsl:template match='doc'>
+                <xsl:call-template name='x'>
+                    <xsl:with-param name='p1' select='1'/>
+                    <xsl:with-param name='p2' select='2'/>
+                </xsl:call-template>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("doc"));
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("p1=\"1\"", result);
+        Assert.Contains("p2=\"2\"", result);
     }
 
     private class InlineUriResolver : IXsltUriResolver

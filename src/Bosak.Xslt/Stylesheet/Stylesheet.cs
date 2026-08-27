@@ -129,6 +129,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.74  | 26-08-2026     | XTSE0660 validation for duplicate named template bindings                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.75  | 27-08-2026     | XTSE0670 validation for duplicate sibling xsl:with-param names                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2676,6 +2678,8 @@ public sealed class Stylesheet
                             throw new InvalidOperationException($"XTSE0010: xsl:apply-templates may not contain xsl:{child.Name.LocalName}.");
                         }
                     }
+
+                    ValidateDuplicateWithParamNames(elem);
                 }
 
                 // xsl:apply-imports may only contain xsl:with-param.
@@ -2692,6 +2696,8 @@ public sealed class Stylesheet
                         if (child.Name.NamespaceName != XslNamespace || child.Name.LocalName != "with-param")
                             throw new InvalidOperationException($"XTSE0010: xsl:apply-imports may not contain xsl:{child.Name.LocalName}.");
                     }
+
+                    ValidateDuplicateWithParamNames(elem);
                 }
 
                 // xsl:call-template may only contain xsl:with-param.
@@ -2708,6 +2714,8 @@ public sealed class Stylesheet
                         if (child.Name.NamespaceName != XslNamespace || child.Name.LocalName != "with-param")
                             throw new InvalidOperationException($"XTSE0010: xsl:call-template may only contain xsl:with-param children.");
                     }
+
+                    ValidateDuplicateWithParamNames(elem);
                 }
 
                 // xsl:template children may not include xsl:sort or xsl:with-param.
@@ -3419,6 +3427,27 @@ public sealed class Stylesheet
         }
 
         return (name, "");
+    }
+
+    /// <summary>
+    /// Throws XTSE0670 if two or more sibling xsl:with-param elements have the same
+    /// expanded QName. Used for xsl:call-template, xsl:apply-templates, and
+    /// xsl:apply-imports.
+    /// </summary>
+    private static void ValidateDuplicateWithParamNames(XElement parent)
+    {
+        var seen = new HashSet<(string LocalName, string NamespaceUri)>();
+        foreach (var child in parent.Elements())
+        {
+            if (child.Name.NamespaceName != XslNamespace || child.Name.LocalName != "with-param")
+                continue;
+            var nameAttr = child.Attribute("name")?.Value;
+            if (string.IsNullOrWhiteSpace(nameAttr))
+                continue;
+            var expanded = ExpandVariableName(child, nameAttr);
+            if (!seen.Add(expanded))
+                throw new InvalidOperationException("XTSE0670: Two or more sibling xsl:with-param elements have the same expanded QName.");
+        }
     }
 
     /// <summary>
