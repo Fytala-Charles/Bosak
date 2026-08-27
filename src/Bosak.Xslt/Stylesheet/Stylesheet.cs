@@ -131,6 +131,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.75  | 27-08-2026     | XTSE0670 validation for duplicate sibling xsl:with-param names                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.76  | 27-08-2026     | XTSE0720 validation for circular xsl:attribute-set use-attribute-sets references        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1112,6 +1114,12 @@ public sealed class Stylesheet
             if (!string.IsNullOrWhiteSpace(attrSet.UseAttributeSets) && GetEffectiveVersion(attrSet.Element) >= 2.0)
                 ValidateUseAttributeSetsValue(attrSet.Element, attrSet.UseAttributeSets, "xsl:attribute-set/@use-attribute-sets");
         }
+
+        // XTSE0720: xsl:attribute-set must not directly or indirectly reference itself
+        // via use-attribute-sets. Checked at the root stylesheet so imports/includes
+        // are visible.
+        if (_isRootStylesheet)
+            ValidateAttributeSetCircularity();
 
         // Static validation: check for disallowed attributes and children on XSLT instructions
         ValidateInstructionTree(root);
@@ -2887,10 +2895,24 @@ public sealed class Stylesheet
     /// </summary>
     private void ValidateUseAttributeSetsValue(XElement element, string rawValue, string construct)
     {
-        if (string.IsNullOrWhiteSpace(rawValue))
-            return;
-
         var allAttrSets = GetAllAttributeSets();
+        foreach (var (localName, nsUri, rawName) in ParseUseAttributeSetNames(element, rawValue, construct))
+        {
+            if (!allAttrSets.ContainsKey((localName, nsUri)))
+                throw new InvalidOperationException($"XTSE0710: Attribute set '{rawName}' referenced by {construct} is not defined.");
+        }
+    }
+
+    /// <summary>
+    /// Parses a whitespace-separated list of attribute-set EQName/QName references
+    /// into expanded name tuples. Throws <c>XTSE0710</c> for malformed tokens,
+    /// undeclared prefixes, or invalid names.
+    /// </summary>
+    private static IEnumerable<(string LocalName, string NamespaceUri, string RawName)> ParseUseAttributeSetNames(XElement element, string rawValue, string construct)
+    {
+        if (string.IsNullOrWhiteSpace(rawValue))
+            yield break;
+
         var tokens = rawValue.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
         foreach (var token in tokens)
         {
@@ -2940,9 +2962,59 @@ public sealed class Stylesheet
                 }
             }
 
-            if (!allAttrSets.ContainsKey((localName, nsUri)))
-                throw new InvalidOperationException($"XTSE0710: Attribute set '{trimmed}' referenced by {construct} is not defined.");
+            yield return (localName, nsUri, trimmed);
         }
+    }
+
+    /// <summary>
+    /// Detects direct or indirect circular references among <c>xsl:attribute-set</c>
+    /// declarations via their <c>use-attribute-sets</c> attributes (XTSE0720).
+    /// </summary>
+    private void ValidateAttributeSetCircularity()
+    {
+        var allAttrSets = GetAllAttributeSets();
+
+        // Build name-level dependency graph: an attribute-set name depends on every
+        // name referenced in the use-attribute-sets of any of its definitions.
+        var dependencies = new Dictionary<(string LocalName, string NamespaceUri), HashSet<(string LocalName, string NamespaceUri)>>();
+        foreach (var (name, defs) in allAttrSets)
+        {
+            if (!dependencies.ContainsKey(name))
+                dependencies[name] = new HashSet<(string, string)>();
+
+            foreach (var def in defs)
+            {
+                if (string.IsNullOrWhiteSpace(def.UseAttributeSets))
+                    continue;
+                foreach (var (refLocal, refNs, _) in ParseUseAttributeSetNames(def.Element, def.UseAttributeSets, "xsl:attribute-set/@use-attribute-sets"))
+                {
+                    dependencies[name].Add((refLocal, refNs));
+                }
+            }
+        }
+
+        var visiting = new HashSet<(string LocalName, string NamespaceUri)>();
+        var visited = new HashSet<(string LocalName, string NamespaceUri)>();
+
+        void Visit((string LocalName, string NamespaceUri) current)
+        {
+            if (visiting.Contains(current))
+                throw new InvalidOperationException("XTSE0720: An xsl:attribute-set directly or indirectly references itself via use-attribute-sets.");
+            if (visited.Contains(current))
+                return;
+
+            visiting.Add(current);
+            if (dependencies.TryGetValue(current, out var refs))
+            {
+                foreach (var next in refs)
+                    Visit(next);
+            }
+            visiting.Remove(current);
+            visited.Add(current);
+        }
+
+        foreach (var name in dependencies.Keys)
+            Visit(name);
     }
 
     /// <summary>

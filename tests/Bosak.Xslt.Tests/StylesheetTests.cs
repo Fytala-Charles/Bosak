@@ -109,6 +109,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.74  | 27-08-2026     | Added XTSE0670 regression tests for duplicate sibling xsl:with-param names                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.75  | 27-08-2026     | Added XTSE0720 regression tests for circular xsl:attribute-set references               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5243,6 +5245,61 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var result = executable.TransformToString(new XDocumentNode(source));
         Assert.Contains("p1=\"1\"", result);
         Assert.Contains("p2=\"2\"", result);
+    }
+
+    // ------------------------------------------------------------------
+    // XTSE0720: circular xsl:attribute-set references
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Attribute_Set_Self_Reference_Raises_XTSE0720()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:attribute-set name='aset1' use-attribute-sets='aset1'>
+                <xsl:attribute name='one'>1</xsl:attribute>
+            </xsl:attribute-set>
+            <xsl:template match='doc'><out><xsl:copy use-attribute-sets='aset1'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE0720", ex.Message);
+    }
+
+    [Fact]
+    public void Attribute_Set_Indirect_Circular_Reference_Raises_XTSE0720()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:attribute-set name='aset1' use-attribute-sets='aset2'>
+                <xsl:attribute name='one'>1</xsl:attribute>
+            </xsl:attribute-set>
+            <xsl:attribute-set name='aset2' use-attribute-sets='aset1'>
+                <xsl:attribute name='two'>2</xsl:attribute>
+            </xsl:attribute-set>
+            <xsl:template match='doc'><out><xsl:copy use-attribute-sets='aset1'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE0720", ex.Message);
+    }
+
+    [Fact]
+    public void Attribute_Set_Non_Circular_Reference_Does_Not_Raise_XTSE0720()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:attribute-set name='aset1' use-attribute-sets='aset2'>
+                <xsl:attribute name='one'>1</xsl:attribute>
+            </xsl:attribute-set>
+            <xsl:attribute-set name='aset2'>
+                <xsl:attribute name='two'>2</xsl:attribute>
+            </xsl:attribute-set>
+            <xsl:template match='doc'><out><xsl:copy use-attribute-sets='aset1'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("doc"));
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("one=\"1\"", result);
+        Assert.Contains("two=\"2\"", result);
     }
 
     private class InlineUriResolver : IXsltUriResolver
