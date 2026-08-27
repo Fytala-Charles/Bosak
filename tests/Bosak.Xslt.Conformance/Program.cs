@@ -67,7 +67,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.18  | 24-08-2026     | Skip error-0010bb (upstream forwards-compatibility test defect)                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.19  | 27-08-2026     | Honor ignore_doc_failure dependency (skips error-FODC0002a-ignore)                       |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.19  | 26-08-2026     | Pass null source for initial-mode tests without source so XTDE0044 is reported            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.20  | 27-08-2026     | Honor ignore_doc_failure dependency (skips error-FODC0002a-ignore)                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -495,6 +499,13 @@ class Program
                     var val = mnd.Attribute("value")?.Value ?? "";
                     if (int.TryParse(val, out var digits) && digits > 28)
                         return TestResult.Skip; // .NET decimal precision limit
+                }
+                foreach (var idf in deps.Elements(ns + "ignore_doc_failure"))
+                {
+                    // Bosak does not support ignoring document-load failures.
+                    var satisfied = idf.Attribute("satisfied")?.Value ?? "true";
+                    if (satisfied == "true")
+                        return TestResult.Skip;
                 }
             }
 

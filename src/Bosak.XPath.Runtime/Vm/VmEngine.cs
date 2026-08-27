@@ -243,6 +243,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.128 | 26-08-2026     | InvokeFunctionItem clears current item so fn:current() raises XTDE1360 in dynamic calls |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.129 | 27-08-2026     | DocumentRoot opcode raises XPTY0020 when the context item is atomic                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -1935,7 +1937,16 @@ public static class VmEngine
                 case IrOpCode.DocumentRoot:
                     {
                         var input = registers[instr.RegisterB];
-                        if (input.IsNode && input.NodeValue != null)
+                        if (input.IsUndefined)
+                        {
+                            // No context item: the path cannot be evaluated.
+                            registers[instr.RegisterA] = XdmValue.Undefined;
+                        }
+                        else if (input.IsAtomic)
+                        {
+                            throw new InvalidOperationException("XPTY0020: An axis step requires a context item that is a node.");
+                        }
+                        else if (input.IsNode && input.NodeValue != null)
                         {
                             var node = input.NodeValue;
                             var root = node.Document;

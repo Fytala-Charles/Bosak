@@ -82,6 +82,7 @@
 //                      | Charles Korthout | 2.36  | 23-08-2026     | Advanced UCA collation regression tests (caseFirst, numeric, backwards, caseLevel, shifted) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.37  | 23-08-2026     | UCA fallback=no and numeric-strength regression tests |
+//                      | Charles Korthout | 2.38  | 27-08-2026     | Updated json-to-xml validate=true expectation to FOJS0004                              |
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -3434,24 +3435,12 @@ public class FunctionLibraryTests
     }
 
     [Fact]
-    public void JsonToXml_ValidateTrue_NumberTypedAsDouble()
+    public void JsonToXml_ValidateTrue_RaisesFOJS0004()
     {
-        // json-to-xml-016: validate=true produces PSVI annotations; the typed value
-        // of j:number is xs:double.
-        const string j = "Q{http://www.w3.org/2005/xpath-functions}";
-        var result = Evaluate(
-            $"let $r := json-to-xml('[1]', map{{'validate':true()}}) " +
-            $"return data($r/{j}array/{j}number) instance of xs:double");
-        Assert.True(result.BooleanValue);
-    }
-
-    [Fact]
-    public void JsonToXml_ValidateTrue_DuplicateKeys_RaisesFOJS0003()
-    {
-        // json-to-xml-error-028: duplicate keys fail schema validation.
+        // Bosak is not a schema-aware processor: validate:=true() raises FOJS0004.
         var ex = Assert.Throws<InvalidOperationException>(
-            () => Evaluate("json-to-xml('{\"a\":1,\"b\":2,\"a\":3}', map{'validate':true()})"));
-        Assert.Contains("FOJS0003", ex.Message);
+            () => Evaluate("json-to-xml('[1]', map{'validate':true()})"));
+        Assert.Contains("FOJS0004", ex.Message);
     }
 
     [Fact]

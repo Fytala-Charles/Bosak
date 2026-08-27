@@ -2578,6 +2578,23 @@ public sealed class Stylesheet
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
                         "name", "match", "use", "collation", "composite"),
                         IsForwardsCompatibleElement(elem));
+
+                    // XTSE1205: xsl:key must have either @use or non-empty content, but not both.
+                    bool hasUse = elem.Attribute("use") != null && !string.IsNullOrWhiteSpace(elem.Attribute("use")!.Value);
+                    bool hasContent = elem.Nodes().Any(n => n is XElement || (n is XText t && !string.IsNullOrWhiteSpace(t.Value)));
+                    if (hasUse && hasContent)
+                        throw new InvalidOperationException("XTSE1205: xsl:key must not have both a use attribute and content.");
+                    if (!hasUse && !hasContent)
+                        throw new InvalidOperationException("XTSE1205: xsl:key must have either a use attribute or non-empty content.");
+
+                    // XTSE1210: xsl:key/@collation must be a URI recognized by this implementation.
+                    var collationAttr = elem.Attribute("collation");
+                    if (collationAttr != null && !string.IsNullOrWhiteSpace(collationAttr.Value))
+                    {
+                        var baseUri = GetEffectiveBaseUri(elem);
+                        if (!IsSupportedCollationUri(collationAttr.Value, baseUri))
+                            throw new InvalidOperationException("XTSE1210: The collation URI specified on xsl:key is not recognized by this implementation.");
+                    }
                 }
 
                 // XTSE0120: xsl:stylesheet / xsl:transform / xsl:package must not have

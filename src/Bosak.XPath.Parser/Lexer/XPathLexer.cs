@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 22-08-2026     | Treat 'validate' as a contextual XQuery keyword (Name token) to keep it valid in XPath |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 27-08-2026     | Reject invalid XML 1.0 name characters (e.g. U+00B5) as XPST0003                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -972,12 +974,23 @@ public ref struct XPathLexer
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsNameStartChar(char c)
     {
-        // XML 1.0 NameStartChar simplified for ASCII + common Unicode
+        // XML 1.0 NameStartChar production (excluding supplementary characters,
+        // which are not representable in a single C# char).
         return c == ':'
             || c == '_'
             || (c >= 'A' && c <= 'Z')
             || (c >= 'a' && c <= 'z')
-            || char.IsLetter(c);
+            || (c >= '\u00C0' && c <= '\u00D6')
+            || (c >= '\u00D8' && c <= '\u00F6')
+            || (c >= '\u00F8' && c <= '\u02FF')
+            || (c >= '\u0370' && c <= '\u037D')
+            || (c >= '\u037F' && c <= '\u1FFF')
+            || (c >= '\u200C' && c <= '\u200D')
+            || (c >= '\u2070' && c <= '\u218F')
+            || (c >= '\u2C00' && c <= '\u2FEF')
+            || (c >= '\u3001' && c <= '\uD7FF')
+            || (c >= '\uF900' && c <= '\uFDCF')
+            || (c >= '\uFDF0' && c <= '\uFFFD');
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

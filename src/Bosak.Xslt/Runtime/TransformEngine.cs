@@ -218,6 +218,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.33  | 26-08-2026     | Don't cache suppressed sequence-constructor globals during pattern validation            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.34  | 27-08-2026     | Added runtime error checks: XTDE0855/1110/1162/1260/1270, XTTE3170/3360, XPTY0020       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1837,6 +1839,10 @@ public sealed class TransformEngine
 
         var node = contextItem.NodeValue;
 
+        // XTTE3360: accumulator-before/after are not defined for attribute or namespace nodes.
+        if (node.NodeKind == XdmNodeKind.Attribute || node.NodeKind == XdmNodeKind.Namespace)
+            throw new InvalidOperationException("XTTE3360: accumulator functions are not defined for attribute or namespace nodes");
+
         // First check for values copied with copy-accumulators="yes"
         if (node is XDocumentNode xdn && xdn.UnderlyingObject is XElement elem)
         {
@@ -3008,6 +3014,10 @@ public sealed class TransformEngine
 
                         var collationAttr = instruction.Attribute("collation")?.Value;
                         var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? _context.DefaultCollation : EvaluateAvt(collationAttr, instruction);
+
+                        // XTDE1110: an explicit collation URI must be recognized by this implementation.
+                        if (!string.IsNullOrEmpty(collationAttr) && !IsRecognizedCollation(effectiveCollation))
+                            throw new InvalidOperationException($"XTDE1110: The collation URI '{effectiveCollation}' is not recognized by this implementation.");
 
                         ValidateForEachGroupAttributes(instruction);
 
@@ -4544,15 +4554,23 @@ public sealed class TransformEngine
             {
                 var enumerator = XdmSequence.FromSource(nsCtxResult.SequenceValue).GetEnumerator();
                 if (enumerator.MoveNext())
-                    nsCtxNode = enumerator.Current.IsNode ? enumerator.Current.NodeValue : null;
+                {
+                    var first = enumerator.Current;
+                    // XTTE3170: namespace-context must evaluate to a single node.
+                    if (enumerator.MoveNext() || !first.IsNode)
+                        throw new InvalidOperationException("XTTE3170: The value of the namespace-context attribute of xsl:evaluate must be a single node.");
+                    nsCtxNode = first.NodeValue;
+                }
             }
-            if (nsCtxNode != null)
-            {
-                if (nsCtxNode is XDocumentNode xdocNode && xdocNode.UnderlyingObject is System.Xml.Linq.XDocument doc && doc.Root != null)
-                    nsContextElement = doc.Root;
-                else if (nsCtxNode is XDocumentNode xelemNode && xelemNode.UnderlyingObject is System.Xml.Linq.XElement elem)
-                    nsContextElement = elem;
-            }
+
+            // XTTE3170: an empty sequence (or non-node) is also invalid.
+            if (nsCtxNode == null)
+                throw new InvalidOperationException("XTTE3170: The value of the namespace-context attribute of xsl:evaluate must be a single node.");
+
+            if (nsCtxNode is XDocumentNode xdocNode && xdocNode.UnderlyingObject is System.Xml.Linq.XDocument doc && doc.Root != null)
+                nsContextElement = doc.Root;
+            else if (nsCtxNode is XDocumentNode xelemNode && xelemNode.UnderlyingObject is System.Xml.Linq.XElement elem)
+                nsContextElement = elem;
         }
 
         var baseUriRaw = instruction.Attribute("base-uri")?.Value;
@@ -4814,6 +4832,10 @@ public sealed class TransformEngine
                     var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw, instruction) : null;
                     var (attrLocalName, attrNsUri) = ResolveAttributeName(instruction, attrName, attrNs, "XTDE0860");
+
+                    // XTDE0855: with no namespace attribute, an effective name of "xmlns" is invalid.
+                    if (attrNsRaw == null && attrLocalName == "xmlns" && string.IsNullOrEmpty(attrNsUri))
+                        throw new InvalidOperationException("XTDE0855: The effective name of xsl:attribute must not be 'xmlns'.");
 
                     var select = instruction.Attribute("select")?.Value;
                     string value;
@@ -5411,6 +5433,10 @@ public sealed class TransformEngine
 
                         var collationAttr = instruction.Attribute("collation")?.Value;
                         var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? _context.DefaultCollation : EvaluateAvt(collationAttr, instruction);
+
+                        // XTDE1110: an explicit collation URI must be recognized by this implementation.
+                        if (!string.IsNullOrEmpty(collationAttr) && !IsRecognizedCollation(effectiveCollation))
+                            throw new InvalidOperationException($"XTDE1110: The collation URI '{effectiveCollation}' is not recognized by this implementation.");
 
                         ValidateForEachGroupAttributes(instruction);
 
@@ -8984,9 +9010,13 @@ public sealed class TransformEngine
         {
             // 2-arg form: search the entire document containing the context node.
             var contextNode = ctx.ContextItem.NodeValue;
-            var docRoot = contextNode?.Document ?? contextNode;
-            if (docRoot == null)
+            if (contextNode == null)
                 return XdmValue.Undefined;
+
+            // XTDE1270: the context node must be in a tree rooted at a document node.
+            var docRoot = contextNode.Document;
+            if (docRoot == null)
+                throw new InvalidOperationException("XTDE1270: The context node for key() is not rooted at a document node.");
 
             var buildKey = (docRoot, keyName);
             if (_buildingKeys.Contains(buildKey))
@@ -9022,7 +9052,11 @@ public sealed class TransformEngine
             var docEntries = new List<(IXdmNode DocRoot, KeyIndex Index, List<IXdmNode> Candidates)>();
             foreach (var candidate in candidates)
             {
-                var candidateDoc = candidate.Document ?? candidate;
+                // XTDE1270: the third-argument node(s) must be rooted at a document node.
+                var candidateDoc = candidate.Document;
+                if (candidateDoc == null)
+                    throw new InvalidOperationException("XTDE1270: A node supplied to key() is not rooted at a document node.");
+
                 bool found = false;
                 foreach (var entry in docEntries)
                 {
@@ -9116,8 +9150,12 @@ public sealed class TransformEngine
 
         var prefix = qname[..colon];
         var local = qname[(colon + 1)..];
-        var ns = context.TryResolveNamespace(prefix, out var uri) ? uri : string.Empty;
-        return "{" + ns + "}" + local;
+
+        // XTDE1260: the key name must be a valid QName with a declared prefix.
+        if (!context.TryResolveNamespace(prefix, out var uri))
+            throw new InvalidOperationException($"XTDE1260: No namespace declaration is in scope for the prefix '{prefix}' in key name '{qname}'.");
+
+        return "{" + uri + "}" + local;
     }
 
     /// <summary>

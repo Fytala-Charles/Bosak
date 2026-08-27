@@ -113,6 +113,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.76  | 27-08-2026     | Added XTSE0975 regression tests for xsl:number/@value exclusivity                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.77  | 27-08-2026     | Added error-cluster regression tests (XTDE0855/1110/1162/1260/1270, XTTE3170/3360, XPST0003) and fixed test invocation |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5334,6 +5336,182 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = new Api.XsltCompiler().Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(new XDocument()));
         Assert.Contains(">42<", result);
+    }
+
+    // ------------------------------------------------------------------
+    // Remaining error cluster regression tests
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("<xsl:key name='k' match='*'/>", "must have either a use attribute or non-empty content")]
+    [InlineData("<xsl:key name='k' match='*' use='17'>twelve</xsl:key>", "must not have both a use attribute and content")]
+    public void Xsl_Key_Validation_Raises_XTSE1205(string keyDecl, string expectedFragment)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            {keyDecl}
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE1205", ex.Message);
+        Assert.Contains(expectedFragment, ex.Message);
+    }
+
+    [Fact]
+    public void Xsl_Key_Unknown_Collation_Raises_XTSE1210()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k' match='*' use='17' collation='http://unknown.collation.uri/'/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE1210", ex.Message);
+    }
+
+    [Fact]
+    public void Key_Undeclared_Prefix_Raises_XTDE1260()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k' match='*' use='17'/>
+            <xsl:template name='main'><out><xsl:sequence select=""key('your:k', 'abc')""/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1260", ex.Message);
+    }
+
+    [Fact]
+    public void Key_On_Parentless_Element_Raises_XTDE1270()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='k' match='*' use=""'pqr'""/>
+            <xsl:template name='main'>
+                <xsl:variable name='e' as='element()'><e/></xsl:variable>
+                <out><xsl:for-each select='$e'><xsl:sequence select=""key('k', 'abc')""/></xsl:for-each></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1270", ex.Message);
+    }
+
+    [Fact]
+    public void Attribute_Effective_Name_Xmlns_Raises_XTDE0855()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:param name='p' select=""'ns'""/>
+            <xsl:template name='main'>
+                <my:out xmlns:my='http://my.com/'><xsl:attribute name='{concat(""xml"", $p)}'>value</xsl:attribute></my:out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE0855", ex.Message);
+    }
+
+    [Fact]
+    public void For_Each_Group_Unknown_Collation_Raises_XTDE1110()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <xsl:variable name='pop'><a/><b/><c/></xsl:variable>
+                <out>
+                    <xsl:for-each-group select='$pop/*' group-adjacent='local-name()' collation='http://unknown.collation.uri/'>
+                        <xsl:value-of select='current-group()'/>
+                    </xsl:for-each-group>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1110", ex.Message);
+    }
+
+    [Fact]
+    public void Document_Relative_Uri_No_Base_Raises_XTDE1162()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='t' as='text()'><xsl:value-of select=""'note.xml'""/></xsl:variable>
+            <xsl:template name='main'>
+                <out><xsl:copy-of select='document($t)'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTDE1162", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Namespace_Context_Not_Single_Node_Raises_XTTE3170()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:variable name='v' as='element()*'><x/><y/></xsl:variable>
+            <xsl:template name='main'>
+                <out><xsl:evaluate xpath=""'1 to 10'"" namespace-context='$v'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTTE3170", ex.Message);
+    }
+
+    [Fact]
+    public void Accumulator_After_On_Attribute_Raises_XTTE3360()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:accumulator name='a' initial-value='0'>
+                <xsl:accumulator-rule match='text()' select='$value+1'/>
+            </xsl:accumulator>
+            <xsl:template name='main'>
+                <xsl:variable name='temp'><x a='1' b='2'/></xsl:variable>
+                <out><xsl:for-each select='$temp/x/@*'>
+                    <xsl:value-of select=""accumulator-after('a')""/>
+                </xsl:for-each></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
+        Assert.Contains("XTTE3360", ex.Message);
+    }
+
+    [Fact]
+    public void Axis_Step_On_Non_Node_Context_Raises_XPTY0020()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:f='http://f.com/'>
+            <xsl:template match='/'><a b='{f:doc()}'/></xsl:template>
+            <xsl:function name='f:doc'>
+                <xsl:for-each select='1 to 5'><xsl:sequence select='//a'/></xsl:for-each>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(new XDocument())));
+        Assert.Contains("XPTY0020", ex.Message);
+    }
+
+    [Fact]
+    public void Invalid_XPath_Name_Character_Raises_XPST0003()
+    {
+        // U+00B5 MICRO SIGN is not a valid XML 1.0 name character.
+        var xsl = "<?xml version='1.0' encoding='iso-8859-1'?>\n" +
+            "<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>\n" +
+            "  <xsl:template name='main'><out><xsl:value-of select=\"\u00B5\"/></out></xsl:template>\n" +
+            "</xsl:stylesheet>";
+
+        var ex = Assert.Throws<Bosak.XPath.Parser.ParseException>(() =>
+        {
+            var executable = new Api.XsltCompiler().Compile(xsl);
+            executable.TransformToString(null, initialTemplate: "main");
+        });
+        Assert.Contains("XPST0003", ex.Message);
     }
 
     private class InlineUriResolver : IXsltUriResolver

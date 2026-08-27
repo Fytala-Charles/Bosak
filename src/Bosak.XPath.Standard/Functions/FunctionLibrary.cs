@@ -63,6 +63,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.102 | 26-08-2026     | fn:element-available validates its argument as an EQName and raises XTDE1440 when invalid |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.103 | 27-08-2026     | json-to-xml validate=true raises FOJS0004 (non-schema-aware processor)                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -6755,11 +6757,18 @@ public static class FunctionLibrary
             if (explicitBase != null)
             {
                 var bn = i < baseNodes.Count ? baseNodes[i] : baseNodes[^1];
-                baseUri = bn?.BaseUri ?? ctx.BaseUri;
+                // XTDE1162: a relative URI cannot be resolved when the explicit base node has no base URI.
+                if (bn == null || string.IsNullOrEmpty(bn.BaseUri))
+                    throw new InvalidOperationException($"XTDE1162: No base URI available to resolve the relative reference '{uri}'.");
+                baseUri = bn.BaseUri;
             }
             else if (items[i].IsNode)
             {
-                baseUri = items[i].NodeValue!.BaseUri ?? ctx.BaseUri;
+                var nodeBaseUri = items[i].NodeValue!.BaseUri;
+                // XTDE1162: a node supplying a relative URI must itself have a base URI.
+                if (string.IsNullOrEmpty(nodeBaseUri))
+                    throw new InvalidOperationException($"XTDE1162: No base URI available to resolve the relative reference '{uri}'.");
+                baseUri = nodeBaseUri;
             }
             else
             {
@@ -12918,16 +12927,8 @@ public static class FunctionLibrary
 
         if (options.Validate)
         {
-            try
-            {
-                XDocumentProvider.ValidateXDocument(xdoc, JsonSchemaSet);
-            }
-            catch (XmlSchemaValidationException)
-            {
-                // Validation failures, including duplicate keys that escaped the
-                // duplicates option, are reported as FOJS0003 (json-to-xml-error-028).
-                throw new InvalidOperationException("FOJS0003: JSON could not be validated against the XML schema for JSON");
-            }
+            // Bosak is not a schema-aware processor: validate:=true() is an error.
+            throw new InvalidOperationException("FOJS0004: The validate option requires a schema-aware processor.");
         }
 
         return XdmValue.FromNode(new XDocumentNode(xdoc));
