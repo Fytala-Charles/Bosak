@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-27
-**Commit:** `8608884` — XSLT: XTDE0640 circularity detection for keys/globals; pattern validation and lazy global fixes
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0640*` XTDE0640 cluster.
+**Commit:** `9b4d5b7` — XSLT: XTSE0670 duplicate sibling xsl:with-param validation
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0670*` XTSE0670 cluster.
 **Expected state:** **2,033 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTDE0640 cluster)
+## This Session Changes (XTSE0670 cluster)
+
+1. **Detect duplicate sibling `xsl:with-param` names (`XTSE0670`)** —
+   - Added `Stylesheet.ValidateDuplicateWithParamNames` to check that sibling `xsl:with-param` elements within `xsl:call-template`, `xsl:apply-templates`, and `xsl:apply-imports` have distinct expanded QNames.
+   - The check resolves each `name` attribute via `ExpandVariableName`, so duplicates using different prefixes for the same namespace are detected (`error-0670b`/`0670d`).
+   - The W3C `error-0670*` cluster passes with 4/0/0.
+   - Added 4 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering duplicate names in `call-template` and `apply-templates`, duplicate QNames, and a valid non-duplicate case.
+   - Header bumped: `Stylesheet.cs` → 2.75, `StylesheetTests.cs` → 0.74.
+
+2. **Results** —
+   - `error-0670*` cluster: 4 passed / 0 failed / 0 skipped.
+   - `error` test set: 460 passed / 23 failed / 96 skipped (4 previously failing tests now pass).
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,033 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTDE0640 cluster)
 
 1. **Detect circular references to `xsl:key` and global variables/parameters (`XTDE0640`)** —
    - Added `_buildingKeys` to `TransformEngine` to track keys currently being built; direct or indirect self-references now raise `XTDE0640` instead of `XPST0008`.
