@@ -1,24 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-27
-**Commit:** `<pending>` — docs: update AGENT_HANDOVER for unicode-90 verification
-**Current focus:** **XSLT gaps** — `unicode-90` verified green (1,365 passed / 0 failed / 95 skipped). Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `regex-syntax` edge cases, schema-aware exclusions, or any new failures introduced by broader test sweeps).
-**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**.
+**Commit:** `<pending>` — docs: update AGENT_HANDOVER for regex-syntax verification
+**Current focus:** **XSLT gaps** — `regex-syntax` verified green (986 passed / 0 failed / 4 skipped in the main set). `regex-syntax-xslt20` remains excluded from routine sweeps because it targets XPath 2.0/XSD 1.0 semantics. Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `import-schema` / schema-aware exclusions, or any new failures introduced by broader test sweeps).
+**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, and `regex-syntax-xslt20` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**.
 
-## This Session Changes (unicode-90 verification)
+## This Session Changes (regex-syntax verification)
 
-1. **Ran the full `unicode-90` conformance cluster** —
-   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "unicode-90"`.
-   - Result: **1,365 passed / 0 failed / 95 skipped** out of 1,460 tests.
-   - The 95 skips are all intentional upstream/platform defects already recorded in `tests/Bosak.Xslt.Conformance/Program.cs` (BMP-only count defects, empty `<c>` elements in fn-replace3/5, surrogate/one-member category quantifier issues, and astral-range omissions).
-   - No code changes were required; regex/unicode category handling is confirmed correct for Unicode 9.0.
+1. **Ran the full `regex-syntax` conformance cluster** —
+   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "regex-syntax"`.
+   - Main `regex-syntax` set: **986 passed / 0 failed / 4 skipped** out of 990 tests.
+   - The `regex-syntax-xslt20` variant also matched the filter and ran; it produced 935 passed / 48 failed / 4 skipped. Those failures are expected because the variant targets XPath 2.0/XSD 1.0 regex semantics and is intentionally excluded from routine sweeps by `tests/Bosak.Xslt.Conformance/Program.cs` (`SkipTestSets`).
+   - No code changes were required; the XPath 3.1/XSD 1.1 regex engine is confirmed correct for the main `regex-syntax` set.
 
 2. **Results** —
-   - `unicode-90` test set: **1,365 passed / 0 failed / 95 skipped**.
+   - `regex-syntax` test set: **986 passed / 0 failed / 4 skipped**.
+   - `regex-syntax-xslt20` (targeted-only): 935 passed / 48 failed / 4 skipped — not a regression.
    - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
    - Unit tests: **2,060 passed / 0 failed / 0 skipped**.
 
-## Previous Session Changes (remaining `error-*` clusters)
+## Previous Session Changes (unicode-90 verification)
 
 1. **Cleared the final 15 failing tests across the `error` set** —
    - Added `XTSE1205`/`XTSE1210` validation for `xsl:key` `@use`/content exclusivity and unknown collation in `Stylesheet.ValidateInstructionTree`.
