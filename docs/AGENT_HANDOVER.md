@@ -1,11 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-27
-**Commit:** `036bcab` — XSLT: XTSE0720 circular xsl:attribute-set use-attribute-sets detection
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0720*` XTSE0720 cluster.
+**Commit:** `d93df6e` — XSLT: XTSE0975 xsl:number/@value exclusivity validation
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0975*` XTSE0975 cluster.
 **Expected state:** **2,033 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0720 cluster)
+## This Session Changes (XTSE0975 cluster)
+
+1. **Detect invalid combination of `xsl:number/@value` with `select`, `level`, `count`, or `from` (`XTSE0975`)** —
+   - Extended the existing `xsl:number` validation block in `Stylesheet.ValidateInstructionTree` to raise `XTSE0975` when `@value` is present together with any of `@select`, `@level`, `@count`, or `@from`.
+   - The W3C `error-0975*` cluster passes with 4/0/0.
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `value` with `count`, `level`, `from`, and `select`, plus a positive test that `value` alone succeeds.
+   - Header bumped: `Stylesheet.cs` → 2.77, `StylesheetTests.cs` → 0.76.
+
+2. **Results** —
+   - `error-0975*` cluster: 4 passed / 0 failed / 0 skipped.
+   - `error` test set: 468 passed / 15 failed / 96 skipped (4 previously failing tests now pass).
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,033 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0720 cluster)
 
 1. **Detect circular references among `xsl:attribute-set` declarations (`XTSE0720`)** —
    - Refactored `ValidateUseAttributeSetsValue` to use a shared `ParseUseAttributeSetNames` helper that returns expanded attribute-set names.
