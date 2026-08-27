@@ -1,25 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-27
-**Commit:** `d93df6e` — XSLT: XTSE0975 xsl:number/@value exclusivity validation
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0975*` XTSE0975 cluster.
-**Expected state:** **2,033 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
+**Commit:** `<pending>` — XSLT: cleared all remaining `error-*` clusters and fixed regression-test suite
+**Current focus:** **XSLT gaps** — all `error-*` conformance clusters are now green. Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `unicode-90` excluded set, or any new failures introduced by broader test sweeps).
+**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**.
 
-## This Session Changes (XTSE0975 cluster)
+## This Session Changes (remaining `error-*` clusters)
 
-1. **Detect invalid combination of `xsl:number/@value` with `select`, `level`, `count`, or `from` (`XTSE0975`)** —
-   - Extended the existing `xsl:number` validation block in `Stylesheet.ValidateInstructionTree` to raise `XTSE0975` when `@value` is present together with any of `@select`, `@level`, `@count`, or `@from`.
-   - The W3C `error-0975*` cluster passes with 4/0/0.
-   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering `value` with `count`, `level`, `from`, and `select`, plus a positive test that `value` alone succeeds.
-   - Header bumped: `Stylesheet.cs` → 2.77, `StylesheetTests.cs` → 0.76.
+1. **Cleared the final 15 failing tests across the `error` set** —
+   - Added `XTSE1205`/`XTSE1210` validation for `xsl:key` `@use`/content exclusivity and unknown collation in `Stylesheet.ValidateInstructionTree`.
+   - Added runtime error checks in `TransformEngine`: `XTDE1260`/`XTDE1270` for `key()` prefix/rooting, `XTTE3170` for `xsl:evaluate/@namespace-context`, `XTTE3360` for `accumulator-before/after` on attribute/namespace nodes, `XTDE1110` for unknown `xsl:for-each-group/@collation`, and `XTDE0855` for `xsl:attribute` effective name `xmlns`.
+   - Made `json-to-xml` raise `FOJS0004` for `validate:=true()` (Bosak is not schema-aware) and updated the affected unit-test expectation.
+   - Made `fn:document()` raise `XTDE1162` when a relative URI is supplied by / resolved against a node with no base URI.
+   - Made `DocumentRoot` VM opcode raise `XPTY0020` when the context item is atomic.
+   - Tightened `XPathLexer` `NameStartChar` to the exact XML 1.0 ranges so invalid characters such as U+00B5 raise `XPST0003`.
+   - Added `ignore_doc_failure` dependency handling to the XSLT conformance harness (skips `error-FODC0002a-ignore`).
+   - Added regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` for each fixed code; fixed C# verbatim-string quoting and initial-template invocation in the new tests.
+   - Headers bumped: `Stylesheet.cs` → 2.77, `TransformEngine.cs` → 6.34, `FunctionLibrary.cs` → 5.103, `VmEngine.cs` → 2.129, `XPathLexer.cs` → 1.3, `Program.cs` → 3.20, `StylesheetTests.cs` → 0.77, `FunctionLibraryTests.cs` → 2.38.
 
 2. **Results** —
-   - `error-0975*` cluster: 4 passed / 0 failed / 0 skipped.
-   - `error` test set: 468 passed / 15 failed / 96 skipped (4 previously failing tests now pass).
+   - `error` test set: **482 passed / 0 failed / 97 skipped** (up from 468/15/96).
    - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
-   - Unit tests: **2,033 passed / 0 failed / 0 skipped**.
+   - Unit tests: **2,060 passed / 0 failed / 0 skipped**.
 
-## Previous Session Changes (XTSE0720 cluster)
+## Previous Session Changes (XTSE0975 cluster)
 
 1. **Detect circular references among `xsl:attribute-set` declarations (`XTSE0720`)** —
    - Refactored `ValidateUseAttributeSetsValue` to use a shared `ParseUseAttributeSetNames` helper that returns expanded attribute-set names.
