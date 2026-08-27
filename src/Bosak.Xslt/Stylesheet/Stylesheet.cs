@@ -133,6 +133,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.76  | 27-08-2026     | XTSE0720 validation for circular xsl:attribute-set use-attribute-sets references        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.77  | 27-08-2026     | XTSE0975 validation for xsl:number/@value exclusivity                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2806,6 +2808,19 @@ public sealed class Stylesheet
                         var strippedFrom = PatternCompiler.StripXPathComments(fromAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedFrom))
                             PatternCompiler.ValidatePatternSyntax(strippedFrom);
+                    }
+
+                    // XTSE0975: @value is mutually exclusive with @select, @level, @count, and @from.
+                    var valueAttr = elem.Attribute("value");
+                    if (valueAttr != null && !string.IsNullOrWhiteSpace(valueAttr.Value))
+                    {
+                        if (elem.Attribute("select") != null ||
+                            elem.Attribute("level") != null ||
+                            elem.Attribute("count") != null ||
+                            elem.Attribute("from") != null)
+                        {
+                            throw new InvalidOperationException("XTSE0975: The value attribute of xsl:number must not be used with select, level, count, or from.");
+                        }
                     }
                 }
 

@@ -111,6 +111,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.75  | 27-08-2026     | Added XTSE0720 regression tests for circular xsl:attribute-set references               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.76  | 27-08-2026     | Added XTSE0975 regression tests for xsl:number/@value exclusivity                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5300,6 +5302,38 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var result = executable.TransformToString(new XDocumentNode(source));
         Assert.Contains("one=\"1\"", result);
         Assert.Contains("two=\"2\"", result);
+    }
+
+    // ------------------------------------------------------------------
+    // XTSE0975: xsl:number/@value is mutually exclusive with select,
+    // level, count, and from.
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("count", "node()")]
+    [InlineData("level", "single")]
+    [InlineData("from", "node()")]
+    [InlineData("select", "1")]
+    public void Number_Value_With_Exclusive_Attribute_Raises_XTSE0975(string attrName, string attrValue)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'><xsl:number value='1' {attrName}='{attrValue}'/></xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE0975", ex.Message);
+    }
+
+    [Fact]
+    public void Number_Value_Alone_Does_Not_Raise_XTSE0975()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'><out><xsl:number value='42'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument()));
+        Assert.Contains(">42<", result);
     }
 
     private class InlineUriResolver : IXsltUriResolver
