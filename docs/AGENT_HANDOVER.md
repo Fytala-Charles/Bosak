@@ -1,11 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-27
-**Commit:** `<pending>` — XSLT: cleared all remaining `error-*` clusters and fixed regression-test suite
-**Current focus:** **XSLT gaps** — all `error-*` conformance clusters are now green. Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `unicode-90` excluded set, or any new failures introduced by broader test sweeps).
-**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**.
+**Commit:** `<pending>` — docs: update AGENT_HANDOVER for unicode-90 verification
+**Current focus:** **XSLT gaps** — `unicode-90` verified green (1,365 passed / 0 failed / 95 skipped). Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `regex-syntax` edge cases, schema-aware exclusions, or any new failures introduced by broader test sweeps).
+**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**.
 
-## This Session Changes (remaining `error-*` clusters)
+## This Session Changes (unicode-90 verification)
+
+1. **Ran the full `unicode-90` conformance cluster** —
+   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "unicode-90"`.
+   - Result: **1,365 passed / 0 failed / 95 skipped** out of 1,460 tests.
+   - The 95 skips are all intentional upstream/platform defects already recorded in `tests/Bosak.Xslt.Conformance/Program.cs` (BMP-only count defects, empty `<c>` elements in fn-replace3/5, surrogate/one-member category quantifier issues, and astral-range omissions).
+   - No code changes were required; regex/unicode category handling is confirmed correct for Unicode 9.0.
+
+2. **Results** —
+   - `unicode-90` test set: **1,365 passed / 0 failed / 95 skipped**.
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,060 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (remaining `error-*` clusters)
 
 1. **Cleared the final 15 failing tests across the `error` set** —
    - Added `XTSE1205`/`XTSE1210` validation for `xsl:key` `@use`/content exclusivity and unknown collation in `Stylesheet.ValidateInstructionTree`.
