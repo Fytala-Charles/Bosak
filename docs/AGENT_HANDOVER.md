@@ -1,11 +1,26 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-27
-**Commit:** `9b4d5b7` — XSLT: XTSE0670 duplicate sibling xsl:with-param validation
-**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0670*` XTSE0670 cluster.
+**Commit:** `036bcab` — XSLT: XTSE0720 circular xsl:attribute-set use-attribute-sets detection
+**Current focus:** **XSLT gaps** — continue fixing small, non-feature XSLT conformance failures. This session cleared the `error-0720*` XTSE0720 cluster.
 **Expected state:** **2,033 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error` and `unicode-90` excluded from routine sweeps).
 
-## This Session Changes (XTSE0670 cluster)
+## This Session Changes (XTSE0720 cluster)
+
+1. **Detect circular references among `xsl:attribute-set` declarations (`XTSE0720`)** —
+   - Refactored `ValidateUseAttributeSetsValue` to use a shared `ParseUseAttributeSetNames` helper that returns expanded attribute-set names.
+   - Added `Stylesheet.ValidateAttributeSetCircularity`, which builds a name-level dependency graph from all attribute-set definitions (including imports/includes) and detects direct or indirect self-references via depth-first search.
+   - The W3C `error-0720*` cluster passes with 4/0/0.
+   - Added 3 regression tests in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` covering direct self-reference, indirect mutual references, and a valid non-circular reference.
+   - Header bumped: `Stylesheet.cs` → 2.76, `StylesheetTests.cs` → 0.75.
+
+2. **Results** —
+   - `error-0720*` cluster: 4 passed / 0 failed / 0 skipped.
+   - `error` test set: 464 passed / 19 failed / 96 skipped (4 previously failing tests now pass).
+   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
+   - Unit tests: **2,033 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (XTSE0670 cluster)
 
 1. **Detect duplicate sibling `xsl:with-param` names (`XTSE0670`)** —
    - Added `Stylesheet.ValidateDuplicateWithParamNames` to check that sibling `xsl:with-param` elements within `xsl:call-template`, `xsl:apply-templates`, and `xsl:apply-imports` have distinct expanded QNames.
