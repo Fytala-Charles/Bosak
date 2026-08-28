@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `TBD` — fix: preserve arrays in xsl:iterate on-completion/break results for raw sequence constructors
+**Commit:** `808daf7` — fix: preserve arrays in xsl:iterate on-completion/break results for raw sequence constructors
 **Current focus:** **XSLT gaps** — `arrays-306` is now unblocked. Next concrete work is another small feature gap (`fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
 **Expected state:** **2,074 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,064 passed / 0 failed / 7,536 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
 
