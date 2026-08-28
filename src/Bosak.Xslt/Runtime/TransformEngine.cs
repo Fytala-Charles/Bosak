@@ -220,6 +220,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.34  | 27-08-2026     | Added runtime error checks: XTDE0855/1110/1162/1260/1270, XTTE3170/3360, XPTY0020       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.35  | 28-08-2026     | Preserve arrays in xsl:iterate on-completion/break results for raw sequence constructors |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -17132,7 +17134,7 @@ public sealed class TransformEngine
                 catch (BreakSignal br)
                 {
                     if (br.Value.HasValue && !br.Value.Value.IsUndefined)
-                        CopyToResult(br.Value.Value);
+                        AddIterateResultToAccumulator(br.Value.Value);
                     broken = true;
                     break;
                 }
@@ -17163,7 +17165,7 @@ public sealed class TransformEngine
                     }
                     else if (ocHasContent)
                     {
-                        completionResult = EvaluateSequenceConstructor(onCompletion, _context.ContextItem, wrapInDocumentNode: true);
+                        completionResult = EvaluateSequenceConstructor(onCompletion, _context.ContextItem, wrapInDocumentNode: false);
                     }
                 }
             }
@@ -17176,7 +17178,33 @@ public sealed class TransformEngine
         }
 
         if (completionResult.HasValue && !completionResult.Value.IsUndefined)
-            CopyToResult(completionResult.Value);
+            AddIterateResultToAccumulator(completionResult.Value);
+    }
+
+    /// <summary>
+    /// Adds the value produced by <c>xsl:on-completion</c> or <c>xsl:break</c> inside
+    /// <c>xsl:iterate</c> to the current sequence accumulator without flattening
+    /// arrays, so that raw sequence constructors (e.g. <c>xsl:variable/@as="array(*)*</c>)
+    /// preserve array items as first-class values.
+    /// </summary>
+    private void AddIterateResultToAccumulator(XdmValue value)
+    {
+        if (_sequenceAccumulator != null)
+        {
+            if (value.IsSequence && value.SequenceValue != null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                    _sequenceAccumulator.Add(item);
+            }
+            else
+            {
+                _sequenceAccumulator.Add(value);
+            }
+        }
+        else
+        {
+            CopyToResult(value);
+        }
     }
 
     /// <summary>

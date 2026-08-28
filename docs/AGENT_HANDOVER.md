@@ -1,9 +1,28 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `29f3631` — feat: detect forbidden variable references in xsl:accumulator-rule/@match
-**Current focus:** **XSLT gaps** — `xsl:accumulator-rule` variable-in-match detection is now implemented. Next concrete work is another small feature gap (`xsl:iterate`, `fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
-**Expected state:** **2,071 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,063 passed / 0 failed / 7,537 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
+**Commit:** `TBD` — fix: preserve arrays in xsl:iterate on-completion/break results for raw sequence constructors
+**Current focus:** **XSLT gaps** — `arrays-306` is now unblocked. Next concrete work is another small feature gap (`fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
+**Expected state:** **2,074 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,064 passed / 0 failed / 7,536 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
+
+## This Session Changes (arrays-306 / xsl:iterate array preservation)
+
+1. **Fixed `xsl:iterate` result-tree handling so arrays are preserved in raw sequence constructors** —
+   - `ExecuteXslIterate` now adds `xsl:on-completion` and `xsl:break` results to the current sequence accumulator without flattening arrays, matching the behaviour already present for direct `xsl:sequence` in function/variable bodies.
+   - `xsl:on-completion` with sequence-constructor content now uses `wrapInDocumentNode: false` so its value is returned as a raw sequence rather than wrapped in a document node.
+   - Added private helper `AddIterateResultToAccumulator` to centralise the raw-sequence vs. result-tree branch.
+   - Header bumped: `TransformEngine.cs` → 6.35.
+
+2. **Added regression tests** —
+   - `XslIterate_In_FunctionBody_With_OnCompletion_Returns_Parameter` verifies integer accumulation via `xsl:on-completion` in a function body.
+   - `XslIterate_Array_Permutations_Matches_Arrays_306` reproduces the `arrays-306` pattern with both `as="array(*)*"` and `as="item()*"`, using an input whose array members are sequences so the permutation product is 2.
+   - `XslIterate_OnCompletion_Preserves_Array_Items_In_Variable` directly checks that an `xsl:on-completion` returning a sequence of arrays populates a variable of type `array(*)*` correctly.
+   - Header bumped: `StylesheetTests.cs` → 0.79.
+
+3. **Results** —
+   - `arrays` test set: **62 passed / 0 failed / 0 skipped** (was 61/1/0; `arrays-306` now passes).
+   - Unit tests: **2,074 passed / 0 failed / 0 skipped** (up 3 from new regression tests).
+   - Routine XSLT sweep: **7,064 passed / 0 failed / 7,536 skipped** (up 1 from arrays-306).
 
 ## This Session Changes (accumulator-091 XPST0008 detection)
 

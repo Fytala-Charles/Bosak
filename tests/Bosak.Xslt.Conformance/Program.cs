@@ -79,6 +79,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.23  | 27-08-2026     | Unskip accumulator-091 (XPST0008 for variable in match pattern now detected)             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.24  | 28-08-2026     | Unskip arrays-306 (xsl:iterate now preserves arrays in raw sequence constructors)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -191,8 +193,6 @@ class Program
         "regex-syntax-0861",
         // Java extension functions are not supported
         "evaluate-008",
-        // xsl:iterate is not implemented
-        "arrays-306",
         // unicode90-001..008 expect BMP-only class counts (e.g. \d = 370) that contradict
         // the XSD spec (\d == \p{Nd}) and this suite's own unicode90-Gen tests, which
         // require full Unicode 9.0 code-point semantics (\p{Nd} = 580). The unicode90-002

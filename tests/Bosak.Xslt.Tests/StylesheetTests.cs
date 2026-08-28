@@ -117,6 +117,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.78  | 27-08-2026     | Added XPST0008 regression tests for variable references in xsl:accumulator-rule/@match |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.79  | 28-08-2026     | Added xsl:iterate regression tests for array preservation in variable bodies           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5558,6 +5560,104 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))), new EvaluationContext());
         Assert.Contains("<out", result);
+    }
+
+    [Fact]
+    public void XslIterate_In_FunctionBody_With_OnCompletion_Returns_Parameter()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:f='urn:test' exclude-result-prefixes='xs f'>
+            <xsl:function name='f:range' as='xs:integer+'>
+                <xsl:param name='n' as='xs:integer'/>
+                <xsl:variable name='result' as='xs:integer+'>
+                    <xsl:iterate select='1 to $n'>
+                        <xsl:param name='acc' as='xs:integer*' select='()'/>
+                        <xsl:on-completion select='$acc'/>
+                        <xsl:next-iteration>
+                            <xsl:with-param name='acc' select='$acc, .'/>
+                        </xsl:next-iteration>
+                    </xsl:iterate>
+                </xsl:variable>
+                <xsl:sequence select='$result'/>
+            </xsl:function>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='f:range(5)' separator=','/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out>1,2,3,4,5</out>", result);
+    }
+
+    [Theory]
+    [InlineData("array(*)*", "2")]
+    [InlineData("item()*", "2")]
+    public void XslIterate_Array_Permutations_Matches_Arrays_306(string variableAs, string expectedSize)
+    {
+        // Array members are sequences: input has one single-item member and one two-item
+        // member, so the permutation product is 1 x 2 = 2.
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:array='http://www.w3.org/2005/xpath-functions/array'
+            xmlns:f='urn:test' exclude-result-prefixes='xs array f'>
+            <xsl:function name='f:permute' as='array(*)'>
+                <xsl:param name='a' as='array(*)'/>
+                <xsl:variable name='parts' as='{variableAs}'>
+                    <xsl:iterate select='1 to array:size($a)'>
+                        <xsl:param name='so-far' as='array(*)*' select='()'/>
+                        <xsl:on-completion select='$so-far'/>
+                        <xsl:variable name='n' select='.' as='xs:integer'/>
+                        <xsl:variable name='member' select='$a($n)' as='item()*'/>
+                        <xsl:variable name='new' as='array(*)+'>
+                            <xsl:choose>
+                                <xsl:when test='$n eq 1'>
+                                    <xsl:sequence select='for $i in $member return [$i]'/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:sequence select='for $i in $so-far, $j in $member return [($i(1), $j)]'/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:next-iteration>
+                            <xsl:with-param name='so-far' select='$new'/>
+                        </xsl:next-iteration>
+                    </xsl:iterate>
+                </xsl:variable>
+                <xsl:sequence select='array:join($parts)'/>
+            </xsl:function>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='array:size(f:permute([1, (2, 3)]))'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains($"<out>{expectedSize}</out>", result);
+    }
+
+    [Fact]
+    public void XslIterate_OnCompletion_Preserves_Array_Items_In_Variable()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            exclude-result-prefixes='xs'>
+            <xsl:template name='main'>
+                <xsl:variable name='parts' as='array(*)*'>
+                    <xsl:iterate select='1 to 2'>
+                        <xsl:param name='so-far' as='array(*)*' select='()'/>
+                        <xsl:on-completion select='$so-far'/>
+                        <xsl:next-iteration>
+                            <xsl:with-param name='so-far' select='($so-far, [.])'/>
+                        </xsl:next-iteration>
+                    </xsl:iterate>
+                </xsl:variable>
+                <out><xsl:value-of select='count($parts)'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out>2</out>", result);
     }
 
     private class InlineUriResolver : IXsltUriResolver
