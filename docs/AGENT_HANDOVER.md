@@ -1,9 +1,34 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `808daf7` — fix: preserve arrays in xsl:iterate on-completion/break results for raw sequence constructors
-**Current focus:** **XSLT gaps** — `arrays-306` is now unblocked. Next concrete work is another small feature gap (`fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
-**Expected state:** **2,074 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,064 passed / 0 failed / 7,536 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
+**Commit:** `TBD` — next small XSLT conformance chunk
+**Current focus:** **XSLT gaps** — tackling another small, self-contained conformance chunk. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,079 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,090 passed / 0 failed / 7,510 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `evaluate` test set 41 passed / 0 failed / 16 skipped** (remaining skips are `schema_aware` and the Java-extension `evaluate-008`); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
+
+## This Session Changes (disable-output-escaping / cdata-section-elements)
+
+1. **Implemented `disable-output-escaping` for `xsl:text` and `xsl:value-of`** —
+   - Added internal `XRawText` node type (`src/Bosak.Xslt/Runtime/XRawText.cs`) that inherits from `XText` and is serialized without XML/HTML escaping.
+   - `TransformEngine.AddTextNode` now accepts a `disableOutputEscaping` flag and emits `XRawText` nodes when requested and not inside temporary output state.
+   - `EvaluateDisableOutputEscaping` evaluates the AVT-valued attribute and accepts `yes`, `true`, or `1`.
+   - `ResultTreeSerializer` detects `XRawText` and routes serialization through the raw path; it also writes `XRawText` content unescaped in HTML, XHTML, and raw XML serializers.
+   - `Stylesheet.cs` now validates non-AVT `disable-output-escaping` values against `yes`/`no`, raising `XTSE0020`.
+   - Header bumped: `TransformEngine.cs` → 6.37; `ResultTreeSerializer.cs` → 1.27; `Stylesheet.cs` → 2.78.
+
+2. **Preserved `XRawText` through node copying and normalizers** —
+   - `TransformEngine` helpers `IsRawTextNode` and `CreateTextNodeCopy` keep `XRawText` instances intact when extracting template results, copying via `xsl:copy`/`xsl:copy-of`, and copying nodes into function bodies.
+   - `ResultTreeSerializer.NormalizeCommentsAndPis`, `WrapCdataSections`, and `NormalizeXhtmlNamespacesForHtml5` explicitly clone `XRawText` nodes instead of relying on `XContainer.Add`, which converts them to plain `XText`.
+   - This fixes `bug-3801` (`cdata-section-elements` regression) and the six `doe-018*` failures.
+
+3. **Enabled the `disabling_output_escaping` feature flag** —
+   - Removed `disabling_output_escaping` from the conformance harness skip list in `tests/Bosak.Xslt.Conformance/Program.cs`.
+   - Header bumped: `Program.cs` → 3.25.
+
+4. **Results** —
+   - `disable-output-escaping` test set: **25 passed / 0 failed / 7 skipped** (the 7 skips require `streaming`).
+   - `cdata-section-elements` test set: `bug-3801` passes; no regression in other cdata tests.
+   - Unit tests: **2,079 passed / 0 failed / 0 skipped**.
+   - Routine XSLT sweep: **7,090 passed / 0 failed / 7,510 skipped** (was 7,064/0/7,536; +26 runnable tests).
 
 ## This Session Changes (arrays-306 / xsl:iterate array preservation)
 
@@ -7429,7 +7454,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 - Unit-test suite: **940 passed / 0 failed / 0 skipped** across 8 projects.
 - Full W3C suite: **5,243/0/9,357** (100.0%).
 - `output` conformance set: **119 passed / 84 failed / 29 skipped** (`output-0112`, `output-0119`, `output-0209`, `output-0210`, `output-0212`, `output-0217`, `output-0221`–`output-0224`, `output-0228`, `output-0229`, `output-0230` now pass; was 109/94 before this change).
-- Several remaining failures in the `output` set are due to harness limitations (e.g., `<not>` assertions not implemented) or out-of-scope features (named outputs/result-document formats, SVG/MathML namespace rewriting, character maps, disable-output-escaping).
+- Several remaining failures in the `output` set are due to harness limitations (e.g., `<not>` assertions not implemented) or out-of-scope features (named outputs/result-document formats, SVG/MathML namespace rewriting, character maps).
 
 ---
 

@@ -135,6 +135,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.77  | 27-08-2026     | XTSE0975 validation for xsl:number/@value exclusivity                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.78  | 28-08-2026     | XTSE0020 validation for xsl:text/xsl:value-of disable-output-escaping values           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1706,6 +1708,19 @@ public sealed class Stylesheet
                 }
                 if (hasSelect && hasContent)
                     throw new InvalidOperationException("XTSE0870: xsl:value-of must have empty content when the select attribute is present.");
+
+                // XTSE0020: disable-output-escaping must be a valid yes/no value when not an AVT.
+                var doeAttr = elem.Attribute("disable-output-escaping");
+                if (doeAttr != null && !IsAvtValue(doeAttr.Value) && !IsYesNoValue(doeAttr.Value))
+                    throw new InvalidOperationException("XTSE0020: invalid value for disable-output-escaping attribute.");
+            }
+
+            // XTSE0020: xsl:text/@disable-output-escaping must be a valid yes/no value.
+            if (isXsltElement && localName == "text")
+            {
+                var doeAttr = elem.Attribute("disable-output-escaping");
+                if (doeAttr != null && !IsAvtValue(doeAttr.Value) && !IsYesNoValue(doeAttr.Value))
+                    throw new InvalidOperationException("XTSE0020: invalid value for disable-output-escaping attribute.");
             }
 
             // XTSE0880: xsl:processing-instruction/@select is allowed only when the element has empty content.

@@ -119,6 +119,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.79  | 28-08-2026     | Added xsl:iterate regression tests for array preservation in variable bodies           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.80  | 28-08-2026     | Added regression tests for disable-output-escaping and cdata-section-elements           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5658,6 +5660,63 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = new Api.XsltCompiler().Compile(xsl);
         var result = executable.TransformToString(null, initialTemplate: "main");
         Assert.Contains("<out>2</out>", result);
+    }
+
+    [Fact]
+    public void DisableOutputEscaping_Text_WritesRawMarkup()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:text disable-output-escaping='yes'>&lt;b&gt;raw&lt;/b&gt;</xsl:text></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out><b>raw</b></out>", result);
+    }
+
+    [Fact]
+    public void DisableOutputEscaping_ValueOf_WritesRawMarkup()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:value-of select='""&lt;i&gt;value&lt;/i&gt;""' disable-output-escaping='yes'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out><i>value</i></out>", result);
+    }
+
+    [Fact]
+    public void DisableOutputEscaping_CdataSectionElements_PreservesRawText()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='xml' cdata-section-elements='wrapper'/>
+            <xsl:template name='main'>
+                <wrapper><xsl:text disable-output-escaping='yes'>&lt;b&gt;ok&lt;/b&gt;</xsl:text></wrapper>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var executable = new Api.XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<wrapper><b>ok</b></wrapper>", result);
+        Assert.DoesNotContain("<![CDATA[", result);
+    }
+
+    [Fact]
+    public void DisableOutputEscaping_InvalidValue_ThrowsXtse0020()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <xsl:text disable-output-escaping='maybe'/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
+        Assert.Contains("XTSE0020", ex.Message);
     }
 
     private class InlineUriResolver : IXsltUriResolver

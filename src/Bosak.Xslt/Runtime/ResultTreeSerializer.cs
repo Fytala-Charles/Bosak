@@ -49,6 +49,10 @@
 //                      | Charles Korthout | 1.25  | 03-08-2026     | XHTML attributes: quote as &#34;, C1 controls as char refs; HTML5 keeps foreign        |
 //                      |                  |       |                | element/attribute prefixes (svg/MathML elements take the default-namespace form)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.26  | 28-08-2026     | Serialize XRawText nodes unescaped for disable-output-escaping support                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.27  | 28-08-2026     | Preserve XRawText through cdata-section-element wrapping and comment normalization     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -1161,6 +1165,9 @@ public static class ResultTreeSerializer
             case XProcessingInstruction pi:
                 return new XProcessingInstruction(pi.Target, pi.Data);
 
+            case XRawText raw:
+                return new XRawText(raw.Value);
+
             case XText text:
                 return new XText(text.Value);
 
@@ -1262,16 +1269,23 @@ public static class ResultTreeSerializer
             return SerializeRaw(element, props);
         }
 
+        if (HasRawText(element))
+        {
+            ValidateXml10(element);
+            return SerializeRaw(element, props);
+        }
+
         ValidateXml10(element);
         return SerializeWithEncoding(element, props);
     }
 
     private static string SerializeXmlFragment(XElement wrapper, Stylesheet.OutputProperties props)
     {
-        // XML 1.1, trees with prefixed namespace undeclarations, and
-        // suppress-indentation must use the raw serializer.
+        // XML 1.1, trees with prefixed namespace undeclarations,
+        // suppress-indentation, and disable-output-escaping must use the raw serializer.
         if (props.Version == "1.1" || HasUndeclarationAnnotations(wrapper)
-            || (props.Indent && props.SuppressIndentation.Count > 0))
+            || (props.Indent && props.SuppressIndentation.Count > 0)
+            || HasRawText(wrapper))
             return SerializeRaw(wrapper, props);
 
         var node = (XNode)wrapper;
@@ -1335,6 +1349,12 @@ public static class ResultTreeSerializer
         }
 
         if (props.Indent && props.SuppressIndentation.Count > 0)
+        {
+            ValidateXml10(document);
+            return SerializeRaw(document, props);
+        }
+
+        if (HasRawText(document))
         {
             ValidateXml10(document);
             return SerializeRaw(document, props);
@@ -1767,6 +1787,8 @@ public static class ResultTreeSerializer
                 foreach (var annotation in element.Annotations<object>())
                     clonedElem.AddAnnotation(annotation);
                 return clonedElem;
+            case XRawText raw:
+                return new XRawText(raw.Value.Normalize(form));
             case XText text:
                 return new XText(text.Value.Normalize(form));
             case XComment comment:
@@ -1803,6 +1825,8 @@ public static class ResultTreeSerializer
                 foreach (var annotation in element.Annotations<object>())
                     clonedElem.AddAnnotation(annotation);
                 return clonedElem;
+            case XRawText raw:
+                return new XRawText(raw.Value);
             case XComment comment:
                 return new XComment(comment.Value.Normalize(form));
             case XProcessingInstruction pi:
@@ -1838,7 +1862,7 @@ public static class ResultTreeSerializer
                 bool wrapChildren = IsCdataSectionElement(element.Name, props);
                 foreach (var child in element.Nodes())
                 {
-                    if (wrapChildren && child is XText text && !(child is XCData))
+                    if (wrapChildren && child is XText text && !(child is XCData) && child is not XRawText)
                     {
                         foreach (var piece in SplitTextForCdata(text.Value, encoding))
                             cloned.Add(piece);
@@ -1851,6 +1875,8 @@ public static class ResultTreeSerializer
                 foreach (var annotation in element.Annotations<object>())
                     cloned.AddAnnotation(annotation);
                 return cloned;
+            case XRawText raw:
+                return new XRawText(raw.Value);
             default:
                 return node;
         }
@@ -1927,6 +1953,9 @@ public static class ResultTreeSerializer
             case XElement elem:
                 WriteHtmlElement(writer, elem, props, depth, inScopeBindings);
                 break;
+            case XRawText raw:
+                writer.Write(MapCharacters(raw.Value, props));
+                break;
             case XText text:
                 WriteHtmlEscaped(writer, text.Value, props);
                 break;
@@ -1970,6 +1999,9 @@ public static class ResultTreeSerializer
                 break;
             case XElement elem:
                 WriteHtmlElement(writer, elem, props, depth, inScopeBindings);
+                break;
+            case XRawText raw:
+                writer.Write(MapCharacters(raw.Value, props));
                 break;
             case XText text:
                 WriteHtmlEscaped(writer, text.Value, props);
@@ -2287,6 +2319,9 @@ public static class ResultTreeSerializer
             case XCData cdata:
                 WriteCdataText(writer, cdata.Value);
                 break;
+            case XRawText raw:
+                writer.Write(MapCharacters(raw.Value, props));
+                break;
             case XText text:
                 WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
                 break;
@@ -2315,6 +2350,9 @@ public static class ResultTreeSerializer
                 break;
             case XElement elem:
                 WriteXhtmlElement(writer, elem, props, depth, inScopeBindings);
+                break;
+            case XRawText raw:
+                writer.Write(MapCharacters(raw.Value, props));
                 break;
             case XText text:
                 WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
@@ -2471,6 +2509,10 @@ public static class ResultTreeSerializer
                 if (child is XCData cdata)
                 {
                     WriteCdataText(writer, cdata.Value);
+                }
+                else if (child is XRawText raw)
+                {
+                    writer.Write(MapCharacters(raw.Value, props));
                 }
                 else if (child is XText text)
                 {
@@ -3102,6 +3144,9 @@ public static class ResultTreeSerializer
                         elem.WriteTo(writer);
                     }
                     break;
+                case XRawText raw:
+                    writer.WriteRaw(raw.Value);
+                    break;
                 case XText text:
                     writer.WriteString(text.Value);
                     break;
@@ -3144,6 +3189,33 @@ public static class ResultTreeSerializer
             foreach (var child in doc.Elements())
             {
                 if (HasUndeclarationAnnotations(child))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> if the node tree contains any <see cref="XRawText"/> nodes
+    /// that require raw serialization.
+    /// </summary>
+    private static bool HasRawText(XNode node)
+    {
+        if (node is XRawText)
+            return true;
+        if (node is XElement element)
+        {
+            foreach (var child in element.Nodes())
+            {
+                if (HasRawText(child))
+                    return true;
+            }
+        }
+        else if (node is XDocument doc)
+        {
+            foreach (var child in doc.Nodes())
+            {
+                if (HasRawText(child))
                     return true;
             }
         }
@@ -3220,6 +3292,9 @@ public static class ResultTreeSerializer
                 break;
             case XCData cdata:
                 WriteCdataText(writer, cdata.Value);
+                break;
+            case XRawText raw:
+                writer.Write(MapCharacters(raw.Value, props));
                 break;
             case XText text:
                 WriteEscaped(writer, text.Value, isAttribute: false, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null);
@@ -3641,6 +3716,8 @@ public static class ResultTreeSerializer
 
             case XCData cdata:
                 return new XCData(cdata.Value);
+            case XRawText raw:
+                return new XRawText(raw.Value);
             case XText text:
                 return new XText(text.Value);
             case XComment comment:

@@ -222,6 +222,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.35  | 28-08-2026     | Preserve arrays in xsl:iterate on-completion/break results for raw sequence constructors |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.36  | 28-08-2026     | Implement disable-output-escaping via XRawText nodes; ignored in temporary output state  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.37  | 28-08-2026     | Preserve XRawText through template returns, xsl:copy/copy-of, and node copying            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1258,8 +1262,10 @@ public sealed class TransformEngine
     /// Adds a text node to the current result container.
     /// Falls back to a document-level text buffer when the container is an XDocument,
     /// because XDocument does not allow non-whitespace text nodes at the document level.
+    /// When <paramref name="disableOutputEscaping"/> is <c>true</c>, the text is wrapped
+    /// as an <see cref="XRawText"/> node so the serializer writes it unescaped.
     /// </summary>
-    private void AddTextNode(string text, bool allowZeroLength = false)
+    private void AddTextNode(string text, bool allowZeroLength = false, bool disableOutputEscaping = false)
     {
         EnsurePrincipalOutputOpen();
         if (text.Length == 0 && !allowZeroLength)
@@ -1267,12 +1273,28 @@ public sealed class TransformEngine
         MarkPrincipalOutputContent();
         if (_currentContainer is XDocument)
         {
+            // Document-level text cannot carry a disable-output-escaping marker;
+            // the deprecated feature has no effect at the document level.
             _documentLevelText.Append(text);
         }
         else
         {
-            _currentContainer.Add(new XText(text));
+            _currentContainer.Add(disableOutputEscaping ? new XRawText(text) : new XText(text));
         }
+    }
+
+    /// <summary>
+    /// Returns whether the <c>disable-output-escaping</c> attribute on the given
+    /// instruction evaluates to a positive value. AVTs are evaluated in the current
+    /// context. The value is assumed to have been validated statically.
+    /// </summary>
+    private bool EvaluateDisableOutputEscaping(XElement instruction)
+    {
+        var attr = instruction.Attribute("disable-output-escaping");
+        if (attr == null)
+            return false;
+        var value = EvaluateAvt(attr.Value, instruction).Trim();
+        return value == "yes" || value == "true" || value == "1";
     }
 
     /// <summary>
@@ -4395,7 +4417,7 @@ public sealed class TransformEngine
                             items.Add(XdmValue.FromNode(new XDocumentNode(e)));
                             break;
                         case XText t when !string.IsNullOrEmpty(t.Value):
-                            items.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                            items.Add(XdmValue.FromNode(new XDocumentNode(t is XRawText ? new XRawText(t.Value) : new XText(t.Value))));
                             break;
                         case XComment c:
                             items.Add(XdmValue.FromNode(new XDocumentNode(c)));
@@ -4930,15 +4952,17 @@ public sealed class TransformEngine
                             var sep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
                             textValue = XdmValueToString(result, sep);
                         }
+                        bool doe = _temporaryOutputDepth == 0 && EvaluateDisableOutputEscaping(instruction);
                         _lastAddedWasAtomic = false;
-                        AddTextNode(textValue, allowZeroLength: true);
+                        AddTextNode(textValue, allowZeroLength: true, disableOutputEscaping: doe);
                     }
                     else
                     {
                         var voSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? "", instruction);
                         var textValue = EvaluateSimpleContent(instruction, contextItem, voSep);
+                        bool doe = _temporaryOutputDepth == 0 && EvaluateDisableOutputEscaping(instruction);
                         _lastAddedWasAtomic = false;
-                        AddTextNode(textValue, allowZeroLength: true);
+                        AddTextNode(textValue, allowZeroLength: true, disableOutputEscaping: doe);
                     }
                     break;
                 }
@@ -4954,8 +4978,9 @@ public sealed class TransformEngine
                     {
                         text = EvaluateTvt(text, instruction);
                     }
+                    bool doe = _temporaryOutputDepth == 0 && EvaluateDisableOutputEscaping(instruction);
                     _lastAddedWasAtomic = false;
-                    AddTextNode(text, allowZeroLength: true);
+                    AddTextNode(text, allowZeroLength: true, disableOutputEscaping: doe);
                     break;
                 }
 
@@ -7474,6 +7499,21 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns whether the supplied node is a text node whose content must be
+    /// serialized without escaping (an <see cref="XRawText"/> instance).
+    /// </summary>
+    private static bool IsRawTextNode(IXdmNode node)
+        => node.NodeKind == XdmNodeKind.Text
+           && node is XDocumentNode xdn
+           && xdn.UnderlyingObject is XRawText;
+
+    /// <summary>
+    /// Creates a new text node that preserves the raw-text flag of the source node.
+    /// </summary>
+    private static XText CreateTextNodeCopy(IXdmNode node)
+        => IsRawTextNode(node) ? new XRawText(node.StringValue) : new XText(node.StringValue);
+
+    /// <summary>
     /// Creates a deep copy of an XDM node, returning a new IXdmNode wrapper.
     /// </summary>
     private IXdmNode CopyXdmNode(IXdmNode node)
@@ -7574,7 +7614,7 @@ public sealed class TransformEngine
                     return new XDocumentNode(copy);
                 }
             case XdmNodeKind.Text:
-                return new XDocumentNode(new XText(node.StringValue));
+                return new XDocumentNode(CreateTextNodeCopy(node));
             case XdmNodeKind.Comment:
                 return new XDocumentNode(new XComment(node.StringValue));
             case XdmNodeKind.ProcessingInstruction:
@@ -7634,7 +7674,7 @@ public sealed class TransformEngine
                     return new XDocumentNode(copy);
                 }
             case XdmNodeKind.Text:
-                return new XDocumentNode(new XText(nodeToCopy.StringValue));
+                return new XDocumentNode(CreateTextNodeCopy(nodeToCopy));
             case XdmNodeKind.Comment:
                 return new XDocumentNode(new XComment(nodeToCopy.StringValue));
             case XdmNodeKind.ProcessingInstruction:
@@ -7769,7 +7809,7 @@ public sealed class TransformEngine
                 }
             case XdmNodeKind.Text:
                 _lastAddedWasAtomic = false;
-                AddTextNode(nodeToCopy.StringValue);
+                AddTextNode(nodeToCopy.StringValue, disableOutputEscaping: IsRawTextNode(nodeToCopy));
                 break;
             case XdmNodeKind.Attribute:
                 if (_currentContainer is not XElement attrTarget)
@@ -8064,7 +8104,7 @@ public sealed class TransformEngine
                     break;
                 }
             case XdmNodeKind.Text:
-                container.Add(new XText(node.StringValue));
+                container.Add(CreateTextNodeCopy(node));
                 break;
             case XdmNodeKind.Comment:
                 container.Add(new XComment(node.StringValue));
@@ -8599,7 +8639,7 @@ public sealed class TransformEngine
         else if (node.NodeKind == XdmNodeKind.Text)
         {
             _lastAddedWasAtomic = false;
-            AddTextNode(node.StringValue);
+            AddTextNode(node.StringValue, disableOutputEscaping: IsRawTextNode(node));
         }
         else if (node.NodeKind == XdmNodeKind.Comment)
         {
@@ -13282,16 +13322,36 @@ public sealed class TransformEngine
     /// <summary>
     /// Applies complex content construction rules to a list of nodes:
     /// removes zero-length text nodes and merges adjacent text nodes.
+    /// <see cref="XRawText"/> nodes are kept separate from ordinary text nodes
+    /// because their content must be serialized without escaping.
     /// </summary>
     private static List<XNode> ApplyComplexContentRules(List<XNode> nodes)
     {
         var result = new List<XNode>();
         var textBuffer = new StringBuilder();
+        bool bufferIsRaw = false;
 
         foreach (var node in nodes)
         {
-            if (node is XText t)
+            if (node is XRawText raw)
             {
+                if (textBuffer.Length > 0 && !bufferIsRaw)
+                {
+                    result.Add(new XText(textBuffer.ToString()));
+                    textBuffer.Clear();
+                }
+                bufferIsRaw = true;
+                if (raw.Value.Length > 0)
+                    textBuffer.Append(raw.Value);
+            }
+            else if (node is XText t)
+            {
+                if (textBuffer.Length > 0 && bufferIsRaw)
+                {
+                    result.Add(new XRawText(textBuffer.ToString()));
+                    textBuffer.Clear();
+                }
+                bufferIsRaw = false;
                 if (t.Value.Length == 0)
                 {
                     // Discard zero-length text nodes. Do not flush the buffer here;
@@ -13305,7 +13365,7 @@ public sealed class TransformEngine
             {
                 if (textBuffer.Length > 0)
                 {
-                    result.Add(new XText(textBuffer.ToString()));
+                    result.Add(bufferIsRaw ? new XRawText(textBuffer.ToString()) : new XText(textBuffer.ToString()));
                     textBuffer.Clear();
                 }
                 result.Add(node);
@@ -13314,7 +13374,7 @@ public sealed class TransformEngine
 
         if (textBuffer.Length > 0)
         {
-            result.Add(new XText(textBuffer.ToString()));
+            result.Add(bufferIsRaw ? new XRawText(textBuffer.ToString()) : new XText(textBuffer.ToString()));
         }
 
         return result;
