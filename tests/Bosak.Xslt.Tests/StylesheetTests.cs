@@ -121,6 +121,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.80  | 28-08-2026     | Added regression tests for disable-output-escaping and cdata-section-elements           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.81  | 28-08-2026     | Added regression tests for xsl:include fragment-identifier embedded modules             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5717,6 +5719,84 @@ return fn:transform(map{""stylesheet-text"": $xsl,
 
         var ex = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(xsl));
         Assert.Contains("XTSE0020", ex.Message);
+    }
+
+    [Fact]
+    public void Include_WithPlainIdFragment_ExtractsEmbeddedStylesheet()
+    {
+        var main = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:include href='embedded.xml#mod'/>
+            <xsl:template name='main'><out><xsl:call-template name='x'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var embedded = @"<container>
+            <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' id='mod'>
+                <xsl:template name='x'>found</xsl:template>
+            </xsl:stylesheet>
+        </container>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string> { ["embedded.xml#mod"] = embedded });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(main);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out>found</out>", result);
+    }
+
+    [Fact]
+    public void Include_WithXmlIdFragment_ExtractsEmbeddedStylesheet()
+    {
+        var main = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:include href='embedded.xml#mod'/>
+            <xsl:template name='main'><out><xsl:call-template name='x'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var embedded = @"<container>
+            <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' xml:id='mod'>
+                <xsl:template name='x'>found</xsl:template>
+            </xsl:stylesheet>
+        </container>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string> { ["embedded.xml#mod"] = embedded });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(main);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out>found</out>", result);
+    }
+
+    [Fact]
+    public void Include_WithMissingFragment_ThrowsXtse0165()
+    {
+        var main = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:include href='embedded.xml#missing'/>
+        </xsl:stylesheet>";
+
+        var embedded = @"<container><xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' id='mod'/></container>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string> { ["embedded.xml#missing"] = embedded });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(main));
+        Assert.Contains("XTSE0165", ex.Message);
+    }
+
+    [Fact]
+    public void Import_WithFragmentIdentifier_ExtractsEmbeddedStylesheet()
+    {
+        var main = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:import href='embedded.xml#mod'/>
+            <xsl:template name='main'><out><xsl:call-template name='x'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var embedded = @"<container>
+            <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' id='mod'>
+                <xsl:template name='x'>found</xsl:template>
+            </xsl:stylesheet>
+        </container>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string> { ["embedded.xml#mod"] = embedded });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(main);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        Assert.Contains("<out>found</out>", result);
     }
 
     private class InlineUriResolver : IXsltUriResolver

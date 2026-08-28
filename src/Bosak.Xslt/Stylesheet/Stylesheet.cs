@@ -137,6 +137,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.78  | 28-08-2026     | XTSE0020 validation for xsl:text/xsl:value-of disable-output-escaping values           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.79  | 28-08-2026     | Support fragment identifiers in xsl:include/xsl:import href for embedded modules        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -148,6 +150,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Api;
 using Bosak.Xslt.Patterns;
@@ -3604,11 +3607,12 @@ public sealed class Stylesheet
         try
         {
             var doc = _resolver.Resolve(href, elementBaseUri);
-            var root = doc.Root;
+            var (moduleDoc, moduleBaseUri) = ExtractModuleDocument(doc, href, resolvedUri);
+            var root = moduleDoc.Root;
             // use-when on the root element of an imported module excludes the whole module.
-            if (root != null && !UseWhen(root, resolvedUri))
+            if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet);
             child.ApplyImportsContextModule = child;
             _imports.Add(child);
             importElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -3637,11 +3641,12 @@ public sealed class Stylesheet
         try
         {
             var doc = _resolver.Resolve(href, elementBaseUri);
-            var root = doc.Root;
+            var (moduleDoc, moduleBaseUri) = ExtractModuleDocument(doc, href, resolvedUri);
+            var root = moduleDoc.Root;
             // use-when on the root element of an included module excludes the whole module.
-            if (root != null && !UseWhen(root, resolvedUri))
+            if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(doc, resolvedUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet);
             child.ApplyImportsContextModule = ApplyImportsContextModule;
             _includes.Add(child);
             includeElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -3651,6 +3656,75 @@ public sealed class Stylesheet
         {
             throw new InvalidOperationException($"XTSE0165: Failed to resolve xsl:include href '{href}'.", ex);
         }
+    }
+
+    /// <summary>
+    /// When <paramref name="href"/> contains a fragment identifier, extracts the
+    /// referenced element (by <c>xml:id</c> or plain <c>id</c>) from the resolved
+    /// document and returns it as a new document with the source document's base URI.
+    /// Otherwise returns the original document unchanged.
+    /// </summary>
+    private static (XDocument document, string baseUri) ExtractModuleDocument(XDocument doc, string href, string resolvedUri)
+    {
+        var fragment = GetFragmentIdentifier(href);
+        if (fragment == null)
+            return (doc, resolvedUri);
+
+        var sourceBaseUri = !string.IsNullOrEmpty(doc.BaseUri)
+            ? doc.BaseUri
+            : GetUriWithoutFragment(resolvedUri);
+
+        var found = FindElementByFragment(doc, fragment);
+        if (found == null)
+            throw new InvalidOperationException($"XTSE0165: Fragment identifier '{fragment}' not found in '{href}'.");
+
+        var elementXml = found.ToString(SaveOptions.DisableFormatting);
+        var newDoc = Xml11Loader.Parse(
+            elementXml,
+            LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri | LoadOptions.SetLineInfo,
+            sourceBaseUri);
+
+        return (newDoc, resolvedUri);
+    }
+
+    /// <summary>
+    /// Returns the fragment identifier from the <paramref name="href"/> if present
+    /// and non-empty; otherwise <c>null</c>.
+    /// </summary>
+    private static string? GetFragmentIdentifier(string href)
+    {
+        var hashIndex = href.IndexOf('#');
+        if (hashIndex < 0 || hashIndex == href.Length - 1)
+            return null;
+        return href[(hashIndex + 1)..];
+    }
+
+    /// <summary>
+    /// Returns the URI without its fragment identifier.
+    /// </summary>
+    private static string GetUriWithoutFragment(string uri)
+    {
+        var hashIndex = uri.IndexOf('#');
+        return hashIndex < 0 ? uri : uri[..hashIndex];
+    }
+
+    /// <summary>
+    /// Finds the element identified by the given fragment using <c>xml:id</c>
+    /// or a plain <c>id</c> attribute.
+    /// </summary>
+    private static XElement? FindElementByFragment(XDocument doc, string fragment)
+    {
+        foreach (var element in doc.Descendants())
+        {
+            var xmlId = (string?)element.Attribute(XNamespace.Xml.GetName("id"));
+            if (xmlId == fragment)
+                return element;
+
+            var plainId = (string?)element.Attribute("id");
+            if (plainId == fragment)
+                return element;
+        }
+        return null;
     }
 
     private static string ResolveAbsoluteUri(string href, string? baseUri)

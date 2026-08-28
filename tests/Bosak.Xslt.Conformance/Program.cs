@@ -83,6 +83,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.25  | 28-08-2026     | Enable disable-output-escaping feature (xsl:text/xsl:value-of now serialize raw text)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.26  | 28-08-2026     | Unskip include-0102/0103 (fragment identifiers in xsl:include/@href now supported)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -186,8 +188,6 @@ class Program
         "mode-1801", "mode-1802",
         // xsl:package not supported
         "declared-modes-009", "declared-modes-010", "declared-modes-011", "declared-modes-012",
-        // Embedded stylesheet modules (fragment identifiers) not supported
-        "include-0102", "include-0103",
         // .NET RegexOptions.Compiled codegen bug: '^((.)(?:b|(c|e){1,2}?|d)+?a)$' crashes the
         // compiled runner with IndexOutOfRangeException on some inputs; the interpreted engine
         // answers correctly. Platform limitation, not an engine defect.
