@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `TBD` — next small XSLT conformance chunk
+**Commit:** `3ec6931` — implement disable-output-escaping for xsl:text/xsl:value-of and fix cdata-section-elements regression
 **Current focus:** **XSLT gaps** — tackling another small, self-contained conformance chunk. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
 **Expected state:** **2,079 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,090 passed / 0 failed / 7,510 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `evaluate` test set 41 passed / 0 failed / 16 skipped** (remaining skips are `schema_aware` and the Java-extension `evaluate-008`); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
 
