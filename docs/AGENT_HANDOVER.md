@@ -1,9 +1,35 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `7aba02a` — support fragment identifiers in xsl:include/xsl:import href for embedded stylesheet modules
+**Commit:** `77696ea` — Enable embedded-stylesheet / xml-stylesheet PI support in XSLT conformance harness
 **Current focus:** **XSLT gaps** — tackling another small, self-contained conformance chunk. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,083 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,092 passed / 0 failed / 7,508 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `evaluate` test set 41 passed / 0 failed / 16 skipped** (remaining skips are `schema_aware` and the Java-extension `evaluate-008`); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
+**Expected state:** **2,088 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,110 passed / 0 failed / 7,490 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `evaluate` test set 41 passed / 0 failed / 16 skipped** (remaining skips are `schema_aware` and the Java-extension `evaluate-008`); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+
+## This Session Changes (embedded-stylesheet / xml-stylesheet processing instruction)
+
+1. **Enabled the previously skipped `xsl-stylesheet-processing-instruction` feature** —
+   - Removed `"xsl-stylesheet-processing-instruction"` from `SkipFeatures` in `tests/Bosak.Xslt.Conformance/Program.cs`.
+   - `LoadEnvironment` now detects `source/@defines-stylesheet="true"`, parses `<?xml-stylesheet?>` processing instructions, and extracts the principal stylesheet from the source document.
+   - Added helpers `ResolveEmbeddedStylesheet`, `IsXmlStylesheetType`, `ParsePseudoAttributes`, and `FindElementByFragment`.
+   - Supports fragment identifiers (`href="#id"`) resolving by `xml:id` then plain `id`, and external stylesheet references via the test harness URI resolver.
+   - Header bumped: `Program.cs` → 3.27.
+
+2. **Fixed principal-stylesheet selection when environment contains secondary stylesheets** —
+   - The fallback that picks a principal stylesheet from the environment now skips elements with `role="secondary"`.
+   - This prevents embedded-stylesheet tests from incorrectly using a secondary standalone stylesheet as the principal.
+
+3. **Added regression tests** —
+   - `EmbeddedStylesheet_XmlStylesheetPi_ExtractsByXmlIdFragment`
+   - `EmbeddedStylesheet_XmlStylesheetPi_ExtractsByPlainIdFragment`
+   - `EmbeddedStylesheet_XmlStylesheetPi_IgnoresAlternateStylesheets`
+   - `EmbeddedStylesheet_XmlStylesheetPi_IgnoresNonXslType`
+   - `EmbeddedStylesheet_XmlStylesheetPi_ExternalHrefUsesResolver`
+   - Header bumped: `StylesheetTests.cs` → 0.82.
+
+4. **Results** —
+   - `embedded-stylesheet` test set: **18 passed / 0 failed / 0 skipped** (was 0/0/18).
+   - Unit tests: **2,088 passed / 0 failed / 0 skipped**.
+   - Routine XSLT sweep: **7,110 passed / 0 failed / 7,490 skipped** (was 7,092/0/7,508; +18 runnable tests).
 
 ## This Session Changes (fragment identifiers in xsl:include / xsl:import)
 
