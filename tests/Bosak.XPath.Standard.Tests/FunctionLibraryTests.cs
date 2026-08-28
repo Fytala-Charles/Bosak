@@ -58,6 +58,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.23  | 27-07-2026     | 15 try/catch tests: named codes, clause order, wildcards, err vars, static bypass |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.24  | 28-08-2026     | Added fn:collection fragment-uri and fn:uri-collection ?select= tests                  |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.24  | 28-07-2026     | 10 name-test/kind-test unit tests |
 //                      | Charles Korthout | 2.25  | 01-08-2026     | fn:serialize expectations follow omit-xml-declaration=yes default (Serialization 3.1) |
 //                      | Charles Korthout | 2.26  | 03-08-2026     | XSD 1.1 hyphen rules + explicit \i/\c NameStartChar/NameChar range tests                |
@@ -2922,6 +2924,62 @@ public class FunctionLibraryTests
                 Assert.True(item.IsNode);
                 count++;
             }
+            Assert.Equal(2, count);
+        }
+        finally
+        {
+            System.IO.Directory.Delete(tempDir, true);
+        }
+    }
+
+    [Fact]
+    public void Collection_LoadsFragmentFromRegisteredCollection()
+    {
+        var tempFile = System.IO.Path.GetTempFileName() + ".xml";
+        System.IO.File.WriteAllText(tempFile, "<doc><a xml:id='frag1'/><a xml:id='frag2'/></doc>");
+        try
+        {
+            var ctx = new EvaluationContext();
+            FunctionLibrary.Populate(ctx);
+            ctx.Collections["my-collection"] = new[] { tempFile + "#frag2" };
+            var result = XPath31Expression.Compile("collection('my-collection')").Evaluate(ctx);
+            Assert.True(result.IsSequence);
+            var items = new List<XdmValue>();
+            foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+                items.Add(item);
+            Assert.Single(items);
+            Assert.True(items[0].IsNode);
+            Assert.Equal(XdmNodeKind.Document, items[0].NodeValue.NodeKind);
+            string? firstChildLocalName = null;
+            foreach (var child in items[0].NodeValue.Children(XdmNodeKind.Element))
+            {
+                Assert.True(child.IsNode);
+                firstChildLocalName = child.NodeValue.LocalName;
+                break;
+            }
+            Assert.Equal("a", firstChildLocalName);
+        }
+        finally
+        {
+            System.IO.File.Delete(tempFile);
+        }
+    }
+
+    [Fact]
+    public void UriCollection_HonorsSelectQueryParameter()
+    {
+        var tempDir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.Guid.NewGuid().ToString());
+        System.IO.Directory.CreateDirectory(tempDir);
+        System.IO.File.WriteAllText(System.IO.Path.Combine(tempDir, "match-1.xml"), "<a/>");
+        System.IO.File.WriteAllText(System.IO.Path.Combine(tempDir, "match-2.xml"), "<b/>");
+        System.IO.File.WriteAllText(System.IO.Path.Combine(tempDir, "other.xml"), "<c/>");
+        try
+        {
+            var result = Evaluate($"uri-collection('{tempDir.Replace("\\", "/")}?select=match-*.xml')");
+            Assert.True(result.IsSequence);
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+                count++;
             Assert.Equal(2, count);
         }
         finally

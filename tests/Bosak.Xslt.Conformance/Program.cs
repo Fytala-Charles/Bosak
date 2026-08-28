@@ -73,6 +73,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.20  | 27-08-2026     | Honor ignore_doc_failure dependency (skips error-FODC0002a-ignore)                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.21  | 28-08-2026     | Unskip collection-004/005/006 and merge uri-collection tests (fn:collection implemented) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -173,9 +175,6 @@ class Program
         // High-precision decimal formatting requires arbitrary-precision decimals
         "format-number-047",
         "format-number-048",
-        // xsl:merge streaming/uri-collection tests require uri-collection() support
-        "merge-065a", "merge-065b",
-        "merge-097", "merge-097s", "merge-097sf", "merge-098", "merge-099",
         // mode-1801/1802: result-document URI handling (see audit 2026-07-13)
         "mode-1801", "mode-1802",
         // xsl:package not supported
@@ -187,8 +186,6 @@ class Program
         "include-0102", "include-0103",
         // on-multiple-match=error detection not implemented
         "include-0702b", "mode-0801b",
-        // Collection registry / fn:collection not implemented
-        "collection-004", "collection-005", "collection-006",
         // .NET RegexOptions.Compiled codegen bug: '^((.)(?:b|(c|e){1,2}?|d)+?a)$' crashes the
         // compiled runner with IndexOutOfRangeException on some inputs; the interpreted engine
         // answers correctly. Platform limitation, not an engine defect.
@@ -1079,10 +1076,21 @@ class Program
                 var sourceUri = source.Attribute("uri")?.Value;
                 if (file != null)
                 {
-                    var path = Path.Combine(testSetDir, file);
-                    if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
+                    // The source URI may include a fragment identifier (e.g. doc15.xml#frag2).
+                    // Strip it before filesystem lookup, but preserve it so fn:collection can
+                    // return the identified sub-document node as a distinct collection item.
+                    var fileOnly = file.Contains('#') ? file.Substring(0, file.IndexOf('#')) : file;
+                    var path = Path.Combine(testSetDir, fileOnly);
+                    if (!File.Exists(path)) path = Path.Combine(catalogDir, fileOnly);
                     if (File.Exists(path))
-                        docs.Add(Path.GetFullPath(path));
+                    {
+                        var fullPath = Path.GetFullPath(path);
+                        var effectiveUri = sourceUri ?? file;
+                        var fragment = effectiveUri.Contains('#')
+                            ? effectiveUri.Substring(effectiveUri.IndexOf('#') + 1)
+                            : null;
+                        docs.Add(fragment != null ? fullPath + "#" + fragment : fullPath);
+                    }
                 }
                 else if (sourceUri != null)
                 {

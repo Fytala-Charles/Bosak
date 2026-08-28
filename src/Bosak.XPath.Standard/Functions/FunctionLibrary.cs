@@ -267,6 +267,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.89  | 21-08-2026     | fn:json-to-xml validate=true performs schema validation against built-in JSON schema   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.90  | 28-08-2026     | fn:collection/fn:uri-collection support fragment identifiers and ?select= query params |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -7332,17 +7334,23 @@ public static class FunctionLibrary
             // fn:collection / fn:uri-collection then return the empty sequence
             // (collection-003's empty default collection). FODC0002/FODC0003 apply only
             // to collections that are not declared at all.
-            if (returnUris)
-            {
-                var uris = new List<XdmValue>(docs.Count);
-                foreach (var doc in docs)
-                    uris.Add(XdmValue.FromString(doc, "anyURI"));
-                return XdmValue.FromSequence(MaterializedSequence.FromList(uris));
-            }
-            var nodes = new List<XdmValue>(docs.Count);
+            var items = new List<XdmValue>(docs.Count);
             foreach (var doc in docs)
-                nodes.Add(XdmValue.FromNode(ctx.LoadDocument(doc)));
-            return XdmValue.FromSequence(MaterializedSequence.FromList(nodes));
+            {
+                var (docPath, fragment) = SplitCollectionPathAndFragment(doc);
+                var node = ctx.LoadDocument(docPath);
+                string itemUri = node.DocumentUri;
+                if (fragment != null)
+                {
+                    node = LoadDocumentFragment(node, fragment, itemUri);
+                    itemUri += "#" + fragment;
+                }
+                if (returnUris)
+                    items.Add(XdmValue.FromString(itemUri, "anyURI"));
+                else
+                    items.Add(XdmValue.FromNode(node));
+            }
+            return XdmValue.FromSequence(MaterializedSequence.FromList(items));
         }
 
         if (!string.IsNullOrEmpty(uri))
@@ -7352,10 +7360,14 @@ public static class FunctionLibrary
             if (!System.IO.Path.IsPathRooted(uri) && !Uri.IsWellFormedUriString(uri, UriKind.RelativeOrAbsolute))
                 throw new InvalidOperationException($"FODC0004: Invalid URI: {uri}");
 
-            var resolved = ResolveUriAgainstBase(uri, ctx.BaseUri);
+            // Separate path and query so that directory collections can honor the
+            // W3C test-suite convention ?select=<glob> (merge-097).
+            var (uriPath, uriQuery) = SplitUriPathAndQuery(uri);
+            var resolved = ResolveUriAgainstBase(uriPath, ctx.BaseUri);
             if (System.IO.Directory.Exists(resolved))
             {
-                var files = System.IO.Directory.GetFiles(resolved, "*.xml");
+                string pattern = GetCollectionSelectPattern(uriQuery) ?? "*.xml";
+                var files = System.IO.Directory.GetFiles(resolved, pattern);
                 if (returnUris)
                 {
                     var uris = new List<XdmValue>(files.Length);
@@ -7373,6 +7385,76 @@ public static class FunctionLibrary
         if (string.IsNullOrEmpty(uri))
             throw new InvalidOperationException("FODC0003: Default collection is not available");
         throw new InvalidOperationException($"FODC0002: Collection not available: {uri}");
+    }
+
+    /// <summary>
+    /// Splits an absolute file path that may carry a URI fragment (e.g. "C:\a\b.xml#frag")
+    /// into the filesystem path and the fragment identifier.
+    /// </summary>
+    private static (string Path, string? Fragment) SplitCollectionPathAndFragment(string value)
+    {
+        int hash = value.IndexOf('#');
+        if (hash < 0) return (value, null);
+        return (value.Substring(0, hash), value.Substring(hash + 1));
+    }
+
+    /// <summary>
+    /// Splits a collection URI into the path portion and the query string portion.
+    /// </summary>
+    private static (string Path, string? Query) SplitUriPathAndQuery(string value)
+    {
+        int q = value.IndexOf('?');
+        if (q < 0) return (value, null);
+        return (value.Substring(0, q), value.Substring(q + 1));
+    }
+
+    /// <summary>
+    /// Extracts the <c>select</c> query parameter used by the W3C test suite to choose
+    /// files from a directory collection (e.g. <c>?select=merge-097-*.xml</c>).
+    /// </summary>
+    private static string? GetCollectionSelectPattern(string? query)
+    {
+        if (string.IsNullOrEmpty(query)) return null;
+        foreach (var part in query.Split('&'))
+        {
+            if (part.StartsWith("select=", StringComparison.OrdinalIgnoreCase))
+                return Uri.UnescapeDataString(part.Substring("select=".Length));
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Loads a sub-document node identified by an ID/fragment reference inside an already
+    /// loaded document (e.g. <c>doc15.xml#frag2</c> from the W3C collection tests).
+    /// </summary>
+    private static IXdmNode LoadDocumentFragment(IXdmNode documentNode, string fragment, string documentUri)
+    {
+        if (documentNode is not XDocumentNode xdn || xdn.UnderlyingObject is not System.Xml.Linq.XDocument doc)
+            throw new InvalidOperationException($"FODC0002: Cannot resolve fragment in collection item: {documentUri}#{fragment}");
+
+        var element = FindElementById(doc, fragment);
+        if (element == null)
+            throw new InvalidOperationException($"FODC0002: Fragment not found in collection item: {documentUri}#{fragment}");
+
+        var fragmentDoc = new System.Xml.Linq.XDocument(new System.Xml.Linq.XElement(element));
+        var node = new XDocumentNode(fragmentDoc);
+        node.SetDocumentUri(documentUri + "#" + fragment);
+        return node;
+    }
+
+    /// <summary>
+    /// Finds the first element with an <c>xml:id</c> or plain <c>id</c> attribute equal to
+    /// <paramref name="id"/> anywhere in the document.
+    /// </summary>
+    private static System.Xml.Linq.XElement? FindElementById(System.Xml.Linq.XDocument doc, string id)
+    {
+        var xmlId = System.Xml.Linq.XNamespace.Xml.GetName("id");
+        foreach (var e in doc.Descendants())
+        {
+            if ((string?)e.Attribute(xmlId) == id || (string?)e.Attribute("id") == id)
+                return e;
+        }
+        return null;
     }
 
     private static IEnumerable<XdmValue> FlattenValue(XdmValue value)

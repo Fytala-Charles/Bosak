@@ -1,24 +1,38 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `<pending>` — docs: update AGENT_HANDOVER for package assessment
-**Current focus:** **XSLT gaps** — `packages` is not a failure cluster: 161 of 163 tests are skipped because `xsl:package` / `xsl:use-package` are not supported. `import-schema`, `regex-syntax`, and `unicode-90` are verified green or correctly blocked. The next concrete work is to either tackle a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`) or run a full catalog sweep to confirm there are no hidden failing clusters among the runnable sets.
-**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**.
+**Commit:** `<pending>` — docs: update AGENT_HANDOVER for fn:collection / fn:uri-collection fixes
+**Current focus:** **XSLT gaps** — `fn:collection` / `fn:uri-collection` now support fragment identifiers and the W3C `?select=<glob>` directory convention. `collection` and `merge` clusters are green. Next concrete work is another small feature gap (e.g. `on-multiple-match="error"` detection, `xsl:accumulator-rule` variable-in-match detection, or `xsl:iterate`) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
+**Expected state:** **2,062 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,060 passed / 0 failed / 7,540 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
 
-## This Session Changes (package assessment)
+## This Session Changes (fn:collection / fn:uri-collection fixes)
 
-1. **Ran the package-related conformance clusters** —
-   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "package"`.
-   - Result: **2 passed / 0 failed / 161 skipped** out of 163 tests across `package-version` (37 tests), `package` (72 tests), and `use-package` (54 tests).
-   - The two runnable tests (`package-version-900`, `package-version-901`) passed; all remaining tests are skipped because they depend on `xsl:package` or `xsl:use-package`, which Bosak does not support.
-   - No code changes were made; `packages` is correctly blocked as a known limitation until `xsl:package` / `xsl:use-package` support is implemented.
+1. **Enabled the previously skipped `collection-*` and `merge-*` uri-collection tests** —
+   - Removed the harness skips for `collection-004/005/006` and `merge-065a/065b/097/097s/097sf/098/099` in `tests/Bosak.Xslt.Conformance/Program.cs`.
+   - Fixed `LoadCollections` to preserve fragment identifiers declared on collection sources (e.g. `doc15.xml#frag2`) and to look up the underlying file without the fragment.
 
-2. **Results** —
-   - `package-version` / `package` / `use-package`: **2 passed / 0 failed / 161 skipped**.
-   - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
-   - Unit tests: **2,060 passed / 0 failed / 0 skipped**.
+2. **Implemented fragment-identifier support in `fn:collection` / `fn:uri-collection`** —
+   - `FunctionLibrary.ResolveCollection` splits declared collection items into filesystem path + fragment, loads the document, then extracts the element identified by `xml:id` or plain `id` and returns it as a distinct document-node collection item.
+   - Added helper methods `SplitCollectionPathAndFragment`, `LoadDocumentFragment`, and `FindElementById`.
+   - Header bumped: `FunctionLibrary.cs` → 5.90.
 
-## Previous Session Changes (import-schema assessment)
+3. **Implemented the `?select=<glob>` directory-collection convention** —
+   - `FunctionLibrary.ResolveCollection` parses the query string of a collection URI, extracts `select`, and uses it as the `Directory.GetFiles` pattern instead of the hard-coded `*.xml`.
+   - This unblocks `merge-097`, which calls `uri-collection('.?select=merge-097-*.xml')`.
+   - Added helper methods `SplitUriPathAndQuery` and `GetCollectionSelectPattern`.
+
+4. **Added regression tests** —
+   - `Collection_LoadsFragmentFromRegisteredCollection` verifies a registered collection can return a sub-document node identified by `xml:id`.
+   - `UriCollection_HonorsSelectQueryParameter` verifies `uri-collection` honors `?select=`.
+   - Header bumped: `FunctionLibraryTests.cs` → 2.24.
+
+5. **Results** —
+   - `collection` test set: **5 passed / 0 failed / 1 skipped** (was 4/0/2).
+   - `merge` test set: **77 passed / 0 failed / 29 skipped** (was 76/1/29).
+   - Routine XSLT sweep: **7,060 passed / 0 failed / 7,540 skipped**.
+   - Unit tests: **2,062 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (package assessment)
 
 1. **Cleared the final 15 failing tests across the `error` set** —
    - Added `XTSE1205`/`XTSE1210` validation for `xsl:key` `@use`/content exclusivity and unknown collation in `Stylesheet.ValidateInstructionTree`.
