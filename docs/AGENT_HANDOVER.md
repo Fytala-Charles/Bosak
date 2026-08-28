@@ -1,9 +1,36 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `77696ea` — Enable embedded-stylesheet / xml-stylesheet PI support in XSLT conformance harness
-**Current focus:** **XSLT gaps** — tackling another small, self-contained conformance chunk. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,088 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,110 passed / 0 failed / 7,490 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `evaluate` test set 41 passed / 0 failed / 16 skipped** (remaining skips are `schema_aware` and the Java-extension `evaluate-008`); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Commit:** `86d0b7d` — working tree includes namespace node handling fixes in XSLT runtime
+**Current focus:** **XSLT gaps** — namespace node copy/sequence and xsl:attribute-in-simple-content fixes. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,091 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,113 passed / 0 failed / 7,487 skipped** (was 7,110/0/7,490; +3 namespace tests now runnable); **full `namespace` test set 223 passed / 0 failed / 1 skipped** (was 220/3/1); **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+
+## This Session Changes (namespace node handling in XSLT runtime)
+
+1. **Enabled the previously skipped `namespace_axis` feature** —
+   - Removed `"namespace_axis"` from `SkipFeatures` in `tests/Bosak.Xslt.Conformance/Program.cs`.
+   - Added explicit `XdmNodeKind.Namespace` handling to `CopyNodeToResult` in `src/Bosak.Xslt/Runtime/TransformEngine.cs` so copied namespace nodes become `xmlns`/`xmlns:prefix` declarations on the current result element.
+   - Added namespace-node handling to `CopyToResult` sequence processing so namespace nodes are not atomized to text (which had triggered `XTDE0410` when followed by attributes).
+   - Added `AddNamespaceDeclarationToElement` helper; `xml` prefix with the XML namespace is skipped because it is always implicitly in scope.
+   - Header bumped: `TransformEngine.cs` → 6.38; `Program.cs` → 3.28.
+
+2. **Fixed `CopyXdmNode` for namespace nodes** —
+   - Added a `XdmNodeKind.Namespace` case that builds a new `XAttribute` namespace declaration wrapped as an `XDocumentNode` namespace node.
+
+3. **Fixed `xsl:attribute` inside simple content** —
+   - Added a `case "attribute"` to `CollectSimpleContentXsltInstruction` so an `xsl:attribute` inside simple content (e.g., `xsl:namespace` content) produces an attribute node whose string value contributes to the simple content.
+   - This fixes `namespace-2602`, where an `xsl:attribute` was previously ignored and produced an empty namespace URI.
+
+4. **Added regression tests** —
+   - `CopyOf_Namespace_Node_Is_Added_To_Result_Element`
+   - `Sequence_Of_Namespace_Nodes_Adds_Declarations`
+   - `Attribute_Inside_Simple_Content_Contributes_String_Value`
+   - Header bumped: `StylesheetTests.cs` → 0.83.
+
+5. **Results** —
+   - `namespace` test set: **223 passed / 0 failed / 1 skipped** (was 220/3/1).
+   - Unit tests: **2,091 passed / 0 failed / 0 skipped** (was 2,088/0/0).
+   - Routine XSLT sweep: **7,113 passed / 0 failed / 7,487 skipped** (was 7,110/0/7,490).
 
 ## This Session Changes (embedded-stylesheet / xml-stylesheet processing instruction)
 

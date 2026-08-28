@@ -125,6 +125,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.82  | 28-08-2026     | Added regression tests for xml-stylesheet PI parsing and embedded fragment extraction |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.83  | 28-08-2026     | Added namespace-node and xsl:attribute-in-simple-content regression tests               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5954,6 +5956,91 @@ return fn:transform(map{""stylesheet-text"": $xsl,
                 return element;
         }
         return null;
+    }
+
+    // ------------------------------------------------------------------
+    // Namespace node handling regression tests
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void CopyOf_Namespace_Node_Is_Added_To_Result_Element()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <xsl:element name='ns:e' namespace='http://nsone.uri/'>
+                    <xsl:copy-of select='doc/namespace::ns'/>
+                </xsl:element>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = XDocument.Parse("<doc xmlns:ns='http://nstwo.uri/'/>", LoadOptions.PreserveWhitespace);
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        var output = XDocument.Parse(result);
+        var root = output.Root;
+        Assert.NotNull(root);
+        Assert.Equal("http://nsone.uri/", root.Name.NamespaceName);
+        Assert.Equal("http://nstwo.uri/", (string?)root.Attribute((XNamespace)"http://www.w3.org/2000/xmlns/" + "ns"));
+    }
+
+    [Fact]
+    public void Sequence_Of_Namespace_Nodes_Adds_Declarations()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:template match='xs:element'>
+                <xsl:element name='foo' namespace='{ /xs:schema/@targetNamespace }'>
+                    <xsl:variable name='prefix' as='xs:string' select='string(prefix-from-QName(resolve-QName(@type, .)))'/>
+                    <xsl:sequence select='namespace::*[name(.) = $prefix]'/>
+                    <xsl:attribute name='type'>
+                        <xsl:value-of select='@type'/>
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = XDocument.Parse(
+            "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' targetNamespace='http://www.example.com/'>" +
+            "<xs:element name='foo' type='xs:fooType'/></xs:schema>",
+            LoadOptions.PreserveWhitespace);
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        var output = XDocument.Parse(result);
+        var root = output.Root;
+        Assert.NotNull(root);
+        Assert.Equal("http://www.example.com/", root.Name.NamespaceName);
+        Assert.Equal("xs:fooType", (string?)root.Attribute("type"));
+        Assert.Equal("http://www.w3.org/2001/XMLSchema", (string?)root.Attribute((XNamespace)"http://www.w3.org/2000/xmlns/" + "xs"));
+    }
+
+    [Fact]
+    public void Attribute_Inside_Simple_Content_Contributes_String_Value()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <root>
+                    <xsl:namespace name='x'>
+                        <xsl:attribute name='select'>
+                            <xsl:value-of select='""http://example.com/""'/>
+                        </xsl:attribute>
+                    </xsl:namespace>
+                </root>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("doc"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        var output = XDocument.Parse(result);
+        var root = output.Root;
+        Assert.NotNull(root);
+        Assert.Equal("http://example.com/", (string?)root.Attribute((XNamespace)"http://www.w3.org/2000/xmlns/" + "x"));
     }
 
     private class InlineUriResolver : IXsltUriResolver

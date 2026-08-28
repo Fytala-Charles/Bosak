@@ -226,6 +226,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.37  | 28-08-2026     | Preserve XRawText through template returns, xsl:copy/copy-of, and node copying            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.38  | 28-08-2026     | Handle namespace nodes in CopyNodeToResult/CopyToResult; xsl:attribute in simple content |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -5064,6 +5066,9 @@ public sealed class TransformEngine
                     }
                     if (_currentContainer is XElement targetElem)
                     {
+                        if (nsName == "xml" && nsUri == "http://www.w3.org/XML/1998/namespace")
+                            break;
+
                         var excludedUris = new HashSet<string>(GetExcludedNamespaceUris(targetElem));
                         var excludedAnn = targetElem.Annotation<ExcludedNamespaceUris>();
                         if (excludedAnn != null)
@@ -7242,6 +7247,19 @@ public sealed class TransformEngine
                     CopyNodeToResult(item.NodeValue);
                 }
                 else if (item.IsNode && item.NodeValue != null &&
+                         item.NodeValue.NodeKind == XdmNodeKind.Namespace)
+                {
+                    // Namespace node: attach as a declaration on the current element
+                    if (sb.Length > 0)
+                    {
+                        AddTextNode(sb.ToString());
+                        sb.Clear();
+                    }
+                    prevWasAtomic = false;
+                    _lastAddedWasAtomic = false;
+                    CopyNodeToResult(item.NodeValue);
+                }
+                else if (item.IsNode && item.NodeValue != null &&
                          item.NodeValue.NodeKind == XdmNodeKind.Text)
                 {
                     // Text node: append without separator
@@ -7623,6 +7641,20 @@ public sealed class TransformEngine
                 return new XDocumentNode(Xml11Attribute.Create(
                     XName.Get(node.EncodedLocalName, node.NamespaceUri),
                     node.StringValue));
+            case XdmNodeKind.Namespace:
+                {
+                    var prefix = node.EncodedLocalName;
+                    var uri = node.StringValue;
+                    XName attrName = string.IsNullOrEmpty(prefix)
+                        ? XNamespace.None + "xmlns"
+                        : XNamespace.Xmlns + prefix;
+                    var tempOwner = new XElement("__nsowner__");
+                    tempOwner.SetAttributeValue(attrName, uri);
+                    var attr = tempOwner.Attribute(attrName);
+                    if (attr == null)
+                        throw new InvalidOperationException($"XTDE????: Cannot create namespace node for prefix '{prefix}'");
+                    return XDocumentNode.CreateNamespaceNode(attr, tempOwner);
+                }
             default:
                 return node;
         }
@@ -8651,6 +8683,13 @@ public sealed class TransformEngine
             _lastAddedWasAtomic = false;
             _currentContainer.Add(new XProcessingInstruction(node.LocalName, node.StringValue));
         }
+        else if (node.NodeKind == XdmNodeKind.Namespace)
+        {
+            _lastAddedWasAtomic = false;
+            if (_currentContainer is not XElement nsTarget)
+                throw new InvalidOperationException("XTDE0420");
+            AddNamespaceDeclarationToElement(nsTarget, node.EncodedLocalName, node.StringValue);
+        }
         else if (node.NodeKind == XdmNodeKind.Attribute)
         {
             if (_currentContainer is not XElement attrParent)
@@ -8704,6 +8743,25 @@ public sealed class TransformEngine
         } while (element.GetNamespaceOfPrefix(prefix) != null);
 
         element.SetAttributeValue(XNamespace.Xmlns + prefix, namespaceUri);
+    }
+
+    /// <summary>
+    /// Adds a namespace declaration to the supplied element from an XDM namespace node.
+    /// The xml prefix is skipped because that namespace is always implicitly in scope.
+    /// </summary>
+    private static void AddNamespaceDeclarationToElement(XElement element, string prefix, string uri)
+    {
+        if (prefix == "xml" && uri == "http://www.w3.org/XML/1998/namespace")
+            return;
+
+        if (string.IsNullOrEmpty(prefix))
+        {
+            element.SetAttributeValue("xmlns", uri);
+        }
+        else
+        {
+            element.SetAttributeValue(XNamespace.Xmlns + prefix, uri);
+        }
     }
 
     /// <summary>
@@ -14088,6 +14146,30 @@ public sealed class TransformEngine
                                 items.Add(XdmValue.FromNode(new XDocumentNode(pi)));
                                 break;
                         }
+                    }
+                    break;
+                }
+
+            case "attribute":
+                {
+                    var savedAttrContainer = _currentContainer;
+                    var savedAttrLastAtomic = _lastAddedWasAtomic;
+                    var attrTemp = new XElement("__simple-content-attr__");
+                    _currentContainer = attrTemp;
+                    _lastAddedWasAtomic = false;
+                    try
+                    {
+                        ExecuteXsltInstruction(instruction, contextItem);
+                    }
+                    finally
+                    {
+                        _currentContainer = savedAttrContainer;
+                        _lastAddedWasAtomic = savedAttrLastAtomic;
+                    }
+                    var createdAttr = attrTemp.Attributes().FirstOrDefault();
+                    if (createdAttr != null)
+                    {
+                        items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(createdAttr.Name, createdAttr.Value))));
                     }
                     break;
                 }
