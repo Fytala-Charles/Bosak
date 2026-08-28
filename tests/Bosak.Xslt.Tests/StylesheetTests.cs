@@ -115,6 +115,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.77  | 27-08-2026     | Added error-cluster regression tests (XTDE0855/1110/1162/1260/1270, XTTE3170/3360, XPST0003) and fixed test invocation |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.78  | 27-08-2026     | Added XPST0008 regression tests for variable references in xsl:accumulator-rule/@match |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -5512,6 +5514,50 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             executable.TransformToString(null, initialTemplate: "main");
         });
         Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("node()[$value le $limit or $value gt $limit]", "$limit")]
+    [InlineData("*[@id eq $other]", "$other")]
+    [InlineData("$value[. eq $n]", "$n")]
+    [InlineData("section[$limit + $value gt 0]", "$limit")]
+    public void AccumulatorRule_MatchPattern_With_Variable_Other_Than_Value_Raises_XPST0008(string match, string offendingVariable)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:param name='limit' select='10'/>
+            <xsl:accumulator name='node-count' as='xs:integer' initial-value='0'>
+                <xsl:accumulator-rule match='{match}' select='$value + 1'/>
+            </xsl:accumulator>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XPST0008", ex.Message);
+        Assert.Contains(offendingVariable, ex.Message);
+    }
+
+    [Theory]
+    [InlineData("node()")]
+    [InlineData("node()[$value le 10]")]
+    [InlineData("*[@id][$value gt 0]")]
+    [InlineData("section[$value instance of element()]")]
+    [InlineData("*:foo[let $temp := namespace-uri() return $temp = &apos;&apos; or $temp=&apos;garbage&apos;]")]
+    public void AccumulatorRule_MatchPattern_Using_Value_Is_Allowed(string match)
+    {
+        var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:accumulator name='node-count' as='xs:integer' initial-value='0'>
+                <xsl:accumulator-rule match='{match}' select='$value + 1'/>
+            </xsl:accumulator>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))), new EvaluationContext());
+        Assert.Contains("<out", result);
     }
 
     private class InlineUriResolver : IXsltUriResolver

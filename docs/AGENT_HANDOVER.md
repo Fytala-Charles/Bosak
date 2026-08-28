@@ -1,11 +1,34 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `<pending>` — docs: update AGENT_HANDOVER for on-multiple-match=error unskip
-**Current focus:** **XSLT gaps** — `include-0702b` and `mode-0801b` are now runnable because the runtime already treats recoverable ambiguous matches as errors when the test declares `on-multiple-match="error"`. Next concrete work is another small feature gap (`xsl:accumulator-rule` variable-in-match detection, `xsl:iterate`, `fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
-**Expected state:** **2,062 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,062 passed / 0 failed / 7,538 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
+**Commit:** `<pending>` — feat: detect forbidden variable references in xsl:accumulator-rule/@match
+**Current focus:** **XSLT gaps** — `xsl:accumulator-rule` variable-in-match detection is now implemented. Next concrete work is another small feature gap (`xsl:iterate`, `fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
+**Expected state:** **2,071 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,063 passed / 0 failed / 7,537 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
 
-## This Session Changes (on-multiple-match=error unskip)
+## This Session Changes (accumulator-091 XPST0008 detection)
+
+1. **Implemented static detection of forbidden variable references in `xsl:accumulator-rule/@match`** —
+   - Added `Bosak.XPath.Parser` project reference to `src/Bosak.Xslt/Bosak.Xslt.csproj`.
+   - `AccumulatorRule.FromElement` now parses the match pattern and walks the AST to find variable references that are neither `$value` nor bound inside the pattern itself (e.g., by `let`, `for`, `some`, `every`).
+   - Raises `XPST0008` for references such as `$limit` in `node()[$value le $limit or $value gt $limit]`, matching `accumulator-091`.
+   - Variables bound within the pattern itself are allowed, matching `accumulator-085` (`let $temp := namespace-uri() return ...`).
+   - Header bumped: `AccumulatorDefinition.cs` → 0.2.
+
+2. **Added regression tests** —
+   - Negative cases in `tests/Bosak.Xslt.Tests/StylesheetTests.cs` verify that `$limit`, `$other`, and `$n` references raise `XPST0008`.
+   - Positive cases verify that `$value` and pattern-local `let` bindings compile and run successfully.
+   - Header bumped: `StylesheetTests.cs` → 0.78.
+
+3. **Unskipped `accumulator-091`** —
+   - Removed the harness skip in `tests/Bosak.Xslt.Conformance/Program.cs`.
+   - Header bumped: `Program.cs` → 3.23.
+
+4. **Results** —
+   - `accumulator` test set: **20 passed / 0 failed / 87 skipped** (was 19/1/87).
+   - Unit tests: **2,071 passed / 0 failed / 0 skipped** (up 9 from new regression tests).
+   - Routine XSLT sweep: **7,063 passed / 0 failed / 7,537 skipped** (up 1 from accumulator-091).
+
+## Previous Session Changes (on-multiple-match=error unskip)
 
 1. **Unskipped `include-0702b` and `mode-0801b`** —
    - Removed the harness skips in `tests/Bosak.Xslt.Conformance/Program.cs`.

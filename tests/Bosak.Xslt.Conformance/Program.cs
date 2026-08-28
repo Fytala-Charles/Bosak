@@ -77,6 +77,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.22  | 28-08-2026     | Unskip include-0702b and mode-0801b (on-multiple-match=error already handled at runtime) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.23  | 27-08-2026     | Unskip accumulator-091 (XPST0008 for variable in match pattern now detected)             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -181,9 +183,6 @@ class Program
         "mode-1801", "mode-1802",
         // xsl:package not supported
         "declared-modes-009", "declared-modes-010", "declared-modes-011", "declared-modes-012",
-        // Variable references other than $value in xsl:accumulator-rule match patterns
-        // are not statically detected (XPST0008)
-        "accumulator-091",
         // Embedded stylesheet modules (fragment identifiers) not supported
         "include-0102", "include-0103",
         // .NET RegexOptions.Compiled codegen bug: '^((.)(?:b|(c|e){1,2}?|d)+?a)$' crashes the
