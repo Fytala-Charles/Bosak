@@ -123,9 +123,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.81  | 28-08-2026     | Added regression tests for xsl:include fragment-identifier embedded modules             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.82  | 28-08-2026     | Added regression tests for xml-stylesheet PI parsing and embedded fragment extraction |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -5797,6 +5801,159 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(main);
         var result = executable.TransformToString(null, initialTemplate: "main");
         Assert.Contains("<out>found</out>", result);
+    }
+
+    [Fact]
+    public void EmbeddedStylesheet_XmlStylesheetPi_ExtractsByXmlIdFragment()
+    {
+        var source = XDocument.Parse(@"<?xml-stylesheet type='text/xsl' href='#mod'?>
+            <doc>
+              <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' xml:id='mod'>
+                <xsl:template match='/'><out>xml-id</out></xsl:template>
+              </xsl:stylesheet>
+            </doc>");
+
+        var stylesheet = ExtractEmbeddedStylesheet(source);
+        Assert.NotNull(stylesheet);
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(stylesheet!);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("<out>xml-id</out>", result);
+    }
+
+    [Fact]
+    public void EmbeddedStylesheet_XmlStylesheetPi_ExtractsByPlainIdFragment()
+    {
+        var source = XDocument.Parse(@"<?xml-stylesheet type='text/xsl' href='#mod'?>
+            <doc>
+              <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' id='mod'>
+                <xsl:template match='/'><out>plain-id</out></xsl:template>
+              </xsl:stylesheet>
+            </doc>");
+
+        var stylesheet = ExtractEmbeddedStylesheet(source);
+        Assert.NotNull(stylesheet);
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(stylesheet!);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("<out>plain-id</out>", result);
+    }
+
+    [Fact]
+    public void EmbeddedStylesheet_XmlStylesheetPi_IgnoresAlternateStylesheets()
+    {
+        var source = XDocument.Parse(@"<?xml-stylesheet type='text/xsl' href='#mod' alternate='yes'?>
+            <doc>
+              <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' xml:id='mod'>
+                <xsl:template match='/'><out>alternate</out></xsl:template>
+              </xsl:stylesheet>
+            </doc>");
+
+        var stylesheet = ExtractEmbeddedStylesheet(source);
+        Assert.Null(stylesheet);
+    }
+
+    [Fact]
+    public void EmbeddedStylesheet_XmlStylesheetPi_IgnoresNonXslType()
+    {
+        var source = XDocument.Parse(@"<?xml-stylesheet type='text/css' href='#mod'?>
+            <doc>
+              <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0' xml:id='mod'>
+                <xsl:template match='/'><out>css</out></xsl:template>
+              </xsl:stylesheet>
+            </doc>");
+
+        var stylesheet = ExtractEmbeddedStylesheet(source);
+        Assert.Null(stylesheet);
+    }
+
+    [Fact]
+    public void EmbeddedStylesheet_XmlStylesheetPi_ExternalHrefUsesResolver()
+    {
+        var source = XDocument.Parse(@"<?xml-stylesheet type='text/xsl' href='external.xsl'?>
+            <doc>data</doc>");
+
+        var external = @"<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'>
+                <xsl:template match='/'><out>external</out></xsl:template>
+              </xsl:stylesheet>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string> { ["external.xsl"] = external });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+
+        var pi = source.Nodes().OfType<XProcessingInstruction>().First(p => p.Target == "xml-stylesheet");
+        var attrs = ParseXmlStylesheetPseudoAttributes(pi.Data);
+        Assert.True(attrs.TryGetValue("href", out var href));
+        var stylesheet = resolver.Resolve(href!, "");
+
+        var executable = compiler.Compile(stylesheet);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("<out>external</out>", result);
+    }
+
+    /// <summary>
+    /// Resolves an embedded stylesheet declared by an <c>&lt;?xml-stylesheet?&gt;</c>
+    /// processing instruction in the source document.
+    /// </summary>
+    private static XDocument? ExtractEmbeddedStylesheet(XDocument source)
+    {
+        foreach (var pi in source.Nodes().OfType<XProcessingInstruction>()
+            .Where(p => p.Target == "xml-stylesheet"))
+        {
+            var attrs = ParseXmlStylesheetPseudoAttributes(pi.Data);
+            if (!attrs.TryGetValue("type", out var type))
+                continue;
+            if (!IsXmlStylesheetType(type))
+                continue;
+            if (attrs.TryGetValue("alternate", out var alt) &&
+                string.Equals(alt, "yes", StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (!attrs.TryGetValue("href", out var href))
+                continue;
+
+            if (href.StartsWith("#"))
+            {
+                var fragment = href.Substring(1);
+                var element = FindElementByFragment(source, fragment);
+                if (element != null)
+                {
+                    var elementXml = element.ToString(SaveOptions.DisableFormatting);
+                    return Xml11Loader.Parse(elementXml,
+                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri | LoadOptions.SetLineInfo,
+                        source.BaseUri ?? "");
+                }
+            }
+        }
+        return null;
+    }
+
+    private static bool IsXmlStylesheetType(string type) =>
+        string.Equals(type, "text/xsl", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(type, "application/xslt+xml", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(type, "text/xml", StringComparison.OrdinalIgnoreCase);
+
+    private static Dictionary<string, string> ParseXmlStylesheetPseudoAttributes(string data)
+    {
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var regex = new Regex(@"(?<name>[a-zA-Z_][a-zA-Z0-9_.-]*)\s*=\s*(?:""(?<value>[^""]*)""|'(?<value>[^']*)')", RegexOptions.Compiled);
+        foreach (Match m in regex.Matches(data))
+        {
+            result[m.Groups["name"].Value] = m.Groups["value"].Value;
+        }
+        return result;
+    }
+
+    private static XElement? FindElementByFragment(XDocument doc, string fragment)
+    {
+        foreach (var element in doc.Descendants())
+        {
+            if ((string?)element.Attribute(XNamespace.Xml.GetName("id")) == fragment)
+                return element;
+            if ((string?)element.Attribute("id") == fragment)
+                return element;
+        }
+        return null;
     }
 
     private class InlineUriResolver : IXsltUriResolver

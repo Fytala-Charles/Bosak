@@ -85,6 +85,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.26  | 28-08-2026     | Unskip include-0102/0103 (fragment identifiers in xsl:include/@href now supported)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.27  | 28-08-2026     | Enable xml-stylesheet processing-instruction feature (embedded/external stylesheets)    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -142,8 +144,7 @@ class Program
         "built_in_derived_types",
         "HTML5",
         "HTML4",
-        "streaming-fallback",
-        "xsl-stylesheet-processing-instruction"
+        "streaming-fallback"
     };
 
     static readonly HashSet<string> SkipTests = new(StringComparer.OrdinalIgnoreCase)
@@ -525,11 +526,13 @@ class Program
                 return TestResult.Skip;
             }
 
+            XDocument? envPrincipalStylesheet = null;
             if (envToLoad != null)
             {
                 var loadedEnv = LoadEnvironment(envToLoad, testSetDir, testSetPath, catalogDir, ns);
                 sourceNode = loadedEnv.SourceNode;
                 envDefaultCollation = loadedEnv.DefaultCollation;
+                envPrincipalStylesheet = loadedEnv.PrincipalStylesheet;
             }
 
             // Collections declared in the environment (both default and named) are made
@@ -573,33 +576,51 @@ class Program
             }
             // The principal stylesheet may be supplied by the referenced environment
             // rather than the test case (e.g. the regex-syntax set shares one
-            // stylesheet across all its tests).
+            // stylesheet across all its tests). Environment stylesheets marked
+            // role="secondary" must not be chosen as the principal.
             if (principalElem == null)
-                principalElem = envToLoad?.Element(ns + "stylesheet");
-            if (principalElem == null) return TestResult.Skip;
-
-            // xsl:package is not supported by this compiler.
-            if (principalElem.Name.LocalName == "package")
             {
-                Console.WriteLine($"  SKIP {name}: xsl:package not supported");
-                return TestResult.Skip;
+                principalElem = envToLoad?.Elements(ns + "stylesheet")
+                    .FirstOrDefault(e => e.Attribute("role")?.Value != "secondary")
+                    ?? envToLoad?.Elements(ns + "package")
+                        .FirstOrDefault(e => e.Attribute("role")?.Value != "secondary");
             }
 
-            var mainStylesheetFile = principalElem.Attribute("file")?.Value;
-            if (mainStylesheetFile == null) return TestResult.Skip;
-
-            var mainStylesheetPath = Path.Combine(testSetDir, mainStylesheetFile);
-            if (!File.Exists(mainStylesheetPath))
+            string? mainStylesheetPath = null;
+            XDocument? principalStylesheetDoc = null;
+            if (principalElem != null)
             {
-                // Try relative to catalog dir
-                mainStylesheetPath = Path.Combine(catalogDir, mainStylesheetFile);
-                if (!File.Exists(mainStylesheetPath))
+                // xsl:package is not supported by this compiler.
+                if (principalElem.Name.LocalName == "package")
+                {
+                    Console.WriteLine($"  SKIP {name}: xsl:package not supported");
                     return TestResult.Skip;
+                }
+
+                var mainStylesheetFile = principalElem.Attribute("file")?.Value;
+                if (mainStylesheetFile == null) return TestResult.Skip;
+
+                mainStylesheetPath = Path.Combine(testSetDir, mainStylesheetFile);
+                if (!File.Exists(mainStylesheetPath))
+                {
+                    // Try relative to catalog dir
+                    mainStylesheetPath = Path.Combine(catalogDir, mainStylesheetFile);
+                    if (!File.Exists(mainStylesheetPath))
+                        return TestResult.Skip;
+                }
             }
+            else if (envPrincipalStylesheet != null)
+            {
+                // Principal stylesheet defined by the source document's xml-stylesheet PI.
+                principalStylesheetDoc = envPrincipalStylesheet;
+            }
+
+            if (mainStylesheetPath == null && principalStylesheetDoc == null)
+                return TestResult.Skip;
 
             // Build resolver for secondary stylesheets
             var resolver = new TestUriResolver(testSetDir, catalogDir);
-            foreach (var ss in testElem.Elements(ns + "stylesheet"))
+            foreach (var ss in testElem.Elements(ns + "stylesheet").Concat(envToLoad?.Elements(ns + "stylesheet") ?? Enumerable.Empty<XElement>()))
             {
                 var file = ss.Attribute("file")?.Value;
                 var role = ss.Attribute("role")?.Value;
@@ -616,15 +637,22 @@ class Program
             }
 
             // Compile and run
-            var baseUri = new Uri(mainStylesheetPath).AbsoluteUri;
+            var baseUri = mainStylesheetPath != null ? new Uri(mainStylesheetPath).AbsoluteUri : (principalStylesheetDoc?.BaseUri ?? "");
 
             // Skip xsl:package based tests; the compiler only supports xsl:stylesheet/xsl:transform.
             XDocument xslDoc;
             try
             {
-                // Load the stylesheet file directly via XmlReader so the encoding
-                // declaration in the XML prolog (e.g. iso-8859-1) is honored.
-                xslDoc = LoadDocumentFromFile(mainStylesheetPath);
+                if (principalStylesheetDoc != null)
+                {
+                    xslDoc = principalStylesheetDoc;
+                }
+                else
+                {
+                    // Load the stylesheet file directly via XmlReader so the encoding
+                    // declaration in the XML prolog (e.g. iso-8859-1) is honored.
+                    xslDoc = LoadDocumentFromFile(mainStylesheetPath!);
+                }
                 if (string.IsNullOrEmpty(xslDoc.BaseUri))
                     xslDoc.AddAnnotation(baseUri);
                 var xslRoot = xslDoc.Root;
@@ -1102,10 +1130,10 @@ class Program
         return collections;
     }
 
-    static (IXdmNode? SourceNode, string? DefaultCollation) LoadEnvironment(XElement envElem, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
+    static (IXdmNode? SourceNode, string? DefaultCollation, XDocument? SourceDocument, XDocument? PrincipalStylesheet) LoadEnvironment(XElement envElem, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
     {
         var source = envElem.Element(ns + "source");
-        if (source == null) return (null, null);
+        if (source == null) return (null, null, null, null);
 
         XDocument? doc = null;
         string? sourceUri = null;
@@ -1136,9 +1164,17 @@ class Program
             }
         }
 
-        if (doc == null) return (null, null);
+        if (doc == null) return (null, null, null, null);
         if (string.IsNullOrEmpty(doc.BaseUri) && sourceUri != null)
             doc.AddAnnotation(sourceUri);
+
+        // If the source document defines the principal stylesheet via an xml-stylesheet
+        // processing instruction, extract it now while the full source document is in hand.
+        XDocument? principalStylesheet = null;
+        if (source.Attribute("defines-stylesheet")?.Value == "true")
+        {
+            principalStylesheet = ResolveEmbeddedStylesheet(doc, sourceUri, testSetDir, catalogDir);
+        }
 
         var sourceNode = new XDocumentNode(doc);
         if (sourceUri != null)
@@ -1157,19 +1193,115 @@ class Program
             var result = compiled.Evaluate(evalContext);
             if (result.IsNode && result.NodeValue != null)
             {
-                return (result.NodeValue, defaultCollation);
+                return (result.NodeValue, defaultCollation, doc, principalStylesheet);
             }
             if (result.IsSequence && result.SequenceValue != null)
             {
                 foreach (var item in XdmSequence.FromSource(result.SequenceValue))
                 {
                     if (item.IsNode && item.NodeValue != null)
-                        return (item.NodeValue, defaultCollation);
+                        return (item.NodeValue, defaultCollation, doc, principalStylesheet);
                 }
             }
         }
 
-        return (sourceNode, defaultCollation);
+        return (sourceNode, defaultCollation, doc, principalStylesheet);
+    }
+
+    /// <summary>
+    /// Resolves the principal stylesheet declared by one or more
+    /// <c>&lt;?xml-stylesheet?&gt;</c> processing instructions in the source document.
+    /// Supports fragment identifiers (<c>href="#id"</c>) that identify an embedded
+    /// stylesheet module and external stylesheet references.
+    /// </summary>
+    static XDocument? ResolveEmbeddedStylesheet(XDocument sourceDoc, string? sourceUri, string testSetDir, string catalogDir)
+    {
+        var pis = sourceDoc.Nodes().OfType<XProcessingInstruction>().Where(pi => pi.Target == "xml-stylesheet").ToList();
+        foreach (var pi in pis)
+        {
+            var attrs = ParsePseudoAttributes(pi.Data);
+            if (!attrs.TryGetValue("type", out var type))
+                continue;
+            if (!IsXmlStylesheetType(type))
+                continue;
+            if (attrs.TryGetValue("alternate", out var alt) && string.Equals(alt, "yes", StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (!attrs.TryGetValue("href", out var href))
+                continue;
+
+            // Fragment identifier: extract the embedded stylesheet from the source document.
+            if (href.StartsWith("#"))
+            {
+                var fragment = href.Substring(1);
+                var element = FindElementByFragment(sourceDoc, fragment);
+                if (element != null)
+                {
+                    var elementXml = element.ToString(SaveOptions.DisableFormatting);
+                    return Xml11Loader.Parse(elementXml,
+                        LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri | LoadOptions.SetLineInfo,
+                        sourceUri ?? "");
+                }
+            }
+            else
+            {
+                // External stylesheet reference; resolve relative to the source document.
+                var resolver = new TestUriResolver(testSetDir, catalogDir);
+                try
+                {
+                    return resolver.Resolve(href, sourceUri);
+                }
+                catch (FileNotFoundException)
+                {
+                    continue;
+                }
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Returns whether the <c>type</c> pseudo-attribute identifies an XSLT stylesheet.
+    /// </summary>
+    static bool IsXmlStylesheetType(string type)
+    {
+        // https://www.w3.org/TR/xml-stylesheet/ permits text/xsl, application/xslt+xml,
+        // and the historical text/xml.
+        return string.Equals(type, "text/xsl", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, "application/xslt+xml", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(type, "text/xml", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Parses pseudo-attributes of the form <c>name="value"</c> in a processing instruction.
+    /// </summary>
+    static Dictionary<string, string> ParsePseudoAttributes(string data)
+    {
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var regex = new Regex(@"(?<name>[a-zA-Z_][a-zA-Z0-9_.-]*)\s*=\s*(?:""(?<value>[^""]*)""|'(?<value>[^']*)')", RegexOptions.Compiled);
+        foreach (Match m in regex.Matches(data))
+        {
+            result[m.Groups["name"].Value] = m.Groups["value"].Value;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Finds the element identified by the fragment using <c>xml:id</c>
+    /// or a plain <c>id</c> attribute.
+    /// </summary>
+    static XElement? FindElementByFragment(XDocument doc, string fragment)
+    {
+        foreach (var element in doc.Descendants())
+        {
+            var xmlId = (string?)element.Attribute(XNamespace.Xml.GetName("id"));
+            if (xmlId == fragment)
+                return element;
+
+            var plainId = (string?)element.Attribute("id");
+            if (plainId == fragment)
+                return element;
+        }
+        return null;
     }
 
     static void CollectEntryPointParameters(XElement? entryPointElem, EvaluationContext evalContext, XNamespace ns)
