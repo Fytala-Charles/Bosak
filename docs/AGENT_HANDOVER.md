@@ -1,24 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-27
-**Commit:** `<pending>` — docs: update AGENT_HANDOVER for import-schema assessment
-**Current focus:** **XSLT gaps** — `import-schema` is not a failure cluster: 204 of 205 tests are skipped because Bosak is not schema-aware. `regex-syntax` and `unicode-90` are verified green. Next recommended work is to return to the remaining non-error XSLT conformance failures (e.g. `packages`, `dynamic-evaluation`, `streaming`, or run a full catalog sweep to find any hidden failing clusters).
-**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, and `import-schema` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**.
+**Date:** 2026-08-28
+**Commit:** `<pending>` — docs: update AGENT_HANDOVER for package assessment
+**Current focus:** **XSLT gaps** — `packages` is not a failure cluster: 161 of 163 tests are skipped because `xsl:package` / `xsl:use-package` are not supported. `import-schema`, `regex-syntax`, and `unicode-90` are verified green or correctly blocked. The next concrete work is to either tackle a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`) or run a full catalog sweep to confirm there are no hidden failing clusters among the runnable sets.
+**Expected state:** **2,060 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,056 passed / 0 failed / 7,544 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**.
 
-## This Session Changes (import-schema assessment)
+## This Session Changes (package assessment)
 
-1. **Ran the full `import-schema` conformance cluster** —
-   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "import-schema"`.
-   - Result: **1 passed / 0 failed / 204 skipped** out of 205 tests.
-   - The single runnable test (`import-schema-191`) passed; the remaining 204 tests are skipped because they declare the `schema_aware` dependency, which Bosak does not support.
-   - No code changes were made; `import-schema` is correctly blocked as a known limitation until schema-awareness is implemented.
+1. **Ran the package-related conformance clusters** —
+   - Targeted run: `dotnet run -c Release --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj -- "tests/xslt30-test/catalog.xml" "package"`.
+   - Result: **2 passed / 0 failed / 161 skipped** out of 163 tests across `package-version` (37 tests), `package` (72 tests), and `use-package` (54 tests).
+   - The two runnable tests (`package-version-900`, `package-version-901`) passed; all remaining tests are skipped because they depend on `xsl:package` or `xsl:use-package`, which Bosak does not support.
+   - No code changes were made; `packages` is correctly blocked as a known limitation until `xsl:package` / `xsl:use-package` support is implemented.
 
 2. **Results** —
-   - `import-schema` test set: **1 passed / 0 failed / 204 skipped**.
+   - `package-version` / `package` / `use-package`: **2 passed / 0 failed / 161 skipped**.
    - Routine XSLT sweep remains **7,056 passed / 0 failed / 7,544 skipped**.
    - Unit tests: **2,060 passed / 0 failed / 0 skipped**.
 
-## Previous Session Changes (regex-syntax verification)
+## Previous Session Changes (import-schema assessment)
 
 1. **Cleared the final 15 failing tests across the `error` set** —
    - Added `XTSE1205`/`XTSE1210` validation for `xsl:key` `@use`/content exclusivity and unknown collation in `Stylesheet.ValidateInstructionTree`.
