@@ -89,6 +89,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.28  | 28-08-2026     | Enabled namespace_axis feature; namespace test set now passes                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.29  | 28-08-2026     | Read default_html_version dependency and pass it as serialization params.                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -143,8 +145,6 @@ class Program
         "xslt-3.0-snapshot",
         "dtd",
         "built_in_derived_types",
-        "HTML5",
-        "HTML4",
         "streaming-fallback"
     };
 
@@ -508,6 +508,13 @@ class Program
                 }
             }
 
+            string? defaultHtmlVersion = null;
+            var defaultHtmlVersionDep = deps?.Element(ns + "default_html_version")?.Attribute("value")?.Value;
+            if (defaultHtmlVersionDep == "4")
+                defaultHtmlVersion = "4.0";
+            else if (defaultHtmlVersionDep == "5")
+                defaultHtmlVersion = "5.0";
+
             // Load environment (source XML)
             IXdmNode? sourceNode = null;
             string? envDefaultCollation = null;
@@ -842,6 +849,14 @@ class Program
             // Determine the base output URI from the test's <output file="..."/> element.
             string? baseOutputUri = null;
             var outputFileAttr = testElem.Element(ns + "output")?.Attribute("file");
+            Bosak.Xslt.Stylesheet.OutputProperties? serializationParams = null;
+            if (defaultHtmlVersion != null)
+            {
+                serializationParams = new Bosak.Xslt.Stylesheet.OutputProperties
+                {
+                    DefaultHtmlVersion = defaultHtmlVersion
+                };
+            }
             if (outputFileAttr != null)
             {
                 var outputFile = outputFileAttr.Value;
@@ -863,7 +878,7 @@ class Program
                 }
                 else
                 {
-                    resultXml = executable.TransformFunctionToString(funcName, args, evalContext);
+                    resultXml = executable.TransformFunctionToString(funcName, args, evalContext, serializationParams);
                 }
             }
             else if (sourceNode != null)
@@ -871,7 +886,7 @@ class Program
                 if (rawOutput)
                     resultValue = executable.Transform(sourceNode, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
                 else
-                    resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri);
+                    resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
             else if (!string.IsNullOrEmpty(initialTemplate) || hasImplicitInitialTemplate)
             {
@@ -880,7 +895,7 @@ class Program
                 if (rawOutput)
                     resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
                 else
-                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri);
+                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
             else if (initialModeElem != null)
             {
@@ -888,11 +903,11 @@ class Program
                 if (rawOutput)
                     resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
                 else
-                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri);
+                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
             else
             {
-                resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate, initialMode, baseOutputUri);
+                resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
 
             // Bind the raw result to the variable named by <output result-var="..."/>

@@ -53,6 +53,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.27  | 28-08-2026     | Preserve XRawText through cdata-section-element wrapping and comment normalization     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.28  | 28-08-2026     | HTML C1 controls: SERE0014 for HTML4, numeric char refs for HTML5.                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -160,9 +162,10 @@ public static class ResultTreeSerializer
 
         if (!props.HtmlVersionSpecified)
         {
-            // HTML defaults to 5.0. XHTML without an explicit html-version is treated
-            // as 1.0 for compatibility with the XSLT 2.0 test cases in the suite.
-            props.HtmlVersion = method == "xhtml" ? "1.0" : "5.0";
+            // HTML defaults to the processor-supplied DefaultHtmlVersion. XHTML without
+            // an explicit html-version is treated as 1.0 for compatibility with the
+            // XSLT 2.0 test cases in the suite.
+            props.HtmlVersion = method == "xhtml" ? "1.0" : props.DefaultHtmlVersion;
         }
 
         bool omitXmlDeclarationWasSpecified = props.OmitXmlDeclarationSpecified;
@@ -2274,7 +2277,21 @@ public static class ResultTreeSerializer
                         writer.Write("&#13;");
                         break;
                     default:
-                        if (!IsRepresentable(cp, props.Encoding))
+                        if (cp is >= 0x7F and <= 0x9F)
+                        {
+                            // HTML 4.0 does not allow characters in the #x7F-#x9F range.
+                            // HTML 5.0 serializes them as numeric character references.
+                            if (props.HtmlVersion == "4.0")
+                            {
+                                throw new XsltRuntimeException("SERE0014",
+                                    "HTML output contains a character in the #x7F-#x9F range.",
+                                    XdmValue.Undefined);
+                            }
+                            writer.Write("&#");
+                            writer.Write(cp);
+                            writer.Write(';');
+                        }
+                        else if (!IsRepresentable(cp, props.Encoding))
                         {
                             writer.Write("&#");
                             writer.Write(cp);

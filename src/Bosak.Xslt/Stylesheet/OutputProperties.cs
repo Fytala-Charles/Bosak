@@ -35,6 +35,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 26-08-2026     | Added MergeChecked for XTSE1560 conflicting xsl:output attribute detection                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.0   | 28-08-2026     | Added DefaultHtmlVersion processor default for HTML version fallback.                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -66,6 +68,13 @@ public sealed class OutputProperties
 
     /// <summary>HTML version for HTML/XHTML serialization (e.g. "5.0", "1.1", "1.0").</summary>
     public string HtmlVersion { get; set; } = "5.0";
+
+    /// <summary>
+    /// Default HTML version used by the processor when neither <c>html-version</c> nor
+    /// <c>version</c> is supplied on <c>xsl:output</c>. The conformance harness maps the
+    /// <c>default_html_version</c> test dependency to this property.
+    /// </summary>
+    public string DefaultHtmlVersion { get; set; } = "5.0";
 
     /// <summary>Standalone attribute for the XML declaration, or "omit" to suppress the pseudo-attribute.</summary>
     public string? Standalone { get; set; }
@@ -809,6 +818,7 @@ public sealed class OutputProperties
         if (source.EncodingSpecified) { target.Encoding = source.Encoding; target.EncodingSpecified = true; }
         if (source.VersionSpecified) { target.Version = source.Version; target.VersionSpecified = true; }
         if (source.HtmlVersionSpecified) { target.HtmlVersion = source.HtmlVersion; target.HtmlVersionSpecified = true; }
+        if (!string.IsNullOrEmpty(source.DefaultHtmlVersion)) { target.DefaultHtmlVersion = source.DefaultHtmlVersion; }
         if (source.StandaloneSpecified) { target.Standalone = source.Standalone; target.StandaloneSpecified = true; }
         if (source.UndeclarePrefixesSpecified) { target.UndeclarePrefixes = source.UndeclarePrefixes; target.UndeclarePrefixesSpecified = true; }
         if (source.NormalizationFormSpecified) { target.NormalizationForm = source.NormalizationForm; target.NormalizationFormSpecified = true; }
@@ -883,6 +893,7 @@ public sealed class OutputProperties
             VersionSpecified = VersionSpecified,
             HtmlVersion = HtmlVersion,
             HtmlVersionSpecified = HtmlVersionSpecified,
+            DefaultHtmlVersion = DefaultHtmlVersion,
             Standalone = Standalone,
             StandaloneSpecified = StandaloneSpecified,
             UndeclarePrefixes = UndeclarePrefixes,

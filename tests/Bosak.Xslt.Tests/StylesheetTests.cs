@@ -127,6 +127,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.83  | 28-08-2026     | Added namespace-node and xsl:attribute-in-simple-content regression tests               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.84  | 28-08-2026     | Added HTML4/5 C1 control serialization regression tests.                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -139,6 +141,7 @@ using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Standard.Functions;
 using Bosak.Xslt.Api;
+using Bosak.Xslt.Runtime;
 using Xunit;
 
 namespace Bosak.Xslt.Tests;
@@ -6041,6 +6044,37 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var root = output.Root;
         Assert.NotNull(root);
         Assert.Equal("http://example.com/", (string?)root.Attribute((XNamespace)"http://www.w3.org/2000/xmlns/" + "x"));
+    }
+
+    [Fact]
+    public void Output_Html4_C1_Control_Raises_Sere0014()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='html' html-version='4.0' encoding='UTF-8' indent='no'/>
+            <xsl:template match='/'><doc>&#x9f;</doc></xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<XsltRuntimeException>(() => executable.TransformToString(new XDocumentNode(source)));
+        Assert.Contains("SERE0014", ex.Message);
+    }
+
+    [Fact]
+    public void Output_Html5_C1_Control_Escaped_As_Numeric_Character_Reference()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:output method='html' version='5.0' encoding='UTF-8' indent='no'/>
+            <xsl:template match='/'><doc>&#x9f;</doc></xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("&#159;", result);
     }
 
     private class InlineUriResolver : IXsltUriResolver

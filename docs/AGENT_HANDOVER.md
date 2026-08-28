@@ -1,9 +1,36 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `991803d` — Fix namespace node handling in XSLT runtime and enable namespace_axis feature
-**Current focus:** **XSLT gaps** — namespace node copy/sequence and xsl:attribute-in-simple-content fixes. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,091 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,113 passed / 0 failed / 7,487 skipped** (was 7,110/0/7,490; +3 namespace tests now runnable); **full `namespace` test set 223 passed / 0 failed / 1 skipped** (was 220/3/1); **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Commit:** `COMMIT_PLACEHOLDER` — Fix HTML4/HTML5 output method C1 control serialization
+**Current focus:** **XSLT gaps** — serialization correctness (HTML C1 controls, default HTML version). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,093 unit tests / 0 failed / 0 skipped** (+2 new regression tests); **full `output` test set 225 passed / 0 failed / 7 skipped** (was 222/3/7); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,113 passed / 0 failed / 7,487 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+
+## This Session Changes (HTML4/HTML5 output method C1 control serialization)
+
+1. **Added processor-level `DefaultHtmlVersion` to `OutputProperties`** —
+   - New property `DefaultHtmlVersion` (default `"5.0"`) in `src/Bosak.Xslt/Stylesheet/OutputProperties.cs`.
+   - Carried through `Clone()` and `Merge()` so serialization parameters and result-document properties inherit the value.
+   - `ResultTreeSerializer.ApplyMethodDefaults` now falls back to `DefaultHtmlVersion` for the HTML output method when neither `html-version` nor `version` is supplied, instead of hard-coding `5.0`.
+
+2. **Fixed C1 control character serialization for HTML** —
+   - `ResultTreeSerializer.WriteHtmlEscaped` now detects characters in the `#x7F-#x9F` range.
+   - HTML 4.0 raises `SERE0014` via `XsltRuntimeException`, matching the W3C serialization spec.
+   - HTML 5.0 escapes the character as a numeric character reference (e.g. `&#159;`).
+   - Header bumped: `ResultTreeSerializer.cs` → 1.28.
+
+3. **Passed `default_html_version` test dependency into serialization** —
+   - `tests/Bosak.Xslt.Conformance/Program.cs` reads `<default_html_version value="N"/>` from each test case's dependencies and maps it to `"4.0"` or `"5.0"`.
+   - `XsltExecutable.TransformToString` and `TransformFunctionToString` now accept an optional `serializationParams` argument (following the existing `TransformCaptured` pattern); the harness passes the dependency value through this parameter.
+   - Header bumped: `Program.cs` → 3.29; `XsltExecutable.cs` → 1.9.
+
+4. **Added regression tests** —
+   - `Output_Html4_C1_Control_Raises_Sere0014`
+   - `Output_Html5_C1_Control_Escaped_As_Numeric_Character_Reference`
+   - Header bumped: `StylesheetTests.cs` → 0.84.
+
+5. **Results** —
+   - `output` test set: **225 passed / 0 failed / 7 skipped** (was 222/3/7). The three previously failing tests `output-0195`, `output-0195a`, and `output-0195b` now pass.
+   - Unit tests: **351 passed / 0 failed / 0 skipped** in `Bosak.Xslt.Tests` (was 349/0/0).
 
 ## This Session Changes (namespace node handling in XSLT runtime)
 

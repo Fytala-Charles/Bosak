@@ -29,6 +29,8 @@
 //                      | Charles Korthout | 1.7   | 15-07-2026     | Added serialization-params merge and TransformFunctionCaptured for fn:transform.        |
 //                      | Charles Korthout | 1.8   | 15-07-2026     | TransformCaptured/TransformFunctionCaptured accept explicit global context item           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 28-08-2026     | Added optional serializationParams to TransformToString/TransformFunctionToString.        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -218,8 +220,9 @@ public sealed class XsltExecutable
     /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
     /// <param name="initialMode">Optional name of the initial mode to use.</param>
     /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
+    /// <param name="serializationParams">Optional serialization parameters merged with the effective output properties.</param>
     /// <returns>The serialized result of the transformation.</returns>
-    public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null)
+    public string TransformToString(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null, Stylesheet.OutputProperties? serializationParams = null)
     {
         return RunWithStack(() =>
         {
@@ -270,6 +273,12 @@ public sealed class XsltExecutable
                 outputProperties.CharacterMap = resolved;
             }
 
+            if (serializationParams != null)
+            {
+                outputProperties = outputProperties.Clone();
+                Stylesheet.OutputProperties.Merge(outputProperties, serializationParams);
+            }
+
             return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
         }, DefaultTransformStackSize);
     }
@@ -296,8 +305,9 @@ public sealed class XsltExecutable
     /// <param name="name">The expanded function name (EQName form <c>Q{{uri}}local</c>).</param>
     /// <param name="args">Arguments to pass to the function.</param>
     /// <param name="context">Optional evaluation context.</param>
+    /// <param name="serializationParams">Optional serialization parameters merged with the effective output properties.</param>
     /// <returns>The serialized result of the function call.</returns>
-    public string TransformFunctionToString(string name, XdmValue[] args, EvaluationContext? context = null)
+    public string TransformFunctionToString(string name, XdmValue[] args, EvaluationContext? context = null, Stylesheet.OutputProperties? serializationParams = null)
     {
         var result = TransformFunction(name, args, context);
         var outputProperties = _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
@@ -314,6 +324,11 @@ public sealed class XsltExecutable
                     resolved[kvp.Key] = kvp.Value;
             }
             outputProperties.CharacterMap = resolved;
+        }
+        if (serializationParams != null)
+        {
+            outputProperties = outputProperties.Clone();
+            Stylesheet.OutputProperties.Merge(outputProperties, serializationParams);
         }
         return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
     }
