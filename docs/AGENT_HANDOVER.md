@@ -1,11 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `<pending>` — docs: update AGENT_HANDOVER for fn:collection / fn:uri-collection fixes
-**Current focus:** **XSLT gaps** — `fn:collection` / `fn:uri-collection` now support fragment identifiers and the W3C `?select=<glob>` directory convention. `collection` and `merge` clusters are green. Next concrete work is another small feature gap (e.g. `on-multiple-match="error"` detection, `xsl:accumulator-rule` variable-in-match detection, or `xsl:iterate`) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
-**Expected state:** **2,062 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,060 passed / 0 failed / 7,540 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
+**Commit:** `<pending>` — docs: update AGENT_HANDOVER for on-multiple-match=error unskip
+**Current focus:** **XSLT gaps** — `include-0702b` and `mode-0801b` are now runnable because the runtime already treats recoverable ambiguous matches as errors when the test declares `on-multiple-match="error"`. Next concrete work is another small feature gap (`xsl:accumulator-rule` variable-in-match detection, `xsl:iterate`, `fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
+**Expected state:** **2,062 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,062 passed / 0 failed / 7,538 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
 
-## This Session Changes (fn:collection / fn:uri-collection fixes)
+## This Session Changes (on-multiple-match=error unskip)
+
+1. **Unskipped `include-0702b` and `mode-0801b`** —
+   - Removed the harness skips in `tests/Bosak.Xslt.Conformance/Program.cs`.
+   - The runtime already raises an error for recoverable ambiguous matches when `XsltCompiler.TreatRecoverableAmbiguousMatchAsError` is set; the harness sets this flag whenever a test declares `<on-multiple-match value="error"/>`.
+   - Header bumped: `Program.cs` → 3.22.
+
+2. **Results** —
+   - `include` test set: **14 passed / 0 failed / 2 skipped** (was 13/0/3).
+   - `mode` test set: **123 passed / 0 failed / 65 skipped** (was 122/0/66).
+   - Routine XSLT sweep: **7,062 passed / 0 failed / 7,538 skipped**.
+   - Unit tests: **2,062 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (fn:collection / fn:uri-collection fixes)
 
 1. **Enabled the previously skipped `collection-*` and `merge-*` uri-collection tests** —
    - Removed the harness skips for `collection-004/005/006` and `merge-065a/065b/097/097s/097sf/098/099` in `tests/Bosak.Xslt.Conformance/Program.cs`.

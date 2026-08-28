@@ -75,6 +75,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.21  | 28-08-2026     | Unskip collection-004/005/006 and merge uri-collection tests (fn:collection implemented) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.22  | 28-08-2026     | Unskip include-0702b and mode-0801b (on-multiple-match=error already handled at runtime) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -184,8 +186,6 @@ class Program
         "accumulator-091",
         // Embedded stylesheet modules (fragment identifiers) not supported
         "include-0102", "include-0103",
-        // on-multiple-match=error detection not implemented
-        "include-0702b", "mode-0801b",
         // .NET RegexOptions.Compiled codegen bug: '^((.)(?:b|(c|e){1,2}?|d)+?a)$' crashes the
         // compiled runner with IndexOutOfRangeException on some inputs; the interpreted engine
         // answers correctly. Platform limitation, not an engine defect.
