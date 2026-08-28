@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-28
-**Commit:** `<pending>` — feat: detect forbidden variable references in xsl:accumulator-rule/@match
+**Commit:** `87c9191` — feat: detect forbidden variable references in xsl:accumulator-rule/@match
 **Current focus:** **XSLT gaps** — `xsl:accumulator-rule` variable-in-match detection is now implemented. Next concrete work is another small feature gap (`xsl:iterate`, `fn:collection` default-collection handling, etc.) or a major feature (`schema-awareness`, `packages`, `streaming`, `dynamic-evaluation`).
 **Expected state:** **2,071 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,063 passed / 0 failed / 7,537 skipped** (100.0% of runnable tests, with `error`, `unicode-90`, `regex-syntax-xslt20`, `import-schema`, and `packages` excluded from routine sweeps); **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**.
 
