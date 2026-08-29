@@ -1,11 +1,32 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-29
-**Commit:** `d85d12d` — result-document-1402 HTML4 nested-HTML serialization fix
-**Current focus:** **XSLT gaps** — remaining 8 failures (`axes-052/058`, `key-058/087/090`, `position-4901`, `attribute-0806`, `number-4501`). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,097 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,246 passed / 8 failed / 7,346 skipped** (was 7,245/9/7,346; `result-document-1402` now passes); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Commit:** `TBD` — xsl:key namespace-node matching and fn:current() in @use
+**Current focus:** **XSLT gaps** — remaining 5 failures (`axes-052/058`, `position-4901`, `attribute-0806`, `number-4501`). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,099 unit tests / 0 failed / 0 skipped** (+2 new regression tests); **full XSLT conformance sweep 7,249 passed / 5 failed / 7,346 skipped** (was 7,246/8/7,346; `key-058/087/090` now pass); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
-## This Session Changes (result-document-1402 HTML4 nested-HTML serialization)
+## This Session Changes (xsl:key namespace-node matching and fn:current() in @use)
+
+1. **Indexed namespace nodes for xsl:key** —
+   - `KeyIndex.IndexNodes` now enumerates the namespace axis of each element and passes namespace nodes to `TryIndexNode`, so `match="namespace-node()"` (and union patterns that include it) actually matches nodes.
+   - Header bumped: `KeyIndex.cs` → 0.8.
+
+2. **Set fn:current() during xsl:key/@use evaluation** —
+   - `KeyIndex.TryIndexNode` now saves/restores focus and current item, sets the current item to the node being indexed, and evaluates the `@use` expression in that context.
+   - This makes `current()` return the indexed node inside `xsl:key/@use`, as required by `key-058`.
+
+3. **Added regression tests** —
+   - `Key_Match_Namespace_Node`
+   - `Key_Use_Current_Item`
+   - Header bumped: `StylesheetTests.cs` → 0.53.
+
+4. **Results** —
+   - `key-058`, `key-087`, `key-090` now pass.
+   - Full `key` test set: **99 passed / 0 failed / 0 skipped**.
+   - Unit tests: **2,099 passed / 0 failed / 0 skipped**.
+   - Full XSLT conformance sweep: **7,249 passed / 5 failed / 7,346 skipped**. Remaining failures: `axes-052/058`, `position-4901`, `attribute-0806`, `number-4501`.
+
+## Previous Session Changes (result-document-1402 HTML4 nested-HTML serialization)
 
 1. **Fixed HTML 4.0 empty-element serialization** —
    - `ResultTreeSerializer.WriteHtmlElement` now emits a closing tag for empty elements when `HtmlVersion` is not `5.0` (e.g. `<meta></meta>` for HTML 4.0). Only HTML 5.0 void elements are serialized without a closing tag (e.g. `<meta>`).

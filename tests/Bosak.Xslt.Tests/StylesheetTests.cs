@@ -64,6 +64,7 @@
 //                      | Charles Korthout | 0.50  | 25-08-2026     | Added XTSE3350 regression tests for duplicate xsl:accumulator names                    |
 //                      | Charles Korthout | 0.51  | 25-08-2026     | Added XTSE0760 regression tests for xsl:param inside xsl:function                       |
 //                      | Charles Korthout | 0.52  | 25-08-2026     | Added XTSE1295 regression tests for xsl:decimal-format/@zero-digit                       |
+//                      | Charles Korthout | 0.53  | 29-08-2026     | Added xsl:key namespace-node and fn:current() in @use regression tests.                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.53  | 25-08-2026     | Added XTSE1290 regression tests for conflicting xsl:decimal-format declarations          |
 //                      |==================|=======|================|=========================================================================================
@@ -1290,6 +1291,69 @@ Welcome to this document on XHTML.
         var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<found>b</found>", result);
+    }
+
+    [Fact]
+    public void Key_Match_Namespace_Node()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='ns' match='namespace-node()' use='name()'/>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each select=""key('ns', 'ext')"">
+                        <e><xsl:value-of select='name(..)'/></e>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("doc",
+                new XAttribute(XNamespace.Xmlns + "ext", "http://example.com"),
+                new XElement("section",
+                    new XElement("inner"))));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<e>doc</e>", result);
+        Assert.Contains("<e>section</e>", result);
+        Assert.Contains("<e>inner</e>", result);
+    }
+
+    [Fact]
+    public void Key_Use_Current_Item()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:key name='targets' match='target'
+                use='string(namespace::*[name()=substring-before(current()/@ref,&quot;:&quot;)])'/>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each select=""key('targets', 'http://aURI/')"">
+                        <t><xsl:value-of select='@name'/></t>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XAttribute(XNamespace.Xmlns + "a", "http://aURI/"),
+                new XAttribute(XNamespace.Xmlns + "b", "http://bURI/"),
+                new XElement("target", new XAttribute("name", "1"), new XAttribute("ref", "a:x")),
+                new XElement("target", new XAttribute("name", "2"), new XAttribute("ref", "b:x")),
+                new XElement("target", new XAttribute("name", "3"), new XAttribute("ref", "x")),
+                new XElement("target", new XAttribute("name", "4"), new XAttribute("ref", "a:y"))));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<t>1</t>", result);
+        Assert.Contains("<t>4</t>", result);
+        Assert.DoesNotContain("<t>2</t>", result);
+        Assert.DoesNotContain("<t>3</t>", result);
     }
 
     [Fact]

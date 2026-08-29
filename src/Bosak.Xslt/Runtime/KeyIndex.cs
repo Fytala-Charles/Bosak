@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.5   | 11-06-2026     | Document-order lookup results; composite key support                                     |
 //                      | Charles Korthout | 0.6   | 24-06-2026     | Pass DefiningElementDefaultNamespace when compiling key use expressions                |
 //                      | Charles Korthout | 0.7   | 26-06-2026     | Per-key-name effective collation for key-value comparison; XTSE1220 detection           |
+//                      | Charles Korthout | 0.8   | 29-08-2026     | Index namespace nodes; set fn:current() during xsl:key/@use evaluation (key-058/087/090).|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -371,13 +372,20 @@ public sealed class KeyIndex
     {
         TryIndexNode(node, keyName, match, useExpr, composite, context, index);
 
-        // Attributes can also match xsl:key/@match patterns such as @id.
         if (node.NodeKind == XdmNodeKind.Element)
         {
+            // Attributes can match xsl:key/@match patterns such as @id.
             foreach (var attr in node.Attributes())
             {
                 if (attr.IsNode && attr.NodeValue != null)
                     TryIndexNode(attr.NodeValue, keyName, match, useExpr, composite, context, index);
+            }
+
+            // Namespace nodes can match xsl:key/@match patterns such as namespace-node().
+            foreach (var ns in node.Axis(XdmAxis.Namespace))
+            {
+                if (ns.IsNode && ns.NodeValue != null)
+                    TryIndexNode(ns.NodeValue, keyName, match, useExpr, composite, context, index);
             }
         }
 
@@ -399,6 +407,12 @@ public sealed class KeyIndex
                 if (attr.IsNode && attr.NodeValue != null)
                     TryIndexNode(attr.NodeValue, keyName, match, useEvaluator, composite, context, index);
             }
+
+            foreach (var ns in node.Axis(XdmAxis.Namespace))
+            {
+                if (ns.IsNode && ns.NodeValue != null)
+                    TryIndexNode(ns.NodeValue, keyName, match, useEvaluator, composite, context, index);
+            }
         }
 
         foreach (var child in node.Axis(XdmAxis.Child))
@@ -412,10 +426,27 @@ public sealed class KeyIndex
     {
         if (match(XdmValue.FromNode(node), context))
         {
-            var keyValues = useExpr != null
-                ? useExpr.Evaluate(context.WithFocus(XdmValue.FromNode(node), 1, 1))
-                : XdmValue.Undefined;
-            AddKeyValues(index, keyName, keyValues, node, composite, context.BackwardsCompatible);
+            // XSLT 3.0 says the node being indexed is the current item for the
+            // xsl:key/@use expression, so fn:current() returns that node.
+            var savedItem = context.ContextItem;
+            var savedPosition = context.ContextPosition;
+            var savedSize = context.ContextSize;
+            var savedCurrent = context.CurrentItem;
+            try
+            {
+                context.WithFocus(XdmValue.FromNode(node), 1, 1)
+                       .WithCurrentItem(XdmValue.FromNode(node));
+
+                var keyValues = useExpr != null
+                    ? useExpr.Evaluate(context)
+                    : XdmValue.Undefined;
+                AddKeyValues(index, keyName, keyValues, node, composite, context.BackwardsCompatible);
+            }
+            finally
+            {
+                context.WithFocus(savedItem, savedPosition, savedSize)
+                       .WithCurrentItem(savedCurrent);
+            }
         }
     }
 
@@ -423,8 +454,23 @@ public sealed class KeyIndex
     {
         if (match(XdmValue.FromNode(node), context))
         {
-            var keyValues = useEvaluator(node);
-            AddKeyValues(index, keyName, keyValues, node, composite, context.BackwardsCompatible);
+            var savedItem = context.ContextItem;
+            var savedPosition = context.ContextPosition;
+            var savedSize = context.ContextSize;
+            var savedCurrent = context.CurrentItem;
+            try
+            {
+                context.WithFocus(XdmValue.FromNode(node), 1, 1)
+                       .WithCurrentItem(XdmValue.FromNode(node));
+
+                var keyValues = useEvaluator(node);
+                AddKeyValues(index, keyName, keyValues, node, composite, context.BackwardsCompatible);
+            }
+            finally
+            {
+                context.WithFocus(savedItem, savedPosition, savedSize)
+                       .WithCurrentItem(savedCurrent);
+            }
         }
     }
 
