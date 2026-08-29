@@ -83,6 +83,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.25  | 28-08-2026     | Enable disable-output-escaping feature (xsl:text/xsl:value-of now serialize raw text)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.26  | 29-08-2026     | Merge harness default-html-version into CompareResult output properties (result-document-1402).|
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.26  | 28-08-2026     | Unskip include-0102/0103 (fragment identifiers in xsl:include/@href now supported)       |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.27  | 28-08-2026     | Enable xml-stylesheet processing-instruction feature (embedded/external stylesheets)    |
@@ -924,14 +926,26 @@ class Program
 
             int messageIndex = 0;
             int warningIndex = 0;
+            // Make harness-level serialization parameters (e.g. default-html-version
+            // from the test-case dependencies) available when re-serializing a raw
+            // result for comparison. This is needed for tests such as
+            // result-document-1402, where the JSON nested HTML output depends on
+            // the declared HTML version.
+            var compareProperties = executable.LastResultDocumentProperties ?? executable.OutputProperties;
+            if (serializationParams != null)
+            {
+                compareProperties = compareProperties.Clone();
+                Bosak.Xslt.Stylesheet.OutputProperties.Merge(compareProperties, serializationParams);
+            }
+
             bool compareOk;
             if (resultValue != null)
             {
-                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext, executable.LastResultDocumentProperties ?? executable.OutputProperties, baseOutputUri);
+                compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext, compareProperties, baseOutputUri);
             }
             else
             {
-                compareOk = CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, executable.LastResultDocumentProperties ?? executable.OutputProperties, baseOutputUri);
+                compareOk = CompareResult(resultXml, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, compareProperties, baseOutputUri);
             }
 
             if (compareOk)

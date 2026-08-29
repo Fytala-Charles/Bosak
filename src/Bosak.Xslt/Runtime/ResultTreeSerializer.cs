@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 1.27  | 28-08-2026     | Preserve XRawText through cdata-section-element wrapping and comment normalization     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.28  | 28-08-2026     | HTML C1 controls: SERE0014 for HTML4, numeric char refs for HTML5.                       |
+//                      | Charles Korthout | 1.29  | 29-08-2026     | HTML 4.0 empty elements emit closing tag; HTML 5.0 void elements remain empty.            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2154,7 +2155,11 @@ public static class ResultTreeSerializer
 
         if (isEmpty)
         {
-            if (IsHtmlEmptyElement(localName) || IsHtmlVoidElement(localName))
+            // In HTML 5.0 void elements are serialized without an end tag.
+            // In HTML 4.0 and earlier every element is serialized with both a
+            // start and end tag (e.g. <meta></meta>). See XSLT/XQuery Serialization
+            // 3.1, section 7 (HTML output method).
+            if (props.HtmlVersion == "5.0" && IsHtmlVoidElement(localName))
             {
                 writer.Write('>');
             }

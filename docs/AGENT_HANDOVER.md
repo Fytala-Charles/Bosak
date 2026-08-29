@@ -1,11 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-29
-**Commit:** `55b5a7d` — DTD support fixes in XSLT conformance harness
-**Current focus:** **XSLT gaps** — DTD support correctness (unparsed entities, ID/IDREFS, document-level whitespace). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,097 unit tests / 0 failed / 0 skipped** (+4 new regression tests); **full XSLT conformance sweep 7,245 passed / 9 failed / 7,346 skipped** (was 7,237/12/7,351); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**. The 9 remaining XSLT failures (`axes-052/058`, `key-058/087/090`, `position-4901`, `attribute-0806`, `number-4501`, `result-document-1402`) are pre-existing and not DTD-related.
+**Commit:** `TBD` — result-document-1402 HTML4 nested-HTML serialization fix
+**Current focus:** **XSLT gaps** — remaining 8 failures (`axes-052/058`, `key-058/087/090`, `position-4901`, `attribute-0806`, `number-4501`). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,097 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,246 passed / 8 failed / 7,346 skipped** (was 7,245/9/7,346; `result-document-1402` now passes); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
-## This Session Changes (DTD support fixes in XSLT conformance harness)
+## This Session Changes (result-document-1402 HTML4 nested-HTML serialization)
+
+1. **Fixed HTML 4.0 empty-element serialization** —
+   - `ResultTreeSerializer.WriteHtmlElement` now emits a closing tag for empty elements when `HtmlVersion` is not `5.0` (e.g. `<meta></meta>` for HTML 4.0). Only HTML 5.0 void elements are serialized without a closing tag (e.g. `<meta>`).
+   - This fixes nested HTML output inside JSON when `default_html_version` is `4.0`, as required by `result-document-1402`.
+   - Header bumped: `ResultTreeSerializer.cs` → 1.29.
+
+2. **Propagated harness-level `default_html_version` to raw-result comparison** —
+   - `tests/Bosak.Xslt.Conformance/Program.cs` now merges the harness-built `serializationParams` (containing `DefaultHtmlVersion` from test-case dependencies) into the `OutputProperties` used by `CompareResult` when re-serializing raw XDM results.
+   - This ensures tests such as `result-document-1402` that return a raw map and rely on `serialization-matches` compare against HTML output produced with the declared HTML version.
+   - Header bumped: `Program.cs` → 3.23.
+
+3. **Results** —
+   - `result-document-1402` now passes.
+   - `result-document-1402b` (HTML5 variant) continues to pass.
+   - Unit tests: **2,097 passed / 0 failed / 0 skipped**.
+   - Full XSLT conformance sweep: **7,246 passed / 8 failed / 7,346 skipped** (was 7,245/9/7,346). Remaining failures: `axes-052/058`, `key-058/087/090`, `position-4901`, `attribute-0806`, `number-4501`.
+
+## Previous Session Changes (DTD support fixes in XSLT conformance harness)
 
 1. **Enabled DTD processing in the conformance harness** —
    - Removed `"dtd"` from `SkipFeatures` in `tests/Bosak.Xslt.Conformance/Program.cs` (already done in prior work).
