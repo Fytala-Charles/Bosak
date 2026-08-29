@@ -1,9 +1,44 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-28
-**Commit:** `1620a6a` — Fix HTML4/HTML5 output method C1 control serialization
-**Current focus:** **XSLT gaps** — serialization correctness (HTML C1 controls, default HTML version). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,093 unit tests / 0 failed / 0 skipped** (+2 new regression tests); **full `output` test set 225 passed / 0 failed / 7 skipped** (was 222/3/7); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **routine XSLT sweep 7,113 passed / 0 failed / 7,487 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Date:** 2026-08-29
+**Commit:** `48c8e8f` — DTD support fixes in XSLT conformance harness
+**Current focus:** **XSLT gaps** — DTD support correctness (unparsed entities, ID/IDREFS, document-level whitespace). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,097 unit tests / 0 failed / 0 skipped** (+4 new regression tests); **full XSLT conformance sweep 7,245 passed / 9 failed / 7,346 skipped** (was 7,237/12/7,351); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**. The 9 remaining XSLT failures (`axes-052/058`, `key-058/087/090`, `position-4901`, `attribute-0806`, `number-4501`, `result-document-1402`) are pre-existing and not DTD-related.
+
+## This Session Changes (DTD support fixes in XSLT conformance harness)
+
+1. **Enabled DTD processing in the conformance harness** —
+   - Removed `"dtd"` from `SkipFeatures` in `tests/Bosak.Xslt.Conformance/Program.cs` (already done in prior work).
+
+2. **Fixed document-level whitespace handling** —
+   - `XDocumentNode.ChildNodes` now skips whitespace-only text nodes when they are direct children of a document node, and unwraps the synthetic `__xdm_doc__` wrapper.
+   - `XDocumentNode.StringValue` for document nodes also excludes document-level whitespace.
+   - Axis iteration (`GetFollowingSiblingAxis`, `GetPrecedingSiblingAxis`, `GetFollowingAxis`, `GetPrecedingAxis`) uses `GetXPathParent` so navigation over document-level comments/PIs works (`axes-202`), while stopping at the synthetic wrapper so parentless temporary trees do not derail.
+   - Header bumped: `XDocumentNode.cs` → 2.10.
+
+3. **Fixed unparsed-entity lookup base URI resolution** —
+   - `UnparsedEntityAnnotation` now carries the document's base URI so relative system identifiers can be resolved.
+   - `Xml11Loader.AttachUnparsedEntities` stores the base URI on the annotation.
+   - `XDocumentNode.TryGetUnparsedEntity` resolves system IDs against the annotation's base URI, falling back to existing document annotations and `XDocument.BaseUri`.
+   - `XDocumentNode.CopyUnparsedEntitiesTo` copies the base URI to cloned documents.
+   - Headers bumped: `UnparsedEntityAnnotation.cs` → 0.2; `Xml11Loader.cs` → 0.6; `XDocumentNode.cs` → 2.11.
+
+4. **Raised proper XSLT runtime errors for unparsed-entity lookup without document context** —
+   - `XsltFunctionLibrary.GetContextNode` / `GetNodeArgument` now throw `XsltRuntimeException` (with XTDE1370 / XTDE1380) instead of plain `InvalidOperationException`, matching the XSLT error semantics.
+   - Header bumped: `XsltFunctionLibrary.cs` → 0.11.
+
+5. **Added DTD regression tests** —
+   - `Dtd_Unparsed_Entity_Lookup`
+   - `Dtd_Id_And_Idrefs_Lookup`
+   - `Dtd_Document_Level_Whitespace_Excluded_From_Node_Count`
+   - `Unparsed_Entity_Lookup_Without_Document_Context_Throws_Xtde1370`
+   - Header bumped: `StylesheetTests.cs` → 0.86.
+
+6. **Results** —
+   - `dtd` feature is now enabled in the harness.
+   - Previously failing DTD-related tests (`axes-202`, `error-1370a/b`, `error-1380a/b`) now pass.
+   - Unit tests: **2,097 passed / 0 failed / 0 skipped** (was 2,093/0/0; +4 new tests).
+   - Full XSLT conformance sweep: **7,245 passed / 9 failed / 7,346 skipped** (was 7,237/12/7,351; +8 runnable tests, -3 failures).
 
 ## This Session Changes (HTML4/HTML5 output method C1 control serialization)
 

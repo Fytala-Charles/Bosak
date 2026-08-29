@@ -22,6 +22,13 @@
 //                      | Charles Korthout | 0.7   | 21-07-2026     | Set IsXsltMode=true in fn:transform nested EvaluationContext                             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 03-08-2026     | fn:stream-available#1: open stream + read to root element; false on any failure          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 29-08-2026     | Implemented fn:unparsed-entity-uri / fn:unparsed-entity-public-id                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 29-08-2026     | Raise XTDE1370/XTDE1380 when unparsed-entity lookup has no document context            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 29-08-2026     | Throw XsltRuntimeException (not InvalidOperationException) for XTDE1370/XTDE1380         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
@@ -29,6 +36,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using Bosak.Xslt.Runtime;
 
 namespace Bosak.Xslt.Api;
 
@@ -60,35 +68,107 @@ public static class XsltFunctionLibrary
             ReturnType = XdmValueKind.Boolean,
             Implementation = StreamAvailable_1
         });
-        // fn:unparsed-entity-uri / fn:unparsed-entity-public-id: the XDocument-based
-        // node providers do not expose DTD unparsed-entity declarations, so the lookup
-        // always yields the empty sequence (correct whenever no unparsed entities are
-        // declared, which is all documents the providers can report on).
-        foreach (var localName in new[] { "unparsed-entity-uri", "unparsed-entity-public-id" })
+        // fn:unparsed-entity-uri / fn:unparsed-entity-public-id: lookup unparsed
+        // entity declarations from the context item's document (arity 1) or from the
+        // supplied node (arity 2).
+        context.RegisterFunction(new FunctionSignature
         {
-            context.RegisterFunction(new FunctionSignature
-            {
-                NamespaceUri = "http://www.w3.org/2005/xpath-functions",
-                LocalName = localName,
-                Arity = 1,
-                ParameterTypes = [XdmValueKind.String],
-                ReturnType = XdmValueKind.String,
-                Implementation = UnparsedEntity_Empty
-            });
-            context.RegisterFunction(new FunctionSignature
-            {
-                NamespaceUri = "http://www.w3.org/2005/xpath-functions",
-                LocalName = localName,
-                Arity = 2,
-                ParameterTypes = [XdmValueKind.String, XdmValueKind.Node],
-                ReturnType = XdmValueKind.String,
-                Implementation = UnparsedEntity_Empty
-            });
-        }
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "unparsed-entity-uri",
+            Arity = 1,
+            ParameterTypes = [XdmValueKind.String],
+            ReturnType = XdmValueKind.String,
+            Implementation = UnparsedEntity_Uri_1
+        });
+        context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "unparsed-entity-uri",
+            Arity = 2,
+            ParameterTypes = [XdmValueKind.String, XdmValueKind.Node],
+            ReturnType = XdmValueKind.String,
+            Implementation = UnparsedEntity_Uri_2
+        });
+        context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "unparsed-entity-public-id",
+            Arity = 1,
+            ParameterTypes = [XdmValueKind.String],
+            ReturnType = XdmValueKind.String,
+            Implementation = UnparsedEntity_PublicId_1
+        });
+        context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = "http://www.w3.org/2005/xpath-functions",
+            LocalName = "unparsed-entity-public-id",
+            Arity = 2,
+            ParameterTypes = [XdmValueKind.String, XdmValueKind.Node],
+            ReturnType = XdmValueKind.String,
+            Implementation = UnparsedEntity_PublicId_2
+        });
     }
 
-    private static XdmValue UnparsedEntity_Empty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.Undefined;
+    private static XdmValue UnparsedEntity_Uri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedEntity_Uri(GetContextNode(ctx, "XTDE1370"), AtomizeString(args[0]));
+
+    private static XdmValue UnparsedEntity_Uri_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedEntity_Uri(GetNodeArgument(args[1], "XTDE1370"), AtomizeString(args[0]));
+
+    private static XdmValue UnparsedEntity_PublicId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedEntity_PublicId(GetContextNode(ctx, "XTDE1380"), AtomizeString(args[0]));
+
+    private static XdmValue UnparsedEntity_PublicId_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => UnparsedEntity_PublicId(GetNodeArgument(args[1], "XTDE1380"), AtomizeString(args[0]));
+
+    private static XdmValue UnparsedEntity_Uri(IXdmNode node, string name)
+    {
+        if (!node.TryGetUnparsedEntity(name, out var systemId, out _))
+            return XdmValue.Undefined;
+        return string.IsNullOrEmpty(systemId) ? XdmValue.Undefined : XdmValue.FromString(systemId, "anyURI");
+    }
+
+    private static XdmValue UnparsedEntity_PublicId(IXdmNode node, string name)
+    {
+        if (!node.TryGetUnparsedEntity(name, out _, out var publicId))
+            return XdmValue.Undefined;
+        return string.IsNullOrEmpty(publicId) ? XdmValue.Undefined : XdmValue.FromString(publicId);
+    }
+
+    private static IXdmNode GetContextNode(EvaluationContext ctx, string errorCode)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new XsltRuntimeException(errorCode, "There is no context item for unparsed-entity lookup.", XdmValue.Undefined);
+        var first = FirstItem(item);
+        if (!first.IsNode)
+            throw new XsltRuntimeException(errorCode, "The context item is not a node.", XdmValue.Undefined);
+        var node = first.NodeValue!;
+        if (node.Document is null)
+            throw new XsltRuntimeException(errorCode, "The root of the tree containing the context item is not a document node.", XdmValue.Undefined);
+        return node;
+    }
+
+    private static IXdmNode GetNodeArgument(XdmValue value, string errorCode)
+    {
+        var first = FirstItem(value);
+        if (!first.IsNode)
+            throw new XsltRuntimeException(errorCode, "The supplied argument is not a node.", XdmValue.Undefined);
+        var node = first.NodeValue!;
+        if (node.Document is null)
+            throw new XsltRuntimeException(errorCode, "The root of the tree containing the supplied node is not a document node.", XdmValue.Undefined);
+        return node;
+    }
+
+    private static string AtomizeString(XdmValue value)
+    {
+        var first = FirstItem(value);
+        if (first.IsUndefined)
+            return string.Empty;
+        if (first.IsNode)
+            return first.NodeValue?.StringValue ?? string.Empty;
+        return first.ToString();
+    }
 
     /// <summary>
     /// Registers only <c>fn:transform</c> (an F&amp;O function available in every host

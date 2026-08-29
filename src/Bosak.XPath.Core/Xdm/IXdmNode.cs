@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 23-08-2026     | Added IsComplexType accessor for schema-aware element type comparison |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 29-08-2026     | Added TryGetUnparsedEntity for DTD unparsed entity support                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -169,6 +171,19 @@ public interface IXdmNode
 
     /// <summary>Gets the internal subset of the document type declaration, or empty string if none.</summary>
     string InternalSubset => string.Empty;
+
+    /// <summary>
+    /// Looks up an unparsed entity declaration by name in the document that contains this node.
+    /// When found, <paramref name="systemId"/> receives the absolute system identifier
+    /// (resolved against the document base URI) and <paramref name="publicId"/> receives the
+    /// public identifier if one was declared. Returns <c>false</c> when no such entity exists.
+    /// </summary>
+    bool TryGetUnparsedEntity(string name, out string? systemId, out string? publicId)
+    {
+        systemId = null;
+        publicId = null;
+        return false;
+    }
 
     /// <summary>Returns the XML serialization of this node.</summary>
     string ToXmlString();

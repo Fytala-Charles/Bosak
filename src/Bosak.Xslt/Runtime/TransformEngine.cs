@@ -228,6 +228,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.38  | 28-08-2026     | Handle namespace nodes in CopyNodeToResult/CopyToResult; xsl:attribute in simple content |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.39  | 29-08-2026     | Preserve DTD unparsed entities when copying document nodes (unparsed-entity-05..07)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -7573,6 +7575,10 @@ public sealed class TransformEngine
                     // Preserve base URI from the source document
                     if (!string.IsNullOrEmpty(node.BaseUri))
                         newDoc.AddAnnotation(node.BaseUri);
+                    // Preserve DTD unparsed entity declarations so fn:unparsed-entity-uri()
+                    // still works on the copied document node.
+                    if (node is XDocumentNode srcDocNode)
+                        srcDocNode.CopyUnparsedEntitiesTo(newDoc);
                     return new XDocumentNode(newDoc);
                 }
             case XdmNodeKind.Element:
@@ -7718,6 +7724,10 @@ public sealed class TransformEngine
             case XdmNodeKind.Document:
                 {
                     var newDoc = new XDocument();
+                    if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
+                        newDoc.AddAnnotation(nodeToCopy.BaseUri);
+                    if (nodeToCopy is XDocumentNode srcDocNode2)
+                        srcDocNode2.CopyUnparsedEntitiesTo(newDoc);
                     var savedContainer = _currentContainer;
                     var savedAccumulator = _sequenceAccumulator;
                     _currentContainer = newDoc;
@@ -7878,6 +7888,8 @@ public sealed class TransformEngine
                         var newDoc = new XDocument();
                         if (!string.IsNullOrEmpty(srcBaseUri))
                             newDoc.AddAnnotation(srcBaseUri);
+                        if (nodeToCopy is XDocumentNode srcDocNode)
+                            srcDocNode.CopyUnparsedEntitiesTo(newDoc);
 
                         var savedDocAccumulator = _sequenceAccumulator;
                         if (ContainsConditionalInstruction(instruction))

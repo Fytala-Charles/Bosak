@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.2   | 12-07-2026     | Avoid infinite loop when malformed markup yields an empty attribute name                 |
 //                      | Charles Korthout | 0.3   | 12-07-2026     | Annotate loaded elements with the original namespace prefix from the XML source.        |
 //                      | Charles Korthout | 0.4   | 01-08-2026     | xml:id attribute values whitespace-collapsed at load (ID attribute normalization)       |
+//                      | Charles Korthout | 0.5   | 29-08-2026     | Capture DTD unparsed-entity declarations on loaded documents                            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 29-08-2026     | Preserve document base URI on unparsed-entity annotation for relative system IDs        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -87,6 +90,7 @@ public static class Xml11Loader
         var settings = CreateSettings();
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri);
         var doc = XDocument.Load(reader, loadOptions);
+        AttachUnparsedEntities(doc, text, baseUri);
         AnnotateOriginalPrefixes(doc, rewritten, baseUri);
         NormalizeXmlIdValues(doc);
         if (isXml11)
@@ -107,6 +111,7 @@ public static class Xml11Loader
         var settings = CreateSettings();
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
+        AttachUnparsedEntities(doc, text, baseUri ?? "");
         AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
         NormalizeXmlIdValues(doc);
         if (isXml11)
@@ -127,6 +132,7 @@ public static class Xml11Loader
         var settings = CreateSettings();
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
+        AttachUnparsedEntities(doc, text, baseUri ?? "");
         AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
         NormalizeXmlIdValues(doc);
         doc.AddAnnotation(Xml11Annotation.Instance);
@@ -302,6 +308,60 @@ public static class Xml11Loader
             XmlResolver = new XmlUrlResolver(),
             CheckCharacters = false
         };
+    }
+
+    /// <summary>
+    /// Extracts unparsed entity declarations from the document's DTD using an
+    /// <see cref="XmlDocument"/> pass, and attaches them as an annotation to the
+    /// loaded <see cref="XDocument"/>. Entities declared in an external subset are
+    /// resolved through the <see cref="XmlUrlResolver"/>.
+    /// </summary>
+    private static void AttachUnparsedEntities(XDocument doc, string xmlText, string baseUri)
+    {
+        bool isXml11 = HasXml11Declaration(xmlText);
+        // For XML 1.1 source we load the name-encoded form: entity declarations live in
+        // the DTD and are unaffected by the element-name encoding.
+        string textToParse = isXml11 ? RewriteDeclarationAndEncodeNames(xmlText, forceXml11: true) : xmlText;
+
+        var settings = CreateSettings();
+        var xmlDoc = new XmlDocument();
+        try
+        {
+            using var reader = XmlReader.Create(new StringReader(textToParse), settings, baseUri);
+            xmlDoc.Load(reader);
+        }
+        catch
+        {
+            // If the document cannot be loaded for entity extraction (for example because
+            // it contains content that is not well-formed even after XML 1.1 rewriting),
+            // simply leave the annotation absent. The loaded XDocument itself is authoritative.
+            return;
+        }
+
+        if (xmlDoc.DocumentType?.Entities is not { } entities || entities.Count == 0)
+            return;
+
+        var annotation = new UnparsedEntityAnnotation { BaseUri = baseUri };
+        foreach (XmlEntity entity in entities)
+        {
+            // Only unparsed entities carry a notation name.
+            if (string.IsNullOrEmpty(entity.NotationName))
+                continue;
+
+            // The first declaration for a given name is binding; later ones are ignored.
+            if (annotation.Entities.ContainsKey(entity.Name))
+                continue;
+
+            annotation.Entities[entity.Name] = new UnparsedEntityAnnotation.EntityInfo
+            {
+                SystemId = entity.SystemId ?? string.Empty,
+                PublicId = entity.PublicId ?? string.Empty,
+                NotationName = entity.NotationName
+            };
+        }
+
+        if (annotation.Entities.Count > 0)
+            doc.AddAnnotation(annotation);
     }
 
     private static (string Rewritten, bool IsXml11) PrepareXml11Text(string text)

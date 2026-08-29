@@ -129,6 +129,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.84  | 28-08-2026     | Added HTML4/5 C1 control serialization regression tests.                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.85  | 29-08-2026     | Added DTD unparsed-entity, ID/IDREFS and document-level whitespace regression tests       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.86  | 29-08-2026     | Adjusted DTD regression tests to match attribute-returning idref() semantics            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -6075,6 +6079,115 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("&#159;", result);
+    }
+
+    [Fact]
+    public void Dtd_Unparsed_Entity_Lookup()
+    {
+        var sourceXml = @"<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE doc [
+  <!NOTATION note SYSTEM 'note-processor'>
+  <!ENTITY pic SYSTEM 'image.png' NDATA note>
+]>
+<doc/>";
+
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out uri=""{unparsed-entity-uri('pic')}"" public=""{unparsed-entity-public-id('pic')}""/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = Xml11Loader.Parse(sourceXml, LoadOptions.PreserveWhitespace, "test.xml");
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("uri=\"image.png\"", result);
+        Assert.Contains("public=\"\"", result);
+    }
+
+    [Fact]
+    public void Dtd_Id_And_Idrefs_Lookup()
+    {
+        var sourceXml = @"<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE doc [
+  <!ELEMENT doc (item*)>
+  <!ELEMENT item EMPTY>
+  <!ATTLIST item id ID #REQUIRED>
+  <!ATTLIST item refs IDREFS #IMPLIED>
+]>
+<doc>
+  <item id='a'/>
+  <item id='b' refs='a'/>
+  <item id='c' refs='a b'/>
+</doc>";
+
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <id><xsl:value-of select=""id('b')/@id""/></id>
+                    <refs><xsl:value-of select=""idref('b')/../@id""/></refs>
+                    <data><xsl:value-of select=""data((//item[@id='c']/@refs))"" separator=','/></data>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = Xml11Loader.Parse(sourceXml, LoadOptions.PreserveWhitespace, "test.xml");
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<id>b</id>", result);
+        Assert.Contains("<refs>c</refs>", result);
+        Assert.Contains("<data>a,b</data>", result);
+    }
+
+    [Fact]
+    public void Dtd_Document_Level_Whitespace_Excluded_From_Node_Count()
+    {
+        var sourceXml = @"<?xml version='1.0' encoding='UTF-8'?>
+<!--A comment-->
+<!DOCTYPE task [<!ELEMENT task EMPTY>]>
+<?Pub Inc?>
+<task/>";
+
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <count><xsl:value-of select='count(//node())'/></count>
+                    <first><xsl:value-of select='/comment()/following-sibling::node()[1]/name()'/></first>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = Xml11Loader.Parse(sourceXml, LoadOptions.PreserveWhitespace, "test.xml");
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<count>3</count>", result);
+        Assert.Contains("<first>Pub</first>", result);
+    }
+
+    [Fact]
+    public void Unparsed_Entity_Lookup_Without_Document_Context_Throws_Xtde1370()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0'
+                xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+                xmlns:my='http://my.com/'>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='my:f()'/></out>
+            </xsl:template>
+            <xsl:function name='my:f'>
+                <xsl:sequence select=""unparsed-entity-uri('pling')""/>
+            </xsl:function>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("input"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<XsltRuntimeException>(() => executable.TransformToString(new XDocumentNode(source), initialTemplate: "main"));
+        Assert.Contains("XTDE1370", ex.Message);
     }
 
     private class InlineUriResolver : IXsltUriResolver

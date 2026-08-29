@@ -48,6 +48,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.8   | 21-08-2026     | Detect XML 1.1 on constructed elements; decode encoded names during serialization        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.9   | 29-08-2026     | Added DTD unparsed entity lookup via TryGetUnparsedEntity                               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.10  | 29-08-2026     | Exclude whitespace-only text nodes from document-level children (axes-202)            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.11  | 29-08-2026     | Resolve unparsed-entity system IDs against annotation BaseUri                            |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 28-07-2026     | Namespace axis skips non-propagating ancestor bindings; redundant xmlns omitted in ToXmlString |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 29-07-2026     | Parentless-namespace-node marker: parent axis and Parent honor it |
@@ -326,7 +332,7 @@ public sealed class XDocumentNode : IXdmNode
                 XProcessingInstruction pi => pi.Data,
                 System.Xml.Linq.XDocument d => GetSyntheticWrapper(d) is { } wrapper
                     ? wrapper.Value
-                    : (d.Root != null ? d.Root.Value : string.Concat(d.Nodes().OfType<XText>().Select(t => t.Value))),
+                    : (d.Root != null ? d.Root.Value : string.Concat(d.Nodes().OfType<XText>().Where(t => !string.IsNullOrWhiteSpace(t.Value)).Select(t => t.Value))),
                 _ => string.Empty
             };
         }
@@ -983,7 +989,7 @@ public sealed class XDocumentNode : IXdmNode
         if (container is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
             container = wrapperDoc;
 
-        foreach (var node in container.Nodes())
+        foreach (var node in ChildNodes(container))
         {
             map[node] = index++;
             if (node is XElement elem)
@@ -1008,6 +1014,83 @@ public sealed class XDocumentNode : IXdmNode
     public string SystemId => GetDocumentType()?.SystemId ?? string.Empty;
 
     public string InternalSubset => GetDocumentType()?.InternalSubset ?? string.Empty;
+
+    /// <summary>
+    /// Looks up an unparsed entity by name in the document that contains this node,
+    /// resolving the system identifier against the document's base URI.
+    /// </summary>
+    public bool TryGetUnparsedEntity(string name, out string? systemId, out string? publicId)
+    {
+        systemId = null;
+        publicId = null;
+
+        var doc = _node as System.Xml.Linq.XDocument ?? _node.Document;
+        if (doc is null)
+            return false;
+
+        var annotation = doc.Annotation<UnparsedEntityAnnotation>();
+        if (annotation is null || !annotation.Entities.TryGetValue(name, out var info))
+            return false;
+
+        if (!string.IsNullOrEmpty(info.SystemId))
+        {
+            // The document base URI may be stored on the unparsed-entity annotation,
+            // as a string annotation (e.g. on a constructed or copied document node),
+            // or on XDocument.BaseUri itself.
+            var baseUri = !string.IsNullOrEmpty(annotation.BaseUri)
+                ? annotation.BaseUri
+                : doc.Annotation<string>() is { Length: > 0 } annotated ? annotated : doc.BaseUri;
+            if (string.IsNullOrEmpty(baseUri))
+            {
+                systemId = info.SystemId;
+            }
+            else
+            {
+                try
+                {
+                    systemId = new Uri(new Uri(baseUri), info.SystemId).AbsoluteUri;
+                }
+                catch
+                {
+                    systemId = info.SystemId;
+                }
+            }
+        }
+
+        if (!string.IsNullOrEmpty(info.PublicId))
+            publicId = info.PublicId;
+
+        return systemId is not null || publicId is not null;
+    }
+
+    /// <summary>
+    /// Copies the unparsed entity declarations from the document containing this node
+    /// onto <paramref name="targetDocument"/>. Used when a document node (or a node
+    /// within a document) is copied, so that entity lookups remain available on the copy.
+    /// </summary>
+    public void CopyUnparsedEntitiesTo(System.Xml.Linq.XDocument targetDocument)
+    {
+        var doc = _node as System.Xml.Linq.XDocument ?? _node.Document;
+        if (doc is null)
+            return;
+
+        var annotation = doc.Annotation<UnparsedEntityAnnotation>();
+        if (annotation is null)
+            return;
+
+        var copy = new UnparsedEntityAnnotation { BaseUri = annotation.BaseUri };
+        foreach (var entity in annotation.Entities)
+        {
+            copy.Entities[entity.Key] = new UnparsedEntityAnnotation.EntityInfo
+            {
+                SystemId = entity.Value.SystemId,
+                PublicId = entity.Value.PublicId,
+                NotationName = entity.Value.NotationName
+            };
+        }
+
+        targetDocument.AddAnnotation(copy);
+    }
 
     private XDocumentType? GetDocumentType()
     {
@@ -1199,7 +1282,7 @@ public sealed class XDocumentNode : IXdmNode
             container = wrapperDoc;
 
         var items = new List<XdmValue>();
-        foreach (var child in container.Nodes())
+        foreach (var child in ChildNodes(container))
         {
             var childKind = GetNodeKind(child);
             if (kind == XdmNodeKind.All || (kind & childKind) == childKind)
@@ -1270,7 +1353,7 @@ public sealed class XDocumentNode : IXdmNode
             container = wrapperDoc;
 
         var items = new List<XdmValue>();
-        foreach (var child in container.Nodes())
+        foreach (var child in ChildNodes(container))
         {
             items.Add(XdmValue.FromNode(new XDocumentNode(child)));
         }
@@ -1492,13 +1575,13 @@ public sealed class XDocumentNode : IXdmNode
 
     private XdmSequence GetFollowingSiblingAxis()
     {
-        var parent = _node.Parent;
-        if (parent is null)
+        var parent = GetXPathParent(_node);
+        if (parent is not XContainer parentContainer)
             return XdmSequence.Empty;
 
         var items = new List<XdmValue>();
         bool found = false;
-        foreach (var sibling in parent.Nodes())
+        foreach (var sibling in ChildNodes(parentContainer))
         {
             if (sibling == _node) { found = true; continue; }
             if (found)
@@ -1509,8 +1592,8 @@ public sealed class XDocumentNode : IXdmNode
 
     private XdmSequence GetPrecedingSiblingAxis()
     {
-        var parent = _node.Parent;
-        if (parent is null)
+        var parent = GetXPathParent(_node);
+        if (parent is not XContainer parentContainer)
             return XdmSequence.Empty;
 
         // Attributes and namespace nodes are not children of their parent element,
@@ -1519,7 +1602,7 @@ public sealed class XDocumentNode : IXdmNode
             return XdmSequence.Empty;
 
         var items = new List<XdmValue>();
-        foreach (var sibling in parent.Nodes())
+        foreach (var sibling in ChildNodes(parentContainer))
         {
             if (sibling == _node) break;
             items.Insert(0, XdmValue.FromNode(new XDocumentNode(sibling)));
@@ -1541,7 +1624,7 @@ public sealed class XDocumentNode : IXdmNode
         {
             if (_node.Parent is XElement attrParent)
             {
-                foreach (var child in attrParent.Nodes())
+                foreach (var child in ChildNodes(attrParent))
                 {
                     items.Add(XdmValue.FromNode(new XDocumentNode(child)));
                     AddDescendants(child, items);
@@ -1556,11 +1639,11 @@ public sealed class XDocumentNode : IXdmNode
 
         while (true)
         {
-            var parent = current.Parent;
-            if (parent is null) break;
+            var parent = GetXPathParent(current);
+            if (parent is not XContainer parentContainer) break;
 
             bool found = false;
-            foreach (var sibling in parent.Nodes())
+            foreach (var sibling in ChildNodes(parentContainer))
             {
                 if (sibling == current) { found = true; continue; }
                 if (found)
@@ -1570,6 +1653,10 @@ public sealed class XDocumentNode : IXdmNode
                 }
             }
             current = parent;
+            // Stop at the synthetic document wrapper: it is an internal container, not an
+            // XDM node, so axes must not walk past it to the outer XDocument.
+            if (current is XElement wrapper && wrapper.Name.LocalName == "__xdm_doc__" && wrapper.Name.NamespaceName == "")
+                break;
         }
 
         return MaterializedSequence.FromList(items);
@@ -1595,11 +1682,11 @@ public sealed class XDocumentNode : IXdmNode
 
         while (true)
         {
-            var parent = current.Parent;
-            if (parent is null) break;
+            var parent = GetXPathParent(current);
+            if (parent is not XContainer parentContainer) break;
 
             var before = new List<XObject>();
-            foreach (var sibling in parent.Nodes())
+            foreach (var sibling in ChildNodes(parentContainer))
             {
                 if (sibling == current) break;
                 before.Add(sibling);
@@ -1617,6 +1704,10 @@ public sealed class XDocumentNode : IXdmNode
             }
 
             current = parent;
+            // Stop at the synthetic document wrapper: it is an internal container, not an
+            // XDM node, so axes must not walk past it to the outer XDocument.
+            if (current is XElement wrapper && wrapper.Name.LocalName == "__xdm_doc__" && wrapper.Name.NamespaceName == "")
+                break;
         }
 
         return MaterializedSequence.FromList(items);
@@ -1637,6 +1728,30 @@ public sealed class XDocumentNode : IXdmNode
         _ => XdmNodeKind.None
     };
 
+    /// <summary>
+    /// Returns the child nodes of a container excluding the XML document type declaration.
+    /// XDM does not expose the DTD as a node, so it must be skipped in axes and node counts.
+    /// Whitespace-only text nodes that are direct children of a document node are also
+    /// excluded, matching the XDM constraint that a document node with element children
+    /// has no whitespace text node children (axes-202, fn:doc prolog/epilog whitespace).
+    /// </summary>
+    private static IEnumerable<XNode> ChildNodes(XContainer container)
+    {
+        // Unwrap synthetic document wrapper so its children appear as document children.
+        if (container is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
+            container = wrapperDoc;
+
+        bool isDocument = container is System.Xml.Linq.XDocument;
+        foreach (var node in container.Nodes())
+        {
+            if (node is XDocumentType)
+                continue;
+            if (isDocument && node is XText text && string.IsNullOrWhiteSpace(text.Value))
+                continue;
+            yield return node;
+        }
+    }
+
     private static IEnumerable<XObject> GetDescendants(XObject node)
     {
         if (node is not XContainer container)
@@ -1646,7 +1761,7 @@ public sealed class XDocumentNode : IXdmNode
         if (node is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
             container = wrapperDoc;
 
-        foreach (var child in container.Nodes())
+        foreach (var child in ChildNodes(container))
         {
             yield return child;
             foreach (var desc in GetDescendants(child))
@@ -1663,7 +1778,7 @@ public sealed class XDocumentNode : IXdmNode
         if (node is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
             container = wrapperDoc;
 
-        foreach (var child in container.Nodes())
+        foreach (var child in ChildNodes(container))
         {
             items.Add(XdmValue.FromNode(new XDocumentNode(child)));
             AddDescendants(child, items);

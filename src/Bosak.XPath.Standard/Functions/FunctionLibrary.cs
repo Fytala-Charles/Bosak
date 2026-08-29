@@ -65,6 +65,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.103 | 27-08-2026     | json-to-xml validate=true raises FOJS0004 (non-schema-aware processor)                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.104 | 29-08-2026     | fn:unparsed-entity-uri returns xs:anyURI; unparsed entities preserved in fn:snapshot    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -3685,6 +3687,10 @@ public static class FunctionLibrary
             {
                 case XdmNodeKind.Document:
                     var docCopy = new XDocument();
+                    if (!string.IsNullOrEmpty(node.BaseUri))
+                        docCopy.AddAnnotation(node.BaseUri);
+                    if (node is Providers.Xml.XDocumentNode srcDocNode)
+                        srcDocNode.CopyUnparsedEntitiesTo(docCopy);
                     container = docCopy;
                     targetCopy = docCopy;
                     break;
@@ -3841,6 +3847,8 @@ public static class FunctionLibrary
                 return new XComment(comment.Value);
             case XProcessingInstruction pi:
                 return new XProcessingInstruction(pi.Target, pi.Data);
+            case XDocumentType docType:
+                return new XDocumentType(docType.Name, docType.PublicId, docType.SystemId, docType.InternalSubset);
             default:
                 return new XText(node.ToString());
         }
@@ -6996,6 +7004,43 @@ public static class FunctionLibrary
         return new HashSet<string>(tokens);
     }
 
+    /// <summary>
+    /// Builds the candidate IDREF value set for fn:idref(). Unlike fn:id(), the strings
+    /// in the argument sequence are not tokenized. The only exception is when the argument
+    /// value originates from a DTD-declared IDREFS attribute, whose string value is a
+    /// whitespace-separated list of IDREF values.
+    /// </summary>
+    private static HashSet<string> ParseIdrefArguments(XdmValue value)
+    {
+        var ids = new HashSet<string>();
+        foreach (var item in AsSequence(value))
+        {
+            if (item.IsNode && item.NodeValue is { } node && IsDtdIdrefsAttribute(node))
+            {
+                foreach (var token in ParseIdTokens(node.StringValue))
+                    ids.Add(token);
+                continue;
+            }
+            var atomized = AtomizedString(item);
+            if (atomized.Length > 0)
+                ids.Add(atomized);
+        }
+        return ids;
+    }
+
+    private static bool IsDtdIdrefsAttribute(IXdmNode node)
+    {
+        if (node.NodeKind != XdmNodeKind.Attribute)
+            return false;
+        var parent = node.Parent;
+        if (parent is null || parent.NodeKind != XdmNodeKind.Element)
+            return false;
+        var dtdInfo = GetDtdAttributeInfo(node);
+        if (!dtdInfo.IdrefsAttributes.TryGetValue(parent.LocalName, out var attrs))
+            return false;
+        return attrs.Contains(node.LocalName);
+    }
+
     private static void CollectElementWithId(IXdmNode node, HashSet<string> ids, List<XdmValue> result)
     {
         var dtdInfo = GetDtdAttributeInfo(node);
@@ -7041,7 +7086,7 @@ public static class FunctionLibrary
             throw new InvalidOperationException("XPTY0004: fn:idref() context item is not a node.");
         RequireDocumentRootedTree(focus.NodeValue, "fn:idref");
 
-        var ids = ParseIdTokens(args[0]);
+        var ids = ParseIdrefArguments(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
@@ -7059,7 +7104,7 @@ public static class FunctionLibrary
             throw new InvalidOperationException("XPTY0004: fn:idref() argument is not a node.");
         RequireDocumentRootedTree(node, "fn:idref");
 
-        var ids = ParseIdTokens(args[0]);
+        var ids = ParseIdrefArguments(args[0]);
         if (ids.Count == 0)
             return XdmValue.Undefined;
 
@@ -7134,6 +7179,14 @@ public static class FunctionLibrary
 
                 if (dtdInfo.IdrefAttributes.TryGetValue(node.LocalName, out var dtdIdrefAttrs)
                     && dtdIdrefAttrs.Contains(attrNode.LocalName))
+                {
+                    var tokens = ParseIdTokens(AtomizedString(attr));
+                    if (tokens.Overlaps(ids))
+                        result.Add(attr);
+                }
+
+                if (dtdInfo.IdrefsAttributes.TryGetValue(node.LocalName, out var dtdIdrefsAttrs)
+                    && dtdIdrefsAttrs.Contains(attrNode.LocalName))
                 {
                     var tokens = ParseIdTokens(AtomizedString(attr));
                     if (tokens.Overlaps(ids))
@@ -7235,7 +7288,8 @@ public static class FunctionLibrary
 
     private sealed record DtdAttributeInfo(
         Dictionary<string, List<string>> IdAttributes,
-        Dictionary<string, List<string>> IdrefAttributes);
+        Dictionary<string, List<string>> IdrefAttributes,
+        Dictionary<string, List<string>> IdrefsAttributes);
 
     private static readonly ConditionalWeakTable<IXdmNode, DtdAttributeInfo> DtdAttributeCache = new();
 
@@ -7259,38 +7313,60 @@ public static class FunctionLibrary
     }
 
     private static readonly DtdAttributeInfo EmptyDtdAttributeInfo =
-        new(new Dictionary<string, List<string>>(StringComparer.Ordinal), new Dictionary<string, List<string>>(StringComparer.Ordinal));
+        new(
+            new Dictionary<string, List<string>>(StringComparer.Ordinal),
+            new Dictionary<string, List<string>>(StringComparer.Ordinal),
+            new Dictionary<string, List<string>>(StringComparer.Ordinal));
 
     private static DtdAttributeInfo ParseDtdAttlistDeclarations(string subset)
     {
         var idAttrs = new Dictionary<string, List<string>>(StringComparer.Ordinal);
         var idrefAttrs = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var idrefsAttrs = new Dictionary<string, List<string>>(StringComparer.Ordinal);
 
+        // ATTLIST declarations may contain multiple attributes spread across lines.
+        // Capture the whole body of each declaration and scan it for ID/IDREF/IDREFS
+        // attribute definitions.
         foreach (Match match in AttlistDeclarationRegex.Matches(subset))
         {
             string element = match.Groups[1].Value;
-            string attr = match.Groups[2].Value;
-            string type = match.Groups[3].Value;
+            string body = match.Groups[2].Value;
 
-            if (type.Equals("ID", StringComparison.Ordinal))
+            foreach (Match attrMatch in AttlistAttributeRegex.Matches(body))
             {
-                if (!idAttrs.TryGetValue(element, out var list))
-                    idAttrs[element] = list = new List<string>();
-                list.Add(attr);
-            }
-            else if (type.Equals("IDREF", StringComparison.Ordinal) || type.Equals("IDREFS", StringComparison.Ordinal))
-            {
-                if (!idrefAttrs.TryGetValue(element, out var list))
-                    idrefAttrs[element] = list = new List<string>();
-                list.Add(attr);
+                string attr = attrMatch.Groups[1].Value;
+                string type = attrMatch.Groups[2].Value;
+
+                if (type.Equals("ID", StringComparison.Ordinal))
+                {
+                    if (!idAttrs.TryGetValue(element, out var list))
+                        idAttrs[element] = list = new List<string>();
+                    list.Add(attr);
+                }
+                else if (type.Equals("IDREF", StringComparison.Ordinal))
+                {
+                    if (!idrefAttrs.TryGetValue(element, out var list))
+                        idrefAttrs[element] = list = new List<string>();
+                    list.Add(attr);
+                }
+                else if (type.Equals("IDREFS", StringComparison.Ordinal))
+                {
+                    if (!idrefsAttrs.TryGetValue(element, out var list))
+                        idrefsAttrs[element] = list = new List<string>();
+                    list.Add(attr);
+                }
             }
         }
 
-        return new DtdAttributeInfo(idAttrs, idrefAttrs);
+        return new DtdAttributeInfo(idAttrs, idrefAttrs, idrefsAttrs);
     }
 
     private static readonly Regex AttlistDeclarationRegex = new(
-        @"<!ATTLIST\s+(\S+)\s+(\S+)\s+(ID|IDREF|IDREFS)\b",
+        @"<!ATTLIST\s+(\S+)\s+(.*?)>",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline);
+
+    private static readonly Regex AttlistAttributeRegex = new(
+        @"\b(\S+)\s+(ID|IDREF|IDREFS)\b",
         RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline);
 
     private static XdmValue Collection_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -11233,6 +11309,20 @@ public static class FunctionLibrary
                 return XdmValue.FromString(node.StringValue);
             if (node.SchemaTypeAnnotation is not null)
                 return node.TypedValue;
+            // DTD-declared IDREFS attributes have a typed value that is a sequence of
+            // xs:IDREF strings (one per whitespace-separated token).
+            if (node.NodeKind == XdmNodeKind.Attribute && IsDtdIdrefsAttribute(node))
+            {
+                var tokens = ParseIdTokens(node.StringValue);
+                var items = new List<XdmValue>(tokens.Count);
+                foreach (var token in tokens)
+                    items.Add(XdmValue.FromString(token, "IDREF"));
+                if (items.Count == 0)
+                    return XdmValue.Undefined;
+                if (items.Count == 1)
+                    return items[0];
+                return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+            }
             return XdmValue.FromString(node.StringValue, "untypedAtomic");
         }
 
@@ -13714,6 +13804,8 @@ public static class FunctionLibrary
     private static XDocument DeepCopyDocument(XDocument document)
     {
         var copy = new XDocument();
+        if (document.DocumentType is { } docType)
+            copy.Add(new XDocumentType(docType.Name, docType.PublicId, docType.SystemId, docType.InternalSubset));
         foreach (var node in document.Nodes())
         {
             switch (node)
@@ -13727,8 +13819,21 @@ public static class FunctionLibrary
                 case XProcessingInstruction pi:
                     copy.Add(new XProcessingInstruction(pi.Target, pi.Data));
                     break;
+                case XText text:
+                    // Only whitespace text nodes are valid direct children of XDocument.
+                    if (text.Value.All(char.IsWhiteSpace))
+                        copy.Add(new XText(text.Value));
+                    break;
             }
         }
+        // Preserve document base URI and DTD unparsed entity declarations so
+        // fn:unparsed-entity-uri() / fn:unparsed-entity-public-id() remain usable.
+        if (document.BaseUri is { Length: > 0 } baseUri)
+            copy.AddAnnotation(baseUri);
+        else if (document.Annotation<string>() is { Length: > 0 } annotatedBaseUri)
+            copy.AddAnnotation(annotatedBaseUri);
+        if (new Providers.Xml.XDocumentNode(document) is { } srcDocNode)
+            srcDocNode.CopyUnparsedEntitiesTo(copy);
         return copy;
     }
 
