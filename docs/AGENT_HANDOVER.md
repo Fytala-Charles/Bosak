@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-29
-**Commit:** `TBD` — xsl:key namespace-node matching and fn:current() in @use
+**Commit:** `d670768` — xsl:key namespace-node matching and fn:current() in @use
 **Current focus:** **XSLT gaps** — remaining 5 failures (`axes-052/058`, `position-4901`, `attribute-0806`, `number-4501`). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
 **Expected state:** **2,099 unit tests / 0 failed / 0 skipped** (+2 new regression tests); **full XSLT conformance sweep 7,249 passed / 5 failed / 7,346 skipped** (was 7,246/8/7,346; `key-058/087/090` now pass); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
