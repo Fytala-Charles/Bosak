@@ -139,6 +139,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.86  | 29-08-2026     | Adjusted DTD regression tests to match attribute-returning idref() semantics            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.87  | 29-08-2026     | Added xsl:package/xsl:use-package static parsing tests                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -6377,6 +6379,75 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<XsltRuntimeException>(() => executable.TransformToString(new XDocumentNode(source), initialTemplate: "main"));
         Assert.Contains("XTDE1370", ex.Message);
+    }
+
+    [Fact]
+    public void Package_Root_IsRecognized()
+    {
+        var xsl = @"<xsl:package version='3.0' name='urn:test:package' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>ok</out>
+            </xsl:template>
+        </xsl:package>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        Assert.Contains("<out>ok</out>", result);
+    }
+
+    [Fact]
+    public void Package_MissingName_RaisesXTSE0010()
+    {
+        var xsl = @"<xsl:package version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:package>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0010", ex.Message);
+    }
+
+    [Fact]
+    public void UsePackage_IsRejectedWithStaticError()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:use-package name='urn:test:package' package-version='1.0'/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0165", ex.Message);
+    }
+
+    [Fact]
+    public void UsePackage_MissingName_RaisesXTSE0010()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:use-package package-version='1.0'/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0010", ex.Message);
+    }
+
+    [Fact]
+    public void Expose_Accept_Override_AreNotUnknown()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:expose component='template' names='*' visibility='public'/>
+            <xsl:accept component='template' names='*' visibility='public'/>
+            <xsl:override/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0010", ex.Message);
+        Assert.DoesNotContain("Unknown XSLT element", ex.Message);
     }
 
     private class InlineUriResolver : IXsltUriResolver

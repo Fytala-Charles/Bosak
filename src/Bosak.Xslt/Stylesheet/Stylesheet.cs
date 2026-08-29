@@ -139,6 +139,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.79  | 28-08-2026     | Support fragment identifiers in xsl:include/xsl:import href for embedded modules        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.80  | 29-08-2026     | Basic xsl:package/xsl:use-package parsing; accept/override known elements                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -729,7 +731,10 @@ public sealed class Stylesheet
         IsPackage = rootName.LocalName == "package";
         if (IsPackage)
         {
-            PackageName = root.Attribute("name")?.Value;
+            var packageNameAttr = root.Attribute("name");
+            if (packageNameAttr == null || string.IsNullOrWhiteSpace(packageNameAttr.Value))
+                throw new InvalidOperationException("XTSE0010: The name attribute is required on xsl:package.");
+            PackageName = packageNameAttr.Value.Trim();
             PackageVersion = root.Attribute("package-version")?.Value;
         }
 
@@ -2498,6 +2503,14 @@ public sealed class Stylesheet
                     {
                         throw new InvalidOperationException($"XTSE0010: xsl:{localName} must appear at the top level.");
                     }
+                }
+
+                // xsl:use-package requires a name attribute and is not yet implemented.
+                if (localName == "use-package")
+                {
+                    if (elem.Attribute("name") == null && elem.Attribute("_name") == null)
+                        throw new InvalidOperationException("XTSE0010: xsl:use-package requires a name attribute.");
+                    throw new InvalidOperationException("XTSE0165: xsl:use-package package resolution is not implemented in this version.");
                 }
 
                 // xsl:if requires a test attribute.
@@ -4893,7 +4906,7 @@ public sealed class Stylesheet
         "stylesheet", "transform", "include", "import", "strip-space", "preserve-space",
         "output", "namespace-alias", "attribute-set", "decimal-format", "key", "mode",
         "accumulator", "accumulator-rule", "variable", "param", "with-param", "template", "function",
-        "global-context-item", "context-item", "use-package", "package", "expose",
+        "global-context-item", "context-item", "use-package", "package", "expose", "accept", "override",
         "import-schema",
         "apply-templates", "apply-imports", "call-template", "next-match",
         "value-of", "text", "element", "attribute", "namespace", "copy", "copy-of",
@@ -4917,7 +4930,7 @@ public sealed class Stylesheet
     {
         "include", "import", "strip-space", "preserve-space", "output",
         "namespace-alias", "decimal-format", "output-character",
-        "copy-of", "mode", "import-schema", "expose",
+        "copy-of", "mode", "import-schema", "expose", "accept",
         "global-context-item", "context-item"
     };
 

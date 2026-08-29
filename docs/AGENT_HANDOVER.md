@@ -1,11 +1,35 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-31
-**Commit:** `1cff295` — schema-aware fn:json-to-xml with validate:=true() (REQ-075)
-**Current focus:** **QT3 is clean** — all runnable XPath/XQuery QT3 tests now pass (31,148/0/673). The remaining skips are unsupported dependencies, platform limitations, and upstream defects. Next larger features: `xsl:package`/`xsl:use-package`, streaming, custom decimal/date-time types.
-**Expected state:** **2,104 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `fn-json-to-xml` test set 87 passed / 0 failed / 7 skipped**; **full `fn-format-number` test set 261 passed / 0 failed / 8 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Date:** 2026-08-29
+**Commit:** `TBD` — basic `xsl:package` / `xsl:use-package` parsing (REQ-076)
+**Current focus:** **XSLT package parsing foundation** — `xsl:package` root is recognized, `@name` is required (XTSE0010), `xsl:use-package`/`xsl:expose`/`xsl:accept`/`xsl:override` are known elements, and `xsl:use-package` raises `XTSE0165` because full package resolution is not yet implemented. QT3 remains clean; next larger features: full `xsl:use-package` resolution, streaming, custom decimal/date-time types.
+**Expected state:** **2,109 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped** (unchanged; package/use-package tests are still skipped by the harness); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `fn-json-to-xml` test set 87 passed / 0 failed / 7 skipped**; **full `fn-format-number` test set 261 passed / 0 failed / 8 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
-## This Session Changes (schema-aware `fn:json-to-xml` — REQ-075)
+## This Session Changes (basic `xsl:package` / `xsl:use-package` parsing — REQ-076)
+
+1. **Recognize and validate `xsl:package` root** —
+   - `Stylesheet` constructor now validates that `xsl:package/@name` is present and non-empty; missing/empty `@name` raises `XTSE0010`.
+   - `xsl:package/@package-version` continues to be parsed when present.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.80.
+
+2. **Treat package-related elements as known XSLT elements** —
+   - Added `accept` and `override` to `KnownXsltElementNames`.
+   - Added `accept` to `EmptyXsltElementNames`.
+   - `use-package`, `package`, and `expose` were already in `AllowedTopLevelDeclarations`.
+
+3. **Static rejection of `xsl:use-package`** —
+   - `ValidateInstructionTree` now checks every `xsl:use-package` element. Missing `@name` raises `XTSE0010`; otherwise the element raises `XTSE0165` with a clear message that package resolution is not implemented in this version.
+
+4. **Regression tests** —
+   - Added `Package_Root_IsRecognized`, `Package_MissingName_RaisesXTSE0010`, `UsePackage_IsRejectedWithStaticError`, `UsePackage_MissingName_RaisesXTSE0010`, and `Expose_Accept_Override_AreNotUnknown` in `tests/Bosak.Xslt.Tests/StylesheetTests.cs`.
+   - Header bumped: `StylesheetTests.cs` → 0.87.
+
+5. **Results** —
+   - New package parsing tests: **5 passed / 0 failed / 0 skipped**.
+   - Full unit test suite: **2,109 passed / 0 failed / 0 skipped**.
+   - XSLT conformance numbers are unchanged because the harness hardcodes skips for package/use-package tests.
+
+## Previous Session Changes (schema-aware `fn:json-to-xml` — REQ-075)
 
 1. **Implement `validate:=true()` for `fn:json-to-xml`** —
    - `FunctionLibrary.JsonToXml` now validates the generated XML representation against the embedded W3C schema-for-JSON (`Bosak.XPath.Standard.Resources.schema-for-json.xsd`) when `options.Validate` is true.

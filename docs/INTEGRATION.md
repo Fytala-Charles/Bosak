@@ -9,8 +9,8 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 31 August 2026
-> **Bosak baseline:** 2,103 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 29 August 2026
+> **Bosak baseline:** 2,109 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%); **100%** of runnable tests pass.
 > **XSLT baseline:** 7,254 passed / 0 failed / 7,346 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation, schema-aware `fn:json-to-xml`
@@ -18,6 +18,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-29** — XSLT: **Basic `xsl:package` / `xsl:use-package` parsing (`REQ-076`)** — The `Stylesheet` loader now recognizes `xsl:package` as a valid root element and requires its `@name` attribute (XTSE0010). It also treats `xsl:use-package`, `xsl:expose`, `xsl:accept`, and `xsl:override` as known XSLT elements. Because full package resolution is not yet implemented, `xsl:use-package` is rejected at compile time with `XTSE0165`. This is foundational work for eventual full XSLT 3.0 package support and does not change the XSLT conformance numbers, because the conformance harness already skips package/use-package tests.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.80).
+  - Regression tests: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (+5 tests; header → 0.87).
+  - Verification: package parsing tests 5/0/0; full unit test suite 2,109/0/0.
 
 - **2026-08-31** — XPath/XQuery: **schema-aware `fn:json-to-xml` (`REQ-075`)** — `fn:json-to-xml` with `validate:=true()` now validates the generated XML representation against the embedded W3C schema-for-JSON. This populates PSVI annotations so that `document-node(schema-element(j:array))`, `element(j:string, j:stringType)`, and typed-value access (`data($n) instance of xs:double` for `j:number`) work as required by the spec. This closes the last remaining QT3 failure cluster; the full QT3 sweep is now **31,148/0/673** (100% of runnable tests pass).
   - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (header → 5.105); unit test `JsonToXml_ValidateTrue_ProducesTypedDocument` added in `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`.

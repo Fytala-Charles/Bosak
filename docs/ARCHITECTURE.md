@@ -503,7 +503,7 @@ src/
 | `xsl:try` / `xsl:catch` | ✅ Implemented | Error variables (`err:code`, `err:description`, `err:value`, ...); global-variable errors propagate uncaught |
 | `xsl:result-document` | ✅ Implemented | Secondary result documents, URI conflict detection, nested principal output, `rollback-output` handling |
 | `xsl:iterate` | ✅ Implemented | Stateful iteration with `xsl:param`, `xsl:next-iteration`, `xsl:break`, and `xsl:on-completion` in result-tree and function-body contexts; `iterate` conformance cluster 44/44 |
-| XSLT 3.0 packages | 🔮 Phase 3 | `xsl:package`, `xsl:use-package` |
+| XSLT 3.0 packages | 🚧 Partial | `xsl:package` root is recognized, `@name` is required (XTSE0010), and `xsl:use-package`/`xsl:expose`/`xsl:accept`/`xsl:override` are known elements. Full package resolution is not implemented; `xsl:use-package` raises `XTSE0165` at compile time. |
 | Streaming | 🔮 Phase 3 | `streamable="yes"` (skeletal support only) |
 
 > **Implementation note:** `TransformEngine.ExecuteXsltInstruction` treats `xsl:fallback`, `xsl:sort`, `xsl:on-empty`, `xsl:on-non-empty`, and `xsl:assert` as no-ops when reached directly. `xsl:sort` is consumed by its parent sorting instruction; `xsl:on-empty`/`xsl:on-non-empty` are handled by dedicated sequence-constructor processing; `xsl:fallback` is processed only as a child of an unrecognized/extension instruction; `xsl:assert` is accepted but not yet evaluated (pending an enable-assertions switch).
