@@ -55,6 +55,10 @@
 //                      | Charles Korthout | 2.11  | 29-08-2026     | Resolve unparsed-entity system IDs against annotation BaseUri                            |
 //                      | Charles Korthout | 2.12  | 29-08-2026     | Stable namespace-node XAttribute cache; following/preceding axes use _namespaceOwner.    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.13  | 29-08-2026     | Namespace nodes report owner element's Document so union sorting places them before attributes |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.14  | 29-08-2026     | Reserve namespace-node DocumentOrder slot after owner element, before attributes         |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 28-07-2026     | Namespace axis skips non-propagating ancestor bindings; redundant xmlns omitted in ToXmlString |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 29-07-2026     | Parentless-namespace-node marker: parent axis and Parent honor it |
@@ -906,12 +910,12 @@ public sealed class XDocumentNode : IXdmNode
     {
         get
         {
-            // Namespace nodes are virtual; their document order is determined by the
-            // owner element so that all namespace nodes of an element sort together and
-            // before the namespace nodes of any descendant.
+            // Namespace nodes are virtual; their document order is placed immediately
+            // after the owner element so all namespace nodes of an element sort together,
+            // after the owner element and before any attributes.
             if (_isNamespaceNode && _namespaceOwner is not null)
             {
-                return new XDocumentNode(_namespaceOwner).DocumentOrder;
+                return new XDocumentNode(_namespaceOwner).DocumentOrder + 1;
             }
 
             var doc = _node.Document;
@@ -1007,6 +1011,9 @@ public sealed class XDocumentNode : IXdmNode
         var map = new Dictionary<XObject, long>();
         long index = 0;
         map[root] = index++;
+        // Reserve one slot after the root element for its namespace nodes,
+        // so namespace nodes sort after the owner element but before attributes.
+        index++;
         foreach (var attr in root.Attributes())
             map[attr] = index++;
         Traverse(root, ref index, map);
@@ -1024,6 +1031,9 @@ public sealed class XDocumentNode : IXdmNode
             map[node] = index++;
             if (node is XElement elem)
             {
+                // Reserve one slot after the element for its namespace nodes,
+                // so namespace nodes sort after the owner element but before attributes.
+                index++;
                 foreach (var attr in elem.Attributes())
                     map[attr] = index++;
                 Traverse(elem, ref index, map);
@@ -1293,6 +1303,11 @@ public sealed class XDocumentNode : IXdmNode
     {
         get
         {
+            if (_isNamespaceNode)
+            {
+                var ownerDoc = _namespaceOwner?.Document;
+                return ownerDoc is not null ? new XDocumentNode(ownerDoc) : null;
+            }
             var doc = _node.Document;
             return doc is not null ? new XDocumentNode(doc) : null;
         }

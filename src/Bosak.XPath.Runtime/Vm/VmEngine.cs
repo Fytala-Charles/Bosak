@@ -243,6 +243,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.128 | 26-08-2026     | InvokeFunctionItem clears current item so fn:current() raises XTDE1360 in dynamic calls |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.130 | 29-08-2026     | Updated NormalizeSequence comment for namespace-node DocumentOrder slot after owner element |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.129 | 27-08-2026     | DocumentRoot opcode raises XPTY0020 when the context item is atomic                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -4231,13 +4233,13 @@ public static class VmEngine
 
         if (nodes.Count > 1)
         {
-            // Use a stable sort by document order. Namespace nodes of the same element
-            // share the same DocumentOrder (they are ordered by the owner element), so
-            // preserving their original sequence order keeps the namespace axis order
-            // (xml first, then root-to-current) intact. Document-order keys are computed
-            // eagerly in sequence order first: parentless trees receive their tree
-            // sequence on first access, and computing keys inside the comparator would
-            // assign them in comparison order, scrambling detached copies (square-array-014).
+            // Use a stable sort by document order. Namespace nodes of an element are
+            // ordered immediately after the owner element (and before its attributes),
+            // so the namespace axis order (xml first, then root-to-current) is preserved
+            // by the DocumentOrder key. Document-order keys are computed eagerly in
+            // sequence order first: parentless trees receive their tree sequence on first
+            // access, and computing keys inside the comparator would assign them in
+            // comparison order, scrambling detached copies (square-array-014).
             var indexed = nodes.Select((n, i) => (Node: n, Index: i, OrderKey: n.NodeValue!.DocumentOrder)).ToList();
             indexed.Sort((a, b) =>
             {

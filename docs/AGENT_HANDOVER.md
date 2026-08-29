@@ -1,11 +1,70 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-29
-**Commit:** `de715e2` — namespace-axis identity and following/preceding axes from namespace nodes
-**Current focus:** **XSLT gaps** — remaining 3 failures (`position-4901`, `attribute-0806`, `number-4501`). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,101 unit tests / 0 failed / 0 skipped** (+2 new regression tests); **full XSLT conformance sweep 7,251 passed / 3 failed / 7,346 skipped** (was 7,249/5/7,346; `axes-052/058` now pass); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Date:** 2026-08-31
+**Commit:** *(work in progress — number-4501 DTD whitespace stripping)*
+**Current focus:** **XSLT is clean** — 0 remaining XSLT conformance failures. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,103 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped** (was 7,253/1/7,346; `number-4501` now passes); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
-## This Session Changes (namespace-axis identity and following/preceding axes from namespace nodes)
+## This Session Changes (number-4501 DTD element-only whitespace stripping)
+
+1. **Annotate elements declared element-only by a DTD** —
+   - `Xml11Loader` now scans the internal and external DTD subsets for `<!ELEMENT>` declarations and attaches a `DtdElementOnlyAnnotation` to every `XElement` whose declaration is `EMPTY` or has a pure element content model (no `#PCDATA`).
+   - Added `DtdElementOnlyAnnotation.cs` to the `Bosak.XPath.Providers.Xml` namespace.
+   - Header bumped: `Xml11Loader.cs` → 0.7.
+
+2. **Apply default XSLT whitespace stripping in DTD element-only content** —
+   - `TransformEngine.ApplyWhitespaceStripping` now always walks the source tree, even when the stylesheet contains no explicit `xsl:strip-space` / `xsl:preserve-space` rules.
+   - `TransformEngine.ShouldStripWhitespace` returns `true` for elements carrying `DtdElementOnlyAnnotation`, unless an explicit `xsl:preserve-space` rule or `xml:space="preserve"` overrides it.
+   - This matches XSLT 1.0 §3.4 default stripping behaviour and the expectation of `number-4501`.
+   - Header bumped: `TransformEngine.cs` → 6.41.
+
+3. **Results** —
+   - `number-4501` now passes.
+   - Full `number` test set: **270 passed / 0 failed / 1 skipped**.
+   - Unit tests: **2,103 passed / 0 failed / 0 skipped**.
+   - Full XSLT conformance sweep: **7,254 passed / 0 failed / 7,346 skipped**.
+
+## Previous Session Changes (attribute-0806 xmlns-prefixed attribute namespace fixup)
+
+1. **Fixed namespace declaration for `xsl:attribute` with `xmlns` prefix hint** —
+   - `TransformEngine.ExecuteXsltInstruction` (`case "attribute"`) now calls `EnsureNamespaceDeclarationForAttribute` after the existing prefix-hint logic, ensuring the attribute's namespace URI is declared in scope on the parent element.
+   - This handles the case where the attribute name prefix is `xmlns` (which the existing prefix-hint logic skips) and ensures the namespace axis includes the attribute's namespace URI.
+   - Header bumped: `TransformEngine.cs` → 6.40.
+
+2. **Added regression test** —
+   - `Attribute_0806_Xmlns_Prefixed_Attribute_Namespace_In_Scope` verifies that an attribute created with `name="xmlns:xsl"` and an explicit namespace URI appears in the in-scope namespace axis of the parent element.
+   - Header bumped: `StylesheetTests.cs` → 0.56.
+
+3. **Results** —
+   - `attribute-0806` now passes.
+   - Full `attribute` test set: **23 passed / 0 failed / 7 skipped**.
+   - Unit tests: **2,103 passed / 0 failed / 0 skipped**.
+   - Full XSLT conformance sweep: **7,253 passed / 1 failed / 7,346 skipped**. Remaining failure: `number-4501`.
+
+## Previous Session Changes (position-4901 namespace/attribute union order)
+
+1. **Fixed `namespace::* | attribute::*` union ordering** —
+   - `XDocumentNode.Document` now returns the owner element's document for namespace nodes, so `NormalizeSequence` treats them as document-rooted instead of parentless.
+   - `XDocumentNode.DocumentOrder` now returns `ownerOrder + 1` for namespace nodes, and the document-order map reserves one slot after each element for its namespace nodes, so namespace nodes sort after the owner element but before attributes.
+   - `ComputeDocumentOrder.Traverse` and `ComputeElementTreeOrder` reserve the namespace-node slot when building order maps.
+   - Header bumped: `XDocumentNode.cs` → 2.14.
+
+2. **Updated `NormalizeSequence` documentation** —
+   - Comment in `VmEngine.NormalizeSequence` updated to describe the new namespace-node DocumentOrder slot.
+   - Header bumped: `VmEngine.cs` → 2.129.
+
+3. **Added regression test** —
+   - `Position_4901_Namespace_Nodes_Precede_Attribute_Nodes` verifies that `namespace::* | attribute::*` returns namespace nodes at positions 1–3 and attributes at positions 4–5.
+   - Header bumped: `StylesheetTests.cs` → 0.55.
+
+4. **Results** —
+   - `position-4901` now passes.
+   - Full `position` test set: **211 passed / 0 failed / 0 skipped**.
+   - Full `axes` test set: **202 passed / 0 failed / 0 skipped** (axes-052 unaffected by the change).
+   - Unit tests: **2,102 passed / 0 failed / 0 skipped**.
+   - Full XSLT conformance sweep: **7,252 passed / 2 failed / 7,346 skipped**. Remaining failures: `attribute-0806`, `number-4501`.
+
+## Previous Session Changes (namespace-axis identity and following/preceding axes from namespace nodes)
 
 1. **Fixed following/preceding axes from namespace nodes** —
    - `XDocumentNode.GetFollowingAxis` and `GetPrecedingAxis` now use `_namespaceOwner` as the parent for namespace nodes (namespace-node backing XAttributes are detached, so `_node.Parent` is null).

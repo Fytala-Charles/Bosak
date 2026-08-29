@@ -230,6 +230,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.39  | 29-08-2026     | Preserve DTD unparsed entities when copying document nodes (unparsed-entity-05..07)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.40  | 29-08-2026     | xsl:attribute ensures namespace URI is declared in scope on parent (attribute-0806)    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.41  | 31-08-2026     | Strip whitespace in DTD-declared element-only content; fixes number-4501                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -4921,6 +4925,16 @@ public sealed class TransformEngine
                                 attrTarget.SetAttributeValue(XNamespace.Xmlns + attrPrefixHint, attrNsUri);
                             }
                         }
+                    }
+
+                    // Ensure the attribute's namespace URI is declared in scope on the parent,
+                    // even when the prefix hint is xmlns/xml or no prefix hint is supplied.
+                    // Without this the namespace axis does not see the URI and the attribute may
+                    // not serialize namespace-well-formed.
+                    if (!string.IsNullOrEmpty(attrNsUri))
+                    {
+                        string? preferredPrefix = attrPrefixHint is "xml" or "xmlns" ? attrLocalName : attrPrefixHint;
+                        EnsureNamespaceDeclarationForAttribute(attrTarget, attrNsUri, preferredPrefix);
                     }
 
                     if (attrTarget.Nodes().Any())
@@ -14844,13 +14858,11 @@ public sealed class TransformEngine
                     if (IsWhitespaceOnly(textNode.Value))
                         textNode.Remove();
                 }
-                if (rules.Count > 0)
-                    StripWhitespaceInElement(doc.Root, rules, preserveInherited: false);
+                StripWhitespaceInElement(doc.Root, rules, preserveInherited: false);
             }
             else if (xdocNode.UnderlyingObject is XElement elem)
             {
-                if (rules.Count > 0)
-                    StripWhitespaceInElement(elem, rules, preserveInherited: false);
+                StripWhitespaceInElement(elem, rules, preserveInherited: false);
             }
         }
     }
@@ -14882,6 +14894,17 @@ public sealed class TransformEngine
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when the element is declared with element-only content in
+    /// the document's DTD. Whitespace-only text nodes in such elements are stripped
+    /// by default, unless preserved by <c>xml:space</c> or an explicit
+    /// <c>xsl:preserve-space</c> rule.
+    /// </summary>
+    private static bool IsDtdDeclaredElementOnly(XElement element)
+    {
+        return element.Annotation<DtdElementOnlyAnnotation>() != null;
     }
 
     private static bool IsWhitespaceOnly(string text)
@@ -14983,7 +15006,13 @@ public sealed class TransformEngine
         }
 
         if (bestStrip == null)
+        {
+            // No explicit strip-space rule, but a DTD-declared element-only element is
+            // stripped by default (XSLT 1.0 §3.4; XSLT 2.0/3.0 permits this).
+            if (bestPreserve == null && IsDtdDeclaredElementOnly(element))
+                return true;
             return false;
+        }
         if (bestPreserve == null)
             return true;
 

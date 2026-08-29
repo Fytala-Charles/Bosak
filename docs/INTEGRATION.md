@@ -9,15 +9,18 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 26 August 2026
-> **Bosak baseline:** 2,033 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 31 August 2026
+> **Bosak baseline:** 2,103 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
-> **XSLT baseline:** 7,056 passed / 0 failed / 7,544 skipped — 100% of runnable W3C XSLT 3.0 tests pass
+> **XSLT baseline:** 7,254 passed / 0 failed / 7,346 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-31** — XSLT: **DTD-declared element-only whitespace stripping (`number-4501`)** — Source documents with a DTD are now parsed for `<!ELEMENT>` declarations. Elements declared as `EMPTY` or with a pure element content model (no `#PCDATA`) are annotated, and the XSLT processor strips whitespace-only text nodes inside those elements by default, matching XSLT 1.0 §3.4. This closes the last remaining XSLT conformance failure. Full XSLT sweep is now **7,254/0/7,346**; unit tests remain **2,103/0/0**.
+  - Implementation: `src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs` (header → 0.7), `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.41), plus new `src/Bosak.XPath.Providers/Xml11/DtdElementOnlyAnnotation.cs`.
 
 - **2026-08-26** — XSLT: **XTSE0660 cluster (`error-0660*`)** — Duplicate named `xsl:template` declarations with the same expanded name at the same import precedence now raise `XTSE0660`, unless a higher-precedence template exists. The validation uses `CollectNamedTemplatesInDocumentOrder` to gather all named templates with their import precedence, then groups by name and checks the highest-precedence group. The W3C `error-0660*` cluster is now **4/0/0**; the routine XSLT sweep remains **7,056/0/7,544**.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.74).

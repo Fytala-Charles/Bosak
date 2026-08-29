@@ -67,6 +67,10 @@
 //                      | Charles Korthout | 0.53  | 29-08-2026     | Added xsl:key namespace-node and fn:current() in @use regression tests.                    |
 //                      | Charles Korthout | 0.54  | 29-08-2026     | Added namespace-node generate-id and following-axis regression tests (axes-052/058).      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.55  | 29-08-2026     | Added position-4901 regression test for namespace/attribute union order.                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.56  | 29-08-2026     | Added attribute-0806 regression test for xmlns-prefixed attribute namespace fixup         |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.53  | 25-08-2026     | Added XTSE1290 regression tests for conflicting xsl:decimal-format declarations          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.54  | 25-08-2026     | Added FODF1280 regression test for unknown decimal-format name                          |
@@ -1375,6 +1379,75 @@ Welcome to this document on XHTML.
         var result = executable.TransformToString(new XDocumentNode(source));
 
         Assert.Contains("<same>true</same>", result);
+    }
+
+    [Fact]
+    public void Position_4901_Namespace_Nodes_Precede_Attribute_Nodes()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+  <xsl:output encoding='UTF-8' method='xml' indent='no'/>
+  <xsl:template match='Doc'>
+    <out>
+      <xsl:for-each select='namespace::* | attribute::*'>
+        <xsl:choose>
+          <xsl:when test='contains(.,&quot;http&quot;)'>
+            <xsl:if test='position() &lt;= 3'>
+              <xsl:text> OK</xsl:text>
+            </xsl:if>
+          </xsl:when>
+          <xsl:when test='contains(.,&quot;attr&quot;)'>
+            <xsl:if test='position() &gt; 3'>
+              <xsl:text> OK</xsl:text>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>&#10;BAD VALUE: </xsl:text><xsl:value-of select='.'/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </out>
+  </xsl:template>
+</xsl:stylesheet>";
+
+        var source = XDocument.Parse(@"<Doc bar:foo1='attr1' xmlns:bar='http://example.org/bar' bar:foo2='attr2' xmlns:foo='http://example.org/foo'/>", LoadOptions.PreserveWhitespace);
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<out> OK OK OK OK OK</out>", result);
+        Assert.DoesNotContain("BAD VALUE", result);
+    }
+
+    [Fact]
+    public void Attribute_0806_Xmlns_Prefixed_Attribute_Namespace_In_Scope()
+    {
+        var xsl = @"<?xml version='1.0'?>
+<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='2.0'>
+  <xsl:template match='/'>
+    <root>
+      <xsl:variable name='out' as='element()'>
+        <Out>
+          <xsl:attribute name='xmlns:xsl' namespace='http://whatever.example.com/'>http://www.w3.org/1999/XSL/Transform</xsl:attribute>
+        </Out>
+      </xsl:variable>
+      <lnames><xsl:value-of select='$out/@*/local-name()'/></lnames>
+      <uris><xsl:value-of select='$out/@*/namespace-uri()'/></uris>
+      <xsl:for-each select='$out//namespace::*'>
+        <xsl:sort select='.'/>
+        <inscope><xsl:value-of select='.'/></inscope>
+      </xsl:for-each>
+    </root>
+  </xsl:template>
+</xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+
+        Assert.Contains("<lnames>xsl</lnames>", result);
+        Assert.Contains("<uris>http://whatever.example.com/</uris>", result);
+        Assert.Contains("<inscope>http://whatever.example.com/</inscope>", result);
+        Assert.Contains("<inscope>http://www.w3.org/XML/1998/namespace</inscope>", result);
     }
 
     [Fact]

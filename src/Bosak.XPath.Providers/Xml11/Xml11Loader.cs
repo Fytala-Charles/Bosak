@@ -18,8 +18,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 29-08-2026     | Preserve document base URI on unparsed-entity annotation for relative system IDs        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 31-08-2026     | Annotate elements declared element-only by a DTD for default XSLT whitespace stripping   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -91,6 +94,7 @@ public static class Xml11Loader
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri);
         var doc = XDocument.Load(reader, loadOptions);
         AttachUnparsedEntities(doc, text, baseUri);
+        AttachDtdElementInfo(doc, baseUri);
         AnnotateOriginalPrefixes(doc, rewritten, baseUri);
         NormalizeXmlIdValues(doc);
         if (isXml11)
@@ -112,6 +116,7 @@ public static class Xml11Loader
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
         AttachUnparsedEntities(doc, text, baseUri ?? "");
+        AttachDtdElementInfo(doc, baseUri ?? "");
         AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
         NormalizeXmlIdValues(doc);
         if (isXml11)
@@ -133,6 +138,7 @@ public static class Xml11Loader
         using var reader = XmlReader.Create(new StringReader(rewritten), settings, baseUri ?? "");
         var doc = XDocument.Load(reader, loadOptions);
         AttachUnparsedEntities(doc, text, baseUri ?? "");
+        AttachDtdElementInfo(doc, baseUri ?? "");
         AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
         NormalizeXmlIdValues(doc);
         doc.AddAnnotation(Xml11Annotation.Instance);
@@ -362,6 +368,109 @@ public static class Xml11Loader
 
         if (annotation.Entities.Count > 0)
             doc.AddAnnotation(annotation);
+    }
+
+    /// <summary>
+    /// Annotates elements declared with element-only content by the document's DTD.
+    /// Both the internal subset and the resolved external subset are inspected.
+    /// </summary>
+    private static void AttachDtdElementInfo(XDocument doc, string baseUri)
+    {
+        var dtdText = ReadDtdSubset(doc, baseUri);
+        if (string.IsNullOrWhiteSpace(dtdText))
+            return;
+
+        var elementOnlyNames = ParseDtdElementDeclarations(dtdText);
+        if (elementOnlyNames.Count == 0)
+            return;
+
+        foreach (var element in doc.Descendants())
+        {
+            if (elementOnlyNames.Contains(element.Name.LocalName))
+                element.AddAnnotation(new DtdElementOnlyAnnotation());
+        }
+    }
+
+    /// <summary>
+    /// Reads the internal DTD subset and resolves the external subset (if any) into a
+    /// single string that can be scanned for element declarations.
+    /// </summary>
+    private static string ReadDtdSubset(XDocument doc, string baseUri)
+    {
+        var doctype = doc.DocumentType;
+        if (doctype == null)
+            return string.Empty;
+
+        var sb = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(doctype.InternalSubset))
+            sb.Append(doctype.InternalSubset);
+
+        if (!string.IsNullOrWhiteSpace(doctype.SystemId))
+        {
+            try
+            {
+                var dtdUri = new Uri(new Uri(baseUri), doctype.SystemId);
+                if (dtdUri.IsFile && File.Exists(dtdUri.LocalPath))
+                {
+                    var encoding = Encoding.UTF8;
+                    var bytes = File.ReadAllBytes(dtdUri.LocalPath);
+                    if (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF)
+                        encoding = new UTF8Encoding(false);
+                    sb.Append(encoding.GetString(bytes));
+                }
+            }
+            catch
+            {
+                // Ignore unresolvable external subsets.
+            }
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Parses element declarations from a DTD subset and returns the names of elements
+    /// declared with element-only content. A declaration is element-only when it is
+    /// <c>EMPTY</c> or when its content model contains no <c>#PCDATA</c> and is not
+    /// <c>ANY</c>.
+    /// </summary>
+    private static HashSet<string> ParseDtdElementDeclarations(string dtdText)
+    {
+        var result = new HashSet<string>(StringComparer.Ordinal);
+
+        // Remove DTD comments so they do not interfere with parsing.
+        var noComments = Regex.Replace(dtdText, @"<!--.*?-->", string.Empty, RegexOptions.Singleline);
+
+        // Find every <!ELEMENT ...> declaration. The content model may span multiple
+        // tokens but always terminates with a right angle bracket.
+        foreach (Match match in Regex.Matches(noComments, @"<!ELEMENT\s+(\S+)\s+([^>]+)>", RegexOptions.IgnoreCase | RegexOptions.Singleline))
+        {
+            var name = match.Groups[1].Value;
+            var contentModel = match.Groups[2].Value.Trim();
+
+            if (IsDtdElementOnlyContent(contentModel))
+                result.Add(name);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Determines whether a DTD element content model denotes element-only content.
+    /// </summary>
+    private static bool IsDtdElementOnlyContent(string contentModel)
+    {
+        var trimmed = contentModel.Trim();
+        if (trimmed.Equals("EMPTY", StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (trimmed.Equals("ANY", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        // A pure element content model is parenthesised and contains no #PCDATA.
+        if (trimmed.StartsWith("("))
+            return !trimmed.Contains("#PCDATA", StringComparison.OrdinalIgnoreCase);
+
+        return false;
     }
 
     private static (string Rewritten, bool IsXml11) PrepareXml11Text(string text)
