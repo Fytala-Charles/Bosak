@@ -65,6 +65,7 @@
 //                      | Charles Korthout | 0.51  | 25-08-2026     | Added XTSE0760 regression tests for xsl:param inside xsl:function                       |
 //                      | Charles Korthout | 0.52  | 25-08-2026     | Added XTSE1295 regression tests for xsl:decimal-format/@zero-digit                       |
 //                      | Charles Korthout | 0.53  | 29-08-2026     | Added xsl:key namespace-node and fn:current() in @use regression tests.                    |
+//                      | Charles Korthout | 0.54  | 29-08-2026     | Added namespace-node generate-id and following-axis regression tests (axes-052/058).      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.53  | 25-08-2026     | Added XTSE1290 regression tests for conflicting xsl:decimal-format declarations          |
 //                      |==================|=======|================|=========================================================================================
@@ -1354,6 +1355,57 @@ Welcome to this document on XHTML.
         Assert.Contains("<t>4</t>", result);
         Assert.DoesNotContain("<t>2</t>", result);
         Assert.DoesNotContain("<t>3</t>", result);
+    }
+
+    [Fact]
+    public void Namespace_Node_Generate_Id_Is_Stable()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:variable name='e' select='/*'/>
+                    <same><xsl:value-of select=""generate-id($e/namespace::node()) = generate-id($e/namespace::xml)""/></same>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(new XElement("root"));
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<same>true</same>", result);
+    }
+
+    [Fact]
+    public void Namespace_Node_Following_Axis()
+    {
+        var xsl = @"<xsl:stylesheet version='2.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out>
+                    <xsl:for-each select=""//namespace::*[name()='a']"">
+                        <following><xsl:value-of select=""following::*/name()""/></following>
+                        <preceding><xsl:value-of select=""preceding::*/name()""/></preceding>
+                    </xsl:for-each>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = new XDocument(
+            new XElement("root",
+                new XElement("before"),
+                new XElement("container",
+                    new XAttribute(XNamespace.Xmlns + "a", "http://a.example"),
+                    new XElement("a-child"),
+                    new XElement("b-child")),
+                new XElement("after")));
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+
+        Assert.Contains("<following>a-child b-child after</following>", result);
+        Assert.Contains("<preceding>before</preceding>", result);
     }
 
     [Fact]

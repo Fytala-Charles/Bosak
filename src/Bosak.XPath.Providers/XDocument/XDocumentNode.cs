@@ -53,6 +53,7 @@
 //                      | Charles Korthout | 2.10  | 29-08-2026     | Exclude whitespace-only text nodes from document-level children (axes-202)            |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.11  | 29-08-2026     | Resolve unparsed-entity system IDs against annotation BaseUri                            |
+//                      | Charles Korthout | 2.12  | 29-08-2026     | Stable namespace-node XAttribute cache; following/preceding axes use _namespaceOwner.    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 28-07-2026     | Namespace axis skips non-propagating ancestor bindings; redundant xmlns omitted in ToXmlString |
 //                      |==================|=======|================|=========================================================================================
@@ -80,6 +81,7 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -101,8 +103,36 @@ public sealed class XDocumentNode : IXdmNode
     private static readonly ConditionalWeakTable<XElement, Dictionary<XObject, long>> ParentlessOrderMaps = new();
     private static readonly ConditionalWeakTable<System.Xml.Linq.XDocument, StrongBox<long>> DocumentSequences = new();
     private static readonly ConditionalWeakTable<XElement, StrongBox<long>> ElementTreeSequences = new();
+    // Namespace nodes are virtual: each axis evaluation used to create a new XAttribute,
+    // so generate-id() produced different IDs for the same logical namespace node.
+    // Cache detached XAttributes per owner element + logical prefix to give namespace
+    // nodes stable object identity.
+    private static readonly ConditionalWeakTable<XElement, ConcurrentDictionary<string, XAttribute>> NamespaceAttributeCache = new();
     private static long _sequenceCounter;
     private static readonly object SequenceLock = new();
+
+    /// <summary>
+    /// Returns a cached detached <see cref="XAttribute"/> representing the namespace
+    /// declaration for <paramref name="prefix"/> on <paramref name="owner"/>, creating
+    /// and caching it on first use. This gives logically identical namespace nodes the
+    /// same underlying object so generate-id() returns the same ID for them.
+    /// </summary>
+    private static XAttribute GetOrCreateNamespaceAttribute(XElement owner, string prefix, string uri, bool xml11)
+    {
+        if (!NamespaceAttributeCache.TryGetValue(owner, out var dict))
+        {
+            dict = new ConcurrentDictionary<string, XAttribute>();
+            NamespaceAttributeCache.AddOrUpdate(owner, dict);
+        }
+
+        return dict.GetOrAdd(prefix, _ =>
+        {
+            string storagePrefix = xml11 ? Xml11NameCodec.EncodeName(prefix) : prefix;
+            return string.IsNullOrEmpty(storagePrefix)
+                ? new XAttribute("xmlns", uri)
+                : new XAttribute(XNamespace.Xmlns + storagePrefix, uri);
+        });
+    }
 
     private readonly XObject _node;
     private readonly bool _isNamespaceNode;
@@ -1540,9 +1570,8 @@ public sealed class XDocumentNode : IXdmNode
         // The xml namespace is always implicitly in scope and must be first.
         if (seen.Add("xml"))
         {
-            items.Add(XdmValue.FromNode(new XDocumentNode(
-                new XAttribute(XNamespace.Xmlns + "xml", XNamespace.Xml.NamespaceName),
-                element)));
+            var xmlAttr = GetOrCreateNamespaceAttribute(element, "xml", XNamespace.Xml.NamespaceName, xml11: false);
+            items.Add(XdmValue.FromNode(new XDocumentNode(xmlAttr, element)));
         }
 
         items.AddRange(collected);
@@ -1566,10 +1595,7 @@ public sealed class XDocumentNode : IXdmNode
             return;
 
         bool xml11 = owner.Document?.Annotation<Xml11Annotation>() != null;
-        string storagePrefix = xml11 ? Xml11NameCodec.EncodeName(prefix) : prefix;
-        XAttribute declaration = string.IsNullOrEmpty(storagePrefix)
-            ? new XAttribute("xmlns", uri)
-            : new XAttribute(XNamespace.Xmlns + storagePrefix, uri);
+        XAttribute declaration = GetOrCreateNamespaceAttribute(owner, prefix, uri, xml11);
         items.Add(XdmValue.FromNode(new XDocumentNode(declaration, owner)));
     }
 
@@ -1622,7 +1648,10 @@ public sealed class XDocumentNode : IXdmNode
         var current = _node;
         if (_node is XAttribute || _isNamespaceNode)
         {
-            if (_node.Parent is XElement attrParent)
+            // Namespace nodes are backed by detached XAttributes; the real XPath
+            // parent is the element whose namespace axis they belong to.
+            var attrParent = _isNamespaceNode ? _namespaceOwner : _node.Parent as XElement;
+            if (attrParent is not null)
             {
                 foreach (var child in ChildNodes(attrParent))
                 {
@@ -1674,7 +1703,10 @@ public sealed class XDocumentNode : IXdmNode
         var current = _node;
         if (_node is XAttribute || _isNamespaceNode)
         {
-            if (_node.Parent is XElement attrParent)
+            // Namespace nodes are backed by detached XAttributes; the real XPath
+            // parent is the element whose namespace axis they belong to.
+            var attrParent = _isNamespaceNode ? _namespaceOwner : _node.Parent as XElement;
+            if (attrParent is not null)
                 current = attrParent;
             else
                 return MaterializedSequence.FromList(items);

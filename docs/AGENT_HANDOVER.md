@@ -1,11 +1,32 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-29
-**Commit:** `d670768` — xsl:key namespace-node matching and fn:current() in @use
-**Current focus:** **XSLT gaps** — remaining 5 failures (`axes-052/058`, `position-4901`, `attribute-0806`, `number-4501`). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,099 unit tests / 0 failed / 0 skipped** (+2 new regression tests); **full XSLT conformance sweep 7,249 passed / 5 failed / 7,346 skipped** (was 7,246/8/7,346; `key-058/087/090` now pass); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Commit:** `TBD` — namespace-axis identity and following/preceding axes from namespace nodes
+**Current focus:** **XSLT gaps** — remaining 3 failures (`position-4901`, `attribute-0806`, `number-4501`). Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,101 unit tests / 0 failed / 0 skipped** (+2 new regression tests); **full XSLT conformance sweep 7,251 passed / 3 failed / 7,346 skipped** (was 7,249/5/7,346; `axes-052/058` now pass); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
-## This Session Changes (xsl:key namespace-node matching and fn:current() in @use)
+## This Session Changes (namespace-axis identity and following/preceding axes from namespace nodes)
+
+1. **Fixed following/preceding axes from namespace nodes** —
+   - `XDocumentNode.GetFollowingAxis` and `GetPrecedingAxis` now use `_namespaceOwner` as the parent for namespace nodes (namespace-node backing XAttributes are detached, so `_node.Parent` is null).
+   - Header bumped: `XDocumentNode.cs` → 2.12.
+
+2. **Gave namespace nodes stable object identity** —
+   - Added a `ConditionalWeakTable<XElement, ConcurrentDictionary<string, XAttribute>>` cache in `XDocumentNode` so the detached `XAttribute` used to represent a namespace node is reused for the same owner element + logical prefix.
+   - This makes `generate-id($e/namespace::node())` and `generate-id($e/namespace::xml)` return the same ID, as required by `axes-058`.
+
+3. **Added regression tests** —
+   - `Namespace_Node_Generate_Id_Is_Stable`
+   - `Namespace_Node_Following_Axis`
+   - Header bumped: `StylesheetTests.cs` → 0.54.
+
+4. **Results** —
+   - `axes-052`, `axes-058` now pass.
+   - Full `axes` test set: **202 passed / 0 failed / 0 skipped**.
+   - Unit tests: **2,101 passed / 0 failed / 0 skipped**.
+   - Full XSLT conformance sweep: **7,251 passed / 3 failed / 7,346 skipped**. Remaining failures: `position-4901`, `attribute-0806`, `number-4501`.
+
+## Previous Session Changes (xsl:key namespace-node matching and fn:current() in @use)
 
 1. **Indexed namespace nodes for xsl:key** —
    - `KeyIndex.IndexNodes` now enumerates the namespace axis of each element and passes namespace nodes to `TryIndexNode`, so `match="namespace-node()"` (and union patterns that include it) actually matches nodes.
