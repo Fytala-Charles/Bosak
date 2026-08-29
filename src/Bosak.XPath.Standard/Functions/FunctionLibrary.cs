@@ -67,6 +67,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.104 | 29-08-2026     | fn:unparsed-entity-uri returns xs:anyURI; unparsed entities preserved in fn:snapshot    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.105 | 31-08-2026     | json-to-xml validate=true performs schema validation against built-in JSON schema      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -13099,8 +13101,23 @@ public static class FunctionLibrary
 
         if (options.Validate)
         {
-            // Bosak is not a schema-aware processor: validate:=true() is an error.
-            throw new InvalidOperationException("FOJS0004: The validate option requires a schema-aware processor.");
+            // Validate the generated XML representation against the W3C schema-for-JSON.
+            // This populates PSVI annotations so that $node instance of element(j:map, j:mapType)
+            // and typed-value access (e.g. data($n) instance of xs:double for j:number) work.
+            var validationErrors = new List<string>();
+            bool hasErrors = false;
+            ValidationEventHandler handler = (sender, e) =>
+            {
+                if (e.Severity == XmlSeverityType.Error)
+                {
+                    hasErrors = true;
+                    validationErrors.Add(e.Message);
+                }
+            };
+
+            xdoc.Validate(JsonSchemaSet, handler, addSchemaInfo: true);
+            if (hasErrors)
+                throw new InvalidOperationException($"FOJS0003: The JSON XML representation is not valid: {string.Join("; ", validationErrors)}");
         }
 
         return XdmValue.FromNode(new XDocumentNode(xdoc));

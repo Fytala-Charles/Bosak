@@ -2,10 +2,28 @@
 
 **Date:** 2026-08-31
 **Commit:** `fda20b5` — format-number FODF1310 cluster (numberformat143/144/146)
-**Current focus:** **XPath/XQuery format-number is clean** — the last non-schema-aware QT3 failures (`numberformat143/144/146`) are fixed. The only remaining QT3 failures are 10 schema-validation `json-to-xml-*` tests that require full schema-aware `fn:json-to-xml`. Larger features (`schema-aware json-to-xml`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,103 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped**; **full QT3 sweep 31,138 passed / 10 failed / 673 skipped** (97.85%); **full `fn-format-number` test set 261 passed / 0 failed / 8 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Current focus:** **QT3 is clean** — all runnable XPath/XQuery QT3 tests now pass (31,148/0/673). The remaining skips are unsupported dependencies, platform limitations, and upstream defects. Next larger features: `xsl:package`/`xsl:use-package`, streaming, custom decimal/date-time types.
+**Expected state:** **2,104 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped**; **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `fn-json-to-xml` test set 87 passed / 0 failed / 7 skipped**; **full `fn-format-number` test set 261 passed / 0 failed / 8 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
-## This Session Changes (format-number FODF1310 cluster — numberformat143/144/146)
+## This Session Changes (schema-aware `fn:json-to-xml` — REQ-075)
+
+1. **Implement `validate:=true()` for `fn:json-to-xml`** —
+   - `FunctionLibrary.JsonToXml` now validates the generated XML representation against the embedded W3C schema-for-JSON (`Bosak.XPath.Standard.Resources.schema-for-json.xsd`) when `options.Validate` is true.
+   - `XDocument.Validate(schemaSet, handler, addSchemaInfo: true)` populates PSVI annotations on the generated elements, enabling `document-node(schema-element(j:array))`, `element(j:string, j:stringType)`, and typed-value access such as `data($n) instance of xs:double` for `j:number`.
+   - Validation errors are reported as `FOJS0003`.
+   - Header bumped: `FunctionLibrary.cs` → 5.105.
+
+2. **Updated regression tests** —
+   - `JsonToXml_ValidateTrue_RaisesFOJS0004` replaced by `JsonToXml_ValidateTrue_ProducesTypedDocument` and `JsonToXml_ValidateTrue_InvalidXml_RaisesFOJS0003` in `tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs`.
+   - Header bumped: `FunctionLibraryTests.cs` → 2.36.
+
+3. **Results** —
+   - `json-to-xml-016/017/017b/037/037b/038/038b/044/046/047` now pass.
+   - Full `fn-json-to-xml` test set: **87 passed / 0 failed / 7 skipped**.
+   - Full QT3 sweep: **31,148 passed / 0 failed / 673 skipped** (100% of runnable tests pass).
+   - Unit tests: **2,104 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (format-number FODF1310 cluster — numberformat143/144/146)
 
 1. **Fix exponent-separator occurrence counting in `FormatNumberEngine.ParseSubpicture`** —
    - The parser already consumes only the first exponent separator that is followed by mandatory digit signs as part of the format token; any further occurrence in the prefix or suffix is passive.

@@ -81,6 +81,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.35  | 23-08-2026     | fn:local-name-from-QName / fn:namespace-uri-from-QName / fn:prefix-from-QName singleton-sequence XPTY0004 tests |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.36  | 31-08-2026     | json-to-xml validate=true now succeeds; test updated for typed result and FOJS0003 dupes |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.36  | 23-08-2026     | Advanced UCA collation regression tests (caseFirst, numeric, backwards, caseLevel, shifted) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.37  | 23-08-2026     | UCA fallback=no and numeric-strength regression tests |
@@ -3493,12 +3495,25 @@ public class FunctionLibraryTests
     }
 
     [Fact]
-    public void JsonToXml_ValidateTrue_RaisesFOJS0004()
+    public void JsonToXml_ValidateTrue_ProducesTypedDocument()
     {
-        // Bosak is not a schema-aware processor: validate:=true() raises FOJS0004.
+        // json-to-xml-016/017: validate:=true() now performs schema validation against the
+        // built-in W3C schema-for-JSON and produces PSVI annotations.
+        var result = Evaluate("json-to-xml('[1]', map{'validate':true()})");
+        Assert.True(result.IsNode);
+        Assert.Equal(XdmNodeKind.Document, result.NodeValue.NodeKind);
+        var numberData = Evaluate("data(json-to-xml('[1]', map{'validate':true()})/*/*[1])");
+        Assert.Equal(1.0, numberData.DoubleValue);
+    }
+
+    [Fact]
+    public void JsonToXml_ValidateTrue_InvalidXml_RaisesFOJS0003()
+    {
+        // validate:=true() with duplicate keys violates the schema-for-JSON unique-key
+        // constraint (when duplicates are not explicitly retained), so it raises FOJS0003.
         var ex = Assert.Throws<InvalidOperationException>(
-            () => Evaluate("json-to-xml('[1]', map{'validate':true()})"));
-        Assert.Contains("FOJS0004", ex.Message);
+            () => Evaluate("json-to-xml('{\"a\":1,\"a\":2}', map{'validate':true()})"));
+        Assert.Contains("FOJS0003", ex.Message);
     }
 
     [Fact]
