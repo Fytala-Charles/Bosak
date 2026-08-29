@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 25-08-2026     | FODF1310 for duplicate percent/per-mille or percent+per-mille in a subpicture             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 31-08-2026     | FODF1310 occurrence counts only on format token, ignoring prefix/suffix (numberformat143) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -153,6 +155,7 @@ internal static class FormatNumberEngine
             throw FormatError("FODF1310");
 
         var sub = new Subpicture();
+        string formatToken = "";
 
         // Grammar-based parsing of the subpicture:
         // subpicture ::= prefix? format-token suffix?
@@ -237,7 +240,7 @@ internal static class FormatNumberEngine
 
             // The format token ends at pos. Everything after is suffix.
             sub.Suffix = picture.Substring(pos);
-            string formatToken = picture.Substring(firstActive, pos - firstActive);
+            formatToken = picture.Substring(firstActive, pos - firstActive);
 
             // Split format token into mantissa and exponent
             if (hasExponent)
@@ -291,9 +294,11 @@ internal static class FormatNumberEngine
 
         // A percent sign, per-mille sign, or exponent separator must not appear more than once
         // in a subpicture, and percent and per-mille must not both appear in the same subpicture.
+        // For the exponent separator, only occurrences inside the parsed format token count;
+        // the same character may appear in the prefix or suffix as a passive character.
         int percentCount = CountOccurrences(picture, format.Percent);
         int perMilleCount = CountOccurrences(picture, format.PerMille);
-        int exponentCount = CountOccurrences(picture, format.ExponentSeparator);
+        int exponentCount = CountOccurrences(formatToken, format.ExponentSeparator);
         if (percentCount > 1 || perMilleCount > 1 || exponentCount > 1)
             throw FormatError("FODF1310");
         if (percentCount > 0 && perMilleCount > 0)
@@ -307,7 +312,7 @@ internal static class FormatNumberEngine
         // Validate grouping separator adjacency rules
         ValidateGroupingSeparators(sub, format);
 
-        // Validate percent / per-mille positioning and detect scaling operators
+        // Validate percent / per-mille positioning and detect scaling operators.
         int firstDigitPos = -1;
         int exponentSepPos = -1;
         for (int i = 0; i < picture.Length; i++)

@@ -2,10 +2,24 @@
 
 **Date:** 2026-08-31
 **Commit:** `bff1e90` — DTD element-only whitespace stripping (number-4501)
-**Current focus:** **XSLT is clean** — 0 remaining XSLT conformance failures. Larger features (`schema-awareness`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
-**Expected state:** **2,103 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped** (was 7,253/1/7,346; `number-4501` now passes); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Current focus:** **XPath/XQuery format-number is clean** — the last non-schema-aware QT3 failures (`numberformat143/144/146`) are fixed. The only remaining QT3 failures are 10 schema-validation `json-to-xml-*` tests that require full schema-aware `fn:json-to-xml`. Larger features (`schema-aware json-to-xml`, `packages`, `streaming`) remain deferred until smaller wins are exhausted.
+**Expected state:** **2,103 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped**; **full QT3 sweep 31,138 passed / 10 failed / 673 skipped** (97.85%); **full `fn-format-number` test set 261 passed / 0 failed / 8 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
 
-## This Session Changes (number-4501 DTD element-only whitespace stripping)
+## This Session Changes (format-number FODF1310 cluster — numberformat143/144/146)
+
+1. **Fix exponent-separator occurrence counting in `FormatNumberEngine.ParseSubpicture`** —
+   - The parser already consumes only the first exponent separator that is followed by mandatory digit signs as part of the format token; any further occurrence in the prefix or suffix is passive.
+   - Occurrence counting for `format.ExponentSeparator` now uses the parsed `formatToken` instead of the whole `picture`, so pictures such as `'9.9999e99end'` (suffix contains another `'e'`) no longer raise `FODF1310`.
+   - Percent and per-mille occurrence counting and positioning validation continue to scan the whole subpicture, preserving correct scaling and output behaviour for `'###.###%'`, `'###.###‰'`, etc.
+   - Header bumped: `FormatNumberEngine.cs` → 0.5.
+
+2. **Results** —
+   - `numberformat143/144/146` now pass.
+   - Full `fn-format-number` test set: **261 passed / 0 failed / 8 skipped**.
+   - Full QT3 sweep: **31,138 passed / 10 failed / 673 skipped**; the 10 failures are schema-validation `json-to-xml-*` tests.
+   - Unit tests: **2,103 passed / 0 failed / 0 skipped**.
+
+## Previous Session Changes (number-4501 DTD element-only whitespace stripping)
 
 1. **Annotate elements declared element-only by a DTD** —
    - `Xml11Loader` now scans the internal and external DTD subsets for `<!ELEMENT>` declarations and attaches a `DtdElementOnlyAnnotation` to every `XElement` whose declaration is `EMPTY` or has a pure element content model (no `#PCDATA`).

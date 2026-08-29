@@ -11,13 +11,17 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 31 August 2026
 > **Bosak baseline:** 2,103 unit tests passed / 0 failed / 0 skipped
-> **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%).
+> **QT3 baseline:** **31,138 passed / 10 failed / 673 skipped** (97.85%); the 10 failures are schema-validation `json-to-xml-*` tests requiring full schema-aware `fn:json-to-xml`.
 > **XSLT baseline:** 7,254 passed / 0 failed / 7,346 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-31** — XPath/XQuery: **`format-number` FODF1310 cluster (`numberformat143/144/146`)** — `FormatNumberEngine.ParseSubpicture` now counts exponent-separator occurrences only inside the parsed format token, so a passive occurrence of the exponent character in the prefix or suffix (e.g., `'end'` in `'9.9999e99end'`) no longer raises `FODF1310`. Percent and per-mille handling remains unchanged; percent/per-mille positioning validation still scans the whole subpicture. This closes the last remaining non-schema-aware `fn:format-number` failures; the full `fn-format-number` test set is **261/0/8**. The full QT3 sweep is now **31,138/10/673**; the 10 residual failures are schema-validation `json-to-xml-*` tests.
+  - Implementation: `src/Bosak.XPath.Standard/Functions/FormatNumberEngine.cs` (header → 0.5).
+  - Verification: `numberformat143/144/146` PASS; full `fn-format-number` 261/0/8; full QT3 sweep 31,138/10/673; unit tests 2,103/0/0.
 
 - **2026-08-31** — XSLT: **DTD-declared element-only whitespace stripping (`number-4501`)** — Source documents with a DTD are now parsed for `<!ELEMENT>` declarations. Elements declared as `EMPTY` or with a pure element content model (no `#PCDATA`) are annotated, and the XSLT processor strips whitespace-only text nodes inside those elements by default, matching XSLT 1.0 §3.4. This closes the last remaining XSLT conformance failure. Full XSLT sweep is now **7,254/0/7,346**; unit tests remain **2,103/0/0**.
   - Implementation: `src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs` (header → 0.7), `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.41), plus new `src/Bosak.XPath.Providers/Xml11/DtdElementOnlyAnnotation.cs`.
