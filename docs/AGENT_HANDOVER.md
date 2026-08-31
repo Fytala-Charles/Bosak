@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-31
-**Commit:** <to be updated after REQ-071 commit> — REQ-071: XSLT source-document hint polish
+**Commit:** cccf355f970b6c687d1ec3dcc87a2fff4f1c261f — REQ-071: XSLT source-document hint polish
 **Current focus:** **REQ-071 XSLT source-document hint polish** — The default source-document hint for the XSLT **Run XSLT transformation** code lens now supports an XML comment alternative (`<!-- bosak:source-document="..." -->`) in addition to the existing processing instruction (`<?bosak source-document="..."?>`). Single-quoted processing instructions are now covered by unit tests, and surrounding whitespace is trimmed from the supplied path before relative-path resolution.
 **Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 70 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
 
