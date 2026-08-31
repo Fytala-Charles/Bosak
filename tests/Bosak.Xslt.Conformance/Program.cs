@@ -95,6 +95,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.30  | 29-08-2026     | Removed "dtd" from SkipFeatures so DTD-dependent tests run                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.31  | 30-08-2026     | Enabled xsl:package/xsl:use-package tests; removed harness skips                         |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.32  | 30-08-2026     | Register inline test packages for xsl:use-package resolution                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -144,7 +148,7 @@ class Program
         "schema_aware",
         "schema-import",
         "streaming",
-        "packages",
+
         "dynamic-evaluation",
         "xslt-3.0-snapshot",
         "built_in_derived_types",
@@ -420,6 +424,7 @@ class Program
     static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
+        var packageVersionResolutionStrategy = Bosak.Xslt.Api.PackageVersionResolutionStrategy.Highest;
 
         if (_testNameFilter != null && !name.Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase))
             return TestResult.Skip;
@@ -509,6 +514,21 @@ class Program
                     if (satisfied == "true")
                         return TestResult.Skip;
                 }
+                foreach (var pvr in deps.Elements(ns + "package_version_resolution"))
+                {
+                    var val = pvr.Attribute("value")?.Value ?? "";
+                    var satisfied = pvr.Attribute("satisfied")?.Value ?? "true";
+                    bool supported = val is "highest_version" or "lowest_version" or "unspecified";
+                    if (satisfied == "false" && supported)
+                        return TestResult.Skip;
+                    if (satisfied != "false" && !supported)
+                        return TestResult.Skip;
+                    packageVersionResolutionStrategy = val switch
+                    {
+                        "lowest_version" => Bosak.Xslt.Api.PackageVersionResolutionStrategy.Lowest,
+                        _ => Bosak.Xslt.Api.PackageVersionResolutionStrategy.Highest
+                    };
+                }
             }
 
             string? defaultHtmlVersion = null;
@@ -550,29 +570,29 @@ class Program
             // available to fn:collection / fn:uri-collection (collection-001..003).
             var envCollections = LoadCollections(envToLoad, testSetDir, catalogDir, ns);
 
-            // Register secondary packages declared in the environment so that
-            // fn:transform can resolve package-name / package-version options.
-            Bosak.Xslt.Api.XsltFunctionLibrary.ClearPackages();
-            if (envToLoad != null)
-            {
-                foreach (var pkg in envToLoad.Elements(ns + "package"))
-                {
-                    var pkgFile = pkg.Attribute("file")?.Value;
-                    var pkgUri = pkg.Attribute("uri")?.Value;
-                    var pkgVersion = pkg.Attribute("package-version")?.Value;
-                    if (pkgFile == null || pkgUri == null)
-                        continue;
-                    var pkgPath = Path.Combine(testSetDir, pkgFile);
-                    if (!File.Exists(pkgPath)) pkgPath = Path.Combine(catalogDir, pkgFile);
-                    if (File.Exists(pkgPath))
-                        Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
-                            pkgUri, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
-                }
-            }
-
             // Load test (stylesheet(s))
             var testElem = testCase.Element(ns + "test");
             if (testElem == null) return TestResult.Skip;
+
+            // Register secondary packages declared in the environment or inline in the
+            // test so that xsl:use-package can resolve package-name/package-version.
+            Bosak.Xslt.Api.XsltFunctionLibrary.ClearPackages();
+            var packageSources = (envToLoad?.Elements(ns + "package") ?? Enumerable.Empty<XElement>())
+                .Concat(testElem.Elements(ns + "package"));
+            foreach (var pkg in packageSources)
+            {
+                var pkgFile = pkg.Attribute("file")?.Value;
+                var pkgUri = pkg.Attribute("uri")?.Value;
+                var pkgVersion = pkg.Attribute("package-version")?.Value;
+                var pkgRole = pkg.Attribute("role")?.Value;
+                if (pkgFile == null || pkgUri == null || pkgRole == "principal")
+                    continue;
+                var pkgPath = Path.Combine(testSetDir, pkgFile);
+                if (!File.Exists(pkgPath)) pkgPath = Path.Combine(catalogDir, pkgFile);
+                if (File.Exists(pkgPath))
+                    Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
+                        pkgUri, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
+            }
 
             // Determine the principal stylesheet or package. Prefer an element with
             // role="principal"; fall back to the first stylesheet/package element.
@@ -601,13 +621,6 @@ class Program
             XDocument? principalStylesheetDoc = null;
             if (principalElem != null)
             {
-                // xsl:package is not supported by this compiler.
-                if (principalElem.Name.LocalName == "package")
-                {
-                    Console.WriteLine($"  SKIP {name}: xsl:package not supported");
-                    return TestResult.Skip;
-                }
-
                 var mainStylesheetFile = principalElem.Attribute("file")?.Value;
                 if (mainStylesheetFile == null) return TestResult.Skip;
 
@@ -667,17 +680,6 @@ class Program
                 if (string.IsNullOrEmpty(xslDoc.BaseUri))
                     xslDoc.AddAnnotation(baseUri);
                 var xslRoot = xslDoc.Root;
-                if (xslRoot != null && xslRoot.Name == XName.Get("package", "http://www.w3.org/1999/XSL/Transform"))
-                {
-                    Console.WriteLine($"  SKIP {name}: xsl:package not supported");
-                    return TestResult.Skip;
-                }
-
-                if (xslRoot != null && xslRoot.Descendants(XName.Get("use-package", "http://www.w3.org/1999/XSL/Transform")).Any())
-                {
-                    Console.WriteLine($"  SKIP {name}: xsl:use-package not supported");
-                    return TestResult.Skip;
-                }
 
             }
             catch
@@ -744,7 +746,8 @@ class Program
                 UriResolver = resolver,
                 MessageListener = messageListener,
                 StaticParameters = staticParamValues,
-                TreatRecoverableAmbiguousMatchAsError = treatAmbiguousMatchAsError
+                TreatRecoverableAmbiguousMatchAsError = treatAmbiguousMatchAsError,
+                PackageVersionResolutionStrategy = packageVersionResolutionStrategy
             };
             var executable = compiler.Compile(xslDoc, baseUri);
 
@@ -2852,6 +2855,18 @@ public class TestUriResolver : Bosak.Xslt.Api.IXsltUriResolver
         if (_mappings.TryGetValue(href, out var mappedPath) && File.Exists(mappedPath))
         {
             return Xml11Loader.Load(mappedPath, loadOptions);
+        }
+
+        // Handle absolute file URIs (used by xsl:use-package package registry).
+        if (Uri.IsWellFormedUriString(href, UriKind.Absolute)
+            && Uri.TryCreate(href, UriKind.Absolute, out var fileUri)
+            && fileUri.IsFile)
+        {
+            var localPath = fileUri.LocalPath;
+            if (File.Exists(localPath))
+            {
+                return Xml11Loader.Load(localPath, loadOptions);
+            }
         }
 
         // Resolve relative to baseUri

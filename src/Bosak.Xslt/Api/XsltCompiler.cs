@@ -55,6 +55,13 @@ public sealed class XsltCompiler
     public bool TreatRecoverableAmbiguousMatchAsError { get; set; }
 
     /// <summary>
+    /// Strategy used to select a package version when an <c>xsl:use-package</c> version
+    /// range matches multiple registered packages. Defaults to
+    /// <see cref="PackageVersionResolutionStrategy.Highest"/>.
+    /// </summary>
+    public PackageVersionResolutionStrategy PackageVersionResolutionStrategy { get; set; } = PackageVersionResolutionStrategy.Highest;
+
+    /// <summary>
     /// Compiles an XSLT stylesheet from an XML string.
     /// </summary>
     /// <param name="xsl">The XSLT stylesheet as an XML string.</param>
@@ -77,7 +84,7 @@ public sealed class XsltCompiler
     public XsltExecutable Compile(XDocument document, string? baseUri = null)
     {
         var resolver = UriResolver ?? new FileSystemUriResolver();
-        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters);
+        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters, packageVersionResolutionStrategy: PackageVersionResolutionStrategy);
         return new XsltExecutable(stylesheet, MessageListener, TreatRecoverableAmbiguousMatchAsError);
     }
 

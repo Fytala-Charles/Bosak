@@ -234,6 +234,20 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.41  | 31-08-2026     | Strip whitespace in DTD-declared element-only content; fixes number-4501                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.42  | 30-08-2026     | Package scope for xsl:function: private functions/variables visible inside package        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.43  | 30-08-2026     | Key index scoped by package; mode lookups use CurrentStylesheet; no private function leak |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.44  | 30-08-2026     | Runtime template visibility filter; EnterPackageScope uses OwningPackage for imports |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.45  | 30-08-2026     | Namespace-alias target namespaces are not excluded by exclude-result-prefixes           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.46  | 30-08-2026     | IsTemplateVisible uses TemplateRule.EffectiveVisibility from xsl:accept                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.47  | 30-08-2026     | Scope-isolate lazy globals; include accepted used-package private functions; CollectingScope visibility |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.48  | 30-08-2026     | Keep evaluated globals in scope dictionary; EnterPackageScope exposes accepted private used-package functions |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -322,7 +336,7 @@ public sealed class TransformEngine
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
     private readonly Dictionary<string, Stylesheet.TemplateRule> _allNamedTemplates;
     private readonly HashSet<string> _excludedResultPrefixes;
-    private readonly Dictionary<string, Stylesheet.NamespaceAliasDefinition> _namespaceAliases;
+    private Dictionary<string, Stylesheet.NamespaceAliasDefinition> _namespaceAliases;
     private readonly IXsltMessageListener? _messageListener;
     private readonly bool _treatRecoverableAmbiguousMatchAsError;
 
@@ -348,11 +362,11 @@ public sealed class TransformEngine
     // Accumulated excluded rules for the current xsl:next-match chain
     private HashSet<Stylesheet.TemplateRule> _nextMatchExcluded = new();
 
-    // Key index for key() function lookups — one per document root node
-    private List<(IXdmNode DocRoot, KeyIndex Index)>? _keyIndices;
+    // Key index for key() function lookups — one per document root node and stylesheet scope.
+    private List<(IXdmNode DocRoot, Stylesheet.Stylesheet Scope, KeyIndex Index)>? _keyIndices;
 
     // Tracks keys currently being built, to detect circular key references (XTDE0640).
-    private readonly HashSet<(IXdmNode DocRoot, string KeyName)> _buildingKeys = new();
+    private readonly HashSet<(IXdmNode DocRoot, Stylesheet.Stylesheet Scope, string KeyName)> _buildingKeys = new();
 
     // The initial source document supplied to Transform, and the initial mode used
     // to process it. Used to determine accumulator applicability for copied trees.
@@ -486,11 +500,19 @@ public sealed class TransformEngine
     private const int MaxApplyTemplatesDepth = 256;
 
     // Deferred global variables with sequence constructors (evaluated lazily on first reference)
-    private readonly Dictionary<(string LocalName, string NamespaceUri), (XElement Element, string? AsType)> _lazyGlobals = new();
+    private readonly Dictionary<ScopeKey, Dictionary<(string LocalName, string NamespaceUri), LazyGlobalInfo>> _lazyGlobalsByScope = new();
+
+    private readonly record struct ScopeKey(Stylesheet.Stylesheet? Package);
+
+    private readonly record struct LazyGlobalInfo(XElement Element, string? AsType, Stylesheet.Stylesheet SourceStylesheet, Stylesheet.Stylesheet CollectingScope, string? EffectiveVisibility);
 
     // Snapshot of variable bindings after global initialization; used to evaluate
     // lazy globals in the global scope, isolating them from local template variables.
     private Dictionary<(string LocalName, string NamespaceUri), XdmValue>? _globalVariableSnapshot;
+
+    // When executing a component declared inside a package, this points to the declaring
+    // package so private functions and variables of that package are visible to the component.
+    private Stylesheet.Stylesheet? _currentPackageScope;
 
     // Tracks globals currently being evaluated to detect circular references.
     private readonly HashSet<(string LocalName, string NamespaceUri)> _evaluatingGlobals = new();
@@ -503,6 +525,13 @@ public sealed class TransformEngine
 
     // The initial context item supplied to the transformation (the global context item).
     private XdmValue _globalContextItem = XdmValue.Undefined;
+
+    /// <summary>
+    /// The stylesheet currently in scope for component lookups. When executing a component
+    /// declared in a used package, this temporarily points to the declaring package so its
+    /// private components (decimal formats, keys, output definitions, etc.) are visible.
+    /// </summary>
+    private Stylesheet.Stylesheet CurrentStylesheet => _currentPackageScope ?? _stylesheet;
 
     /// <summary>The parsed xsl:output serialization properties.</summary>
     public Stylesheet.OutputProperties? OutputProperties => _stylesheet.EffectiveOutputProperties;
@@ -831,7 +860,7 @@ public sealed class TransformEngine
         // Build key indices iteratively to handle cross-key dependencies
         // (e.g. key-063 where k2's use calls key('k1',...), or key-064 where
         // k1's match calls key('k2',...)).
-        var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
+        var allKeyDefs = CurrentStylesheet.GetAllKeyDefinitions();
         if (source != null && allKeyDefs.Count > 0)
         {
             // XTSE1222: all xsl:key declarations with the same expanded name must
@@ -842,11 +871,11 @@ public sealed class TransformEngine
                     throw new InvalidOperationException($"XTSE1222: xsl:key definitions for '{group.Key}' have conflicting @composite values.");
             }
 
-            _keyIndices = new List<(IXdmNode, KeyIndex)>();
+            _keyIndices = new List<(IXdmNode DocRoot, Stylesheet.Stylesheet Scope, KeyIndex Index)>();
             var sourceIndex = new KeyIndex();
             // Add the index before building so recursive key() calls inside
             // xsl:key/@use or match can query the partially-built index.
-            _keyIndices.Add((source, sourceIndex));
+            _keyIndices.Add((source, CurrentStylesheet, sourceIndex));
 
             BuildKeyIndex(source, sourceIndex, allKeyDefs);
         }
@@ -2364,6 +2393,85 @@ public sealed class TransformEngine
     /// </summary>
     private const int MaxXsltFunctionCallDepth = 256;
 
+    private struct PackageScopeState
+    {
+        public Stylesheet.Stylesheet? PreviousScope;
+        public Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> FunctionSnapshot;
+        public Dictionary<string, Stylesheet.NamespaceAliasDefinition> NamespaceAliasSnapshot;
+        public Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> NamedDecimalFormatSnapshot;
+        public DecimalFormat DefaultDecimalFormatSnapshot;
+        public IDisposable? LazyGlobalsSnapshot;
+    }
+
+    /// <summary>
+    /// Enters the declaring package scope for a component so that the component can see
+    /// the package's private functions and variables. Restoring the snapshot returns the
+    /// engine to the previous package scope and function registry.
+    /// </summary>
+    private PackageScopeState EnterPackageScope(Stylesheet.Stylesheet? package)
+    {
+        var previousScope = _currentPackageScope;
+        var functionSnapshot = _context.SnapshotFunctions();
+        var namespaceAliasSnapshot = _namespaceAliases;
+        var namedDecimalSnapshot = _context.SnapshotDecimalFormats();
+        var defaultDecimalSnapshot = _context.DefaultDecimalFormat;
+        var lazyGlobalsSnapshot = _context.SnapshotLazyGlobals();
+
+        if (package?.IsPackage == true && package != previousScope)
+        {
+            _currentPackageScope = package;
+            _namespaceAliases = package.GetEffectiveNamespaceAliases();
+
+            // Register the package's decimal formats so format-number inside the package
+            // sees the package's own definitions.
+            foreach (var (key, def) in package.GetAllDecimalFormats())
+            {
+                if (string.IsNullOrEmpty(key.localName))
+                    _context.DefaultDecimalFormat = def.Format;
+                else
+                    _context.WithDecimalFormat(key.localName, key.nsUri, def.Format);
+            }
+
+            foreach (var (key, def) in package.GetAllFunctionDefinitions(includePrivate: true, includeUsedPackagePrivate: true))
+            {
+                var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                _context.RegisterFunction(new FunctionSignature
+                {
+                    NamespaceUri = def.NamespaceUri,
+                    LocalName = def.LocalName,
+                    Arity = def.Arity,
+                    ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
+                    ReturnType = XdmValueKind.Sequence,
+                    ParameterTypeNames = Enumerable.Range(0, def.Arity)
+                        .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
+                        .ToList(),
+                    ReturnTypeName = def.ReturnType,
+                    Implementation = (ctx, a) => ExecuteXsltFunction(def, a)
+                });
+            }
+        }
+
+        return new PackageScopeState
+        {
+            PreviousScope = previousScope,
+            FunctionSnapshot = functionSnapshot,
+            NamespaceAliasSnapshot = namespaceAliasSnapshot,
+            NamedDecimalFormatSnapshot = namedDecimalSnapshot,
+            DefaultDecimalFormatSnapshot = defaultDecimalSnapshot,
+            LazyGlobalsSnapshot = lazyGlobalsSnapshot
+        };
+    }
+
+    private void ExitPackageScope(PackageScopeState state)
+    {
+        _currentPackageScope = state.PreviousScope;
+        _namespaceAliases = state.NamespaceAliasSnapshot;
+        _context.RestoreFunctions(state.FunctionSnapshot);
+        _context.RestoreDecimalFormats(state.NamedDecimalFormatSnapshot);
+        _context.DefaultDecimalFormat = state.DefaultDecimalFormatSnapshot;
+        state.LazyGlobalsSnapshot?.Dispose();
+    }
+
     private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
     {
         if (++_xsltFunctionCallDepth > MaxXsltFunctionCallDepth)
@@ -2398,8 +2506,12 @@ public sealed class TransformEngine
         var effectiveNewEachTime = GetEffectiveFunctionAttribute(def.Element, "new-each-time");
         bool memoize = IsDeterministicNewEachTime(effectiveNewEachTime);
         XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
+        PackageScopeState packageScopeState = default;
         try
         {
+            // Enter the declaring package scope after binding parameters so private
+            // functions and variables of the package are visible to the function body.
+            packageScopeState = EnterPackageScope(def.Stylesheet.OwningPackage);
             _context.CurrentOutputUri = null;
             using var temporaryOutputState = EnterTemporaryOutputState();
 
@@ -2478,6 +2590,7 @@ public sealed class TransformEngine
             _context.SuppressLazyGlobalCaching = savedSuppressCaching;
             _context.CurrentOutputUri = savedOutputUri;
             _functionLocalLazyVariables = savedFunctionLocals;
+            ExitPackageScope(packageScopeState);
         }
     }
 
@@ -2829,7 +2942,7 @@ public sealed class TransformEngine
                         var select = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = XPath31Expression.Compile(select!);
+                            var compiled = CompileXPath(select!, instruction);
                             var result = compiled.Evaluate(_context);
                             FlattenToList(result, results);
                         }
@@ -2867,7 +2980,7 @@ public sealed class TransformEngine
                         string textValue;
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = XPath31Expression.Compile(select);
+                            var compiled = CompileXPath(select, instruction);
                             var result = compiled.Evaluate(_context);
                             var sep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
                             textValue = XdmValueToString(result, sep);
@@ -3838,6 +3951,8 @@ public sealed class TransformEngine
                 stripped.StartsWith("(/");
             if (!isRootPattern)
                 continue;
+            if (!IsTemplateVisible(rule))
+                continue;
             if (rule.CompiledMatch == null)
                 continue;
             if (!EvaluatePatternMatch(rule, XdmValue.FromNode(_initialSource!)))
@@ -3872,7 +3987,7 @@ public sealed class TransformEngine
 
         if (hasConflict && best != null)
         {
-            var modeDef = _stylesheet.GetModeDefinition("");
+            var modeDef = CurrentStylesheet.GetModeDefinition("");
             if (modeDef?.OnMultipleMatch == Stylesheet.OnMultipleMatch.Fail)
             {
                 throw new InvalidOperationException("XTDE0540: Multiple templates match with the same priority.");
@@ -4162,6 +4277,19 @@ public sealed class TransformEngine
         => ExecuteTemplate(rule, XdmValue.FromNode(currentNode), callParams, incomingTunnelParams, position, last, setCurrentRule);
 
     public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1, bool setCurrentRule = true)
+    {
+        var packageScopeState = EnterPackageScope(rule.Stylesheet.OwningPackage);
+        try
+        {
+            ExecuteTemplateCore(rule, contextItem, callParams, incomingTunnelParams, position, last, setCurrentRule);
+        }
+        finally
+        {
+            ExitPackageScope(packageScopeState);
+        }
+    }
+
+    private void ExecuteTemplateCore(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams, Dictionary<string, XdmValue>? incomingTunnelParams, int position, int last, bool setCurrentRule)
     {
         var asType = rule.Element.Attribute("as")?.Value;
         var savedContainer = _currentContainer;
@@ -8490,7 +8618,8 @@ public sealed class TransformEngine
     /// <summary>
     /// Collects the namespace URIs that are excluded by <c>exclude-result-prefixes</c>
     /// in scope on the given element. The special value <c>#all</c> is returned as the
-    /// literal string <c>#all</c> so callers can treat it as a wildcard.
+    /// literal string <c>#all</c> so callers can treat it as a wildcard. The target
+    /// namespace of an active <c>xsl:namespace-alias</c> is never excluded.
     /// </summary>
     private HashSet<string> GetExcludedNamespaceUris(XElement element)
     {
@@ -8523,6 +8652,11 @@ public sealed class TransformEngine
             }
             current = current.Parent;
         }
+
+        // XSLT 2.0 §11.1.4: the target namespace of a namespace alias is not excluded.
+        foreach (var alias in _namespaceAliases.Values)
+            result.Remove(alias.ResultUri);
+
         return result;
     }
 
@@ -8844,9 +8978,9 @@ public sealed class TransformEngine
 
     private void ApplyBuiltInRulesForAtomic(XdmValue item, string mode)
     {
-        var modeDef = _stylesheet.GetModeDefinition(mode);
+        var modeDef = CurrentStylesheet.GetModeDefinition(mode);
         if (modeDef == null && !string.IsNullOrEmpty(mode))
-            modeDef = _stylesheet.GetModeDefinition("");
+            modeDef = CurrentStylesheet.GetModeDefinition("");
         var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
         if (behavior == Stylesheet.OnNoMatch.DeepSkip || behavior == Stylesheet.OnNoMatch.ShallowSkip)
             return;
@@ -8875,12 +9009,12 @@ public sealed class TransformEngine
         _context.WithCurrentItem(XdmValue.FromNode(node));
         try
         {
-            var modeDef = _stylesheet.GetModeDefinition(mode);
+            var modeDef = CurrentStylesheet.GetModeDefinition(mode);
             var typed = modeDef?.Typed ?? false;
             // Named modes with no explicit xsl:mode declaration inherit the
             // unnamed mode's on-no-match behavior (XSLT 3.0 §3.5.2).
             if (modeDef == null && !string.IsNullOrEmpty(mode))
-                modeDef = _stylesheet.GetModeDefinition("");
+                modeDef = CurrentStylesheet.GetModeDefinition("");
             var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
 
             // xsl:mode warning-on-no-match: warn whenever the built-in rule processes
@@ -9116,7 +9250,7 @@ public sealed class TransformEngine
     private XdmValue KeyFunctionImpl(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         if (_keyIndices == null)
-            _keyIndices = new List<(IXdmNode DocRoot, KeyIndex Index)>();
+            _keyIndices = new List<(IXdmNode DocRoot, Stylesheet.Stylesheet Scope, KeyIndex Index)>();
 
         var rawKeyName = args[0].ToString();
         var keyName = ExpandKeyName(rawKeyName, ctx);
@@ -9128,7 +9262,7 @@ public sealed class TransformEngine
             keyValueArg = ConvertKeyValueToStringSequence(keyValueArg);
 
         // XTDE1260: the expanded key name must match at least one xsl:key definition.
-        var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
+        var allKeyDefs = CurrentStylesheet.GetAllKeyDefinitions();
         if (!allKeyDefs.Any(k => k.Name == keyName))
             throw new InvalidOperationException($"XTDE1260: No xsl:key definition named '{rawKeyName}'.");
 
@@ -9144,7 +9278,7 @@ public sealed class TransformEngine
             if (docRoot == null)
                 throw new InvalidOperationException("XTDE1270: The context node for key() is not rooted at a document node.");
 
-            var buildKey = (docRoot, keyName);
+            var buildKey = (docRoot, CurrentStylesheet, keyName);
             if (_buildingKeys.Contains(buildKey))
                 ThrowCircularityError("xsl:key", rawKeyName);
 
@@ -9195,7 +9329,7 @@ public sealed class TransformEngine
                 }
                 if (!found)
                 {
-                    var buildKey = (candidateDoc, keyName);
+                    var buildKey = (candidateDoc, CurrentStylesheet, keyName);
                     if (_buildingKeys.Contains(buildKey))
                         ThrowCircularityError("xsl:key", rawKeyName);
 
@@ -9306,18 +9440,20 @@ public sealed class TransformEngine
     /// </summary>
     private KeyIndex? GetOrBuildKeyIndex(IXdmNode docRoot)
     {
-        // Find existing index using IsSameNode (wrapper instances may differ).
+        // Find existing index using IsSameNode (wrapper instances may differ) and the
+        // current stylesheet scope, because xsl:key definitions are scoped to the package
+        // that declares them.
         KeyIndex? existingIndex = null;
-        foreach (var (existingDoc, idx) in _keyIndices!)
+        foreach (var (existingDoc, existingScope, idx) in _keyIndices!)
         {
-            if (existingDoc.IsSameNode(docRoot))
+            if (existingDoc.IsSameNode(docRoot) && existingScope == CurrentStylesheet)
             {
                 existingIndex = idx;
                 break;
             }
         }
 
-        var allKeyDefs = _stylesheet.GetAllKeyDefinitions();
+        var allKeyDefs = CurrentStylesheet.GetAllKeyDefinitions();
         if (allKeyDefs.Count == 0)
             return null;
 
@@ -9328,7 +9464,7 @@ public sealed class TransformEngine
         // actual cycles.
         if (existingIndex != null)
         {
-            if (_buildingKeys.Any(k => k.DocRoot.IsSameNode(docRoot)))
+            if (_buildingKeys.Any(k => k.Scope == CurrentStylesheet && k.DocRoot.IsSameNode(docRoot)))
                 BuildKeyIndex(docRoot, existingIndex, allKeyDefs);
             return existingIndex;
         }
@@ -9336,7 +9472,7 @@ public sealed class TransformEngine
         // Build iteratively for this document; add the index first so that
         // recursive key() calls inside xsl:key/@use or match can query it.
         var keyIndex = new KeyIndex();
-        _keyIndices!.Add((docRoot, keyIndex));
+        _keyIndices!.Add((docRoot, CurrentStylesheet, keyIndex));
         BuildKeyIndex(docRoot, keyIndex, allKeyDefs);
         return keyIndex;
     }
@@ -9387,7 +9523,7 @@ public sealed class TransformEngine
 
                 foreach (var (keyName, definitions) in keyNames)
                 {
-                    var buildKey = (docRoot, keyName);
+                    var buildKey = (docRoot, CurrentStylesheet, keyName);
 
                     // If this key name is already being built higher up the call stack,
                     // skip it in this nested rebuild. Direct or indirect self-references
@@ -9468,7 +9604,7 @@ public sealed class TransformEngine
     }
 
     private bool IsCompositeKey(string keyName)
-        => _stylesheet.GetAllKeyDefinitions().Any(k => k.Name == keyName && k.Composite);
+        => CurrentStylesheet.GetAllKeyDefinitions().Any(k => k.Name == keyName && k.Composite);
 
     /// <summary>
     /// Converts a key-value argument to a sequence of strings using XPath 1.0
@@ -9677,218 +9813,29 @@ public sealed class TransformEngine
         // checking required="yes" parameters.
         var externallySupplied = _context.SnapshotVariables();
 
-        // Collect globals in document order, recursing into imported and included
-        // modules at the position of their xsl:import / xsl:include element. This
-        // ensures globals from nested imports/includes are visible to the importer
-        // and that collisions resolve first by import precedence (higher wins) and
-        // then by document order within the same precedence (last wins).
-        var globals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)>();
-        int documentOrder = 0;
-        _stylesheet.CollectGlobalsInDocumentOrder(globals, ref documentOrder);
-        // Lower numeric precedence means higher XSLT import precedence and must win,
-        // so process higher-numeric (lower-precedence) declarations first and let
-        // lower-numeric (higher-precedence) declarations overwrite them. Within the
-        // same precedence, document order governs last-wins behaviour.
-        globals.Sort((a, b) =>
-        {
-            int precedenceComparison = b.Precedence.CompareTo(a.Precedence);
-            return precedenceComparison != 0 ? precedenceComparison : a.Order.CompareTo(b.Order);
-        });
-
-        static bool IsStaticGlobal(XElement e)
-        {
-            var staticAttr = e.Attribute("static")?.Value;
-            if (string.IsNullOrEmpty(staticAttr))
-                return false;
-            var v = staticAttr.Trim();
-            return v is "yes" or "true" or "1";
-        }
-
-        // Pre-register all globals (variables and parameters with defaults) so they
-        // can be resolved lazily on first reference. Processing in precedence order
-        // ensures the highest-precedence declaration wins when names collide.
-        // Static declarations are resolved from the pre-computed static context rather
-        // than re-evaluated at runtime, so a static $p is still visible to other static
-        // expressions even when a non-static declaration with the same name shadows it
-        // at runtime (static-027).
-        foreach (var (_, _, name, elem, isParam) in globals)
-        {
-            // Skip parameters already supplied by the caller (e.g. fn:transform).
-            if (isParam && externallySupplied.ContainsKey(name))
-                continue;
-
-            _lazyGlobals[name] = (elem, elem.Attribute("as")?.Value);
-        }
+        // Collect globals visible from the root stylesheet scope, applying
+        // accept/override rules at every used-package boundary. Each scope's globals
+        // are stored separately so that package-private variables resolve correctly
+        // when components from different packages are executed.
+        var rootGlobals = BuildScopeGlobals(_stylesheet, externallySupplied);
+        _lazyGlobalsByScope[new ScopeKey(null)] = rootGlobals;
 
         // Register lazy variable resolver BEFORE any global is referenced.
-        _context.LazyVariableResolver = (localName, namespaceUri) =>
-        {
-            var key = (localName, namespaceUri);
-
-            // A reference to a global that is currently being evaluated is a circular
-            // dependency. Detect this before looking the variable up, so callers (e.g.
-            // function bodies) see a circularity rather than an "undefined variable" error.
-            if (_evaluatingGlobals.Contains(key))
-                ThrowCircularityError("global variable", localName);
-
-            if (_lazyGlobals.TryGetValue(key, out var info))
-            {
-                // During pattern validation, skip globals whose value is defined by a
-                // sequence constructor. Evaluating them now would materialize the wrong value
-                // (the validation dummy node is not the real source), and could hide
-                // circularity errors that should be raised at runtime (error-0640d).
-                // Returning Undefined lets the predicate evaluate to a dynamic error that
-                // validation ignores, while simple @select globals like $screen are still
-                // evaluated and cached. The suppression sentinel must not be cached,
-                // otherwise it leaks into the real transformation.
-                if (_context.SuppressLazySequenceConstructorGlobals &&
-                    string.IsNullOrEmpty(info.Element.Attribute("select")?.Value))
-                {
-                    _context.SkipLazyGlobalCacheOnce = true;
-                    return XdmValue.Undefined;
-                }
-
-                // Parameters supplied by the caller are already bound.
-                if (_context.TryGetBoundVariable(localName, out var existing, namespaceUri))
-                    return existing;
-
-                // Static variables/parameters were evaluated during stylesheet loading.
-                // Return the pre-computed value instead of re-evaluating at runtime.
-                if (IsStaticGlobal(info.Element))
-                {
-                    if (_stylesheet.StaticVariables.TryGetValue(key, out var staticValue))
-                    {
-                        if (staticValue.IsUndefined)
-                            throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{localName}'.");
-                        var converted = ConvertVariableValue(staticValue, info.AsType, isParam: info.Element.Name.LocalName == "param", _context);
-                        _context.WithVariable(localName, converted, namespaceUri);
-                        return converted;
-                    }
-                }
-
-                // Detect circular references (a global variable referencing itself).
-                if (!_evaluatingGlobals.Add(key))
-                    ThrowCircularityError("global variable", localName);
-
-                // Global variables/parameters are evaluated with a singleton focus based
-                // on the root node of the tree containing the initial context node
-                // (XSLT 3.0 §9.6). They are also evaluated in the global scope, so local
-                // template variables do not shadow globals during lazy evaluation.
-                var savedItem = _context.ContextItem;
-                var savedPos = _context.ContextPosition;
-                var savedSize = _context.ContextSize;
-                var savedVariables = _context.SnapshotVariables();
-                // #current inside a global variable/parameter refers to the unnamed mode
-                // (XSLT 2.0 erratum XT.E19), so isolate the mode stack from the caller.
-                var savedModes = new List<string>(_modeStack);
-                savedModes.Reverse();
-                _modeStack.Clear();
-                // Global variables/parameters are not evaluated within a current template rule,
-                // so xsl:apply-imports and xsl:next-match must raise XTDE0560 here.
-                var savedTemplateRule = _currentTemplateRule;
-                _currentTemplateRule = null;
-                try
-                {
-                    // Global variables/parameters are evaluated with a singleton focus based
-                    // on the global context item for the transformation.
-                    var focus = _globalContextItem.IsUndefined ? XdmValue.Undefined : _globalContextItem;
-                    _context.WithFocus(focus, focus.IsUndefined ? 0 : 1, focus.IsUndefined ? 0 : 1);
-                    if (_globalVariableSnapshot != null)
-                        _context.RestoreVariables(_globalVariableSnapshot);
-
-                    XdmValue value;
-                    var select = info.Element.Attribute("select")?.Value;
-                    if (string.IsNullOrEmpty(select))
-                    {
-                        // Support the AVT form _select="{...}" on global variables/parameters.
-                        var underSelect = info.Element.Attribute("_select")?.Value;
-                        if (!string.IsNullOrEmpty(underSelect))
-                            select = EvaluateAvt(underSelect, info.Element);
-                    }
-                    try
-                    {
-                        // The variable's own version attribute puts its select/body into
-                        // XPath 1.0 backwards-compatible mode (xslt-compat-011: a global
-                        // variable declared version="1.0" under a 2.0 stylesheet).
-                        var savedBc = _context.BackwardsCompatible;
-                        try
-                        {
-                            _context.BackwardsCompatible = IsEffectiveBackwardsCompatible(info.Element);
-                            if (!string.IsNullOrEmpty(select))
-                            {
-                                // A global variable is out of scope within its own declaration.
-                                // Detect direct self-reference in the select expression (including
-                                // references from inline function bodies) before evaluation.
-                                if (SelectReferencesVariable(select, info.Element, localName, namespaceUri))
-                                    throw new InvalidOperationException($"XPST0008: Variable ${localName} is out of scope in its own declaration.");
-
-                                var compiled = CompileXPath(select, info.Element);
-                                value = compiled.Evaluate(_context);
-                            }
-                            else
-                            {
-                                // Global variable/parameter bodies are evaluated in a temporary output state.
-                                var savedOutputUri = _context.CurrentOutputUri;
-                                _context.CurrentOutputUri = null;
-                                using var temporaryOutputState = EnterTemporaryOutputState();
-                                try
-                                {
-                                    value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
-                                }
-                                finally
-                                {
-                                    _context.CurrentOutputUri = savedOutputUri;
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            _context.BackwardsCompatible = savedBc;
-                        }
-                        value = ConvertVariableValue(value, info.AsType, context: _context);
-                    }
-                    catch (Exception evalEx)
-                    {
-                        // Circular-reference and out-of-scope errors are static errors raised
-                        // by the engine itself; leave them untouched so callers can recognise
-                        // them (e.g. function-local eager evaluation defers on circular refs).
-                        if (evalEx is InvalidOperationException ioe &&
-                            (ioe.Message.Contains("Circular reference", StringComparison.OrdinalIgnoreCase) ||
-                             ioe.Message.StartsWith("XPST0008:", StringComparison.Ordinal)))
-                        {
-                            throw;
-                        }
-                        // Mark dynamic errors from global-variable evaluation so that xsl:try
-                        // knows not to catch them, while preserving the original exception type
-                        // for callers outside a try/catch block.
-                        evalEx.Data["Bosak.GlobalVariableError"] = true;
-                        throw;
-                    }
-                    _context.WithVariable(localName, value, namespaceUri);
-                    _lazyGlobals.Remove(key);
-                    return value;
-                }
-                finally
-                {
-                    _context.RestoreVariables(savedVariables);
-                    _context.WithFocus(savedItem, savedPos, savedSize);
-                    _modeStack.Clear();
-                    foreach (var m in savedModes)
-                        _modeStack.Push(m);
-                    _currentTemplateRule = savedTemplateRule;
-                    _evaluatingGlobals.Remove(key);
-                }
-            }
-            return null;
-        };
+        // The resolver uses the current package scope so that used-package components
+        // see the variables visible in their declaring scope.
+        _context.LazyVariableResolver = (localName, namespaceUri) => ResolveLazyGlobal(_currentPackageScope, localName, namespaceUri);
 
         // Check required parameters and eagerly bind parameters whose default value
         // is an empty sequence constructor without @as, so they produce a document node
         // even if never explicitly referenced.
-        foreach (var (_, _, name, elem, isParam) in globals)
+        if (_lazyGlobalsByScope.TryGetValue(new ScopeKey(null), out var rootLazyGlobals))
         {
-            if (isParam)
+            foreach (var (name, info) in rootLazyGlobals.ToList())
             {
+                if (info.Element.Name.LocalName != "param" || info.Element.Name.NamespaceName != Stylesheet.Stylesheet.XslNamespace)
+                    continue;
+
+                var elem = info.Element;
                 var required = elem.Attribute("required")?.Value?.Trim();
                 if (required == "yes" && !externallySupplied.ContainsKey(name))
                     throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{name.LocalName}'.");
@@ -9909,9 +9856,9 @@ public sealed class TransformEngine
                     !elem.HasElements)
                 {
                     // Force creation of the empty-document-node default value now.
-                    if (_lazyGlobals.TryGetValue(name, out var info))
+                    if (rootLazyGlobals.TryGetValue(name, out var currentInfo))
                     {
-                        _lazyGlobals.Remove(name);
+                        rootLazyGlobals.Remove(name);
                         var savedItem = _context.ContextItem;
                         var savedPos = _context.ContextPosition;
                         var savedSize = _context.ContextSize;
@@ -9928,8 +9875,8 @@ public sealed class TransformEngine
                             var root = _globalContextItem.IsNode ? GetRootNode(_globalContextItem.NodeValue) : null;
                             var globalFocus = root != null ? XdmValue.FromNode(root) : XdmValue.Undefined;
                             _context.WithFocus(globalFocus, globalFocus.IsUndefined ? 0 : 1, globalFocus.IsUndefined ? 0 : 1);
-                            var value = EvaluateSequenceConstructor(info.Element, globalFocus, wrapInDocumentNode: true);
-                            value = ConvertVariableValue(value, info.AsType, context: _context);
+                            var value = EvaluateSequenceConstructor(currentInfo.Element, globalFocus, wrapInDocumentNode: true);
+                            value = ConvertVariableValue(value, currentInfo.AsType, context: _context);
                             _context.WithVariable(name.LocalName, value, name.NamespaceUri);
                         }
                         finally
@@ -9948,6 +9895,232 @@ public sealed class TransformEngine
         // Capture the global variable scope so lazy evaluations run in isolation
         // from local template variables.
         _globalVariableSnapshot = _context.SnapshotVariables();
+    }
+
+    /// <summary>
+    /// Returns true if the given element represents a static variable or parameter.
+    /// </summary>
+    private static bool IsStaticGlobal(XElement e)
+    {
+        var staticAttr = e.Attribute("static")?.Value;
+        if (string.IsNullOrEmpty(staticAttr))
+            return false;
+        var v = staticAttr.Trim();
+        return v is "yes" or "true" or "1";
+    }
+
+    /// <summary>
+    /// Collects and sorts the global variables/parameters visible in the given stylesheet
+    /// scope, applying accept/override rules at used-package boundaries. The optional
+    /// <paramref name="externallySupplied"/> map suppresses caller-supplied parameters.
+    /// </summary>
+    private Dictionary<(string LocalName, string NamespaceUri), LazyGlobalInfo> BuildScopeGlobals(
+        Stylesheet.Stylesheet stylesheet,
+        Dictionary<(string LocalName, string NamespaceUri), XdmValue>? externallySupplied)
+    {
+        var globals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam, Stylesheet.Stylesheet SourceStylesheet, Stylesheet.Stylesheet CollectingScope, string? EffectiveVisibility)>();
+        int order = 0;
+        stylesheet.CollectGlobalsInDocumentOrder(globals, ref order, includePrivateUsedPackageGlobals: stylesheet.IsPackage);
+        globals.Sort((a, b) =>
+        {
+            int precedenceComparison = b.Precedence.CompareTo(a.Precedence);
+            return precedenceComparison != 0 ? precedenceComparison : a.Order.CompareTo(b.Order);
+        });
+
+        var result = new Dictionary<(string LocalName, string NamespaceUri), LazyGlobalInfo>();
+        foreach (var (_, _, name, elem, isParam, source, collectingScope, effectiveVis) in globals)
+        {
+            // Skip parameters already supplied by the caller (e.g. fn:transform).
+            if (isParam && externallySupplied != null && externallySupplied.ContainsKey(name))
+                continue;
+
+            result[name] = new LazyGlobalInfo(elem, elem.Attribute("as")?.Value, source, collectingScope, effectiveVis);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Resolves a global variable or parameter lazily in the given package scope.
+    /// The scope is <c>null</c> for the principal stylesheet and a package stylesheet
+    /// when executing a component declared inside that package.
+    /// </summary>
+    private XdmValue? ResolveLazyGlobal(Stylesheet.Stylesheet? scope, string localName, string namespaceUri)
+    {
+        var key = (localName, namespaceUri);
+
+        // A reference to a global that is currently being evaluated is a circular
+        // dependency. Detect this before looking the variable up, so callers (e.g.
+        // function bodies) see a circularity rather than an "undefined variable" error.
+        if (_evaluatingGlobals.Contains(key))
+            ThrowCircularityError("global variable", localName);
+
+        var scopeKey = new ScopeKey(scope);
+        if (!_lazyGlobalsByScope.TryGetValue(scopeKey, out var scopeGlobals))
+        {
+            var stylesheet = scope ?? _stylesheet;
+            scopeGlobals = BuildScopeGlobals(stylesheet, null);
+            _lazyGlobalsByScope[scopeKey] = scopeGlobals;
+        }
+
+        if (!scopeGlobals.TryGetValue(key, out var info))
+            return null;
+
+        // Globals collected in the current scope are always visible. Globals collected in
+        // a different package scope are only visible when exported (public/final) across
+        // that package boundary. Globals collected in a non-package stylesheet are visible
+        // from any scope.
+        if (info.CollectingScope != scope && info.CollectingScope?.IsPackage == true)
+        {
+            var visibility = info.EffectiveVisibility ?? info.Element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
+            if (visibility is not "public" and not "final")
+                return null;
+        }
+
+        // During pattern validation, skip globals whose value is defined by a
+        // sequence constructor. Evaluating them now would materialize the wrong value
+        // (the validation dummy node is not the real source), and could hide
+        // circularity errors that should be raised at runtime (error-0640d).
+        // Returning Undefined lets the predicate evaluate to a dynamic error that
+        // validation ignores, while simple @select globals like $screen are still
+        // evaluated and cached. The suppression sentinel must not be cached,
+        // otherwise it leaks into the real transformation.
+        if (_context.SuppressLazySequenceConstructorGlobals &&
+            string.IsNullOrEmpty(info.Element.Attribute("select")?.Value))
+        {
+            _context.SkipLazyGlobalCacheOnce = true;
+            return XdmValue.Undefined;
+        }
+
+        // Parameters supplied by the caller are already bound.
+        if (_context.TryGetBoundVariable(localName, out var existing, namespaceUri))
+            return existing;
+
+        // Static variables/parameters were evaluated during stylesheet loading.
+        // Return the pre-computed value instead of re-evaluating at runtime.
+        if (IsStaticGlobal(info.Element))
+        {
+            if (_stylesheet.StaticVariables.TryGetValue(key, out var staticValue))
+            {
+                if (staticValue.IsUndefined)
+                    throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{localName}'.");
+                var converted = ConvertVariableValue(staticValue, info.AsType, isParam: info.Element.Name.LocalName == "param", _context);
+                _context.WithVariable(localName, converted, namespaceUri);
+                return converted;
+            }
+        }
+
+        // Detect circular references (a global variable referencing itself).
+        if (!_evaluatingGlobals.Add(key))
+            ThrowCircularityError("global variable", localName);
+
+        // Global variables/parameters are evaluated with a singleton focus based
+        // on the root node of the tree containing the initial context node
+        // (XSLT 3.0 §9.6). They are also evaluated in the global scope, so local
+        // template variables do not shadow globals during lazy evaluation.
+        var savedItem = _context.ContextItem;
+        var savedPos = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        var savedVariables = _context.SnapshotVariables();
+        // #current inside a global variable/parameter refers to the unnamed mode
+        // (XSLT 2.0 erratum XT.E19), so isolate the mode stack from the caller.
+        var savedModes = new List<string>(_modeStack);
+        savedModes.Reverse();
+        _modeStack.Clear();
+        // Global variables/parameters are not evaluated within a current template rule,
+        // so xsl:apply-imports and xsl:next-match must raise XTDE0560 here.
+        var savedTemplateRule = _currentTemplateRule;
+        _currentTemplateRule = null;
+        try
+        {
+            // Global variables/parameters are evaluated with a singleton focus based
+            // on the global context item for the transformation.
+            var focus = _globalContextItem.IsUndefined ? XdmValue.Undefined : _globalContextItem;
+            _context.WithFocus(focus, focus.IsUndefined ? 0 : 1, focus.IsUndefined ? 0 : 1);
+            if (_globalVariableSnapshot != null)
+                _context.RestoreVariables(_globalVariableSnapshot);
+
+            XdmValue value;
+            var select = info.Element.Attribute("select")?.Value;
+            if (string.IsNullOrEmpty(select))
+            {
+                // Support the AVT form _select="{...}" on global variables/parameters.
+                var underSelect = info.Element.Attribute("_select")?.Value;
+                if (!string.IsNullOrEmpty(underSelect))
+                    select = EvaluateAvt(underSelect, info.Element);
+            }
+            try
+            {
+                // The variable's own version attribute puts its select/body into
+                // XPath 1.0 backwards-compatible mode (xslt-compat-011: a global
+                // variable declared version="1.0" under a 2.0 stylesheet).
+                var savedBc = _context.BackwardsCompatible;
+                try
+                {
+                    _context.BackwardsCompatible = IsEffectiveBackwardsCompatible(info.Element);
+                    if (!string.IsNullOrEmpty(select))
+                    {
+                        // A global variable is out of scope within its own declaration.
+                        // Detect direct self-reference in the select expression (including
+                        // references from inline function bodies) before evaluation.
+                        if (SelectReferencesVariable(select, info.Element, localName, namespaceUri))
+                            throw new InvalidOperationException($"XPST0008: Variable ${localName} is out of scope in its own declaration.");
+
+                        var compiled = CompileXPath(select, info.Element);
+                        value = compiled.Evaluate(_context);
+                    }
+                    else
+                    {
+                        // Global variable/parameter bodies are evaluated in a temporary output state.
+                        var savedOutputUri = _context.CurrentOutputUri;
+                        _context.CurrentOutputUri = null;
+                        using var temporaryOutputState = EnterTemporaryOutputState();
+                        try
+                        {
+                            value = EvaluateSequenceConstructor(info.Element, focus, wrapInDocumentNode: string.IsNullOrEmpty(info.AsType));
+                        }
+                        finally
+                        {
+                            _context.CurrentOutputUri = savedOutputUri;
+                        }
+                    }
+                }
+                finally
+                {
+                    _context.BackwardsCompatible = savedBc;
+                }
+                value = ConvertVariableValue(value, info.AsType, context: _context);
+            }
+            catch (Exception evalEx)
+            {
+                // Circular-reference and out-of-scope errors are static errors raised
+                // by the engine itself; leave them untouched so callers can recognise
+                // them (e.g. function-local eager evaluation defers on circular refs).
+                if (evalEx is InvalidOperationException ioe &&
+                    (ioe.Message.Contains("Circular reference", StringComparison.OrdinalIgnoreCase) ||
+                     ioe.Message.StartsWith("XPST0008:", StringComparison.Ordinal)))
+                {
+                    throw;
+                }
+                // Mark dynamic errors from global-variable evaluation so that xsl:try
+                // knows not to catch them, while preserving the original exception type
+                // for callers outside a try/catch block.
+                evalEx.Data["Bosak.GlobalVariableError"] = true;
+                throw;
+            }
+            _context.WithVariable(localName, value, namespaceUri);
+            return value;
+        }
+        finally
+        {
+            _context.RestoreVariables(savedVariables);
+            _context.WithFocus(savedItem, savedPos, savedSize);
+            _modeStack.Clear();
+            foreach (var m in savedModes)
+                _modeStack.Push(m);
+            _currentTemplateRule = savedTemplateRule;
+            _evaluatingGlobals.Remove(key);
+        }
     }
 
     /// <summary>
@@ -10000,6 +10173,8 @@ public sealed class TransformEngine
                 continue;
             if (!MatchesMode(rule, mode))
                 continue;
+            if (!IsTemplateVisible(rule))
+                continue;
             if (rule.CompiledMatch == null)
                 continue;
             if (!EvaluatePatternMatch(rule, item))
@@ -10035,7 +10210,7 @@ public sealed class TransformEngine
 
         if (hasConflict && best != null)
         {
-            var modeDef = _stylesheet.GetModeDefinition(mode);
+            var modeDef = CurrentStylesheet.GetModeDefinition(mode);
 
             if (modeDef?.OnMultipleMatch == Stylesheet.OnMultipleMatch.Fail)
             {
@@ -10092,6 +10267,30 @@ public sealed class TransformEngine
                 return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Determines whether a template rule is visible from the current package scope.
+    /// Non-package templates are always visible; package templates are visible when public,
+    /// final, the implicit xsl:initial-template, or when the current stylesheet is the owning package.
+    /// </summary>
+    private bool IsTemplateVisible(Stylesheet.TemplateRule rule)
+    {
+        var owner = rule.Stylesheet.OwningPackage;
+        if (owner == null)
+            return true;
+
+        if (rule.Name == "xsl:initial-template")
+            return true;
+
+        var visibility = rule.EffectiveVisibility ?? rule.Visibility;
+        if (string.IsNullOrEmpty(visibility))
+            visibility = "private";
+
+        if (visibility is "public" or "final")
+            return true;
+
+        return CurrentStylesheet == owner;
     }
 
     private static IEnumerable<IXdmNode> EnumerateNodes(XdmSequence sequence)
@@ -12284,7 +12483,7 @@ public sealed class TransformEngine
         if (_allNamedTemplates.TryGetValue(name, out rule!))
         {
             key = name;
-            return true;
+            return IsTemplateVisible(rule);
         }
 
         // Clark notation: {uri}local or local (no namespace).
@@ -12302,7 +12501,7 @@ public sealed class TransformEngine
                 {
                     key = pair.Key;
                     rule = candidate;
-                    return true;
+                    return IsTemplateVisible(rule);
                 }
             }
         }
@@ -14527,14 +14726,14 @@ public sealed class TransformEngine
         if (!string.IsNullOrEmpty(formatLexical))
         {
             var expandedName = Stylesheet.Stylesheet.ExpandQName(instruction, formatLexical);
-            namedProps = _stylesheet.GetEffectiveNamedOutput(expandedName);
+            namedProps = CurrentStylesheet.GetEffectiveNamedOutput(expandedName);
             if (namedProps == null)
                 throw new XsltRuntimeException("XTDE1460",
                     $"No xsl:output definition named '{formatLexical}' exists.",
                     contextItem);
         }
 
-        var baseProps = _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
+        var baseProps = CurrentStylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
         var evaluatedInstruction = EvaluateResultDocumentInstruction(instruction);
         var resultDocumentProps = new Stylesheet.OutputProperties();
 
@@ -14583,7 +14782,7 @@ public sealed class TransformEngine
             }
         }
         if (expandedNames.Count > 0)
-            resultDocumentProps.CharacterMap = _stylesheet.ResolveCharacterMap(expandedNames);
+            resultDocumentProps.CharacterMap = CurrentStylesheet.ResolveCharacterMap(expandedNames);
 
         // Determine whether this result document should preserve top-level items as raw
         // XDM values rather than building a result tree.

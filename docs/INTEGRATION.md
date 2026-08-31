@@ -9,8 +9,8 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 29 August 2026
-> **Bosak baseline:** 2,109 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 30 August 2026
+> **Bosak baseline:** 2,111 unit tests passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%); **100%** of runnable tests pass.
 > **XSLT baseline:** 7,254 passed / 0 failed / 7,346 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation, schema-aware `fn:json-to-xml`
@@ -18,6 +18,14 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-30** — XSLT: **`xsl:use-package` package-version range matching and `package_version_resolution` dependency** — `xsl:use-package` now matches `@package-version` against registered package versions using `XsltFunctionLibrary.PackageVersion.Parse`, `VersionMatches`, and `ResolvePackageLocation`. Supported syntax includes exact versions, wildcard prefixes (`1.*`), hyphen and `to` ranges (`1.0-2.0`, `1.0 to 2.0`), minimum bounds (`1.5+`), comma-separated alternatives, and `*` / empty for any version. `PackageVersionResolutionStrategy.Highest` selects the highest matching version by default (the XSLT 3.0 default); the W3C conformance harness honors the `package_version_resolution` dependency values `highest_version`, `lowest_version`, and `unspecified`. Inline test packages are registered in `tests/Bosak.Xslt.Conformance/Program.cs` so the package-version conformance tests run.
+  - Implementation: `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs` (`PackageVersion`, `VersionMatches`, `ResolvePackageLocation`, `PackageVersionResolutionStrategy`); `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`; `src/Bosak.Xslt/Runtime/TransformEngine.cs`; `tests/Bosak.Xslt.Conformance/Program.cs`.
+  - Verification: all runnable `use-package` tests pass; `dotnet test Bosak.sln` passes; unit tests 2,111/0/0.
+
+- **2026-08-30** — XSLT: **`xsl:use-package` accept/override component merging and lazy-global isolation (`REQ-077`)** — `xsl:use-package` now resolves to a registered package and merges functions, variables, and parameters using `xsl:accept` visibility and `xsl:override` replacements. `CollectGlobalsInDocumentOrder` propagates a `CollectingScope` so overrides and used-package globals are collected in the declaring package scope; `ValidateGlobalVariableBindings` groups conflicts by `(name, collecting scope, source stylesheet)`, allowing same-name public variables from diamond used-package routes. `TransformEngine.EnterPackageScope` now includes `includeUsedPackagePrivate: true` so accepted private functions remain visible inside the used package's own scope. Per-package lazy-global isolation snapshots/restores cached globals via `EvaluationContext.SnapshotLazyGlobals` on package scope entry/exit, and `LazyGlobalInfo.CollectingScope` drives the runtime visibility rule (same scope ⇒ visible; different package ⇒ public/final only). This closes W3C `use-package-160` through `use-package-176`.
+  - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.86); `src/Bosak.Xslt/Runtime/TransformEngine.cs` (header → 6.47); `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`.
+  - Verification: `use-package-160` through `use-package-176` PASS (17/0/0); target `use-package` set (001-007, 101-108, 150) 10/0/0; unit tests 2,111/0/0.
 
 - **2026-08-29** — XSLT: **Basic `xsl:package` / `xsl:use-package` parsing (`REQ-076`)** — The `Stylesheet` loader now recognizes `xsl:package` as a valid root element and requires its `@name` attribute (XTSE0010). It also treats `xsl:use-package`, `xsl:expose`, `xsl:accept`, and `xsl:override` as known XSLT elements. Because full package resolution is not yet implemented, `xsl:use-package` is rejected at compile time with `XTSE0165`. This is foundational work for eventual full XSLT 3.0 package support and does not change the XSLT conformance numbers, because the conformance harness already skips package/use-package tests.
   - Implementation: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` (header → 2.80).
@@ -1915,6 +1923,7 @@ var result = compiler
 | `xsl:analyze-string` | ✅ Working | Regex matching/non-matching children; `regex-group()`; XSLT 3.0 zero-length match semantics; `@flags` including multiline (`m`) are passed to regex translation |
 | Tunnel parameters | ✅ Working | `tunnel="yes"` propagation through `apply-templates` |
 | `fn:transform()` | ✅ Working | Full option support: `stylesheet-location`/`stylesheet-node`/`stylesheet-text`/`package-name`(+`package-version` range selection), `source-node`, `global-context-item`, `initial-match-selection` (arbitrary XDM), `initial-template`/`initial-mode`/`default-mode` (xs:QName), `stylesheet-params`/`template-params`/`tunnel-params`/`static-params`, `delivery-format` (`document`/`raw`/`serialized`), `base-output-uri`, `serialization-params`, `xslt-version`. Secondary `xsl:result-document` output is captured into the result map keyed by resolved URI, and absent principal output is suppressed. Available in static expressions (`static="yes"` variables, `xsl:use-when`); function items returned via `delivery-format="raw"` remain callable in the calling stylesheet. Package entry points honor `visibility` (XTDE0040). W3C `fn-transform` Tier-2m 117/124 passed (7 skipped). |
+| `xsl:use-package` | ✅ Working | Resolves a used package by `@name` and `@package-version` against the registered package set. Supports exact versions, wildcard prefixes (`1.*`), hyphen and `to` ranges (`1.0-2.0`, `1.0 to 2.0`), minimum bounds (`1.5+`), comma-separated alternatives, and `*` / empty for any version. Honors `xsl:accept`/`xsl:override` visibility, per-package lazy-global isolation, and the W3C `package_version_resolution` dependency (`highest_version`/`lowest_version`/`unspecified`). |
 | `xsl:attribute-set` / `use-attribute-sets` | ✅ Working | Accumulates across imports/includes; cycle detection; `xsl:next-match` inside attribute sets works |
 | `xsl:use-when` | ✅ Working | Top-level and nested elements evaluated in document order; `true()`/`false()` and static-variable references work; XTSE0090 and XTSE3450 error cases validated. |
 | Shadow attributes (`_{attr}` static AVTs) | ✅ Working | `_version`, `_href`, `_use-when`, `_xpath-default-namespace`, `_static`, `_select`, and other underscore-prefixed XSLT attributes are evaluated at compile time in the current static context and replace their non-underscore counterparts. Shadow attributes on literal result elements are preserved as ordinary attributes. |
@@ -1946,7 +1955,7 @@ var result = compiler
 ### Known gaps
 - `fn:load-xquery-module` — not implemented
 - `fn:serialize` — partial (JSON method supported for maps/arrays/atomics; XML serialization options still limited)
-- `fn:transform` — full option support including `delivery-format`, `global-context-item`, `xslt-version`, serialization parameters, and package selection; principal `xsl:use-package` stylesheets remain unsupported
+- `fn:transform` — full option support including `delivery-format`, `global-context-item`, `xslt-version`, serialization parameters, and package selection; principal `xsl:use-package` stylesheets are now supported; remaining package gap is secondary-package harness registration
 - Schema-aware operations — source documents with `validation="strict"` are now validated in the QT3 harness, and `fn:id`/`fn:element-with-id` use the resulting PSVI; `import schema` and `validate` expressions remain unsupported.
 - Regex functions (`fn:matches`, `fn:tokenize`, `fn:replace`) — full XSD regex support: strict syntax validation, character classes/subtraction, backreferences (incl. unclosed-group FORX0002), flags, code-point `.`, and pinned Unicode 9.0 category/block data (`\p{X}`, `\p{IsBlock}`). Remaining gap: the `i` flag uses .NET case-insensitivity rather than Unicode full case folding (affects patterns mixing `i` with `\p{...}` or negated classes)
 

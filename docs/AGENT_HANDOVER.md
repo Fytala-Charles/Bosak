@@ -1,9 +1,140 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-29
-**Commit:** `d5ea1d5` — basic `xsl:package` / `xsl:use-package` parsing (REQ-076)
-**Current focus:** **XSLT package parsing foundation** — `xsl:package` root is recognized, `@name` is required (XTSE0010), `xsl:use-package`/`xsl:expose`/`xsl:accept`/`xsl:override` are known elements, and `xsl:use-package` raises `XTSE0165` because full package resolution is not yet implemented. QT3 remains clean; next larger features: full `xsl:use-package` resolution, streaming, custom decimal/date-time types.
-**Expected state:** **2,109 unit tests / 0 failed / 0 skipped**; **full XSLT conformance sweep 7,254 passed / 0 failed / 7,346 skipped** (unchanged; package/use-package tests are still skipped by the harness); **full QT3 sweep 31,148 passed / 0 failed / 673 skipped** (97.89%); **full `fn-json-to-xml` test set 87 passed / 0 failed / 7 skipped**; **full `fn-format-number` test set 261 passed / 0 failed / 8 skipped**; **full `namespace` test set 223 passed / 0 failed / 1 skipped**; **full `axes` test set 202 passed / 0 failed / 0 skipped**; **full `position` test set 211 passed / 0 failed / 0 skipped**; **full `attribute` test set 23 passed / 0 failed / 7 skipped**; **full `number` test set 270 passed / 0 failed / 1 skipped**; **full `evaluate` test set 41 passed / 0 failed / 16 skipped**; **full `error` test set 482 passed / 0 failed / 97 skipped**; **full `unicode-90` test set 1,365 passed / 0 failed / 95 skipped**; **full `regex-syntax` test set 986 passed / 0 failed / 4 skipped**; **full `import-schema` test set 1 passed / 0 failed / 204 skipped**; **package-related sets 2 passed / 0 failed / 161 skipped**; **full `collection` test set 5 passed / 0 failed / 1 skipped**; **full `merge` test set 77 passed / 0 failed / 29 skipped**; **full `embedded-stylesheet` test set 18 passed / 0 failed / 0 skipped**.
+**Date:** 2026-08-30
+**Commit:** b370b21dc140f5050e1c45a1498193aa2d09d1e6 — REQ-077 continued: `xsl:use-package` function/variable/parameter accept+override visibility, diamond imports, per-package lazy-global isolation, and package-version range matching
+**Current focus:** **REQ-077 `xsl:use-package` resolution and component merging** — `xsl:use-package` resolves to a registered package and merges functions, variables, and parameters with `xsl:accept` visibility and `xsl:override` replacements. Public/final components are visible cross-package; private components are visible only inside their owning package scope (or the accepting package when explicitly accepted as private). Same-name public variables from different used-package routes (diamond imports) no longer conflict. Per-package lazy-global isolation prevents sibling packages with same-name globals from sharing cached values. `package-version` range matching is now implemented, including exact versions, wildcards, hyphen/`to` ranges, `+` minimum bounds, and comma-separated alternatives. The full runnable `use-package` test set passes (`use-package-001` through `use-package-212`, including the package-version range tests `203-210`).
+**Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **all runnable `use-package` tests pass (53/54, 1 skipped)**; `namespace-alias` **26 passed / 0 failed / 0 skipped**; no regressions in unit tests or representative conformance sets.
+
+## This Session Changes (REQ-077 continued: package-version range matching)
+
+1. **Package-version parsing and range matching** —
+   - Added `PackageVersion` (numeric components with optional suffixes) and `PackageVersionResolutionStrategy` (`Highest`/`Lowest`) in `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs`.
+   - `VersionMatches` supports exact versions, wildcard prefixes (`1.*`), hyphen and `to` ranges (`1.0-2.0`, `1.0 to 2.0`), minimum bounds (`1.5+`), comma-separated alternatives, and `*` / empty for any version.
+   - `ResolvePackageLocation` selects the highest matching registered version by default and can select the lowest via `PackageVersionResolutionStrategy.Lowest`.
+
+2. **Conformance harness registers inline test packages** —
+   - `tests/Bosak.Xslt.Conformance/Program.cs` registers the inline packages required by the W3C package-version range tests (`use-package-203` through `use-package-210`).
+   - The harness parses the `package_version_resolution` dependency and maps `highest_version`, `lowest_version`, and `unspecified` to the matching strategy.
+
+3. **Stylesheet/runtime integration** —
+   - `Stylesheet.GetAllFunctionDefinitions`, `CollectGlobalsInDocumentOrder`, and the new `IsAcceptedAsPrivate` helper wire version-range resolution into used-package component collection.
+   - `TransformEngine.EnterPackageScope`, `BuildScopeGlobals`, and `ResolveLazyGlobal` ensure the resolved used-package globals participate in lazy-global isolation and visibility rules.
+
+4. **Results** —
+   - All runnable W3C `use-package` tests pass (including package-version range tests).
+   - `dotnet test Bosak.sln` passes.
+   - Unit tests: **2,111 passed / 0 failed / 0 skipped**.
+   - No regressions in representative conformance sets.
+
+## This Session Changes (REQ-077 continued: function/variable/parameter accept+override and lazy-global isolation)
+
+1. **Component collection carries a `CollectingScope`** —
+   - `Stylesheet.CollectGlobalsInDocumentOrder` now propagates a `CollectingScope` field so overrides and used-package components are collected in the declaring package scope.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.86.
+
+2. **Global-variable conflict validation uses collecting scope** —
+   - `ValidateGlobalVariableBindings` now groups conflicts by `(name, collecting scope, source stylesheet)`, allowing same-name public variables from different used-package routes (e.g. diamond package-version imports) to coexist.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.86.
+
+3. **Accepted private functions are visible inside package scope** —
+   - `TransformEngine.EnterPackageScope` now includes `includeUsedPackagePrivate: true` so accepted private functions from a used package are visible within that package's own scope.
+   - Header bumped: `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.47.
+
+4. **Per-package lazy-global isolation** —
+   - `EvaluationContext.SnapshotLazyGlobals` snapshots and restores lazy-global caches on `EnterPackageScope` / `ExitPackageScope`.
+   - This prevents sibling packages with same-name globals from sharing cached values.
+   - Header bumped: `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.47; `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`.
+
+5. **Runtime visibility check for lazy globals** —
+   - `LazyGlobalInfo` now carries a `CollectingScope`.
+   - The runtime visibility rule is: same collecting scope ⇒ visible; different package scope ⇒ public/final only; otherwise visible.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.86; `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs`.
+
+6. **Results** —
+   - W3C `use-package-160` through `use-package-176`: **17 passed / 0 failed / 0 skipped**.
+   - Target `use-package` set (001-007, 101-108, 150): **10 passed / 0 failed / 0 skipped**.
+   - Unit tests: **2,111 passed / 0 failed / 0 skipped**.
+   - No regressions in representative conformance sets.
+
+## This Session Changes (REQ-077 completion: accept/override component merging)
+
+1. **Parse `xsl:accept` and `xsl:override` on `xsl:use-package`** —
+   - Added `Stylesheet.PackageUseOptions` and `AcceptRule` to hold accept rules and override component elements per use-package.
+   - Added `ParsePackageUseOptions` and `ParseAcceptNames` to parse `component`, `names`, and `visibility` and wildcard forms (`*`, `*:local`, `Q{uri}local`).
+   - Static validation now permits top-level declarations (template, function, variable, etc.) as children of `xsl:override`.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.85.
+
+2. **Template rule accept visibility and override merging** —
+   - `Stylesheet.GetAllTemplateRules` now applies `xsl:accept` visibility to used-package template rules and creates `TemplateRule`s for `xsl:override` templates.
+   - `TemplateRule.EffectiveVisibility` carries the resolved visibility through to the runtime visibility filter.
+   - Override templates are appended (they have higher import precedence), and overridden used-package rules are kept in the pool so `xsl:next-match` can fall back to them.
+   - This fixes `use-package-170` through `use-package-173`.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/TemplateRule.cs` → 1.8, `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.46.
+
+3. **Results** —
+   - Target `use-package` set (001-007, 101-108, 150): 10 passed / 0 failed / 0 skipped.
+   - `use-package-170` through `use-package-173`: 4 passed / 0 failed / 0 skipped.
+   - Full `use-package` set: 37 passed / 16 failed / 1 skipped.
+   - Unit tests: 2,111 passed / 0 failed / 0 skipped.
+   - `namespace-alias`: 26 passed / 0 failed / 0 skipped.
+   - No regressions in unit tests or representative conformance sets.
+
+## This Session Changes (REQ-077 step 1 continued: private templates and namespace-alias exclusion)
+
+1. **Owning package propagation** —
+   - Added `Stylesheet.OwningPackage` and set it so package roots own themselves, while imports/includes inherit the package of the module that contains them.
+   - `ResolveImport`, `ResolveInclude`, and `ResolveUsePackage` now pass the current module’s owning package to child modules.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.84.
+
+2. **Runtime template visibility filter** —
+   - `Stylesheet.GetAllTemplateRules` no longer filters used-package rules by visibility; all rules are collected.
+   - `TransformEngine` gained `IsTemplateVisible`: non-package rules are always visible; package rules are visible when public/final/`xsl:initial-template`, or when the current stylesheet scope is the owning package.
+   - Applied in `FindBestTemplate`, `FindRootTemplate`, and `TryFindNamedTemplate`.
+   - `EnterPackageScope` now receives the rule/function’s `OwningPackage`, so templates inside a package’s imports/includes get the right private scope.
+   - This fixes `use-package-150` (private match templates inside the xml-to-json package).
+   - Header bumped: `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.45.
+
+3. **Namespace-alias target namespaces are not excluded** —
+   - `GetExcludedNamespaceUris` now removes the result URI of any active `xsl:namespace-alias` from the excluded set.
+   - This matches XSLT 2.0 §11.1.4 and fixes `use-package-108`.
+   - Header bumped: `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.45.
+
+4. **Results** —
+   - `use-package-108` and `use-package-150` now pass.
+   - Target set `use-package` (001-007, 101-108, 150): 10 passed / 0 failed / 0 skipped.
+   - Full `use-package` set: 33 passed / 20 failed / 1 skipped.
+   - Unit tests: 2,111 passed / 0 failed / 0 skipped.
+   - `namespace-alias` conformance set: 26 passed / 0 failed / 0 skipped.
+   - No regressions in representative conformance sets (`mode`, `function`, `namespace-alias`, `output`, `character-map`).
+
+## This Session Changes (REQ-077 step 1: `xsl:use-package` runtime scope)
+
+1. **Key index scoped to the active package** —
+   - `_keyIndices` and `_buildingKeys` in `TransformEngine` now include the current `Stylesheet` scope, so each package gets its own key index for the same document.
+   - `GetOrBuildKeyIndex` matches existing indexes on `(docRoot, CurrentStylesheet)`.
+   - This fixes `use-package-102` (keys from different packages no longer collide).
+   - Header bumped: `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.43.
+
+2. **Private functions from used packages are no longer leaked** —
+   - `Stylesheet.GetAllFunctionDefinitions` now has an `includeUsedPackagePrivate` parameter. When `false`, private functions declared in used packages are excluded even when `includePrivate` is `true`.
+   - `EnterPackageScope` registers the entering package's own functions with `includeUsedPackagePrivate: false`, so a using package can no longer call a used package's private functions.
+   - This fixes `use-package-003`.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.83.
+
+3. **Mode lookups use the current package scope** —
+   - Built-in rules and template-rule conflict handling now call `CurrentStylesheet.GetModeDefinition(mode)` instead of `_stylesheet.GetModeDefinition(mode)`.
+   - This lets exported functions/templates inside a used package find modes declared in that package (necessary for `use-package-150`, though that test still needs private-template visibility).
+
+4. **Allow `xsl:function/@streamability` for W3C xml-to-json package** —
+   - Static attribute validation for `xsl:function` now accepts the `streamability` attribute (used as `_streamability` shadow attribute).
+   - This gets `use-package-150` past static validation; runtime streaming remains unsupported.
+
+5. **Results** —
+   - `use-package-003` and `use-package-102` now pass.
+   - Target set `use-package` (001-007, 101-108, 150): 8 passed / 2 failed / 0 skipped.
+   - Full `use-package` set: 30 passed / 23 failed / 1 skipped (up from 13 passed).
+   - Unit tests: 2,111 passed / 0 failed / 0 skipped.
+   - No regressions in representative conformance sets (`mode`, `function`, `namespace-alias`, `output`, `character-map`).
 
 ## This Session Changes (basic `xsl:package` / `xsl:use-package` parsing — REQ-076)
 

@@ -72,6 +72,7 @@ public sealed class XsltExecutable
                 props.CharacterMap = _stylesheet.ResolveCharacterMap(
                     props.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
             }
+            // If the runtime already resolved the maps inside a package scope, keep them.
             return props;
         }
     }
@@ -259,18 +260,11 @@ public sealed class XsltExecutable
             outputProperties.ImplicitResultTree = implicitResultTree;
 
             // Resolve named character maps for the principal output if not already done.
-            if (outputProperties.UseCharacterMaps.Count > 0)
+            if (outputProperties.UseCharacterMaps.Count > 0 && outputProperties.CharacterMap == null)
             {
                 outputProperties = outputProperties.Clone();
-                var resolved = _stylesheet.ResolveCharacterMap(
+                outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
                     outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
-                if (outputProperties.CharacterMap != null)
-                {
-                    // Explicit or pre-resolved character maps override the re-resolved list.
-                    foreach (var kvp in outputProperties.CharacterMap)
-                        resolved[kvp.Key] = kvp.Value;
-                }
-                outputProperties.CharacterMap = resolved;
             }
 
             if (serializationParams != null)
@@ -313,17 +307,11 @@ public sealed class XsltExecutable
         var outputProperties = _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties();
         outputProperties.EffectiveVersion = _stylesheet.Version;
         outputProperties.ImplicitResultTree = true;
-        if (outputProperties.UseCharacterMaps.Count > 0)
+        if (outputProperties.UseCharacterMaps.Count > 0 && outputProperties.CharacterMap == null)
         {
             outputProperties = outputProperties.Clone();
-            var resolved = _stylesheet.ResolveCharacterMap(
+            outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
                 outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
-            if (outputProperties.CharacterMap != null)
-            {
-                foreach (var kvp in outputProperties.CharacterMap)
-                    resolved[kvp.Key] = kvp.Value;
-            }
-            outputProperties.CharacterMap = resolved;
         }
         if (serializationParams != null)
         {
@@ -457,6 +445,13 @@ public sealed class XsltExecutable
     {
         if (outputProperties.UseCharacterMaps.Count > 0)
         {
+            // If the runtime already resolved the maps inside the declaring package scope,
+            // use that concrete map instead of re-resolving against the principal stylesheet.
+            if (outputProperties.CharacterMap != null && outputProperties.CharacterMap.Count > 0)
+            {
+                return;
+            }
+
             var resolved = _stylesheet.ResolveCharacterMap(
                 outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
             if (outputProperties.CharacterMap != null)

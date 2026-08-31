@@ -141,6 +141,20 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.80  | 29-08-2026     | Basic xsl:package/xsl:use-package parsing; accept/override known elements                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.81  | 30-08-2026     | Resolve xsl:use-package to registered packages and merge exported components            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.82  | 30-08-2026     | Added includePrivate option to GetAllFunctionDefinitions for package internal view      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.83  | 30-08-2026     | GetAllFunctionDefinitions excludes used-package private functions; allow streamability attr |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.84  | 30-08-2026     | OwningPackage propagation; yield all used-package template rules for runtime filtering |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.85  | 30-08-2026     | Parse xsl:accept/xsl:override; apply accept visibility and template rule overrides      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.86  | 30-08-2026     | Pass CollectingScope through global collection and validation; scope-isolate use-package globals |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.87  | 30-08-2026     | Filter used-package private components; only accepted-as-private are visible in package scope |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -174,6 +188,8 @@ public sealed class Stylesheet
     private readonly Dictionary<string, TemplateRule> _namedTemplates = new();
     private readonly List<Stylesheet> _imports = new();
     private readonly List<Stylesheet> _includes = new();
+    private readonly List<Stylesheet> _usedPackages = new();
+    private readonly Dictionary<Stylesheet, PackageUseOptions?> _usedPackageOptions = new();
     private readonly List<KeyDefinition> _keyDefinitions = new();
     private readonly List<AccumulatorDefinition> _accumulators = new();
     private readonly List<XElement> _globalVariables = new();
@@ -192,6 +208,7 @@ public sealed class Stylesheet
     private readonly Stylesheet _rootStylesheet;
     private readonly StaticContext _staticContext = new();
     private readonly IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> _externalStaticParameters;
+    private readonly Api.PackageVersionResolutionStrategy _packageVersionResolutionStrategy;
 
     /// <summary>
     /// Empty dictionary used when no external static parameters are supplied.
@@ -521,7 +538,7 @@ public sealed class Stylesheet
         return dict;
     }
 
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null)
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest)
     {
         _document = document;
         _baseUri = baseUri;
@@ -532,6 +549,7 @@ public sealed class Stylesheet
         _isRootStylesheet = _resolvedUris.Count == 0;
         _externalStaticParameters = externalStaticParameters ?? EmptyExternalStaticParameters;
         _rootStylesheet = rootStylesheet ?? this;
+        _packageVersionResolutionStrategy = packageVersionResolutionStrategy;
 
         // Add this stylesheet's own URI to the resolved set for circular-reference detection
         if (!string.IsNullOrEmpty(baseUri))
@@ -557,6 +575,10 @@ public sealed class Stylesheet
         }
 
         Load();
+
+        // OwningPackage identifies the package root that owns this module. A package root
+        // owns itself; imports and includes inherit the package of the module that contains them.
+        OwningPackage = IsPackage ? this : owningPackage;
     }
 
     /// <summary>The root element of the stylesheet (xsl:stylesheet or xsl:transform).</summary>
@@ -579,6 +601,9 @@ public sealed class Stylesheet
 
     /// <summary>Stylesheets included via xsl:include (same precedence).</summary>
     public IReadOnlyList<Stylesheet> Includes => _includes;
+
+    /// <summary>Packages used via xsl:use-package (lower precedence than this module).</summary>
+    public IReadOnlyList<Stylesheet> UsedPackages => _usedPackages;
 
     /// <summary>The import precedence of this stylesheet (0 = main, higher = deeper import).</summary>
     public int ImportPrecedence { get; private set; }
@@ -612,6 +637,9 @@ public sealed class Stylesheet
 
     /// <summary>The package version from xsl:package/@package-version, or null when absent.</summary>
     public string? PackageVersion { get; private set; }
+
+    /// <summary>The package root that owns this module, or null for non-package stylesheets.</summary>
+    public Stylesheet? OwningPackage { get; private set; }
 
     /// <summary>The value of the xsl:global-context-item/@as attribute, or null if absent.</summary>
     public string? GlobalContextItemAs { get; private set; }
@@ -656,10 +684,58 @@ public sealed class Stylesheet
                         yield return rule;
                 }
             }
+            else if (ns == XslNamespace && localName == "use-package")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } package })
+                {
+                    var options = element.Annotation<PackageUseOptions>();
+                    var overrideRules = new List<TemplateRule>();
+                    foreach (var overrideElem in options?.OverrideTemplates ?? Enumerable.Empty<XElement>())
+                    {
+                        foreach (var rule in TemplateRule.FromElement(overrideElem, this))
+                            overrideRules.Add(rule);
+                    }
+
+                    var childRules = package.GetAllTemplateRules().ToList();
+                    foreach (var rule in childRules)
+                    {
+                        var (local, nsUri) = string.IsNullOrEmpty(rule.Name)
+                            ? (null, null)
+                            : ExpandVariableName(rule.Element, rule.Name);
+                        string? effectiveVis = null;
+                        if (options != null)
+                        {
+                            foreach (var acceptRule in options.AcceptRules)
+                            {
+                                if (acceptRule.Component != "template" && acceptRule.Component != "*")
+                                    continue;
+                                if (acceptRule.Matches(local, nsUri))
+                                {
+                                    effectiveVis = acceptRule.Visibility;
+                                    break;
+                                }
+                            }
+                        }
+                        rule.EffectiveVisibility = effectiveVis ?? "public";
+                        if (rule.EffectiveVisibility is not "public" and not "final" && rule.Name != "xsl:initial-template")
+                            continue;
+                        yield return rule;
+                    }
+
+                    foreach (var rule in overrideRules)
+                    {
+                        rule.EffectiveVisibility = GetLocalVisibility(rule.Element, "template", IsPackage);
+                        yield return rule;
+                    }
+                }
+            }
             else if (ns == XslNamespace && localName == "template" && rulesByElement.TryGetValue(element, out var rules))
             {
                 foreach (var rule in rules)
+                {
+                    rule.EffectiveVisibility = GetLocalVisibility(rule.Element, "template", IsPackage);
                     yield return rule;
+                }
             }
         }
     }
@@ -707,11 +783,228 @@ public sealed class Stylesheet
                 result[name] = rule;
         }
 
+        // Used packages next: only exported components are visible.
+        foreach (var package in _usedPackages)
+        {
+            foreach (var (name, rule) in package.GetAllNamedTemplates())
+            {
+                if (IsExportedFromPackage(package, rule))
+                    result[name] = rule;
+            }
+        }
+
         // Local last (highest precedence)
         foreach (var (name, rule) in _namedTemplates)
             result[name] = rule;
 
         return result;
+    }
+
+    /// <summary>
+    /// Returns true when a used-package component was explicitly accepted with
+    /// <c>private</c> or <c>hidden</c> visibility by the using package.
+    /// </summary>
+    private static bool IsAcceptedAsPrivate(PackageUseOptions? options, string componentType, string? localName, string? namespaceUri)
+    {
+        if (options == null)
+            return false;
+
+        foreach (var rule in options.AcceptRules)
+        {
+            if (rule.Visibility is not "private" and not "hidden")
+                continue;
+            if (rule.Component != componentType && rule.Component != "*")
+                continue;
+            if (rule.Matches(localName, namespaceUri))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true when the given component is visible outside its declaring package.
+    /// Imports and includes are always visible; used packages filter by visibility.
+    /// </summary>
+    private static bool IsExportedFromPackage(Stylesheet package, TemplateRule rule)
+    {
+        if (!package.IsPackage) return true;
+        var name = rule.Name;
+        var visibility = rule.Visibility;
+        // xsl:initial-template is implicitly public in any package.
+        if (name == "xsl:initial-template")
+            return true;
+        return visibility is "public" or "final";
+    }
+
+    /// <summary>
+    /// Returns true when the given component is visible outside its declaring package.
+    /// Imports and includes are always visible; used packages filter by visibility.
+    /// </summary>
+    private static bool IsExportedFromPackage(Stylesheet package, XsltFunctionDefinition def)
+    {
+        if (!package.IsPackage) return true;
+        return def.Visibility is "public" or "final";
+    }
+
+    /// <summary>
+    /// Returns true when the given top-level element is visible outside its declaring package.
+    /// Imports and includes are always visible; used packages filter by visibility.
+    /// </summary>
+    private static bool IsExportedFromPackage(Stylesheet package, XElement element)
+    {
+        if (!package.IsPackage) return true;
+        var visibility = element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
+        return visibility is "public" or "final";
+    }
+
+    /// <summary>
+    /// Returns the effective visibility of a used-package component after applying any
+    /// matching <c>xsl:accept</c> rule from the using package. If no accept rule matches,
+    /// the component keeps its original visibility. For non-package stylesheets the
+    /// effective visibility is always <c>public</c>.
+    /// </summary>
+    private static string? GetEffectiveVisibility(
+        Stylesheet package,
+        XElement componentElement,
+        string componentType,
+        PackageUseOptions? options,
+        string? localName,
+        string? namespaceUri)
+    {
+        if (!package.IsPackage)
+            return "public";
+
+        if (options != null)
+        {
+            foreach (var rule in options.AcceptRules)
+            {
+                if (rule.Component != componentType && rule.Component != "*")
+                    continue;
+                if (rule.Matches(localName, namespaceUri))
+                    return rule.Visibility;
+            }
+        }
+
+        // If no accept rule matches, the component keeps its original declared visibility.
+        return GetLocalVisibility(componentElement, componentType, package.IsPackage);
+    }
+
+    /// <summary>
+    /// Applies any matching <c>xsl:accept</c> rule to the supplied current visibility.
+    /// Returns the supplied visibility unchanged if no accept rule matches.
+    /// </summary>
+    private static string? ApplyAcceptVisibility(
+        string? currentVisibility,
+        PackageUseOptions? options,
+        string componentType,
+        string? localName,
+        string? namespaceUri)
+    {
+        if (options != null)
+        {
+            foreach (var rule in options.AcceptRules)
+            {
+                if (rule.Component != componentType && rule.Component != "*")
+                    continue;
+                if (rule.Matches(localName, namespaceUri))
+                    return rule.Visibility;
+            }
+        }
+        return currentVisibility;
+    }
+
+    /// <summary>
+    /// Determines whether a component from a used package is visible to the using package.
+    /// </summary>
+    private static bool IsVisibleFromUsedPackage(
+        Stylesheet package,
+        XElement componentElement,
+        string componentType,
+        PackageUseOptions? options,
+        string? localName,
+        string? namespaceUri)
+    {
+        if (!package.IsPackage)
+            return true;
+
+        var effective = GetEffectiveVisibility(package, componentElement, componentType, options, localName, namespaceUri);
+        if (effective is "public" or "final")
+            return true;
+
+        // xsl:initial-template is implicitly public in any package.
+        if (componentType == "template" && localName == "xsl:initial-template")
+            return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns the original visibility of a component declared locally in a stylesheet.
+    /// Package components default to private; non-package stylesheets default to public.
+    /// </summary>
+    private static string? GetLocalVisibility(XElement element, string componentType, bool isPackage)
+    {
+        if (!isPackage)
+            return "public";
+
+        var vis = element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
+        if (string.IsNullOrEmpty(vis))
+            vis = "private";
+        if (componentType == "template" && element.Attribute("name")?.Value == "xsl:initial-template")
+            vis = "public";
+        return vis;
+    }
+
+    /// <summary>
+    /// Returns the expanded names of all xsl:override variable or parameter declarations
+    /// in the supplied <c>xsl:use-package</c> options.
+    /// </summary>
+    private static HashSet<(string LocalName, string NamespaceUri)> GetOverrideVariableNames(PackageUseOptions? options, bool isParam)
+    {
+        var result = new HashSet<(string, string)>();
+        var overrides = isParam ? options?.OverrideParams : options?.OverrideVariables;
+        foreach (var overrideElem in overrides ?? Enumerable.Empty<XElement>())
+        {
+            var nameAttr = overrideElem.Attribute("name")?.Value;
+            if (!string.IsNullOrEmpty(nameAttr))
+            {
+                var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
+                result.Add((local, ns));
+            }
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Checks whether an overriding template rule replaces a given used-package rule.
+    /// An override with a <c>@name</c> replaces a named template with the same expanded name;
+    /// an override with a <c>@match</c> replaces a template rule with the same stripped
+    /// match pattern and the same modes.
+    /// </summary>
+    private static bool TemplateRuleOverrides(TemplateRule overrideRule, TemplateRule baseRule)
+    {
+        if (!string.IsNullOrEmpty(overrideRule.Name))
+        {
+            if (string.IsNullOrEmpty(baseRule.Name))
+                return false;
+            var (oLocal, oNs) = ExpandVariableName(overrideRule.Element, overrideRule.Name);
+            var (bLocal, bNs) = ExpandVariableName(baseRule.Element, baseRule.Name);
+            return oLocal == bLocal && oNs == bNs;
+        }
+
+        if (!string.IsNullOrEmpty(overrideRule.Match) && !string.IsNullOrEmpty(baseRule.Match))
+        {
+            var oMatch = Patterns.PatternCompiler.StripXPathComments(overrideRule.Match).Trim();
+            var bMatch = Patterns.PatternCompiler.StripXPathComments(baseRule.Match).Trim();
+            if (!string.Equals(oMatch, bMatch, StringComparison.Ordinal))
+                return false;
+            var oModes = new HashSet<string>(overrideRule.Modes);
+            var bModes = new HashSet<string>(baseRule.Modes);
+            return oModes.SetEquals(bModes);
+        }
+
+        return false;
     }
 
     private void Load()
@@ -732,9 +1025,11 @@ public sealed class Stylesheet
         if (IsPackage)
         {
             var packageNameAttr = root.Attribute("name");
-            if (packageNameAttr == null || string.IsNullOrWhiteSpace(packageNameAttr.Value))
+            // Unnamed packages are allowed when they are the principal stylesheet. Packages
+            // referenced via xsl:use-package must have a name so they can be targeted.
+            if (!_isRootStylesheet && (packageNameAttr == null || string.IsNullOrWhiteSpace(packageNameAttr.Value)))
                 throw new InvalidOperationException("XTSE0010: The name attribute is required on xsl:package.");
-            PackageName = packageNameAttr.Value.Trim();
+            PackageName = packageNameAttr?.Value.Trim();
             PackageVersion = root.Attribute("package-version")?.Value;
         }
 
@@ -1212,6 +1507,24 @@ public sealed class Stylesheet
                     child.Remove();
                 }
             }
+            else if (ns == XslNamespace && localName == "use-package")
+            {
+                if (UseWhen(child))
+                {
+                    var name = child.Attribute("name")?.Value;
+                    if (string.IsNullOrEmpty(name))
+                        throw new InvalidOperationException("XTSE0010: Missing required name attribute on xsl:use-package.");
+                    var packageVersion = child.Attribute("package-version")?.Value?.Trim();
+                    ResolveUsePackage(child, name, packageVersion);
+                    ParsePackageUseOptions(child);
+                    if (child.Annotation<ResolvedModuleAnnotation>()?.Module is { } usedModule)
+                        _usedPackageOptions[usedModule] = child.Annotation<PackageUseOptions>();
+                }
+                else
+                {
+                    child.Remove();
+                }
+            }
             else if (ns == XslNamespace && (localName == "variable" || localName == "param"))
             {
                 ProcessStaticVariable(child);
@@ -1519,7 +1832,7 @@ public sealed class Stylesheet
                     var parent = elem.Parent;
                     bool isTopLevel = parent != null &&
                         parent.Name.NamespaceName == XslNamespace &&
-                        parent.Name.LocalName is "transform" or "stylesheet";
+                        parent.Name.LocalName is "transform" or "stylesheet" or "package";
                     if (!isTopLevel)
                         throw new InvalidOperationException("XTSE0090: A static variable or parameter must be declared at the top level of the stylesheet.");
                 }
@@ -2122,7 +2435,8 @@ public sealed class Stylesheet
                         baseName != "new-each-time" &&
                         baseName != "cache" &&
                         baseName != "identity-sensitive" &&
-                        baseName != "expand-text")
+                        baseName != "expand-text" &&
+                        baseName != "streamability")
                     {
                         throw new InvalidOperationException("XTSE0090");
                     }
@@ -2501,16 +2815,19 @@ public sealed class Stylesheet
                     }
                     else if (TopLevelOnlyDeclarations.Contains(localName))
                     {
-                        throw new InvalidOperationException($"XTSE0010: xsl:{localName} must appear at the top level.");
+                        var parentName = parent.Name;
+                        bool insideOverride = parentName.NamespaceName == XslNamespace && parentName.LocalName == "override";
+                        if (!insideOverride)
+                            throw new InvalidOperationException($"XTSE0010: xsl:{localName} must appear at the top level.");
                     }
                 }
 
-                // xsl:use-package requires a name attribute and is not yet implemented.
+                // xsl:use-package requires a name attribute; resolution is handled during
+                // BuildStaticContext so visibility/expose/accept/override can be applied.
                 if (localName == "use-package")
                 {
                     if (elem.Attribute("name") == null && elem.Attribute("_name") == null)
                         throw new InvalidOperationException("XTSE0010: xsl:use-package requires a name attribute.");
-                    throw new InvalidOperationException("XTSE0165: xsl:use-package package resolution is not implemented in this version.");
                 }
 
                 // xsl:if requires a test attribute.
@@ -2649,7 +2966,7 @@ public sealed class Stylesheet
                         var parentName = parentIsXslt ? paramParent.Name.LocalName : null;
 
                         // xsl:param is only permitted in a small set of parent elements.
-                        if (!parentIsXslt || parentName is not "stylesheet" and not "transform" and not "template" and not "function" and not "iterate")
+                        if (!parentIsXslt || parentName is not "stylesheet" and not "transform" and not "package" and not "template" and not "function" and not "iterate")
                         {
                             throw new InvalidOperationException("XTSE0010: xsl:param is not permitted in this context.");
                         }
@@ -3604,6 +3921,60 @@ public sealed class Stylesheet
         public Stylesheet? Module { get; init; }
     }
 
+    /// <summary>
+    /// Holds the <c>xsl:accept</c> and <c>xsl:override</c> information declared on a
+    /// single <c>xsl:use-package</c> element. Used to adjust component visibility and
+    /// to replace components from the used package with local overrides.
+    /// </summary>
+    private sealed class PackageUseOptions
+    {
+        public List<AcceptRule> AcceptRules { get; } = new();
+        public List<XElement> OverrideTemplates { get; } = new();
+        public List<XElement> OverrideFunctions { get; } = new();
+        public List<XElement> OverrideVariables { get; } = new();
+        public List<XElement> OverrideParams { get; } = new();
+        public List<XElement> OverrideAttributeSets { get; } = new();
+        public List<XElement> OverrideModes { get; } = new();
+        public List<XElement> OverrideKeys { get; } = new();
+        public List<XElement> OverrideDecimalFormats { get; } = new();
+        public List<XElement> OverrideNamespaceAliases { get; } = new();
+        public List<XElement> OverrideCharacterMaps { get; } = new();
+        public List<XElement> OverrideOutput { get; } = new();
+        public List<XElement> OverrideStripSpace { get; } = new();
+        public List<XElement> OverridePreserveSpace { get; } = new();
+    }
+
+    /// <summary>
+    /// Represents a single <c>xsl:accept</c> rule from a <c>xsl:use-package</c> element.
+    /// </summary>
+    private sealed class AcceptRule
+    {
+        public string Component { get; }
+        public string Visibility { get; }
+        public IReadOnlyList<(string? NamespaceUri, string LocalName)> Names { get; }
+        public bool IsWildcard => Names.Count == 1 && Names[0].NamespaceUri == null && Names[0].LocalName == "*";
+
+        public AcceptRule(string component, string visibility, IEnumerable<(string? NamespaceUri, string LocalName)> names)
+        {
+            Component = component;
+            Visibility = visibility;
+            Names = names.ToList();
+        }
+
+        public bool Matches(string? localName, string? namespaceUri)
+        {
+            if (IsWildcard) return true;
+            foreach (var (ns, loc) in Names)
+            {
+                if (loc != localName) continue;
+                if (ns == "*") return true;
+                if (ns == namespaceUri) return true;
+                if (string.IsNullOrEmpty(ns) && string.IsNullOrEmpty(namespaceUri)) return true;
+            }
+            return false;
+        }
+    }
+
     private void ResolveImport(XElement importElement, string href)
     {
         // Relative hrefs resolve against the base URI of the xsl:import element,
@@ -3625,7 +3996,7 @@ public sealed class Stylesheet
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy);
             child.ApplyImportsContextModule = child;
             _imports.Add(child);
             importElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -3659,7 +4030,7 @@ public sealed class Stylesheet
             // use-when on the root element of an included module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy);
             child.ApplyImportsContextModule = ApplyImportsContextModule;
             _includes.Add(child);
             includeElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -3668,6 +4039,131 @@ public sealed class Stylesheet
         catch (FileNotFoundException ex)
         {
             throw new InvalidOperationException($"XTSE0165: Failed to resolve xsl:include href '{href}'.", ex);
+        }
+    }
+
+    /// <summary>
+    /// Resolves an <c>xsl:use-package</c> declaration to a registered package, loads it,
+    /// and adds it as a used package. The package components are later merged with the
+    /// visibility/expose/accept/override rules applied.
+    /// </summary>
+    private void ResolveUsePackage(XElement usePackageElement, string name, string? packageVersion)
+    {
+        var versionRange = string.IsNullOrWhiteSpace(packageVersion) ? "*" : packageVersion.Trim();
+        var location = Api.XsltFunctionLibrary.ResolvePackageLocation(name, versionRange, _packageVersionResolutionStrategy);
+        if (location == null)
+            throw new InvalidOperationException($"XTSE0165: Package '{name}' with version '{versionRange}' is not available.");
+
+        try
+        {
+            // Load the package document using the stylesheet resolver. The registry stores
+            // an absolute URI (typically file://), so no base URI resolution is needed.
+            var doc = _resolver.Resolve(location, null);
+            var root = doc.Root;
+            if (root == null)
+                throw new InvalidOperationException($"XTSE0165: Package '{name}' has no root element.");
+
+            if (root.Name.NamespaceName != XslNamespace || root.Name.LocalName != "package")
+            {
+                // A package used via xsl:use-package must have an xsl:package root element.
+                // Stylesheets/transforms are not usable as packages.
+                throw new InvalidOperationException($"XTSE0165: Package '{name}' is not a valid xsl:package document.");
+            }
+
+            // use-when on the root element of the used package excludes the whole package.
+            if (!UseWhen(root, location))
+                return;
+
+            var child = new Stylesheet(doc, location, _resolver, ImportPrecedence + 1, _resolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy);
+            child.ApplyImportsContextModule = child;
+            _usedPackages.Add(child);
+            usePackageElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
+        }
+        catch (FileNotFoundException ex)
+        {
+            throw new InvalidOperationException($"XTSE0165: Failed to load package '{name}' from '{location}'.", ex);
+        }
+    }
+
+    /// <summary>
+    /// Parses the <c>xsl:accept</c> and <c>xsl:override</c> children of an
+    /// <c>xsl:use-package</c> element and stores them as an annotation.
+    /// </summary>
+    private PackageUseOptions ParsePackageUseOptions(XElement usePackageElement)
+    {
+        var options = new PackageUseOptions();
+        foreach (var child in usePackageElement.Elements())
+        {
+            if (child.Name.NamespaceName != XslNamespace)
+                continue;
+            var localName = child.Name.LocalName;
+            if (localName == "accept")
+            {
+                var component = child.Attribute("component")?.Value?.Trim() ?? "";
+                var visibility = child.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant() ?? "public";
+                var namesAttr = child.Attribute("names")?.Value?.Trim() ?? "*";
+                var names = ParseAcceptNames(usePackageElement, namesAttr);
+                options.AcceptRules.Add(new AcceptRule(component, visibility, names));
+            }
+            else if (localName == "override")
+            {
+                foreach (var overrideChild in child.Elements())
+                {
+                    if (overrideChild.Name.NamespaceName != XslNamespace)
+                        continue;
+                    switch (overrideChild.Name.LocalName)
+                    {
+                        case "template": options.OverrideTemplates.Add(overrideChild); break;
+                        case "function": options.OverrideFunctions.Add(overrideChild); break;
+                        case "variable": options.OverrideVariables.Add(overrideChild); break;
+                        case "param": options.OverrideParams.Add(overrideChild); break;
+                        case "attribute-set": options.OverrideAttributeSets.Add(overrideChild); break;
+                        case "mode": options.OverrideModes.Add(overrideChild); break;
+                        case "key": options.OverrideKeys.Add(overrideChild); break;
+                        case "decimal-format": options.OverrideDecimalFormats.Add(overrideChild); break;
+                        case "namespace-alias": options.OverrideNamespaceAliases.Add(overrideChild); break;
+                        case "character-map": options.OverrideCharacterMaps.Add(overrideChild); break;
+                        case "output": options.OverrideOutput.Add(overrideChild); break;
+                        case "strip-space": options.OverrideStripSpace.Add(overrideChild); break;
+                        case "preserve-space": options.OverridePreserveSpace.Add(overrideChild); break;
+                    }
+                }
+            }
+        }
+        usePackageElement.AddAnnotation(options);
+        return options;
+    }
+
+    /// <summary>
+    /// Parses the <c>names</c> attribute of an <c>xsl:accept</c> element into a list of
+    /// (namespace-uri, local-name) pairs. The wildcard <c>*</c> is represented as
+    /// <c>(null, "*")</c>; <c>*:local</c> is represented as <c>("*", local)</c>.
+    /// </summary>
+    private static IEnumerable<(string? NamespaceUri, string LocalName)> ParseAcceptNames(XElement context, string names)
+    {
+        foreach (var token in names.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var t = token.Trim();
+            if (string.IsNullOrEmpty(t) || t == "*")
+            {
+                yield return (null, "*");
+                yield break;
+            }
+            if (t.Length > 2 && t[0] == 'Q' && t[1] == '{' && t.IndexOf('}') is int close && close > 1)
+            {
+                var ns = t[2..close];
+                var loc = t[(close + 1)..];
+                yield return (ns, loc);
+            }
+            else if (t.StartsWith("*:"))
+            {
+                yield return ("*", t[2..]);
+            }
+            else
+            {
+                var (loc, ns) = ExpandVariableName(context, t);
+                yield return (ns, loc);
+            }
         }
     }
 
@@ -4190,8 +4686,9 @@ public sealed class Stylesheet
     /// by precedence (lower first) and then by document order, matching XSLT
     /// import-precedence / last-wins semantics.
     /// </summary>
-    public void CollectGlobalsInDocumentOrder(List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)> globals, ref int order)
+    public void CollectGlobalsInDocumentOrder(List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam, Stylesheet SourceStylesheet, Stylesheet CollectingScope, string? EffectiveVisibility)> globals, ref int order, int precedenceOffset = 0, bool includePrivateUsedPackageGlobals = false)
     {
+        int precedence = ImportPrecedence + precedenceOffset;
         foreach (var element in Root.Elements())
         {
             var ns = element.Name.NamespaceName;
@@ -4200,22 +4697,86 @@ public sealed class Stylesheet
             if (ns == XslNamespace && localName == "import")
             {
                 if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } imported })
-                    imported.CollectGlobalsInDocumentOrder(globals, ref order);
+                    imported.CollectGlobalsInDocumentOrder(globals, ref order, precedenceOffset, includePrivateUsedPackageGlobals);
             }
             else if (ns == XslNamespace && localName == "include")
             {
                 if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } included })
-                    included.CollectGlobalsInDocumentOrder(globals, ref order);
+                    included.CollectGlobalsInDocumentOrder(globals, ref order, precedenceOffset, includePrivateUsedPackageGlobals);
+            }
+            else if (ns == XslNamespace && localName == "use-package")
+            {
+                if (element.Annotation<ResolvedModuleAnnotation>() is { Module: { } package })
+                {
+                    var options = element.Annotation<PackageUseOptions>();
+                    CollectVisibleGlobalsFromUsedPackage(package, options, precedence, globals, ref order, includePrivateUsedPackageGlobals);
+                }
             }
             else if (ns == XslNamespace && localName == "param")
             {
                 var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
-                globals.Add((ImportPrecedence, order++, name, element, true));
+                var visibility = GetLocalVisibility(element, "variable", IsPackage);
+                globals.Add((precedence, order++, name, element, true, this, this, visibility));
             }
             else if (ns == XslNamespace && localName == "variable")
             {
                 var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
-                globals.Add((ImportPrecedence, order++, name, element, false));
+                var visibility = GetLocalVisibility(element, "variable", IsPackage);
+                globals.Add((precedence, order++, name, element, false, this, this, visibility));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Collects the global variables and parameters that the given used package exposes
+    /// to this stylesheet, applying this use-package's <c>xsl:accept</c> and
+    /// <c>xsl:override</c> rules. The collected declarations are given the same import
+    /// precedence as the <c>xsl:use-package</c> declaration itself so that overrides win
+    /// by document order without creating spurious same-precedence conflicts.
+    /// </summary>
+    private void CollectVisibleGlobalsFromUsedPackage(Stylesheet package, PackageUseOptions? options, int precedence, List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam, Stylesheet SourceStylesheet, Stylesheet CollectingScope, string? EffectiveVisibility)> globals, ref int order, bool includePrivateUsedPackageGlobals)
+    {
+        var baseGlobals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam, Stylesheet SourceStylesheet, Stylesheet CollectingScope, string? EffectiveVisibility)>();
+        int baseOrder = 0;
+        int usedPackageOffset = ImportPrecedence == package.ImportPrecedence ? 0 : (precedence - package.ImportPrecedence);
+        package.CollectGlobalsInDocumentOrder(baseGlobals, ref baseOrder, usedPackageOffset, includePrivateUsedPackageGlobals);
+
+        var overrideParamNames = GetOverrideVariableNames(options, isParam: true);
+        var overrideVariableNames = GetOverrideVariableNames(options, isParam: false);
+
+        foreach (var g in baseGlobals)
+        {
+            var effectiveVis = ApplyAcceptVisibility(g.EffectiveVisibility, options, g.IsParam ? "variable" : "variable", g.Name.LocalName, g.Name.NamespaceUri);
+            bool acceptedAsPrivate = effectiveVis is "private" or "hidden" &&
+                IsAcceptedAsPrivate(options, "variable", g.Name.LocalName, g.Name.NamespaceUri);
+            if (effectiveVis is not "public" and not "final" && !acceptedAsPrivate)
+                continue;
+
+            if (g.IsParam && overrideParamNames.Contains(g.Name))
+                continue;
+            if (!g.IsParam && overrideVariableNames.Contains(g.Name))
+                continue;
+
+            globals.Add((precedence, order++, g.Name, g.Element, g.IsParam, g.SourceStylesheet, this, effectiveVis));
+        }
+
+        foreach (var overrideElem in options?.OverrideParams ?? Enumerable.Empty<XElement>())
+        {
+            var nameAttr = overrideElem.Attribute("name")?.Value;
+            if (!string.IsNullOrEmpty(nameAttr))
+            {
+                var name = ExpandVariableName(overrideElem, nameAttr);
+                globals.Add((precedence, order++, name, overrideElem, true, this, this, null));
+            }
+        }
+
+        foreach (var overrideElem in options?.OverrideVariables ?? Enumerable.Empty<XElement>())
+        {
+            var nameAttr = overrideElem.Attribute("name")?.Value;
+            if (!string.IsNullOrEmpty(nameAttr))
+            {
+                var name = ExpandVariableName(overrideElem, nameAttr);
+                globals.Add((precedence, order++, name, overrideElem, false, this, this, null));
             }
         }
     }
@@ -4226,11 +4787,11 @@ public sealed class Stylesheet
     /// </summary>
     private void ValidateGlobalVariableBindings()
     {
-        var globals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam)>();
+        var globals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam, Stylesheet SourceStylesheet, Stylesheet CollectingScope, string? EffectiveVisibility)>();
         int order = 0;
-        CollectGlobalsInDocumentOrder(globals, ref order);
+        CollectGlobalsInDocumentOrder(globals, ref order, includePrivateUsedPackageGlobals: false);
 
-        foreach (var group in globals.GroupBy(g => g.Name))
+        foreach (var group in globals.GroupBy(g => (g.Name, g.CollectingScope, g.SourceStylesheet)))
         {
             var minPrecedence = group.Min(g => g.Precedence);
             var top = group.Where(g => g.Precedence == minPrecedence).ToList();
@@ -4321,6 +4882,28 @@ public sealed class Stylesheet
                 result[name] = elem;
         }
 
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            var overrideNames = GetOverrideVariableNames(options, isParam: true);
+            foreach (var (name, elem) in package.GetAllGlobalParameters())
+            {
+                var expanded = ExpandVariableName(elem, name);
+                var effectiveVis = GetEffectiveVisibility(package, elem, "variable", options, expanded.LocalName, expanded.NamespaceUri);
+                if (effectiveVis is not "public" and not "final")
+                    continue;
+                if (overrideNames.Contains(expanded))
+                    continue;
+                result[name] = elem;
+            }
+            foreach (var overrideElem in options?.OverrideParams ?? Enumerable.Empty<XElement>())
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(nameAttr))
+                    result[nameAttr] = overrideElem;
+            }
+        }
+
         foreach (var param in _globalParameters)
         {
             var name = param.Attribute("name")?.Value;
@@ -4349,6 +4932,28 @@ public sealed class Stylesheet
         {
             foreach (var (name, elem) in included.GetAllGlobalVariables())
                 result[name] = elem;
+        }
+
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            var overrideNames = GetOverrideVariableNames(options, isParam: false);
+            foreach (var (name, elem) in package.GetAllGlobalVariables())
+            {
+                var expanded = ExpandVariableName(elem, name);
+                var effectiveVis = GetEffectiveVisibility(package, elem, "variable", options, expanded.LocalName, expanded.NamespaceUri);
+                if (effectiveVis is not "public" and not "final")
+                    continue;
+                if (overrideNames.Contains(expanded))
+                    continue;
+                result[name] = elem;
+            }
+            foreach (var overrideElem in options?.OverrideVariables ?? Enumerable.Empty<XElement>())
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(nameAttr))
+                    result[nameAttr] = overrideElem;
+            }
         }
 
         foreach (var variable in _globalVariables)
@@ -4384,26 +4989,70 @@ public sealed class Stylesheet
     /// Recursively collects all function definitions from this stylesheet, its includes, and its imports.
     /// Later definitions override earlier ones (local &gt; included &gt; imported).
     /// The key is a tuple of (namespaceUri, localName, arity).
+    /// When <paramref name="includePrivate"/> is <c>true</c> and this stylesheet is a package,
+    /// private functions of the package are included in addition to public/final ones.
+    /// When <paramref name="includePrivate"/> is <c>true</c> and <paramref name="includeUsedPackagePrivate"/>
+    /// is <c>false</c>, private functions declared in used packages are excluded (only public/final
+    /// components of a used package are visible to the using package).
     /// </summary>
-    public Dictionary<(string ns, string name, int arity), XsltFunctionDefinition> GetAllFunctionDefinitions()
+    public Dictionary<(string ns, string name, int arity), XsltFunctionDefinition> GetAllFunctionDefinitions(bool includePrivate = false, bool includeUsedPackagePrivate = true)
     {
         var result = new Dictionary<(string, string, int), XsltFunctionDefinition>();
 
         foreach (var imported in _imports)
         {
-            foreach (var (key, def) in imported.GetAllFunctionDefinitions())
+            foreach (var (key, def) in imported.GetAllFunctionDefinitions(includePrivate, includeUsedPackagePrivate))
                 result[key] = def;
         }
 
         foreach (var included in _includes)
         {
-            foreach (var (key, def) in included.GetAllFunctionDefinitions())
+            foreach (var (key, def) in included.GetAllFunctionDefinitions(includePrivate, includeUsedPackagePrivate))
                 result[key] = def;
+        }
+
+        foreach (var package in _usedPackages)
+        {
+            bool usedIncludePrivate = includePrivate && includeUsedPackagePrivate;
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            var overrides = new Dictionary<(string, string, int), XsltFunctionDefinition>();
+            if (options != null)
+            {
+                foreach (var overrideElem in options.OverrideFunctions)
+                {
+                    var overrideDef = XsltFunctionDefinition.FromElement(overrideElem, this);
+                    if (overrideDef != null)
+                        overrides[(overrideDef.NamespaceUri, overrideDef.LocalName, overrideDef.Arity)] = overrideDef;
+                }
+            }
+
+            foreach (var (key, def) in package.GetAllFunctionDefinitions(usedIncludePrivate, includeUsedPackagePrivate))
+            {
+                var effectiveVis = GetEffectiveVisibility(package, def.Element, "function", options, def.LocalName, def.NamespaceUri);
+                bool acceptedAsPrivate = effectiveVis is "private" or "hidden" &&
+                    IsAcceptedAsPrivate(options, "function", def.LocalName, def.NamespaceUri);
+                if (overrides.TryGetValue(key, out var overrideDef))
+                {
+                    result[key] = overrideDef;
+                }
+                else if (effectiveVis is "public" or "final" or "abstract" ||
+                         (usedIncludePrivate && acceptedAsPrivate))
+                {
+                    result[key] = def;
+                }
+            }
+
+            foreach (var (key, overrideDef) in overrides)
+            {
+                if (!result.ContainsKey(key))
+                    result[key] = overrideDef;
+            }
         }
 
         foreach (var def in _functionDefinitions)
         {
-            result[(def.NamespaceUri, def.LocalName, def.Arity)] = def;
+            if (includePrivate || !IsPackage || IsExportedFromPackage(this, def))
+                result[(def.NamespaceUri, def.LocalName, def.Arity)] = def;
         }
 
         return result;
@@ -4470,6 +5119,31 @@ public sealed class Stylesheet
             CollectModeDefinitions(included, map);
         foreach (var imported in stylesheet._imports)
             CollectModeDefinitions(imported, map);
+        foreach (var package in stylesheet._usedPackages)
+        {
+            foreach (var kv in package._modeDefinitions)
+            {
+                if (!IsExportedFromPackage(package, kv.Value))
+                    continue;
+                if (!map.TryGetValue(kv.Key, out var list))
+                {
+                    list = new List<(int, ModeDefinition)>();
+                    map[kv.Key] = list;
+                }
+                list.Add((package.ImportPrecedence, kv.Value));
+            }
+            CollectModeDefinitions(package, map);
+        }
+    }
+
+    /// <summary>
+    /// Returns true when the given mode is visible outside its declaring package.
+    /// Imports and includes are always visible; used packages filter by visibility.
+    /// </summary>
+    private static bool IsExportedFromPackage(Stylesheet package, ModeDefinition mode)
+    {
+        if (!package.IsPackage) return true;
+        return mode.Visibility is ModeVisibility.Public or ModeVisibility.Final;
     }
 
     private static bool HasSamePrecedenceMode(Stylesheet stylesheet, string name)
@@ -4511,11 +5185,19 @@ public sealed class Stylesheet
                 return def;
         }
 
-        // Imported last (lowest precedence)
+        // Imported next
         foreach (var imported in _imports)
         {
             var def = imported.GetModeDefinition(name);
             if (def != null)
+                return def;
+        }
+
+        // Used packages last: only exported modes are visible.
+        foreach (var package in _usedPackages)
+        {
+            var def = package.GetModeDefinition(name);
+            if (def != null && IsExportedFromPackage(package, def))
                 return def;
         }
 
@@ -4823,6 +5505,21 @@ public sealed class Stylesheet
                 if (!result.TryGetValue(key, out var existing))
                     result[key] = existing = new List<AttributeSetDefinition>();
                 existing.AddRange(list);
+            }
+        }
+
+        // Used packages next: only exported components are visible.
+        foreach (var package in _usedPackages)
+        {
+            foreach (var (key, list) in package.GetAllAttributeSets())
+            {
+                if (!result.TryGetValue(key, out var existing))
+                    result[key] = existing = new List<AttributeSetDefinition>();
+                foreach (var def in list)
+                {
+                    if (IsExportedFromPackage(package, def.Element))
+                        existing.Add(def);
+                }
             }
         }
 

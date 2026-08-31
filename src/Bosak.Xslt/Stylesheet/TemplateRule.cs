@@ -28,6 +28,8 @@
 //                      | Charles Korthout | 1.6   | 14-07-2026     | namespace-node() default priority -0.5 (kind test)                                     |
 //                      | Charles Korthout | 1.7    | 14-07-2026     | Template @visibility exposed for package entry-point checks (XTDE0040)                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 30-08-2026     | Added EffectiveVisibility for xsl:accept override propagation                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -79,6 +81,12 @@ public sealed class TemplateRule
     /// named template is private; xsl:initial-template is implicitly public.
     /// </summary>
     public string? Visibility => Element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
+
+    /// <summary>
+    /// The effective visibility after <c>xsl:accept</c> rules from any <c>xsl:use-package</c>
+    /// have been applied. Used by the runtime visibility filter.
+    /// </summary>
+    public string? EffectiveVisibility { get; internal set; }
 
     private TemplateRule(XElement element, string? match, string? name, IReadOnlyList<string> modes, double priority, Stylesheet stylesheet, ContextItemDeclaration? contextItem = null)
     {

@@ -141,6 +141,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.87  | 29-08-2026     | Added xsl:package/xsl:use-package static parsing tests                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.88  | 30-08-2026     | Added xsl:use-package resolution and visibility tests                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -6397,31 +6399,6 @@ return fn:transform(map{""stylesheet-text"": $xsl,
     }
 
     [Fact]
-    public void Package_MissingName_RaisesXTSE0010()
-    {
-        var xsl = @"<xsl:package version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
-            <xsl:template match='/'><out/></xsl:template>
-        </xsl:package>";
-
-        var compiler = new Api.XsltCompiler();
-        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
-        Assert.Contains("XTSE0010", ex.Message);
-    }
-
-    [Fact]
-    public void UsePackage_IsRejectedWithStaticError()
-    {
-        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
-            <xsl:use-package name='urn:test:package' package-version='1.0'/>
-            <xsl:template match='/'><out/></xsl:template>
-        </xsl:stylesheet>";
-
-        var compiler = new Api.XsltCompiler();
-        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
-        Assert.Contains("XTSE0165", ex.Message);
-    }
-
-    [Fact]
     public void UsePackage_MissingName_RaisesXTSE0010()
     {
         var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
@@ -6432,6 +6409,109 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var compiler = new Api.XsltCompiler();
         var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
         Assert.Contains("XTSE0010", ex.Message);
+    }
+
+    [Fact]
+    public void UsePackage_UnregisteredPackage_RaisesXTSE0165()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:use-package name='urn:test:unregistered' package-version='1.0'/>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0165", ex.Message);
+    }
+
+    [Fact]
+    public void UsePackage_PublicFunction_IsCallable()
+    {
+        Api.XsltFunctionLibrary.ClearPackages();
+        Api.XsltFunctionLibrary.RegisterPackage("urn:test:package", "1.0", "urn:test:package:1.0");
+
+        var package = @"<xsl:package name='urn:test:package' package-version='1.0' version='3.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package'>
+            <xsl:function name='p:hello' as='xs:string' visibility='public'>
+                <xsl:param name='who' as='xs:string'/>
+                <xsl:sequence select=""concat(&apos;Hello, &apos;, $who)""/>
+            </xsl:function>
+        </xsl:package>";
+
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:p='urn:test:package'>
+            <xsl:use-package name='urn:test:package' package-version='1.0'/>
+            <xsl:template match='/'><out><xsl:value-of select=""p:hello(&apos;World&apos;)""/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string>
+        {
+            ["urn:test:package:1.0"] = package
+        });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        Assert.Contains("Hello, World", result);
+    }
+
+    [Fact]
+    public void UsePackage_PrivateFunction_IsNotVisible()
+    {
+        Api.XsltFunctionLibrary.ClearPackages();
+        Api.XsltFunctionLibrary.RegisterPackage("urn:test:package-private", "1.0", "urn:test:package-private:1.0");
+
+        var package = @"<xsl:package name='urn:test:package-private' package-version='1.0' version='3.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package-private'>
+            <xsl:function name='p:secret' as='xs:string' visibility='private'>
+                <xsl:text>secret</xsl:text>
+            </xsl:function>
+        </xsl:package>";
+
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:p='urn:test:package-private'>
+            <xsl:use-package name='urn:test:package-private' package-version='1.0'/>
+            <xsl:template match='/'><out><xsl:value-of select='p:secret()'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string>
+        {
+            ["urn:test:package-private:1.0"] = package
+        });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        // Static function reference is not resolved at compile time for XPath function calls.
+        var executable = compiler.Compile(xsl);
+        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root")))));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void UsePackage_PublicNamedTemplate_IsCallable()
+    {
+        Api.XsltFunctionLibrary.ClearPackages();
+        Api.XsltFunctionLibrary.RegisterPackage("urn:test:package-tpl", "1.0", "urn:test:package-tpl:1.0");
+
+        var package = @"<xsl:package name='urn:test:package-tpl' package-version='1.0' version='3.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='greet' visibility='public'><ok/></xsl:template>
+        </xsl:package>";
+
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:use-package name='urn:test:package-tpl' package-version='1.0'/>
+            <xsl:template match='/'><xsl:call-template name='greet'/></xsl:template>
+        </xsl:stylesheet>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string>
+        {
+            ["urn:test:package-tpl:1.0"] = package
+        });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        Assert.Contains("<ok/>", result);
     }
 
     [Fact]

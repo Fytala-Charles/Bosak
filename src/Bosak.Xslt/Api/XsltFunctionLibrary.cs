@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 29-08-2026     | Throw XsltRuntimeException (not InvalidOperationException) for XTDE1370/XTDE1380         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 30-08-2026     | Exposed ResolvePackageLocation for xsl:use-package resolution                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
@@ -39,6 +41,131 @@ using Bosak.XPath.Standard.Functions;
 using Bosak.Xslt.Runtime;
 
 namespace Bosak.Xslt.Api;
+
+/// <summary>
+/// Strategy for selecting a package version when multiple registered versions match
+/// an <c>xsl:use-package</c> version range.
+/// </summary>
+public enum PackageVersionResolutionStrategy
+{
+    /// <summary>Select the highest matching version (XSLT 3.0 default).</summary>
+    Highest,
+
+    /// <summary>Select the lowest matching version.</summary>
+    Lowest
+}
+
+/// <summary>
+/// Represents a parsed XSLT package version as a sequence of numeric components,
+/// each with an optional suffix. Suffixes are compared lexicographically, with the
+/// empty suffix (release version) considered greater than any non-empty suffix.
+/// </summary>
+public readonly record struct PackageVersion
+{
+    /// <summary>A single version component: a numeric part plus an optional suffix.</summary>
+    public readonly record struct Component(int Number, string Suffix)
+    {
+        public int CompareTo(Component other)
+        {
+            int cmp = Number.CompareTo(other.Number);
+            if (cmp != 0) return cmp;
+            return CompareSuffix(Suffix, other.Suffix);
+        }
+    }
+
+    private readonly Component[] _components;
+
+    public PackageVersion(Component[] components)
+    {
+        _components = components;
+    }
+
+    public ReadOnlySpan<Component> Components => _components;
+
+    public int ComponentCount => _components.Length;
+
+    public Component this[int index] => index < _components.Length ? _components[index] : new Component(0, "");
+
+    public static PackageVersion Parse(string version)
+    {
+        if (string.IsNullOrWhiteSpace(version))
+            return new PackageVersion(Array.Empty<Component>());
+
+        version = version.Trim();
+        var parts = version.Split('.');
+        var components = new Component[parts.Length];
+        for (int i = 0; i < parts.Length; i++)
+        {
+            var part = parts[i];
+            int number = 0;
+            int j = 0;
+            while (j < part.Length && char.IsAsciiDigit(part[j]))
+            {
+                number = number * 10 + (part[j] - '0');
+                j++;
+            }
+            components[i] = new Component(number, j < part.Length ? part[j..] : "");
+        }
+        return new PackageVersion(components);
+    }
+
+    public static int Compare(PackageVersion a, PackageVersion b)
+    {
+        int len = Math.Max(a.ComponentCount, b.ComponentCount);
+        for (int i = 0; i < len; i++)
+        {
+            var ca = a[i];
+            var cb = b[i];
+            int cmp = ca.CompareTo(cb);
+            if (cmp != 0) return cmp;
+        }
+        return 0;
+    }
+
+    public int CompareTo(PackageVersion other) => Compare(this, other);
+
+    /// <summary>
+    /// Returns true when this version has the same leading components as
+    /// <paramref name="prefix"/>, matching both number and suffix. Used for exact
+    /// version and wildcard/prefix matching.
+    /// </summary>
+    public bool StartsWith(PackageVersion prefix)
+    {
+        if (prefix.ComponentCount == 0) return true;
+        if (_components.Length < prefix.ComponentCount) return false;
+        for (int i = 0; i < prefix.ComponentCount; i++)
+        {
+            if (_components[i].CompareTo(prefix[i]) != 0)
+                return false;
+        }
+        return true;
+    }
+
+    public bool IsEmpty => _components.Length == 0;
+
+    public override string ToString()
+    {
+        if (_components.Length == 0) return "";
+        var sb = new System.Text.StringBuilder();
+        for (int i = 0; i < _components.Length; i++)
+        {
+            if (i > 0) sb.Append('.');
+            sb.Append(_components[i].Number);
+            sb.Append(_components[i].Suffix);
+        }
+        return sb.ToString();
+    }
+
+    private static int CompareSuffix(string a, string b)
+    {
+        bool aEmpty = string.IsNullOrEmpty(a);
+        bool bEmpty = string.IsNullOrEmpty(b);
+        if (aEmpty && bEmpty) return 0;
+        if (aEmpty) return 1;
+        if (bEmpty) return -1;
+        return string.CompareOrdinal(a, b);
+    }
+}
 
 /// <summary>
 /// Registers XSLT-specific XPath functions that cannot live in Bosak.XPath.Standard
@@ -440,7 +567,7 @@ public static class XsltFunctionLibrary
         if (packageName != null)
         {
             var versionRange = GetStringOption(options, "package-version") ?? "*";
-            var location = ResolvePackage(packageName, versionRange);
+            var location = ResolvePackageLocation(packageName, versionRange, PackageVersionResolutionStrategy.Highest);
             if (location == null)
                 throw new InvalidOperationException(
                     $"FOXT0001: Package '{packageName}' with version '{versionRange}' is not available.");
@@ -562,9 +689,9 @@ public static class XsltFunctionLibrary
 
     /// <summary>
     /// Resolves a package name and version range against the package registry,
-    /// choosing the highest matching registered version.
+    /// choosing a matching registered version according to the supplied strategy.
     /// </summary>
-    private static string? ResolvePackage(string name, string versionRange)
+    internal static string? ResolvePackageLocation(string name, string versionRange, PackageVersionResolutionStrategy strategy = PackageVersionResolutionStrategy.Highest)
     {
         List<(string Name, string Version, string Location)> snapshot;
         lock (_packageRegistry)
@@ -573,15 +700,17 @@ public static class XsltFunctionLibrary
         }
 
         string? bestLocation = null;
-        int[]? bestVersion = null;
+        PackageVersion? bestVersion = null;
         foreach (var candidate in snapshot)
         {
             if (!VersionMatches(candidate.Version, versionRange))
                 continue;
-            var parts = ParseVersion(candidate.Version);
-            if (bestVersion == null || CompareVersions(parts, bestVersion) > 0)
+            var parsed = PackageVersion.Parse(candidate.Version);
+            if (bestVersion == null ||
+                (strategy == PackageVersionResolutionStrategy.Highest && parsed.CompareTo(bestVersion.Value) > 0) ||
+                (strategy == PackageVersionResolutionStrategy.Lowest && parsed.CompareTo(bestVersion.Value) < 0))
             {
-                bestVersion = parts;
+                bestVersion = parsed;
                 bestLocation = candidate.Location;
             }
         }
@@ -590,7 +719,8 @@ public static class XsltFunctionLibrary
 
     /// <summary>
     /// Matches a concrete version against an XSLT package version range
-    /// (e.g. <c>1.0.2</c>, <c>1.*</c>, <c>1.0-2.0</c>, <c>*</c>).
+    /// (e.g. <c>1.0.2</c>, <c>1.*</c>, <c>1.0-2.0</c>, <c>1.0 to 2.0</c>,
+    /// <c>1.5+</c>, <c>1.0.0, 2.0</c>, <c>*</c>).
     /// </summary>
     private static bool VersionMatches(string version, string range)
     {
@@ -598,69 +728,68 @@ public static class XsltFunctionLibrary
         if (range == "*" || range.Length == 0)
             return true;
 
-        var dashIndex = range.IndexOf('-');
-        if (dashIndex > 0)
+        // A package without an explicit version is considered versionless and matches
+        // any concrete version request. This aligns with the W3C package-version tests.
+        if (string.IsNullOrWhiteSpace(version))
+            return true;
+
+        // Comma-separated list of version specifiers (any match wins).
+        if (range.Contains(','))
         {
-            var lower = range[..dashIndex];
-            var upper = range[(dashIndex + 1)..];
-            return VersionAtLeast(version, lower) && VersionAtMost(version, upper);
+            foreach (var item in range.Split(','))
+            {
+                if (VersionMatchesSingle(version, item.Trim()))
+                    return true;
+            }
+            return false;
         }
 
+        return VersionMatchesSingle(version, range);
+    }
+
+    private static bool VersionMatchesSingle(string version, string range)
+    {
+        range = range.Trim();
+        if (range == "*" || range.Length == 0)
+            return true;
+
+        var parsedVersion = PackageVersion.Parse(version);
+
+        // XSLT package version range using "to": "a to b", "to b", "a to".
+        var toIndex = range.IndexOf(" to ", StringComparison.Ordinal);
+        if (toIndex >= 0)
+        {
+            var lower = range[..toIndex].Trim();
+            var upper = range[(toIndex + 4)..].Trim();
+            bool okLower = string.IsNullOrEmpty(lower) || parsedVersion.CompareTo(PackageVersion.Parse(lower)) >= 0;
+            bool okUpper = string.IsNullOrEmpty(upper) || parsedVersion.CompareTo(PackageVersion.Parse(upper)) <= 0;
+            return okLower && okUpper;
+        }
+
+        // "VersionFrom+" form: 1.5+ means >= 1.5.
+        if (range.EndsWith('+'))
+        {
+            var bound = range[..^1].Trim();
+            return parsedVersion.CompareTo(PackageVersion.Parse(bound)) >= 0;
+        }
+
+        // "to b" form (omitted lower bound).
+        if (range.StartsWith("to ", StringComparison.Ordinal))
+        {
+            var upper = range[3..].Trim();
+            return parsedVersion.CompareTo(PackageVersion.Parse(upper)) <= 0;
+        }
+
+        // Wildcard prefix: 3.5.* matches any version starting with 3.5.
         if (range.EndsWith(".*", StringComparison.Ordinal))
         {
-            var prefix = range[..^2];
-            return VersionAtLeast(version, prefix)
-                && CompareVersions(ParseVersion(version), ParseVersion(prefix)) is var cmp
-                && (cmp == 0 || PrefixContains(prefix, version));
+            var prefix = PackageVersion.Parse(range[..^2]);
+            return parsedVersion.StartsWith(prefix);
         }
 
-        return CompareVersions(ParseVersion(version), ParseVersion(range)) == 0;
-    }
-
-    private static bool PrefixContains(string prefix, string version)
-    {
-        var prefixParts = ParseVersion(prefix);
-        var versionParts = ParseVersion(version);
-        if (versionParts.Length < prefixParts.Length)
-            return false;
-        for (int i = 0; i < prefixParts.Length; i++)
-        {
-            if (versionParts[i] != prefixParts[i])
-                return false;
-        }
-        return true;
-    }
-
-    private static bool VersionAtLeast(string version, string bound)
-        => CompareVersions(ParseVersion(version), ParseVersion(bound)) >= 0;
-
-    private static bool VersionAtMost(string version, string bound)
-        => CompareVersions(ParseVersion(version), ParseVersion(bound)) <= 0;
-
-    private static int[] ParseVersion(string version)
-    {
-        var parts = version.Trim().Split('.');
-        var result = new int[parts.Length];
-        for (int i = 0; i < parts.Length; i++)
-        {
-            if (!int.TryParse(parts[i], System.Globalization.NumberStyles.None,
-                    System.Globalization.CultureInfo.InvariantCulture, out result[i]))
-                result[i] = 0;
-        }
-        return result;
-    }
-
-    private static int CompareVersions(int[] a, int[] b)
-    {
-        int len = Math.Max(a.Length, b.Length);
-        for (int i = 0; i < len; i++)
-        {
-            int av = i < a.Length ? a[i] : 0;
-            int bv = i < b.Length ? b[i] : 0;
-            if (av != bv)
-                return av.CompareTo(bv);
-        }
-        return 0;
+        // Exact/prefix version: 2.0 matches 2.0.0 etc.
+        var exact = PackageVersion.Parse(range);
+        return parsedVersion.StartsWith(exact);
     }
 
     private static string? GetStringOption(XdmMap options, string key)
