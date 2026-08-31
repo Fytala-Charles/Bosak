@@ -1,9 +1,31 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-31
-**Commit:** cccf355f970b6c687d1ec3dcc87a2fff4f1c261f — REQ-071: XSLT source-document hint polish
-**Current focus:** **REQ-071 XSLT source-document hint polish** — The default source-document hint for the XSLT **Run XSLT transformation** code lens now supports an XML comment alternative (`<!-- bosak:source-document="..." -->`) in addition to the existing processing instruction (`<?bosak source-document="..."?>`). Single-quoted processing instructions are now covered by unit tests, and surrounding whitespace is trimmed from the supplied path before relative-path resolution.
-**Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 70 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
+**Commit:** <to be updated after REQ-073 commit> — REQ-073: Richer XSLT document symbols / outline
+**Current focus:** **REQ-073 Richer XSLT document symbols / outline** — `DocumentSymbolHandler` now produces outline symbols for all top-level XSLT declarations requested in REQ-073: templates (named and matched), functions, variables, parameters, attribute-sets, keys, and output declarations. It also continues to cover imports/includes, modes, decimal formats, character maps, and accumulators. The `xsl:output` symbol now includes the serialization method (e.g., **output (html)**) when present. New unit tests verify every requested declaration type.
+**Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 72 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
+
+## This Session Changes (REQ-073: Richer XSLT document symbols / outline)
+
+1. **Comprehensive outline coverage** —
+   - Verified `DocumentSymbolHandler.CreateSymbol` produces symbols for templates (named and matched), functions, variables, parameters, attribute-sets, keys, and output declarations.
+   - Also covers imports/includes, modes, decimal formats, character maps, and accumulators.
+   - Header bumped: `src/Bosak.LanguageServer/DocumentSymbolHandler.cs` → 0.2.
+
+2. **Output declaration polish** —
+   - `xsl:output` now displays as **output ({method})** when a `method` attribute is present (e.g., **output (html)**).
+   - `Detail` is set to `xsl:output`.
+
+3. **Tests** —
+   - Added `ReturnsSymbolsForReq073TopLevelDeclarations` covering output, param, variable, match/named templates, function, attribute-set, and key.
+   - Added `ReturnsSymbolsForAdditionalTopLevelDeclarations` covering import, include, mode, decimal-format, character-map, and accumulator.
+   - Updated existing test expectation from `output` to `output (xml)`.
+   - Header bumped: `tests/Bosak.LanguageServer.Tests/DocumentSymbolHandlerTests.cs` → 0.2.
+
+4. **Results** —
+   - `dotnet test Bosak.sln` passes (2,111/0/0).
+   - `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes (72/0/0).
+   - No regressions.
 
 ## This Session Changes (REQ-071: XSLT source-document hint polish)
 

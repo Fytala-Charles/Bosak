@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 18-08-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 31-08-2026     | Added comprehensive tests for richer XSLT document symbols (REQ-073)                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -263,10 +264,12 @@ public class DocumentSymbolHandler : DocumentSymbolHandlerBase
             }
             case "output":
             {
+                var method = element.Attribute("method")?.Value;
                 return new SymbolInformationOrDocumentSymbol(new DocumentSymbol
                 {
-                    Name = "output",
-                    Kind = SymbolKind.File,
+                    Name = method is not null ? $"output ({method})" : "output",
+                    Detail = "xsl:output",
+                    Kind = SymbolKind.Interface,
                     Range = range,
                     SelectionRange = range,
                 });

@@ -11,7 +11,7 @@
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 31 August 2026
 > **Bosak baseline:** 2,111 unit tests passed / 0 failed / 0 skipped
-> **Language-server baseline:** 70 passed / 0 failed / 0 skipped
+> **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%); **100%** of runnable tests pass.
 > **XSLT baseline:** 7,254 passed / 0 failed / 7,346 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation, schema-aware `fn:json-to-xml`
@@ -19,6 +19,11 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-31** — Language Server: **Richer XSLT document symbols / outline (`REQ-073`)** — `DocumentSymbolHandler` now produces outline symbols for all top-level XSLT declarations requested in REQ-073: templates (named and matched), functions, variables, parameters, attribute-sets, keys, and output declarations. It also continues to cover imports/includes, modes, decimal formats, character maps, and accumulators. The `xsl:output` symbol now includes the serialization method (e.g., **output (html)**) when present, making it easier to distinguish multiple output declarations. New unit tests verify every requested declaration type.
+  - Implementation: `src/Bosak.LanguageServer/DocumentSymbolHandler.cs` (header → 0.2).
+  - Tests: `tests/Bosak.LanguageServer.Tests/DocumentSymbolHandlerTests.cs` (header → 0.2).
+  - Verification: `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; language-server tests 72/0/0.
 
 - **2026-08-31** — Language Server: **XSLT source-document hint polish (`REQ-071`)** — The default source-document code-lens hint now supports an XML comment alternative (`<!-- bosak:source-document="..." -->`) in addition to the existing processing instruction (`<?bosak source-document="..."?>`). Single-quoted processing instructions are now covered by unit tests, and surrounding whitespace is trimmed from the supplied path before relative-path resolution. The processing-instruction regex is renamed to `DefaultSourcePiRegex`; a new `DefaultSourceCommentRegex` provides the comment fallback. Relative paths continue to resolve against the stylesheet directory.
   - Implementation: `src/Bosak.LanguageServer/CodeLensHandler.cs` (header → 0.6).
