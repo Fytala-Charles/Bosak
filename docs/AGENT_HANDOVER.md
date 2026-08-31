@@ -1,9 +1,29 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-31
-**Commit:** 16c44c8b1a2fac383d451bd93e621b03153f34e7 — REQ-072: XSLT initial-template runner code lens
-**Current focus:** **REQ-072 XSLT initial-template runner code lens** — `.xsl` and `.xslt` documents that declare a named template entry point now display a second code lens, **Run initial template** (or **Run initial template 'name'** for a non-implicit entry point). The lens detects `<xsl:template name="xsl:initial-template">` as the declared XSLT 3.0 entry point and falls back to the first other named template. Clicking the lens invokes the new `bosak.runInitialTemplate` command, which sends a custom `bosak/runInitialTemplate` LSP request; the server compiles the stylesheet and runs it via `XsltExecutable.TransformToString(source: null, initialTemplate: name)` without requiring a source XML document. The VS Code extension registers the command, sends the request, and opens the serialized result in a preview editor.
-**Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 67 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
+**Commit:** <to be updated after REQ-071 commit> — REQ-071: XSLT source-document hint polish
+**Current focus:** **REQ-071 XSLT source-document hint polish** — The default source-document hint for the XSLT **Run XSLT transformation** code lens now supports an XML comment alternative (`<!-- bosak:source-document="..." -->`) in addition to the existing processing instruction (`<?bosak source-document="..."?>`). Single-quoted processing instructions are now covered by unit tests, and surrounding whitespace is trimmed from the supplied path before relative-path resolution.
+**Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 70 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
+
+## This Session Changes (REQ-071: XSLT source-document hint polish)
+
+1. **XML comment source-document hint** —
+   - Added `DefaultSourceCommentRegex` in `src/Bosak.LanguageServer/CodeLensHandler.cs` to match `<!-- bosak:source-document="..." -->`.
+   - `TryGetDefaultSourceDocument` now tries the processing-instruction regex first, then the comment regex.
+   - Header bumped: `src/Bosak.LanguageServer/CodeLensHandler.cs` → 0.6.
+
+2. **Whitespace trimming** —
+   - The captured source-document path is trimmed with `.Trim()` before it is checked and resolved against the stylesheet directory.
+
+3. **Single-quoted PI test coverage** —
+   - Added `ReturnsXsltTransformLensWithSingleQuotedSourceDocument` in `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`.
+   - Added `ReturnsXsltTransformLensWithCommentSourceDocument` and `TrimsWhitespaceAroundSourceDocumentPath`.
+   - Header bumped: `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` → 0.6.
+
+4. **Results** —
+   - `dotnet test Bosak.sln` passes (2,111/0/0).
+   - `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes (70/0/0).
+   - No regressions.
 
 ## This Session Changes (REQ-072: XSLT initial-template runner code lens)
 

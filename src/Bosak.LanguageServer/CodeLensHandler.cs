@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT document support                                                              |
 //                      | Charles Korthout | 0.4   | 20-08-2026     | Added default source-document hint for XSLT code lens                                  |
 //                      | Charles Korthout | 0.5   | 31-08-2026     | Added initial-template runner code lens for XSLT                                        |
+//                      | Charles Korthout | 0.6   | 31-08-2026     | Polished default source-document hint: XML comment alternative and trimmed paths        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -177,19 +178,25 @@ public class CodeLensHandler : CodeLensHandlerBase
         }
     }
 
-    private static readonly Regex DefaultSourceRegex = new(
+    private static readonly Regex DefaultSourcePiRegex = new(
         @"<\?bosak\s+source-document\s*=\s*(?:""([^""]*)""|'([^']*)')\s*\?>",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    private static readonly Regex DefaultSourceCommentRegex = new(
+        @"<!--\s*bosak:source-document\s*=\s*(?:""([^""]*)""|'([^']*)')\s*-->",
         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
     private static bool TryGetDefaultSourceDocument(
         string text, DocumentUri uri, out string? resolvedSourcePath)
     {
         resolvedSourcePath = null;
-        var match = DefaultSourceRegex.Match(text);
+        var match = DefaultSourcePiRegex.Match(text);
+        if (!match.Success)
+            match = DefaultSourceCommentRegex.Match(text);
         if (!match.Success)
             return false;
 
-        var raw = match.Groups[1].Success ? match.Groups[1].Value : match.Groups[2].Value;
+        var raw = (match.Groups[1].Success ? match.Groups[1].Value : match.Groups[2].Value).Trim();
         if (string.IsNullOrWhiteSpace(raw))
             return false;
 

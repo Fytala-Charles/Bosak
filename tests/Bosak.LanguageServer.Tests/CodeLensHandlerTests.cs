@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT lens tests                                                                    |
 //                      | Charles Korthout | 0.4   | 20-08-2026     | Added default source-document hint tests                                                 |
 //                      | Charles Korthout | 0.5   | 31-08-2026     | Added initial-template runner lens tests                                                |
+//                      | Charles Korthout | 0.6   | 31-08-2026     | Added source-document hint polish tests                                                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Linq;
@@ -130,6 +131,79 @@ public class CodeLensHandlerTests
         Assert.NotNull(args);
         Assert.Equal(2, args!.Count);
         Assert.Contains("input.xml", args[1]!.ToString());
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ReturnsXsltTransformLensWithSingleQuotedSourceDocument()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xsl").ToString();
+        documents.Update(uri, "<?bosak source-document='input.xml'?><xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'/>");
+
+        var handler = new CodeLensHandler(documents);
+        var result = await handler.Handle(new CodeLensParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xsl"))
+        }, default);
+
+        Assert.NotNull(result);
+        var lens = Assert.Single(result!);
+        Assert.NotNull(lens.Command);
+        Assert.Contains("input.xml", lens.Command!.Title);
+        Assert.Equal("bosak.transformXslt", lens.Command.Name);
+        var args = lens.Command.Arguments;
+        Assert.NotNull(args);
+        Assert.Equal(2, args!.Count);
+        Assert.Contains("input.xml", args[1]!.ToString());
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ReturnsXsltTransformLensWithCommentSourceDocument()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xsl").ToString();
+        documents.Update(uri, "<!-- bosak:source-document=\"input.xml\" --><xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'/>");
+
+        var handler = new CodeLensHandler(documents);
+        var result = await handler.Handle(new CodeLensParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xsl"))
+        }, default);
+
+        Assert.NotNull(result);
+        var lens = Assert.Single(result!);
+        Assert.NotNull(lens.Command);
+        Assert.Contains("input.xml", lens.Command!.Title);
+        Assert.Equal("bosak.transformXslt", lens.Command.Name);
+        var args = lens.Command.Arguments;
+        Assert.NotNull(args);
+        Assert.Equal(2, args!.Count);
+        Assert.Contains("input.xml", args[1]!.ToString());
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task TrimsWhitespaceAroundSourceDocumentPath()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/transform.xsl").ToString();
+        documents.Update(uri, "<?bosak source-document=\"  input.xml  \"?><xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'/>");
+
+        var handler = new CodeLensHandler(documents);
+        var result = await handler.Handle(new CodeLensParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/transform.xsl"))
+        }, default);
+
+        Assert.NotNull(result);
+        var lens = Assert.Single(result!);
+        Assert.NotNull(lens.Command);
+        var args = lens.Command!.Arguments;
+        Assert.NotNull(args);
+        Assert.Equal(2, args!.Count);
+        var resolved = args[1]!.ToString();
+        Assert.Contains("input.xml", resolved);
+        Assert.DoesNotContain("  input.xml", resolved);
+        Assert.DoesNotContain("input.xml  ", resolved);
     }
 
     [Fact]
