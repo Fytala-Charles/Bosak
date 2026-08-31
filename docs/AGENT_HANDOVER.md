@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-31
-**Commit:** <to be updated after REQ-073 commit> — REQ-073: Richer XSLT document symbols / outline
+**Commit:** de3146b582bde6fe4b9f2e09bff0c00580002725 — REQ-073: Richer XSLT document symbols / outline
 **Current focus:** **REQ-073 Richer XSLT document symbols / outline** — `DocumentSymbolHandler` now produces outline symbols for all top-level XSLT declarations requested in REQ-073: templates (named and matched), functions, variables, parameters, attribute-sets, keys, and output declarations. It also continues to cover imports/includes, modes, decimal formats, character maps, and accumulators. The `xsl:output` symbol now includes the serialization method (e.g., **output (html)**) when present. New unit tests verify every requested declaration type.
 **Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 72 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
 
