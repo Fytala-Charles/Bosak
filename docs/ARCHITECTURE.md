@@ -663,7 +663,7 @@ src/
   Bosak.XPath.Providers/    XDocument adapter (XDocumentNode), XML 1.1 loader/codec; XmlDocument and streaming adapters planned
   Bosak.Xslt/         XSLT 2.0/3.0 processor (stylesheet compiler, transform engine)
   Bosak.XQuery/       XQuery 3.1 processor (query compiler, static context, prolog parser, FLWOR engine)
-  Bosak.LanguageServer/   LSP server for XPath / XSLT / XQuery diagnostics, completions, hover, go-to-definition, document symbols, semantic tokens, and code actions (OmniSharp 0.19.9)
+  Bosak.LanguageServer/   LSP server for XPath / XSLT / XQuery diagnostics, completions, hover, go-to-definition, document symbols, semantic tokens, code actions, code lens for XPath/XQuery results and XSLT transformations, and an XSLT initial-template runner (OmniSharp 0.19.9)
 
 tests/
   Bosak.XPath.Core.Tests/

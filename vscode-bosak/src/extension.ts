@@ -70,7 +70,8 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand('bosak.evaluateXPath', evaluateXPath),
         vscode.commands.registerCommand('bosak.evaluateXQuery', runXQuery),
         vscode.commands.registerCommand('bosak.runXQuery', runXQuery),
-        vscode.commands.registerCommand('bosak.transformXslt', transformXslt)
+        vscode.commands.registerCommand('bosak.transformXslt', transformXslt),
+        vscode.commands.registerCommand('bosak.runInitialTemplate', runInitialTemplate)
     );
 }
 
@@ -247,5 +248,45 @@ async function transformXslt(uri?: string, sourcePath?: string): Promise<void> {
         }
     } catch (err) {
         vscode.window.showErrorMessage(`XSLT transformation failed: ${err}`);
+    }
+}
+
+async function runInitialTemplate(uri?: string, initialTemplate?: string): Promise<void> {
+    let targetUri: string;
+    if (uri) {
+        targetUri = uri;
+    } else {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor || editor.document.languageId !== 'xslt') {
+            vscode.window.showInformationMessage('Open an XSLT file to run an initial template.');
+            return;
+        }
+        targetUri = editor.document.uri.toString();
+    }
+
+    if (!client) {
+        vscode.window.showErrorMessage('Bosak language server is not running.');
+        return;
+    }
+
+    try {
+        const result = await client.sendRequest<{ result?: string; error?: string }>(
+            'bosak/runInitialTemplate',
+            {
+                textDocument: { uri: targetUri },
+                initialTemplate: initialTemplate ?? null
+            }
+        );
+        if (result.error) {
+            vscode.window.showErrorMessage(`Initial template run failed: ${result.error}`);
+        } else {
+            const doc = await vscode.workspace.openTextDocument({
+                content: result.result ?? '',
+                language: 'xml'
+            });
+            await vscode.window.showTextDocument(doc, { preview: true });
+        }
+    } catch (err) {
+        vscode.window.showErrorMessage(`Initial template run failed: ${err}`);
     }
 }

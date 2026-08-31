@@ -190,7 +190,7 @@ flowchart TB
 
 ## VS Code Extension
 
-A Language Server Protocol (LSP) implementation and VS Code extension provide IDE features for XPath, XSLT, and XQuery development — syntax highlighting, semantic tokens, diagnostics, completion, hover, go-to-definition, document outline, code actions (quick fixes), code lens for `.xpath`/`.xq`/`.xqy`/`.xquery` results, `workspace/executeCommand` evaluation, and evaluate/run commands.
+A Language Server Protocol (LSP) implementation and VS Code extension provide IDE features for XPath, XSLT, and XQuery development — syntax highlighting, semantic tokens, diagnostics, completion, hover, go-to-definition, document outline, code actions (quick fixes), code lens for `.xpath`/`.xq`/`.xqy`/`.xquery` results, XSLT **Run XSLT transformation** and **Run initial template** lenses, `workspace/executeCommand` evaluation, and evaluate/run commands.
 
 ### Quick Install
 
@@ -219,7 +219,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-All 2,103 unit tests pass (0 failures).
+All 2,111 unit tests pass (0 failures).
 
 ---
 

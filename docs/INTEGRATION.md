@@ -9,8 +9,9 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 30 August 2026
+> **Last updated:** 31 August 2026
 > **Bosak baseline:** 2,111 unit tests passed / 0 failed / 0 skipped
+> **Language-server baseline:** 67 passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%); **100%** of runnable tests pass.
 > **XSLT baseline:** 7,254 passed / 0 failed / 7,346 skipped — 100% of runnable W3C XSLT 3.0 tests pass
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation, schema-aware `fn:json-to-xml`
@@ -18,6 +19,14 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-08-31** — Language Server: **XSLT initial-template runner code lens (`REQ-072`)** — `.xsl` and `.xslt` documents that declare a named template now display a second code lens, **Run initial template** (or **Run initial template 'name'** for a non-implicit entry point). The lens detects `<xsl:template name="xsl:initial-template">` as the declared entry point and falls back to the first other named template when no implicit initial template exists. Clicking the lens invokes the new `bosak.runInitialTemplate` command, which sends a custom `bosak/runInitialTemplate` request to the language server. The server compiles the stylesheet and runs it via `XsltExecutable.TransformToString(source: null, initialTemplate: name)` without requiring a source XML document. The VS Code extension registers the command, sends the request, and opens the serialized result in a preview editor. This covers the common XSLT 3.0 use case of generating output from parameters alone.
+  - Server handler: `src/Bosak.LanguageServer/EvaluationHandler.cs` (`RunInitialTemplateParams`, `RunInitialTemplateResult`, `RunInitialTemplateHandler`).
+  - Code-lens detection: `src/Bosak.LanguageServer/CodeLensHandler.cs`.
+  - Registration: `src/Bosak.LanguageServer/Program.cs`.
+  - VS Code client: `vscode-bosak/src/extension.ts` and `vscode-bosak/package.json`.
+  - Tests: `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs` and `tests/Bosak.LanguageServer.Tests/EvaluationHandlerTests.cs`.
+  - Verification: `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; language-server tests 67/0/0.
 
 - **2026-08-30** — XSLT: **`xsl:use-package` package-version range matching and `package_version_resolution` dependency** — `xsl:use-package` now matches `@package-version` against registered package versions using `XsltFunctionLibrary.PackageVersion.Parse`, `VersionMatches`, and `ResolvePackageLocation`. Supported syntax includes exact versions, wildcard prefixes (`1.*`), hyphen and `to` ranges (`1.0-2.0`, `1.0 to 2.0`), minimum bounds (`1.5+`), comma-separated alternatives, and `*` / empty for any version. `PackageVersionResolutionStrategy.Highest` selects the highest matching version by default (the XSLT 3.0 default); the W3C conformance harness honors the `package_version_resolution` dependency values `highest_version`, `lowest_version`, and `unspecified`. Inline test packages are registered in `tests/Bosak.Xslt.Conformance/Program.cs` so the package-version conformance tests run.
   - Implementation: `src/Bosak.Xslt/Api/XsltFunctionLibrary.cs` (`PackageVersion`, `VersionMatches`, `ResolvePackageLocation`, `PackageVersionResolutionStrategy`); `src/Bosak.Xslt/Stylesheet/Stylesheet.cs`; `src/Bosak.Xslt/Runtime/TransformEngine.cs`; `tests/Bosak.Xslt.Conformance/Program.cs`.

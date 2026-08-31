@@ -135,6 +135,11 @@
         "command": "bosak.runXQuery",
         "title": "Run XQuery",
         "category": "Bosak"
+      },
+      {
+        "command": "bosak.runInitialTemplate",
+        "title": "Run XSLT Initial Template",
+        "category": "Bosak"
       }
     ],
     "menus": {

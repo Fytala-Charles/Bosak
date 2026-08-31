@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 18-08-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 31-08-2026     | Added initial-template runner handler tests                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
@@ -101,6 +102,73 @@ public class EvaluationHandlerTests
         {
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/style.xslt")),
             SourcePath = null
+        }, default);
+
+        Assert.Null(result.Result);
+        Assert.NotNull(result.Error);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RunInitialTemplateExecutesNamedTemplateWithoutSource()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/initial.xslt").ToString();
+        documents.Update(uri, """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                <xsl:template name="start"><out>hello</out></xsl:template>
+            </xsl:stylesheet>
+            """);
+
+        var handler = new RunInitialTemplateHandler(documents);
+        var result = await handler.Handle(new RunInitialTemplateParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/initial.xslt")),
+            InitialTemplate = "start"
+        }, default);
+
+        Assert.Null(result.Error);
+        Assert.NotNull(result.Result);
+        Assert.Contains("hello", result.Result);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RunInitialTemplateUsesDeclaredInitialTemplateWhenNameOmitted()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/implicit.xslt").ToString();
+        documents.Update(uri, """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                <xsl:template name="xsl:initial-template"><out>world</out></xsl:template>
+            </xsl:stylesheet>
+            """);
+
+        var handler = new RunInitialTemplateHandler(documents);
+        var result = await handler.Handle(new RunInitialTemplateParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/implicit.xslt"))
+        }, default);
+
+        Assert.Null(result.Error);
+        Assert.NotNull(result.Result);
+        Assert.Contains("world", result.Result);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RunInitialTemplateReturnsErrorForMissingTemplate()
+    {
+        var documents = new DocumentManager();
+        var uri = DocumentUri.FromFileSystemPath("C:/test/missing.xslt").ToString();
+        documents.Update(uri, """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                <xsl:template match="/"><out/></xsl:template>
+            </xsl:stylesheet>
+            """);
+
+        var handler = new RunInitialTemplateHandler(documents);
+        var result = await handler.Handle(new RunInitialTemplateParams
+        {
+            TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/missing.xslt")),
+            InitialTemplate = "start"
         }, default);
 
         Assert.Null(result.Result);

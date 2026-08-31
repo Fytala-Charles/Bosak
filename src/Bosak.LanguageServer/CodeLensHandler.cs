@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Added XQuery document support                                                            |
 //                      | Charles Korthout | 0.3   | 20-08-2026     | Added XSLT document support                                                              |
 //                      | Charles Korthout | 0.4   | 20-08-2026     | Added default source-document hint for XSLT code lens                                  |
+//                      | Charles Korthout | 0.5   | 31-08-2026     | Added initial-template runner code lens for XSLT                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -37,8 +38,8 @@ namespace Bosak.LanguageServer;
 
 /// <summary>
 /// Provides code lenses for XPath, XQuery, and XSLT documents. XPath and XQuery lenses
-/// evaluate the document and show the serialized result; XSLT lenses provide a command
-/// to run the transformation because XSLT requires an external source document.
+/// evaluate the document and show the serialized result; XSLT lenses provide commands
+/// to run the transformation with a source document or from an initial named template.
 /// </summary>
 public class CodeLensHandler : CodeLensHandlerBase
 {
@@ -69,43 +70,43 @@ public class CodeLensHandler : CodeLensHandlerBase
         if (!_documents.TryGet(uri.ToString(), out var text))
             return Task.FromResult<CodeLensContainer?>(new CodeLensContainer(Array.Empty<CodeLens>()));
 
-        string title;
-        string commandName;
-        JArray arguments;
+        var lenses = new List<CodeLens>();
+
         if (language == "XSLT")
         {
-            commandName = "bosak.transformXslt";
-            if (TryGetDefaultSourceDocument(text, uri, out var defaultSourcePath))
+            AddXsltTransformLens(lenses, text, uri);
+
+            if (TryGetInitialTemplateName(text, out var initialTemplate))
             {
-                var fileName = Path.GetFileName(defaultSourcePath!);
-                title = $"Run XSLT transformation ({Truncate(fileName, MaxTitleLength - 29)})";
-                arguments = new JArray(uri.ToString(), defaultSourcePath!);
-            }
-            else
-            {
-                title = "Run XSLT transformation";
-                arguments = new JArray(uri.ToString());
+                var title = string.IsNullOrEmpty(initialTemplate)
+                    ? "Run initial template"
+                    : $"Run initial template '{Truncate(initialTemplate, MaxTitleLength - 25)}'";
+                lenses.Add(new CodeLens
+                {
+                    Range = new Range(new Position(0, 0), new Position(0, 0)),
+                    Command = new Command
+                    {
+                        Title = title,
+                        Name = "bosak.runInitialTemplate",
+                        Arguments = new JArray(uri.ToString(), (object?)initialTemplate)
+                    }
+                });
             }
         }
         else
         {
-            (title, commandName) = GetEvaluatedLens(text, language);
-            arguments = new JArray(uri.ToString());
-        }
-
-        var lenses = new List<CodeLens>
-        {
-            new()
+            var (title, commandName) = GetEvaluatedLens(text, language);
+            lenses.Add(new CodeLens
             {
                 Range = new Range(new Position(0, 0), new Position(0, 0)),
                 Command = new Command
                 {
                     Title = title,
                     Name = commandName,
-                    Arguments = arguments,
+                    Arguments = new JArray(uri.ToString())
                 }
-            }
-        };
+            });
+        }
 
         return Task.FromResult<CodeLensContainer?>(new CodeLensContainer(lenses));
     }
@@ -205,6 +206,59 @@ public class CodeLensHandler : CodeLensHandlerBase
         {
             return false;
         }
+    }
+
+    private static void AddXsltTransformLens(List<CodeLens> lenses, string text, DocumentUri uri)
+    {
+        string title;
+        JArray arguments;
+        if (TryGetDefaultSourceDocument(text, uri, out var defaultSourcePath))
+        {
+            var fileName = Path.GetFileName(defaultSourcePath!);
+            title = $"Run XSLT transformation ({Truncate(fileName, MaxTitleLength - 29)})";
+            arguments = new JArray(uri.ToString(), defaultSourcePath!);
+        }
+        else
+        {
+            title = "Run XSLT transformation";
+            arguments = new JArray(uri.ToString());
+        }
+
+        lenses.Add(new CodeLens
+        {
+            Range = new Range(new Position(0, 0), new Position(0, 0)),
+            Command = new Command
+            {
+                Title = title,
+                Name = "bosak.transformXslt",
+                Arguments = arguments,
+            }
+        });
+    }
+
+    private static readonly Regex NamedTemplateRegex = new(
+        @"<xsl:template\s+[^>]*?name\s*=\s*(?:""([^""]*)""|'([^']*)')[^>]*?>",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    private static bool TryGetInitialTemplateName(string text, out string? initialTemplate)
+    {
+        initialTemplate = null;
+
+        var match = NamedTemplateRegex.Match(text);
+        if (!match.Success)
+            return false;
+
+        var name = match.Groups[1].Success ? match.Groups[1].Value : match.Groups[2].Value;
+        if (string.IsNullOrWhiteSpace(name))
+            return false;
+
+        // A template named xsl:initial-template (or any prefix resolving to the XSLT namespace)
+        // is the stylesheet's declared entry point. Pass null so the runtime selects it.
+        if (name.EndsWith(":initial-template", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        initialTemplate = name;
+        return true;
     }
 
     private static string Truncate(string value, int maxLength)

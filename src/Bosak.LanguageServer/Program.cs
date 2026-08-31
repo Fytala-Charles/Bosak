@@ -20,6 +20,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 20-08-2026     | Register CodeLensHandler                                                                 |
 //                      | Charles Korthout | 0.7   | 20-08-2026     | Register ExecuteCommandHandler                                                           |
+//                      | Charles Korthout | 0.8   | 31-08-2026     | Register RunInitialTemplateHandler                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -69,7 +70,8 @@ class Program
                 .WithHandler<ExecuteCommandHandler>()
                 .WithHandler<EvaluateXPathHandler>()
                 .WithHandler<EvaluateXQueryHandler>()
-                .WithHandler<TransformXsltHandler>();
+                .WithHandler<TransformXsltHandler>()
+                .WithHandler<RunInitialTemplateHandler>();
         }).ConfigureAwait(false);
 
         await server.WaitForExit.ConfigureAwait(false);

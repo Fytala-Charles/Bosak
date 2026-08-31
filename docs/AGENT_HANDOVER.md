@@ -1,9 +1,38 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
-**Date:** 2026-08-30
-**Commit:** b370b21dc140f5050e1c45a1498193aa2d09d1e6 — REQ-077 continued: `xsl:use-package` function/variable/parameter accept+override visibility, diamond imports, per-package lazy-global isolation, and package-version range matching
-**Current focus:** **REQ-077 `xsl:use-package` resolution and component merging** — `xsl:use-package` resolves to a registered package and merges functions, variables, and parameters with `xsl:accept` visibility and `xsl:override` replacements. Public/final components are visible cross-package; private components are visible only inside their owning package scope (or the accepting package when explicitly accepted as private). Same-name public variables from different used-package routes (diamond imports) no longer conflict. Per-package lazy-global isolation prevents sibling packages with same-name globals from sharing cached values. `package-version` range matching is now implemented, including exact versions, wildcards, hyphen/`to` ranges, `+` minimum bounds, and comma-separated alternatives. The full runnable `use-package` test set passes (`use-package-001` through `use-package-212`, including the package-version range tests `203-210`).
-**Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **all runnable `use-package` tests pass (53/54, 1 skipped)**; `namespace-alias` **26 passed / 0 failed / 0 skipped**; no regressions in unit tests or representative conformance sets.
+**Date:** 2026-08-31
+**Commit:** 16c44c8b1a2fac383d451bd93e621b03153f34e7 — REQ-072: XSLT initial-template runner code lens
+**Current focus:** **REQ-072 XSLT initial-template runner code lens** — `.xsl` and `.xslt` documents that declare a named template entry point now display a second code lens, **Run initial template** (or **Run initial template 'name'** for a non-implicit entry point). The lens detects `<xsl:template name="xsl:initial-template">` as the declared XSLT 3.0 entry point and falls back to the first other named template. Clicking the lens invokes the new `bosak.runInitialTemplate` command, which sends a custom `bosak/runInitialTemplate` LSP request; the server compiles the stylesheet and runs it via `XsltExecutable.TransformToString(source: null, initialTemplate: name)` without requiring a source XML document. The VS Code extension registers the command, sends the request, and opens the serialized result in a preview editor.
+**Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 67 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
+
+## This Session Changes (REQ-072: XSLT initial-template runner code lens)
+
+1. **New LSP request `bosak/runInitialTemplate`** —
+   - Added `RunInitialTemplateParams`, `RunInitialTemplateResult`, and `RunInitialTemplateHandler` in `src/Bosak.LanguageServer/EvaluationHandler.cs`.
+   - The handler compiles the stylesheet from the open document and calls `XsltExecutable.TransformToString(source: null, initialTemplate: name)`.
+   - Registered in `src/Bosak.LanguageServer/Program.cs`.
+   - Header bumped: `src/Bosak.LanguageServer/EvaluationHandler.cs` → 0.2; `src/Bosak.LanguageServer/Program.cs` → 0.8.
+
+2. **Code-lens detection** —
+   - `CodeLensHandler` now scans `.xsl` and `.xslt` documents for a named template.
+   - `<xsl:template name="xsl:initial-template">` produces a **Run initial template** lens with a null initial-template argument so the runtime selects the declared entry point.
+   - Any other named template produces **Run initial template 'name'**.
+   - The original **Run XSLT transformation** lens is still shown first.
+   - Header bumped: `src/Bosak.LanguageServer/CodeLensHandler.cs` → 0.5.
+
+3. **VS Code client wiring** —
+   - `vscode-bosak/src/extension.ts` registers `bosak.runInitialTemplate` and sends the `bosak/runInitialTemplate` request.
+   - `vscode-bosak/package.json` declares the new command and context-menu entry.
+
+4. **Tests** —
+   - `tests/Bosak.LanguageServer.Tests/CodeLensHandlerTests.cs`: lens presence for implicit initial template, named-template fallback, and no-lens case.
+   - `tests/Bosak.LanguageServer.Tests/EvaluationHandlerTests.cs`: handler happy path, implicit initial-template fallback, and missing-template error.
+   - `npm run compile` in `vscode-bosak` passes.
+
+5. **Results** —
+   - `dotnet test Bosak.sln` passes (2,111/0/0).
+   - `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes (67/0/0).
+   - No regressions.
 
 ## This Session Changes (REQ-077 continued: package-version range matching)
 

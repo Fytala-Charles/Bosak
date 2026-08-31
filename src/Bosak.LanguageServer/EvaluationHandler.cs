@@ -64,6 +64,25 @@ public record TransformXsltResult
     public string? Error { get; init; }
 }
 
+/// <summary>Parameters for the <c>bosak/runInitialTemplate</c> request.</summary>
+[Method("bosak/runInitialTemplate", Direction.ClientToServer)]
+public record RunInitialTemplateParams : IRequest<RunInitialTemplateResult>
+{
+    /// <summary>The document containing the XSLT stylesheet.</summary>
+    public TextDocumentIdentifier TextDocument { get; init; } = null!;
+    /// <summary>The optional name of the initial template. When omitted, the stylesheet's declared <c>xsl:initial-template</c> is used.</summary>
+    public string? InitialTemplate { get; init; }
+}
+
+/// <summary>The result of running an XSLT stylesheet from an initial template.</summary>
+public record RunInitialTemplateResult
+{
+    /// <summary>The serialized output, when execution succeeded.</summary>
+    public string? Result { get; init; }
+    /// <summary>The error message, when execution failed.</summary>
+    public string? Error { get; init; }
+}
+
 /// <summary>
 /// Evaluates the XPath expression contained in a document and returns the serialized result.
 /// </summary>
@@ -202,6 +221,46 @@ public class TransformXsltHandler : IJsonRpcRequestHandler<TransformXsltParams, 
         catch (Exception ex)
         {
             return Task.FromResult(new TransformXsltResult { Error = ex.Message });
+        }
+    }
+}
+
+/// <summary>
+/// Runs an XSLT stylesheet from an initial named template without requiring a source XML document.
+/// </summary>
+public class RunInitialTemplateHandler : IJsonRpcRequestHandler<RunInitialTemplateParams, RunInitialTemplateResult>
+{
+    private readonly DocumentManager _documents;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RunInitialTemplateHandler"/> class.
+    /// </summary>
+    /// <param name="documents">The document manager holding open document contents.</param>
+    public RunInitialTemplateHandler(DocumentManager documents)
+    {
+        _documents = documents;
+    }
+
+    /// <summary>
+    /// Runs the stylesheet starting from the named initial template.
+    /// </summary>
+    /// <param name="request">The run parameters.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The serialized result or an error message.</returns>
+    public Task<RunInitialTemplateResult> Handle(RunInitialTemplateParams request, CancellationToken cancellationToken)
+    {
+        if (!_documents.TryGet(request.TextDocument.Uri.ToString(), out var xsltText))
+            return Task.FromResult(new RunInitialTemplateResult { Error = "Document is not open." });
+
+        try
+        {
+            var executable = new XsltCompiler().Compile(xsltText);
+            var result = executable.TransformToString(source: null, initialTemplate: request.InitialTemplate);
+            return Task.FromResult(new RunInitialTemplateResult { Result = result });
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new RunInitialTemplateResult { Error = ex.Message });
         }
     }
 }
