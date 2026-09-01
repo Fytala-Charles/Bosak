@@ -30,6 +30,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 30-08-2026     | Added EffectiveVisibility for xsl:accept override propagation                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 31-08-2026     | Made ParseModes internal for mode-aware visibility lookup                              |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.0   | 31-08-2026     | Added AcceptedBy property for used-package private template visibility tracking        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -87,6 +91,13 @@ public sealed class TemplateRule
     /// have been applied. Used by the runtime visibility filter.
     /// </summary>
     public string? EffectiveVisibility { get; internal set; }
+
+    /// <summary>
+    /// The package whose <c>xsl:accept</c> rules set <see cref="EffectiveVisibility"/> to
+    /// <c>private</c>, or <c>null</c> when the private visibility comes from the declaring
+    /// package itself.
+    /// </summary>
+    public Stylesheet? AcceptedBy { get; internal set; }
 
     private TemplateRule(XElement element, string? match, string? name, IReadOnlyList<string> modes, double priority, Stylesheet stylesheet, ContextItemDeclaration? contextItem = null)
     {
@@ -211,7 +222,7 @@ public sealed class TemplateRule
         throw new InvalidOperationException($"XTTE0590: Required context item type '{contextItem.AsType}' is incompatible with match pattern '{match}'.");
     }
 
-    private static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element, string stylesheetDefaultMode)
+    internal static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element, string stylesheetDefaultMode)
     {
         if (string.IsNullOrEmpty(modeAttr))
         {

@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 24-08-2026     | FromElement parses Q{uri}local EQNames for attribute-set names                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 01-09-2026     | Added EffectiveVisibility for xsl:accept visibility enforcement                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -43,6 +45,12 @@ public sealed class AttributeSetDefinition
 
     /// <summary>The import precedence of the stylesheet module that declared this set.</summary>
     public int ImportPrecedence { get; }
+
+    /// <summary>
+    /// The effective visibility after <c>xsl:accept</c> rules from any <c>xsl:use-package</c>
+    /// have been applied. Used by the runtime to reject hidden/abstract attribute sets.
+    /// </summary>
+    public string? EffectiveVisibility { get; internal set; }
 
     public AttributeSetDefinition(string localName, string namespaceUri, string? useAttributeSets, XElement element, int importPrecedence)
     {

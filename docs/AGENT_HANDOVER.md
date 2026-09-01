@@ -1,5 +1,147 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-01
+**Commit:** *(work in progress; not yet committed)* — package cluster residual work (`package-101` override scope)
+**Current focus:** **XSLT `package` conformance cluster** — The W3C `package` cluster is now **159 passed / 1 failed / 3 skipped** (up from 152/8/3). Four incremental fixes landed: `assert-string-value` on raw XDM node/sequence results via `GetStringValue(XdmValue)` in the harness; `XTSE3008` for `xsl:use-package` in imported/included modules via a new `Stylesheet.IsPrincipalLevel` flag; `XPDY0002` for library-package global variables whose initializer needs a context item by evaluating them with absent focus when the source stylesheet is a non-principal package; and `xsl:original` for overridden attribute-sets by including used-package originals when an override's `use-attribute-sets` contains `xsl:original`. The remaining failure is `package-101`, where variable/function overrides from `xsl:override` are not visible inside used-package components that reference them; implementing that requires deeper override-scope propagation and `xsl:original` support for functions/variables and is tracked as the last known residual.
+**Expected state:** W3C `package` cluster **159 passed / 1 failed / 3 skipped**; W3C `accept` cluster **50 passed / 0 failed / 0 skipped**; W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full W3C XSLT sweep **7,618 passed / 112 failed / 6,870 skipped** (98.6% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,111/0/0).
+
+---
+
+## This Session Changes (XSLT `package` cluster residual work)
+
+1. **`assert-string-value` on raw XDM results** —
+   - `tests/Bosak.Xslt.Conformance/Program.cs` adds `GetStringValue(XdmValue)` so the harness can compare the string value of a raw node or sequence result for `assert-string-value` assertions.
+   - Header bumped: `tests/Bosak.Xslt.Conformance/Program.cs` → 3.34.
+
+2. **`XTSE3008` for `xsl:use-package` in imported/included modules** —
+   - `Stylesheet.IsPrincipalLevel` tracks whether the current module is the principal stylesheet module (top-level or via `xsl:include`) or an imported module.
+   - `Stylesheet.ProcessTopLevelElements` raises `XTSE3008` when `xsl:use-package` appears in a non-principal module.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.92.
+
+3. **`XPDY0002` for library-package global variables with context-item references** —
+   - Global variables whose initializer references the context item are now evaluated with an absent focus when their `SourceStylesheet` is a non-principal package.
+   - This ensures library-package globals that legitimately need a context item raise `XPDY0002` instead of silently using the wrong context.
+   - Header bumped: `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.34.
+
+4. **`xsl:original` for overridden attribute-sets** —
+   - When an overriding attribute-set's `use-attribute-sets` includes `xsl:original`, the effective attribute set now merges the used-package original definitions before the override definitions.
+   - This closes the attribute-set override residuals in the `package` cluster.
+
+5. **Known residual: `package-101`** —
+   - The remaining failure (`package-101`) requires variable and function overrides from `xsl:override` to be visible inside used-package components that reference them, plus `xsl:original` support for functions/variables.
+   - This is a larger change than the other fixes because it requires making used-package global scope see overrides and wiring `xsl:original` into function/global lookup.
+
+6. **Verification** —
+   - W3C `package` cluster: **159/1/3** (up from 152/8/3).
+   - W3C `use-package` cluster: **53/0/1** (no regression).
+   - W3C `declared-modes` cluster: **10/0/4** (no regression).
+   - W3C `accept` cluster: **50/0/0** (no regression).
+   - W3C `expose` cluster: **42/0/0** (no regression).
+   - Full W3C XSLT sweep: **7,618/112/6,870** (98.6% pass rate among runnable tests, up from 7,585/145/6,870).
+   - `dotnet test Bosak.sln`: **2,111/0/0**.
+
+---
+
+**Date:** 2026-08-31
+**Commit:** *(work in progress; not yet committed)* — `xsl:accept` visibility enforcement and runtime checks
+**Current focus:** **XSLT `xsl:accept` conformance cluster** — `Stylesheet` now validates `xsl:accept` rules against the components exported by used packages, applying the correct visibility (`public`/`private`/`final`/`abstract`/`hidden`) with rule-precedence resolution. `GetEffectiveAcceptRule` selects the most specific matching rule by component type and name specificity; `GetEffectiveVisibility` applies both `xsl:expose` rules from the used package and `xsl:accept` rules from the using package. Private used-package templates that are explicitly accepted as `private` are tracked via `TemplateRule.AcceptedBy` and remain visible to the accepting package in `IsTemplateVisible`. Runtime checks now raise `XTDE0040` for hidden/private named templates and `XTDE3052` for abstract functions, templates, variables, and attribute-sets. The W3C `accept` cluster now passes with **50/0/0**.
+**Expected state:** W3C `accept` cluster **50 passed / 0 failed / 0 skipped**; W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full W3C XSLT sweep **7,585 passed / 145 failed / 6,870 skipped** (98.1% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,111/0/0). *(Note: the full sweep reports 22 `accept` failures caused by intra-test-set interactions; the targeted cluster is clean.)*
+
+## This Session Changes (`xsl:accept` visibility enforcement and runtime checks)
+
+1. **`xsl:accept` static validation** —
+   - `Stylesheet.ValidateAcceptRules` / `ValidateAcceptRulesForPackage` checks every `xsl:accept` rule against the components exported by used packages.
+   - Raises `XTSE0010` for missing required attributes, `XTSE0020` for invalid `component` or `visibility` values, `XTSE3032` for `component="*"` with non-wildcard names, `XTSE3030` for named components that are not declared, `XTSE3040` for disallowed visibility increases, and `XTSE3050` / `XTSE3080` for abstract-visibility mismatches.
+   - `ValidateUsedPackageConflicts` detects conflicting visible components exported by multiple used packages when no `xsl:accept` rule resolves the conflict.
+   - `GetEffectiveAcceptRule` resolves rule precedence by name specificity (full name > partial wildcard > full wildcard), then component specificity (`component` match > `*`), then document order (later wins).
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.91.
+
+2. **`xsl:accept` runtime visibility** —
+   - `GetEffectiveVisibility` and `ApplyAcceptVisibility` apply the most specific matching `xsl:accept` rule only to public/final/abstract used-package components; private components remain private regardless of accept rules.
+   - Private templates accepted as `private` from a used package are tracked via `TemplateRule.AcceptedBy`; `IsTemplateVisible` lets them be called only by the owning package or the package that explicitly accepted them.
+   - `GetAllNamedTemplates` now merges `xsl:override` templates and filters hidden/abstract used-package templates; exported templates that are not explicitly accepted default to `private` for `xsl:initial-template`.
+   - `AttributeSetDefinition.EffectiveVisibility` enables runtime rejection of abstract attribute-sets.
+   - Headers bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.91; `src/Bosak.Xslt/Stylesheet/TemplateRule.cs` → 2.0; `src/Bosak.Xslt/Stylesheet/AttributeSetDefinition.cs` → 0.3.
+
+3. **Runtime error codes** —
+   - `TransformEngine.CallTemplate` checks `IsTemplateVisible` and raises `XTDE0040` for inaccessible named templates or `XTDE3052` for abstract named templates.
+   - `ExecuteXsltFunction` raises `XTDE3052` for abstract stylesheet functions.
+   - Global-variable lookup raises `XTDE3052` for abstract variables.
+   - Attribute-set evaluation raises `XTDE3052` for abstract attribute-sets.
+   - Initial-template selection respects `TemplateRule.EffectiveVisibility`, defaulting `xsl:initial-template` from a used package to `private` unless explicitly accepted.
+   - Header bumped: `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.51.
+
+4. **Verification** —
+   - W3C `accept` cluster: **50/0/0**.
+   - W3C `expose` cluster: **42/0/0** (no regression).
+   - W3C `use-package` cluster: **53/0/1** (no regression).
+   - W3C `declared-modes` cluster: **10/0/4** (no regression).
+   - Full W3C XSLT sweep: **7,585/145/6,870** (98.1% pass rate among runnable tests, up from 7,560/170/6,870).
+   - `dotnet test Bosak.sln`: **2,111/0/0**.
+
+---
+
+**Date:** 2026-08-31
+**Commit:** *(work in progress; not yet committed)* — `xsl:expose` static validation / runtime visibility
+**Current focus:** **XSLT `xsl:expose` conformance cluster** — `Stylesheet` now parses and validates `xsl:expose` declarations on `xsl:package` roots. Static validation raises `XTSE0020`, `XTSE3010`, `XTSE3020`, `XTSE3022`, and `XTSE3025` for malformed or invalid expose rules. Runtime visibility (`GetExposedVisibility`) and package export (`IsExportedFromPackage`) apply expose rules so that only exposed public/final components are visible to using packages. Match-only templates inherit the visibility of their mode when no explicit `@visibility` is present. A regression in `use-package` caused by the new visibility logic (templates defaulting to private in packages) was fixed by treating public/final modes as public for match-only templates. The W3C `expose` cluster now passes with **42/0/0** and `use-package` is back to **53/0/1**.
+**Expected state:** W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full W3C XSLT sweep **7,560 passed / 170 failed / 6,870 skipped** (97.8% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,111/0/0).
+
+## This Session Changes (`xsl:expose` static validation, runtime visibility, and regression fix)
+
+1. **`xsl:expose` parsing and static validation** —
+   - `ExposeRule` and `ExposeName` model expose rules with component type, name patterns (including wildcards), and visibility.
+   - `Stylesheet.ParseExposeRules` parses `xsl:expose` children of `xsl:package` roots.
+   - `ValidateExposeRules` checks that `xsl:expose` appears only on packages, that `component`/`visibility` values are valid, that every named component is declared (`XTSE3020`), that partial-wildcard rules match at least one component, and that conflicting rules and invalid visibilities raise `XTSE3022`/`XTSE3025`.
+   - `GetAllExposableComponents` enumerates all components that can be exposed (templates, functions, variables, params, modes, attribute-sets, keys, decimal-formats, namespace-aliases, character-maps, outputs, accumulators, etc.) with expanded names and function arities.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.89.
+
+2. **`xsl:expose` runtime visibility** —
+   - `GetExposedVisibility` looks up the effective visibility for a component based on matching expose rules.
+   - `IsExportedFromPackage` overloads now use exposed visibility (falling back to declared visibility) to decide whether a component is visible to using packages.
+   - `GetEffectiveVisibility` applies both `xsl:expose` (used package) and `xsl:accept` (using package) rules.
+   - Match-only templates inherit public/final visibility from a public/final mode, fixing `use-package-150/151/161/170/171/173`.
+   - `TransformEngine.ExecuteXsltFunction` throws `XTDE3052` for `visibility="abstract"` functions, fixing `use-package-295`.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.89; `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.49.
+
+3. **Conformance harness package metadata fallback** —
+   - `tests/Bosak.Xslt.Conformance/Program.cs` reads `@name` and `@package-version` from the package document when the catalog test case omits them, fixing `expose-008`/`expose-009` registration.
+   - Header bumped: `tests/Bosak.Xslt.Conformance/Program.cs` → 3.33.
+
+4. **Unit test fix** —
+   - `tests/Bosak.Xslt.Tests/StylesheetTests.Package_Root_IsRecognized` now declares `<xsl:mode/>` so the package-root test continues to pass under strict declared-modes validation.
+   - Header bumped: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` → 0.89.
+
+5. **Verification** —
+   - W3C `expose` cluster: **42/0/0**.
+   - W3C `use-package` cluster: **53/0/1** (regression fixed).
+   - W3C `declared-modes` cluster: **10/0/4** (no regression).
+   - Full W3C XSLT sweep: **7,560/170/6,870** (97.8% pass rate among runnable tests, up from 7,523/207/6,870 before the `xsl:expose` fix).
+   - `dotnet test Bosak.sln`: **2,111/0/0**.
+
+---
+
+**Date:** 2026-08-31
+**Commit:** *(work in progress; not yet committed)* — `declared-modes` / `XTSE3085` validation
+**Current focus:** **XSLT `declared-modes` conformance cluster** — `Stylesheet.ValidateModeDefinitions` now enforces `xsl:package/@declared-modes="yes"` by checking that every mode used inside a package is declared. The check covers `xsl:template/@mode`, `xsl:apply-templates/@mode`, and implicit unnamed/default mode usages across the package's root stylesheet and its imports/includes; explicit `#default`/`#unnamed` are normalized to the unnamed mode, while `#current` and `#all` are ignored. Modes accepted from used packages (public/final) are also considered declared, so cross-package mode references continue to work.
+**Expected state:** W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full XSLT sweep **7,523 / 207 / 6,870** (97.3% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,104/0/0); no new failures in `declared-modes` or `use-package` clusters.
+
+## This Session Changes (`declared-modes` / `XTSE3085` validation)
+
+1. **Per-package declared-mode check** —
+   - `Stylesheet.ValidateModeDefinitions` now, when the root stylesheet is a package with `declared-modes` enabled, collects every mode used in the package and verifies it is declared.
+   - `CollectUsedModes` walks the package tree (root + imports + includes, not used packages) and gathers mode references from `xsl:template/@mode` and `xsl:apply-templates/@mode`. Missing `@mode` on a matching template or on `xsl:apply-templates` is treated as the package's default mode (usually the unnamed mode). Multi-token template mode lists are split.
+   - `CollectUsedModeToken` normalizes `#default`/`#unnamed` to the empty string and ignores `#current`/`#all`. Prefixed names are expanded to Clark notation.
+   - `CollectDeclaredModes` gathers `xsl:mode` declarations across the package tree and also accepts public/final modes from used packages so that cross-package mode usage remains valid.
+   - Header bumped: `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.88.
+
+2. **Verification** —
+   - Target `declared-modes` set: `declared-modes-001` through `declared-modes-008` and `declared-modes-013/014` PASS (10/0/4; skips are intentional harness skips for `declared-modes="no"` cases).
+   - Regression check `use-package`: all 53 runnable tests PASS (53/0/1); specifically `use-package-170` through `use-package-173` continue to pass because accepted used-package modes are treated as declared.
+   - Full W3C XSLT 3.0 sweep: **7,523 passed / 207 failed / 6,870 skipped** (97.3% of runnable tests pass). No failures in `declared-modes` or `use-package` clusters.
+   - `dotnet test Bosak.sln` passes (2,104 unit tests / 0 failed / 0 skipped).
+
+---
+
 **Date:** 2026-08-31
 **Commit:** de3146b582bde6fe4b9f2e09bff0c00580002725 — REQ-073: Richer XSLT document symbols / outline
 **Current focus:** **REQ-073 Richer XSLT document symbols / outline** — `DocumentSymbolHandler` now produces outline symbols for all top-level XSLT declarations requested in REQ-073: templates (named and matched), functions, variables, parameters, attribute-sets, keys, and output declarations. It also continues to cover imports/includes, modes, decimal formats, character maps, and accumulators. The `xsl:output` symbol now includes the serialization method (e.g., **output (html)**) when present. New unit tests verify every requested declaration type.

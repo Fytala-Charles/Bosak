@@ -155,6 +155,16 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.87  | 30-08-2026     | Filter used-package private components; only accepted-as-private are visible in package scope |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.88  | 31-08-2026     | XTSE3085 validation for undeclared modes in packages                                  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.89  | 31-08-2026     | xsl:expose partial-wildcard validation; skip default mode in declared-modes check       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.90  | 31-08-2026     | Mode-aware template visibility; fixes use-package regressions for public-mode rules   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.91  | 31-08-2026     | Fix xsl:expose component="*" wildcard-name validation (XTSE3025/3010)                  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.92  | 31-08-2026     | XTSE3008 validation for xsl:use-package in imported modules; add IsPrincipalLevel flag |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -190,6 +200,7 @@ public sealed class Stylesheet
     private readonly List<Stylesheet> _includes = new();
     private readonly List<Stylesheet> _usedPackages = new();
     private readonly Dictionary<Stylesheet, PackageUseOptions?> _usedPackageOptions = new();
+    private readonly List<ExposeRule> _exposeRules = new();
     private readonly List<KeyDefinition> _keyDefinitions = new();
     private readonly List<AccumulatorDefinition> _accumulators = new();
     private readonly List<XElement> _globalVariables = new();
@@ -538,7 +549,7 @@ public sealed class Stylesheet
         return dict;
     }
 
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest)
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true)
     {
         _document = document;
         _baseUri = baseUri;
@@ -550,6 +561,7 @@ public sealed class Stylesheet
         _externalStaticParameters = externalStaticParameters ?? EmptyExternalStaticParameters;
         _rootStylesheet = rootStylesheet ?? this;
         _packageVersionResolutionStrategy = packageVersionResolutionStrategy;
+        IsPrincipalLevel = isPrincipalLevel;
 
         // Add this stylesheet's own URI to the resolved set for circular-reference detection
         if (!string.IsNullOrEmpty(baseUri))
@@ -641,6 +653,13 @@ public sealed class Stylesheet
     /// <summary>The package root that owns this module, or null for non-package stylesheets.</summary>
     public Stylesheet? OwningPackage { get; private set; }
 
+    /// <summary>
+    /// Whether this module is at the same stylesheet level as its principal stylesheet module
+    /// (the principal module itself and any modules reached by xsl:include). Modules reached by
+    /// xsl:import are at a lower stylesheet level.
+    /// </summary>
+    public bool IsPrincipalLevel { get; private set; } = true;
+
     /// <summary>The value of the xsl:global-context-item/@as attribute, or null if absent.</summary>
     public string? GlobalContextItemAs { get; private set; }
 
@@ -702,29 +721,15 @@ public sealed class Stylesheet
                         var (local, nsUri) = string.IsNullOrEmpty(rule.Name)
                             ? (null, null)
                             : ExpandVariableName(rule.Element, rule.Name);
-                        string? effectiveVis = null;
-                        if (options != null)
-                        {
-                            foreach (var acceptRule in options.AcceptRules)
-                            {
-                                if (acceptRule.Component != "template" && acceptRule.Component != "*")
-                                    continue;
-                                if (acceptRule.Matches(local, nsUri))
-                                {
-                                    effectiveVis = acceptRule.Visibility;
-                                    break;
-                                }
-                            }
-                        }
-                        rule.EffectiveVisibility = effectiveVis ?? "public";
-                        if (rule.EffectiveVisibility is not "public" and not "final" && rule.Name != "xsl:initial-template")
+                        rule.EffectiveVisibility = GetEffectiveVisibility(package, rule.Element, "template", options, local, nsUri);
+                        if (rule.EffectiveVisibility is not "public" and not "final")
                             continue;
                         yield return rule;
                     }
 
                     foreach (var rule in overrideRules)
                     {
-                        rule.EffectiveVisibility = GetLocalVisibility(rule.Element, "template", IsPackage);
+                        rule.EffectiveVisibility = GetExposedVisibility("template", rule.Name, null) ?? GetLocalVisibility(rule.Element, "template", this);
                         yield return rule;
                     }
                 }
@@ -733,7 +738,10 @@ public sealed class Stylesheet
             {
                 foreach (var rule in rules)
                 {
-                    rule.EffectiveVisibility = GetLocalVisibility(rule.Element, "template", IsPackage);
+                    var (local, nsUri) = string.IsNullOrEmpty(rule.Name)
+                            ? (null, null)
+                            : ExpandVariableName(rule.Element, rule.Name);
+                    rule.EffectiveVisibility = GetExposedVisibility("template", local, nsUri) ?? GetLocalVisibility(rule.Element, "template", this);
                     yield return rule;
                 }
             }
@@ -773,49 +781,92 @@ public sealed class Stylesheet
         foreach (var imported in _imports)
         {
             foreach (var (name, rule) in imported.GetAllNamedTemplates())
+            {
                 result[name] = rule;
+                rule.EffectiveVisibility = imported.GetExposedVisibility("template", rule.Name, null) ?? GetLocalVisibility(rule.Element, "template", imported);
+            }
         }
 
         // Included next (same precedence)
         foreach (var included in _includes)
         {
             foreach (var (name, rule) in included.GetAllNamedTemplates())
+            {
                 result[name] = rule;
+                rule.EffectiveVisibility = included.GetExposedVisibility("template", rule.Name, null) ?? GetLocalVisibility(rule.Element, "template", included);
+            }
         }
 
         // Used packages next: only exported components are visible.
         foreach (var package in _usedPackages)
         {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+
+            // xsl:override template definitions take precedence over used-package templates.
+            foreach (var overrideElem in options?.OverrideTemplates ?? Enumerable.Empty<XElement>())
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                foreach (var rule in TemplateRule.FromElement(overrideElem, this))
+                {
+                    rule.EffectiveVisibility = GetExposedVisibility("template", rule.Name, null) ?? GetLocalVisibility(rule.Element, "template", this);
+                    result[nameAttr] = rule;
+                }
+            }
+
             foreach (var (name, rule) in package.GetAllNamedTemplates())
             {
-                if (IsExportedFromPackage(package, rule))
-                    result[name] = rule;
+                if (!IsExportedFromPackage(package, rule))
+                    continue;
+                var (local, ns) = string.IsNullOrEmpty(rule.Name) ? (null, null) : ExpandVariableName(rule.Element, rule.Name);
+                var exposed = package.GetExposedVisibility("template", local, ns);
+                var baseVisibility = exposed ?? GetLocalVisibility(rule.Element, "template", package);
+                var effectiveRule = GetEffectiveAcceptRule(options, "template", local, ns, -1);
+                rule.EffectiveVisibility = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility("template", local, ns, baseVisibility);
+                // Private templates from a used package are visible only to the owning
+                // package itself or to the package that explicitly accepted them as private.
+                if (rule.EffectiveVisibility == "private" && effectiveRule != null)
+                    rule.AcceptedBy = this;
+                // Include public/final templates and private templates from used packages.
+                // Hidden and abstract templates are invisible. xsl:initial-template is
+                // included even when private so the initial-template selection can raise
+                // XTDE0040 when it is not explicitly accepted.
+                var eff = rule.EffectiveVisibility ?? "private";
+                if (eff is "hidden" or "abstract")
+                    continue;
+                result[name] = rule;
             }
         }
 
         // Local last (highest precedence)
         foreach (var (name, rule) in _namedTemplates)
+        {
+            var (local, ns) = string.IsNullOrEmpty(rule.Name) ? (null, null) : ExpandVariableName(rule.Element, rule.Name);
+            rule.EffectiveVisibility = GetExposedVisibility("template", local, ns) ?? GetLocalVisibility(rule.Element, "template", this);
             result[name] = rule;
+        }
 
         return result;
     }
 
     /// <summary>
     /// Returns true when a used-package component was explicitly accepted with
-    /// <c>private</c> or <c>hidden</c> visibility by the using package.
+    /// <c>private</c> visibility by the using package. Components accepted as <c>hidden</c>
+    /// are not visible anywhere in the using package.
     /// </summary>
-    private static bool IsAcceptedAsPrivate(PackageUseOptions? options, string componentType, string? localName, string? namespaceUri)
+    private static bool IsAcceptedAsPrivate(PackageUseOptions? options, string componentType, string? localName, string? namespaceUri, int arity = -1)
     {
         if (options == null)
             return false;
 
         foreach (var rule in options.AcceptRules)
         {
-            if (rule.Visibility is not "private" and not "hidden")
+            if (rule.Visibility != "private")
                 continue;
             if (rule.Component != componentType && rule.Component != "*")
                 continue;
-            if (rule.Matches(localName, namespaceUri))
+            if (rule.Matches(localName, namespaceUri, arity))
                 return true;
         }
 
@@ -824,45 +875,70 @@ public sealed class Stylesheet
 
     /// <summary>
     /// Returns true when the given component is visible outside its declaring package.
-    /// Imports and includes are always visible; used packages filter by visibility.
+    /// Imports and includes are always visible; used packages filter by visibility
+    /// and by any <c>xsl:expose</c> declarations on the package root.
     /// </summary>
     private static bool IsExportedFromPackage(Stylesheet package, TemplateRule rule)
     {
         if (!package.IsPackage) return true;
-        var name = rule.Name;
-        var visibility = rule.Visibility;
-        // xsl:initial-template is implicitly public in any package.
-        if (name == "xsl:initial-template")
-            return true;
-        return visibility is "public" or "final";
+        var (local, ns) = string.IsNullOrEmpty(rule.Name) ? (null, null) : ExpandVariableName(rule.Element, rule.Name);
+        var exposed = package.GetExposedVisibility("template", local, ns);
+        var effective = exposed ?? GetLocalVisibility(rule.Element, "template", package);
+        return effective is "public" or "final";
     }
 
     /// <summary>
     /// Returns true when the given component is visible outside its declaring package.
-    /// Imports and includes are always visible; used packages filter by visibility.
+    /// Imports and includes are always visible; used packages filter by visibility
+    /// and by any <c>xsl:expose</c> declarations on the package root.
     /// </summary>
     private static bool IsExportedFromPackage(Stylesheet package, XsltFunctionDefinition def)
     {
         if (!package.IsPackage) return true;
-        return def.Visibility is "public" or "final";
+        var exposed = package.GetExposedVisibility("function", def.LocalName, def.NamespaceUri, def.Arity);
+        var effective = exposed ?? def.Visibility;
+        return effective is "public" or "final";
     }
 
     /// <summary>
     /// Returns true when the given top-level element is visible outside its declaring package.
-    /// Imports and includes are always visible; used packages filter by visibility.
+    /// Imports and includes are always visible; used packages filter by visibility
+    /// and by any <c>xsl:expose</c> declarations on the package root.
     /// </summary>
     private static bool IsExportedFromPackage(Stylesheet package, XElement element)
     {
         if (!package.IsPackage) return true;
-        var visibility = element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
-        return visibility is "public" or "final";
+        var (componentType, localName, namespaceUri) = GetElementComponentIdentity(element);
+        var exposed = package.GetExposedVisibility(componentType, localName, namespaceUri);
+        var effective = exposed ?? GetLocalVisibility(element, componentType, package.IsPackage);
+        return effective is "public" or "final";
+    }
+
+    /// <summary>
+    /// Extracts the component type and expanded name for common named top-level XSLT
+    /// elements, used when applying <c>xsl:expose</c> visibility rules.
+    /// </summary>
+    private static (string ComponentType, string? LocalName, string? NamespaceUri) GetElementComponentIdentity(XElement element)
+    {
+        var componentType = element.Name.LocalName;
+        string? localName = null;
+        string? namespaceUri = null;
+        if (componentType is "variable" or "param" or "attribute-set" or "key" or "decimal-format"
+            or "namespace-alias" or "character-map" or "output" or "strip-space" or "preserve-space")
+        {
+            var nameAttr = element.Attribute("name")?.Value;
+            if (!string.IsNullOrEmpty(nameAttr))
+                (localName, namespaceUri) = ExpandVariableName(element, nameAttr);
+        }
+        return (componentType, localName, namespaceUri);
     }
 
     /// <summary>
     /// Returns the effective visibility of a used-package component after applying any
-    /// matching <c>xsl:accept</c> rule from the using package. If no accept rule matches,
-    /// the component keeps its original visibility. For non-package stylesheets the
-    /// effective visibility is always <c>public</c>.
+    /// matching <c>xsl:accept</c> rule from the using package and any <c>xsl:expose</c>
+    /// rules from the used package. If no rule matches, the component keeps its
+    /// original declared visibility. For non-package stylesheets the effective visibility
+    /// is always <c>public</c>.
     /// </summary>
     private static string? GetEffectiveVisibility(
         Stylesheet package,
@@ -870,48 +946,56 @@ public sealed class Stylesheet
         string componentType,
         PackageUseOptions? options,
         string? localName,
-        string? namespaceUri)
+        string? namespaceUri,
+        int arity = -1)
     {
         if (!package.IsPackage)
             return "public";
 
+        var exposed = package.GetExposedVisibility(componentType, localName, namespaceUri, arity);
+        var baseVisibility = exposed ?? GetLocalVisibility(componentElement, componentType, package);
+
         if (options != null)
         {
-            foreach (var rule in options.AcceptRules)
+            if (baseVisibility != "private")
             {
-                if (rule.Component != componentType && rule.Component != "*")
-                    continue;
-                if (rule.Matches(localName, namespaceUri))
-                    return rule.Visibility;
+                var effectiveRule = GetEffectiveAcceptRule(options, componentType, localName, namespaceUri, arity);
+                if (effectiveRule != null)
+                    return effectiveRule.Visibility;
             }
+
+            // xsl:initial-template from a used package is only visible to the using package
+            // when explicitly accepted as public/final. The package-local default is private
+            // from the using package's perspective (accept-913/914).
+            if (componentType == "template" && localName == "initial-template" && namespaceUri == XslNamespace)
+                return "private";
         }
 
-        // If no accept rule matches, the component keeps its original declared visibility.
-        return GetLocalVisibility(componentElement, componentType, package.IsPackage);
+        return baseVisibility;
     }
 
     /// <summary>
-    /// Applies any matching <c>xsl:accept</c> rule to the supplied current visibility.
-    /// Returns the supplied visibility unchanged if no accept rule matches.
+    /// Applies the most specific matching <c>xsl:accept</c> rule to the supplied current
+    /// visibility. Returns the supplied visibility unchanged if no accept rule matches.
     /// </summary>
     private static string? ApplyAcceptVisibility(
         string? currentVisibility,
         PackageUseOptions? options,
         string componentType,
         string? localName,
-        string? namespaceUri)
+        string? namespaceUri,
+        int arity = -1)
     {
-        if (options != null)
-        {
-            foreach (var rule in options.AcceptRules)
-            {
-                if (rule.Component != componentType && rule.Component != "*")
-                    continue;
-                if (rule.Matches(localName, namespaceUri))
-                    return rule.Visibility;
-            }
-        }
-        return currentVisibility;
+        if (options == null)
+            return currentVisibility;
+
+        // Accept rules only apply to components that are visible in the used package.
+        // Private components remain private regardless of any matching accept rule.
+        if (currentVisibility == "private")
+            return "private";
+
+        var effectiveRule = GetEffectiveAcceptRule(options, componentType, localName, namespaceUri, arity);
+        return effectiveRule?.Visibility ?? currentVisibility;
     }
 
     /// <summary>
@@ -932,11 +1016,25 @@ public sealed class Stylesheet
         if (effective is "public" or "final")
             return true;
 
-        // xsl:initial-template is implicitly public in any package.
-        if (componentType == "template" && localName == "xsl:initial-template")
-            return true;
+        // xsl:initial-template from a used package is only visible when explicitly
+        // accepted as public/final; otherwise it defaults to private.
+        if (componentType == "template" && localName == "initial-template" && namespaceUri == XslNamespace)
+            return false;
 
         return false;
+    }
+
+    /// <summary>
+    /// Returns the original visibility of a component declared locally in a stylesheet.
+    /// Package components default to private; non-package stylesheets default to public.
+    /// For template rules the visibility is mode-aware: match-only templates inherit the
+    /// visibility of the mode they belong to.
+    /// </summary>
+    private static string? GetLocalVisibility(XElement element, string componentType, Stylesheet stylesheet)
+    {
+        if (componentType == "template")
+            return GetTemplateLocalVisibility(element, stylesheet);
+        return GetLocalVisibility(element, componentType, stylesheet.IsPackage);
     }
 
     /// <summary>
@@ -951,9 +1049,47 @@ public sealed class Stylesheet
         var vis = element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
         if (string.IsNullOrEmpty(vis))
             vis = "private";
-        if (componentType == "template" && element.Attribute("name")?.Value == "xsl:initial-template")
-            vis = "public";
         return vis;
+    }
+
+    /// <summary>
+    /// Returns the local visibility of a template rule. A named template uses its declared
+    /// visibility (defaulting to private in a package). A match-only template inherits the
+    /// visibility of the most visible mode it participates in; if it belongs to a public or
+    /// final mode it is itself public/final. This mirrors XSLT 3.0 package visibility rules
+    /// so that templates in exported modes are not hidden by the package-private default.
+    /// </summary>
+    private static string? GetTemplateLocalVisibility(XElement element, Stylesheet stylesheet)
+    {
+        var vis = element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
+        if (!string.IsNullOrEmpty(vis))
+            return vis;
+
+        if (!stylesheet.IsPackage)
+            return "public";
+
+        // Named-only templates default to private in a package.
+        var match = element.Attribute("match")?.Value;
+        if (string.IsNullOrEmpty(match))
+            return "private";
+
+        // Match-only templates take their visibility from the modes they participate in.
+        var modeAttr = element.Attribute("mode")?.Value;
+        var modes = TemplateRule.ParseModes(modeAttr, element, stylesheet.DefaultMode);
+        foreach (var mode in modes)
+        {
+            if (mode == "#all" || mode == "#current")
+                continue;
+            var modeDef = stylesheet.GetModeDefinition(mode);
+            if (modeDef != null)
+            {
+                var modeVis = modeDef.Visibility.ToString().ToLowerInvariant();
+                if (modeVis is "public" or "final")
+                    return modeVis;
+            }
+        }
+
+        return "private";
     }
 
     /// <summary>
@@ -1036,6 +1172,10 @@ public sealed class Stylesheet
         // Expand a shadow version attribute before the effective version is determined.
         ExpandShadowAttribute(root, "version");
 
+        // Expand a shadow package-version attribute before validating the package version.
+        if (IsPackage)
+            ExpandShadowAttribute(root, "package-version");
+
         // Required version attribute (XTSE0010)
         var versionAttr = root.Attribute("version");
         if (versionAttr == null || string.IsNullOrWhiteSpace(versionAttr.Value))
@@ -1047,6 +1187,29 @@ public sealed class Stylesheet
 
         Version = versionValue;
 
+        // Validate xsl:package/@package-version after any shadow expansion.
+        if (IsPackage)
+        {
+            var packageVersionAttr = root.Attribute("package-version");
+            if (packageVersionAttr != null)
+            {
+                var pv = packageVersionAttr.Value.Trim();
+                if (string.IsNullOrEmpty(pv))
+                    throw new InvalidOperationException("XTSE0090: The package-version attribute must not be empty.");
+                try
+                {
+                    var parsed = Api.PackageVersion.Parse(pv);
+                    if (parsed.IsEmpty)
+                        throw new InvalidOperationException("XTSE0090: The package-version attribute must not be empty.");
+                }
+                catch
+                {
+                    throw new InvalidOperationException($"XTSE0090: Invalid package-version '{pv}'.");
+                }
+                PackageVersion = pv;
+            }
+        }
+
         // Parse xsl:stylesheet/@input-type-annotations (strip, preserve, or unspecified).
         var inputTypeAnnotationsAttr = root.Attribute("input-type-annotations")?.Value?.Trim()?.ToLowerInvariant();
         if (!string.IsNullOrEmpty(inputTypeAnnotationsAttr))
@@ -1056,9 +1219,17 @@ public sealed class Stylesheet
             InputTypeAnnotations = inputTypeAnnotationsAttr;
         }
 
-        // Parse xsl:declared-modes on stylesheet/package root
+        // Parse xsl:declared-modes on stylesheet/package root. The attribute is an
+        // xs:boolean, so "yes"/"true"/"1" enables the check and "no"/"false"/"0"
+        // disables it. For xsl:package the default is "yes"; for xsl:stylesheet it
+        // is "no".
         var declaredModesAttr = root.Attribute("declared-modes")?.Value?.Trim()?.ToLowerInvariant();
-        DeclaredModes = declaredModesAttr != "no";
+        DeclaredModes = declaredModesAttr switch
+        {
+            "no" or "false" or "0" => false,
+            "yes" or "true" or "1" or null or "" => true,
+            _ => throw new InvalidOperationException($"XTSE0020: Invalid value '{declaredModesAttr}' for @declared-modes. Must be yes/no/true/false/0/1.")
+        };
 
         // Parse xsl:default-mode on stylesheet root
         var defaultModeAttr = root.Attribute("default-mode")?.Value?.Trim() ?? "";
@@ -1163,6 +1334,12 @@ public sealed class Stylesheet
         // xsl:template) now that the static context is fully built.
         ExpandAllShadowAttributes(root);
 
+        // Parse top-level xsl:expose declarations on a package root.
+        foreach (var expose in root.Elements(XName.Get("expose", XslNamespace)))
+        {
+            _exposeRules.Add(ParseExposeRule(expose));
+        }
+
         // Parse top-level xsl:param declarations
         foreach (var param in root.Elements(XName.Get("param", XslNamespace)))
         {
@@ -1233,7 +1410,7 @@ public sealed class Stylesheet
         foreach (var mode in root.Elements(XName.Get("mode", XslNamespace)))
         {
             if (!UseWhen(mode)) continue;
-            var def = ModeDefinition.FromElement(mode);
+            var def = ModeDefinition.FromElement(mode, IsPackage);
             if (def != null)
                 localModes.Add(def);
         }
@@ -1428,6 +1605,16 @@ public sealed class Stylesheet
         if (_isRootStylesheet)
             ValidateAttributeSetCircularity();
 
+        // XTSE3060: an xsl:override must not override a final component from a used package.
+        if (_isRootStylesheet)
+        {
+            ValidateAttributeSetOverrides();
+            ValidateVariableOverrides();
+            ValidateFunctionOverrides();
+            ValidateModeOverrides();
+            ValidateTemplateOverrides();
+        }
+
         // Static validation: check for disallowed attributes and children on XSLT instructions
         ValidateInstructionTree(root);
 
@@ -1454,6 +1641,16 @@ public sealed class Stylesheet
 
             // XTSE0265: conflicting xsl:stylesheet/@input-type-annotations values across modules.
             ValidateInputTypeAnnotations();
+
+            // Validate xsl:expose rules against the components declared in this package.
+            ValidateExposeRules();
+
+            // Validate xsl:accept rules against the components declared in used packages.
+            ValidateAcceptRules();
+
+            // Detect conflicting visible components exported by multiple used packages
+            // when no xsl:accept rule hides one of them.
+            ValidateUsedPackageConflicts();
         }
     }
 
@@ -1509,6 +1706,12 @@ public sealed class Stylesheet
             }
             else if (ns == XslNamespace && localName == "use-package")
             {
+                // XTSE3008: xsl:use-package is only allowed at the same stylesheet level as the
+                // principal stylesheet module of the package. Modules reached by xsl:import are
+                // at a lower level and cannot contain xsl:use-package.
+                if (!IsPrincipalLevel)
+                    throw new InvalidOperationException("XTSE3008: xsl:use-package is not allowed in a stylesheet module that is not at the same stylesheet level as the principal stylesheet module of the package.");
+
                 if (UseWhen(child))
                 {
                     var name = child.Attribute("name")?.Value;
@@ -3278,7 +3481,7 @@ public sealed class Stylesheet
         var allAttrSets = GetAllAttributeSets();
         foreach (var (localName, nsUri, rawName) in ParseUseAttributeSetNames(element, rawValue, construct))
         {
-            if (!allAttrSets.ContainsKey((localName, nsUri)))
+            if (!allAttrSets.TryGetValue((localName, nsUri), out var defs) || defs.Count == 0)
                 throw new InvalidOperationException($"XTSE0710: Attribute set '{rawName}' referenced by {construct} is not defined.");
         }
     }
@@ -3347,6 +3550,54 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Returns whether any token in a <c>use-attribute-sets</c> value is the special
+    /// <c>xsl:original</c> reference used inside <c>xsl:override</c>.
+    /// </summary>
+    private static bool UseAttributeSetsReferencesOriginal(XElement context, string? rawValue)
+    {
+        if (string.IsNullOrWhiteSpace(rawValue))
+            return false;
+
+        foreach (var token in rawValue.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var trimmed = token.Trim();
+            if (string.IsNullOrEmpty(trimmed))
+                continue;
+
+            string nsUri;
+            string localName;
+            if (trimmed.Length > 2 && trimmed[0] == 'Q' && trimmed[1] == '{')
+            {
+                int closeBrace = trimmed.IndexOf('}');
+                if (closeBrace < 2 || closeBrace == trimmed.Length - 1)
+                    continue;
+                nsUri = trimmed.Substring(2, closeBrace - 2);
+                localName = trimmed.Substring(closeBrace + 1);
+            }
+            else
+            {
+                int colon = trimmed.IndexOf(':');
+                if (colon >= 0)
+                {
+                    var prefix = trimmed.Substring(0, colon);
+                    localName = trimmed.Substring(colon + 1);
+                    nsUri = context.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                }
+                else
+                {
+                    localName = trimmed;
+                    nsUri = "";
+                }
+            }
+
+            if (localName == "original" && nsUri == XslNamespace)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Detects direct or indirect circular references among <c>xsl:attribute-set</c>
     /// declarations via their <c>use-attribute-sets</c> attributes (XTSE0720).
     /// </summary>
@@ -3395,6 +3646,152 @@ public sealed class Stylesheet
 
         foreach (var name in dependencies.Keys)
             Visit(name);
+    }
+
+    /// <summary>
+    /// Validates that no <c>xsl:override</c> attribute-set tries to override a used-package
+    /// attribute-set that is exposed as <c>final</c>. Raises <c>XTSE3060</c> when such an
+    /// override is detected.
+    /// </summary>
+    private void ValidateAttributeSetOverrides()
+    {
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            if (options == null)
+                continue;
+            var packageSets = package.GetAllAttributeSets();
+            foreach (var overrideElem in options.OverrideAttributeSets)
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
+                if (!packageSets.TryGetValue((local, ns), out var defs))
+                    continue;
+                foreach (var def in defs)
+                {
+                    var exposed = package.GetExposedVisibility("attribute-set", local, ns);
+                    var effective = exposed ?? GetLocalVisibility(def.Element, "attribute-set", package.IsPackage);
+                    if (effective == "final")
+                        throw new InvalidOperationException($"XTSE3060: Cannot override final attribute-set '{nameAttr}'.");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates that no <c>xsl:override</c> variable or parameter tries to override a
+    /// used-package variable or parameter that is exposed as <c>final</c>.
+    /// Raises <c>XTSE3060</c> when such an override is detected.
+    /// </summary>
+    private void ValidateVariableOverrides()
+    {
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            if (options == null)
+                continue;
+            foreach (var overrideElem in options.OverrideVariables.Concat(options.OverrideParams))
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
+                if (!package.TryGetVariableElement(local, ns, out var element) || element == null)
+                    continue;
+                var exposed = package.GetExposedVisibility("variable", local, ns);
+                var effective = exposed ?? GetLocalVisibility(element, "variable", package.IsPackage);
+                if (effective == "final")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override final variable '{nameAttr}'.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates that no <c>xsl:override</c> function tries to override a used-package
+    /// function that is exposed as <c>final</c>. Raises <c>XTSE3060</c> when such an
+    /// override is detected.
+    /// </summary>
+    private void ValidateFunctionOverrides()
+    {
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            if (options == null)
+                continue;
+            foreach (var overrideElem in options.OverrideFunctions)
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
+                var arity = overrideElem.Elements(XName.Get("param", XslNamespace)).Count();
+                if (!package.TryFindFunction(local, ns, arity, out var def) || def == null)
+                    continue;
+                var exposed = package.GetExposedVisibility("function", local, ns, arity);
+                var effective = exposed ?? def.Visibility;
+                if (effective == "final")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override final function '{nameAttr}'.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates that no <c>xsl:override</c> mode tries to override a used-package
+    /// mode that is exposed as <c>final</c>. Raises <c>XTSE3060</c> when such an
+    /// override is detected.
+    /// </summary>
+    private void ValidateModeOverrides()
+    {
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            if (options == null)
+                continue;
+            foreach (var overrideElem in options.OverrideModes)
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                var expanded = ExpandModeNameForExpose(nameAttr, overrideElem);
+                if (!package.TryGetMode(expanded, out var mode) || mode == null)
+                    continue;
+                var exposed = package.GetExposedVisibility("mode", mode.Name, null);
+                var element = package.FindModeElement(expanded);
+                var effective = exposed ?? GetLocalVisibility(element, "mode", package.IsPackage);
+                if (effective == "final")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override final mode '{nameAttr}'.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validates that no <c>xsl:override</c> template tries to override a used-package
+    /// named template that is exposed as <c>final</c>. Raises <c>XTSE3060</c> when such
+    /// an override is detected.
+    /// </summary>
+    private void ValidateTemplateOverrides()
+    {
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            if (options == null)
+                continue;
+            foreach (var overrideElem in options.OverrideTemplates)
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
+                if (!package.TryFindNamedTemplate(local, ns, out var rule) || rule == null)
+                    continue;
+                var exposed = package.GetExposedVisibility("template", local, ns);
+                var effective = exposed ?? GetLocalVisibility(rule.Element, "template", package);
+                if (effective == "final")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override final template '{nameAttr}'.");
+            }
+        }
     }
 
     /// <summary>
@@ -3951,26 +4348,170 @@ public sealed class Stylesheet
     {
         public string Component { get; }
         public string Visibility { get; }
-        public IReadOnlyList<(string? NamespaceUri, string LocalName)> Names { get; }
-        public bool IsWildcard => Names.Count == 1 && Names[0].NamespaceUri == null && Names[0].LocalName == "*";
+        public IReadOnlyList<AcceptName> Names { get; }
+        public bool IsWildcard => Names.Count == 1 && Names[0].IsWildcard;
 
-        public AcceptRule(string component, string visibility, IEnumerable<(string? NamespaceUri, string LocalName)> names)
+        public AcceptRule(string component, string visibility, IEnumerable<AcceptName> names)
         {
             Component = component;
             Visibility = visibility;
             Names = names.ToList();
         }
 
-        public bool Matches(string? localName, string? namespaceUri)
+        public bool Matches(string? localName, string? namespaceUri, int arity = -1)
         {
             if (IsWildcard) return true;
-            foreach (var (ns, loc) in Names)
+            foreach (var name in Names)
             {
-                if (loc != localName) continue;
-                if (ns == "*") return true;
-                if (ns == namespaceUri) return true;
-                if (string.IsNullOrEmpty(ns) && string.IsNullOrEmpty(namespaceUri)) return true;
+                if (name.LocalName != localName && name.LocalName != "*")
+                    continue;
+                if (name.Arity >= 0 && name.Arity != arity)
+                    continue;
+                if (name.IsNamespaceWildcard)
+                    return true;
+                if (name.LocalName == "*")
+                {
+                    if (name.NamespaceUri == namespaceUri)
+                        return true;
+                    if (string.IsNullOrEmpty(name.NamespaceUri) && string.IsNullOrEmpty(namespaceUri))
+                        return true;
+                    continue;
+                }
+                if (name.NamespaceUri == namespaceUri)
+                    return true;
+                if (string.IsNullOrEmpty(name.NamespaceUri) && string.IsNullOrEmpty(namespaceUri))
+                    return true;
             }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Represents one name entry in an <c>xsl:accept</c> <c>names</c> attribute,
+    /// optionally carrying a required function arity.
+    /// </summary>
+    private readonly struct AcceptName
+    {
+        public string? NamespaceUri { get; }
+        public string LocalName { get; }
+        public int Arity { get; }
+        public bool IsWildcard { get; }
+        public bool IsNamespaceWildcard => NamespaceUri == "*" && !IsWildcard;
+
+        public AcceptName(string? namespaceUri, string localName, int arity = -1, bool isWildcard = false)
+        {
+            NamespaceUri = namespaceUri;
+            LocalName = localName;
+            Arity = arity;
+            IsWildcard = isWildcard;
+        }
+
+        /// <summary>
+        /// Returns whether this name pattern matches the supplied component identity.
+        /// A <c>*</c> in either the namespace URI or local name position acts as a wildcard.
+        /// </summary>
+        public bool Matches(string? localName, string? namespaceUri, int arity)
+        {
+            if (IsWildcard)
+                return true;
+            if (LocalName != localName && LocalName != "*")
+                return false;
+            if (Arity >= 0 && Arity != arity)
+                return false;
+            if (NamespaceUri == "*")
+                return true;
+            if (NamespaceUri == namespaceUri)
+                return true;
+            if (string.IsNullOrEmpty(NamespaceUri) && string.IsNullOrEmpty(namespaceUri))
+                return true;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Represents a single <c>xsl:expose</c> rule from an <c>xsl:package</c> root.
+    /// </summary>
+    private sealed class ExposeRule
+    {
+        public string Component { get; }
+        public string Visibility { get; }
+        public IReadOnlyList<ExposeName> Names { get; }
+        public bool IsWildcard => Names.Count == 1 && Names[0].IsWildcard;
+
+        public ExposeRule(string component, string visibility, IEnumerable<ExposeName> names)
+        {
+            Component = component;
+            Visibility = visibility;
+            Names = names.ToList();
+        }
+
+        public bool Matches(string componentType, string? localName, string? namespaceUri, int arity)
+        {
+            if (Component != componentType && Component != "*")
+                return false;
+            if (IsWildcard)
+                return true;
+            foreach (var name in Names)
+            {
+                if (name.LocalName != localName && name.LocalName != "*")
+                    continue;
+                if (name.Arity >= 0 && name.Arity != arity)
+                    continue;
+                if (name.IsNamespaceWildcard)
+                    return true;
+                if (name.LocalName == "*")
+                {
+                    if (name.NamespaceUri == namespaceUri)
+                        return true;
+                    if (string.IsNullOrEmpty(name.NamespaceUri) && string.IsNullOrEmpty(namespaceUri))
+                        return true;
+                    continue;
+                }
+                if (name.NamespaceUri == namespaceUri)
+                    return true;
+                if (string.IsNullOrEmpty(name.NamespaceUri) && string.IsNullOrEmpty(namespaceUri))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Represents one name entry in an <c>xsl:expose</c> <c>names</c> attribute,
+    /// optionally carrying a required function arity.
+    /// </summary>
+    private readonly struct ExposeName
+    {
+        public string? NamespaceUri { get; }
+        public string LocalName { get; }
+        public int Arity { get; }
+        public bool IsWildcard { get; }
+        public bool IsNamespaceWildcard => NamespaceUri == "*" && !IsWildcard;
+
+        public ExposeName(string? namespaceUri, string localName, int arity = -1, bool isWildcard = false)
+        {
+            NamespaceUri = namespaceUri;
+            LocalName = localName;
+            Arity = arity;
+            IsWildcard = isWildcard;
+        }
+
+        /// <summary>
+        /// Returns whether this name pattern matches the supplied component identity.
+        /// A <c>*</c> in either the namespace URI or local name position acts as a wildcard.
+        /// </summary>
+        public bool Matches(string? localName, string? namespaceUri, int arity)
+        {
+            if (LocalName != "*" && LocalName != localName)
+                return false;
+            if (Arity >= 0 && Arity != arity)
+                return false;
+            if (NamespaceUri == "*")
+                return true;
+            if (NamespaceUri == namespaceUri)
+                return true;
+            if (string.IsNullOrEmpty(NamespaceUri) && string.IsNullOrEmpty(namespaceUri))
+                return true;
             return false;
         }
     }
@@ -3996,7 +4537,7 @@ public sealed class Stylesheet
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: false);
             child.ApplyImportsContextModule = child;
             _imports.Add(child);
             importElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -4030,7 +4571,7 @@ public sealed class Stylesheet
             // use-when on the root element of an included module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: this.IsPrincipalLevel);
             child.ApplyImportsContextModule = ApplyImportsContextModule;
             _includes.Add(child);
             includeElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -4102,7 +4643,28 @@ public sealed class Stylesheet
                 var component = child.Attribute("component")?.Value?.Trim() ?? "";
                 var visibility = child.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant() ?? "public";
                 var namesAttr = child.Attribute("names")?.Value?.Trim() ?? "*";
-                var names = ParseAcceptNames(usePackageElement, namesAttr);
+
+                if (string.IsNullOrEmpty(component))
+                    throw new InvalidOperationException("XTSE0010: xsl:accept must have a component attribute.");
+                if (string.IsNullOrEmpty(visibility))
+                    throw new InvalidOperationException("XTSE0010: xsl:accept must have a visibility attribute.");
+
+                if (visibility is not "public" and not "private" and not "final" and not "abstract" and not "hidden")
+                    throw new InvalidOperationException($"XTSE0020: Invalid visibility '{visibility}' for xsl:accept.");
+
+                var validAcceptComponents = new HashSet<string>(StringComparer.Ordinal)
+                {
+                    "template", "function", "variable", "mode", "attribute-set",
+                    "key", "decimal-format", "namespace-alias", "character-map",
+                    "output", "strip-space", "preserve-space", "global-context-item", "*"
+                };
+                if (!validAcceptComponents.Contains(component))
+                    throw new InvalidOperationException($"XTSE0020: Invalid component '{component}' for xsl:accept.");
+
+                var names = ParseAcceptNames(usePackageElement, namesAttr, component).ToList();
+                if (component == "*" && !names.All(n => n.IsWildcard || n.IsNamespaceWildcard || n.LocalName == "*"))
+                    throw new InvalidOperationException("XTSE3032: xsl:accept with component=\"*\" must use wildcard names.");
+
                 options.AcceptRules.Add(new AcceptRule(component, visibility, names));
             }
             else if (localName == "override")
@@ -4136,35 +4698,1006 @@ public sealed class Stylesheet
 
     /// <summary>
     /// Parses the <c>names</c> attribute of an <c>xsl:accept</c> element into a list of
-    /// (namespace-uri, local-name) pairs. The wildcard <c>*</c> is represented as
-    /// <c>(null, "*")</c>; <c>*:local</c> is represented as <c>("*", local)</c>.
+    /// <see cref="AcceptName"/> values. The wildcard <c>*</c> is represented as
+    /// <see cref="AcceptName.IsWildcard"/>; <c>*:local</c> is represented with
+    /// <see cref="AcceptName.IsNamespaceWildcard"/>.
     /// </summary>
-    private static IEnumerable<(string? NamespaceUri, string LocalName)> ParseAcceptNames(XElement context, string names)
+    private static IEnumerable<AcceptName> ParseAcceptNames(XElement context, string names, string component)
     {
         foreach (var token in names.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
         {
             var t = token.Trim();
             if (string.IsNullOrEmpty(t) || t == "*")
             {
-                yield return (null, "*");
+                yield return new AcceptName(null, "*", isWildcard: true);
                 yield break;
             }
             if (t.Length > 2 && t[0] == 'Q' && t[1] == '{' && t.IndexOf('}') is int close && close > 1)
             {
                 var ns = t[2..close];
                 var loc = t[(close + 1)..];
-                yield return (ns, loc);
+                var (fnLocal, arity) = component == "function" ? ParseFunctionNameWithArity(loc) : (loc, -1);
+                yield return new AcceptName(ns, fnLocal, arity);
             }
             else if (t.StartsWith("*:"))
             {
-                yield return ("*", t[2..]);
+                var local = t[2..];
+                var (fnLocal, arity) = component == "function" ? ParseFunctionNameWithArity(local) : (local, -1);
+                yield return new AcceptName("*", fnLocal, arity);
             }
             else
             {
                 var (loc, ns) = ExpandVariableName(context, t);
-                yield return (ns, loc);
+                var (fnLocal, arity) = component == "function" ? ParseFunctionNameWithArity(loc) : (loc, -1);
+                yield return new AcceptName(ns, fnLocal, arity);
             }
         }
+    }
+
+    /// <summary>
+    /// Parses an <c>xsl:expose</c> element into an <see cref="ExposeRule"/>.
+    /// Only permitted as a child of an <c>xsl:package</c> root; otherwise raises
+    /// <c>XTSE0010</c>.
+    /// </summary>
+    private ExposeRule ParseExposeRule(XElement exposeElement)
+    {
+        if (!IsPackage)
+            throw new InvalidOperationException("XTSE0010: xsl:expose is only allowed as a child of xsl:package.");
+
+        var component = exposeElement.Attribute("component")?.Value?.Trim() ?? "";
+        var visibility = exposeElement.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant() ?? "";
+        var namesAttr = exposeElement.Attribute("names")?.Value?.Trim() ?? "";
+
+        if (string.IsNullOrEmpty(component))
+            throw new InvalidOperationException("XTSE0010: xsl:expose must have a component attribute.");
+        if (string.IsNullOrEmpty(visibility))
+            throw new InvalidOperationException("XTSE0010: xsl:expose must have a visibility attribute.");
+        if (string.IsNullOrEmpty(namesAttr))
+            throw new InvalidOperationException("XTSE0010: xsl:expose must have a names attribute.");
+
+        if (visibility is not "public" and not "private" and not "final" and not "abstract")
+            throw new InvalidOperationException($"XTSE0020: Invalid visibility '{visibility}' for xsl:expose.");
+
+        var validComponents = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "template", "function", "variable", "mode", "attribute-set",
+            "key", "decimal-format", "namespace-alias", "character-map",
+            "output", "strip-space", "preserve-space", "global-context-item", "*"
+        };
+        if (!validComponents.Contains(component))
+            throw new InvalidOperationException($"XTSE0020: Invalid component '{component}' for xsl:expose.");
+
+        var names = ParseExposeNames(exposeElement, namesAttr, component).ToList();
+        if (names.Count == 0)
+            throw new InvalidOperationException("XTSE0020: xsl:expose/@names is empty.");
+
+        if (component == "*" && names.Any(n => !n.IsWildcard && n.NamespaceUri != "*" && n.LocalName != "*"))
+            throw new InvalidOperationException("XTSE3022: xsl:expose with component=\"*\" must use wildcard names.");
+
+        return new ExposeRule(component, visibility, names);
+    }
+
+    /// <summary>
+    /// Parses the <c>names</c> attribute of an <c>xsl:expose</c> element. Function
+    /// names may carry a <c>#arity</c> suffix; mode and other component names use
+    /// ordinary lexical or Clark QNames. Special mode tokens such as <c>#unnamed</c>
+    /// are not permitted here and raise <c>XTSE0020</c>.
+    /// </summary>
+    private static IEnumerable<ExposeName> ParseExposeNames(XElement context, string names, string component)
+    {
+        foreach (var token in names.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var t = token.Trim();
+            if (string.IsNullOrEmpty(t))
+                continue;
+            if (t == "*")
+            {
+                yield return new ExposeName(null, "*", isWildcard: true);
+                yield break;
+            }
+            if (t.StartsWith("#"))
+                throw new InvalidOperationException($"XTSE0020: Invalid name token '{t}' in xsl:expose/@names.");
+            if (t.StartsWith("*:"))
+            {
+                var local = t[2..];
+                if (component == "function")
+                {
+                    var (fnLocal, arity) = ParseFunctionNameWithArity(local);
+                    yield return new ExposeName("*", fnLocal, arity);
+                }
+                else
+                {
+                    yield return new ExposeName("*", local);
+                }
+                continue;
+            }
+            if (t.Length > 2 && t[0] == 'Q' && t[1] == '{' && t.IndexOf('}') is int close && close > 1)
+            {
+                var ns = t[2..close];
+                var loc = t[(close + 1)..];
+                if (component == "function")
+                {
+                    var (fnLocal, arity) = ParseFunctionNameWithArity(loc);
+                    yield return new ExposeName(ns, fnLocal, arity);
+                }
+                else
+                {
+                    yield return new ExposeName(ns, loc);
+                }
+                continue;
+            }
+
+            var (localName, nsUri) = ExpandVariableName(context, t);
+            if (component == "function")
+            {
+                var (fnLocal, arity) = ParseFunctionNameWithArity(localName);
+                yield return new ExposeName(nsUri, fnLocal, arity);
+            }
+            else if (component is "template" or "variable")
+            {
+                yield return new ExposeName(nsUri, localName);
+            }
+            else
+            {
+                // Mode, attribute-set, key, decimal-format, etc. do not use the
+                // default namespace for unprefixed names. Prefixed names keep their
+                // resolved namespace; namespace-wildcard forms (*:local, prefix:*) are
+                // preserved as such.
+                if (t.Contains(':'))
+                    yield return new ExposeName(nsUri, localName);
+                else
+                    yield return new ExposeName("", localName);
+            }
+        }
+    }
+
+    private static (string LocalName, int Arity) ParseFunctionNameWithArity(string localName)
+    {
+        var hash = localName.LastIndexOf('#');
+        if (hash < 0)
+            return (localName, -1);
+        var name = localName[..hash];
+        var arityStr = localName[(hash + 1)..];
+        if (int.TryParse(arityStr, NumberStyles.None, CultureInfo.InvariantCulture, out var arity) && arity >= 0 && name.Length > 0)
+            return (name, arity);
+        return (localName, -1);
+    }
+
+    /// <summary>
+    /// Returns the visibility assigned by the package's <c>xsl:expose</c> rules for
+    /// the supplied component. Returns <c>null</c> when no rule matches, which means
+    /// the component keeps its declared visibility.
+    /// </summary>
+    internal string? GetExposedVisibility(string componentType, string? localName, string? namespaceUri, int arity = -1)
+    {
+        if (!IsPackage)
+            return null;
+        string? result = null;
+        foreach (var rule in _exposeRules)
+        {
+            if (rule.Matches(componentType, localName, namespaceUri, arity))
+                result = rule.Visibility;
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Validates every <c>xsl:expose</c> rule against the components actually declared
+    /// in this package. Raises <c>XTSE3020</c> for undeclared named components,
+    /// <c>XTSE3010</c> for visibility changes that are not permitted, and
+    /// <c>XTSE3025</c> for wildcard/abstract rules that match non-abstract components.
+    /// </summary>
+    private void ValidateExposeRules()
+    {
+        if (!IsPackage || _exposeRules.Count == 0)
+            return;
+
+        foreach (var rule in _exposeRules)
+        {
+            if (rule.IsWildcard)
+            {
+                ValidateWildcardExposeRule(rule);
+                continue;
+            }
+
+            foreach (var name in rule.Names)
+            {
+                ValidateNamedExposeRule(rule, name);
+            }
+        }
+    }
+
+    private void ValidateWildcardExposeRule(ExposeRule rule)
+    {
+        if (rule.Visibility == "abstract")
+        {
+            // A wildcard rule with visibility="abstract" is only valid if every
+            // matching component is itself abstract.
+            foreach (var component in GetAllExposableComponents(rule.Component))
+            {
+                if (component.DeclaredVisibility != "abstract")
+                    throw new InvalidOperationException($"XTSE3025: xsl:expose with visibility='abstract' matches a non-abstract {component.ComponentType} component.");
+            }
+        }
+        else if (rule.Visibility is "public" or "final")
+        {
+            // An explicit private component cannot be made public or final by a wildcard rule.
+            foreach (var component in GetAllExposableComponents(rule.Component))
+            {
+                if (component.IsExplicit && component.DeclaredVisibility == "private")
+                    throw new InvalidOperationException($"XTSE3010: xsl:expose with visibility='{rule.Visibility}' matches an explicitly private {component.ComponentType} component.");
+            }
+        }
+    }
+
+    private void ValidateNamedExposeRule(ExposeRule rule, ExposeName name)
+    {
+        var componentType = rule.Component;
+
+        // Partial wildcards (namespace="*" or local-name="*") match multiple components;
+        // validate them against every matching declaration rather than a single name.
+        if (name.NamespaceUri == "*" || name.LocalName == "*")
+        {
+            foreach (var matching in GetAllExposableComponents(componentType))
+            {
+                if (!name.Matches(matching.LocalName, matching.NamespaceUri, matching.Arity))
+                    continue;
+
+                if (rule.Visibility == "abstract")
+                {
+                    if (matching.DeclaredVisibility != "abstract")
+                        throw new InvalidOperationException($"XTSE3025: xsl:expose with visibility='abstract' matches a non-abstract {matching.ComponentType} component.");
+                }
+                else if (rule.Visibility is "public" or "final")
+                {
+                    if (matching.IsExplicit && matching.DeclaredVisibility == "private")
+                        throw new InvalidOperationException($"XTSE3010: xsl:expose with visibility='{rule.Visibility}' matches an explicitly private {matching.ComponentType} component.");
+                }
+            }
+            return;
+        }
+
+        if (componentType == "function" && name.Arity < 0 && rule.Visibility is "public" or "final")
+            throw new InvalidOperationException($"XTSE3020: Function name '{name.LocalName}' in xsl:expose must include an arity.");
+
+        var component = FindExposedComponent(componentType, name);
+        if (component == null)
+            throw new InvalidOperationException($"XTSE3020: {ComponentDisplayName(componentType, name)} is not declared in the package.");
+
+        var (declaredVisibility, isExplicit, _) = component.Value;
+        var exposed = rule.Visibility;
+
+        if (exposed == "abstract")
+        {
+            if (declaredVisibility == "abstract")
+                return;
+            if (isExplicit)
+                throw new InvalidOperationException($"XTSE3010: Cannot expose {ComponentDisplayName(componentType, name)} as abstract because its declared visibility is '{declaredVisibility}'.");
+            throw new InvalidOperationException($"XTSE3025: Cannot expose {ComponentDisplayName(componentType, name)} as abstract because it has no declared visibility.");
+        }
+
+        if (declaredVisibility == "abstract")
+            throw new InvalidOperationException($"XTSE3010: Cannot change visibility of abstract {ComponentDisplayName(componentType, name)} to '{exposed}'.");
+
+        if (exposed == "public")
+        {
+            if (isExplicit && declaredVisibility is "private" or "final")
+                throw new InvalidOperationException($"XTSE3010: Cannot expose {ComponentDisplayName(componentType, name)} as public because its declared visibility is '{declaredVisibility}'.");
+        }
+        else if (exposed == "final")
+        {
+            if (isExplicit && declaredVisibility == "private")
+                throw new InvalidOperationException($"XTSE3010: Cannot expose {ComponentDisplayName(componentType, name)} as final because its declared visibility is private.");
+        }
+    }
+
+    private static string ComponentDisplayName(string componentType, ExposeName name)
+    {
+        var display = string.IsNullOrEmpty(name.NamespaceUri) || name.NamespaceUri == "*"
+            ? name.LocalName
+            : $"{{{name.NamespaceUri}}}{name.LocalName}";
+        if (componentType == "function" && name.Arity >= 0)
+            display += $"#{name.Arity}";
+        return $"{componentType} '{display}'";
+    }
+
+    /// <summary>
+    /// Validates every <c>xsl:accept</c> rule against the components declared in the
+    /// corresponding used package. Raises <c>XTSE3030</c> for undeclared named components,
+    /// <c>XTSE3040</c> for visibility increases that are not permitted, and
+    /// <c>XTSE3050</c>/<c>XTSE3080</c> for abstract visibility mismatches.
+    /// </summary>
+    private void ValidateAcceptRules()
+    {
+        foreach (var (package, options) in _usedPackageOptions)
+        {
+            if (options == null)
+                continue;
+            ValidateAcceptRulesForPackage(package, options);
+        }
+    }
+
+    private void ValidateAcceptRulesForPackage(Stylesheet package, PackageUseOptions options)
+    {
+        // Validate the effective accept rule for each component exported by the used package.
+        // Later/more-specific rules override earlier/more-generic ones, and only the
+        // effective rule is checked for visibility compatibility.
+        foreach (var component in package.GetAllExposableComponents("*"))
+        {
+            var exposed = package.GetExposedVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
+            var baseVisibility = exposed ?? component.DeclaredVisibility;
+
+            // Components that are private in the used package are not visible to the
+            // using package; accept rules do not apply to them and no error is raised.
+            if (baseVisibility == "private")
+                continue;
+
+            var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
+            var effectiveVisibility = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility);
+
+            ValidateAcceptVisibilityCompatibility(package, component.ComponentType, baseVisibility, effectiveVisibility, component.LocalName, component.NamespaceUri, component.Arity);
+        }
+
+        // For non-wildcard named accept rules, verify that each name refers to at least
+        // one declared component in the used package.
+        foreach (var rule in options.AcceptRules)
+        {
+            if (IsWildcardAcceptRule(rule))
+                continue;
+
+            var componentType = rule.Component;
+            if (componentType == "*")
+                continue;
+
+            foreach (var name in rule.Names)
+            {
+                if (name.IsWildcard || name.IsNamespaceWildcard || name.LocalName == "*")
+                    continue;
+
+                var exposeName = new ExposeName(name.NamespaceUri, name.LocalName, name.Arity);
+                if (package.FindExposedComponent(componentType, exposeName) != null)
+                    continue;
+
+                // For functions without arity, accept any function with that name.
+                if (componentType == "function" && name.Arity < 0)
+                {
+                    var functions = new List<XsltFunctionDefinition>();
+                    package.CollectFunctions(name.LocalName, name.NamespaceUri, functions);
+                    if (functions.Count > 0)
+                        continue;
+                }
+
+                throw new InvalidOperationException($"XTSE3030: {ComponentDisplayName(componentType, exposeName)} is not declared in the used package.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns true when the accept rule relies solely on wildcards and does not need
+    /// a name-existence check.
+    /// </summary>
+    private static bool IsWildcardAcceptRule(AcceptRule rule)
+    {
+        if (rule.IsWildcard)
+            return true;
+        return rule.Names.All(n => n.IsWildcard || n.IsNamespaceWildcard || n.LocalName == "*");
+    }
+
+    /// <summary>
+    /// Returns the most specific accept rule that matches the supplied component, or null
+    /// if no accept rule matches. Specificity is determined first by the name pattern,
+    /// then by the component type, then by document order (later wins).
+    /// </summary>
+    private static AcceptRule? GetEffectiveAcceptRule(PackageUseOptions options, string componentType, string? localName, string? namespaceUri, int arity)
+    {
+        AcceptRule? bestRule = null;
+        int bestNameSpecificity = -1;
+        int bestComponentSpecificity = -1;
+        int bestIndex = -1;
+
+        int index = 0;
+        foreach (var rule in options.AcceptRules)
+        {
+            if (rule.Component != componentType && rule.Component != "*")
+            {
+                index++;
+                continue;
+            }
+            if (!rule.Matches(localName, namespaceUri, arity))
+            {
+                index++;
+                continue;
+            }
+
+            int nameSpecificity = GetAcceptNameSpecificity(rule, localName, namespaceUri, arity);
+            int componentSpecificity = rule.Component == componentType ? 1 : 0;
+
+            bool replace = bestRule == null ||
+                           nameSpecificity > bestNameSpecificity ||
+                           (nameSpecificity == bestNameSpecificity && componentSpecificity > bestComponentSpecificity) ||
+                           (nameSpecificity == bestNameSpecificity && componentSpecificity == bestComponentSpecificity && index > bestIndex);
+
+            if (replace)
+            {
+                bestRule = rule;
+                bestNameSpecificity = nameSpecificity;
+                bestComponentSpecificity = componentSpecificity;
+                bestIndex = index;
+            }
+
+            index++;
+        }
+
+        return bestRule;
+    }
+
+    /// <summary>
+    /// Returns the specificity of the most specific matching name pattern within the rule.
+    /// A fully wildcard name has specificity 0, a partial wildcard has specificity 1,
+    /// and a fully qualified name has specificity 2.
+    /// </summary>
+    private static int GetAcceptNameSpecificity(AcceptRule rule, string? localName, string? namespaceUri, int arity)
+    {
+        int best = 0;
+        foreach (var name in rule.Names)
+        {
+            if (!name.Matches(localName, namespaceUri, arity))
+                continue;
+
+            int specificity;
+            if (name.IsWildcard)
+            {
+                specificity = 0;
+            }
+            else
+            {
+                specificity = (name.LocalName != "*" ? 1 : 0) + (name.NamespaceUri != "*" ? 1 : 0);
+            }
+
+            if (specificity > best)
+                best = specificity;
+        }
+        return best;
+    }
+
+    /// <summary>
+    /// Returns the default visibility of a used-package component when no accept rule
+    /// matches. xsl:initial-template defaults to private in the using package.
+    /// </summary>
+    private static string? GetDefaultUsedPackageVisibility(string componentType, string? localName, string? namespaceUri, string? baseVisibility)
+    {
+        if (componentType == "template" && localName == "initial-template" && namespaceUri == XslNamespace)
+            return "private";
+        return baseVisibility;
+    }
+
+    private void ValidateAcceptVisibilityCompatibility(Stylesheet package, string componentType, string baseVisibility, string? effectiveVisibility, string? localName, string? namespaceUri, int arity)
+    {
+        var acceptVisibility = effectiveVisibility ?? baseVisibility;
+
+        // XTSE3080: accepting as abstract requires the component to be abstract.
+        // xsl:initial-template is never eligible to be accepted as abstract.
+        if (acceptVisibility == "abstract")
+        {
+            if (componentType == "template" && localName == "initial-template" && namespaceUri == XslNamespace)
+                throw new InvalidOperationException("XTSE3080: xsl:initial-template cannot be accepted as abstract.");
+            if (baseVisibility != "abstract")
+                throw new InvalidOperationException($"XTSE3080: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} as abstract because its visibility in the used package is '{baseVisibility}'.");
+            return;
+        }
+
+        // XTSE3050: cannot accept an abstract component as public/final/private.
+        if (baseVisibility == "abstract" && acceptVisibility is "public" or "final" or "private")
+            throw new InvalidOperationException($"XTSE3050: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} with visibility '{acceptVisibility}' because it is abstract in the used package.");
+
+        // XTSE3040: cannot increase visibility beyond the used-package visibility.
+        if (acceptVisibility == "public")
+        {
+            if (baseVisibility is "final" or "private")
+                throw new InvalidOperationException($"XTSE3040: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} as public because its visibility in the used package is '{baseVisibility}'.");
+        }
+        else if (acceptVisibility == "final")
+        {
+            if (baseVisibility is "private")
+                throw new InvalidOperationException($"XTSE3040: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} as final because its visibility in the used package is '{baseVisibility}'.");
+        }
+    }
+
+    /// <summary>
+    /// Detects conflicting visible components exported by multiple used packages when
+    /// no <c>xsl:accept</c> rule resolves the conflict. Raises <c>XTSE3050</c>.
+    /// </summary>
+    private void ValidateUsedPackageConflicts()
+    {
+        var visibleComponents = new Dictionary<(string ComponentType, string? NamespaceUri, string LocalName, int Arity), List<(Stylesheet Package, string Visibility)>>();
+
+        foreach (var (package, options) in _usedPackageOptions)
+        {
+            if (options == null)
+                continue;
+            foreach (var component in package.GetAllExposableComponents("*"))
+            {
+                var exposed = package.GetExposedVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
+                var baseVisibility = exposed ?? component.DeclaredVisibility;
+                var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
+                var effectiveVis = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility);
+                if (effectiveVis is null || (effectiveVis != "public" && effectiveVis != "final" && effectiveVis != "abstract"))
+                    continue;
+
+                var key = (component.ComponentType, component.NamespaceUri, component.LocalName ?? "", component.Arity);
+                if (!visibleComponents.TryGetValue(key, out var list))
+                    visibleComponents[key] = list = new List<(Stylesheet, string)>();
+                list.Add((package, effectiveVis));
+            }
+        }
+
+        foreach (var (key, list) in visibleComponents)
+        {
+            if (list.Count < 2)
+                continue;
+
+            // Duplicate entries from the same package do not constitute a conflict.
+            if (list.Select(x => x.Package).Distinct().Count() == 1)
+                continue;
+
+            // A local declaration with the same name in the using package overrides
+            // the used-package components, so no conflict.
+            if (FindLocalComponent(key.ComponentType, key.LocalName, key.NamespaceUri, key.Arity))
+                continue;
+
+            throw new InvalidOperationException($"XTSE3050: Conflicting visible {key.ComponentType} '{DisplayComponentName(key.LocalName, key.NamespaceUri, key.Arity)}' exported by multiple used packages.");
+        }
+    }
+
+    private bool FindLocalComponent(string componentType, string localName, string? namespaceUri, int arity)
+    {
+        return componentType switch
+        {
+            "template" => TryFindNamedTemplate(localName, namespaceUri, out _),
+            "function" => TryFindFunction(localName, namespaceUri, arity, out _),
+            "variable" => TryGetVariableElement(localName, namespaceUri, out _),
+            "attribute-set" => TryGetAttributeSet(localName, namespaceUri, out _),
+            "mode" => TryGetMode(string.IsNullOrEmpty(namespaceUri) ? localName : $"{{{namespaceUri}}}{localName}", out _),
+            _ => false
+        };
+    }
+
+    private static string DisplayComponentName(string localName, string? namespaceUri, int arity)
+    {
+        var display = string.IsNullOrEmpty(namespaceUri) ? localName : $"{{{namespaceUri}}}{localName}";
+        if (arity >= 0)
+            display += $"#{arity}";
+        return display;
+    }
+
+    private (string DeclaredVisibility, bool IsExplicit, string ComponentType)? FindExposedComponent(string componentType, ExposeName name)
+    {
+        return componentType switch
+        {
+            "template" => FindExposedTemplate(name),
+            "function" => FindExposedFunction(name),
+            "variable" => FindExposedVariable(name),
+            "mode" => FindExposedMode(name),
+            "attribute-set" => FindExposedAttributeSet(name),
+            "key" => FindExposedKey(name),
+            "decimal-format" => FindExposedDecimalFormat(name),
+            "namespace-alias" => FindExposedNamespaceAlias(name),
+            "character-map" => FindExposedCharacterMap(name),
+            "output" => FindExposedOutput(name),
+            "strip-space" => FindExposedStripSpace(name),
+            "preserve-space" => FindExposedPreserveSpace(name),
+            "global-context-item" => FindExposedGlobalContextItem(name),
+            _ => null
+        };
+    }
+
+    private (string, bool, string)? FindExposedTemplate(ExposeName name)
+    {
+        if (TryFindNamedTemplate(name.LocalName, name.NamespaceUri, out var rule) && rule != null)
+        {
+            var vis = GetLocalVisibility(rule.Element, "template", this) ?? "private";
+            var isExplicit = rule.Element.Attribute("visibility")?.Value is not null;
+            return (vis, isExplicit, "template");
+        }
+        return null;
+    }
+
+    private (string, bool, string)? FindExposedFunction(ExposeName name)
+    {
+        if (name.Arity < 0)
+        {
+            var functions = new List<XsltFunctionDefinition>();
+            CollectFunctions(name.LocalName, name.NamespaceUri, functions);
+            if (functions.Count == 0)
+                return null;
+            var def = functions[0];
+            var isExplicit = def.Element.Attribute("visibility")?.Value is not null;
+            return (def.Visibility, isExplicit, "function");
+        }
+        if (TryFindFunction(name.LocalName, name.NamespaceUri, name.Arity, out var foundDef) && foundDef != null)
+        {
+            var isExplicit = foundDef.Element.Attribute("visibility")?.Value is not null;
+            return (foundDef.Visibility, isExplicit, "function");
+        }
+        return null;
+    }
+
+    private (string, bool, string)? FindExposedVariable(ExposeName name)
+    {
+        if (TryGetVariableElement(name.LocalName, name.NamespaceUri, out var element) && element != null)
+        {
+            var vis = GetLocalVisibility(element, "variable", IsPackage) ?? "private";
+            var isExplicit = element.Attribute("visibility")?.Value is not null;
+            return (vis, isExplicit, "variable");
+        }
+        return null;
+    }
+
+    private (string, bool, string)? FindExposedMode(ExposeName name)
+    {
+        var modeName = string.IsNullOrEmpty(name.NamespaceUri) ? name.LocalName : $"{{{name.NamespaceUri}}}{name.LocalName}";
+        if (TryGetMode(modeName, out var mode) && mode != null)
+        {
+            var vis = mode.Visibility.ToString().ToLowerInvariant();
+            var element = FindModeElement(modeName);
+            var isExplicit = element?.Attribute("visibility")?.Value is not null;
+            return (vis, isExplicit, "mode");
+        }
+
+        // A package can re-export a mode accepted from a package it uses.
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            if (options == null)
+                continue;
+            var effectiveRule = GetEffectiveAcceptRule(options, "mode", name.LocalName, name.NamespaceUri, -1);
+            if (effectiveRule?.Visibility is not "public" and not "final")
+                continue;
+            var baseMode = package.FindExposedMode(name);
+            if (baseMode != null)
+                return baseMode.Value;
+        }
+        return null;
+    }
+
+    private (string, bool, string)? FindExposedAttributeSet(ExposeName name)
+    {
+        if (TryGetAttributeSet(name.LocalName, name.NamespaceUri, out var def) && def != null)
+        {
+            var vis = GetLocalVisibility(def.Element, "attribute-set", IsPackage) ?? "private";
+            var isExplicit = def.Element.Attribute("visibility")?.Value is not null;
+            return (vis, isExplicit, "attribute-set");
+        }
+        return null;
+    }
+
+    private (string, bool, string)? FindExposedKey(ExposeName name) => null;
+    private (string, bool, string)? FindExposedDecimalFormat(ExposeName name) => null;
+    private (string, bool, string)? FindExposedNamespaceAlias(ExposeName name) => null;
+    private (string, bool, string)? FindExposedCharacterMap(ExposeName name) => null;
+    private (string, bool, string)? FindExposedOutput(ExposeName name) => null;
+    private (string, bool, string)? FindExposedStripSpace(ExposeName name) => null;
+    private (string, bool, string)? FindExposedPreserveSpace(ExposeName name) => null;
+    private (string, bool, string)? FindExposedGlobalContextItem(ExposeName name) => null;
+
+    private IEnumerable<(string DeclaredVisibility, bool IsExplicit, string ComponentType, string? LocalName, string? NamespaceUri, int Arity)> GetAllExposableComponents(string componentType)
+    {
+        if (componentType is "template" or "*")
+        {
+            foreach (var rule in GetAllNamedTemplatesForExpose())
+            {
+                if (string.IsNullOrEmpty(rule.Name))
+                    continue;
+                var (loc, ns) = ExpandVariableName(rule.Element, rule.Name);
+                var vis = GetLocalVisibility(rule.Element, "template", this) ?? "private";
+                var isExplicit = rule.Element.Attribute("visibility")?.Value is not null;
+                yield return (vis, isExplicit, "template", loc, ns, -1);
+            }
+        }
+        if (componentType is "function" or "*")
+        {
+            foreach (var def in GetAllFunctionDefinitionsForExpose())
+            {
+                var isExplicit = def.Element.Attribute("visibility")?.Value is not null;
+                yield return (def.Visibility, isExplicit, "function", def.LocalName, def.NamespaceUri, def.Arity);
+            }
+        }
+        if (componentType is "variable" or "*")
+        {
+            foreach (var element in GetAllVariableElementsForExpose())
+            {
+                var nameAttr = element.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                var (loc, ns) = ExpandVariableName(element, nameAttr);
+                var vis = GetLocalVisibility(element, "variable", IsPackage) ?? "private";
+                var isExplicit = element.Attribute("visibility")?.Value is not null;
+                yield return (vis, isExplicit, "variable", loc, ns, -1);
+            }
+        }
+        if (componentType is "mode" or "*")
+        {
+            foreach (var (mode, element) in GetAllModeDefinitionsForExpose())
+            {
+                var (modeNs, modeLocal) = SplitModeName(mode.Name);
+                var vis = mode.Visibility.ToString().ToLowerInvariant();
+                var isExplicit = element?.Attribute("visibility")?.Value is not null;
+                yield return (vis, isExplicit, "mode", modeLocal, modeNs, -1);
+            }
+        }
+        if (componentType is "attribute-set" or "*")
+        {
+            foreach (var def in GetAllAttributeSetDefinitionsForExpose())
+            {
+                var vis = GetLocalVisibility(def.Element, "attribute-set", IsPackage) ?? "private";
+                var isExplicit = def.Element.Attribute("visibility")?.Value is not null;
+                yield return (vis, isExplicit, "attribute-set", def.LocalName, def.NamespaceUri, -1);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Splits a stored mode name (Clark notation or empty) into namespace URI and local name.
+    /// </summary>
+    private static (string? NamespaceUri, string LocalName) SplitModeName(string modeName)
+    {
+        if (string.IsNullOrEmpty(modeName))
+            return (null, "");
+        if (modeName.Length > 2 && modeName[0] == '{' && modeName.IndexOf('}') is int close && close > 0)
+        {
+            var ns = modeName[1..close];
+            var local = modeName[(close + 1)..];
+            return (ns, local);
+        }
+        return (null, modeName);
+    }
+
+    /// <summary>
+    /// Finds a named template recursively in this stylesheet, its imports and includes.
+    /// </summary>
+    private bool TryFindNamedTemplate(string localName, string? namespaceUri, out TemplateRule? rule)
+    {
+        rule = null;
+        foreach (var imported in _imports)
+            if (imported.TryFindNamedTemplate(localName, namespaceUri, out rule))
+                return true;
+        foreach (var included in _includes)
+            if (included.TryFindNamedTemplate(localName, namespaceUri, out rule))
+                return true;
+        foreach (var candidate in _namedTemplates.Values)
+        {
+            if (string.IsNullOrEmpty(candidate.Name))
+                continue;
+            var (loc, ns) = ExpandVariableName(candidate.Element, candidate.Name);
+            if (loc == localName && ns == (namespaceUri ?? ""))
+            {
+                rule = candidate;
+                return true;
+            }
+        }
+        return rule != null;
+    }
+
+    /// <summary>
+    /// Finds a function declaration recursively in this stylesheet, its imports and includes.
+    /// </summary>
+    private bool TryFindFunction(string localName, string? namespaceUri, int arity, out XsltFunctionDefinition? def)
+    {
+        def = null;
+        foreach (var imported in _imports)
+            if (imported.TryFindFunction(localName, namespaceUri, arity, out def))
+                return true;
+        foreach (var included in _includes)
+            if (included.TryFindFunction(localName, namespaceUri, arity, out def))
+                return true;
+        foreach (var candidate in _functionDefinitions)
+        {
+            if (candidate.LocalName == localName && candidate.NamespaceUri == (namespaceUri ?? "") && candidate.Arity == arity)
+            {
+                def = candidate;
+                return true;
+            }
+        }
+        return def != null;
+    }
+
+    private void CollectFunctions(string localName, string? namespaceUri, List<XsltFunctionDefinition> result)
+    {
+        foreach (var imported in _imports)
+            imported.CollectFunctions(localName, namespaceUri, result);
+        foreach (var included in _includes)
+            included.CollectFunctions(localName, namespaceUri, result);
+        foreach (var candidate in _functionDefinitions)
+        {
+            if (candidate.LocalName == localName && candidate.NamespaceUri == (namespaceUri ?? ""))
+                result.Add(candidate);
+        }
+    }
+
+    /// <summary>
+    /// Finds a top-level xsl:variable element recursively in this stylesheet,
+    /// its imports and includes. Parameters are not considered variables.
+    /// </summary>
+    private bool TryGetVariableElement(string localName, string? namespaceUri, out XElement? element)
+    {
+        element = null;
+        foreach (var imported in _imports)
+            if (imported.TryGetVariableElement(localName, namespaceUri, out element))
+                return true;
+        foreach (var included in _includes)
+            if (included.TryGetVariableElement(localName, namespaceUri, out element))
+                return true;
+        foreach (var candidate in _globalVariables)
+        {
+            var nameAttr = candidate.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(nameAttr))
+                continue;
+            var (loc, ns) = ExpandVariableName(candidate, nameAttr);
+            if (loc == localName && ns == (namespaceUri ?? ""))
+            {
+                element = candidate;
+                return true;
+            }
+        }
+        return element != null;
+    }
+
+    /// <summary>
+    /// Finds a mode definition recursively in this stylesheet, its imports and includes.
+    /// </summary>
+    private bool TryGetMode(string modeName, out ModeDefinition? mode)
+    {
+        foreach (var imported in _imports)
+            if (imported.TryGetMode(modeName, out mode))
+                return true;
+        foreach (var included in _includes)
+            if (included.TryGetMode(modeName, out mode))
+                return true;
+        return _modeDefinitions.TryGetValue(modeName, out mode);
+    }
+
+    /// <summary>
+    /// Finds the original xsl:mode element for a mode name.
+    /// </summary>
+    private XElement? FindModeElement(string modeName)
+    {
+        foreach (var imported in _imports)
+        {
+            var found = imported.FindModeElement(modeName);
+            if (found != null)
+                return found;
+        }
+        foreach (var included in _includes)
+        {
+            var found = included.FindModeElement(modeName);
+            if (found != null)
+                return found;
+        }
+        foreach (var mode in _document.Root?.Elements(XName.Get("mode", XslNamespace)) ?? Enumerable.Empty<XElement>())
+        {
+            var name = ModeDefinition.NormalizeModeName(mode.Attribute("name")?.Value?.Trim() ?? "");
+            var expanded = string.IsNullOrEmpty(name) ? "" : ExpandModeNameForExpose(name, mode);
+            if (expanded == modeName)
+                return mode;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Finds an attribute-set recursively in this stylesheet, its imports and includes.
+    /// </summary>
+    private bool TryGetAttributeSet(string localName, string? namespaceUri, out AttributeSetDefinition? def)
+    {
+        def = null;
+        foreach (var imported in _imports)
+            if (imported.TryGetAttributeSet(localName, namespaceUri, out def))
+                return true;
+        foreach (var included in _includes)
+            if (included.TryGetAttributeSet(localName, namespaceUri, out def))
+                return true;
+        foreach (var candidate in _attributeSets)
+        {
+            if (candidate.LocalName == localName && candidate.NamespaceUri == (namespaceUri ?? ""))
+            {
+                def = candidate;
+                return true;
+            }
+        }
+        return def != null;
+    }
+
+    private IEnumerable<TemplateRule> GetAllNamedTemplatesForExpose()
+    {
+        foreach (var imported in _imports)
+            foreach (var rule in imported.GetAllNamedTemplatesForExpose())
+                yield return rule;
+        foreach (var included in _includes)
+            foreach (var rule in included.GetAllNamedTemplatesForExpose())
+                yield return rule;
+        foreach (var rule in _namedTemplates.Values)
+            yield return rule;
+    }
+
+    private IEnumerable<XsltFunctionDefinition> GetAllFunctionDefinitionsForExpose()
+    {
+        foreach (var imported in _imports)
+            foreach (var def in imported.GetAllFunctionDefinitionsForExpose())
+                yield return def;
+        foreach (var included in _includes)
+            foreach (var def in included.GetAllFunctionDefinitionsForExpose())
+                yield return def;
+        foreach (var def in _functionDefinitions)
+            yield return def;
+    }
+
+    private IEnumerable<XElement> GetAllVariableElementsForExpose()
+    {
+        foreach (var imported in _imports)
+            foreach (var e in imported.GetAllVariableElementsForExpose())
+                yield return e;
+        foreach (var included in _includes)
+            foreach (var e in included.GetAllVariableElementsForExpose())
+                yield return e;
+        foreach (var e in _globalVariables)
+            yield return e;
+    }
+
+    private IEnumerable<(ModeDefinition Mode, XElement? Element)> GetAllModeDefinitionsForExpose()
+    {
+        foreach (var imported in _imports)
+            foreach (var pair in imported.GetAllModeDefinitionsForExpose())
+                yield return pair;
+        foreach (var included in _includes)
+            foreach (var pair in included.GetAllModeDefinitionsForExpose())
+                yield return pair;
+        foreach (var kv in _modeDefinitions)
+        {
+            var element = FindModeElement(kv.Key);
+            yield return (kv.Value, element);
+        }
+    }
+
+    private IEnumerable<AttributeSetDefinition> GetAllAttributeSetDefinitionsForExpose()
+    {
+        foreach (var imported in _imports)
+            foreach (var def in imported.GetAllAttributeSetDefinitionsForExpose())
+                yield return def;
+        foreach (var included in _includes)
+            foreach (var def in included.GetAllAttributeSetDefinitionsForExpose())
+                yield return def;
+        foreach (var def in _attributeSets)
+            yield return def;
+    }
+
+    /// <summary>
+    /// Expands a mode name token into Clark notation. Mode names never use the
+    /// default namespace, so an unprefixed name is in no namespace.
+    /// </summary>
+    private static string ExpandModeNameForExpose(string name, XElement context)
+    {
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int closeBrace = name.IndexOf('}');
+            if (closeBrace >= 2)
+            {
+                var uri = name[2..closeBrace];
+                var local = name[(closeBrace + 1)..];
+                return string.IsNullOrEmpty(uri) ? local : $"{{{uri}}}{local}";
+            }
+        }
+        int colon = name.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = name[..colon];
+            var local = name[(colon + 1)..];
+            if (prefix == "xml")
+                return $"{{{XNamespace.Xml.NamespaceName}}}{local}";
+            var ns = context.GetNamespaceOfPrefix(prefix);
+            if (ns == null)
+                throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}'");
+            return $"{{{ns.NamespaceName}}}{local}";
+        }
+        return name;
     }
 
     /// <summary>
@@ -4715,13 +6248,15 @@ public sealed class Stylesheet
             else if (ns == XslNamespace && localName == "param")
             {
                 var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
-                var visibility = GetLocalVisibility(element, "variable", IsPackage);
+                var exposed = GetExposedVisibility("variable", name.LocalName, name.NamespaceUri);
+                var visibility = exposed ?? GetLocalVisibility(element, "variable", IsPackage);
                 globals.Add((precedence, order++, name, element, true, this, this, visibility));
             }
             else if (ns == XslNamespace && localName == "variable")
             {
                 var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
-                var visibility = GetLocalVisibility(element, "variable", IsPackage);
+                var exposed = GetExposedVisibility("variable", name.LocalName, name.NamespaceUri);
+                var visibility = exposed ?? GetLocalVisibility(element, "variable", IsPackage);
                 globals.Add((precedence, order++, name, element, false, this, this, visibility));
             }
         }
@@ -4747,9 +6282,9 @@ public sealed class Stylesheet
         foreach (var g in baseGlobals)
         {
             var effectiveVis = ApplyAcceptVisibility(g.EffectiveVisibility, options, g.IsParam ? "variable" : "variable", g.Name.LocalName, g.Name.NamespaceUri);
-            bool acceptedAsPrivate = effectiveVis is "private" or "hidden" &&
+            bool acceptedAsPrivate = effectiveVis == "private" &&
                 IsAcceptedAsPrivate(options, "variable", g.Name.LocalName, g.Name.NamespaceUri);
-            if (effectiveVis is not "public" and not "final" && !acceptedAsPrivate)
+            if (effectiveVis is "hidden" || (effectiveVis is not "public" and not "final" && !acceptedAsPrivate))
                 continue;
 
             if (g.IsParam && overrideParamNames.Contains(g.Name))
@@ -5028,9 +6563,9 @@ public sealed class Stylesheet
 
             foreach (var (key, def) in package.GetAllFunctionDefinitions(usedIncludePrivate, includeUsedPackagePrivate))
             {
-                var effectiveVis = GetEffectiveVisibility(package, def.Element, "function", options, def.LocalName, def.NamespaceUri);
-                bool acceptedAsPrivate = effectiveVis is "private" or "hidden" &&
-                    IsAcceptedAsPrivate(options, "function", def.LocalName, def.NamespaceUri);
+                var effectiveVis = GetEffectiveVisibility(package, def.Element, "function", options, def.LocalName, def.NamespaceUri, def.Arity);
+                bool acceptedAsPrivate = effectiveVis == "private" &&
+                    IsAcceptedAsPrivate(options, "function", def.LocalName, def.NamespaceUri, def.Arity);
                 if (overrides.TryGetValue(key, out var overrideDef))
                 {
                     result[key] = overrideDef;
@@ -5102,6 +6637,23 @@ public sealed class Stylesheet
                 }
             }
         }
+
+        // If this is a package with declared-modes="yes", every mode used within the
+        // package must be declared by an xsl:mode declaration in the same package.
+        if (IsPackage && DeclaredModes)
+        {
+            var declaredModes = new HashSet<string>();
+            CollectDeclaredModes(this, declaredModes);
+
+            var usedModes = new HashSet<string>();
+            CollectUsedModes(this, usedModes);
+
+            foreach (var mode in usedModes)
+            {
+                if (!declaredModes.Contains(mode))
+                    throw new InvalidOperationException($"XTSE3085: Mode '{mode}' is not declared.");
+            }
+        }
     }
 
     private static void CollectModeDefinitions(Stylesheet stylesheet, Dictionary<string, List<(int Precedence, ModeDefinition Def)>> map)
@@ -5137,13 +6689,144 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Recursively collects the names of all xsl:mode declarations declared in this
+    /// stylesheet and its imports/includes. Modes accepted from used packages are also
+    /// considered declared because they become part of the using package's mode set.
+    /// </summary>
+    private static void CollectDeclaredModes(Stylesheet stylesheet, HashSet<string> declaredModes)
+    {
+        foreach (var name in stylesheet._modeDefinitions.Keys)
+            declaredModes.Add(name);
+
+        foreach (var included in stylesheet._includes)
+            CollectDeclaredModes(included, declaredModes);
+        foreach (var imported in stylesheet._imports)
+            CollectDeclaredModes(imported, declaredModes);
+        foreach (var package in stylesheet._usedPackages)
+        {
+            foreach (var kv in package._modeDefinitions)
+            {
+                if (!IsExportedFromPackage(package, kv.Value))
+                    continue;
+                declaredModes.Add(kv.Key);
+            }
+            CollectDeclaredModes(package, declaredModes);
+        }
+    }
+
+    /// <summary>
+    /// Recursively collects the names of all modes used in this stylesheet and its
+    /// imports/includes (but not in used packages). Implicit default/unnamed mode
+    /// usages and explicit #default/#unnamed are normalized to the empty string.
+    /// </summary>
+    private static void CollectUsedModes(Stylesheet stylesheet, HashSet<string> usedModes)
+    {
+        foreach (var element in stylesheet.Root.Descendants())
+        {
+            if (element.Name.Namespace != XslNamespace)
+                continue;
+
+            var localName = element.Name.LocalName;
+            if (localName == "template")
+            {
+                var matchAttr = element.Attribute("match");
+                if (matchAttr == null)
+                    continue;
+
+                var modeAttr = element.Attribute("mode");
+                if (modeAttr == null)
+                {
+                    usedModes.Add(stylesheet.DefaultMode);
+                }
+                else
+                {
+                    foreach (var token in modeAttr.Value.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                        CollectUsedModeToken(token, element, usedModes);
+                }
+            }
+            else if (localName == "apply-templates")
+            {
+                var modeAttr = element.Attribute("mode");
+                if (modeAttr == null)
+                {
+                    usedModes.Add(stylesheet.DefaultMode);
+                }
+                else
+                {
+                    var token = modeAttr.Value.Trim();
+                    if (string.IsNullOrEmpty(token))
+                        usedModes.Add(stylesheet.DefaultMode);
+                    else
+                        CollectUsedModeToken(token, element, usedModes);
+                }
+            }
+        }
+
+        foreach (var included in stylesheet._includes)
+            CollectUsedModes(included, usedModes);
+        foreach (var imported in stylesheet._imports)
+            CollectUsedModes(imported, usedModes);
+    }
+
+    /// <summary>
+    /// Expands a single mode token and adds it to the used-mode set, normalizing
+    /// #default/#unnamed to the empty string and ignoring #current/#all.
+    /// </summary>
+    private static void CollectUsedModeToken(string mode, XElement element, HashSet<string> usedModes)
+    {
+        string expanded;
+        if (mode == "#current" || mode == "#default" || mode == "#all" || mode == "#unnamed")
+        {
+            expanded = mode;
+        }
+        else
+        {
+            int colon = mode.IndexOf(':');
+            if (colon < 0)
+            {
+                expanded = mode;
+            }
+            else
+            {
+                var prefix = mode.Substring(0, colon);
+                var local = mode.Substring(colon + 1);
+                string? ns = null;
+                var current = element;
+                while (current != null)
+                {
+                    foreach (var attr in current.Attributes())
+                    {
+                        if (attr.IsNamespaceDeclaration && attr.Name.LocalName == prefix)
+                        {
+                            ns = attr.Value;
+                            break;
+                        }
+                    }
+                    if (ns != null) break;
+                    current = current.Parent;
+                }
+                expanded = ns != null ? $"{{{ns}}}{local}" : mode;
+            }
+        }
+
+        if (expanded == "#current" || expanded == "#all")
+            return;
+        if (expanded == "#default" || expanded == "#unnamed")
+            usedModes.Add("");
+        else
+            usedModes.Add(expanded);
+    }
+
+    /// <summary>
     /// Returns true when the given mode is visible outside its declaring package.
     /// Imports and includes are always visible; used packages filter by visibility.
     /// </summary>
     private static bool IsExportedFromPackage(Stylesheet package, ModeDefinition mode)
     {
         if (!package.IsPackage) return true;
-        return mode.Visibility is ModeVisibility.Public or ModeVisibility.Final;
+        var exposed = package.GetExposedVisibility("mode", mode.Name, "");
+        var effective = exposed ?? mode.Visibility.ToString().ToLowerInvariant();
+        return effective is "public" or "final";
     }
 
     private static bool HasSamePrecedenceMode(Stylesheet stylesheet, string name)
@@ -5511,15 +7194,66 @@ public sealed class Stylesheet
         // Used packages next: only exported components are visible.
         foreach (var package in _usedPackages)
         {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+
+            // Names of attribute-sets overridden in this use-package; used-package
+            // definitions with the same name are replaced, unless the override uses
+            // xsl:original to retain the original attributes.
+            var overrideSetNames = new HashSet<(string LocalName, string NamespaceUri)>();
+            var overrideUsesOriginal = new HashSet<(string LocalName, string NamespaceUri)>();
+            foreach (var overrideElem in options?.OverrideAttributeSets ?? Enumerable.Empty<XElement>())
+            {
+                var def = AttributeSetDefinition.FromElement(overrideElem, this);
+                if (def == null)
+                    continue;
+                var key = (def.LocalName, def.NamespaceUri);
+                overrideSetNames.Add(key);
+                if (UseAttributeSetsReferencesOriginal(overrideElem, def.UseAttributeSets))
+                    overrideUsesOriginal.Add(key);
+            }
+
             foreach (var (key, list) in package.GetAllAttributeSets())
             {
                 if (!result.TryGetValue(key, out var existing))
                     result[key] = existing = new List<AttributeSetDefinition>();
+
+                if (overrideSetNames.Contains(key) && !overrideUsesOriginal.Contains(key))
+                    continue;
+
                 foreach (var def in list)
                 {
-                    if (IsExportedFromPackage(package, def.Element))
-                        existing.Add(def);
+                    var exposed = package.GetExposedVisibility("attribute-set", def.LocalName, def.NamespaceUri);
+                    var baseVis = exposed ?? GetLocalVisibility(def.Element, "attribute-set", package);
+                    var effectiveVis = ApplyAcceptVisibility(baseVis, options, "attribute-set", def.LocalName, def.NamespaceUri);
+                    bool acceptedAsPrivate = effectiveVis == "private" &&
+                        IsAcceptedAsPrivate(options, "attribute-set", def.LocalName, def.NamespaceUri);
+                    // Hidden non-abstract attribute-sets are invisible in the using package.
+                    if (effectiveVis == "hidden" && baseVis != "abstract")
+                        continue;
+                    if (effectiveVis != "public" && effectiveVis != "final" && effectiveVis != "abstract" && !acceptedAsPrivate)
+                    {
+                        // Abstract attribute-sets remain abstract even when accepted as hidden;
+                        // using them at runtime raises XTDE3052.
+                        if (baseVis == "abstract")
+                            effectiveVis = "abstract";
+                        else
+                            continue;
+                    }
+                    def.EffectiveVisibility = effectiveVis;
+                    existing.Add(def);
                 }
+            }
+
+            // Add override attribute-set definitions (highest precedence in this use-package).
+            foreach (var overrideElem in options?.OverrideAttributeSets ?? Enumerable.Empty<XElement>())
+            {
+                var def = AttributeSetDefinition.FromElement(overrideElem, this);
+                if (def == null)
+                    continue;
+                var key = (def.LocalName, def.NamespaceUri);
+                if (!result.TryGetValue(key, out var existing))
+                    result[key] = existing = new List<AttributeSetDefinition>();
+                existing.Add(def);
             }
         }
 

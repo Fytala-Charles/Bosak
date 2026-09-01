@@ -143,6 +143,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.88  | 30-08-2026     | Added xsl:use-package resolution and visibility tests                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.89  | 31-08-2026     | Added xsl:mode to package-root test so declared-modes validation passes                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -6387,6 +6389,7 @@ return fn:transform(map{""stylesheet-text"": $xsl,
     public void Package_Root_IsRecognized()
     {
         var xsl = @"<xsl:package version='3.0' name='urn:test:package' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:mode/>
             <xsl:template match='/'>
                 <out>ok</out>
             </xsl:template>

@@ -128,7 +128,7 @@ public sealed class ModeDefinition
     /// <summary>
     /// Parses an xsl:mode element into a <see cref="ModeDefinition"/>.
     /// </summary>
-    public static ModeDefinition? FromElement(XElement element)
+    public static ModeDefinition? FromElement(XElement element, bool isPackage)
     {
         var name = ExpandModeName(element.Attribute("name")?.Value?.Trim() ?? "", element);
         var onNoMatch = element.Attribute("on-no-match")?.Value?.Trim()?.ToLowerInvariant() switch
@@ -154,7 +154,9 @@ public sealed class ModeDefinition
             "private" => ModeVisibility.Private,
             "final" => ModeVisibility.Final,
             "abstract" => ModeVisibility.Abstract,
-            null or "" => string.IsNullOrEmpty(name) ? ModeVisibility.Private : ModeVisibility.Public,
+            null or "" => string.IsNullOrEmpty(name)
+                ? ModeVisibility.Private
+                : isPackage ? ModeVisibility.Private : ModeVisibility.Public,
             _ => throw new InvalidOperationException("XTSE0020")
         };
 
@@ -209,8 +211,10 @@ public sealed class ModeDefinition
 
     private static string ExpandModeName(string mode, XElement element)
     {
-        if (mode == "#current" || mode == "#default" || mode == "#all")
-            return mode;
+        // xsl:mode/@name may be absent (the unnamed mode) or a valid QName; the special
+        // mode tokens #current, #default, #all, and #unnamed are not permitted here.
+        if (mode is "#current" or "#default" or "#all" or "#unnamed")
+            throw new InvalidOperationException($"XTSE0020: Invalid mode name '{mode}' in xsl:mode/@name.");
 
         int colon = mode.IndexOf(':');
         if (colon < 0)

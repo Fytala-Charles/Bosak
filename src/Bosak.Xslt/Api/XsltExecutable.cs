@@ -112,6 +112,21 @@ public sealed class XsltExecutable
     }
 
     /// <summary>
+    /// Runs a transformation with an explicit initial match selection, which is applied
+    /// to the initial mode when no source node is supplied.
+    /// </summary>
+    public XdmValue Transform(IXdmNode? source, XdmValue? initialMatchSelection, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
+    {
+        return RunWithStack(() =>
+        {
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            var result = engine.Transform(source, initialTemplate, initialMode, rawResult, baseOutputUri, initialMatchSelection: initialMatchSelection);
+            LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+            return result;
+        }, DefaultTransformStackSize);
+    }
+
+    /// <summary>
     /// Runs a transformation on behalf of <c>fn:transform</c>: secondary result
     /// documents are captured rather than written to disk, and both the principal
     /// and the secondary results are post-processed according to the requested
@@ -266,6 +281,33 @@ public sealed class XsltExecutable
                 outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
                     outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
             }
+
+            if (serializationParams != null)
+            {
+                outputProperties = outputProperties.Clone();
+                Stylesheet.OutputProperties.Merge(outputProperties, serializationParams);
+            }
+
+            return Runtime.ResultTreeSerializer.Serialize(result, outputProperties);
+        }, DefaultTransformStackSize);
+    }
+
+    /// <summary>
+    /// Transforms the supplied source document (or initial match selection) and serializes
+    /// the result to a string.
+    /// </summary>
+    public string TransformToString(IXdmNode? source, XdmValue? initialMatchSelection, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null, Stylesheet.OutputProperties? serializationParams = null)
+    {
+        return RunWithStack(() =>
+        {
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            var result = engine.Transform(source, initialTemplate, initialMode, false, baseOutputUri, initialMatchSelection: initialMatchSelection);
+            LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+
+            var outputProperties = engine.PrincipalResultDocumentProperties
+                ?? _stylesheet.EffectiveOutputProperties
+                ?? new Stylesheet.OutputProperties();
+            outputProperties.EffectiveVersion = _stylesheet.Version;
 
             if (serializationParams != null)
             {

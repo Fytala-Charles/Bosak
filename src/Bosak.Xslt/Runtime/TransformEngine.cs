@@ -218,6 +218,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.33  | 26-08-2026     | Don't cache suppressed sequence-constructor globals during pattern validation            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.34  | 31-08-2026     | Library-package globals evaluate with absent focus so context-item refs raise XPDY0002 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.34  | 27-08-2026     | Added runtime error checks: XTDE0855/1110/1162/1260/1270, XTTE3170/3360, XPTY0020       |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.35  | 28-08-2026     | Preserve arrays in xsl:iterate on-completion/break results for raw sequence constructors |
@@ -247,6 +249,12 @@
 //                      | Charles Korthout | 6.47  | 30-08-2026     | Scope-isolate lazy globals; include accepted used-package private functions; CollectingScope visibility |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.48  | 30-08-2026     | Keep evaluated globals in scope dictionary; EnterPackageScope exposes accepted private used-package functions |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.49  | 31-08-2026     | Initial-template check prefers TemplateRule.EffectiveVisibility                         |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.50  | 31-08-2026     | Throw XTDE3052 when invoking an abstract stylesheet function                           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.51  | 31-08-2026     | CallTemplate delegates visibility to IsTemplateVisible using owner+AcceptedBy           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -889,17 +897,11 @@ public sealed class TransformEngine
                 throw new InvalidOperationException($"XTDE0040: Named template '{effectiveInitialTemplate}' not found.");
 
             // In an xsl:package, only public (or final) named templates may be used as
-            // a transformation entry point; the default visibility is private, except
-            // for xsl:initial-template which is implicitly public.
+            // a transformation entry point; the default visibility is private.
             if (_stylesheet.IsPackage)
             {
-                bool isPublicEntry = entryRule.Visibility is "public" or "final";
-                if (!isPublicEntry && entryRule.Visibility == null && entryRule.Name != null)
-                {
-                    var (tplLocal, tplNs) = ExpandVariableName(entryRule.Element, entryRule.Name);
-                    isPublicEntry = tplLocal == "initial-template" && tplNs == Stylesheet.Stylesheet.XslNamespace;
-                }
-                if (!isPublicEntry)
+                var effectiveVis = entryRule.EffectiveVisibility ?? entryRule.Visibility;
+                if (effectiveVis is not "public" and not "final")
                     throw new InvalidOperationException($"XTDE0040: Named template '{effectiveInitialTemplate}' is not public.");
             }
 
@@ -930,21 +932,14 @@ public sealed class TransformEngine
             // fn:transform initial-match-selection: apply templates in the initial mode
             // to each item of the supplied selection (XSLT 3.0 §24.2).
             // When no initial mode is supplied, use the stylesheet's default mode.
-            var resolvedInitialMode = string.IsNullOrEmpty(initialMode) || initialMode == "#default" || initialMode == "#unnamed"
-                ? _stylesheet.DefaultMode
-                : ExpandModeName(initialMode, _stylesheet.Root);
+            var resolvedInitialMode = initialMode switch
+            {
+                null or "" or "#default" => _stylesheet.DefaultMode,
+                "#unnamed" => "",
+                _ => ExpandModeName(initialMode, _stylesheet.Root)
+            };
             _initialMode = resolvedInitialMode;
-            // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
-            if (!ModeExists(resolvedInitialMode))
-            {
-                throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' does not exist in the stylesheet.");
-            }
-            // A private or abstract mode cannot be used as the initial mode.
-            var matchModeDef = _stylesheet.GetModeDefinition(resolvedInitialMode);
-            if (matchModeDef != null && (matchModeDef.Visibility == Stylesheet.ModeVisibility.Private || matchModeDef.Visibility == Stylesheet.ModeVisibility.Abstract))
-            {
-                throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' is not visible.");
-            }
+            ValidateInitialMode(resolvedInitialMode);
 
             var selectionItems = new List<XdmValue>();
             FlattenToList(initialMatchSelection.Value, selectionItems);
@@ -992,9 +987,12 @@ public sealed class TransformEngine
             {
                 // Start transformation in the specified initial mode.
                 // Expand any namespace prefix in the initial mode name.
-                var resolvedInitialMode = initialMode == "#default" || initialMode == "#unnamed"
-                    ? _stylesheet.DefaultMode
-                    : ExpandModeName(initialMode, _stylesheet.Root);
+                var resolvedInitialMode = initialMode switch
+                {
+                    "#default" => _stylesheet.DefaultMode,
+                    "#unnamed" => "",
+                    _ => ExpandModeName(initialMode, _stylesheet.Root)
+                };
                 _initialMode = resolvedInitialMode;
                 // XTDE0044: an explicit initial mode requires an initial match selection or
                 // a supplied global context item. If neither source nor initial-match-selection
@@ -1003,17 +1001,7 @@ public sealed class TransformEngine
                 {
                     throw new InvalidOperationException("XTDE0044: An initial mode requires an initial match selection or global context item.");
                 }
-                // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
-                if (!ModeExists(resolvedInitialMode))
-                {
-                    throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' does not exist in the stylesheet.");
-                }
-                // A private or abstract mode cannot be used as the initial mode.
-                var initialModeDef = _stylesheet.GetModeDefinition(resolvedInitialMode);
-                if (initialModeDef != null && (initialModeDef.Visibility == Stylesheet.ModeVisibility.Private || initialModeDef.Visibility == Stylesheet.ModeVisibility.Abstract))
-                {
-                    throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' is not visible.");
-                }
+                ValidateInitialMode(resolvedInitialMode);
                 _modeStack.Push(resolvedInitialMode);
                 try
                 {
@@ -2474,6 +2462,9 @@ public sealed class TransformEngine
 
     private XdmValue ExecuteXsltFunction(Stylesheet.XsltFunctionDefinition def, ReadOnlySpan<XdmValue> args)
     {
+        if (def.Visibility == "abstract")
+            throw new InvalidOperationException("XTDE3052: Abstract stylesheet function has no implementation.");
+
         if (++_xsltFunctionCallDepth > MaxXsltFunctionCallDepth)
         {
             _xsltFunctionCallDepth--;
@@ -4237,6 +4228,62 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Validates that the requested initial mode exists and is eligible.
+    /// The stylesheet's default mode is always eligible, even when private.
+    /// A named mode declared as private/abstract is not eligible, and an
+    /// implicit named mode that has been made private by xsl:expose is also
+    /// not eligible.
+    /// </summary>
+    private void ValidateInitialMode(string resolvedInitialMode)
+    {
+        // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
+        if (!ModeExists(resolvedInitialMode))
+        {
+            throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' does not exist in the stylesheet.");
+        }
+
+        // The unnamed mode and the default mode (the value of default-mode) are always
+        // eligible, even if the corresponding xsl:mode declaration is private.
+        if (string.IsNullOrEmpty(resolvedInitialMode) || resolvedInitialMode == _stylesheet.DefaultMode)
+            return;
+
+        var modeDef = _stylesheet.GetModeDefinition(resolvedInitialMode);
+        if (modeDef != null)
+        {
+            if (modeDef.Visibility == Stylesheet.ModeVisibility.Private || modeDef.Visibility == Stylesheet.ModeVisibility.Abstract)
+                throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' is not visible.");
+            return;
+        }
+
+        // No explicit xsl:mode declaration: an implicit mode is normally eligible,
+        // unless an xsl:expose rule on the package root gives it private/abstract
+        // visibility.
+        var (modeLocal, modeNs) = SplitModeName(resolvedInitialMode);
+        var exposed = _stylesheet.GetExposedVisibility("mode", modeLocal, modeNs);
+        if (exposed == "private" || exposed == "abstract")
+            throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' is not visible.");
+    }
+
+    /// <summary>
+    /// Splits a normalized mode name into (localName, namespaceUri) for use
+    /// with package visibility lookups. The empty string represents the unnamed
+    /// mode.
+    /// </summary>
+    private static (string? LocalName, string? NamespaceUri) SplitModeName(string mode)
+    {
+        if (string.IsNullOrEmpty(mode))
+            return (null, null);
+        if (mode.Length > 2 && mode[0] == '{' && mode.Contains('}'))
+        {
+            int close = mode.IndexOf('}');
+            var ns = mode.Substring(1, close - 1);
+            var local = mode.Substring(close + 1);
+            return (local, ns);
+        }
+        return (mode, null);
+    }
+
+    /// <summary>
     /// Expands a mode attribute value to Clark notation ({uri}local) using
     /// the in-scope namespaces of the instruction element. No-op for special
     /// mode names (#current, #default, #all) and unprefixed names.
@@ -4627,7 +4674,15 @@ public sealed class TransformEngine
         try
         {
             if (!_allNamedTemplates.TryGetValue(name, out var rule))
-                throw new InvalidOperationException($"Named template '{name}' not found.");
+                throw new InvalidOperationException($"XTDE0040: Named template '{name}' not found.");
+
+            var effectiveVis = rule.EffectiveVisibility ?? rule.Visibility;
+            if (string.IsNullOrEmpty(effectiveVis))
+                effectiveVis = "private";
+            if (effectiveVis == "abstract")
+                throw new InvalidOperationException($"XTDE3052: Named template '{name}' is abstract and has no implementation.");
+            if (!IsTemplateVisible(rule))
+                throw new InvalidOperationException($"XTDE0040: Named template '{name}' is not visible.");
 
             // Static validation of call-template parameters: every with-param must match a
             // declared xsl:param, and its tunnel status must match the declaration.
@@ -6570,6 +6625,10 @@ public sealed class TransformEngine
             var key = (localName, nsUri);
             if (!allSets.TryGetValue(key, out var defs))
                 continue;
+
+            // An abstract attribute-set cannot be evaluated; applying it raises XTDE3052.
+            if (defs.Any(d => d.EffectiveVisibility == "abstract"))
+                throw new InvalidOperationException("XTDE3052: Abstract attribute-set has no implementation.");
 
             if (!visited.Add(key))
                 continue; // Cycle detected — skip to avoid infinite recursion
@@ -9970,10 +10029,13 @@ public sealed class TransformEngine
         // a different package scope are only visible when exported (public/final) across
         // that package boundary. Globals collected in a non-package stylesheet are visible
         // from any scope.
+        var visibility = info.EffectiveVisibility ?? info.Element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant() ?? "public";
+        if (visibility == "abstract")
+            throw new InvalidOperationException($"XTDE3052: Global variable '${localName}' is abstract and has no value.");
+
         if (info.CollectingScope != scope && info.CollectingScope?.IsPackage == true)
         {
-            var visibility = info.EffectiveVisibility ?? info.Element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
-            if (visibility is not "public" and not "final")
+            if (visibility != "public" && visibility != "final")
                 return null;
         }
 
@@ -10034,8 +10096,12 @@ public sealed class TransformEngine
         try
         {
             // Global variables/parameters are evaluated with a singleton focus based
-            // on the global context item for the transformation.
-            var focus = _globalContextItem.IsUndefined ? XdmValue.Undefined : _globalContextItem;
+            // on the global context item for the transformation. Library-package globals
+            // (those declared in a used package that is not the principal stylesheet)
+            // have no context item; referencing it raises XPDY0002.
+            var focus = (info.SourceStylesheet.IsPackage && info.SourceStylesheet != _stylesheet)
+                ? XdmValue.Undefined
+                : (_globalContextItem.IsUndefined ? XdmValue.Undefined : _globalContextItem);
             _context.WithFocus(focus, focus.IsUndefined ? 0 : 1, focus.IsUndefined ? 0 : 1);
             if (_globalVariableSnapshot != null)
                 _context.RestoreVariables(_globalVariableSnapshot);
@@ -10272,15 +10338,13 @@ public sealed class TransformEngine
     /// <summary>
     /// Determines whether a template rule is visible from the current package scope.
     /// Non-package templates are always visible; package templates are visible when public,
-    /// final, the implicit xsl:initial-template, or when the current stylesheet is the owning package.
+    /// final, or when the current stylesheet is the owning package or the package that
+    /// explicitly accepted the template as private.
     /// </summary>
     private bool IsTemplateVisible(Stylesheet.TemplateRule rule)
     {
         var owner = rule.Stylesheet.OwningPackage;
         if (owner == null)
-            return true;
-
-        if (rule.Name == "xsl:initial-template")
             return true;
 
         var visibility = rule.EffectiveVisibility ?? rule.Visibility;
@@ -10290,7 +10354,18 @@ public sealed class TransformEngine
         if (visibility is "public" or "final")
             return true;
 
-        return CurrentStylesheet == owner;
+        var current = CurrentStylesheet;
+
+        // Private templates are visible to the owning package itself.
+        if (current == owner)
+            return true;
+
+        // Private templates that were explicitly accepted as private by the current
+        // package are also visible.
+        if (rule.AcceptedBy != null && current == rule.AcceptedBy)
+            return true;
+
+        return false;
     }
 
     private static IEnumerable<IXdmNode> EnumerateNodes(XdmSequence sequence)

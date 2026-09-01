@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-> **Living Registry** — Last updated: 2026-08-31 (richer XSLT document symbols / outline (`REQ-073`): `DocumentSymbolHandler` outline now verified for templates, functions, variables, parameters, attribute-sets, keys, output declarations, plus import/include, modes, decimal formats, character maps, and accumulators; output symbols include method detail; language-server tests 72/0/0) (XSLT code lens source-document hint polish (`REQ-071`): single-quoted `<?bosak source-document='...'?>` now covered by tests; new XML comment alternative `<!-- bosak:source-document=... -->` supported; paths are trimmed before resolution; language-server tests 70/0/0) (XSLT initial-template runner code lens (`REQ-072`): `CodeLensHandler` detects `<xsl:template name="xsl:initial-template">` and other named templates; new `bosak/runInitialTemplate` request and `RunInitialTemplateHandler` run stylesheets without a source document; VS Code client registers `bosak.runInitialTemplate`; language-server tests 67/0/0) (`xsl:use-package` package-version range matching: `PackageVersion.Parse`, `VersionMatches`, and `ResolvePackageLocation` implement exact, wildcard, hyphen/`to`, `+` minimum, and comma-separated range syntax with `PackageVersionResolutionStrategy`; harness honors `package_version_resolution` dependency; all runnable `use-package` tests pass; unit tests pass 2,111/0/0) (`xsl:use-package` component merging: accept/override visibility for functions, variables, and parameters, CollectingScope propagation through global collection and conflict validation, per-package lazy-global isolation via `SnapshotLazyGlobals`; closes `use-package-160` through `use-package-176`; unit tests pass 2,111/0/0) (basic `xsl:package`/`xsl:use-package` parsing: `Stylesheet` recognizes `xsl:package` root, validates `@name`, treats `xsl:use-package`/`xsl:expose`/`xsl:accept`/`xsl:override` as known elements, and raises `XTSE0165` for `xsl:use-package` because package resolution is not yet implemented; unit tests pass 2,109/0/0) (schema-aware `fn:json-to-xml`: `FunctionLibrary.JsonToXml` validates generated XML against the embedded W3C schema-for-JSON when `validate:=true()`; populates PSVI annotations so `schema-element(j:array)` and `element(j:string, j:stringType)` work; closes `json-to-xml-016/017/017b/037/037b/038/038b/044/046/047`; full QT3 sweep 31,148/0/673 (97.89%), 100% of runnable tests pass; unit tests pass 2,104/0; prior: xquery30keywords5 cluster: `XPathParser` allows most XPath/XQuery keywords as unprefixed function names when followed by `(` or `#`, while preserving validate/quantified/try/FLWOR forms; closes `xquery30keywords5`; full QT3 sweep 30,958/1/862 (97.29%); unit tests pass 1,840/0; prior: function return-type atomization cluster: `ApplyFunctionConversion` atomizes nodes for atomic/simple targets even when the typed value matches; closes `qischema040` and `qischema040a`; full QT3 sweep 30,957/2/862 (97.35%); unit tests pass 1,838/0; prior: QName accessor singleton-sequence XPTY0004 cluster: `LocalNameFromQName`, `NamespaceUriFromQName`, and `PrefixFromQName` use `AtomizeSingleton` so multi-item sequences raise `XPTY0004`; closes `LocalNameFromQNameFunc010` and `NamespaceURIFromQNameFunc010`; full QT3 sweep 30,955/4/862 (97.33%); unit tests pass 1,835/0; prior: document-node / root() / constructed-element cluster: bare `document-node()` now matches empty documents; constructed elements annotated as `xs:anyType`; closes `K2-NodeRootFunc-8`, `K2-ancestor-or-selfAxis-5`, `K2-ConDocNode-33`, `K2-DirectConElemContent-35a`; full QT3 sweep 30,953/6/862 (97.27%); unit tests pass 1,831/0; prior: HOF residuals cluster: `VmEngine.IsElementOrAttributeSchemaSubtype` strips outer occurrence indicators, defaults missing element type parts to `xs:anyType`, handles nillability, and compares built-in schema types without a user schema; `GetDirectSupertypes` now includes `anyatomictype → anysimpletype → anytype → item()`; closes `hof-039` and `hof-053`; full QT3 sweep 30,948/11/862 (97.26%); unit tests pass 1,827/0; prior: schema-aware validate / QName-NOTATION / ID / typed-value cluster: `VmEngine.ValidateNode` uses the built-in schema set so `validate lax` honours `xsi:type`, supports `validate type QName { Expr }`, returns a validated `XDocumentNode`, and populates PSVI; `XDocumentNode` preserves QName/NOTATION prefixes and schema annotations and detects `xsi:type` ID/IDREF; closes `CastAsNamespaceSensitiveType-6`, `CastAs-UnionType-33`, `FunctionCall-049`, `qischema061`, `instanceof142`, `fo-test-fn-id-002`, `fo-test-fn-element-with-id-002`, `fo-test-fn-idref-001`, `fo-test-fn-idref-002`; full QT3 sweep 30,946/13/862 (97.25%); unit tests pass 1,825/0; prior: `fn:load-xquery-module` / `validate` expression cluster implemented: XQuery `validate { Expr }`/`strict`/`lax` parses as a contextual keyword and evaluates through `VmEngine.ValidateNode`; schema imports loaded via `fn:load-xquery-module` are propagated to the module's evaluation context; closes `fn-load-xquery-module-050`–`052` and `-056`; full QT3 sweep 30,929/30/862 (97.20%); unit tests pass 1,821/0; prior: namespace-sensitive atomic function-conversion cluster fixed: `ApplyFunctionConversion` raises `XPTY0117` when `xs:untypedAtomic` is supplied to `xs:QName`, `xs:NOTATION`, or a user-defined restriction of those; closes `CastAs675a`, `CastAsNamespaceSensitiveType-1/2`; full QT3 sweep 30,854/19/948 (96.96%); unit tests pass 1,813/0; prior: schema-aware list/union function-conversion cluster regression-tested: attribute kind-test type-name case preservation, union function conversion membership semantics with `xs:untypedAtomic` casting and namespace-sensitive rejection, unprefixed user-defined schema types in `instance of` via default element namespace, and `element(*, T1)` / `attribute(*, T1)` subtyping through the schema hierarchy; targeted `prod-FLWORExpr` 21/0/28 and `prod-FunctionCall` 120/0/32; full QT3 sweep 30,851/22/948 (96.95%); unit tests pass 1,813/0; prior: op-numeric-add / union named-member cluster fixed: `XPathParser.ParseSingleType` treats `*`/`+` after a cast target as operators when an operand follows while keeping standalone `cast as xs:string*` as `XPST0003`; `VmEngine.GetUnionMemberTypes` returns both inline and named `@memberTypes` union members; closes `op-numeric-add-13`–`op-numeric-add-16`; full QT3 sweep 30,842/31/948 (96.92%); unit tests pass 1,806/0; prior: castable cluster fixed: `VmEngine.TryCast`, the `Cast` opcode, and the `Castable` opcode share `AtomizeForCast`, which recursively atomizes arrays, atomizes nodes, and raises `FOTY0013` for maps/function items; `castable as` propagates type errors instead of returning `false`; closes `prod-CastableExpr` `CastableAs665`–`CastableAs668`; full QT3 sweep 30,836/37/948 (96.90%); unit tests pass 1,801/0; prior: schema-validated date/time timezone preservation cluster fixed: `XDocumentNode.GetTypedValue` preserves explicit offsets such as `+05:00` and `Z` for `xs:date`, `xs:time`, `xs:dateTime`, `xs:dateTimeStamp`, and `g*` types; closes `prod-CastExpr.schema` `casthcds30`–`casthcds34` and `prod-WindowClause` `WindowingUseCase*`; full QT3 sweep 30,832/41/948 (96.89%); unit tests pass 1,792/0; prior: schema-derived string/numeric/union cast cluster fixed: derived string subtypes accept numeric input, derived atomic pattern-facet validation uses XSD canonical lexical forms, list type casts reject single non-string atomic values, TimeSpan-backed durations serialize to XSD duration lexical form; XdmValue.ToString() respects gYear/gYearMonth/gMonth/gMonthDay/gDay schema annotations; full QT3 sweep 30,821/52/948 (96.86%); unit tests pass 1,786/0; prior: orderBy decimal normalization cluster fixed: `VmEngine.TryCast` now returns the atomized typed value when a schema-validated node is cast to its own type, so `xs:decimal($x)` on an `xs:decimal` element returns a decimal instead of the element node; closes `prod-OrderByClause` residual failures `orderBy26/36/46/56/62/64/65` at 205/0/0; full QT3 sweep 30,831/68/922 (96.89%); unit tests pass 1,777/0; prior: schema-aware SequenceType XPST0051 cluster fixed: VmEngine.InstanceOf now rejects list types, restrictions of union/list types, and unions containing list members as SequenceType item types, while pure atomic unions remain valid; closes `prod-InstanceofExpr` at 308/0/1 and `prod-TypeswitchExpr` at 72/0/1; unit tests pass 1,775/0; prior: fn:idref cluster fixed: IXdmNode.IsIdref exposes PSVI is-idrefs property for schema-validated IDREF/IDREFS nodes, including derived restrictions/lists, unions where the selected member is xs:IDREF, and complex types with simple content; fn:idref collection logic now consults IsIdref, closing QT3 fn-idref at 54/0/0; XDocumentNode.Prefix prefers empty prefix for default-namespace-bound elements so fn:name() returns unprefixed names; unit tests pass 1,772/0; prior: fn:json-to-xml cluster fixed: schema-aware validation with validate:=true() against embedded W3C schema-for-JSON, FOJS0005 for validate+duplicates='retain', FOJS0003 for schema/duplicate-key failures; VmEngine.ValueMatchesType recognizes parameterized kind tests including document-node(schema-element(...)) and preserves original case for schema type names in element(name, type); XQuery import schema "http://www.w3.org/2005/xpath-functions" resolves to embedded JSON schema; fn:json-to-xml 86/0/8; full QT3 sweep in progress; unit tests pass 1,765/0; fn:nilled cluster fixed: PSVI IsNil honored, fn:data returns PSVI typed value for schema-validated nodes (empty for nilled elements), element(*, T)/element(N, T) reject nilled elements while element(*, T?)/element(N, T?) accept them; full QT3 sweep at 30,780/119/922 (96.73%); runtime recursion fixes: FunctionItemInstanceOf no longer recurses through ValueMatchesType, and IsSchemaTypeSequenceSubtype no longer recurses through IsSequenceTypeSubtype for atomic schema types; dynamic constructor calls now capture/restore the static namespace context for namespace-sensitive union constructors; restrictions of union/list types are rejected as SequenceType item types with XPST0051; QName/NOTATION cast cluster fixed: original-case prefix resolution, xs:NOTATION-derived user-defined type construction, XQST0034 constructor-function conflicts, and QName-to-string-subtype rejection for union member selection; also fixes CastAs-UnionType-13/14/15/17/20, qname-cast-3/4, notation-cast-3, user-defined-8/9/11, instanceof136-141; `prod-CastExpr.schema` 123/6/1, `prod-CastableExpr UnionType` 29/0, `prod-CastableExpr ListType` 18/0, `fn-nilled` 60/0/4, `prod-InstanceofExpr` 305/3/1)
+> **Living Registry** — Last updated: 2026-09-01 (XSLT package cluster residual (`REQ-081`): `assert-string-value` now works on raw XDM results; `xsl:use-package` in imports/includes raises `XTSE3008`; library-package globals with context-item references raise `XPDY0002`; `xsl:original` resolved for overridden attribute-sets; `package` cluster 159/1/3 with `package-101` residual; full XSLT sweep 7,618/112/6,870; unit tests 2,111/0/0) (`xsl:accept` visibility enforcement and runtime checks (`REQ-079`): `Stylesheet.ValidateAcceptRules` validates `xsl:accept` rules, `GetEffectiveAcceptRule` resolves rule precedence, runtime raises `XTDE0040`/`XTDE3052`; W3C `accept` 50/0/0; unit tests 2,111/0/0) (`xsl:expose` static validation / runtime visibility (`REQ-078`): parses `component`/`names`/`visibility`, supports wildcards, raises `XTSE0020`/`XTSE3010`/`XTSE3020`/`XTSE3022`/`XTSE3025`; W3C `expose` 42/0/0; unit tests 2,111/0/0) (declared-modes / `XTSE3085` validation (`REQ-080`): enforces `xsl:package/@declared-modes`; W3C `declared-modes` 10/0/4; unit tests 2,104/0/0) (richer XSLT document symbols / outline (`REQ-073`): `DocumentSymbolHandler` outline now verified for templates, functions, variables, parameters, attribute-sets, keys, output declarations, plus import/include, modes, decimal formats, character maps, and accumulators; output symbols include method detail; language-server tests 72/0/0) (XSLT code lens source-document hint polish (`REQ-071`): single-quoted `<?bosak source-document=...?>` covered; XML comment alternative `<!-- bosak:source-document=... -->` supported; paths trimmed; language-server tests 70/0/0) (XSLT initial-template runner code lens (`REQ-072`): named-template code lens and `bosak/runInitialTemplate`; language-server tests 67/0/0) (`xsl:use-package` package-version range matching: exact/wildcard/hyphen/`to`/`+`/comma ranges with `PackageVersionResolutionStrategy`; harness honors `package_version_resolution`; all runnable `use-package` tests pass; unit tests 2,111/0/0) (`xsl:use-package` component merging: accept/override visibility, CollectingScope propagation, per-package lazy-global isolation; closes `use-package-160` through `use-package-176`; unit tests 2,111/0/0) (basic `xsl:package`/`xsl:use-package` parsing: `Stylesheet` recognizes `xsl:package` root, validates `@name`, treats package elements as known, raises `XTSE0165` for unimplemented resolution; unit tests 2,109/0/0) (schema-aware `fn:json-to-xml` with `validate:=true()` (`REQ-075`): validates generated XML against schema-for-JSON; QT3 sweep 31,148/0/673; unit tests 2,104/0/0)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -187,6 +187,10 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-075 | *(internal)* | Schema-aware `fn:json-to-xml` with `validate:=true()` | The remaining 10 QT3 failures (`json-to-xml-016/017/017b/037/037b/038/038b/044/046/047`) require `fn:json-to-xml` to validate the generated XML against the W3C schema-for-JSON when the `validate` option is true. The engine currently raises `FOJS0004` because it lacks the schema-aware JSON-to-XML path. | **Implemented** | Phase 4 | Charles Korthout | 2026-08-31 |
 | REQ-076 | *(internal)* | Basic `xsl:package` / `xsl:use-package` parsing | Prepare XSLT 3.0 package support: recognize `xsl:package` root and require `@name`, treat `xsl:use-package`, `xsl:expose`, `xsl:accept`, and `xsl:override` as known elements, and raise `XTSE0165` for `xsl:use-package` because full package resolution is not yet implemented. | **Implemented** | Phase 5 | Charles Korthout | 2026-08-29 |
 | REQ-077 | *(internal)* | `xsl:use-package` component merging — accept/override visibility and lazy-global isolation | Resolve `xsl:use-package` to registered packages, merge functions/variables/parameters with `xsl:accept` visibility and `xsl:override` replacements, propagate `CollectingScope` for global collection and conflict validation, and isolate per-package lazy globals so sibling packages do not share same-name cached values. | **Implemented** | Phase 5 | Charles Korthout | 2026-08-30 |
+| REQ-078 | *(internal)* | `xsl:expose` static validation and runtime visibility | Required for W3C `expose` conformance cluster (42/0/0): parse `component`/`names`/`visibility`, support full and partial wildcards, validate partial wildcards against matching components, apply exposed visibility to exported components and initial-template selection, and read package name/version from the package document when the catalog omits them. | **Implemented** | Phase 5 | Charles Korthout | 2026-08-31 |
+| REQ-079 | *(internal)* | `xsl:accept` visibility enforcement and runtime checks | Required for W3C `accept` conformance cluster (50/0/0): validate `xsl:accept` rules against used-package exports, resolve rule precedence by name/component specificity, apply `xsl:expose` and `xsl:accept` visibility, track private templates accepted as `private` via `TemplateRule.AcceptedBy`, and raise `XTDE0040`/`XTDE3052` for hidden/abstract components. | **Implemented** | Phase 5 | Charles Korthout | 2026-08-31 |
+| REQ-080 | *(internal)* | XSLT `declared-modes` / `XTSE3085` validation | Required for W3C `declared-modes` cluster (10/0/4): enforce `xsl:package/@declared-modes="yes"` by checking every mode used in a package is declared locally or accepted from a used package. | **Implemented** | Phase 5 | Charles Korthout | 2026-08-31 |
+| REQ-081 | *(internal)* | XSLT `xsl:override` scope propagation for used-package components | Required to clear the last W3C `package` cluster failure (`package-101`): `xsl:override` variables and functions must be visible inside used-package templates, functions, and global initializers that reference them, and `xsl:original` must resolve to the overridden used-package definition for variables and functions. | **In Progress** | Phase 5 | Charles Korthout | 2026-09-01 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -3427,3 +3431,179 @@ After REQ-076 made `xsl:package` and the package-related elements known, `xsl:us
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-08-30 | Kimi | Implemented | Closes the accept/override visibility, diamond-import, and package-version range gaps in `use-package` conformance; all runnable W3C `use-package` tests pass. |
+
+
+
+### REQ-078: `xsl:expose` Static Validation and Runtime Visibility
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-08-31  
+**Status:** **Implemented**
+
+#### Problem Statement
+XSLT 3.0 packages use `xsl:expose` to control the visibility of exported components. Bosak recognized `xsl:expose` as a known element (REQ-076) but did not enforce the static constraints in XSLT 3.0 §9.6. Full wildcards (`names="*"`), partial wildcards (`*:local`, `prefix:*`), visibility upgrades, and `abstract` exposure were not validated against declared components, and runtime package export did not consult `xsl:expose`. The W3C `expose` cluster therefore failed 41/1/0.
+
+#### Proposed Solution
+- Parse `component`, `names`, and `visibility`, supporting full/partial wildcards and function arity suffixes.
+- Validate named rules against a single matching component, raising `XTSE3020` for missing components and `XTSE3010`/`XTSE3025` for illegal visibility changes.
+- Validate partial-wildcard rules against every matching component so `abstract` and public/final restrictions apply.
+- Apply exposed visibility in `GetExposedVisibility`, `IsExportedFromPackage`, `GetEffectiveVisibility`, `GetAllTemplateRules`, `GetAllNamedTemplates`, and `CollectGlobalsInDocumentOrder`.
+- Prefer `EffectiveVisibility` when selecting an initial template.
+- Make the conformance harness read package `@name` and `@package-version` from the package document when the catalog omits them.
+
+#### Acceptance Criteria
+- [x] W3C `expose` cluster passes 42/0/0.
+- [x] Partial wildcard `*:name` and `prefix:*` no longer raise `XTSE3020` when matching components exist.
+- [x] `abstract` partial-wildcard exposure of non-abstract components raises `XTSE3025`.
+- [x] Public/final partial-wildcard exposure of explicitly private components raises `XTSE3010`.
+- [x] `dotnet test Bosak.sln` passes (2,111/0/0).
+- [x] No regression in `declared-modes` or `use-package` clusters.
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine` initial-template selection uses `EffectiveVisibility` |
+| Standard | None | |
+| XSLT | Modified | `Stylesheet` expose parsing/validation, `GetExposedVisibility`, `IsExportedFromPackage`, component collection |
+| API | None | |
+
+#### Related Requests
+- REQ-076 (basic `xsl:package` / `xsl:use-package` parsing)
+- REQ-077 (`xsl:use-package` component merging)
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-08-31 | Kimi | Implemented | Closes the W3C `expose` conformance cluster (42/0/0) and aligns package export/initial-template visibility with `xsl:expose`. |
+
+
+### REQ-079: `xsl:accept` Visibility Enforcement and Runtime Checks
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-08-31  
+**Status:** **Implemented**
+
+#### Problem Statement
+With `xsl:expose` implemented (REQ-078), using packages needed matching `xsl:accept` rules to import components with the correct visibility. Bosak did not validate `xsl:accept` against used-package exports or enforce the resulting visibility at runtime. This caused the W3C `accept` cluster to fail.
+
+#### Proposed Solution
+- Implement `Stylesheet.ValidateAcceptRules` / `ValidateAcceptRulesForPackage` to check every `xsl:accept` rule against the components exported by used packages.
+- Raise `XTSE0010`, `XTSE0020`, `XTSE3030`, `XTSE3032`, `XTSE3040`, and `XTSE3050`/`XTSE3080` where required.
+- Detect conflicting visible components exported by multiple used packages when no `xsl:accept` rule resolves the conflict.
+- `GetEffectiveAcceptRule` resolves rule precedence by name specificity, component specificity, and document order.
+- `GetEffectiveVisibility` and `ApplyAcceptVisibility` apply both `xsl:expose` (used package) and `xsl:accept` (using package) rules.
+- Track private templates accepted as `private` via `TemplateRule.AcceptedBy`; `IsTemplateVisible` restricts them to the accepting package.
+- Runtime checks in `TransformEngine` raise `XTDE0040` for inaccessible named templates and `XTDE3052` for abstract functions, templates, variables, and attribute-sets.
+
+#### Acceptance Criteria
+- [x] W3C `accept` cluster passes 50/0/0.
+- [x] `expose` cluster remains 42/0/0.
+- [x] `use-package` cluster remains 53/0/1.
+- [x] `declared-modes` cluster remains 10/0/4.
+- [x] `dotnet test Bosak.sln` passes (2,111/0/0).
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine` raises `XTDE0040`/`XTDE3052` for hidden/abstract components |
+| Standard | None | |
+| XSLT | Modified | `Stylesheet` accept validation and visibility application; `TemplateRule.AcceptedBy` |
+| API | None | |
+
+#### Related Requests
+- REQ-076 (basic `xsl:package` / `xsl:use-package` parsing)
+- REQ-077 (`xsl:use-package` component merging)
+- REQ-078 (`xsl:expose` static validation and runtime visibility)
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-08-31 | Kimi | Implemented | Closes the W3C `accept` conformance cluster (50/0/0) and completes the accept/override visibility story. |
+
+
+### REQ-080: XSLT `declared-modes` / `XTSE3085` Validation
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-08-31  
+**Status:** **Implemented**
+
+#### Problem Statement
+XSLT 3.0 allows a package to declare `declared-modes="yes"` (the default) so that every mode used inside the package must be explicitly declared. Bosak did not enforce this, causing the W3C `declared-modes` cluster to fail.
+
+#### Proposed Solution
+- `Stylesheet.ValidateModeDefinitions` enforces `xsl:package/@declared-modes="yes"` by collecting every mode used in the package and verifying it is declared.
+- `CollectUsedModes` gathers modes from `xsl:template/@mode`, `xsl:apply-templates/@mode`, and implicit unnamed/default mode usages across the package's root stylesheet and its imports/includes.
+- `#default`/`#unnamed` are normalized to the unnamed mode; `#current` and `#all` are ignored.
+- `CollectDeclaredModes` considers local `xsl:mode` declarations and public/final modes accepted from used packages.
+
+#### Acceptance Criteria
+- [x] W3C `declared-modes` cluster passes 10/0/4 (skips are `declared-modes="no"` cases).
+- [x] `use-package` cluster remains 53/0/1.
+- [x] `dotnet test Bosak.sln` passes (2,104/0/0).
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | None | |
+| Standard | None | |
+| XSLT | Modified | `Stylesheet.ValidateModeDefinitions`, `CollectUsedModes`, `CollectDeclaredModes` |
+| API | None | |
+
+#### Related Requests
+- REQ-076 (basic `xsl:package` / `xsl:use-package` parsing)
+- REQ-077 (`xsl:use-package` component merging)
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-08-31 | Kimi | Implemented | Closes the W3C `declared-modes` cluster (10/0/4) and keeps cross-package mode references valid. |
+
+
+### REQ-081: XSLT `xsl:override` Scope Propagation for Used-Package Components
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-09-01  
+**Status:** **In Progress**
+
+#### Problem Statement
+The W3C `package` conformance cluster is down to a single failure: `package-101`. The test uses `xsl:override` to replace a variable and a function in a used package, then expects the used package's own templates and functions to see the overridden definitions. Currently Bosak applies overrides only when the *using* package directly references a component; components inside the *used* package continue to see their own original definitions. In addition, `xsl:original` is not yet implemented for variables and functions, which `package-101` also relies on.
+
+#### Proposed Solution
+- Extend the used-package global scope so that when collecting functions, variables, and attribute-sets for a used package, `xsl:override` definitions from the using package are merged in with higher precedence than the originals.
+- Ensure `xsl:original` inside an override resolves to the overridden used-package component (function, variable, or attribute-set).
+- Preserve lazy-global isolation so that an overridden global variable in one package scope does not leak into sibling or unrelated package scopes.
+- Update `GetAllFunctionDefinitions`, `CollectGlobalsInDocumentOrder`, and runtime global/function lookup to consult the effective scope chain.
+
+#### Acceptance Criteria
+- [ ] `package-101` passes.
+- [ ] Other `package` cluster tests remain passing.
+- [ ] `use-package`, `accept`, `expose`, and `declared-modes` clusters show no regression.
+- [ ] `dotnet test Bosak.sln` passes (2,111/0/0).
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None | |
+| Runtime | Modified | `TransformEngine` global/function lookup must consult override scope |
+| Standard | None | |
+| XSLT | Modified | `Stylesheet` component collection and `xsl:original` resolution |
+| API | None | |
+
+#### Related Requests
+- REQ-076 (basic `xsl:package` / `xsl:use-package` parsing)
+- REQ-077 (`xsl:use-package` component merging)
+- REQ-078 (`xsl:expose` static validation and runtime visibility)
+- REQ-079 (`xsl:accept` visibility enforcement and runtime checks)
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-09-01 | Kimi | In Progress | Deeper override-scope propagation is required to clear `package-101`; recorded as the remaining package-cluster residual while earlier regressions and documentation are finalized. |
+

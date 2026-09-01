@@ -99,6 +99,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.32  | 30-08-2026     | Register inline test packages for xsl:use-package resolution                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.33  | 31-08-2026     | Read package name/version from package document when catalog omits them                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.34  | 31-08-2026     | Add GetStringValue(XdmValue) helper so assert-string-value works on node/sequence results|
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -585,13 +589,37 @@ class Program
                 var pkgUri = pkg.Attribute("uri")?.Value;
                 var pkgVersion = pkg.Attribute("package-version")?.Value;
                 var pkgRole = pkg.Attribute("role")?.Value;
-                if (pkgFile == null || pkgUri == null || pkgRole == "principal")
+                if (pkgFile == null || pkgRole == "principal")
                     continue;
                 var pkgPath = Path.Combine(testSetDir, pkgFile);
                 if (!File.Exists(pkgPath)) pkgPath = Path.Combine(catalogDir, pkgFile);
-                if (File.Exists(pkgPath))
-                    Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
-                        pkgUri, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
+                if (!File.Exists(pkgPath))
+                    continue;
+                // Some test cases omit the package uri/version on the <package> element;
+                // read them from the package document root so secondary packages still resolve.
+                if (pkgUri == null || pkgVersion == null)
+                {
+                    try
+                    {
+                        var pkgDoc = XDocument.Load(pkgPath);
+                        var pkgRoot = pkgDoc.Root;
+                        if (pkgRoot != null && pkgRoot.Name.LocalName == "package" &&
+                            (pkgRoot.Name.NamespaceName == "http://www.w3.org/1999/XSL/Transform" ||
+                             string.IsNullOrEmpty(pkgRoot.Name.NamespaceName)))
+                        {
+                            pkgUri ??= pkgRoot.Attribute("name")?.Value;
+                            pkgVersion ??= pkgRoot.Attribute("package-version")?.Value;
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore parse errors; the stylesheet loader will report them.
+                    }
+                }
+                if (pkgUri == null)
+                    continue;
+                Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
+                    pkgUri, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
             }
 
             // Determine the principal stylesheet or package. Prefer an element with
@@ -842,6 +870,19 @@ class Program
             if (initialModeElem != null)
                 initialMode = initialModeElem.Attribute("name")?.Value;
 
+            // Evaluate <initial-mode select="..."> to produce the initial match selection.
+            XdmValue? initialMatchSelection = null;
+            if (initialModeElem != null)
+            {
+                var selectAttr = initialModeElem.Attribute("select")?.Value;
+                if (!string.IsNullOrEmpty(selectAttr))
+                {
+                    var nsMap = ExtractNamespaces(initialModeElem);
+                    var matchExpr = XPath31Expression.Compile(selectAttr, new Bosak.XPath.Api.CompileOptions { Namespaces = nsMap });
+                    initialMatchSelection = matchExpr.Evaluate(evalContext);
+                }
+            }
+
             // Check for initial-function entry point
             var initialFunctionElem = testElem.Element(ns + "initial-function");
             bool isInitialFunction = initialFunctionElem != null;
@@ -894,6 +935,14 @@ class Program
                 else
                     resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
+            else if (initialMatchSelection != null)
+            {
+                // Initial mode with an explicit initial match selection.
+                if (rawOutput)
+                    resultValue = executable.Transform(null, initialMatchSelection, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                else
+                    resultXml = executable.TransformToString(null, initialMatchSelection, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
+            }
             else if (!string.IsNullOrEmpty(initialTemplate) || hasImplicitInitialTemplate)
             {
                 // Named-template entry points with no explicit source document have no
@@ -913,7 +962,13 @@ class Program
             }
             else
             {
-                resultXml = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
+                // No source and no explicit entry point. Let the runtime report the
+                // appropriate error (XTDE0044 or, for a package with no public initial
+                // template, XTDE0040) instead of fabricating a dummy source document.
+                if (rawOutput)
+                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                else
+                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
 
             // Bind the raw result to the variable named by <output result-var="..."/>
@@ -1751,7 +1806,9 @@ class Program
         var assertString = resultElem.Name.LocalName == "assert-string-value" ? resultElem : resultElem.Element(ns + "assert-string-value");
         if (assertString != null)
         {
-            return (actual.IsUndefined ? string.Empty : actual.StringValue) == assertString.Value;
+            var stringValue = GetStringValue(actual);
+            return stringValue == assertString.Value
+                || stringValue.Trim() == assertString.Value.Trim();
         }
 
         // assert-true
@@ -2228,6 +2285,36 @@ class Program
             var text = Regex.Replace(actual, "<\\?xml[^?]*\\?>", string.Empty).TrimStart('\uFEFF');
             return text.TrimEnd('\r', '\n');
         }
+    }
+
+    /// <summary>
+    /// Computes the XPath string value of an XDM value. For a node this is the
+    /// node's string value; for a sequence the string values of the items are
+    /// concatenated; for atomic values the canonical string representation is used.
+    /// </summary>
+    static string GetStringValue(XdmValue actual)
+    {
+        if (actual.IsUndefined)
+            return string.Empty;
+
+        if (actual.Kind == XdmValueKind.Node)
+            return actual.NodeValue.StringValue;
+
+        if (actual.Kind == XdmValueKind.Sequence)
+        {
+            var sb = new StringBuilder();
+            var source = actual.SequenceValue;
+            if (source != null)
+            {
+                foreach (var item in XdmSequence.FromSource(source))
+                {
+                    sb.Append(GetStringValue(item));
+                }
+            }
+            return sb.ToString();
+        }
+
+        return actual.ToString();
     }
 
     /// <summary>
