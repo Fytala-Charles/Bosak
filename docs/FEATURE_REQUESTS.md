@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-> **Living Registry** — Last updated: 2026-09-01 (XSLT `xsl:override` scope propagation and `xsl:original` for functions (`REQ-081`): `xsl:override` variables/functions are visible inside used-package components; `xsl:original(...)` dispatches to overridden functions; `XTSE0770` for duplicate overriding functions; package-scope `fn:function-lookup` returns the declaring package's own declarations; `package` cluster 72/0/0 with `package-101` passing; `override` cluster 56/43/4; `function-lookup` cluster 8/0/0; full XSLT sweep 7,627/103/6,870; unit tests 2,114/0/0) (XSLT package cluster residual (`REQ-081`): `assert-string-value` now works on raw XDM results; `xsl:use-package` in imports/includes raises `XTSE3008`; library-package globals with context-item references raise `XPDY0002`; `xsl:original` resolved for overridden attribute-sets; `package` cluster 159/1/3 with `package-101` residual; full XSLT sweep 7,618/112/6,870; unit tests 2,111/0/0) (`xsl:accept` visibility enforcement and runtime checks (`REQ-079`): `Stylesheet.ValidateAcceptRules` validates `xsl:accept` rules, `GetEffectiveAcceptRule` resolves rule precedence, runtime raises `XTDE0040`/`XTDE3052`; W3C `accept` 50/0/0; unit tests 2,111/0/0) (`xsl:expose` static validation / runtime visibility (`REQ-078`): parses `component`/`names`/`visibility`, supports wildcards, raises `XTSE0020`/`XTSE3010`/`XTSE3020`/`XTSE3022`/`XTSE3025`; W3C `expose` 42/0/0; unit tests 2,111/0/0) (declared-modes / `XTSE3085` validation (`REQ-080`): enforces `xsl:package/@declared-modes`; W3C `declared-modes` 10/0/4; unit tests 2,104/0/0) (richer XSLT document symbols / outline (`REQ-073`): `DocumentSymbolHandler` outline now verified for templates, functions, variables, parameters, attribute-sets, keys, output declarations, plus import/include, modes, decimal formats, character maps, and accumulators; output symbols include method detail; language-server tests 72/0/0) (XSLT code lens source-document hint polish (`REQ-071`): single-quoted `<?bosak source-document=...?>` covered; XML comment alternative `<!-- bosak:source-document=... -->` supported; paths trimmed; language-server tests 70/0/0) (XSLT initial-template runner code lens (`REQ-072`): named-template code lens and `bosak/runInitialTemplate`; language-server tests 67/0/0) (`xsl:use-package` package-version range matching: exact/wildcard/hyphen/`to`/`+`/comma ranges with `PackageVersionResolutionStrategy`; harness honors `package_version_resolution`; all runnable `use-package` tests pass; unit tests 2,111/0/0) (`xsl:use-package` component merging: accept/override visibility, CollectingScope propagation, per-package lazy-global isolation; closes `use-package-160` through `use-package-176`; unit tests 2,111/0/0) (basic `xsl:package`/`xsl:use-package` parsing: `Stylesheet` recognizes `xsl:package` root, validates `@name`, treats package elements as known, raises `XTSE0165` for unimplemented resolution; unit tests 2,109/0/0) (schema-aware `fn:json-to-xml` with `validate:=true()` (`REQ-075`): validates generated XML against schema-for-JSON; QT3 sweep 31,148/0/673; unit tests 2,104/0/0)
+> **Living Registry** — Last updated: 2026-09-01 (Strict error-code matching in the XSLT conformance harness (`REQ-082`): expected `<error>` results now require the declared error code in the exception; strict full sweep 7,480/250/6,870 (96.8%), exposing 147 masked wrong-code passes — lenient figure was 7,627/103/6,870 — with zero genuine passes lost) (XSLT `xsl:override` scope propagation and `xsl:original` for functions (`REQ-081`): `xsl:override` variables/functions are visible inside used-package components; `xsl:original(...)` dispatches to overridden functions; `XTSE0770` for duplicate overriding functions; package-scope `fn:function-lookup` returns the declaring package's own declarations; `package` cluster 72/0/0 with `package-101` passing; `override` cluster 56/43/4; `function-lookup` cluster 8/0/0; full XSLT sweep 7,627/103/6,870; unit tests 2,114/0/0) (XSLT package cluster residual (`REQ-081`): `assert-string-value` now works on raw XDM results; `xsl:use-package` in imports/includes raises `XTSE3008`; library-package globals with context-item references raise `XPDY0002`; `xsl:original` resolved for overridden attribute-sets; `package` cluster 159/1/3 with `package-101` residual; full XSLT sweep 7,618/112/6,870; unit tests 2,111/0/0) (`xsl:accept` visibility enforcement and runtime checks (`REQ-079`): `Stylesheet.ValidateAcceptRules` validates `xsl:accept` rules, `GetEffectiveAcceptRule` resolves rule precedence, runtime raises `XTDE0040`/`XTDE3052`; W3C `accept` 50/0/0; unit tests 2,111/0/0) (`xsl:expose` static validation / runtime visibility (`REQ-078`): parses `component`/`names`/`visibility`, supports wildcards, raises `XTSE0020`/`XTSE3010`/`XTSE3020`/`XTSE3022`/`XTSE3025`; W3C `expose` 42/0/0; unit tests 2,111/0/0) (declared-modes / `XTSE3085` validation (`REQ-080`): enforces `xsl:package/@declared-modes`; W3C `declared-modes` 10/0/4; unit tests 2,104/0/0) (richer XSLT document symbols / outline (`REQ-073`): `DocumentSymbolHandler` outline now verified for templates, functions, variables, parameters, attribute-sets, keys, output declarations, plus import/include, modes, decimal formats, character maps, and accumulators; output symbols include method detail; language-server tests 72/0/0) (XSLT code lens source-document hint polish (`REQ-071`): single-quoted `<?bosak source-document=...?>` covered; XML comment alternative `<!-- bosak:source-document=... -->` supported; paths trimmed; language-server tests 70/0/0) (XSLT initial-template runner code lens (`REQ-072`): named-template code lens and `bosak/runInitialTemplate`; language-server tests 67/0/0) (`xsl:use-package` package-version range matching: exact/wildcard/hyphen/`to`/`+`/comma ranges with `PackageVersionResolutionStrategy`; harness honors `package_version_resolution`; all runnable `use-package` tests pass; unit tests 2,111/0/0) (`xsl:use-package` component merging: accept/override visibility, CollectingScope propagation, per-package lazy-global isolation; closes `use-package-160` through `use-package-176`; unit tests 2,111/0/0) (basic `xsl:package`/`xsl:use-package` parsing: `Stylesheet` recognizes `xsl:package` root, validates `@name`, treats package elements as known, raises `XTSE0165` for unimplemented resolution; unit tests 2,109/0/0) (schema-aware `fn:json-to-xml` with `validate:=true()` (`REQ-075`): validates generated XML against schema-for-JSON; QT3 sweep 31,148/0/673; unit tests 2,104/0/0)
 > This document tracks feature requests originating from applications consuming the Bosak XPath / XSLT stack. It serves as the single source of truth for cross-cutting capabilities that multiple consumers need.
 
 ---
@@ -191,6 +191,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-079 | *(internal)* | `xsl:accept` visibility enforcement and runtime checks | Required for W3C `accept` conformance cluster (50/0/0): validate `xsl:accept` rules against used-package exports, resolve rule precedence by name/component specificity, apply `xsl:expose` and `xsl:accept` visibility, track private templates accepted as `private` via `TemplateRule.AcceptedBy`, and raise `XTDE0040`/`XTDE3052` for hidden/abstract components. | **Implemented** | Phase 5 | Charles Korthout | 2026-08-31 |
 | REQ-080 | *(internal)* | XSLT `declared-modes` / `XTSE3085` validation | Required for W3C `declared-modes` cluster (10/0/4): enforce `xsl:package/@declared-modes="yes"` by checking every mode used in a package is declared locally or accepted from a used package. | **Implemented** | Phase 5 | Charles Korthout | 2026-08-31 |
 | REQ-081 | *(internal)* | XSLT `xsl:override` scope propagation for used-package components | Required to clear the last W3C `package` cluster failure (`package-101`): `xsl:override` variables and functions are visible inside used-package templates, functions, and global initializers that reference them, and `xsl:original` resolves to the overridden used-package function. | **Implemented** | Phase 5 | Charles Korthout | 2026-09-01 |
+| REQ-082 | *(internal)* | Spec-correct XSLT error codes (strict harness follow-up) | The strict conformance harness (error-code matching, 2026-09-01) exposed 147 tests that passed with a wrong error code. Raise the spec-mandated codes: `XTSE0020` (15), `XTSE0010` (13), `XPTY0004` (12), `XTTE0505` (10), `XTDE3052` (10, abstract-component handling), `XTSE3070` (6), `XTDE0820` (6), `XTSE3050`/`XTSE3080` (8), `FODT0001` (4), others. | **Pending** | Phase 5 | Charles Korthout | 2026-09-01 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -3616,3 +3617,54 @@ The W3C `package` conformance cluster is down to a single failure: `package-101`
 | 2026-09-01 | Kimi | In Progress | Deeper override-scope propagation is required to clear `package-101`; recorded as the remaining package-cluster residual while earlier regressions and documentation are finalized. |
 | 2026-09-01 | Kimi | Implemented | Override contributions give used-package scopes the using package's `xsl:override` declarations; `xsl:original` dispatches to overridden functions. `package` cluster 72/0/0 (`package-101` passes); `override` cluster 56/43/4 (+7); no regressions in `use-package`/`accept`/`expose`/`declared-modes`; unit tests 2,114/0/0. |
 
+
+### REQ-082: Spec-Correct XSLT Error Codes (Strict Harness Follow-Up)
+
+**Requesting Application:** *(internal)*  
+**Submitted:** 2026-09-01  
+**Status:** **Pending**
+
+#### Problem Statement
+The XSLT conformance harness previously accepted any exception for an `<error>` result expectation. After tightening it to require the declared `<error code="...">` in the exception message (2026-09-01), the full sweep dropped from 7,627/103/6,870 to 7,480/250/6,870 — exposing **147 tests that passed with a wrong error code**. These are genuine spec-conformance bugs in the engine's error reporting, not harness artifacts (spot review of the `accept` cluster confirmed wrong codes such as `XPST0008`/`XTDE0040` where `XTDE3052` is mandated for invoking abstract components, and `XTDE3052` where `XTSE3080` is mandated). A few failures are upstream catalog artifacts (e.g. `accept-916` registers its secondary package under a URI that does not match the stylesheet's `xsl:use-package/@name`).
+
+#### Expected-code families (count of affected tests)
+| Expected code | Count | Theme |
+|---------------|-------|-------|
+| `XTSE0020` | 15 | Static validation of invalid attributes/elements |
+| `XTSE0010` | 13 | Missing/misplaced required constructs |
+| `XPTY0004` | 12 | Type errors (wrong item type / cardinality) |
+| `XTTE0505` | 10 | `xsl:message`/`xsl:assert` typed errors |
+| `XTDE3052` | 10 | Invoking abstract components must raise `XTDE3052`, not "not found"/`XPST0008` |
+| `XTSE3070` | 6 | Override of `hidden` components |
+| `XTDE0820` | 6 | `xsl:result-document` URI conflicts |
+| `XTSE3050`/`XTSE3080` | 8 | `xsl:accept` abstract-visibility rules (static vs dynamic phase) |
+| `FODT0001` | 4 | Date/time overflow |
+| `XTMM9001`, `XTSE3085`, `XTDE1480`, `XTDE1030`, others | 26 | Misc (modes, merge, try/catch) |
+| Uncategorized / `any-of` / upstream artifacts | 17 | Includes `load-xquery-module-*` (FOQM0001 unsupported) |
+
+#### Proposed Solution
+- Work through the families top-down; most are one-code-site fixes (e.g. raise `XTDE3052` when the target of a call is abstract instead of treating it as absent; raise `XTSE3080` statically for accept-abstract mismatches instead of failing dynamically).
+- Re-run the strict sweep after each family; the strict failure list (`/tmp/sweep_strict.log`) is the backlog.
+- Follow-up candidate: the QT3 harness has the same leniency (`tests/Bosak.XPath.Conformance/ResultComparer.cs:324` accepts any `InvalidOperationException` on code mismatch); tightening it will expose a similar QT3 backlog.
+
+#### Acceptance Criteria
+- [ ] Strict full sweep returns to at least the previous lenient pass count (7,627) with error codes matching.
+- [ ] `dotnet test Bosak.sln` passes.
+
+#### Impact Analysis
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | Possibly | Static validation error codes |
+| Compiler | None | |
+| Runtime | Possibly | Dynamic error codes (`XTDE3052`, `XTTE0505`, `XTDE0820`) |
+| Standard | Possibly | `FODT0001` date/time overflow |
+| XSLT | Possibly | Stylesheet static validation (`XTSE0010`/`XTSE0020`/`XTSE3070`/`XTSE3080`) |
+| API | None | |
+
+#### Related Requests
+- REQ-081 (`xsl:override` scope propagation — the strictness issue was discovered through `override-f-019`)
+
+#### Decision Log
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-09-01 | Kimi | Pending | Recorded as the backlog exposed by strict error-code matching in the XSLT conformance harness (147 tests). |

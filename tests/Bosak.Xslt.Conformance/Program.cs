@@ -103,6 +103,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.34  | 31-08-2026     | Add GetStringValue(XdmValue) helper so assert-string-value works on node/sequence results|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.35  | 01-09-2026     | Expected <error> results now require the declared error code to match the exception    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1019,12 +1021,20 @@ class Program
         }
         catch (Exception ex)
         {
-            // Check if an error was expected
+            // Check if an error was expected. The declared error code must match the
+            // exception message: accepting any error masked wrong-error-code failures
+            // (e.g. override-f-019 passing via an unrelated XPST0017).
             var resultElem = testCase.Element(ns + "result");
-            if (resultElem != null && resultElem.Element(ns + "error") != null)
+            if (resultElem != null && resultElem.Element(ns + "error") is { } expectedError)
             {
-                Console.WriteLine($"  PASS {name}");
-                return TestResult.Pass;
+                var expectedCode = expectedError.Attribute("code")?.Value;
+                if (ErrorCodeMatches(expectedCode, ex))
+                {
+                    Console.WriteLine($"  PASS {name}");
+                    return TestResult.Pass;
+                }
+                Console.WriteLine($"  FAIL {name}: Expected error {expectedCode}, got: {ex.Message}");
+                return TestResult.Fail;
             }
             if (resultElem != null && resultElem.Element(ns + "assert-serialization-error") is { } serError)
             {
@@ -1039,12 +1049,19 @@ class Program
             {
                 foreach (var child in resultElem.Element(ns + "any-of")!.Elements())
                 {
-                    if (child.Name.LocalName == "error") return TestResult.Pass;
+                    if (child.Name.LocalName == "error" && ErrorCodeMatches(child.Attribute("code")?.Value, ex))
+                    {
+                        Console.WriteLine($"  PASS {name}");
+                        return TestResult.Pass;
+                    }
                     if (child.Name.LocalName == "assert-serialization-error")
                     {
                         var code = child.Attribute("code")?.Value;
                         if (code != null && ex.Message.Contains(code))
+                        {
+                            Console.WriteLine($"  PASS {name}");
                             return TestResult.Pass;
+                        }
                     }
                 }
             }
@@ -1056,6 +1073,17 @@ class Program
                 Console.WriteLine(ex.ToString());
             return TestResult.Fail;
         }
+    }
+
+    /// <summary>
+    /// Returns true when the exception message contains the expected error code.
+    /// A missing or wildcard code accepts any error.
+    /// </summary>
+    private static bool ErrorCodeMatches(string? expectedCode, Exception ex)
+    {
+        if (string.IsNullOrEmpty(expectedCode) || expectedCode == "*")
+            return true;
+        return ex.Message.Contains(expectedCode, StringComparison.Ordinal);
     }
 
     static bool IsBackwardsCompatibleSpec(string specValue)
