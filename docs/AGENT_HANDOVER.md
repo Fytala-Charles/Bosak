@@ -1,9 +1,51 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** *(work in progress; not yet committed)* — package cluster residual work (`package-101` override scope)
-**Current focus:** **XSLT `package` conformance cluster** — The W3C `package` cluster is now **159 passed / 1 failed / 3 skipped** (up from 152/8/3). Four incremental fixes landed: `assert-string-value` on raw XDM node/sequence results via `GetStringValue(XdmValue)` in the harness; `XTSE3008` for `xsl:use-package` in imported/included modules via a new `Stylesheet.IsPrincipalLevel` flag; `XPDY0002` for library-package global variables whose initializer needs a context item by evaluating them with absent focus when the source stylesheet is a non-principal package; and `xsl:original` for overridden attribute-sets by including used-package originals when an override's `use-attribute-sets` contains `xsl:original`. The remaining failure is `package-101`, where variable/function overrides from `xsl:override` are not visible inside used-package components that reference them; implementing that requires deeper override-scope propagation and `xsl:original` support for functions/variables and is tracked as the last known residual.
-**Expected state:** W3C `package` cluster **159 passed / 1 failed / 3 skipped**; W3C `accept` cluster **50 passed / 0 failed / 0 skipped**; W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full W3C XSLT sweep **7,618 passed / 112 failed / 6,870 skipped** (98.6% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,111/0/0).
+**Commit:** *(work in progress; not yet committed)* — `xsl:override` scope propagation and `xsl:original` for functions (REQ-081)
+**Current focus:** **XSLT `package` conformance cluster is fully green** — The W3C `package` cluster is now **72 passed / 0 failed / 0 skipped**; `package-101` passes. `xsl:override` variable and function declarations are now visible inside used-package components that reference them (XSLT 3.0 §3.5.7.2): `Stylesheet.RegisterPackageOverrideContribution` records each use-package relationship carrying overrides on the used package's stylesheet instance, and the package-scope views (`GetPackageScopeFunctionDefinitions`, `CollectPackageScopeGlobalsInDocumentOrder`) apply those contributions whenever a used-package component executes. `XsltFunctionDefinition.OverriddenFunction` links an override to the declaration it replaces, and `TransformEngine` dispatches `xsl:original(...)` calls to that declaration while the override executes (registered per-arity in the root and package-scope function registries). `ValidateFunctionOverrides` now also raises `XTSE0770` for duplicate overriding functions in one `xsl:override` element. The `override` cluster improves to **56 passed / 43 failed / 4 skipped** (up from 49/50/4, zero regressions); residuals there are `$xsl:original` variable references, `xsl:original#N` named references, `xsl:original` partial application, and `xsl:call-template name="xsl:original"`.
+**Expected state:** W3C `package` cluster **72 passed / 0 failed / 0 skipped**; W3C `accept` cluster **50 passed / 0 failed / 0 skipped**; W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; W3C `override` cluster **56 passed / 43 failed / 4 skipped**; W3C `function-lookup` cluster **8 passed / 0 failed / 0 skipped**; full W3C XSLT sweep **7,627 passed / 103 failed / 6,870 skipped** (98.7% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,114/0/0; language-server tests 72/0/0).
+
+---
+
+## This Session Changes (`xsl:override` scope propagation and `xsl:original` for functions, REQ-081)
+
+1. **Override contributions on used packages** —
+   - `Stylesheet.RegisterPackageOverrideContribution(user, options)` is called from the `xsl:use-package` processing site when the use options contain variable/parameter/function overrides; the used package's stylesheet instance keeps the list so its own scope can see its users' overrides.
+   - Package stylesheets are re-parsed per compilation (no cross-compilation cache), so contributions cannot leak between compilations.
+
+2. **Package-scope component views** —
+   - `Stylesheet.GetPackageScopeFunctionDefinitions()` returns the function registry for the package's own execution scope with contributed overrides applied (override replaces original by name+arity and keeps an `OverriddenFunction` link).
+   - `Stylesheet.CollectPackageScopeGlobalsInDocumentOrder(...)` collects the package's own globals, removes overridden originals, and appends the override declarations (source stylesheet = the using package, collecting scope = the used package).
+   - `TransformEngine.EnterPackageScope` now builds the package-scope registry from `GetPackageScopeFunctionDefinitions()`; `TransformEngine.BuildScopeGlobals` builds scope globals from `CollectPackageScopeGlobalsInDocumentOrder(...)`. For the root stylesheet (no users) both views are identical to the previous behavior.
+   - `GetAllFunctionDefinitions` also sets `OverriddenFunction` when it merges overrides into a using package's view, so `xsl:original` works when the override is invoked from the principal package.
+
+3. **`xsl:original` function dispatch** —
+   - `TransformEngine` registers an `xsl:original#N` signature for every arity present among override definitions in each registry (root and package scope).
+   - `ExecuteXsltFunction` pushes `def.OverriddenFunction` onto `_overriddenFunctionStack` while an overriding function executes; `xsl:original(...)` dispatches to the stack top (arity-checked), raising `XTDE0041` when no override is executing.
+   - This also fixes `override-f-016` (call), `override-f-017` (`xsl:original#2` named reference), `override-f-018` (partial application), `override-f-026`, `override-f-033`, `override-f-035`, and `override-v-014`.
+
+4. **`XTSE0770` for duplicate overriding functions** —
+   - `ValidateFunctionOverrides` now detects two overriding functions with the same expanded QName and arity in a single `xsl:override` element. `override-f-019` previously passed only incidentally (the harness accepts any error for `<error>` results and the missing `xsl:original` registration raised `XPST0017`); it now passes for the correct static error.
+
+5. **Package-scope `fn:function-lookup`** —
+   - `FunctionSignature.IsHiddenFromFunctionLookup` marks pseudo-functions: `xsl:original` registrations are hidden because `xsl:original` is only available lexically inside an overriding component (fixes `function-lookup-006`).
+   - `EvaluationContext.FunctionLookupInterceptor` lets `TransformEngine.EnterPackageScope` redirect `fn:function-lookup` inside a package to the package's own (unamended) declarations: overridden originals are returned via an internal alias (`¹original¹name`) since the plain name resolves to the override in the effective registry; abstract declarations and user functions declared only in other packages are excluded (fixes `function-lookup-005`, fully green at 8/0/0). An interceptor is required because `XPath31Expression.Evaluate` re-populates the standard function library on every evaluation, overwriting registry-level replacements of built-ins.
+   - Headers bumped: `src/Bosak.XPath.Runtime/Functions/XPathFunction.cs` → 0.5; `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` → 2.17; `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` → 5.91.
+
+6. **Headers bumped** —
+   - `src/Bosak.Xslt/Stylesheet/Stylesheet.cs` → 2.93; `src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs` → 0.6; `src/Bosak.Xslt/Runtime/TransformEngine.cs` → 6.53; `tests/Bosak.Xslt.Tests/StylesheetTests.cs` → 0.90 (three new `UsePackage_*` tests).
+
+7. **Verification** —
+   - W3C `package` cluster: **72/0/0** (`package-101` passes; up from 71/1/0 within the set).
+   - W3C `use-package` cluster: **53/0/1** (no regression).
+   - W3C `declared-modes` cluster: **10/0/4** (no regression).
+   - W3C `accept` cluster: **50/0/0** (no regression).
+   - W3C `expose` cluster: **42/0/0** (no regression).
+   - W3C `override` cluster: **56/43/4** (up from 49/50/4; before/after pass-list diff shows zero regressions and seven newly passing).
+   - W3C `function-lookup` cluster: **8/0/0** (`function-lookup-005` fixed; up from 7/1/0).
+   - QT3 `fn-function-lookup` set: **669/0** (no regression).
+   - Full W3C XSLT sweep: **7,627/103/6,870** (98.7% pass rate among runnable tests, up from 7,618/112/6,870; nine tests fixed — `package-101`, seven `override` tests, `function-lookup-005` — zero regressions).
+   - `dotnet test Bosak.sln`: **2,114/0/0** (up from 2,111 with the three new tests; language-server tests 72/0/0).
 
 ---
 

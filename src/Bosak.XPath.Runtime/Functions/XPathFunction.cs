@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 25-07-2026     | Added IsVariadic for variable-arity functions (fn:concat arity 2+)                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 01-09-2026     | Added IsHiddenFromFunctionLookup for pseudo-functions (xsl:original)                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -80,4 +82,12 @@ public sealed class FunctionSignature
     /// when no exact-arity registration exists.
     /// </summary>
     public bool IsVariadic { get; init; }
+
+    /// <summary>
+    /// When true, the function is a pseudo-function that is not exposed through
+    /// <c>fn:function-lookup</c> — it remains callable by name and through function items.
+    /// Used for XSLT's <c>xsl:original</c>, which is only available lexically inside an
+    /// overriding component (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    public bool IsHiddenFromFunctionLookup { get; init; }
 }

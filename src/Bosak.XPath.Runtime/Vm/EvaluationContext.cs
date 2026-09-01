@@ -61,6 +61,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.16  | 26-08-2026     | Added DocumentLoaded callback so XSLT can detect XTDE1500 read/write conflicts            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.17  | 01-09-2026     | Added FunctionLookupInterceptor so XSLT package scopes can filter fn:function-lookup      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -691,6 +693,16 @@ public sealed class EvaluationContext
         _functions[key] = signature;
         return this;
     }
+
+    /// <summary>
+    /// Optional interceptor consulted by <c>fn:function-lookup</c> before the dynamic
+    /// registry. The interceptor receives the context, namespace URI, local name, and arity,
+    /// and returns the lookup result (<see cref="XdmValue.Undefined"/> for "not found"), or
+    /// <c>null</c> to decline and let the standard registry resolution run. XSLT package
+    /// scopes install an interceptor so the lookup sees the declaring package's own
+    /// declarations rather than overrides contributed by using packages.
+    /// </summary>
+    public Func<EvaluationContext, string, string, int, XdmValue?>? FunctionLookupInterceptor { get; set; }
 
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
     {

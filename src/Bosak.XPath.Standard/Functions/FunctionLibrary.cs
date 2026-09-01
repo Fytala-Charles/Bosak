@@ -273,6 +273,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.90  | 28-08-2026     | fn:collection/fn:uri-collection support fragment identifiers and ?select= query params |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.91  | 01-09-2026     | fn:function-lookup skips signatures hidden via IsHiddenFromFunctionLookup (xsl:original) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -6661,7 +6663,12 @@ public static class FunctionLibrary
     {
         var qname = args[0].QNameValue;
         int arity = (int)args[1].IntegerValue;
-        if (ctx.TryResolveFunction(qname.NamespaceUri, qname.LocalName, arity, out var sig))
+        // XSLT package scopes may intercept the lookup to expose the declaring package's
+        // own declarations instead of overrides contributed by using packages.
+        if (ctx.FunctionLookupInterceptor?.Invoke(ctx, qname.NamespaceUri, qname.LocalName, arity) is { } intercepted)
+            return intercepted;
+        if (ctx.TryResolveFunction(qname.NamespaceUri, qname.LocalName, arity, out var sig) &&
+            !sig.IsHiddenFromFunctionLookup)
             return XdmValue.FromFunction(new NamedFunctionItem(sig.NamespaceUri, sig.LocalName, sig.Arity)
             {
                 DefiningContext = ctx,

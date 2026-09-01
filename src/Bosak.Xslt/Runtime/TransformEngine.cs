@@ -256,6 +256,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.51  | 31-08-2026     | CallTemplate delegates visibility to IsTemplateVisible using owner+AcceptedBy           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.52  | 01-09-2026     | Override scope propagation into used-package components; xsl:original function dispatch |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.53  | 01-09-2026     | Package-scope fn:function-lookup interceptor: own declarations, originals via alias   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -521,6 +525,15 @@ public sealed class TransformEngine
     // When executing a component declared inside a package, this points to the declaring
     // package so private functions and variables of that package are visible to the component.
     private Stylesheet.Stylesheet? _currentPackageScope;
+
+    // Stack of overridden used-package functions whose xsl:override replacement is currently
+    // executing; the top is the dispatch target of an xsl:original call (XSLT 3.0 §3.5.7.2).
+    private readonly Stack<Stylesheet.XsltFunctionDefinition> _overriddenFunctionStack = new();
+
+    // Keys of every registered XSLT stylesheet function (root and package scopes). Used by the
+    // package-scope fn:function-lookup to distinguish user functions that are not visible in
+    // the current package from built-in functions.
+    private readonly HashSet<(string NamespaceUri, string LocalName, int Arity)> _xsltFunctionKeys = new();
 
     // Tracks globals currently being evaluated to detect circular references.
     private readonly HashSet<(string LocalName, string NamespaceUri)> _evaluatingGlobals = new();
@@ -1680,7 +1693,99 @@ public sealed class TransformEngine
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
             _context.RegisterFunction(sig);
+            _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
         }
+        RegisterXslOriginalFunctions(allFuncs.Values);
+    }
+
+    /// <summary>
+    /// Registers <c>xsl:original</c> function signatures for the arities of the supplied
+    /// definitions that override a used-package function. A call to <c>xsl:original</c>
+    /// dispatches to the overridden declaration of the override that is currently executing
+    /// (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    private void RegisterXslOriginalFunctions(IEnumerable<Stylesheet.XsltFunctionDefinition> definitions)
+    {
+        foreach (var arity in definitions.Where(d => d.OverriddenFunction != null).Select(d => d.Arity).Distinct())
+        {
+            _context.RegisterFunction(new FunctionSignature
+            {
+                NamespaceUri = Stylesheet.Stylesheet.XslNamespace,
+                LocalName = "original",
+                Arity = arity,
+                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, arity).ToList(),
+                ReturnType = XdmValueKind.Sequence,
+                // xsl:original is only available lexically inside an overriding component;
+                // fn:function-lookup must not expose it (function-lookup-006).
+                IsHiddenFromFunctionLookup = true,
+                Implementation = (ctx, a) => ExecuteXslOriginalFunction(a)
+            });
+        }
+    }
+
+    /// <summary>
+    /// Dispatches an <c>xsl:original</c> call to the overridden used-package function of the
+    /// override that is currently executing.
+    /// </summary>
+    private XdmValue ExecuteXslOriginalFunction(ReadOnlySpan<XdmValue> args)
+    {
+        if (_overriddenFunctionStack.Count == 0)
+            throw new InvalidOperationException("XTDE0041: xsl:original is not available because no overriding function is currently executing.");
+        var original = _overriddenFunctionStack.Peek();
+        if (original.Arity != args.Length)
+            throw new InvalidOperationException($"XPST0017: xsl:original called with {args.Length} argument(s) does not match the arity {original.Arity} of the overridden function '{original.LocalName}'.");
+        return ExecuteXsltFunction(original, args);
+    }
+
+    /// <summary>
+    /// Internal alias prefix for the registration of a used-package original function whose
+    /// name is shadowed by an override in the effective package-scope registry. The alias
+    /// lets the package-scope <c>fn:function-lookup</c> return the package's own declaration
+    /// even when the plain name resolves to the override. The control character makes the
+    /// alias unspellable in source XPath.
+    /// </summary>
+    private static string OriginalAliasName(string localName) => "\u0001original\u0001" + localName;
+
+    /// <summary>
+    /// Package-scope interceptor for <c>fn:function-lookup</c>. Within a package, the
+    /// function returned for a user function is the package's own declaration — not an
+    /// overriding declaration contributed by a using package — and abstract declarations
+    /// are not returned (XSLT 3.0 §9.9 / function-lookup-005). Returns <c>null</c> for
+    /// names that are not XSLT stylesheet functions so the standard implementation handles
+    /// built-in and constructor functions.
+    /// </summary>
+    private XdmValue? PackageScopeFunctionLookup(
+        string namespaceUri,
+        string localName,
+        int arity,
+        IReadOnlyDictionary<(string ns, string name, int arity), Stylesheet.XsltFunctionDefinition> ownView,
+        IReadOnlySet<(string ns, string name, int arity)> overriddenKeys,
+        EvaluationContext ctx)
+    {
+        var key = (namespaceUri, localName, arity);
+
+        if (ownView.TryGetValue(key, out var def))
+        {
+            if (def.Visibility == "abstract")
+                return XdmValue.Undefined;
+            var resolvedName = overriddenKeys.Contains(key) ? OriginalAliasName(localName) : localName;
+            return XdmValue.FromFunction(new NamedFunctionItem(namespaceUri, resolvedName, arity)
+            {
+                DefiningContext = ctx,
+                CapturedContextItem = ctx.ContextItem,
+                CapturedContextPosition = ctx.ContextPosition,
+                CapturedContextSize = ctx.ContextSize,
+                CapturedBaseUri = ctx.BaseUri,
+                CapturedNamespaces = ctx.SnapshotNamespaces()
+            });
+        }
+
+        // XSLT user functions outside this package's own view (e.g. declared only in the
+        // principal package) are not visible to fn:function-lookup inside this package.
+        if (_xsltFunctionKeys.Contains(key))
+            return XdmValue.Undefined;
+
+        return null;
     }
 
     /// <summary>
@@ -2389,6 +2494,7 @@ public sealed class TransformEngine
         public Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> NamedDecimalFormatSnapshot;
         public DecimalFormat DefaultDecimalFormatSnapshot;
         public IDisposable? LazyGlobalsSnapshot;
+        public Func<EvaluationContext, string, string, int, XdmValue?>? PreviousFunctionLookupInterceptor;
     }
 
     /// <summary>
@@ -2404,6 +2510,7 @@ public sealed class TransformEngine
         var namedDecimalSnapshot = _context.SnapshotDecimalFormats();
         var defaultDecimalSnapshot = _context.DefaultDecimalFormat;
         var lazyGlobalsSnapshot = _context.SnapshotLazyGlobals();
+        var functionLookupInterceptorSnapshot = _context.FunctionLookupInterceptor;
 
         if (package?.IsPackage == true && package != previousScope)
         {
@@ -2420,7 +2527,14 @@ public sealed class TransformEngine
                     _context.WithDecimalFormat(key.localName, key.nsUri, def.Format);
             }
 
-            foreach (var (key, def) in package.GetAllFunctionDefinitions(includePrivate: true, includeUsedPackagePrivate: true))
+            // The package's own (unamended) function view drives fn:function-lookup; the
+            // effective view adds xsl:override contributions from using packages and drives
+            // static dispatch (XSLT 3.0 §3.5.7.2 and §9.9).
+            var ownView = package.GetAllFunctionDefinitions(includePrivate: true, includeUsedPackagePrivate: true);
+            var scopeFunctions = new Dictionary<(string ns, string name, int arity), Stylesheet.XsltFunctionDefinition>(ownView);
+            package.ApplyPackageOverrideContributions(scopeFunctions);
+            var overriddenKeys = new HashSet<(string ns, string name, int arity)>();
+            foreach (var (key, def) in scopeFunctions)
             {
                 var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
                 _context.RegisterFunction(new FunctionSignature
@@ -2436,7 +2550,32 @@ public sealed class TransformEngine
                     ReturnTypeName = def.ReturnType,
                     Implementation = (ctx, a) => ExecuteXsltFunction(def, a)
                 });
+                _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
+
+                // The overridden original remains callable for fn:function-lookup through an
+                // internal alias, since its plain name now resolves to the override.
+                if (def.OverriddenFunction is { } original)
+                {
+                    overriddenKeys.Add(key);
+                    _context.RegisterFunction(new FunctionSignature
+                    {
+                        NamespaceUri = original.NamespaceUri,
+                        LocalName = OriginalAliasName(original.LocalName),
+                        Arity = original.Arity,
+                        ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, original.Arity).ToList(),
+                        ReturnType = XdmValueKind.Sequence,
+                        IsHiddenFromFunctionLookup = true,
+                        Implementation = (ctx, a) => ExecuteXsltFunction(original, a)
+                    });
+                }
             }
+            RegisterXslOriginalFunctions(scopeFunctions.Values);
+
+            // Within a package, fn:function-lookup returns the package's own declarations,
+            // not overrides contributed by using packages (function-lookup-005). An
+            // interceptor is used because XPath evaluation re-populates the standard
+            // function library, which would overwrite a registry-level replacement.
+            _context.FunctionLookupInterceptor = (ctx, ns, local, a) => PackageScopeFunctionLookup(ns, local, a, ownView, overriddenKeys, ctx);
         }
 
         return new PackageScopeState
@@ -2446,7 +2585,8 @@ public sealed class TransformEngine
             NamespaceAliasSnapshot = namespaceAliasSnapshot,
             NamedDecimalFormatSnapshot = namedDecimalSnapshot,
             DefaultDecimalFormatSnapshot = defaultDecimalSnapshot,
-            LazyGlobalsSnapshot = lazyGlobalsSnapshot
+            LazyGlobalsSnapshot = lazyGlobalsSnapshot,
+            PreviousFunctionLookupInterceptor = functionLookupInterceptorSnapshot
         };
     }
 
@@ -2457,6 +2597,7 @@ public sealed class TransformEngine
         _context.RestoreFunctions(state.FunctionSnapshot);
         _context.RestoreDecimalFormats(state.NamedDecimalFormatSnapshot);
         _context.DefaultDecimalFormat = state.DefaultDecimalFormatSnapshot;
+        _context.FunctionLookupInterceptor = state.PreviousFunctionLookupInterceptor;
         state.LazyGlobalsSnapshot?.Dispose();
     }
 
@@ -2503,6 +2644,10 @@ public sealed class TransformEngine
             // Enter the declaring package scope after binding parameters so private
             // functions and variables of the package are visible to the function body.
             packageScopeState = EnterPackageScope(def.Stylesheet.OwningPackage);
+            // An override's xsl:original calls dispatch to the overridden used-package
+            // declaration for the duration of the overriding body (XSLT 3.0 §3.5.7.2).
+            if (def.OverriddenFunction != null)
+                _overriddenFunctionStack.Push(def.OverriddenFunction);
             _context.CurrentOutputUri = null;
             using var temporaryOutputState = EnterTemporaryOutputState();
 
@@ -2581,6 +2726,8 @@ public sealed class TransformEngine
             _context.SuppressLazyGlobalCaching = savedSuppressCaching;
             _context.CurrentOutputUri = savedOutputUri;
             _functionLocalLazyVariables = savedFunctionLocals;
+            if (def.OverriddenFunction != null)
+                _overriddenFunctionStack.Pop();
             ExitPackageScope(packageScopeState);
         }
     }
@@ -9979,7 +10126,7 @@ public sealed class TransformEngine
     {
         var globals = new List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam, Stylesheet.Stylesheet SourceStylesheet, Stylesheet.Stylesheet CollectingScope, string? EffectiveVisibility)>();
         int order = 0;
-        stylesheet.CollectGlobalsInDocumentOrder(globals, ref order, includePrivateUsedPackageGlobals: stylesheet.IsPackage);
+        stylesheet.CollectPackageScopeGlobalsInDocumentOrder(globals, ref order, stylesheet.IsPackage);
         globals.Sort((a, b) =>
         {
             int precedenceComparison = b.Precedence.CompareTo(a.Precedence);

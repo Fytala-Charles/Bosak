@@ -145,6 +145,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.89  | 31-08-2026     | Added xsl:mode to package-root test so declared-modes validation passes                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.90  | 01-09-2026     | Added xsl:override scope propagation and xsl:original function tests                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -6531,6 +6533,135 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
         Assert.Contains("XTSE0010", ex.Message);
         Assert.DoesNotContain("Unknown XSLT element", ex.Message);
+    }
+
+    [Fact]
+    public void UsePackage_OverriddenVariable_IsVisibleInsideUsedPackage()
+    {
+        Api.XsltFunctionLibrary.ClearPackages();
+        Api.XsltFunctionLibrary.RegisterPackage("urn:test:package-var-override", "1.0", "urn:test:package-var-override:1.0");
+
+        var package = @"<xsl:package name='urn:test:package-var-override' package-version='1.0' version='3.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package-var-override'>
+            <xsl:variable name='p:separator' as='xs:string' select=""','"" visibility='public'/>
+            <xsl:function name='p:sep' as='xs:string' visibility='public'>
+                <xsl:sequence select='$p:separator'/>
+            </xsl:function>
+        </xsl:package>";
+
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package-var-override'
+            exclude-result-prefixes='xs p'>
+            <xsl:use-package name='urn:test:package-var-override' package-version='1.0'>
+                <xsl:override>
+                    <xsl:variable name='p:separator' as='xs:string' select=""';'"" visibility='public'/>
+                </xsl:override>
+            </xsl:use-package>
+            <xsl:template match='/'><out><xsl:value-of select='p:sep()'/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string>
+        {
+            ["urn:test:package-var-override:1.0"] = package
+        });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        // The used package's own function must see the overriding variable, not the original.
+        Assert.Contains("<out>;</out>", result);
+    }
+
+    [Fact]
+    public void UsePackage_OverriddenFunction_XslOriginal_CallsOriginal()
+    {
+        Api.XsltFunctionLibrary.ClearPackages();
+        Api.XsltFunctionLibrary.RegisterPackage("urn:test:package-func-override", "1.0", "urn:test:package-func-override:1.0");
+
+        var package = @"<xsl:package name='urn:test:package-func-override' package-version='1.0' version='3.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package-func-override'>
+            <xsl:function name='p:label' as='xs:string' visibility='public'>
+                <xsl:param name='v' as='xs:string'/>
+                <xsl:sequence select=""'L:' || $v""/>
+            </xsl:function>
+            <xsl:function name='p:wrap' as='xs:string' visibility='public'>
+                <xsl:param name='v' as='xs:string'/>
+                <xsl:sequence select='p:label($v)'/>
+            </xsl:function>
+        </xsl:package>";
+
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package-func-override'
+            exclude-result-prefixes='xs p'>
+            <xsl:use-package name='urn:test:package-func-override' package-version='1.0'>
+                <xsl:override>
+                    <xsl:function name='p:label' as='xs:string' visibility='public'>
+                        <xsl:param name='v' as='xs:string'/>
+                        <xsl:sequence select=""'*' || xsl:original($v) || '*'""/>
+                    </xsl:function>
+                </xsl:override>
+            </xsl:use-package>
+            <xsl:template match='/'><out><xsl:value-of select=""p:wrap('a')""/></out></xsl:template>
+        </xsl:stylesheet>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string>
+        {
+            ["urn:test:package-func-override:1.0"] = package
+        });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("root"))));
+        // p:wrap inside the used package must dispatch to the override, whose xsl:original
+        // call must invoke the used package's original p:label.
+        Assert.Contains("<out>*L:a*</out>", result);
+    }
+
+    [Fact]
+    public void UsePackage_DuplicateOverridingFunction_RaisesXTSE0770()
+    {
+        Api.XsltFunctionLibrary.ClearPackages();
+        Api.XsltFunctionLibrary.RegisterPackage("urn:test:package-dup-override", "1.0", "urn:test:package-dup-override:1.0");
+
+        var package = @"<xsl:package name='urn:test:package-dup-override' package-version='1.0' version='3.0'
+            xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package-dup-override'>
+            <xsl:function name='p:f' as='xs:string' visibility='public'>
+                <xsl:param name='v' as='xs:string'/>
+                <xsl:sequence select='$v'/>
+            </xsl:function>
+        </xsl:package>";
+
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:p='urn:test:package-dup-override'>
+            <xsl:use-package name='urn:test:package-dup-override' package-version='1.0'>
+                <xsl:override>
+                    <xsl:function name='p:f' as='xs:string' visibility='public'>
+                        <xsl:param name='v' as='xs:string'/>
+                        <xsl:sequence select=""'one'""/>
+                    </xsl:function>
+                    <xsl:function name='p:f' as='xs:string' visibility='public'>
+                        <xsl:param name='v' as='xs:string'/>
+                        <xsl:sequence select=""'two'""/>
+                    </xsl:function>
+                </xsl:override>
+            </xsl:use-package>
+            <xsl:template match='/'><out/></xsl:template>
+        </xsl:stylesheet>";
+
+        var resolver = new InlineUriResolver(new Dictionary<string, string>
+        {
+            ["urn:test:package-dup-override:1.0"] = package
+        });
+        var compiler = new Api.XsltCompiler { UriResolver = resolver };
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.Contains("XTSE0770", ex.Message);
     }
 
     private class InlineUriResolver : IXsltUriResolver

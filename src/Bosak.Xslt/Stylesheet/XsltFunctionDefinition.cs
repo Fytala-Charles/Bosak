@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.3   | 24-06-2026     | Evaluate _name AVTs to expanded QNames at parse time                                    |
 //                      | Charles Korthout | 0.4   | 29-06-2026     | _name AVTs now use the stylesheet static context (external static parameters)         |
 //                      | Charles Korthout | 0.5   | 26-06-2026     | Reject xsl:context-item inside xsl:function                                              |
+//                      | Charles Korthout | 0.6   | 01-09-2026     | Added OverriddenFunction link so xsl:original can reach the overridden declaration       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -61,6 +62,14 @@ public sealed class XsltFunctionDefinition
     /// Defaults to <c>private</c> when the attribute is absent.
     /// </summary>
     public string Visibility { get; }
+
+    /// <summary>
+    /// When this definition is an <c>xsl:override</c> replacement of a used-package function,
+    /// the overridden used-package declaration; otherwise <c>null</c>. A call to
+    /// <c>xsl:original</c> inside the overriding function body dispatches to this declaration
+    /// (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    public XsltFunctionDefinition? OverriddenFunction { get; set; }
 
     private XsltFunctionDefinition(
         string namespaceUri,

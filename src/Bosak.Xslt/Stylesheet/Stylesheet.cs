@@ -165,6 +165,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.92  | 31-08-2026     | XTSE3008 validation for xsl:use-package in imported modules; add IsPrincipalLevel flag |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.93  | 01-09-2026     | Override contributions: package-scope function/global views see xsl:override declarations |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -200,6 +202,10 @@ public sealed class Stylesheet
     private readonly List<Stylesheet> _includes = new();
     private readonly List<Stylesheet> _usedPackages = new();
     private readonly Dictionary<Stylesheet, PackageUseOptions?> _usedPackageOptions = new();
+    // xsl:override contributions from packages that use THIS package. Registered on the used
+    // package by each using package so that this package's own components see the overriding
+    // declarations when they execute (XSLT 3.0 §3.5.7.2).
+    private List<(Stylesheet User, PackageUseOptions Options)>? _packageOverrideContributions;
     private readonly List<ExposeRule> _exposeRules = new();
     private readonly List<KeyDefinition> _keyDefinitions = new();
     private readonly List<AccumulatorDefinition> _accumulators = new();
@@ -1721,7 +1727,12 @@ public sealed class Stylesheet
                     ResolveUsePackage(child, name, packageVersion);
                     ParsePackageUseOptions(child);
                     if (child.Annotation<ResolvedModuleAnnotation>()?.Module is { } usedModule)
-                        _usedPackageOptions[usedModule] = child.Annotation<PackageUseOptions>();
+                    {
+                        var useOptions = child.Annotation<PackageUseOptions>();
+                        _usedPackageOptions[usedModule] = useOptions;
+                        if (useOptions != null)
+                            usedModule.RegisterPackageOverrideContribution(this, useOptions);
+                    }
                 }
                 else
                 {
@@ -3710,8 +3721,9 @@ public sealed class Stylesheet
 
     /// <summary>
     /// Validates that no <c>xsl:override</c> function tries to override a used-package
-    /// function that is exposed as <c>final</c>. Raises <c>XTSE3060</c> when such an
-    /// override is detected.
+    /// function that is exposed as <c>final</c> (raises <c>XTSE3060</c>), and that a single
+    /// <c>xsl:override</c> element does not contain two functions with the same expanded
+    /// QName and arity (raises <c>XTSE0770</c>).
     /// </summary>
     private void ValidateFunctionOverrides()
     {
@@ -3720,6 +3732,7 @@ public sealed class Stylesheet
             var options = _usedPackageOptions.GetValueOrDefault(package);
             if (options == null)
                 continue;
+            var seenOverrides = new HashSet<(string LocalName, string NamespaceUri, int Arity)>();
             foreach (var overrideElem in options.OverrideFunctions)
             {
                 var nameAttr = overrideElem.Attribute("name")?.Value;
@@ -3727,6 +3740,8 @@ public sealed class Stylesheet
                     continue;
                 var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
                 var arity = overrideElem.Elements(XName.Get("param", XslNamespace)).Count();
+                if (!seenOverrides.Add((local, ns, arity)))
+                    throw new InvalidOperationException($"XTSE0770: Duplicate overriding function declaration '{{{ns}}}{local}#{arity}'.");
                 if (!package.TryFindFunction(local, ns, arity, out var def) || def == null)
                     continue;
                 var exposed = package.GetExposedVisibility("function", local, ns, arity);
@@ -4624,6 +4639,20 @@ public sealed class Stylesheet
         {
             throw new InvalidOperationException($"XTSE0165: Failed to load package '{name}' from '{location}'.", ex);
         }
+    }
+
+    /// <summary>
+    /// Registers an <c>xsl:use-package</c> relationship in which <paramref name="user"/> uses this
+    /// package with overriding variable, parameter, or function declarations. The overrides become
+    /// visible to this package's own components when they execute (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    private void RegisterPackageOverrideContribution(Stylesheet user, PackageUseOptions options)
+    {
+        if (options.OverrideFunctions.Count == 0 &&
+            options.OverrideVariables.Count == 0 &&
+            options.OverrideParams.Count == 0)
+            return;
+        (_packageOverrideContributions ??= new()).Add((user, options));
     }
 
     /// <summary>
@@ -6317,6 +6346,52 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Collects the global variables and parameters visible to components executing in this
+    /// package's own scope: the package's own declarations with <c>xsl:override</c> replacements
+    /// contributed by packages that use this package applied on top. Used-package components that
+    /// reference an overridden global must see the overriding declaration (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    public void CollectPackageScopeGlobalsInDocumentOrder(List<(int Precedence, int Order, (string LocalName, string NamespaceUri) Name, XElement Element, bool IsParam, Stylesheet SourceStylesheet, Stylesheet CollectingScope, string? EffectiveVisibility)> globals, ref int order, bool includePrivateUsedPackageGlobals)
+    {
+        CollectGlobalsInDocumentOrder(globals, ref order, 0, includePrivateUsedPackageGlobals);
+        if (_packageOverrideContributions == null)
+            return;
+
+        var overrideParamNames = new HashSet<(string LocalName, string NamespaceUri)>();
+        var overrideVariableNames = new HashSet<(string LocalName, string NamespaceUri)>();
+        var additions = new List<(XElement Element, bool IsParam, (string LocalName, string NamespaceUri) Name, Stylesheet User)>();
+        foreach (var (user, options) in _packageOverrideContributions)
+        {
+            foreach (var name in GetOverrideVariableNames(options, isParam: true))
+                overrideParamNames.Add(name);
+            foreach (var name in GetOverrideVariableNames(options, isParam: false))
+                overrideVariableNames.Add(name);
+            foreach (var elem in options.OverrideParams)
+            {
+                var nameAttr = elem.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(nameAttr))
+                    additions.Add((elem, true, ExpandVariableName(elem, nameAttr), user));
+            }
+            foreach (var elem in options.OverrideVariables)
+            {
+                var nameAttr = elem.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(nameAttr))
+                    additions.Add((elem, false, ExpandVariableName(elem, nameAttr), user));
+            }
+        }
+
+        if (additions.Count == 0)
+            return;
+
+        // Remove the overridden originals collected above; the overriding declarations
+        // take their place in this package's effective scope.
+        globals.RemoveAll(g => g.IsParam ? overrideParamNames.Contains(g.Name) : overrideVariableNames.Contains(g.Name));
+        int precedence = ImportPrecedence;
+        foreach (var (elem, isParam, name, user) in additions)
+            globals.Add((precedence, order++, name, elem, isParam, user, this, null));
+    }
+
+    /// <summary>
     /// Validates that no global variable or parameter has more than one binding at the
     /// same import precedence, unless a higher-precedence binding exists (XTSE0630).
     /// </summary>
@@ -6568,6 +6643,7 @@ public sealed class Stylesheet
                     IsAcceptedAsPrivate(options, "function", def.LocalName, def.NamespaceUri, def.Arity);
                 if (overrides.TryGetValue(key, out var overrideDef))
                 {
+                    overrideDef.OverriddenFunction = def;
                     result[key] = overrideDef;
                 }
                 else if (effectiveVis is "public" or "final" or "abstract" ||
@@ -6591,6 +6667,45 @@ public sealed class Stylesheet
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// Returns the function definitions visible to components executing in this package's own
+    /// scope: every function visible locally, with <c>xsl:override</c> replacements contributed
+    /// by packages that use this package applied on top. Used-package components that call an
+    /// overridden function must dispatch to the overriding declaration (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    public Dictionary<(string ns, string name, int arity), XsltFunctionDefinition> GetPackageScopeFunctionDefinitions()
+    {
+        var result = GetAllFunctionDefinitions(includePrivate: true, includeUsedPackagePrivate: true);
+        ApplyPackageOverrideContributions(result);
+        return result;
+    }
+
+    /// <summary>
+    /// Applies the <c>xsl:override</c> function declarations contributed by packages that use
+    /// this package to the supplied definition map, replacing same-name/arity definitions and
+    /// linking each override to the declaration it replaces. Used to build the effective
+    /// function registry for this package's execution scope (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    internal void ApplyPackageOverrideContributions(Dictionary<(string ns, string name, int arity), XsltFunctionDefinition> result)
+    {
+        if (_packageOverrideContributions == null)
+            return;
+
+        foreach (var (user, options) in _packageOverrideContributions)
+        {
+            foreach (var overrideElem in options.OverrideFunctions)
+            {
+                var overrideDef = XsltFunctionDefinition.FromElement(overrideElem, user);
+                if (overrideDef == null)
+                    continue;
+                var key = (overrideDef.NamespaceUri, overrideDef.LocalName, overrideDef.Arity);
+                if (result.TryGetValue(key, out var original))
+                    overrideDef.OverriddenFunction = original;
+                result[key] = overrideDef;
+            }
+        }
     }
 
     /// <summary>
