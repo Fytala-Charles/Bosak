@@ -1,6 +1,17 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
+**Commit:** 49cf229 — XTSE0010 validation for misplaced xsl:use-package and xsl:expose (REQ-082)
+**Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: package-version grammar (12 tests), static param error codes (5 tests), misplaced use-package/expose (2 tests). Latest clean sweep pending; expect previous strict baseline (7,511/219/6,870) to drop by ~2 more tests.
+**Results:** `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass), `package` 64/8/0 (903/904 fixed, 8 pre-existing failures remain). Unit tests 2,114/0/0.
+**Remaining in REQ-082 family (17 tests):** `accumulator-024/025`, `context-item-016/902/903`, `expose-927`, `initial-function-102i/j`, `iterate-024`, `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`, `param-0113`.
+**Next steps:** Continue through the remaining sub-clusters.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-01
 **Commit:** 99c9bb4 — XTSE0010/0020 error codes for static param sequence constructor and tunnel attribute (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: strict package-version grammar validation (12 tests fixed), static param sequence-constructor/tunnel error codes (5 tests fixed). Latest clean sweep: **7,511 passed / 219 failed / 6,870 skipped** (97.2%).
 **Results:** W3C `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass; remaining 2 unrelated). Unit tests 2,114/0/0.
