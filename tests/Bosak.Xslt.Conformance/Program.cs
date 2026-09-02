@@ -599,29 +599,34 @@ class Program
                     continue;
                 // Some test cases omit the package uri/version on the <package> element;
                 // read them from the package document root so secondary packages still resolve.
-                if (pkgUri == null || pkgVersion == null)
+                string? docName = null;
+                try
                 {
-                    try
+                    var pkgDoc = XDocument.Load(pkgPath);
+                    var pkgRoot = pkgDoc.Root;
+                    if (pkgRoot != null && pkgRoot.Name.LocalName == "package" &&
+                        (pkgRoot.Name.NamespaceName == "http://www.w3.org/1999/XSL/Transform" ||
+                         string.IsNullOrEmpty(pkgRoot.Name.NamespaceName)))
                     {
-                        var pkgDoc = XDocument.Load(pkgPath);
-                        var pkgRoot = pkgDoc.Root;
-                        if (pkgRoot != null && pkgRoot.Name.LocalName == "package" &&
-                            (pkgRoot.Name.NamespaceName == "http://www.w3.org/1999/XSL/Transform" ||
-                             string.IsNullOrEmpty(pkgRoot.Name.NamespaceName)))
-                        {
-                            pkgUri ??= pkgRoot.Attribute("name")?.Value;
-                            pkgVersion ??= pkgRoot.Attribute("package-version")?.Value;
-                        }
+                        docName = pkgRoot.Attribute("name")?.Value;
+                        pkgUri ??= docName;
+                        pkgVersion ??= pkgRoot.Attribute("package-version")?.Value;
                     }
-                    catch
-                    {
-                        // Ignore parse errors; the stylesheet loader will report them.
-                    }
+                }
+                catch
+                {
+                    // Ignore parse errors; the stylesheet loader will report them.
                 }
                 if (pkgUri == null)
                     continue;
                 Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
                     pkgUri, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
+                // The catalog URI occasionally differs from the name declared in the package
+                // document (e.g. accept-916); register both so xsl:use-package resolves by
+                // the document-declared name as a real package loader would.
+                if (!string.IsNullOrEmpty(docName) && docName != pkgUri)
+                    Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
+                        docName, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
             }
 
             // Determine the principal stylesheet or package. Prefer an element with

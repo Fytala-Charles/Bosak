@@ -167,6 +167,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.93  | 01-09-2026     | Override contributions: package-scope function/global views see xsl:override declarations |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.94  | 01-09-2026     | XTSE3051 validation for accept/override name overlap; strict accept visibility table   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -828,8 +830,8 @@ public sealed class Stylesheet
                 var (local, ns) = string.IsNullOrEmpty(rule.Name) ? (null, null) : ExpandVariableName(rule.Element, rule.Name);
                 var exposed = package.GetExposedVisibility("template", local, ns);
                 var baseVisibility = exposed ?? GetLocalVisibility(rule.Element, "template", package);
-                var effectiveRule = GetEffectiveAcceptRule(options, "template", local, ns, -1);
-                rule.EffectiveVisibility = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility("template", local, ns, baseVisibility);
+                var effectiveRule = GetEffectiveAcceptRule(options, "template", local, ns, -1, baseVisibility);
+                rule.EffectiveVisibility = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility("template", local, ns, baseVisibility, options);
                 // Private templates from a used package are visible only to the owning
                 // package itself or to the package that explicitly accepted them as private.
                 if (rule.EffectiveVisibility == "private" && effectiveRule != null)
@@ -965,7 +967,7 @@ public sealed class Stylesheet
         {
             if (baseVisibility != "private")
             {
-                var effectiveRule = GetEffectiveAcceptRule(options, componentType, localName, namespaceUri, arity);
+                var effectiveRule = GetEffectiveAcceptRule(options, componentType, localName, namespaceUri, arity, baseVisibility);
                 if (effectiveRule != null)
                     return effectiveRule.Visibility;
             }
@@ -975,6 +977,11 @@ public sealed class Stylesheet
             // from the using package's perspective (accept-913/914).
             if (componentType == "template" && localName == "initial-template" && namespaceUri == XslNamespace)
                 return "private";
+
+            // Abstract components default to hidden unless an accept rule explicitly
+            // accepts them as abstract (XSLT 3.0 §3.5.6.1).
+            if (baseVisibility == "abstract")
+                return "hidden";
         }
 
         return baseVisibility;
@@ -1000,8 +1007,16 @@ public sealed class Stylesheet
         if (currentVisibility == "private")
             return "private";
 
-        var effectiveRule = GetEffectiveAcceptRule(options, componentType, localName, namespaceUri, arity);
-        return effectiveRule?.Visibility ?? currentVisibility;
+        var effectiveRule = GetEffectiveAcceptRule(options, componentType, localName, namespaceUri, arity, currentVisibility);
+        if (effectiveRule != null)
+            return effectiveRule.Visibility;
+
+        // Abstract components default to hidden unless an accept rule explicitly
+        // accepts them as abstract (XSLT 3.0 §3.5.6.1).
+        if (currentVisibility == "abstract")
+            return "hidden";
+
+        return currentVisibility;
     }
 
     /// <summary>
@@ -1621,6 +1636,13 @@ public sealed class Stylesheet
             ValidateTemplateOverrides();
         }
 
+        // Validate xsl:accept rules against the components declared in used packages.
+        // Runs before ValidateInstructionTree so that an xsl:accept name matching no
+        // used-package component (XTSE3030) is reported before instruction-level checks
+        // such as xsl:use-attribute-sets resolution (accept-004).
+        if (_isRootStylesheet)
+            ValidateAcceptRules();
+
         // Static validation: check for disallowed attributes and children on XSLT instructions
         ValidateInstructionTree(root);
 
@@ -1651,12 +1673,15 @@ public sealed class Stylesheet
             // Validate xsl:expose rules against the components declared in this package.
             ValidateExposeRules();
 
-            // Validate xsl:accept rules against the components declared in used packages.
-            ValidateAcceptRules();
-
             // Detect conflicting visible components exported by multiple used packages
             // when no xsl:accept rule hides one of them.
             ValidateUsedPackageConflicts();
+
+            // XTSE3080: a top-level package must not contain components whose effective
+            // visibility is abstract, whether or not they are referenced. Applies only
+            // to the principal module of the compilation, not to used packages.
+            if (ReferenceEquals(_rootStylesheet, this))
+                ValidateTopLevelPackageAbstractComponents();
         }
     }
 
@@ -5033,7 +5058,8 @@ public sealed class Stylesheet
     /// <summary>
     /// Validates every <c>xsl:accept</c> rule against the components declared in the
     /// corresponding used package. Raises <c>XTSE3030</c> for undeclared named components,
-    /// <c>XTSE3040</c> for visibility increases that are not permitted, and
+    /// <c>XTSE3040</c> for visibility increases that are not permitted, <c>XTSE3051</c> for
+    /// accept tokens that also match an <c>xsl:override</c> declaration, and
     /// <c>XTSE3050</c>/<c>XTSE3080</c> for abstract visibility mismatches.
     /// </summary>
     private void ValidateAcceptRules()
@@ -5050,21 +5076,18 @@ public sealed class Stylesheet
     {
         // Validate the effective accept rule for each component exported by the used package.
         // Later/more-specific rules override earlier/more-generic ones, and only the
-        // effective rule is checked for visibility compatibility.
+        // effective rule is checked for visibility compatibility. Wildcard-matched rules
+        // whose combination is not permitted for a component were already treated as not
+        // matching during effective-rule selection; explicitly named incompatibilities
+        // (including rules naming private components) are reported here.
         foreach (var component in package.GetAllExposableComponents("*"))
         {
             var exposed = package.GetExposedVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
             var baseVisibility = exposed ?? component.DeclaredVisibility;
 
-            // Components that are private in the used package are not visible to the
-            // using package; accept rules do not apply to them and no error is raised.
-            if (baseVisibility == "private")
-                continue;
-
-            var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
-            var effectiveVisibility = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility);
-
-            ValidateAcceptVisibilityCompatibility(package, component.ComponentType, baseVisibility, effectiveVisibility, component.LocalName, component.NamespaceUri, component.Arity);
+            var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity, baseVisibility);
+            if (effectiveRule != null)
+                ValidateAcceptVisibilityCompatibility(package, component.ComponentType, baseVisibility, effectiveRule.Visibility, component.LocalName, component.NamespaceUri, component.Arity);
         }
 
         // For non-wildcard named accept rules, verify that each name refers to at least
@@ -5099,6 +5122,104 @@ public sealed class Stylesheet
                 throw new InvalidOperationException($"XTSE3030: {ComponentDisplayName(componentType, exposeName)} is not declared in the used package.");
             }
         }
+
+        // A non-wildcard accept token must not name a component that is also declared
+        // within an xsl:override child of the same xsl:use-package element.
+        ValidateAcceptOverrideOverlap(options);
+    }
+
+    /// <summary>
+    /// Validates that no non-wildcard token in an <c>xsl:accept</c> names attribute matches
+    /// the symbolic name of a component declared within an <c>xsl:override</c> child of the
+    /// same <c>xsl:use-package</c> element (XSLT 3.0 §3.5.6.1). Raises <c>XTSE3051</c> when
+    /// such an overlap is detected.
+    /// </summary>
+    private void ValidateAcceptOverrideOverlap(PackageUseOptions options)
+    {
+        foreach (var rule in options.AcceptRules)
+        {
+            if (IsWildcardAcceptRule(rule))
+                continue;
+
+            foreach (var name in rule.Names)
+            {
+                if (name.IsWildcard || name.IsNamespaceWildcard || name.LocalName == "*")
+                    continue;
+
+                if (AcceptNameMatchesOverride(options, rule.Component, name, out var matchedKind))
+                {
+                    var displayName = new ExposeName(name.NamespaceUri, name.LocalName, name.Arity);
+                    throw new InvalidOperationException($"XTSE3051: {ComponentDisplayName(matchedKind, displayName)} is declared within an xsl:override child of the same xsl:use-package element.");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns true when a fully qualified accept token matches the symbolic name of an
+    /// <c>xsl:override</c> declaration of a compatible component kind. A function token
+    /// without an arity matches overriding functions of any arity.
+    /// </summary>
+    private static bool AcceptNameMatchesOverride(PackageUseOptions options, string componentType, AcceptName name, out string matchedKind)
+    {
+        matchedKind = "";
+
+        bool NameMatches(XElement element)
+        {
+            var nameAttr = element.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(nameAttr))
+                return false;
+            var (local, ns) = ExpandVariableName(element, nameAttr);
+            return local == name.LocalName && string.Equals(ns ?? "", name.NamespaceUri ?? "", StringComparison.Ordinal);
+        }
+
+        if ((componentType == "template" || componentType == "*") && options.OverrideTemplates.Any(NameMatches))
+        {
+            matchedKind = "template";
+            return true;
+        }
+
+        if (componentType == "function" || componentType == "*")
+        {
+            foreach (var element in options.OverrideFunctions)
+            {
+                if (!NameMatches(element))
+                    continue;
+                if (name.Arity >= 0 && name.Arity != element.Elements(XName.Get("param", XslNamespace)).Count())
+                    continue;
+                matchedKind = "function";
+                return true;
+            }
+        }
+
+        if ((componentType == "variable" || componentType == "*") &&
+            (options.OverrideVariables.Any(NameMatches) || options.OverrideParams.Any(NameMatches)))
+        {
+            matchedKind = "variable";
+            return true;
+        }
+
+        if ((componentType == "attribute-set" || componentType == "*") && options.OverrideAttributeSets.Any(NameMatches))
+        {
+            matchedKind = "attribute-set";
+            return true;
+        }
+
+        if (componentType == "mode" || componentType == "*")
+        {
+            var modeName = string.IsNullOrEmpty(name.NamespaceUri) ? name.LocalName : $"{{{name.NamespaceUri}}}{name.LocalName}";
+            foreach (var element in options.OverrideModes)
+            {
+                var nameAttr = element.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(nameAttr) && ExpandModeNameForExpose(nameAttr, element) == modeName)
+                {
+                    matchedKind = "mode";
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -5113,11 +5234,33 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Returns true when the <c>xsl:accept</c> visibility combination is permitted by the
+    /// XSLT 3.0 §3.5.6.1 table: <c>public</c> requires base <c>public</c>; <c>final</c> and
+    /// <c>private</c> require base <c>public</c>/<c>final</c>; <c>abstract</c> requires base
+    /// <c>abstract</c>; <c>hidden</c> requires base <c>public</c>/<c>final</c>/<c>abstract</c>.
+    /// Combinations with a <c>private</c> base are never permitted.
+    /// </summary>
+    private static bool IsAcceptCombinationPermitted(string acceptVisibility, string baseVisibility)
+        => acceptVisibility switch
+        {
+            "public" => baseVisibility == "public",
+            "final" => baseVisibility is "public" or "final",
+            "private" => baseVisibility is "public" or "final",
+            "abstract" => baseVisibility == "abstract",
+            "hidden" => baseVisibility is "public" or "final" or "abstract",
+            _ => false
+        };
+
+    /// <summary>
     /// Returns the most specific accept rule that matches the supplied component, or null
     /// if no accept rule matches. Specificity is determined first by the name pattern,
-    /// then by the component type, then by document order (later wins).
+    /// then by the component type, then by document order (later wins). When
+    /// <paramref name="baseVisibility"/> is supplied, a rule whose visibility combination is
+    /// not permitted for the component is treated as not matching when the matching token is
+    /// a wildcard (XSLT 3.0 §3.5.6.1); explicitly named matches remain effective so the
+    /// incompatibility can be reported as XTSE3040.
     /// </summary>
-    private static AcceptRule? GetEffectiveAcceptRule(PackageUseOptions options, string componentType, string? localName, string? namespaceUri, int arity)
+    private static AcceptRule? GetEffectiveAcceptRule(PackageUseOptions options, string componentType, string? localName, string? namespaceUri, int arity, string? baseVisibility = null)
     {
         AcceptRule? bestRule = null;
         int bestNameSpecificity = -1;
@@ -5139,6 +5282,15 @@ public sealed class Stylesheet
             }
 
             int nameSpecificity = GetAcceptNameSpecificity(rule, localName, namespaceUri, arity);
+
+            // A wildcard-matched rule whose visibility combination is not permitted for the
+            // component is treated as not matching that component (XSLT 3.0 §3.5.6.1).
+            if (baseVisibility != null && nameSpecificity < 2 && !IsAcceptCombinationPermitted(rule.Visibility, baseVisibility))
+            {
+                index++;
+                continue;
+            }
+
             int componentSpecificity = rule.Component == componentType ? 1 : 0;
 
             bool replace = bestRule == null ||
@@ -5191,12 +5343,16 @@ public sealed class Stylesheet
 
     /// <summary>
     /// Returns the default visibility of a used-package component when no accept rule
-    /// matches. xsl:initial-template defaults to private in the using package.
+    /// matches. xsl:initial-template defaults to private in the using package. Abstract
+    /// components default to hidden: they are only visible in the using package when an
+    /// accept rule explicitly accepts them as abstract (XSLT 3.0 §3.5.6.1).
     /// </summary>
-    private static string? GetDefaultUsedPackageVisibility(string componentType, string? localName, string? namespaceUri, string? baseVisibility)
+    private static string? GetDefaultUsedPackageVisibility(string componentType, string? localName, string? namespaceUri, string? baseVisibility, PackageUseOptions? options = null)
     {
         if (componentType == "template" && localName == "initial-template" && namespaceUri == XslNamespace)
             return "private";
+        if (baseVisibility == "abstract")
+            return "hidden";
         return baseVisibility;
     }
 
@@ -5204,32 +5360,12 @@ public sealed class Stylesheet
     {
         var acceptVisibility = effectiveVisibility ?? baseVisibility;
 
-        // XTSE3080: accepting as abstract requires the component to be abstract.
-        // xsl:initial-template is never eligible to be accepted as abstract.
-        if (acceptVisibility == "abstract")
-        {
-            if (componentType == "template" && localName == "initial-template" && namespaceUri == XslNamespace)
-                throw new InvalidOperationException("XTSE3080: xsl:initial-template cannot be accepted as abstract.");
-            if (baseVisibility != "abstract")
-                throw new InvalidOperationException($"XTSE3080: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} as abstract because its visibility in the used package is '{baseVisibility}'.");
-            return;
-        }
-
-        // XTSE3050: cannot accept an abstract component as public/final/private.
-        if (baseVisibility == "abstract" && acceptVisibility is "public" or "final" or "private")
-            throw new InvalidOperationException($"XTSE3050: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} with visibility '{acceptVisibility}' because it is abstract in the used package.");
-
-        // XTSE3040: cannot increase visibility beyond the used-package visibility.
-        if (acceptVisibility == "public")
-        {
-            if (baseVisibility is "final" or "private")
-                throw new InvalidOperationException($"XTSE3040: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} as public because its visibility in the used package is '{baseVisibility}'.");
-        }
-        else if (acceptVisibility == "final")
-        {
-            if (baseVisibility is "private")
-                throw new InvalidOperationException($"XTSE3040: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} as final because its visibility in the used package is '{baseVisibility}'.");
-        }
+        // XTSE3040: the visibility assigned by an xsl:accept element must be compatible
+        // with the component's visibility in the used package (XSLT 3.0 §3.5.6.1 table).
+        // Wildcard-matched incompatible rules were already treated as not matching during
+        // effective-rule selection, so only explicitly named incompatibilities reach here.
+        if (!IsAcceptCombinationPermitted(acceptVisibility, baseVisibility))
+            throw new InvalidOperationException($"XTSE3040: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} with visibility '{acceptVisibility}' because its visibility in the used package is '{baseVisibility}'.");
     }
 
     /// <summary>
@@ -5248,8 +5384,8 @@ public sealed class Stylesheet
             {
                 var exposed = package.GetExposedVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
                 var baseVisibility = exposed ?? component.DeclaredVisibility;
-                var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
-                var effectiveVis = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility);
+                var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity, baseVisibility);
+                var effectiveVis = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility, options);
                 if (effectiveVis is null || (effectiveVis != "public" && effectiveVis != "final" && effectiveVis != "abstract"))
                     continue;
 
@@ -5275,6 +5411,54 @@ public sealed class Stylesheet
                 continue;
 
             throw new InvalidOperationException($"XTSE3050: Conflicting visible {key.ComponentType} '{DisplayComponentName(key.LocalName, key.NamespaceUri, key.Arity)}' exported by multiple used packages.");
+        }
+    }
+
+    /// <summary>
+    /// Validates that a top-level (executable) package does not contain components whose
+    /// effective visibility is abstract. Per the XSLT 3.0 specification (XTSE3080), it is
+    /// an error for the top-level package to contain abstract components whether or not
+    /// they are referenced; abstract components are only permitted in library packages.
+    /// </summary>
+    private void ValidateTopLevelPackageAbstractComponents()
+    {
+        // Components declared abstract in this package itself.
+        foreach (var def in _functionDefinitions)
+        {
+            if (def.Visibility == "abstract")
+                throw new InvalidOperationException($"XTSE3080: Top-level package contains the abstract function '{{{def.NamespaceUri}}}{def.LocalName}#{def.Arity}'.");
+        }
+        foreach (var rule in _namedTemplates.Values)
+        {
+            if (GetLocalVisibility(rule.Element, "template", this) == "abstract")
+                throw new InvalidOperationException($"XTSE3080: Top-level package contains the abstract template '{rule.Name}'.");
+        }
+        foreach (var element in _globalVariables.Concat(_globalParameters))
+        {
+            var nameAttr = element.Attribute("name")?.Value;
+            if (GetLocalVisibility(element, "variable", IsPackage) == "abstract")
+                throw new InvalidOperationException($"XTSE3080: Top-level package contains the abstract variable '${nameAttr}'.");
+        }
+        foreach (var def in _attributeSets)
+        {
+            if (GetLocalVisibility(def.Element, "attribute-set", IsPackage) == "abstract")
+                throw new InvalidOperationException($"XTSE3080: Top-level package contains the abstract attribute-set '{def.LocalName}'.");
+        }
+
+        // Components accepted as abstract from used packages.
+        foreach (var (package, options) in _usedPackageOptions)
+        {
+            if (options == null)
+                continue;
+            foreach (var component in package.GetAllExposableComponents("*"))
+            {
+                var exposed = package.GetExposedVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
+                var baseVisibility = exposed ?? component.DeclaredVisibility;
+                var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity, baseVisibility);
+                var effectiveVis = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility, options);
+                if (effectiveVis == "abstract")
+                    throw new InvalidOperationException($"XTSE3080: Top-level package accepts the abstract {component.ComponentType} '{DisplayComponentName(component.LocalName, component.NamespaceUri, component.Arity)}' from package '{package.Root.Attribute("name")?.Value}'.");
+            }
         }
     }
 

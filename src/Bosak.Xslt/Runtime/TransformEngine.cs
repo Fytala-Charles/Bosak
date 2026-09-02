@@ -535,6 +535,10 @@ public sealed class TransformEngine
     // the current package from built-in functions.
     private readonly HashSet<(string NamespaceUri, string LocalName, int Arity)> _xsltFunctionKeys = new();
 
+    // Cache of per-package named-template maps used to resolve calls made from within a
+    // package to templates that are hidden or abstract outside it.
+    private readonly Dictionary<Stylesheet.Stylesheet, Dictionary<string, Stylesheet.TemplateRule>> _packageNamedTemplates = new();
+
     // Tracks globals currently being evaluated to detect circular references.
     private readonly HashSet<(string LocalName, string NamespaceUri)> _evaluatingGlobals = new();
 
@@ -1744,6 +1748,20 @@ public sealed class TransformEngine
     /// even when the plain name resolves to the override. The control character makes the
     /// alias unspellable in source XPath.
     /// </summary>
+
+    /// <summary>
+    /// Returns the named templates visible in the given package's own scope, including
+    /// templates that are hidden or abstract outside the package. Cached per package.
+    /// </summary>
+    private Dictionary<string, Stylesheet.TemplateRule> GetPackageScopeNamedTemplates(Stylesheet.Stylesheet package)
+    {
+        if (!_packageNamedTemplates.TryGetValue(package, out var map))
+        {
+            map = package.GetAllNamedTemplates();
+            _packageNamedTemplates[package] = map;
+        }
+        return map;
+    }
     private static string OriginalAliasName(string localName) => "\u0001original\u0001" + localName;
 
     /// <summary>
@@ -4494,6 +4512,11 @@ public sealed class TransformEngine
         var savedLastAtomic = _lastAddedWasAtomic;
         var savedTypedRawItems = _typedResultRawItems;
         XElement? tempContainer = null;
+        // Tracks normal completion of the template body. The as-conversion and result
+        // delivery in the finally must not run while an exception from the body is in
+        // flight: converting the empty temporary container would mask the original error
+        // (e.g. XTDE3052 for an abstract template became a bogus XTTE0570).
+        var bodyCompleted = false;
 
         if (!string.IsNullOrEmpty(asType))
         {
@@ -4691,6 +4714,8 @@ public sealed class TransformEngine
                         break;
                 }
             }
+
+            bodyCompleted = true;
         }
         finally
         {
@@ -4714,14 +4739,18 @@ public sealed class TransformEngine
                 var items = new List<XdmValue>();
                 // Map and function items cannot be represented as container nodes; they were
                 // captured in source order into _typedResultRawItems by CopyToResult.
-                if (_typedResultRawItems is { Count: > 0 } rawItems)
+                // During exception unwinding the body produced no result: skip assembly
+                // and deliver nothing so the in-flight error propagates unchanged.
+                if (bodyCompleted && _typedResultRawItems is { Count: > 0 } rawItems)
                     items.AddRange(rawItems);
-                foreach (var attr in tempContainer.Attributes())
+                if (bodyCompleted)
                 {
-                    items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
-                }
-                foreach (var node in tempContainer.Nodes().ToList())
-                {
+                    foreach (var attr in tempContainer.Attributes())
+                    {
+                        items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                    }
+                    foreach (var node in tempContainer.Nodes().ToList())
+                    {
                     // Detach the node from the temporary container so result nodes are
                     // parentless (or keep the parent they were constructed with) rather
                     // than being rooted at the synthetic __temp__ element.
@@ -4757,6 +4786,7 @@ public sealed class TransformEngine
                             break;
                     }
                 }
+                }
 
                 _currentContainer = savedContainer;
                 _sequenceAccumulator = savedAccumulator;
@@ -4766,29 +4796,34 @@ public sealed class TransformEngine
                 _lastAddedWasAtomic = savedLastAtomic;
                 _typedResultRawItems = savedTypedRawItems;
 
-                XdmValue typedResult;
-                if (items.Count > 0)
+                // Convert and deliver the result only when the body completed normally;
+                // during exception unwinding the in-flight error must propagate unchanged.
+                if (bodyCompleted)
                 {
-                    var result = items.Count == 1 ? items[0] :
-                        XdmValue.FromSequence(MaterializedSequence.FromList(items));
-                    typedResult = ConvertVariableValue(result, asType, context: _context);
-                }
-                else
-                {
-                    typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context);
-                }
+                    XdmValue typedResult;
+                    if (items.Count > 0)
+                    {
+                        var result = items.Count == 1 ? items[0] :
+                            XdmValue.FromSequence(MaterializedSequence.FromList(items));
+                        typedResult = ConvertVariableValue(result, asType, context: _context);
+                    }
+                    else
+                    {
+                        typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context);
+                    }
 
-                if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
-                    _rawInitialTemplateResult = typedResult;
-                else if (_sequenceAccumulator != null)
-                {
-                    // An outer sequence-returning context (function body, typed variable,
-                    // apply-templates in a function) collects raw items: add the template
-                    // result without copying so node identity and parentage survive.
-                    _sequenceAccumulator.Add(typedResult);
+                    if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
+                        _rawInitialTemplateResult = typedResult;
+                    else if (_sequenceAccumulator != null)
+                    {
+                        // An outer sequence-returning context (function body, typed variable,
+                        // apply-templates in a function) collects raw items: add the template
+                        // result without copying so node identity and parentage survive.
+                        _sequenceAccumulator.Add(typedResult);
+                    }
+                    else
+                        CopyToResult(typedResult);
                 }
-                else
-                    CopyToResult(typedResult);
             }
             else
             {
@@ -4820,8 +4855,24 @@ public sealed class TransformEngine
 
         try
         {
-            if (!_allNamedTemplates.TryGetValue(name, out var rule))
+            Stylesheet.TemplateRule? rule = null;
+            if (_currentPackageScope != null &&
+                GetPackageScopeNamedTemplates(_currentPackageScope).TryGetValue(name, out var ownRule))
+            {
+                // Templates that are hidden or abstract in the using package remain
+                // callable within the package that declares them (XSLT 3.0 §3.5.6.1).
+                rule = ownRule;
+            }
+            else if (!_allNamedTemplates.TryGetValue(name, out rule))
+            {
                 throw new InvalidOperationException($"XTDE0040: Named template '{name}' not found.");
+            }
+
+            // An abstract template has no implementation. The declared visibility governs:
+            // a template that is abstract in its declaring package cannot be called,
+            // whether the call comes from the declaring package or a using package.
+            if (rule.Visibility == "abstract")
+                throw new InvalidOperationException($"XTDE3052: Named template '{name}' is abstract and has no implementation.");
 
             var effectiveVis = rule.EffectiveVisibility ?? rule.Visibility;
             if (string.IsNullOrEmpty(effectiveVis))
@@ -10240,6 +10291,11 @@ public sealed class TransformEngine
         // so xsl:apply-imports and xsl:next-match must raise XTDE0560 here.
         var savedTemplateRule = _currentTemplateRule;
         _currentTemplateRule = null;
+        // A global's initializer is evaluated in the package scope of the stylesheet that
+        // declares it, so references inside the initializer resolve against the declaring
+        // package's own components (accept-043b: an abstract variable in a used package
+        // raises XTDE3052 there instead of XPST0008 in the caller's scope).
+        var declaringScopeState = EnterPackageScope(info.SourceStylesheet.OwningPackage);
         try
         {
             // Global variables/parameters are evaluated with a singleton focus based
@@ -10326,6 +10382,7 @@ public sealed class TransformEngine
         }
         finally
         {
+            ExitPackageScope(declaringScopeState);
             _context.RestoreVariables(savedVariables);
             _context.WithFocus(savedItem, savedPos, savedSize);
             _modeStack.Clear();
