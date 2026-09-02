@@ -171,6 +171,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.95  | 01-09-2026     | XTSE0020 validation for xsl:package and xsl:use-package package-version (REQ-082)         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010/0020 for static param sequence constructor and tunnel attribute (REQ-082)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1814,11 +1816,11 @@ public sealed class Stylesheet
                 return;
 
             if (!IsStaticBodyEmpty(elem))
-                throw new InvalidOperationException("XTSE0620: Static variable or parameter must not have a sequence constructor.");
+                throw new InvalidOperationException("XTSE0010: Static variable or parameter must not have a sequence constructor.");
 
             // XTSE0090: tunnel is not permitted on static variables/parameters.
             if (elem.Attribute("tunnel") != null)
-                throw new InvalidOperationException("XTSE0090: The tunnel attribute is not permitted on a static variable or parameter.");
+                throw new InvalidOperationException("XTSE0020: The tunnel attribute is not permitted on a static variable or parameter.");
 
             // XTSE0090: visibility is not permitted on static variables/parameters.
             if (elem.Attribute("visibility") != null)
