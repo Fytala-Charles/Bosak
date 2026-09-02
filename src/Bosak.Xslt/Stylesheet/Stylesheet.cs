@@ -173,6 +173,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010 for misplaced xsl:use-package and xsl:expose (REQ-082)                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.97  | 01-09-2026     | XTSE0020 for undeclared prefix in xsl:expose/@names and xsl:accept/@names (REQ-082)   |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010/0020 for static param sequence constructor and tunnel attribute (REQ-082)      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -4782,9 +4784,17 @@ public sealed class Stylesheet
             }
             else
             {
-                var (loc, ns) = ExpandVariableName(context, t);
-                var (fnLocal, arity) = component == "function" ? ParseFunctionNameWithArity(loc) : (loc, -1);
-                yield return new AcceptName(ns, fnLocal, arity);
+                (string loc, string ns) expanded;
+                try
+                {
+                    expanded = ExpandVariableName(context, t);
+                }
+                catch (InvalidOperationException ex) when (ex.Message.StartsWith("XPST0081"))
+                {
+                    throw new InvalidOperationException($"XTSE0020: Invalid name token '{t}' in xsl:accept/@names: {ex.Message}");
+                }
+                var (fnLocal, arity) = component == "function" ? ParseFunctionNameWithArity(expanded.loc) : (expanded.loc, -1);
+                yield return new AcceptName(expanded.ns, fnLocal, arity);
             }
         }
     }
@@ -4882,7 +4892,17 @@ public sealed class Stylesheet
                 continue;
             }
 
-            var (localName, nsUri) = ExpandVariableName(context, t);
+            (string localName, string nsUri) expandedName;
+            try
+            {
+                expandedName = ExpandVariableName(context, t);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.StartsWith("XPST0081"))
+            {
+                throw new InvalidOperationException($"XTSE0020: Invalid name token '{t}' in xsl:expose/@names: {ex.Message}");
+            }
+            var localName = expandedName.localName;
+            var nsUri = expandedName.nsUri;
             if (component == "function")
             {
                 var (fnLocal, arity) = ParseFunctionNameWithArity(localName);
