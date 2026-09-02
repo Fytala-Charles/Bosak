@@ -1,6 +1,17 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
+**Commit:** 4129791 — XTSE0020 for undeclared prefix in xsl:expose/@names and xsl:accept/@names (REQ-082)
+**Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: package-version grammar (12 tests), static param error codes (5 tests), misplaced use-package/expose (2 tests), undeclared prefix in expose/accept names (1 test). Latest clean sweep: **7,517 passed / 213 failed / 6,870 skipped** (97.2%).
+**Results:** `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass), `package` 64/8/0, `expose` 42/0/0. Unit tests 2,114/0/0.
+**Remaining in REQ-082 family (16 tests):** `accumulator-024/025`, `context-item-016/902/903`, `initial-function-102i/j`, `iterate-024`, `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`, `param-0113`.
+**Next steps:** Continue through the remaining sub-clusters.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-01
 **Commit:** 49cf229 — XTSE0010 validation for misplaced xsl:use-package and xsl:expose (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: package-version grammar (12 tests), static param error codes (5 tests), misplaced use-package/expose (2 tests). Latest clean sweep pending; expect previous strict baseline (7,511/219/6,870) to drop by ~2 more tests.
 **Results:** `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass), `package` 64/8/0 (903/904 fixed, 8 pre-existing failures remain). Unit tests 2,114/0/0.
