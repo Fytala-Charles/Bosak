@@ -1,6 +1,16 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
+**Commit:** 82a65b9 — strict package-version validation (XTSE0020) for xsl:package and xsl:use-package (REQ-082)
+**Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Just completed the package-version sub-family: strict validation for `xsl:package/@package-version` (PackageVersion grammar) and `xsl:use-package/@package-version` (PackageVersionRange grammar). Both clusters now pass with zero failures.
+**Results:** W3C `package-version` 35/0/2 (was 27/8/2), W3C `use-package` 53/0/1 (was 49/4/1). Unit tests 2,114/0/0. The strict full sweep is running; expect the previous strict baseline (7,499/231/6,870) to drop by ~12 tests.
+**Next steps:** Continue the remaining XTSE0020/XTSE0010 failures (24 tests), including `static-006/007/014`, `context-item-016/902/903`, `accumulator-024/025`, `override-f-005/006/007/m-013/misc`, `package-903/904`, `param-0113`, `iterate-024`, `initial-function-102i/j`, `expose-927`.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-01
 **Commit:** 39d5925 — accept/abstract/XTSE3051 overlap validation (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes for XSLT package/accept/abstract behavior — phase 1 complete.** Implemented: strict accept visibility compatibility table with `XTSE3040`; default `hidden` for unmatched abstract used-package components and `XTSE3080` for abstract acceptance in the principal package; `ValidateAcceptRules` reordered before `ValidateInstructionTree` (`accept-004`); abstract named templates raise `XTDE3052` with a `TransformEngine.ExecuteTemplateCore` finally-mask fix preventing `XTTE0570` conversion; lazy global variable references resolve in the declaring package scope (`accept-043b/c`); `XTSE3051` overlap validation for accept tokens that match an `xsl:override` declaration (`accept-916`); conformance harness registers secondary packages under their document-declared package name as well as the catalog URI.
 **Results:** W3C `accept` 50/0/0 (was 35/15); `override` 46/53/4 (5 fixes vs 250-failure baseline); `use-package` 49/4/1; `expose` 41/1/0; `package` 62/10/0; `declared-modes` 10/0/4; `function-lookup` 8/0/0. Clean strict full sweep **7,499 passed / 231 failed / 6,870 skipped** (97.0%), improving from previous strict baseline **7,480/250/6,870** (96.8%). No regression in any package cluster.
