@@ -17,6 +17,8 @@
 //                      | Charles Korthout | 0.5   | 26-06-2026     | Reject xsl:context-item inside xsl:function                                              |
 //                      | Charles Korthout | 0.6   | 01-09-2026     | Added OverriddenFunction link so xsl:original can reach the overridden declaration       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 02-09-2026     | XTSE0020 for braced-URI names without leading 'Q' (invalid EQName) in @_name (REQ-082)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using System.Xml;
@@ -255,6 +257,10 @@ public sealed class XsltFunctionDefinition
             var localName = trimmed.Substring(closeBrace + 1);
             return (nsUri, localName);
         }
+
+        // A braced URI without the leading 'Q' is not a valid EQName (XTSE0020).
+        if (trimmed[0] == '{')
+            throw new InvalidOperationException($"XTSE0020: '{trimmed}' is not a valid EQName in xsl:function/@name.");
 
         var colonIndex = trimmed.IndexOf(':');
         if (colonIndex >= 0)

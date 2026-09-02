@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 27-08-2026     | Statically detect variable references other than $value in accumulator-rule match patterns |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 02-09-2026     | XTSE0010 when initial-value is missing or no xsl:accumulator-rule is present (REQ-082)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -70,6 +72,11 @@ public sealed class AccumulatorDefinition
         if (string.IsNullOrEmpty(nameAttr))
             return null;
 
+        // XTSE0010: the initial-value attribute is mandatory on xsl:accumulator (it may be
+        // supplied through the static shadow attribute _initial-value).
+        if (element.Attribute("initial-value") == null && element.Attribute("_initial-value") == null)
+            throw new InvalidOperationException($"XTSE0010: The initial-value attribute is required on xsl:accumulator '{nameAttr}'.");
+
         var (localName, namespaceUri) = ResolveAccumulatorName(nameAttr, element);
         var initialValue = element.Attribute("initial-value")?.Value ?? "()";
         var asType = element.Attribute("as")?.Value;
@@ -79,6 +86,10 @@ public sealed class AccumulatorDefinition
             .Where(r => r != null)
             .Cast<AccumulatorRule>()
             .ToList();
+
+        // XTSE0010: an accumulator must declare at least one xsl:accumulator-rule.
+        if (rules.Count == 0)
+            throw new InvalidOperationException($"XTSE0010: xsl:accumulator '{nameAttr}' must have at least one xsl:accumulator-rule.");
 
         return new AccumulatorDefinition(element, localName, namespaceUri, asType, initialValue, rules);
     }

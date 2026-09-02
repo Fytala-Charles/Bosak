@@ -12,6 +12,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-06-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 02-09-2026     | Skip namespace declarations in attribute check; XTSE0020 for non-required @use in        |
+//                      |                  |       |                | unnamed xsl:template (REQ-082)                                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -86,6 +89,8 @@ public sealed class ContextItemDeclaration
         // Only @use and @as are allowed.
         foreach (var attr in element.Attributes())
         {
+            if (attr.IsNamespaceDeclaration)
+                continue; // namespace declarations are not attributes for this check
             var name = attr.Name.LocalName;
             var ns = attr.Name.NamespaceName;
             if (ns == "http://www.w3.org/XML/1998/namespace")
@@ -112,6 +117,12 @@ public sealed class ContextItemDeclaration
                 "absent" => ContextItemUse.Absent,
                 _ => throw new InvalidOperationException($"XTSE0020: Invalid value '{useAttr}' for xsl:context-item/@use. Must be 'required', 'optional', or 'absent'.")
             };
+
+            // XTSE0020: if the containing xsl:template has no name attribute, the only
+            // permitted value of xsl:context-item/@use is "required" (XSLT 3.0 §10.1.1).
+            if (use != ContextItemUse.Required &&
+                template.Attribute("name") == null && template.Attribute("_name") == null)
+                throw new InvalidOperationException($"XTSE0020: xsl:context-item/@use='{useAttr}' is not permitted in an xsl:template without a name attribute; only 'required' is allowed.");
         }
 
         // use="absent" is incompatible with @as.

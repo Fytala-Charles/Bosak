@@ -179,6 +179,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010/0020 for static param sequence constructor and tunnel attribute (REQ-082)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.98  | 02-09-2026     | XTSE0010 for disallowed content in xsl:override; on-completion placement pre-pass       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -2046,6 +2048,18 @@ public sealed class Stylesheet
 
     private void ValidateInstructionTree(XElement root)
     {
+        // XTSE0010: xsl:on-completion must be a direct child of xsl:iterate. This pre-pass
+        // runs before the per-element walk so that a misplaced xsl:on-completion reports
+        // the structural error even when an earlier element carries its own attribute error.
+        foreach (var onCompletion in root.Descendants(XName.Get("on-completion", XslNamespace)))
+        {
+            if (!ShouldValidateElement(onCompletion))
+                continue;
+            var parent = onCompletion.Parent;
+            if (parent == null || parent.Name.NamespaceName != XslNamespace || parent.Name.LocalName != "iterate")
+                throw new InvalidOperationException("XTSE0010: xsl:on-completion must be a child of xsl:iterate.");
+        }
+
         foreach (var elem in root.DescendantsAndSelf())
         {
             if (!ShouldValidateElement(elem))
@@ -4731,10 +4745,20 @@ public sealed class Stylesheet
             }
             else if (localName == "override")
             {
+                // XTSE0010: only template, function, variable, param and attribute-set
+                // declarations are permitted inside xsl:override (XSLT 3.0 §3.5.7.2).
+                // Non-whitespace text, literal result elements and other XSLT declarations
+                // (xsl:mode, xsl:key, xsl:accumulator, xsl:decimal-format, nested
+                // xsl:override, ...) are static errors.
+                foreach (var node in child.Nodes())
+                {
+                    if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                        throw new InvalidOperationException("XTSE0010: Text is not permitted as a child of xsl:override.");
+                }
                 foreach (var overrideChild in child.Elements())
                 {
                     if (overrideChild.Name.NamespaceName != XslNamespace)
-                        continue;
+                        throw new InvalidOperationException($"XTSE0010: Element '{overrideChild.Name.LocalName}' is not permitted as a child of xsl:override.");
                     switch (overrideChild.Name.LocalName)
                     {
                         case "template": options.OverrideTemplates.Add(overrideChild); break;
@@ -4742,14 +4766,8 @@ public sealed class Stylesheet
                         case "variable": options.OverrideVariables.Add(overrideChild); break;
                         case "param": options.OverrideParams.Add(overrideChild); break;
                         case "attribute-set": options.OverrideAttributeSets.Add(overrideChild); break;
-                        case "mode": options.OverrideModes.Add(overrideChild); break;
-                        case "key": options.OverrideKeys.Add(overrideChild); break;
-                        case "decimal-format": options.OverrideDecimalFormats.Add(overrideChild); break;
-                        case "namespace-alias": options.OverrideNamespaceAliases.Add(overrideChild); break;
-                        case "character-map": options.OverrideCharacterMaps.Add(overrideChild); break;
-                        case "output": options.OverrideOutput.Add(overrideChild); break;
-                        case "strip-space": options.OverrideStripSpace.Add(overrideChild); break;
-                        case "preserve-space": options.OverridePreserveSpace.Add(overrideChild); break;
+                        default:
+                            throw new InvalidOperationException($"XTSE0010: xsl:{overrideChild.Name.LocalName} is not permitted as a child of xsl:override.");
                     }
                 }
             }
