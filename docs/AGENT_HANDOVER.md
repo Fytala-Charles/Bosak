@@ -1,5 +1,15 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-02
+**Commit:** `0f714a1` — REQ-082 phase 2 complete (override content model, accumulator/context-item/EQName/on-completion XTSE validation)
+**Current focus:** **REQ-082 strict-conformance fixes — phase 2 complete (XTSE0020/XTSE0010 static-validation family cleared, 0 remaining).** This session fixed the final 15 tests: `xsl:override` content model enforced in `ParsePackageUseOptions` (non-whitespace text, LREs, and XSLT declarations other than template/function/variable/param/attribute-set raise XTSE0010 — fixes `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`); `xsl:accumulator` requires `initial-value`/`_initial-value` and at least one `xsl:accumulator-rule` (`accumulator-024/025`); `xsl:context-item` attribute check skips namespace declarations and rejects non-`required` `@use` in unnamed templates (`context-item-016/902/903`); braced-URI names without leading `Q` rejected as invalid EQNames in `xsl:function/@_name` (`initial-function-102i/j`); `xsl:on-completion` placement pre-pass in `ValidateInstructionTree` reports XTSE0010 before later attribute errors (`iterate-024`).
+**Results:** Clean strict full sweep **7,534 passed / 196 failed / 6,870 skipped** (97.5%), exactly +15/−15 vs. the 7,519/211 baseline; zero new failures. W3C `override` 53/46/4. Unit tests all green (`dotnet test Bosak.sln` exit 0).
+**Next steps:** Continue REQ-082 with the remaining error-code families: `XPTY0004` (12), `XTTE0505` (10), `XTDE3052` (10), `XTSE3070` (6), `XTDE0820` (6), `FODT0001` (4), misc. Acceptance target: strict sweep back at the lenient 7,627 pass count.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-01
 **Commit:** ff76567 — XTSE0010 for required xsl:param with non-empty sequence constructor (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: package-version grammar (12 tests), static param error codes (5 tests), misplaced use-package/expose (2 tests), undeclared prefix in expose/accept names (1 test), required xsl:param with sequence constructor (1 test). Latest clean sweep pending.
