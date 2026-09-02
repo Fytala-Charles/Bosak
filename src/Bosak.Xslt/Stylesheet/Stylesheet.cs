@@ -171,6 +171,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.95  | 01-09-2026     | XTSE0020 validation for xsl:package and xsl:use-package package-version (REQ-082)         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010 for misplaced xsl:use-package and xsl:expose (REQ-082)                         |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010/0020 for static param sequence constructor and tunnel attribute (REQ-082)      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -3052,8 +3054,9 @@ public sealed class Stylesheet
                     else if (TopLevelOnlyDeclarations.Contains(localName))
                     {
                         var parentName = parent.Name;
+                        bool insideUsePackage = parentName.NamespaceName == XslNamespace && parentName.LocalName == "use-package";
                         bool insideOverride = parentName.NamespaceName == XslNamespace && parentName.LocalName == "override";
-                        if (!insideOverride)
+                        if (!insideUsePackage && !insideOverride)
                             throw new InvalidOperationException($"XTSE0010: xsl:{localName} must appear at the top level.");
                     }
                 }
@@ -3900,10 +3903,11 @@ public sealed class Stylesheet
     /// </summary>
     private static readonly HashSet<string> TopLevelOnlyDeclarations = new(StringComparer.Ordinal)
     {
-        "stylesheet", "transform",
+        "stylesheet", "transform", "package",
         "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
         "attribute-set", "decimal-format", "key", "mode", "accumulator", "template", "function",
-        "global-context-item", "import-schema"
+        "global-context-item", "import-schema",
+        "use-package", "expose", "accept", "override"
     };
 
     /// <summary>
