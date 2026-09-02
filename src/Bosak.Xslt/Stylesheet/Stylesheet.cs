@@ -173,6 +173,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010 for misplaced xsl:use-package and xsl:expose (REQ-082)                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.97  | 01-09-2026     | XTSE0010 for required xsl:param with non-empty sequence constructor (REQ-082)            |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.97  | 01-09-2026     | XTSE0020 for undeclared prefix in xsl:expose/@names and xsl:accept/@names (REQ-082)   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.96  | 01-09-2026     | XTSE0010/0020 for static param sequence constructor and tunnel attribute (REQ-082)      |
@@ -2495,6 +2497,9 @@ public sealed class Stylesheet
 
                         if (reqVal == "yes" && (elem.Attribute("select") != null || elem.Attribute("_select") != null))
                             throw new InvalidOperationException("XTSE0010: A required xsl:param must not have a select attribute.");
+
+                        if (reqVal == "yes" && !IsStaticBodyEmpty(elem))
+                            throw new InvalidOperationException("XTSE0010: A required xsl:param must be empty.");
                     }
                 }
 
