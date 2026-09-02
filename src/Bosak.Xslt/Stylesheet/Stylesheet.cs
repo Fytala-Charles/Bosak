@@ -169,6 +169,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.94  | 01-09-2026     | XTSE3051 validation for accept/override name overlap; strict accept visibility table   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.95  | 01-09-2026     | XTSE0020 validation for xsl:package and xsl:use-package package-version (REQ-082)         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -1209,24 +1211,15 @@ public sealed class Stylesheet
         Version = versionValue;
 
         // Validate xsl:package/@package-version after any shadow expansion.
+        // XTSE0020 if the value does not match the PackageVersion grammar.
         if (IsPackage)
         {
             var packageVersionAttr = root.Attribute("package-version");
             if (packageVersionAttr != null)
             {
                 var pv = packageVersionAttr.Value.Trim();
-                if (string.IsNullOrEmpty(pv))
-                    throw new InvalidOperationException("XTSE0090: The package-version attribute must not be empty.");
-                try
-                {
-                    var parsed = Api.PackageVersion.Parse(pv);
-                    if (parsed.IsEmpty)
-                        throw new InvalidOperationException("XTSE0090: The package-version attribute must not be empty.");
-                }
-                catch
-                {
-                    throw new InvalidOperationException($"XTSE0090: Invalid package-version '{pv}'.");
-                }
+                if (string.IsNullOrEmpty(pv) || !Api.PackageVersion.IsValidVersion(pv))
+                    throw new InvalidOperationException($"XTSE0020: Invalid package-version '{pv}'.");
                 PackageVersion = pv;
             }
         }
@@ -1749,6 +1742,8 @@ public sealed class Stylesheet
                     if (string.IsNullOrEmpty(name))
                         throw new InvalidOperationException("XTSE0010: Missing required name attribute on xsl:use-package.");
                     var packageVersion = child.Attribute("package-version")?.Value?.Trim();
+                    if (!string.IsNullOrEmpty(packageVersion) && packageVersion != "*" && !Api.PackageVersion.IsValidVersionRange(packageVersion))
+                        throw new InvalidOperationException($"XTSE0020: Invalid package-version range '{packageVersion}'.");
                     ResolveUsePackage(child, name, packageVersion);
                     ParsePackageUseOptions(child);
                     if (child.Annotation<ResolvedModuleAnnotation>()?.Module is { } usedModule)

@@ -31,7 +31,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 30-08-2026     | Exposed ResolvePackageLocation for xsl:use-package resolution                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13  | 01-09-2026     | Strict PackageVersion/PackageVersionRange validation for XTSE0020 (REQ-082)             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Globalization;
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Core.Xdm;
@@ -164,6 +169,155 @@ public readonly record struct PackageVersion
         if (aEmpty) return 1;
         if (bEmpty) return -1;
         return string.CompareOrdinal(a, b);
+    }
+
+    /// <summary>
+    /// Returns true when the supplied string is a valid XSLT package version number,
+    /// matching the grammar <c>PackageVersion ::= NumericPart ("-" NamePart)?</c> where
+    /// <c>NumericPart</c> is dot-separated integer literals and <c>NamePart</c> is an NCName.
+    /// Leading and trailing whitespace is ignored.
+    /// </summary>
+    public static bool IsValidVersion(string? version)
+    {
+        if (string.IsNullOrWhiteSpace(version))
+            return false;
+        version = version!.Trim();
+
+        // Separate optional suffix (first hyphen is the version/suffix separator).
+        int dash = version.IndexOf('-');
+        string numericPart;
+        ReadOnlySpan<char> namePart;
+        if (dash >= 0)
+        {
+            numericPart = version[..dash];
+            namePart = version.AsSpan(dash + 1);
+            if (namePart.IsEmpty)
+                return false;
+        }
+        else
+        {
+            numericPart = version;
+            namePart = ReadOnlySpan<char>.Empty;
+        }
+
+        if (string.IsNullOrEmpty(numericPart))
+            return false;
+
+        foreach (var token in numericPart.Split('.', StringSplitOptions.None))
+        {
+            if (string.IsNullOrEmpty(token))
+                return false;
+            foreach (char c in token)
+            {
+                if (!char.IsAsciiDigit(c))
+                    return false;
+            }
+        }
+
+        if (!namePart.IsEmpty)
+        {
+            var suffix = namePart.ToString();
+            if (suffix.Length == 0 || suffix.Contains(':'))
+                return false;
+            var first = Rune.GetRuneAt(suffix, 0);
+            var firstCat = Rune.GetUnicodeCategory(first);
+            if (firstCat is UnicodeCategory.DecimalDigitNumber or
+                UnicodeCategory.ConnectorPunctuation or
+                UnicodeCategory.DashPunctuation)
+                return false;
+            foreach (Rune rune in suffix.EnumerateRunes())
+            {
+                var category = Rune.GetUnicodeCategory(rune);
+                if (category is UnicodeCategory.PrivateUse or
+                    UnicodeCategory.Surrogate or
+                    UnicodeCategory.Control)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Returns true when the supplied string is a valid XSLT package version range,
+    /// matching the grammar for <c>PackageVersionRange</c>: <c>*</c>, a comma-separated
+    /// list of exact versions, prefixes (<c>.*</c>), lower-bounds (<c>+</c>), or
+    /// <c>to</c> ranges.
+    /// </summary>
+    public static bool IsValidVersionRange(string? range)
+    {
+        if (string.IsNullOrWhiteSpace(range))
+            return false;
+        range = range!.Trim();
+        if (range == "*")
+            return true;
+
+        foreach (var item in range.Split(','))
+        {
+            var itemTrim = item.Trim();
+            if (string.IsNullOrEmpty(itemTrim))
+                return false;
+
+            // VersionPrefix: PackageVersion ".*"
+            if (itemTrim.EndsWith(".*"))
+            {
+                if (!IsValidVersion(itemTrim[..^2]))
+                    return false;
+                continue;
+            }
+
+            // VersionFrom: PackageVersion "+"
+            if (itemTrim.EndsWith("+"))
+            {
+                if (!IsValidVersion(itemTrim[..^1]))
+                    return false;
+                continue;
+            }
+
+            // VersionTo: "to" S (PackageVersion | VersionPrefix)
+            if (itemTrim.StartsWith("to ", StringComparison.Ordinal))
+            {
+                var upper = itemTrim[3..].Trim();
+                if (upper.EndsWith(".*"))
+                {
+                    if (!IsValidVersion(upper[..^2]))
+                        return false;
+                }
+                else if (!IsValidVersion(upper))
+                {
+                    return false;
+                }
+                continue;
+            }
+
+            // VersionFromTo: PackageVersion S "to" S (PackageVersion | VersionPrefix)
+            var toIndex = itemTrim.IndexOf(" to ", StringComparison.Ordinal);
+            if (toIndex >= 0)
+            {
+                var lower = itemTrim[..toIndex].Trim();
+                var upper = itemTrim[(toIndex + 4)..].Trim();
+                if (string.IsNullOrEmpty(lower) || !IsValidVersion(lower))
+                    return false;
+                if (upper.EndsWith(".*"))
+                {
+                    if (!IsValidVersion(upper[..^2]))
+                        return false;
+                }
+                else if (!IsValidVersion(upper))
+                {
+                    return false;
+                }
+                continue;
+            }
+
+            // Exact package version.
+            if (!IsValidVersion(itemTrim))
+                return false;
+        }
+
+        return true;
     }
 }
 
