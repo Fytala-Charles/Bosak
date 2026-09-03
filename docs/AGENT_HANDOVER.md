@@ -1,6 +1,19 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
+**Commit:** `3bc2078` — accumulator cluster cleared + 22 singles (REQ-082 continuation)
+**Current focus:** **Accumulator cluster cleared (56/0/51, 100% runnable) plus 22 singles fixed across assert/merge/try/coco/sort/result-document/use-when/message/call-template/package/mode/transform/static/evaluate/id.** Strict full sweep **7,647/83/6,870 → 7,703/27/6,870 (99.7%)**, zero regressions.
+**What was built:**
+- Accumulator cluster (11 fixed: 021, 023, 026, 027, 040, 046, 047, 064-067): attribute/namespace nodes are not visited by accumulators (026); per-attribute import-precedence merging for xsl:mode (`ModeDefinition.SpecifiedAttributes` + `MergeModeDefinitions`, 023); EQName `Q{uri}local` support in accumulator name resolution at all three sites (021/027); `fn:copy-of`/`fn:snapshot` copy accumulator values via the new `EvaluationContext.AccumulatorValueCopier` hook and deep `AttachAccumulatorValues` (046/047/064-067); on-demand accumulator computation saves/restores the caller's focus (040).
+- Singles (22): harness `ErrorCodeMatches` matches `XPathErrorException` structured codes (assert-002/004/006/009 + try-003); XTSE3470/XTSE3500 for merge functions in patterns (merge-057/058); XTDE0930 empty-namespace binding (coco-017); XTTE3375 for non-map in xsl:map content (maps-007); `ContainsAvt` no longer hides AVT braces inside literal quotes (sort-029 XTDE0030); `build-tree` added to the result-document AVT list (result-document-1405 SERE0022); XTSE0620 for static select+content (use-when-0431); XTMM9000 fallback for invalid message error-codes (message-0406); XTSE0690 for call-template missing a required param (call-template-2101); package-906 (XTSE0090 package attribute whitelist), package-910 (XTSE0165 import-of-package), package-914a (XTDE0040 default xsl:initial-template absent), package-914d/e (XTSE3085 undeclared initial mode in declared-modes packages, static before dynamic), mode-1803 (default mode counts as existing), transform-001 (FOXT0002 for unretrievable stylesheet-location + no-entry-point fn:transform), static-012/013 (implicit-mandatory static params XTDE0700/XTDE0050 at priming), id-043 (harness evaluates select-only source documents), evaluate-023 (XTTE0780 result coercion), evaluate-043 (XTTE3165 non-QName param keys), evaluate-047 (document() removed from the xsl:evaluate function library).
+**Deferred this batch:** evaluate-002 (cross-tree document order for unions of temporary trees), evaluate-048 (needs network), context-item-911/analyze-string-085 (XPTY0019/0020 path-step semantics — QT3 regression risk), package-021err/022err + package-200 (upstream catalog artifacts/inconsistencies), math-3702 (conflicts with extension-functions-0105: XTSE0085 vs retired XTSE0800), json-to-xml-typed-010 (schema-awareness edge), package-scope depth items (override-f-014/v-004/as-002/003/005/misc-005), load-xquery-module (FOQM0001 feature gap), collection-006/document-2401/2402 (real output bugs).
+**Results:** Unit tests 2,114+371/0/0 (all projects). Strict sweep 7,703/27/6,870 (99.7%). `accumulator` 56/0/51, `static` 49/0/0, `assert` 9/0/1, `maps` 50/0/0, `mode` 137/0/32, `package` 69/3/0 (only the deferred upstream artifacts remain), `id` 43/0/0.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-02
 **Commit:** `ea44175` — namespace/global-context-item/sort/merge error-code families (REQ-082 continuation)
 **Current focus:** **REQ-082 continuation — namespace + global-context-item + sort/merge/result-document families.** Strict full sweep **7,647/83/6,870 → 7,665/65/6,870 (99.2%)**: +18 fixed, zero regressions.
 **What was built:**
