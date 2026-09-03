@@ -3651,6 +3651,8 @@ public static class FunctionLibrary
                 var copied = SnapshotNode(item.NodeValue);
                 if (copied == null)
                     throw new InvalidOperationException("FOTY0013");
+                // XSLT hook: fn:snapshot copies accumulator values onto the copy.
+                ctx.AccumulatorValueCopier?.Invoke(item.NodeValue, copied);
                 copies.Add(XdmValue.FromNode(copied));
             }
             else
@@ -13686,7 +13688,7 @@ public static class FunctionLibrary
         var item = ctx.ContextItem;
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: copy-of() requires a context item.");
-        return CopyOf(item);
+        return CopyOf(ctx, item);
     }
 
     private static XdmValue CopyOf_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -13694,10 +13696,10 @@ public static class FunctionLibrary
         var item = args[0];
         if (item.IsUndefined)
             return XdmValue.Undefined;
-        return CopyOf(item);
+        return CopyOf(ctx, item);
     }
 
-    private static XdmValue CopyOf(XdmValue item)
+    private static XdmValue CopyOf(EvaluationContext ctx, XdmValue item)
     {
         // If a singleton sequence was passed, extract the node.
         if (item.IsSequence)
@@ -13706,11 +13708,11 @@ public static class FunctionLibrary
             foreach (var seqItem in XdmSequence.FromSource(item.SequenceValue!))
                 items.Add(seqItem);
             if (items.Count == 1)
-                return CopyOf(items[0]);
+                return CopyOf(ctx, items[0]);
             // Map over each item for multi-item sequences.
             var results = new List<XdmValue>(items.Count);
             foreach (var i in items)
-                results.Add(CopyOf(i));
+                results.Add(CopyOf(ctx, i));
             return XdmValue.FromSequence(MaterializedSequence.FromList(results));
         }
 
@@ -13718,7 +13720,11 @@ public static class FunctionLibrary
         {
             var copied = DeepCopyNode(item.NodeValue);
             if (copied != null)
+            {
+                // XSLT hook: fn:copy-of copies accumulator values onto the copy.
+                ctx.AccumulatorValueCopier?.Invoke(item.NodeValue, copied);
                 return XdmValue.FromNode(copied);
+            }
         }
         // For atomic values, return the value itself (copy-of on atomic is identity)
         return item;

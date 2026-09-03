@@ -9,8 +9,8 @@
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 19-05-2026     | Added document cache and loader for fn:doc / fn:collection                             |
 //                      | Charles Korthout | 0.3   | 22-05-2026     | Added stable current-dateTime/date/time snapshot                                       |
 //                      | Charles Korthout | 0.4   | 22-05-2026     | Added decimal-format support for fn:format-number                                      |
@@ -36,7 +36,6 @@
 //                      | Charles Korthout | 2.3   | 18-07-2026     | Added Collections dictionary for fn:collection/fn:uri-collection resolution             |
 //                      | Charles Korthout | 2.4   | 20-07-2026     | Added IsXsltMode to expose XSLT-only functions (fn:current, fn:system-property) only in XSLT mode |
 //                      | Charles Korthout | 2.5   | 21-07-2026     | Convert UriFormatException/IOException/XmlException to FODC0005/FODC0002 in LoadDocument |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.6   | 25-07-2026     | TryResolveFunction falls back to variadic signatures (fn:concat#N for any N >= 2)      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.7   | 25-07-2026     | Added ElementConstructorHook and ContentNodeConstructorHook for XQuery constructors    |
@@ -62,6 +61,9 @@
 //                      | Charles Korthout | 2.16  | 26-08-2026     | Added DocumentLoaded callback so XSLT can detect XTDE1500 read/write conflicts            |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.17  | 01-09-2026     | Added FunctionLookupInterceptor so XSLT package scopes can filter fn:function-lookup      |
+//                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.18  | 02-09-2026     | AccumulatorValueCopier hook so fn:copy-of/fn:snapshot carry accumulator values (accumulator-046/064)|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -421,6 +423,14 @@ public sealed class EvaluationContext
         DocumentLoaded?.Invoke(uri);
         return node;
     }
+
+    /// <summary>
+    /// Optional hook invoked by <c>fn:copy-of</c> / <c>fn:snapshot</c> after copying a node,
+    /// so the XSLT layer can attach accumulator values to the copy (XSLT 3.0 §19.2:
+    /// accumulator values are copied by those functions). Arguments are the source node and
+    /// the copy root node.
+    /// </summary>
+    public Action<IXdmNode, IXdmNode>? AccumulatorValueCopier { get; set; }
 
     /// <summary>
     /// Registers a document node under the supplied URI without invoking <see cref="DocumentLoader"/>.

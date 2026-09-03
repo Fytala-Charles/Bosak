@@ -9,12 +9,14 @@
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 12-06-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 27-08-2026     | Statically detect variable references other than $value in accumulator-rule match patterns |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 02-09-2026     | XTSE0010 when initial-value is missing or no xsl:accumulator-rule is present (REQ-082)   |
+//                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4  | 02-09-2026     | EQName Q{uri}local support in accumulator name resolution (accumulator-021)|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -96,12 +98,16 @@ public sealed class AccumulatorDefinition
 
     private static (string LocalName, string NamespaceUri) ResolveAccumulatorName(string name, XElement element)
     {
-        var colon = name.IndexOf(':');
+        var trimmed = name.Trim();
+        // EQName form Q{uri}local (accumulator-021).
+        if (trimmed.StartsWith("Q{", StringComparison.Ordinal) && trimmed.IndexOf('}') is int closeBrace && closeBrace > 2)
+            return (trimmed[(closeBrace + 1)..], trimmed[2..closeBrace]);
+        var colon = trimmed.IndexOf(':');
         if (colon < 0)
-            return (name, string.Empty);
+            return (trimmed, string.Empty);
 
-        var prefix = name[..colon];
-        var local = name[(colon + 1)..];
+        var prefix = trimmed[..colon];
+        var local = trimmed[(colon + 1)..];
         var ns = element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
         return (local, ns);
     }

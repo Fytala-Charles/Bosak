@@ -9,16 +9,15 @@
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 11-07-2026     | Full fn:transform: initial-match-selection/mode, delivery formats, packages, result docs |
 //                      | Charles Korthout | 0.3   | 15-07-2026     | stylesheet-location consults ResourceUriMapper so published http: URIs map to local files|
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Honor stylesheet-base-uri; stylesheet-text without it has no base URI (XTSE0165)         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 15-07-2026     | fn:transform option handling: params, serialization, base URI, default mode, validation |
-//                      | Charles Korthout | 0.6   | 15-07-2026     | global-context-item default wrapper, xslt-version type validation, xslt-version override  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 15-07-2026     | global-context-item default wrapper, xslt-version type validation, xslt-version override  |
 //                      | Charles Korthout | 0.7   | 21-07-2026     | Set IsXsltMode=true in fn:transform nested EvaluationContext                             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 03-08-2026     | fn:stream-available#1: open stream + read to root element; false on any failure          |
@@ -32,6 +31,9 @@
 //                      | Charles Korthout | 0.12  | 30-08-2026     | Exposed ResolvePackageLocation for xsl:use-package resolution                            |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13  | 01-09-2026     | Strict PackageVersion/PackageVersionRange validation for XTSE0020 (REQ-082)             |
+//                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14  | 02-09-2026     | FOXT0002 when a stylesheet-location resource cannot be retrieved (transform-001); fn:transform with no entry point raises FOXT0002|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -814,6 +816,11 @@ public static class XsltFunctionLibrary
         {
             stylesheetText = File.ReadAllText(resolvedPath);
         }
+        catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
+        {
+            // The stylesheet module cannot be retrieved: FOXT0002 (transform-001).
+            throw new InvalidOperationException($"FOXT0002: Failed to retrieve stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
+        }
         catch (Exception ex)
         {
             throw new InvalidOperationException($"FOXT0001: Failed to load stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
@@ -1046,6 +1053,12 @@ public static class XsltFunctionLibrary
 
         if (sourceNode != null && initialMatchSelection != null)
             throw new InvalidOperationException("FOXT0002: fn:transform options source-node and initial-match-selection are mutually exclusive.");
+
+        // FOXT0002: no primary input at all (no source-node, initial-match-selection,
+        // initial-template, initial-mode, or initial-function).
+        if (sourceNode == null && initialMatchSelection == null
+            && string.IsNullOrEmpty(initialTemplate) && string.IsNullOrEmpty(initialMode) && string.IsNullOrEmpty(initialFunction))
+            throw new InvalidOperationException("FOXT0002: fn:transform requires a source-node, initial-match-selection, or initial-template option.");
 
         if (!string.IsNullOrEmpty(initialFunction))
         {

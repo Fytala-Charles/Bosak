@@ -9,14 +9,16 @@
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-05-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Added OnMultipleMatch enum and parsing for xsl:mode on-multiple-match                  |
 //                      | Charles Korthout | 0.3   | 07-06-2026     | Added DeepSkip to OnNoMatch enum and parsing; fixes next-match-034                     |
 //                      | Charles Korthout | 0.4   | 08-06-2026     | FromElement expands mode name QNames to Clark notation                                 |
 //                      | Charles Korthout | 0.5   | 09-06-2026     | Added NormalizeModeName; trim whitespace from mode/on-no-match attribute values       |
 //                      | Charles Korthout | 0.6   | 11-06-2026     | Added use-accumulators parsing                                                          |
 //                      | Charles Korthout | 0.7   | 30-06-2026     | Default on-no-match is text-only-copy per XSLT 3.0 spec; fixes match-241               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8  | 02-09-2026     | ModeDefinition tracks explicitly-specified attributes; GetModeDefinition merges per attribute by import precedence (accumulator-023)|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -106,12 +108,15 @@ public sealed class ModeDefinition
     /// <summary>Whether this mode uses all accumulators.</summary>
     public bool UseAllAccumulators { get; }
 
+    /// <summary>The attribute names explicitly specified on the xsl:mode declaration.</summary>
+    public IReadOnlySet<string> SpecifiedAttributes { get; }
+
     public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch = OnMultipleMatch.UseLast)
         : this(name, onNoMatch, onMultipleMatch, ModeVisibility.Private, false, false, false, false, new HashSet<string>(), false)
     {
     }
 
-    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, bool typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators)
+    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, bool typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators, IReadOnlySet<string>? specifiedAttributes = null)
     {
         Name = name;
         OnNoMatch = onNoMatch;
@@ -123,6 +128,7 @@ public sealed class ModeDefinition
         Streamable = streamable;
         UseAccumulators = useAccumulators;
         UseAllAccumulators = useAllAccumulators;
+        SpecifiedAttributes = specifiedAttributes ?? new HashSet<string>();
     }
 
     /// <summary>
@@ -193,7 +199,14 @@ public sealed class ModeDefinition
             }
         }
 
-        return new ModeDefinition(name, onNoMatch, onMultipleMatch, visibility, typed, warningOnNoMatch, warningOnMultipleMatch, streamable, useAccumulators, useAllAccumulators);
+        var specified = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var attr in element.Attributes())
+        {
+            if (!attr.IsNamespaceDeclaration && string.IsNullOrEmpty(attr.Name.NamespaceName))
+                specified.Add(attr.Name.LocalName);
+        }
+
+        return new ModeDefinition(name, onNoMatch, onMultipleMatch, visibility, typed, warningOnNoMatch, warningOnMultipleMatch, streamable, useAccumulators, useAllAccumulators, specified);
     }
 
     private static bool ParseYesNoAttribute(XElement element, string attributeName)
@@ -246,6 +259,10 @@ public sealed class ModeDefinition
     {
         if (name.StartsWith("Q{") && name.Length > 2)
         {
+            // EQName form: convert Q{uri}local to the Clark form used for accumulator names.
+            int closeBrace = name.IndexOf('}');
+            if (closeBrace > 2)
+                return $"{{{name[2..closeBrace]}}}{name[(closeBrace + 1)..]}";
             return NormalizeModeName(name);
         }
 

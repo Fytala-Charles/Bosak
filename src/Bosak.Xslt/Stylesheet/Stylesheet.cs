@@ -194,6 +194,11 @@
 //                      | Charles Korthout | 2.101 | 02-09-2026     | XTSE2200 for merge-key count mismatch; XTSE3087 for multiple/inconsistent             |
 //                      |                  |       |                | xsl:global-context-item declarations; XTTE0590 for use=required in a library package   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.102 | 02-09-2026     | XTSE0620 for static var/param with select+content (use-when-0431); XTSE0690 for         |
+//                      |                  |       |                | call-template missing a required parameter (call-template-2101); implicit-mandatory     |
+//                      |                  |       |                | static-param rules XTDE0700/XTDE0050 (static-012/013); XTSE0090 for unknown xsl:package |
+//                      |                  |       |                | attributes (package-906); XTSE0165 for xsl:import of a package (package-910)            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1991,7 +1996,14 @@ public sealed class Stylesheet
                 return;
 
             if (!IsStaticBodyEmpty(elem))
+            {
+                // XTSE0620 takes precedence when the declaration has both a select
+                // attribute and content (use-when-0431); a static variable with content
+                // and no select is XTSE0010.
+                if (elem.Attribute("select") != null || elem.Attribute("_select") != null)
+                    throw new InvalidOperationException($"XTSE0620: xsl:{elem.Name.LocalName} must not have both a select attribute and content.");
                 throw new InvalidOperationException("XTSE0010: Static variable or parameter must not have a sequence constructor.");
+            }
 
             // XTSE0090: tunnel is not permitted on static variables/parameters.
             if (elem.Attribute("tunnel") != null)
@@ -2038,7 +2050,37 @@ public sealed class Stylesheet
             // at compile time (XTTE0590). Default values are validated at runtime so that
             // empty-sequence defaults for optional types are preserved correctly.
             var asType = elem.Attribute("as")?.Value;
-            if (isParam && _externalStaticParameters.ContainsKey(key) && !string.IsNullOrEmpty(asType))
+            bool externallySupplied = isParam && _externalStaticParameters.ContainsKey(key);
+            if (isParam && !isRequired && !externallySupplied && !string.IsNullOrEmpty(asType))
+            {
+                var asTrimmed = asType.Trim();
+                bool permitsEmpty = asTrimmed.EndsWith('?') || asTrimmed.EndsWith('*');
+                if (!permitsEmpty)
+                {
+                    if (string.IsNullOrEmpty(select) && elem.Attribute("_select") == null)
+                    {
+                        // XTDE0700: a parameter whose implicit default (the empty sequence)
+                        // cannot convert to the required type is implicitly mandatory;
+                        // priming the stylesheet without a value for it is an error
+                        // (static-012).
+                        throw new InvalidOperationException($"XTDE0700: No value supplied for required parameter '{name}'.");
+                    }
+                    else
+                    {
+                        // XTDE0050: an unsupplied parameter whose default value does not
+                        // convert to the declared type (static-013).
+                        try
+                        {
+                            TransformEngine.ConvertVariableValue(value, asType, true, CreateUseWhenContext(elem));
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{name}'.");
+                        }
+                    }
+                }
+            }
+            if (externallySupplied && !string.IsNullOrEmpty(asType))
             {
                 var ctx = CreateUseWhenContext(elem);
                 value = TransformEngine.ConvertVariableValue(value, asType, isParam, ctx);
@@ -2719,6 +2761,7 @@ public sealed class Stylesheet
                     if (allNamed.TryGetValue(calledName, out var rule))
                     {
                         var declaredParams = new HashSet<string>();
+                        var requiredParams = new List<(string Key, string Raw)>();
                         foreach (var param in rule.Element.Elements(XName.Get("param", XslNamespace)))
                         {
                             var paramName = param.Attribute("name")?.Value;
@@ -2727,8 +2770,15 @@ public sealed class Stylesheet
                                 var (pLocal, pNs) = ExpandVariableName(param, paramName);
                                 var key = string.IsNullOrEmpty(pNs) ? pLocal : $"{{{pNs}}}{pLocal}";
                                 declaredParams.Add(key);
+                                bool isRequired = param.Attribute("required")?.Value?.Trim() is "yes" or "true" or "1";
+                                bool isTunnel = param.Attribute("tunnel")?.Value?.Trim() is "yes" or "true" or "1";
+                                // Required tunnel parameters arrive by tunneling, not by
+                                // xsl:with-param, so they are not part of this check.
+                                if (isRequired && !isTunnel)
+                                    requiredParams.Add((key, paramName));
                             }
                         }
+                        var suppliedParams = new HashSet<string>();
                         foreach (var wp in elem.Elements(XName.Get("with-param", XslNamespace)))
                         {
                             if (wp.Attribute("tunnel")?.Value == "yes")
@@ -2738,8 +2788,16 @@ public sealed class Stylesheet
                                 continue;
                             var (wpLocal, wpNs) = ExpandVariableName(wp, wpName);
                             var wpKey = string.IsNullOrEmpty(wpNs) ? wpLocal : $"{{{wpNs}}}{wpLocal}";
+                            suppliedParams.Add(wpKey);
                             if (!declaredParams.Contains(wpKey))
                                 throw new InvalidOperationException($"XTSE0680: Parameter '{wpName}' is not declared by template '{calledName}'.");
+                        }
+                        // XTSE0690: a call-template must supply a value for every required
+                        // non-tunnel parameter of the called template (call-template-2101).
+                        foreach (var (reqKey, reqRaw) in requiredParams)
+                        {
+                            if (!suppliedParams.Contains(reqKey))
+                                throw new InvalidOperationException($"XTSE0690: No value supplied for required parameter '{reqRaw}' of template '{calledName}'.");
                         }
                     }
                 }
@@ -3317,6 +3375,14 @@ public sealed class Stylesheet
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
                         "id", "default-mode", "default-validation",
                         "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes"),
+                        IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "package")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                        "id", "default-mode", "default-validation",
+                        "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes",
+                        "name", "package-version", "declared-modes"),
                         IsForwardsCompatibleElement(elem));
                 }
                 else if (localName == "template")
@@ -4942,6 +5008,10 @@ public sealed class Stylesheet
             var doc = _resolver.Resolve(href, elementBaseUri);
             var (moduleDoc, moduleBaseUri) = ExtractModuleDocument(doc, href, resolvedUri);
             var root = moduleDoc.Root;
+            // XTSE0165: an xsl:import target that is an xsl:package document is not a
+            // stylesheet module (package-910).
+            if (root != null && root.Name.LocalName == "package" && root.Name.NamespaceName == XslNamespace)
+                throw new InvalidOperationException($"XTSE0165: The resource '{href}' is an xsl:package, not a stylesheet module.");
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
@@ -7692,35 +7762,73 @@ public sealed class Stylesheet
 
     public ModeDefinition? GetModeDefinition(string name)
     {
-        // Local first (highest precedence)
+        // Per-attribute import-precedence merging (XSLT 3.0 §6.6.1): the effective value
+        // of each attribute comes from the highest-precedence declaration that specifies
+        // it explicitly, so a higher-precedence declaration that omits an attribute does
+        // not mask a lower-precedence one that specifies it (accumulator-023).
+        var defs = new List<(ModeDefinition Def, int Precedence)>();
+        CollectModeDefinitions(name, defs);
+        if (defs.Count == 0)
+        {
+            // Used packages last: only exported modes are visible.
+            foreach (var package in _usedPackages)
+            {
+                var def = package.GetModeDefinition(name);
+                if (def != null && IsExportedFromPackage(package, def))
+                    return def;
+            }
+
+            return null;
+        }
+        if (defs.Count == 1)
+            return defs[0].Def;
+        return MergeModeDefinitions(name, defs);
+    }
+
+    /// <summary>
+    /// Collects all declarations of the named mode in this module and, recursively, its
+    /// included and imported modules, each tagged with its module's import precedence.
+    /// </summary>
+    private void CollectModeDefinitions(string name, List<(ModeDefinition Def, int Precedence)> result)
+    {
         if (_modeDefinitions.TryGetValue(name, out var local))
-            return local;
-
-        // Included next
+            result.Add((local, ImportPrecedence));
         foreach (var included in _includes)
-        {
-            var def = included.GetModeDefinition(name);
-            if (def != null)
-                return def;
-        }
-
-        // Imported next
+            included.CollectModeDefinitions(name, result);
         foreach (var imported in _imports)
+            imported.CollectModeDefinitions(name, result);
+    }
+
+    /// <summary>
+    /// Merges several declarations of the same mode: each attribute's effective value is
+    /// taken from the highest-precedence declaration that specifies it explicitly (lower
+    /// numeric import precedence wins); attributes specified nowhere use the default.
+    /// </summary>
+    private static ModeDefinition MergeModeDefinitions(string name, List<(ModeDefinition Def, int Precedence)> defs)
+    {
+        var ordered = defs.OrderBy(d => d.Precedence).ToList();
+
+        T Pick<T>(string attribute, Func<ModeDefinition, T> getter)
         {
-            var def = imported.GetModeDefinition(name);
-            if (def != null)
-                return def;
+            foreach (var d in ordered)
+            {
+                if (d.Def.SpecifiedAttributes.Contains(attribute))
+                    return getter(d.Def);
+            }
+            return getter(ordered[0].Def); // unspecified everywhere: the default value
         }
 
-        // Used packages last: only exported modes are visible.
-        foreach (var package in _usedPackages)
-        {
-            var def = package.GetModeDefinition(name);
-            if (def != null && IsExportedFromPackage(package, def))
-                return def;
-        }
-
-        return null;
+        return new ModeDefinition(
+            name,
+            Pick("on-no-match", d => d.OnNoMatch),
+            Pick("on-multiple-match", d => d.OnMultipleMatch),
+            Pick("visibility", d => d.Visibility),
+            Pick("typed", d => d.Typed),
+            Pick("warning-on-no-match", d => d.WarningOnNoMatch),
+            Pick("warning-on-multiple-match", d => d.WarningOnMultipleMatch),
+            Pick("streamable", d => d.Streamable),
+            Pick("use-accumulators", d => d.UseAccumulators),
+            Pick("use-accumulators", d => d.UseAllAccumulators));
     }
 
     /// <summary>The root element of the parsed stylesheet document.</summary>

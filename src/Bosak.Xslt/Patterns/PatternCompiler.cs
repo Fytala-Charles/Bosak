@@ -9,8 +9,8 @@
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 27-05-2026     | Added // prefix support in match patterns                                                |
 //                      | Charles Korthout | 0.3   | 28-05-2026     | Added smart split, axis steps, node tests, set ops, variable patterns                    |
 //                      | Charles Korthout | 0.4   | 31-05-2026     | Fixed bare predicate patterns ([foo]) compiling as self::node()[foo]                     |
@@ -41,8 +41,10 @@
 //                      | Charles Korthout | 2.7   | 14-07-2026     | namespace-node() match pattern support; fixes snapshot-0102a                           |
 //                      | Charles Korthout | 2.8   | 01-08-2026     | union/intersect/except after / @ :: are NameTests, not operators; fixes match-038      |
 //                      | Charles Korthout | 2.9   | 25-08-2026     | XTSE0340 validation for numeric pattern starts/steps and PI NCName arguments          |
-//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.0   | 26-08-2026     | Propagate XTDE0640 circularity errors from pattern predicates                           |
+//                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.1  | 02-09-2026     | XTSE3470/XTSE3500 for current-merge-group()/current-merge-key() in match patterns (merge-057/058)|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -232,9 +234,9 @@ public sealed class PatternCompiler
         if (ContainsFunctionCall(trimmed, "current-grouping-key"))
             throw new InvalidOperationException("XTSE1070: current-grouping-key() is not allowed in a match pattern");
         if (ContainsFunctionCall(trimmed, "current-merge-group"))
-            throw new InvalidOperationException("XTSE1060: current-merge-group() is not allowed in a match pattern");
+            throw new InvalidOperationException("XTSE3470: current-merge-group() is not allowed in a match pattern");
         if (ContainsFunctionCall(trimmed, "current-merge-key"))
-            throw new InvalidOperationException("XTSE1070: current-merge-key() is not allowed in a match pattern");
+            throw new InvalidOperationException("XTSE3500: current-merge-key() is not allowed in a match pattern");
 
         // 7.  Disallow reverse axes at the top level of a step (XTSE0340).
         //     Allowed axes in match patterns are child, attribute, descendant,

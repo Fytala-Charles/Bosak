@@ -277,6 +277,13 @@
 //                      |                  |       |                | XTDE1030 for incomparable sort keys; XTTE2230 for merge keys; temporary output state   |
 //                      |                  |       |                | for xsl:sort/xsl:merge-key content (XTDE1480)                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.57  | 02-09-2026     | Accumulators: attribute nodes not visited; context focus saved/restored around on-       |
+//                      |                  |       |                | demand accumulator computation (accumulator-040); deep AttachAccumulatorValues;        |
+//                      |                  |       |                | fn:copy-of/fn:snapshot hook via EvaluationContext.AccumulatorValueCopier; XTDE0930;     |
+//                      |                  |       |                | xsl:evaluate result coercion XTTE0780 + XTTE3165 param keys + document() removed;      |
+//                      |                  |       |                | initial-mode XTSE3085 in declared-modes packages; default-mode counts as existing;     |
+//                      |                  |       |                | XTDE0040 when no source and no entry point                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -811,7 +818,9 @@ public sealed class TransformEngine
         // xsl:initial-template (with any namespace prefix).
         var implicitInitialTemplate = string.IsNullOrEmpty(initialTemplate) ? FindInitialTemplateName() : null;
         if (source == null && initialMatchSelection == null && string.IsNullOrEmpty(initialTemplate) && implicitInitialTemplate == null && string.IsNullOrEmpty(initialMode))
-            throw new InvalidOperationException("FOXT0002: A source document is required unless an initial template is specified.");
+            // The default initial template is xsl:initial-template; when the stylesheet does
+            // not declare it and no source is supplied, the invocation fails (package-914a).
+            throw new InvalidOperationException("XTDE0040: Named template 'xsl:initial-template' not found (no source document or entry point was supplied).");
 
         // XTDE3086: a required global context item must be supplied.
         if (_stylesheet.GlobalContextItemUse == "required" && source == null)
@@ -846,6 +855,14 @@ public sealed class TransformEngine
         // subject to the stylesheet's whitespace stripping rules, but the stylesheet
         // document itself (returned by document('')) must not be mutated.
         _context.DocumentPostProcessor = PostProcessLoadedDocument;
+
+        // fn:copy-of / fn:snapshot copy accumulator values onto the copied nodes
+        // (XSLT 3.0 §19.2; accumulator-046/047/064-067).
+        _context.AccumulatorValueCopier = (srcNode, copyNode) =>
+        {
+            if (copyNode is XDocumentNode xdn && xdn.UnderlyingObject is XElement el)
+                AttachAccumulatorValues(srcNode, el);
+        };
 
         // Make the source document available to fn:doc via its document URI so that
         // doc(document-uri($arg)) is $arg returns true for the initial source tree.
@@ -1048,6 +1065,9 @@ public sealed class TransformEngine
                     _ => ExpandModeName(initialMode, _stylesheet.Root)
                 };
                 _initialMode = resolvedInitialMode;
+                // Static mode-declaration checks (XTSE3085/XTDE0045) come before the
+                // dynamic XTDE0044 match-selection check (package-914d/e).
+                ValidateInitialMode(resolvedInitialMode);
                 // XTDE0044: an explicit initial mode requires an initial match selection or
                 // a supplied global context item. If neither source nor initial-match-selection
                 // nor global-context-item is present, the transformation cannot begin.
@@ -1055,7 +1075,6 @@ public sealed class TransformEngine
                 {
                     throw new InvalidOperationException("XTDE0044: An initial mode requires an initial match selection or global context item.");
                 }
-                ValidateInitialMode(resolvedInitialMode);
                 _modeStack.Push(resolvedInitialMode);
                 try
                 {
@@ -1883,6 +1902,11 @@ public sealed class TransformEngine
         context.UnregisterFunction(Fn, "current-merge-key", 0);
         context.UnregisterFunction(Fn, "system-property", 1);
         context.UnregisterFunction(Fn, "current-output-uri", 0);
+        // document() is an XSLT-defined function and is not available inside xsl:evaluate;
+        // removing it makes such calls XPST0008/XPST0017 static errors, reported as
+        // XTDE3160 (evaluate-047/048).
+        context.UnregisterFunction(Fn, "document", 1);
+        context.UnregisterFunction(Fn, "document", 2);
     }
 
     /// <summary>
@@ -2135,6 +2159,15 @@ public sealed class TransformEngine
         if (name.StartsWith("{"))
             return name;
 
+        // EQName form Q{uri}local (accumulator-021).
+        if (name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf('}') is int closeBrace && closeBrace > 2)
+        {
+            var clarkQName = $"{{{name[2..closeBrace]}}}{name[(closeBrace + 1)..]}";
+            if (_accumulators.Any(a => a.ClarkName == clarkQName))
+                return clarkQName;
+            return "";
+        }
+
         var colon = name.IndexOf(':');
         if (colon < 0)
         {
@@ -2171,6 +2204,12 @@ public sealed class TransformEngine
         if (!_accumulatorsInProgress.Add(key))
             throw new InvalidOperationException($"XTDE3400: cyclic dependency detected in accumulator '{acc.ClarkName}'");
 
+        // Computing accumulator values evaluates match patterns and rule bodies; that must
+        // not perturb the caller's dynamic context (accumulator-040).
+        var savedItem = _context.ContextItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        var savedCurrent = _context.CurrentItem;
         try
         {
             nodeValues = ComputeAccumulatorValues(acc, root);
@@ -2179,6 +2218,8 @@ public sealed class TransformEngine
         }
         finally
         {
+            _context.WithFocus(savedItem, savedPosition, savedSize);
+            _context.WithCurrentItem(savedCurrent);
             _accumulatorsInProgress.Remove(key);
         }
     }
@@ -2212,15 +2253,11 @@ public sealed class TransformEngine
         {
             // Apply all matching start-phase rules before descendants, in declaration order.
             // The value after the start rules is what accumulator-before() returns for this node.
+            // Attribute and namespace nodes are not visited (XSLT 3.0 §9.2), so rules that
+            // match them are legal but never fire (accumulator-026).
             foreach (var startRule in compiledRules.Where(r => IsAccumulatorStartRule(r.Rule) && r.Match(XdmValue.FromNode(node), _context)))
                 current = ApplyAccumulatorRule(acc, startRule, node, current);
             var before = current;
-
-            foreach (var attr in node.Axis(XdmAxis.Attribute))
-            {
-                if (attr.IsNode && attr.NodeValue != null)
-                    current = Walk(attr.NodeValue);
-            }
 
             foreach (var child in node.Axis(XdmAxis.Child))
             {
@@ -2535,6 +2572,18 @@ public sealed class TransformEngine
             }
         }
         copy.AddAnnotation(values);
+
+        // Recurse so each descendant of the copy carries its source counterpart's values
+        // (fn:copy-of/fn:snapshot copy accumulator values; accumulator-046/047/064-067).
+        var sourceElements = new List<IXdmNode>();
+        foreach (var c in sourceNode.Axis(XdmAxis.Child))
+        {
+            if (c.IsNode && c.NodeValue != null && c.NodeValue.NodeKind == XdmNodeKind.Element)
+                sourceElements.Add(c.NodeValue);
+        }
+        var copyElements = copy.Elements().ToList();
+        for (int i = 0; i < sourceElements.Count && i < copyElements.Count; i++)
+            AttachAccumulatorValues(sourceElements[i], copyElements[i]);
     }
 
     /// <summary>
@@ -3105,7 +3154,7 @@ public sealed class TransformEngine
             foreach (var entry in EnumerateItems(item))
             {
                 if (!entry.IsMap)
-                    throw new InvalidOperationException("XTTE3365: xsl:map content must produce map entries");
+                    throw new InvalidOperationException("XTTE3375: xsl:map content must evaluate to a sequence of maps; a non-map item was produced");
 
                 var entryMap = entry.MapValue;
                 if (entryMap.Count != 1)
@@ -4417,6 +4466,11 @@ public sealed class TransformEngine
         if (string.IsNullOrEmpty(mode))
             return true; // unnamed mode always exists
 
+        // The stylesheet's default mode exists even when nothing declares or uses it
+        // explicitly (mode-1803).
+        if (mode == _stylesheet.DefaultMode)
+            return true;
+
         // Check for explicit xsl:mode declaration
         if (_stylesheet.GetModeDefinition(mode) != null)
             return true;
@@ -4445,7 +4499,14 @@ public sealed class TransformEngine
     /// </summary>
     private void ValidateInitialMode(string resolvedInitialMode)
     {
-        // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count)
+        // XTSE3085: in a package with declared-modes (the default), the initial mode must be
+        // declared by an xsl:mode declaration (or accepted from a used package). This static
+        // check takes precedence over the dynamic XTDE0044/XTDE0045 checks (package-914d/e).
+        if (_stylesheet.IsPackage && _stylesheet.DeclaredModes && !string.IsNullOrEmpty(resolvedInitialMode)
+            && _stylesheet.GetModeDefinition(resolvedInitialMode) == null)
+            throw new InvalidOperationException($"XTSE3085: Mode '{resolvedInitialMode}' is not declared in the package.");
+
+        // XTDE0045: initial mode must exist in the stylesheet (templates with #all don't count).
         if (!ModeExists(resolvedInitialMode))
         {
             throw new InvalidOperationException($"XTDE0045: Initial mode '{resolvedInitialMode}' does not exist in the stylesheet.");
@@ -5171,7 +5232,9 @@ public sealed class TransformEngine
             result = compiled.Evaluate(_context);
             var asAttr = instruction.Attribute("as")?.Value;
             if (!string.IsNullOrEmpty(asAttr))
-                result = ConvertVariableValue(result, asAttr, isParam: false, _context);
+                // The xsl:evaluate result is converted using function conversion rules;
+                // a failure is XTTE0780 (evaluate-023).
+                result = ConvertVariableValue(result, asAttr, isParam: false, _context, errorCodeOverride: "XTTE0780");
             return result;
         }
         catch (InvalidOperationException ex) when (IsXPathStaticError(ex))
@@ -5555,6 +5618,10 @@ public sealed class TransformEngine
                     // (namespace-2622).
                     if (nsUri == "http://www.w3.org/2000/xmlns/")
                         throw new InvalidOperationException("XTDE0905: xsl:namespace must not generate a binding to the namespace http://www.w3.org/2000/xmlns/.");
+                    // XTDE0930: a non-empty prefix must not be bound to the empty namespace
+                    // (coco-017).
+                    if (nsName.Length > 0 && nsUri.Length == 0)
+                        throw new InvalidOperationException($"XTDE0930: The prefix '{nsName}' cannot be bound to the empty namespace name.");
                     if (_currentContainer is XElement targetElem)
                     {
                         if (nsName == "xml" && nsUri == "http://www.w3.org/XML/1998/namespace")
@@ -11237,6 +11304,11 @@ public sealed class TransformEngine
             return $"Q{{{ns.NamespaceName}}}{local}";
         }
 
+        // An evaluated error-code that is not a valid NCName falls back to the default
+        // (message-0406).
+        if (!Bosak.XPath.Providers.Xml.Xml11NameCodec.IsValidXml11NCName(expanded))
+            return "XTMM9000";
+
         return $"Q{{}}{expanded}";
     }
 
@@ -11876,37 +11948,21 @@ public sealed class TransformEngine
 
     private static bool ContainsAvt(string? value)
     {
+        // An AVT marker is a single '{'; a doubled '{{' is an escaped literal brace.
+        // (Quotes do not delimit anything at the AVT level: '{$lang}' contains an AVT
+        // expression even though the braces sit between literal quote characters — sort-029.)
         if (string.IsNullOrEmpty(value))
             return false;
-        bool inString = false;
-        char stringChar = '\0';
         for (int i = 0; i < value.Length; i++)
         {
-            char c = value[i];
-            if (inString)
+            if (value[i] == '{')
             {
-                if (c == stringChar)
-                    inString = false;
-                continue;
-            }
-            if (c == '\'' || c == '"')
-            {
-                inString = true;
-                stringChar = c;
-                continue;
-            }
-            if (c == '{' && i + 1 < value.Length && value[i + 1] == '{')
-            {
-                i++;
-                continue;
-            }
-            if (c == '{')
-            {
-                for (int j = i + 1; j < value.Length; j++)
+                if (i + 1 < value.Length && value[i + 1] == '{')
                 {
-                    if (value[j] == '}')
-                        return true;
+                    i++;
+                    continue;
                 }
+                return true;
             }
         }
         return false;
@@ -13102,8 +13158,10 @@ public sealed class TransformEngine
             {
                 foreach (var entry in mapValue.MapValue.Entries)
                 {
+                    // XTTE3165: xsl:evaluate parameter map keys must be QNames
+                    // (evaluate-043, bug 29351).
                     if (entry.Key.Kind != XdmValueKind.QName)
-                        continue;
+                        throw new InvalidOperationException($"XTTE3165: xsl:evaluate parameter keys must be QNames, not {entry.Key.Kind}.");
                     var qn = entry.Key.QNameValue;
                     result[VariableKey(qn.LocalName, qn.NamespaceUri)] = entry.Value;
                 }
@@ -15107,7 +15165,7 @@ public sealed class TransformEngine
                 or "escape-uri-attributes" or "include-content-type" or "media-type"
                 or "byte-order-mark" or "json-node-output-method" or "allow-duplicate-names"
                 or "escape-solidus" or "item-separator" or "cdata-section-elements"
-                or "suppress-indentation" or "parameter-document")
+                or "suppress-indentation" or "parameter-document" or "build-tree")
             {
                 value = EvaluateAvt(value, instruction);
             }
@@ -15489,7 +15547,6 @@ public sealed class TransformEngine
     private void ApplyWhitespaceStripping(IXdmNode source)
     {
         var rules = _stylesheet.GetAllSpaceHandlingRules();
-
         // Only strip whitespace in XDocument-backed nodes for now
         if (source is XDocumentNode xdocNode)
         {

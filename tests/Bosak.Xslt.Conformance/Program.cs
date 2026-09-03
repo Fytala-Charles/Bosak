@@ -109,6 +109,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.37  | 02-09-2026     | DocumentLoader falls back to the bare file name in the test set dir (merge-008)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.38  | 02-09-2026     | ErrorCodeMatches also matches XPathErrorException structured codes (xsl:assert);      |
+//                      |                  |       |                | evaluate select-only source documents (id-043)                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1124,7 +1127,18 @@ class Program
     {
         if (string.IsNullOrEmpty(expectedCode) || expectedCode == "*")
             return true;
-        return ex.Message.Contains(expectedCode, StringComparison.Ordinal);
+        if (ex.Message.Contains(expectedCode, StringComparison.Ordinal))
+            return true;
+        // XPathErrorException carries the error code as structured parts (namespace/local)
+        // rather than embedded in the message (xsl:assert / xsl:message error paths).
+        // Match on the local name; catalog prefixes bind in the test stylesheet, not here.
+        if (ex is Bosak.XPath.Runtime.Vm.XPathErrorException xpe)
+        {
+            var expectedLocal = expectedCode.Contains(':') ? expectedCode[(expectedCode.IndexOf(':') + 1)..] : expectedCode;
+            if (xpe.CodeLocalName == expectedLocal)
+                return true;
+        }
+        return false;
     }
 
     static bool IsBackwardsCompatibleSpec(string specValue)
@@ -1322,7 +1336,33 @@ class Program
             }
         }
 
-        if (doc == null) return (null, null, null, null);
+        // A source may be defined purely by a select expression (e.g.
+        // select="parse-xml('...')" in id-043): evaluate it with an absent focus.
+        var select = source.Attribute("select")?.Value;
+        if (doc == null)
+        {
+            if (!string.IsNullOrEmpty(select))
+            {
+                var compiled0 = XPath31Expression.Compile(select);
+                var result0 = compiled0.Evaluate(new EvaluationContext());
+                var items0 = new List<XdmValue>();
+                if (result0.IsSequence && result0.SequenceValue != null)
+                {
+                    foreach (var item in XdmSequence.FromSource(result0.SequenceValue))
+                        items0.Add(item);
+                }
+                else
+                {
+                    items0.Add(result0);
+                }
+                foreach (var item in items0)
+                {
+                    if (item.IsNode && item.NodeValue != null)
+                        return (item.NodeValue, envElem.Element(ns + "collation")?.Attribute("uri")?.Value, null, null);
+                }
+            }
+            return (null, null, null, null);
+        }
         if (string.IsNullOrEmpty(doc.BaseUri) && sourceUri != null)
             doc.AddAnnotation(sourceUri);
 
@@ -1341,7 +1381,6 @@ class Program
         var defaultCollation = envElem.Element(ns + "collation")?.Attribute("uri")?.Value;
 
         // Handle select="..." on source (e.g. role="." select="/doc")
-        var select = source.Attribute("select")?.Value;
         if (!string.IsNullOrEmpty(select))
         {
             var node = new XDocumentNode(doc);

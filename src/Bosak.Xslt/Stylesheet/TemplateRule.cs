@@ -239,6 +239,12 @@ public sealed class TemplateRule
         }
 
         // Any other type is atomic; no node can satisfy an atomic required type.
+        // This static check applies only when the match pattern can match nodes only:
+        // a pattern like "." also matches atomic items, so the error is dynamic instead
+        // (XPTY0019 when an axis step runs on an atomic context item, context-item-911).
+        if (match.Trim() == ".")
+            return;
+
         throw new InvalidOperationException($"XTTE0590: Required context item type '{contextItem.AsType}' is incompatible with match pattern '{match}'.");
     }
 
