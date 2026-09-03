@@ -280,6 +280,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.93  | 02-09-2026     | load-xquery-module stub dispatches via EvaluationContext.XQueryModuleLoader (XSLT hosts) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.94  | 02-09-2026     | fn:function-lookup captures the resolved signature on the returned function             |
+//                      |                  |       |                | item (override-f-014)                                                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -6683,7 +6686,8 @@ public static class FunctionLibrary
                 CapturedContextPosition = ctx.ContextPosition,
                 CapturedContextSize = ctx.ContextSize,
                 CapturedBaseUri = ctx.BaseUri,
-                CapturedNamespaces = ctx.SnapshotNamespaces()
+                CapturedNamespaces = ctx.SnapshotNamespaces(),
+                CapturedSignature = sig
             });
         return XdmValue.Undefined;
     }

@@ -202,6 +202,9 @@
 //                      | Charles Korthout | 2.103 | 02-09-2026     | Static-evaluation contexts seed XQueryModuleSources from the XsltFunctionLibrary      |
 //                      |                  |       |                | registry so fn:load-xquery-module resolves modules in static variables (l-x-m-004)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.104 | 02-09-2026     | Unnamed-mode template rules are public; GetPackageScopeAttributeSets applies            |
+//                      |                  |       |                | xsl:override contributions (override-v-004, as-002/003/005)                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -955,6 +958,57 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Returns the attribute sets visible in this package's own execution scope, with
+    /// <c>xsl:override</c> attribute-set declarations contributed by packages that use
+    /// this package applied on top (XSLT 3.0 §3.5.7.2): references inside this package's
+    /// own definitions bind to the overriding declarations, so a <c>use-attribute-sets</c>
+    /// chain that loops back through an override is a dynamic circularity (XTDE0640,
+    /// override-as-003). When the overriding declaration retains
+    /// <c>use-attribute-sets="xsl:original"</c>, the overridden originals are kept ahead
+    /// of the override so its attributes augment (and override same-named ones of) the
+    /// originals (override-as-002).
+    /// </summary>
+    public Dictionary<(string LocalName, string NamespaceUri), List<AttributeSetDefinition>> GetPackageScopeAttributeSets()
+    {
+        var result = GetAllAttributeSets();
+        if (_packageOverrideContributions == null)
+            return result;
+
+        foreach (var (user, options) in _packageOverrideContributions)
+        {
+            foreach (var overrideElem in options.OverrideAttributeSets)
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                var def = AttributeSetDefinition.FromElement(overrideElem, user);
+                if (def == null)
+                    continue;
+                var (oLocal, oNs) = ExpandVariableName(overrideElem, nameAttr);
+                var key = (oLocal, oNs);
+
+                if (!result.TryGetValue(key, out var existing))
+                    result[key] = existing = new List<AttributeSetDefinition>();
+
+                // The override replaces the overridden originals unless it retains them
+                // via a use-attribute-sets="xsl:original" reference.
+                List<AttributeSetDefinition> kept;
+                if (UseAttributeSetsReferencesOriginal(overrideElem, def.UseAttributeSets))
+                {
+                    kept = existing;
+                }
+                else
+                {
+                    kept = new List<AttributeSetDefinition>();
+                }
+                kept.Add(def);
+                result[key] = kept;
+            }
+        }
+        return result;
+    }
+
+    /// <summary>
     /// Returns true when a used-package component was explicitly accepted with
     /// <c>private</c> visibility by the using package. Components accepted as <c>hidden</c>
     /// are not visible anywhere in the using package.
@@ -1275,6 +1329,11 @@ public sealed class Stylesheet
         {
             if (mode == "#all" || mode == "#current")
                 continue;
+            // The default (unnamed) mode is always public (XSLT 3.0 §6.6.1), so a
+            // template rule that participates in it is public to using packages
+            // (override-v-004).
+            if (mode.Length == 0)
+                return "public";
             var modeDef = stylesheet.GetModeDefinition(mode);
             if (modeDef != null)
             {

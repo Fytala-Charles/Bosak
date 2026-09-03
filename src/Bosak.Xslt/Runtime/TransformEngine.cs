@@ -284,6 +284,9 @@
 //                      |                  |       |                | initial-mode XTSE3085 in declared-modes packages; default-mode counts as existing;     |
 //                      |                  |       |                | XTDE0040 when no source and no entry point                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.58  | 02-09-2026     | Package-scoped attribute-set and accumulator resolution keyed by                        |
+//                      |                  |       |                | CurrentStylesheet (override-as-002/003/005, misc-005)                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -571,13 +574,24 @@ public sealed class TransformEngine
     // package to templates that are hidden or abstract outside it.
     private readonly Dictionary<Stylesheet.Stylesheet, Dictionary<string, Stylesheet.TemplateRule>> _packageNamedTemplates = new();
 
+    // Cache of per-package attribute-set views (own declarations plus xsl:override
+    // contributions from using packages) used to resolve use-attribute-sets references
+    // package-locally (override-as-002/003/005).
+    private readonly Dictionary<Stylesheet.Stylesheet, Dictionary<(string LocalName, string NamespaceUri), List<Stylesheet.AttributeSetDefinition>>> _packageAttributeSetViews = new();
+
+    // Cache of per-package accumulator lists; accumulator names resolve package-locally
+    // like keys and decimal formats (override-misc-005).
+    private readonly Dictionary<Stylesheet.Stylesheet, List<Stylesheet.AccumulatorDefinition>> _packageAccumulators = new();
+
     // Tracks globals currently being evaluated to detect circular references.
     private readonly HashSet<(string LocalName, string NamespaceUri)> _evaluatingGlobals = new();
 
-    // Accumulator declarations and cached accumulator values per source tree.
+    // Accumulator declarations and cached accumulator values per source tree. The
+    // caches are keyed by the accumulator definition itself so same-named accumulators
+    // from different packages stay separate (override-misc-005).
     private readonly List<Stylesheet.AccumulatorDefinition> _accumulators;
-    private readonly Dictionary<(IXdmNode Root, string ClarkName), Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>> _accumulatorCache = new();
-    private readonly HashSet<(IXdmNode Root, string ClarkName)> _accumulatorsInProgress = new();
+    private readonly Dictionary<(Stylesheet.AccumulatorDefinition Acc, IXdmNode Root), Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>> _accumulatorCache = new();
+    private readonly HashSet<(Stylesheet.AccumulatorDefinition Acc, IXdmNode Root)> _accumulatorsInProgress = new();
     private readonly Dictionary<IXdmNode, HashSet<string>> _accumulatorApplicability = new();
 
     // The initial context item supplied to the transformation (the global context item).
@@ -2028,7 +2042,7 @@ public sealed class TransformEngine
     /// </summary>
     private void RegisterAccumulatorFunctions(EvaluationContext context)
     {
-        if (_accumulators.Count == 0)
+        if (_accumulators.Count == 0 && !HasUsedPackageAccumulators(_stylesheet))
             return;
 
         context.RegisterFunction(new FunctionSignature
@@ -2053,6 +2067,21 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Returns whether any package used by the given stylesheet (recursively) declares
+    /// an accumulator, so <c>accumulator-before()</c>/<c>accumulator-after()</c> are
+    /// registered even when the principal package declares none (override-misc-005).
+    /// </summary>
+    private static bool HasUsedPackageAccumulators(Stylesheet.Stylesheet stylesheet)
+    {
+        foreach (var package in stylesheet.UsedPackages)
+        {
+            if (package.GetAllAccumulators().Any() || HasUsedPackageAccumulators(package))
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
     /// Implements <c>accumulator-before()</c> / <c>accumulator-after()</c>.
     /// </summary>
     private XdmValue GetAccumulatorValue(EvaluationContext ctx, ReadOnlySpan<XdmValue> args, bool before)
@@ -2062,7 +2091,11 @@ public sealed class TransformEngine
         if (string.IsNullOrEmpty(name))
             throw new InvalidOperationException("XTDE3341: accumulator name must be a string");
 
-        var accName = ResolveAccumulatorFunctionName(name, ctx);
+        // Accumulator names resolve package-locally: a component executing inside a used
+        // package sees that package's accumulators, even when a using package declares an
+        // accumulator with the same name (override-misc-005).
+        var scopeAccumulators = GetScopedAccumulators(CurrentStylesheet);
+        var accName = ResolveAccumulatorFunctionName(name, ctx, scopeAccumulators);
         if (string.IsNullOrEmpty(accName))
             throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
 
@@ -2093,7 +2126,7 @@ public sealed class TransformEngine
         if (!IsAccumulatorApplicableToTree(accName, node))
             throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
 
-        var acc = _accumulators.FirstOrDefault(a => a.ClarkName == accName);
+        var acc = scopeAccumulators.FirstOrDefault(a => a.ClarkName == accName);
         if (acc == null)
             throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
 
@@ -2106,6 +2139,23 @@ public sealed class TransformEngine
         // return the initial value for before and after.
         var initialCompiled = CompileXPath(acc.InitialValue, acc.Element);
         return initialCompiled.Evaluate(CreateAccumulatorEvaluationContext());
+    }
+
+    /// <summary>
+    /// Returns the accumulator declarations visible in the given package scope. The
+    /// principal stylesheet scope uses the pre-collected list; a used package's scope
+    /// resolves to that package's own declarations (including private ones).
+    /// </summary>
+    private List<Stylesheet.AccumulatorDefinition> GetScopedAccumulators(Stylesheet.Stylesheet scope)
+    {
+        if (scope == _stylesheet)
+            return _accumulators;
+        if (!_packageAccumulators.TryGetValue(scope, out var list))
+        {
+            list = scope.GetAllAccumulators().ToList();
+            _packageAccumulators[scope] = list;
+        }
+        return list;
     }
 
     /// <summary>
@@ -2154,7 +2204,7 @@ public sealed class TransformEngine
     /// Resolves an accumulator name supplied to <c>accumulator-before()</c> / <c>accumulator-after()</c>
     /// to Clark notation using the in-scope namespaces of the calling expression.
     /// </summary>
-    private string ResolveAccumulatorFunctionName(string name, EvaluationContext ctx)
+    private string ResolveAccumulatorFunctionName(string name, EvaluationContext ctx, List<Stylesheet.AccumulatorDefinition> scopeAccumulators)
     {
         if (name.StartsWith("{"))
             return name;
@@ -2163,7 +2213,7 @@ public sealed class TransformEngine
         if (name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf('}') is int closeBrace && closeBrace > 2)
         {
             var clarkQName = $"{{{name[2..closeBrace]}}}{name[(closeBrace + 1)..]}";
-            if (_accumulators.Any(a => a.ClarkName == clarkQName))
+            if (scopeAccumulators.Any(a => a.ClarkName == clarkQName))
                 return clarkQName;
             return "";
         }
@@ -2172,7 +2222,7 @@ public sealed class TransformEngine
         if (colon < 0)
         {
             // Unprefixed accumulator names are in no namespace.
-            foreach (var acc in _accumulators)
+            foreach (var acc in scopeAccumulators)
             {
                 if (acc.LocalName == name && string.IsNullOrEmpty(acc.NamespaceUri))
                     return acc.ClarkName;
@@ -2185,7 +2235,7 @@ public sealed class TransformEngine
         if (ctx.TryResolveNamespace(prefix, out var nsUri))
         {
             var clark = $"{{{nsUri}}}{local}";
-            if (_accumulators.Any(a => a.ClarkName == clark))
+            if (scopeAccumulators.Any(a => a.ClarkName == clark))
                 return clark;
         }
         return "";
@@ -2193,11 +2243,13 @@ public sealed class TransformEngine
 
     /// <summary>
     /// Returns the cached accumulator values for every node in the source tree,
-    /// computing them on first use.
+    /// computing them on first use. The cache is keyed by the accumulator definition
+    /// itself so that same-named accumulators from different packages stay separate
+    /// (override-misc-005).
     /// </summary>
     private Dictionary<IXdmNode, (XdmValue Before, XdmValue After)> GetAccumulatorNodeValues(Stylesheet.AccumulatorDefinition acc, IXdmNode root)
     {
-        var key = (root, acc.ClarkName);
+        var key = (acc, root);
         if (_accumulatorCache.TryGetValue(key, out var nodeValues))
             return nodeValues;
 
@@ -6934,7 +6986,20 @@ public sealed class TransformEngine
     /// Applies the named attribute sets to the target element.
     /// Attribute sets accumulate across imports/includes (merge semantics).
     /// </summary>
-    private void ApplyAttributeSets(XElement source, XElement target, HashSet<(string LocalName, string NamespaceUri)>? visited = null)
+    /// <param name="source">The element carrying the <c>use-attribute-sets</c> attribute
+    /// (a literal result element, <c>xsl:element</c>, <c>xsl:copy</c>, or an
+    /// <c>xsl:attribute-set</c> definition referenced recursively).</param>
+    /// <param name="target">The result element receiving the attributes.</param>
+    /// <param name="visited">Names currently being expanded, tagged with the resolution
+    /// view they were expanded through; re-entering a name in the same view is a genuine
+    /// cycle (XTDE0640).</param>
+    /// <param name="view">The attribute-set resolution view (package-scoped).</param>
+    /// <param name="viewScope">The package whose view <paramref name="view"/> is, or
+    /// <c>null</c> for the principal stylesheet scope.</param>
+    private void ApplyAttributeSets(XElement source, XElement target,
+        HashSet<(Stylesheet.Stylesheet? Scope, string LocalName, string NamespaceUri)>? visited = null,
+        Dictionary<(string LocalName, string NamespaceUri), List<Stylesheet.AttributeSetDefinition>>? view = null,
+        Stylesheet.Stylesheet? viewScope = null)
     {
         // Check both xsl:use-attribute-sets (on literal elements) and use-attribute-sets (on xsl:element / xsl:attribute-set)
         var useAttrSetsRaw = source.Attribute(XNamespace.Get(Stylesheet.Stylesheet.XslNamespace) + "use-attribute-sets")?.Value
@@ -6942,8 +7007,12 @@ public sealed class TransformEngine
         if (string.IsNullOrWhiteSpace(useAttrSetsRaw))
             return;
 
-        visited ??= new HashSet<(string, string)>();
-        var allSets = _stylesheet.GetAllAttributeSets();
+        visited ??= new HashSet<(Stylesheet.Stylesheet?, string, string)>();
+        if (view == null)
+        {
+            viewScope = _currentPackageScope;
+            view = GetAttributeSetView(viewScope);
+        }
         var xslNs = Stylesheet.Stylesheet.XslNamespace;
 
         foreach (var name in useAttrSetsRaw.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
@@ -6985,7 +7054,7 @@ public sealed class TransformEngine
             }
 
             var key = (localName, nsUri);
-            if (!allSets.TryGetValue(key, out var defs))
+            if (!view.TryGetValue(key, out var defs))
                 continue;
 
             // An abstract attribute-set cannot be evaluated; applying it raises XTDE3052.
@@ -6994,8 +7063,9 @@ public sealed class TransformEngine
 
             // A genuine cycle (an attribute-set reachable from itself while still on the
             // expansion stack, e.g. composed via an xsl:override) is a dynamic circularity
-            // error (override-as-003).
-            if (!visited.Add(key))
+            // error (override-as-003). The view tags the name so that same-named sets in
+            // different packages do not false-positive (override-as-005).
+            if (!visited.Add((viewScope, localName, nsUri)))
                 ThrowCircularityError("attribute-set", trimmed);
 
             var prevContainer = _currentContainer;
@@ -7013,10 +7083,14 @@ public sealed class TransformEngine
             {
                 foreach (var def in defs)
                 {
-                    // Recursively apply referenced attribute sets
+                    // Recursively apply referenced attribute sets. References from a
+                    // package's own definition resolve in that package's scope (private
+                    // sets included, overrides applied) so chains stay package-local
+                    // (override-as-002/003/005).
                     if (!string.IsNullOrWhiteSpace(def.UseAttributeSets))
                     {
-                        ApplyAttributeSets(def.Element, target, visited);
+                        var defScope = def.DeclaringStylesheet?.OwningPackage;
+                        ApplyAttributeSets(def.Element, target, visited, GetAttributeSetView(defScope), defScope);
                     }
 
                     // Execute this definition's xsl:attribute children
@@ -7030,9 +7104,27 @@ public sealed class TransformEngine
             {
                 _context.RestoreVariables(savedVariables);
                 _currentContainer = prevContainer;
-                visited.Remove(key);
+                visited.Remove((viewScope, localName, nsUri));
             }
         }
+    }
+
+    /// <summary>
+    /// Returns the attribute-set resolution view for the given package scope: the
+    /// package's own declarations (private included) plus <c>xsl:override</c>
+    /// contributions from using packages. The principal scope (<c>null</c> or the
+    /// root stylesheet) resolves through the root stylesheet's merged view.
+    /// </summary>
+    private Dictionary<(string LocalName, string NamespaceUri), List<Stylesheet.AttributeSetDefinition>> GetAttributeSetView(Stylesheet.Stylesheet? scope)
+    {
+        if (scope == null || scope == _stylesheet)
+            return _stylesheet.GetAllAttributeSets();
+        if (!_packageAttributeSetViews.TryGetValue(scope, out var view))
+        {
+            view = scope.GetPackageScopeAttributeSets();
+            _packageAttributeSetViews[scope] = view;
+        }
+        return view;
     }
 
     /// <summary>

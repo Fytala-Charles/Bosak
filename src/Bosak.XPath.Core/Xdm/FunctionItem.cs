@@ -18,6 +18,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5    | 21-08-2026     | NamedFunctionItem.CapturedNamespaces for namespace-sensitive constructor functions   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6    | 02-09-2026     | NamedFunctionItem.CapturedSignature for cross-scope function-item                   |
+//                      |                  |        |                | invocation (override-f-014)                                                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -72,6 +75,17 @@ public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, in
     /// using these bindings rather than the call-site bindings (CastAs-UnionType-13/14/15).
     /// </summary>
     public Dictionary<string, string>? CapturedNamespaces { get; init; }
+
+    /// <summary>
+    /// The function signature this item resolved to when it was materialized, if known.
+    /// Used as a last-resort fallback for invocation when the function is no longer
+    /// resolvable in the call-site or defining context: XSLT package-private functions
+    /// are unregistered when the declaring package scope exits, but a function item
+    /// created inside that scope remains bound to them (override-f-014). Typed as
+    /// <see cref="object"/> to preserve project layering; the runtime casts it to
+    /// its FunctionSignature.
+    /// </summary>
+    public object? CapturedSignature { get; init; }
 }
 
 /// <summary>

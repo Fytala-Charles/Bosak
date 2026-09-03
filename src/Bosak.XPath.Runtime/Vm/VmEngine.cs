@@ -249,6 +249,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.131 | 02-09-2026     | FODT0001 for lexically valid date/dateTime casts with out-of-range years (REQ-082)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.132 | 02-09-2026     | Capture resolved signature on named-function references; captured-signature             |
+//                      |                  |       |                | invocation fallback (override-f-014)                                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -3645,7 +3648,7 @@ public static class VmEngine
         // of resolving against a variadic fallback and returning an impossible arity.
         if (tuple.Item2 == int.MaxValue)
             throw new InvalidOperationException($"FOAR0002: Function {{{nsUri}}}{localName}#{tuple.Item2} arity exceeds the implementation limit.");
-        if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out _))
+        if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out var signature))
             throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName}#{tuple.Item2} not found.");
         return new NamedFunctionItem(nsUri, localName, tuple.Item2)
         {
@@ -3654,7 +3657,8 @@ public static class VmEngine
             CapturedContextPosition = context.ContextPosition,
             CapturedContextSize = context.ContextSize,
             CapturedBaseUri = context.BaseUri,
-            CapturedNamespaces = context.SnapshotNamespaces()
+            CapturedNamespaces = context.SnapshotNamespaces(),
+            CapturedSignature = signature
         };
     }
 
@@ -3670,7 +3674,7 @@ public static class VmEngine
         // surface FOAR0002 instead of resolving against a variadic fallback.
         if (named.Arity == int.MaxValue)
             throw new InvalidOperationException($"FOAR0002: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.Arity} arity exceeds the implementation limit.");
-        if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.Arity, out _))
+        if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.Arity, out var signature))
             throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.Arity} not found.");
         return named with
         {
@@ -3679,7 +3683,8 @@ public static class VmEngine
             CapturedContextPosition = context.ContextPosition,
             CapturedContextSize = context.ContextSize,
             CapturedBaseUri = context.BaseUri,
-            CapturedNamespaces = context.SnapshotNamespaces()
+            CapturedNamespaces = context.SnapshotNamespaces(),
+            CapturedSignature = signature
         };
     }
 
@@ -3724,6 +3729,18 @@ public static class VmEngine
                         && definingContext.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out sig))
                     {
                         // Resolved against the defining context.
+                    }
+                    else if (named.CapturedSignature is FunctionSignature capturedSignature
+                        && capturedSignature.NamespaceUri == named.NamespaceUri
+                        && capturedSignature.LocalName == named.LocalName
+                        && capturedSignature.Arity == args.Length)
+                    {
+                        // Last-resort fallback: the signature the item was bound to when it
+                        // was materialized. This keeps XSLT package-private functions
+                        // callable through a function item created in the declaring
+                        // package after that package's scope has been exited
+                        // (override-f-014).
+                        sig = capturedSignature;
                     }
                     else
                     {

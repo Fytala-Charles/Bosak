@@ -16,6 +16,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 01-09-2026     | Added EffectiveVisibility for xsl:accept visibility enforcement                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 02-09-2026     | DeclaringStylesheet set in FromElement for package-scoped use-attribute-sets            |
+//                      |                  |       |                | resolution (override-as-002/003/005)                                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -51,6 +54,14 @@ public sealed class AttributeSetDefinition
     /// have been applied. Used by the runtime to reject hidden/abstract attribute sets.
     /// </summary>
     public string? EffectiveVisibility { get; internal set; }
+
+    /// <summary>
+    /// The stylesheet module that declared this attribute set. References in
+    /// <c>use-attribute-sets</c> resolve in the declaring package's scope so that
+    /// private sets referenced from a used package's own definitions remain
+    /// package-local (override-as-002/003/005).
+    /// </summary>
+    public Stylesheet? DeclaringStylesheet { get; internal set; }
 
     public AttributeSetDefinition(string localName, string namespaceUri, string? useAttributeSets, XElement element, int importPrecedence)
     {
@@ -102,6 +113,9 @@ public sealed class AttributeSetDefinition
 
         var useAttrSets = element.Attribute("use-attribute-sets")?.Value;
 
-        return new AttributeSetDefinition(localName, nsUri, useAttrSets, element, stylesheet.ImportPrecedence);
+        return new AttributeSetDefinition(localName, nsUri, useAttrSets, element, stylesheet.ImportPrecedence)
+        {
+            DeclaringStylesheet = stylesheet
+        };
     }
 }
