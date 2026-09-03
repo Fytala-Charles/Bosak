@@ -1,6 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
+**Commit:** `82c3834` — xsl:original for templates and variables + package-scope override contributions for templates
+**Current focus:** **REQ-081 residual: xsl:original beyond functions.** Strict full sweep **7,634/96/6,870 → 7,647/83/6,870 (98.9%)**: +13 fixed, zero regressions. W3C `override` cluster 80/19/4 → 93/6/4.
+**What was built:**
+- `call-template name="xsl:original"` dispatches to the overridden used-package template: `TemplateRule.OverriddenTemplate` link (set in `GetAllNamedTemplates` and the new `Stylesheet.GetPackageScopeNamedTemplates`), `_overriddenTemplateStack` pushed while an override template executes, `TryCallOriginalTemplate` intercepts both call-template paths (override-t-007/015).
+- `$xsl:original` in overriding variable/param initializers: overridden originals stay in the scope-globals view under the unspellable alias namespace `Stylesheet.OriginalVariableNamespace`; `TransformEngine._overriddenVariableStack` tracks the currently-evaluating override initializer and `ResolveLazyGlobal` resolves `$xsl:original` through it (override-v-003).
+- Template rebinding: override contributions are now registered for template and attribute-set overrides (`RegisterPackageOverrideContribution` condition extended), and the package-scope named-template view (`GetPackageScopeNamedTemplates`) applies them so used-package components bind overridden templates (override-t-002).
+- `xsl:override/@default-mode` is inherited by template rules declared inside `xsl:override` (`TemplateRule.FromElement`) and by their bodies at runtime (`ExecuteTemplateCore` default-mode push) — override-m-010/012.
+- Core fix found via probe: the simple-content fallback (`CollectSimpleContentXsltInstruction` default case) nulled `_currentContainer` but not `_sequenceAccumulator`, so nested typed call-template results were lost (override-t-001/011).
+- `xsl:param` is now permitted as a child of `xsl:override` in the parent-context validation (override-v-008/009/010/015).
+**Deferred (feature-depth items, pre-existing):** `override-f-014` (private function-item invocation scope), `override-v-004` (global-variable rebinding inside match patterns), `override-as-002/003/005` (package-scoped attribute-set resolution for private sets), `override-misc-005` (package-scoped accumulator resolution).
+**Results:** Unit tests 2,114/0/0. Strict sweep 7,647/83/6,870 (98.9%).
+**Next steps:** the four deferred package-scope areas; then `glob-cxt-item` (6), `namespace` (4), merge/sort comparer error codes, `assert` (4), `evaluate` (5).
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-02
 **Commit:** `e977104` — REQ-082 phase 3 (100 conformance fixes: XPTY0004/XTDE0820/FODT0001/XTTE0505 families, xml-to-json cluster, package-visibility family)
 **Current focus:** **REQ-082 phase 3 complete.** Strict full sweep **7,534/196/6,870 → 7,634/96/6,870 (98.8%)**: +100 fixed, zero regressions — the strict pass count now exceeds the 7,627 lenient baseline named in REQ-082's acceptance criterion.
 **What was built:**
