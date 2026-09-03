@@ -1,6 +1,21 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
+**Commit:** `ea44175` — namespace/global-context-item/sort/merge error-code families (REQ-082 continuation)
+**Current focus:** **REQ-082 continuation — namespace + global-context-item + sort/merge/result-document families.** Strict full sweep **7,647/83/6,870 → 7,665/65/6,870 (99.2%)**: +18 fixed, zero regressions.
+**What was built:**
+- `namespace-2621..2624` (4): XTDE0835/XTDE0865 — constructed element/attribute namespace must not be the xmlns namespace URI; XTDE0905/XTDE0920 — `xsl:namespace` value must not be the xmlns URI, name must be a valid NCName other than `xmlns`.
+- `global-context-item` 14/14 (6): XTSE3087 for multiple declarations in one module and inconsistent declarations across a package's modules (whitespace-insensitive `TypesAreIdentical` comparison of `@as`); XTTE0590 when a library package declares `use="required"` and when the supplied global context item violates `@as`; `use="absent"` now suppresses the global context item (XPDY0002 path).
+- Sort/merge/result-document (8): `List.Sort` comparer-wrapper exceptions are unwrapped to the original XSLT error (`SortItems`, for-each-group, merge); incomparable sort keys raise XTDE1030 (mapped from XPTY0004 in `CompareSortKey`); merge-key comparison failures raise XTTE2230; `xsl:sort` and `xsl:merge-key` sequence constructors evaluate in temporary output state so nested `xsl:result-document` raises XTDE1480; merge-key content (sequence constructor without `@select`) is now evaluated at all; XTSE2200 for merge-key count mismatch (was XTSE0010); harness `DocumentLoader` falls back to the bare file name in the test-set dir for stale catalog paths (merge-008).
+- Bonus spillover: `collations-1006`.
+**Results:** Unit tests 2,114/0/0. Strict sweep 7,665/65/6,870 (99.2%). `namespace` 223/0/1, `global-context-item` 14/0/0, `sort` 79/1/0, `merge` 75/2/29, `result-document` 142/1/11.
+**Remaining sweep failures (65):** package-scope depth items (`override-f-014`, `override-v-004`, `override-as-002/003/005`, `override-misc-005`), `load-xquery-module` (4, FOQM0001 feature gap), accumulator result mismatches (9), assorted singles (`sort-029`, `for-each-group-051`, `merge-057/058`, `result-document-1405`, `context-item-010/911`, `iterate-902`, `static-012/013`, `evaluate-*`).
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-02
 **Commit:** `82c3834` — xsl:original for templates and variables + package-scope override contributions for templates
 **Current focus:** **REQ-081 residual: xsl:original beyond functions.** Strict full sweep **7,634/96/6,870 → 7,647/83/6,870 (98.9%)**: +13 fixed, zero regressions. W3C `override` cluster 80/19/4 → 93/6/4.
 **What was built:**
