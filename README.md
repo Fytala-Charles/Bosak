@@ -8,7 +8,7 @@
 <div align="center">
 
 [![.NET 10](https://img.shields.io/badge/.NET-10-2F4F4F?logo=dotnet&logoColor=F0FFF0)](https://dotnet.microsoft.com/)
-[![License](https://img.shields.io/badge/License-Dual%20Usage-556B2F)](LICENSE.md)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue)](license.md)
 [![Status](https://img.shields.io/badge/Status-Alpha-518D8F)]()
 
 </div>
