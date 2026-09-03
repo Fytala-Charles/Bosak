@@ -1,6 +1,22 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
+**Commit:** `0afd542` — fn:load-xquery-module wired into the XSLT engine (REQ-082)
+**Current focus:** **`fn:load-xquery-module` feature gap closed.** Strict full sweep **7,703/27/6,870 → 7,707/23/6,870 (99.7%)**: the 4 `load-xquery-module` tests fixed, zero regressions. Also drafted **REQ-083** (public-launch checklist: license placeholder, CI, ROADMAP, NuGet-from-CI, repo hygiene, submodule licensing, community/sponsorship/commercial layers).
+**What was built:**
+- XSLT transforms now resolve `fn:load-xquery-module` through the real `Bosak.XQuery` `XQueryModuleLoader` (Load1/Load2) instead of the `FOQM0001` stub. A registry-level re-register does NOT survive: `XPath31Expression.Evaluate` re-runs `FunctionLibrary.Populate` per compiled expression (cf. the existing note at `TransformEngine.cs:2682`). Root fix: new `EvaluationContext.XQueryModuleLoader` delegate hook — the `FunctionLibrary` stub dispatches through it and only raises `FOQM0001` when no loader is set; `XsltFunctionLibrary.Populate` installs it, and it also covers `xsl:evaluate` contexts now.
+- `Bosak.Xslt` → `Bosak.XQuery` project reference (acyclic; XQuery references Core/Runtime/Api/Standard/Providers only). `XsltFunctionLibrary` gains a static module-source registry (`RegisterXQueryModuleSource`/`ClearXQueryModuleSources`/`RegisteredXQueryModuleSources`) mirroring `RegisterPackage`.
+- `Stylesheet.CreateUseWhenContext` seeds `ctx.XQueryModuleSources` from that registry, so `static="yes"` variables can call `load-xquery-module` at compile time (load-xquery-module-004) — static evaluation has no access to the transform-time context.
+- `XQueryModuleLoader` raises `XQST0059` for unresolvable **relative** module URIs, keeping `FOQM0002` for absolute URIs (QT3 fn-load-xquery-module-003/005 pin FOQM0002; the XSLT catalog accepts XQST0059/FOQM0006 for the relative case).
+- Harness: `<resource media-type="application/xquery">` environment entries are collected (`LoadXQueryModuleResources`, file resolved vs testSetDir then catalogDir) and registered into the transform `EvaluationContext.XQueryModuleSources` before compile/run.
+**Results:** Unit tests 2,114+371/0/0 (all projects). Strict sweep 7,707/23/6,870 (99.7%). `load-xquery-module` 4/4/0. QT3 `load-xquery-module` set 69/0/14 unchanged (no other QT3 test references FOQM0002). `package` cluster 157/3/0 (the 3 are the known upstream artifacts, verified pre-existing by stash-rebuild).
+**Deferred:** REQ-083 public-launch checklist is drafted and **Pending** (not started). Unchanged deferrals: evaluate-002/048, context-item-911/analyze-string-085, package-021err/022err/200, math-3702, json-to-xml-typed-010, override depth items (f-014, v-004, as-002/003/005, misc-005), collection-006, document-2401/2402, extension-functions-0201, strip-space-019.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-02
 **Commit:** `3bc2078` — accumulator cluster cleared + 22 singles (REQ-082 continuation)
 **Current focus:** **Accumulator cluster cleared (56/0/51, 100% runnable) plus 22 singles fixed across assert/merge/try/coco/sort/result-document/use-when/message/call-template/package/mode/transform/static/evaluate/id.** Strict full sweep **7,647/83/6,870 → 7,703/27/6,870 (99.7%)**, zero regressions.
 **What was built:**
