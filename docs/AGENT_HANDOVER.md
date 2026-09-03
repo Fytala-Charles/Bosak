@@ -1,6 +1,24 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
+**Commit:** `e977104` — REQ-082 phase 3 (100 conformance fixes: XPTY0004/XTDE0820/FODT0001/XTTE0505 families, xml-to-json cluster, package-visibility family)
+**Current focus:** **REQ-082 phase 3 complete.** Strict full sweep **7,534/196/6,870 → 7,634/96/6,870 (98.8%)**: +100 fixed, zero regressions — the strict pass count now exceeds the 7,627 lenient baseline named in REQ-082's acceptance criterion.
+**What was built:**
+- `XPTY0004` (12): XPTY0004 guards for non-boolean `liberal`/`escape`/`indent` JSON options (`ParseJsonOptions`); `fn:resolve-QName` validates second-argument cardinality/kind; `xsl:merge-source/@for-each-source` requires string-family items; accumulator `@as` coercion raises XPTY0004 via new `ConvertVariableValue(errorCodeOverride)`; match+name initial templates exempt from the package public-visibility gate (`accumulator-038`).
+- `XTDE0820` (6): lexical QName validation in `TransformEngine.ResolveName` (XTDE0820 elements / XTDE0850 attributes) — empty names, empty prefix/local, multiple colons, invalid NCName chars.
+- `FODT0001` (4): out-of-range years in lexically valid `xs:date`/`xs:dateTime` casts raise FODT0001 instead of FORG0001 (`VmEngine.TryParseXPathDate(Time)`).
+- `XTTE0505` (11): template results raise XTTE0505, function results XTTE0780 (was XTTE0570 for both); bonus `function-1017`, `coco-102`.
+- `xml-to-json` A/B clusters (38): `CollectGlobalsInDocumentOrder` now honors use-when so mutually exclusive same-named globals no longer trip XTSE0630.
+- Package-visibility family (25 + harness): override validators raise XTSE3058 (no homonymous target), XTSE3060 (visibility other than public/abstract, incl. template-rule mode visibility), XTSE3070 (signature compatibility per XSLT 3.0 §3.5.7.2 incl. new-each-time, tunnel/non-tunnel param rules, context-item equivalence); XTSE3440 (#all/#unnamed/omitted-to-unnamed modes in override template rules); XTSE3050 for local-vs-accepted component conflicts and implicit mode redeclaration by local template rules (override-m-018); `GetExposedVisibility` implements the §3.5.5.2 precedence (named > declared > partial wildcard > full wildcard); `GetAllNamedTemplates` override precedence fixed (override loop now runs last); harness registers document-declared package versions (override-f-024/025).
+- Deferred: `override-as-003` (needs package-scoped attribute-set resolution for private sets referenced from used-package components), `package-021err/022err` (upstream catalog artifacts: the used package declares an invalid QName `me:function1#0` and the conflict spans include modules).
+**Results:** Unit tests 2,114/0/0 (8 projects, `dotnet test Bosak.sln` exit 0). W3C strict sweep 7,634/96/6,870 (98.8%). W3C `override` 80/19/4 (was 53/46/4), `accept` 50/0/0, `package` 64/8/0, `use-package` 53/0/1, `expose` 42/0/0.
+**Remaining REQ-082 scope:** ~96 failures include XTDE3052 (abstract invocation), XTSE3070 residuals, merge/document collection issues, result mismatches, and known feature gaps (load-xquery-module FOQM0001, streaming). 
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-02
 **Commit:** `0f714a1` — REQ-082 phase 2 complete (override content model, accumulator/context-item/EQName/on-completion XTSE validation)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 complete (XTSE0020/XTSE0010 static-validation family cleared, 0 remaining).** This session fixed the final 15 tests: `xsl:override` content model enforced in `ParsePackageUseOptions` (non-whitespace text, LREs, and XSLT declarations other than template/function/variable/param/attribute-set raise XTSE0010 — fixes `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`); `xsl:accumulator` requires `initial-value`/`_initial-value` and at least one `xsl:accumulator-rule` (`accumulator-024/025`); `xsl:context-item` attribute check skips namespace declarations and rejects non-`required` `@use` in unnamed templates (`context-item-016/902/903`); braced-URI names without leading `Q` rejected as invalid EQNames in `xsl:function/@_name` (`initial-function-102i/j`); `xsl:on-completion` placement pre-pass in `ValidateInstructionTree` reports XTSE0010 before later attribute errors (`iterate-024`).
 **Results:** Clean strict full sweep **7,534 passed / 196 failed / 6,870 skipped** (97.5%), exactly +15/−15 vs. the 7,519/211 baseline; zero new failures. W3C `override` 53/46/4. Unit tests all green (`dotnet test Bosak.sln` exit 0).
