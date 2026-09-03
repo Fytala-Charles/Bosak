@@ -2137,7 +2137,7 @@ Add a lexer constructor mode that emits a whole direct constructor as a single t
 
 **Acceptance Criteria:**
 - [x] Direct element constructors with literal/computed attributes, enclosed expressions (items joined per-expression with single spaces), nested constructors, comments, PIs, and CDATA.
-- [x] Standalone comment/PI constructors as primary expressions (`<?pi x?>` valid anywhere).
+- [x] Customer Cdalone comment/PI constructors as primary expressions (`<?pi x?>` valid anywhere).
 - [x] Constructor-local namespace declarations with dynamic scoping, undeclarations (`xmlns=""`), redundant-declaration fixup, and in-scope copying for cloned nodes.
 - [x] Static validations: `XQST0118` (tag mismatch), `XQDY0025` (duplicate attributes), `XQTY0024` (attribute after content), `XQST0070/0071` (prefix misuse/duplicates), `XQST0022` (computed ns URI), `XQST0046` (invalid ns URI char), `XQST0090` (invalid character reference), `XPST0081` (undeclared prefix).
 - [x] Boundary whitespace handling (`strip` default, `xml:space="preserve"`, reference/CDATA-significant text).
@@ -3714,3 +3714,4 @@ The Bosak engine is technically strong (XSLT 3.0 strict W3C sweep 7,703/27, 99.7
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-09-02 | Kimi | Pending | Drafted from the 2026-09-02 public-release advisory; engineering preconditions (load-xquery-module, override depth items) tracked under REQ-082. |
+| 2026-09-03 | Kimi | Hygiene pass started (item 5 partial) | Repo prepared for transfer to the Fytala-Charles org while private: `xsl:vendor-url` repointed (`FunctionLibrary.cs`); `tmpdebug/` and `.kimi/HANDOVER.md` untracked (kept on disk, now ignored); `.gitignore` hardened (`last_test.txt` anywhere, `*.out`, `.kimi/`); customer project names anonymized in docs — Customer A→Customer A, Customer B→Customer B, Customer C→Customer C, Customer D→Customer D, example `app:` prefix→`app:`. Verified: root scratch logs were never tracked; `src/` and handover/INTEGRATION docs had no customer references. Remaining item-5 work: on-disk scratch cleanup decision (`tmp/`, `tmpdebug/`, ~275 root logs are local-only); then items 1–4, 6–10. Unit tests 2,114+371 green after the changes. |

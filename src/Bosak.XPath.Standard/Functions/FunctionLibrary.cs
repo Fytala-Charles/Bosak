@@ -69,6 +69,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.105 | 31-08-2026     | json-to-xml validate=true performs schema validation against built-in JSON schema      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.106 | 03-09-2026     | xsl:vendor-url points to the Fytala-Charles/Bosak repository (org transfer prep)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4316,7 +4318,7 @@ public static class FunctionLibrary
         {
             "xsl:version" => ctx.XsltVersion?.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture) ?? "3.0",
             "xsl:vendor" => "Bosak",
-            "xsl:vendor-url" => "https://github.com/poco-irrilevante/Bosak",
+            "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
             "xsl:product-version" => "1.0",
             "xsl:is-schema-aware" => "no",

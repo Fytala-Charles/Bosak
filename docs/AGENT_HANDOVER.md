@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-03
 **Commit:** `5eda8b7` — package-scoped attribute-set/accumulator resolution + override depth fixes (REQ-082)
-**Current focus:** **All deferred package-scope depth items closed; W3C override cluster now 99/0/4 (100% runnable).** The last REQ-082 depth deferrals — `override-v-004`, `override-f-014`, `override-as-002/003/005`, `override-misc-005` — are fixed via package-scoped attribute-set/accumulator resolution and visibility fixes. QT3 sweep unchanged at 31,148/0/673; unit tests 2,114+371 green.
+**Current focus:** **REQ-083 (public-launch) hygiene pass started; repo being prepared for transfer to the Fytala-Charles org while private.** Today: doc-sync for `5eda8b7` (override cluster 99/0/4), then launch prep — `xsl:vendor-url` repointed to `Fytala-Charles/Bosak`, scratch untracked from git (`tmpdebug/`, `.kimi/HANDOVER.md`), `.gitignore` hardened, and customer project names anonymized in docs (Customer A→Customer A, Customer B→Customer B, Customer C→Customer C, Customer D→Customer D; example `app:` prefix → `app:`).
 **What was built:**
 - **v-004:** the default mode is always public (XSLT 3.0 6.6.1). `GetTemplateLocalVisibility` no longer treats the empty default-mode token as a named mode filtering used-package template rules as private, so match patterns see overridden globals.
 - **f-014:** `NamedFunctionItem` gains `CapturedSignature`, populated at named function-reference materialization and in `fn:function-lookup`; `InvokeFunctionItemCore` falls back to it, re-entering the defining package scope via `ExecuteXsltFunction` — a public variable holding a reference to a package-private function is invocable from a using package.

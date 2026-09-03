@@ -70,6 +70,8 @@ xslt_function*.log
 tests/xslt30-test/
 
 /last_test.txt
+last_test.txt
+*.out
 *.log
 
 # VS Code Extension
@@ -82,3 +84,4 @@ vscode-bosak/*.vsix
 tmp/
 tmpdebug/
 mult/
+.kimi/
