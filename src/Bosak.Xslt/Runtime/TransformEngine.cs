@@ -260,6 +260,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.53  | 01-09-2026     | Package-scope fn:function-lookup interceptor: own declarations, originals via alias   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.54  | 02-09-2026     | REQ-082 error codes: ConvertVariableValue errorCodeOverride (template XTTE0505,        |
+//                      |                  |       |                | function XTTE0780, accumulator XPTY0004); for-each-source string check; lexical QName  |
+//                      |                  |       |                | validation in ResolveName (XTDE0820/XTDE0850); initial-template visibility exempts     |
+//                      |                  |       |                | match+name templates; XTDE0640 for attribute-set expansion cycles                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -914,8 +919,10 @@ public sealed class TransformEngine
                 throw new InvalidOperationException($"XTDE0040: Named template '{effectiveInitialTemplate}' not found.");
 
             // In an xsl:package, only public (or final) named templates may be used as
-            // a transformation entry point; the default visibility is private.
-            if (_stylesheet.IsPackage)
+            // a transformation entry point; the default visibility is private. A named
+            // template that also carries a match pattern acts as a template rule and is
+            // exempt from this check (accumulator-038).
+            if (_stylesheet.IsPackage && entryRule.CompiledMatch == null)
             {
                 var effectiveVis = entryRule.EffectiveVisibility ?? entryRule.Visibility;
                 if (effectiveVis is not "public" and not "final")
@@ -2157,7 +2164,7 @@ public sealed class TransformEngine
     {
         var result = new Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>();
         var initialCtx = CreateAccumulatorEvaluationContext(focusNode: root, value: null);
-        var current = ConvertVariableValue(CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx), acc.As, context: _context);
+        var current = ConvertVariableValue(CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx), acc.As, context: _context, errorCodeOverride: "XPTY0004");
 
         var compiledRules = new List<(Stylesheet.AccumulatorRule Rule, Patterns.PatternPredicate Match)>();
         var patternCompiler = new Patterns.PatternCompiler(_context);
@@ -2236,7 +2243,9 @@ public sealed class TransformEngine
                 _context = savedEngineContext;
             }
         }
-        return ConvertVariableValue(newValue, acc.As, context: _context);
+        // Accumulator value coercion against @as raises the generic XPath type error
+        // (accumulator-038), not the XSLT variable-coercion code.
+        return ConvertVariableValue(newValue, acc.As, context: _context, errorCodeOverride: "XPTY0004");
     }
 
     /// <summary>
@@ -2720,7 +2729,9 @@ public sealed class TransformEngine
             // XSLT functions have no context item (XSLT 3.0 §9.6).
             // Evaluate the function body with an absent context item.
             var result = EvaluateFunctionBody(def.Element, XdmValue.Undefined);
-            var convertedResult = ConvertVariableValue(result, def.ReturnType, context: _context);
+            // XTTE0780: the function's sequence-constructor result must be convertible to
+            // the function's @as type (coco-102).
+            var convertedResult = ConvertVariableValue(result, def.ReturnType, context: _context, errorCodeOverride: "XTTE0780");
             if (cacheKey.HasValue)
                 _xsltFunctionCache[cacheKey.Value] = convertedResult;
             return convertedResult;
@@ -4805,11 +4816,13 @@ public sealed class TransformEngine
                     {
                         var result = items.Count == 1 ? items[0] :
                             XdmValue.FromSequence(MaterializedSequence.FromList(items));
-                        typedResult = ConvertVariableValue(result, asType, context: _context);
+                        // XTTE0505: the template's sequence-constructor result must be
+                        // convertible to the template's @as type (as-1602, sequence-0133+).
+                        typedResult = ConvertVariableValue(result, asType, context: _context, errorCodeOverride: "XTTE0505");
                     }
                     else
                     {
-                        typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context);
+                        typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context, errorCodeOverride: "XTTE0505");
                     }
 
                     if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
@@ -6828,8 +6841,11 @@ public sealed class TransformEngine
             if (defs.Any(d => d.EffectiveVisibility == "abstract"))
                 throw new InvalidOperationException("XTDE3052: Abstract attribute-set has no implementation.");
 
+            // A genuine cycle (an attribute-set reachable from itself while still on the
+            // expansion stack, e.g. composed via an xsl:override) is a dynamic circularity
+            // error (override-as-003).
             if (!visited.Add(key))
-                continue; // Cycle detected — skip to avoid infinite recursion
+                ThrowCircularityError("attribute-set", trimmed);
 
             var prevContainer = _currentContainer;
             _currentContainer = target;
@@ -13209,12 +13225,12 @@ public sealed class TransformEngine
         return -1;
     }
 
-    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false, EvaluationContext? context = null)
+    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false, EvaluationContext? context = null, string? errorCodeOverride = null)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
 
-        var errorCode = isParam ? "XTTE0590" : "XTTE0570";
+        var errorCode = errorCodeOverride ?? (isParam ? "XTTE0590" : "XTTE0570");
         var originalType = asType.Trim();
         // Strip XPath comments (: ... :) from the type string
         var type = System.Text.RegularExpressions.Regex.Replace(originalType, @"\(:[^:]*:\)", "").Trim();
@@ -16901,17 +16917,32 @@ public sealed class TransformEngine
     /// instruction element.
     /// </summary>
     private static (string LocalName, string NamespaceUri) ResolveElementName(XElement instruction, string name, string? explicitNamespace, string errorCode)
-        => ResolveName(instruction, name, explicitNamespace, errorCode, useDefaultNamespace: true);
+        => ResolveName(instruction, name, explicitNamespace, errorCode, useDefaultNamespace: true, invalidNameCode: "XTDE0820");
 
     private static (string LocalName, string NamespaceUri) ResolveAttributeName(XElement instruction, string name, string? explicitNamespace, string errorCode)
-        => ResolveName(instruction, name, explicitNamespace, errorCode, useDefaultNamespace: false);
+        => ResolveName(instruction, name, explicitNamespace, errorCode, useDefaultNamespace: false, invalidNameCode: "XTDE0850");
 
     private static string NormalizeQNameWhitespace(string name)
         => Regex.Replace(name.Trim(), @"\s+", " ");
 
-    private static (string LocalName, string NamespaceUri) ResolveName(XElement instruction, string name, string? explicitNamespace, string errorCode, bool useDefaultNamespace)
+    private static (string LocalName, string NamespaceUri) ResolveName(XElement instruction, string name, string? explicitNamespace, string errorCode, bool useDefaultNamespace, string invalidNameCode)
     {
         name = NormalizeQNameWhitespace(name);
+        // XTDE0820 (elements) / XTDE0850 (attributes): the effective name must be a valid
+        // lexical QName — empty names, empty prefixes/locals, multiple colons and invalid
+        // NCName characters are rejected (element-0006, lre-022, namespace-3103/3104/3201/3203).
+        if (!name.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var checkColon = name.IndexOf(':');
+            var checkPrefix = checkColon >= 0 ? name[..checkColon] : null;
+            var checkLocal = checkColon >= 0 ? name[(checkColon + 1)..] : name;
+            bool valid = checkLocal.Length > 0
+                && Xml11NameCodec.IsValidXml11NCName(checkLocal)
+                && (checkPrefix == null || (checkPrefix.Length > 0 && Xml11NameCodec.IsValidXml11NCName(checkPrefix)))
+                && !(checkColon >= 0 && name.IndexOf(':', checkColon + 1) >= 0);
+            if (!valid)
+                throw new InvalidOperationException($"{invalidNameCode}: The name '{name}' is not a valid lexical QName.");
+        }
         int colon = name.IndexOf(':');
         if (colon >= 0)
         {
@@ -17442,6 +17473,11 @@ public sealed class TransformEngine
                     }
                     else
                     {
+                        // XPTY0004: xsl:merge-source/@for-each-source items must be in the
+                        // string family (xs:string/xs:untypedAtomic/xs:anyURI); other atomics
+                        // such as integers are a type error (merge-043).
+                        if (fsItems[idx].Kind is not (XdmValueKind.String or XdmValueKind.Uri))
+                            throw new InvalidOperationException($"XPTY0004: xsl:merge-source/@for-each-source must evaluate to a sequence of strings; got an item of kind '{fsItems[idx].Kind}'.");
                         var uri = fsItems[idx].ToString();
                         var baseUri = GetEffectiveBaseUri(sourceElem);
                         var resolvedUri = string.IsNullOrEmpty(uri) ? baseUri ?? "" : uri;

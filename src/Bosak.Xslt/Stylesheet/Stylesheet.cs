@@ -181,6 +181,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.98  | 02-09-2026     | XTSE0010 for disallowed content in xsl:override; on-completion placement pre-pass       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.99  | 02-09-2026     | REQ-082 phase 3: override validators enforce XTSE3058/3060/3070 (incl. new-each-time,  |
+//                      |                  |       |                | template-rule modes XTSE3440/3060, transitive targets); XTSE3050 local-vs-accepted     |
+//                      |                  |       |                | conflicts + implicit mode redeclaration; xsl:expose precedence (declared over          |
+//                      |                  |       |                | wildcard); use-when honored in XTSE0630 collection; override wins GetAllNamedTemplates |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -188,6 +193,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -822,19 +828,6 @@ public sealed class Stylesheet
         {
             var options = _usedPackageOptions.GetValueOrDefault(package);
 
-            // xsl:override template definitions take precedence over used-package templates.
-            foreach (var overrideElem in options?.OverrideTemplates ?? Enumerable.Empty<XElement>())
-            {
-                var nameAttr = overrideElem.Attribute("name")?.Value;
-                if (string.IsNullOrEmpty(nameAttr))
-                    continue;
-                foreach (var rule in TemplateRule.FromElement(overrideElem, this))
-                {
-                    rule.EffectiveVisibility = GetExposedVisibility("template", rule.Name, null) ?? GetLocalVisibility(rule.Element, "template", this);
-                    result[nameAttr] = rule;
-                }
-            }
-
             foreach (var (name, rule) in package.GetAllNamedTemplates())
             {
                 if (!IsExportedFromPackage(package, rule))
@@ -856,6 +849,19 @@ public sealed class Stylesheet
                 if (eff is "hidden" or "abstract")
                     continue;
                 result[name] = rule;
+            }
+
+            // xsl:override template definitions take precedence over used-package templates.
+            foreach (var overrideElem in options?.OverrideTemplates ?? Enumerable.Empty<XElement>())
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                foreach (var rule in TemplateRule.FromElement(overrideElem, this))
+                {
+                    rule.EffectiveVisibility = GetExposedVisibility("template", rule.Name, null) ?? GetLocalVisibility(rule.Element, "template", this);
+                    result[nameAttr] = rule;
+                }
             }
         }
 
@@ -1083,6 +1089,84 @@ public sealed class Stylesheet
         if (string.IsNullOrEmpty(vis))
             vis = "private";
         return vis;
+    }
+
+    /// <summary>
+    /// Returns the local visibility of a top-level xsl:variable or xsl:param. Per XSLT 3.0
+    /// §3.5.7.1, a stylesheet parameter's implicit visibility is private when static and
+    /// public when non-static; variables default to private in a package.
+    /// </summary>
+    private static string? GetParamAwareLocalVisibility(XElement element, bool isPackage)
+    {
+        var vis = element.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant();
+        if (!string.IsNullOrEmpty(vis))
+            return vis;
+        if (element.Name.LocalName == "param")
+        {
+            bool isStatic = element.Attribute("static")?.Value?.Trim() is "yes" or "true" or "1";
+            return isStatic ? "private" : "public";
+        }
+        return GetLocalVisibility(element, "variable", isPackage);
+    }
+
+    /// <summary>
+    /// XTSE3050: a template rule declared in this package (outside <c>xsl:override</c>) that
+    /// names a mode accepted from a used package implicitly redeclares that mode, which
+    /// conflicts with the accepted component (override-m-018; XSLT 3.0 §6.6.1: two modes
+    /// with the same name must not be visible within a package).
+    /// </summary>
+    private void ValidateLocalTemplateRuleModeConflicts()
+    {
+        if (_usedPackages.Count == 0)
+            return;
+        var localRules = new List<TemplateRule>();
+        CollectLocalTemplateRules(localRules);
+        foreach (var rule in localRules)
+        {
+            var modeAttr = rule.Element.Attribute("mode")?.Value;
+            if (string.IsNullOrWhiteSpace(modeAttr))
+                continue;
+            foreach (var token in modeAttr.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (token.StartsWith('#'))
+                    continue;
+                var expanded = ExpandModeNameForExpose(token, rule.Element);
+                // A mode declared locally (explicitly or by an earlier implicit
+                // declaration) is this package's own component; only conflicts with an
+                // accepted mode matter here.
+                if (TryGetMode(expanded, out _))
+                    continue;
+                foreach (var package in _usedPackages)
+                {
+                    if (!package.TryGetMode(expanded, out var mode) || mode == null)
+                        continue;
+                    var options = _usedPackageOptions.GetValueOrDefault(package);
+                    var exposed = package.GetExposedVisibility("mode", mode.Name, null);
+                    var modeElement = package.FindModeElement(expanded);
+                    var baseVis = exposed ?? GetLocalVisibility(modeElement, "mode", package.IsPackage);
+                    var effectiveRule = options == null
+                        ? null
+                        : GetEffectiveAcceptRule(options, "mode", mode.Name, null, -1, baseVis);
+                    var effective = effectiveRule?.Visibility ?? baseVis;
+                    if (effective is not "hidden" and not "absent")
+                        throw new InvalidOperationException($"XTSE3050: The template rule in mode '{token}' implicitly redeclares a mode accepted from a used package; declare it inside xsl:override instead.");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Collects the template rules declared in this module and, recursively, in its imported
+    /// and included modules. Template rules from used packages and <c>xsl:override</c>
+    /// children are not included.
+    /// </summary>
+    private void CollectLocalTemplateRules(List<TemplateRule> result)
+    {
+        result.AddRange(_templateRules);
+        foreach (var imported in _imports)
+            imported.CollectLocalTemplateRules(result);
+        foreach (var included in _includes)
+            included.CollectLocalTemplateRules(result);
     }
 
     /// <summary>
@@ -1679,6 +1763,10 @@ public sealed class Stylesheet
             // Detect conflicting visible components exported by multiple used packages
             // when no xsl:accept rule hides one of them.
             ValidateUsedPackageConflicts();
+
+            // XTSE3050: local template rules must not implicitly redeclare a mode accepted
+            // from a used package (override-m-018).
+            ValidateLocalTemplateRuleModeConflicts();
 
             // XTSE3080: a top-level package must not contain components whose effective
             // visibility is abstract, whether or not they are referenced. Applies only
@@ -3706,9 +3794,8 @@ public sealed class Stylesheet
     }
 
     /// <summary>
-    /// Validates that no <c>xsl:override</c> attribute-set tries to override a used-package
-    /// attribute-set that is exposed as <c>final</c>. Raises <c>XTSE3060</c> when such an
-    /// override is detected.
+    /// Validates <c>xsl:override</c> attribute-set declarations against the used package:
+    /// the target must exist (XTSE3058) and must be public or abstract (XTSE3060).
     /// </summary>
     private void ValidateAttributeSetOverrides()
     {
@@ -3724,23 +3811,26 @@ public sealed class Stylesheet
                 if (string.IsNullOrEmpty(nameAttr))
                     continue;
                 var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
+                // XTSE3058: the override must be homonymous with a component of the used package.
                 if (!packageSets.TryGetValue((local, ns), out var defs))
-                    continue;
+                    throw new InvalidOperationException($"XTSE3058: xsl:override attribute-set '{nameAttr}' does not match any attribute-set in the used package.");
                 foreach (var def in defs)
                 {
                     var exposed = package.GetExposedVisibility("attribute-set", local, ns);
                     var effective = exposed ?? GetLocalVisibility(def.Element, "attribute-set", package.IsPackage);
-                    if (effective == "final")
-                        throw new InvalidOperationException($"XTSE3060: Cannot override final attribute-set '{nameAttr}'.");
+                    // XTSE3060: only public or abstract components may be overridden.
+                    if (effective is not "public" and not "abstract")
+                        throw new InvalidOperationException($"XTSE3060: Cannot override attribute-set '{nameAttr}' whose visibility is '{effective}'.");
                 }
             }
         }
     }
 
     /// <summary>
-    /// Validates that no <c>xsl:override</c> variable or parameter tries to override a
-    /// used-package variable or parameter that is exposed as <c>final</c>.
-    /// Raises <c>XTSE3060</c> when such an override is detected.
+    /// Validates <c>xsl:override</c> variable and parameter declarations against the used
+    /// package: the target must exist (XTSE3058), must be public or abstract (XTSE3060),
+    /// and must have an identical declared type (XTSE3070; an overriding parameter for a
+    /// required parameter must itself specify <c>required="yes"</c>).
     /// </summary>
     private void ValidateVariableOverrides()
     {
@@ -3755,12 +3845,17 @@ public sealed class Stylesheet
                 if (string.IsNullOrEmpty(nameAttr))
                     continue;
                 var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
-                if (!package.TryGetVariableElement(local, ns, out var element) || element == null)
-                    continue;
-                var exposed = package.GetExposedVisibility("variable", local, ns);
-                var effective = exposed ?? GetLocalVisibility(element, "variable", package.IsPackage);
-                if (effective == "final")
-                    throw new InvalidOperationException($"XTSE3060: Cannot override final variable '{nameAttr}'.");
+                // XTSE3058: the override must be homonymous with a component of the used package.
+                if (!package.TryGetVariableOrParamElement(local, ns, out var element) || element == null)
+                    throw new InvalidOperationException($"XTSE3058: xsl:override variable '{nameAttr}' does not match any variable or parameter in the used package.");
+                var exposed = package.GetExposedVisibility("variable", local, ns, -1, hasDeclaredVisibility: element.Attribute("visibility") != null);
+                var effective = exposed ?? GetParamAwareLocalVisibility(element, package.IsPackage);
+                // XTSE3060: only public or abstract components may be overridden.
+                if (effective is not "public" and not "abstract")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override variable '{nameAttr}' whose visibility is '{effective}'.");
+                // XTSE3070: the declared types must be identical (override-v-007).
+                if (!TypesAreIdentical(overrideElem.Attribute("as")?.Value, element.Attribute("as")?.Value))
+                    throw new InvalidOperationException($"XTSE3070: The declared type of overriding variable '{nameAttr}' differs from the overridden variable.");
             }
         }
     }
@@ -3788,14 +3883,62 @@ public sealed class Stylesheet
                 var arity = overrideElem.Elements(XName.Get("param", XslNamespace)).Count();
                 if (!seenOverrides.Add((local, ns, arity)))
                     throw new InvalidOperationException($"XTSE0770: Duplicate overriding function declaration '{{{ns}}}{local}#{arity}'.");
+                // XTSE3058: the override must be homonymous with a component of the used package.
                 if (!package.TryFindFunction(local, ns, arity, out var def) || def == null)
-                    continue;
+                    throw new InvalidOperationException($"XTSE3058: xsl:override function '{nameAttr}#{arity}' does not match any function in the used package.");
                 var exposed = package.GetExposedVisibility("function", local, ns, arity);
                 var effective = exposed ?? def.Visibility;
-                if (effective == "final")
-                    throw new InvalidOperationException($"XTSE3060: Cannot override final function '{nameAttr}'.");
+                // XTSE3060: only public or abstract components may be overridden.
+                if (effective is not "public" and not "abstract")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override function '{nameAttr}' whose visibility is '{effective}'.");
+                ValidateFunctionOverrideSignature(overrideElem, def, nameAttr);
             }
         }
+    }
+
+    /// <summary>
+    /// Validates the signature compatibility rules of XSLT 3.0 §3.5.7.2 (XTSE3070) for an
+    /// overriding function: argument types must be pairwise identical to the overridden
+    /// function's and the return types must be identical.
+    /// </summary>
+    private static void ValidateFunctionOverrideSignature(XElement overrideElem, XsltFunctionDefinition def, string displayName)
+    {
+        var overrideParams = overrideElem.Elements(XName.Get("param", XslNamespace)).ToList();
+        var baseParams = def.Element.Elements(XName.Get("param", XslNamespace)).ToList();
+        for (int i = 0; i < baseParams.Count && i < overrideParams.Count; i++)
+        {
+            if (!TypesAreIdentical(overrideParams[i].Attribute("as")?.Value, baseParams[i].Attribute("as")?.Value))
+                throw new InvalidOperationException($"XTSE3070: The signature of overriding function '{displayName}' is not compatible with the overridden function (parameter '{overrideParams[i].Attribute("name")?.Value}' type differs).");
+        }
+        if (!TypesAreIdentical(overrideElem.Attribute("as")?.Value, def.Element.Attribute("as")?.Value))
+            throw new InvalidOperationException($"XTSE3070: The return type of overriding function '{displayName}' differs from the overridden function.");
+
+        // The effective new-each-time value must be the same on both declarations
+        // (default "yes"; override-f-021).
+        var overrideDet = overrideElem.Attribute("new-each-time")?.Value?.Trim()?.ToLowerInvariant() ?? "yes";
+        var baseDet = def.Element.Attribute("new-each-time")?.Value?.Trim()?.ToLowerInvariant() ?? "yes";
+        if (overrideDet != baseDet)
+            throw new InvalidOperationException($"XTSE3070: The new-each-time value of overriding function '{displayName}' differs from the overridden function.");
+    }
+
+    /// <summary>
+    /// Compares two SequenceType attribute values for identity (both absent means the default
+    /// <c>item()*</c> on both sides); comparison is whitespace- and punctuation-insensitive.
+    /// </summary>
+    internal static bool TypesAreIdentical(string? a, string? b)
+    {
+        return NormalizeTypeForComparison(a) == NormalizeTypeForComparison(b);
+    }
+
+    private static string NormalizeTypeForComparison(string? type)
+    {
+        if (string.IsNullOrWhiteSpace(type))
+            return "";
+        var s = Patterns.PatternCompiler.StripXPathComments(type).Trim();
+        // Remove whitespace adjacent to grouping punctuation and occurrence indicators so
+        // that "element( * )" and "element(*)" compare equal.
+        s = Regex.Replace(s, @"\s*(?<p>[(),*+?])|\s+", m => m.Groups["p"].Success ? m.Groups["p"].Value : " ");
+        return s.Trim();
     }
 
     /// <summary>
@@ -3816,21 +3959,25 @@ public sealed class Stylesheet
                 if (string.IsNullOrEmpty(nameAttr))
                     continue;
                 var expanded = ExpandModeNameForExpose(nameAttr, overrideElem);
+                // XTSE3058: the override must be homonymous with a component of the used package.
                 if (!package.TryGetMode(expanded, out var mode) || mode == null)
-                    continue;
+                    throw new InvalidOperationException($"XTSE3058: xsl:override mode '{nameAttr}' does not match any mode in the used package.");
                 var exposed = package.GetExposedVisibility("mode", mode.Name, null);
                 var element = package.FindModeElement(expanded);
                 var effective = exposed ?? GetLocalVisibility(element, "mode", package.IsPackage);
-                if (effective == "final")
-                    throw new InvalidOperationException($"XTSE3060: Cannot override final mode '{nameAttr}'.");
+                // XTSE3060: only public or abstract components may be overridden.
+                if (effective is not "public" and not "abstract")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override mode '{nameAttr}' whose visibility is '{effective}'.");
             }
         }
     }
 
     /// <summary>
-    /// Validates that no <c>xsl:override</c> template tries to override a used-package
-    /// named template that is exposed as <c>final</c>. Raises <c>XTSE3060</c> when such
-    /// an override is detected.
+    /// Validates <c>xsl:override</c> named-template declarations against the used package:
+    /// the target must exist (XTSE3058), must be public or abstract (XTSE3060), and the
+    /// signatures must be compatible (XTSE3070: identical return types; every overridden
+    /// parameter present with identical type and the same tunnel/required values; extra
+    /// overriding parameters must be optional; equivalent xsl:context-item children).
     /// </summary>
     private void ValidateTemplateOverrides()
     {
@@ -3843,16 +3990,137 @@ public sealed class Stylesheet
             {
                 var nameAttr = overrideElem.Attribute("name")?.Value;
                 if (string.IsNullOrEmpty(nameAttr))
+                {
+                    ValidateOverrideTemplateRule(overrideElem, package);
                     continue;
+                }
                 var (local, ns) = ExpandVariableName(overrideElem, nameAttr);
-                if (!package.TryFindNamedTemplate(local, ns, out var rule) || rule == null)
-                    continue;
-                var exposed = package.GetExposedVisibility("template", local, ns);
-                var effective = exposed ?? GetLocalVisibility(rule.Element, "template", package);
-                if (effective == "final")
-                    throw new InvalidOperationException($"XTSE3060: Cannot override final template '{nameAttr}'.");
+                // XTSE3058: the override must be homonymous with a component of the used package.
+                // The target may also be a component the used package itself accepted from
+                // its own used packages (override-t-003a), so search transitively.
+                if (!package.TryFindNamedTemplateDeep(local, ns, out var rule, out var declaringPackage) || rule == null || declaringPackage == null)
+                    throw new InvalidOperationException($"XTSE3058: xsl:override template '{nameAttr}' does not match any named template in the used package.");
+                var exposed = declaringPackage.GetExposedVisibility("template", local, ns, -1, hasDeclaredVisibility: rule.Element.Attribute("visibility") != null);
+                var effective = exposed ?? GetLocalVisibility(rule.Element, "template", declaringPackage);
+                // XTSE3060: only public or abstract components may be overridden.
+                if (effective is not "public" and not "abstract")
+                    throw new InvalidOperationException($"XTSE3060: Cannot override template '{nameAttr}' whose visibility is '{effective}'.");
+                ValidateTemplateOverrideSignature(overrideElem, rule.Element, nameAttr);
             }
         }
+    }
+
+    /// <summary>
+    /// Validates an <c>xsl:override</c> template rule (a template with <c>@match</c> and no
+    /// <c>@name</c>): the mode list must not contain <c>#all</c> or <c>#unnamed</c>, and must
+    /// not resolve to the unnamed mode via <c>#default</c> or an omitted <c>@mode</c>
+    /// (XTSE3440, XSLT 3.0 §3.5.7.2); a named mode that is not public or abstract in the
+    /// used package cannot be overridden (XTSE3060).
+    /// </summary>
+    private void ValidateOverrideTemplateRule(XElement overrideElem, Stylesheet package)
+    {
+        if (overrideElem.Attribute("match") == null)
+            return;
+
+        var modeAttr = overrideElem.Attribute("mode")?.Value;
+        var defaultModeRaw = overrideElem.Parent?.Attribute("default-mode")?.Value?.Trim();
+        bool defaultIsUnnamed = string.IsNullOrEmpty(defaultModeRaw) || defaultModeRaw == "#unnamed";
+
+        var tokens = (modeAttr ?? "").Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        foreach (var token in tokens)
+        {
+            if (token is "#all" or "#unnamed")
+                throw new InvalidOperationException($"XTSE3440: The mode list of a template rule in xsl:override must not contain '{token}'.");
+            if (token == "#default" && defaultIsUnnamed)
+                throw new InvalidOperationException("XTSE3440: A template rule in xsl:override must not use the unnamed mode (mode='#default' refers to the unnamed mode).");
+        }
+        if (string.IsNullOrWhiteSpace(modeAttr) && defaultIsUnnamed)
+            throw new InvalidOperationException("XTSE3440: A template rule in xsl:override must not use the unnamed mode (the mode attribute is omitted and the default mode is unnamed).");
+
+        // XTSE3060: a named mode that is not public or abstract in the used package cannot
+        // be overridden (final or private modes reject template-rule overrides).
+        foreach (var token in tokens)
+        {
+            if (token.StartsWith('#'))
+                continue;
+            var expanded = ExpandModeNameForExpose(token, overrideElem);
+            if (!package.TryGetMode(expanded, out var mode) || mode == null)
+                continue;
+            var exposed = package.GetExposedVisibility("mode", mode.Name, null);
+            var modeElement = package.FindModeElement(expanded);
+            var effective = exposed ?? GetLocalVisibility(modeElement, "mode", package.IsPackage);
+            if (effective is not "public" and not "abstract")
+                throw new InvalidOperationException($"XTSE3060: Cannot override a template rule in mode '{token}' whose visibility is '{effective}'.");
+        }
+    }
+
+    /// <summary>
+    /// Validates the XTSE3070 signature-compatibility rules for an overriding named template
+    /// (XSLT 3.0 §3.5.7.2): return types identical, parameters present on both declarations
+    /// with identical types, additional overriding parameters optional, and equivalent
+    /// xsl:context-item children.
+    /// </summary>
+    private static void ValidateTemplateOverrideSignature(XElement overrideElem, XElement baseElem, string displayName)
+    {
+        if (!TypesAreIdentical(overrideElem.Attribute("as")?.Value, baseElem.Attribute("as")?.Value))
+            throw new InvalidOperationException($"XTSE3070: The return type of overriding template '{displayName}' differs from the overridden template.");
+
+        var overrideParams = overrideElem.Elements(XName.Get("param", XslNamespace))
+            .Select(p => (Name: p.Attribute("name")?.Value ?? "", Element: p))
+            .Where(p => !string.IsNullOrEmpty(p.Name))
+            .ToList();
+        var baseParams = baseElem.Elements(XName.Get("param", XslNamespace))
+            .Select(p => (Name: p.Attribute("name")?.Value ?? "", Element: p))
+            .Where(p => !string.IsNullOrEmpty(p.Name))
+            .ToList();
+
+        // Non-tunnel parameters on the overridden template require a same-named non-tunnel
+        // parameter on the overriding template with an identical type and the same required
+        // value. A tunnel parameter on the overridden template may be omitted; if the
+        // overriding template declares a same-named parameter it must also be a tunnel
+        // parameter with an identical type (override-t-004/012/013).
+        foreach (var baseParam in baseParams)
+        {
+            bool baseTunnel = baseParam.Element.Attribute("tunnel")?.Value?.Trim() is "yes" or "true" or "1";
+            var match = overrideParams.FirstOrDefault(p => p.Name == baseParam.Name);
+            if (match.Element == null)
+                continue; // omitted parameters are permitted
+            bool overrideTunnel = match.Element.Attribute("tunnel")?.Value?.Trim() is "yes" or "true" or "1";
+            if (baseTunnel != overrideTunnel)
+                throw new InvalidOperationException($"XTSE3070: The tunnel value of parameter '{baseParam.Name}' on overriding template '{displayName}' differs from the overridden template.");
+            if (!TypesAreIdentical(match.Element.Attribute("as")?.Value, baseParam.Element.Attribute("as")?.Value))
+                throw new InvalidOperationException($"XTSE3070: The type of parameter '{baseParam.Name}' on overriding template '{displayName}' differs from the overridden template.");
+            if (!baseTunnel)
+            {
+                bool baseRequired = baseParam.Element.Attribute("required")?.Value?.Trim() is "yes" or "true" or "1";
+                bool overrideRequired = match.Element.Attribute("required")?.Value?.Trim() is "yes" or "true" or "1";
+                if (baseRequired != overrideRequired)
+                    throw new InvalidOperationException($"XTSE3070: The required value of parameter '{baseParam.Name}' on overriding template '{displayName}' differs from the overridden template.");
+            }
+        }
+
+        // Any parameter on the overriding template with no counterpart on the overridden
+        // template must be optional (required="no", the default).
+        foreach (var extra in overrideParams.Where(p => baseParams.All(b => b.Name != p.Name)))
+        {
+            bool required = extra.Element.Attribute("required")?.Value?.Trim() is "yes" or "true" or "1";
+            if (required)
+                throw new InvalidOperationException($"XTSE3070: The overriding template '{displayName}' declares required parameter '{extra.Name}' that does not exist on the overridden template.");
+        }
+
+        // xsl:context-item equivalence: the use values must be the same and the required
+        // types identical; an absent xsl:context-item is equivalent to use="optional"
+        // as="item()".
+        var overrideCi = overrideElem.Elements(XName.Get("context-item", XslNamespace)).FirstOrDefault();
+        var baseCi = baseElem.Elements(XName.Get("context-item", XslNamespace)).FirstOrDefault();
+        var overrideUse = overrideCi?.Attribute("use")?.Value?.Trim() ?? "optional";
+        var baseUse = baseCi?.Attribute("use")?.Value?.Trim() ?? "optional";
+        if (overrideUse != baseUse)
+            throw new InvalidOperationException($"XTSE3070: The xsl:context-item of overriding template '{displayName}' is not equivalent to the overridden template's.");
+        var overrideCiAs = overrideCi?.Attribute("as")?.Value;
+        var baseCiAs = baseCi?.Attribute("as")?.Value;
+        if (!TypesAreIdentical(overrideCiAs ?? "item()", baseCiAs ?? "item()"))
+            throw new InvalidOperationException($"XTSE3070: The xsl:context-item type of overriding template '{displayName}' differs from the overridden template's.");
     }
 
     /// <summary>
@@ -4967,16 +5235,47 @@ public sealed class Stylesheet
     /// the component keeps its declared visibility.
     /// </summary>
     internal string? GetExposedVisibility(string componentType, string? localName, string? namespaceUri, int arity = -1)
+        => GetExposedVisibility(componentType, localName, namespaceUri, arity, hasDeclaredVisibility: false);
+
+    /// <summary>
+    /// Returns the visibility assigned by the package's <c>xsl:expose</c> rules for the
+    /// supplied component, following the precedence of XSLT 3.0 §3.5.5.2: an explicit
+    /// (named) rule wins; a component with a declared visibility attribute
+    /// (<paramref name="hasDeclaredVisibility"/>) ignores wildcard rules; otherwise the
+    /// last matching partial wildcard beats the last matching full wildcard. Returns
+    /// <c>null</c> when no applicable rule matches, meaning the declared visibility stands.
+    /// </summary>
+    internal string? GetExposedVisibility(string componentType, string? localName, string? namespaceUri, int arity, bool hasDeclaredVisibility)
     {
         if (!IsPackage)
             return null;
-        string? result = null;
+        string? namedResult = null;
+        string? partialWildcardResult = null;
+        string? fullWildcardResult = null;
         foreach (var rule in _exposeRules)
         {
-            if (rule.Matches(componentType, localName, namespaceUri, arity))
-                result = rule.Visibility;
+            if (rule.Component != componentType && rule.Component != "*")
+                continue;
+            foreach (var name in rule.Names)
+            {
+                bool isFullWildcard = name.IsWildcard || (name.LocalName == "*" && name.NamespaceUri is null);
+                if (!isFullWildcard && !name.Matches(localName, namespaceUri, arity))
+                    continue;
+                bool isPartialWildcard = !isFullWildcard && (name.IsNamespaceWildcard || name.LocalName == "*");
+                if (isFullWildcard)
+                    fullWildcardResult = rule.Visibility;
+                else if (isPartialWildcard)
+                    partialWildcardResult = rule.Visibility;
+                else
+                    namedResult = rule.Visibility;
+            }
         }
-        return result;
+        if (namedResult != null)
+            return namedResult;
+        // A declared visibility attribute takes precedence over wildcard expose rules.
+        if (hasDeclaredVisibility)
+            return null;
+        return partialWildcardResult ?? fullWildcardResult;
     }
 
     /// <summary>
@@ -5426,7 +5725,10 @@ public sealed class Stylesheet
                 continue;
             foreach (var component in package.GetAllExposableComponents("*"))
             {
-                var exposed = package.GetExposedVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity);
+                // A component with an explicitly declared visibility ignores wildcard
+                // xsl:expose rules (XSLT 3.0 §3.5.5.2 precedence): a private-declared
+                // component matched only by a wildcard stays private (accept-001).
+                var exposed = package.GetExposedVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity, component.IsExplicit);
                 var baseVisibility = exposed ?? component.DeclaredVisibility;
                 var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity, baseVisibility);
                 var effectiveVis = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility, options);
@@ -5442,16 +5744,17 @@ public sealed class Stylesheet
 
         foreach (var (key, list) in visibleComponents)
         {
+            // XTSE3050: a component declared at the top level of this package conflicts
+            // with a homonymous component accepted from a used package with a visibility
+            // other than hidden (such components may only be overridden via xsl:override).
+            if (FindLocalComponent(key.ComponentType, key.LocalName, key.NamespaceUri, key.Arity))
+                throw new InvalidOperationException($"XTSE3050: Local {key.ComponentType} '{DisplayComponentName(key.LocalName, key.NamespaceUri, key.Arity)}' conflicts with a component accepted from a used package; use xsl:override to override it.");
+
             if (list.Count < 2)
                 continue;
 
             // Duplicate entries from the same package do not constitute a conflict.
             if (list.Select(x => x.Package).Distinct().Count() == 1)
-                continue;
-
-            // A local declaration with the same name in the using package overrides
-            // the used-package components, so no conflict.
-            if (FindLocalComponent(key.ComponentType, key.LocalName, key.NamespaceUri, key.Arity))
                 continue;
 
             throw new InvalidOperationException($"XTSE3050: Conflicting visible {key.ComponentType} '{DisplayComponentName(key.LocalName, key.NamespaceUri, key.Arity)}' exported by multiple used packages.");
@@ -5736,6 +6039,28 @@ public sealed class Stylesheet
     }
 
     /// <summary>
+    /// Finds a named template in this stylesheet's package or, recursively, in the packages
+    /// it uses (components accepted transitively are still components of the used package,
+    /// XSLT 3.0 §3.5.7.2). Also returns the package that declares the template.
+    /// </summary>
+    private bool TryFindNamedTemplateDeep(string localName, string? namespaceUri, out TemplateRule? rule, out Stylesheet? declaringPackage)
+    {
+        if (TryFindNamedTemplate(localName, namespaceUri, out rule))
+        {
+            declaringPackage = this;
+            return true;
+        }
+        foreach (var used in _usedPackages)
+        {
+            if (used.TryFindNamedTemplateDeep(localName, namespaceUri, out rule, out declaringPackage))
+                return true;
+        }
+        rule = null;
+        declaringPackage = null;
+        return false;
+    }
+
+    /// <summary>
     /// Finds a function declaration recursively in this stylesheet, its imports and includes.
     /// </summary>
     private bool TryFindFunction(string localName, string? namespaceUri, int arity, out XsltFunctionDefinition? def)
@@ -5785,6 +6110,37 @@ public sealed class Stylesheet
             if (included.TryGetVariableElement(localName, namespaceUri, out element))
                 return true;
         foreach (var candidate in _globalVariables)
+        {
+            var nameAttr = candidate.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(nameAttr))
+                continue;
+            var (loc, ns) = ExpandVariableName(candidate, nameAttr);
+            if (loc == localName && ns == (namespaceUri ?? ""))
+            {
+                element = candidate;
+                return true;
+            }
+        }
+        return element != null;
+    }
+
+    /// <summary>
+    /// Finds a top-level xsl:variable or xsl:param element recursively in this stylesheet,
+    /// its imports and includes. Used by the xsl:override validation, where parameters and
+    /// variables share the same symbolic identifier space.
+    /// </summary>
+    private bool TryGetVariableOrParamElement(string localName, string? namespaceUri, out XElement? element)
+    {
+        if (TryGetVariableElement(localName, namespaceUri, out element))
+            return true;
+        element = null;
+        foreach (var imported in _imports)
+            if (imported.TryGetVariableOrParamElement(localName, namespaceUri, out element))
+                return true;
+        foreach (var included in _includes)
+            if (included.TryGetVariableOrParamElement(localName, namespaceUri, out element))
+                return true;
+        foreach (var candidate in _globalParameters)
         {
             var nameAttr = candidate.Attribute("name")?.Value;
             if (string.IsNullOrEmpty(nameAttr))
@@ -6504,6 +6860,7 @@ public sealed class Stylesheet
             }
             else if (ns == XslNamespace && localName == "param")
             {
+                if (!UseWhen(element)) continue;
                 var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
                 var exposed = GetExposedVisibility("variable", name.LocalName, name.NamespaceUri);
                 var visibility = exposed ?? GetLocalVisibility(element, "variable", IsPackage);
@@ -6511,6 +6868,7 @@ public sealed class Stylesheet
             }
             else if (ns == XslNamespace && localName == "variable")
             {
+                if (!UseWhen(element)) continue;
                 var name = ExpandVariableName(element, element.Attribute("name")?.Value ?? "");
                 var exposed = GetExposedVisibility("variable", name.LocalName, name.NamespaceUri);
                 var visibility = exposed ?? GetLocalVisibility(element, "variable", IsPackage);

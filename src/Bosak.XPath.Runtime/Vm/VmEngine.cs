@@ -247,6 +247,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.129 | 27-08-2026     | DocumentRoot opcode raises XPTY0020 when the context item is atomic                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.131 | 02-09-2026     | FODT0001 for lexically valid date/dateTime casts with out-of-range years (REQ-082)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -11232,7 +11234,10 @@ public static class VmEngine
 
         string yearStr = m.Groups["year"].Value;
         long year = long.Parse(yearStr, CultureInfo.InvariantCulture);
-        if (year > int.MaxValue || year < int.MinValue) return false;
+        // Lexically valid but outside the implementation-defined year range: FODT0001
+        // (date/time overflow), not FORG0001 (date-094e/f, date-095e/f).
+        if (year > int.MaxValue || year < int.MinValue)
+            throw new InvalidOperationException($"FODT0001: The year '{yearStr}' is outside the supported range.");
         // Reject + sign and leading zeros for years longer than 4 digits
         if (yearStr.StartsWith('+')) return false;
         if (yearStr.Length > 4 && yearStr[0] == '0') return false;
@@ -11289,7 +11294,10 @@ public static class VmEngine
 
         string yearStr = m.Groups["year"].Value;
         long year = long.Parse(yearStr, CultureInfo.InvariantCulture);
-        if (year > int.MaxValue || year < int.MinValue) return false;
+        // Lexically valid but outside the implementation-defined year range: FODT0001
+        // (date/time overflow), not FORG0001 (date-094e/f, date-095e/f).
+        if (year > int.MaxValue || year < int.MinValue)
+            throw new InvalidOperationException($"FODT0001: The year '{yearStr}' is outside the supported range.");
         // Reject + sign and leading zeros for years longer than 4 digits
         if (yearStr.StartsWith('+')) return false;
         if (yearStr.Length > 4 && yearStr[0] == '0') return false;

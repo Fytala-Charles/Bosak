@@ -275,6 +275,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.91  | 01-09-2026     | fn:function-lookup skips signatures hidden via IsHiddenFromFunctionLookup (xsl:original) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.92  | 02-09-2026     | XPTY0004 for non-boolean liberal/escape/indent JSON options; fn:resolve-QName validates  |
+//                      |                  |       |                | the element argument's cardinality/kind (REQ-082)                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -12285,23 +12288,37 @@ public static class FunctionLibrary
     {
         var lexical = AtomizedString(args[0]);
         IXdmNode? node = null;
+        int argCount = 0;
         if (args[1].IsSequence && args[1].SequenceValue != null)
         {
             foreach (var item in XdmSequence.FromSource(args[1].SequenceValue))
             {
-                if (item.IsNode)
-                {
+                argCount++;
+                if (item.IsNode && node == null)
                     node = item.NodeValue;
-                    break;
-                }
             }
         }
         else if (args[1].IsNode)
         {
             node = args[1].NodeValue;
+            argCount = 1;
+        }
+        else if (!args[1].IsUndefined)
+        {
+            argCount = 1; // atomic, non-node value
         }
 
-        if (node == null || string.IsNullOrEmpty(lexical))
+        // The second parameter of fn:resolve-QName is exactly one element node (F+O 3.1
+        // §11.2.2): an empty sequence, a multi-item sequence, or a non-node is XPTY0004
+        // (type-0158).
+        if (argCount == 0)
+            throw new InvalidOperationException("XPTY0004: The second argument of fn:resolve-QName must be exactly one element node; the empty sequence is not allowed.");
+        if (argCount > 1)
+            throw new InvalidOperationException("XPTY0004: The second argument of fn:resolve-QName must be exactly one element node; a sequence of more than one item is not allowed.");
+        if (node == null)
+            throw new InvalidOperationException("XPTY0004: The second argument of fn:resolve-QName must be an element node.");
+
+        if (string.IsNullOrEmpty(lexical))
             return XdmValue.Undefined;
 
         string prefix;
@@ -12464,7 +12481,12 @@ public static class FunctionLibrary
         var result = defaultOptions;
 
         if (map.TryGetValue(XdmValue.FromString("liberal"), out var liberal))
+        {
+            // The value must be a single xs:boolean (json-to-xml-error-020/021).
+            if (liberal.Kind != XdmValueKind.Boolean)
+                throw new InvalidOperationException("XPTY0004: The liberal option must be a single xs:boolean");
             result = result with { Liberal = liberal.BooleanValue };
+        }
         if (map.TryGetValue(XdmValue.FromString("duplicates"), out var dup))
         {
             var dupStr = RequireString(dup);
@@ -12479,9 +12501,19 @@ public static class FunctionLibrary
             result = result with { Duplicates = dupStr, DuplicatesExplicit = true };
         }
         if (map.TryGetValue(XdmValue.FromString("escape"), out var escape))
+        {
+            // The value must be a single xs:boolean (json-to-xml-error-025/026/027).
+            if (escape.Kind != XdmValueKind.Boolean)
+                throw new InvalidOperationException("XPTY0004: The escape option must be a single xs:boolean");
             result = result with { Escape = escape.BooleanValue };
+        }
         if (map.TryGetValue(XdmValue.FromString("indent"), out var indent))
+        {
+            // The value must be a single xs:boolean (xml-to-json-C100..C103).
+            if (indent.Kind != XdmValueKind.Boolean)
+                throw new InvalidOperationException("XPTY0004: The indent option must be a single xs:boolean");
             result = result with { Indent = indent.BooleanValue };
+        }
         if (map.TryGetValue(XdmValue.FromString("validate"), out var validate))
         {
             // fn:json-to-xml only: requests schema validation of the result. The

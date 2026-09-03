@@ -105,6 +105,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.35  | 01-09-2026     | Expected <error> results now require the declared error code to match the exception    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.36  | 02-09-2026     | Register document-declared package version alongside catalog version (override-f-024)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -600,6 +602,7 @@ class Program
                 // Some test cases omit the package uri/version on the <package> element;
                 // read them from the package document root so secondary packages still resolve.
                 string? docName = null;
+                string? docVersion = null;
                 try
                 {
                     var pkgDoc = XDocument.Load(pkgPath);
@@ -609,8 +612,9 @@ class Program
                          string.IsNullOrEmpty(pkgRoot.Name.NamespaceName)))
                     {
                         docName = pkgRoot.Attribute("name")?.Value;
+                        docVersion = pkgRoot.Attribute("package-version")?.Value;
                         pkgUri ??= docName;
-                        pkgVersion ??= pkgRoot.Attribute("package-version")?.Value;
+                        pkgVersion ??= docVersion;
                     }
                 }
                 catch
@@ -627,6 +631,17 @@ class Program
                 if (!string.IsNullOrEmpty(docName) && docName != pkgUri)
                     Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
                         docName, pkgVersion ?? "", new Uri(pkgPath).AbsoluteUri);
+                // The catalog package-version can also differ from the document-declared
+                // version (e.g. override-f-024a declares 0.0.1 while the catalog registers
+                // 1.0.0); register the document-declared version under both names as well.
+                if (!string.IsNullOrEmpty(docVersion) && docVersion != pkgVersion)
+                {
+                    Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
+                        pkgUri, docVersion, new Uri(pkgPath).AbsoluteUri);
+                    if (!string.IsNullOrEmpty(docName) && docName != pkgUri)
+                        Bosak.Xslt.Api.XsltFunctionLibrary.RegisterPackage(
+                            docName, docVersion, new Uri(pkgPath).AbsoluteUri);
+                }
             }
 
             // Determine the principal stylesheet or package. Prefer an element with
