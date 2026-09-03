@@ -34,6 +34,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.0   | 31-08-2026     | Added AcceptedBy property for used-package private template visibility tracking        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.1   | 02-09-2026     | Added OverriddenTemplate link for xsl:original dispatch; xsl:override/@default-mode    |
+//                      |                  |       |                | applies to template rules declared inside xsl:override (override-m-010)                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -93,6 +96,13 @@ public sealed class TemplateRule
     public string? EffectiveVisibility { get; internal set; }
 
     /// <summary>
+    /// For a template declared inside <c>xsl:override</c>, the used-package declaration it
+    /// replaces. <c>xsl:call-template name="xsl:original"</c> inside the overriding template
+    /// dispatches to this rule while it executes (XSLT 3.0 §3.5.7.2).
+    /// </summary>
+    public TemplateRule? OverriddenTemplate { get; internal set; }
+
+    /// <summary>
     /// The package whose <c>xsl:accept</c> rules set <see cref="EffectiveVisibility"/> to
     /// <c>private</c>, or <c>null</c> when the private visibility comes from the declaring
     /// package itself.
@@ -128,7 +138,17 @@ public sealed class TemplateRule
             match = element.Attribute("_match")?.Value;
         var name = element.Attribute("name")?.Value?.Trim();
         var modeAttr = element.Attribute("mode")?.Value;
-        var modes = ParseModes(modeAttr, element, stylesheet.DefaultMode);
+        // For declarations inside xsl:override, the default mode comes from the
+        // xsl:override/@default-mode attribute before the stylesheet's (override-m-010).
+        var overrideDefaultMode = element.Parent is { } overrideParent
+            && overrideParent.Name.LocalName == "override"
+            && overrideParent.Name.NamespaceName == Stylesheet.XslNamespace
+            ? overrideParent.Attribute("default-mode")?.Value?.Trim()
+            : null;
+        var effectiveDefaultMode = string.IsNullOrEmpty(overrideDefaultMode)
+            ? stylesheet.DefaultMode
+            : ExpandModeName(overrideDefaultMode, element);
+        var modes = ParseModes(modeAttr, element, effectiveDefaultMode);
 
         if (string.IsNullOrEmpty(match) && string.IsNullOrEmpty(name))
             return Array.Empty<TemplateRule>(); // Invalid template

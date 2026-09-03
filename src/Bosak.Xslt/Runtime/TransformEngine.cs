@@ -265,9 +265,13 @@
 //                      |                  |       |                | validation in ResolveName (XTDE0820/XTDE0850); initial-template visibility exempts     |
 //                      |                  |       |                | match+name templates; XTDE0640 for attribute-set expansion cycles                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.55  | 02-09-2026     | xsl:original for templates: _overriddenTemplateStack + TryCallOriginalTemplate;        |
+//                      |                  |       |                | $xsl:original variable resolution via alias stack in ResolveLazyGlobal; simple-content  |
+//                      |                  |       |                | fallback nulls the sequence accumulator (typed call-template results no longer lost); |
+//                      |                  |       |                | templates inherit xsl:override/@default-mode; package-scope named-template view uses  |
+//                      |                  |       |                | override contributions                                                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
-
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -534,6 +538,15 @@ public sealed class TransformEngine
     // Stack of overridden used-package functions whose xsl:override replacement is currently
     // executing; the top is the dispatch target of an xsl:original call (XSLT 3.0 §3.5.7.2).
     private readonly Stack<Stylesheet.XsltFunctionDefinition> _overriddenFunctionStack = new();
+
+    // Stack of overridden used-package named templates whose xsl:override replacement is
+    // currently executing; the top is the dispatch target of call-template name="xsl:original".
+    private readonly Stack<Stylesheet.TemplateRule> _overriddenTemplateStack = new();
+
+    // Stack of aliased overridden used-package variables/parameters whose xsl:override
+    // replacement initializer is currently evaluating; the top is the resolution target of
+    // a $xsl:original reference (override-v-003).
+    private readonly Stack<(string LocalName, string NamespaceUri)> _overriddenVariableStack = new();
 
     // Keys of every registered XSLT stylesheet function (root and package scopes). Used by the
     // package-scope fn:function-lookup to distinguish user functions that are not visible in
@@ -1764,7 +1777,7 @@ public sealed class TransformEngine
     {
         if (!_packageNamedTemplates.TryGetValue(package, out var map))
         {
-            map = package.GetAllNamedTemplates();
+            map = package.GetPackageScopeNamedTemplates();
             _packageNamedTemplates[package] = map;
         }
         return map;
@@ -3490,8 +3503,11 @@ public sealed class TransformEngine
                                 // Named templates are matched by expanded QName, so a call using
                                 // one prefix can resolve to a template declared with another prefix
                                 // bound to the same namespace URI.
-                                var resolvedName = ResolveNamedTemplateName(calledName, instruction);
-                                CallTemplate(resolvedName, contextItem, withParams, tunnelParams);
+                                if (!TryCallOriginalTemplate(calledName, instruction, contextItem, withParams, tunnelParams))
+                                {
+                                    var resolvedName = ResolveNamedTemplateName(calledName, instruction);
+                                    CallTemplate(resolvedName, contextItem, withParams, tunnelParams);
+                                }
                             }
                             finally
                             {
@@ -4502,12 +4518,18 @@ public sealed class TransformEngine
     public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1, bool setCurrentRule = true)
     {
         var packageScopeState = EnterPackageScope(rule.Stylesheet.OwningPackage);
+        // An override's call-template name="xsl:original" dispatches to the overridden
+        // used-package template while the overriding body executes (XSLT 3.0 §3.5.7.2).
+        if (rule.OverriddenTemplate != null)
+            _overriddenTemplateStack.Push(rule.OverriddenTemplate);
         try
         {
             ExecuteTemplateCore(rule, contextItem, callParams, incomingTunnelParams, position, last, setCurrentRule);
         }
         finally
         {
+            if (rule.OverriddenTemplate != null)
+                _overriddenTemplateStack.Pop();
             ExitPackageScope(packageScopeState);
         }
     }
@@ -4611,8 +4633,16 @@ public sealed class TransformEngine
         }
         _tunnelParamStack.Push(tunnelFrame);
 
-        // Push default-mode for this template scope
+        // Push default-mode for this template scope; a template declared inside
+        // xsl:override inherits the xsl:override/@default-mode (override-m-010).
         var templateDefaultMode = rule.Element.Attribute("default-mode")?.Value;
+        if (string.IsNullOrEmpty(templateDefaultMode) &&
+            rule.Element.Parent is { } overrideParent &&
+            overrideParent.Name.LocalName == "override" &&
+            overrideParent.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
+        {
+            templateDefaultMode = overrideParent.Attribute("default-mode")?.Value;
+        }
         if (!string.IsNullOrEmpty(templateDefaultMode))
         {
             _defaultModeStack.Push(ExpandModeName(templateDefaultMode, rule.Element));
@@ -4857,6 +4887,23 @@ public sealed class TransformEngine
         => CallTemplate(name, XdmValue.FromNode(currentNode), withParams, incomingTunnelParams);
 
     private const int MaxCallTemplateDepth = 128;
+
+    /// <summary>
+    /// Returns whether the supplied call-template name denotes <c>xsl:original</c>, and if so
+    /// executes the overridden used-package template of the currently executing override
+    /// (XSLT 3.0 §3.5.7.2). Raises <c>XTDE0041</c> when no overriding template is executing.
+    /// </summary>
+    private bool TryCallOriginalTemplate(string calledName, XElement instruction, XdmValue contextItem, Dictionary<string, XdmValue>? withParams, Dictionary<string, XdmValue>? tunnelParams)
+    {
+        var (local, ns) = ExpandVariableName(instruction, calledName);
+        if (local != "original" || ns != Stylesheet.Stylesheet.XslNamespace)
+            return false;
+        if (_overriddenTemplateStack.Count == 0)
+            throw new InvalidOperationException("XTDE0041: xsl:original is not available because no overriding template is currently executing.");
+        var original = _overriddenTemplateStack.Peek();
+        ExecuteTemplate(original, contextItem, withParams, tunnelParams, _context.ContextPosition, _context.ContextSize, setCurrentRule: false);
+        return true;
+    }
 
     public void CallTemplate(string name, XdmValue contextItem, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
@@ -6154,8 +6201,11 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(calledName))
                     {
                         var (withParams, tunnelParams) = CollectWithParams(instruction, contextItem);
-                        var resolvedName = ResolveNamedTemplateName(calledName, instruction);
-                        WithoutMergeContext(() => CallTemplate(resolvedName, contextItem, withParams, tunnelParams));
+                        if (!TryCallOriginalTemplate(calledName, instruction, contextItem, withParams, tunnelParams))
+                        {
+                            var resolvedName = ResolveNamedTemplateName(calledName, instruction);
+                            WithoutMergeContext(() => CallTemplate(resolvedName, contextItem, withParams, tunnelParams));
+                        }
                     }
                     break;
                 }
@@ -10220,6 +10270,20 @@ public sealed class TransformEngine
     /// </summary>
     private XdmValue? ResolveLazyGlobal(Stylesheet.Stylesheet? scope, string localName, string namespaceUri)
     {
+        // $xsl:original inside an overriding variable/parameter initializer refers to the
+        // overridden used-package declaration's value. The original is kept under an
+        // unspellable alias namespace in the scope globals (override-v-003).
+        if (localName == "original" && namespaceUri == Stylesheet.Stylesheet.XslNamespace)
+        {
+            if (_overriddenVariableStack.Count == 0)
+                return null;
+            var (aliasLocal, aliasNs) = _overriddenVariableStack.Peek();
+            var resolved = ResolveLazyGlobal(scope, aliasLocal, aliasNs);
+            if (resolved == null && scope != null)
+                resolved = ResolveLazyGlobal(null, aliasLocal, aliasNs);
+            return resolved;
+        }
+
         var key = (localName, namespaceUri);
 
         // A reference to a global that is currently being evaluated is a circular
@@ -10312,6 +10376,13 @@ public sealed class TransformEngine
         // package's own components (accept-043b: an abstract variable in a used package
         // raises XTDE3052 there instead of XPST0008 in the caller's scope).
         var declaringScopeState = EnterPackageScope(info.SourceStylesheet.OwningPackage);
+        // While an overriding variable/parameter initializer evaluates, $xsl:original
+        // resolves to the overridden declaration's value (kept under the alias namespace).
+        var isOverrideInitializer = info.Element.Parent is { } overrideParent
+            && overrideParent.Name.LocalName == "override"
+            && overrideParent.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace;
+        if (isOverrideInitializer)
+            _overriddenVariableStack.Push((localName, Stylesheet.Stylesheet.OriginalVariableNamespace));
         try
         {
             // Global variables/parameters are evaluated with a singleton focus based
@@ -10398,6 +10469,8 @@ public sealed class TransformEngine
         }
         finally
         {
+            if (isOverrideInitializer)
+                _overriddenVariableStack.Pop();
             ExitPackageScope(declaringScopeState);
             _context.RestoreVariables(savedVariables);
             _context.WithFocus(savedItem, savedPos, savedSize);
@@ -14708,9 +14781,16 @@ public sealed class TransformEngine
 
             default:
                 // Fallback: execute into a temporary container and extract nodes.
+                // The sequence accumulator is nulled so that a nested typed template or
+                // function delivers its converted result into the temporary container
+                // instead of the outer placeholder accumulator (override-t-001).
                 var savedContainer = _currentContainer;
+                var savedAccumulator = _sequenceAccumulator;
+                var savedFallbackLastAtomic = _lastAddedWasAtomic;
                 var temp = new XElement("__fallback__");
                 _currentContainer = temp;
+                _sequenceAccumulator = null;
+                _lastAddedWasAtomic = false;
                 try
                 {
                     var currentNode = contextItem.IsNode ? contextItem.NodeValue : null;
@@ -14737,6 +14817,8 @@ public sealed class TransformEngine
                 finally
                 {
                     _currentContainer = savedContainer;
+                    _sequenceAccumulator = savedAccumulator;
+                    _lastAddedWasAtomic = savedFallbackLastAtomic;
                 }
                 break;
         }

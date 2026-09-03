@@ -186,9 +186,12 @@
 //                      |                  |       |                | conflicts + implicit mode redeclaration; xsl:expose precedence (declared over          |
 //                      |                  |       |                | wildcard); use-when honored in XTSE0630 collection; override wins GetAllNamedTemplates |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.100 | 02-09-2026     | xsl:original variables: overridden globals kept under an unspellable alias namespace    |
+//                      |                  |       |                | for $xsl:original resolution; template override contributions registered for named    |
+//                      |                  |       |                | templates/attribute-sets; GetPackageScopeNamedTemplates applies contributions;        |
+//                      |                  |       |                | xsl:param permitted in xsl:override                                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
-
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -827,8 +830,9 @@ public sealed class Stylesheet
         foreach (var package in _usedPackages)
         {
             var options = _usedPackageOptions.GetValueOrDefault(package);
+            var packageView = package.GetAllNamedTemplates();
 
-            foreach (var (name, rule) in package.GetAllNamedTemplates())
+            foreach (var (name, rule) in packageView)
             {
                 if (!IsExportedFromPackage(package, rule))
                     continue;
@@ -860,6 +864,16 @@ public sealed class Stylesheet
                 foreach (var rule in TemplateRule.FromElement(overrideElem, this))
                 {
                     rule.EffectiveVisibility = GetExposedVisibility("template", rule.Name, null) ?? GetLocalVisibility(rule.Element, "template", this);
+                    // Link the overriding template to the used-package declaration it
+                    // replaces so xsl:original can dispatch to it at runtime.
+                    var (oLocal, oNs) = ExpandVariableName(overrideElem, nameAttr);
+                    rule.OverriddenTemplate = packageView.Values.FirstOrDefault(candidate =>
+                    {
+                        if (string.IsNullOrEmpty(candidate.Name))
+                            return false;
+                        var (cLocal, cNs) = ExpandVariableName(candidate.Element, candidate.Name);
+                        return cLocal == oLocal && cNs == oNs;
+                    });
                     result[nameAttr] = rule;
                 }
             }
@@ -873,6 +887,54 @@ public sealed class Stylesheet
             result[name] = rule;
         }
 
+        return result;
+    }
+
+    /// <summary>
+    /// Returns the named templates visible in this package's own execution scope, with
+    /// <c>xsl:override</c> template declarations contributed by packages that use this
+    /// package applied on top (XSLT 3.0 §3.5.7.2): references to an overridden named
+    /// template inside this package's components bind to the overriding declaration.
+    /// Each contributed override is linked to the declaration it replaces
+    /// (<see cref="TemplateRule.OverriddenTemplate"/>) so <c>xsl:original</c> dispatches
+    /// correctly (override-t-002/007/015).
+    /// </summary>
+    public Dictionary<string, TemplateRule> GetPackageScopeNamedTemplates()
+    {
+        var result = GetAllNamedTemplates();
+        if (_packageOverrideContributions == null)
+            return result;
+
+        foreach (var (user, options) in _packageOverrideContributions)
+        {
+            foreach (var overrideElem in options.OverrideTemplates)
+            {
+                var nameAttr = overrideElem.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(nameAttr))
+                    continue;
+                foreach (var rule in TemplateRule.FromElement(overrideElem, user))
+                {
+                    var (oLocal, oNs) = ExpandVariableName(overrideElem, nameAttr);
+                    rule.EffectiveVisibility = GetLocalVisibility(rule.Element, "template", user);
+                    // Replace the entry with the same expanded name (the raw lexical keys
+                    // may differ when the two packages bind different prefixes).
+                    string? existingKey = null;
+                    foreach (var (key, candidate) in result)
+                    {
+                        if (string.IsNullOrEmpty(candidate.Name))
+                            continue;
+                        var (cLocal, cNs) = ExpandVariableName(candidate.Element, candidate.Name);
+                        if (cLocal == oLocal && cNs == oNs)
+                        {
+                            existingKey = key;
+                            rule.OverriddenTemplate = candidate;
+                            break;
+                        }
+                    }
+                    result[existingKey ?? nameAttr] = rule;
+                }
+            }
+        }
         return result;
     }
 
@@ -3314,7 +3376,7 @@ public sealed class Stylesheet
                         var parentName = parentIsXslt ? paramParent.Name.LocalName : null;
 
                         // xsl:param is only permitted in a small set of parent elements.
-                        if (!parentIsXslt || parentName is not "stylesheet" and not "transform" and not "package" and not "template" and not "function" and not "iterate")
+                        if (!parentIsXslt || parentName is not "stylesheet" and not "transform" and not "package" and not "template" and not "function" and not "iterate" and not "override")
                         {
                             throw new InvalidOperationException("XTSE0010: xsl:param is not permitted in this context.");
                         }
@@ -4958,14 +5020,17 @@ public sealed class Stylesheet
 
     /// <summary>
     /// Registers an <c>xsl:use-package</c> relationship in which <paramref name="user"/> uses this
-    /// package with overriding variable, parameter, or function declarations. The overrides become
-    /// visible to this package's own components when they execute (XSLT 3.0 §3.5.7.2).
+    /// package with overriding variable, parameter, template, or function declarations. The
+    /// overrides become visible to this package's own components when they execute
+    /// (XSLT 3.0 §3.5.7.2).
     /// </summary>
     private void RegisterPackageOverrideContribution(Stylesheet user, PackageUseOptions options)
     {
         if (options.OverrideFunctions.Count == 0 &&
             options.OverrideVariables.Count == 0 &&
-            options.OverrideParams.Count == 0)
+            options.OverrideParams.Count == 0 &&
+            options.OverrideTemplates.Count == 0 &&
+            options.OverrideAttributeSets.Count == 0)
             return;
         (_packageOverrideContributions ??= new()).Add((user, options));
     }
@@ -6903,9 +6968,18 @@ public sealed class Stylesheet
                 continue;
 
             if (g.IsParam && overrideParamNames.Contains(g.Name))
+            {
+                // Keep the overridden original reachable under an unspellable alias so a
+                // $xsl:original reference inside the overriding initializer resolves to it
+                // (override-v-003; XSLT 3.0 §3.5.7.2).
+                globals.Add((g.Precedence, order++, (g.Name.LocalName, Stylesheet.OriginalVariableNamespace), g.Element, g.IsParam, g.SourceStylesheet, this, g.EffectiveVisibility));
                 continue;
+            }
             if (!g.IsParam && overrideVariableNames.Contains(g.Name))
+            {
+                globals.Add((g.Precedence, order++, (g.Name.LocalName, Stylesheet.OriginalVariableNamespace), g.Element, g.IsParam, g.SourceStylesheet, this, g.EffectiveVisibility));
                 continue;
+            }
 
             globals.Add((precedence, order++, g.Name, g.Element, g.IsParam, g.SourceStylesheet, this, effectiveVis));
         }
@@ -6970,12 +7044,23 @@ public sealed class Stylesheet
             return;
 
         // Remove the overridden originals collected above; the overriding declarations
-        // take their place in this package's effective scope.
+        // take their place in this package's effective scope. The originals remain
+        // reachable under an unspellable alias so that $xsl:original references inside
+        // overriding initializers resolve to them (override-v-003; XSLT 3.0 §3.5.7.2).
+        var overridden = globals
+            .Where(g => g.IsParam ? overrideParamNames.Contains(g.Name) : overrideVariableNames.Contains(g.Name))
+            .ToList();
+        foreach (var g in overridden)
+            globals.Add((g.Precedence, g.Order, (g.Name.LocalName, OriginalVariableNamespace), g.Element, g.IsParam, g.SourceStylesheet, g.CollectingScope, g.EffectiveVisibility));
         globals.RemoveAll(g => g.IsParam ? overrideParamNames.Contains(g.Name) : overrideVariableNames.Contains(g.Name));
         int precedence = ImportPrecedence;
         foreach (var (elem, isParam, name, user) in additions)
             globals.Add((precedence, order++, name, elem, isParam, user, this, null));
     }
+
+    /// <summary>The alias namespace under which overridden variables/parameters remain
+    /// reachable for <c>$xsl:original</c> references (unspellable in source XPath).</summary>
+    internal const string OriginalVariableNamespace = "\u0001original";
 
     /// <summary>
     /// Validates that no global variable or parameter has more than one binding at the
