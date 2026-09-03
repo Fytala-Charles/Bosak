@@ -107,6 +107,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.36  | 02-09-2026     | Register document-declared package version alongside catalog version (override-f-024)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.37  | 02-09-2026     | DocumentLoader falls back to the bare file name in the test set dir (merge-008)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -841,6 +843,25 @@ class Program
                     var node = new XDocumentNode(doc);
                     node.SetDocumentUri(new Uri(testPath).AbsoluteUri);
                     return node;
+                }
+                // Some tests reference documents by stale relative paths (e.g.
+                // 'TestInputs/merge/log-file-1.xml' in merge-008); fall back to the bare
+                // file name within the test set directory, where the environment's
+                // declared sources live.
+                var fileName = uri.Replace('\\', '/');
+                var lastSlash = fileName.LastIndexOf('/');
+                if (lastSlash >= 0)
+                {
+                    var byName = Path.Combine(testSetDir, fileName[(lastSlash + 1)..]);
+                    if (File.Exists(byName))
+                    {
+                        var doc = LoadDocumentFromFile(byName);
+                        if (string.IsNullOrEmpty(doc.BaseUri))
+                            doc.AddAnnotation(new Uri(byName).AbsoluteUri);
+                        var node = new XDocumentNode(doc);
+                        node.SetDocumentUri(new Uri(byName).AbsoluteUri);
+                        return node;
+                    }
                 }
                 throw new FileNotFoundException($"Document not found: {uri}");
             };

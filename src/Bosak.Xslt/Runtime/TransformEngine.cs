@@ -271,7 +271,14 @@
 //                      |                  |       |                | templates inherit xsl:override/@default-mode; package-scope named-template view uses  |
 //                      |                  |       |                | override contributions                                                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.56  | 02-09-2026     | XTDE0835/0865 (xmlns namespace on constructed elements/attributes), XTDE0905/0920      |
+//                      |                  |       |                | (xsl:namespace value/name validation); use=absent suppresses the global context item;  |
+//                      |                  |       |                | XTTE0590 for global-context-item type mismatch; unwrap List.Sort comparer wrapper;     |
+//                      |                  |       |                | XTDE1030 for incomparable sort keys; XTTE2230 for merge keys; temporary output state   |
+//                      |                  |       |                | for xsl:sort/xsl:merge-key content (XTDE1480)                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -854,6 +861,16 @@ public sealed class TransformEngine
         // When called directly without an explicit global context item, the source
         // node serves as the global context item for backward compatibility.
         var effectiveGlobalContextItem = globalContextItem ?? source;
+
+        // xsl:global-context-item use="absent": the transformation runs with an absent
+        // global context item even when a source is supplied (glob-cxt-item-003).
+        if (_stylesheet.GlobalContextItemUse == "absent")
+            effectiveGlobalContextItem = null;
+
+        // XTTE0590: the supplied global context item must match the declared
+        // xsl:global-context-item/@as type (glob-cxt-item-002).
+        if (_stylesheet.GlobalContextItemAs is { } gciAs && effectiveGlobalContextItem != null)
+            ConvertVariableValue(XdmValue.FromNode(effectiveGlobalContextItem), gciAs, context: _context, errorCodeOverride: "XTTE0590");
 
         // Initialize global parameters and variables before compiling match patterns
         // and building key indices, because both match-pattern predicate validation
@@ -5212,6 +5229,10 @@ public sealed class TransformEngine
                     var elemNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var elemNs = elemNsRaw != null ? EvaluateAvt(elemNsRaw, instruction) : null;
                     var (elemLocalName, elemNsUri) = ResolveElementName(instruction, elemName, elemNs, "XTDE0830");
+                    // XTDE0835: a constructed element must not be in the xmlns namespace
+                    // (namespace-2621).
+                    if (elemNsUri == "http://www.w3.org/2000/xmlns/")
+                        throw new InvalidOperationException("XTDE0835: The namespace URI of a constructed element must not be http://www.w3.org/2000/xmlns/.");
                     var elem = new XElement(XName.Get(Xml11NameCodec.EncodeName(elemLocalName), elemNsUri));
 
                     // If the element has a namespace URI but no prefix hint, bind it via the
@@ -5305,6 +5326,11 @@ public sealed class TransformEngine
                     var attrNsRaw = instruction.Attribute("namespace")?.Value; // null if absent, "" if explicitly empty
                     var attrNs = attrNsRaw != null ? EvaluateAvt(attrNsRaw, instruction) : null;
                     var (attrLocalName, attrNsUri) = ResolveAttributeName(instruction, attrName, attrNs, "XTDE0860");
+
+                    // XTDE0865: a constructed attribute must not be in the xmlns namespace
+                    // (namespace-2623).
+                    if (attrNsUri == "http://www.w3.org/2000/xmlns/")
+                        throw new InvalidOperationException("XTDE0865: The namespace URI of a constructed attribute must not be http://www.w3.org/2000/xmlns/.");
 
                     // XTDE0855: with no namespace attribute, an effective name of "xmlns" is invalid.
                     if (attrNsRaw == null && attrLocalName == "xmlns" && string.IsNullOrEmpty(attrNsUri))
@@ -5509,6 +5535,10 @@ public sealed class TransformEngine
                 {
                     var nsNameRaw = instruction.Attribute("name")?.Value ?? "";
                     var nsName = EvaluateAvt(nsNameRaw, instruction);
+                    // XTDE0920: the namespace name must be empty or a valid NCName, and must
+                    // not be "xmlns" (namespace-2624).
+                    if (nsName == "xmlns" || (nsName.Length > 0 && !Xml11NameCodec.IsValidXml11NCName(nsName)))
+                        throw new InvalidOperationException($"XTDE0920: The name of xsl:namespace must be a valid NCName and must not be 'xmlns'; got '{nsName}'.");
                     var nsSelect = instruction.Attribute("select")?.Value;
                     string nsUri;
                     if (!string.IsNullOrEmpty(nsSelect))
@@ -5521,6 +5551,10 @@ public sealed class TransformEngine
                     {
                         nsUri = EvaluateSimpleContent(instruction, contextItem, " ");
                     }
+                    // XTDE0905: the namespace value must not be the xmlns namespace URI
+                    // (namespace-2622).
+                    if (nsUri == "http://www.w3.org/2000/xmlns/")
+                        throw new InvalidOperationException("XTDE0905: xsl:namespace must not generate a binding to the namespace http://www.w3.org/2000/xmlns/.");
                     if (_currentContainer is XElement targetElem)
                     {
                         if (nsName == "xml" && nsUri == "http://www.w3.org/XML/1998/namespace")
@@ -11621,16 +11655,25 @@ public sealed class TransformEngine
                 keyed.Add(new SortEntry(item, keys, idx));
             }
 
-            keyed.Sort((a, b) =>
+            try
             {
-                for (int i = 0; i < a.Keys.Count; i++)
+                keyed.Sort((a, b) =>
                 {
-                    var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
-                    if (cmp != 0) return cmp;
-                }
-                // Stable sort: preserve original relative order when all keys equal
-                return a.OriginalIndex.CompareTo(b.OriginalIndex);
-            });
+                    for (int i = 0; i < a.Keys.Count; i++)
+                    {
+                        var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
+                        if (cmp != 0) return cmp;
+                    }
+                    // Stable sort: preserve original relative order when all keys equal
+                    return a.OriginalIndex.CompareTo(b.OriginalIndex);
+                });
+            }
+            catch (InvalidOperationException wrap) when (wrap.InnerException != null && wrap.Message.StartsWith("Failed to compare", StringComparison.Ordinal))
+            {
+                // List.Sort wraps comparer exceptions in a generic InvalidOperationException;
+                // rethrow the original XSLT error (XTDE1030 etc.) unchanged (sort-080, date-053).
+                throw wrap.InnerException;
+            }
 
             return keyed.Select(k => k.Item).ToList();
         }
@@ -11782,6 +11825,10 @@ public sealed class TransformEngine
         }
         if (spec.HasElements)
         {
+            // The sequence constructor of xsl:sort is evaluated in temporary output state
+            // (XSLT 3.0 §11.4); a nested xsl:result-document raises XTDE1480
+            // (result-document-1137).
+            using var temporaryOutputState = EnterTemporaryOutputState();
             return EvaluateSequenceConstructor(spec, _context.ContextItem, wrapInDocumentNode: false);
         }
         return CompileXPath(".", spec).Evaluate(_context);
@@ -11918,7 +11965,18 @@ public sealed class TransformEngine
                  !string.IsNullOrEmpty(_context.DefaultCollation))
             cmp = CompareTextSortKey(a.Value, b.Value, a.Control.Collation ?? _context.DefaultCollation, a.Control.Lang, a.Control.CaseOrder);
         else
-            cmp = XdmValueComparer.Instance.Compare(a.Value, b.Value);
+        {
+            // XTDE1030: sort key values that are not comparable raise the sort-specific
+            // error rather than the generic XPath type error (sort-080, date-053).
+            try
+            {
+                cmp = XdmValueComparer.Instance.Compare(a.Value, b.Value);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("XPTY0004"))
+            {
+                throw new InvalidOperationException("XTDE1030: Sort key values are not comparable.");
+            }
+        }
 
         return a.Control.Descending ? -cmp : cmp;
     }
@@ -12097,16 +12155,25 @@ public sealed class TransformEngine
                 keyed.Add((key, items, keys, idx));
             }
 
-            keyed.Sort((a, b) =>
+            try
             {
-                for (int i = 0; i < a.Keys.Count; i++)
+                keyed.Sort((a, b) =>
                 {
-                    var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
-                    if (cmp != 0) return cmp;
-                }
-                // Stable sort: preserve original relative order when all keys equal
-                return a.OriginalIndex.CompareTo(b.OriginalIndex);
-            });
+                    for (int i = 0; i < a.Keys.Count; i++)
+                    {
+                        var cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
+                        if (cmp != 0) return cmp;
+                    }
+                    // Stable sort: preserve original relative order when all keys equal
+                    return a.OriginalIndex.CompareTo(b.OriginalIndex);
+                });
+            }
+            catch (InvalidOperationException wrap) when (wrap.InnerException != null && wrap.Message.StartsWith("Failed to compare", StringComparison.Ordinal))
+            {
+                // List.Sort wraps comparer exceptions; rethrow the original XSLT error
+                // unchanged (XTDE1030 family).
+                throw wrap.InnerException;
+            }
 
             return keyed.Select(k => (k.Key, k.Items)).ToList();
         }
@@ -17162,20 +17229,29 @@ public sealed class TransformEngine
             return;
 
         // Sort globally by key tuple, then source order, then original document order.
-        allEntries.Sort((a, b) =>
+        try
         {
-            int minKeys = Math.Min(a.Keys.Count, b.Keys.Count);
-            for (int i = 0; i < minKeys; i++)
+            allEntries.Sort((a, b) =>
             {
-                int cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
-                if (cmp != 0) return cmp;
-            }
-            if (a.Keys.Count != b.Keys.Count)
-                return a.Keys.Count.CompareTo(b.Keys.Count);
-            int srcCmp = a.SourceIndex.CompareTo(b.SourceIndex);
-            if (srcCmp != 0) return srcCmp;
-            return a.OriginalIndex.CompareTo(b.OriginalIndex);
-        });
+                int minKeys = Math.Min(a.Keys.Count, b.Keys.Count);
+                for (int i = 0; i < minKeys; i++)
+                {
+                    int cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
+                    if (cmp != 0) return cmp;
+                }
+                if (a.Keys.Count != b.Keys.Count)
+                    return a.Keys.Count.CompareTo(b.Keys.Count);
+                int srcCmp = a.SourceIndex.CompareTo(b.SourceIndex);
+                if (srcCmp != 0) return srcCmp;
+                return a.OriginalIndex.CompareTo(b.OriginalIndex);
+            });
+        }
+        catch (InvalidOperationException wrap) when (wrap.InnerException != null && wrap.Message.StartsWith("Failed to compare", StringComparison.Ordinal))
+        {
+            // List.Sort wraps comparer exceptions; remap comparison failures to the
+            // merge-key type error (merge-023).
+            throw new InvalidOperationException($"XTTE2230: Merge key values are not comparable across input sequences. {wrap.InnerException.Message}");
+        }
 
         // Build groups of consecutive equal-key items.
         var groups = new List<(int Start, int End, List<SortKey> Keys)>();
@@ -17681,6 +17757,13 @@ public sealed class TransformEngine
             {
                 var compiled = CompileXPath(selectAttr, keySpec);
                 keyValue = compiled.Evaluate(_context);
+            }
+            else if (keySpec.HasElements)
+            {
+                // xsl:merge-key content is evaluated in temporary output state (XSLT 3.0
+                // §11.4); a nested xsl:result-document raises XTDE1480 (result-document-1143).
+                using var temporaryOutputState = EnterTemporaryOutputState();
+                keyValue = EvaluateSequenceConstructor(keySpec, item, wrapInDocumentNode: false);
             }
             else
             {

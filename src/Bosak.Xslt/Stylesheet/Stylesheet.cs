@@ -191,6 +191,9 @@
 //                      |                  |       |                | templates/attribute-sets; GetPackageScopeNamedTemplates applies contributions;        |
 //                      |                  |       |                | xsl:param permitted in xsl:override                                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.101 | 02-09-2026     | XTSE2200 for merge-key count mismatch; XTSE3087 for multiple/inconsistent             |
+//                      |                  |       |                | xsl:global-context-item declarations; XTTE0590 for use=required in a library package   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1617,9 +1620,12 @@ public sealed class Stylesheet
             ValidateModeDefinitions();
 
         // Parse xsl:global-context-item declaration (XSLT 3.0)
-        foreach (var gci in root.Elements(XName.Get("global-context-item", XslNamespace)))
+        var gciElements = root.Elements(XName.Get("global-context-item", XslNamespace)).Where(e => UseWhen(e)).ToList();
+        // XTSE3087: at most one xsl:global-context-item declaration per stylesheet module.
+        if (gciElements.Count > 1)
+            throw new InvalidOperationException("XTSE3087: More than one xsl:global-context-item declaration in a stylesheet module.");
+        foreach (var gci in gciElements)
         {
-            if (!UseWhen(gci)) continue;
             var use = gci.Attribute("use")?.Value?.Trim();
             var asType = gci.Attribute("as")?.Value?.Trim();
             // XTSE3089: use="absent" and as must not both be present.
@@ -1628,6 +1634,12 @@ public sealed class Stylesheet
             GlobalContextItemUse = use;
             GlobalContextItemAs = asType;
         }
+
+        // XTSE3087: xsl:global-context-item declarations must be consistent across the
+        // modules of a package (glob-cxt-item-005/007). Checked here, after this module's
+        // own declaration is parsed and after includes/imports are resolved.
+        if (_isRootStylesheet)
+            ValidateGlobalContextItemConsistency();
 
         // Parse xsl:output properties. Multiple xsl:output declarations are merged,
         // with later declarations overriding earlier ones for the same property.
@@ -1908,6 +1920,11 @@ public sealed class Stylesheet
                     ParsePackageUseOptions(child);
                     if (child.Annotation<ResolvedModuleAnnotation>()?.Module is { } usedModule)
                     {
+                        // XTTE0590: an xsl:global-context-item in a library package is
+                        // ignored unless it specifies use="required", which is an error
+                        // (glob-cxt-item-009).
+                        if (usedModule.GlobalContextItemUse == "required")
+                            throw new InvalidOperationException($"XTTE0590: The used package '{name}' declares xsl:global-context-item with use='required'.");
                         var useOptions = child.Annotation<PackageUseOptions>();
                         _usedPackageOptions[usedModule] = useOptions;
                         if (useOptions != null)
@@ -2984,7 +3001,7 @@ public sealed class Stylesheet
                     if (keyCount == null)
                         keyCount = count;
                     else if (keyCount != count)
-                        throw new InvalidOperationException("XTSE0010: all xsl:merge-source elements must have the same number of xsl:merge-key children");
+                        throw new InvalidOperationException("XTSE2200: all xsl:merge-source elements must have the same number of xsl:merge-key children");
                 }
 
                 // XTSE3190: sibling xsl:merge-source elements must have distinct names.
@@ -3996,11 +4013,10 @@ public sealed class Stylesheet
     {
         if (string.IsNullOrWhiteSpace(type))
             return "";
-        var s = Patterns.PatternCompiler.StripXPathComments(type).Trim();
-        // Remove whitespace adjacent to grouping punctuation and occurrence indicators so
-        // that "element( * )" and "element(*)" compare equal.
-        s = Regex.Replace(s, @"\s*(?<p>[(),*+?])|\s+", m => m.Groups["p"].Success ? m.Groups["p"].Value : " ");
-        return s.Trim();
+        var s = Patterns.PatternCompiler.StripXPathComments(type);
+        // SequenceTypes contain no significant whitespace: remove it all so that
+        // "element( * )" and "element(*)" compare equal (glob-cxt-item-008).
+        return Regex.Replace(s, @"\s+", "");
     }
 
     /// <summary>
@@ -7061,6 +7077,40 @@ public sealed class Stylesheet
     /// <summary>The alias namespace under which overridden variables/parameters remain
     /// reachable for <c>$xsl:original</c> references (unspellable in source XPath).</summary>
     internal const string OriginalVariableNamespace = "\u0001original";
+
+    /// <summary>
+    /// Validates that xsl:global-context-item declarations are consistent across the
+    /// modules of a package: all must specify the same use and as values (XTSE3087).
+    /// </summary>
+    private void ValidateGlobalContextItemConsistency()
+    {
+        var declarations = new List<(string? Use, string? As)>();
+        CollectGlobalContextItemDeclarations(declarations);
+        var first = declarations.FirstOrDefault();
+        foreach (var d in declarations)
+        {
+            // Whitespace-insensitive comparison: "document-node(element(doc))" and
+            // "document-node( element( doc ))" are the same type (glob-cxt-item-008).
+            bool sameUse = (d.Use ?? "optional") == (first.Use ?? "optional");
+            bool sameAs = TypesAreIdentical(d.As ?? "item()", first.As ?? "item()");
+            if (!sameUse || !sameAs)
+                throw new InvalidOperationException("XTSE3087: Inconsistent xsl:global-context-item declarations across the modules of a package.");
+        }
+    }
+
+    /// <summary>
+    /// Collects the xsl:global-context-item declarations of this module and, recursively,
+    /// its included and imported modules.
+    /// </summary>
+    private void CollectGlobalContextItemDeclarations(List<(string? Use, string? As)> result)
+    {
+        if (GlobalContextItemUse != null || GlobalContextItemAs != null)
+            result.Add((GlobalContextItemUse, GlobalContextItemAs));
+        foreach (var included in _includes)
+            included.CollectGlobalContextItemDeclarations(result);
+        foreach (var imported in _imports)
+            imported.CollectGlobalContextItemDeclarations(result);
+    }
 
     /// <summary>
     /// Validates that no global variable or parameter has more than one binding at the
