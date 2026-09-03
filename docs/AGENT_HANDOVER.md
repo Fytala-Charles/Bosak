@@ -1,5 +1,21 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-03
+**Commit:** `5eda8b7` — package-scoped attribute-set/accumulator resolution + override depth fixes (REQ-082)
+**Current focus:** **All deferred package-scope depth items closed; W3C override cluster now 99/0/4 (100% runnable).** The last REQ-082 depth deferrals — `override-v-004`, `override-f-014`, `override-as-002/003/005`, `override-misc-005` — are fixed via package-scoped attribute-set/accumulator resolution and visibility fixes. QT3 sweep unchanged at 31,148/0/673; unit tests 2,114+371 green.
+**What was built:**
+- **v-004:** the default mode is always public (XSLT 3.0 6.6.1). `GetTemplateLocalVisibility` no longer treats the empty default-mode token as a named mode filtering used-package template rules as private, so match patterns see overridden globals.
+- **f-014:** `NamedFunctionItem` gains `CapturedSignature`, populated at named function-reference materialization and in `fn:function-lookup`; `InvokeFunctionItemCore` falls back to it, re-entering the defining package scope via `ExecuteXsltFunction` — a public variable holding a reference to a package-private function is invocable from a using package.
+- **as-002/003/005:** `AttributeSetDefinition.DeclaringStylesheet` + `Stylesheet.GetPackageScopeAttributeSets` (override contributions applied, `xsl:original` appended); `ApplyAttributeSets` resolves `use-attribute-sets` in the declaring definition's `OwningPackage` view, with the `XTDE0640` cycle visited-set tagged by view scope so same-named private sets in different packages don't false-positive while a real same-view cycle still raises.
+- **misc-005:** `GetScopedAccumulators(CurrentStylesheet)` with per-package caches; accumulator caches re-keyed `(Acc, Root)` so same-named accumulators in different packages are distinct; mirrors the existing keys/decimal-format package-scope pattern.
+**Results:** W3C override cluster 93/6/4 → **99/0/4**. QT3 sweep 31,148/0/673 unchanged. Unit tests 2,114+371/0/0 (all projects). Build re-verified green on 2026-09-03 (0 errors).
+**Deferred:** REQ-083 public-launch checklist is drafted and **Pending** (not started). Residual deferrals: evaluate-002/048, context-item-911/analyze-string-085, package-021err/022err/200, math-3702, json-to-xml-typed-010, collection-006, document-2401/2402, extension-functions-0201, strip-space-019.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-02
 **Commit:** `0afd542` — fn:load-xquery-module wired into the XSLT engine (REQ-082)
 **Current focus:** **`fn:load-xquery-module` feature gap closed.** Strict full sweep **7,703/27/6,870 → 7,707/23/6,870 (99.7%)**: the 4 `load-xquery-module` tests fixed, zero regressions. Also drafted **REQ-083** (public-launch checklist: license placeholder, CI, ROADMAP, NuGet-from-CI, repo hygiene, submodule licensing, community/sponsorship/commercial layers).
