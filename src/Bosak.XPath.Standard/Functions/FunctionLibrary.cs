@@ -278,6 +278,8 @@
 //                      | Charles Korthout | 5.92  | 02-09-2026     | XPTY0004 for non-boolean liberal/escape/indent JSON options; fn:resolve-QName validates  |
 //                      |                  |       |                | the element argument's cardinality/kind (REQ-082)                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.93  | 02-09-2026     | load-xquery-module stub dispatches via EvaluationContext.XQueryModuleLoader (XSLT hosts) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -6688,12 +6690,15 @@ public static class FunctionLibrary
 
     /// <summary>
     /// Stub for fn:load-xquery-module: the function is resolvable (so fn:function-lookup
-    /// finds it) but this processor does not load XQuery library modules; every
-    /// invocation raises FOQM0001.
+    /// finds it) in every host, but this library has no XQuery module loader of its own.
+    /// Hosts that support module loading (XQuery executions, XSLT 3.0 transforms) set
+    /// <see cref="EvaluationContext.XQueryModuleLoader"/> on their context; the stub
+    /// dispatches through it and raises FOQM0001 only when no loader is present.
     /// </summary>
     private static XdmValue LoadXQueryModuleStub(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => throw new InvalidOperationException(
-            "FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader).");
+        => ctx.XQueryModuleLoader?.Invoke(ctx, args)
+            ?? throw new InvalidOperationException(
+                "FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader).");
 
     // ------------------------------------------------------------------
     // fn:error

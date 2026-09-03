@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 0.1   | 01-08-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-08-2026     | Inherit caller schema set and compile schemas imported by loaded modules (fn:load-xquery-module schema propagation) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 02-09-2026     | XQST0059 (not FOQM0002) for an unresolvable relative module URI (xslt30 load-xquery-module-001) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -59,7 +61,7 @@ public static class XQueryModuleLoader
         // Resolve the target module source: registered sources first (location hints
         // select among candidates), then the filesystem fallback.
         var target = ResolveSource(ctx, href, options.LocationHints)
-            ?? throw new InvalidOperationException($"FOQM0002: Unable to resolve the module URI '{href}'.");
+            ?? throw new InvalidOperationException(UnresolvedModuleError(href));
 
         XQueryParseResult targetParse;
         try
@@ -199,6 +201,17 @@ public static class XQueryModuleLoader
             .WithAdded(XdmValue.FromString("variables"), XdmValue.FromMap(varsMap))
             .WithAdded(XdmValue.FromString("functions"), XdmValue.FromMap(funcsMap)));
     }
+
+    /// <summary>
+    /// The error for an unresolvable module URI: FOQM0002 for an absolute URI
+    /// (fn-load-xquery-module-003/005), XQST0059 for a relative URI — the XSLT 3.0
+    /// test load-xquery-module-001 accepts either XQST0059 or FOQM0006 for a
+    /// relative href that cannot be resolved.
+    /// </summary>
+    private static string UnresolvedModuleError(string href)
+        => Bosak.XPath.Standard.Functions.FunctionLibrary.IsAbsoluteUri(href)
+            ? $"FOQM0002: Unable to resolve the module URI '{href}'."
+            : $"XQST0059: Unable to resolve the module URI '{href}'.";
 
     /// <summary>
     /// Resolves a module variable through the lazy resolver registered by the wrapper

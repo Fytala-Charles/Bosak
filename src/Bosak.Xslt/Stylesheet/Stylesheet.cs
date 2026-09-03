@@ -199,6 +199,9 @@
 //                      |                  |       |                | static-param rules XTDE0700/XTDE0050 (static-012/013); XTSE0090 for unknown xsl:package |
 //                      |                  |       |                | attributes (package-906); XTSE0165 for xsl:import of a package (package-910)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.103 | 02-09-2026     | Static-evaluation contexts seed XQueryModuleSources from the XsltFunctionLibrary      |
+//                      |                  |       |                | registry so fn:load-xquery-module resolves modules in static variables (l-x-m-004)    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -298,6 +301,11 @@ public sealed class Stylesheet
         // fn:transform is available in static expressions (XSLT 3.0 §24.1), e.g. a
         // static variable whose value is used in an xsl:use-when attribute.
         Api.XsltFunctionLibrary.Populate(ctx);
+        // Static variables and use-when expressions may call fn:load-xquery-module
+        // (xslt30 load-xquery-module-004): this compile-time context has no transform-time
+        // EvaluationContext to draw module sources from, so seed it from the registry.
+        foreach (var (moduleUri, sources) in Api.XsltFunctionLibrary.RegisteredXQueryModuleSources)
+            ctx.XQueryModuleSources[moduleUri] = new List<(string? Location, string Source)>(sources);
 
         // Add in-scope namespace declarations so prefixes in use-when resolve correctly.
         var currentNs = elem;

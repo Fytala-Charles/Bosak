@@ -35,6 +35,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 02-09-2026     | FOXT0002 when a stylesheet-location resource cannot be retrieved (transform-001); fn:transform with no entry point raises FOXT0002|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15  | 02-09-2026     | fn:load-xquery-module enabled via EvaluationContext.XQueryModuleLoader + static module-source registry |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -337,6 +338,34 @@ public static class XsltFunctionLibrary
     private static readonly List<(string Name, string Version, string Location)> _packageRegistry = new();
 
     /// <summary>
+    /// Registry of XQuery library-module sources available to <c>fn:load-xquery-module</c>
+    /// during stylesheet compilation (static variables and <c>use-when</c> run before any
+    /// transform-time <see cref="EvaluationContext"/> exists). Keyed by module URI; each
+    /// entry lists candidate sources with an optional location hint. Seeded onto every
+    /// static-evaluation context created by the stylesheet loader.
+    /// </summary>
+    private static readonly Dictionary<string, List<(string? Location, string Source)>> _xqueryModuleSourceRegistry = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Registers an XQuery library-module source for <c>fn:load-xquery-module</c> under
+    /// the given module URI, mirroring <c>XQueryCompiler.WithModule</c> for contexts
+    /// (stylesheet static evaluation) that have no compiler to draw module sources from.
+    /// </summary>
+    public static void RegisterXQueryModuleSource(string moduleUri, string source, string? location = null)
+    {
+        if (!_xqueryModuleSourceRegistry.TryGetValue(moduleUri, out var candidates))
+            _xqueryModuleSourceRegistry[moduleUri] = candidates = new List<(string? Location, string Source)>();
+        if (!candidates.Any(c => c.Source == source && c.Location == location))
+            candidates.Add((location, source));
+    }
+
+    /// <summary>Clears all sources registered with <see cref="RegisterXQueryModuleSource"/>.</summary>
+    public static void ClearXQueryModuleSources() => _xqueryModuleSourceRegistry.Clear();
+
+    /// <summary>The XQuery module sources registered for static evaluation, keyed by module URI.</summary>
+    internal static IReadOnlyDictionary<string, List<(string? Location, string Source)>> RegisteredXQueryModuleSources => _xqueryModuleSourceRegistry;
+
+    /// <summary>
     /// Registers fn:transform and other XSLT-specific functions on the context.
     /// </summary>
     public static void Populate(EvaluationContext context)
@@ -390,6 +419,15 @@ public static class XsltFunctionLibrary
             ReturnType = XdmValueKind.String,
             Implementation = UnparsedEntity_PublicId_2
         });
+        // fn:load-xquery-module is an XSLT 3.0 function (xslt30-test load-xquery-module-*).
+        // The standard library registers a stub for it; the stub dispatches through
+        // EvaluationContext.XQueryModuleLoader, because XPath evaluation re-populates the
+        // standard library on the context per expression (XPath31Expression.Evaluate),
+        // which would overwrite any registry-level replacement.
+        context.XQueryModuleLoader = (ctx, args) =>
+            args.Length == 1
+                ? Bosak.XQuery.Api.XQueryModuleLoader.Load1(ctx, args)
+                : Bosak.XQuery.Api.XQueryModuleLoader.Load2(ctx, args);
     }
 
     private static XdmValue UnparsedEntity_Uri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

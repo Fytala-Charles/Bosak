@@ -65,6 +65,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.18  | 02-09-2026     | AccumulatorValueCopier hook so fn:copy-of/fn:snapshot carry accumulator values (accumulator-046/064)|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.19  | 02-09-2026     | XQueryModuleLoader delegate: hosts supply fn:load-xquery-module's implementation on the context |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -316,6 +318,17 @@ public sealed class EvaluationContext
     /// back to treating the URI as a filesystem path relative to the static base URI.
     /// </summary>
     public Dictionary<string, List<(string? Location, string Source)>> XQueryModuleSources { get; } = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Host-language loader for <c>fn:load-xquery-module</c> (F&amp;O 3.1 §15.3.1). The
+    /// standard function library always registers a resolvable stub for the two arities;
+    /// the stub dispatches through this delegate at invocation time, so hosts that
+    /// support module loading (XQuery, XSLT) set it on their evaluation context. A null
+    /// loader makes every invocation raise FOQM0001. The delegate survives repeated
+    /// re-population of the standard function library (which would otherwise overwrite a
+    /// registry-level replacement), because it lives on the context, not in the registry.
+    /// </summary>
+    public XPathFunction? XQueryModuleLoader { get; set; }
 
     /// <summary>
     /// Optional post-processor applied to documents loaded through <see cref="DocumentLoader"/>.

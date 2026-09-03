@@ -112,6 +112,9 @@
 //                      | Charles Korthout | 3.38  | 02-09-2026     | ErrorCodeMatches also matches XPathErrorException structured codes (xsl:assert);      |
 //                      |                  |       |                | evaluate select-only source documents (id-043)                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.39  | 02-09-2026     | Environment <resource media-type="application/xquery"> feeds fn:load-xquery-module     |
+//                      |                  |       |                | via the transform context and the static module-source registry (load-xquery-module-*) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -583,6 +586,10 @@ class Program
             // available to fn:collection / fn:uri-collection (collection-001..003).
             var envCollections = LoadCollections(envToLoad, testSetDir, catalogDir, ns);
 
+            // XQuery library modules declared as environment resources are made available
+            // to fn:load-xquery-module (load-xquery-module-002/003/004).
+            var envXQueryModules = LoadXQueryModuleResources(envToLoad, testSetDir, catalogDir, ns);
+
             // Load test (stylesheet(s))
             var testElem = testCase.Element(ns + "test");
             if (testElem == null) return TestResult.Skip;
@@ -590,6 +597,13 @@ class Program
             // Register secondary packages declared in the environment or inline in the
             // test so that xsl:use-package can resolve package-name/package-version.
             Bosak.Xslt.Api.XsltFunctionLibrary.ClearPackages();
+            // Static variables and use-when expressions are evaluated at compile time, so
+            // their fn:load-xquery-module calls resolve from this static registry rather
+            // than the transform-time evaluation context below.
+            Bosak.Xslt.Api.XsltFunctionLibrary.ClearXQueryModuleSources();
+            foreach (var (moduleUri, sources) in envXQueryModules)
+                foreach (var (location, source) in sources)
+                    Bosak.Xslt.Api.XsltFunctionLibrary.RegisterXQueryModuleSource(moduleUri, source, location);
             var packageSources = (envToLoad?.Elements(ns + "package") ?? Enumerable.Empty<XElement>())
                 .Concat(testElem.Elements(ns + "package"));
             foreach (var pkg in packageSources)
@@ -812,6 +826,8 @@ class Program
             var evalContext = new Bosak.XPath.Runtime.Vm.EvaluationContext();
             foreach (var (colKey, colDocs) in envCollections)
                 evalContext.Collections[colKey] = colDocs;
+            foreach (var (moduleUri, sources) in envXQueryModules)
+                evalContext.XQueryModuleSources[moduleUri] = sources;
             if (!string.IsNullOrEmpty(envDefaultCollation))
                 evalContext.DefaultCollation = envDefaultCollation;
             evalContext.BaseUri = baseUri;
@@ -1253,6 +1269,33 @@ class Program
     static XDocument LoadDocumentFromText(string xml, string baseUri)
     {
         return Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri, baseUri);
+    }
+
+    /// <summary>
+    /// Reads the XQuery library-module <c>&lt;resource media-type="application/xquery"&gt;</c>
+    /// declarations of an environment into a module-URI-keyed map of source texts. Files
+    /// resolve relative to the test-set directory, then the catalog directory — the same
+    /// pattern as source documents. Consumed by fn:load-xquery-module (load-xquery-module-*).
+    /// </summary>
+    static Dictionary<string, List<(string? Location, string Source)>> LoadXQueryModuleResources(XElement? envElem, string testSetDir, string catalogDir, XNamespace ns)
+    {
+        var modules = new Dictionary<string, List<(string? Location, string Source)>>(StringComparer.Ordinal);
+        if (envElem == null) return modules;
+
+        foreach (var resElem in envElem.Elements(ns + "resource"))
+        {
+            if (resElem.Attribute("media-type")?.Value != "application/xquery") continue;
+            var uri = resElem.Attribute("uri")?.Value;
+            var file = resElem.Attribute("file")?.Value;
+            if (uri == null || file == null) continue;
+            var path = Path.Combine(testSetDir, file);
+            if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
+            if (!File.Exists(path)) continue;
+            if (!modules.TryGetValue(uri, out var sources))
+                modules[uri] = sources = new List<(string? Location, string Source)>();
+            sources.Add((null, File.ReadAllText(path)));
+        }
+        return modules;
     }
 
     /// <summary>

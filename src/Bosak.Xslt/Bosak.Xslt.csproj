@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj" />
     <ProjectReference Include="..\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
     <ProjectReference Include="..\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj" />
+    <ProjectReference Include="..\Bosak.XQuery\Bosak.XQuery.csproj" />
   </ItemGroup>
 
 </Project>
