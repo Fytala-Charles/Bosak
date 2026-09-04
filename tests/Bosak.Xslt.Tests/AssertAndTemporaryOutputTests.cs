@@ -12,6 +12,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-08-2026     | Creation (assert-001..010, result-document-1131/1139/1140/1142/1144 coverage)          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 03-09-2026     | ResultDocument_InTemplateBody_IsAllowed resolves secondary doc against a temp-dir base output URI (was writing to filesystem root; failed on Linux CI) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -22,12 +24,12 @@ namespace Bosak.Xslt.Tests;
 
 public class AssertAndTemporaryOutputTests
 {
-    private static string Run(string xsl)
+    private static string Run(string xsl, string? baseOutputUri = null)
     {
         var compiler = new Api.XsltCompiler();
         var executable = compiler.Compile(xsl, "file:///test.xsl");
         var source = new XDocumentNode(new XDocument(new XElement("dummy")));
-        return executable.TransformToString(source);
+        return executable.TransformToString(source, baseOutputUri: baseOutputUri);
     }
 
     [Fact]
@@ -121,13 +123,17 @@ public class AssertAndTemporaryOutputTests
     [Fact]
     public void ResultDocument_InTemplateBody_IsAllowed()
     {
+        // Resolve the secondary document against a temp-dir base output URI:
+        // the stylesheet base URI is file:///test.xsl, so a relative href would
+        // otherwise land at the filesystem root (and fail on Linux).
+        string baseOutputUri = new Uri(Path.GetTempPath()).AbsoluteUri;
         var result = Run(@"
 <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'>
     <xsl:template match='/'>
         <xsl:result-document href='secondary.xml'><boo/></xsl:result-document>
         <out/>
     </xsl:template>
-</xsl:stylesheet>");
+</xsl:stylesheet>", baseOutputUri);
         Assert.Contains("<out/>", result);
     }
 
