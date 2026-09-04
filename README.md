@@ -16,25 +16,35 @@
 --- 
 ## About FYTALA
 
-**FYTALA — Feeling Young, Thriving, Active, Learning Always** — is a personal initiative founded after retirement, driven by the belief that curiosity and learning have no age limit.
-It is about staying engaged, exploring new ideas, and sharing the excitement of technology with others. FYTALA aims to inspire people — especially young people — to discover, understand, and create with technology.
-Not technology for technology’s sake, but technology as a tool to learn, connect, solve problems, and build a better future.
-Its scope is deliberately broad: from software and electronics to engineering, science, artificial intelligence, and whatever comes next.
+**FYTALA — Feeling Young, Thriving, Active, Learning Always** — is a personal initiative founded after retirement, driven by the belief that curiosity, enthusiasm, and learning have no age limit.
+
+It is about staying engaged, exploring new ideas, and sharing the excitement of technology and innovation with others. A special ambition of FYTALA is to spark that enthusiasm in young people and encourage them to discover how fascinating technology can be—not just by talking about technology, but by making it visible, tangible, surprising, and fun.
+
+My dream captures that ambition perfectly: **to walk into a classroom one day, side by side with a humanoid robot, and make my enthusiasm for technology and innovation contagious.**
+
+If that experience inspires even a few young minds to start asking questions, experimenting, building, programming, or imagining what might be possible, FYTALA has achieved something worthwhile.
+
+Technology, after all, is not just about machines, electronics, or software. It is about curiosity, creativity, and turning ideas into reality. FYTALA therefore takes a deliberately broad perspective, embracing software, electronics, engineering, science, artificial intelligence, robotics, and whatever comes next.
 
 > Experimenting matters.
+>
 > Making mistakes matters.
+>
 > Understanding *why* something works matters even more.
 
 Every project is an opportunity to learn something new and, hopefully, to help someone else learn as well.
 
-The cable-stayed bridge in the FYTALA logo represents that philosophy. A bridge connects places, but also people, ideas, generations, and fields of knowledge. Its strength comes from many individual elements working together — much like technology itself.
-FYTALA wants to help build those bridges between experience and youthful curiosity, theory and practice, and ideas and real-world creations.
+The cable-stayed bridge in the FYTALA logo represents that philosophy. A bridge connects places, but it can also connect people, ideas, generations, and fields of knowledge. Its strength comes from many individual elements working together—much like technology itself.
 
-It encourages looking beyond the obvious, asking questions, taking things apart, and building them again in new ways.
-Above all, FYTALA is about keeping the desire to discover alive.
+FYTALA wants to help build those bridges: between experience and youthful curiosity, theory and practice, and imagination and real-world creation. It encourages looking beyond the obvious, asking questions, taking things apart, and building them again in new ways.
+
+Above all, FYTALA is about keeping the desire to discover alive—and passing that desire on to the next generation.
+
 > Because we never have to stop being curious.
+>
 > We never have to stop creating.
-> And we are never too old — or too young — to learn something new.
+>
+> And we are never too old—or too young—to learn something new.
 
 
 ---
