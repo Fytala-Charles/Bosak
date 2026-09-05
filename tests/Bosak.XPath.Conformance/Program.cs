@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 18-08-2026     | BOSAK_QT3_DUMP_SKIPS env var writes per-test skip details grouped by reason           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 03-09-2026     | Warning-free build: CS8602 null-conditional report access                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Diagnostics;
@@ -79,7 +81,7 @@ internal class Program
         worker.Join();
         stopwatch.Stop();
 
-        report.PrintSummary();
+        report?.PrintSummary();
         Console.WriteLine();
         Console.WriteLine($"Elapsed: {stopwatch.Elapsed.TotalSeconds:F2}s");
 
@@ -87,10 +89,10 @@ internal class Program
         var dumpSkipsPath = Environment.GetEnvironmentVariable("BOSAK_QT3_DUMP_SKIPS");
         if (!string.IsNullOrEmpty(dumpSkipsPath))
         {
-            report.DumpSkips(dumpSkipsPath);
+            report?.DumpSkips(dumpSkipsPath);
             Console.WriteLine($"Skip details written to {dumpSkipsPath}");
         }
 
-        return report.Failed > 0 ? 2 : 0;
+        return report is { Failed: > 0 } ? 2 : 0;
     }
 }

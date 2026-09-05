@@ -46,6 +46,8 @@
 //                      | Charles Korthout | 1.8   | 18-08-2026     | XQST0070 for default element namespace bound to XML/XMLNS namespace                    |
 //                      | Charles Korthout | 1.9   | 19-08-2026     | Parse 'import schema default element namespace' and apply it to static context        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 03-09-2026     | Warning-free build: CA1831 AsSpan instead of Range string indexer                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1468,7 +1470,7 @@ public sealed class XQueryParser
             if (c == '<')
             {
                 // Direct element constructor: skip the whole span (K2-Axes-1/2).
-                int ctorLength = XPathLexer.ScanDirectConstructorLength(_source[_position..]);
+                int ctorLength = XPathLexer.ScanDirectConstructorLength(_source.AsSpan(_position));
                 if (ctorLength > 0)
                 {
                     _position += ctorLength;
@@ -1514,7 +1516,7 @@ public sealed class XQueryParser
                 // Direct element constructor: skip the whole span so apostrophes and
                 // quotes in text content are not mistaken for string delimiters
                 // (K2-Axes-1/2). '<' that does not begin a valid constructor is an operator.
-                int ctorLength = XPathLexer.ScanDirectConstructorLength(_source[_position..]);
+                int ctorLength = XPathLexer.ScanDirectConstructorLength(_source.AsSpan(_position));
                 if (ctorLength > 0)
                 {
                     _position += ctorLength;

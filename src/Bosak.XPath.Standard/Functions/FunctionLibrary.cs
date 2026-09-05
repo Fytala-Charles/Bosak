@@ -71,6 +71,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.106 | 03-09-2026     | xsl:vendor-url points to the Fytala-Charles/Bosak repository (org transfer prep)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.107 | 03-09-2026     | Warning-free build: CS8629/CS8604 null-flow guards; bHasType deep-equal typo (a->b NodeKind) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -11961,12 +11963,12 @@ public static class FunctionLibrary
         //     we fall back to string-value comparison (complex types may have element-only,
         //     mixed, or empty content where typed-value comparison is not appropriate).
         bool aHasType = a.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && a.SchemaTypeAnnotation.HasValue;
-        bool bHasType = a.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && b.SchemaTypeAnnotation.HasValue;
+        bool bHasType = b.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && b.SchemaTypeAnnotation.HasValue;
         bool useTypedValue = aHasType && bHasType && !a.IsComplexType && !b.IsComplexType;
-        if (aHasType && bHasType && !useTypedValue)
+        if (aHasType && bHasType && !useTypedValue
+            && a.SchemaTypeAnnotation is { } typeA
+            && b.SchemaTypeAnnotation is { } typeB)
         {
-            var typeA = a.SchemaTypeAnnotation.Value;
-            var typeB = b.SchemaTypeAnnotation.Value;
             if (typeA.NamespaceUri != typeB.NamespaceUri || typeA.LocalName != typeB.LocalName)
                 return false;
         }
@@ -12113,10 +12115,10 @@ public static class FunctionLibrary
         // The argument must be a single node or the empty sequence (generate-id-902..905).
         if (IsEmptySequence(args[0]))
             return XdmValue.FromString(string.Empty);
-        if (args[0].IsSequence && args[0].SequenceValue is not null)
+        if (args[0].IsSequence && args[0].SequenceValue is { } seq)
         {
             int count = 0;
-            foreach (var _ in XdmSequence.FromSource(args[0].SequenceValue))
+            foreach (var _ in XdmSequence.FromSource(seq))
             {
                 count++;
                 if (count > 1)
@@ -12302,9 +12304,9 @@ public static class FunctionLibrary
         var lexical = AtomizedString(args[0]);
         IXdmNode? node = null;
         int argCount = 0;
-        if (args[1].IsSequence && args[1].SequenceValue != null)
+        if (args[1].IsSequence && args[1].SequenceValue is { } seq)
         {
-            foreach (var item in XdmSequence.FromSource(args[1].SequenceValue))
+            foreach (var item in XdmSequence.FromSource(seq))
             {
                 argCount++;
                 if (item.IsNode && node == null)

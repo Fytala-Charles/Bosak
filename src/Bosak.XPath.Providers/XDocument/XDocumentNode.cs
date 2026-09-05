@@ -83,6 +83,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.23  | 23-08-2026     | Added IsComplexType property for schema-aware deep-equal type-annotation comparison |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.24  | 03-09-2026     | Warning-free build: CS8602 guard for null union BaseMemberTypes                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -532,8 +534,10 @@ public sealed class XDocumentNode : IXdmNode
     {
         if (unionType.Content is not XmlSchemaSimpleTypeUnion union)
             return null;
+        if (union.BaseMemberTypes is not { } memberTypes)
+            return null;
 
-        foreach (XmlSchemaSimpleType member in union.BaseMemberTypes)
+        foreach (XmlSchemaSimpleType member in memberTypes)
         {
             if (member.Datatype is null)
                 continue;

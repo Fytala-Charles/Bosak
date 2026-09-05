@@ -205,6 +205,8 @@
 //                      | Charles Korthout | 2.104 | 02-09-2026     | Unnamed-mode template rules are public; GetPackageScopeAttributeSets applies            |
 //                      |                  |       |                | xsl:override contributions (override-v-004, as-002/003/005)                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.105 | 03-09-2026     | Warning-free build: CS8604 null guards on options/mode elements; wildcard fallbacks     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -858,7 +860,9 @@ public sealed class Stylesheet
                 var (local, ns) = string.IsNullOrEmpty(rule.Name) ? (null, null) : ExpandVariableName(rule.Element, rule.Name);
                 var exposed = package.GetExposedVisibility("template", local, ns);
                 var baseVisibility = exposed ?? GetLocalVisibility(rule.Element, "template", package);
-                var effectiveRule = GetEffectiveAcceptRule(options, "template", local, ns, -1, baseVisibility);
+                var effectiveRule = options == null
+                    ? null
+                    : GetEffectiveAcceptRule(options, "template", local, ns, -1, baseVisibility);
                 rule.EffectiveVisibility = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility("template", local, ns, baseVisibility, options);
                 // Private templates from a used package are visible only to the owning
                 // package itself or to the package that explicitly accepted them as private.
@@ -1275,6 +1279,8 @@ public sealed class Stylesheet
                     var options = _usedPackageOptions.GetValueOrDefault(package);
                     var exposed = package.GetExposedVisibility("mode", mode.Name, null);
                     var modeElement = package.FindModeElement(expanded);
+                    if (modeElement is null)
+                        continue;
                     var baseVis = exposed ?? GetLocalVisibility(modeElement, "mode", package.IsPackage);
                     var effectiveRule = options == null
                         ? null
@@ -4174,7 +4180,8 @@ public sealed class Stylesheet
                 if (!package.TryGetMode(expanded, out var mode) || mode == null)
                     throw new InvalidOperationException($"XTSE3058: xsl:override mode '{nameAttr}' does not match any mode in the used package.");
                 var exposed = package.GetExposedVisibility("mode", mode.Name, null);
-                var element = package.FindModeElement(expanded);
+                var element = package.FindModeElement(expanded)
+                    ?? throw new InvalidOperationException($"XTSE3058: xsl:override mode '{nameAttr}' does not match any mode in the used package.");
                 var effective = exposed ?? GetLocalVisibility(element, "mode", package.IsPackage);
                 // XTSE3060: only public or abstract components may be overridden.
                 if (effective is not "public" and not "abstract")
@@ -4259,6 +4266,8 @@ public sealed class Stylesheet
                 continue;
             var exposed = package.GetExposedVisibility("mode", mode.Name, null);
             var modeElement = package.FindModeElement(expanded);
+            if (modeElement is null)
+                continue;
             var effective = exposed ?? GetLocalVisibility(modeElement, "mode", package.IsPackage);
             if (effective is not "public" and not "abstract")
                 throw new InvalidOperationException($"XTSE3060: Cannot override a template rule in mode '{token}' whose visibility is '{effective}'.");
@@ -5926,7 +5935,7 @@ public sealed class Stylesheet
         // Wildcard-matched incompatible rules were already treated as not matching during
         // effective-rule selection, so only explicitly named incompatibilities reach here.
         if (!IsAcceptCombinationPermitted(acceptVisibility, baseVisibility))
-            throw new InvalidOperationException($"XTSE3040: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName, arity))} with visibility '{acceptVisibility}' because its visibility in the used package is '{baseVisibility}'.");
+            throw new InvalidOperationException($"XTSE3040: Cannot accept {ComponentDisplayName(componentType, new ExposeName(namespaceUri, localName ?? "*", arity))} with visibility '{acceptVisibility}' because its visibility in the used package is '{baseVisibility}'.");
     }
 
     /// <summary>
@@ -6022,7 +6031,7 @@ public sealed class Stylesheet
                 var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity, baseVisibility);
                 var effectiveVis = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility, options);
                 if (effectiveVis == "abstract")
-                    throw new InvalidOperationException($"XTSE3080: Top-level package accepts the abstract {component.ComponentType} '{DisplayComponentName(component.LocalName, component.NamespaceUri, component.Arity)}' from package '{package.Root.Attribute("name")?.Value}'.");
+                    throw new InvalidOperationException($"XTSE3080: Top-level package accepts the abstract {component.ComponentType} '{DisplayComponentName(component.LocalName ?? "*", component.NamespaceUri, component.Arity)}' from package '{package.Root.Attribute("name")?.Value}'.");
             }
         }
     }
