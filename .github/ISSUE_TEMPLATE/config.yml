@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea discussion
+    url: https://github.com/Fytala-Charles/Bosak/discussions
+    about: Open-ended questions, usage help, and design ideas belong in Discussions — not Issues.
+  - name: Documentation
+    url: https://github.com/Fytala-Charles/Bosak/blob/main/docs/INTEGRATION.md
+    about: Integration guide and getting-started material.
