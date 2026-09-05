@@ -147,6 +147,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.90  | 01-09-2026     | Added xsl:override scope propagation and xsl:original function tests                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.91  | 03-09-2026     | xsl:product-version matches the assembly informational version (0.9.0-preview)          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -4943,6 +4945,25 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(null, initialTemplate: "main"));
         Assert.Contains("XTDE1390", ex.Message);
+    }
+
+    [Fact]
+    public void SystemProperty_ProductVersion_MatchesAssemblyInformationalVersion()
+    {
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out><xsl:sequence select='system-property(""xsl:product-version"")'/></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null, initialTemplate: "main");
+        var expected = System.Reflection.CustomAttributeExtensions
+            .GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>(typeof(Bosak.XPath.Standard.Functions.FunctionLibrary).Assembly)
+            ?.InformationalVersion;
+        Assert.False(string.IsNullOrEmpty(expected));
+        Assert.Contains($"<out>{expected}</out>", result);
     }
 
     [Fact]
