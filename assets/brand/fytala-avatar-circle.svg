@@ -1,0 +1,60 @@
+<!-- ============================================================= -->
+<!-- Fytala circular avatar (GitHub profile / org logo)            -->
+<!-- Derived from fytala-logo-color-dark.svg; safe inside a circle -->
+<!-- ============================================================= -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 100 100"
+     width="100%" height="100%">
+
+  <!-- Circular background disc (#2F4F4F) -->
+  <circle cx="50" cy="50" r="50" fill="#2F4F4F"/>
+  <!-- Thin inner ring for definition on light backgrounds -->
+  <circle cx="50" cy="50" r="46.5" fill="none"
+          stroke="#E8F4EE" stroke-width="1" opacity="0.55"/>
+
+  <!-- Artwork: original logo content, reflowed to fit the disc.
+       Original strokes span x 6..86, y 18..89; we remap into the
+       inscribed circle: centre (50,53), usable radius ~40. -->
+  <g stroke="#E8F4EE" fill="none" stroke-linecap="round">
+
+    <!-- Horizon curves (below the disc centre) -->
+    <path d="M 12 66 q 19 -13 76 0" stroke-width="0.9" opacity="0.95"/>
+    <path d="M 12 68.5 q 15 -9 76 0" stroke-width="3" opacity="0.95"/>
+    <path d="M 18 84 q 15 -4 64 0" stroke-width="0.7" opacity="0.8"/>
+
+    <!-- F mast: left stem group -->
+    <line x1="32" y1="24" x2="32" y2="66" stroke-width="0.9"/>
+    <line x1="32" y1="66" x2="30" y2="82" stroke-width="0.9"/>
+    <line x1="36" y1="23" x2="36" y2="72" stroke-width="1.8"/>
+    <line x1="36" y1="72" x2="36" y2="82" stroke-width="1.8"/>
+    <line x1="36" y1="22" x2="38" y2="24" stroke-width="0.9"/>
+    <line x1="32" y1="24" x2="36" y2="22" stroke-width="1.1"/>
+    <line x1="38" y1="24" x2="38" y2="82" stroke-width="0.45"/>
+
+    <!-- F bars -->
+    <line x1="44" y1="24" x2="44" y2="27" stroke-width="0.7"/>
+    <line x1="44" y1="24" x2="47" y2="22" stroke-width="0.7"/>
+    <line x1="44" y1="32" x2="44" y2="62" stroke-width="0.7"/>
+    <line x1="44" y1="72" x2="43" y2="82" stroke-width="0.9"/>
+    <line x1="47" y1="23" x2="47" y2="61" stroke-width="1.8"/>
+    <line x1="47" y1="22" x2="49" y2="24" stroke-width="0.7"/>
+    <line x1="49" y1="24" x2="49" y2="26" stroke-width="0.7"/>
+    <line x1="47" y1="72" x2="47" y2="82" stroke-width="1.8"/>
+    <line x1="49" y1="29" x2="49" y2="31" stroke-width="0.25"/>
+    <line x1="49" y1="35" x2="49" y2="37" stroke-width="0.25"/>
+    <line x1="49" y1="41" x2="49" y2="62" stroke-width="0.25"/>
+    <line x1="49" y1="72" x2="49" y2="82" stroke-width="0.25"/>
+
+    <!-- Cross-strokes of the F -->
+    <path d="M40 29 L45 29" stroke-width="0.9"/>
+    <path d="M40 32 L45 32" stroke-width="0.9"/>
+    <path d="M45 29 L45 32" stroke-width="0.7"/>
+
+    <!-- Light rays fanning right -->
+    <line x1="30" y1="32" x2="19" y2="63" stroke-width="0.12"/>
+    <line x1="30" y1="37" x2="24" y2="61" stroke-width="0.12"/>
+    <line x1="49" y1="27" x2="84" y2="64" stroke-width="0.12"/>
+    <line x1="49" y1="32" x2="69" y2="62" stroke-width="0.12"/>
+    <line x1="49" y1="38" x2="59" y2="60" stroke-width="0.12"/>
+  </g>
+</svg>
