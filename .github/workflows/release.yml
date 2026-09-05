@@ -16,8 +16,10 @@ jobs:
       id-token: write   # required for the OIDC token exchange with nuget.org
       contents: read
     steps:
-      - name: Checkout
+      - name: Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Setup .NET 10
         uses: actions/setup-dotnet@v4
