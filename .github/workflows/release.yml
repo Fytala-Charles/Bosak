@@ -1,0 +1,57 @@
+name: Release
+
+# Publishes NuGet packages via Trusted Publishing (OIDC — no long-lived API key).
+# The filename of THIS workflow is registered in the nuget.org trusted publishing
+# policy; if you rename it, update the policy at nuget.org → Trusted Publishing.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # required for the OIDC token exchange with nuget.org
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore & build
+        run: |
+          dotnet restore Bosak.sln
+          dotnet build Bosak.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test Bosak.sln -c Release --no-build --nologo
+
+      - name: Pack
+        run: dotnet pack Bosak.sln -c Release --no-build -o nupkgs
+
+      # Exchange the GitHub OIDC token for a short-lived (1 hour) NuGet API key.
+      - name: NuGet login (OIDC)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}   # nuget.org profile name, NOT your email
+
+      # Publish all library packages; the language server is a private EXE for the
+      # VS Code extension and is not published.
+      - name: NuGet push
+        run: |
+          for pkg in nupkgs/*.nupkg; do
+            case "$pkg" in
+              *LanguageServer*) continue ;;
+            esac
+            dotnet nuget push "$pkg" \
+              --api-key ${{ steps.login.outputs.NUGET_API_KEY }} \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done
