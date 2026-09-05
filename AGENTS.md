@@ -12,7 +12,8 @@
 // SPECIAL NOTES        : <Layer-specific note or "Part of the Bosak XPath 3.1 implementation.">
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -34,7 +35,8 @@
    - `src/Bosak.XPath.Api/*` → "Public surface API for compiling and evaluating XPath 3.1 expressions."
    - `tests/*` → "Unit tests verifying correctness of the underlying implementation."
 3. **Change History** — When modifying an existing file, append a new row to the change history table with the current date, a bumped version number, and a brief note.
-4. **Generated files** — Skip `obj/`, `bin/`, and any file containing "Generated" or "Auto-generated" in the first 200 characters.
+4. **License reference** — The `SPDX-License-Identifier: Apache-2.0` line and the COPYRIGHT notice must never be removed; downstream redistributors are required to retain them (Apache-2.0 §4.4).
+5. **Generated files** — Skip `obj/`, `bin/`, and any file containing "Generated" or "Auto-generated" in the first 200 characters.
 
 ## Build & Test
 
