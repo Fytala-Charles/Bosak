@@ -1,6 +1,21 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-05
+**Commit:** (pending) — strip-space-019 + math-3702 conformance fixes (REQ-082 deferrals)
+**Current focus:** **Two deferred W3C conformance tests fixed, strict sweep 7,713/17/6,870 → 7,715/15/6,870 (99.9%), zero regressions.** Both fixes use the "spec-correct engine + retired-code alias in the harness" pattern (mirrors Saxon).
+**What was built:**
+- **strip-space-019 / strip-space-019a:** both test cases run the *same* `version="2.0"` stylesheet, so the plan's "stylesheet version ≥ 3.0" condition cannot distinguish them. Resolution: `ShouldStripWhitespace` (`TransformEngine.cs`) keeps the XTSE0270 static error whenever the stylesheet is not in XSLT 1.0 backwards-compatible mode (the XSLT 3.0 REC makes the conflict an unconditional static error); the XTRE0270 recovery rule (later declaration in stylesheet document order wins, XSLT 1.0/2.0 §3.4.3) is implemented for BC mode via best-strip vs best-preserve rule indices. Harness `ErrorCodeMatches` aliases expected `XTRE0270` → raised `XTSE0270` (strip-space-019 was written for 1.0/2.0 processors, uncorrected).
+- **math-3702 / extension-functions-0105:** stylesheet loader now raises `XTSE0085` (XSLT 3.0 REC) instead of retired `XTSE0800` for `extension-element-prefixes` bound to reserved namespaces (`Stylesheet.cs`). Harness `ErrorCodeMatches` aliases expected `XTSE0800` → raised `XTSE0085` (extension-functions-0105 written 2015, uncorrected).
+- Docs: `docs/INTEGRATION.md` error-code row updated to XTSE0085 + alias note.
+**Results:** Unit tests 372/0/0 (`Bosak.Xslt.Tests` via `run-xslt-tests.ps1`). Strict sweep 7,715/15/6,870. `strip-space` set 27/0/3, `math` set clean, `error-0270a` passes. Remaining 15 failures are all pre-existing deferrals (unchanged list below).
+**Deferred:** REQ-083 public-launch checklist is drafted and **Pending** (not started). Residual deferrals: evaluate-002/048, context-item-010/911/analyze-string-085, package-021err/022err/200, json-to-xml-typed-010, collection-006, document-2401/2402, extension-functions-0201, for-each-group-051, iterate-902.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-05
 **Commit:** `6b13982` — conformance harnesses marked IsPackable=false (REQ-083 item 4 fallout)
 **Current focus:** **🚀 PUBLIC LAUNCH EXECUTED (2026-09-05) — repo is PUBLIC at Fytala-Charles/Bosak.** REQ-083 complete (all ten items done); flip actions done by Charles: Discussions on, stray conformance 1.0.0 packages unlisted, Sponsors enrollment pending approval, avatar live. Post-flip checks: CI green ×5, Discussions on, visibility PUBLIC. **TODO: ruleset `protect-main` (id 22255065) still `enforcement: disabled`** — switch to Active via Settings → Rules → Rulesets (admin-only; collaborator tokens 404). Release workflow `.github/workflows/release.yml` (filename registered in the nuget.org trusted-publishing policy — do not rename) triggers on `v*` tags + dispatch; needs `NUGET_USER` secret; conformance harnesses are IsPackable=false. NuGet: `v0.9.0-preview`, all 9 library packages live. **Next engine work resumes under REQ-082 deferrals** (evaluate-002/048, context-item-911, math-3702, collection-006, document-2401/2402, extension-functions-0201, strip-space-019).
 **What was built (2026-09-03 engine work, commit `2cc5f30`):**

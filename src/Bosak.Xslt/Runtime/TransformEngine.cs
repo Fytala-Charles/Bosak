@@ -287,6 +287,9 @@
 //                      | Charles Korthout | 6.58  | 02-09-2026     | Package-scoped attribute-set and accumulator resolution keyed by                        |
 //                      |                  |       |                | CurrentStylesheet (override-as-002/003/005, misc-005)                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.59  | 05-09-2026     | XTRE0270 recovery (later decl wins) in XSLT 1.0 BC mode only; XTSE0270 static error |
+//                      |                  |       |                | otherwise; XTRE0270 expectation of strip-space-019 aliased to XTSE0270 in harness       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -15639,6 +15642,11 @@ public sealed class TransformEngine
     private void ApplyWhitespaceStripping(IXdmNode source)
     {
         var rules = _stylesheet.GetAllSpaceHandlingRules();
+        // XTRE0270 conflict recovery (later declaration wins) applies in XSLT 1.0
+        // backwards-compatible mode only; otherwise the XSLT 3.0 REC treats a
+        // same-precedence, same-specificity strip/preserve conflict as a static
+        // error (XTSE0270).
+        bool isBackwardsCompatible = _context.BackwardsCompatible;
         // Only strip whitespace in XDocument-backed nodes for now
         if (source is XDocumentNode xdocNode)
         {
@@ -15650,16 +15658,16 @@ public sealed class TransformEngine
                     if (IsWhitespaceOnly(textNode.Value))
                         textNode.Remove();
                 }
-                StripWhitespaceInElement(doc.Root, rules, preserveInherited: false);
+                StripWhitespaceInElement(doc.Root, rules, preserveInherited: false, isBackwardsCompatible);
             }
             else if (xdocNode.UnderlyingObject is XElement elem)
             {
-                StripWhitespaceInElement(elem, rules, preserveInherited: false);
+                StripWhitespaceInElement(elem, rules, preserveInherited: false, isBackwardsCompatible);
             }
         }
     }
 
-    private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited)
+    private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited, bool isBackwardsCompatible)
     {
         if (element == null)
             return;
@@ -15673,10 +15681,10 @@ public sealed class TransformEngine
 
         foreach (var child in element.Elements().ToList())
         {
-            StripWhitespaceInElement(child, rules, preserve);
+            StripWhitespaceInElement(child, rules, preserve, isBackwardsCompatible);
         }
 
-        if (!preserve && ShouldStripWhitespace(element, rules))
+        if (!preserve && ShouldStripWhitespace(element, rules, isBackwardsCompatible))
         {
             foreach (var textNode in element.Nodes().OfType<XText>().ToList())
             {
@@ -15757,7 +15765,7 @@ public sealed class TransformEngine
             _ => 0
         };
 
-    private static bool ShouldStripWhitespace(XElement element, List<SpaceHandlingRule> rules)
+    private static bool ShouldStripWhitespace(XElement element, List<SpaceHandlingRule> rules, bool isBackwardsCompatible)
     {
         // xml:space="preserve" always preserves whitespace
         var xmlSpace = element.Attribute(System.Xml.Linq.XNamespace.Xml + "space")?.Value;
@@ -15768,11 +15776,17 @@ public sealed class TransformEngine
         SpaceHandlingRule? bestPreserve = null;
         int bestStripSpec = -1;
         int bestPreserveSpec = -1;
+        int bestStripIndex = -1;
+        int bestPreserveIndex = -1;
 
+        int index = 0;
         foreach (var rule in rules)
         {
             if (!MatchesNameTest(rule, element))
+            {
+                index++;
                 continue;
+            }
 
             int spec = NameTestSpecificity(rule);
             if (rule.IsStrip)
@@ -15783,6 +15797,7 @@ public sealed class TransformEngine
                 {
                     bestStrip = rule;
                     bestStripSpec = spec;
+                    bestStripIndex = index;
                 }
             }
             else
@@ -15793,8 +15808,10 @@ public sealed class TransformEngine
                 {
                     bestPreserve = rule;
                     bestPreserveSpec = spec;
+                    bestPreserveIndex = index;
                 }
             }
+            index++;
         }
 
         if (bestStrip == null)
@@ -15819,9 +15836,16 @@ public sealed class TransformEngine
         if (bestStripSpec < bestPreserveSpec)
             return false;
 
-        // Same precedence and specificity: this is a conflict between strip and preserve
-        // rules (XTSE0270). The spec treats it as a recoverable static error.
-        throw new InvalidOperationException("XTSE0270: Conflicting xsl:strip-space and xsl:preserve-space rules");
+        // Same precedence and specificity: conflicting strip and preserve rules.
+        // Outside XSLT 1.0 backwards-compatible mode the XSLT 3.0 REC treats this as
+        // a static error (XTSE0270). In backwards-compatible mode it is a recoverable
+        // error (XTRE0270) and the declaration that occurs later in stylesheet
+        // document order wins (XSLT 1.0/2.0 §3.4.3 recovery rule). The flattened rule
+        // list is in declaration order within a precedence, so the higher index is
+        // the later declaration.
+        if (!isBackwardsCompatible)
+            throw new InvalidOperationException("XTSE0270: Conflicting xsl:strip-space and xsl:preserve-space rules");
+        return bestStripIndex > bestPreserveIndex;
     }
 
     private static bool MatchesNameTest(SpaceHandlingRule rule, XElement element)

@@ -115,6 +115,9 @@
 //                      | Charles Korthout | 3.39  | 02-09-2026     | Environment <resource media-type="application/xquery"> feeds fn:load-xquery-module     |
 //                      |                  |       |                | via the transform context and the static module-source registry (load-xquery-module-*) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.40  | 05-09-2026     | ErrorCodeMatches aliases retired XTSE0800 to XTSE0085 (math-3702 vs extension-          |
+//                      |                  |       |                | functions-0105) and XTRE0270 to XTSE0270 (strip-space-019 vs strip-space-019a)           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1144,6 +1147,18 @@ class Program
         if (string.IsNullOrEmpty(expectedCode) || expectedCode == "*")
             return true;
         if (ex.Message.Contains(expectedCode, StringComparison.Ordinal))
+            return true;
+        // Retired-code alias (mirrors Saxon): the XSLT 3.0 REC corrected the code for
+        // reserved-namespace extension-element-prefixes from XTSE0800 to XTSE0085
+        // (math-3702, corrected 2019), but extension-functions-0105 (written 2015,
+        // uncorrected) still expects the retired XTSE0800.
+        if (expectedCode == "XTSE0800" && ex.Message.Contains("XTSE0085", StringComparison.Ordinal))
+            return true;
+        // Recoverable-code alias: XSLT 3.0 made the conflicting strip/preserve rule
+        // conflict a static error (XTSE0270) instead of the recoverable XTRE0270
+        // (strip-space-019a expects XTSE0270; strip-space-019, written for 1.0/2.0
+        // processors, still accepts only XTRE0270 or the recovered result).
+        if (expectedCode == "XTRE0270" && ex.Message.Contains("XTSE0270", StringComparison.Ordinal))
             return true;
         // XPathErrorException carries the error code as structured parts (namespace/local)
         // rather than embedded in the message (xsl:assert / xsl:message error paths).

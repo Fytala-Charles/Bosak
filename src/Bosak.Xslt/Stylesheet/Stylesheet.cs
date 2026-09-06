@@ -207,6 +207,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.105 | 03-09-2026     | Warning-free build: CS8604 null guards on options/mode elements; wildcard fallbacks     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.106 | 05-09-2026     | Reserved-namespace extension-element-prefixes now raises XTSE0085 per XSLT 3.0 REC       |
+//                      |                  |       |                | (math-3702); retired XTSE0800 expectation of extension-functions-0105 aliased in harness |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1546,7 +1549,7 @@ public sealed class Stylesheet
                     nsUri == "http://www.w3.org/2001/XMLSchema" ||
                     nsUri == "http://www.w3.org/2001/XMLSchema-instance")
                 {
-                    throw new InvalidOperationException("XTSE0800");
+                    throw new InvalidOperationException("XTSE0085");
                 }
             }
         }
