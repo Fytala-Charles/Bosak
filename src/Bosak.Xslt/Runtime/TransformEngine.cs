@@ -293,6 +293,9 @@
 //                      | Charles Korthout | 6.60  | 05-09-2026     | Eagerly RegisterTree at result-tree construction so cross-tree document order follows   |
 //                      |                  |       |                | creation order (evaluate-002)                                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.61  | 05-09-2026     | Per-package document-load whitespace policy: used-package components strip loaded docs  |
+//                      |                  |       |                | with their own rules; document cache keyed by (URI, policy) (document-2401/2402, coll-006)|
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -825,6 +828,7 @@ public sealed class TransformEngine
     {
         _baseOutputUri = baseOutputUri;
         _context.CurrentOutputUri = baseOutputUri;
+        _context.DocumentLoadPolicy = null;
         _initialSource = source;
         _initialMode = string.IsNullOrEmpty(initialMode) || initialMode == "#default" || initialMode == "#unnamed"
             ? _stylesheet.DefaultMode
@@ -1279,6 +1283,7 @@ public sealed class TransformEngine
     {
         _baseOutputUri = baseOutputUri;
         _context.CurrentOutputUri = baseOutputUri;
+        _context.DocumentLoadPolicy = null;
         _captureResultDocuments = captureResultDocuments;
         RegisterXsltFunctions();
         RegisterKeyFunction();
@@ -2810,6 +2815,10 @@ public sealed class TransformEngine
         var savedSuppressCaching = _context.SuppressLazyGlobalCaching;
         var savedFunctionLocals = _functionLocalLazyVariables;
         var savedOutputUri = _context.CurrentOutputUri;
+        // Used-package functions load documents stripped per their own package's
+        // rules (XSLT 3.0 §2.13.4); principal functions keep the default policy.
+        var savedLoadPolicy = _context.DocumentLoadPolicy;
+        _context.DocumentLoadPolicy = GetPackageLoadPolicy(def.Stylesheet);
         _sequenceAccumulator = null;
         _tunnelParamStack.Clear();
         _currentMergeGroup = null;
@@ -2910,6 +2919,7 @@ public sealed class TransformEngine
             _context.SuppressLazyGlobalCaching = savedSuppressCaching;
             _context.CurrentOutputUri = savedOutputUri;
             _functionLocalLazyVariables = savedFunctionLocals;
+            _context.DocumentLoadPolicy = savedLoadPolicy;
             if (def.OverriddenFunction != null)
                 _overriddenFunctionStack.Pop();
             ExitPackageScope(packageScopeState);
@@ -4678,7 +4688,8 @@ public sealed class TransformEngine
             _overriddenTemplateStack.Push(rule.OverriddenTemplate);
         try
         {
-            ExecuteTemplateCore(rule, contextItem, callParams, incomingTunnelParams, position, last, setCurrentRule);
+            WithComponentLoadPolicy(rule.Stylesheet, () =>
+                ExecuteTemplateCore(rule, contextItem, callParams, incomingTunnelParams, position, last, setCurrentRule));
         }
         finally
         {
@@ -10599,6 +10610,10 @@ public sealed class TransformEngine
         // package's own components (accept-043b: an abstract variable in a used package
         // raises XTDE3052 there instead of XPST0008 in the caller's scope).
         var declaringScopeState = EnterPackageScope(info.SourceStylesheet.OwningPackage);
+        // A global's initializer loads documents stripped per the declaring package's
+        // own rules (XSLT 3.0 §2.13.4); principal globals keep the default policy.
+        var savedLoadPolicy = _context.DocumentLoadPolicy;
+        _context.DocumentLoadPolicy = GetPackageLoadPolicy(info.SourceStylesheet);
         // While an overriding variable/parameter initializer evaluates, $xsl:original
         // resolves to the overridden declaration's value (kept under the alias namespace).
         var isOverrideInitializer = info.Element.Parent is { } overrideParent
@@ -10695,6 +10710,7 @@ public sealed class TransformEngine
             if (isOverrideInitializer)
                 _overriddenVariableStack.Pop();
             ExitPackageScope(declaringScopeState);
+            _context.DocumentLoadPolicy = savedLoadPolicy;
             _context.RestoreVariables(savedVariables);
             _context.WithFocus(savedItem, savedPos, savedSize);
             _modeStack.Clear();
@@ -15640,10 +15656,85 @@ public sealed class TransformEngine
     // Whitespace stripping (xsl:strip-space / xsl:preserve-space)
     // ------------------------------------------------------------------
 
+    // Cached merged rule lists per stylesheet/package, so the document cache can key
+    // stripped trees by rule-set identity (XSLT 3.0 §2.13.4). Used packages are keyed
+    // by their package root; the principal stylesheet shares the default (null)
+    // policy, which is also the key under which host-registered documents (e.g. the
+    // initial source tree) live.
+    private readonly Dictionary<Stylesheet.Stylesheet, List<SpaceHandlingRule>> _spaceRulesByPackage = new();
+
     private IXdmNode PostProcessLoadedDocument(IXdmNode node)
     {
-        ApplyWhitespaceStripping(node);
+        ApplyWhitespaceStripping(node, CurrentLoadSpaceRules());
         return node;
+    }
+
+    /// <summary>
+    /// The whitespace rules to apply to a document loaded by the code currently
+    /// executing. Used-package code strips with its own package's rules; principal
+    /// stylesheet code (and code outside any component) falls back to the principal
+    /// stylesheet's merged rules.
+    /// </summary>
+    private List<SpaceHandlingRule> CurrentLoadSpaceRules()
+        => _context.DocumentLoadPolicy as List<SpaceHandlingRule> ?? GetPrincipalSpaceRules();
+
+    private List<SpaceHandlingRule> GetPrincipalSpaceRules()
+    {
+        if (!_spaceRulesByPackage.TryGetValue(_stylesheet, out var rules))
+        {
+            rules = _stylesheet.GetAllSpaceHandlingRules();
+            _spaceRulesByPackage[_stylesheet] = rules;
+        }
+        return rules;
+    }
+
+    /// <summary>
+    /// The document-load whitespace policy for code declared in
+    /// <paramref name="declaringStylesheet"/>: the merged strip/preserve rules of the
+    /// owning package, or <c>null</c> for principal-stylesheet code (the default
+    /// policy, shared with the host-registered document pool).
+    /// </summary>
+    private List<SpaceHandlingRule>? GetPackageLoadPolicy(Stylesheet.Stylesheet declaringStylesheet)
+    {
+        var owner = declaringStylesheet.OwningPackage ?? declaringStylesheet;
+        var principalOwner = _stylesheet.OwningPackage ?? _stylesheet;
+        if (ReferenceEquals(owner, principalOwner))
+            return null;
+
+        if (!_spaceRulesByPackage.TryGetValue(owner, out var rules))
+        {
+            rules = owner.GetAllSpaceHandlingRules();
+            _spaceRulesByPackage[owner] = rules;
+        }
+        return rules;
+    }
+
+    /// <summary>
+    /// Enters the document-load whitespace policy of a compiled component for the
+    /// duration of a callback, restoring the previous policy afterwards. Components
+    /// declared in a used package load documents stripped per that package's own
+    /// rules (XSLT 3.0 §2.13.4); principal-stylesheet components keep the default
+    /// (null) policy so they share the host-registered document pool.
+    /// </summary>
+    private void WithComponentLoadPolicy(Stylesheet.Stylesheet declaringStylesheet, Action action)
+    {
+        var policy = GetPackageLoadPolicy(declaringStylesheet);
+        if (policy == null)
+        {
+            action();
+            return;
+        }
+
+        var savedPolicy = _context.DocumentLoadPolicy;
+        _context.DocumentLoadPolicy = policy;
+        try
+        {
+            action();
+        }
+        finally
+        {
+            _context.DocumentLoadPolicy = savedPolicy;
+        }
     }
 
     private bool IsStylesheetDocument(XDocument doc)
@@ -15672,8 +15763,10 @@ public sealed class TransformEngine
     }
 
     private void ApplyWhitespaceStripping(IXdmNode source)
+        => ApplyWhitespaceStripping(source, GetPrincipalSpaceRules());
+
+    private void ApplyWhitespaceStripping(IXdmNode source, List<SpaceHandlingRule> rules)
     {
-        var rules = _stylesheet.GetAllSpaceHandlingRules();
         // XTRE0270 conflict recovery (later declaration wins) applies in XSLT 1.0
         // backwards-compatible mode only; otherwise the XSLT 3.0 REC treats a
         // same-precedence, same-specificity strip/preserve conflict as a static

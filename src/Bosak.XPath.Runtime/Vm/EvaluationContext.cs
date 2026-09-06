@@ -69,6 +69,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.20  | 05-09-2026     | LoadDocument registers loaded trees so cross-tree document order follows load order (evaluate-002) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.21  | 05-09-2026     | Document cache keyed by (URI, DocumentLoadPolicy) so XSLT packages keep distinct stripped trees (document-2401/2402, collection-006) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -185,8 +187,10 @@ public sealed class EvaluationContext
     // Function libraries, indexed by (namespace, localName, arity)
     private readonly Dictionary<(string, string, int), FunctionSignature> _functions;
 
-    // Document cache for fn:doc / fn:collection identity
-    private readonly Dictionary<string, IXdmNode> _documentCache;
+    // Document cache for fn:doc / fn:collection identity, keyed by (URI, load policy).
+    // The policy slot lets an XSLT host keep a distinct stripped tree per distinct
+    // xsl:strip-space / xsl:preserve-space rule set (XSLT 3.0 §2.13.4).
+    private readonly Dictionary<(string Uri, object? Policy), IXdmNode> _documentCache;
 
     // XML Schema set for schema-aware kind tests and typed values.
     private XmlSchemaSet? _schemaSet;
@@ -226,7 +230,7 @@ public sealed class EvaluationContext
             ["err"] = "http://www.w3.org/2005/xqt-errors"
         };
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
-        _documentCache = new Dictionary<string, IXdmNode>();
+        _documentCache = new Dictionary<(string Uri, object? Policy), IXdmNode>();
         _namedDecimalFormats = new Dictionary<(string, string), DecimalFormat>();
     }
 
@@ -341,6 +345,16 @@ public sealed class EvaluationContext
     public Func<IXdmNode, IXdmNode>? DocumentPostProcessor { get; set; }
 
     /// <summary>
+    /// Optional identity object describing the whitespace-stripping policy of the code
+    /// currently performing a document load (XSLT 3.0 §2.13.4: the strip/preserve rules
+    /// of the package whose code calls fn:doc / fn:document / fn:collection apply).
+    /// The document cache is keyed by (URI, policy), so the same URI loaded under
+    /// different policies yields distinct trees. The default (null) is the host's
+    /// default policy, shared with documents registered via <see cref="RegisterDocument"/>.
+    /// </summary>
+    public object? DocumentLoadPolicy { get; set; }
+
+    /// <summary>
     /// When true, XPath comparisons use XSLT 1.0 / XPath 1.0 backwards-compatible
     /// coercion rules (e.g., string-to-boolean, number-to-boolean in general comparisons).
     /// </summary>
@@ -401,7 +415,7 @@ public sealed class EvaluationContext
                 uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;
             }
 
-            if (_documentCache.TryGetValue(uri, out var cached))
+            if (_documentCache.TryGetValue((uri, DocumentLoadPolicy), out var cached))
             {
                 DocumentLoaded?.Invoke(uri);
                 return cached;
@@ -444,7 +458,7 @@ public sealed class EvaluationContext
             else if (xdn.UnderlyingObject is System.Xml.Linq.XElement xelem)
                 XDocumentNode.RegisterTree(xelem);
         }
-        _documentCache[uri] = node;
+        _documentCache[(uri, DocumentLoadPolicy)] = node;
         DocumentLoaded?.Invoke(uri);
         return node;
     }
@@ -467,7 +481,7 @@ public sealed class EvaluationContext
     {
         if (!string.IsNullOrEmpty(uri))
         {
-            _documentCache[uri] = node;
+            _documentCache[(uri, null)] = node;
             DocumentLoaded?.Invoke(uri);
         }
     }
