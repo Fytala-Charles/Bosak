@@ -1,6 +1,20 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-05
+**Commit:** (pending) — XPTY0019/XPTY0020 structural split for path steps (REQ-082 deferrals)
+**Current focus:** **Two deferred W3C conformance tests fixed, strict sweep 7,715/15/6,870 → 7,717/13/6,870 (99.8% runnable), zero regressions; full QT3 sweep unchanged at 31,148/0/673.**
+**What was built:**
+- **context-item-911 (XPTY0019) / analyze-string-085 (XPTY0020):** the two error codes are now distinguished structurally instead of incidentally. The lowerer records whether a path step's input is the result of a preceding step (LHS of `/`) in a has-LHS flag carried in `RegisterC` of axis instructions and `PathStepMap` (`IrLowerer` → 1.37, `LowerStep`/`LowerStepCore`/`LowerPathExpr`). The VM raises **XPTY0019** for atomic step input only when the step has a path LHS, and **XPTY0020** for a standalone/first step applied to an atomic ambient context item (`VmEngine.ApplyAxis` + `PathStepMap` handler → 2.133). The `SimpleMap` pre-check is unchanged — its `RegisterC != 0` (path-mode) path is already LHS-only, so `!` mapping over non-nodes is unaffected. `ApplyAxis`'s sequence branch (XPTY0019 for atomic items in a sequence input) is unchanged.
+- **QT3 safety:** every pin gate re-verified green — `AxisStep` sets 606/588/0/18 (`ancestor-1`, `preceding-1`, `following-1`, `followingsibling-1`, `statictypingaxis-1..6`, `K2-Axes-38..41/52`, `axis-err-1`), `CombinedErrorCodes` 259/240/0/19 (`XPTY0019-XPTY0020`, `XPTY0019_1/2/3`), `TryCatchExpr try-017` PASS.
+**Results:** Unit tests 2,187/0/0 across all nine test projects (Runtime 232, Xslt 372, Compiler 66, Api 87, Core 119, Parser 192, Standard 744, XQuery 303, LanguageServer 72); build 0/0 warnings. Strict sweep 7,717/13/6,870 — the 13 failures are the unchanged pre-existing deferral list. QT3 full sweep 31,148/0/673.
+**Deferred:** REQ-083 public-launch checklist is drafted and **Pending** (not started). Residual deferrals: evaluate-002/048, context-item-010, package-021err/022err/200, json-to-xml-typed-010, collection-006, document-2401/2402, extension-functions-0201, for-each-group-051, iterate-902.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-05
 **Commit:** (pending) — strip-space-019 + math-3702 conformance fixes (REQ-082 deferrals)
 **Current focus:** **Two deferred W3C conformance tests fixed, strict sweep 7,713/17/6,870 → 7,715/15/6,870 (99.9%), zero regressions.** Both fixes use the "spec-correct engine + retired-code alias in the harness" pattern (mirrors Saxon).
 **What was built:**

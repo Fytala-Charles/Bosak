@@ -84,6 +84,8 @@
 //                      | Charles Korthout | 1.35  | 22-08-2026     | Lower ValidateExpressionNode to Validate opcode |
 //                      | Charles Korthout | 1.36  | 23-08-2026     | Validate opcode literal pool carries optional target type name for validate type QName |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.37  | 05-09-2026     | Axis/PathStepMap instructions carry a has-LHS flag (RegisterC) so atomic step input raises XPTY0019 only for non-first path steps |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -1058,7 +1060,10 @@ public sealed class IrLowerer
         {
             if (step is StepNode stepNode)
             {
-                currentReg = LowerStep(stepNode, currentReg);
+                // The first step applies to the ambient context item (XPTY0020 for
+                // atomic input); later steps apply to the previous step's result
+                // (XPTY0019 for atomic input).
+                currentReg = LowerStep(stepNode, currentReg, !isFirstStep);
             }
             else
             {
@@ -1111,7 +1116,7 @@ public sealed class IrLowerer
         return currentReg;
     }
 
-    private int LowerStep(StepNode node, int contextReg)
+    private int LowerStep(StepNode node, int contextReg, bool hasLhs = false)
     {
         if (node.Predicates.Count > 0)
         {
@@ -1119,9 +1124,12 @@ public sealed class IrLowerer
             // not on the flattened union of all axis results.
             // Wrap the step in PathStepMap so each input node becomes the
             // sole context item while the predicates run.
+            // RegisterC records whether the step input is the result of a
+            // preceding path step (XPTY0019) or the ambient context item
+            // (XPTY0020 for atomic input).
             int mapResultReg = AllocRegister();
             int mapInstrIdx = _instructions.Count;
-            Emit(IrOpCode.PathStepMap, (ushort)mapResultReg, (ushort)contextReg, 0, 0); // placeholder
+            Emit(IrOpCode.PathStepMap, (ushort)mapResultReg, (ushort)contextReg, hasLhs ? (ushort)1 : (ushort)0, 0); // placeholder
 
             int jumpInstrIdx = _instructions.Count;
             Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
@@ -1144,7 +1152,7 @@ public sealed class IrLowerer
             FreeRegister(innerResult);
 
             int afterBlock = _instructions.Count;
-            PatchInstruction(mapInstrIdx, IrOpCode.PathStepMap, (ushort)mapResultReg, (ushort)contextReg, 0, blockEntry);
+            PatchInstruction(mapInstrIdx, IrOpCode.PathStepMap, (ushort)mapResultReg, (ushort)contextReg, hasLhs ? (ushort)1 : (ushort)0, blockEntry);
             PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterBlock);
 
             // Path expression results must be in document order.
@@ -1154,7 +1162,7 @@ public sealed class IrLowerer
             return normReg;
         }
 
-        int resultReg = LowerStepCore(node, contextReg);
+        int resultReg = LowerStepCore(node, contextReg, hasLhs);
         // Path expression results must be in document order.
         int normReg2 = AllocRegister();
         Emit(IrOpCode.Normalize, (ushort)normReg2, (ushort)resultReg);
@@ -1165,12 +1173,17 @@ public sealed class IrLowerer
     /// <summary>
     /// Emits axis + name test for a step (no predicates).
     /// </summary>
-    private int LowerStepCore(StepNode node, int contextReg)
+    /// <param name="hasLhs">
+    /// Whether the step input is the result of a preceding path step (<c>/</c> LHS);
+    /// carried in the axis instruction's RegisterC so the runtime can raise XPTY0019
+    /// for atomic step input instead of XPTY0020.
+    /// </param>
+    private int LowerStepCore(StepNode node, int contextReg, bool hasLhs = false)
     {
         // Emit axis instruction
         int axisReg = AllocRegister();
         var axisOpcode = GetAxisOpcode(node.Axis);
-        Emit(axisOpcode, (ushort)axisReg, (ushort)contextReg);
+        Emit(axisOpcode, (ushort)axisReg, (ushort)contextReg, hasLhs ? (ushort)1 : (ushort)0);
 
         // Emit name test if present
         int afterTestReg = axisReg;

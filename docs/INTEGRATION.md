@@ -9,16 +9,20 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 1 September 2026
-> **Bosak baseline:** 2,111 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 5 September 2026
+> **Bosak baseline:** 2,187 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline:** **31,148 passed / 0 failed / 673 skipped** (97.89%); **100%** of runnable tests pass.
-> **XSLT baseline:** `package` cluster **159 passed / 1 failed / 3 skipped**; `accept` cluster **50 passed / 0 failed / 0 skipped**; `expose` cluster **42 passed / 0 failed / 0 skipped**; `use-package` cluster **53 passed / 0 failed / 1 skipped**; `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; full W3C XSLT 3.0 sweep (last full run) **7,618 passed / 112 failed / 6,870 skipped** — 98.6% pass rate among runnable tests
+> **XSLT baseline:** `package` cluster **159 passed / 1 failed / 3 skipped**; `accept` cluster **50 passed / 0 failed / 0 skipped**; `expose` cluster **42 passed / 0 failed / 0 skipped**; `use-package` cluster **53 passed / 0 failed / 1 skipped**; `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; full W3C XSLT 3.0 strict sweep (last full run) **7,717 passed / 13 failed / 6,870 skipped** — 99.8% pass rate among runnable tests
 > **XQuery baseline:** Phase 4 — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate`, output declarations and serialization, user-defined functions and variables, library modules, string constructors, ordering features, `fn:load-xquery-module` with schema propagation, schema-aware `fn:json-to-xml`
 
 ---
 
 ## 0. Recent Changes
+
+- **2026-09-05** — XPath/XSLT: **Structural XPTY0019/XPTY0020 split for path steps (`context-item-911`, `analyze-string-085`)** — A step whose input is the result of a preceding path step (LHS of `/`) now raises **XPTY0019** for atomic input, while a standalone/first step applied to an atomic ambient context item raises **XPTY0020**. The lowerer records the distinction in a has-LHS flag: axis instructions and `PathStepMap` carry it in `RegisterC` (`IrLowerer` → 1.37), and `VmEngine` selects the error code from that flag (`ApplyAxis`, `PathStepMap` handler → 2.133). The `SimpleMap` check is unchanged (its `RegisterC != 0` path is already LHS-only). Strict full sweep **7,715/15 → 7,717/13/6,870** with zero regressions; full QT3 sweep unchanged at **31,148/0/673** (all `AxisStep`/`CombinedErrorCodes`/`TryCatchExpr` gates green).
+  - Implementation: `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs` (1.37), `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (2.133).
+  - Verification: `context-item-911` PASS (XPTY0019), `analyze-string-085` PASS (XPTY0020); QT3 `AxisStep` sets 606/588/0/18, `CombinedErrorCodes` 259/240/0/19, `try-017` PASS; `dotnet test` green across all unit-test projects (0 warnings).
 
 - **2026-09-01** — XSLT: **Strict error-code matching in the conformance harness** — Expected `<error>` results in the W3C XSLT harness now require the declared error code to appear in the raised exception; previously any exception satisfied an error expectation, which masked wrong-error-code failures (discovered when `override-f-019` passed via an unrelated `XPST0017`). The strict full sweep is **7,480 passed / 250 failed / 6,870 skipped** (96.8%), exposing **147 masked failures** (lenient figure: 7,627/103/6,870); zero genuinely passing tests were lost. The newly exposed failures are spec error-code bugs in the engine — top families: `XTSE0020` (15), `XTSE0010` (13), `XPTY0004` (12), `XTTE0505` (10), `XTDE3052` (10, abstract-component handling), `XTSE3070` (6), `XTDE0820` (6), `XTSE3050`/`XTSE3080` (8), `FODT0001` (4) — tracked as REQ-082. Note: the QT3 harness has the same leniency (`ResultComparer.CompareError` accepts any `InvalidOperationException` on code mismatch) and is a follow-up candidate.
   - Implementation: `tests/Bosak.Xslt.Conformance/Program.cs` (header → 3.35).

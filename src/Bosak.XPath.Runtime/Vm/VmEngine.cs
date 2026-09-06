@@ -252,6 +252,8 @@
 //                      | Charles Korthout | 2.132 | 02-09-2026     | Capture resolved signature on named-function references; captured-signature             |
 //                      |                  |       |                | invocation fallback (override-f-014)                                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.133 | 05-09-2026     | Structural XPTY0019/XPTY0020 split: axis/PathStepMap raise XPTY0019 for atomic input only when the step has a path LHS (RegisterC flag from lowerer) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -790,6 +792,9 @@ public static class VmEngine
                             break;
                         }
                         int rhsEntry = instr.Operand;
+                        // RegisterC set by the lowerer: the step input is the result of a
+                        // preceding path step (LHS of '/'), not the ambient context item.
+                        bool hasLhs = instr.RegisterC != 0;
 
                         var items = MaterializeSequence(sequence);
                         var results = new List<XdmValue>();
@@ -801,9 +806,15 @@ public static class VmEngine
 
                         for (int i = 0; i < items.Length; i++)
                         {
-                            // A path step requires every context item to be a node (XPTY0019).
+                            // A step whose input comes from a preceding path step raises
+                            // XPTY0019 for atomic items; a standalone/first step applied to
+                            // the ambient context item raises XPTY0020.
                             if (!items[i].IsNode)
-                                throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
+                            {
+                                if (hasLhs)
+                                    throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
+                                throw new InvalidOperationException("XPTY0020: An axis step requires a context item that is a node.");
+                            }
 
                             // Path-step predicates must see position=1, size=1
                             // for each context item (predicate is relative to the
@@ -1936,7 +1947,7 @@ public static class VmEngine
                     {
                         var input = registers[instr.RegisterB];
                         var axis = ToXdmAxis(instr.OpCode);
-                        registers[instr.RegisterA] = ApplyAxis(input, axis);
+                        registers[instr.RegisterA] = ApplyAxis(input, axis, instr.RegisterC != 0);
                         ip++;
                         break;
                     }
@@ -3600,7 +3611,11 @@ public static class VmEngine
         _ => throw new ArgumentOutOfRangeException(nameof(opcode), opcode, null)
     };
 
-    private static XdmValue ApplyAxis(XdmValue input, XdmAxis axis)
+    /// <param name="hasLhs">
+    /// Whether the input is the result of a preceding path step (LHS of <c>/</c>).
+    /// Atomic input from an LHS raises XPTY0019; atomic ambient context input raises XPTY0020.
+    /// </param>
+    private static XdmValue ApplyAxis(XdmValue input, XdmAxis axis, bool hasLhs)
     {
         if (input.IsUndefined)
         {
@@ -3609,7 +3624,11 @@ public static class VmEngine
             return XdmValue.Undefined;
         }
         if (input.IsAtomic)
+        {
+            if (hasLhs)
+                throw new InvalidOperationException("XPTY0019: A path step requires nodes, but the step input contains an atomic value.");
             throw new InvalidOperationException("XPTY0020: An axis step requires a context item that is a node.");
+        }
 
         if (input.IsNode)
             return XdmValue.FromSequence(input.NodeValue.Axis(axis));
