@@ -2,7 +2,7 @@
   <img src="assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak XPath engine">
   <br><br>
   <h1>Bosak XPath</h1>
-  <p>A high-performance, XDM-first XPath 3.1 + XSLT 3.0 engine for .NET, with XQuery 3.1 in progress</p>
+  <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET</p>
 </div>
 
 <div align="center">
@@ -10,6 +10,9 @@
 [![.NET 10](https://img.shields.io/badge/.NET-10-2F4F4F?logo=dotnet&logoColor=F0FFF0)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](license.md)
 [![Status](https://img.shields.io/badge/Status-Alpha-518D8F)]()
+[![NuGet](https://img.shields.io/nuget/vpre/Bosak.XPath.Api?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Bosak.XPath.Api)
+[![CI](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml/badge.svg)](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml)
+[![XSLT 3.0 conformance](https://img.shields.io/badge/XSLT%203.0%20conformance-99.9%25-2F4F4F)](docs/ARCHITECTURE.md)
 
 </div>
 
@@ -51,7 +54,9 @@ Above all, FYTALA is about keeping the desire to discover alive—and passing th
 
 ## Overview
 
-**Bosak** is a ground-up .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), designed as the expression-engine foundation for **XSLT 3.0** and **XQuery 3.1** processors.
+**Bosak** is a ground-up .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), with full **XSLT 3.0** and **XQuery 3.1** processors built on the same expression engine.
+
+The project is named for **Jon Bosak**, who chaired the W3C working groups that created XSLT and XPath and donated the XML logo to the community — the standards this engine implements.
 
 Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)** from day one. Expressions are compiled once to an intermediate representation (IR) and executed many times on a lightweight, register-based virtual machine. XSLT and XQuery reuse the same XPath engine for all expression evaluation.
 
@@ -69,6 +74,12 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 ---
 
 ## Quick Start
+
+```bash
+dotnet add package Bosak.XPath.Api --prerelease   # XPath entry point
+# or: dotnet add package Bosak.Xslt --prerelease  # XSLT 3.0 transforms
+# or: dotnet add package Bosak.XQuery --prerelease # XQuery 3.1 queries
+```
 
 ```csharp
 using Bosak.XPath.Api;
@@ -261,7 +272,7 @@ The harness:
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
 | Pass Rate (XPath+XQuery) | **31,148 passed / 0 failed / 673 skipped** (97.89%); **100%** of runnable tests pass |
 | **XSLT 3.0** | 234 test sets, 14,600 tests |
-| Pass Rate (XSLT) | **7,480 passed / 250 failed / 6,870 skipped** — 96.8% of runnable tests pass (measured with strict error-code matching; see note below) |
+| Pass Rate (XSLT) | **7,722 passed / 7 failed / 6,871 skipped** — **99.9%** of runnable tests pass (measured with strict error-code matching; see note below) |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |
 | Unsupported Features | Schema awareness, XSLT streaming, XQuery-only dependencies |
 

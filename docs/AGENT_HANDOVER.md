@@ -8,6 +8,7 @@
 - `src/Directory.Build.props`: `PackageProjectUrl`, `RepositoryUrl`, `RepositoryType`, `PackageTags`; packs `license.md`, `README.md`, `assets/logos/*.svg`, `assets/brand/*.png`; `PackageIcon` = 128×128 dark PNG (`assets/icons-png/fytala-logo-color-dark-128.png`) packed as `icon.png` at package root.
 - Verified: `dotnet build Bosak.sln` 0/0; `dotnet pack` on Bosak.XPath.Api — nuspec carries `<icon>`, searchable description, tags, repository element (commit hash baked in); brand assets under `assets/`. `nupkgs/Bosak.XPath.Api.0.9.0-preview.nupkg` regenerated locally.
 - Note: packages already published on nuget.org under `v0.9.0-preview` predate this metadata; it is picked up by the next pack + publish.
+- **Pass 2 (same session):** README launch polish — tagline now lists the full stack (XPath 3.1 + XSLT 3.0 + XQuery 3.1, XQuery no longer "in progress"); badges for NuGet (vpre), CI workflow, 99.9% XSLT conformance; "Why Bosak" namesake note (Jon Bosak, W3C XSL/XPath WG chair); `dotnet add package` snippets in Quick Start; XSLT conformance table refreshed 7,480/250 → 7,722/7 (99.9% strict). Repo About section + topics set by owner. GitHub Release for `v0.9.0-preview` drafted but unpublished — `gh` CLI not installed; publish manually or install gh.
 **Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass; strict sweep `7,722/7/6,871`; QT3 `31,148/0/673`.
 
 ---
