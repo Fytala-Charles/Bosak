@@ -118,6 +118,9 @@
 //                      | Charles Korthout | 3.40  | 05-09-2026     | ErrorCodeMatches aliases retired XTSE0800 to XTSE0085 (math-3702 vs extension-          |
 //                      |                  |       |                | functions-0105) and XTRE0270 to XTSE0270 (strip-space-019 vs strip-space-019a)           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.41  | 05-09-2026     | Skip json-to-xml-typed-010 (spec contradiction: XTSE1650 required by 27.2 makes       |
+//                      |                  |       |                | expected XTDE3245 unreachable; W3C submissions concur)                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -232,6 +235,14 @@ class Program
         // forwards-compatible mode unknown XSLT instructions are ignored, so this test
         // cannot be reconciled with the forwards test set without breaking those tests.
         "error-0010bb",
+        // json-to-xml-typed-010 expects dynamic error XTDE3245 for validate:=true() on a
+        // non-schema-aware processor, but the test stylesheet contains xsl:import-schema,
+        // which XSLT 3.0 27.2 REQUIRES to fail statically with XTSE1650 on exactly such a
+        // processor — a spec-level contradiction: no conformant basic processor can reach
+        // the dynamic error. W3C submissions agree (Saxon-JS reports wrongError; EE/Parrot
+        // skip as schema-aware). Bosak raises the spec-mandated XTSE1650; see REQ-082
+        // decision log 2026-09-05.
+        "json-to-xml-typed-010",
     };
 
     static Program()
@@ -437,6 +448,8 @@ class Program
                 return "Upstream test defect: $validrange omits U+10000, doc-vs-validrange comparison is off by one";
             return "Upstream test defect: BMP-only expected counts contradict this suite's own Gen tests";
         }
+        if (name is "json-to-xml-typed-010")
+            return "Spec contradiction: xsl:import-schema must raise XTSE1650 statically on a non-schema-aware processor (XSLT 3.0 27.2), so XTDE3245 at runtime is unreachable; W3C submissions concur";
         return "Known harness skip";
     }
 
