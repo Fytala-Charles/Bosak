@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <PackageId>Bosak.XPath.Core</PackageId>
-    <Description>XDM types and core abstractions for high-performance XPath 3.1</Description>
+    <Description>Bosak: XQuery Data Model (XDM) foundation types — XdmValue, nodes, sequences and axis navigation. Shared foundation of the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 stack for .NET.</Description>
   </PropertyGroup>
 
 </Project>

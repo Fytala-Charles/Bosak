@@ -8,11 +8,19 @@
     <Copyright>Copyright (c) 2026 FYTALA</Copyright>
     <PackageLicenseFile>license.md</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/Fytala-Charles/Bosak</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Fytala-Charles/Bosak.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>xslt;xslt-3.0;xpath;xpath-3.1;xquery;xquery-3.1;xml;xml-processing;w3c;conformance;dotnet;net10;fytala</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\license.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)..\assets\logos\*.svg" Pack="true" PackagePath="\assets\logos\" />
+    <None Include="$(MSBuildThisFileDirectory)..\assets\brand\*.png" Pack="true" PackagePath="\assets\brand\" />
+    <None Include="$(MSBuildThisFileDirectory)..\assets\icons-png\fytala-logo-color-dark-128.png" Pack="true" PackagePath="\icon.png" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
     <PackageId>Bosak.XPath.Providers</PackageId>
-    <Description>IXdmNode adapter implementations for System.Xml.Linq</Description>
+    <Description>Bosak: IXdmNode adapters for System.Xml.Linq (XDocument/XElement) — plug existing LINQ-to-XML trees into the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 engine for .NET.</Description>
   </PropertyGroup>
 
   <ItemGroup>

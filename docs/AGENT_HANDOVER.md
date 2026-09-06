@@ -1,6 +1,20 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-06
+**Commit:** `656dffa` — REQ-083 discoverability: NuGet package metadata polish (handover + registry updated)
+**Current focus:** **REQ-083 discoverability — NuGet package metadata polish. No engine/code changes; conformance numbers unchanged (strict 7,722/7/6,871; QT3 31,148/0/673; unit 2,214/0/0; build 0/0 warnings).**
+**What was built:**
+- All 9 src `.csproj` `<Description>` values rewritten into NuGet.org-searchable form ("Bosak:" prefix, feature keywords, stack cross-reference).
+- `src/Directory.Build.props`: `PackageProjectUrl`, `RepositoryUrl`, `RepositoryType`, `PackageTags`; packs `license.md`, `README.md`, `assets/logos/*.svg`, `assets/brand/*.png`; `PackageIcon` = 128×128 dark PNG (`assets/icons-png/fytala-logo-color-dark-128.png`) packed as `icon.png` at package root.
+- Verified: `dotnet build Bosak.sln` 0/0; `dotnet pack` on Bosak.XPath.Api — nuspec carries `<icon>`, searchable description, tags, repository element (commit hash baked in); brand assets under `assets/`. `nupkgs/Bosak.XPath.Api.0.9.0-preview.nupkg` regenerated locally.
+- Note: packages already published on nuget.org under `v0.9.0-preview` predate this metadata; it is picked up by the next pack + publish.
+**Expected state:** `dotnet build Bosak.sln` and `dotnet test Bosak.sln` pass; strict sweep `7,722/7/6,871`; QT3 `31,148/0/673`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-06
 **Commit:** `3b2f392` — REQ-082 deferral batch: 10 of 17 strict-sweep failures cleared
 **Current focus:** **REQ-082 residual deferrals swept: strict sweep 7,713/17/6,870 → 7,722/7/6,871 (99.9% of runnable), full QT3 unchanged at 31,148/0/673, unit tests 2,214/0/0 across all nine projects, build 0/0 warnings.**
 **What was built (6 batches, each sweep-verified):**

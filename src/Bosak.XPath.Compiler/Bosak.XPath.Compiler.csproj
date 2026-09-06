@@ -7,7 +7,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
     <PackageId>Bosak.XPath.Compiler</PackageId>
-    <Description>AST-to-IR compilation pipeline for XPath 3.1</Description>
+    <Description>Bosak: AST-to-IR compiler pipeline for XPath 3.1 / XSLT 3.0 / XQuery 3.1. Compilation layer of the Bosak stack for .NET.</Description>
   </PropertyGroup>
 
   <ItemGroup>

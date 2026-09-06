@@ -7,7 +7,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
     <PackageId>Bosak.XPath.Runtime</PackageId>
-    <Description>Register-based virtual machine execution engine for XPath 3.1</Description>
+    <Description>Bosak: register-based virtual machine that executes compiled XPath 3.1 / XSLT 3.0 / XQuery 3.1 programs. Runtime layer of the Bosak stack for .NET.</Description>
   </PropertyGroup>
 
   <ItemGroup>

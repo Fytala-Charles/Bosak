@@ -7,7 +7,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
     <PackageId>Bosak.XPath.Api</PackageId>
-    <Description>Public API surface for compiling and evaluating XPath 3.1 expressions</Description>
+    <Description>Bosak: compile and evaluate XPath 3.1 expressions in .NET — full XPath 3.1 with maps, arrays, JSON and higher-order functions. The entry-point package of the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 stack.</Description>
   </PropertyGroup>
 
   <ItemGroup>

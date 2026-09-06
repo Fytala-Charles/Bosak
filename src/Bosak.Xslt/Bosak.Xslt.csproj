@@ -8,7 +8,7 @@
     <AssemblyName>Bosak.Xslt</AssemblyName>
     <RootNamespace>Bosak.Xslt</RootNamespace>
     <PackageId>Bosak.Xslt</PackageId>
-    <Description>XSLT 3.0 processor and transform engine</Description>
+    <Description>Bosak: pure-managed XSLT 3.0 processor for .NET — the open-source XSLT 3.0 engine with 99.9% W3C conformance. Packages, modes, streaming-ready processing, fn:transform(). Part of the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 stack.</Description>
   </PropertyGroup>
 
   <ItemGroup>
