@@ -77,6 +77,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.109 | 05-09-2026     | EXSLT math library (http://exslt.org/math): constant#1/#2, abs, sqrt, sin, cos, tan, log, exp, power, atan2, max, min |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.110 | 06-09-2026     | xsl:product-version fallback bumped to 0.9.1-preview (packaging refresh release)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4445,7 +4447,7 @@ public static class FunctionLibrary
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
-            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.9.0-preview",
+            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.9.1-preview",
             "xsl:is-schema-aware" => "no",
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
