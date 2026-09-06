@@ -75,6 +75,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.108 | 03-09-2026     | xsl:product-version reports the assembly informational version (0.9.0-preview), stays in sync |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.109 | 05-09-2026     | EXSLT math library (http://exslt.org/math): constant#1/#2, abs, sqrt, sin, cos, tan, log, exp, power, atan2, max, min |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -3149,6 +3151,125 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = ExsltNodeSet
             },
+
+            // ----- EXSLT math --------------------------------------------------
+            [(Namespaces.ExsltMath, "constant", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "constant",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltConstant1
+            },
+            [(Namespaces.ExsltMath, "constant", 2)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "constant",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltConstant2
+            },
+            [(Namespaces.ExsltMath, "abs", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "abs",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltAbs
+            },
+            [(Namespaces.ExsltMath, "sqrt", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "sqrt",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltSqrt
+            },
+            [(Namespaces.ExsltMath, "sin", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "sin",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltSin
+            },
+            [(Namespaces.ExsltMath, "cos", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "cos",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltCos
+            },
+            [(Namespaces.ExsltMath, "tan", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "tan",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltTan
+            },
+            [(Namespaces.ExsltMath, "log", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "log",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltLog
+            },
+            [(Namespaces.ExsltMath, "exp", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "exp",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltExp
+            },
+            [(Namespaces.ExsltMath, "power", 2)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "power",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltPower
+            },
+            [(Namespaces.ExsltMath, "atan2", 2)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "atan2",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltAtan2
+            },
+            [(Namespaces.ExsltMath, "max", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "max",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltMax
+            },
+            [(Namespaces.ExsltMath, "min", 1)] = new()
+            {
+                NamespaceUri = Namespaces.ExsltMath,
+                LocalName = "min",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Double,
+                Implementation = ExsltMin
+            },
         };
 
         // fn:concat is variadic (any arity >= 2): register the higher arities not covered by
@@ -4650,6 +4771,192 @@ public static class FunctionLibrary
         if (arg.IsSequence)
             return arg;
         return XdmValue.FromSequence(XdmSequence.Empty);
+    }
+
+    // ------------------------------------------------------------------
+    // EXSLT math functions (http://exslt.org/math)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Decimal-string representations of the EXSLT math constants. The digit
+    /// strings match the EXSLT reference implementation and Saxon; the
+    /// <c>constant</c> function truncates them to the requested precision.
+    /// </summary>
+    private static string? ExsltConstantDigits(string name) => name switch
+    {
+        "PI" => "3.1415926535897932384626433832795028841971693993751",
+        "E" => "2.71828182845904523536028747135266249775724709369996",
+        "SQRRT2" => "1.41421356237309504880168872420969807856967187537694",
+        "LN2" => "0.69314718055994530941723212145817656807550013436025",
+        "LN10" => "2.302585092994046",
+        "LOG2E" => "1.4426950408889633",
+        "SQRT1_2" => "0.7071067811865476",
+        _ => null,
+    };
+
+    /// <summary>
+    /// Implements EXSLT math <c>constant($name)</c>: the named constant at the
+    /// full precision of an xs:double.
+    /// </summary>
+    private static XdmValue ExsltConstant1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ExsltConstantValue(args[0], hasPrecision: false, precision: 0);
+
+    /// <summary>
+    /// Implements EXSLT math <c>constant($name, $precision)</c>: the named
+    /// constant truncated to <c>$precision</c> digits after the decimal point.
+    /// A precision that cannot be converted to a number raises XTDE1425; an
+    /// out-of-range precision or unknown constant name raises XTDE1420.
+    /// </summary>
+    private static XdmValue ExsltConstant2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (!TryExsltNumber(args[1], out double precision))
+            throw new InvalidOperationException(
+                "XTDE1425: The precision argument of math:constant cannot be converted to the required type (number).");
+        return ExsltConstantValue(args[0], hasPrecision: true, precision);
+    }
+
+    private static XdmValue ExsltConstantValue(XdmValue nameArg, bool hasPrecision, double precision)
+    {
+        string name;
+        try
+        {
+            name = AtomizedString(nameArg);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException(
+                "XTDE1425: The name argument of math:constant cannot be converted to the required type (string).");
+        }
+
+        string? digits = ExsltConstantDigits(name);
+        if (digits is null)
+            throw new InvalidOperationException($"XTDE1420: Unknown EXSLT math constant '{name}'.");
+
+        if (hasPrecision)
+        {
+            // Truncate fractional precisions like the reference implementations.
+            int p = (int)precision;
+            if (double.IsNaN(precision) || p < 1 || p + 2 > digits.Length)
+                throw new InvalidOperationException(
+                    $"XTDE1420: The precision of math:constant must be between 1 and {digits.Length - 2} digits.");
+            digits = digits.Substring(0, p + 2);
+        }
+
+        return XdmValue.FromDouble(double.Parse(digits, CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>
+    /// Converts an EXSLT math argument to a double using XPath 1.0
+    /// <c>number()</c> semantics; returns false when no conversion exists
+    /// (maps, arrays, functions, unparseable strings).
+    /// </summary>
+    private static bool TryExsltNumber(XdmValue value, out double result)
+    {
+        result = 0;
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            return false;
+        value = AtomizeValue(value);
+        if (value.IsUndefined)
+            return false;
+        switch (value.Kind)
+        {
+            case XdmValueKind.Integer:
+                result = value.IntegerValue;
+                return true;
+            case XdmValueKind.Decimal:
+                result = (double)value.DecimalValue;
+                return true;
+            case XdmValueKind.Double:
+            case XdmValueKind.Float:
+                result = value.DoubleValue;
+                return true;
+            case XdmValueKind.Boolean:
+                result = value.BooleanValue ? 1.0 : 0.0;
+                return true;
+            case XdmValueKind.String:
+                return double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+            default:
+                return false;
+        }
+    }
+
+    private static XdmValue ExsltAbs(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], Math.Abs);
+
+    private static XdmValue ExsltSqrt(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], Math.Sqrt);
+
+    private static XdmValue ExsltSin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], Math.Sin);
+
+    private static XdmValue ExsltCos(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], Math.Cos);
+
+    private static XdmValue ExsltTan(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], Math.Tan);
+
+    private static XdmValue ExsltLog(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], Math.Log);
+
+    private static XdmValue ExsltExp(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ApplyMath(args[0], Math.Exp);
+
+    private static XdmValue ExsltPower(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var a = AtomizeValue(args[0]);
+        var b = AtomizeValue(args[1]);
+        if (a.IsUndefined || b.IsUndefined) return XdmValue.Undefined;
+        return XdmValue.FromDouble(Math.Pow(ToDoubleValue(a), ToDoubleValue(b)));
+    }
+
+    private static XdmValue ExsltAtan2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var a = AtomizeValue(args[0]);
+        var b = AtomizeValue(args[1]);
+        if (a.IsUndefined || b.IsUndefined) return XdmValue.Undefined;
+        return XdmValue.FromDouble(Math.Atan2(ToDoubleValue(a), ToDoubleValue(b)));
+    }
+
+    /// <summary>
+    /// Implements EXSLT math <c>max</c>: the maximum of the numeric values of
+    /// the items in the argument (an empty argument yields NaN, matching the
+    /// reference implementation).
+    /// </summary>
+    private static XdmValue ExsltMax(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        double max = double.NegativeInfinity;
+        bool any = false;
+        foreach (var item in Materialize(args[0]))
+        {
+            any = true;
+            double x = ParseXPathDouble(item.IsNode ? item.NodeValue.StringValue : AtomizedString(item));
+            if (double.IsNaN(x))
+                return XdmValue.FromDouble(double.NaN);
+            if (x > max)
+                max = x;
+        }
+        return XdmValue.FromDouble(any ? max : double.NaN);
+    }
+
+    /// <summary>
+    /// Implements EXSLT math <c>min</c>: the minimum of the numeric values of
+    /// the items in the argument (an empty argument yields NaN, matching the
+    /// reference implementation).
+    /// </summary>
+    private static XdmValue ExsltMin(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        double min = double.PositiveInfinity;
+        bool any = false;
+        foreach (var item in Materialize(args[0]))
+        {
+            any = true;
+            double x = ParseXPathDouble(item.IsNode ? item.NodeValue.StringValue : AtomizedString(item));
+            if (double.IsNaN(x))
+                return XdmValue.FromDouble(double.NaN);
+            if (x < min)
+                min = x;
+        }
+        return XdmValue.FromDouble(any ? min : double.NaN);
     }
 
     private static (string nsUri, string localName) ParseFunctionAvailableName(EvaluationContext ctx, string name)
@@ -14044,6 +14351,7 @@ file static class Namespaces
     public const string Map = "http://www.w3.org/2005/xpath-functions/map";
     public const string Array = "http://www.w3.org/2005/xpath-functions/array";
     public const string ExsltCommon = "http://exslt.org/common";
+    public const string ExsltMath = "http://exslt.org/math";
     public const string Xs = "http://www.w3.org/2001/XMLSchema";
     public const string Xsl = "http://www.w3.org/1999/XSL/Transform";
 }
