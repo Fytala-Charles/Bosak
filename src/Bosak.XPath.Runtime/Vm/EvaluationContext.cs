@@ -67,9 +67,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.19  | 02-09-2026     | XQueryModuleLoader delegate: hosts supply fn:load-xquery-module's implementation on the context |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.20  | 05-09-2026     | LoadDocument registers loaded trees so cross-tree document order follows load order (evaluate-002) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
+using Bosak.XPath.Providers.Xml;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
@@ -432,6 +435,15 @@ public sealed class EvaluationContext
 
         if (DocumentPostProcessor != null)
             node = DocumentPostProcessor(node);
+        // Eagerly assign the creation sequence so cross-tree document order follows
+        // load order instead of first document-order access (evaluate-002).
+        if (node is XDocumentNode xdn)
+        {
+            if (xdn.UnderlyingObject is System.Xml.Linq.XDocument xdoc)
+                XDocumentNode.RegisterTree(xdoc);
+            else if (xdn.UnderlyingObject is System.Xml.Linq.XElement xelem)
+                XDocumentNode.RegisterTree(xelem);
+        }
         _documentCache[uri] = node;
         DocumentLoaded?.Invoke(uri);
         return node;

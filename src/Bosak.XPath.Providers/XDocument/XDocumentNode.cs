@@ -85,6 +85,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.24  | 03-09-2026     | Warning-free build: CS8602 guard for null union BaseMemberTypes                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.25  | 05-09-2026     | RegisterTree eagerly assigns creation sequence so cross-tree order matches construction |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -991,6 +993,37 @@ public sealed class XDocumentNode : IXdmNode
             ElementTreeSequences.AddOrUpdate(root, new StrongBox<long>(seq));
             return seq;
         }
+    }
+
+    /// <summary>
+    /// Eagerly assigns the creation sequence number of a constructed document tree so that
+    /// cross-document document order reflects tree construction order rather than the order
+    /// of first document-order access (evaluate-002). Idempotent; the lazy assignment in
+    /// <see cref="GetDocumentSequence"/> remains for trees that are never registered.
+    /// </summary>
+    /// <param name="doc">The constructed document to register.</param>
+    public static void RegisterTree(System.Xml.Linq.XDocument doc)
+    {
+        if (doc is null)
+            return;
+        GetDocumentSequence(doc);
+    }
+
+    /// <summary>
+    /// Eagerly assigns the creation sequence number of a tree rooted at an element.
+    /// When the element already belongs to a document, the document is registered;
+    /// otherwise the parentless element tree is registered.
+    /// </summary>
+    /// <param name="root">The root of the constructed tree to register.</param>
+    public static void RegisterTree(XElement root)
+    {
+        if (root is null)
+            return;
+        var doc = root.Document;
+        if (doc is not null)
+            GetDocumentSequence(doc);
+        else
+            GetElementTreeSequence(root);
     }
 
     private static Dictionary<XObject, long> ComputeDocumentOrder(System.Xml.Linq.XDocument doc)

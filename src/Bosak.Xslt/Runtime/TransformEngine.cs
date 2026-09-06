@@ -290,6 +290,9 @@
 //                      | Charles Korthout | 6.59  | 05-09-2026     | XTRE0270 recovery (later decl wins) in XSLT 1.0 BC mode only; XTSE0270 static error |
 //                      |                  |       |                | otherwise; XTRE0270 expectation of strip-space-019 aliased to XTSE0270 in harness       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.60  | 05-09-2026     | Eagerly RegisterTree at result-tree construction so cross-tree document order follows   |
+//                      |                  |       |                | creation order (evaluate-002)                                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -630,6 +633,9 @@ public sealed class TransformEngine
         XsltFunctionLibrary.Populate(_context);
 
         _resultDocument = new XElement("__xdm_doc__");
+        // Eagerly assign the creation sequence so the principal result tree's cross-tree
+        // document order reflects construction time rather than first access (evaluate-002).
+        XDocumentNode.RegisterTree(_resultDocument);
         _currentContainer = _resultDocument;
 
         _allTemplateRules = _stylesheet.GetAllTemplateRules().ToList();
@@ -1199,6 +1205,7 @@ public sealed class TransformEngine
         {
             rootElements[0].Remove();
             var doc = new XDocument(rootElements[0]);
+            XDocumentNode.RegisterTree(doc);
             var rdProps = _resultDocument.Annotation<Stylesheet.OutputProperties>();
             if (rdProps != null)
                 doc.AddAnnotation(rdProps);
@@ -1231,14 +1238,24 @@ public sealed class TransformEngine
             if (node is XElement elem)
             {
                 elem.Remove();
-                return XdmValue.FromNode(new XDocumentNode(new XDocument(elem)));
+                var elemDoc = new XDocument(elem);
+                XDocumentNode.RegisterTree(elemDoc);
+                return XdmValue.FromNode(new XDocumentNode(elemDoc));
             }
             if (node is XText text)
                 return XdmValue.FromString(text.Value);
             if (node is XComment comment)
-                return XdmValue.FromNode(new XDocumentNode(new XDocument(new XComment(comment.Value))));
+            {
+                var commentDoc = new XDocument(new XComment(comment.Value));
+                XDocumentNode.RegisterTree(commentDoc);
+                return XdmValue.FromNode(new XDocumentNode(commentDoc));
+            }
             if (node is XProcessingInstruction pi)
-                return XdmValue.FromNode(new XDocumentNode(new XDocument(new XProcessingInstruction(pi.Target, pi.Data))));
+            {
+                var piDoc = new XDocument(new XProcessingInstruction(pi.Target, pi.Data));
+                XDocumentNode.RegisterTree(piDoc);
+                return XdmValue.FromNode(new XDocumentNode(piDoc));
+            }
             return XdmValue.FromString(node.ToString());
         }
 
@@ -1562,7 +1579,11 @@ public sealed class TransformEngine
                     if (xdn.UnderlyingObject is XDocument doc)
                         return doc;
                     if (xdn.UnderlyingObject is XElement elem)
-                        return new XDocument(elem);
+                    {
+                        var paramDoc = new XDocument(elem);
+                        XDocumentNode.RegisterTree(paramDoc);
+                        return paramDoc;
+                    }
                 }
                 return null;
             }
@@ -4944,7 +4965,9 @@ public sealed class TransformEngine
                             }
                             break;
                         case XElement e when e.Name.LocalName == "__xdm_doc__":
-                            items.Add(XdmValue.FromNode(new XDocumentNode(new XDocument(e))));
+                            var seqDoc = new XDocument(e);
+                            XDocumentNode.RegisterTree(seqDoc);
+                            items.Add(XdmValue.FromNode(new XDocumentNode(seqDoc)));
                             break;
                         case XElement e:
                             items.Add(XdmValue.FromNode(new XDocumentNode(e)));
@@ -8240,6 +8263,7 @@ public sealed class TransformEngine
                     // still works on the copied document node.
                     if (node is XDocumentNode srcDocNode)
                         srcDocNode.CopyUnparsedEntitiesTo(newDoc);
+                    XDocumentNode.RegisterTree(newDoc);
                     return new XDocumentNode(newDoc);
                 }
             case XdmNodeKind.Element:
@@ -8385,6 +8409,7 @@ public sealed class TransformEngine
             case XdmNodeKind.Document:
                 {
                     var newDoc = new XDocument();
+                    XDocumentNode.RegisterTree(newDoc);
                     if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
                         newDoc.AddAnnotation(nodeToCopy.BaseUri);
                     if (nodeToCopy is XDocumentNode srcDocNode2)
@@ -8547,6 +8572,7 @@ public sealed class TransformEngine
                         // In a sequence-returning context (e.g. xsl:variable with @as),
                         // produce an actual document node so base-uri() works correctly.
                         var newDoc = new XDocument();
+                        XDocumentNode.RegisterTree(newDoc);
                         if (!string.IsNullOrEmpty(srcBaseUri))
                             newDoc.AddAnnotation(srcBaseUri);
                         if (nodeToCopy is XDocumentNode srcDocNode)
@@ -9569,6 +9595,7 @@ public sealed class TransformEngine
                     // node produces an actual document node (possibly empty) so that its
                     // base URI is preserved.
                     var newDoc = new XDocument();
+                    XDocumentNode.RegisterTree(newDoc);
                     if (!string.IsNullOrEmpty(node.BaseUri))
                         newDoc.AddAnnotation(node.BaseUri);
                     var savedContainer = _currentContainer;
@@ -13691,6 +13718,7 @@ public sealed class TransformEngine
             if (wrapInDocumentNode)
             {
                 var emptyDoc = new XDocument();
+                XDocumentNode.RegisterTree(emptyDoc);
                 var effectiveBaseUri = GetEffectiveBaseUri(parent);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     emptyDoc.AddAnnotation(effectiveBaseUri);
@@ -13726,6 +13754,7 @@ public sealed class TransformEngine
                 if (nodes[0] is XElement rootElem && !string.IsNullOrEmpty(effectiveBaseUri) && rootElem.Annotation<string>() == null)
                     rootElem.AddAnnotation(effectiveBaseUri);
                 var tempDoc = new XDocument(nodes[0]);
+                XDocumentNode.RegisterTree(tempDoc);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     tempDoc.AddAnnotation(effectiveBaseUri);
                 return XdmValue.FromNode(new XDocumentNode(tempDoc));
@@ -13744,6 +13773,7 @@ public sealed class TransformEngine
                 if (!string.IsNullOrEmpty(effectiveBaseUri) && docWrapper.Annotation<string>() == null)
                     docWrapper.AddAnnotation(effectiveBaseUri);
                 var tempDoc = new XDocument(docWrapper);
+                XDocumentNode.RegisterTree(tempDoc);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     tempDoc.AddAnnotation(effectiveBaseUri);
                 return XdmValue.FromNode(new XDocumentNode(tempDoc));
@@ -15187,6 +15217,7 @@ public sealed class TransformEngine
         if (elementChildren.Count == 1)
         {
             var doc = new XDocument(elementChildren[0]);
+            XDocumentNode.RegisterTree(doc);
             var serialized = ResultTreeSerializer.Serialize(XdmValue.FromNode(new XDocumentNode(doc)), props);
             System.IO.File.WriteAllText(path, serialized);
         }
@@ -15565,6 +15596,7 @@ public sealed class TransformEngine
                 else
                 {
                     var capturedDoc = new XDocument();
+                    XDocumentNode.RegisterTree(capturedDoc);
                     var tempNodes = temp!.Nodes().ToList();
                     // LINQ documents allow a single root element; XDM document nodes allow
                     // arbitrary content. Use the synthetic __xdm_doc__ wrapper when the
