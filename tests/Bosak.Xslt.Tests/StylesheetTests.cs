@@ -149,6 +149,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.91  | 03-09-2026     | xsl:product-version matches the assembly informational version (0.9.0-preview)          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.92  | 07-09-2026     | Unregistered xsl:use-package now expects XTSE3000 (spec) instead of XTSE0165 (REQ-082)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -6438,7 +6440,7 @@ return fn:transform(map{""stylesheet-text"": $xsl,
     }
 
     [Fact]
-    public void UsePackage_UnregisteredPackage_RaisesXTSE0165()
+    public void UsePackage_UnregisteredPackage_RaisesXTSE3000()
     {
         var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
             <xsl:use-package name='urn:test:unregistered' package-version='1.0'/>
@@ -6447,7 +6449,7 @@ return fn:transform(map{""stylesheet-text"": $xsl,
 
         var compiler = new Api.XsltCompiler();
         var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
-        Assert.Contains("XTSE0165", ex.Message);
+        Assert.Contains("XTSE3000", ex.Message);
     }
 
     [Fact]

@@ -296,6 +296,12 @@
 //                      | Charles Korthout | 6.61  | 05-09-2026     | Per-package document-load whitespace policy: used-package components strip loaded docs  |
 //                      |                  |       |                | with their own rules; document cache keyed by (URI, policy) (document-2401/2402, coll-006)|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.62  | 07-09-2026     | XTSE3520: xsl:iterate xsl:param with no select/sequence constructor and a type that     |
+//                      |                  |       |                | disallows () is a static error (iterate-902, REQ-082)                                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.63  | 07-09-2026     | xsl:for-each-group attribute validation precedes collation recognition so XTSE1090     |
+//                      |                  |       |                | wins over XTDE1110 (for-each-group-051, REQ-082)                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3492,11 +3498,14 @@ public sealed class TransformEngine
                         var collationAttr = instruction.Attribute("collation")?.Value;
                         var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? _context.DefaultCollation : EvaluateAvt(collationAttr, instruction);
 
+                        // Static attribute checks precede collation recognition (XTSE1090
+                        // for @collation with group-starting-with/ending-with wins over
+                        // XTDE1110 for an unrecognized URI; for-each-group-051).
+                        ValidateForEachGroupAttributes(instruction);
+
                         // XTDE1110: an explicit collation URI must be recognized by this implementation.
                         if (!string.IsNullOrEmpty(collationAttr) && !IsRecognizedCollation(effectiveCollation))
                             throw new InvalidOperationException($"XTDE1110: The collation URI '{effectiveCollation}' is not recognized by this implementation.");
-
-                        ValidateForEachGroupAttributes(instruction);
 
                         var savedFocus = _context.ContextItem;
                         var savedPosition = _context.ContextPosition;
@@ -6113,11 +6122,13 @@ public sealed class TransformEngine
                         var collationAttr = instruction.Attribute("collation")?.Value;
                         var effectiveCollation = string.IsNullOrEmpty(collationAttr) ? _context.DefaultCollation : EvaluateAvt(collationAttr, instruction);
 
+                        // Static attribute checks precede collation recognition (XTSE1090
+                        // wins over XTDE1110; for-each-group-051).
+                        ValidateForEachGroupAttributes(instruction);
+
                         // XTDE1110: an explicit collation URI must be recognized by this implementation.
                         if (!string.IsNullOrEmpty(collationAttr) && !IsRecognizedCollation(effectiveCollation))
                             throw new InvalidOperationException($"XTDE1110: The collation URI '{effectiveCollation}' is not recognized by this implementation.");
-
-                        ValidateForEachGroupAttributes(instruction);
 
                         var groups = BuildForEachGroups(instruction, items, effectiveCollation);
 
@@ -18227,6 +18238,17 @@ public sealed class TransformEngine
             var (plocal, pns) = ExpandVariableName(p, pname);
             var pselect = p.Attribute("select")?.Value;
             var pas = p.Attribute("as")?.Value;
+
+            // XTSE3520: an xsl:param child of xsl:iterate with no select attribute and
+            // no sequence constructor defaults to (), which must match the declared type.
+            if (string.IsNullOrEmpty(pselect) && !HasSequenceConstructorContent(p)
+                && !string.IsNullOrEmpty(pas) && !TypeAllowsEmptySequence(pas))
+            {
+                throw new InvalidOperationException(
+                    $"XTSE3520: xsl:param '{pname}' in xsl:iterate has no select attribute or sequence constructor, " +
+                    $"and its declared type '{pas}' does not allow an empty sequence.");
+            }
+
             XdmValue pvalue;
             if (!string.IsNullOrEmpty(pselect))
             {
@@ -18451,6 +18473,53 @@ public sealed class TransformEngine
             if (hasFollowingSibling)
                 throw new InvalidOperationException("XTSE3120: xsl:break and xsl:next-iteration must be the last instruction in their sequence constructor.");
         }
+    }
+
+    /// <summary>
+    /// Returns true if the <c>xsl:param</c> element has sequence-constructor content
+    /// (any child element or non-whitespace text), which supplies its default value.
+    /// </summary>
+    private static bool HasSequenceConstructorContent(XElement param)
+    {
+        foreach (var node in param.Nodes())
+        {
+            if (node is XElement)
+                return true;
+            if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true if the occurrence indicator of the declared sequence type
+    /// permits an empty sequence: no indicator (exactly-one) and <c>+</c> reject it,
+    /// <c>?</c> and <c>*</c> allow it. Types ending in a kind test such as
+    /// <c>map(*)</c> have no top-level indicator and thus reject the empty sequence.
+    /// </summary>
+    private static bool TypeAllowsEmptySequence(string asType)
+    {
+        var type = asType.Trim();
+        if (type.Length == 0)
+            return true;
+
+        int depth = 0;
+        for (int i = type.Length - 1; i >= 0; i--)
+        {
+            var c = type[i];
+            if (c == ')') depth++;
+            else if (c == '(') depth--;
+            else if (depth == 0)
+            {
+                return c switch
+                {
+                    '?' or '*' => true,
+                    '+' => false,
+                    _ => false
+                };
+            }
+        }
+        return false;
     }
 
     /// <summary>

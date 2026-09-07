@@ -14,6 +14,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 02-09-2026     | Skip namespace declarations in attribute check; XTSE0020 for non-required @use in        |
 //                      |                  |       |                | unnamed xsl:template (REQ-082)                                                           |
+//                      | Charles Korthout | 0.3   | 07-09-2026     | use="absent" with @as raises XTSE3088, not XTSE3089 (XTSE3089 is for                      |
+//                      |                  |       |                | xsl:global-context-item); context-item-010 (REQ-082)                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -125,9 +127,10 @@ public sealed class ContextItemDeclaration
                 throw new InvalidOperationException($"XTSE0020: xsl:context-item/@use='{useAttr}' is not permitted in an xsl:template without a name attribute; only 'required' is allowed.");
         }
 
-        // use="absent" is incompatible with @as.
+        // use="absent" is incompatible with @as (XTSE3088; XTSE3089 is the
+        // corresponding error for xsl:global-context-item).
         if (use == ContextItemUse.Absent && !string.IsNullOrEmpty(asAttr))
-            throw new InvalidOperationException("XTSE3089: xsl:context-item must not have an as attribute when use is absent.");
+            throw new InvalidOperationException("XTSE3088: xsl:context-item must not have an as attribute when use is absent.");
 
         string? validatedAs = null;
         if (!string.IsNullOrEmpty(asAttr))

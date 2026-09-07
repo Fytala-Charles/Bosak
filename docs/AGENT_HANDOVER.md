@@ -1,5 +1,23 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-07
+**Commit:** `f105066` — fix(XSLT): REQ-082 residual triage — strict sweep 7,722/7/6,871 → 7,722/3/6,875 (100% of runnable)
+**Current focus:** **REQ-082 residual triage complete: strict sweep 7,722/7/6,871 → 7,722/3/6,875 (100.0% of runnable). Xslt.Tests 377/0/0; build 0/0 warnings. QT3 untouched at 31,148/0/673.**
+**What was built:**
+- Earlier same session (commit `7781aa3`): Stan BOD→BOD regression coverage under REQ-015 (`BodTransformationRegressionTests`, 2 tests) + social-preview PNG regenerated (mojibake fixed) and SVG twin added.
+- **`context-item-010`** — `ContextItemDeclaration` now raises **XTSE3088** for `xsl:context-item[@use='absent']/@as`; XTSE3089 is `xsl:global-context-item`'s code (Stylesheet.cs global-context-item path unchanged; global-context-item 14/14 still green). Header 0.3.
+- **`iterate-902`** — `xsl:param` child of `xsl:iterate` with no `select` and no sequence-constructor content defaults to `()`; if `@as` disallows empty (no indicator or `+`), static **XTSE3520** now replaces the late XTTE0590. New helpers `HasSequenceConstructorContent` + `TypeAllowsEmptySequence` in TransformEngine (header 6.62). Iterate set 44/44.
+- **`package-200`** — invalid `xsl:use-package/@package-version` range no longer raises XTSE0020; per XSLT 3.0 §3.5.2 it never matches, so `ResolveUsePackage` fails with **XTSE3000** (Stylesheet 2.107). Unit test renamed `UsePackage_UnregisteredPackage_RaisesXTSE3000` (StylesheetTests 0.92). Package 72/70/2, package-version 35/2, use-package 49/5.
+- **`for-each-group-051`** — `ValidateForEachGroupAttributes` (XTSE1090) now runs **before** the XTDE1110 collation-recognition check at both for-each-group sites (TransformEngine 6.63). Set 81/4.
+- **Harness:** `use-package-291..294` skipped with documented contradiction — their XTSE0020 expectation for invalid version ranges contradicts spec REC §3.5.2 and `package-200` (Program.cs 3.42, same precedent as json-to-xml-typed-010).
+- **Documented out-of-scope residuals (3):** `evaluate-048` (remote `fn:document()` in `xsl:evaluate`; any-of needs live network), `package-021err`/`package-022err` (upstream pre-erratum-E36 stylesheets put arity `#0` in `xsl:function/@name` / `xsl:accept/@component`; Bosak's XTSE0020 is spec-correct, expected XTSE3050 unreachable).
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green; strict sweep `7,722/3/6,875`; QT3 `31,148/0/673`.
+**Next steps:** the ROADMAP Alpha→Beta item "remaining strict-sweep failures triaged" is now satisfiable with 3 documented residuals; remaining REQ-082 scope is the QT3-harness strictness follow-up noted in the registry.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-06
 **Commit:** `656dffa` — REQ-083 discoverability: NuGet package metadata polish (handover + registry updated)
 **Current focus:** **REQ-083 discoverability — NuGet package metadata polish. No engine/code changes; conformance numbers unchanged (strict 7,722/7/6,871; QT3 31,148/0/673; unit 2,214/0/0; build 0/0 warnings).**

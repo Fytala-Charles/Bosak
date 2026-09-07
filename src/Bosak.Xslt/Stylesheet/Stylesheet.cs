@@ -210,6 +210,9 @@
 //                      | Charles Korthout | 2.106 | 05-09-2026     | Reserved-namespace extension-element-prefixes now raises XTSE0085 per XSLT 3.0 REC       |
 //                      |                  |       |                | (math-3702); retired XTSE0800 expectation of extension-functions-0105 aliased in harness |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.107 | 07-09-2026     | Invalid xsl:use-package version range never matches instead of XTSE0020; package not     |
+//                      |                  |       |                | found raises XTSE3000 (package-200, REQ-082)                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1995,8 +1998,9 @@ public sealed class Stylesheet
                     if (string.IsNullOrEmpty(name))
                         throw new InvalidOperationException("XTSE0010: Missing required name attribute on xsl:use-package.");
                     var packageVersion = child.Attribute("package-version")?.Value?.Trim();
-                    if (!string.IsNullOrEmpty(packageVersion) && packageVersion != "*" && !Api.PackageVersion.IsValidVersionRange(packageVersion))
-                        throw new InvalidOperationException($"XTSE0020: Invalid package-version range '{packageVersion}'.");
+                    // An invalid version range is not a static error: it simply never
+                    // matches any package version, so resolution below fails with XTSE3000
+                    // (package-200, XSLT 3.0 §3.5.2).
                     ResolveUsePackage(child, name, packageVersion);
                     ParsePackageUseOptions(child);
                     if (child.Annotation<ResolvedModuleAnnotation>()?.Module is { } usedModule)
@@ -5150,7 +5154,7 @@ public sealed class Stylesheet
         var versionRange = string.IsNullOrWhiteSpace(packageVersion) ? "*" : packageVersion.Trim();
         var location = Api.XsltFunctionLibrary.ResolvePackageLocation(name, versionRange, _packageVersionResolutionStrategy);
         if (location == null)
-            throw new InvalidOperationException($"XTSE0165: Package '{name}' with version '{versionRange}' is not available.");
+            throw new InvalidOperationException($"XTSE3000: Package '{name}' with version '{versionRange}' was not found.");
 
         try
         {

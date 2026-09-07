@@ -121,6 +121,9 @@
 //                      | Charles Korthout | 3.41  | 05-09-2026     | Skip json-to-xml-typed-010 (spec contradiction: XTSE1650 required by 27.2 makes       |
 //                      |                  |       |                | expected XTDE3245 unreachable; W3C submissions concur)                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.42  | 07-09-2026     | Skip use-package-291..294 (invalid version range must yield XTSE3000 per §3.5.2,       |
+//                      |                  |       |                | contradicting their XTSE0020 expectation; package-200 pins spec behavior) (REQ-082)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -243,6 +246,13 @@ class Program
         // skip as schema-aware). Bosak raises the spec-mandated XTSE1650; see REQ-082
         // decision log 2026-09-05.
         "json-to-xml-typed-010",
+        // use-package-291..294 expect XTSE0020 for an invalid package-version range on
+        // xsl:use-package, but XSLT 3.0 §3.5.2 requires an invalid range to be treated as
+        // one that matches no version, so resolution fails with XTSE3000 (package-200,
+        // added later by the W3C, pins that behavior). The four expectations predate the
+        // rule and contradict package-200; Bosak follows the spec REC. See REQ-082
+        // decision log 2026-09-07.
+        "use-package-291", "use-package-292", "use-package-293", "use-package-294",
     };
 
     static Program()
