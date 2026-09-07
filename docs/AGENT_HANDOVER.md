@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-07
-**Commit:** `<this commit>` — fix(XPath/XQuery): REQ-082 QT3 strict error-code triage — 1,200 exposed, ~970 fixed, 233 documented residuals
+**Commit:** `4107ce8` — fix(XPath/XQuery): REQ-082 QT3 strict error-code triage — 1,200 exposed, ~970 fixed, 233 documented residuals
 **Current focus:** **REQ-082 QT3 strict follow-up COMPLETE for this session: QT3 29,948/1,200/673 (tightened baseline) → 30,909/233/679 (97.13%), zero new failure names; XSLT strict sweep unchanged 7,722/3/6,875; `dotnet test Bosak.sln` green (exit 0).**
 **What was built:**
 - Earlier same session (commits `7781aa3`, `d7d1087`): Stan BOD→BOD regression coverage (REQ-015), social-preview PNG fix + SVG twin, XSLT residual triage 7,722/7 → 7,722/3.
