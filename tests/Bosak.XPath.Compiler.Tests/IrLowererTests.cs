@@ -13,6 +13,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 30-05-2026     | Updated path-with-predicate tests for PathStepMap IR generation                        |
 //                      | Charles Korthout | 0.3   | 25-06-2026     | Updated path tests for element KindTest before named node tests                        |
+//                      | Charles Korthout | 0.4   | 07-09-2026     | Updated function-call tests for CheckFunction pre-resolution instruction               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -273,11 +274,13 @@ public class IrLowererTests
     {
         var module = Lower("fn:current-date()");
         var instrs = module.Instructions.ToArray();
-        Assert.Equal(2, instrs.Length);
-        Assert.Equal(IrOpCode.Call, instrs[0].OpCode);
-        Assert.Equal(0, instrs[0].RegisterB); // first arg reg
+        Assert.Equal(3, instrs.Length);
+        Assert.Equal(IrOpCode.CheckFunction, instrs[0].OpCode);
         Assert.Equal(0, instrs[0].RegisterC); // arg count
-        Assert.Equal("fn:current-date", module.LiteralPool[instrs[0].Operand]);
+        Assert.Equal(IrOpCode.Call, instrs[1].OpCode);
+        Assert.Equal(0, instrs[1].RegisterB); // first arg reg
+        Assert.Equal(0, instrs[1].RegisterC); // arg count
+        Assert.Equal("fn:current-date", module.LiteralPool[instrs[1].Operand]);
     }
 
     [Fact]
@@ -285,16 +288,19 @@ public class IrLowererTests
     {
         var module = Lower("concat('a', 'b')");
         var instrs = module.Instructions.ToArray();
+        // CheckFunction argCount=2
         // LoadString 'a'
         // LoadString 'b'
         // Call resultReg, firstArgReg, argCount=2, funcName
         // Return
-        Assert.Equal(4, instrs.Length);
-        Assert.Equal(IrOpCode.LoadString, instrs[0].OpCode);
+        Assert.Equal(5, instrs.Length);
+        Assert.Equal(IrOpCode.CheckFunction, instrs[0].OpCode);
+        Assert.Equal(2, instrs[0].RegisterC); // 2 args
         Assert.Equal(IrOpCode.LoadString, instrs[1].OpCode);
-        Assert.Equal(IrOpCode.Call, instrs[2].OpCode);
-        Assert.Equal(2, instrs[2].RegisterC); // 2 args
-        Assert.Equal("concat", module.LiteralPool[instrs[2].Operand]);
+        Assert.Equal(IrOpCode.LoadString, instrs[2].OpCode);
+        Assert.Equal(IrOpCode.Call, instrs[3].OpCode);
+        Assert.Equal(2, instrs[3].RegisterC); // 2 args
+        Assert.Equal("concat", module.LiteralPool[instrs[3].Operand]);
     }
 
     // ------------------------------------------------------------------

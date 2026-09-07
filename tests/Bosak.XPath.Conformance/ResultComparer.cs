@@ -49,6 +49,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.5   | 21-08-2026     | NormalizeXml falls back to XML 1.1 parsing; canonical serialization decodes encoded names |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.6   | 07-09-2026     | Strict error-code matching: removed lenient InvalidOperationException fallback in        |
+//                      |                  |       |                | CompareError (REQ-082 QT3 follow-up)                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.7   | 07-09-2026     | CompareError matches XPathErrorException.CodeLocalName structurally (FOER0000 family)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -315,14 +320,21 @@ internal static class ResultComparer
         if (expectedCode is "*" or "")
             return new TestOutcome(TestOutcomeKind.Passed, null);
 
-        // Try to extract error code from exception message
+        // Strict matching (REQ-082 QT3 follow-up, 2026-09-07): the declared error code
+        // must appear in the exception message. The previous lenient fallback accepted
+        // any InvalidOperationException, masking wrong-code passes.
+        // Structured match first: XPathErrorException (fn:error, xqt errors) carries the
+        // code explicitly — its Message is the description only (FOER0000 family).
+        for (Exception? cur = caughtException; cur is not null; cur = cur.InnerException)
+        {
+            if (cur is XPathErrorException xee &&
+                xee.CodeLocalName.Equals(expectedCode, StringComparison.OrdinalIgnoreCase))
+                return new TestOutcome(TestOutcomeKind.Passed, null);
+        }
+
         string message = caughtException.Message;
         if (message.Contains(expectedCode, StringComparison.OrdinalIgnoreCase))
             return new TestOutcome(TestOutcomeKind.Passed, null);
-
-        // Some errors map to generic messages; accept any runtime error for now
-        if (caughtException is InvalidOperationException)
-            return new TestOutcome(TestOutcomeKind.Passed, null); // lenient matching
 
         return new TestOutcome(TestOutcomeKind.Failed, $"Expected error {expectedCode}, got: {message}");
     }

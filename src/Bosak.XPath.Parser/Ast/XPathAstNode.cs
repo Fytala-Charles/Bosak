@@ -45,6 +45,8 @@
 //                      | Charles Korthout | 1.13  | 22-08-2026     | Added ValidateExpressionNode for XQuery validate expressions |
 //                      | Charles Korthout | 1.14  | 23-08-2026     | ValidateExpressionNode carries optional TypeName/TypePrefix for validate type QName |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.15  | 07-09-2026     | NodeTest carries KindTestInnerName for document-node(element|schema-element(...))        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
@@ -371,7 +373,21 @@ public sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, boo
 // Node tests
 // ------------------------------------------------------------------
 
-public sealed record NodeTest(NameTestKind Kind, string? Name = null, string? NamespaceUri = null, string? KindTestArgument = null, string? KindTestTypeName = null);
+/// <summary>
+/// A node test: wildcard, name test, or kind test.
+/// <paramref name="NamespaceUri"/> carries a prefix for prefixed name tests (resolved at
+/// compile/evaluation time), the wildcard marker <c>"*"</c>, or an explicit namespace URI
+/// for EQName and <c>xml</c> forms. For <c>document-node()</c> kind tests,
+/// <paramref name="KindTestInnerName"/> records the inner test ("element" or
+/// "schema-element") and <paramref name="KindTestArgument"/> its name argument.
+/// </summary>
+public sealed record NodeTest(
+    NameTestKind Kind,
+    string? Name = null,
+    string? NamespaceUri = null,
+    string? KindTestArgument = null,
+    string? KindTestTypeName = null,
+    string? KindTestInnerName = null);
 
 // ------------------------------------------------------------------
 // Enums

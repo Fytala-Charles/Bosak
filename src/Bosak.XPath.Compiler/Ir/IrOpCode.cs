@@ -36,6 +36,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 22-08-2026     | Added Validate opcode for XQuery validate expressions |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 07-09-2026     | Added CheckFunction opcode for pre-argument callee resolution (XPST0017)                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -54,6 +56,7 @@ public enum IrOpCode : byte
     JumpIfEmpty,
     Call,
     TailCall,
+    CheckFunction,      // Resolve a static call target before arguments are evaluated (XPST0017 precedence)
     For,
     Some,
     Every,

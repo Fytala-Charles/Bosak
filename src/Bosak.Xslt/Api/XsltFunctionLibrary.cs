@@ -36,6 +36,8 @@
 //                      | Charles Korthout | 0.14  | 02-09-2026     | FOXT0002 when a stylesheet-location resource cannot be retrieved (transform-001); fn:transform with no entry point raises FOXT0002|
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.15  | 02-09-2026     | fn:load-xquery-module enabled via EvaluationContext.XQueryModuleLoader + static module-source registry |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.16  | 07-09-2026     | Register the XSLT-defined document() function on XSLT contexts                           |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -371,6 +373,9 @@ public static class XsltFunctionLibrary
     public static void Populate(EvaluationContext context)
     {
         PopulateTransformOnly(context);
+        // document() is an XSLT-defined function: it lives on XSLT contexts only, not in
+        // the pure XPath/XQuery function library (K2-NodeTest-10 expects XPST0017).
+        FunctionLibrary.PopulateXsltDocumentFunction(context);
         context.RegisterFunction(new FunctionSignature
         {
             NamespaceUri = "http://www.w3.org/2005/xpath-functions",

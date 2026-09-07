@@ -20,6 +20,8 @@
 
 ## 0. Recent Changes
 
+- **2026-09-07** — XPath/XQuery: **static name-test validation (QT3 static-error follow-up)** — undeclared prefixes in name tests and schema-aware kind tests are now rejected at **compile time** instead of surfacing as XPDY0002 at evaluation: `StaticNameTestValidator` (new, `src/Bosak.XPath.Compiler`) raises **XPST0081** for unresolvable prefixes and **XPST0008** for schema-element/schema-attribute with unknown types, mirroring the VM's `NamespaceTest` operand rules and understanding direct-element-constructor `xmlns:` scopes. It runs from `XPath31Expression.Compile` when `CompileOptions.Namespaces` is supplied (XSLT pattern compilation is unchanged), and from `XQueryCompiler` for the main module body. Related changes: the parser rejects whitespace/comments inside wildcard QNames (`*:local`, K2-Axes-5..16), the `namespace::` axis in XQuery (**XPST0003**, K2-Axes-54), malformed kind-test arguments (`item(...)`, `element(1)`, …), and invalid `document-node(...)` content; the lexer raises **XPST0003** for unterminated `Q{` and **XQST0046** for invalid braced-URI literals; a new `CheckFunction` IR opcode resolves callees before arguments so unknown functions raise **XPST0017** with correct precedence (K2-NodeTest-10); `fn:document#1/#2` moved out of the base library (XPST0017 in pure XPath/XQuery) and are registered by `XsltFunctionLibrary.Populate` for XSLT only. `XQueryCompiler` gains **`WithNamespace(prefix, uri)`** for host-environment bindings (§4.4a). QT3: **30,909/233/679** (was 30,737/405/679 — no new failure names).
+
 - **2026-09-05** — XSLT: **EXSLT math extension library (`extension-functions-0201`)** — `FunctionLibrary` now registers the EXSLT math module in namespace `http://exslt.org/math`: `math:constant#1/#2` (PI, E, SQRRT2, LN2, LN10, LOG2E, SQRT1_2; decimal-string truncation to the requested precision, matching the Saxon/EXSLT reference semantics) plus `abs`, `sqrt`, `sin`, `cos`, `tan`, `log`, `exp`, `power`, `atan2`, `max`, `min`. `math:constant` raises **XTDE1420** for an unknown constant name or out-of-range precision and **XTDE1425** when an argument cannot be converted to the required type. Dispatch is by namespace URI, so the standard XSLT 2.0+ `math:*` functions in `http://www.w3.org/2005/xpath-functions/math` are unaffected. This restores the W3C `extension-functions-0201` test (7,718/12 → 7,719/11).
   - Implementation: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (header → 5.109).
   - Regression tests: `tests/Bosak.XPath.Standard.Tests/ExsltMathTests.cs` (new file, 24 tests).
@@ -1920,6 +1922,26 @@ var result = compiler
   base URI, default element namespace, default collation).
 - A library module cannot be evaluated as a query (XPST0003); unresolved imports raise
   XQST0059; duplicate imports of one namespace raise XQST0047.
+
+### 4.4a Host-Environment Namespace Bindings
+
+Host environments (test drivers, embedding applications) can pre-bind namespace prefixes in
+the static context with `WithNamespace(prefix, uri)` — the same mechanism the QT3 harness
+uses for environment-declared prefixes. Prolog `declare namespace` declarations take
+precedence over external bindings:
+
+```csharp
+var compiler = new XQueryCompiler()
+    .WithNamespace("test", "http://www.xpathtest.com/test");
+
+var result = compiler
+    .Compile("/test:valueComp200/test:integer[. eq 3]")
+    .Evaluate(new XQueryContext());
+```
+
+Undeclared prefixes in name tests are rejected at compile time with XPST0081 (see
+§2 static-name-test validation), so queries that rely on host bindings must declare them
+through `WithNamespace`.
 
 ### 4.5 Current Status
 

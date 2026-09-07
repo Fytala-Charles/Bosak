@@ -44,6 +44,8 @@
 //                      | Charles Korthout | 2.5   | 21-08-2026     | Detect XQST0034 conflicts between user-declared functions and schema simple-type constructor functions |
 //                      | Charles Korthout | 2.6   | 22-08-2026     | BuildSchemaSet can merge an existing schema set and skip duplicate namespaces (fn:load-xquery-module schema propagation) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.7   | 07-09-2026     | Circular variable dependency raises XQDY0054 (XQuery 3.1 §4.15 dynamic detection)         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -431,9 +433,11 @@ public sealed class XQueryExecutable
                 {
                     if (v.LocalName == local && v.NamespaceUri == ns && v.Body is not null)
                     {
-                        // XQST0054: circular variable dependency.
+                        // XQDY0054: circular variable dependency. Per XQuery 3.1 §4.15 the
+                        // error is detected dynamically (it is not a static error), so the
+                        // code is XQDY0054 even though detection happens during evaluation.
                         if (!inFlight.Add((local, ns)))
-                            throw new InvalidOperationException($"XQST0054: Circular variable dependency for variable '${local}'.");
+                            throw new InvalidOperationException($"XQDY0054: Circular variable dependency for variable '${local}'.");
                         var savedItem = ctx.ContextItem;
                         var savedPosition = ctx.ContextPosition;
                         var savedSize = ctx.ContextSize;

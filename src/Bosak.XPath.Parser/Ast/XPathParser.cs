@@ -112,6 +112,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.53  | 23-08-2026     | Allow keywords as unprefixed function names when followed by '(' or '#' (xquery30keywords5) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.54  | 07-09-2026     | Static errors: wildcard-QName trivia gaps, kind-test arguments, document-node content... |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -222,6 +224,13 @@ public sealed class XPathParser
     private Token Current => _position < _tokens.Length ? _tokens[_position] : Token.Eof;
     private Token Peek(int offset) => _position + offset < _tokens.Length ? _tokens[_position + offset] : Token.Eof;
     private bool IsAtEnd => _position >= _tokens.Length;
+
+    /// <summary>
+    /// True when trivia (whitespace or comments) intervenes between two adjacent tokens.
+    /// Wildcard QNames such as <c>*:local</c> and <c>prefix:*</c> are single lexical units:
+    /// trivia between their parts is a syntax error (K2-Axes-5..16).
+    /// </summary>
+    private static bool HasTriviaGap(Token before, Token after) => before.Start + before.Length < after.Start;
 
     private int End => _position > 0 ? _tokens[_position - 1].Start + _tokens[_position - 1].Length : 0;
 
@@ -1469,6 +1478,10 @@ public sealed class XPathParser
         if ((Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind)) && Peek(1).Kind == TokenKind.DoubleColon)
         {
             axis = ParseAxisName();
+            // XPath 2.0+ removed the namespace axis; XQuery does not support it at all
+            // (K2-Axes-54). XPath/XSLT keep the engine's namespace-axis support.
+            if (axis == XdmAxis.Namespace && _allowFullFlwor)
+                throw new ParseException("XPST0003: The namespace axis is not supported in XQuery.", start);
             Expect(TokenKind.DoubleColon);
             axisExplicit = true;
         }
@@ -1528,6 +1541,7 @@ public sealed class XPathParser
         // Wildcard: *
         if (Match(TokenKind.Star))
         {
+            var starTok = _tokens[_position - 1];
             // *:local — greedy, except inside a map-constructor key where the wildcard
             // form applies only when the entry ':' follows the local name; otherwise
             // '*' alone is the key and the first ':' is the entry separator (map{* :b}).
@@ -1536,8 +1550,15 @@ public sealed class XPathParser
                     || (Peek(1).Kind == TokenKind.Name && !GetString(Peek(1)).Contains(':')
                         && Peek(2).Kind == TokenKind.Colon)))
             {
+                // Whitespace or comments may not intervene between the parts of a
+                // wildcard QName (K2-Axes-5..8/11/13/15/16).
+                if (HasTriviaGap(starTok, Current))
+                    throw new ParseException("XPST0003: Whitespace and comments are not allowed between '*' and ':' in a wildcard name test.", starTok.Start);
+                var colonTok = Current;
                 Advance(); // ':'
                 var local = ExpectName();
+                if (HasTriviaGap(colonTok, local))
+                    throw new ParseException("XPST0003: Whitespace and comments are not allowed between ':' and the local name in a wildcard name test.", colonTok.Start);
                 return new NodeTest(NameTestKind.QName, GetString(local), "*");
             }
             return new NodeTest(NameTestKind.AnyName);
@@ -1545,6 +1566,7 @@ public sealed class XPathParser
 
         if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
         {
+            var nameTok = Current;
             var name = GetString(Current);
             var (prefix, local, nsUri) = SplitQName(name);
 
@@ -1581,6 +1603,10 @@ public sealed class XPathParser
                 // (nametest-23; the URI-qualified wildcard form is Q{uri}*).
                 if (name.StartsWith("Q{", StringComparison.Ordinal))
                     throw new ParseException($"XPST0003: A braced URI literal must not be followed by ':*' ('{name}:*').", Current.Start);
+                // Whitespace or comments may not intervene between the parts of a
+                // wildcard QName (K2-Axes-9/10/12/14).
+                if (HasTriviaGap(nameTok, Current) || HasTriviaGap(Current, Peek(1)))
+                    throw new ParseException($"XPST0003: Whitespace and comments are not allowed within the wildcard name test '{name}:*'.", nameTok.Start);
                 Advance(); // ':'
                 Advance(); // '*'
                 return new NodeTest(NameTestKind.NamespaceAny, name);
@@ -1605,116 +1631,154 @@ public sealed class XPathParser
 
     private NodeTest ParseKindTest()
     {
+        var nameTok = Current;
         var name = GetString(Current);
         Advance();
         Expect(TokenKind.LParen);
 
         string? argument = null;
         string? typeName = null;
+        string? innerName = null;
 
-        // Schema-aware kind tests require schema awareness, which this engine does not
-        // support. Grammar errors are checked here: the empty form, a wildcard, and a
-        // string literal argument are XPST0003 (K2-Axes-85, K2-NodeTest-8/9,
-        // K2-NameTest-33/34). Unprefixed names are XPST0008 (K2-Axes-84); prefixed
-        // names flow to evaluation where an unbound prefix is XPST0081 (K2-NameTest-35/36).
-        if (name is "schema-element" or "schema-attribute")
+        // item() is an ItemType in SequenceType syntax only; as a node test in a step
+        // it is a reserved-name syntax error (function-call-reserved-function-names-026).
+        if (name == "item")
+            throw new ParseException("XPST0003: item() is not a node test and cannot appear in a path step.", nameTok.Start);
+
+        // Kind tests that take no argument at all (K2-NodeTest-4/5/6).
+        if (name is "text" or "comment" or "node" or "namespace-node")
+        {
+            if (Current.Kind != TokenKind.RParen)
+                throw new ParseException($"XPST0003: The {name}() kind test does not allow an argument.", Current.Start);
+        }
+        else if (name == "document-node")
         {
             if (Current.Kind == TokenKind.RParen)
-                throw new ParseException($"XPST0003: The {name}() kind test requires a name argument.", Current.Start);
-            if (Current.Kind == TokenKind.Star)
-                throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a wildcard.", Current.Start);
-            if (Current.Kind == TokenKind.StringLiteral)
-                throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a string literal.", Current.Start);
-            if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
-                throw new ParseException($"XPST0008: Schema-aware kind test {name}() is not supported (no schema awareness).", Current.Start);
-        }
-
-        // Parse simple kind-test arguments: processing-instruction(name), element(name), attribute(name).
-        // For now we do not parse schema types or nested kind tests (e.g. document-node(element(x))).
-        if (Current.Kind == TokenKind.RParen)
-        {
-            // empty parentheses, e.g. node(), text(), element()
-        }
-        else if (name == "processing-instruction")
-        {
-            // The argument must be an NCName or a string literal holding a valid NCName
-            // (anything else is XPST0003); a string literal is whitespace-trimmed and
-            // validated (XPTY0004, K2-NameTest-21/23).
-            if (Current.Kind == TokenKind.StringLiteral)
             {
-                argument = Unquote(GetString(Current)).Trim();
-                if (!IsValidNCName(argument))
-                    throw new ParseException($"XPTY0004: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
-                Advance();
-            }
-            else if (Current.Kind == TokenKind.Name)
-            {
-                argument = GetString(Current);
-                // Only an unprefixed NCName is a syntactically valid PI name (K2-NameTest-25).
-                if (!IsValidNCName(argument))
-                    throw new ParseException($"XPST0003: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
-                Advance();
+                // Empty document-node() is accepted (matches any document node), e.g.
+                // K2-Axes-105 self::document-node().
             }
             else
             {
-                throw new ParseException($"XPST0003: The processing-instruction() argument must be a name or string literal but found {Current.Kind}.", Current.Start);
+                // Only element() or schema-element() tests may appear inside document-node()
+                // (K2-NodeTest-7/12/14..20/22).
+                (argument, innerName) = ParseDocumentNodeContent();
             }
-            // skip to closing paren
-            while (!IsAtEnd && Current.Kind != TokenKind.RParen)
-                Advance();
         }
-        else if (name == "element" || name == "attribute" || name is "schema-element" or "schema-attribute")
+        else if (name == "processing-instruction")
         {
-            // argument is a name test (QName, *, prefix:*, or NCName), optionally followed
-            // by a comma and a schema type name (attribute(foo, xs:integer)).
-            if (Current.Kind == TokenKind.Star)
+            if (Current.Kind != TokenKind.RParen)
             {
-                argument = "*";
-                Advance();
-            }
-            else if (Current.Kind == TokenKind.Name)
-            {
-                var argName = GetString(Current);
-                Advance();
-                if (Current.Kind == TokenKind.Colon)
+                // The argument must be an NCName or a string literal holding a valid NCName
+                // (anything else is XPST0003); a string literal is whitespace-trimmed and
+                // validated (XPTY0004, K2-NameTest-21/23).
+                if (Current.Kind == TokenKind.StringLiteral)
                 {
+                    argument = Unquote(GetString(Current)).Trim();
+                    if (!IsValidNCName(argument))
+                        throw new ParseException($"XPTY0004: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
                     Advance();
-                    if (Current.Kind == TokenKind.Star)
+                }
+                else if (Current.Kind == TokenKind.Name)
+                {
+                    argument = GetString(Current);
+                    // Only an unprefixed NCName is a syntactically valid PI name (K2-NameTest-25).
+                    if (!IsValidNCName(argument))
+                        throw new ParseException($"XPST0003: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
+                    Advance();
+                }
+                else
+                {
+                    throw new ParseException($"XPST0003: The processing-instruction() argument must be a name or string literal but found {Current.Kind}.", Current.Start);
+                }
+                // skip to closing paren
+                while (!IsAtEnd && Current.Kind != TokenKind.RParen)
+                    Advance();
+            }
+        }
+        else if (name is "element" or "attribute" or "schema-element" or "schema-attribute")
+        {
+            // Schema-aware kind tests require schema awareness, which this engine does not
+            // support. Grammar errors are checked here: the empty form, a wildcard, and a
+            // string literal argument are XPST0003 (K2-Axes-85, K2-NodeTest-8/9,
+            // K2-NameTest-33/34). Unprefixed names are XPST0008 (K2-Axes-84); prefixed
+            // names are namespace-checked at compile time (XPST0081, K2-NodeTest-23..27).
+            if (name is "schema-element" or "schema-attribute")
+            {
+                if (Current.Kind == TokenKind.RParen)
+                    throw new ParseException($"XPST0003: The {name}() kind test requires a name argument.", Current.Start);
+                if (Current.Kind == TokenKind.Star)
+                    throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a wildcard.", Current.Start);
+                if (Current.Kind == TokenKind.StringLiteral)
+                    throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a string literal.", Current.Start);
+                if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
+                    throw new ParseException($"XPST0008: Schema-aware kind test {name}() is not supported (no schema awareness).", Current.Start);
+            }
+
+            if (Current.Kind != TokenKind.RParen)
+            {
+                // argument is a name test (QName, *, prefix:*, or NCName), optionally followed
+                // by a comma and a schema type name (attribute(foo, xs:integer)).
+                if (Current.Kind == TokenKind.Star)
+                {
+                    argument = "*";
+                    Advance();
+                }
+                else if (Current.Kind == TokenKind.Name)
+                {
+                    var argName = GetString(Current);
+                    Advance();
+                    if (Current.Kind == TokenKind.Colon)
                     {
-                        argument = argName + ":*";
                         Advance();
+                        if (Current.Kind == TokenKind.Star)
+                        {
+                            argument = argName + ":*";
+                            Advance();
+                        }
+                        else if (Current.Kind == TokenKind.Name)
+                        {
+                            argument = argName + ":" + GetString(Current);
+                            Advance();
+                        }
+                        else
+                        {
+                            throw new ParseException($"XPST0003: Expected a local name or '*' after ':' in the {name}() name test.", Current.Start);
+                        }
                     }
-                    else if (Current.Kind == TokenKind.Name)
+                    else
                     {
-                        argument = argName + ":" + GetString(Current);
-                        Advance();
+                        argument = argName;
                     }
                 }
                 else
                 {
-                    argument = argName;
+                    // Anything but a name or wildcard is a syntax error: reserved function
+                    // names used as calls (element(1), attribute(1), ...) land here (K2-NodeTest
+                    // via function-call-reserved-function-names-001/004/020/023).
+                    throw new ParseException($"XPST0003: The {name}() kind test argument must be a name or '*', not {Current.Kind}.", Current.Start);
                 }
-            }
-            // Optional schema type name after a comma (validated at evaluation time).
-            if (Match(TokenKind.Comma))
-            {
-                if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
+                // Optional schema type name after a comma (validated at evaluation time).
+                if (Match(TokenKind.Comma))
                 {
-                    typeName = GetString(Current);
-                    Advance();
+                    if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
+                    {
+                        typeName = GetString(Current);
+                        Advance();
+                    }
+                    // An occurrence indicator may follow the type name; it does not affect
+                    // single-node kind-test matching.
+                    if (Current.Kind == TokenKind.Question)
+                        Advance();
                 }
-                // An occurrence indicator may follow the type name; it does not affect
-                // single-node kind-test matching.
-                if (Current.Kind == TokenKind.Question)
+                // skip any remaining content to the closing paren
+                while (!IsAtEnd && Current.Kind != TokenKind.RParen)
                     Advance();
             }
-            // skip any remaining content to the closing paren
-            while (!IsAtEnd && Current.Kind != TokenKind.RParen)
-                Advance();
         }
         else
         {
-            // For other kind tests (schema-element, schema-attribute, document-node) skip content.
+            // For other kind tests skip content.
             int depth = 1;
             while (!IsAtEnd && depth > 0)
             {
@@ -1725,7 +1789,103 @@ public sealed class XPathParser
         }
 
         Expect(TokenKind.RParen);
-        return new NodeTest(NameTestKind.KindTest, name, KindTestArgument: argument, KindTestTypeName: typeName);
+        return new NodeTest(NameTestKind.KindTest, name, KindTestArgument: argument, KindTestTypeName: typeName, KindTestInnerName: innerName);
+    }
+
+    /// <summary>
+    /// Parses the content of <c>document-node(...)</c>: only an <c>element()</c> or
+    /// <c>schema-element()</c> test is allowed inside. Returns the inner argument and
+    /// the inner test name ("element" or "schema-element").
+    /// </summary>
+    private (string? Argument, string? InnerName) ParseDocumentNodeContent()
+    {
+        if (Current.Kind == TokenKind.RParen)
+            throw new ParseException("XPST0003: The document-node() kind test requires an element() or schema-element() test, not empty parentheses.", Current.Start);
+        if (Current.Kind == TokenKind.Star)
+            throw new ParseException("XPST0003: The document-node() kind test requires an element() or schema-element() test, not a wildcard.", Current.Start);
+        if (Current.Kind != TokenKind.Name && !IsKeywordName(Current.Kind))
+            throw new ParseException($"XPST0003: The document-node() kind test requires an element() or schema-element() test but found {Current.Kind}.", Current.Start);
+
+        var inner = GetString(Current);
+        if (inner is not ("element" or "schema-element"))
+            throw new ParseException($"XPST0003: Only element() or schema-element() tests are allowed inside document-node(), not {inner}().", Current.Start);
+        Advance();
+        Expect(TokenKind.LParen);
+
+        string? argument = null;
+        string? typeName = null;
+
+        if (inner == "schema-element")
+        {
+            // Mirror the top-level schema-element() checks: the empty form, a wildcard,
+            // and a string literal are XPST0003; an unprefixed name is XPST0008 because
+            // schema-aware kind tests are unsupported (K2-NodeTest-19).
+            if (Current.Kind == TokenKind.RParen)
+                throw new ParseException("XPST0003: The schema-element() kind test requires a name argument.", Current.Start);
+            if (Current.Kind == TokenKind.Star)
+                throw new ParseException("XPST0003: The schema-element() kind test requires a name, not a wildcard.", Current.Start);
+            if (Current.Kind == TokenKind.StringLiteral)
+                throw new ParseException("XPST0003: The schema-element() kind test requires a name, not a string literal.", Current.Start);
+            if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
+                throw new ParseException("XPST0008: Schema-aware kind test schema-element() is not supported (no schema awareness).", Current.Start);
+        }
+
+        // Inner element()/schema-element() argument: a name test (QName, *, prefix:*),
+        // optionally followed by a comma and a schema type name.
+        if (Current.Kind == TokenKind.Star)
+        {
+            argument = "*";
+            Advance();
+        }
+        else if (Current.Kind == TokenKind.Name)
+        {
+            var argName = GetString(Current);
+            Advance();
+            if (Current.Kind == TokenKind.Colon)
+            {
+                Advance();
+                if (Current.Kind == TokenKind.Star)
+                {
+                    argument = argName + ":*";
+                    Advance();
+                }
+                else if (Current.Kind == TokenKind.Name)
+                {
+                    argument = argName + ":" + GetString(Current);
+                    Advance();
+                }
+                else
+                {
+                    throw new ParseException("XPST0003: Expected a local name or '*' after ':' in the schema-element()/element() name test.", Current.Start);
+                }
+            }
+            else
+            {
+                argument = argName;
+            }
+        }
+        else
+        {
+            throw new ParseException($"XPST0003: The {inner}() kind test argument must be a name or '*', not {Current.Kind}.", Current.Start);
+        }
+
+        // Optional schema type name after a comma (validated at evaluation time).
+        if (Match(TokenKind.Comma))
+        {
+            if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
+            {
+                typeName = GetString(Current);
+                Advance();
+            }
+            if (Current.Kind == TokenKind.Question)
+                Advance();
+        }
+        // skip any remaining content to the closing paren
+        while (!IsAtEnd && Current.Kind != TokenKind.RParen)
+            Advance();
+
+        Expect(TokenKind.RParen);
+        return (argument, inner);
     }
 
     private List<XPathAstNode> ParsePredicateList()
@@ -3170,6 +3330,11 @@ public sealed class XPathParser
                 if (qname[2..closeBrace].Contains('{'))
                     throw new ParseException($"XPST0003: Braces are not allowed in the URI part of an EQName ('{qname}').", 0);
                 string nsUri = NormalizeEQNameUri(ExpandEQNameRefs(qname[2..closeBrace]));
+                // The URI literal must be interpretable as an IRI reference: percent signs
+                // must introduce two hex digits and a fragment (after '#') may not contain
+                // further '#' or illegal characters (eqname-911/912, XQST0046).
+                if (!IsValidUriLiteral(nsUri))
+                    throw new ParseException($"XQST0046: The URI literal '{nsUri}' is not a valid URI reference.", 0);
                 // The xmlns namespace must not appear in any EQName (eqname-910).
                 if (nsUri == "http://www.w3.org/2000/xmlns/")
                     throw new ParseException($"XQST0070: The namespace URI '{nsUri}' is reserved and must not be used in an EQName.", 0);
@@ -3210,6 +3375,49 @@ public sealed class XPathParser
         }
         return sb.ToString();
     }
+
+    /// <summary>
+    /// Validates the URI part of a braced URI literal as an IRI reference (XQST0046):
+    /// every '%' must start a two-hex-digit escape sequence, and everything after a
+    /// '#' (the fragment) must consist of fragment-legal characters only.
+    /// </summary>
+    private static bool IsValidUriLiteral(string uri)
+    {
+        const string hex = "0123456789abcdefABCDEF";
+        for (int i = 0; i < uri.Length; i++)
+        {
+            char c = uri[i];
+            if (c == '%')
+            {
+                if (i + 2 >= uri.Length || !hex.Contains(uri[i + 1]) || !hex.Contains(uri[i + 2]))
+                    return false;
+                i += 2;
+                continue;
+            }
+            if (c == '#')
+            {
+                for (int j = i + 1; j < uri.Length; j++)
+                {
+                    char f = uri[j];
+                    if (f == '%')
+                    {
+                        if (j + 2 >= uri.Length || !hex.Contains(uri[j + 1]) || !hex.Contains(uri[j + 2]))
+                            return false;
+                        j += 2;
+                        continue;
+                    }
+                    if (!IsUriFragmentChar(f))
+                        return false;
+                }
+                return true;
+            }
+        }
+        return true;
+    }
+
+    private static bool IsUriFragmentChar(char c) =>
+        char.IsLetterOrDigit(c) || c is '-' or '.' or '_' or '~' or '!' or '$' or '&' or '\''
+            or '(' or ')' or '*' or '+' or ',' or ';' or '=' or ':' or '@' or '/' or '?';
 
     /// <summary>
     /// Expands character references (<c>&amp;#x20;</c>, <c>&amp;#32;</c>) and predefined
@@ -3617,6 +3825,7 @@ public sealed class XPathParser
 
         // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), element(foo), etc.
         bool hasParens = false;
+        var baseLocal = local;
         if (Current.Kind == TokenKind.LParen)
         {
             hasParens = true;
@@ -3653,6 +3862,15 @@ public sealed class XPathParser
                 }
             } while (parenDepth > 0 && Current.Kind != TokenKind.Eof);
             local = sb.ToString();
+
+            // "document" is neither a kind test nor a type name: document() and document(*)
+            // in a SequenceType are syntax errors (K2-NodeTest-12/13).
+            if (baseLocal == "document" && string.IsNullOrEmpty(prefix))
+            {
+                var parensContent = local[baseLocal.Length..];
+                if (parensContent is "()" or "(*)")
+                    throw new ParseException("XPST0003: document() and document(*) are not valid sequence types.", Current.Start);
+            }
 
             // Function tests may have a return type: function(item()*) as xs:double
             if (local.StartsWith("function", StringComparison.OrdinalIgnoreCase)

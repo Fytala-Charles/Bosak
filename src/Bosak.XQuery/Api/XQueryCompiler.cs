@@ -52,11 +52,16 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.0   | 22-08-2026     | Resolve function namespaces inside XQuery validate expressions |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.1   | 07-09-2026     | Static name-test validation (XPST0081/XPST0008) of the main module body against the p... |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.2   | 07-09-2026     | WithNamespace seeds host-environment namespace bindings into the static context (prolog wins) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
+using Bosak.XPath.Compiler;
 using Bosak.XPath.Core;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
@@ -75,6 +80,7 @@ public sealed record XQueryModuleSource(string Uri, string? Location, string Sou
 public sealed class XQueryCompiler
 {
     private readonly List<XQueryModuleSource> _moduleSources = new();
+    private readonly Dictionary<string, string> _externalNamespaces = new(StringComparer.Ordinal);
 
     /// <summary>
     /// Registers a library module source that can satisfy a module import of
@@ -96,6 +102,22 @@ public sealed class XQueryCompiler
     }
 
     /// <summary>
+    /// Declares a namespace binding in the static context of the compiled query, as a
+    /// host environment would (e.g. QT3 test drivers pre-binding environment namespaces).
+    /// A binding declared by the query prolog itself takes precedence over an external one.
+    /// </summary>
+    /// <param name="prefix">The namespace prefix to bind.</param>
+    /// <param name="uri">The namespace URI the prefix expands to.</param>
+    /// <returns>The same compiler, for chaining.</returns>
+    public XQueryCompiler WithNamespace(string prefix, string uri)
+    {
+        ArgumentNullException.ThrowIfNull(prefix);
+        ArgumentNullException.ThrowIfNull(uri);
+        _externalNamespaces[prefix] = uri;
+        return this;
+    }
+
+    /// <summary>
     /// Compiles the supplied XQuery source text.
     /// </summary>
     /// <param name="query">The XQuery 3.1 source text.</param>
@@ -111,6 +133,20 @@ public sealed class XQueryCompiler
         if (parseResult.IsLibraryModule)
             throw new ParseException("XPST0003: A library module ('module namespace ...') cannot be evaluated as a query.", 0);
 
+        // 1b. External (host-environment) namespace bindings seed the static context;
+        // prolog declarations take precedence and are never overwritten.
+        if (_externalNamespaces.Count > 0)
+        {
+            var seeded = parseResult.StaticContext;
+            foreach (var (prefix, uri) in _externalNamespaces)
+            {
+                if (!seeded.Namespaces.ContainsKey(prefix))
+                    seeded = seeded.WithNamespace(prefix, uri);
+            }
+            if (!ReferenceEquals(seeded, parseResult.StaticContext))
+                parseResult = new XQueryParseResult(seeded, parseResult.Body, parseResult.IsLibraryModule);
+        }
+
         // 2. Load the transitive closure of imported library modules, keyed by target namespace.
         var moduleGraph = new Dictionary<string, List<XQueryParseResult>>(StringComparer.Ordinal);
         var loadedSources = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
@@ -121,6 +157,11 @@ public sealed class XQueryCompiler
 
         // 3. Resolve function-call namespaces using the static context derived from the prolog.
         var resolvedBody = ResolveFunctionNamespaces(parseResult.Body, parseResult.StaticContext);
+
+        // 3c. Static name-test validation (XPST0081 for undeclared prefixes; XPST0008 for
+        //     schema-aware kind tests) against the prolog's statically known namespaces.
+        StaticNameTestValidator.Validate(resolvedBody, prefix =>
+            parseResult.StaticContext.Namespaces.TryGetValue(prefix, out var nsUri) ? nsUri : null);
 
         // 3b. Validate module-namespace references (public visibility, imports not transitive)
         //     and collect statically unresolvable names for the evaluation-time check.

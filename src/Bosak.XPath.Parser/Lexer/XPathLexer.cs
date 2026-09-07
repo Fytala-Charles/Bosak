@@ -32,6 +32,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 27-08-2026     | Reject invalid XML 1.0 name characters (e.g. U+00B5) as XPST0003                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.4   | 07-09-2026     | Unterminated braced URI literal Q{ raises XPST0003 (eqname-907)                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -361,8 +363,9 @@ public ref struct XPathLexer
             _position++; // consume '{'
             while (_position < _source.Length && _source[_position] != '}')
                 _position++;
-            if (_position < _source.Length)
-                _position++; // consume '}'
+            if (_position >= _source.Length)
+                throw new ParseException("XPST0003: Unterminated braced URI literal (missing '}').", start);
+            _position++; // consume '}'
 
             // URI-qualified wildcard: Q{uri}*
             if (_position < _source.Length && _source[_position] == '*')

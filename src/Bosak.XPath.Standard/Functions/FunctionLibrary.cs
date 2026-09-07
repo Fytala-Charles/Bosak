@@ -293,6 +293,13 @@
 //                      | Charles Korthout | 5.94  | 02-09-2026     | fn:function-lookup captures the resolved signature on the returned function             |
 //                      |                  |       |                | item (override-f-014)                                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.95  | 07-09-2026     | xs:QName constructor raises FORG0001 on invalid lexical value (K-SeqExprCast-1421)      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.96  | 07-09-2026     | fn:error#1/2/3 raise XPTY0004 on a non-QName code and CompareError matches             |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.97  | 07-09-2026     | fn:document#1/#2 moved out of the XPath/XQuery library (XPST0017); XSLT registers it ... |
+//                      |                  |       |                | XPathErrorException.CodeLocalName structurally (fn-error-3, FOER0000 family)            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3293,12 +3300,30 @@ public static class FunctionLibrary
     }
 
     /// <summary>
+    /// Registers fn:document#1 and fn:document#2, the XSLT-defined document() function.
+    /// Not part of the pure XPath/XQuery function library; called for XSLT contexts.
+    /// </summary>
+    /// <param name="context">The evaluation context to register the function on.</param>
+    public static void PopulateXsltDocumentFunction(EvaluationContext context)
+    {
+        if (context.IsStaticEvaluation)
+            return;
+        context.RegisterFunction(StandardFunctions[(Namespaces.Fn, "document", 1)]);
+        context.RegisterFunction(StandardFunctions[(Namespaces.Fn, "document", 2)]);
+    }
+
+    /// <summary>
     /// Populates the evaluation context with all standard functions.
     /// </summary>
     public static void Populate(EvaluationContext context)
     {
         foreach (var sig in StandardFunctions.Values)
         {
+            // document() is an XSLT-defined function (XSLT 1.0 heritage), not part of the
+            // XPath/XQuery function library: pure XPath/XQuery calls must raise XPST0017
+            // (K2-NodeTest-10). XSLT contexts register it via PopulateXsltDocumentFunction.
+            if (sig.NamespaceUri == Namespaces.Fn && sig.LocalName == "document")
+                continue;
             // XSLT-defined functions that depend on the dynamic evaluation context are
             // not available in a static (use-when / shadow attribute) context.
             if (context.IsStaticEvaluation && sig.NamespaceUri == Namespaces.Fn && XsltDynamicFunctions.Contains(sig.LocalName))
@@ -5176,7 +5201,10 @@ public static class FunctionLibrary
 
         string lexical = arg.StringValue.Trim();
         if (string.IsNullOrEmpty(lexical))
-            throw new InvalidOperationException("FOCA0002");
+            // XQuery constructor semantics: invalid lexical QName in the xs:QName
+            // CONSTRUCTOR is FORG0001 (K-SeqExprCast-1421); FOCA0002 is reserved
+            // for the 'cast as xs:QName' expression.
+            throw new InvalidOperationException("FORG0001: Empty string is not a valid lexical QName.");
 
         string prefix, local;
         int colon = lexical.IndexOf(':');
@@ -5185,7 +5213,7 @@ public static class FunctionLibrary
             prefix = lexical[..colon];
             local = lexical[(colon + 1)..];
             if (string.IsNullOrEmpty(prefix) || string.IsNullOrEmpty(local))
-                throw new InvalidOperationException("FOCA0002");
+                throw new InvalidOperationException("FORG0001: Invalid lexical QName.");
         }
         else
         {
@@ -5194,7 +5222,7 @@ public static class FunctionLibrary
         }
 
         if (!IsValidNcName(local) || (!string.IsNullOrEmpty(prefix) && !IsValidNcName(prefix)))
-            throw new InvalidOperationException("FOCA0002");
+            throw new InvalidOperationException("FORG0001: Invalid lexical QName.");
 
         if (!string.IsNullOrEmpty(prefix))
         {
@@ -8308,6 +8336,10 @@ public static class FunctionLibrary
         // An empty code argument behaves as err:FOER0000 (fn-error-5/6).
         if (IsEmptySequence(args[0]))
             throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", "fn:error() called");
+        // fn-error-3: a non-QName code (e.g. a plain string, which function conversion
+        // cannot promote to xs:QName) raises XPTY0004.
+        if (args[0].Kind != XdmValueKind.QName)
+            throw new InvalidOperationException("XPTY0004: The error code of fn:error must be an xs:QName.");
         var code = args[0].QNameValue;
         throw new XPathErrorException(code.NamespaceUri, code.LocalName, code.Prefix, $"fn:error({code}) called");
     }
@@ -8316,6 +8348,8 @@ public static class FunctionLibrary
     {
         if (IsEmptySequence(args[0]))
             throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", args[1].ToString());
+        if (args[0].Kind != XdmValueKind.QName)
+            throw new InvalidOperationException("XPTY0004: The error code of fn:error must be an xs:QName.");
         var code = args[0].QNameValue;
         throw new XPathErrorException(code.NamespaceUri, code.LocalName, code.Prefix, args[1].ToString());
     }
@@ -8324,6 +8358,8 @@ public static class FunctionLibrary
     {
         if (IsEmptySequence(args[0]))
             throw new XPathErrorException(XPathError.ErrNs, "FOER0000", "err", args[1].ToString(), args[2]);
+        if (args[0].Kind != XdmValueKind.QName)
+            throw new InvalidOperationException("XPTY0004: The error code of fn:error must be an xs:QName.");
         var code = args[0].QNameValue;
         throw new XPathErrorException(code.NamespaceUri, code.LocalName, code.Prefix, args[1].ToString(), args[2]);
     }

@@ -69,7 +69,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
 - **XSD Regex with Pinned Unicode 9.0** — Full `\p{X}`/`\P{X}` category and `\p{IsBlock}` support, class subtraction, astral-safe matching
 - **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:analyze-string`, `xsl:where-populated`, `xsl:on-empty`, `xsl:iterate`/`xsl:break`, `fn:transform()`
-- **XQuery 3.1 (Phase 4)** — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate` (`strict`/`lax`/`type QName`), output declarations and serialization, user-defined functions and variables, library modules (`import module` with %public/%private visibility), schema-aware user-defined simple types, QName/NOTATION preservation and ID/IDREF detection, higher-order function item instance-of over element kind tests, empty `document-node()` matching, constructed-element `xs:anyType` annotations, QName accessor singleton-sequence XPTY0004, function return-type atomization for user-defined schema types, keywords as unprefixed function names, instance-of type-hierarchy semantics for user-defined schema types; schema-aware `fn:json-to-xml` with `validate:=true()` against the W3C schema-for-JSON; QT3 wired (31,148/0/673)
+- **XQuery 3.1 (Phase 4)** — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate` (`strict`/`lax`/`type QName`), output declarations and serialization, user-defined functions and variables, library modules (`import module` with %public/%private visibility), schema-aware user-defined simple types, QName/NOTATION preservation and ID/IDREF detection, higher-order function item instance-of over element kind tests, empty `document-node()` matching, constructed-element `xs:anyType` annotations, QName accessor singleton-sequence XPTY0004, function return-type atomization for user-defined schema types, keywords as unprefixed function names, instance-of type-hierarchy semantics for user-defined schema types; schema-aware `fn:json-to-xml` with `validate:=true()` against the W3C schema-for-JSON; QT3 wired (30,909/233/679 strict)
 
 ---
 
@@ -178,7 +178,7 @@ flowchart TB
 | **XDM Core** | `Bosak.XPath.Core` | `XdmValue`, `IXdmNode`, `XdmSequence`, axis kinds |
 | **Node Providers** | `Bosak.XPath.Providers` | `XDocument`, `XmlDocument`, streaming adapters *(planned)* |
 | **XSLT** | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
-| **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, `XQueryExecutable`, `XQueryParser`, `XQueryStaticContext`; full core FLWOR + direct and computed constructors + switch/typeswitch + output declarations and serialization + user-defined functions/variables + library modules + schema-aware user-defined simple types; QT3 wired (29,929/0/1,892) |
+| **XQuery** | `Bosak.XQuery` | `XQueryCompiler`, `XQueryExecutable`, `XQueryParser`, `XQueryStaticContext`; full core FLWOR + direct and computed constructors + switch/typeswitch + output declarations and serialization + user-defined functions/variables + library modules + schema-aware user-defined simple types; QT3 wired (30,909/233/679 strict) |
 | **Language Server** | `Bosak.LanguageServer` | LSP server for XPath / XSLT / XQuery — diagnostics, completions, hover, go-to-definition, document outline, semantic tokens, code actions, code lens |
 | **VS Code Extension** | `vscode-bosak/` | TypeScript client for the language server |
 
@@ -203,7 +203,7 @@ flowchart TB
 |-------|-------------|--------|
 | 1 | XPath 3.1 Core — compiler + VM + standard functions | ✅ Complete |
 | 2 | XSLT 2.0/3.0 — template matching, sequence constructors, `fn:transform()` | ✅ Complete — full option surface + QT3 Tier-2m (117/124 passed, 7 skipped) |
-| 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries, full core FLWOR | 🚧 Phase 4 (constructors, modules, serialization, HOF, `fn:load-xquery-module`, schema-aware user-defined simple types, `validate`, QName/NOTATION/ID support, QName accessor singleton-sequence XPTY0004, function return-type atomization for user-defined schema types, schema-aware `fn:json-to-xml`); QT3 wired (31,148/0/673) |
+| 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries, full core FLWOR | 🚧 Phase 4 (constructors, modules, serialization, HOF, `fn:load-xquery-module`, schema-aware user-defined simple types, `validate`, QName/NOTATION/ID support, QName accessor singleton-sequence XPTY0004, function return-type atomization for user-defined schema types, schema-aware `fn:json-to-xml`); QT3 wired (30,909/233/679 strict) |
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | 📋 Planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
 
@@ -260,26 +260,31 @@ dotnet run --project tests/Bosak.XPath.Conformance/Bosak.XPath.Conformance.cspro
 
 The harness:
 1. Discovers all test sets from `tests/qt3tests/catalog.xml`
-2. Filters out unsupported features (schema-aware, XQuery-only, serialization, static typing)
-3. Skips XQuery syntax (`declare`, `import`, semicolons)
-4. Executes each test via the public `XPath31Expression.Compile(expr).Evaluate(ctx)` API
-5. Compares results against QT3 assertions (`assert-eq`, `assert-true`, `assert-xml`, etc.)
+2. Filters out unsupported features (schema-aware, XSLT streaming-only, serialization, static typing)
+3. Routes XQuery-syntax tests through the `Bosak.XQuery` pipeline; evaluates the rest via the public `XPath31Expression.Compile(expr).Evaluate(ctx)` API
+4. Executes each test with environment-defined namespaces, variables, and context documents wired in
+5. Compares results against QT3 assertions (`assert-eq`, `assert-true`, `assert-xml`, etc.) with strict error-code matching
 
 ### Current Results
 
 | Metric | Value |
 |--------|-------|
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
-| Pass Rate (XPath+XQuery) | **31,148 passed / 0 failed / 673 skipped** (97.89%); **100%** of runnable tests pass |
+| Pass Rate (XPath+XQuery) | **30,909 passed / 233 failed / 679 skipped** (97.13%) with strict error-code matching (2026-09-07); all failures triaged, zero wrong-code passes |
 | **XSLT 3.0** | 234 test sets, 14,600 tests |
 | Pass Rate (XSLT) | **7,722 passed / 3 failed / 6,875 skipped** — **100%** of runnable tests pass (measured with strict error-code matching; see note below) |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |
 | Unsupported Features | Schema awareness, XSLT streaming, XQuery-only dependencies |
 
-> **Strict error matching (2026-09-01)** — The XSLT conformance harness now requires the
-> declared `<error code="...">` to match the raised exception; previously any error satisfied
-> an error expectation. The strict count exposed 147 tests that passed with a wrong error
-> code (the lenient figure was 7,627/103/6,870). No genuinely passing test was lost.
+> **Strict error matching** — Both conformance harnesses now require the declared
+> `<error code="...">` to match the raised exception; previously any error satisfied an error
+> expectation. The XSLT strict count (2026-09-01) exposed 147 tests that passed with a wrong
+> error code (lenient figure 7,627/103/6,870). The QT3 strict tightening (2026-09-07) exposed
+> 1,200 wrong-code passes; the triage fixed ~970 of them — cast-matrix error codes, static
+> XPST0003/XPST0081/XPST0008 checks at parse/compile time, XQDY0054 dynamic detection,
+> FOER0000 structural matching — leaving 233 triaged failures (documented engine gaps:
+> schema list-type casts, extreme date/time ranges, JSON parse error-code granularity). No
+> genuinely passing test was lost in either sweep.
 
 ### Known Limitations
 

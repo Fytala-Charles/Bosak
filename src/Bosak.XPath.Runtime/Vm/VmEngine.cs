@@ -254,6 +254,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.133 | 05-09-2026     | Structural XPTY0019/XPTY0020 split: axis/PathStepMap raise XPTY0019 for atomic input only when the step has a path LHS (RegisterC flag from lowerer) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.134 | 07-09-2026     | §19.3 permitted-cast matrix (GetCastSourceFamily/IsCastCombinationPermitted): non-    |
+//                      |                  |       |                | permitted combinations raise XPTY0004 (was FORG0001); NaN/INF→integer/decimal raise    |
+//                      |                  |       |                | FOCA0002 (CastFailureKind; QT3 strict sweep, REQ-082 follow-up)                        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.135 | 07-09-2026     | CheckFunction opcode resolves the callee before arguments are evaluated (XPST0017      |
+//                      |                  |       |                | precedence over argument errors, K2-NodeTest-10)                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -403,6 +410,28 @@ public static class VmEngine
 
                 case IrOpCode.TailCall:
                     throw new NotImplementedException("TailCall is not yet implemented.");
+
+                case IrOpCode.CheckFunction:
+                    {
+                        // Pre-argument callee resolution: unknown functions raise XPST0017
+                        // before argument expressions are evaluated (K2-NodeTest-10).
+                        var checkLiteral = literalPool[instr.Operand]!;
+                        string checkLocal, checkNs;
+                        if (checkLiteral is ValueTuple<string, string> checkResolved)
+                        {
+                            checkLocal = checkResolved.Item1;
+                            checkNs = checkResolved.Item2;
+                        }
+                        else
+                        {
+                            (checkLocal, checkNs) = ResolveFunctionName((string)checkLiteral, context);
+                        }
+                        if (!context.TryResolveFunction(checkNs, checkLocal, instr.RegisterC, out _))
+                            throw new InvalidOperationException(
+                                $"XPST0017: Function {{{checkNs}}}{checkLocal}#{instr.RegisterC} not found.");
+                        ip++;
+                        break;
+                    }
 
                 // ------------------------------------------------------------------
                 // Context
@@ -6426,16 +6455,71 @@ public static class VmEngine
 
     public static XdmValue Cast(XdmValue value, string typeName, EvaluationContext? context)
     {
-        if (!TryCast(value, typeName, context, out var result))
-            throw new InvalidOperationException($"FORG0001: Cannot cast '{value}' to {typeName}.");
-        return result;
+        try
+        {
+            if (!TryCast(value, typeName, context, out var result, out var failureKind))
+            {
+                // XPath 3.1 §19: combinations outside the permitted-cast matrix are type
+                // errors (XPTY0004), NaN/INF→integer/decimal is out-of-range (FOCA0002);
+                // only lexical failures of permitted casts raise FORG0001.
+                throw failureKind switch
+                {
+                    CastFailureKind.NotPermitted => new InvalidOperationException(
+                        $"XPTY0004: The value '{value}' cannot be cast to {typeName}: the cast combination is not permitted (XPath 3.1 §19.3)."),
+                    CastFailureKind.OutOfRange => new InvalidOperationException(
+                        $"FOCA0002: The value '{value}' is out of range or not representable for {typeName}."),
+                    _ => new InvalidOperationException($"FORG0001: Cannot cast '{value}' to {typeName}."),
+                };
+            }
+            return result;
+        }
+        catch (OverflowException)
+        {
+            // Numeric conversion overflow maps to the spec code for the target family
+            // (cbcl-cast-*: decimal/integer FOCA0001, date/time FODT0001, durations FODT0002).
+            string code = normalizedCode(typeName) switch
+            {
+                "duration" or "yearmonthduration" or "daytimeduration" => "FODT0002",
+                "datetime" or "date" or "time"
+                    or "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth" => "FODT0001",
+                "decimal" => "FOCA0001",
+                _ => "FORG0001",
+            };
+            throw new InvalidOperationException($"{code}: The value '{value}' is out of range for {typeName}.");
+        }
+
+        static string normalizedCode(string name)
+        {
+            var n = name.Trim();
+            if (n.EndsWith('?') || n.EndsWith('*') || n.EndsWith('+'))
+                n = n[..^1].TrimEnd();
+            int colon = n.IndexOf(':');
+            if (colon >= 0 && !n.StartsWith("Q{", StringComparison.Ordinal))
+                n = n[(colon + 1)..];
+            return n.ToLowerInvariant();
+        }
     }
 
     public static bool TryCast(XdmValue value, string typeName, out XdmValue result)
         => TryCast(value, typeName, null, out result);
 
     public static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result)
+        => TryCast(value, typeName, context, out result, out _);
+
+    /// <summary>Distinguishes why a cast failed so <see cref="Cast"/> can raise the spec-mandated code.</summary>
+    private enum CastFailureKind
     {
+        /// <summary>A permitted cast whose lexical form or value is invalid (FORG0001).</summary>
+        Lexical,
+        /// <summary>The source/target combination is outside the §19.3 permitted-cast matrix (XPTY0004).</summary>
+        NotPermitted,
+        /// <summary>A representable value is out of range for the target type, e.g. NaN/INF to integer (FOCA0002).</summary>
+        OutOfRange,
+    }
+
+    private static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result, out CastFailureKind failureKind)
+    {
+        failureKind = CastFailureKind.Lexical;
         result = value;
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "").Replace("xsd:", "");
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
@@ -6493,7 +6577,12 @@ public static class VmEngine
                 return true;
             }
             if (seqLen != 1)
+            {
+                // Casting a sequence of more than one item is a type error (XPTY0004),
+                // not a cast failure (K-SeqExprCast-145).
+                failureKind = CastFailureKind.NotPermitted;
                 return false;
+            }
             var enumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
             enumerator.MoveNext();
             value = enumerator.Current;
@@ -6525,11 +6614,23 @@ public static class VmEngine
             throw new InvalidOperationException("XPST0051");
         }
 
-        // Schema type cast restrictions: some typed values can only cast to specific types
-        if (value.SchemaTypeName is not null
-            && normalized is not "string" and not "untypedatomic"
-            && !IsCastAllowed(value.SchemaTypeName, normalized))
+        // Unknown xs:* cast target: XQST0052 (matches the lowerer's static check and
+        // K-SeqExprCast-9a). User-defined simple types resolved above via
+        // TryGetSchemaSimpleType. (XSD list types such as NMTOKENS resolve through the
+        // schema path; their residual miscodes are recorded as known gaps.)
+        if (resolvedNs == XmlSchema.Namespace
+            && !BuiltInSchemaTypes.Any(t => string.Equals(t, resolvedLocal, StringComparison.OrdinalIgnoreCase)))
         {
+            throw new InvalidOperationException($"XQST0052: The type '{typeName}' is not a known schema type.");
+        }
+
+        // XPath 3.1 §19.3 permitted-cast matrix: combinations outside the matrix are
+        // type errors (XPTY0004) for 'cast as' and simply false for 'castable as' —
+        // never FORG0001. The source family is derived from the runtime kind plus any
+        // schema type annotation (plain xs:float etc. carry no annotation).
+        if (!IsCastCombinationPermitted(GetCastSourceFamily(value), normalized))
+        {
+            failureKind = CastFailureKind.NotPermitted;
             return false;
         }
 
@@ -6574,7 +6675,11 @@ public static class VmEngine
                     if (value.Kind == XdmValueKind.Double || value.Kind == XdmValueKind.Float)
                     {
                         double d = value.DoubleValue;
-                        if (double.IsNaN(d) || double.IsInfinity(d)) return false;
+                        if (double.IsNaN(d) || double.IsInfinity(d))
+                        {
+                            failureKind = CastFailureKind.OutOfRange;
+                            return false;
+                        }
                         if (d < 0 || d > ulong.MaxValue) return false;
                         if (d <= long.MaxValue)
                             result = XdmValue.FromInteger((long)d, normalized);
@@ -6622,7 +6727,10 @@ public static class VmEngine
                 {
                     double d = value.DoubleValue;
                     if (double.IsNaN(d) || double.IsInfinity(d))
+                    {
+                        failureKind = CastFailureKind.OutOfRange;
                         return false;
+                    }
                     if (d > long.MaxValue || d < long.MinValue)
                         throw new InvalidOperationException("FOCA0003");
                     long lDbl = (long)d;
@@ -6663,7 +6771,10 @@ public static class VmEngine
                 {
                     double d = value.DoubleValue;
                     if (double.IsNaN(d) || double.IsInfinity(d))
+                    {
+                        failureKind = CastFailureKind.OutOfRange;
                         return false;
+                    }
                     result = XdmValue.FromDecimal((decimal)d);
                     return true;
                 }
@@ -9422,34 +9533,110 @@ public static class VmEngine
         "numeric",
     };
 
-    private static bool IsCastAllowed(string? sourceSchemaType, string targetType)
+    /// <summary>
+    /// Classifies an atomized value into the XPath 3.1 §19.3 source-type families used by
+    /// the permitted-cast matrix. Plain typed values (xs:float etc.) carry no schema
+    /// annotation, so the runtime kind is the primary discriminator; schema annotations
+    /// (xs:untypedAtomic, xs:yearMonthDuration, xs:gYear, ...) refine it. Date/time values
+    /// are distinguished by subtype (date vs time vs the g* types) because §19.3.4
+    /// permits only specific subtype combinations.
+    /// </summary>
+    private static string GetCastSourceFamily(XdmValue value)
     {
-        if (string.IsNullOrEmpty(sourceSchemaType))
+        var st = value.SchemaTypeName?.ToLowerInvariant();
+        if (st is not null)
+        {
+            if (st is "untypedatomic" or "string"
+                or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
+                or "ncname" or "id" or "idref" or "entity")
+                return "stringish";
+            if (st is "hexbinary" or "base64binary")
+                return "binary";
+            if (st is "anyuri")
+                return "uri";
+            if (st is "qname" or "notation")
+                return "qname";
+            if (st is "duration")
+                return "duration";
+            if (st is "yearmonthduration")
+                return "yearmonthduration";
+            if (st is "daytimeduration")
+                return "daytimeduration";
+            if (st is "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth")
+                return st;
+            if (st is "datetime")
+                return "datetime";
+            if (st is "date")
+                return "date";
+            if (st is "time")
+                return "time";
+            if (IsIntegerSchemaType(st) || st is "decimal" or "double" or "float" or "numeric")
+                return "numeric";
+            if (st is "boolean")
+                return "boolean";
+            return "other";
+        }
+
+        return value.Kind switch
+        {
+            XdmValueKind.String => "stringish",
+            XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float => "numeric",
+            XdmValueKind.Boolean => "boolean",
+            XdmValueKind.Duration => value.SchemaTypeName?.ToLowerInvariant() switch
+            {
+                "yearmonthduration" => "yearmonthduration",
+                "daytimeduration" => "daytimeduration",
+                _ => "duration",
+            },
+            XdmValueKind.Date => "date",
+            XdmValueKind.Time => "time",
+            XdmValueKind.DateTime => "datetime",
+            XdmValueKind.QName => "qname",
+            XdmValueKind.Uri => "uri",
+            _ => "other",
+        };
+    }
+
+    /// <summary>
+    /// Applies the XPath 3.1 §19.3 permitted-cast matrix: xs:string/xs:untypedAtomic
+    /// (the "stringish" family) cast to anything; numeric targets accept numeric, boolean
+    /// and stringish sources; duration targets accept duration-family sources with
+    /// subtype rules (yearMonthDuration/dayTimeDuration only from themselves or
+    /// xs:duration); date/time targets accept only the subtype combinations of §19.3.4
+    /// (date and dateTime cast to all date/time types, time and the g* types only to
+    /// themselves). Combinations outside the matrix raise XPTY0004, not FORG0001.
+    /// </summary>
+    private static bool IsCastCombinationPermitted(string sourceFamily, string targetType)
+    {
+        if (sourceFamily is "stringish" or "other")
             return true;
-
-        sourceSchemaType = sourceSchemaType.ToLowerInvariant().Replace("xs:", "");
-        targetType = targetType.ToLowerInvariant().Replace("xs:", "");
-
-        // gYear, gYearMonth, gMonthDay, gDay, gMonth can only cast to themselves, string, untypedAtomic
-        if (sourceSchemaType is "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth")
-        {
-            return sourceSchemaType == targetType || targetType is "string" or "untypedatomic";
-        }
-
-        // hexBinary and base64Binary can cast to themselves, each other, string, untypedAtomic
-        if (sourceSchemaType is "hexbinary" or "base64binary")
-        {
-            return targetType is "hexbinary" or "base64binary" or "string" or "untypedatomic";
-        }
-
-        // anyURI can cast to itself, string, untypedAtomic
-        if (sourceSchemaType == "anyuri")
-        {
-            return targetType is "anyuri" or "string" or "untypedatomic";
-        }
-
-        // Other schema types (normalizedString, token, etc.) allow any cast
-        return true;
+        if (targetType is "string" or "untypedatomic"
+            or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
+            or "ncname" or "id" or "idref" or "entity")
+            return true;
+        if (IsIntegerSchemaType(targetType) || targetType is "decimal" or "double" or "float" or "numeric")
+            return sourceFamily is "numeric" or "boolean";
+        if (targetType is "boolean")
+            return sourceFamily is "boolean" or "numeric";
+        if (targetType is "duration" or "yearmonthduration" or "daytimeduration")
+            return sourceFamily is "duration" or "yearmonthduration" or "daytimeduration";
+        if (targetType is "datetime")
+            return sourceFamily is "datetime" or "date";
+        if (targetType is "date")
+            return sourceFamily is "datetime" or "date";
+        if (targetType is "time")
+            return sourceFamily is "datetime" or "time";
+        if (targetType is "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth")
+            return sourceFamily is "datetime" or "date" || sourceFamily == targetType;
+        if (targetType is "qname" or "notation")
+            return sourceFamily is "qname";
+        if (targetType is "anyuri")
+            return sourceFamily is "uri";
+        if (targetType is "hexbinary" or "base64binary")
+            return sourceFamily is "binary";
+        // time, gYear, gYearMonth, gMonthDay, gDay, gMonth sources reach here for
+        // non-date targets: rejected above except casting to themselves.
+        return sourceFamily == targetType;
     }
 
     private static bool IsIntegerInRange(long value, string typeName)

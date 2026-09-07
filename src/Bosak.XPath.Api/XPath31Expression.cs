@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 27-07-2026     | Namespace resolution traversal for StringConstructorNode |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 07-09-2026     | Static name-test validation (XPST0081/XPST0008) against CompileOptions.Namespaces        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
@@ -76,6 +78,14 @@ public sealed class XPath31Expression
         // 2. Resolve function-call namespaces using the supplied static context and
         // report static errors for functions that have been removed from the spec.
         ast = ResolveFunctionNamespaces(ast, options);
+
+        // 2b. Static name-test validation against the in-scope namespaces (XPST0081 for
+        // undeclared prefixes) and schema-aware kind tests (XPST0008, no schema awareness).
+        // Skipped when no static context is supplied: XSLT patterns compile without one
+        // and keep the runtime NamespaceTest resolution.
+        if (options.Namespaces is not null)
+            Compiler.StaticNameTestValidator.Validate(ast, prefix =>
+                options.Namespaces.TryGetValue(prefix, out var nsUri) ? nsUri : null);
 
         // 3. Optimize AST
         var optimizer = new XPathOptimizer();

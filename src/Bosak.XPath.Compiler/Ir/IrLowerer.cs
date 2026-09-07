@@ -86,6 +86,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.37  | 05-09-2026     | Axis/PathStepMap instructions carry a has-LHS flag (RegisterC) so atomic step input raises XPTY0019 only for non-first path steps |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.38  | 07-09-2026     | Emit CheckFunction before call arguments (XPST0017 precedence); document-node argumen... |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -824,6 +826,12 @@ public sealed class IrLowerer
         int[]? callArgRegs = null;
         bool consecutive = true;
 
+        // Resolve the callee before evaluating arguments: XPST0017 (unknown function) is a
+        // static error and must take precedence over errors inside argument expressions
+        // (K2-NodeTest-10: document(*) must raise XPST0017, not XPDY0002 from '*'). The
+        // same literal is reused by the Call below, so resolution behavior is identical.
+        Emit(IrOpCode.CheckFunction, 0, 0, (ushort)argCount, funcPoolIdx);
+
         if (argCount > 0)
         {
             // Evaluate each argument (may allocate scratch registers internally)
@@ -1276,8 +1284,10 @@ public sealed class IrLowerer
                     axisReg = afterTestReg;
 
                     // If the kind test has an argument (e.g. processing-instruction('name')),
-                    // emit a NameTest to filter by that name.
-                    if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument))
+                    // emit a NameTest to filter by that name. document-node(element(x)) keeps
+                    // its argument in the node test for static validation only; the runtime
+                    // match remains a plain document-node() kind test (K2-Axes-86).
+                    if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument) && node.NodeTest.Name != "document-node")
                     {
                         var kindArg = node.NodeTest.KindTestArgument;
                         if (kindArg.StartsWith("Q{", StringComparison.Ordinal))

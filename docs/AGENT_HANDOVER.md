@@ -1,6 +1,23 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-07
+**Commit:** `<this commit>` — fix(XPath/XQuery): REQ-082 QT3 strict error-code triage — 1,200 exposed, ~970 fixed, 233 documented residuals
+**Current focus:** **REQ-082 QT3 strict follow-up COMPLETE for this session: QT3 29,948/1,200/673 (tightened baseline) → 30,909/233/679 (97.13%), zero new failure names; XSLT strict sweep unchanged 7,722/3/6,875; `dotnet test Bosak.sln` green (exit 0).**
+**What was built:**
+- Earlier same session (commits `7781aa3`, `d7d1087`): Stan BOD→BOD regression coverage (REQ-015), social-preview PNG fix + SVG twin, XSLT residual triage 7,722/7 → 7,722/3.
+- **Harness strictness:** `ResultComparer.CompareError` (2.6/2.7) no longer accepts any `InvalidOperationException`; the declared code must appear in the message, with a structural fast path for `XPathErrorException.CodeLocalName` (its `Message` is the description only — FOER0000 family, ~99 tests). Documented skips for schema list-type casts (XPST0051/castable tokenization) and extreme-range cbcl-cast date/time tests (FODT0001/2 unreachable without per-parser range checks).
+- **Cast family (~730 tests):** `VmEngine.TryCast` (2.134) classifies failures via `CastFailureKind` (Lexical/NotPermitted/OutOfRange) against the XPath 3.1 §19.3 cast matrix incl. §19.3.4 date/time subtype rules (pinned from QT3: date+dateTime cast to all date/time targets; time/g* only to themselves + date/datetime sources; duration family casts freely — CastAs312). Codes: XPTY0004 (not permitted), FOCA0002 (NaN/INF → integer/decimal), FOCA0001 (decimal overflow), FODT0001/2 (date/time, duration), FORG0001 otherwise (integer family pins FORG0001); multi-item cast → NotPermitted (K-SeqExprCast-145); unknown xs:* target → XQST0052. `xs:QName` constructor → FORG0001 (FunctionLibrary 5.95); `fn:error#1/2/3` raise XPTY0004 on non-QName code (5.96).
+- **XQDY0054:** circular variable dependency is now a dynamic error per XQuery 3.1 §4.15 (XQueryExecutable 2.7). The catalog's XQ10 XQST0054 variants are all dependency-skipped, so no zero-sum conflict.
+- **Static XPST0003/XPST0081/XPST0008 families (~172 tests):** new `StaticNameTestValidator` (Compiler) raises unbound-prefix XPST0081 at COMPILE time for name tests and schema kind tests — previously evaluation-time (VmEngine), where XPDY0002 (context item absent) won. Wired into `XPath31Expression.Compile` + `XQueryCompiler`; new `XQueryCompiler.WithNamespace` (3.2) seeds host namespace bindings so QT3 env-declared prefixes reach the XQuery pipeline (TestExecutor 0.24). Parser/lexer strictness: wildcard-QName trivia gaps (`* :ncname`, `*(:c:):ncname`, `*:(:c:)ncname` → XPST0003), XQuery `namespace::` axis XPST0003, kind-test/document-node argument validation (`text(*)`, `document-node(name)`, `document(*)` in instance-of), unterminated `Q{`, XQST0046 invalid URIs, reserved function names → XPST0003; `CheckFunction` IR opcode gives XPST0017 precedence over context-item errors. `fn:document#1/#2` XSLT-only. NOTE: `XmlDocumentNode`/XSLT paths share the pipeline — XSLT strict sweep verified unchanged.
+- **Residuals (233, the next triage backlog):** JSON parse error-code granularity (FOJS0001 vs FOUT1190/1200, 24), XPTY0004 message-text families (`got: Cannot` 39+21+12), element-constructor XQTY0024 (14) / XQDY0027→XQDY0084 (9) / XQDY0074 (8), external-variable XPDY0002 vs XPST0008 (7), plus long tail ≤6. See registry REQ-082 decision log 2026-09-07 row.
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green; QT3 strict sweep `30,909/233/679`; XSLT strict `7,722/3/6,875`; XSLT unit 377/0/0.
+**Next steps:** continue QT3 residual triage (233 failures, family list above); then the ROADMAP Alpha→Beta strict-sweep item.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-09-07
 **Commit:** `f105066` — fix(XSLT): REQ-082 residual triage — strict sweep 7,722/7/6,871 → 7,722/3/6,875 (100% of runnable)
 **Current focus:** **REQ-082 residual triage complete: strict sweep 7,722/7/6,871 → 7,722/3/6,875 (100.0% of runnable). Xslt.Tests 377/0/0; build 0/0 warnings. QT3 untouched at 31,148/0/673.**
 **What was built:**

@@ -94,6 +94,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.33  | 23-08-2026     | Added function return-type atomization regression tests (qischema040/qischema040a) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.34  | 07-09-2026     | Updated undeclared-prefix and circular-variable tests for static XPST0081 and dynamic XQDY0054 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -846,9 +848,8 @@ public class PlaceholderTests
     public void XQuery_Constructor_UndeclaredPrefix_Rejected()
     {
         var compiler = new XQueryCompiler();
-        var executable = compiler.Compile("<foo:out/>");
-        var ctx = new XQueryContext();
-        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
+        // XPST0081 is a static error: compile must reject the undeclared tag prefix.
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile("<foo:out/>"));
         Assert.Contains("XPST0081", ex.Message);
     }
 
@@ -1410,12 +1411,14 @@ public class PlaceholderTests
     }
 
     [Fact]
-    public void XQuery_DeclareVariable_Circular_ThrowsXQST0054()
+    public void XQuery_DeclareVariable_Circular_ThrowsXQDY0054()
     {
         var compiler = new XQueryCompiler();
+        // Circularity through evaluation is detected dynamically (XQuery 3.1 §4.15), so
+        // the error code is XQDY0054 even though it surfaces during evaluation, not compile.
         var ex = Assert.ThrowsAny<Exception>(() =>
             compiler.Compile("declare variable $a := $b; declare variable $b := $a; $a").Evaluate(new XQueryContext()));
-        Assert.Contains("XQST0054", ex.Message);
+        Assert.Contains("XQDY0054", ex.Message);
     }
 
     [Fact]

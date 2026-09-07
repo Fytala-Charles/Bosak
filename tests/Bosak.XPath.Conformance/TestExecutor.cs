@@ -47,6 +47,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.22  | 22-08-2026     | Admit validate expressions in the XQuery construct gate                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.23  | 07-09-2026     | Pass environment namespace bindings to CompileOptions so compile-time XPST0081/XPST00... |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.24  | 07-09-2026     | Seed env namespaces into the XQuery compiler; route/skip namespace-axis feature tests |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -89,6 +93,20 @@ internal sealed class TestExecutor
         bool routeXQuery = CanHandleAsXQuery(expr) &&
                            !xpathOnlyCase &&
                            (hasXqDeps || (xquerySyntax && !expectsParseError));
+
+        // Namespace-axis feature tests: the XQuery pipeline rejects the (deprecated)
+        // namespace axis with XPST0003 (K2-Axes-54), while the XPath pipeline supports
+        // it. Plain-XPath expressions take the XPath pipeline (the axis works there);
+        // XQuery-syntax ones (e.g. generate-id-011's let) are inapplicable and skip.
+        if (routeXQuery &&
+            testCase.Dependencies.Any(d => d.Type == "feature" && d.Value == "namespace-axis") &&
+            expr.Contains("namespace::", StringComparison.Ordinal))
+        {
+            if (!xquerySyntax)
+                routeXQuery = false;
+            else
+                return new TestOutcome(TestOutcomeKind.Skipped, "namespace axis not supported in XQuery");
+        }
 
         var xqContext = routeXQuery ? new XQueryContext() : null;
         var ctx = xqContext?.EvaluationContext ?? new EvaluationContext();
@@ -148,13 +166,25 @@ internal sealed class TestExecutor
                         continue;
                     compiler.WithModule(module.Uri, File.ReadAllText(module.FilePath), module.Location);
                 }
+                // Environment namespace bindings are part of the static context (QT3
+                // drivers pre-bind them); without them compile-time XPST0081 validation
+                // would reject prefixes the environment declares (json-to-xml-011).
+                if (environment is not null)
+                    foreach (var ns in environment.Namespaces)
+                        compiler.WithNamespace(ns.Prefix, ns.Uri);
                 var executable = compiler.Compile(expr, xml11LineEndings);
                 result = executable.Evaluate(xqContext!);
-            }
-            else
+            }            else
             {
+                // Static name-test validation (XPST0081/XPST0008) runs at compile time and
+                // needs the environment's namespace bindings; an empty map validates against
+                // no prefixes (undeclared prefixes then fail fast with XPST0081).
+                var compileNamespaces = new Dictionary<string, string>(StringComparer.Ordinal);
+                if (environment is not null)
+                    foreach (var ns in environment.Namespaces)
+                        compileNamespaces[ns.Prefix] = ns.Uri;
                 var compiled = XPath31Expression.Compile(expr,
-                    new CompileOptions { Xml11LineEndings = xml11LineEndings });
+                    new CompileOptions { Xml11LineEndings = xml11LineEndings, Namespaces = compileNamespaces });
                 result = compiled.Evaluate(ctx);
             }
         }
