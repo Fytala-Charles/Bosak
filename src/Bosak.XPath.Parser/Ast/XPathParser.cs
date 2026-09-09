@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -116,12 +117,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.55  | 09-09-2026     | Operator/invalid tokens rejected as function names (K-NodeAfter/Before-5/7, K-FunctionCallExpr-9); empty-sequence() occurrence indicator is XPST0003 (K-QuantExprWith-7/8); typed function test requires 'as' return type (hof-910) |
 //                      | Charles Korthout | 1.56  | 09-09-2026     | Integer literals beyond long range tagged IsIntegerLiteral (stay xs:integer)             |
+//                      | Charles Korthout | 1.57  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Lexer;
 
@@ -145,6 +146,12 @@ public sealed class XPathParser
     // greedy — the entry ':' must follow the local name (map{* :b}, MapConstructor-020).
     private int _mapKeyDepth;
 
+    /// <summary>
+    /// Initializes a parser over a pre-lexed token stream.
+    /// </summary>
+    /// <param name="tokens">The tokens produced by <see cref="XPathLexer"/>, excluding the final Eof token.</param>
+    /// <param name="source">The original source text the tokens were scanned from (used for token text and spans).</param>
+    /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax (multiple for/let/where/order-by clauses).</param>
     public XPathParser(Token[] tokens, string source, bool allowFullFlwor = false)
     {
         _tokens = tokens;
@@ -185,6 +192,10 @@ public sealed class XPathParser
     /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax (multiple for/let/where/order-by clauses). Default is false (XPath-only FLWOR).</param>
     /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending
     /// normalization; when false (default), references produce their exact characters.</param>
+    /// <param name="boundarySpaceStrip">When true (the default), whitespace-only text at the
+    /// boundaries of direct element constructor content is stripped; false preserves it.</param>
+    /// <returns>The root of the parsed AST.</returns>
+    /// <exception cref="ParseException">The expression is not syntactically valid.</exception>
     public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
@@ -205,6 +216,10 @@ public sealed class XPathParser
     /// <param name="xpath">The XPath expression to parse.</param>
     /// <param name="allowFullFlwor">When true, allows full XQuery FLWOR syntax. Default is false.</param>
     /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending normalization.</param>
+    /// <param name="boundarySpaceStrip">When true (the default), whitespace-only text at the
+    /// boundaries of direct element constructor content is stripped; false preserves it.</param>
+    /// <returns>The root of the parsed AST.</returns>
+    /// <exception cref="ParseException">The expression is not syntactically valid, or input remains after the ExprSingle.</exception>
     public static XPathAstNode ParseExprSingle(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
@@ -305,6 +320,11 @@ public sealed class XPathParser
     // Entry point
     // ------------------------------------------------------------------
 
+    /// <summary>
+    /// Parses the token stream as a complete XPath expression, requiring all tokens to be consumed.
+    /// </summary>
+    /// <returns>The root of the parsed AST.</returns>
+    /// <exception cref="ParseException">The token stream is not a syntactically valid expression, or tokens remain after it.</exception>
     public XPathAstNode ParseExpression()
     {
         int start = Current.Start;

@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -40,6 +41,9 @@
 //                      | Charles Korthout | 0.16  | 07-09-2026     | Register the XSLT-defined document() function on XSLT contexts                           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.17  | 09-09-2026     | fn:transform option errors use FOXT0002 (mutually exclusive sources/options, delivery-format) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.18  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -75,8 +79,16 @@ public enum PackageVersionResolutionStrategy
 public readonly record struct PackageVersion
 {
     /// <summary>A single version component: a numeric part plus an optional suffix.</summary>
+    /// <param name="Number">The numeric part of the component.</param>
+    /// <param name="Suffix">The optional suffix (for example a pre-release label); empty for a release component.</param>
     public readonly record struct Component(int Number, string Suffix)
     {
+        /// <summary>
+        /// Compares this component to another: first by numeric value, then by suffix,
+        /// where the empty (release) suffix sorts after any non-empty suffix.
+        /// </summary>
+        /// <param name="other">The component to compare against.</param>
+        /// <returns>A negative value, zero, or a positive value when this component sorts before, equal to, or after <paramref name="other"/>.</returns>
         public int CompareTo(Component other)
         {
             int cmp = Number.CompareTo(other.Number);
@@ -87,17 +99,36 @@ public readonly record struct PackageVersion
 
     private readonly Component[] _components;
 
+    /// <summary>
+    /// Creates a package version from the supplied components.
+    /// </summary>
+    /// <param name="components">The version components in order from most to least significant.</param>
     public PackageVersion(Component[] components)
     {
         _components = components;
     }
 
+    /// <summary>The version components in order from most to least significant.</summary>
     public ReadOnlySpan<Component> Components => _components;
 
+    /// <summary>The number of version components.</summary>
     public int ComponentCount => _components.Length;
 
+    /// <summary>
+    /// Gets the component at the supplied index; indexes beyond the last component yield a
+    /// zero component with an empty suffix so versions of different lengths compare equal
+    /// when their common components match.
+    /// </summary>
+    /// <param name="index">The zero-based component index.</param>
+    /// <returns>The component at <paramref name="index"/>, or a zero component when out of range.</returns>
     public Component this[int index] => index < _components.Length ? _components[index] : new Component(0, "");
 
+    /// <summary>
+    /// Parses a version string such as <c>3.5</c> into a <see cref="PackageVersion"/>; each
+    /// dot-separated part contributes one component whose suffix is any trailing non-numeric text.
+    /// </summary>
+    /// <param name="version">The version string to parse.</param>
+    /// <returns>The parsed version; empty when <paramref name="version"/> is blank.</returns>
     public static PackageVersion Parse(string version)
     {
         if (string.IsNullOrWhiteSpace(version))
@@ -121,6 +152,12 @@ public readonly record struct PackageVersion
         return new PackageVersion(components);
     }
 
+    /// <summary>
+    /// Compares two package versions component-wise; missing trailing components count as zero.
+    /// </summary>
+    /// <param name="a">The first version.</param>
+    /// <param name="b">The second version.</param>
+    /// <returns>A negative value, zero, or a positive value when <paramref name="a"/> sorts before, equal to, or after <paramref name="b"/>.</returns>
     public static int Compare(PackageVersion a, PackageVersion b)
     {
         int len = Math.Max(a.ComponentCount, b.ComponentCount);
@@ -134,6 +171,11 @@ public readonly record struct PackageVersion
         return 0;
     }
 
+    /// <summary>
+    /// Compares this version to another component-wise; missing trailing components count as zero.
+    /// </summary>
+    /// <param name="other">The version to compare against.</param>
+    /// <returns>A negative value, zero, or a positive value when this version sorts before, equal to, or after <paramref name="other"/>.</returns>
     public int CompareTo(PackageVersion other) => Compare(this, other);
 
     /// <summary>
@@ -141,6 +183,8 @@ public readonly record struct PackageVersion
     /// <paramref name="prefix"/>, matching both number and suffix. Used for exact
     /// version and wildcard/prefix matching.
     /// </summary>
+    /// <param name="prefix">The prefix version to match against.</param>
+    /// <returns>True when this version starts with the supplied prefix.</returns>
     public bool StartsWith(PackageVersion prefix)
     {
         if (prefix.ComponentCount == 0) return true;
@@ -153,8 +197,10 @@ public readonly record struct PackageVersion
         return true;
     }
 
+    /// <summary>Whether this version has no components (the empty version).</summary>
     public bool IsEmpty => _components.Length == 0;
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         if (_components.Length == 0) return "";
@@ -184,6 +230,8 @@ public readonly record struct PackageVersion
     /// <c>NumericPart</c> is dot-separated integer literals and <c>NamePart</c> is an NCName.
     /// Leading and trailing whitespace is ignored.
     /// </summary>
+    /// <param name="version">The version string to validate.</param>
+    /// <returns>True when the string is a valid package version number.</returns>
     public static bool IsValidVersion(string? version)
     {
         if (string.IsNullOrWhiteSpace(version))
@@ -253,6 +301,8 @@ public readonly record struct PackageVersion
     /// list of exact versions, prefixes (<c>.*</c>), lower-bounds (<c>+</c>), or
     /// <c>to</c> ranges.
     /// </summary>
+    /// <param name="range">The version range string to validate.</param>
+    /// <returns>True when the string is a valid package version range.</returns>
     public static bool IsValidVersionRange(string? range)
     {
         if (string.IsNullOrWhiteSpace(range))

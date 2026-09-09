@@ -5,12 +5,14 @@
 // SPECIAL NOTES        : Public surface API for compiling and evaluating XPath 3.1 expressions.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
@@ -23,6 +25,10 @@ namespace Bosak.XPath.Api.Xsd;
 /// </summary>
 public sealed class XsdValidator : IXsdValidator
 {
+    /// <summary>
+    /// Validates an XML document against a single XSD schema.
+    /// Throws <see cref="XmlSchemaValidationException"/> when the document is invalid.
+    /// </summary>
     public XsdValidationResult Validate(string xml, Stream xsdStream, XsdValidatorOptions? options = null)
     {
         var result = TryValidate(xml, xsdStream, options);
@@ -31,6 +37,10 @@ public sealed class XsdValidator : IXsdValidator
         return result;
     }
 
+    /// <summary>
+    /// Validates an XML document against a set of XSD schemas (handles imports/includes).
+    /// Throws <see cref="XmlSchemaValidationException"/> when the document is invalid.
+    /// </summary>
     public XsdValidationResult Validate(string xml, IEnumerable<Stream> xsdStreams, XsdValidatorOptions? options = null)
     {
         var result = TryValidate(xml, xsdStreams, options);
@@ -39,9 +49,17 @@ public sealed class XsdValidator : IXsdValidator
         return result;
     }
 
+    /// <summary>
+    /// Validates an XML document against a single XSD schema.
+    /// Non-throwing: returns a result with any errors rather than throwing.
+    /// </summary>
     public XsdValidationResult TryValidate(string xml, Stream xsdStream, XsdValidatorOptions? options = null)
         => TryValidate(xml, new[] { xsdStream }, options);
 
+    /// <summary>
+    /// Validates an XML document against a set of XSD schemas.
+    /// Non-throwing: returns a result with any errors rather than throwing.
+    /// </summary>
     public XsdValidationResult TryValidate(string xml, IEnumerable<Stream> xsdStreams, XsdValidatorOptions? options = null)
     {
         options ??= XsdValidatorOptions.Default;

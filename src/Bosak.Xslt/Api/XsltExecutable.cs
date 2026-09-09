@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -30,6 +31,8 @@
 //                      | Charles Korthout | 1.8   | 15-07-2026     | TransformCaptured/TransformFunctionCaptured accept explicit global context item           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 28-08-2026     | Added optional serializationParams to TransformToString/TransformFunctionToString.        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -84,22 +87,22 @@ public sealed class XsltExecutable
     public Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
 
     /// <summary>
-    /// Transforms the supplied source document using this stylesheet.
-    /// </summary>
-    /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
-    /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
-    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
-    /// <param name="initialMode">Optional name of the initial mode to use.</param>
-    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
-    /// <param name="rawResult">When true and an initial template is used, returns the raw template result instead of wrapping it in a result document.</param>
-    /// <returns>The result of the transformation as an XDM value.</returns>
-    /// <summary>
     /// Default stack size (bytes) allocated for the transformation thread.  A larger
     /// stack is required for stylesheets that rely on deep xsl:call-template recursion
     /// (for example the DocBook XSLT 1.0 stylesheets).
     /// </summary>
     private const int DefaultTransformStackSize = 16 * 1024 * 1024;
 
+    /// <summary>
+    /// Transforms the supplied source document using this stylesheet.
+    /// </summary>
+    /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
+    /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
+    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
+    /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="rawResult">When true and an initial template is used, returns the raw template result instead of wrapping it in a result document.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
+    /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode? source, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {
         return RunWithStack(() =>
@@ -115,6 +118,14 @@ public sealed class XsltExecutable
     /// Runs a transformation with an explicit initial match selection, which is applied
     /// to the initial mode when no source node is supplied.
     /// </summary>
+    /// <param name="source">The source document or node to transform. May be null when an initial match selection is supplied.</param>
+    /// <param name="initialMatchSelection">The initial match selection applied to the initial mode (fn:transform).</param>
+    /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
+    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
+    /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="rawResult">When true and an initial template is used, returns the raw template result instead of wrapping it in a result document.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
+    /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode? source, XdmValue? initialMatchSelection, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null)
     {
         return RunWithStack(() =>
@@ -155,6 +166,20 @@ public sealed class XsltExecutable
             deliveryFormat, baseOutputUri, serializationParams: null, out secondaryResults);
     }
 
+    /// <summary>
+    /// Runs a transformation on behalf of <c>fn:transform</c>, merging the supplied
+    /// serialization parameters into the effective output properties.
+    /// </summary>
+    /// <param name="source">The source node, or null when no source-node is supplied.</param>
+    /// <param name="initialMatchSelection">Optional initial match selection applied in the initial mode.</param>
+    /// <param name="context">Optional evaluation context (stylesheet parameters).</param>
+    /// <param name="initialTemplate">Optional initial named template (lexical or Clark form).</param>
+    /// <param name="initialMode">Optional initial mode.</param>
+    /// <param name="deliveryFormat">One of <c>document</c>, <c>raw</c>, or <c>serialized</c>.</param>
+    /// <param name="baseOutputUri">Optional base output URI for resolving result-document hrefs.</param>
+    /// <param name="serializationParams">Optional user-supplied serialization parameters.</param>
+    /// <param name="secondaryResults">The captured secondary result documents, keyed by resolved URI.</param>
+    /// <returns>The principal result in the requested delivery format.</returns>
     public XdmValue TransformCaptured(
         IXdmNode? source,
         XdmValue? initialMatchSelection,
@@ -168,6 +193,22 @@ public sealed class XsltExecutable
         => TransformCaptured(source, initialMatchSelection, context, initialTemplate, initialMode,
             deliveryFormat, baseOutputUri, serializationParams, globalContextItem: null, out secondaryResults);
 
+    /// <summary>
+    /// Runs a transformation on behalf of <c>fn:transform</c> with an explicit global
+    /// context item: secondary result documents are captured rather than written to disk,
+    /// and the principal result is post-processed according to the requested delivery format.
+    /// </summary>
+    /// <param name="source">The source node, or null when no source-node is supplied.</param>
+    /// <param name="initialMatchSelection">Optional initial match selection applied in the initial mode.</param>
+    /// <param name="context">Optional evaluation context (stylesheet parameters).</param>
+    /// <param name="initialTemplate">Optional initial named template (lexical or Clark form).</param>
+    /// <param name="initialMode">Optional initial mode.</param>
+    /// <param name="deliveryFormat">One of <c>document</c>, <c>raw</c>, or <c>serialized</c>.</param>
+    /// <param name="baseOutputUri">Optional base output URI for resolving result-document hrefs.</param>
+    /// <param name="serializationParams">Optional user-supplied serialization parameters.</param>
+    /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
+    /// <param name="secondaryResults">The captured secondary result documents, keyed by resolved URI.</param>
+    /// <returns>The principal result in the requested delivery format.</returns>
     public XdmValue TransformCaptured(
         IXdmNode? source,
         XdmValue? initialMatchSelection,
@@ -296,6 +337,14 @@ public sealed class XsltExecutable
     /// Transforms the supplied source document (or initial match selection) and serializes
     /// the result to a string.
     /// </summary>
+    /// <param name="source">The source document or node to transform. May be null when an initial match selection is supplied.</param>
+    /// <param name="initialMatchSelection">The initial match selection applied to the initial mode (fn:transform).</param>
+    /// <param name="context">Optional evaluation context.</param>
+    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
+    /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
+    /// <param name="serializationParams">Optional serialization parameters merged with the effective output properties.</param>
+    /// <returns>The serialized result of the transformation.</returns>
     public string TransformToString(IXdmNode? source, XdmValue? initialMatchSelection, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null, Stylesheet.OutputProperties? serializationParams = null)
     {
         return RunWithStack(() =>
@@ -386,6 +435,20 @@ public sealed class XsltExecutable
         out IReadOnlyDictionary<string, XdmValue> secondaryResults)
         => TransformFunctionCaptured(name, args, context, deliveryFormat, baseOutputUri, serializationParams, source: null, out secondaryResults);
 
+    /// <summary>
+    /// Invokes an <c>xsl:function</c> as the transformation entry point on behalf of
+    /// <c>fn:transform</c>, with an optional source node used as the global context
+    /// item fallback.
+    /// </summary>
+    /// <param name="name">The expanded function name (EQName form <c>Q{{uri}}local</c>).</param>
+    /// <param name="args">Arguments to pass to the function.</param>
+    /// <param name="context">Optional evaluation context.</param>
+    /// <param name="deliveryFormat">One of <c>document</c>, <c>raw</c>, or <c>serialized</c>.</param>
+    /// <param name="baseOutputUri">Optional base output URI for secondary result documents.</param>
+    /// <param name="serializationParams">Optional user-supplied serialization parameters.</param>
+    /// <param name="source">Optional source node used as the global context item fallback.</param>
+    /// <param name="secondaryResults">The captured secondary result documents.</param>
+    /// <returns>The principal result in the requested delivery format.</returns>
     public XdmValue TransformFunctionCaptured(
         string name,
         XdmValue[] args,
@@ -397,6 +460,20 @@ public sealed class XsltExecutable
         out IReadOnlyDictionary<string, XdmValue> secondaryResults)
         => TransformFunctionCaptured(name, args, context, deliveryFormat, baseOutputUri, serializationParams, source, globalContextItem: null, out secondaryResults);
 
+    /// <summary>
+    /// Invokes an <c>xsl:function</c> as the transformation entry point on behalf of
+    /// <c>fn:transform</c>, with an explicit source node and global context item.
+    /// </summary>
+    /// <param name="name">The expanded function name (EQName form <c>Q{{uri}}local</c>).</param>
+    /// <param name="args">Arguments to pass to the function.</param>
+    /// <param name="context">Optional evaluation context.</param>
+    /// <param name="deliveryFormat">One of <c>document</c>, <c>raw</c>, or <c>serialized</c>.</param>
+    /// <param name="baseOutputUri">Optional base output URI for secondary result documents.</param>
+    /// <param name="serializationParams">Optional user-supplied serialization parameters.</param>
+    /// <param name="source">Optional source node used as the global context item fallback.</param>
+    /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
+    /// <param name="secondaryResults">The captured secondary result documents.</param>
+    /// <returns>The principal result in the requested delivery format.</returns>
     public XdmValue TransformFunctionCaptured(
         string name,
         XdmValue[] args,

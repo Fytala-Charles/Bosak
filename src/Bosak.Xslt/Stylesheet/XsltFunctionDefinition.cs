@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -18,6 +19,8 @@
 //                      | Charles Korthout | 0.6   | 01-09-2026     | Added OverriddenFunction link so xsl:original can reach the overridden declaration       |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 02-09-2026     | XTSE0020 for braced-URI names without leading 'Q' (invalid EQName) in @_name (REQ-082)   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -95,10 +98,7 @@ public sealed class XsltFunctionDefinition
         Visibility = visibility;
     }
 
-    /// <summary>
-    /// Parses an &lt;xsl:function&gt; element into a <see cref="XsltFunctionDefinition"/>.
-    /// Returns <c>null</c> if the element is missing required attributes.
-    /// </summary>
+    // The namespaces reserved by the XSLT specification; xsl:function names must not use them (XTSE0080).
     private static readonly HashSet<string> ReservedFunctionNamespaces = new(StringComparer.Ordinal)
     {
         "http://www.w3.org/2001/XMLSchema",
@@ -110,6 +110,14 @@ public sealed class XsltFunctionDefinition
         "http://www.w3.org/XML/1998/namespace"
     };
 
+    /// <summary>
+    /// Parses an &lt;xsl:function&gt; element into a <see cref="XsltFunctionDefinition"/>.
+    /// Returns <c>null</c> if the element is missing required attributes.
+    /// </summary>
+    /// <param name="element">The xsl:function element to parse.</param>
+    /// <param name="stylesheet">The stylesheet module that declares the function.</param>
+    /// <returns>The parsed function definition, or null when the element has no usable name.</returns>
+    /// <exception cref="InvalidOperationException">XTSE0020/XTSE0740/XTSE0080: the function name is invalid, not in a namespace, or in a reserved namespace.</exception>
     public static XsltFunctionDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
         var nameAttr = element.Attribute("name")?.Value;

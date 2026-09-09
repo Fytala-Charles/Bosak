@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -42,6 +43,7 @@
 //                      | Charles Korthout | 2.2   | 22-08-2026     | Format gYear/gMonth/gDay/etc. schema-type annotations correctly in ToString           |
 //                      | Charles Korthout | 2.3   | 23-08-2026     | Added FromQName(XsQName, string schemaTypeName) overload for schema-typed QNames/NOTATIONs |
 //                      | Charles Korthout | 2.4   | 09-09-2026     | ThrowInvalidAccess prefixes XPTY0004 (function-argument type errors surface the declared |
+//                      | Charles Korthout | 2.5   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -77,13 +79,18 @@ public readonly struct XdmValue
         _schemaTypeName = schemaTypeName;
     }
 
+    /// <summary>The undefined (absent) value, used for out-of-range lookups and empty results.</summary>
     public static XdmValue Undefined => new(XdmValueKind.Undefined);
+    /// <summary>The singleton xs:boolean true value.</summary>
     public static XdmValue True => new(XdmValueKind.Boolean, integer: 1);
+    /// <summary>The singleton xs:boolean false value.</summary>
     public static XdmValue False => new(XdmValueKind.Boolean, integer: 0);
 
+    /// <summary>Creates an xs:boolean value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromBoolean(bool value) => value ? True : False;
 
+    /// <summary>Creates an xs:integer value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromInteger(long value) => new(XdmValueKind.Integer, integer: value);
 
@@ -91,15 +98,19 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromInteger(long value, string schemaTypeName) => new(XdmValueKind.Integer, integer: value, schemaTypeName: schemaTypeName);
 
+    /// <summary>Creates an xs:double value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDouble(double value) => new(XdmValueKind.Double, @double: value);
 
+    /// <summary>Creates an xs:float value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromFloat(float value) => new(XdmValueKind.Float, @double: value);
 
+    /// <summary>Creates an xs:decimal value (negative zero is normalized).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDecimal(decimal value) => new(XdmValueKind.Decimal, reference: NormalizeZero(value));
 
+    /// <summary>Creates a decimal-family value with a derived-type annotation (e.g. xs:unsignedLong overflow).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDecimal(decimal value, string schemaTypeName) => new(XdmValueKind.Decimal, reference: NormalizeZero(value), schemaTypeName: schemaTypeName);
 
@@ -108,87 +119,110 @@ public readonly struct XdmValue
     private static decimal NormalizeZero(decimal value) =>
         value == 0m && decimal.GetBits(value)[3] < 0 ? new decimal(0, 0, 0, false, value.Scale) : value;
 
+    /// <summary>Creates an xs:string value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromString(string value) => new(XdmValueKind.String, reference: value);
 
+    /// <summary>Creates a string-family value with a schema type annotation (e.g. xs:hexBinary, xs:gYear).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromString(string value, string schemaTypeName) => new(XdmValueKind.String, reference: value, schemaTypeName: schemaTypeName);
 
+    /// <summary>Creates an xs:duration value from its lexical representation.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDuration(string value) => new(XdmValueKind.Duration, reference: value);
 
+    /// <summary>Creates a duration-family value with a derived-type annotation (e.g. xs:dayTimeDuration).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDuration(string value, string schemaTypeName) => new(XdmValueKind.Duration, reference: value, schemaTypeName: schemaTypeName);
 
+    /// <summary>Creates a node value; a null node yields <see cref="Undefined"/>.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromNode(IXdmNode node) => node != null ? new(XdmValueKind.Node, reference: node) : Undefined;
 
+    /// <summary>Creates a sequence value wrapping the given sequence.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromSequence(XdmSequence sequence)
         => new(XdmValueKind.Sequence, reference: sequence.Source);
 
+    /// <summary>Creates a map value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromMap(XdmMap map) => new(XdmValueKind.Map, reference: map);
 
+    /// <summary>Creates an array value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromArray(XdmArray array) => new(XdmValueKind.Array, reference: array);
 
+    /// <summary>Creates a function-item value wrapping the given function item.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromFunction(object functionItem)
         => new(XdmValueKind.Function, reference: functionItem);
 
+    /// <summary>Creates a value wrapping an opaque external .NET object.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromExternal(object externalObject)
         => new(XdmValueKind.External, reference: externalObject);
 
+    /// <summary>Creates an xs:dateTime value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(DateTimeOffset value)
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone: true), hasTimezone: true));
 
+    /// <summary>Creates an xs:dateTime value; hasTimezone records whether a timezone was present.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(DateTimeOffset value, bool hasTimezone)
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone));
 
+    /// <summary>Creates a dateTime-family value with a schema type annotation (e.g. xs:dateTimeStamp).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(DateTimeOffset value, bool hasTimezone, string schemaTypeName)
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName);
 
+    /// <summary>Creates an xs:dateTime value from an extended-year date/time.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone));
 
+    /// <summary>Creates a dateTime-family value from an extended-year date/time with a schema type annotation.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(XPathDateTime value, bool hasTimezone, string schemaTypeName)
         => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone), schemaTypeName: schemaTypeName);
 
+    /// <summary>Creates an xs:date value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDate(DateTimeOffset value)
         => new(XdmValueKind.Date, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone: true), hasTimezone: true));
 
+    /// <summary>Creates an xs:date value; hasTimezone records whether a timezone was present.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDate(DateTimeOffset value, bool hasTimezone)
         => new(XdmValueKind.Date, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone));
 
+    /// <summary>Creates an xs:date value from an extended-year date/time.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDate(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.Date, reference: new DateTimeWrapper(value, hasTimezone));
 
+    /// <summary>Creates an xs:time value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value)
         => new(XdmValueKind.Time, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone: true), hasTimezone: true));
 
+    /// <summary>Creates an xs:time value; hasTimezone records whether a timezone was present.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value, bool hasTimezone)
         => new(XdmValueKind.Time, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone));
 
+    /// <summary>Creates an xs:time value from an extended-year date/time.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.Time, reference: new DateTimeWrapper(value, hasTimezone));
 
+    /// <summary>Creates an xs:QName value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromQName(XsQName value)
         => new(XdmValueKind.QName, reference: value);
 
+    /// <summary>Creates a QName value with a schema type annotation (e.g. xs:NOTATION).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromQName(XsQName value, string schemaTypeName)
         => new(XdmValueKind.QName, reference: value, schemaTypeName: schemaTypeName);
@@ -197,17 +231,27 @@ public readonly struct XdmValue
     // Accessors
     // ------------------------------------------------------------------
 
+    /// <summary>Gets the kind discriminator of this value.</summary>
     public XdmValueKind Kind => _kind;
+    /// <summary>Gets the schema type annotation local name (e.g. integer, dateTimeStamp), or null when unannotated.</summary>
     public string? SchemaTypeName => _schemaTypeName;
 
+    /// <summary>Returns whether this is the undefined (absent) value.</summary>
     public bool IsUndefined => _kind == XdmValueKind.Undefined;
+    /// <summary>Returns whether this value is an atomic value (String through Uri kinds).</summary>
     public bool IsAtomic => _kind is >= XdmValueKind.String and <= XdmValueKind.Uri;
+    /// <summary>Returns whether this value is a node.</summary>
     public bool IsNode => _kind == XdmValueKind.Node;
+    /// <summary>Returns whether this value is a sequence.</summary>
     public bool IsSequence => _kind == XdmValueKind.Sequence;
+    /// <summary>Returns whether this value is a function item.</summary>
     public bool IsFunction => _kind == XdmValueKind.Function;
+    /// <summary>Returns whether this value is a map.</summary>
     public bool IsMap => _kind == XdmValueKind.Map;
+    /// <summary>Returns whether this value is an array.</summary>
     public bool IsArray => _kind == XdmValueKind.Array;
 
+    /// <summary>Gets the boolean payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Boolean"/>.</summary>
     public bool BooleanValue
     {
         get
@@ -218,6 +262,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the integer payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Integer"/>.</summary>
     public long IntegerValue
     {
         get
@@ -228,6 +273,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the double payload; valid for <see cref="XdmValueKind.Double"/> and <see cref="XdmValueKind.Float"/> values.</summary>
     public double DoubleValue
     {
         get
@@ -238,6 +284,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the decimal payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Decimal"/>.</summary>
     public decimal DecimalValue
     {
         get
@@ -248,6 +295,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the string payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.String"/>.</summary>
     public string StringValue
     {
         get
@@ -258,6 +306,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the duration lexical form; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Duration"/>.</summary>
     public string DurationValue
     {
         get
@@ -268,6 +317,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the node payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Node"/>.</summary>
     public IXdmNode NodeValue
     {
         get
@@ -278,6 +328,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the underlying sequence source; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Sequence"/>.</summary>
     public IXdmSequence? SequenceValue
     {
         get
@@ -288,6 +339,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the external .NET object; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.External"/>.</summary>
     public object? ExternalValue
     {
         get
@@ -298,6 +350,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the function item payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Function"/>.</summary>
     public object FunctionValue
     {
         get
@@ -308,6 +361,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the map payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Map"/>.</summary>
     public XdmMap MapValue
     {
         get
@@ -318,6 +372,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the array payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Array"/>.</summary>
     public XdmArray ArrayValue
     {
         get
@@ -328,6 +383,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the dateTime payload as a <see cref="DateTimeOffset"/>; throws for extended years outside its range.</summary>
     public DateTimeOffset DateTimeValue
     {
         get
@@ -338,6 +394,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the date payload as a <see cref="DateTimeOffset"/>; throws for extended years outside its range.</summary>
     public DateTimeOffset DateValue
     {
         get
@@ -348,6 +405,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the time payload as a <see cref="DateTimeOffset"/>; throws for extended years outside its range.</summary>
     public DateTimeOffset TimeValue
     {
         get
@@ -372,6 +430,10 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>
+    /// Returns the underlying <see cref="XPathDateTime"/> for date values,
+    /// including support for extended years that cannot be represented by <see cref="DateTimeOffset"/>.
+    /// </summary>
     public XPathDateTime DateXPathValue
     {
         get
@@ -382,6 +444,10 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>
+    /// Returns the underlying <see cref="XPathDateTime"/> for time values,
+    /// including support for extended years that cannot be represented by <see cref="DateTimeOffset"/>.
+    /// </summary>
     public XPathDateTime TimeXPathValue
     {
         get
@@ -392,6 +458,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Returns whether a date/time value carries an explicit timezone; false for other kinds.</summary>
     public bool HasTimezone
     {
         get
@@ -402,6 +469,7 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the QName payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.QName"/>.</summary>
     public XsQName QNameValue
     {
         get
@@ -502,6 +570,7 @@ public readonly struct XdmValue
             "FORG0006: Invalid argument type for fn:boolean() / effective boolean value");
     }
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         return _kind switch

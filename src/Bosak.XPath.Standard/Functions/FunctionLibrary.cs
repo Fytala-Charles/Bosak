@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 //                      | Charles Korthout | 5.74  | 27-07-2026     | fn:error throws structured XPathErrorException; FORG0003/0004/0005 codes; parse-xml(-fragment) FODC0006 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.75  | 28-07-2026     | in-scope-prefixes/namespace-uri-for-prefix skip non-propagating ancestor bindings |
@@ -300,6 +301,8 @@
 //                      | Charles Korthout | 5.97  | 07-09-2026     | fn:document#1/#2 moved out of the XPath/XQuery library (XPST0017); XSLT registers it ... |
 //                      |                  |       |                | XPathErrorException.CodeLocalName structurally (fn-error-3, FOER0000 family)            |
 //                      | Charles Korthout | 5.98  | 09-09-2026     | QT3 triage: SortKeyed unwrap, collection URI resolution, XPTY0117, strict JSON decode, t |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.99  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3316,6 +3319,7 @@ public static class FunctionLibrary
     /// <summary>
     /// Populates the evaluation context with all standard functions.
     /// </summary>
+    /// <param name="context">The evaluation context to populate.</param>
     public static void Populate(EvaluationContext context)
     {
         foreach (var sig in StandardFunctions.Values)
@@ -3383,6 +3387,11 @@ public static class FunctionLibrary
     /// <summary>
     /// Attempts to resolve a standard function by qualified name and arity.
     /// </summary>
+    /// <param name="namespaceUri">The function's namespace URI.</param>
+    /// <param name="localName">The function's local name.</param>
+    /// <param name="arity">The function's arity.</param>
+    /// <param name="signature">The resolved signature when found.</param>
+    /// <returns><c>true</c> when a standard function with the given name and arity exists.</returns>
     public static bool TryGetFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
         => StandardFunctions.TryGetValue((namespaceUri, localName, arity), out signature!);
 
@@ -4104,6 +4113,8 @@ public static class FunctionLibrary
     /// More permissive than <see cref="Uri.IsWellFormedUriString"/>:
     /// accepts <c>g:h</c> style URIs that .NET rejects as DOS paths.
     /// </summary>
+    /// <param name="uri">The URI string to test.</param>
+    /// <returns><c>true</c> when the string is an absolute URI.</returns>
     public static bool IsAbsoluteUri(string uri)
     {
         if (Uri.IsWellFormedUriString(uri, UriKind.Absolute))
@@ -4492,7 +4503,7 @@ public static class FunctionLibrary
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
-            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.9.1-preview",
+            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.10.0-beta",
             "xsl:is-schema-aware" => "no",
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
@@ -5895,6 +5906,11 @@ public static class FunctionLibrary
     /// Compares two strings using the supplied collation URI. Returns a negative value,
     /// zero, or a positive value using the same conventions as <see cref="string.Compare"/>.
     /// </summary>
+    /// <param name="s1">The first string.</param>
+    /// <param name="s2">The second string.</param>
+    /// <param name="collation">The collation URI (codepoint, HTML ASCII case-insensitive, or UCA).</param>
+    /// <returns>A negative value, zero, or a positive value as <paramref name="s1"/> sorts
+    /// before, equal to, or after <paramref name="s2"/>.</returns>
     public static int CompareStrings(string s1, string s2, string collation)
     {
         if (TryParseUca(collation, out var uca))

@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -13,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 11-06-2026     | Expand key name to Clark notation; capture @composite; validate required attrs/content   |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Capture xsl:key @collation for effective collation resolution                           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -50,6 +53,17 @@ public sealed class KeyDefinition
     /// <summary>The original xsl:key element (for namespace resolution).</summary>
     public XElement? Element { get; }
 
+    /// <summary>
+    /// Creates a key definition with the supplied attributes.
+    /// </summary>
+    /// <param name="name">The expanded key name in Clark notation.</param>
+    /// <param name="match">The match pattern string.</param>
+    /// <param name="use">The use expression string, or null when the key is defined by its content.</param>
+    /// <param name="hasUseContent">Whether the key is defined by a sequence constructor child.</param>
+    /// <param name="composite">Whether this is a composite key (XSLT 3.0).</param>
+    /// <param name="stylesheet">The parent stylesheet.</param>
+    /// <param name="element">The original xsl:key element, used for namespace resolution.</param>
+    /// <param name="collation">The explicit collation URI for comparing key values, if any.</param>
     public KeyDefinition(string name, string match, string? use, bool hasUseContent, bool composite, Stylesheet stylesheet, XElement? element = null, string? collation = null)
     {
         Name = name;
@@ -65,6 +79,10 @@ public sealed class KeyDefinition
     /// <summary>
     /// Creates a <see cref="KeyDefinition"/> from an xsl:key element.
     /// </summary>
+    /// <param name="element">The xsl:key element to parse.</param>
+    /// <param name="stylesheet">The stylesheet module that declares the key.</param>
+    /// <returns>The parsed key definition.</returns>
+    /// <exception cref="InvalidOperationException">XTSE0010: the element lacks @name or @match, or contains an xsl:template child.</exception>
     public static KeyDefinition FromElement(XElement element, Stylesheet stylesheet)
     {
         var nameAttr = element.Attribute("name");

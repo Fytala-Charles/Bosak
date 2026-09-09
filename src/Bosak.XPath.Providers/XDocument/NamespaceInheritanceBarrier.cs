@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the XDocument node provider layer; used by xsl:copy / xsl:element inherit-namespaces="no".
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |

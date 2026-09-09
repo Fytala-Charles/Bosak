@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -71,6 +72,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.21  | 05-09-2026     | Document cache keyed by (URI, DocumentLoadPolicy) so XSLT packages keep distinct stripped trees (document-2401/2402, collection-006) |
 //                      | Charles Korthout | 2.22  | 09-09-2026     | Added UnsuppliedExternalVariables (XPDY0002 for declared-but-unbound externals)          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.23  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -218,6 +221,11 @@ public sealed class EvaluationContext
     private DecimalFormat _defaultDecimalFormat = new();
     private readonly Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> _namedDecimalFormats;
 
+    /// <summary>
+    /// Creates an evaluation context with an empty focus, no variables, and the predefined
+    /// namespace bindings (<c>xml</c>, <c>xs</c>, <c>xsi</c>, <c>fn</c>, <c>math</c>,
+    /// <c>map</c>, <c>array</c>, <c>local</c>, <c>err</c>).
+    /// </summary>
     public EvaluationContext()
     {
         _contextItem = XdmValue.Undefined;
@@ -410,6 +418,10 @@ public sealed class EvaluationContext
     /// <summary>
     /// Loads a document by URI, using the cache and <see cref="DocumentLoader"/>.
     /// </summary>
+    /// <param name="uri">The document URI; relative URIs are resolved against <see cref="BaseUri"/>.</param>
+    /// <returns>The (cached) document node for the URI.</returns>
+    /// <exception cref="InvalidOperationException">No document loader is configured, or the
+    /// document cannot be loaded (reported with error code FODC0002 or FODC0005).</exception>
     public IXdmNode LoadDocument(string uri)
     {
         if (DocumentLoader is null)
@@ -498,8 +510,13 @@ public sealed class EvaluationContext
     // Focus
     // ------------------------------------------------------------------
 
+    /// <summary>The context item (the value of the <c>.</c> expression); undefined when there is no focus.</summary>
     public XdmValue ContextItem => _contextItem;
+
+    /// <summary>The context position: the 1-based position of the context item in the focus sequence.</summary>
     public int ContextPosition => _contextPosition;
+
+    /// <summary>The context size: the number of items in the focus sequence.</summary>
     public int ContextSize => _contextSize;
 
     /// <summary>
@@ -508,6 +525,11 @@ public sealed class EvaluationContext
     /// </summary>
     public XdmValue CurrentItem => _currentItem;
 
+    /// <summary>Sets the focus (context item, position, and size) and returns this context.</summary>
+    /// <param name="item">The context item.</param>
+    /// <param name="position">The 1-based context position.</param>
+    /// <param name="size">The context size.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext WithFocus(XdmValue item, int position, int size)
     {
         _contextItem = item;
@@ -516,6 +538,9 @@ public sealed class EvaluationContext
         return this;
     }
 
+    /// <summary>Sets the current item used by <c>fn:current()</c> and returns this context.</summary>
+    /// <param name="item">The new current item.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext WithCurrentItem(XdmValue item)
     {
         _currentItem = item;
@@ -526,12 +551,26 @@ public sealed class EvaluationContext
     // Variables
     // ------------------------------------------------------------------
 
+    /// <summary>Binds a variable to a value and returns this context.</summary>
+    /// <param name="localName">The variable's local name.</param>
+    /// <param name="value">The value to bind.</param>
+    /// <param name="namespaceUri">The variable's namespace URI (empty for no namespace).</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext WithVariable(string localName, XdmValue value, string namespaceUri = "")
     {
         _variables[(localName, namespaceUri)] = value;
         return this;
     }
 
+    /// <summary>
+    /// Attempts to resolve a variable, consulting the direct bindings, the evaluated
+    /// lazy-global cache, and finally <see cref="LazyVariableResolver"/> (whose result is
+    /// cached unless lazy caching is suppressed).
+    /// </summary>
+    /// <param name="localName">The variable's local name.</param>
+    /// <param name="value">The bound value when found.</param>
+    /// <param name="namespaceUri">The variable's namespace URI (empty for no namespace).</param>
+    /// <returns><c>true</c> when the variable is bound.</returns>
     public bool TryGetVariable(string localName, out XdmValue value, string namespaceUri = "")
     {
         if (_variables.TryGetValue((localName, namespaceUri), out value))
@@ -560,6 +599,7 @@ public sealed class EvaluationContext
     /// Captures the current lazy-global cache so it can be restored later. This lets
     /// XSLT function calls isolate function-local lazy variables from the global cache.
     /// </summary>
+    /// <returns>A token whose <see cref="IDisposable.Dispose"/> restores the saved cache.</returns>
     public IDisposable SnapshotLazyGlobals()
     {
         var saved = new Dictionary<(string LocalName, string NamespaceUri), XdmValue>(_evaluatedLazyGlobals);
@@ -585,6 +625,10 @@ public sealed class EvaluationContext
         }
     }
 
+    /// <summary>Removes a variable binding, if present.</summary>
+    /// <param name="localName">The variable's local name.</param>
+    /// <param name="namespaceUri">The variable's namespace URI (empty for no namespace).</param>
+    /// <returns><c>true</c> when a binding was removed.</returns>
     public bool RemoveVariable(string localName, string namespaceUri = "")
         => _variables.Remove((localName, namespaceUri));
 
@@ -593,6 +637,10 @@ public sealed class EvaluationContext
     /// cache without invoking <see cref="LazyVariableResolver"/>. Used by the XSLT global
     /// variable resolver to avoid recursive re-entry through its own resolver.
     /// </summary>
+    /// <param name="localName">The variable's local name.</param>
+    /// <param name="value">The bound value when found.</param>
+    /// <param name="namespaceUri">The variable's namespace URI (empty for no namespace).</param>
+    /// <returns><c>true</c> when the variable is bound.</returns>
     public bool TryGetBoundVariable(string localName, out XdmValue value, string namespaceUri = "")
     {
         if (_variables.TryGetValue((localName, namespaceUri), out value))
@@ -607,12 +655,14 @@ public sealed class EvaluationContext
     /// <summary>
     /// Creates a snapshot of all current variable bindings.
     /// </summary>
+    /// <returns>A copy of the current bindings, keyed by (local name, namespace URI).</returns>
     public Dictionary<(string LocalName, string NamespaceUri), XdmValue> SnapshotVariables()
         => new Dictionary<(string, string), XdmValue>(_variables);
 
     /// <summary>
     /// Restores variable bindings from a snapshot, removing any variables added since.
     /// </summary>
+    /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotVariables"/>.</param>
     public void RestoreVariables(Dictionary<(string LocalName, string NamespaceUri), XdmValue> snapshot)
     {
         _variables.Clear();
@@ -624,6 +674,13 @@ public sealed class EvaluationContext
     // Namespaces
     // ------------------------------------------------------------------
 
+    /// <summary>
+    /// Binds a namespace prefix to a URI and returns this context. A zero-length URI on a
+    /// non-empty prefix undeclares the prefix (XQuery namespace undeclaration).
+    /// </summary>
+    /// <param name="prefix">The namespace prefix (empty for the default namespace).</param>
+    /// <param name="namespaceUri">The namespace URI to bind; empty undeclares the prefix.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext WithNamespace(string prefix, string namespaceUri)
     {
         // A zero-length URI undeclares the prefix (XQuery namespace undeclaration).
@@ -635,6 +692,8 @@ public sealed class EvaluationContext
     }
 
     /// <summary>Removes a namespace prefix binding (used for namespace undeclarations).</summary>
+    /// <param name="prefix">The prefix to remove.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext RemoveNamespace(string prefix)
     {
         _namespaces.Remove(prefix);
@@ -657,18 +716,27 @@ public sealed class EvaluationContext
     /// <summary>
     /// Looks up a global element declaration in the compiled schema set, if any.
     /// </summary>
+    /// <param name="namespaceUri">The declaration's target namespace URI.</param>
+    /// <param name="localName">The declaration's local name.</param>
+    /// <returns>The global element declaration, or <c>null</c> when not present.</returns>
     public XmlSchemaElement? GetSchemaElement(string namespaceUri, string localName)
         => _schemaSet?.GlobalElements[new XmlQualifiedName(localName, namespaceUri)] as XmlSchemaElement;
 
     /// <summary>
     /// Looks up a global attribute declaration in the compiled schema set, if any.
     /// </summary>
+    /// <param name="namespaceUri">The declaration's target namespace URI.</param>
+    /// <param name="localName">The declaration's local name.</param>
+    /// <returns>The global attribute declaration, or <c>null</c> when not present.</returns>
     public XmlSchemaAttribute? GetSchemaAttribute(string namespaceUri, string localName)
         => _schemaSet?.GlobalAttributes[new XmlQualifiedName(localName, namespaceUri)] as XmlSchemaAttribute;
 
     /// <summary>
     /// Looks up a global type definition in the compiled schema set, if any.
     /// </summary>
+    /// <param name="namespaceUri">The type's target namespace URI.</param>
+    /// <param name="localName">The type's local name.</param>
+    /// <returns>The global type definition, or <c>null</c> when not present.</returns>
     public XmlSchemaType? GetSchemaType(string namespaceUri, string localName)
         => _schemaSet?.GlobalTypes[new XmlQualifiedName(localName, namespaceUri)] as XmlSchemaType;
 
@@ -687,6 +755,8 @@ public sealed class EvaluationContext
     /// Records a constructor-local namespace declaration; an empty URI undeclares the
     /// prefix (removing any earlier local binding of the same prefix).
     /// </summary>
+    /// <param name="prefix">The namespace prefix being declared (empty for the default namespace).</param>
+    /// <param name="uri">The namespace URI; empty removes the local binding.</param>
     public void AddConstructorLocalNamespace(string prefix, string uri)
     {
         for (int i = _constructorLocalNamespaces.Count - 1; i >= 0; i--)
@@ -702,12 +772,21 @@ public sealed class EvaluationContext
     }
 
     /// <summary>Drops constructor-local bindings recorded after the given snapshot point.</summary>
+    /// <param name="count">The binding count previously read from <see cref="ConstructorLocalNamespaceCount"/>.</param>
     public void TruncateConstructorLocalNamespaces(int count)
     {
         if (_constructorLocalNamespaces.Count > count)
             _constructorLocalNamespaces.RemoveRange(count, _constructorLocalNamespaces.Count - count);
     }
 
+    /// <summary>
+    /// Resolves a namespace prefix to its URI. The empty prefix resolves to
+    /// <see cref="DefaultElementNamespace"/> when set, and the <c>xml</c> prefix always
+    /// resolves to the XML namespace URI.
+    /// </summary>
+    /// <param name="prefix">The prefix to resolve (empty for the default element namespace).</param>
+    /// <param name="namespaceUri">The resolved namespace URI when found.</param>
+    /// <returns><c>true</c> when the prefix is bound.</returns>
     public bool TryResolveNamespace(string prefix, out string namespaceUri)
     {
         if (prefix == "" && !string.IsNullOrEmpty(DefaultElementNamespace))
@@ -726,6 +805,7 @@ public sealed class EvaluationContext
     /// <summary>
     /// Returns a snapshot of the current namespace bindings.
     /// </summary>
+    /// <returns>A copy of the current prefix-to-URI bindings.</returns>
     public Dictionary<string, string> SnapshotNamespaces()
         => new(_namespaces);
 
@@ -733,6 +813,7 @@ public sealed class EvaluationContext
     /// Restores namespace bindings from a snapshot, discarding any bindings
     /// added since the snapshot was taken.
     /// </summary>
+    /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotNamespaces"/>.</param>
     public void RestoreNamespaces(Dictionary<string, string> snapshot)
     {
         _namespaces.Clear();
@@ -744,6 +825,12 @@ public sealed class EvaluationContext
     // Functions
     // ------------------------------------------------------------------
 
+    /// <summary>
+    /// Registers a function signature under its (namespace URI, local name, arity) key,
+    /// replacing any existing registration, and returns this context.
+    /// </summary>
+    /// <param name="signature">The function signature to register.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext RegisterFunction(FunctionSignature signature)
     {
         var key = (signature.NamespaceUri, signature.LocalName, signature.Arity);
@@ -761,6 +848,16 @@ public sealed class EvaluationContext
     /// </summary>
     public Func<EvaluationContext, string, string, int, XdmValue?>? FunctionLookupInterceptor { get; set; }
 
+    /// <summary>
+    /// Resolves a function by namespace URI, local name, and arity. When no exact-arity
+    /// registration exists, a variadic signature whose declared arity is not greater than
+    /// the requested arity matches (e.g. <c>fn:concat</c> resolves for any arity ≥ 2).
+    /// </summary>
+    /// <param name="namespaceUri">The function's namespace URI.</param>
+    /// <param name="localName">The function's local name.</param>
+    /// <param name="arity">The number of arguments at the call site.</param>
+    /// <param name="signature">The resolved signature when found.</param>
+    /// <returns><c>true</c> when a matching function is registered.</returns>
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
     {
         if (_functions.TryGetValue((namespaceUri, localName, arity), out signature!))
@@ -782,18 +879,24 @@ public sealed class EvaluationContext
     /// <summary>
     /// Removes a registered function signature, if present.
     /// </summary>
+    /// <param name="namespaceUri">The function's namespace URI.</param>
+    /// <param name="localName">The function's local name.</param>
+    /// <param name="arity">The function's arity.</param>
+    /// <returns><c>true</c> when a registration was removed.</returns>
     public bool UnregisterFunction(string namespaceUri, string localName, int arity)
         => _functions.Remove((namespaceUri, localName, arity));
 
     /// <summary>
     /// Returns a shallow copy of the currently registered function signatures.
     /// </summary>
+    /// <returns>A copy of the function registry, keyed by (namespace URI, local name, arity).</returns>
     public Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> SnapshotFunctions()
         => new Dictionary<(string, string, int), FunctionSignature>(_functions);
 
     /// <summary>
     /// Replaces the current function library with the supplied snapshot.
     /// </summary>
+    /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotFunctions"/>.</param>
     public void RestoreFunctions(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> snapshot)
     {
         _functions.Clear();
@@ -813,12 +916,21 @@ public sealed class EvaluationContext
     // Decimal Formats
     // ------------------------------------------------------------------
 
+    /// <summary>The unnamed (default) decimal format used by <c>fn:format-number</c>.</summary>
     public DecimalFormat DefaultDecimalFormat
     {
         get => _defaultDecimalFormat;
         set => _defaultDecimalFormat = value;
     }
 
+    /// <summary>
+    /// Registers a decimal format and returns this context; a null or empty name replaces
+    /// the default decimal format, otherwise the format is registered under the name in
+    /// no namespace.
+    /// </summary>
+    /// <param name="name">The format's local name, or null/empty for the default format.</param>
+    /// <param name="format">The decimal format to register.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext WithDecimalFormat(string? name, DecimalFormat format)
     {
         if (string.IsNullOrEmpty(name))
@@ -832,12 +944,23 @@ public sealed class EvaluationContext
         return this;
     }
 
+    /// <summary>Registers a named decimal format under an expanded QName and returns this context.</summary>
+    /// <param name="localName">The format's local name.</param>
+    /// <param name="namespaceUri">The format's namespace URI.</param>
+    /// <param name="format">The decimal format to register.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext WithDecimalFormat(string localName, string namespaceUri, DecimalFormat format)
     {
         _namedDecimalFormats[(localName, namespaceUri)] = format;
         return this;
     }
 
+    /// <summary>
+    /// Looks up a named decimal format by lexical name; a prefixed name is resolved
+    /// against the in-scope namespaces.
+    /// </summary>
+    /// <param name="name">The format name, optionally prefixed.</param>
+    /// <returns>The registered format, or <c>null</c> when not found.</returns>
     public DecimalFormat? GetDecimalFormat(string name)
     {
         // Try empty namespace first (local name)
@@ -860,6 +983,10 @@ public sealed class EvaluationContext
         return null;
     }
 
+    /// <summary>Looks up a named decimal format by expanded QName.</summary>
+    /// <param name="localName">The format's local name.</param>
+    /// <param name="namespaceUri">The format's namespace URI.</param>
+    /// <returns>The registered format, or <c>null</c> when not found.</returns>
     public DecimalFormat? GetDecimalFormat(string localName, string namespaceUri)
     {
         if (_namedDecimalFormats.TryGetValue((localName, namespaceUri), out var fmt))
@@ -871,10 +998,12 @@ public sealed class EvaluationContext
     /// Copies the current named decimal formats for save/restore around module-context
     /// switches (a library module's decimal-format declarations apply only within that module).
     /// </summary>
+    /// <returns>A copy of the named decimal formats, keyed by (local name, namespace URI).</returns>
     public Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> SnapshotDecimalFormats()
         => new(_namedDecimalFormats);
 
     /// <summary>Replaces the named decimal formats with a previously snapshotted set.</summary>
+    /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotDecimalFormats"/>.</param>
     public void RestoreDecimalFormats(Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> snapshot)
     {
         _namedDecimalFormats.Clear();
@@ -886,8 +1015,16 @@ public sealed class EvaluationContext
     // Default Collation
     // ------------------------------------------------------------------
 
+    /// <summary>
+    /// The default collation URI used by the two-argument forms of string functions such
+    /// as <c>fn:compare</c>, <c>fn:contains</c>, and <c>fn:starts-with</c>. The empty
+    /// string selects the codepoint collation.
+    /// </summary>
     public string DefaultCollation { get; set; } = string.Empty;
 
+    /// <summary>Sets the default collation URI and returns this context.</summary>
+    /// <param name="collation">The collation URI to make the default.</param>
+    /// <returns>This context, for fluent chaining.</returns>
     public EvaluationContext WithDefaultCollation(string collation)
     {
         DefaultCollation = collation;

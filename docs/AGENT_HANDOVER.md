@@ -1,5 +1,21 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-09 (third session)
+**Commit:** (pending) — REQ-084 Beta readiness: API review + XML-doc coverage + Beta version bump
+**Current focus:** **Alpha→Beta gates COMPLETE — status is Beta; version 0.10.0-beta.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.
+**What was built:**
+- **API review inventory** (read-only, all 9 published packages) with findings triaged; fixes: `OccurrenceIndicator` moved to `Bosak.XPath.Core.Xdm` namespace (only breaking change — AST-level consumers); `Bosak.LanguageServer` `IsPackable=false`; dangling `ConsoleMessageListener` doc cref fixed (messages are discarded when no listener is set); file headers batch-normalized to `license.md (Apache-2.0)` + SPDX line (162 files — completes the 2026-09-05 convention).
+- **XML-doc coverage pass (~480 declarations)** across Core/Api/Parser/Compiler/Runtime/Standard/Providers/Xslt — every public/protected member now carries `///` docs; build stays 0 warnings.
+- **Community scaffolding:** `.github/PULL_REQUEST_TEMPLATE.md` (issue templates + CONTRIBUTING + CODE_OF_CONDUCT already existed).
+- **Deferred by decision (recorded in REQ-084):** EvaluationContext god object, VmEngine public helpers, public IR/Parser surface, mutable XdmMap/Array fast paths, static XsltFunctionLibrary registries, object-typed layering hacks, dead XdmValueKind.Uri/Binary members, Stylesheet.Root/RootElement duplication, separate Api/Providers packages (intentional pluggability).
+- **Version:** `src/Directory.Build.props` 0.9.1-preview → 0.10.0-beta; `xsl:product-version` fallback synced (FunctionLibrary). Tag `v0.10.0-beta` triggers release.yml (Trusted Publishing).
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`.
+**Next steps:** GA track (ROADMAP Beta → 1.0): API freeze commitment, release notes, support channel; performance pass is the natural first post-Beta engineering item; streaming/schema-awareness remain post-1.0 strategic items.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-09 (second session)
 **Commit:** `a255003` — fix(XPath/XQuery): REQ-082 QT3 residual backlog cleared — 8 → 0 (QT3 31,142/0/679 = 100% of runnable)
 **Current focus:** **REQ-082 QT3 COMPLETE: 31,142 passed / 0 failed / 679 skipped with strict error-code matching — 100% of runnable QT3 tests pass.** XSLT strict sweep unchanged 7,722/3/6,875 (3 documented residuals); unit tests 2,216/0/0; build 0/0.

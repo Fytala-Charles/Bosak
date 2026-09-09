@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -212,6 +213,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.107 | 07-09-2026     | Invalid xsl:use-package version range never matches instead of XTSE0020; package not     |
 //                      |                  |       |                | found raises XTSE3000 (package-200, REQ-082)                                             |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.108 | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -605,6 +608,21 @@ public sealed class Stylesheet
         return dict;
     }
 
+    /// <summary>
+    /// Loads a stylesheet module from the supplied document, resolving includes, imports,
+    /// and used packages through the supplied URI resolver.
+    /// </summary>
+    /// <param name="document">The stylesheet module document (xsl:stylesheet, xsl:transform, or xsl:package).</param>
+    /// <param name="baseUri">The base URI of the module, used to resolve relative references.</param>
+    /// <param name="resolver">The resolver used for xsl:import, xsl:include, and xsl:use-package locations.</param>
+    /// <param name="importPrecedence">The import precedence of this module (0 for the principal module).</param>
+    /// <param name="resolvedUris">URIs already resolved in this import/include tree, used for circular-reference detection.</param>
+    /// <param name="inheritedStaticContext">The static context inherited from an including module (xsl:include), if any.</param>
+    /// <param name="externalStaticParameters">Externally supplied values for static parameters.</param>
+    /// <param name="rootStylesheet">The root stylesheet of the import tree; defaults to this module.</param>
+    /// <param name="owningPackage">The package that owns this module, when loaded via xsl:use-package.</param>
+    /// <param name="packageVersionResolutionStrategy">How to select among multiple matching package versions.</param>
+    /// <param name="isPrincipalLevel">Whether this module is at the principal level of its package.</param>
     public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true)
     {
         _document = document;
@@ -4872,6 +4890,7 @@ public sealed class Stylesheet
     /// </summary>
     private sealed class ResolvedModuleAnnotation
     {
+        /// <summary>The child stylesheet resolved from the annotated xsl:import/xsl:include element, if any.</summary>
         public Stylesheet? Module { get; init; }
     }
 
@@ -4882,19 +4901,33 @@ public sealed class Stylesheet
     /// </summary>
     private sealed class PackageUseOptions
     {
+        /// <summary>The xsl:accept rules declared on the xsl:use-package element.</summary>
         public List<AcceptRule> AcceptRules { get; } = new();
+        /// <summary>The xsl:template declarations inside xsl:override.</summary>
         public List<XElement> OverrideTemplates { get; } = new();
+        /// <summary>The xsl:function declarations inside xsl:override.</summary>
         public List<XElement> OverrideFunctions { get; } = new();
+        /// <summary>The xsl:variable declarations inside xsl:override.</summary>
         public List<XElement> OverrideVariables { get; } = new();
+        /// <summary>The xsl:param declarations inside xsl:override.</summary>
         public List<XElement> OverrideParams { get; } = new();
+        /// <summary>The xsl:attribute-set declarations inside xsl:override.</summary>
         public List<XElement> OverrideAttributeSets { get; } = new();
+        /// <summary>The xsl:mode declarations inside xsl:override.</summary>
         public List<XElement> OverrideModes { get; } = new();
+        /// <summary>The xsl:key declarations inside xsl:override.</summary>
         public List<XElement> OverrideKeys { get; } = new();
+        /// <summary>The xsl:decimal-format declarations inside xsl:override.</summary>
         public List<XElement> OverrideDecimalFormats { get; } = new();
+        /// <summary>The xsl:namespace-alias declarations inside xsl:override.</summary>
         public List<XElement> OverrideNamespaceAliases { get; } = new();
+        /// <summary>The xsl:character-map declarations inside xsl:override.</summary>
         public List<XElement> OverrideCharacterMaps { get; } = new();
+        /// <summary>The xsl:output declarations inside xsl:override.</summary>
         public List<XElement> OverrideOutput { get; } = new();
+        /// <summary>The xsl:strip-space declarations inside xsl:override.</summary>
         public List<XElement> OverrideStripSpace { get; } = new();
+        /// <summary>The xsl:preserve-space declarations inside xsl:override.</summary>
         public List<XElement> OverridePreserveSpace { get; } = new();
     }
 
@@ -4903,11 +4936,21 @@ public sealed class Stylesheet
     /// </summary>
     private sealed class AcceptRule
     {
+        /// <summary>The component kind the rule applies to (template, function, variable, mode, etc.).</summary>
         public string Component { get; }
+        /// <summary>The visibility assigned to matching components (public, private, final, abstract, or hidden).</summary>
         public string Visibility { get; }
+        /// <summary>The name patterns listed in the rule's names attribute.</summary>
         public IReadOnlyList<AcceptName> Names { get; }
+        /// <summary>Whether the rule matches every component of its kind (names="*").</summary>
         public bool IsWildcard => Names.Count == 1 && Names[0].IsWildcard;
 
+        /// <summary>
+        /// Creates an xsl:accept rule.
+        /// </summary>
+        /// <param name="component">The component kind the rule applies to.</param>
+        /// <param name="visibility">The visibility assigned to matching components.</param>
+        /// <param name="names">The name patterns listed in the rule's names attribute.</param>
         public AcceptRule(string component, string visibility, IEnumerable<AcceptName> names)
         {
             Component = component;
@@ -4915,6 +4958,13 @@ public sealed class Stylesheet
             Names = names.ToList();
         }
 
+        /// <summary>
+        /// Returns whether this rule matches the supplied component identity.
+        /// </summary>
+        /// <param name="localName">The local name of the component, or null.</param>
+        /// <param name="namespaceUri">The namespace URI of the component, or null.</param>
+        /// <param name="arity">The function arity, or -1 when the component is not a function.</param>
+        /// <returns>True when the rule matches the component.</returns>
         public bool Matches(string? localName, string? namespaceUri, int arity = -1)
         {
             if (IsWildcard) return true;
@@ -4949,12 +4999,24 @@ public sealed class Stylesheet
     /// </summary>
     private readonly struct AcceptName
     {
+        /// <summary>The namespace URI of the name, or <c>*</c> when any namespace matches (<c>*:local</c>).</summary>
         public string? NamespaceUri { get; }
+        /// <summary>The local name of the component, or <c>*</c> when any local name matches.</summary>
         public string LocalName { get; }
+        /// <summary>The required function arity, or -1 when arity is not constrained.</summary>
         public int Arity { get; }
+        /// <summary>Whether this entry is the <c>*</c> wildcard that matches any component name.</summary>
         public bool IsWildcard { get; }
+        /// <summary>Whether the namespace position is a wildcard (<c>*:local</c>): any namespace with this local name matches.</summary>
         public bool IsNamespaceWildcard => NamespaceUri == "*" && !IsWildcard;
 
+        /// <summary>
+        /// Creates one name entry of an xsl:accept names attribute.
+        /// </summary>
+        /// <param name="namespaceUri">The namespace URI of the name, or <c>*</c> when any namespace matches.</param>
+        /// <param name="localName">The local name of the component, or <c>*</c> when any local name matches.</param>
+        /// <param name="arity">The required function arity, or -1 when arity is not constrained.</param>
+        /// <param name="isWildcard">Whether this entry is the <c>*</c> wildcard.</param>
         public AcceptName(string? namespaceUri, string localName, int arity = -1, bool isWildcard = false)
         {
             NamespaceUri = namespaceUri;
@@ -4990,11 +5052,21 @@ public sealed class Stylesheet
     /// </summary>
     private sealed class ExposeRule
     {
+        /// <summary>The component kind the rule applies to (template, function, variable, mode, etc.).</summary>
         public string Component { get; }
+        /// <summary>The visibility assigned to matching components (public, private, final, or abstract).</summary>
         public string Visibility { get; }
+        /// <summary>The name patterns listed in the rule's names attribute.</summary>
         public IReadOnlyList<ExposeName> Names { get; }
+        /// <summary>Whether the rule matches every component of its kind (names="*").</summary>
         public bool IsWildcard => Names.Count == 1 && Names[0].IsWildcard;
 
+        /// <summary>
+        /// Creates an xsl:expose rule.
+        /// </summary>
+        /// <param name="component">The component kind the rule applies to.</param>
+        /// <param name="visibility">The visibility assigned to matching components.</param>
+        /// <param name="names">The name patterns listed in the rule's names attribute.</param>
         public ExposeRule(string component, string visibility, IEnumerable<ExposeName> names)
         {
             Component = component;
@@ -5002,6 +5074,14 @@ public sealed class Stylesheet
             Names = names.ToList();
         }
 
+        /// <summary>
+        /// Returns whether this rule matches the supplied component identity.
+        /// </summary>
+        /// <param name="componentType">The kind of component being tested (template, function, variable, etc.).</param>
+        /// <param name="localName">The local name of the component, or null.</param>
+        /// <param name="namespaceUri">The namespace URI of the component, or null.</param>
+        /// <param name="arity">The function arity, or -1 when the component is not a function.</param>
+        /// <returns>True when the rule matches the component.</returns>
         public bool Matches(string componentType, string? localName, string? namespaceUri, int arity)
         {
             if (Component != componentType && Component != "*")
@@ -5039,12 +5119,24 @@ public sealed class Stylesheet
     /// </summary>
     private readonly struct ExposeName
     {
+        /// <summary>The namespace URI of the name, or <c>*</c> when any namespace matches (<c>*:local</c>).</summary>
         public string? NamespaceUri { get; }
+        /// <summary>The local name of the component, or <c>*</c> when any local name matches.</summary>
         public string LocalName { get; }
+        /// <summary>The required function arity, or -1 when arity is not constrained.</summary>
         public int Arity { get; }
+        /// <summary>Whether this entry is the <c>*</c> wildcard that matches any component name.</summary>
         public bool IsWildcard { get; }
+        /// <summary>Whether the namespace position is a wildcard (<c>*:local</c>): any namespace with this local name matches.</summary>
         public bool IsNamespaceWildcard => NamespaceUri == "*" && !IsWildcard;
 
+        /// <summary>
+        /// Creates one name entry of an xsl:expose names attribute.
+        /// </summary>
+        /// <param name="namespaceUri">The namespace URI of the name, or <c>*</c> when any namespace matches.</param>
+        /// <param name="localName">The local name of the component, or <c>*</c> when any local name matches.</param>
+        /// <param name="arity">The required function arity, or -1 when arity is not constrained.</param>
+        /// <param name="isWildcard">Whether this entry is the <c>*</c> wildcard.</param>
         public ExposeName(string? namespaceUri, string localName, int arity = -1, bool isWildcard = false)
         {
             NamespaceUri = namespaceUri;
@@ -7843,6 +7935,12 @@ public sealed class Stylesheet
             && a.UseAccumulators.SetEquals(b.UseAccumulators);
     }
 
+    /// <summary>
+    /// Returns the effective definition of the named mode, merging multiple declarations
+    /// per attribute by import precedence and considering modes exported from used packages.
+    /// </summary>
+    /// <param name="name">The mode name in Clark notation (empty string for the unnamed mode).</param>
+    /// <returns>The effective mode definition, or null when the mode is not declared.</returns>
     public ModeDefinition? GetModeDefinition(string name)
     {
         // Per-attribute import-precedence merging (XSLT 3.0 §6.6.1): the effective value
@@ -8511,14 +8609,25 @@ public sealed class Stylesheet
 /// </summary>
 public sealed class DecimalFormatDefinition
 {
+    /// <summary>The local name of the decimal format (empty for the default decimal format).</summary>
     public string LocalName { get; init; } = "";
+    /// <summary>The namespace URI of the decimal format name (empty when unnamed or unprefixed).</summary>
     public string NamespaceUri { get; init; } = "";
+    /// <summary>The decimal-format symbols parsed from the declaration.</summary>
     public DecimalFormat Format { get; init; } = new();
     /// <summary>Attributes explicitly set on this xsl:decimal-format element.</summary>
     public HashSet<string> ExplicitAttributes { get; init; } = new();
     /// <summary>The import precedence of the stylesheet module that declared this format.</summary>
     public int ImportPrecedence { get; init; }
 
+    /// <summary>
+    /// Parses an <c>xsl:decimal-format</c> element into a <see cref="DecimalFormatDefinition"/>,
+    /// validating symbol uniqueness (XTSE1300) and the zero-digit (XTSE1295).
+    /// </summary>
+    /// <param name="element">The xsl:decimal-format element to parse.</param>
+    /// <param name="stylesheet">The stylesheet module that declares the decimal format.</param>
+    /// <returns>The parsed decimal-format definition.</returns>
+    /// <exception cref="InvalidOperationException">XTSE1300: two explicitly-set symbols are equal; XTSE1295: zero-digit is not a digit with numeric value zero.</exception>
     public static DecimalFormatDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
         var format = new DecimalFormat();
@@ -8629,6 +8738,9 @@ public static class StylesheetExtensions
     /// <summary>
     /// Resolves a namespace prefix in the stylesheet's root element.
     /// </summary>
+    /// <param name="stylesheet">The stylesheet whose root element declares the namespaces.</param>
+    /// <param name="prefix">The namespace prefix to resolve (empty for the default namespace).</param>
+    /// <returns>The namespace URI, or null when the prefix is not declared.</returns>
     public static string? ResolveNamespace(this Stylesheet stylesheet, string prefix)
     {
         var root = stylesheet.RootElement;
@@ -8649,6 +8761,9 @@ public static class StylesheetExtensions
     /// <summary>
     /// Resolves a namespace prefix using the element's own and ancestor namespace declarations.
     /// </summary>
+    /// <param name="element">The element whose in-scope namespaces are searched.</param>
+    /// <param name="prefix">The namespace prefix to resolve (empty for the default namespace).</param>
+    /// <returns>The namespace URI, or null when the prefix is not declared.</returns>
     public static string? ResolveNamespace(this XElement element, string prefix)
     {
         var current = element;
@@ -8721,10 +8836,15 @@ public enum SpaceNameTestKind
 /// </summary>
 public readonly struct SpaceHandlingRule
 {
+    /// <summary>The kind of name test that selects the affected elements.</summary>
     public SpaceNameTestKind Kind { get; }
+    /// <summary>The local name matched by an exact or wildcard-local rule; otherwise null.</summary>
     public string? LocalName { get; }
+    /// <summary>The namespace URI matched by an exact or wildcard-namespace rule; otherwise null.</summary>
     public string? NamespaceUri { get; }
+    /// <summary>True for an xsl:strip-space rule, false for xsl:preserve-space.</summary>
     public bool IsStrip { get; }
+    /// <summary>The import precedence of the stylesheet module that declared the rule.</summary>
     public int Precedence { get; }
 
     private SpaceHandlingRule(SpaceNameTestKind kind, string? localName, string? namespaceUri, bool isStrip, int precedence)
@@ -8739,6 +8859,14 @@ public readonly struct SpaceHandlingRule
     /// <summary>
     /// Parses a name test from an <c>@elements</c> value into a <see cref="SpaceHandlingRule"/>.
     /// </summary>
+    /// <param name="nameTest">The name test token from the elements attribute.</param>
+    /// <param name="declaration">The xsl:strip-space or xsl:preserve-space element, used for namespace resolution.</param>
+    /// <param name="stylesheet">The stylesheet module that declares the rule.</param>
+    /// <param name="defaultNamespace">The default namespace for unprefixed names, if any.</param>
+    /// <param name="isStrip">True when parsing xsl:strip-space, false for xsl:preserve-space.</param>
+    /// <param name="precedence">The import precedence of the declaring module.</param>
+    /// <returns>The parsed rule.</returns>
+    /// <exception cref="InvalidOperationException">XTSE0270: the name test is invalid; XTSE0280: an undeclared prefix is used.</exception>
     public static SpaceHandlingRule FromNameTest(string nameTest, XElement declaration, Stylesheet stylesheet, string? defaultNamespace, bool isStrip, int precedence)
     {
         var nt = nameTest.Trim();

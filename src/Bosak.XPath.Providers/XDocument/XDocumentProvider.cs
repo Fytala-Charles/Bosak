@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the XDocument node provider layer.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -47,6 +48,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.19  | 23-08-2026     | Annotate constructed elements so they report xs:anyType instead of xs:untyped |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.20  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -65,6 +68,8 @@ public static class XDocumentProvider
     /// <summary>
     /// Adapts an <see cref="XDocument"/> to <see cref="IXdmNode"/>.
     /// </summary>
+    /// <param name="document">The document to adapt.</param>
+    /// <returns>The document node adapter.</returns>
     public static IXdmNode ToXdmNode(this System.Xml.Linq.XDocument document)
     {
         ArgumentNullException.ThrowIfNull(document);
@@ -76,6 +81,8 @@ public static class XDocumentProvider
     /// <summary>
     /// Adapts an <see cref="XElement"/> to <see cref="IXdmNode"/>.
     /// </summary>
+    /// <param name="element">The element to adapt.</param>
+    /// <returns>The element node adapter.</returns>
     public static IXdmNode ToXdmNode(this XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
@@ -659,6 +666,8 @@ public static class XDocumentProvider
     /// Parses an XML string and returns the root as an <see cref="IXdmNode"/>.
     /// XML 1.1 declarations are accepted by encoding name characters that .NET rejects.
     /// </summary>
+    /// <param name="xml">The XML text to parse.</param>
+    /// <returns>The parsed document node.</returns>
     public static IXdmNode ParseXml(string xml)
     {
         var document = Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace);
@@ -670,6 +679,9 @@ public static class XDocumentProvider
     /// <summary>
     /// Parses an XML string that is known to be XML 1.1 and returns the root as an <see cref="IXdmNode"/>.
     /// </summary>
+    /// <param name="xml">The XML 1.1 text to parse.</param>
+    /// <param name="baseUri">An optional base URI recorded on the parsed nodes.</param>
+    /// <returns>The parsed document node.</returns>
     public static IXdmNode ParseXml11(string xml, string? baseUri = null)
     {
         var document = Xml11Loader.ParseXml11(xml, LoadOptions.PreserveWhitespace, baseUri);
@@ -683,6 +695,8 @@ public static class XDocumentProvider
     /// The file path is preserved as the document's base URI.
     /// XML 1.1 declarations are accepted by encoding name characters that .NET rejects.
     /// </summary>
+    /// <param name="filePath">The path or file URI of the document to load.</param>
+    /// <returns>The loaded document node.</returns>
     public static IXdmNode LoadXml(string filePath)
         => LoadXml(filePath, baseUri: null);
 
@@ -693,6 +707,9 @@ public static class XDocumentProvider
     /// document under a different URI than its local file location.
     /// XML 1.1 declarations are accepted by encoding name characters that .NET rejects.
     /// </summary>
+    /// <param name="filePath">The path or file URI of the document to load.</param>
+    /// <param name="baseUri">An optional published URI to use as the document's base URI.</param>
+    /// <returns>The loaded document node.</returns>
     public static IXdmNode LoadXml(string filePath, string? baseUri)
     {
         var document = Xml11Loader.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
@@ -731,6 +748,11 @@ public static class XDocumentProvider
     /// instead of the file path. PSVI annotations are added to the tree so that
     /// <see cref="XDocumentNode.IsId"/> reflects the schema types.
     /// </summary>
+    /// <param name="filePath">The path or file URI of the document to load.</param>
+    /// <param name="baseUri">An optional published URI to use as the document's base URI.</param>
+    /// <param name="schemaSet">An optional compiled schema set to validate against.</param>
+    /// <returns>The loaded (and optionally validated) document node.</returns>
+    /// <exception cref="XmlSchemaValidationException">Validation against <paramref name="schemaSet"/> produces errors.</exception>
     public static IXdmNode LoadXml(string filePath, string? baseUri, XmlSchemaSet? schemaSet)
     {
         var document = Xml11Loader.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
@@ -825,6 +847,7 @@ public static class XDocumentProvider
     /// XPath/XQuery processors typically preserve whitespace inside elements but strip
     /// insignificant whitespace before/after the root element.
     /// </summary>
+    /// <param name="doc">The document to strip; it is modified in place.</param>
     public static void StripDocumentLevelWhitespace(System.Xml.Linq.XDocument doc)
     {
         var toRemove = doc.Nodes()

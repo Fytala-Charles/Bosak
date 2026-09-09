@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the standard XPath / XQuery function library.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -13,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 11-07-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 12-07-2026     | Added CharacterMap option and apply it during JSON string encoding.                     |
 //                      | Charles Korthout | 0.3   | 13-07-2026     | Serialize sequence-valued array/map members via SerializeTopLevel.                     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.31  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -58,6 +61,11 @@ public static class XdmJsonSerializer
     /// <summary>
     /// Serializes an XDM value as JSON.
     /// </summary>
+    /// <param name="value">The XDM value to serialize.</param>
+    /// <param name="options">Serialization options; defaults are used when null.</param>
+    /// <returns>The JSON text.</returns>
+    /// <exception cref="InvalidOperationException">A JSON object contains duplicate keys and
+    /// <see cref="XdmJsonOptions.AllowDuplicateNames"/> is false (SERE0022).</exception>
     public static string Serialize(XdmValue value, XdmJsonOptions? options = null)
     {
         options ??= new XdmJsonOptions();
@@ -238,6 +246,9 @@ public static class XdmJsonSerializer
     /// Encodes a string as a JSON string literal, escaping quotes, backslashes,
     /// control characters and (optionally) forward slashes.
     /// </summary>
+    /// <param name="value">The string to encode.</param>
+    /// <param name="escapeSolidus">Whether to escape <c>/</c> as <c>\/</c>.</param>
+    /// <returns>The JSON string literal, including the surrounding quotes.</returns>
     public static string EncodeJsonString(string value, bool escapeSolidus = false)
     {
         return EncodeJsonString(value, escapeSolidus, null);
@@ -247,6 +258,10 @@ public static class XdmJsonSerializer
     /// Encodes a string as a JSON string literal, applying any character map before
     /// escaping quotes, backslashes, control characters and (optionally) forward slashes.
     /// </summary>
+    /// <param name="value">The string to encode.</param>
+    /// <param name="escapeSolidus">Whether to escape <c>/</c> as <c>\/</c>.</param>
+    /// <param name="characterMap">An optional map from Unicode codepoint to literal replacement string.</param>
+    /// <returns>The JSON string literal, including the surrounding quotes.</returns>
     public static string EncodeJsonString(string value, bool escapeSolidus, Dictionary<int, string>? characterMap)
     {
         var sb = new StringBuilder();

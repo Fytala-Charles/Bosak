@@ -5,12 +5,15 @@
 // SPECIAL NOTES        : Part of the XDocument node provider layer.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 07-07-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -59,6 +62,8 @@ public static class Xml11NameCodec
     /// Returns <c>true</c> when <paramref name="codepoint"/> is accepted by .NET
     /// as an XML 1.0 name character.
     /// </summary>
+    /// <param name="codepoint">The Unicode codepoint to test.</param>
+    /// <returns><c>true</c> when the character is valid in an XML 1.0 name.</returns>
     public static bool IsValidNameChar(int codepoint)
     {
         if (codepoint is >= 1 and < 0x10000)
@@ -77,6 +82,8 @@ public static class Xml11NameCodec
     /// <summary>
     /// Encodes an XML name so that it can be stored in an <see cref="System.Xml.Linq.XName"/>.
     /// </summary>
+    /// <param name="name">The XML 1.1 name to encode.</param>
+    /// <returns>The encoded name; the input unchanged when no encoding is needed.</returns>
     public static string EncodeName(string name)
     {
         if (string.IsNullOrEmpty(name))
@@ -118,6 +125,8 @@ public static class Xml11NameCodec
     /// <summary>
     /// Decodes a name that was previously encoded with <see cref="EncodeName"/>.
     /// </summary>
+    /// <param name="name">The encoded name.</param>
+    /// <returns>The original XML 1.1 name; the input unchanged when it contains no encoded characters.</returns>
     public static string DecodeName(string name)
     {
         if (string.IsNullOrEmpty(name))
@@ -160,6 +169,8 @@ public static class Xml11NameCodec
     /// <summary>
     /// Returns <c>true</c> if <paramref name="name"/> contains encoded XML 1.1 characters.
     /// </summary>
+    /// <param name="name">The name to test.</param>
+    /// <returns><c>true</c> when the name contains sentinel-encoded characters.</returns>
     public static bool IsEncoded(string name)
         => !string.IsNullOrEmpty(name) && name.IndexOf(SentinelOpen) >= 0;
 
@@ -167,6 +178,8 @@ public static class Xml11NameCodec
     /// Encodes characters that are not permitted in XML 1.0 text/attribute values
     /// (C0/C1 controls and the sentinel characters themselves).
     /// </summary>
+    /// <param name="value">The text or attribute value to encode.</param>
+    /// <returns>The encoded value; the input unchanged when no encoding is needed.</returns>
     public static string EncodeValue(string value)
     {
         if (string.IsNullOrEmpty(value))
@@ -217,6 +230,8 @@ public static class Xml11NameCodec
     /// <summary>
     /// Returns <c>true</c> when <paramref name="codepoint"/> is not a valid XML 1.0 character.
     /// </summary>
+    /// <param name="codepoint">The Unicode codepoint to test.</param>
+    /// <returns><c>true</c> when the character is forbidden in XML 1.0 documents.</returns>
     public static bool IsInvalidXml10Char(int codepoint)
     {
         if (codepoint == 0x09 || codepoint == 0x0A || codepoint == 0x0D)
@@ -233,6 +248,8 @@ public static class Xml11NameCodec
     /// <summary>
     /// Returns <c>true</c> when <paramref name="name"/> is a valid XML 1.1 NCName.
     /// </summary>
+    /// <param name="name">The name to validate.</param>
+    /// <returns><c>true</c> when the name is a valid XML 1.1 NCName.</returns>
     public static bool IsValidXml11NCName(string name)
     {
         if (string.IsNullOrEmpty(name))
@@ -314,5 +331,7 @@ public static class Xml11NameCodec
     /// <summary>
     /// Decodes a value encoded with <see cref="EncodeValue"/>.
     /// </summary>
+    /// <param name="value">The encoded text or attribute value.</param>
+    /// <returns>The original value; the input unchanged when it contains no encoded characters.</returns>
     public static string DecodeValue(string value) => DecodeName(value);
 }

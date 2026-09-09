@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -19,6 +20,8 @@
 //                      | Charles Korthout | 0.7   | 30-06-2026     | Default on-no-match is text-only-copy per XSLT 3.0 spec; fixes match-241               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8  | 02-09-2026     | ModeDefinition tracks explicitly-specified attributes; GetModeDefinition merges per attribute by import precedence (accumulator-023)|
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -111,11 +114,31 @@ public sealed class ModeDefinition
     /// <summary>The attribute names explicitly specified on the xsl:mode declaration.</summary>
     public IReadOnlySet<string> SpecifiedAttributes { get; }
 
+    /// <summary>
+    /// Creates a mode definition with private visibility and no warnings, accumulators, or streaming.
+    /// </summary>
+    /// <param name="name">The mode name (empty string for the unnamed mode).</param>
+    /// <param name="onNoMatch">The behavior when no template matches a node.</param>
+    /// <param name="onMultipleMatch">The behavior when multiple templates match with the same priority.</param>
     public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch = OnMultipleMatch.UseLast)
         : this(name, onNoMatch, onMultipleMatch, ModeVisibility.Private, false, false, false, false, new HashSet<string>(), false)
     {
     }
 
+    /// <summary>
+    /// Creates a mode definition with all <c>xsl:mode</c> attributes specified explicitly.
+    /// </summary>
+    /// <param name="name">The mode name (empty string for the unnamed mode).</param>
+    /// <param name="onNoMatch">The behavior when no template matches a node.</param>
+    /// <param name="onMultipleMatch">The behavior when multiple templates match with the same priority.</param>
+    /// <param name="visibility">The visibility of the mode.</param>
+    /// <param name="typed">Whether the mode requires typed (schema-validated) nodes.</param>
+    /// <param name="warningOnNoMatch">Whether to emit a warning when no template matches a node.</param>
+    /// <param name="warningOnMultipleMatch">Whether to emit a warning when multiple templates match with the same priority.</param>
+    /// <param name="streamable">Whether the mode is declared streamable.</param>
+    /// <param name="useAccumulators">The accumulator names (Clark notation) applicable to this mode.</param>
+    /// <param name="useAllAccumulators">Whether this mode uses all accumulators.</param>
+    /// <param name="specifiedAttributes">The attribute names explicitly specified on the xsl:mode declaration; defaults to an empty set.</param>
     public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, bool typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators, IReadOnlySet<string>? specifiedAttributes = null)
     {
         Name = name;

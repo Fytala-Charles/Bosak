@@ -5,7 +5,7 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
 // SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 07-09-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XQST0040 for duplicate expanded attribute names in direct element constructors           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -46,6 +48,10 @@ public static class StaticNameTestValidator
     /// Maps a prefix to its namespace URI, or returns null when the prefix is not declared
     /// in the static context. The predefined <c>xml</c> prefix need not be supplied.
     /// </param>
+    /// <exception cref="ArgumentNullException"><paramref name="node"/> or <paramref name="resolvePrefix"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">A name-test prefix is not declared
+    /// (XPST0081), a kind test requires schema awareness (XPST0008), or a direct element
+    /// constructor declares duplicate attribute names (XQST0040).</exception>
     public static void Validate(XPathAstNode node, Func<string, string?> resolvePrefix)
     {
         ArgumentNullException.ThrowIfNull(node);

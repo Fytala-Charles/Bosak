@@ -5,12 +5,14 @@
 // SPECIAL NOTES        : Public surface API for compiling and evaluating XPath 3.1 expressions.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -21,7 +23,9 @@ namespace Bosak.XPath.Api.Xsd;
 /// </summary>
 public enum XsdValidationSeverity
 {
+    /// <summary>A non-fatal validation warning.</summary>
     Warning,
+    /// <summary>A validation error.</summary>
     Error
 }
 
@@ -45,6 +49,7 @@ public sealed class XsdValidationError
     /// <summary>Gets the source URI of the schema that reported the error, or empty if unknown.</summary>
     public string SourceUri { get; }
 
+    /// <summary>Creates a validation message with its severity, text, and optional source location.</summary>
     public XsdValidationError(XsdValidationSeverity severity, string message, int lineNumber = 0, int linePosition = 0, string sourceUri = "")
     {
         Severity = severity;
@@ -54,6 +59,7 @@ public sealed class XsdValidationError
         SourceUri = sourceUri;
     }
 
+    /// <inheritdoc/>
     public override string ToString()
         => $"[{Severity}] {Message} (at line {LineNumber}, column {LinePosition})";
 }

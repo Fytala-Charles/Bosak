@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the XDocument node provider layer.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -19,6 +20,8 @@
 //                      | Charles Korthout | 0.6   | 29-08-2026     | Preserve document base URI on unparsed-entity annotation for relative system IDs        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 31-08-2026     | Annotate elements declared element-only by a DTD for default XSLT whitespace stripping   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -65,6 +68,9 @@ public static class Xml11Loader
     /// Loads an XML document from a file, applying XML 1.1 compatibility if the
     /// declaration declares version 1.1.
     /// </summary>
+    /// <param name="filePath">The path or file URI of the document to load.</param>
+    /// <param name="loadOptions">The LINQ-to-XML load options.</param>
+    /// <returns>The loaded document.</returns>
     public static XDocument Load(string filePath, LoadOptions loadOptions)
     {
         var resolvedPath = filePath;
@@ -109,6 +115,10 @@ public static class Xml11Loader
     /// Parses an XML string, applying XML 1.1 compatibility if the declaration
     /// declares version 1.1.
     /// </summary>
+    /// <param name="text">The XML text to parse.</param>
+    /// <param name="loadOptions">The LINQ-to-XML load options.</param>
+    /// <param name="baseUri">An optional base URI recorded on the parsed nodes.</param>
+    /// <returns>The parsed document.</returns>
     public static XDocument Parse(string text, LoadOptions loadOptions, string? baseUri = null)
     {
         var (rewritten, isXml11) = PrepareXml11Text(text);
@@ -131,6 +141,10 @@ public static class Xml11Loader
     /// Parses XML text that is known to be XML 1.1 (for example inline source content
     /// marked with an <c>xml-version="1.1"</c> attribute in the test catalog).
     /// </summary>
+    /// <param name="text">The XML 1.1 text to parse.</param>
+    /// <param name="loadOptions">The LINQ-to-XML load options.</param>
+    /// <param name="baseUri">An optional base URI recorded on the parsed nodes.</param>
+    /// <returns>The parsed document.</returns>
     public static XDocument ParseXml11(string text, LoadOptions loadOptions, string? baseUri = null)
     {
         var rewritten = RewriteDeclarationAndEncodeNames(text, forceXml11: true);
@@ -171,6 +185,8 @@ public static class Xml11Loader
     /// <summary>
     /// Returns true when the XML text declares itself as XML 1.1.
     /// </summary>
+    /// <param name="text">The XML text whose declaration is inspected.</param>
+    /// <returns><c>true</c> when the XML declaration specifies <c>version="1.1"</c>.</returns>
     public static bool HasXml11Declaration(string text)
     {
         if (string.IsNullOrEmpty(text))

@@ -5,12 +5,14 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -36,12 +38,14 @@ public sealed class MaterializedSequence : IXdmSequence
     public static XdmSequence FromEnumerable(IEnumerable<XdmValue> items)
         => XdmSequence.FromSource(new MaterializedSequence(items.ToList()));
 
+    /// <summary>Returns the item count; always known for a materialized sequence.</summary>
     public bool TryGetLength(out int length)
     {
         length = _items.Count;
         return true;
     }
 
+    /// <summary>Returns an enumerator over the materialized items.</summary>
     public IXdmSequenceEnumerator GetEnumerator() => new Enumerator(_items);
 
     private sealed class Enumerator : IXdmSequenceEnumerator

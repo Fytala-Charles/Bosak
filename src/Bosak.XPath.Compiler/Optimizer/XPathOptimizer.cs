@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -42,6 +43,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 22-08-2026     | Optimize ValidateExpressionNode |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -58,6 +61,8 @@ public sealed class XPathOptimizer
     /// <summary>
     /// Optimizes an AST node. Runs multiple passes until no further changes are made.
     /// </summary>
+    /// <param name="node">The root of the AST to optimize.</param>
+    /// <returns>The optimized AST; the original node when no optimization applies.</returns>
     public XPathAstNode Optimize(XPathAstNode node)
         => Optimize(node, backwardsCompatible: false);
 
@@ -65,6 +70,10 @@ public sealed class XPathOptimizer
     /// Optimizes an AST node, optionally applying XPath 1.0 backwards-compatible
     /// constant-folding rules.
     /// </summary>
+    /// <param name="node">The root of the AST to optimize.</param>
+    /// <param name="backwardsCompatible">When true, constant folding follows XPath 1.0
+    /// backwards-compatible rules (integer arithmetic folds to xs:double).</param>
+    /// <returns>The optimized AST; the original node when no optimization applies.</returns>
     public XPathAstNode Optimize(XPathAstNode node, bool backwardsCompatible)
     {
         _backwardsCompatible = backwardsCompatible;

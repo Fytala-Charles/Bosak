@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -17,6 +18,7 @@
 //                      | Charles Korthout | 0.4   | 25-07-2026     | Date/time keys require same timezone presence; throw-safe UTC instant keys             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 25-07-2026     | Map keys distinguish string-family subtypes from g* date types                         |
+//                      | Charles Korthout | 0.6   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -31,8 +33,10 @@ using System.Numerics;
 /// </summary>
 public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
 {
+    /// <summary>The shared singleton instance.</summary>
     public static readonly XdmValueEqualityComparer Instance = new();
 
+    /// <summary>Compares two values with op:same-key semantics (numeric promotion, string/URI comparability).</summary>
     public bool Equals(XdmValue x, XdmValue y)
     {
         if (IsNumeric(x) && IsNumeric(y))
@@ -65,6 +69,7 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
         return false;
     }
 
+    /// <summary>Returns a hash code consistent with op:same-key equality, so equal keys hash alike.</summary>
     public int GetHashCode(XdmValue obj)
     {
         if (IsNumeric(obj))

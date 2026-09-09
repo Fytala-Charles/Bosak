@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -302,6 +303,8 @@
 //                      | Charles Korthout | 6.63  | 07-09-2026     | xsl:for-each-group attribute validation precedes collation recognition so XTSE1090     |
 //                      |                  |       |                | wins over XTDE1110 (for-each-group-051, REQ-082)                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.64  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -507,11 +510,19 @@ public sealed class TransformEngine
     private readonly struct TemporaryOutputScope : IDisposable
     {
         private readonly TransformEngine _engine;
+
+        /// <summary>
+        /// Enters a temporary output state on the supplied engine, incrementing its
+        /// temporary-output depth until <see cref="Dispose"/> is called.
+        /// </summary>
+        /// <param name="engine">The engine whose temporary-output depth is tracked.</param>
         public TemporaryOutputScope(TransformEngine engine)
         {
             _engine = engine;
             _engine._temporaryOutputDepth++;
         }
+
+        /// <summary>Leaves the temporary output state, decrementing the engine's temporary-output depth.</summary>
         public void Dispose() => _engine._temporaryOutputDepth--;
     }
 
@@ -628,6 +639,13 @@ public sealed class TransformEngine
     /// </summary>
     public Stylesheet.OutputProperties? PrincipalResultDocumentProperties => _principalResultDocumentProperties;
 
+    /// <summary>
+    /// Creates a transform engine for the supplied compiled stylesheet.
+    /// </summary>
+    /// <param name="stylesheet">The compiled stylesheet to execute.</param>
+    /// <param name="context">Optional evaluation context (global parameters, variables, and settings); a new context is created when null.</param>
+    /// <param name="messageListener">Optional listener for xsl:message output and XSLT warnings.</param>
+    /// <param name="treatRecoverableAmbiguousMatchAsError">When true, the recoverable ambiguous-match condition (XTRE0540) is reported as an error.</param>
     public TransformEngine(Stylesheet.Stylesheet stylesheet, EvaluationContext? context = null, IXsltMessageListener? messageListener = null, bool treatRecoverableAmbiguousMatchAsError = false)
     {
         _stylesheet = stylesheet;
@@ -830,6 +848,8 @@ public sealed class TransformEngine
     /// <param name="initialMatchSelection">Optional initial match selection (fn:transform): an arbitrary XDM value to which templates are applied in the initial mode.</param>
     /// <param name="captureResultDocuments">When true, secondary result documents are captured instead of written to disk.</param>
     /// <param name="rawTransformResult">When true, the raw top-level items of the transformation are returned as a sequence (fn:transform delivery-format="raw").</param>
+    /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
+    /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false, IXdmNode? globalContextItem = null)
     {
         _baseOutputUri = baseOutputUri;
@@ -1285,6 +1305,9 @@ public sealed class TransformEngine
     /// <param name="args">Arguments to pass to the function.</param>
     /// <param name="captureResultDocuments">When true, secondary result documents are captured instead of written to disk.</param>
     /// <param name="baseOutputUri">The base output URI for resolving result-document hrefs.</param>
+    /// <param name="source">Optional source node used as the global context item fallback.</param>
+    /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
+    /// <returns>The value returned by the function.</returns>
     public XdmValue TransformFunction(string name, XdmValue[] args, bool captureResultDocuments = false, string? baseOutputUri = null, IXdmNode? source = null, IXdmNode? globalContextItem = null)
     {
         _baseOutputUri = baseOutputUri;
@@ -2681,12 +2704,19 @@ public sealed class TransformEngine
 
     private struct PackageScopeState
     {
+        /// <summary>The package scope that was current before the package scope was entered.</summary>
         public Stylesheet.Stylesheet? PreviousScope;
+        /// <summary>Snapshot of the function registry taken when the package scope was entered.</summary>
         public Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> FunctionSnapshot;
+        /// <summary>Snapshot of the active namespace aliases taken when the package scope was entered.</summary>
         public Dictionary<string, Stylesheet.NamespaceAliasDefinition> NamespaceAliasSnapshot;
+        /// <summary>Snapshot of the named decimal formats taken when the package scope was entered.</summary>
         public Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> NamedDecimalFormatSnapshot;
+        /// <summary>Snapshot of the default decimal format taken when the package scope was entered.</summary>
         public DecimalFormat DefaultDecimalFormatSnapshot;
+        /// <summary>Snapshot of the lazy-global evaluation state taken when the package scope was entered.</summary>
         public IDisposable? LazyGlobalsSnapshot;
+        /// <summary>The function-lookup interceptor that was installed before the package scope was entered.</summary>
         public Func<EvaluationContext, string, string, int, XdmValue?>? PreviousFunctionLookupInterceptor;
     }
 
@@ -4349,6 +4379,13 @@ public sealed class TransformEngine
     /// Implements xsl:apply-templates: selects nodes and processes each with the best-matching template.
     /// Supports XSLT 3.0 atomic-value matching.
     /// </summary>
+    /// <param name="contextNode">The context node used to evaluate the select expression.</param>
+    /// <param name="mode">The mode to apply (may be #current or #default).</param>
+    /// <param name="select">The select expression, or null to process the child nodes of the context node.</param>
+    /// <param name="sortKeys">Optional xsl:sort key elements used to order the selected items.</param>
+    /// <param name="incomingTunnelParams">Tunnel parameters visible to the applied templates.</param>
+    /// <param name="callParams">Non-tunnel parameters supplied by the caller.</param>
+    /// <param name="instruction">The xsl:apply-templates instruction element, used for the XPath static context.</param>
     public void ApplyTemplates(IXdmNode contextNode, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, XElement? instruction = null)
     {
         if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
@@ -4437,6 +4474,13 @@ public sealed class TransformEngine
     /// <summary>
     /// Implements xsl:apply-templates when there is no context node (e.g. inside a named template).
     /// </summary>
+    /// <param name="contextItem">The context item used to evaluate the select expression.</param>
+    /// <param name="mode">The mode to apply (may be #current or #default).</param>
+    /// <param name="select">The select expression, or null to process the child nodes of the context node.</param>
+    /// <param name="sortKeys">Optional xsl:sort key elements used to order the selected items.</param>
+    /// <param name="incomingTunnelParams">Tunnel parameters visible to the applied templates.</param>
+    /// <param name="callParams">Non-tunnel parameters supplied by the caller.</param>
+    /// <param name="instruction">The xsl:apply-templates instruction element, used for the XPath static context.</param>
     public void ApplyTemplates(XdmValue contextItem, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, XElement? instruction = null)
     {
         if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
@@ -4685,9 +4729,27 @@ public sealed class TransformEngine
     /// <summary>
     /// Executes the body of a template rule against the current node.
     /// </summary>
+    /// <param name="rule">The template rule to execute.</param>
+    /// <param name="currentNode">The node that becomes the context item for the template body.</param>
+    /// <param name="callParams">Non-tunnel parameters supplied by the caller.</param>
+    /// <param name="incomingTunnelParams">Tunnel parameters visible to the template.</param>
+    /// <param name="position">The position of the current item in the sequence being processed.</param>
+    /// <param name="last">The size of the sequence being processed.</param>
+    /// <param name="setCurrentRule">Whether this template becomes the current rule for xsl:next-match.</param>
     public void ExecuteTemplate(Stylesheet.TemplateRule rule, IXdmNode currentNode, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1, bool setCurrentRule = true)
         => ExecuteTemplate(rule, XdmValue.FromNode(currentNode), callParams, incomingTunnelParams, position, last, setCurrentRule);
 
+    /// <summary>
+    /// Executes the body of a template rule against the current item, entering the
+    /// template's declaring package scope so its private components remain visible.
+    /// </summary>
+    /// <param name="rule">The template rule to execute.</param>
+    /// <param name="contextItem">The item that becomes the context item for the template body.</param>
+    /// <param name="callParams">Non-tunnel parameters supplied by the caller.</param>
+    /// <param name="incomingTunnelParams">Tunnel parameters visible to the template.</param>
+    /// <param name="position">The position of the current item in the sequence being processed.</param>
+    /// <param name="last">The size of the sequence being processed.</param>
+    /// <param name="setCurrentRule">Whether this template becomes the current rule for xsl:next-match.</param>
     public void ExecuteTemplate(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, int position = 1, int last = 1, bool setCurrentRule = true)
     {
         var packageScopeState = EnterPackageScope(rule.Stylesheet.OwningPackage);
@@ -5059,6 +5121,10 @@ public sealed class TransformEngine
     /// <summary>
     /// Implements xsl:call-template: invokes a named template by name.
     /// </summary>
+    /// <param name="name">The name of the template to invoke (Clark notation or xsl:original).</param>
+    /// <param name="currentNode">The node that becomes the context item for the template body.</param>
+    /// <param name="withParams">Parameters supplied via xsl:with-param.</param>
+    /// <param name="incomingTunnelParams">Tunnel parameters visible to the called template.</param>
     public void CallTemplate(string name, IXdmNode currentNode, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
         => CallTemplate(name, XdmValue.FromNode(currentNode), withParams, incomingTunnelParams);
 
@@ -5081,6 +5147,14 @@ public sealed class TransformEngine
         return true;
     }
 
+    /// <summary>
+    /// Implements xsl:call-template: invokes a named template by name against the supplied
+    /// context item, dispatching package-locally when the caller executes inside a package.
+    /// </summary>
+    /// <param name="name">The name of the template to invoke (Clark notation or xsl:original).</param>
+    /// <param name="contextItem">The item that becomes the context item for the template body.</param>
+    /// <param name="withParams">Parameters supplied via xsl:with-param.</param>
+    /// <param name="incomingTunnelParams">Tunnel parameters visible to the called template.</param>
     public void CallTemplate(string name, XdmValue contextItem, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
         if (++_callTemplateDepth > MaxCallTemplateDepth)
@@ -9558,6 +9632,12 @@ public sealed class TransformEngine
     /// Applies built-in template rules when no explicit template matches.
     /// Respects xsl:mode on-no-match declarations.
     /// </summary>
+    /// <param name="node">The node to process with the built-in rules.</param>
+    /// <param name="mode">The mode whose on-no-match behavior selects the built-in rule.</param>
+    /// <param name="incomingTunnelParams">Tunnel parameters passed through to descendant processing.</param>
+    /// <param name="callParams">Non-tunnel parameters passed through to descendant processing.</param>
+    /// <param name="position">The position of the node in the sequence being processed.</param>
+    /// <param name="last">The size of the sequence being processed.</param>
     public void ApplyBuiltInRules(IXdmNode node, string mode, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, int position = 1, int last = 1)
     {
         var savedItem = _context.ContextItem;
@@ -13477,11 +13557,22 @@ public sealed class TransformEngine
     /// </summary>
     private readonly struct XsltFunctionCacheKey : IEquatable<XsltFunctionCacheKey>
     {
+        /// <summary>The namespace URI of the function.</summary>
         public string NamespaceUri { get; }
+        /// <summary>The local name of the function.</summary>
         public string LocalName { get; }
+        /// <summary>The arity of the function.</summary>
         public int Arity { get; }
+        /// <summary>The normalized cache keys of the evaluated arguments.</summary>
         public object?[] ArgumentKeys { get; }
 
+        /// <summary>
+        /// Creates a cache key for a function call with the supplied evaluated arguments.
+        /// </summary>
+        /// <param name="ns">The namespace URI of the function.</param>
+        /// <param name="local">The local name of the function.</param>
+        /// <param name="arity">The arity of the function.</param>
+        /// <param name="args">The evaluated argument values.</param>
         public XsltFunctionCacheKey(string ns, string local, int arity, ReadOnlySpan<XdmValue> args)
         {
             NamespaceUri = ns;
@@ -13509,6 +13600,12 @@ public sealed class TransformEngine
             return (value.Kind, value.ToString());
         }
 
+        /// <summary>
+        /// Returns whether this key and another denote the same function call: equal name,
+        /// arity, and argument keys (nodes compare by identity, atomics by kind and value).
+        /// </summary>
+        /// <param name="other">The key to compare against.</param>
+        /// <returns>True when both keys are equal.</returns>
         public bool Equals(XsltFunctionCacheKey other)
         {
             if (NamespaceUri != other.NamespaceUri || LocalName != other.LocalName || Arity != other.Arity)
@@ -13523,8 +13620,10 @@ public sealed class TransformEngine
             return true;
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object? obj) => obj is XsltFunctionCacheKey key && Equals(key);
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             var h = new HashCode();
@@ -14097,6 +14196,7 @@ public sealed class TransformEngine
     /// </summary>
     private sealed class SequencePlaceholderItems
     {
+        /// <summary>The XDM items held by the annotated placeholder element.</summary>
         public List<XdmValue> Items { get; } = new();
     }
 
@@ -14130,13 +14230,23 @@ public sealed class TransformEngine
     {
         private readonly TransformEngine _engine;
 
+        /// <summary>
+        /// Creates a placeholder accumulator bound to the supplied engine's current container.
+        /// </summary>
+        /// <param name="engine">The engine whose current container receives the placeholder elements.</param>
         public PlaceholderSequenceAccumulator(TransformEngine engine)
         {
             _engine = engine;
         }
 
+        /// <summary>Empty: items are stored in placeholder elements, not in a list.</summary>
         public IList<XdmValue> Items => Array.Empty<XdmValue>();
 
+        /// <summary>
+        /// Adds an item as a synthetic placeholder element in the current container,
+        /// flattening nested sequences so each item keeps its source position.
+        /// </summary>
+        /// <param name="item">The item produced by the sequence constructor.</param>
         public void Add(XdmValue item)
         {
             // Sequences are flattened so that each XDM item occupies its own
@@ -14165,13 +14275,22 @@ public sealed class TransformEngine
     {
         private readonly List<XdmValue> _items;
 
+        /// <summary>
+        /// Creates a list accumulator that appends items to the supplied list.
+        /// </summary>
+        /// <param name="items">The list that receives the collected items.</param>
         public ListSequenceAccumulator(List<XdmValue> items)
         {
             _items = items;
         }
 
+        /// <summary>The list of collected items.</summary>
         public IList<XdmValue> Items => _items;
 
+        /// <summary>
+        /// Adds an item to the list, skipping undefined values and flattening nested sequences.
+        /// </summary>
+        /// <param name="item">The item produced by the sequence constructor.</param>
         public void Add(XdmValue item)
         {
             if (item.IsUndefined)
@@ -16302,6 +16421,7 @@ public sealed class TransformEngine
     /// </summary>
     private sealed class TvtConsumedMarker
     {
+        /// <summary>The singleton marker instance.</summary>
         public static readonly TvtConsumedMarker Instance = new();
         private TvtConsumedMarker() { }
     }
@@ -18128,6 +18248,7 @@ public sealed class TransformEngine
     /// </summary>
     private sealed class AccumulatorValues
     {
+        /// <summary>The before/after values of each accumulator, keyed by accumulator Clark name.</summary>
         public Dictionary<string, (XdmValue Before, XdmValue After)> Values { get; } = new();
 
         /// <summary>
@@ -18149,6 +18270,10 @@ public sealed class TransformEngine
     /// </summary>
     private abstract class IterateControlException : Exception
     {
+        /// <summary>
+        /// Creates the control exception with the supplied message.
+        /// </summary>
+        /// <param name="message">The message identifying the control instruction.</param>
         protected IterateControlException(string message)
             : base(message)
         {
@@ -18164,6 +18289,10 @@ public sealed class TransformEngine
         /// <summary>The value produced by the <c>xsl:break</c> instruction.</summary>
         public XdmValue? Value { get; }
 
+        /// <summary>
+        /// Creates the break signal carrying the value of the <c>xsl:break</c> instruction.
+        /// </summary>
+        /// <param name="value">The value produced by the xsl:break instruction.</param>
         public BreakSignal(XdmValue? value)
             : base("xsl:break")
         {
@@ -18180,6 +18309,10 @@ public sealed class TransformEngine
         /// <summary>New values for the iteration parameters.</summary>
         public Dictionary<(string LocalName, string NamespaceUri), XdmValue> NewParamValues { get; }
 
+        /// <summary>
+        /// Creates the next-iteration signal carrying the updated iteration parameter values.
+        /// </summary>
+        /// <param name="newParamValues">The new values for the iteration parameters.</param>
         public NextIterationSignal(Dictionary<(string LocalName, string NamespaceUri), XdmValue> newParamValues)
             : base("xsl:next-iteration")
         {

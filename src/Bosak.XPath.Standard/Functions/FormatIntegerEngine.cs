@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the standard XPath / XQuery function library.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -19,6 +20,8 @@
 //                      | Charles Korthout | 0.7   | 03-06-2026     | Added BigInteger overload for formatting values > long.MaxValue (fixes number-0807)       |
 //                      | Charles Korthout | 0.8   | 26-06-2026     | German word/ordinal support for xsl:number and fn:format-integer                         |
 //                      | Charles Korthout | 0.9   | 15-07-2026     | Tier-2l: CJK kanji, French ordinal, Italian gender, o(-lang) suffix                     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -34,9 +37,27 @@ namespace Bosak.XPath.Standard.Functions;
 /// </summary>
 public static class FormatIntegerEngine
 {
+    /// <summary>
+    /// Formats an integer according to an <c>fn:format-integer</c> picture string.
+    /// </summary>
+    /// <param name="ctx">The evaluation context.</param>
+    /// <param name="value">The integer to format.</param>
+    /// <param name="picture">The format picture (primary token with optional <c>;o</c>/<c>;c</c>/<c>;t</c> modifier).</param>
+    /// <param name="language">An optional language tag (e.g. <c>de</c>, <c>fr</c>) used for word and ordinal output.</param>
+    /// <returns>The formatted integer string.</returns>
+    /// <exception cref="InvalidOperationException">The picture is invalid (FODF1310).</exception>
     public static string Format(EvaluationContext ctx, long value, string picture, string? language)
         => Format(ctx, new BigInteger(value), picture, language);
 
+    /// <summary>
+    /// Formats an arbitrarily large integer according to an <c>fn:format-integer</c> picture string.
+    /// </summary>
+    /// <param name="ctx">The evaluation context.</param>
+    /// <param name="value">The integer to format.</param>
+    /// <param name="picture">The format picture (primary token with optional <c>;o</c>/<c>;c</c>/<c>;t</c> modifier).</param>
+    /// <param name="language">An optional language tag (e.g. <c>de</c>, <c>fr</c>) used for word and ordinal output.</param>
+    /// <returns>The formatted integer string.</returns>
+    /// <exception cref="InvalidOperationException">The picture is invalid (FODF1310).</exception>
     public static string Format(EvaluationContext ctx, BigInteger value, string picture, string? language)
     {
         // 1. Split picture into primary format token and format modifier

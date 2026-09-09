@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -34,6 +35,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 07-09-2026     | Unterminated braced URI literal Q{ raises XPST0003 (eqname-907)                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -49,6 +52,12 @@ public ref struct XPathLexer
     private readonly bool _allowConstructors;
     private int _position;
 
+    /// <summary>
+    /// Initializes a lexer over the given source text.
+    /// </summary>
+    /// <param name="source">The XPath or XQuery source text to tokenize.</param>
+    /// <param name="allowConstructors">When true, XQuery direct element/comment/PI and string
+    /// constructors are scanned as single <see cref="TokenKind.Constructor"/> tokens.</param>
     public XPathLexer(ReadOnlySpan<char> source, bool allowConstructors = false)
     {
         _source = source;
@@ -56,8 +65,11 @@ public ref struct XPathLexer
         _position = 0;
     }
 
+    /// <summary>The source text being tokenized.</summary>
     public ReadOnlySpan<char> Source => _source;
+    /// <summary>The zero-based character offset of the next character to scan.</summary>
     public int Position => _position;
+    /// <summary>True when the end of the source text has been reached.</summary>
     public bool IsAtEnd => _position >= _source.Length;
 
     /// <summary>
@@ -68,6 +80,8 @@ public ref struct XPathLexer
     /// (K2-Axes-1/2: apostrophes in element content are not string delimiters).
     /// </summary>
     /// <param name="source">The source text positioned at '&lt;'.</param>
+    /// <returns>The length of the constructor in characters, or 0 when the text is not a
+    /// structurally valid constructor.</returns>
     public static int ScanDirectConstructorLength(ReadOnlySpan<char> source)
     {
         if (source.Length < 2 || source[0] != '<' || !IsNameStartChar(source[1]))
@@ -80,6 +94,8 @@ public ref struct XPathLexer
     /// <summary>
     /// Returns the next token and advances the lexer.
     /// </summary>
+    /// <returns>The next token, or <see cref="Token.Eof"/> when the end of the source is reached.</returns>
+    /// <exception cref="ParseException">An XPath comment or braced URI literal is unterminated.</exception>
     public Token NextToken()
     {
         SkipWhitespaceAndComments();

@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -36,7 +37,7 @@ public sealed class XsltCompiler
     public IXsltUriResolver? UriResolver { get; set; }
 
     /// <summary>
-    /// Optional listener for xsl:message output. Defaults to <see cref="ConsoleMessageListener"/>.
+    /// Optional listener for xsl:message output. When unset, xsl:message output is discarded.
     /// </summary>
     public IXsltMessageListener? MessageListener { get; set; }
 

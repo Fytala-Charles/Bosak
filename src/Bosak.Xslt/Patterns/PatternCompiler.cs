@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -46,6 +47,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.1  | 02-09-2026     | XTSE3470/XTSE3500 for current-merge-group()/current-merge-key() in match patterns (merge-057/058)|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -75,6 +78,10 @@ public sealed class PatternCompiler
     private readonly EvaluationContext? _validationContext;
     private string? _defaultElementNamespace;
 
+    /// <summary>
+    /// Creates a pattern compiler.
+    /// </summary>
+    /// <param name="validationContext">Optional evaluation context used when validating pattern predicates at compile time.</param>
     public PatternCompiler(EvaluationContext? validationContext = null)
     {
         _validationContext = validationContext;

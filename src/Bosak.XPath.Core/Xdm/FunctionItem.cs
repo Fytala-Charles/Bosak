@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -20,6 +21,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6    | 02-09-2026     | NamedFunctionItem.CapturedSignature for cross-scope function-item                   |
 //                      |                  |        |                | invocation (override-f-014)                                                         |
+//                      | Charles Korthout | 0.7   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -29,14 +31,19 @@ namespace Bosak.XPath.Core.Xdm;
 /// </summary>
 public abstract record FunctionItem
 {
+    /// <summary>Gets the number of arguments the function accepts.</summary>
     public abstract int Arity { get; }
 }
 
 /// <summary>
 /// A reference to a named standard or user-defined function.
 /// </summary>
+/// <param name="NamespaceUri">The namespace URI of the function name.</param>
+/// <param name="LocalName">The local name of the function.</param>
+/// <param name="ArityValue">The number of arguments the function accepts.</param>
 public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, int ArityValue) : FunctionItem
 {
+    /// <inheritdoc/>
     public override int Arity => ArityValue;
 
     /// <summary>
@@ -91,8 +98,11 @@ public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, in
 /// <summary>
 /// A partially applied (curried) function.
 /// </summary>
+/// <param name="BaseFunction">The function being partially applied.</param>
+/// <param name="FixedArgs">The argument list; null entries are placeholders that remain open.</param>
 public sealed record CurriedFunctionItem(FunctionItem BaseFunction, XdmValue?[] FixedArgs) : FunctionItem
 {
+    /// <inheritdoc/>
     public override int Arity
     {
         get

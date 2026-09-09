@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -13,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-05-2026     | Added Prefix field for lexical QName serialization                                       |
 //                      | Charles Korthout | 0.3   | 25-06-2026     | QName equality ignores prefix; compares namespace URI and local name only              |
+//                      | Charles Korthout | 0.4   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -20,6 +22,9 @@ namespace Bosak.XPath.Core.Xdm;
 /// <summary>
 /// Represents an <c>xs:QName</c> value: a tuple of namespace URI, local name, and optional prefix.
 /// </summary>
+/// <param name="LocalName">The local name.</param>
+/// <param name="NamespaceUri">The namespace URI, or empty string for no namespace.</param>
+/// <param name="Prefix">The lexical prefix, if any.</param>
 public readonly record struct XsQName(string LocalName, string NamespaceUri, string Prefix = "")
 {
     /// <summary>

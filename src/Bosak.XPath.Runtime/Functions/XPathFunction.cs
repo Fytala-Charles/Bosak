@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -18,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 01-09-2026     | Added IsHiddenFromFunctionLookup for pseudo-functions (xsl:original)                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.51  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -27,21 +30,33 @@ namespace Bosak.XPath.Runtime.Functions;
 /// <summary>
 /// Delegate signature for all XPath/XQuery extension functions.
 /// </summary>
+/// <param name="context">The evaluation context for the call.</param>
+/// <param name="arguments">The evaluated call arguments.</param>
+/// <returns>The function result.</returns>
 public delegate XdmValue XPathFunction(EvaluationContext context, ReadOnlySpan<XdmValue> arguments);
 
 /// <summary>
 /// Strongly-typed variant for zero-argument functions to avoid array allocation.
 /// </summary>
+/// <param name="context">The evaluation context for the call.</param>
+/// <returns>The function result.</returns>
 public delegate XdmValue XPathFunction0(EvaluationContext context);
 
 /// <summary>
 /// Strongly-typed variant for one-argument functions.
 /// </summary>
+/// <param name="context">The evaluation context for the call.</param>
+/// <param name="arg1">The first argument.</param>
+/// <returns>The function result.</returns>
 public delegate XdmValue XPathFunction1(EvaluationContext context, XdmValue arg1);
 
 /// <summary>
 /// Strongly-typed variant for two-argument functions.
 /// </summary>
+/// <param name="context">The evaluation context for the call.</param>
+/// <param name="arg1">The first argument.</param>
+/// <param name="arg2">The second argument.</param>
+/// <returns>The function result.</returns>
 public delegate XdmValue XPathFunction2(EvaluationContext context, XdmValue arg1, XdmValue arg2);
 
 /// <summary>
@@ -49,11 +64,22 @@ public delegate XdmValue XPathFunction2(EvaluationContext context, XdmValue arg1
 /// </summary>
 public sealed class FunctionSignature
 {
+    /// <summary>The function's namespace URI (e.g. the <c>fn:</c> namespace).</summary>
     public required string NamespaceUri { get; init; }
+
+    /// <summary>The function's local name.</summary>
     public required string LocalName { get; init; }
+
+    /// <summary>The function's declared arity.</summary>
     public required int Arity { get; init; }
+
+    /// <summary>The coarse parameter kinds used for dispatch, one entry per declared parameter.</summary>
     public required IReadOnlyList<XdmValueKind> ParameterTypes { get; init; }
+
+    /// <summary>The coarse result kind used for dispatch.</summary>
     public required XdmValueKind ReturnType { get; init; }
+
+    /// <summary>The implementation invoked when the function is called statically.</summary>
     public required XPathFunction Implementation { get; init; }
 
     /// <summary>

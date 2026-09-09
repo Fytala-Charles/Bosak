@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XQuery 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -62,7 +63,7 @@ using Bosak.XPath.Api;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
 using Bosak.XPath.Compiler;
-using Bosak.XPath.Core;
+using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Runtime.Vm;

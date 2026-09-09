@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -18,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 02-09-2026     | DeclaringStylesheet set in FromElement for package-scoped use-attribute-sets            |
 //                      |                  |       |                | resolution (override-as-002/003/005)                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -63,6 +66,14 @@ public sealed class AttributeSetDefinition
     /// </summary>
     public Stylesheet? DeclaringStylesheet { get; internal set; }
 
+    /// <summary>
+    /// Creates an attribute-set definition with the supplied name, references, and precedence.
+    /// </summary>
+    /// <param name="localName">The resolved local name of the attribute set.</param>
+    /// <param name="namespaceUri">The resolved namespace URI of the attribute set.</param>
+    /// <param name="useAttributeSets">The raw <c>use-attribute-sets</c> value: a space-separated list of QName references.</param>
+    /// <param name="element">The original <c>xsl:attribute-set</c> element.</param>
+    /// <param name="importPrecedence">The import precedence of the declaring stylesheet module.</param>
     public AttributeSetDefinition(string localName, string namespaceUri, string? useAttributeSets, XElement element, int importPrecedence)
     {
         LocalName = localName;
@@ -75,6 +86,9 @@ public sealed class AttributeSetDefinition
     /// <summary>
     /// Parses an <c>xsl:attribute-set</c> element into an <see cref="AttributeSetDefinition"/>.
     /// </summary>
+    /// <param name="element">The xsl:attribute-set element to parse.</param>
+    /// <param name="stylesheet">The stylesheet module that declares the attribute set.</param>
+    /// <returns>The parsed attribute-set definition, or null when the element has no usable name.</returns>
     public static AttributeSetDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
         var nameAttr = element.Attribute("name")?.Value;

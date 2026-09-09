@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -267,6 +268,8 @@
 //                      |                  |       |                | types, unions containing/derived from lists); XPST0051 for unknown type constructors   |
 //                      |                  |       |                | in schema-imported namespaces (instanceof117)                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.138 | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -277,7 +280,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Compiler.Ir;
-using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Providers.Xml;
@@ -293,6 +295,9 @@ public static class VmEngine
     /// <summary>
     /// Executes a compiled IR module against the given evaluation context.
     /// </summary>
+    /// <param name="module">The compiled IR module to interpret.</param>
+    /// <param name="context">The evaluation context holding the focus, variables, and functions.</param>
+    /// <returns>The XDM value produced by the expression.</returns>
     public static XdmValue Execute(IrModule module, EvaluationContext context)
     {
         try
@@ -3786,6 +3791,17 @@ public static class VmEngine
         };
     }
 
+    /// <summary>
+    /// Invokes a function item dynamically. Per XSLT 3.0 §5.3.4, the current captured
+    /// substrings (regex groups), the current output URI, and the XSLT current item are
+    /// cleared for the duration of the call, so <c>fn:current()</c> raises XTDE1360.
+    /// </summary>
+    /// <param name="func">The function item to invoke.</param>
+    /// <param name="context">The evaluation context for the call.</param>
+    /// <param name="args">The call arguments.</param>
+    /// <returns>The value produced by the function item.</returns>
+    /// <exception cref="InvalidOperationException">The function item type is not recognized,
+    /// or the invoked function raises a dynamic error.</exception>
     public static XdmValue InvokeFunctionItem(FunctionItem func, EvaluationContext context, ReadOnlySpan<XdmValue> args)
     {
         // XSLT 3.0 §5.3.4: dynamic function calls clear the current captured substrings
@@ -4050,6 +4066,17 @@ public static class VmEngine
         }
     }
 
+    /// <summary>
+    /// Invokes a value as a function: function items are invoked directly, maps are
+    /// invoked as functions of their key, and arrays as functions of their 1-based index.
+    /// A single-item sequence wrapping a function item is unwrapped first.
+    /// </summary>
+    /// <param name="funcValue">The value to invoke.</param>
+    /// <param name="context">The evaluation context for the call.</param>
+    /// <param name="args">The call arguments.</param>
+    /// <returns>The value produced by the invocation.</returns>
+    /// <exception cref="InvalidOperationException">The value is not invocable, or the
+    /// argument count is wrong for a map/array call (XPTY0004).</exception>
     public static XdmValue InvokeFunctionItem(XdmValue funcValue, EvaluationContext context, ReadOnlySpan<XdmValue> args)
     {
         // A dynamic call target may arrive as a single-item sequence wrapping a
@@ -4959,6 +4986,11 @@ public static class VmEngine
     /// A value without a timezone is treated as having the supplied implicit timezone.
     /// Returns null when the comparison is indeterminate.
     /// </summary>
+    /// <param name="left">The left-hand date/time value.</param>
+    /// <param name="right">The right-hand date/time value.</param>
+    /// <param name="subtype">The shared subtype name (e.g. <c>dateTime</c>, <c>date</c>, <c>time</c>).</param>
+    /// <param name="implicitTz">The implicit timezone offset in minutes for values without a timezone.</param>
+    /// <returns>A negative value, zero, or a positive value, or <c>null</c> when indeterminate.</returns>
     public static int? CompareDateTimeValues(XdmValue left, XdmValue right, string subtype, int implicitTz)
     {
         var leftXdt = AsComparableDateTime(GetXPathDateTime(left, subtype), subtype);
@@ -6515,9 +6547,28 @@ public static class VmEngine
     // Type operations
     // ------------------------------------------------------------------
 
+    /// <summary>
+    /// Casts a value to the named type using the XPath 3.1 §19 cast rules.
+    /// </summary>
+    /// <param name="value">The value to cast.</param>
+    /// <param name="typeName">The target type name (e.g. <c>xs:integer</c>), optionally with an occurrence indicator.</param>
+    /// <returns>The casted value.</returns>
+    /// <exception cref="InvalidOperationException">The cast fails: XPTY0004 for a combination
+    /// outside the §19.3 permitted-cast matrix, FOCA0002 for an out-of-range value, FORG0001
+    /// for a lexical failure.</exception>
     public static XdmValue Cast(XdmValue value, string typeName)
         => Cast(value, typeName, null);
 
+    /// <summary>
+    /// Casts a value to the named type using the XPath 3.1 §19 cast rules.
+    /// </summary>
+    /// <param name="value">The value to cast.</param>
+    /// <param name="typeName">The target type name (e.g. <c>xs:integer</c>), optionally with an occurrence indicator.</param>
+    /// <param name="context">An optional evaluation context used for namespace resolution and user-defined schema types.</param>
+    /// <returns>The casted value.</returns>
+    /// <exception cref="InvalidOperationException">The cast fails: XPTY0004 for a combination
+    /// outside the §19.3 permitted-cast matrix, FOCA0002 for an out-of-range value, FORG0001
+    /// for a lexical failure.</exception>
     public static XdmValue Cast(XdmValue value, string typeName, EvaluationContext? context)
     {
         try
@@ -6565,9 +6616,24 @@ public static class VmEngine
         }
     }
 
+    /// <summary>
+    /// Attempts to cast a value to the named type using the XPath 3.1 §19 cast rules.
+    /// </summary>
+    /// <param name="value">The value to cast.</param>
+    /// <param name="typeName">The target type name (e.g. <c>xs:integer</c>), optionally with an occurrence indicator.</param>
+    /// <param name="result">The casted value when the cast succeeds.</param>
+    /// <returns><c>true</c> when the cast succeeds.</returns>
     public static bool TryCast(XdmValue value, string typeName, out XdmValue result)
         => TryCast(value, typeName, null, out result);
 
+    /// <summary>
+    /// Attempts to cast a value to the named type using the XPath 3.1 §19 cast rules.
+    /// </summary>
+    /// <param name="value">The value to cast.</param>
+    /// <param name="typeName">The target type name (e.g. <c>xs:integer</c>), optionally with an occurrence indicator.</param>
+    /// <param name="context">An optional evaluation context used for namespace resolution and user-defined schema types.</param>
+    /// <param name="result">The casted value when the cast succeeds.</param>
+    /// <returns><c>true</c> when the cast succeeds.</returns>
     public static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result)
         => TryCast(value, typeName, context, out result, out _);
 
@@ -7744,6 +7810,12 @@ public static class VmEngine
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Extracts the year/month components of an <c>xs:duration</c> lexical string as a
+    /// canonical <c>xs:yearMonthDuration</c> lexical string (months folded into years).
+    /// </summary>
+    /// <param name="s">The <c>xs:duration</c> lexical string.</param>
+    /// <returns>The canonical yearMonthDuration form, or the input unchanged when it does not parse.</returns>
     public static string ExtractYearMonthDuration(string s)
     {
         var m = DurationPartsRegex.Match(s);
@@ -7761,6 +7833,12 @@ public static class VmEngine
         return result;
     }
 
+    /// <summary>
+    /// Extracts the day/time components of an <c>xs:duration</c> lexical string as a
+    /// canonical <c>xs:dayTimeDuration</c> lexical string (smaller units folded upwards).
+    /// </summary>
+    /// <param name="s">The <c>xs:duration</c> lexical string.</param>
+    /// <returns>The canonical dayTimeDuration form, or the input unchanged when it does not parse.</returns>
     public static string ExtractDayTimeDuration(string s)
     {
         var m = DurationPartsRegex.Match(s);
@@ -7898,6 +7976,13 @@ public static class VmEngine
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Validates an <c>xs:base64Binary</c> lexical string: whitespace is ignored, the
+    /// remaining length must be a multiple of four, and only the base64 alphabet with
+    /// trailing <c>=</c> padding is allowed.
+    /// </summary>
+    /// <param name="s">The lexical string to validate.</param>
+    /// <returns><c>true</c> when the string is a valid base64 lexical form.</returns>
     public static bool IsValidBase64(string s)
     {
         if (string.IsNullOrEmpty(s)) return true;
@@ -9788,6 +9873,9 @@ public static class VmEngine
     /// <summary>
     /// Checks whether an XDM value matches a declared type name (e.g. "xs:string", "element(foo)").
     /// </summary>
+    /// <param name="value">The value to test.</param>
+    /// <param name="typeName">The sequence type string to match against.</param>
+    /// <returns><c>true</c> when the value matches the type.</returns>
     public static bool ValueMatchesType(XdmValue value, string typeName)
         => ValueMatchesType(value, typeName, null);
 
@@ -9795,6 +9883,10 @@ public static class VmEngine
     /// Checks whether a value matches a sequence type, with an optional evaluation
     /// context that enables signature-aware matching of named function items.
     /// </summary>
+    /// <param name="value">The value to test.</param>
+    /// <param name="typeName">The sequence type string to match against.</param>
+    /// <param name="context">An optional evaluation context used to match named function items by signature.</param>
+    /// <returns><c>true</c> when the value matches the type.</returns>
     public static bool ValueMatchesType(XdmValue value, string typeName, EvaluationContext? context)
     {
         if (string.IsNullOrEmpty(typeName)) return true;
@@ -10653,6 +10745,11 @@ public static class VmEngine
     /// sequence type: subtype substitution, node atomization, untypedAtomic casting,
     /// numeric promotion, and URI promotion. Raises XPTY0004 when no rule applies.
     /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="targetType">The target sequence type string.</param>
+    /// <param name="context">An optional evaluation context used for namespace resolution and function-item coercion.</param>
+    /// <returns>The converted value.</returns>
+    /// <exception cref="InvalidOperationException">No function conversion rule applies (XPTY0004).</exception>
     public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
     {
         var type = NormalizeEQNameTypeName(targetType.Trim());

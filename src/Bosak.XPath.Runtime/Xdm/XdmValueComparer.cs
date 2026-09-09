@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -13,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Compare dateTime values by instant for xsl:merge key ordering                           |
 //                      | Charles Korthout | 0.3   | 09-09-2026     | Numeric promotion parse failures raise FORG0001/XPTY0004 with codes                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.31  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,6 +36,7 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
 
     private XdmValueComparer() { }
 
+    /// <inheritdoc/>
     public int Compare(XdmValue x, XdmValue y)
     {
         var a = Atomize(x);

@@ -7,6 +7,8 @@
     <Nullable>enable</Nullable>
     <PackageId>Bosak.LanguageServer</PackageId>
     <Description>Language Server Protocol implementation for XPath 3.1 and XSLT 3.0</Description>
+    <!-- The language server is an executable consumed by the VS Code extension, not a library package. -->
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

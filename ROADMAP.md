@@ -1,6 +1,6 @@
 # Bosak — Roadmap
 
-**Status:** Alpha · **Last updated:** 2026-09-03 · **Conformance baseline:** XSLT 3.0 strict sweep **7,713 / 17 / 6,870** (99.8%) · QT3 (XPath 3.1 + XQuery 3.1) **31,148 / 0 / 673** (100% of runnable) · unit tests **2,485 / 0 / 0**
+**Status:** Beta · **Last updated:** 2026-09-09 · **Conformance baseline:** XSLT 3.0 strict sweep **7,722 / 3 / 6,875** (100% of runnable; 3 documented residuals) · QT3 (XPath 3.1 + XQuery 3.1) **31,142 / 0 / 679** (100% of runnable) · unit tests **2,216 / 0 / 0**
 
 ---
 
@@ -8,15 +8,15 @@
 
 A ground-up, pure-managed .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), **XSLT 3.0**, and **XQuery 3.1**, built on the W3C XQuery Data Model. No native dependencies, no Java bridge — the only third-party package in the tree is the MIT-licensed language-server library used by the VS Code extension.
 
-## Where we are — Alpha
+## Where we are — Beta
 
-Alpha means: **feature-complete engine core, conformance-verified, API still evolving.**
+Beta means: **feature-complete, conformance-verified (100% of runnable tests on both W3C suites), public API reviewed and frozen for the 1.0 line.**
 
 | Area | State |
 |------|-------|
 | XPath 3.1 | Complete; QT3 sweep 100% of runnable tests |
-| XQuery 3.1 | Phase 4 — full core FLWOR, direct/computed constructors, `switch`/`typeswitch`, library modules, `fn:load-xquery-module`, ordering features, schema-aware `fn:json-to-xml` |
-| XSLT 3.0 | Packages (`xsl:package`/`xsl:use-package`/`xsl:override`/`xsl:original`), accumulators, keys, modes, `xsl:evaluate`, `fn:transform()`, strict error-code conformance at 99.8% |
+| XQuery 3.1 | Phase 4 — full core FLWOR, direct/computed constructors, `switch`/`typeswitch`, library modules, `fn:load-xquery-module`, ordering features, schema-aware `fn:json-to-xml`; QT3 sweep 100% of runnable tests |
+| XSLT 3.0 | Packages (`xsl:package`/`xsl:use-package`/`xsl:override`/`xsl:original`), accumulators, keys, modes, `xsl:evaluate`, `fn:transform()`; strict error-code sweep 100% of runnable tests |
 | Tooling | VS Code language server (highlighting, diagnostics, completion, code lens, initial-template runner) |
 | CI | GitHub Actions build+test on every push/PR; weekly W3C conformance sweep |
 
@@ -30,13 +30,13 @@ Everything below lands before the repo and packages are called Beta:
 - [x] Apache-2.0 license + commercial layer defined (`COMMERCIAL.md`)
 - [x] Repository hygiene (history scrubbed, customer references anonymized)
 - [x] NuGet **preview** packages policy decided: `0.9.0-preview` line published from CI (see Versioning policy); local packages re-versioned from 1.0.0
-- [ ] Remaining 17 strict-sweep failures triaged: fixed or individually documented as upstream test-suite artifacts / out-of-scope (see `docs/FEATURE_REQUESTS.md`, REQ-082 decision log)
-- [ ] Public API review pass over `Bosak.XPath.Api` — thin surface, but naming and options objects freeze at Beta
-- [ ] Issue templates, `CONTRIBUTING.md`, community scaffolding
+- [x] Strict-sweep failures triaged: **QT3 31,142/0/679 and XSLT 7,722/3/6,875 — 100% of runnable on both suites**; the 3 XSLT residuals are individually documented as out-of-scope (see `docs/FEATURE_REQUESTS.md`, REQ-082 decision log)
+- [x] Public API review pass over `Bosak.XPath.Api` — thin surface confirmed; naming and options objects frozen as of the Beta line (`0.10.0-beta`); full XML-doc coverage pass over every published package (see `docs/INTEGRATION.md` recent changes)
+- [x] Issue templates, `CONTRIBUTING.md`, community scaffolding — issue forms + PR template in `.github/`, Discussions enabled
 
 ### Beta → 1.0 (GA)
 
-- [ ] Strict XSLT sweep at 100% of runnable tests that are not proven upstream artifacts
+- [x] Strict XSLT sweep at 100% of runnable tests that are not proven upstream artifacts
 - [ ] API frozen; SemVer commitment begins
 - [ ] Version promoted from `0.9.x-preview` to `1.0.0`; public release notes
 - [ ] Integration guide (`docs/INTEGRATION.md`) and XML-doc coverage complete

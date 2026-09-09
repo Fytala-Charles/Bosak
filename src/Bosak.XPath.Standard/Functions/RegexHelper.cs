@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -20,6 +21,8 @@
 //                      | Charles Korthout | 0.8   | 19-07-2026     | XPath 'i' flag: use RegexOptions.IgnoreCase, wrap class atoms in (?-i:)                  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 21-07-2026     | CacheRegex converts RegexParseException to FORX0002 (fn-matches-25, cbcl-matches-004)  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -42,6 +45,11 @@ public static class RegexHelper
     /// out parameter is still returned so that the XSD translator can wrap category and
     /// bracketed class atoms in <c>(?-i:...)</c>, keeping them case-sensitive per XPath semantics.
     /// </summary>
+    /// <param name="flags">The flags string (any of <c>i</c>, <c>m</c>, <c>s</c>, <c>x</c>, <c>q</c>).</param>
+    /// <param name="isQuoteMode">Set to <c>true</c> when the <c>q</c> (literal) flag is present.</param>
+    /// <param name="caseInsensitive">Set to <c>true</c> when the <c>i</c> flag is present.</param>
+    /// <returns>The equivalent .NET regex options.</returns>
+    /// <exception cref="InvalidOperationException">An unrecognized flag character is present (FORX0001).</exception>
     public static RegexOptions ParseRegexFlags(string flags, out bool isQuoteMode, out bool caseInsensitive)
     {
         var options = RegexOptions.None;
@@ -67,6 +75,8 @@ public static class RegexHelper
     /// and translates XSD-specific constructs (such as single-digit backreferences) into a form
     /// that .NET <see cref="Regex"/> understands.
     /// </summary>
+    /// <param name="pattern">The XSD regular-expression pattern.</param>
+    /// <returns>The translated .NET-compatible pattern.</returns>
     /// <exception cref="InvalidOperationException">Thrown with code <c>FORX0002</c> when the
     /// pattern is invalid.</exception>
     public static string ValidateAndTranslatePattern(string pattern)
@@ -80,6 +90,11 @@ public static class RegexHelper
     /// mode) are known. In non-multiline mode, <c>$</c> is translated to <c>\z</c> so that it
     /// matches only the absolute end of the string, not the position before a final newline.
     /// </summary>
+    /// <param name="pattern">The XSD regular-expression pattern.</param>
+    /// <param name="options">The regex options derived from the flags (multiline and whitespace modes matter).</param>
+    /// <param name="caseInsensitive">Whether the XPath <c>i</c> flag is in effect.</param>
+    /// <returns>The translated .NET-compatible pattern.</returns>
+    /// <exception cref="InvalidOperationException">The pattern is invalid (FORX0002).</exception>
     public static string ValidateAndTranslatePattern(string pattern, RegexOptions options, bool caseInsensitive)
     {
         if ((options & RegexOptions.IgnorePatternWhitespace) != 0)
@@ -142,6 +157,9 @@ public static class RegexHelper
     /// <summary>
     /// Throws <c>FORX0003</c> if the pattern matches a zero-length string.
     /// </summary>
+    /// <param name="pattern">The (already translated) pattern to test.</param>
+    /// <param name="options">The regex options for the test compilation.</param>
+    /// <exception cref="InvalidOperationException">The pattern matches the empty string (FORX0003).</exception>
     public static void CheckZeroLengthMatch(string pattern, RegexOptions options)
     {
         if (GetRegex(pattern, options).IsMatch(string.Empty))
@@ -155,6 +173,11 @@ public static class RegexHelper
     /// such as <c>fn:matches</c> may translate the same literal pattern millions of times.
     /// The cache holds at most 512 entries and is cleared when full.
     /// </summary>
+    /// <param name="pattern">The XSD regular-expression pattern.</param>
+    /// <param name="options">The regex options derived from the flags.</param>
+    /// <param name="caseInsensitive">Whether the XPath <c>i</c> flag is in effect.</param>
+    /// <returns>The translated .NET-compatible pattern.</returns>
+    /// <exception cref="InvalidOperationException">The pattern is invalid (FORX0002).</exception>
     public static string ValidateAndTranslatePatternCached(string pattern, RegexOptions options, bool caseInsensitive)
     {
         var key = (pattern, options, caseInsensitive);
@@ -175,6 +198,11 @@ public static class RegexHelper
     /// <c>fn:matches</c>/<c>fn:replace</c> with large translated Unicode classes pay only a
     /// small dictionary lookup per call.
     /// </summary>
+    /// <param name="originalPattern">The original (untranslated) XSD pattern.</param>
+    /// <param name="options">The regex options derived from the flags.</param>
+    /// <param name="caseInsensitive">Whether the XPath <c>i</c> flag is in effect.</param>
+    /// <returns>A cached, compiled <see cref="Regex"/> for the translated pattern.</returns>
+    /// <exception cref="InvalidOperationException">The pattern is invalid (FORX0002).</exception>
     public static Regex GetRegexForXsdPattern(string originalPattern, RegexOptions options, bool caseInsensitive)
     {
         var key = (originalPattern, options, caseInsensitive);
@@ -192,6 +220,10 @@ public static class RegexHelper
     /// The cache holds at most 512 entries and is cleared when full (patterns are cheap to
     /// recreate).
     /// </summary>
+    /// <param name="pattern">The .NET-compatible (already translated) pattern.</param>
+    /// <param name="options">The regex options for the compilation.</param>
+    /// <returns>A cached, compiled <see cref="Regex"/> for the pattern.</returns>
+    /// <exception cref="InvalidOperationException">The pattern is rejected by .NET (FORX0002).</exception>
     public static Regex GetRegex(string pattern, RegexOptions options)
     {
         var key = (pattern, options, false);
@@ -222,6 +254,8 @@ public static class RegexHelper
     /// <summary>
     /// Throws <c>FORX0003</c> if the pattern matches a zero-length string.
     /// </summary>
+    /// <param name="regex">The compiled regex to test.</param>
+    /// <exception cref="InvalidOperationException">The regex matches the empty string (FORX0003).</exception>
     public static void CheckZeroLengthMatch(Regex regex)
     {
         if (regex.IsMatch(string.Empty))
@@ -234,6 +268,10 @@ public static class RegexHelper
     /// <paramref name="groupCount"/> is the number of capturing groups in the pattern (excluding
     /// group 0, the whole match).
     /// </summary>
+    /// <param name="replacement">The XPath replacement string.</param>
+    /// <param name="groupCount">The number of capturing groups in the pattern (excluding group 0).</param>
+    /// <returns>The translated .NET-compatible replacement string.</returns>
+    /// <exception cref="InvalidOperationException">The replacement string is malformed (FORX0004).</exception>
     public static string ValidateAndTranslateReplacement(string replacement, int groupCount)
     {
         var sb = new StringBuilder(replacement.Length);
@@ -333,6 +371,8 @@ public static class RegexHelper
     /// When the <c>q</c> flag is used, the replacement string is literal. This method escapes
     /// <c>$</c> for .NET <see cref="Regex"/> replacement strings while leaving backslashes unchanged.
     /// </summary>
+    /// <param name="replacement">The literal replacement string.</param>
+    /// <returns>The escaped .NET-compatible replacement string.</returns>
     public static string EscapeReplacementForQuoteMode(string replacement)
     {
         var sb = new StringBuilder(replacement.Length);
@@ -712,6 +752,8 @@ public static class RegexHelper
     /// Counts the number of capturing groups (parenthesized subexpressions) in the regular
     /// expression. Non-capturing groups and character classes are ignored.
     /// </summary>
+    /// <param name="pattern">The regular-expression pattern to scan.</param>
+    /// <returns>The number of capturing groups.</returns>
     public static int CountCapturingGroups(string pattern)
     {
         int count = 0;
@@ -756,6 +798,8 @@ public static class RegexHelper
     /// element <c>n</c> contains the number of the enclosing capturing group, or <c>0</c>
     /// if the group is at the top level.
     /// </summary>
+    /// <param name="pattern">The .NET-compatible pattern to scan.</param>
+    /// <returns>The parent map, indexed by capturing-group number.</returns>
     public static int[] GetCapturingGroupParents(string pattern)
     {
         var parents = new List<int> { 0 };

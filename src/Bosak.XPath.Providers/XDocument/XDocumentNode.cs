@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the XDocument node provider layer; adapts without copying into a proprietary DOM.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -87,6 +88,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.25  | 05-09-2026     | RegisterTree eagerly assigns creation sequence so cross-tree order matches construction |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.26  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -146,6 +149,10 @@ public sealed class XDocumentNode : IXdmNode
     private readonly bool _isNamespaceNode;
     private readonly XElement? _namespaceOwner;
 
+    /// <summary>Wraps a LINQ to XML object as an XDM node.</summary>
+    /// <param name="node">The <see cref="XObject"/> to adapt (document, element, attribute,
+    /// text, comment, or processing instruction).</param>
+    /// <exception cref="ArgumentNullException"><paramref name="node"/> is null.</exception>
     public XDocumentNode(XObject node)
     {
         _node = node ?? throw new ArgumentNullException(nameof(node));
@@ -198,6 +205,9 @@ public sealed class XDocumentNode : IXdmNode
     /// Creates an <see cref="IXdmNode"/> representing a namespace node
     /// from an <see cref="XAttribute"/> namespace declaration.
     /// </summary>
+    /// <param name="declaration">The namespace declaration attribute (<c>xmlns</c> or <c>xmlns:prefix</c>).</param>
+    /// <param name="owner">The element that owns the namespace declaration.</param>
+    /// <returns>The namespace node.</returns>
     public static XDocumentNode CreateNamespaceNode(XAttribute declaration, XElement owner)
         => new XDocumentNode(declaration, owner);
 
@@ -208,6 +218,7 @@ public sealed class XDocumentNode : IXdmNode
     // Node metadata
     // ------------------------------------------------------------------
 
+    /// <summary>Gets the XDM node kind; virtual namespace nodes report <see cref="XdmNodeKind.Namespace"/>.</summary>
     public XdmNodeKind NodeKind => _isNamespaceNode ? XdmNodeKind.Namespace : GetNodeKind(_node);
 
     /// <summary>
@@ -243,6 +254,11 @@ public sealed class XDocumentNode : IXdmNode
 
     private string Decode(string name) => IsXml11Document ? Xml11NameCodec.DecodeName(name) : name;
 
+    /// <summary>
+    /// Gets the local name of the node: the element or attribute local name (decoded for
+    /// XML 1.1 trees), the processing-instruction target, the bound prefix for namespace
+    /// nodes, or the empty string for other node kinds.
+    /// </summary>
     public string LocalName
     {
         get
@@ -263,6 +279,7 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>Gets the local name as stored in the tree, without XML 1.1 name decoding.</summary>
     public string EncodedLocalName
     {
         get
@@ -283,6 +300,7 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>Gets the namespace URI of the node, or the empty string when the node is in no namespace.</summary>
     public string NamespaceUri => _isNamespaceNode
         ? string.Empty
         : _node switch
@@ -292,6 +310,11 @@ public sealed class XDocumentNode : IXdmNode
             _ => string.Empty
         };
 
+    /// <summary>
+    /// Gets the namespace prefix of the node (decoded for XML 1.1 trees): the original
+    /// source prefix when preserved, else the prefix bound to the node's namespace,
+    /// or the empty string.
+    /// </summary>
     public string Prefix
     {
         get
@@ -308,6 +331,7 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>Gets the namespace prefix as stored in the tree, without XML 1.1 name decoding.</summary>
     public string EncodedPrefix
     {
         get
@@ -355,6 +379,11 @@ public sealed class XDocumentNode : IXdmNode
         return element.GetPrefixOfNamespace(ns) ?? string.Empty;
     }
 
+    /// <summary>
+    /// Gets the XDM string value of the node: the attribute or text content, the
+    /// concatenated descendant text for elements and documents, or the namespace URI
+    /// for namespace nodes.
+    /// </summary>
     public string StringValue
     {
         get
@@ -376,6 +405,10 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>
+    /// Gets the XDM typed value: the PSVI typed value when schema validation annotations
+    /// are present, otherwise the string value as <c>xs:untypedAtomic</c>.
+    /// </summary>
     public XdmValue TypedValue => GetTypedValue();
 
     /// <summary>
@@ -808,6 +841,10 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     public bool IsIdref => ComputeIsIdref();
 
+    /// <summary>
+    /// Gets the (namespace URI, local name) of the node's schema type annotation from
+    /// schema validation, or <c>null</c> when the node was not validated.
+    /// </summary>
     public (string NamespaceUri, string LocalName)? SchemaTypeAnnotation => GetSchemaTypeAnnotation();
 
     private (string NamespaceUri, string LocalName)? GetSchemaTypeAnnotation()
@@ -831,6 +868,10 @@ public sealed class XDocumentNode : IXdmNode
         return (qn.Namespace, qn.Name);
     }
 
+    /// <summary>
+    /// Gets the (namespace URI, local name) of the governing global element declaration
+    /// from schema validation, or <c>null</c> when the node is not a validated element.
+    /// </summary>
     public (string NamespaceUri, string LocalName)? SchemaElementDeclaration => GetSchemaElementDeclaration();
 
     private (string NamespaceUri, string LocalName)? GetSchemaElementDeclaration()
@@ -844,6 +885,10 @@ public sealed class XDocumentNode : IXdmNode
         return (decl.QualifiedName.Namespace, decl.QualifiedName.Name);
     }
 
+    /// <summary>
+    /// Gets the (namespace URI, local name) of the governing global attribute declaration
+    /// from schema validation, or <c>null</c> when the node is not a validated attribute.
+    /// </summary>
     public (string NamespaceUri, string LocalName)? SchemaAttributeDeclaration => GetSchemaAttributeDeclaration();
 
     private (string NamespaceUri, string LocalName)? GetSchemaAttributeDeclaration()
@@ -857,6 +902,7 @@ public sealed class XDocumentNode : IXdmNode
         return (decl.QualifiedName.Namespace, decl.QualifiedName.Name);
     }
 
+    /// <summary>Gets a value indicating whether this element is nilled (<c>xsi:nil="true"</c> in the PSVI).</summary>
     public bool IsNilled
     {
         get
@@ -867,6 +913,11 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>
+    /// Gets a value indicating whether this element was built by an XQuery element
+    /// constructor; such elements carry an <c>xs:anyType</c> type annotation rather
+    /// than <c>xs:untyped</c>.
+    /// </summary>
     public bool IsConstructedElement
     {
         get
@@ -877,6 +928,12 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>
+    /// Tests node identity. Virtual namespace nodes have no stable underlying object, so
+    /// they compare by owner element, bound prefix, and namespace URI.
+    /// </summary>
+    /// <param name="other">The node to compare with.</param>
+    /// <returns><c>true</c> when both nodes are the same XDM node.</returns>
     public bool IsSameNode(IXdmNode other)
     {
         if (other is not XDocumentNode xn)
@@ -897,9 +954,11 @@ public sealed class XDocumentNode : IXdmNode
         return ReferenceEquals(_node, xn._node);
     }
 
+    /// <inheritdoc/>
     public override bool Equals(object? obj)
         => obj is IXdmNode other && IsSameNode(other);
 
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         if (_isNamespaceNode)
@@ -912,6 +971,11 @@ public sealed class XDocumentNode : IXdmNode
         return RuntimeHelpers.GetHashCode(_node);
     }
 
+    /// <summary>
+    /// Gets a monotonic document-order key for the node. The high 32 bits carry the
+    /// containing tree's creation sequence so nodes from different trees sort in tree
+    /// construction order; the low 32 bits are the node's index within its tree.
+    /// </summary>
     public long DocumentOrder
     {
         get
@@ -1078,24 +1142,35 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>Gets the base URI of the node, resolved from <c>xml:base</c> attributes and the containing document.</summary>
     public string BaseUri => ComputeBaseUri();
 
+    /// <summary>Gets the document URI of the containing document, or the empty string when none is known.</summary>
     public string DocumentUri => ComputeDocumentUri();
 
+    /// <summary>Gets a value indicating whether the containing document has a DOCTYPE declaration.</summary>
     public bool HasDocumentType => GetDocumentType() is not null;
 
+    /// <summary>Gets the name from the containing document's DOCTYPE declaration, or the empty string.</summary>
     public string DocumentTypeName => GetDocumentType()?.Name ?? string.Empty;
 
+    /// <summary>Gets the public identifier from the containing document's DOCTYPE declaration, or the empty string.</summary>
     public string PublicId => GetDocumentType()?.PublicId ?? string.Empty;
 
+    /// <summary>Gets the system identifier from the containing document's DOCTYPE declaration, or the empty string.</summary>
     public string SystemId => GetDocumentType()?.SystemId ?? string.Empty;
 
+    /// <summary>Gets the internal DTD subset from the containing document's DOCTYPE declaration, or the empty string.</summary>
     public string InternalSubset => GetDocumentType()?.InternalSubset ?? string.Empty;
 
     /// <summary>
     /// Looks up an unparsed entity by name in the document that contains this node,
     /// resolving the system identifier against the document's base URI.
     /// </summary>
+    /// <param name="name">The entity name.</param>
+    /// <param name="systemId">The (resolved) system identifier when found.</param>
+    /// <param name="publicId">The public identifier when declared.</param>
+    /// <returns><c>true</c> when an unparsed entity with the name is declared.</returns>
     public bool TryGetUnparsedEntity(string name, out string? systemId, out string? publicId)
     {
         systemId = null;
@@ -1145,6 +1220,7 @@ public sealed class XDocumentNode : IXdmNode
     /// onto <paramref name="targetDocument"/>. Used when a document node (or a node
     /// within a document) is copied, so that entity lookups remain available on the copy.
     /// </summary>
+    /// <param name="targetDocument">The document to receive the unparsed entity annotation.</param>
     public void CopyUnparsedEntitiesTo(System.Xml.Linq.XDocument targetDocument)
     {
         var doc = _node as System.Xml.Linq.XDocument ?? _node.Document;
@@ -1324,6 +1400,10 @@ public sealed class XDocumentNode : IXdmNode
     // Tree navigation
     // ------------------------------------------------------------------
 
+    /// <summary>
+    /// Gets the parent node. Namespace nodes return their owner element, except nodes
+    /// created by computed namespace constructors, which are parentless.
+    /// </summary>
     public IXdmNode? Parent
     {
         get
@@ -1336,6 +1416,7 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>Gets the containing document node, or <c>null</c> for parentless trees.</summary>
     public IXdmNode? Document
     {
         get
@@ -1354,6 +1435,9 @@ public sealed class XDocumentNode : IXdmNode
     // Children & Attributes
     // ------------------------------------------------------------------
 
+    /// <summary>Returns the child nodes, optionally filtered by node kind.</summary>
+    /// <param name="kind">The node kinds to include (a flags combination; <see cref="XdmNodeKind.All"/> by default).</param>
+    /// <returns>The matching child nodes in document order.</returns>
     public XdmSequence Children(XdmNodeKind kind = XdmNodeKind.All)
     {
         if (_node is not XContainer container)
@@ -1375,6 +1459,10 @@ public sealed class XDocumentNode : IXdmNode
         return MaterializedSequence.FromList(items);
     }
 
+    /// <summary>Returns the attribute nodes of an element, optionally filtered by name.</summary>
+    /// <param name="localName">An optional attribute local-name filter.</param>
+    /// <param name="namespaceUri">An optional attribute namespace-URI filter.</param>
+    /// <returns>The matching attribute nodes.</returns>
     public XdmSequence Attributes(string? localName = null, string? namespaceUri = null)
     {
         if (_node is not XElement element)
@@ -1400,6 +1488,9 @@ public sealed class XDocumentNode : IXdmNode
     // Axes
     // ------------------------------------------------------------------
 
+    /// <summary>Evaluates an XPath axis starting from this node.</summary>
+    /// <param name="axis">The axis to evaluate.</param>
+    /// <returns>The axis nodes in axis order.</returns>
     public XdmSequence Axis(XdmAxis axis)
     {
         return axis switch
@@ -1869,6 +1960,11 @@ public sealed class XDocumentNode : IXdmNode
         }
     }
 
+    /// <summary>
+    /// Serializes the node to an XML string, restoring XML 1.1 encoded names.
+    /// Namespace nodes serialize to the empty string.
+    /// </summary>
+    /// <returns>The XML representation of the node.</returns>
     public string ToXmlString()
     {
         if (_isNamespaceNode)

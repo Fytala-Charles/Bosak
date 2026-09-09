@@ -5,7 +5,8 @@
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
-// LICENSE              : License.txt
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -90,10 +91,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.39  | 09-09-2026     | Hoist CheckFunction for static calls in non-first path steps so XPST0017 precedes the SimpleMap XPTY0019 node check (K2-SeqCountFunc-1) |
 //                      | Charles Korthout | 1.40  | 09-09-2026     | SimpleMap RegisterC encodes last/non-last step (XPTY0018/0019); XQST0094 for unbound gro |
+//                      | Charles Korthout | 1.41  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
-using Bosak.XPath.Core;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser.Ast;
 
@@ -102,24 +103,40 @@ namespace Bosak.XPath.Compiler.Ir;
 /// <summary>
 /// Loop information stored in the literal pool for For/Some/Every opcodes.
 /// </summary>
+/// <param name="VariableName">The local name of the loop variable.</param>
+/// <param name="RhsEntryPoint">The instruction entry point of the right-hand side (bound expression) block.</param>
+/// <param name="PositionalVariableName">The positional variable of a for binding (<c>at $pos</c>), or null.</param>
+/// <param name="VariablePrefix">The namespace prefix of the loop variable, or null.</param>
+/// <param name="VariableNamespaceUri">The namespace URI of an EQName loop variable, or null.</param>
+/// <param name="AllowingEmpty">True when a for binding declares <c>allowing empty</c>.</param>
+/// <param name="ScopedVariableNames">The top-level let variable names in scope for the loop body, or null.</param>
 public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, bool AllowingEmpty = false, IReadOnlyList<string>? ScopedVariableNames = null);
 
 /// <summary>
 /// Try/catch information stored in the literal pool for the TryCatch opcode: the try block
 /// entry point and the catch clauses in declaration order (first matching clause wins).
 /// </summary>
+/// <param name="TryEntryPoint">The instruction entry point of the try block.</param>
+/// <param name="Clauses">The catch clauses in declaration order.</param>
 public sealed record TryCatchInfo(int TryEntryPoint, IReadOnlyList<CatchClauseInfo> Clauses);
 
 /// <summary>
 /// One catch clause of a <see cref="TryCatchInfo"/>: the error-code patterns that select it
 /// and its body entry point.
 /// </summary>
+/// <param name="Patterns">The error-code name-test patterns that select the clause.</param>
+/// <param name="EntryPoint">The instruction entry point of the clause body.</param>
 public sealed record CatchClauseInfo(IReadOnlyList<CatchCodePattern> Patterns, int EntryPoint);
 
 /// <summary>
 /// Ordering information stored in the literal pool for the OrderBy opcode.
 /// Tuple format: [valueCount variable items, then keyCount key items].
 /// </summary>
+/// <param name="ValueCount">The number of variable items at the head of each tuple.</param>
+/// <param name="KeyCount">The number of sort key items per tuple.</param>
+/// <param name="Descending">The descending flag of each sort key.</param>
+/// <param name="EmptyOrder">The empty-sequence ordering of each sort key.</param>
+/// <param name="CollationUri">The collation URI of each sort key, or null.</param>
 public readonly record struct OrderByInfo(
     int ValueCount,
     int KeyCount,
@@ -130,6 +147,7 @@ public readonly record struct OrderByInfo(
 /// <summary>
 /// Variable-binding information stored in the literal pool for the TupleBind opcode.
 /// </summary>
+/// <param name="Variables">The variables bound from tuple items, in tuple order.</param>
 public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, string? Prefix, string? NamespaceUri)> Variables);
 
 /// <summary>
@@ -137,6 +155,10 @@ public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, str
 /// Tuple format: [variable items]; the key indices identify the grouping variables.
 /// Per-spec optional declared types are enforced on each pre-grouping key value.
 /// </summary>
+/// <param name="KeyIndices">The tuple indices of the grouping variables.</param>
+/// <param name="CollationUri">The collation URI of each grouping key, or null.</param>
+/// <param name="DeclaredTypeNames">The declared type name of each grouping spec, or null.</param>
+/// <param name="DeclaredTypeOccurrences">The occurrence indicator of each declared type.</param>
 public readonly record struct GroupByInfo(
     IReadOnlyList<int> KeyIndices,
     IReadOnlyList<string?> CollationUri,
@@ -147,12 +169,19 @@ public readonly record struct GroupByInfo(
 /// Type-enforcement information stored in the literal pool for the EnforceType opcode.
 /// Raises the given error code when the value is not an instance of the declared type.
 /// </summary>
+/// <param name="TypeName">The qualified name of the declared type.</param>
+/// <param name="Occurrence">The occurrence indicator of the declared type.</param>
+/// <param name="ErrorCode">The error code raised when the value is not an instance of the declared type.</param>
 public readonly record struct EnforceTypeInfo(string TypeName, OccurrenceIndicator Occurrence, string ErrorCode);
 
 /// <summary>
 /// Attribute metadata for the ConstructElement opcode; the attribute's value parts are a
 /// slice of the shared <see cref="ConstructElementInfo.Parts"/> list.
 /// </summary>
+/// <param name="LocalName">The local name of the attribute.</param>
+/// <param name="Prefix">The namespace prefix of the attribute, or null.</param>
+/// <param name="FirstPart">The index of the attribute's first value part in the shared parts list.</param>
+/// <param name="PartCount">The number of value parts of the attribute.</param>
 public readonly record struct ConstructAttributeInfo(string LocalName, string? Prefix, int FirstPart, int PartCount);
 
 /// <summary>
@@ -160,6 +189,12 @@ public readonly record struct ConstructAttributeInfo(string LocalName, string? P
 /// Expression parts reference registers relative to the instruction's RegisterB base
 /// (packed consecutive by the lowerer).
 /// </summary>
+/// <param name="LocalName">The local name of the element.</param>
+/// <param name="Prefix">The namespace prefix of the element, or null.</param>
+/// <param name="Attributes">The attribute metadata of the element.</param>
+/// <param name="FirstContentPart">The index of the first content part in <paramref name="Parts"/>.</param>
+/// <param name="ContentPartCount">The number of content parts.</param>
+/// <param name="Parts">The shared list of attribute value and content parts.</param>
 public readonly record struct ConstructElementInfo(
     string LocalName,
     string? Prefix,
@@ -173,6 +208,9 @@ public readonly record struct ConstructElementInfo(
 /// value (register offset from the instruction's RegisterB base), a comment (literal-pool
 /// index of its value), or a processing instruction (literal-pool indices of data and target).
 /// </summary>
+/// <param name="Kind">The kind of part.</param>
+/// <param name="Index">The literal-pool index or register offset of the part.</param>
+/// <param name="Index2">The second literal-pool index (the processing-instruction target), or -1.</param>
 public readonly record struct ConstructPartInfo(ConstructPartKind Kind, int Index, int Index2 = -1);
 
 /// <summary>The kind of one element-construction part.</summary>
@@ -212,6 +250,11 @@ public enum ComputedConstructorKind : byte
 /// Static name parts when present; when HasNameExpression is true the name/target/prefix is
 /// evaluated from the register in RegisterB instead.
 /// </summary>
+/// <param name="Kind">The kind of computed constructor.</param>
+/// <param name="LocalName">The static local name, or null.</param>
+/// <param name="Prefix">The static namespace prefix, or null.</param>
+/// <param name="NamespaceUri">The static namespace URI, or null.</param>
+/// <param name="HasNameExpression">True when the name/target/prefix is computed from the register in RegisterB.</param>
 public readonly record struct ComputedConstructorInfo(
     ComputedConstructorKind Kind,
     string? LocalName,
@@ -225,6 +268,23 @@ public readonly record struct ComputedConstructorInfo(
 /// start condition, end condition, and window body blocks, and the optional
 /// current/positional/previous/next variable names of both conditions.
 /// </summary>
+/// <param name="VariableName">The local name of the window variable.</param>
+/// <param name="VariableNamespaceUri">The namespace URI of an EQName window variable, or null.</param>
+/// <param name="Sliding">True for a sliding window, false for a tumbling window.</param>
+/// <param name="OnlyEnd">True when the end condition uses <c>only end</c>.</param>
+/// <param name="StartEntryPoint">The instruction entry point of the start condition block.</param>
+/// <param name="EndEntryPoint">The instruction entry point of the end condition block.</param>
+/// <param name="RhsEntryPoint">The instruction entry point of the window body block.</param>
+/// <param name="StartCurrent">The start condition's current item variable name, or null.</param>
+/// <param name="StartPos">The start condition's positional variable name, or null.</param>
+/// <param name="StartPrev">The start condition's previous item variable name, or null.</param>
+/// <param name="StartNext">The start condition's next item variable name, or null.</param>
+/// <param name="EndCurrent">The end condition's current item variable name, or null.</param>
+/// <param name="EndPos">The end condition's positional variable name, or null.</param>
+/// <param name="EndPrev">The end condition's previous item variable name, or null.</param>
+/// <param name="EndNext">The end condition's next item variable name, or null.</param>
+/// <param name="DeclaredTypeName">The qualified name of the window variable's declared type, or null.</param>
+/// <param name="DeclaredTypeOccurrence">The occurrence indicator of the declared type.</param>
 public readonly record struct WindowInfo(
     string VariableName,
     string? VariableNamespaceUri,
@@ -267,6 +327,12 @@ public sealed class IrLowerer
     private EmptyOrder ResolveEmptyOrder(EmptyOrder? specEmptyOrder)
         => specEmptyOrder ?? DefaultEmptyOrder ?? EmptyOrder.Least;
 
+    /// <summary>
+    /// Lowers an (optimized) XPath AST into a module of register-based IR instructions.
+    /// The lowerer's buffers are reset by each call, so an instance may be reused.
+    /// </summary>
+    /// <param name="node">The root of the AST to lower.</param>
+    /// <returns>The compiled module with the instruction sequence and literal pool.</returns>
     public IrModule Lower(XPathAstNode node)
     {
         _instructions.Clear();
