@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09 (third session)
-**Commit:** (pending) — REQ-084 Beta readiness: API review + XML-doc coverage + Beta version bump
+**Commit:** `a787040` — REQ-084 Beta readiness: API review + XML-doc coverage + Beta version bump
 **Current focus:** **Alpha→Beta gates COMPLETE — status is Beta; version 0.10.0-beta.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.
 **What was built:**
 - **API review inventory** (read-only, all 9 published packages) with findings triaged; fixes: `OccurrenceIndicator` moved to `Bosak.XPath.Core.Xdm` namespace (only breaking change — AST-level consumers); `Bosak.LanguageServer` `IsPackable=false`; dangling `ConsoleMessageListener` doc cref fixed (messages are discarded when no listener is set); file headers batch-normalized to `license.md (Apache-2.0)` + SPDX line (162 files — completes the 2026-09-05 convention).
