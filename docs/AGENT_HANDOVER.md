@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09 (second session)
-**Commit:** (pending) — fix(XPath/XQuery): REQ-082 QT3 residual backlog cleared — 8 → 0 (QT3 31,142/0/679 = 100% of runnable)
+**Commit:** `a255003` — fix(XPath/XQuery): REQ-082 QT3 residual backlog cleared — 8 → 0 (QT3 31,142/0/679 = 100% of runnable)
 **Current focus:** **REQ-082 QT3 COMPLETE: 31,142 passed / 0 failed / 679 skipped with strict error-code matching — 100% of runnable QT3 tests pass.** XSLT strict sweep unchanged 7,722/3/6,875 (3 documented residuals); unit tests 2,216/0/0; build 0/0.
 **What was built (the final XPST0051 family):**
 - `ValidateFunctionConversionTarget` (VmEngine 2.137) — function-conversion targets are validated against XPath 3.1 §2.5.5.2 before conversion: pseudo-name `none`/`none()` → XPST0051 (K-FunctionProlog-57/58), built-in list types xs:NMTOKENS/IDREFS/ENTITIES → XPST0051 (FunctionCall-027), user-defined schema types whose variety is list or a union containing/derived from a list → XPST0051 (FunctionCall-032/033/034/039, reusing `IsDisallowedSequenceTypeItemType`).
