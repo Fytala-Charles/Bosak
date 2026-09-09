@@ -260,7 +260,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.135 | 07-09-2026     | CheckFunction opcode resolves the callee before arguments are evaluated (XPST0017      |
 //                      |                  |       |                | precedence over argument errors, K2-NodeTest-10)                                       |
-//                      | Charles Korthout | 2.136 | 09-09-2026     | QT3 triage: numeric FORG0001/XPTY0004 conversions, ctor codes, validate XQDY0084/0061, x |
+//                      | Charles Korthout | 2.136 | 09-09-2026     | QT3 triage: numeric FORG0001/XPTY0004 conversions, ctor codes, validate XQDY0084/0061, |
+//                      |                  |       |                | xs:error cast, dynamic-call XPTY0004                                                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.137 | 09-09-2026     | XPST0051 for illegal sequence-type item types in function conversion (none, list      |
+//                      |                  |       |                | types, unions containing/derived from lists); XPST0051 for unknown type constructors   |
+//                      |                  |       |                | in schema-imported namespaces (instanceof117)                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
@@ -373,8 +378,15 @@ public static class VmEngine
 
                         bool found = context.TryResolveFunction(nsUri, localName, argCount, out var sig);
                         if (!found)
+                        {
+                            // A 1-argument call in a schema-imported namespace is a type
+                            // constructor; an unknown schema type is XPST0051, not XPST0017
+                            // (instanceof117).
+                            if (argCount == 1 && IsSchemaImportedNamespace(nsUri, context))
+                                throw new InvalidOperationException($"XPST0051: The type '{{{nsUri}}}{localName}' is not a known schema type.");
                             throw new InvalidOperationException(
                                 $"XPST0017: Function {{{nsUri}}}{localName}#{argCount} not found.");
+                        }
 
                         // Build argument span
                         XdmValue[] args = new XdmValue[argCount];
@@ -428,8 +440,12 @@ public static class VmEngine
                             (checkLocal, checkNs) = ResolveFunctionName((string)checkLiteral, context);
                         }
                         if (!context.TryResolveFunction(checkNs, checkLocal, instr.RegisterC, out _))
+                        {
+                            if (instr.RegisterC == 1 && IsSchemaImportedNamespace(checkNs, context))
+                                throw new InvalidOperationException($"XPST0051: The type '{{{checkNs}}}{checkLocal}' is not a known schema type.");
                             throw new InvalidOperationException(
                                 $"XPST0017: Function {{{checkNs}}}{checkLocal}#{instr.RegisterC} not found.");
+                        }
                         ip++;
                         break;
                     }
@@ -8720,6 +8736,45 @@ public static class VmEngine
     /// union types are disallowed if they are derived by restriction or transitively contain
     /// a list type member.
     /// </summary>
+    // A 1-argument call in a schema-imported namespace is interpreted as a type
+    // constructor function; when no such type exists the error is XPST0051.
+    private static bool IsSchemaImportedNamespace(string nsUri, EvaluationContext context)
+    {
+        if (context.SchemaSet is null)
+            return false;
+        foreach (XmlSchema schema in context.SchemaSet.Schemas())
+            if (schema.TargetNamespace == nsUri)
+                return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Validates that a function-conversion target names a legal sequence-type item type
+    /// (XPath 3.1 §2.5.5.2): raises XPST0051 for the pseudo-name 'none', built-in list
+    /// types (xs:NMTOKENS/IDREFS/ENTITIES), and schema types whose variety is list or a
+    /// union that contains or is derived from a list (FunctionCall-027/032/033/034/039,
+    /// K-FunctionProlog-57/58). Unknown names are left to the conversion path (XPTY0004).
+    /// </summary>
+    private static void ValidateFunctionConversionTarget(string type, EvaluationContext? context)
+    {
+        var name = NormalizeTypeName(type); // lowercased, occurrence indicator and parens stripped
+        if (name == "none")
+            throw new InvalidOperationException($"XPST0051: '{type}' is not a type available to users.");
+        if (IsKnownSequenceTypeName(name) || IsFunctionFamilyType(name))
+            return;
+        var bare = name.StartsWith("xs:", StringComparison.Ordinal) ? name[3..] : name;
+        if (bare is "nmtokens" or "idrefs" or "entities")
+            throw new InvalidOperationException($"XPST0051: The list type '{type}' must not be used as an item type in a sequence type.");
+        if (IsKnownAtomicTypeName(bare) || !name.Contains(':'))
+            return;
+        // Prefixed, non-xs name: a user-defined schema simple type must not be a list type
+        // or a union containing/derived from a list (case-sensitive resolution on the
+        // original spelling).
+        if (IsUserDefinedSchemaType(type, context, out var userType)
+            && IsDisallowedSequenceTypeItemType(userType, context))
+            throw new InvalidOperationException($"XPST0051: The type '{type}' is a list type or a union type that contains or is derived from a list type, and must not be used in a sequence type.");
+    }
+
     private static bool IsDisallowedSequenceTypeItemType(XmlSchemaSimpleType type, EvaluationContext? context)
     {
         var variety = GetSchemaTypeVariety(type);
@@ -10648,6 +10703,14 @@ public static class VmEngine
             // An occurrence-wrapped parenthesized function test: (function(...) as ...)?
             isFunctionTest = type.StartsWith("function(", StringComparison.OrdinalIgnoreCase);
         }
+
+        // A declared type that is not a legal sequence-type item type is XPST0051
+        // (XPath 3.1 §2.5.5.2), reported before any conversion attempt: the pseudo-name
+        // 'none', built-in list types (xs:NMTOKENS/IDREFS/ENTITIES), and schema types
+        // whose variety is list or a union containing/restricted-from a list
+        // (FunctionCall-027/032/033/034/039, K-FunctionProlog-57/58).
+        if (!isFunctionTest)
+            ValidateFunctionConversionTarget(type, context);
 
         // XPath 3.1 function conversion: xs:untypedAtomic cannot be implicitly cast to a
         // namespace-sensitive atomic type such as xs:QName or xs:NOTATION (XPTY0117).

@@ -1,5 +1,18 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-09 (second session)
+**Commit:** (pending) — fix(XPath/XQuery): REQ-082 QT3 residual backlog cleared — 8 → 0 (QT3 31,142/0/679 = 100% of runnable)
+**Current focus:** **REQ-082 QT3 COMPLETE: 31,142 passed / 0 failed / 679 skipped with strict error-code matching — 100% of runnable QT3 tests pass.** XSLT strict sweep unchanged 7,722/3/6,875 (3 documented residuals); unit tests 2,216/0/0; build 0/0.
+**What was built (the final XPST0051 family):**
+- `ValidateFunctionConversionTarget` (VmEngine 2.137) — function-conversion targets are validated against XPath 3.1 §2.5.5.2 before conversion: pseudo-name `none`/`none()` → XPST0051 (K-FunctionProlog-57/58), built-in list types xs:NMTOKENS/IDREFS/ENTITIES → XPST0051 (FunctionCall-027), user-defined schema types whose variety is list or a union containing/derived from a list → XPST0051 (FunctionCall-032/033/034/039, reusing `IsDisallowedSequenceTypeItemType`).
+- Type constructors (instanceof117): an unresolved 1-argument call in a schema-imported namespace is a type constructor — an unknown type raises XPST0051 instead of XPST0017 (`IsSchemaImportedNamespace` check at both `CallFunction` and `CheckFunction` sites).
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216 tests); QT3 strict sweep `31,142/0/679`; XSLT strict `7,722/3/6,875`.
+**Next steps:** ROADMAP Alpha→Beta items; optional `v0.9.2-preview` packaging (100%-of-runnable QT3 + 100%-of-runnable XSLT milestones).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-09
 **Commit:** `3bc6fb5` — fix(XPath/XQuery): REQ-082 QT3 residual backlog triage — 233 → 8 (QT3 31,134/8/679; XSLT 7,722/3/6,875 unchanged)
 **Current focus:** **REQ-082 QT3 residual backlog triaged: QT3 30,909/233/679 → 31,134/8/679 (97.84%), zero new failure names; ~225 tests fixed across ~20 error-code families. Remaining 8 are documented XPST0051 schema-type validation gaps. XSLT strict sweep unchanged 7,722/3/6,875; unit tests 2,216/0/0 across all nine projects; build 0/0.**
