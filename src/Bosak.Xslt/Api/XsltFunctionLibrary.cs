@@ -38,6 +38,8 @@
 //                      | Charles Korthout | 0.15  | 02-09-2026     | fn:load-xquery-module enabled via EvaluationContext.XQueryModuleLoader + static module-source registry |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.16  | 07-09-2026     | Register the XSLT-defined document() function on XSLT contexts                           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.17  | 09-09-2026     | fn:transform option errors use FOXT0002 (mutually exclusive sources/options, delivery-format) |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -602,7 +604,7 @@ public static class XsltFunctionLibrary
         // delivery-format: document (default), raw, or serialized.
         var deliveryFormat = GetStringOption(options, "delivery-format") ?? "document";
         if (deliveryFormat is not ("document" or "raw" or "serialized"))
-            throw new InvalidOperationException($"FOXT0004: Invalid delivery-format '{deliveryFormat}'.");
+            throw new InvalidOperationException($"FOXT0002: Invalid delivery-format '{deliveryFormat}'.");
 
         // initial-template / initial-mode / initial-function are xs:QName values.
         string? initialTemplate = GetQNameOption(options, "initial-template");
@@ -755,9 +757,12 @@ public static class XsltFunctionLibrary
             + (stylesheetText != null ? 1 : 0)
             + (stylesheetNodeValue != null ? 1 : 0)
             + (packageName != null ? 1 : 0);
-        if (sourceCount != 1)
+        if (sourceCount == 0)
             throw new InvalidOperationException(
                 "FOXT0001: fn:transform requires exactly one of stylesheet-location, stylesheet-node, stylesheet-text, or package-name.");
+        if (sourceCount > 1)
+            throw new InvalidOperationException(
+                "FOXT0002: fn:transform options stylesheet-location, stylesheet-node, stylesheet-text, and package-name are mutually exclusive.");
 
         var compiler = new XsltCompiler();
         if (staticParameters != null)
@@ -1092,7 +1097,7 @@ public static class XsltFunctionLibrary
     {
         // Mutually exclusive entry-point options.
         if (!string.IsNullOrEmpty(initialMode) && !string.IsNullOrEmpty(initialTemplate))
-            throw new InvalidOperationException("XPTY0004: fn:transform options initial-mode and initial-template are mutually exclusive.");
+            throw new InvalidOperationException("FOXT0002: fn:transform options initial-mode and initial-template are mutually exclusive.");
 
         if (sourceNode != null && initialMatchSelection != null)
             throw new InvalidOperationException("FOXT0002: fn:transform options source-node and initial-match-selection are mutually exclusive.");

@@ -41,6 +41,7 @@
 //                      | Charles Korthout | 2.1   | 25-07-2026     | FromDecimal normalizes negative zero (XPath decimals have no -0)                        |
 //                      | Charles Korthout | 2.2   | 22-08-2026     | Format gYear/gMonth/gDay/etc. schema-type annotations correctly in ToString           |
 //                      | Charles Korthout | 2.3   | 23-08-2026     | Added FromQName(XsQName, string schemaTypeName) overload for schema-typed QNames/NOTATIONs |
+//                      | Charles Korthout | 2.4   | 09-09-2026     | ThrowInvalidAccess prefixes XPTY0004 (function-argument type errors surface the declared |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -528,7 +529,7 @@ public readonly struct XdmValue
     }
 
     private void ThrowInvalidAccess(string propertyName)
-        => throw new InvalidOperationException($"Cannot access {propertyName} on XDM value of kind '{_kind}'");
+        => throw new InvalidOperationException($"XPTY0004: Cannot access {propertyName} on XDM value of kind '{_kind}'");
 
     private static string FormatExponent(string s)
         => s.Replace("E+", "E");

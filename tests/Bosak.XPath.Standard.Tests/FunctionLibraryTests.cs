@@ -2635,6 +2635,8 @@ public class FunctionLibraryTests
     [Fact]
     public void Serialize_CharacterMapMultiCharKey_SEPM0016()
     {
+        // Params supplied as a map: SEPM0016 (serialize-xml-123); the XML parameter-document
+        // form uses SEPM0017 instead (serialize-xml-023).
         var ex = Assert.Throws<InvalidOperationException>(
             () => Evaluate("serialize(parse-xml('<e/>'), map{'use-character-maps':map{'$$':'£'}})"));
         Assert.Contains("SEPM0016", ex.Message);
@@ -3825,7 +3827,7 @@ public class FunctionLibraryTests
     }
 
     [Fact]
-    public void UnparsedText_UnknownExplicitEncoding_RaisesFOUT1200()
+    public void UnparsedText_UnknownExplicitEncoding_RaisesFOUT1190()
     {
         var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".txt");
         File.WriteAllText(path, "hello");
@@ -3836,7 +3838,9 @@ public class FunctionLibraryTests
             ctx.ResourceUriMapper = u => u == "http://example.org/text/plain-txt" ? path : null;
             var ex = Assert.Throws<InvalidOperationException>(() =>
                 XPath31Expression.Compile("unparsed-text('http://example.org/text/plain-txt', 'no-such-encoding')").Evaluate(ctx));
-            Assert.Contains("FOUT1200", ex.Message);
+            // An unknown encoding NAME is FOUT1190 (QT3 fn-unparsed-text-036/056); FOUT1200
+            // is reserved for undecodable content under a valid specified encoding.
+            Assert.Contains("FOUT1190", ex.Message);
         }
         finally
         {

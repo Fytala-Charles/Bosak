@@ -95,6 +95,7 @@
 //                      | Charles Korthout | 1.33  | 23-08-2026     | Added function return-type atomization regression tests (qischema040/qischema040a) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.34  | 07-09-2026     | Updated undeclared-prefix and circular-variable tests for static XPST0081 and dynamic XQDY0054 |
+//                      | Charles Korthout | 1.35  | 09-09-2026     | DuplicateAttribute test expects static XQST0040 (was dynamic XQDY0025)                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -838,10 +839,9 @@ public class PlaceholderTests
     public void XQuery_Constructor_DuplicateAttribute_Rejected()
     {
         var compiler = new XQueryCompiler();
-        var executable = compiler.Compile("<out a=\"1\" a=\"2\"/>");
-        var ctx = new XQueryContext();
-        var ex = Assert.ThrowsAny<Exception>(() => executable.Evaluate(ctx));
-        Assert.Contains("XQDY0025", ex.Message);
+        // XQST0040 is a static error: compile must reject duplicate expanded attribute names.
+        var ex = Assert.ThrowsAny<Exception>(() => compiler.Compile("<out a=\"1\" a=\"2\"/>"));
+        Assert.Contains("XQST0040", ex.Message);
     }
 
     [Fact]

@@ -260,6 +260,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.135 | 07-09-2026     | CheckFunction opcode resolves the callee before arguments are evaluated (XPST0017      |
 //                      |                  |       |                | precedence over argument errors, K2-NodeTest-10)                                       |
+//                      | Charles Korthout | 2.136 | 09-09-2026     | QT3 triage: numeric FORG0001/XPTY0004 conversions, ctor codes, validate XQDY0084/0061, x |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
@@ -487,6 +488,10 @@ public static class VmEngine
                             else
                             {
                                 string displayName = string.IsNullOrEmpty(nsUri) ? localName : $"Q{{{nsUri}}}{localName}";
+                                // A prolog-declared external variable whose value was never
+                                // supplied is a dynamic error (XPDY0002), not XPST0008.
+                                if (context.UnsuppliedExternalVariables.Contains((localName, nsUri)))
+                                    throw new InvalidOperationException($"XPDY0002: No value was supplied for external variable '${displayName}'.");
                                 throw new InvalidOperationException($"XPST0008: Variable ${displayName} is not defined.");
                             }
                         }
@@ -532,7 +537,9 @@ public static class VmEngine
                     break;
 
                 case IrOpCode.LoadDecimal:
-                    registers[instr.RegisterA] = XdmValue.FromDecimal((decimal)literalPool[instr.Operand]!);
+                    registers[instr.RegisterA] = literalPool[instr.Operand] is (decimal typedDec, string decAnnotation)
+                        ? XdmValue.FromDecimal(typedDec, decAnnotation)
+                        : XdmValue.FromDecimal((decimal)literalPool[instr.Operand]!);
                     ip++;
                     break;
 
@@ -753,7 +760,11 @@ public static class VmEngine
                     {
                         var sequence = registers[instr.RegisterB];
                         int rhsEntry = instr.Operand;
-                        bool enforceNodeResult = instr.RegisterC != 0;
+                        // RegisterC: 0 = `!` (no node checks), 1 = last path step (mixed
+                        // result is XPTY0018), 2 = non-last path step (non-node result item
+                        // is XPTY0019).
+                        int pathResultMode = instr.RegisterC;
+                        bool enforceNodeResult = pathResultMode != 0;
 
                         var items = MaterializeSequence(sequence);
                         var results = new List<XdmValue>();
@@ -793,8 +804,15 @@ public static class VmEngine
                         // Restore context
                         context.WithFocus(savedItem, savedPos, savedSize);
 
-                        // XPath 2.0/3.0: path expression result must not contain both nodes and non-nodes
-                        if (enforceNodeResult)
+                        // Non-last path steps must produce nodes only (XPTY0019, mode 2);
+                        // the last step merely must not mix nodes and non-nodes (XPTY0018,
+                        // mode 1). `!` (mode 0) performs no result check.
+                        if (pathResultMode == 2)
+                        {
+                            if (results.Any(r => !r.IsNode))
+                                throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
+                        }
+                        else if (enforceNodeResult)
                         {
                             bool hasNode = results.Any(r => r.IsNode);
                             bool hasNonNode = results.Any(r => !r.IsNode);
@@ -1079,11 +1097,21 @@ public static class VmEngine
                             tupleIndex++;
                         }
 
-                        materializedTuples.Sort((x, y) =>
+                        try
                         {
-                            int cmp = CompareTuples(x.Items, y.Items, orderInfo, context);
-                            return cmp != 0 ? cmp : x.Index.CompareTo(y.Index);
-                        });
+                            materializedTuples.Sort((x, y) =>
+                            {
+                                int cmp = CompareTuples(x.Items, y.Items, orderInfo, context);
+                                return cmp != 0 ? cmp : x.Index.CompareTo(y.Index);
+                            });
+                        }
+                        catch (InvalidOperationException wrap) when (wrap.InnerException is not null
+                            && wrap.Message.StartsWith("Failed to compare", StringComparison.Ordinal))
+                        {
+                            // List<T>.Sort wraps exceptions thrown by the comparison delegate;
+                            // rethrow the original XPTY0004 (incomparable order-by keys).
+                            throw wrap.InnerException;
+                        }
 
                         var sorted = new List<XdmValue>(materializedTuples.Count);
                         foreach (var (tupleItems, _) in materializedTuples)
@@ -1351,11 +1379,11 @@ public static class VmEngine
                                 {
                                     target = computedInfo.LocalName!;
                                 }
-                                // XQDY0041: a target with a colon is not a valid computed PI name;
-                                // XQDY0064: the target must be a valid NCName other than 'xml'.
-                                if (target.Contains(':'))
+                                // XQDY0041: the target must be a valid NCName (colons are not
+                                // allowed); XQDY0064: the target must not be 'xml' in any case.
+                                if (target.Contains(':') || !IsValidNcName(target))
                                     throw new InvalidOperationException($"XQDY0041: Invalid processing instruction target '{target}'.");
-                                if (!IsValidNcName(target) || target.Equals("xml", StringComparison.OrdinalIgnoreCase))
+                                if (target.Equals("xml", StringComparison.OrdinalIgnoreCase))
                                     throw new InvalidOperationException($"XQDY0064: Invalid processing instruction target '{target}'.");
                                 var data = JoinAtomizedItems(registers[instr.RegisterC], " ").TrimStart();
                                 // XQDY0026: PI data must not contain '?>'.
@@ -1407,8 +1435,10 @@ public static class VmEngine
                                     throw new InvalidOperationException("XQDY0101: A namespace constructor must not bind a prefix to the XMLNS namespace URI.");
                                 if (uri.Length == 0 && nsPrefix.Length > 0)
                                     throw new InvalidOperationException("XQDY0101: A namespace constructor with a non-empty prefix must not have an empty URI.");
+                                // XQDY0074: the prefix must be a valid NCName (nscons-016/017);
+                                // reserved-prefix/URI misuse above is XQDY0101.
                                 if (nsPrefix.Length > 0 && !IsValidNcName(nsPrefix))
-                                    throw new InvalidOperationException($"XQDY0101: Invalid namespace prefix '{nsPrefix}'.");
+                                    throw new InvalidOperationException($"XQDY0074: Invalid namespace prefix '{nsPrefix}'.");
                                 if (context.ContentNodeConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no content-node provider is registered (EvaluationContext.ContentNodeConstructorHook).");
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.ContentNodeConstructorHook(new XdmContentItem(XdmContentKind.Namespace, uri, null, nsPrefix)));
@@ -3226,32 +3256,13 @@ public static class VmEngine
             throw new InvalidOperationException("XQTY0030: The operand of a validate expression must be a single document or element node.");
 
         var item = items[0];
-        XmlSchemaSet schemaSetToUse = context.SchemaSet ?? s_builtInSchemaSet;
-        if (context.SchemaSet is null && !string.IsNullOrEmpty(typeName))
-        {
-            // validate type Q { ... } may use a built-in XML Schema type without a user schema;
-            // built-in types are always in-scope. Check that the type resolves before deciding
-            // whether a schema is needed.
-            var (builtInNs, builtInLocal) = ResolveValidateTypeName(typeName, context);
-            bool isBuiltInType = builtInNs == XmlSchema.Namespace
-                && XmlSchemaType.GetBuiltInSimpleType(new XmlQualifiedName(builtInLocal, builtInNs)) is not null;
-            if (!isBuiltInType)
-            {
-                throw new InvalidOperationException("XQST0075: A validate expression requires a schema, but no schema is available.");
-            }
-        }
-        else if (context.SchemaSet is null && mode != "lax")
-        {
-            // XQuery 3.1 §3.13.2: only lax validation without a target type may proceed
-            // without a user schema; strict/default validation requires one.
-            throw new InvalidOperationException("XQST0075: A validate expression requires a schema, but no schema is available.");
-        }
-
         var node = item.NodeValue;
 
         // XQDY0061: a validation root document node must contain exactly one element child
-        // and no text node children. Detect this before serializing, otherwise XDocument.Load
-        // throws a generic XmlException about multiple root elements.
+        // and no text node children. This operand-shape error precedes schema-availability
+        // (XQST0075) — cbcl-validateexpr-11/12, validateexpr-26 expect it without a schema.
+        // It is also detected before serializing, otherwise XDocument.Load throws a generic
+        // XmlException about multiple root elements.
         if (node.NodeKind == XdmNodeKind.Document)
         {
             int elementChildCount = 0;
@@ -3272,6 +3283,27 @@ public static class VmEngine
             {
                 throw new InvalidOperationException("XQDY0061: The document node of the validation root must have exactly one element child.");
             }
+        }
+
+        XmlSchemaSet schemaSetToUse = context.SchemaSet ?? s_builtInSchemaSet;
+        if (context.SchemaSet is null && !string.IsNullOrEmpty(typeName))
+        {
+            // validate type Q { ... } may use a built-in XML Schema type without a user schema;
+            // built-in types are always in-scope. Check that the type resolves before deciding
+            // whether a schema is needed.
+            var (builtInNs, builtInLocal) = ResolveValidateTypeName(typeName, context);
+            bool isBuiltInType = builtInNs == XmlSchema.Namespace
+                && XmlSchemaType.GetBuiltInSimpleType(new XmlQualifiedName(builtInLocal, builtInNs)) is not null;
+            if (!isBuiltInType)
+            {
+                throw new InvalidOperationException("XQST0075: A validate expression requires a schema, but no schema is available.");
+            }
+        }
+        else if (context.SchemaSet is null && mode != "lax")
+        {
+            // XQuery 3.1 §3.13.2: only lax validation without a target type may proceed
+            // without a user schema; strict/default validation requires one.
+            throw new InvalidOperationException("XQST0075: A validate expression requires a schema, but no schema is available.");
         }
 
         var validationErrors = new List<string>();
@@ -3387,17 +3419,19 @@ public static class VmEngine
             // annotations used by fn:id, fn:idref, schema-element(), and typed value access.
             doc.Validate(schemaSetToUse, handler, addSchemaInfo: true);
 
-            if (hasErrors)
-                throw new InvalidOperationException($"XQDY0027: Validation of the validate expression operand failed: {string.Join("; ", validationErrors)}");
-
-            // In strict / default validation, the root element must be validated against a
-            // top-level element declaration. Validation against an xsi:type alone (with no
-            // matching element declaration) must still raise XQDY0084.
-            if (validateType is null && (mode == "strict" || mode == "")
-                && doc.Root?.GetSchemaInfo()?.SchemaElement is null)
+            // XQDY0084 (strict/default): the root element must have a top-level element
+            // declaration in the in-scope element declarations; xsi:type is no substitute.
+            // This takes precedence over content-validity errors (XQDY0027), which apply
+            // only when a governing declaration exists (cbcl-validateexpr-5/7/8/10 vs
+            // qischema90703-err, whose FpML root IS declared).
+            if (validateType is null && (mode == "strict" || mode == "") && doc.Root is not null
+                && schemaSetToUse.GlobalElements[new XmlQualifiedName(doc.Root.Name.LocalName, doc.Root.Name.NamespaceName)] is null)
             {
                 throw new InvalidOperationException("XQDY0084: The root element does not match a top-level element declaration.");
             }
+
+            if (hasErrors)
+                throw new InvalidOperationException($"XQDY0027: Validation of the validate expression operand failed: {string.Join("; ", validationErrors)}");
 
             // Remove the injected xsi:type and any namespace declarations we added; the result
             // of validate type Q { ... } must not expose the temporary xsi:type attribute.
@@ -3766,9 +3800,11 @@ public static class VmEngine
         {
             case NamedFunctionItem named:
                 // The function item has a fixed arity; a dynamic call must supply exactly
-                // that many arguments (higher-order-functions-049/050).
+                // that many arguments (higher-order-functions-049/050). A mismatch in a
+                // DYNAMIC call is a type error (XPTY0004) — XPST0017 applies only to
+                // static calls resolved at compile time (xqhof7, for-each-901).
                 if (args.Length != named.ArityValue)
-                    throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.ArityValue} cannot be called with {args.Length} argument(s).");
+                    throw new InvalidOperationException($"XPTY0004: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.ArityValue} cannot be called with {args.Length} argument(s).");
                 if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out var sig))
                 {
                     // Fall back to the context in which the function item was created
@@ -5117,8 +5153,12 @@ public static class VmEngine
     private static XdmValue MultiplyDuration(XdmValue duration, XdmValue factor)
     {
         double f = ToDouble(factor);
-        if (double.IsNaN(f) || double.IsInfinity(f))
-            throw new InvalidOperationException("FOCA0005");
+        // op:multiply-yearMonthDuration/dayTimeDuration: a NaN factor is FOCA0005;
+        // an infinite factor overflows the duration range (FODT0002).
+        if (double.IsNaN(f))
+            throw new InvalidOperationException("FOCA0005: Cannot multiply a duration by NaN.");
+        if (double.IsInfinity(f))
+            throw new InvalidOperationException("FODT0002: Cannot multiply a duration by an infinite factor.");
 
         var subtype = GetDurationSubtype(duration);
         if (subtype == DurationSubtype.YearMonthDuration)
@@ -5267,7 +5307,8 @@ public static class VmEngine
             var (y2, m2, _, _, _, _) = ParseDuration(r);
             decimal totalMonths1 = y1 * 12m + m1;
             decimal totalMonths2 = y2 * 12m + m2;
-            if (totalMonths2 == 0) throw new InvalidOperationException("FODT0002");
+            // op:divide-yearMonthDuration-by-yearMonthDuration: a zero divisor is FOAR0001.
+            if (totalMonths2 == 0) throw new InvalidOperationException("FOAR0001: Division of a duration by a zero duration.");
             return XdmValue.FromDecimal(totalMonths1 / totalMonths2);
         }
         if (IsDayTimeDurationString(l) && IsDayTimeDurationString(r))
@@ -5276,7 +5317,7 @@ public static class VmEngine
             var (_, _, d2, h2, min2, s2) = ParseDuration(r);
             decimal totalSeconds1 = d1 * 86400m + h1 * 3600m + min1 * 60m + s1;
             decimal totalSeconds2 = d2 * 86400m + h2 * 3600m + min2 * 60m + s2;
-            if (totalSeconds2 == 0) throw new InvalidOperationException("FODT0002");
+            if (totalSeconds2 == 0) throw new InvalidOperationException("FOAR0001: Division of a duration by a zero duration.");
             return XdmValue.FromDecimal(totalSeconds1 / totalSeconds2);
         }
         throw new InvalidOperationException("XPTY0004");
@@ -5388,12 +5429,14 @@ public static class VmEngine
         {
             double l = ToDouble(left);
             double r = ToDouble(right);
+            // A zero divisor is FOAR0001 even when the dividend is INF (it takes
+            // precedence over the FOAR0002 result-overflow check).
+            if (r == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             if (double.IsNaN(l) || double.IsNaN(r) || double.IsInfinity(l))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
             if (double.IsInfinity(r))
                 return XdmValue.FromInteger(0L);
-            if (r == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
             double result = l / r;
             if (double.IsNaN(result) || double.IsInfinity(result))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
@@ -5408,12 +5451,14 @@ public static class VmEngine
         {
             double l = ToDouble(left);
             double r = ToDouble(right);
+            // A zero divisor is FOAR0001 even when the dividend is INF (it takes
+            // precedence over the FOAR0002 result-overflow check).
+            if (r == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             if (double.IsNaN(l) || double.IsNaN(r) || double.IsInfinity(l))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
             if (double.IsInfinity(r))
                 return XdmValue.FromInteger(0L);
-            if (r == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
             double result = l / r;
             if (double.IsNaN(result) || double.IsInfinity(result))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
@@ -5428,12 +5473,12 @@ public static class VmEngine
         {
             float l = ToFloat(left);
             float r = ToFloat(right);
+            if (r == 0)
+                throw new InvalidOperationException("FOAR0001: Division by zero.");
             if (float.IsNaN(l) || float.IsNaN(r) || float.IsInfinity(l))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
             if (float.IsInfinity(r))
                 return XdmValue.FromInteger(0L);
-            if (r == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
             float result = l / r;
             if (float.IsNaN(result) || float.IsInfinity(result))
                 throw new InvalidOperationException("FOAR0002: Integer division overflow.");
@@ -5591,10 +5636,11 @@ public static class VmEngine
         left = Atomize(left);
         right = Atomize(right);
 
-        // Function items cannot be atomized: any comparison involving one is FOTY0013
-        // (function-item-4 — string-join#1 eq string-join#1).
-        if (left.IsFunction || right.IsFunction)
-            throw new InvalidOperationException("FOTY0013: A comparison operand must not be a function item.");
+        // Function items and maps cannot be atomized: any comparison involving one is
+        // FOTY0013 (function-item-4 — string-join#1 eq string-join#1; value-comparison-11
+        // — map{1:1} eq 1).
+        if (left.IsFunction || left.IsMap || right.IsFunction || right.IsMap)
+            throw new InvalidOperationException("FOTY0013: A comparison operand must not be a function item or map.");
 
         // XPath value comparisons with empty sequence operand return empty sequence
         if (left.IsUndefined || right.IsUndefined)
@@ -6389,6 +6435,9 @@ public static class VmEngine
         var atomized = Atomize(value);
         if (atomized.IsUndefined)
             return; // empty-sequence operands are handled by the caller
+        // Atomization of a map or function item is undefined (FOTY0013, ArrayTest-031/032).
+        if (atomized.IsMap || atomized.IsFunction)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a function item or map.");
         if (IsNumeric(atomized) || IsUntypedAtomic(atomized))
             return;
         throw new InvalidOperationException(
@@ -6622,6 +6671,15 @@ public static class VmEngine
             && !BuiltInSchemaTypes.Any(t => string.Equals(t, resolvedLocal, StringComparison.OrdinalIgnoreCase)))
         {
             throw new InvalidOperationException($"XQST0052: The type '{typeName}' is not a known schema type.");
+        }
+
+        // xs:error has no instances: a cast to it always fails (FORG0001 via the lexical
+        // classification, xs-error-050/051) — before the §19.3 matrix would misclassify it
+        // as a not-permitted combination.
+        if (normalized == "error")
+        {
+            failureKind = CastFailureKind.Lexical;
+            return false;
         }
 
         // XPath 3.1 §19.3 permitted-cast matrix: combinations outside the matrix are
@@ -8345,12 +8403,14 @@ public static class VmEngine
             or "decimal" or "double" or "float" or "numeric" or "datetime" or "datetimestamp" or "date" or "time"
             or "duration" or "daytimeduration" or "yearmonthduration" or "qname" or "anyuri" or "notation"
             or "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth"
-            or "hexbinary" or "base64binary" or "untypedatomic" or "anyatomictype";
+            or "hexbinary" or "base64binary" or "untypedatomic" or "anyatomictype" or "error";
 
     private static bool ItemInstanceOf(XdmValue value, string normalized)
     {
         return normalized switch
         {
+            // xs:error is the empty type: no value is ever an instance of it.
+            "error" => false,
             "string" or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
                 or "ncname" or "id" or "idref" or "entity"
                 => value.Kind == XdmValueKind.String && IsAtomicTypeSubtype(value.SchemaTypeName ?? "string", normalized),
@@ -9530,7 +9590,7 @@ public static class VmEngine
         "integer", "nonPositiveInteger", "negativeInteger", "long", "int", "short", "byte",
         "nonNegativeInteger", "unsignedLong", "unsignedInt", "unsignedShort", "unsignedByte",
         "positiveInteger", "dateTimeStamp", "dayTimeDuration", "yearMonthDuration",
-        "numeric",
+        "numeric", "error",
     };
 
     /// <summary>
@@ -9620,7 +9680,9 @@ public static class VmEngine
             return sourceFamily is "boolean" or "numeric";
         if (targetType is "duration" or "yearmonthduration" or "daytimeduration")
             return sourceFamily is "duration" or "yearmonthduration" or "daytimeduration";
-        if (targetType is "datetime")
+        if (targetType is "datetime" or "datetimestamp")
+            // dateTimeStamp follows the dateTime rules (§19.3.4); the timezone requirement
+            // is a value check in the cast itself (FORG0001 when absent), not a matrix rule.
             return sourceFamily is "datetime" or "date";
         if (targetType is "date")
             return sourceFamily is "datetime" or "date";
@@ -10727,6 +10789,15 @@ public static class VmEngine
             {
                 converted.Add(casted);
             }
+            else if (IsUntypedAtomicValue(atomic) && !IsKnownSequenceTypeName(type)
+                     && type.StartsWith("xs:", StringComparison.OrdinalIgnoreCase)
+                     && IsKnownAtomicTypeName(type[3..].ToLowerInvariant()))
+            {
+                // Function conversion casts xs:untypedAtomic to the required atomic type;
+                // when the target is a built-in type, a failed cast is the cast's own
+                // lexical error (FORG0001), not the generic XPTY0004 (K2-FunctionProlog-24).
+                throw new InvalidOperationException($"FORG0001: Cannot cast xs:untypedAtomic '{atomic}' to {targetType}");
+            }
             else if (TryPromoteNumericOrUri(atomic, type, out var promoted))
             {
                 converted.Add(promoted);
@@ -11775,7 +11846,7 @@ public static class VmEngine
             XdmValueKind.Decimal => (double)value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => value.DoubleValue,
             XdmValueKind.Boolean => value.BooleanValue ? 1.0 : 0.0,
-            _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to double")
+            _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw NumericConversionError(value, "double")
         };
     }
 
@@ -11787,7 +11858,7 @@ public static class VmEngine
             XdmValueKind.Integer => value.IntegerValue,
             XdmValueKind.Decimal => value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => (decimal)value.DoubleValue,
-            _ => decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to decimal")
+            _ => decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw NumericConversionError(value, "decimal")
         };
     }
 
@@ -11799,7 +11870,7 @@ public static class VmEngine
             XdmValueKind.Integer => value.IntegerValue,
             XdmValueKind.Decimal => (long)value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => (long)value.DoubleValue,
-            _ => long.TryParse(value.ToString(), out var l) ? l : throw new InvalidOperationException($"Cannot convert {value.Kind} to integer")
+            _ => long.TryParse(value.ToString(), out var l) ? l : throw NumericConversionError(value, "integer")
         };
     }
 
@@ -11812,9 +11883,17 @@ public static class VmEngine
             XdmValueKind.Decimal => (float)value.DecimalValue,
             XdmValueKind.Double or XdmValueKind.Float => (float)value.DoubleValue,
             XdmValueKind.Boolean => value.BooleanValue ? 1.0f : 0.0f,
-            _ => float.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var f) ? f : throw new InvalidOperationException($"Cannot convert {value.Kind} to float")
+            _ => float.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var f) ? f : throw NumericConversionError(value, "float")
         };
     }
+
+    // String-kind failures are xs:untypedAtomic cast failures (FORG0001 — plain xs:string
+    // operands are rejected earlier by ValidateNumericOperand); any other kind is a
+    // type error (XPTY0004, e.g. xs:duration as an arithmetic factor).
+    private static InvalidOperationException NumericConversionError(XdmValue value, string target)
+        => new(value.Kind == XdmValueKind.String
+            ? $"FORG0001: Cannot convert {value.Kind} to {target}"
+            : $"XPTY0004: Cannot convert {value.Kind} to {target}");
 
     // ------------------------------------------------------------------
     // Opcode helpers
@@ -12291,7 +12370,11 @@ public static class VmEngine
             }
             if (item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Attribute)
             {
-                if (!_allowAttributes || _seenNonAttributeContent)
+                // Document constructors accept no attributes at all (XPTY0004, XQuery §3.9.1.1);
+                // in element content an attribute following other content is XQTY0024.
+                if (!_allowAttributes)
+                    throw new InvalidOperationException("XPTY0004: An attribute node is not allowed in document constructor content.");
+                if (_seenNonAttributeContent)
                     throw new InvalidOperationException("XQTY0024: An attribute node in content must not follow other content.");
                 var attrNode = item.NodeValue;
                 string? itemNs = string.IsNullOrEmpty(attrNode.NamespaceUri) ? null : attrNode.NamespaceUri;
@@ -12414,6 +12497,10 @@ public static class VmEngine
         }
 
         var text = atomized.ToString().Trim();
+        // Only xs:string / xs:untypedAtomic atoms are cast to a lexical QName; any other
+        // atomic type (xs:integer, xs:date, xs:dateTime, ...) is a type error (XPTY0004).
+        if (atomized.Kind != XdmValueKind.String)
+            throw new InvalidOperationException($"XPTY0004: The computed {construct} name must be xs:QName, xs:string, or xs:untypedAtomic, not {atomized.Kind}.");
         // EQName braced form: Q{uri}local (empty URI means no namespace).
         if (text.StartsWith("Q{", StringComparison.Ordinal))
         {
@@ -12438,9 +12525,10 @@ public static class VmEngine
         {
             var prefixPart = text[..colon];
             var localPart = text[(colon + 1)..];
-            // XQDY0096: the 'xmlns' prefix must not be used, whether or not it is declared.
+            // The 'xmlns' prefix must not be used, whether or not it is declared
+            // (XQDY0044 for attributes, XQDY0096 for elements).
             if (prefixPart == "xmlns")
-                throw new InvalidOperationException($"XQDY0096: A computed {construct} name must not use the 'xmlns' prefix.");
+                throw new InvalidOperationException($"{(construct == "attribute" ? "XQDY0044" : "XQDY0096")}: A computed {construct} name must not use the 'xmlns' prefix.");
             if (!context.TryResolveNamespace(prefixPart, out var pns))
                 throw new InvalidOperationException($"XQDY0074: The prefix of the computed {construct} name '{text}' cannot be resolved.");
             if (!IsValidNcName(localPart))
@@ -12464,15 +12552,16 @@ public static class VmEngine
         return string.Join(' ', parts);
     }
 
-    // XQDY0096: computed element/attribute names must not misuse the xml/xmlns prefixes.
+    // XQDY0044 (attributes) / XQDY0096 (elements): computed names must not misuse the xml/xmlns prefixes.
     private static void ValidateComputedNamePrefix(string? prefix, string? namespaceUri, string construct)
     {
+        string code = construct == "attribute" ? "XQDY0044" : "XQDY0096";
         if (prefix == "xmlns")
-            throw new InvalidOperationException($"XQDY0096: A computed {construct} name must not use the 'xmlns' prefix.");
+            throw new InvalidOperationException($"{code}: A computed {construct} name must not use the 'xmlns' prefix.");
         if (prefix == "xml" && namespaceUri != "http://www.w3.org/XML/1998/namespace")
-            throw new InvalidOperationException($"XQDY0096: The 'xml' prefix in a computed {construct} name must be bound to the XML namespace URI.");
+            throw new InvalidOperationException($"{code}: The 'xml' prefix in a computed {construct} name must be bound to the XML namespace URI.");
         if (prefix is not (null or "xml") && namespaceUri == "http://www.w3.org/XML/1998/namespace")
-            throw new InvalidOperationException($"XQDY0096: A computed {construct} name must not bind a non-'xml' prefix to the XML namespace URI.");
+            throw new InvalidOperationException($"{code}: A computed {construct} name must not bind a non-'xml' prefix to the XML namespace URI.");
     }
 
     // Computed PI targets accept only string-like atomic values (xs:string,

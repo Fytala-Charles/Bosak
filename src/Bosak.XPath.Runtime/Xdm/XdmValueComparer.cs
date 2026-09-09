@@ -12,6 +12,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Compare dateTime values by instant for xsl:merge key ordering                           |
+//                      | Charles Korthout | 0.3   | 09-09-2026     | Numeric promotion parse failures raise FORG0001/XPTY0004 with codes                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -214,7 +215,7 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
         XdmValueKind.Decimal => (double)value.DecimalValue,
         XdmValueKind.Float => value.DoubleValue,
         XdmValueKind.Double => value.DoubleValue,
-        _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to double")
+        _ => double.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw NumericConversionError(value, "double")
     };
 
     private static float ToFloat(XdmValue value) => value.Kind switch
@@ -222,7 +223,7 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
         XdmValueKind.Integer => value.IntegerValue,
         XdmValueKind.Decimal => (float)value.DecimalValue,
         XdmValueKind.Float or XdmValueKind.Double => (float)value.DoubleValue,
-        _ => float.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var f) ? f : throw new InvalidOperationException($"Cannot convert {value.Kind} to float")
+        _ => float.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var f) ? f : throw NumericConversionError(value, "float")
     };
 
     private static decimal ToDecimal(XdmValue value) => value.Kind switch
@@ -230,8 +231,15 @@ public sealed class XdmValueComparer : IComparer<XdmValue>
         XdmValueKind.Integer => value.IntegerValue,
         XdmValueKind.Decimal => value.DecimalValue,
         XdmValueKind.Float or XdmValueKind.Double => (decimal)value.DoubleValue,
-        _ => decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw new InvalidOperationException($"Cannot convert {value.Kind} to decimal")
+        _ => decimal.TryParse(value.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out var d) ? d : throw NumericConversionError(value, "decimal")
     };
+
+    // Numeric promotion only reaches the parse fallback for xs:untypedAtomic (String kind),
+    // so a failed parse is a cast failure (FORG0001); any other kind is a type error (XPTY0004).
+    private static InvalidOperationException NumericConversionError(XdmValue value, string target)
+        => new(value.Kind == XdmValueKind.String
+            ? $"FORG0001: Cannot convert {value.Kind} to {target}"
+            : $"XPTY0004: Cannot convert {value.Kind} to {target}");
 
     private static XdmValue Atomize(XdmValue value)
     {

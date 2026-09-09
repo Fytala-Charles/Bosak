@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.5   | 01-08-2026     | HTML matrix: version-dependent void lists, boolean attrs, script raw text, CDATA islands, xhtml prefix normalization |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 07-08-2026     | XML/XHTML: escape NEL (#x85), LS (#x2028) and C1 controls (#x7F-#x9F) as character references in text and attribute content (K2-Serialization-5/6/9/10) |
+//                      | Charles Korthout | 0.7   | 09-09-2026     | Multi-char character-map key raises SEPM0017 (was SEPM0016)                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -517,6 +518,8 @@ internal static class XdmSerializer
                 throw new InvalidOperationException(
                     $"XPTY0004: Character map keys must be xs:string, got {Describe(kvp.Key)}.");
             string key = kvp.Key.StringValue;
+            // Params supplied as a map use SEPM0016 (serialize-xml-123); the same error in
+            // an XML parameter-document is SEPM0017 (serialize-xml-023).
             if (key.Length != 1)
                 throw new InvalidOperationException(
                     $"SEPM0016: Character map key '{key}' must be a single character.");
@@ -698,7 +701,7 @@ internal static class XdmSerializer
             character ??= string.Empty;
             if (character.Length != 1)
                 throw new InvalidOperationException(
-                    $"SEPM0016: Character map key '{character}' must be a single character.");
+                    $"SEPM0017: Character map key '{character}' must be a single character.");
             if (result.ContainsKey(character))
                 throw new InvalidOperationException(
                     $"SEPM0018: Duplicate character map entry for '{character}'.");

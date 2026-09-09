@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 07-09-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 09-09-2026     | XQST0040 for duplicate expanded attribute names in direct element constructors           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -70,6 +71,16 @@ public static class StaticNameTestValidator
                || (_bindings is not null && _bindings.ContainsKey(prefix))
                || (_parent?.IsDeclared(prefix) ?? false)
                || _resolve(prefix) is not null;
+
+        /// <summary>Resolves a prefix to its namespace URI, or null when undeclared.</summary>
+        public string? Resolve(string prefix)
+        {
+            if (prefix == "xml")
+                return "http://www.w3.org/XML/1998/namespace";
+            if (_bindings is not null && _bindings.TryGetValue(prefix, out var uri))
+                return uri;
+            return _parent?.Resolve(prefix) ?? _resolve(prefix);
+        }
 
         /// <summary>Returns a child scope with additional local bindings (constructor xmlns attributes).</summary>
         public Scope Extend(IReadOnlyDictionary<string, string> bindings)
@@ -304,6 +315,23 @@ public static class StaticNameTestValidator
         // (XML namespace scoping; Constr-namespace-1/14).
         if (!string.IsNullOrEmpty(node.Prefix) && !inner.IsDeclared(node.Prefix))
             throw new InvalidOperationException($"XPST0081: Prefix '{node.Prefix}' is not declared.");
+
+        // XQST0040: two attributes in one direct element constructor must not have the same
+        // expanded QName — including differently-prefixed names bound to the same URI
+        // (Constr-attr-distnames-4, K2-DefaultNamespaceProlog-10). Unprefixed attribute
+        // names are in no namespace.
+        var seenAttributes = new HashSet<(string NamespaceUri, string LocalName)>();
+        foreach (var attr in node.Attributes)
+        {
+            if (attr.Prefix == "xmlns" || (attr.Prefix is null && attr.Name == "xmlns"))
+                continue;
+            string attrNs = attr.Prefix is null ? "" : inner.Resolve(attr.Prefix) ?? ("undeclared:" + attr.Prefix);
+            if (!seenAttributes.Add((attrNs, attr.Name)))
+            {
+                string lexical = attr.Prefix is null ? attr.Name : attr.Prefix + ":" + attr.Name;
+                throw new InvalidOperationException($"XQST0040: Duplicate attribute '{lexical}' in a direct element constructor.");
+            }
+        }
 
         foreach (var attr in node.Attributes)
         {

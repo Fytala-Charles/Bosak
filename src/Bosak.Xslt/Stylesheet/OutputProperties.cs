@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 1.9   | 26-08-2026     | Added MergeChecked for XTSE1560 conflicting xsl:output attribute detection                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.0   | 28-08-2026     | Added DefaultHtmlVersion processor default for HTML version fallback.                    |
+//                      | Charles Korthout | 2.1   | 09-09-2026     | fn:transform character-map key error uses SEPM0017                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1217,7 +1218,7 @@ public sealed class OutputProperties
             string key = keyValue.StringValue;
             if (key.Length != 1)
                 throw new InvalidOperationException(
-                    $"SEPM0016: fn:transform use-character-maps key '{key}' must be a single character.");
+                    $"SEPM0017: fn:transform use-character-maps key '{key}' must be a single character.");
 
             var valueValue = AtomizeOptionValue(kvp.Value);
             if (valueValue.Kind != XdmValueKind.String || IsUntypedAtomic(valueValue))

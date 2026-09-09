@@ -114,6 +114,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.54  | 07-09-2026     | Static errors: wildcard-QName trivia gaps, kind-test arguments, document-node content... |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.55  | 09-09-2026     | Operator/invalid tokens rejected as function names (K-NodeAfter/Before-5/7, K-FunctionCallExpr-9); empty-sequence() occurrence indicator is XPST0003 (K-QuantExprWith-7/8); typed function test requires 'as' return type (hof-910) |
+//                      | Charles Korthout | 1.56  | 09-09-2026     | Integer literals beyond long range tagged IsIntegerLiteral (stay xs:integer)             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1958,7 +1961,7 @@ public sealed class XPathParser
             if (long.TryParse(str, out var val))
                 node = new IntegerLiteralNode(val);
             else if (decimal.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out var decVal))
-                node = new DecimalLiteralNode(decVal);
+                node = new DecimalLiteralNode(decVal, IsIntegerLiteral: true);
             else
                 node = new DoubleLiteralNode(double.Parse(str, CultureInfo.InvariantCulture));
             Advance();
@@ -2015,7 +2018,9 @@ public sealed class XPathParser
                 if (long.TryParse(strI, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i))
                     nodeI = new IntegerLiteralNode(i);
                 else if (decimal.TryParse(strI, NumberStyles.Float, CultureInfo.InvariantCulture, out var decI))
-                    nodeI = new DecimalLiteralNode(decI);
+                    // An integer literal beyond the long range is still an xs:integer
+                    // (cbcl-numeric-multiply-026) — tag it so it is not typed xs:decimal.
+                    nodeI = new DecimalLiteralNode(decI, IsIntegerLiteral: true);
                 else
                     nodeI = new DoubleLiteralNode(double.Parse(strI, CultureInfo.InvariantCulture));
                 Advance();
@@ -2118,9 +2123,13 @@ public sealed class XPathParser
                 // followed by '(' or '#' in a primary-expression context (xquery30keywords5).
                 // Reserved function names (e.g., 'if', 'function', 'map', 'array') remain
                 // rejected; they are handled by dedicated grammar rules above.
+                // Only keyword tokens can act as names here: operator symbols ('<', '>',
+                // '<<', '>>') and invalid tokens are never function names — a digit-led or
+                // operator-led "call" such as 1fd() or >() is a syntax error (XPST0003,
+                // K-FunctionCallExpr-9, K-NodeAfter-5/7, K-NodeBefore-5/7).
                 {
                     var kwName = GetString(Current);
-                    if (Current.Kind != TokenKind.Name && !ReservedFunctionNames.Contains(kwName))
+                    if (IsKeywordName(Current.Kind) && !ReservedFunctionNames.Contains(kwName))
                     {
                         if (Peek(1).Kind == TokenKind.LParen)
                             return ParseFunctionCall(start);
@@ -3726,6 +3735,14 @@ public sealed class XPathParser
 
         var (prefix, local, _) = ParseTypeNameAndParens();
 
+        // "empty-sequence()" is a complete sequence type by itself; an occurrence
+        // indicator after it is a syntax error (K-QuantExprWith-7/8).
+        if (prefix is null && local == "empty-sequence()"
+            && Current.Kind is TokenKind.Question or TokenKind.Star or TokenKind.Plus)
+        {
+            throw new ParseException("XPST0003: empty-sequence() must not have an occurrence indicator.", Current.Start);
+        }
+
         OccurrenceIndicator occurrence = OccurrenceIndicator.One;
         if (Match(TokenKind.Question))
             occurrence = OccurrenceIndicator.ZeroOrOne;
@@ -3870,6 +3887,16 @@ public sealed class XPathParser
                 var parensContent = local[baseLocal.Length..];
                 if (parensContent is "()" or "(*)")
                     throw new ParseException("XPST0003: document() and document(*) are not valid sequence types.", Current.Start);
+            }
+
+            // A function test that lists argument types (anything other than the
+            // any-function form function(*)) is a TypedFunctionTest and requires an
+            // 'as' return type: a bare function(xs:integer) is a syntax error (hof-910).
+            if (local.StartsWith("function(", StringComparison.OrdinalIgnoreCase)
+                && !local.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
+                && Current.Kind != TokenKind.KeywordAs)
+            {
+                throw new ParseException("XPST0003: A function test with argument types requires an 'as' return type.", Current.Start);
             }
 
             // Function tests may have a return type: function(item()*) as xs:double

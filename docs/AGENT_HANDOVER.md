@@ -1,5 +1,27 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-09
+**Commit:** (pending) — fix(XPath/XQuery): REQ-082 QT3 residual backlog triage — 233 → 8 (QT3 31,134/8/679; XSLT 7,722/3/6,875 unchanged)
+**Current focus:** **REQ-082 QT3 residual backlog triaged: QT3 30,909/233/679 → 31,134/8/679 (97.84%), zero new failure names; ~225 tests fixed across ~20 error-code families. Remaining 8 are documented XPST0051 schema-type validation gaps. XSLT strict sweep unchanged 7,722/3/6,875; unit tests 2,216/0/0 across all nine projects; build 0/0.**
+**What was built:**
+- **Value-accessor family (~41):** `XdmValue.ThrowInvalidAccess` (Core 2.4) prefixes XPTY0004; fn:local-name-from-QName / namespace-uri-from-QName raise XPTY0117 for untypedAtomic arguments (FunctionLibrary 5.98).
+- **Numeric conversion family (~21):** untypedAtomic parse failures → FORG0001, other kinds → XPTY0004, via `NumericConversionError` in `VmEngine` (2.136) and `XdmValueComparer` (0.3).
+- **Sort comparer (11):** `List<T>.Sort` wrapper exception rethrows the original XPTY0004 in fn:sort / array:sort (`SortKeyed`) and FLWOR order-by (`CompareTuples` site).
+- **Collections (6):** default collection → FODC0002; relative collection URIs resolve against the static base URI and retry registered-collection lookups (`TryLookupRegisteredCollection`), so collection-006/007 now succeed.
+- **Constructor codes (~37):** computed element/attribute name atoms of wrong type → XPTY0004 (was XQDY0074); attribute xml/xmlns misuse → XQDY0044 (elements keep XQDY0096); PI target non-NCName → XQDY0041 (xml → XQDY0064); namespace prefix non-NCName → XQDY0074 (was XQDY0101); attribute in document-constructor content → XPTY0004 (element content keeps XQTY0024); duplicate direct-constructor attributes → static XQST0040 in `StaticNameTestValidator` (0.2, expanded-QName comparison incl. different prefixes bound to the same URI).
+- **JSON invalid-UTF-8 (13):** `fn:json-doc` decodes strictly via `DecodeBytes` + `DecodeJsonBytes` (undecodable → FOUT1200, satisfying both i_string_* and n_* cases); unknown encoding *names* are FOUT1190 (fn-unparsed-text-036/056).
+- **Validate (9):** XQDY0084 (strict root without top-level element declaration, checked via the schema set's GlobalElements — qischema90703's declared FpML root correctly stays XQDY0027) precedes XQDY0027; XQDY0061 operand-shape check precedes XQST0075.
+- **HOF/dynamic-call arity (8):** dynamic function-item invocation with wrong arity → XPTY0004 (was XPST0017); fn:apply pre-checks arity → FOAP0001.
+- **Parser statics (6):** operator tokens (`<`,`>`,`<<`,`>>`) and digit-led names rejected as function names (XPST0003); `(1 to 10)/count()` parses as a function-call step → XPST0017; `empty-sequence()` occurrence indicator → XPST0003; typed function test without `as` return type → XPST0003 (hof-910).
+- **Misc singles:** unsupplied external variable declarations → XPDY0002 (`EvaluationContext.UnsuppliedExternalVariables`, 2.22); duplicate schema-import target namespace → XQST0058; exponent-separator == digit sign → XQST0098; `fn:doc` invalid URI → FODC0005; idiv zero-divisor precedence → FOAR0001 (INF idiv 0); duration × ±INF → FODT0002 (NaN keeps FOCA0005); duration ÷ zero duration → FOAR0001; xs:error is a known empty type (cast → FORG0001, instance-of → false); dateTime/date → dateTimeStamp casts permitted (missing timezone → FORG0001); integer literals beyond long range keep xs:integer (`DecimalLiteralNode.IsIntegerLiteral`, distinct from true decimal literals — K2-FunctionProlog-5/6 still XPTY0004); fn:transform mutually exclusive options/invalid delivery-format → FOXT0002; parameter-document character-map multi-char key → SEPM0017 (map form keeps SEPM0016); FOTY0013 for map/function atomization scoped to arithmetic (`ValidateNumericOperand`) and value-comparison paths; fn:avg untypedAtomic cast failure → FORG0001; fn:unparsed-text(-lines) enforce xs:string args + ()-encoding XPTY0004; `SimpleMap` RegisterC encodes last/non-last step (XPTY0018 vs XPTY0019); grouping variable not in tuple stream → XQST0094; untypedAtomic→built-in cast failure in function conversion → FORG0001 (K2-FunctionProlog-24); `ToDateTimeOffset` range → FODT0001; harness `CompareError` matches the Q{uri}local expectation form (try-catch-fn-error-1).
+**Residuals (8, documented):** FunctionCall-027/032/033/034/039, K-FunctionProlog-57/58, instanceof117 — all XPST0051 declared-type validation for schema list/union types (list types in function signatures, `none` as a type name, constructor functions for schema-defined types); needs the schema-type static-context pass.
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216 tests); QT3 strict sweep `31,134/8/679`; XSLT strict `7,722/3/6,875`.
+**Next steps:** the 8 XPST0051 schema-type residuals (schema list/union types in signatures, `none` type name, schema-type constructor functions); then the ROADMAP Alpha→Beta strict-sweep item.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-07
 **Commit:** `4107ce8` — fix(XPath/XQuery): REQ-082 QT3 strict error-code triage — 1,200 exposed, ~970 fixed, 233 documented residuals
 **Current focus:** **REQ-082 QT3 strict follow-up COMPLETE for this session: QT3 29,948/1,200/673 (tightened baseline) → 30,909/233/679 (97.13%), zero new failure names; XSLT strict sweep unchanged 7,722/3/6,875; `dotnet test Bosak.sln` green (exit 0).**

@@ -44,6 +44,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.13  | 22-08-2026     | Added ValidateExpressionNode for XQuery validate expressions |
 //                      | Charles Korthout | 1.14  | 23-08-2026     | ValidateExpressionNode carries optional TypeName/TypePrefix for validate type QName |
+//                      | Charles Korthout | 1.15  | 09-09-2026     | DecimalLiteralNode gains IsIntegerLiteral flag                                           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.15  | 07-09-2026     | NodeTest carries KindTestInnerName for document-node(element|schema-element(...))        |
 //                      |==================|=======|================|=========================================================================================
@@ -75,7 +76,7 @@ public readonly record struct TextSpan(int Start, int Length)
 
 public sealed record BooleanLiteralNode(bool Value) : XPathAstNode;
 public sealed record IntegerLiteralNode(long Value) : XPathAstNode;
-public sealed record DecimalLiteralNode(decimal Value) : XPathAstNode;
+public sealed record DecimalLiteralNode(decimal Value, bool IsIntegerLiteral = false) : XPathAstNode;
 public sealed record DoubleLiteralNode(double Value) : XPathAstNode;
 public sealed record StringLiteralNode(string Value) : XPathAstNode;
 

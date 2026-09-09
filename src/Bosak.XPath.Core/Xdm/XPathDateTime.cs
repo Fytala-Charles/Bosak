@@ -11,6 +11,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 23-05-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 09-09-2026     | ToDateTimeOffset range failure carries FODT0001                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -64,7 +65,7 @@ public readonly struct XPathDateTime
     public DateTimeOffset ToDateTimeOffset()
     {
         if (!IsRepresentableAsDateTimeOffset)
-            throw new InvalidOperationException($"Year {Year} is outside the range supported by DateTimeOffset.");
+            throw new InvalidOperationException($"FODT0001: Year {Year} is outside the range supported by DateTimeOffset.");
 
         var offset = TimeSpan.FromMinutes(TimezoneOffsetMinutes);
         return new DateTimeOffset((int)Year, Month, Day, Hour, Minute, Second, Millisecond, offset);

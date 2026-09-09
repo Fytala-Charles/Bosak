@@ -53,6 +53,7 @@
 //                      |                  |       |                | CompareError (REQ-082 QT3 follow-up)                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.7   | 07-09-2026     | CompareError matches XPathErrorException.CodeLocalName structurally (FOER0000 family)   |
+//                      | Charles Korthout | 2.8   | 09-09-2026     | CompareError matches Q{uri}local expectation form against XPathErrorException structured |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -327,8 +328,15 @@ internal static class ResultComparer
         // code explicitly — its Message is the description only (FOER0000 family).
         for (Exception? cur = caughtException; cur is not null; cur = cur.InnerException)
         {
-            if (cur is XPathErrorException xee &&
-                xee.CodeLocalName.Equals(expectedCode, StringComparison.OrdinalIgnoreCase))
+            if (cur is not XPathErrorException xee)
+                continue;
+            if (xee.CodeLocalName.Equals(expectedCode, StringComparison.OrdinalIgnoreCase))
+                return new TestOutcome(TestOutcomeKind.Passed, null);
+            // EQName expectation form Q{uri}local matches the structured code's namespace + local.
+            if (expectedCode.StartsWith("Q{", StringComparison.Ordinal)
+                && expectedCode.IndexOf('}') is int closeBrace && closeBrace > 2
+                && xee.CodeNamespaceUri.Equals(expectedCode[2..closeBrace], StringComparison.Ordinal)
+                && xee.CodeLocalName.Equals(expectedCode[(closeBrace + 1)..], StringComparison.OrdinalIgnoreCase))
                 return new TestOutcome(TestOutcomeKind.Passed, null);
         }
 

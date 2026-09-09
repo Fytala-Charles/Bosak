@@ -88,6 +88,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.38  | 07-09-2026     | Emit CheckFunction before call arguments (XPST0017 precedence); document-node argumen... |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.39  | 09-09-2026     | Hoist CheckFunction for static calls in non-first path steps so XPST0017 precedes the SimpleMap XPTY0019 node check (K2-SeqCountFunc-1) |
+//                      | Charles Korthout | 1.40  | 09-09-2026     | SimpleMap RegisterC encodes last/non-last step (XPTY0018/0019); XQST0094 for unbound gro |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core;
@@ -361,7 +364,9 @@ public sealed class IrLowerer
     private int LowerDecimalLiteral(DecimalLiteralNode node, int? targetReg)
     {
         int reg = targetReg ?? AllocRegister();
-        int poolIdx = AddToLiteralPool(node.Value);
+        // Integer literals beyond the long range keep their xs:integer type annotation
+        // (they are not xs:decimal literals).
+        int poolIdx = AddToLiteralPool(node.IsIntegerLiteral ? (node.Value, "integer") : node.Value);
         Emit(IrOpCode.LoadDecimal, (ushort)reg, operand: poolIdx);
         return reg;
     }
@@ -1064,8 +1069,10 @@ public sealed class IrLowerer
         }
 
         bool isFirstStep = true;
-        foreach (var step in node.Steps)
+        for (int stepIndex = 0; stepIndex < node.Steps.Count; stepIndex++)
         {
+            var step = node.Steps[stepIndex];
+            bool isLastStep = stepIndex == node.Steps.Count - 1;
             if (step is StepNode stepNode)
             {
                 // The first step applies to the ambient context item (XPTY0020 for
@@ -1084,11 +1091,24 @@ public sealed class IrLowerer
                 }
                 else
                 {
+                    // A static function call in step position: resolve the callee before
+                    // the per-item SimpleMap so an unknown function raises XPST0017 (a
+                    // static error) ahead of the XPTY0019 node check on the step input
+                    // (K2-SeqCountFunc-1: (1 to 10)/count()).
+                    if (step is FunctionCallNode stepCall
+                        && !stepCall.Arguments.Any(a => a is ArgumentPlaceholderNode))
+                    {
+                        EmitCheckFunction(stepCall);
+                    }
+
                     // Subsequent non-axis step: evaluate per-item using SimpleMap
-                    // semantics (e.g., /a/b/number(), /a/b/(1+2))
+                    // semantics (e.g., /a/b/number(), /a/b/(1+2)).
+                    // RegisterC: 1 = last step (mixed nodes/non-nodes is XPTY0018);
+                    // 2 = non-last step (any non-node item is XPTY0019).
+                    ushort pathResultMode = isLastStep ? (ushort)1 : (ushort)2;
                     int mapResultReg = AllocRegister();
                     int mapInstrIdx = _instructions.Count;
-                    Emit(IrOpCode.SimpleMap, (ushort)mapResultReg, (ushort)currentReg, 1, 0); // placeholder; RegisterC=1 => enforce XPTY0018
+                    Emit(IrOpCode.SimpleMap, (ushort)mapResultReg, (ushort)currentReg, pathResultMode, 0); // placeholder
 
                     int jumpInstrIdx = _instructions.Count;
                     Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
@@ -1099,7 +1119,7 @@ public sealed class IrLowerer
                     FreeRegister(rhsReg);
 
                     int afterRhs = _instructions.Count;
-                    PatchInstruction(mapInstrIdx, IrOpCode.SimpleMap, (ushort)mapResultReg, (ushort)currentReg, 1, rhsEntry);
+                    PatchInstruction(mapInstrIdx, IrOpCode.SimpleMap, (ushort)mapResultReg, (ushort)currentReg, pathResultMode, rhsEntry);
                     PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
 
                     FreeRegister(currentReg);
@@ -1122,6 +1142,28 @@ public sealed class IrLowerer
         }
 
         return currentReg;
+    }
+
+    /// <summary>
+    /// Emits a CheckFunction instruction for a static call target so the callee is
+    /// resolved (XPST0017 when unknown) independently of the surrounding evaluation.
+    /// </summary>
+    /// <param name="node">The static function call to check.</param>
+    private void EmitCheckFunction(FunctionCallNode node)
+    {
+        int funcPoolIdx;
+        if (!string.IsNullOrEmpty(node.NamespaceUri))
+        {
+            funcPoolIdx = AddToLiteralPool((node.LocalName, node.NamespaceUri));
+        }
+        else
+        {
+            string qname = string.IsNullOrEmpty(node.Prefix)
+                ? node.LocalName
+                : $"{node.Prefix}:{node.LocalName}";
+            funcPoolIdx = AddToLiteralPool(qname);
+        }
+        Emit(IrOpCode.CheckFunction, 0, 0, (ushort)node.Arguments.Count, funcPoolIdx);
     }
 
     private int LowerStep(StepNode node, int contextReg, bool hasLhs = false)
@@ -2080,8 +2122,10 @@ public sealed class IrLowerer
         foreach (var spec in groupByClause.Specs)
         {
             int index = boundVariables.FindLastIndex(v => v.Name == spec.VariableName && v.NamespaceUri == spec.NamespaceUri);
+            // XQST0094: the grouping variable must be one of the tuple-stream variables
+            // (a variable bound only outside the FLWOR is not a grouping variable).
             if (index < 0)
-                throw new InvalidOperationException($"XPST0008: Grouping variable '${spec.VariableName}' is not bound in the FLWOR expression.");
+                throw new InvalidOperationException($"XQST0094: Grouping variable '${spec.VariableName}' is not bound in the FLWOR expression.");
             keyIndices.Add(index);
             collations.Add(spec.CollationUri);
             declaredTypeNames.Add(spec.DeclaredType is null

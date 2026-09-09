@@ -48,6 +48,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 03-09-2026     | Warning-free build: CA1831 AsSpan instead of Range string indexer                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 09-09-2026     | Typed function test (args other than '*') requires an 'as' return type (hof-910)      |
+//                      | Charles Korthout | 1.12  | 09-09-2026     | XQST0098 for exponent-separator == digit sign; XQST0058 for duplicate schema-import targ |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -361,6 +364,13 @@ public sealed class XQueryParser
             context = context.WithNamespace(importPrefix, importNs);
         else if (isDefaultElementNamespace)
             context = context.WithDefaultElementNamespace(importNs);
+        // XQST0058: a prolog must not contain two schema imports with the same target
+        // namespace (schema-import-2, XQST0058 in misc-CombinedErrorCodes).
+        foreach (var existing in context.ImportedSchemas)
+        {
+            if (string.Equals(existing.NamespaceUri ?? "", importNs, StringComparison.Ordinal))
+                throw new ParseException($"XQST0058: More than one schema import specifies the target namespace '{importNs}'.", _position);
+        }
         context = context.WithImportedSchema(new SchemaImport(importPrefix, importNs, locationHints, _position));
         return true;
     }
@@ -719,6 +729,10 @@ public sealed class XQueryParser
             throw new ParseException("XQST0098: The decimal-separator and grouping-separator must be different characters and must not be digits.", _position);
         if (format.ExponentSeparator == format.Percent || format.ExponentSeparator == format.PerMille)
             throw new ParseException("XQST0098: The exponent-separator must not be the percent or per-mille character.", _position);
+        // numberformat126: the exponent-separator must not be the digit sign either
+        // (it would be ambiguous with a mandatory-digit placeholder in a picture).
+        if (format.ExponentSeparator == format.Digit)
+            throw new ParseException("XQST0098: The exponent-separator must not be the digit sign.", _position);
 
         RegisterDecimalFormat(ref context, isDefault, fmtLocal, fmtNs, format);
     }
@@ -1422,6 +1436,7 @@ public sealed class XQueryParser
             throw new ParseException("XPST0003: Expected item type.", _position);
         var itemTypeName = _source[nameStart.._position];
         // Optional parenthesized arguments: (), (*), (element-name), (*:name), etc.
+        bool isTypedFunctionTest = false;
         SkipWhitespace();
         if (_position < _source.Length && _source[_position] == '(')
         {
@@ -1448,6 +1463,14 @@ public sealed class XQueryParser
                 if (badOccurrence || badStar)
                     throw new ParseException($"XPST0003: An occurrence indicator ('*' or '+') is not allowed inside the {itemTypeName}() type.", nameStart);
             }
+            // A function test that lists argument types (anything other than the
+            // any-function form function(*)) is a TypedFunctionTest and requires an
+            // 'as' return type (hof-910).
+            if (itemTypeName == "function"
+                && _source[contentStart..(_position - 1)].Trim() != "*")
+            {
+                isTypedFunctionTest = true;
+            }
         }
         // Function tests may carry a return type: function(xs:integer) as xs:integer.
         SkipWhitespace();
@@ -1455,6 +1478,10 @@ public sealed class XQueryParser
         {
             SkipWhitespace();
             ReadSequenceTypeText();
+        }
+        else if (isTypedFunctionTest)
+        {
+            throw new ParseException("XPST0003: A function test with argument types requires an 'as' return type.", nameStart);
         }
     }
 

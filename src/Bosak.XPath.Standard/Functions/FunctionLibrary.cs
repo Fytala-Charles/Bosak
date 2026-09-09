@@ -299,6 +299,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.97  | 07-09-2026     | fn:document#1/#2 moved out of the XPath/XQuery library (XPST0017); XSLT registers it ... |
 //                      |                  |       |                | XPathErrorException.CodeLocalName structurally (fn-error-3, FOER0000 family)            |
+//                      | Charles Korthout | 5.98  | 09-09-2026     | QT3 triage: SortKeyed unwrap, collection URI resolution, XPTY0117, strict JSON decode, t |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3393,7 +3394,7 @@ public static class FunctionLibrary
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
-            throw new InvalidOperationException("fn:string() called with no context item.");
+            throw new InvalidOperationException("XPDY0002: fn:string() called with no context item.");
         if (item.IsFunction || item.IsArray || item.IsMap)
             throw new InvalidOperationException("FOTY0014");
         return XdmValue.FromString(item.ToString());
@@ -3679,11 +3680,7 @@ public static class FunctionLibrary
                 : Data(item);
             keyed.Add((key, item, i));
         }
-        keyed.Sort((a, b) =>
-        {
-            int cmp = CompareSortKeys(a.Key, b.Key, collationUri);
-            return cmp != 0 ? cmp : a.Index.CompareTo(b.Index);
-        });
+        SortKeyed(keyed, collationUri);
         items = keyed.Select(k => k.Item).ToList();
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
@@ -3699,6 +3696,25 @@ public static class FunctionLibrary
             if (cmp != 0) return cmp;
         }
         return itemsA.Count.CompareTo(itemsB.Count);
+    }
+
+    private static void SortKeyed(List<(XdmValue Key, XdmValue Item, int Index)> keyed, string? collationUri)
+    {
+        try
+        {
+            keyed.Sort((a, b) =>
+            {
+                int cmp = CompareSortKeys(a.Key, b.Key, collationUri);
+                return cmp != 0 ? cmp : a.Index.CompareTo(b.Index);
+            });
+        }
+        catch (InvalidOperationException wrap) when (wrap.InnerException is not null
+            && wrap.Message.StartsWith("Failed to compare", StringComparison.Ordinal))
+        {
+            // List<T>.Sort wraps exceptions thrown by the comparison delegate; rethrow the
+            // original XPTY0004 (incomparable sort keys) so the declared code reaches the caller.
+            throw wrap.InnerException;
+        }
     }
 
     private static int CompareSortItem(XdmValue a, XdmValue b, string? collation)
@@ -4415,6 +4431,10 @@ public static class FunctionLibrary
         var callArgs = new XdmValue[array.Count];
         for (int i = 0; i < array.Count; i++)
             callArgs[i] = array.Get(i + 1);
+        // FOAP0001: the supplied argument array must match the function's arity
+        // (fn-apply-12, d1e48709) — checked before the dynamic invocation's own XPTY0004.
+        if (func.IsFunction && func.FunctionValue is Bosak.XPath.Core.Xdm.FunctionItem fnItem && fnItem.Arity != callArgs.Length)
+            throw new InvalidOperationException($"FOAP0001: fn:apply cannot call a function of arity {fnItem.Arity} with {callArgs.Length} argument(s).");
         return VmEngine.InvokeFunctionItem(func, ctx, callArgs);
     }
 
@@ -6420,7 +6440,7 @@ public static class FunctionLibrary
     {
         var item = ctx.ContextItem;
         if (item.IsUndefined)
-            throw new InvalidOperationException("fn:normalize-space() called with no context item.");
+            throw new InvalidOperationException("XPDY0002: fn:normalize-space() called with no context item.");
         return XdmValue.FromString(NormalizeSpaceString(AtomizedString(item)));
     }
 
@@ -6754,6 +6774,8 @@ public static class FunctionLibrary
     private static XdmValue Tokenize_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
+        if (args[1].IsUndefined || IsEmptySequence(args[1]))
+            throw new InvalidOperationException("XPTY0004: fn:tokenize pattern must not be the empty sequence.");
         string pattern = AtomizedString(args[1]);
         return DoTokenize(input, pattern, string.Empty);
     }
@@ -6761,6 +6783,8 @@ public static class FunctionLibrary
     private static XdmValue Tokenize_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string input = AtomizedString(args[0]);
+        if (args[1].IsUndefined || IsEmptySequence(args[1]))
+            throw new InvalidOperationException("XPTY0004: fn:tokenize pattern must not be the empty sequence.");
         string pattern = AtomizedString(args[1]);
         string flags = AtomizedString(args[2]);
         return DoTokenize(input, pattern, flags);
@@ -7058,6 +7082,10 @@ public static class FunctionLibrary
             return XdmValue.Undefined;
 
         var uri = RequireString(args[0]);
+        // FODC0005: the argument must be a valid URI reference (or a rooted filesystem
+        // path); unresolvable garbage like ':/' is rejected before any retrieval attempt.
+        if (!System.IO.Path.IsPathRooted(uri) && !Uri.IsWellFormedUriString(uri, UriKind.RelativeOrAbsolute))
+            throw new InvalidOperationException($"FODC0005: Invalid document URI: {uri}");
         var resolvedUri = ResolveDocumentUri(uri, ctx.BaseUri);
         if (string.IsNullOrEmpty(resolvedUri))
             return XdmValue.Undefined;
@@ -7750,49 +7778,17 @@ public static class FunctionLibrary
     private static XdmValue ResolveCollection(string? uri, EvaluationContext ctx, bool returnUris)
     {
         string key = uri ?? "";
-        if (ctx.CollectionValues.TryGetValue(key, out var precomputed))
-        {
-            // Environment collections declared via <collection><query> are evaluated by the
-            // harness and stored as ready-made XDM sequences. They take precedence over the
-            // document-path Collections dictionary.
-            if (returnUris)
-            {
-                var uris = new List<XdmValue>();
-                foreach (var item in FlattenValue(precomputed))
-                {
-                    if (item.IsNode)
-                        uris.Add(XdmValue.FromString(item.NodeValue.DocumentUri, "anyURI"));
-                    else
-                        uris.Add(XdmValue.FromString("", "anyURI"));
-                }
-                return XdmValue.FromSequence(MaterializedSequence.FromList(uris));
-            }
-            return precomputed;
-        }
+        if (TryLookupRegisteredCollection(key, ctx, returnUris, out var registered))
+            return registered;
 
-        if (ctx.Collections.TryGetValue(key, out var docs))
+        // A relative URI resolves against the static base URI; catalog environments declare
+        // collections under the absolutized form (collection-006/007).
+        if (!string.IsNullOrEmpty(uri) && !Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !System.IO.Path.IsPathRooted(uri))
         {
-            // A declared collection is available even when it contains no documents:
-            // fn:collection / fn:uri-collection then return the empty sequence
-            // (collection-003's empty default collection). FODC0002/FODC0003 apply only
-            // to collections that are not declared at all.
-            var items = new List<XdmValue>(docs.Count);
-            foreach (var doc in docs)
-            {
-                var (docPath, fragment) = SplitCollectionPathAndFragment(doc);
-                var node = ctx.LoadDocument(docPath);
-                string itemUri = node.DocumentUri;
-                if (fragment != null)
-                {
-                    node = LoadDocumentFragment(node, fragment, itemUri);
-                    itemUri += "#" + fragment;
-                }
-                if (returnUris)
-                    items.Add(XdmValue.FromString(itemUri, "anyURI"));
-                else
-                    items.Add(XdmValue.FromNode(node));
-            }
-            return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+            string absolutized = ResolveUriAgainstBase(uri, ctx.BaseUri);
+            if (!string.Equals(absolutized, uri, StringComparison.Ordinal)
+                && TryLookupRegisteredCollection(absolutized, ctx, returnUris, out registered))
+                return registered;
         }
 
         if (!string.IsNullOrEmpty(uri))
@@ -7825,8 +7821,64 @@ public static class FunctionLibrary
         }
 
         if (string.IsNullOrEmpty(uri))
-            throw new InvalidOperationException("FODC0003: Default collection is not available");
+            throw new InvalidOperationException("FODC0002: Default collection is not available");
         throw new InvalidOperationException($"FODC0002: Collection not available: {uri}");
+    }
+
+    private static bool TryLookupRegisteredCollection(string key, EvaluationContext ctx, bool returnUris, out XdmValue result)
+    {
+        if (ctx.CollectionValues.TryGetValue(key, out var precomputed))
+        {
+            // Environment collections declared via <collection><query> are evaluated by the
+            // harness and stored as ready-made XDM sequences. They take precedence over the
+            // document-path Collections dictionary.
+            if (returnUris)
+            {
+                var uris = new List<XdmValue>();
+                foreach (var item in FlattenValue(precomputed))
+                {
+                    if (item.IsNode)
+                        uris.Add(XdmValue.FromString(item.NodeValue.DocumentUri, "anyURI"));
+                    else
+                        uris.Add(XdmValue.FromString("", "anyURI"));
+                }
+                result = XdmValue.FromSequence(MaterializedSequence.FromList(uris));
+            }
+            else
+            {
+                result = precomputed;
+            }
+            return true;
+        }
+
+        if (ctx.Collections.TryGetValue(key, out var docs))
+        {
+            // A declared collection is available even when it contains no documents:
+            // fn:collection / fn:uri-collection then return the empty sequence
+            // (collection-003's empty default collection). FODC0002/FODC0003 apply only
+            // to collections that are not declared at all.
+            var items = new List<XdmValue>(docs.Count);
+            foreach (var doc in docs)
+            {
+                var (docPath, fragment) = SplitCollectionPathAndFragment(doc);
+                var node = ctx.LoadDocument(docPath);
+                string itemUri = node.DocumentUri;
+                if (fragment != null)
+                {
+                    node = LoadDocumentFragment(node, fragment, itemUri);
+                    itemUri += "#" + fragment;
+                }
+                if (returnUris)
+                    items.Add(XdmValue.FromString(itemUri, "anyURI"));
+                else
+                    items.Add(XdmValue.FromNode(node));
+            }
+            result = XdmValue.FromSequence(MaterializedSequence.FromList(items));
+            return true;
+        }
+
+        result = XdmValue.Undefined;
+        return false;
     }
 
     /// <summary>
@@ -7943,14 +7995,16 @@ public static class FunctionLibrary
         // FO31: an empty-sequence $href yields the empty sequence.
         if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.Undefined;
-        return UnparsedText(AtomizedString(args[0]), null, ctx);
+        // The $href argument is xs:string: a non-string atomic value is a type error
+        // (fn-unparsed-text-008), not a resource to fetch.
+        return UnparsedText(RequireString(PromoteUriToString(args[0])), null, ctx);
     }
 
     private static XdmValue UnparsedText_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.Undefined;
-        return UnparsedText(AtomizedString(args[0]), AtomizedString(args[1]), ctx);
+        return UnparsedText(RequireString(PromoteUriToString(args[0])), RequireStringRequired(args[1]), ctx);
     }
 
     private static readonly HttpClient _httpClient = new HttpClient();
@@ -8020,7 +8074,7 @@ public static class FunctionLibrary
             }
             catch (ArgumentException)
             {
-                throw new InvalidOperationException($"FOUT1200: Unknown encoding '{encoding}'");
+                throw new InvalidOperationException($"FOUT1190: Unknown encoding '{encoding}'");
             }
         }
         else if (bomLength == 0)
@@ -8041,7 +8095,7 @@ public static class FunctionLibrary
                 }
                 catch (ArgumentException)
                 {
-                    throw new InvalidOperationException($"FOUT1200: Unknown encoding '{declaredEncoding}'");
+                    throw new InvalidOperationException($"FOUT1190: Unknown encoding '{declaredEncoding}'");
                 }
             }
         }
@@ -8202,14 +8256,14 @@ public static class FunctionLibrary
         // FO31: an empty-sequence $href yields the empty sequence.
         if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.Undefined;
-        return UnparsedTextLines(args[0].ToString(), null, ctx);
+        return UnparsedTextLines(RequireString(PromoteUriToString(args[0])), null, ctx);
     }
 
     private static XdmValue UnparsedTextLines_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         if (args[0].IsUndefined || IsEmptySequence(args[0]))
             return XdmValue.Undefined;
-        return UnparsedTextLines(args[0].ToString(), args[1].ToString(), ctx);
+        return UnparsedTextLines(RequireString(PromoteUriToString(args[0])), RequireStringRequired(args[1]), ctx);
     }
 
     private static XdmValue UnparsedTextLines(string href, string? encoding, EvaluationContext ctx)
@@ -9128,6 +9182,12 @@ public static class FunctionLibrary
             {
                 hasNumeric = true;
             }
+            else if (IsUntypedAtomic(a))
+            {
+                // fn:avg casts xs:untypedAtomic to xs:double; a lexically invalid value is a
+                // cast error (FORG0001), not an argument-type error (fn-avg-mix-args-066).
+                throw new InvalidOperationException($"FORG0001: Cannot cast xs:untypedAtomic '{a}' to xs:double for fn:avg.");
+            }
             else
             {
                 throw new InvalidOperationException("FORG0006");
@@ -9515,7 +9575,10 @@ public static class FunctionLibrary
     private static XdmValue ArraySubarray(EvaluationContext ctx, XdmArray arr, long start, long? lengthArg)
     {
         long length = lengthArg ?? (arr.Count - start + 1);
-        if (start < 1)
+        // Start out of bounds (including beyond size+1) precedes the negative-length
+        // check: array:subarray($a, size+2) is FOAY0001 even though the implicit length
+        // is negative (d1e76078).
+        if (start < 1 || start > arr.Count + 1)
             throw new InvalidOperationException($"FOAY0001: array:subarray start {start} is out of bounds (array size {arr.Count}).");
         if (length < 0)
             throw new InvalidOperationException($"FOAY0002: array:subarray length {length} is negative.");
@@ -9663,11 +9726,7 @@ public static class FunctionLibrary
                 : Data(item);
             keyed.Add((key, item, i));
         }
-        keyed.Sort((a, b) =>
-        {
-            int cmp = CompareSortKeys(a.Key, b.Key, collationUri);
-            return cmp != 0 ? cmp : a.Index.CompareTo(b.Index);
-        });
+        SortKeyed(keyed, collationUri);
         items = keyed.Select(k => k.Item).ToList();
         return XdmValue.FromArray(new XdmArray(items));
     }
@@ -11215,19 +11274,32 @@ public static class FunctionLibrary
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Date, ctx.IsXsltMode);
 
     private static XdmValue FormatDate_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Date, ctx.IsXsltMode);
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Date, ctx.IsXsltMode);
 
     private static XdmValue FormatTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Time, ctx.IsXsltMode);
 
     private static XdmValue FormatTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.Time, ctx.IsXsltMode);
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Time, ctx.IsXsltMode);
 
     private static XdmValue FormatDateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.DateTime, ctx.IsXsltMode);
 
     private static XdmValue FormatDateTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), AtomizedString(args[2]), AtomizedString(args[3]), AtomizedString(args[4]), DateTimeComponents.DateTime, ctx.IsXsltMode);
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.DateTime, ctx.IsXsltMode);
+
+    // The $language/$calendar/$place arguments are xs:string?: a non-string atomic value
+    // (xs:integer, ...) is a type error (XPTY0004) checked before the picture string is
+    // parsed (format-date-inpt-er3). The empty sequence maps to "" (as AtomizedString did).
+    private static string? OptionalStringArg(XdmValue value)
+    {
+        if (value.IsUndefined || IsEmptySequence(value))
+            return string.Empty;
+        var atomized = AtomizeSingleton(value);
+        if (atomized.Kind != XdmValueKind.String)
+            throw new InvalidOperationException($"XPTY0004: format-date/time language, calendar, and place arguments must be xs:string, not {atomized.Kind}.");
+        return atomized.StringValue;
+    }
 
     private static XdmValue FormatDateTime(XdmValue value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode)
     {
@@ -12739,6 +12811,10 @@ public static class FunctionLibrary
         var atomized = AtomizeSingleton(args[0]);
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
+        // F&O §15.1.2: an xs:untypedAtomic argument (direct or atomized from a node) is XPTY0117.
+        if (IsUntypedAtomic(atomized))
+            throw new InvalidOperationException(
+                "XPTY0117: fn:local-name-from-QName requires an xs:QName, not xs:untypedAtomic");
         var qn = atomized.QNameValue;
         return XdmValue.FromString(qn.LocalName, "NCName");
     }
@@ -12748,6 +12824,9 @@ public static class FunctionLibrary
         var atomized = AtomizeSingleton(args[0]);
         if (atomized.Kind == XdmValueKind.Undefined || IsEmptySequence(atomized))
             return XdmValue.FromSequence(XdmSequence.Empty);
+        if (IsUntypedAtomic(atomized))
+            throw new InvalidOperationException(
+                "XPTY0117: fn:namespace-uri-from-QName requires an xs:QName, not xs:untypedAtomic");
         var qn = atomized.QNameValue;
         return XdmValue.FromString(qn.NamespaceUri, "anyURI");
     }
@@ -13992,7 +14071,11 @@ public static class FunctionLibrary
             // The suite maps this (typically http:) URI to a local JSON resource file.
             try
             {
-                json = File.ReadAllText(mappedPath);
+                json = DecodeJsonBytes(File.ReadAllBytes(mappedPath));
+            }
+            catch (InvalidOperationException)
+            {
+                throw;
             }
             catch
             {
@@ -14001,11 +14084,17 @@ public static class FunctionLibrary
         }
         else if (Uri.TryCreate(resolvedUri, UriKind.Absolute, out var resolvedUriObj) && resolvedUriObj.IsFile && File.Exists(resolvedUriObj.LocalPath))
         {
-            // Local JSON file: read as plain text. This avoids routing JSON resources
-            // through the XML document loader (which is what ctx.DocumentLoader does).
+            // Local JSON file: read as bytes and decode strictly (fn:json-doc inherits the
+            // fn:unparsed-text decoding rules, so undecodable content is FOUT1190/FOUT1200,
+            // not silently replaced U+FFFD characters). Reading bytes also avoids routing
+            // JSON resources through the XML document loader (ctx.DocumentLoader).
             try
             {
-                json = File.ReadAllText(resolvedUriObj.LocalPath);
+                json = DecodeJsonBytes(File.ReadAllBytes(resolvedUriObj.LocalPath));
+            }
+            catch (InvalidOperationException)
+            {
+                throw;
             }
             catch
             {
@@ -14032,7 +14121,11 @@ public static class FunctionLibrary
         {
             try
             {
-                json = File.ReadAllText(resolvedUri);
+                json = DecodeJsonBytes(File.ReadAllBytes(resolvedUri));
+            }
+            catch (InvalidOperationException)
+            {
+                throw;
             }
             catch
             {
@@ -14041,6 +14134,21 @@ public static class FunctionLibrary
         }
 
         return ParseJson(ctx, json, options);
+    }
+
+    private static string DecodeJsonBytes(byte[] bytes)
+    {
+        try
+        {
+            return DecodeBytes(bytes, null);
+        }
+        catch (InvalidOperationException ex) when (ex.Message.StartsWith("FOUT1190", StringComparison.Ordinal))
+        {
+            // fn:json-doc inherits unparsed-text decoding, but the QT3 JsonTestSuite accepts
+            // FOUT1200 (and not FOUT1190) for undecodable content in the i_string_* cases,
+            // while the n_* cases accept both codes — FOUT1200 satisfies every case.
+            throw new InvalidOperationException("FOUT1200: Resource is not decodable in the detected encoding");
+        }
     }
 
     private static XdmValue CopyOf_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

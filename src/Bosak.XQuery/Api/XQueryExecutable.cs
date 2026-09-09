@@ -45,6 +45,7 @@
 //                      | Charles Korthout | 2.6   | 22-08-2026     | BuildSchemaSet can merge an existing schema set and skip duplicate namespaces (fn:load-xquery-module schema propagation) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.7   | 07-09-2026     | Circular variable dependency raises XQDY0054 (XQuery 3.1 §4.15 dynamic detection)         |
+//                      | Charles Korthout | 2.8   | 09-09-2026     | Register unsupplied external variable declarations (XPDY0002 on reference)               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -462,6 +463,14 @@ public sealed class XQueryExecutable
                 }
                 return previousResolver?.Invoke(local, ns);
             };
+        }
+
+        // External declarations without a default value and without a host-supplied value
+        // are recorded so a later reference raises XPDY0002 (dynamic) instead of XPST0008.
+        foreach (var v in _userVariables)
+        {
+            if (v.IsExternal && v.Body is null && !ctx.TryGetVariable(v.LocalName, out _, v.NamespaceUri))
+                ctx.UnsuppliedExternalVariables.Add((v.LocalName, v.NamespaceUri));
         }
 
         // External variables with a declared type: the supplied value is checked strictly

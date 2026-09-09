@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.4   | 25-08-2026     | FODF1310 for duplicate percent/per-mille or percent+per-mille in a subpicture             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 31-08-2026     | FODF1310 occurrence counts only on format token, ignoring prefix/suffix (numberformat143) |
+//                      | Charles Korthout | 0.6   | 09-09-2026     | Percent/per-mille scaling overflow raises FOCA0001                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -615,8 +616,18 @@ internal static class FormatNumberEngine
         else
         {
             num = ToDecimal(value);
-            if (sub.HasPercent) num *= 100m;
-            if (sub.HasPerMille) num *= 1000m;
+            try
+            {
+                if (sub.HasPercent) num *= 100m;
+                if (sub.HasPerMille) num *= 1000m;
+            }
+            catch (OverflowException)
+            {
+                // Scaling a decimal at the top of the range overflows; per F&O fn:format-number
+                // this is FOCA0001 (input cannot be represented as a decimal), not the generic
+                // FOAR0002 arithmetic overflow (cbcl-fn-format-number-017/037).
+                throw new InvalidOperationException("FOCA0001: The value cannot be represented as a decimal for fn:format-number.");
+            }
         }
 
         string signPrefix = "";

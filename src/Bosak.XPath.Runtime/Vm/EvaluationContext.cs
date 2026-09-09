@@ -70,6 +70,7 @@
 //                      | Charles Korthout | 2.20  | 05-09-2026     | LoadDocument registers loaded trees so cross-tree document order follows load order (evaluate-002) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.21  | 05-09-2026     | Document cache keyed by (URI, DocumentLoadPolicy) so XSLT packages keep distinct stripped trees (document-2401/2402, collection-006) |
+//                      | Charles Korthout | 2.22  | 09-09-2026     | Added UnsuppliedExternalVariables (XPDY0002 for declared-but-unbound externals)          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -139,6 +140,13 @@ public sealed class EvaluationContext
     /// <c>xsl:evaluate</c> to supply a restricted function library.
     /// </summary>
     public bool SkipStandardFunctionPopulation { get; set; }
+
+    /// <summary>
+    /// Names of variables declared <c>external</c> in the XQuery prolog for which the host
+    /// supplied no value and no default exists. Referencing such a variable is a dynamic
+    /// error (XPDY0002), not a static "not defined" error (XPST0008) — XQuery 3.1 §4.16.
+    /// </summary>
+    public HashSet<(string LocalName, string NamespaceUri)> UnsuppliedExternalVariables { get; } = new();
 
     /// <summary>
     /// Optional collation-aware string comparer used by XPath comparison operators.
