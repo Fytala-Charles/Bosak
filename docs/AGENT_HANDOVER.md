@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09
-**Commit:** (pending) — fix(XPath/XQuery): REQ-082 QT3 residual backlog triage — 233 → 8 (QT3 31,134/8/679; XSLT 7,722/3/6,875 unchanged)
+**Commit:** `3bc6fb5` — fix(XPath/XQuery): REQ-082 QT3 residual backlog triage — 233 → 8 (QT3 31,134/8/679; XSLT 7,722/3/6,875 unchanged)
 **Current focus:** **REQ-082 QT3 residual backlog triaged: QT3 30,909/233/679 → 31,134/8/679 (97.84%), zero new failure names; ~225 tests fixed across ~20 error-code families. Remaining 8 are documented XPST0051 schema-type validation gaps. XSLT strict sweep unchanged 7,722/3/6,875; unit tests 2,216/0/0 across all nine projects; build 0/0.**
 **What was built:**
 - **Value-accessor family (~41):** `XdmValue.ThrowInvalidAccess` (Core 2.4) prefixes XPTY0004; fn:local-name-from-QName / namespace-uri-from-QName raise XPTY0117 for untypedAtomic arguments (FunctionLibrary 5.98).
