@@ -2032,7 +2032,7 @@ public static class ResultTreeSerializer
     private static void WriteHtmlElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
     {
         var localName = element.Name.LocalName;
-        var isEmpty = !element.HasElements;
+        var isEmpty = !element.Nodes().Any();
         var isRawContent = IsHtmlRawContentElement(localName);
         var elemNs = element.Name.NamespaceName;
 

@@ -62,6 +62,6 @@ cache, engine Populate skip, static LRE namespace-info cache): raw output in `ba
 | Compile_Flwor | 9.57 µs / 36.5 KB | 11.70 µs / 36.5 KB | — | — |
 | Evaluate_Flwor | 44.23 ms / 66.75 MB | 27.61 ms / 36.66 MB | −38% | −45% |
 | Compile_Stylesheet | 35.69 µs / 80.2 KB | 37.14 µs / 80.2 KB | — | — |
-| Transform_HtmlTable | 193.34 ms / 115.48 MB | 60.14 ms / 60.20 MB | −69% | −48% |
+| Transform_HtmlTable | 193.34 ms / 115.48 MB | 62.57 ms / 61.54 MB | −68% | −47% |
 
 Re-run with: `dotnet run -c Release --project benchmarks/Bosak.Benchmarks -- --filter '*'`
