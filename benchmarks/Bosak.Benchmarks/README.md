@@ -50,8 +50,8 @@ of the benchmark host.
 
 ## Baseline results (2026-09-09, .NET 10.0.11, Windows 11 x64, AVX2)
 
-First optimization wave (wrapper cache, lazy axes, standard-function table clone):
-full raw output in `baseline-0.10.0.txt`.
+Waves 1–2 (wrapper cache, lazy axes, function-table clone; per-instruction compiled-XPath
+cache, engine Populate skip, static LRE namespace-info cache): raw output in `baseline-0.10.0.txt`.
 
 | Benchmark | Baseline | After wave 1 | Δ time | Δ allocated |
 |---|---|---|---|---|
@@ -62,6 +62,6 @@ full raw output in `baseline-0.10.0.txt`.
 | Compile_Flwor | 9.57 µs / 36.5 KB | 11.70 µs / 36.5 KB | — | — |
 | Evaluate_Flwor | 44.23 ms / 66.75 MB | 27.61 ms / 36.66 MB | −38% | −45% |
 | Compile_Stylesheet | 35.69 µs / 80.2 KB | 37.14 µs / 80.2 KB | — | — |
-| Transform_HtmlTable | 193.34 ms / 115.48 MB | 198.37 ms / 103.01 MB | — | −11% |
+| Transform_HtmlTable | 193.34 ms / 115.48 MB | 73.06 ms / 71.53 MB | −62% | −38% |
 
 Re-run with: `dotnet run -c Release --project benchmarks/Bosak.Benchmarks -- --filter '*'`

@@ -305,6 +305,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.64  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      | Charles Korthout | 6.65  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
+//                      | Charles Korthout | 6.66  | 09-09-2026     | Perf: per-instruction compiled-XPath cache, static LRE namespace-info cache; engine cont |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -659,6 +660,11 @@ public sealed class TransformEngine
         FunctionLibrary.Populate(_context);
         _context.CollationComparer = FunctionLibrary.CompareStrings;
         XsltFunctionLibrary.Populate(_context);
+        // The engine keeps the standard function registry intact for its lifetime, so
+        // per-instruction XPath evaluations (value-of, select expressions, sort keys)
+        // must not pay the Populate cost on every call. xsl:evaluate toggles the flag
+        // back off around its restricted-registry evaluation.
+        _context.SkipStandardFunctionPopulation = true;
 
         _resultDocument = new XElement("__xdm_doc__");
         // Eagerly assign the creation sequence so the principal result tree's cross-tree
@@ -1670,7 +1676,20 @@ public sealed class TransformEngine
     /// Compiles an XPath expression with the in-scope namespace bindings
     /// and xpath-default-namespace from the given instruction element.
     /// </summary>
+    // Compiled XPath expressions keyed by (instruction element, expression text): the
+    // stylesheet tree is immutable for the executable's lifetime, so a select expression
+    // (and its static namespace context) is compiled once per instruction instead of on
+    // every execution — the dominant per-node cost on row/cell-heavy stylesheets.
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<XElement, System.Collections.Concurrent.ConcurrentDictionary<string, XPath31Expression>> CompiledXPathCache = new();
+
     private XPath31Expression CompileXPath(string expression, XElement instruction)
+    {
+        var cache = CompiledXPathCache.GetValue(instruction,
+            static _ => new System.Collections.Concurrent.ConcurrentDictionary<string, XPath31Expression>(StringComparer.Ordinal));
+        return cache.GetOrAdd(expression, expr => CompileXPathUncached(expr, instruction));
+    }
+
+    private XPath31Expression CompileXPathUncached(string expression, XElement instruction)
     {
         var nsMap = GetInScopeNamespaces(instruction);
         ValidateXPathPrefixes(expression, nsMap);
@@ -7253,15 +7272,35 @@ public sealed class TransformEngine
     /// <summary>
     /// Copies a literal result element to the output.
     /// </summary>
+    // Static per-instruction LRE namespace info: extension-element namespaces,
+    // exclude-result-prefixes URIs, and in-scope namespace declarations are all fixed by
+    // the instruction's position in the (immutable) stylesheet tree, so compute them once
+    // instead of on every literal-result-element instantiation.
+    private sealed class LreStaticInfo
+    {
+        public required HashSet<string> ExtensionNamespaces { get; init; }
+        public required HashSet<string> ExcludedNamespaceUris { get; init; }
+        public required List<(string Prefix, XNamespace Namespace)> InScopeDeclarations { get; init; }
+    }
+
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<XElement, LreStaticInfo> LreStaticInfoCache = new();
+
     private void CopyLiteralElement(XElement source)
     {
         _literalElementDepth++;
+
+        var lreInfo = LreStaticInfoCache.GetValue(source, s => new LreStaticInfo
+        {
+            ExtensionNamespaces = GetExtensionElementPrefixes(s),
+            ExcludedNamespaceUris = GetExcludedNamespaceUris(s),
+            InScopeDeclarations = GetInScopeNamespaceDeclarations(s).ToList(),
+        });
 
         // Extension elements are not copied; if they have xsl:fallback children,
         // the fallback content is evaluated in their place. If there is no fallback,
         // this is a dynamic error (XTDE1450). Recognized extension elements such as
         // EXSLT exsl:document are executed directly.
-        var extensionNs = GetExtensionElementPrefixes(source);
+        var extensionNs = lreInfo.ExtensionNamespaces;
         if (extensionNs.Contains(source.Name.NamespaceName))
         {
             var xslNs = Stylesheet.Stylesheet.XslNamespace;
@@ -7348,7 +7387,7 @@ public sealed class TransformEngine
 
         // Compute excluded namespace URIs in scope on this LRE. exclude-result-prefixes
         // suppresses namespace nodes by URI, not by prefix.
-        var excludedNamespaceUris = GetExcludedNamespaceUris(source);
+        var excludedNamespaceUris = lreInfo.ExcludedNamespaceUris;
         bool excludeAllNamespaces = excludedNamespaceUris.Contains("#all");
 
         // Record the excluded URIs on the constructed element so that xsl:namespace can
@@ -7372,7 +7411,7 @@ public sealed class TransformEngine
              currentElem.Name.LocalName == "__result-document__");
         if (isRootLevelLiteral && !excludeAllNamespaces)
         {
-            foreach (var (prefix, styleNs) in GetInScopeNamespaceDeclarations(source))
+            foreach (var (prefix, styleNs) in lreInfo.InScopeDeclarations)
             {
                 if (prefix == "xml" || prefix == "xmlns")
                     continue;

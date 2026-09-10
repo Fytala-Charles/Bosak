@@ -3778,7 +3778,7 @@ The engine is conformance-verified (100% of runnable tests on both W3C suites) b
 | Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 22.08 ms / 30.96 MB | −33% time, −45% alloc |
 | Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 15.58 ms / 19.87 MB | −48% time, −51% alloc |
 | Evaluate_Flwor | 44.23 ms / 66.75 MB | 27.61 ms / 36.66 MB | −38% time, −45% alloc |
-| Transform_HtmlTable | 193.34 ms / 115.48 MB | 198.37 ms / 103.01 MB | ~same time, −11% alloc |
+| Transform_HtmlTable | 193.34 ms / 115.48 MB | 73.06 ms / 71.53 MB | −62% time, −38% alloc |
 
 Verification: QT3 31,142/0/679, XSLT 7,722/3/6,875, unit tests 2,216/0/0 — all unchanged; build 0/0. The Populate/variadic work was immaterial on these benchmarks (fixed cost is small vs evaluation) but removes an O(table-size) lookup per arity miss.
 
@@ -3792,3 +3792,4 @@ Verification: QT3 31,142/0/679, XSLT 7,722/3/6,875, unit tests 2,216/0/0 — all
 | Date | Actor | Decision | Rationale |
 |------|-------|----------|-----------|
 | 2026-09-09 | Kimi | Wave 1 done | Baseline + wrapper cache + lazy axes + copy-free materialization + function-table template/variadic index; conformance unchanged; numbers above. |
+| 2026-09-09 | Kimi | Wave 2 done (XSLT transform path) | Bisected Transform_HtmlTable (198 ms / 103 MB): per-instruction `CompileXPath` re-compiled the select on every execution (72 call sites) and every evaluation re-ran `FunctionLibrary.Populate` (~700 insertions) on the already-populated engine context. Fixes: per-(instruction, expression) compiled-XPath cache (ConditionalWeakTable on the immutable stylesheet tree); engine context sets `SkipStandardFunctionPopulation` at init (xsl:evaluate toggles it back for its restricted registry); static LRE namespace-info cache (extension namespaces, exclude-result-prefixes URIs, in-scope declarations — three ancestor walks per LRE removed). **Transform_HtmlTable 193.34 → 73.06 ms (−62%), 115.48 → 71.53 MB (−38%)**; PathHeavy/StringFunctions/FLWOR hold wave-1 gains; Xslt.Tests 377/0, QT3 31,142/0/679, XSLT strict 7,722/3/6,875, unit 2,216/0/0 — all unchanged. Remaining for wave 3: result-tree construction micro-costs, per-transform thread spawn reuse, predicate-path lists, FLWOR tuples. |

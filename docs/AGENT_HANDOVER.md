@@ -1,5 +1,20 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-10
+**Commit:** (pending) — REQ-085 performance wave 2: XSLT transform path (compiled-XPath cache, Populate skip, LRE static-info cache)
+**Current focus:** **Performance wave 2 landed: Transform_HtmlTable 193.34 → 73.06 ms (−62%), 115.48 → 71.53 MB (−38%).** Xslt.Tests 377/0, QT3 31,142/0/679, XSLT strict 7,722/3/6,875, unit 2,216/0/0 — all unchanged; build 0/0.
+**What was built (bisect-driven, probe decomposition: ~6.4 MB fixed, ~8 KB per value-of, ~3.5 KB per LRE element):**
+- **Per-instruction compiled-XPath cache** (`CompiledXPathCache`, TransformEngine 6.66) — `CompileXPath` re-compiled the select expression on EVERY execution across all 72 call sites (value-of, for-each, sort keys, accumulator rules, AVT-adjacent paths); now cached per (instruction element, expression text) via ConditionalWeakTable — the stylesheet tree is immutable per executable.
+- **Engine Populate skip** — `TransformEngine` sets `SkipStandardFunctionPopulation` at init: every instruction-level `XPath31Expression.Evaluate(context)` previously re-ran `FunctionLibrary.Populate` (~700 registrations) on the already-populated context. xsl:evaluate still toggles the flag for its restricted registry.
+- **Static LRE namespace-info cache** (`LreStaticInfoCache`) — extension-element namespaces, exclude-result-prefixes URIs, and in-scope declarations computed once per instruction instead of three ancestor walks per literal-result-element instantiation.
+**Benchmark journey (Transform_HtmlTable):** 193.34 ms / 115.48 MB (baseline) → 73.06 ms / 71.53 MB (wave 2). Wave-1 numbers hold: PathHeavy 22.8 ms/31.0 MB, StringFunctions 16.1 ms/19.9 MB, FLWOR 29.7 ms/36.7 MB.
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`.
+**Next steps (wave 3 candidates):** result-tree construction micro-costs (per-row element/text append path), per-transform thread-spawn reuse (RunWithStack, re-entrancy-sensitive), predicate-path intermediate lists, FLWOR tuple materialization. Then the GA track (release notes, SemVer commitment at 1.0).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-09 (fourth session)
 **Commit:** `5719f81` — REQ-085 performance wave 1: benchmark harness + baseline, wrapper cache, lazy axes, copy-free materialization
 **Current focus:** **Performance wave 1 landed: document benchmarks 33–48% faster, 45–51% less allocated.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.
