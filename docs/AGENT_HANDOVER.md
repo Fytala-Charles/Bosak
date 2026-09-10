@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-10
-**Commit:** (pending) — REQ-085 performance wave 2: XSLT transform path (compiled-XPath cache, Populate skip, LRE static-info cache)
+**Commit:** `df8632c` — REQ-085 performance wave 2: XSLT transform path (compiled-XPath cache, Populate skip, LRE static-info cache)
 **Current focus:** **Performance wave 2 landed: Transform_HtmlTable 193.34 → 73.06 ms (−62%), 115.48 → 71.53 MB (−38%).** Xslt.Tests 377/0, QT3 31,142/0/679, XSLT strict 7,722/3/6,875, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (bisect-driven, probe decomposition: ~6.4 MB fixed, ~8 KB per value-of, ~3.5 KB per LRE element):**
 - **Per-instruction compiled-XPath cache** (`CompiledXPathCache`, TransformEngine 6.66) — `CompileXPath` re-compiled the select expression on EVERY execution across all 72 call sites (value-of, for-each, sort keys, accumulator rules, AVT-adjacent paths); now cached per (instruction element, expression text) via ConditionalWeakTable — the stylesheet tree is immutable per executable.
