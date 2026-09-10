@@ -20,6 +20,8 @@
 
 ## 0. Recent Changes
 
+- **2026-09-09 (d)** — **Performance wave 1 (REQ-085):** BenchmarkDotNet harness at `benchmarks/Bosak.Benchmarks` (not part of the solution) with a published baseline. New public surface: `XDocumentNode.Wrap(XObject)` (shared per-object wrapper cache — direct `new XDocumentNode(x)` still works but allocates), `MaterializedSequence.Items` (copy-free item view), `EnumerableXdmSequence` (lazy sequence type in Core). Behavior is unchanged; document-evaluation benchmarks improved 33–48% on time and 45–51% on allocations. QT3 31,142/0/679, XSLT 7,722/3/6,875 unchanged.
+
 - **2026-09-09 (c)** — **Beta readiness (REQ-084):** public API review pass over the nine published packages; `OccurrenceIndicator` moved to namespace `Bosak.XPath.Core.Xdm` (breaking for direct AST consumers only); `Bosak.LanguageServer` is no longer packable (executable, not a library); full XML-doc coverage on the public surface (~480 declarations); all file headers now carry `license.md (Apache-2.0)` + `SPDX-License-Identifier: Apache-2.0`. **Version `0.10.0-beta` — naming and options objects are frozen for the 1.0 line from here on.** QT3 31,142/0/679, XSLT 7,722/3/6,875, unit tests 2,216/0/0 — all unchanged.
 
 - **2026-09-09 (b)** — XPath/XQuery: **QT3 is 100% of runnable (31,142/0/679)** — the final XPST0051 residual family closed: sequence-type item types in function signatures/returns are validated per XPath 3.1 §2.5.5.2 (`none`, list types, and unions containing or derived from lists are rejected with XPST0051), and unresolved 1-argument calls in a schema-imported namespace are treated as type constructors (unknown type → XPST0051, was XPST0017).

@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 0.19  | 23-08-2026     | Annotate constructed elements so they report xs:anyType instead of xs:untyped |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.20  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.21  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -75,7 +76,7 @@ public static class XDocumentProvider
         ArgumentNullException.ThrowIfNull(document);
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
-        return new XDocumentNode(document);
+        return XDocumentNode.Wrap(document);
     }
 
     /// <summary>
@@ -92,7 +93,7 @@ public static class XDocumentProvider
             var map = ComputeDocumentOrder(doc);
             XDocumentNode.RegisterOrderMap(doc, map);
         }
-        return new XDocumentNode(element);
+        return XDocumentNode.Wrap(element);
     }
 
     /// <summary>
@@ -401,7 +402,7 @@ public static class XDocumentProvider
         }
         FlushText();
 
-        return new XDocumentNode(element);
+        return XDocumentNode.Wrap(element);
     }
 
     private static XElement ParentlessOwner()
@@ -422,9 +423,9 @@ public static class XDocumentProvider
         ArgumentNullException.ThrowIfNull(item);
         return item.Kind switch
         {
-            XdmContentKind.Text => new XDocumentNode(new XText(item.Text ?? string.Empty)),
-            XdmContentKind.Comment => new XDocumentNode(new XComment(item.Text ?? string.Empty)),
-            XdmContentKind.ProcessingInstruction => new XDocumentNode(new XProcessingInstruction(item.Target ?? string.Empty, item.Text ?? string.Empty)),
+            XdmContentKind.Text => XDocumentNode.Wrap(new XText(item.Text ?? string.Empty)),
+            XdmContentKind.Comment => XDocumentNode.Wrap(new XComment(item.Text ?? string.Empty)),
+            XdmContentKind.ProcessingInstruction => XDocumentNode.Wrap(new XProcessingInstruction(item.Target ?? string.Empty, item.Text ?? string.Empty)),
             XdmContentKind.Namespace => XDocumentNode.CreateNamespaceNode(
                 string.IsNullOrEmpty(item.Target)
                     ? new XAttribute("xmlns", item.Text ?? string.Empty)
@@ -488,7 +489,7 @@ public static class XDocumentProvider
         // free-standing attribute still reports its constructed prefix.
         if (!string.IsNullOrEmpty(attribute.Prefix))
             xattr.AddAnnotation(new AttributePrefixAnnotation(attribute.Prefix));
-        return new XDocumentNode(xattr);
+        return XDocumentNode.Wrap(xattr);
     }
 
     /// <summary>
@@ -577,7 +578,7 @@ public static class XDocumentProvider
             }
         }
         FlushText();
-        return new XDocumentNode(document);
+        return XDocumentNode.Wrap(document);
     }
 
     private static XNode CloneNode(XdmValue nodeValue)
@@ -673,7 +674,7 @@ public static class XDocumentProvider
         var document = Xml11Loader.Parse(xml, LoadOptions.PreserveWhitespace);
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
-        return new XDocumentNode(document);
+        return XDocumentNode.Wrap(document);
     }
 
     /// <summary>
@@ -687,7 +688,7 @@ public static class XDocumentProvider
         var document = Xml11Loader.ParseXml11(xml, LoadOptions.PreserveWhitespace, baseUri);
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
-        return new XDocumentNode(document);
+        return XDocumentNode.Wrap(document);
     }
 
     /// <summary>
@@ -732,7 +733,7 @@ public static class XDocumentProvider
         }
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
-        var node = new XDocumentNode(document);
+        var node = XDocumentNode.Wrap(document);
         // Relative paths must be absolutized first: new Uri(relativePath) throws UriFormatException.
         var absolutePath = Uri.IsWellFormedUriString(filePath, UriKind.Absolute)
             ? filePath
@@ -778,7 +779,7 @@ public static class XDocumentProvider
         }
         var map = ComputeDocumentOrder(document);
         XDocumentNode.RegisterOrderMap(document, map);
-        var node = new XDocumentNode(document);
+        var node = XDocumentNode.Wrap(document);
         var absolutePath = Uri.IsWellFormedUriString(filePath, UriKind.Absolute)
             ? filePath
             : Path.GetFullPath(filePath);

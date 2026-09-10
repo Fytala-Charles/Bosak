@@ -89,6 +89,7 @@
 //                      | Charles Korthout | 0.25  | 05-09-2026     | RegisterTree eagerly assigns creation sequence so cross-tree order matches construction |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.26  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.27  | 09-09-2026     | Perf: shared XObject wrapper cache (ConditionalWeakTable); lazy yield-based child/descen |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -144,6 +145,18 @@ public sealed class XDocumentNode : IXdmNode
                 : new XAttribute(XNamespace.Xmlns + storagePrefix, uri);
         });
     }
+
+    // Wrapper cache: one XDocumentNode per underlying XObject. Node identity is defined
+    // by the wrapped XObject (IsSameNode/GetHashCode use it), so sharing wrappers is
+    // identity-preserving, and mutable state (document URI, annotations) lives on the
+    // XObject itself. Avoids re-allocating a wrapper on every axis/Document access —
+    // the dominant managed allocation on path-heavy evaluations.
+    private static readonly ConditionalWeakTable<XObject, XDocumentNode> WrapperCache = new();
+
+    /// <summary>Returns the shared wrapper for the given LINQ to XML object.</summary>
+    /// <param name="node">The <see cref="XObject"/> to adapt.</param>
+    /// <returns>The cached <see cref="XDocumentNode"/> for <paramref name="node"/>.</returns>
+    public static XDocumentNode Wrap(XObject node) => WrapperCache.GetValue(node, static k => new XDocumentNode(k));
 
     private readonly XObject _node;
     private readonly bool _isNamespaceNode;
@@ -985,7 +998,7 @@ public sealed class XDocumentNode : IXdmNode
             // after the owner element and before any attributes.
             if (_isNamespaceNode && _namespaceOwner is not null)
             {
-                return new XDocumentNode(_namespaceOwner).DocumentOrder + 1;
+                return XDocumentNode.Wrap(_namespaceOwner).DocumentOrder + 1;
             }
 
             var doc = _node.Document;
@@ -1410,9 +1423,9 @@ public sealed class XDocumentNode : IXdmNode
         {
             if (_isNamespaceNode)
                 return _namespaceOwner is not null && _namespaceOwner.Annotation<ParentlessNamespaceNode>() is null
-                    ? new XDocumentNode(_namespaceOwner) : null;
+                    ? XDocumentNode.Wrap(_namespaceOwner) : null;
             var parent = GetXPathParent(_node);
-            return parent is not null ? new XDocumentNode(parent) : null;
+            return parent is not null ? XDocumentNode.Wrap(parent) : null;
         }
     }
 
@@ -1424,10 +1437,10 @@ public sealed class XDocumentNode : IXdmNode
             if (_isNamespaceNode)
             {
                 var ownerDoc = _namespaceOwner?.Document;
-                return ownerDoc is not null ? new XDocumentNode(ownerDoc) : null;
+                return ownerDoc is not null ? XDocumentNode.Wrap(ownerDoc) : null;
             }
             var doc = _node.Document;
-            return doc is not null ? new XDocumentNode(doc) : null;
+            return doc is not null ? XDocumentNode.Wrap(doc) : null;
         }
     }
 
@@ -1453,7 +1466,7 @@ public sealed class XDocumentNode : IXdmNode
             var childKind = GetNodeKind(child);
             if (kind == XdmNodeKind.All || (kind & childKind) == childKind)
             {
-                items.Add(XdmValue.FromNode(new XDocumentNode(child)));
+                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(child)));
             }
         }
         return MaterializedSequence.FromList(items);
@@ -1479,7 +1492,7 @@ public sealed class XDocumentNode : IXdmNode
             if (namespaceUri is not null && attr.Name.NamespaceName != namespaceUri)
                 continue;
 
-            items.Add(XdmValue.FromNode(new XDocumentNode(attr)));
+            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(attr)));
         }
         return MaterializedSequence.FromList(items);
     }
@@ -1525,32 +1538,32 @@ public sealed class XDocumentNode : IXdmNode
         if (_node is System.Xml.Linq.XDocument doc && GetSyntheticWrapper(doc) is { } wrapperDoc)
             container = wrapperDoc;
 
-        var items = new List<XdmValue>();
+        return XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateChildren(container)));
+    }
+
+    private static IEnumerable<XdmValue> EnumerateChildren(XContainer container)
+    {
         foreach (var child in ChildNodes(container))
-        {
-            items.Add(XdmValue.FromNode(new XDocumentNode(child)));
-        }
-        return MaterializedSequence.FromList(items);
+            yield return XdmValue.FromNode(XDocumentNode.Wrap(child));
     }
 
     private XdmSequence GetDescendantAxis()
-    {
-        var items = new List<XdmValue>();
-        foreach (var desc in GetDescendants(_node))
-        {
-            items.Add(XdmValue.FromNode(new XDocumentNode(desc)));
-        }
-        return MaterializedSequence.FromList(items);
-    }
+        => XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateDescendants(_node)));
 
     private XdmSequence GetDescendantOrSelfAxis()
+        => XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateSelfAndDescendants()));
+
+    private IEnumerable<XdmValue> EnumerateSelfAndDescendants()
     {
-        var items = new List<XdmValue> { XdmValue.FromNode(this) };
+        yield return XdmValue.FromNode(this);
         foreach (var desc in GetDescendants(_node))
-        {
-            items.Add(XdmValue.FromNode(new XDocumentNode(desc)));
-        }
-        return MaterializedSequence.FromList(items);
+            yield return XdmValue.FromNode(XDocumentNode.Wrap(desc));
+    }
+
+    private static IEnumerable<XdmValue> EnumerateDescendants(XObject node)
+    {
+        foreach (var desc in GetDescendants(node))
+            yield return XdmValue.FromNode(XDocumentNode.Wrap(desc));
     }
 
     /// <summary>
@@ -1591,7 +1604,7 @@ public sealed class XDocumentNode : IXdmNode
     {
         var parent = GetXPathParent(_node);
         return parent is not null
-            ? XdmSequence.Singleton(XdmValue.FromNode(new XDocumentNode(parent)))
+            ? XdmSequence.Singleton(XdmValue.FromNode(XDocumentNode.Wrap(parent)))
             : XdmSequence.Empty;
     }
 
@@ -1601,7 +1614,7 @@ public sealed class XDocumentNode : IXdmNode
         var current = GetXPathParent(_node);
         while (current is not null)
         {
-            items.Add(XdmValue.FromNode(new XDocumentNode(current)));
+            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(current)));
             current = GetXPathParent(current);
         }
         return MaterializedSequence.FromList(items);
@@ -1613,7 +1626,7 @@ public sealed class XDocumentNode : IXdmNode
         var current = GetXPathParent(_node);
         while (current is not null)
         {
-            items.Add(XdmValue.FromNode(new XDocumentNode(current)));
+            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(current)));
             current = GetXPathParent(current);
         }
         return MaterializedSequence.FromList(items);
@@ -1624,16 +1637,19 @@ public sealed class XDocumentNode : IXdmNode
         if (_node is not XElement element)
             return XdmSequence.Empty;
 
-        var items = new List<XdmValue>();
+        return XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateAttributes(element)));
+    }
+
+    private static IEnumerable<XdmValue> EnumerateAttributes(XElement element)
+    {
         foreach (var attr in element.Attributes())
         {
             // Namespace declarations are not attributes in the XPath data model;
             // they belong to the namespace axis.
             if (attr.IsNamespaceDeclaration)
                 continue;
-            items.Add(XdmValue.FromNode(new XDocumentNode(attr)));
+            yield return XdmValue.FromNode(XDocumentNode.Wrap(attr));
         }
-        return MaterializedSequence.FromList(items);
     }
 
     private XdmSequence GetNamespaceAxis()
@@ -1754,7 +1770,7 @@ public sealed class XDocumentNode : IXdmNode
         {
             if (sibling == _node) { found = true; continue; }
             if (found)
-                items.Add(XdmValue.FromNode(new XDocumentNode(sibling)));
+                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(sibling)));
         }
         return MaterializedSequence.FromList(items);
     }
@@ -1774,7 +1790,7 @@ public sealed class XDocumentNode : IXdmNode
         foreach (var sibling in ChildNodes(parentContainer))
         {
             if (sibling == _node) break;
-            items.Insert(0, XdmValue.FromNode(new XDocumentNode(sibling)));
+            items.Insert(0, XdmValue.FromNode(XDocumentNode.Wrap(sibling)));
         }
         return MaterializedSequence.FromList(items);
     }
@@ -1798,7 +1814,7 @@ public sealed class XDocumentNode : IXdmNode
             {
                 foreach (var child in ChildNodes(attrParent))
                 {
-                    items.Add(XdmValue.FromNode(new XDocumentNode(child)));
+                    items.Add(XdmValue.FromNode(XDocumentNode.Wrap(child)));
                     AddDescendants(child, items);
                 }
                 current = attrParent;
@@ -1820,7 +1836,7 @@ public sealed class XDocumentNode : IXdmNode
                 if (sibling == current) { found = true; continue; }
                 if (found)
                 {
-                    items.Add(XdmValue.FromNode(new XDocumentNode(sibling)));
+                    items.Add(XdmValue.FromNode(XDocumentNode.Wrap(sibling)));
                     AddDescendants(sibling, items);
                 }
             }
@@ -1873,9 +1889,9 @@ public sealed class XDocumentNode : IXdmNode
                 var descs = GetDescendants(before[i]).ToList();
                 for (int j = descs.Count - 1; j >= 0; j--)
                 {
-                    items.Add(XdmValue.FromNode(new XDocumentNode(descs[j])));
+                    items.Add(XdmValue.FromNode(XDocumentNode.Wrap(descs[j])));
                 }
-                items.Add(XdmValue.FromNode(new XDocumentNode(before[i])));
+                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(before[i])));
             }
 
             current = parent;
@@ -1955,7 +1971,7 @@ public sealed class XDocumentNode : IXdmNode
 
         foreach (var child in ChildNodes(container))
         {
-            items.Add(XdmValue.FromNode(new XDocumentNode(child)));
+            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(child)));
             AddDescendants(child, items);
         }
     }
@@ -2005,7 +2021,7 @@ public sealed class XDocumentNode : IXdmNode
         }
 
         // Add any missing in-scope namespace bindings from the original element's ancestors.
-        var nsNode = new XDocumentNode(element);
+        var nsNode = XDocumentNode.Wrap(element);
         foreach (var ns in nsNode.Axis(XdmAxis.Namespace))
         {
             var attr = ns.NodeValue;

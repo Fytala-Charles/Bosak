@@ -303,6 +303,7 @@
 //                      | Charles Korthout | 5.98  | 09-09-2026     | QT3 triage: SortKeyed unwrap, collection URI resolution, XPTY0117, strict JSON decode, t |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.99  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 5.100 | 09-09-2026     | Perf: Populate installs a shared pre-built function-table template per evaluation (singl |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -3320,10 +3321,22 @@ public static class FunctionLibrary
     /// Populates the evaluation context with all standard functions.
     /// </summary>
     /// <param name="context">The evaluation context to populate.</param>
-    public static void Populate(EvaluationContext context)
+    // Shared standard function tables: one for dynamic contexts, one for static
+    // (use-when / shadow attribute) contexts that exclude the XSLT-defined dynamic
+    // functions. Cloned into each EvaluationContext by Populate — a single dictionary
+    // copy per evaluation instead of hundreds of individual registrations.
+    private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplate =
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: false));
+
+    private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplateStaticEval =
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: true));
+
+    private static Dictionary<(string, string, int), FunctionSignature> BuildStandardTemplate(bool excludeXsltDynamicFunctions)
     {
-        foreach (var sig in StandardFunctions.Values)
+        var template = new Dictionary<(string, string, int), FunctionSignature>(StandardFunctions.Count);
+        foreach (var kvp in StandardFunctions)
         {
+            var sig = kvp.Value;
             // document() is an XSLT-defined function (XSLT 1.0 heritage), not part of the
             // XPath/XQuery function library: pure XPath/XQuery calls must raise XPST0017
             // (K2-NodeTest-10). XSLT contexts register it via PopulateXsltDocumentFunction.
@@ -3331,10 +3344,17 @@ public static class FunctionLibrary
                 continue;
             // XSLT-defined functions that depend on the dynamic evaluation context are
             // not available in a static (use-when / shadow attribute) context.
-            if (context.IsStaticEvaluation && sig.NamespaceUri == Namespaces.Fn && XsltDynamicFunctions.Contains(sig.LocalName))
+            if (excludeXsltDynamicFunctions && sig.NamespaceUri == Namespaces.Fn && XsltDynamicFunctions.Contains(sig.LocalName))
                 continue;
-            context.RegisterFunction(sig);
+            template[kvp.Key] = sig;
         }
+        return template;
+    }
+
+    public static void Populate(EvaluationContext context)
+    {
+        context.InstallStandardFunctionTable(
+            context.IsStaticEvaluation ? s_standardTemplateStaticEval.Value : s_standardTemplate.Value);
 
         // Register constructor functions for simple types declared in imported schemas.
         // XSD-derived simple types (e.g. hat:hatsize) are available as Q{uri}local#1
@@ -5349,7 +5369,7 @@ public static class FunctionLibrary
             throw new InvalidOperationException($"FODC0006: Error parsing XML fragment: {ex.Message}");
         }
         XDocumentProvider.StripDocumentLevelWhitespace(doc);
-        return XdmValue.FromNode(new XDocumentNode(doc));
+        return XdmValue.FromNode(XDocumentNode.Wrap(doc));
     }
 
     private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -5540,7 +5560,7 @@ public static class FunctionLibrary
             new XAttribute(XNamespace.Xmlns + "fn", fn.NamespaceName));
 
         if (string.IsNullOrEmpty(value))
-            return XdmValue.FromNode(new XDocumentNode(result));
+            return XdmValue.FromNode(XDocumentNode.Wrap(result));
 
         var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode, out bool caseInsensitive);
         if (isQuoteMode)
@@ -5589,7 +5609,7 @@ public static class FunctionLibrary
         // (e.g. @nr as xs:positiveInteger) and schema-element tests succeed.
         var wrapper = new XDocument(result);
         XDocumentProvider.ValidateXDocument(wrapper, AnalyzeStringSchemaSet);
-        return XdmValue.FromNode(new XDocumentNode(result));
+        return XdmValue.FromNode(XDocumentNode.Wrap(result));
     }
 
     private sealed class GroupNode
@@ -7947,7 +7967,7 @@ public static class FunctionLibrary
             throw new InvalidOperationException($"FODC0002: Fragment not found in collection item: {documentUri}#{fragment}");
 
         var fragmentDoc = new System.Xml.Linq.XDocument(new System.Xml.Linq.XElement(element));
-        var node = new XDocumentNode(fragmentDoc);
+        var node = XDocumentNode.Wrap(fragmentDoc);
         node.SetDocumentUri(documentUri + "#" + fragment);
         return node;
     }
@@ -13616,7 +13636,7 @@ public static class FunctionLibrary
                 throw new InvalidOperationException($"FOJS0003: The JSON XML representation is not valid: {string.Join("; ", validationErrors)}");
         }
 
-        return XdmValue.FromNode(new XDocumentNode(xdoc));
+        return XdmValue.FromNode(XDocumentNode.Wrap(xdoc));
     }
 
     private static XdmValue XmlToJson_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

@@ -74,6 +74,7 @@
 //                      | Charles Korthout | 2.22  | 09-09-2026     | Added UnsuppliedExternalVariables (XPDY0002 for declared-but-unbound externals)          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.23  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 2.24  | 09-09-2026     | Perf: InstallStandardFunctionTable clone-install; indexed variadic resolution (no full-t |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -196,7 +197,11 @@ public sealed class EvaluationContext
     private readonly Dictionary<string, string> _namespaces;
 
     // Function libraries, indexed by (namespace, localName, arity)
-    private readonly Dictionary<(string, string, int), FunctionSignature> _functions;
+    private Dictionary<(string, string, int), FunctionSignature> _functions;
+
+    // Variadic function index: (namespace, localName) -> minimum declared arity, so an
+    // exact-arity lookup miss resolves variadic candidates without a full table scan.
+    private readonly Dictionary<(string, string), int> _variadicMinArity = new();
 
     // Document cache for fn:doc / fn:collection identity, keyed by (URI, load policy).
     // The policy slot lets an XSLT host keep a distinct stripped tree per distinct
@@ -835,7 +840,40 @@ public sealed class EvaluationContext
     {
         var key = (signature.NamespaceUri, signature.LocalName, signature.Arity);
         _functions[key] = signature;
+        if (signature.IsVariadic)
+        {
+            var variadicKey = (signature.NamespaceUri, signature.LocalName);
+            if (!_variadicMinArity.TryGetValue(variadicKey, out var min) || signature.Arity < min)
+                _variadicMinArity[variadicKey] = signature.Arity;
+        }
         return this;
+    }
+
+    /// <summary>
+    /// Installs a standard function table, preserving any non-standard registrations.
+    /// On an empty registry this is a single dictionary copy (much cheaper than hundreds
+    /// of individual <see cref="RegisterFunction"/> insertions); on an already populated
+    /// registry the standard entries overwrite in place, matching the historical
+    /// <c>FunctionLibrary.Populate</c> semantics.
+    /// </summary>
+    /// <param name="template">The shared standard function table to install (never mutated).</param>
+    public void InstallStandardFunctionTable(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> template)
+    {
+        if (_functions.Count == 0)
+        {
+            _functions = new Dictionary<(string, string, int), FunctionSignature>(template);
+            RebuildVariadicIndex();
+            return;
+        }
+        foreach (var kvp in template)
+            _functions[kvp.Key] = kvp.Value;
+        foreach (var ((ns, name, arity), sig) in template)
+        {
+            if (!sig.IsVariadic) continue;
+            var variadicKey = (ns, name);
+            if (!_variadicMinArity.TryGetValue(variadicKey, out var min) || arity < min)
+                _variadicMinArity[variadicKey] = arity;
+        }
     }
 
     /// <summary>
@@ -862,14 +900,23 @@ public sealed class EvaluationContext
     {
         if (_functions.TryGetValue((namespaceUri, localName, arity), out signature!))
             return true;
-        // Variadic fallback: a variadic signature accepts any arity >= its declared arity
-        // (e.g. fn:concat#99 resolves against the variadic fn:concat registration).
-        foreach (var ((ns, name, minArity), sig) in _functions)
+        // Variadic fallback via the (namespace, localName) index: a variadic signature
+        // accepts any arity >= its minimum declared arity (e.g. fn:concat#99 resolves
+        // against the variadic fn:concat registration).
+        if (_variadicMinArity.TryGetValue((namespaceUri, localName), out var minVariadicArity))
         {
-            if (ns == namespaceUri && name == localName && sig.IsVariadic && arity >= minArity)
-            {
-                signature = sig;
+            if (arity >= minVariadicArity
+                && _functions.TryGetValue((namespaceUri, localName, minVariadicArity), out signature!))
                 return true;
+            // Rare: the minimum-arity variadic slot was explicitly unregistered — rescan
+            // for another variadic registration of the same name.
+            foreach (var ((ns, name, candidateArity), sig) in _functions)
+            {
+                if (ns == namespaceUri && name == localName && sig.IsVariadic && arity >= candidateArity)
+                {
+                    signature = sig;
+                    return true;
+                }
             }
         }
         signature = null!;
@@ -884,7 +931,24 @@ public sealed class EvaluationContext
     /// <param name="arity">The function's arity.</param>
     /// <returns><c>true</c> when a registration was removed.</returns>
     public bool UnregisterFunction(string namespaceUri, string localName, int arity)
-        => _functions.Remove((namespaceUri, localName, arity));
+    {
+        bool removed = _functions.Remove((namespaceUri, localName, arity));
+        if (removed && _variadicMinArity.TryGetValue((namespaceUri, localName), out var min) && min == arity)
+        {
+            // Recompute the minimum from the remaining variadic registrations (removals are rare).
+            int? newMin = null;
+            foreach (var ((ns, name, candidateArity), sig) in _functions)
+            {
+                if (ns == namespaceUri && name == localName && sig.IsVariadic)
+                    newMin = newMin is null ? candidateArity : Math.Min(newMin.Value, candidateArity);
+            }
+            if (newMin is null)
+                _variadicMinArity.Remove((namespaceUri, localName));
+            else
+                _variadicMinArity[(namespaceUri, localName)] = newMin.Value;
+        }
+        return removed;
+    }
 
     /// <summary>
     /// Returns a shallow copy of the currently registered function signatures.
@@ -900,8 +964,10 @@ public sealed class EvaluationContext
     public void RestoreFunctions(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> snapshot)
     {
         _functions.Clear();
+        _variadicMinArity.Clear();
         foreach (var (key, value) in snapshot)
             _functions[key] = value;
+        RebuildVariadicIndex();
     }
 
     /// <summary>
@@ -910,6 +976,18 @@ public sealed class EvaluationContext
     public void ClearFunctions()
     {
         _functions.Clear();
+        _variadicMinArity.Clear();
+    }
+
+    private void RebuildVariadicIndex()
+    {
+        foreach (var ((ns, name, arity), sig) in _functions)
+        {
+            if (!sig.IsVariadic) continue;
+            var variadicKey = (ns, name);
+            if (!_variadicMinArity.TryGetValue(variadicKey, out var min) || arity < min)
+                _variadicMinArity[variadicKey] = arity;
+        }
     }
 
     // ------------------------------------------------------------------

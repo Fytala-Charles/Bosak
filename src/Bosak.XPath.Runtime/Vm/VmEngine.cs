@@ -269,6 +269,7 @@
 //                      |                  |       |                | in schema-imported namespaces (instanceof117)                                        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.138 | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 2.139 | 09-09-2026     | Perf: MaterializeSequence fast path for already-materialized inputs; wrappers via shared |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics.CodeAnalysis;
@@ -3229,10 +3230,24 @@ public static class VmEngine
             if (seq is null)
                 return Array.Empty<XdmValue>();
 
-            var list = new List<XdmValue>();
+            // Fast path: an already-materialized sequence exposes its item list without
+            // the List-growth + ToArray double copy (hot on multi-step path evaluations).
+            if (seq is MaterializedSequence materialized)
+            {
+                if (materialized.Items is XdmValue[] arr)
+                    return arr;
+                if (materialized.Items is List<XdmValue> list)
+                    return list.ToArray();
+                var copy = new XdmValue[materialized.Items.Count];
+                for (int i = 0; i < copy.Length; i++)
+                    copy[i] = materialized.Items[i];
+                return copy;
+            }
+
+            var list2 = new List<XdmValue>();
             foreach (var item in XdmSequence.FromSource(seq))
-                list.Add(item);
-            return list.ToArray();
+                list2.Add(item);
+            return list2.ToArray();
         }
 
         return new[] { sequence };
@@ -3468,7 +3483,7 @@ public static class VmEngine
 
         if (item.NodeValue.NodeKind == XdmNodeKind.Document)
         {
-            var validatedDoc = new XDocumentNode(doc);
+            var validatedDoc = XDocumentNode.Wrap(doc);
             validatedDoc.SetDocumentUri(documentUri);
             return XdmValue.FromNode(validatedDoc);
         }
@@ -3480,7 +3495,7 @@ public static class VmEngine
         if (validatedRoot is null)
             throw new InvalidOperationException("XQDY0027: Validation produced no element.");
         validatedRoot.Remove();
-        return XdmValue.FromNode(new XDocumentNode(validatedRoot));
+        return XdmValue.FromNode(XDocumentNode.Wrap(validatedRoot));
     }
 
     private static (string NamespaceUri, string LocalName) ResolveValidateTypeName(string typeName, EvaluationContext context)

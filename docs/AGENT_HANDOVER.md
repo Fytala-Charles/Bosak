@@ -1,5 +1,22 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-09 (fourth session)
+**Commit:** (pending) — REQ-085 performance wave 1: benchmark harness + baseline, wrapper cache, lazy axes, copy-free materialization
+**Current focus:** **Performance wave 1 landed: document benchmarks 33–48% faster, 45–51% less allocated.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.
+**What was built:**
+- **Benchmark harness** `benchmarks/Bosak.Benchmarks` (BenchmarkDotNet, not in Bosak.sln): 8 benchmarks over a synthetic 2,000-item catalog; baseline in `baseline-0.10.0.txt` + summary table in its README.
+- **`XDocumentNode` wrapper cache** — shared wrapper per underlying `XObject` (`XDocumentNode.Wrap`, ConditionalWeakTable; 132 `new XDocumentNode(...)` sites converted across 7 files). Was the dominant allocation: `Document` re-wrapped per access (~190k×/sort).
+- **Lazy axes** — child/descendant/descendant-or-self/attribute axes yield-based via new Core type `EnumerableXdmSequence`.
+- **Copy-free materialization** — `MaterializedSequence.Items` view + VM `MaterializeSequence` fast path.
+- **Function-table** — `FunctionLibrary.Populate` installs a shared template via `EvaluationContext.InstallStandardFunctionTable` (clone on fresh contexts); indexed variadic map removes the full-table scan on arity misses. (Immaterial on these benchmarks; kept as a robustness win.)
+**Results (baseline → wave 1):** PathHeavy 32.77 ms/56.05 MB → 22.08 ms/30.96 MB; StringFunctions 30.01 ms/40.71 MB → 15.58 ms/19.87 MB; FLWOR 44.23 ms/66.75 MB → 27.61 ms/36.66 MB; Transform_HtmlTable 193.34 ms/115.48 MB → 198.37 ms/103.01 MB.
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`.
+**Next steps (performance wave 2+):** predicate-path intermediate lists; XSLT result-tree construction + serialization (largest remaining benchmark); per-transform thread reuse; FLWOR tuple materialization. Then the GA track (release notes, SemVer commitment at 1.0).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-09 (third session)
 **Commit:** `a787040` — REQ-084 Beta readiness: API review + XML-doc coverage + Beta version bump
 **Current focus:** **Alpha→Beta gates COMPLETE — status is Beta; version 0.10.0-beta.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.

@@ -47,7 +47,7 @@ Everything below lands before the repo and packages are called Beta:
 - **XSLT streaming** — `xsl:supports-streaming` currently reports `no`; a streaming mode for very large documents is the largest single spec area not implemented
 - **Full schema-awareness** — PSVI annotations exist for typed values and `fn:json-to-xml(validate:=true())`, but source-document validation (`is-schema-aware: no`) is not implemented; likely the core of a future commercial "Bosak Pro" add-on per `COMMERCIAL.md`
 - **XPath 4.0** — the parser is forward-compatible; 4.0 features (e.g. `->` operator, bare `||`, etc.) land as the recommendation stabilizes
-- **Performance work** — ArrayPool/span hot paths; no benchmarks published yet
+- **Performance work** — first wave landed 2026-09-09 (REQ-085): BenchmarkDotNet harness in `benchmarks/Bosak.Benchmarks` with a published baseline; document-evaluation benchmarks improved 33–48% on time and 45–51% on allocations (wrapper cache, lazy axes, copy-free materialization). Further: XSLT result-tree construction, per-transform thread reuse, predicate-path allocations
 
 ## Known limitations (platform-bound, no fix planned)
 

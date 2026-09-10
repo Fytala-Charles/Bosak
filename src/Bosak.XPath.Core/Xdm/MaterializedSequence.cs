@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 09-09-2026     | Added Items view (copy-free access for the VM's materialization fast path)             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -37,6 +39,9 @@ public sealed class MaterializedSequence : IXdmSequence
     /// <summary>Creates a materialized sequence from an enumerable.</summary>
     public static XdmSequence FromEnumerable(IEnumerable<XdmValue> items)
         => XdmSequence.FromSource(new MaterializedSequence(items.ToList()));
+
+    /// <summary>Returns the materialized items without copying.</summary>
+    public IReadOnlyList<XdmValue> Items => _items;
 
     /// <summary>Returns the item count; always known for a materialized sequence.</summary>
     public bool TryGetLength(out int length)

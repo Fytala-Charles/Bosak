@@ -43,6 +43,7 @@
 //                      | Charles Korthout | 0.17  | 09-09-2026     | fn:transform option errors use FOXT0002 (mutually exclusive sources/options, delivery-format) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.18  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      | Charles Korthout | 0.19  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1129,12 +1130,12 @@ public static class XsltFunctionLibrary
         if (node is XDocumentNode xdn)
         {
             if (xdn.UnderlyingObject is XElement elem)
-                return new XDocumentNode(new XDocument(new XElement(elem)));
+                return XDocumentNode.Wrap(new XDocument(new XElement(elem)));
             if (xdn.UnderlyingObject is XDocument doc)
-                return new XDocumentNode(doc);
+                return XDocumentNode.Wrap(doc);
         }
         var fallback = new XElement("__wrapper__", node.StringValue);
-        return new XDocumentNode(new XDocument(fallback));
+        return XDocumentNode.Wrap(new XDocument(fallback));
     }
 
     private static void ValidateTransformOptions(

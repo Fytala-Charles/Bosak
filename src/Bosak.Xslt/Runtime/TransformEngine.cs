@@ -304,6 +304,7 @@
 //                      |                  |       |                | wins over XTDE1110 (for-each-group-051, REQ-082)                                        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.64  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      | Charles Korthout | 6.65  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1239,11 +1240,11 @@ public sealed class TransformEngine
             var rdProps = _resultDocument.Annotation<Stylesheet.OutputProperties>();
             if (rdProps != null)
                 doc.AddAnnotation(rdProps);
-            resultValue = XdmValue.FromNode(new XDocumentNode(doc));
+            resultValue = XdmValue.FromNode(XDocumentNode.Wrap(doc));
         }
         else
         {
-            resultValue = XdmValue.FromNode(new XDocumentNode(_resultDocument));
+            resultValue = XdmValue.FromNode(XDocumentNode.Wrap(_resultDocument));
         }
 
         FinalizeResultTreeNamespaces(resultValue);
@@ -1270,7 +1271,7 @@ public sealed class TransformEngine
                 elem.Remove();
                 var elemDoc = new XDocument(elem);
                 XDocumentNode.RegisterTree(elemDoc);
-                return XdmValue.FromNode(new XDocumentNode(elemDoc));
+                return XdmValue.FromNode(XDocumentNode.Wrap(elemDoc));
             }
             if (node is XText text)
                 return XdmValue.FromString(text.Value);
@@ -1278,13 +1279,13 @@ public sealed class TransformEngine
             {
                 var commentDoc = new XDocument(new XComment(comment.Value));
                 XDocumentNode.RegisterTree(commentDoc);
-                return XdmValue.FromNode(new XDocumentNode(commentDoc));
+                return XdmValue.FromNode(XDocumentNode.Wrap(commentDoc));
             }
             if (node is XProcessingInstruction pi)
             {
                 var piDoc = new XDocument(new XProcessingInstruction(pi.Target, pi.Data));
                 XDocumentNode.RegisterTree(piDoc);
-                return XdmValue.FromNode(new XDocumentNode(piDoc));
+                return XdmValue.FromNode(XDocumentNode.Wrap(piDoc));
             }
             return XdmValue.FromString(node.ToString());
         }
@@ -3063,7 +3064,7 @@ public sealed class TransformEngine
                 if (pendingTextIsSingleNode)
                     normalized.Add(pendingSingleTextItem);
                 else
-                    normalized.Add(XdmValue.FromNode(new XDocumentNode(new XText(pendingText.ToString()))));
+                    normalized.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(pendingText.ToString()))));
                 pendingText.Clear();
                 pendingTextIsSingleNode = false;
                 pendingSingleTextItem = default;
@@ -3152,7 +3153,7 @@ public sealed class TransformEngine
 
                         if (sb.Length > 0)
                         {
-                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(sb.ToString()))));
+                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(sb.ToString()))));
                         }
                     }
                     else
@@ -3164,12 +3165,12 @@ public sealed class TransformEngine
                             // applies to the parent (or an ancestor).
                             if (parent != null && IsWhitespacePreserveContext(parent))
                             {
-                                results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(value))));
                             }
                         }
                         else
                         {
-                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(value))));
                         }
                     }
                 }
@@ -3180,7 +3181,7 @@ public sealed class TransformEngine
             case XElement elem:
                 {
                     var copy = CopyLiteralElementToXElement(elem);
-                    results.Add(XdmValue.FromNode(new XDocumentNode(copy)));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(copy)));
                 }
                 break;
         }
@@ -3324,18 +3325,18 @@ public sealed class TransformEngine
                                         if (GetExpandText(instruction))
                                         {
                                             var tvtResult = EvaluateTvt(text.Value, instruction);
-                                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(tvtResult))));
+                                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(tvtResult))));
                                         }
                                         else if (!IsWhitespaceOnly(text.Value))
                                         {
-                                            results.Add(XdmValue.FromNode(new XDocumentNode(new XText(text.Value))));
+                                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(text.Value))));
                                         }
                                         break;
                                     case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                                         EvaluateFunctionBodyInstruction(elem, results, contextItem);
                                         break;
                                     case XElement elem:
-                                        results.Add(XdmValue.FromNode(new XDocumentNode(elem)));
+                                        results.Add(XdmValue.FromNode(XDocumentNode.Wrap(elem)));
                                         break;
                                 }
                             }
@@ -3366,7 +3367,7 @@ public sealed class TransformEngine
                         }
                         // xsl:value-of constructs a text node, even when contributing to a
                         // raw sequence such as an xsl:function result.
-                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(textValue))));
+                        results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(textValue))));
                         break;
                     }
                 case "variable":
@@ -3668,11 +3669,11 @@ public sealed class TransformEngine
                                 }
                                 else
                                 {
-                                    results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
                                 }
                             }
                             else if (node is XText t)
-                                results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(t.Value))));
                         }
                         break;
                     }
@@ -3720,11 +3721,11 @@ public sealed class TransformEngine
                                     }
                                     else
                                     {
-                                        results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                        results.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
                                     }
                                 }
                                 else if (node is XText t && !string.IsNullOrEmpty(t.Value))
-                                    results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(t.Value))));
                             }
                         }
                         break;
@@ -3890,7 +3891,7 @@ public sealed class TransformEngine
                         {
                             text = EvaluateTvt(text, instruction);
                         }
-                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(text))));
+                        results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(text))));
                         break;
                     }
                 case "number":
@@ -3972,7 +3973,7 @@ public sealed class TransformEngine
                         if (createdElem != null)
                         {
                             createdElem.Remove();
-                            results.Add(XdmValue.FromNode(new XDocumentNode(createdElem)));
+                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(createdElem)));
                         }
                         break;
                     }
@@ -3995,7 +3996,7 @@ public sealed class TransformEngine
                         var createdAttr = temp.Attributes().FirstOrDefault();
                         if (createdAttr != null)
                         {
-                            results.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(createdAttr.Name, createdAttr.Value))));
+                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(createdAttr.Name, createdAttr.Value))));
                         }
                         break;
                     }
@@ -4067,9 +4068,9 @@ public sealed class TransformEngine
                         foreach (var node in temp.Nodes())
                         {
                             if (node is XElement e)
-                                results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
                             else if (node is XText t && !string.IsNullOrEmpty(t.Value))
-                                results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(t.Value))));
                         }
                         break;
                     }
@@ -4231,7 +4232,7 @@ public sealed class TransformEngine
                 if (copied != null)
                 {
                     copied.Remove();
-                    results.Add(XdmValue.FromNode(new XDocumentNode(copied)));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(copied)));
                 }
             }
             finally
@@ -5024,7 +5025,7 @@ public sealed class TransformEngine
                 {
                     foreach (var attr in tempContainer.Attributes())
                     {
-                        items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                        items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
                     }
                     foreach (var node in tempContainer.Nodes().ToList())
                     {
@@ -5049,19 +5050,19 @@ public sealed class TransformEngine
                         case XElement e when e.Name.LocalName == "__xdm_doc__":
                             var seqDoc = new XDocument(e);
                             XDocumentNode.RegisterTree(seqDoc);
-                            items.Add(XdmValue.FromNode(new XDocumentNode(seqDoc)));
+                            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(seqDoc)));
                             break;
                         case XElement e:
-                            items.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
                             break;
                         case XText t when !string.IsNullOrEmpty(t.Value):
-                            items.Add(XdmValue.FromNode(new XDocumentNode(t is XRawText ? new XRawText(t.Value) : new XText(t.Value))));
+                            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(t is XRawText ? new XRawText(t.Value) : new XText(t.Value))));
                             break;
                         case XComment c:
-                            items.Add(XdmValue.FromNode(new XDocumentNode(c)));
+                            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(c)));
                             break;
                         case XProcessingInstruction pi:
-                            items.Add(XdmValue.FromNode(new XDocumentNode(pi)));
+                            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(pi)));
                             break;
                     }
                 }
@@ -5591,7 +5592,7 @@ public sealed class TransformEngine
                     if (IsRawCollectionTopLevel)
                     {
                         var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
-                        rawList.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(
+                        rawList.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(
                             XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri), value))));
                         break;
                     }
@@ -5721,7 +5722,7 @@ public sealed class TransformEngine
                     if (IsRawCollectionTopLevel)
                     {
                         var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
-                        rawList.Add(XdmValue.FromNode(new XDocumentNode(new XComment(commentText))));
+                        rawList.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XComment(commentText))));
                     }
                     else
                     {
@@ -5755,7 +5756,7 @@ public sealed class TransformEngine
                     if (IsRawCollectionTopLevel)
                     {
                         var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
-                        rawList.Add(XdmValue.FromNode(new XDocumentNode(new XProcessingInstruction(piName, piData))));
+                        rawList.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XProcessingInstruction(piName, piData))));
                     }
                     else
                     {
@@ -7560,7 +7561,7 @@ public sealed class TransformEngine
             if (collectAsRawItem)
             {
                 var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
-                rawList.Add(XdmValue.FromNode(new XDocumentNode(copy)));
+                rawList.Add(XdmValue.FromNode(XDocumentNode.Wrap(copy)));
             }
         }
         finally
@@ -8264,7 +8265,7 @@ public sealed class TransformEngine
             if (attr.IsNamespaceDeclaration)
                 continue;
             attr.Remove();
-            result.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+            result.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
         }
 
         // Child nodes are detached and wrapped as XDM nodes. Synthetic sequence
@@ -8281,7 +8282,7 @@ public sealed class TransformEngine
             }
             else
             {
-                result.Add(XdmValue.FromNode(new XDocumentNode(node)));
+                result.Add(XdmValue.FromNode(XDocumentNode.Wrap(node)));
             }
         }
     }
@@ -8360,7 +8361,7 @@ public sealed class TransformEngine
                     if (node is XDocumentNode srcDocNode)
                         srcDocNode.CopyUnparsedEntitiesTo(newDoc);
                     XDocumentNode.RegisterTree(newDoc);
-                    return new XDocumentNode(newDoc);
+                    return XDocumentNode.Wrap(newDoc);
                 }
             case XdmNodeKind.Element:
                 {
@@ -8416,16 +8417,16 @@ public sealed class TransformEngine
                     {
                         CopyNodeToContainer(child.NodeValue!, copy, copyAllNamespaces, copyAccumulators);
                     }
-                    return new XDocumentNode(copy);
+                    return XDocumentNode.Wrap(copy);
                 }
             case XdmNodeKind.Text:
-                return new XDocumentNode(CreateTextNodeCopy(node));
+                return XDocumentNode.Wrap(CreateTextNodeCopy(node));
             case XdmNodeKind.Comment:
-                return new XDocumentNode(new XComment(node.StringValue));
+                return XDocumentNode.Wrap(new XComment(node.StringValue));
             case XdmNodeKind.ProcessingInstruction:
-                return new XDocumentNode(new XProcessingInstruction(node.LocalName, node.StringValue));
+                return XDocumentNode.Wrap(new XProcessingInstruction(node.LocalName, node.StringValue));
             case XdmNodeKind.Attribute:
-                return new XDocumentNode(Xml11Attribute.Create(
+                return XDocumentNode.Wrap(Xml11Attribute.Create(
                     XName.Get(node.EncodedLocalName, node.NamespaceUri),
                     node.StringValue));
             case XdmNodeKind.Namespace:
@@ -8490,16 +8491,16 @@ public sealed class TransformEngine
                         _sequenceAccumulator = savedAccumulator;
                     }
                     NormalizeElementContent(copy);
-                    return new XDocumentNode(copy);
+                    return XDocumentNode.Wrap(copy);
                 }
             case XdmNodeKind.Text:
-                return new XDocumentNode(CreateTextNodeCopy(nodeToCopy));
+                return XDocumentNode.Wrap(CreateTextNodeCopy(nodeToCopy));
             case XdmNodeKind.Comment:
-                return new XDocumentNode(new XComment(nodeToCopy.StringValue));
+                return XDocumentNode.Wrap(new XComment(nodeToCopy.StringValue));
             case XdmNodeKind.ProcessingInstruction:
-                return new XDocumentNode(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
+                return XDocumentNode.Wrap(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
             case XdmNodeKind.Attribute:
-                return new XDocumentNode(new XAttribute(
+                return XDocumentNode.Wrap(new XAttribute(
                     XName.Get(nodeToCopy.EncodedLocalName, nodeToCopy.NamespaceUri),
                     nodeToCopy.StringValue));
             case XdmNodeKind.Document:
@@ -8529,7 +8530,7 @@ public sealed class TransformEngine
                         _currentContainer = savedContainer;
                         _sequenceAccumulator = savedAccumulator;
                     }
-                    return new XDocumentNode(newDoc);
+                    return XDocumentNode.Wrap(newDoc);
                 }
             default:
                 return null;
@@ -8709,7 +8710,7 @@ public sealed class TransformEngine
                             }
                         }
 
-                        _sequenceAccumulator!.Add(XdmValue.FromNode(new XDocumentNode(newDoc)));
+                        _sequenceAccumulator!.Add(XdmValue.FromNode(XDocumentNode.Wrap(newDoc)));
                     }
                     else
                     {
@@ -9704,7 +9705,7 @@ public sealed class TransformEngine
                     _currentContainer = newDoc;
                     ApplyTemplates(node, mode, select: null, sortKeys: null, incomingTunnelParams, callParams);
                     _currentContainer = savedContainer;
-                    _sequenceAccumulator.Add(XdmValue.FromNode(new XDocumentNode(newDoc)));
+                    _sequenceAccumulator.Add(XdmValue.FromNode(XDocumentNode.Wrap(newDoc)));
                 }
                 else
                 {
@@ -11380,11 +11381,11 @@ public sealed class TransformEngine
             if (root != null && root.Name.LocalName == "__xdm_doc__")
             {
                 foreach (var child in root.Nodes())
-                    results.Add(XdmValue.FromNode(new XDocumentNode(child)));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(child)));
                 return;
             }
             if (root != null)
-                results.Add(XdmValue.FromNode(new XDocumentNode(root)));
+                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(root)));
             return;
         }
 
@@ -13848,7 +13849,7 @@ public sealed class TransformEngine
                 var effectiveBaseUri = GetEffectiveBaseUri(parent);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     emptyDoc.AddAnnotation(effectiveBaseUri);
-                return XdmValue.FromNode(new XDocumentNode(emptyDoc));
+                return XdmValue.FromNode(XDocumentNode.Wrap(emptyDoc));
             }
             return XdmValue.FromSequence(XdmSequence.Empty);
         }
@@ -13883,7 +13884,7 @@ public sealed class TransformEngine
                 XDocumentNode.RegisterTree(tempDoc);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     tempDoc.AddAnnotation(effectiveBaseUri);
-                return XdmValue.FromNode(new XDocumentNode(tempDoc));
+                return XdmValue.FromNode(XDocumentNode.Wrap(tempDoc));
             }
             else
             {
@@ -13902,7 +13903,7 @@ public sealed class TransformEngine
                 XDocumentNode.RegisterTree(tempDoc);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     tempDoc.AddAnnotation(effectiveBaseUri);
-                return XdmValue.FromNode(new XDocumentNode(tempDoc));
+                return XdmValue.FromNode(XDocumentNode.Wrap(tempDoc));
             }
         }
 
@@ -13992,7 +13993,7 @@ public sealed class TransformEngine
                     // Return the element directly as a standalone node. It has already
                     // been detached from the temporary wrapper, so it is the root of
                     // its own temporary tree.
-                    results.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
                     break;
                 case XText t:
                     // Drop zero-length text nodes for single-item node-kind types;
@@ -14002,13 +14003,13 @@ public sealed class TransformEngine
                     // Preserve text nodes as text nodes, not atomic strings,
                     // so that CopyToResult can concatenate adjacent text nodes
                     // without inserting spaces (XSLT 3.0 §5.7.2).
-                    results.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(t.Value))));
                     break;
                 case XComment c:
-                    results.Add(XdmValue.FromNode(new XDocumentNode(c)));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(c)));
                     break;
                 case XProcessingInstruction pi:
-                    results.Add(XdmValue.FromNode(new XDocumentNode(pi)));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(pi)));
                     break;
             }
         }
@@ -14021,7 +14022,7 @@ public sealed class TransformEngine
             }
             else
             {
-                results.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
             }
         }
 
@@ -14638,7 +14639,7 @@ public sealed class TransformEngine
                             }
                             continue;
                         }
-                        resultItems.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(attr.Name, attr.Value))));
+                        resultItems.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
                     }
                 }
                 foreach (var node in tempContainer.Nodes().ToList())
@@ -14660,7 +14661,7 @@ public sealed class TransformEngine
                         }
                         else
                         {
-                            resultItems.Add(XdmValue.FromNode(new XDocumentNode(node)));
+                            resultItems.Add(XdmValue.FromNode(XDocumentNode.Wrap(node)));
                         }
                     }
                 }
@@ -14827,10 +14828,10 @@ public sealed class TransformEngine
             if (IsWhitespaceOnly(merged))
             {
                 if (IsWhitespacePreserveContext(parent))
-                    items.Add(XdmValue.FromNode(new XDocumentNode(new XText(merged))));
+                    items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(merged))));
                 return;
             }
-            items.Add(XdmValue.FromNode(new XDocumentNode(new XText(EvaluateTvt(merged, parent)))));
+            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(EvaluateTvt(merged, parent)))));
         }
 
         foreach (var node in parent.Nodes())
@@ -14854,7 +14855,7 @@ public sealed class TransformEngine
                 case XElement elem:
                     FlushPendingTvt();
                     var copy = CopyLiteralElementToXElement(elem);
-                    items.Add(XdmValue.FromNode(new XDocumentNode(copy)));
+                    items.Add(XdmValue.FromNode(XDocumentNode.Wrap(copy)));
                     break;
             }
         }
@@ -14884,7 +14885,7 @@ public sealed class TransformEngine
         {
             value = text.Value;
         }
-        items.Add(XdmValue.FromNode(new XDocumentNode(new XText(value))));
+        items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(value))));
     }
 
     /// <summary>
@@ -15123,16 +15124,16 @@ public sealed class TransformEngine
                         switch (child)
                         {
                             case XText t:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(t.Value))));
                                 break;
                             case XElement e:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
                                 break;
                             case XComment c:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(c)));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(c)));
                                 break;
                             case XProcessingInstruction pi:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(pi)));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(pi)));
                                 break;
                         }
                     }
@@ -15158,7 +15159,7 @@ public sealed class TransformEngine
                     var createdAttr = attrTemp.Attributes().FirstOrDefault();
                     if (createdAttr != null)
                     {
-                        items.Add(XdmValue.FromNode(new XDocumentNode(new XAttribute(createdAttr.Name, createdAttr.Value))));
+                        items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(createdAttr.Name, createdAttr.Value))));
                     }
                     break;
                 }
@@ -15196,16 +15197,16 @@ public sealed class TransformEngine
                         switch (child)
                         {
                             case XText t:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(new XText(t.Value))));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(t.Value))));
                                 break;
                             case XElement e:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(e)));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
                                 break;
                             case XComment c:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(c)));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(c)));
                                 break;
                             case XProcessingInstruction pi:
-                                items.Add(XdmValue.FromNode(new XDocumentNode(pi)));
+                                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(pi)));
                                 break;
                         }
                     }
@@ -15364,7 +15365,7 @@ public sealed class TransformEngine
         {
             var doc = new XDocument(elementChildren[0]);
             XDocumentNode.RegisterTree(doc);
-            var serialized = ResultTreeSerializer.Serialize(XdmValue.FromNode(new XDocumentNode(doc)), props);
+            var serialized = ResultTreeSerializer.Serialize(XdmValue.FromNode(XDocumentNode.Wrap(doc)), props);
             System.IO.File.WriteAllText(path, serialized);
         }
         else if (props.Method == "text")
@@ -15762,7 +15763,7 @@ public sealed class TransformEngine
                         node.Remove();
                         captureTarget.Add(node);
                     }
-                    capturedValue = XdmValue.FromNode(new XDocumentNode(capturedDoc));
+                    capturedValue = XdmValue.FromNode(XDocumentNode.Wrap(capturedDoc));
                 }
                 _capturedResultDocuments[resolvedHref] = (capturedValue, resultDocumentProps);
             }
@@ -17985,18 +17986,18 @@ public sealed class TransformEngine
                 case XText text:
                     if (GetExpandText(child))
                     {
-                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(EvaluateTvt(text.Value, child)))));
+                        results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(EvaluateTvt(text.Value, child)))));
                     }
                     else if (!IsWhitespaceOnly(text.Value))
                     {
-                        results.Add(XdmValue.FromNode(new XDocumentNode(new XText(text.Value))));
+                        results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(text.Value))));
                     }
                     break;
                 case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
                     EvaluateFunctionBodyInstruction(elem, results, contextItem);
                     break;
                 case XElement elem:
-                    results.Add(XdmValue.FromNode(new XDocumentNode(elem)));
+                    results.Add(XdmValue.FromNode(XDocumentNode.Wrap(elem)));
                     break;
             }
         }

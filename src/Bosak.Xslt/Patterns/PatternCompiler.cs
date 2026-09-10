@@ -48,6 +48,7 @@
 //                      | Charles Korthout | 3.1  | 02-09-2026     | XTSE3470/XTSE3500 for current-merge-group()/current-merge-key() in match patterns (merge-057/058)|
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      | Charles Korthout | 3.3   | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2363,7 +2364,7 @@ public sealed class PatternCompiler
             _validationContext.SuppressLazySequenceConstructorGlobals = true;
             try
             {
-                var dummyNode = new XDocumentNode(new XElement("__dummy__"));
+                var dummyNode = XDocumentNode.Wrap(new XElement("__dummy__"));
                 var validationExpr = CompilePatternXPath($"boolean({predicateExpr})");
                 validationExpr.Evaluate(_validationContext.WithFocus(XdmValue.FromNode(dummyNode), 1, 1));
             }

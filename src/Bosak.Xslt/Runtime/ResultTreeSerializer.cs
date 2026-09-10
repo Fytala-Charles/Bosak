@@ -56,6 +56,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.28  | 28-08-2026     | HTML C1 controls: SERE0014 for HTML4, numeric char refs for HTML5.                       |
 //                      | Charles Korthout | 1.29  | 29-08-2026     | HTML 4.0 empty elements emit closing tag; HTML 5.0 void elements remain empty.            |
+//                      | Charles Korthout | 1.30  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1023,7 +1024,7 @@ public static class ResultTreeSerializer
                 xdn.UnderlyingObject is XDocument doc)
             {
                 foreach (var child in doc.Nodes())
-                    yield return XdmValue.FromNode(new XDocumentNode(child));
+                    yield return XdmValue.FromNode(XDocumentNode.Wrap(child));
             }
             else if (node is XDocumentNode xdn2 &&
                      xdn2.UnderlyingObject is XElement elem &&
@@ -1031,7 +1032,7 @@ public static class ResultTreeSerializer
                      elem.Name.NamespaceName == "")
             {
                 foreach (var child in elem.Nodes())
-                    yield return XdmValue.FromNode(new XDocumentNode(child));
+                    yield return XdmValue.FromNode(XDocumentNode.Wrap(child));
             }
             else
             {
@@ -1766,7 +1767,7 @@ public static class ResultTreeSerializer
     private static IXdmNode NormalizeXdmNode(IXdmNode node, System.Text.NormalizationForm form)
     {
         if (node is XDocumentNode xdocNode && xdocNode.UnderlyingObject is XNode xnode)
-            return new XDocumentNode(NormalizeXNode(xnode, form));
+            return XDocumentNode.Wrap(NormalizeXNode(xnode, form));
         return node;
     }
 
@@ -1949,11 +1950,11 @@ public static class ResultTreeSerializer
         {
             case XDocument doc:
                 foreach (var child in doc.Nodes())
-                    WriteHtmlNode(writer, new XDocumentNode(child), props, depth, inScopeBindings);
+                    WriteHtmlNode(writer, XDocumentNode.Wrap(child), props, depth, inScopeBindings);
                 break;
             case XElement elem when elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "":
                 foreach (var child in elem.Nodes())
-                    WriteHtmlNode(writer, new XDocumentNode(child), props, depth, inScopeBindings);
+                    WriteHtmlNode(writer, XDocumentNode.Wrap(child), props, depth, inScopeBindings);
                 break;
             case XElement elem:
                 WriteHtmlElement(writer, elem, props, depth, inScopeBindings);
@@ -2330,11 +2331,11 @@ public static class ResultTreeSerializer
         {
             case XDocument doc:
                 foreach (var child in doc.Nodes())
-                    WriteXhtmlNode(writer, new XDocumentNode(child), props, depth, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlNode(writer, XDocumentNode.Wrap(child), props, depth, new Dictionary<string, string>(inScopeBindings));
                 break;
             case XElement elem when elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "":
                 foreach (var child in elem.Nodes())
-                    WriteXhtmlNode(writer, new XDocumentNode(child), props, depth, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlNode(writer, XDocumentNode.Wrap(child), props, depth, new Dictionary<string, string>(inScopeBindings));
                 break;
             case XElement elem:
                 WriteXhtmlElement(writer, elem, props, depth, inScopeBindings);
