@@ -57,6 +57,7 @@
 //                      | Charles Korthout | 1.28  | 28-08-2026     | HTML C1 controls: SERE0014 for HTML4, numeric char refs for HTML5.                       |
 //                      | Charles Korthout | 1.29  | 29-08-2026     | HTML 4.0 empty elements emit closing tag; HTML 5.0 void elements remain empty.            |
 //                      | Charles Korthout | 1.30  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
+//                      | Charles Korthout | 1.31  | 10-09-2026     | Perf: span-based HTML escaping (no per-char strings/encoding lookups); copy-on-write nam |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2031,7 +2032,7 @@ public static class ResultTreeSerializer
     private static void WriteHtmlElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
     {
         var localName = element.Name.LocalName;
-        var isEmpty = !element.Nodes().Any();
+        var isEmpty = !element.HasElements;
         var isRawContent = IsHtmlRawContentElement(localName);
         var elemNs = element.Name.NamespaceName;
 
@@ -2039,7 +2040,12 @@ public static class ResultTreeSerializer
         // attributes (output-0602c/0603a-c); HTML 4 and XHTML-namespace content keep
         // the prefix-less form with a default namespace declaration.
         bool html5 = props.HtmlVersion == "5.0";
-        var localBindings = new Dictionary<string, string>(inScopeBindings);
+        // Local namespace view over the incoming scope, materialized only on first
+        // modification (copy-on-write): elements that add no declarations share the
+        // parent's dictionary instead of copying it per element.
+        Dictionary<string, string>? localBindings = null;
+        Dictionary<string, string> BindingsView() => localBindings ?? inScopeBindings;
+        Dictionary<string, string> BindingsWrite() => localBindings ??= new Dictionary<string, string>(inScopeBindings);
         var declarationsToEmit = new List<(string Prefix, string Uri)>();
         var attributeDeclarations = new List<(string Prefix, string Uri)>();
         string? elemPrefix = null;
@@ -2055,9 +2061,9 @@ public static class ResultTreeSerializer
                 var declPrefix = nsAttr.Name.LocalName == "xmlns" ? "" : nsAttr.Name.LocalName;
                 if (declPrefix.Length == 0)
                     continue;
-                if (!localBindings.TryGetValue(declPrefix, out var existing) || existing != nsAttr.Value)
+                if (!BindingsView().TryGetValue(declPrefix, out var existing) || existing != nsAttr.Value)
                 {
-                    localBindings[declPrefix] = nsAttr.Value;
+                    BindingsWrite()[declPrefix] = nsAttr.Value;
                     if (nsAttr.Value != "http://www.w3.org/1999/xhtml" &&
                         nsAttr.Value != "http://www.w3.org/2000/svg" &&
                         nsAttr.Value != "http://www.w3.org/1998/Math/MathML")
@@ -2071,7 +2077,7 @@ public static class ResultTreeSerializer
             {
                 // A foreign-namespace element keeps a declared in-scope prefix (output-0602c).
                 // XHTML, SVG, and MathML elements take the default-namespace form instead.
-                elemPrefix = FindHtml5Prefix(elemNs, localBindings);
+                elemPrefix = FindHtml5Prefix(elemNs, BindingsView());
             }
         }
 
@@ -2097,18 +2103,20 @@ public static class ResultTreeSerializer
             writer.Write(elemNs);
             writer.Write('"');
             inScopeBindings[""] = elemNs;
-            localBindings[""] = elemNs;
+            BindingsWrite()[""] = elemNs;
         }
 
-        foreach (var attr in element.Attributes().Where(a => !a.IsNamespaceDeclaration))
+        foreach (var attr in element.Attributes())
         {
+            if (attr.IsNamespaceDeclaration)
+                continue;
             writer.Write(' ');
             var attrNs = attr.Name.NamespaceName;
             if (html5 && !string.IsNullOrEmpty(attrNs))
             {
                 // Foreign-namespace attribute: keep its prefix (output-0603a/b/c).
-                var attrPrefix = FindHtml5Prefix(attrNs, localBindings)
-                    ?? DeclareHtml5Prefix(attrNs, localBindings, declarationsToEmit);
+                var attrPrefix = FindHtml5Prefix(attrNs, BindingsView())
+                    ?? DeclareHtml5Prefix(attrNs, BindingsWrite(), declarationsToEmit);
                 bool isSpecialNs = attrNs == "http://www.w3.org/1999/xhtml" ||
                     attrNs == "http://www.w3.org/2000/svg" ||
                     attrNs == "http://www.w3.org/1998/Math/MathML";
@@ -2182,7 +2190,7 @@ public static class ResultTreeSerializer
 
         writer.Write('>');
 
-        var childBindings = new Dictionary<string, string>(localBindings);
+        var childBindings = localBindings ?? inScopeBindings;
         if (isRawContent)
         {
             foreach (var child in element.Nodes())
@@ -2254,6 +2262,14 @@ public static class ResultTreeSerializer
     {
         var map = applyCharacterMap ? props.CharacterMap : null;
         var form = applyCharacterMap ? TryGetNormalizationForm(props) : null;
+        if (map is null or { Count: 0 })
+        {
+            // Fast path: clean spans are written in one go; only special characters and
+            // non-representable codepoints break the span. Avoids per-character string
+            // allocations and per-character encoding lookups.
+            WriteHtmlEscapedFast(writer, form != null ? value.Normalize(form.Value) : value, props);
+            return;
+        }
         foreach (var (immune, text) in GetCharacterMapSegments(value, map))
         {
             if (immune)
@@ -2263,54 +2279,99 @@ public static class ResultTreeSerializer
             }
 
             var normalized = form != null ? text.Normalize(form.Value) : text;
-            foreach (var rune in normalized.EnumerateRunes())
+            WriteHtmlEscapedFast(writer, normalized, props);
+        }
+    }
+
+    private static bool IsUnicodeEncodingName(string encodingName)
+        => encodingName.Equals("utf-8", StringComparison.OrdinalIgnoreCase)
+            || encodingName.Equals("utf-16", StringComparison.OrdinalIgnoreCase)
+            || encodingName.Equals("utf-16le", StringComparison.OrdinalIgnoreCase)
+            || encodingName.Equals("utf-16be", StringComparison.OrdinalIgnoreCase)
+            || encodingName.Equals("utf-32", StringComparison.OrdinalIgnoreCase)
+            || encodingName.Equals("unicode", StringComparison.OrdinalIgnoreCase);
+
+    private static void WriteHtmlEscapedFast(TextWriter writer, string text, Stylesheet.OutputProperties props)
+    {
+        bool html4 = props.HtmlVersion == "4.0";
+        bool unicodeEncoding = IsUnicodeEncodingName(props.Encoding);
+        int start = 0;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            // The #x7F-#x9F rule applies regardless of encoding; other non-ASCII checks
+            // only matter when the output encoding is not a full Unicode encoding.
+            bool isSpecial = c is '<' or '>' or '&' or '"' or '\r'
+                || (c >= 0x7F && (c <= 0x9F || !unicodeEncoding));
+            if (!isSpecial)
+                continue;
+            if (i > start)
+                writer.Write(text.AsSpan(start, i - start));
+            switch (c)
             {
-                var cp = rune.Value;
-                switch (cp)
-                {
-                    case '<':
-                        writer.Write("&lt;");
-                        break;
-                    case '>':
-                        writer.Write("&gt;");
-                        break;
-                    case '&':
-                        writer.Write("&amp;");
-                        break;
-                    case '"':
-                        writer.Write("&quot;");
-                        break;
-                    case '\r':
-                        writer.Write("&#13;");
-                        break;
-                    default:
-                        if (cp is >= 0x7F and <= 0x9F)
-                        {
-                            // HTML 4.0 does not allow characters in the #x7F-#x9F range.
-                            // HTML 5.0 serializes them as numeric character references.
-                            if (props.HtmlVersion == "4.0")
-                            {
-                                throw new XsltRuntimeException("SERE0014",
-                                    "HTML output contains a character in the #x7F-#x9F range.",
-                                    XdmValue.Undefined);
-                            }
-                            writer.Write("&#");
-                            writer.Write(cp);
-                            writer.Write(';');
-                        }
-                        else if (!IsRepresentable(cp, props.Encoding))
-                        {
-                            writer.Write("&#");
-                            writer.Write(cp);
-                            writer.Write(';');
-                        }
-                        else
-                        {
-                            writer.Write(rune.ToString());
-                        }
-                        break;
-                }
+                case '<': writer.Write("&lt;"); break;
+                case '>': writer.Write("&gt;"); break;
+                case '&': writer.Write("&amp;"); break;
+                case '"': writer.Write("&quot;"); break;
+                case '\r': writer.Write("&#13;"); break;
+                default:
+                    int cp;
+                    if (char.IsHighSurrogate(c) && i + 1 < text.Length && char.IsLowSurrogate(text[i + 1]))
+                    {
+                        cp = char.ConvertToUtf32(c, text[i + 1]);
+                        i++;
+                    }
+                    else if (char.IsSurrogate(c))
+                    {
+                        // Unpaired surrogate: match Rune enumeration, which substitutes U+FFFD.
+                        cp = 0xFFFD;
+                    }
+                    else
+                    {
+                        cp = c;
+                    }
+                    WriteHtmlEscapedCodepoint(writer, cp, props, html4);
+                    break;
             }
+            start = i + 1;
+        }
+        if (start < text.Length)
+            writer.Write(text.AsSpan(start));
+    }
+
+    private static void WriteHtmlEscapedCodepoint(TextWriter writer, int cp, Stylesheet.OutputProperties props, bool html4)
+    {
+        if (cp is >= 0x7F and <= 0x9F)
+        {
+            // HTML 4.0 does not allow characters in the #x7F-#x9F range.
+            // HTML 5.0 serializes them as numeric character references.
+            if (html4)
+            {
+                throw new XsltRuntimeException("SERE0014",
+                    "HTML output contains a character in the #x7F-#x9F range.",
+                    XdmValue.Undefined);
+            }
+            writer.Write("&#");
+            writer.Write(cp);
+            writer.Write(';');
+            return;
+        }
+        if (!IsRepresentable(cp, props.Encoding))
+        {
+            writer.Write("&#");
+            writer.Write(cp);
+            writer.Write(';');
+            return;
+        }
+        if (cp > 0xFFFF)
+        {
+            int u = cp - 0x10000;
+            writer.Write((char)(u / 0x400 + 0xD800));
+            writer.Write((char)(u % 0x400 + 0xDC00));
+        }
+        else
+        {
+            writer.Write((char)cp);
         }
     }
 

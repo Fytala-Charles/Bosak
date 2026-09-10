@@ -1,5 +1,18 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-10 (second session)
+**Commit:** (pending) — REQ-085 performance wave 3: span-based HTML escaping + copy-on-write namespace bindings
+**Current focus:** **Performance wave 3 landed: Transform_HtmlTable 73.06 → 60.14 ms (cumulative 193.34 → 60.14, −69%), 71.53 → 60.20 MB (cumulative 115.48 → 60.20, −48%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
+**What was built:**
+- **Span-based HTML escaping** (`WriteHtmlEscapedFast`, ResultTreeSerializer 1.31): the serializer allocated a `Rune.ToString()` per ordinary character and resolved the output encoding + allocated char/byte arrays per `IsRepresentable` check (~150k allocations per transform). Now clean spans are written whole; per-codepoint handling only for specials; `IsUnicodeEncodingName` short-circuits representability for utf-8/utf-16/utf-32; unpaired surrogates keep the Rune U+FFFD semantics. Serialization share of the transform benchmark fell 7.5 → 1.3 MB.
+- **Copy-on-write namespace bindings** in `WriteHtmlElement`: two `Dictionary` copies per element (bindings + childBindings, ~3,000× per transform) replaced by a lazy view — zero copies when an element adds no declarations; the default-namespace mutation semantics are preserved (XSLT output-0602/0603 series green).
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`.
+**Next steps (wave 4 candidates):** result-tree append micro-costs (execution share ~4.5 KB/row), per-transform thread-spawn reuse (RunWithStack, re-entrancy-sensitive), predicate-path intermediate lists, FLWOR tuple materialization. Then the GA track (release notes, SemVer commitment at 1.0; optionally `v0.10.1-beta` to ship the perf story).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-10
 **Commit:** `df8632c` — REQ-085 performance wave 2: XSLT transform path (compiled-XPath cache, Populate skip, LRE static-info cache)
 **Current focus:** **Performance wave 2 landed: Transform_HtmlTable 193.34 → 73.06 ms (−62%), 115.48 → 71.53 MB (−38%).** Xslt.Tests 377/0, QT3 31,142/0/679, XSLT strict 7,722/3/6,875, unit 2,216/0/0 — all unchanged; build 0/0.
