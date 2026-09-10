@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09 (fourth session)
-**Commit:** (pending) — REQ-085 performance wave 1: benchmark harness + baseline, wrapper cache, lazy axes, copy-free materialization
+**Commit:** `5719f81` — REQ-085 performance wave 1: benchmark harness + baseline, wrapper cache, lazy axes, copy-free materialization
 **Current focus:** **Performance wave 1 landed: document benchmarks 33–48% faster, 45–51% less allocated.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.
 **What was built:**
 - **Benchmark harness** `benchmarks/Bosak.Benchmarks` (BenchmarkDotNet, not in Bosak.sln): 8 benchmarks over a synthetic 2,000-item catalog; baseline in `baseline-0.10.0.txt` + summary table in its README.
