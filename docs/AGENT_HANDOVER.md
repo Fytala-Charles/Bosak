@@ -9,7 +9,10 @@
 - **LRE bookkeeping caching** — `ElementPrefixHint` interned per prefix value (`GetPrefixHint`, engine-instance dictionary; serializer consumes `.Prefix` by value); duplicate-attribute `HashSet` allocated lazily (zero-attribute LREs allocate nothing); xsl:on-empty/on-non-empty direct-child check and variable-snapshot need cached in `LreStaticInfo` (`ContainsConditional`, `MayDeclareVariables`) — `SnapshotVariables`/`RestoreVariables` skipped when the LRE subtree cannot declare variables (templates, stylesheet functions, for-each, iterate all restore their own scopes).
 **Also in this session:** registry hygiene — post-QT3 roadmap rows 1–2 (XQuery 3.1, XSLT 3.0 packages) flipped from stale `In Progress` to `Implemented`; REQ-085 registry row/status/header updated to waves 1–4.
 **Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`; benchmark `Transform_HtmlTable` 51.46 ms / 47.13 MB.
-**Next steps (wave 5 candidates, unchanged priority):** per-transform thread-spawn reuse (`RunWithStack`, re-entrancy-sensitive), predicate-path intermediate lists, FLWOR tuple materialization. Then the GA track (release notes, SemVer commitment at 1.0; optionally `v0.10.1-beta` to ship the perf story).
+**Next steps (agreed 2026-09-14):**
+1. **Wave 5: predicate-path intermediate lists** (~1 KB per node-predicate; also improves `Evaluate_PathHeavy`, still 22 ms / 31 MB). Best risk/reward of the wave-5 candidates — semantics-local. Then FLWOR tuple materialization; keep per-transform thread-spawn reuse (`RunWithStack`, re-entrancy-sensitive) for last.
+2. **Consider cutting `v0.10.1-beta`** to publish the perf story (cumulative −73% time / −59% alloc on Transform_HtmlTable, both W3C suites unchanged); also exercises the release pipeline before GA. Owner decision; release notes can be drafted on request.
+3. **Owner-side open items:** activate ruleset `protect-main` (id 22255065, Settings → Rules → Rulesets → enforcement Active — pending since 2026-09-05); define support channel per `COMMERCIAL.md`; SemVer/1.0 timing decision.
 
 ---
 
