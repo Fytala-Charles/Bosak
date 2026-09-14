@@ -306,6 +306,7 @@
 //                      | Charles Korthout | 6.64  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      | Charles Korthout | 6.65  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      | Charles Korthout | 6.66  | 09-09-2026     | Perf: per-instruction compiled-XPath cache, static LRE namespace-info cache; engine cont |
+//                      | Charles Korthout | 6.67  | 14-09-2026     | REQ-085 wave 4: NormalizeElementContent fast path, AVT literal fast path, LRE         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1476,14 +1477,41 @@ public sealed class TransformEngine
     /// </summary>
     private static void NormalizeElementContent(XElement element)
     {
-        var nodes = element.Nodes().ToList();
-        if (nodes.Count == 0)
+        // Fast path: the complex content rules only change the tree when a zero-length
+        // text node must be discarded or adjacent text nodes must be merged. Detect that
+        // with an allocation-free walk over the linked node list and skip the rebuild.
+        var node = element.FirstNode;
+        if (node == null)
             return;
 
+        bool previousWasText = false;
+        bool requiresNormalization = false;
+        for (; node != null; node = node.NextNode)
+        {
+            // XRawText derives from XText, so raw text is covered by the same check.
+            if (node is XText text)
+            {
+                if (previousWasText || text.Value.Length == 0)
+                {
+                    requiresNormalization = true;
+                    break;
+                }
+                previousWasText = true;
+            }
+            else
+            {
+                previousWasText = false;
+            }
+        }
+
+        if (!requiresNormalization)
+            return;
+
+        var nodes = element.Nodes().ToList();
         var normalized = ApplyComplexContentRules(nodes);
         element.RemoveNodes();
-        foreach (var node in normalized)
-            element.Add(node);
+        foreach (var child in normalized)
+            element.Add(child);
     }
 
     /// <summary>
@@ -7281,9 +7309,28 @@ public sealed class TransformEngine
         public required HashSet<string> ExtensionNamespaces { get; init; }
         public required HashSet<string> ExcludedNamespaceUris { get; init; }
         public required List<(string Prefix, XNamespace Namespace)> InScopeDeclarations { get; init; }
+        public required bool ContainsConditional { get; init; }
+        public required bool MayDeclareVariables { get; init; }
     }
 
     private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<XElement, LreStaticInfo> LreStaticInfoCache = new();
+
+    // ElementPrefixHint is immutable; share one instance per distinct prefix value
+    // instead of allocating a new hint for every copied literal element. The NUL
+    // string keys the null prefix (it can never be a real namespace prefix).
+    private const string NoPrefixHintKey = "\0";
+    private readonly Dictionary<string, ElementPrefixHint> _prefixHintCache = new();
+
+    private ElementPrefixHint GetPrefixHint(string? prefix)
+    {
+        var key = prefix ?? NoPrefixHintKey;
+        if (!_prefixHintCache.TryGetValue(key, out var hint))
+        {
+            hint = new ElementPrefixHint { Prefix = prefix };
+            _prefixHintCache[key] = hint;
+        }
+        return hint;
+    }
 
     private void CopyLiteralElement(XElement source)
     {
@@ -7294,6 +7341,15 @@ public sealed class TransformEngine
             ExtensionNamespaces = GetExtensionElementPrefixes(s),
             ExcludedNamespaceUris = GetExcludedNamespaceUris(s),
             InScopeDeclarations = GetInScopeNamespaceDeclarations(s).ToList(),
+            // xsl:on-empty / xsl:on-non-empty as direct children route the content through
+            // the conditional sequence-constructor path; fixed by the stylesheet tree.
+            ContainsConditional = s.Elements().Any(e => e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                && (e.Name.LocalName == "on-empty" || e.Name.LocalName == "on-non-empty")),
+            // The variable snapshot/restore around the content is only needed when the
+            // content itself can declare variables; templates, stylesheet functions, and
+            // for-each restore their own scopes.
+            MayDeclareVariables = s.Descendants().Any(e => e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                && (e.Name.LocalName == "variable" || e.Name.LocalName == "param" || e.Name.LocalName == "iterate")),
         });
 
         // Extension elements are not copied; if they have xsl:fallback children,
@@ -7383,7 +7439,7 @@ public sealed class TransformEngine
         // Record the prefix chosen for this element so that the serializer can
         // preserve it even when sibling elements use a different prefix for the
         // same namespace URI.
-        copy.AddAnnotation(new ElementPrefixHint { Prefix = elementResultPrefix });
+        copy.AddAnnotation(GetPrefixHint(elementResultPrefix));
 
         // Compute excluded namespace URIs in scope on this LRE. exclude-result-prefixes
         // suppresses namespace nodes by URI, not by prefix.
@@ -7472,7 +7528,8 @@ public sealed class TransformEngine
         // Apply attribute sets first; literal attributes override them.
         ApplyAttributeSets(source, copy);
 
-        var literalAttributesAdded = new HashSet<XName>();
+        // Allocated lazily: many literal result elements carry no copyable attributes.
+        HashSet<XName>? literalAttributesAdded = null;
         foreach (var attr in source.Attributes())
         {
             // Skip namespace declarations that are inherited from ancestors
@@ -7528,6 +7585,7 @@ public sealed class TransformEngine
                 }
             }
 
+            literalAttributesAdded ??= new HashSet<XName>();
             if (!literalAttributesAdded.Add(mappedAttrName))
             {
                 throw new InvalidOperationException("XTSE0813: Two attributes on a literal result element have the same expanded QName after namespace aliasing.");
@@ -7552,7 +7610,8 @@ public sealed class TransformEngine
 
         // Variables declared in the content of a literal result element are scoped to that
         // element and must not leak to following siblings in the containing sequence.
-        var savedVariables = _context.SnapshotVariables();
+        // Skip the snapshot entirely when the content cannot declare variables.
+        var savedVariables = lreInfo.MayDeclareVariables ? _context.SnapshotVariables() : null;
 
         // Push xsl:default-mode for this literal result element scope
         var lreDefaultMode = source.Attribute(XName.Get("default-mode", Stylesheet.Stylesheet.XslNamespace))?.Value;
@@ -7563,7 +7622,7 @@ public sealed class TransformEngine
 
         try
         {
-            if (ContainsConditionalInstruction(source))
+            if (lreInfo.ContainsConditional)
             {
                 EvaluateSequenceConstructorIntoContainer(source, copy, _context.ContextItem);
             }
@@ -7609,7 +7668,8 @@ public sealed class TransformEngine
             {
                 _defaultModeStack.Pop();
             }
-            _context.RestoreVariables(savedVariables);
+            if (savedVariables != null)
+                _context.RestoreVariables(savedVariables);
             _currentContainer = prev;
             _sequenceAccumulator = savedAccumulator;
             _literalElementDepth--;
@@ -7624,6 +7684,12 @@ public sealed class TransformEngine
     private string EvaluateAvt(string value, XElement? contextElement = null)
     {
         if (string.IsNullOrEmpty(value))
+            return value;
+
+        // Literal fast path: without braces there are no template expressions or
+        // escapes, so the result is the input string. Skip computing namespaces,
+        // base URI, and the StringBuilder.
+        if (value.IndexOf('{') < 0 && value.IndexOf('}') < 0)
             return value;
 
         var sb = new System.Text.StringBuilder();

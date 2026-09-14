@@ -1,5 +1,20 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-14
+**Commit:** uncommitted working tree (pending user commit) — REQ-085 performance wave 4: result-tree append micro-costs
+**Current focus:** **Performance wave 4 landed: Transform_HtmlTable 62.57 → 51.46 ms (−18%), 61.54 → 47.13 MB (−23%). Cumulative 193.34 → 51.46 ms (−73%), 115.48 → 47.13 MB (−59%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
+**What was built (all in TransformEngine 6.67):**
+- **`NormalizeElementContent` fast path** — every constructed element's children were rebuilt (`ToList` + `RemoveNodes` + re-`Add`, plus fresh string/XText per text run via `ApplyComplexContentRules`). Now an allocation-free walk over the linked node list (`FirstNode`/`NextNode`) skips the rebuild unless a zero-length discard or adjacent-text merge is actually required; §5.7.1 semantics preserved (`XRawText : XText` covered by the same check; zero-length raw text still routes to the slow path).
+- **AVT literal fast path** — `EvaluateAvt` computed in-scope namespaces (ancestor-walk dictionary), effective base URI, and a StringBuilder before scanning; values without braces (the hot case: `value-of` separator default `" "`, literal LRE attributes) now return the input string immediately.
+- **LRE bookkeeping caching** — `ElementPrefixHint` interned per prefix value (`GetPrefixHint`, engine-instance dictionary; serializer consumes `.Prefix` by value); duplicate-attribute `HashSet` allocated lazily (zero-attribute LREs allocate nothing); xsl:on-empty/on-non-empty direct-child check and variable-snapshot need cached in `LreStaticInfo` (`ContainsConditional`, `MayDeclareVariables`) — `SnapshotVariables`/`RestoreVariables` skipped when the LRE subtree cannot declare variables (templates, stylesheet functions, for-each, iterate all restore their own scopes).
+**Also in this session:** registry hygiene — post-QT3 roadmap rows 1–2 (XQuery 3.1, XSLT 3.0 packages) flipped from stale `In Progress` to `Implemented`; REQ-085 registry row/status/header updated to waves 1–4.
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`; benchmark `Transform_HtmlTable` 51.46 ms / 47.13 MB.
+**Next steps (wave 5 candidates, unchanged priority):** per-transform thread-spawn reuse (`RunWithStack`, re-entrancy-sensitive), predicate-path intermediate lists, FLWOR tuple materialization. Then the GA track (release notes, SemVer commitment at 1.0; optionally `v0.10.1-beta` to ship the perf story).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-10 (second session)
 **Commit:** `223f38e` — REQ-085 performance wave 3: span-based HTML escaping + copy-on-write namespace bindings
 **Current focus:** **Performance wave 3 landed: Transform_HtmlTable 73.06 → 62.57 ms (cumulative 193.34 → 62.57, −68%), 71.53 → 61.54 MB (cumulative 115.48 → 61.54, −47%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
