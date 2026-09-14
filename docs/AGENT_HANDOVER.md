@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-14
-**Commit:** uncommitted working tree (pending user commit) — REQ-085 performance wave 4: result-tree append micro-costs
+**Commit:** `be54533` — REQ-085 performance wave 4: result-tree append fast paths + cached LRE bookkeeping
 **Current focus:** **Performance wave 4 landed: Transform_HtmlTable 62.57 → 51.46 ms (−18%), 61.54 → 47.13 MB (−23%). Cumulative 193.34 → 51.46 ms (−73%), 115.48 → 47.13 MB (−59%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (all in TransformEngine 6.67):**
 - **`NormalizeElementContent` fast path** — every constructed element's children were rebuilt (`ToList` + `RemoveNodes` + re-`Add`, plus fresh string/XText per text run via `ApplyComplexContentRules`). Now an allocation-free walk over the linked node list (`FirstNode`/`NextNode`) skips the rebuild unless a zero-length discard or adjacent-text merge is actually required; §5.7.1 semantics preserved (`XRawText : XText` covered by the same check; zero-length raw text still routes to the slow path).
