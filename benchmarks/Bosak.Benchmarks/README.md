@@ -58,17 +58,20 @@ ordered-sequence fast path in document-order normalization) and wave 6 (FLWOR tu
 materialization: sort keys atomized once per tuple, copy-free tuple item views, array-tuple
 reuse in the sorted stream) and wave 7 (function-call machinery: argument registers passed
 as a span when no callee can rewrite them — no per-call argument array; fn:string/fn:concat
-single-pass sequence handling) — latest numbers below.
+single-pass sequence handling) and wave 8 (ApplyFunctionConversion caches the syntactic
+sequence-type parse per distinct type string — targets typed built-in/user-function calls,
+not these untyped benchmark workloads). Latest numbers below; run-to-run time variance on
+this machine is ±5% at identical allocations.
 
-| Benchmark | Baseline | After waves 1–7 | Δ time | Δ allocated |
+| Benchmark | Baseline | After waves 1–8 | Δ time | Δ allocated |
 |---|---|---|---|---|
-| Compile_ModerateExpression | 4.85 µs / 18.5 KB | 5.21 µs / 18.5 KB | — | — |
-| Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 15.93 ms / 21.18 MB | −51% | −62% |
-| Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 9.80 ms / 9.94 MB | −67% | −76% |
-| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 308.0 µs / 366 KB | — | −13% |
-| Compile_Flwor | 9.57 µs / 36.5 KB | 10.32 µs / 36.5 KB | — | — |
-| Evaluate_Flwor | 44.23 ms / 66.75 MB | 20.80 ms / 22.18 MB | −53% | −67% |
-| Compile_Stylesheet | 35.69 µs / 80.2 KB | 36.94 µs / 80.2 KB | — | — |
-| Transform_HtmlTable | 193.34 ms / 115.48 MB | 47.23 ms / 42.87 MB | −76% | −63% |
+| Compile_ModerateExpression | 4.85 µs / 18.5 KB | 5.36 µs / 18.5 KB | — | — |
+| Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 15.92 ms / 21.18 MB | −51% | −62% |
+| Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 9.23 ms / 9.94 MB | −69% | −76% |
+| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 320.8 µs / 366 KB | — | −13% |
+| Compile_Flwor | 9.57 µs / 36.5 KB | 10.46 µs / 36.5 KB | — | — |
+| Evaluate_Flwor | 44.23 ms / 66.75 MB | 22.28 ms / 22.18 MB | −50% | −67% |
+| Compile_Stylesheet | 35.69 µs / 80.2 KB | 37.44 µs / 80.2 KB | — | — |
+| Transform_HtmlTable | 193.34 ms / 115.48 MB | 48.17 ms / 42.87 MB | −75% | −63% |
 
 Re-run with: `dotnet run -c Release --project benchmarks/Bosak.Benchmarks -- --filter '*'`

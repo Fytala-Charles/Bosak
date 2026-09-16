@@ -288,6 +288,10 @@
 //                      |                  |       |                | can rewrite them (no map/array/function-typed params, no declared sequence types) —     |
 //                      |                  |       |                | eliminates the per-call argument array on the built-in hot path                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.144 | 16-09-2026     | REQ-085 perf wave 8: ApplyFunctionConversion caches the syntactic sequence-type parse |
+//                      |                  |       |                | (normalized name, occurrence flags, function-test marker) per distinct type string —    |
+//                      |                  |       |                | typed signatures no longer re-parse type names per argument per call                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -11054,17 +11058,17 @@ public static class VmEngine
         => value.Kind == XdmValueKind.String
            && string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
 
+    private readonly record struct ConversionTargetInfo(string Type, bool AllowsEmpty, bool AllowsMultiple, bool IsFunctionTest);
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, ConversionTargetInfo> s_conversionTargets = new();
+
     /// <summary>
-    /// Applies the XPath 3.1 function conversion rules to convert a value to a target
-    /// sequence type: subtype substitution, node atomization, untypedAtomic casting,
-    /// numeric promotion, and URI promotion. Raises XPTY0004 when no rule applies.
+    /// Parses a sequence-type string into its normalized item-type name, occurrence flags,
+    /// and function-test marker. Purely syntactic (context-independent); results are cached
+    /// in <see cref="s_conversionTargets"/> because call sites repeat the same type names
+    /// on every invocation.
     /// </summary>
-    /// <param name="value">The value to convert.</param>
-    /// <param name="targetType">The target sequence type string.</param>
-    /// <param name="context">An optional evaluation context used for namespace resolution and function-item coercion.</param>
-    /// <returns>The converted value.</returns>
-    /// <exception cref="InvalidOperationException">No function conversion rule applies (XPTY0004).</exception>
-    public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
+    private static ConversionTargetInfo ParseConversionTarget(string targetType)
     {
         var type = NormalizeEQNameTypeName(targetType.Trim());
         while (type.Length > 1 && type[0] == '(' && FindMatchingParen(type, 0) == type.Length - 1)
@@ -11114,6 +11118,28 @@ public static class VmEngine
             // An occurrence-wrapped parenthesized function test: (function(...) as ...)?
             isFunctionTest = type.StartsWith("function(", StringComparison.OrdinalIgnoreCase);
         }
+
+        return new ConversionTargetInfo(type, allowsEmpty, allowsMultiple, isFunctionTest);
+    }
+
+    /// <summary>
+    /// Applies the XPath 3.1 function conversion rules to convert a value to a target
+    /// sequence type: subtype substitution, node atomization, untypedAtomic casting,
+    /// numeric promotion, and URI promotion. Raises XPTY0004 when no rule applies.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="targetType">The target sequence type string.</param>
+    /// <param name="context">An optional evaluation context used for namespace resolution and function-item coercion.</param>
+    /// <returns>The converted value.</returns>
+    /// <exception cref="InvalidOperationException">No function conversion rule applies (XPTY0004).</exception>
+    public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
+    {
+        // The syntactic parse of the target sequence type depends only on the type string,
+        // so it is cached per distinct name (call sites repeat the same handful of type
+        // names per call); schema-dependent validation and the value-dependent conversion
+        // below still run per call.
+        var (type, allowsEmpty, allowsMultiple, isFunctionTest) =
+            s_conversionTargets.GetOrAdd(targetType, static t => ParseConversionTarget(t));
 
         // A declared type that is not a legal sequence-type item type is XPST0051
         // (XPath 3.1 §2.5.5.2), reported before any conversion attempt: the pseudo-name
