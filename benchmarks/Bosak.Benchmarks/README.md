@@ -54,17 +54,19 @@ Waves 1–4 (wrapper cache, lazy axes, function-table clone; per-instruction com
 cache, engine Populate skip, static LRE namespace-info cache; serializer span escaping +
 copy-on-write namespace bindings; result-tree append fast paths): raw output in `baseline-0.10.0.txt`.
 Wave 5 (lazy node-test filtering, copy-free predicate-path views, pooled Filter kept-buffer,
-ordered-sequence fast path in document-order normalization — latest numbers below).
+ordered-sequence fast path in document-order normalization) and wave 6 (FLWOR tuple
+materialization: sort keys atomized once per tuple, copy-free tuple item views, array-tuple
+reuse in the sorted stream) — latest numbers below.
 
-| Benchmark | Baseline | After waves 1–5 | Δ time | Δ allocated |
+| Benchmark | Baseline | After waves 1–6 | Δ time | Δ allocated |
 |---|---|---|---|---|
 | Compile_ModerateExpression | 4.85 µs / 18.5 KB | 5.25 µs / 18.5 KB | — | — |
 | Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 16.10 ms / 21.18 MB | −51% | −62% |
 | Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 10.43 ms / 10.06 MB | −65% | −75% |
-| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 308.1 µs / 405 KB | — | −4% |
-| Compile_Flwor | 9.57 µs / 36.5 KB | 10.54 µs / 36.5 KB | — | — |
-| Evaluate_Flwor | 44.23 ms / 66.75 MB | 22.50 ms / 26.16 MB | −49% | −61% |
+| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 312.9 µs / 366 KB | — | −13% |
+| Compile_Flwor | 9.57 µs / 36.5 KB | 10.74 µs / 36.5 KB | — | — |
+| Evaluate_Flwor | 44.23 ms / 66.75 MB | 21.49 ms / 24.24 MB | −51% | −64% |
 | Compile_Stylesheet | 35.69 µs / 80.2 KB | 38.07 µs / 80.2 KB | — | — |
-| Transform_HtmlTable | 193.34 ms / 115.48 MB | 47.81 ms / 43.23 MB | −75% | −63% |
+| Transform_HtmlTable | 193.34 ms / 115.48 MB | 45.92 ms / 43.23 MB | −76% | −63% |
 
 Re-run with: `dotnet run -c Release --project benchmarks/Bosak.Benchmarks -- --filter '*'`

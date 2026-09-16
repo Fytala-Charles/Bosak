@@ -279,6 +279,11 @@
 //                      |                  |       |                | Castable, TryCast, and empty-sequence() matching peek (at most two items) instead of     |
 //                      |                  |       |                | treating unknown length as non-empty                                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.142 | 16-09-2026     | REQ-085 perf wave 6: FLWOR tuple materialization — OrderBy atomizes sort keys ONCE per  |
+//                      |                  |       |                | tuple (was per comparison, re-materializing lazy node keys per pair), keeps tuple item   |
+//                      |                  |       |                | lists copy-free and reuses incoming array tuples in the sorted stream; TupleBind indexes  |
+//                      |                  |       |                | tuple values without ToArray; For/Some/Every/OrderBy/GroupBy inputs via view             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -933,7 +938,7 @@ public static class VmEngine
                     {
                         var info = (QuantifiedLoopInfo)literalPool[instr.Operand]!;
                         var sequence = registers[instr.RegisterB];
-                        var items = MaterializeSequence(sequence);
+                        var items = MaterializeSequenceView(sequence);
                         var results = new List<XdmValue>();
 
                         var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
@@ -968,7 +973,7 @@ public static class VmEngine
                         }
 
                         int position = 0;
-                        if (items.Length == 0 && info.AllowingEmpty)
+                        if (items.Count == 0 && info.AllowingEmpty)
                         {
                             // XQuery "allowing empty": one iteration with the variable bound to
                             // the empty sequence (and a declared positional variable bound to 0).
@@ -1027,7 +1032,7 @@ public static class VmEngine
                     {
                         var info = (QuantifiedLoopInfo)literalPool[instr.Operand]!;
                         var sequence = registers[instr.RegisterB];
-                        var items = MaterializeSequence(sequence);
+                        var items = MaterializeSequenceView(sequence);
 
                         var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
                         bool hadVariable = context.TryGetVariable(bindLocal, out var savedVar, bindNs);
@@ -1061,7 +1066,7 @@ public static class VmEngine
                     {
                         var info = (QuantifiedLoopInfo)literalPool[instr.Operand]!;
                         var sequence = registers[instr.RegisterB];
-                        var items = MaterializeSequence(sequence);
+                        var items = MaterializeSequenceView(sequence);
 
                         var (bindLocal, bindNs) = ResolveLoopVariableKey(info, context);
                         bool hadVariable = context.TryGetVariable(bindLocal, out var savedVar, bindNs);
@@ -1104,26 +1109,36 @@ public static class VmEngine
                                 throw new InvalidOperationException($"XQST0076: Collation '{collation}' is not supported.");
                         }
 
-                        var tuples = MaterializeSequence(tupleSequence);
-                        // List<T>.Sort is introsort and NOT stable: decorate with the
-                        // original position so equal keys keep their input order
-                        // ('stable order by' semantics, fn-doc-33).
-                        var materializedTuples = new List<(XdmValue[] Items, int Index)>();
+                        var tuples = MaterializeSequenceView(tupleSequence);
+                        // Copy-free tuple handling + sort keys atomized ONCE per tuple.
+                        // Previously each tuple's item list was ToArray-copied here, re-wrapped
+                        // after the sort, and ToArray-copied again in TupleBind; and every
+                        // comparison re-atomized the raw keys — a lazy node key (e.g. $i/@id)
+                        // re-materialized its attribute sequence per compared pair.
+                        var materializedTuples = new List<(IReadOnlyList<XdmValue> Items, XdmValue[] Keys, XdmValue Original, int Index)>(tuples.Count);
                         int tupleIndex = 0;
                         foreach (var tuple in tuples)
                         {
+                            IReadOnlyList<XdmValue> items;
                             if (tuple.IsArray && tuple.ArrayValue is not null)
-                            {
-                                materializedTuples.Add((tuple.ArrayValue.Values.ToArray(), tupleIndex));
-                            }
+                                items = ArrayValuesView(tuple.ArrayValue);
                             else if (tuple.IsSequence && tuple.SequenceValue is not null)
-                            {
-                                materializedTuples.Add((MaterializeSequence(tuple), tupleIndex));
-                            }
+                                items = MaterializeSequenceView(tuple);
                             else
+                                items = new[] { tuple };
+
+                            var keys = new XdmValue[orderInfo.KeyCount];
+                            for (int k = 0; k < orderInfo.KeyCount; k++)
                             {
-                                materializedTuples.Add((new[] { tuple }, tupleIndex));
+                                int keyIndex = orderInfo.ValueCount + k;
+                                var rawKey = keyIndex < items.Count ? items[keyIndex] : XdmValue.Undefined;
+                                // Pre-atomize exactly as the CompareOrderByValues prologue did;
+                                // atomization errors (XPTY0004 multi-item, FOTY0012/0013) surface
+                                // here instead of mid-sort, with the same codes.
+                                keys[k] = Atomize(rawKey);
                             }
+
+                            materializedTuples.Add((items, keys, tuple, tupleIndex));
                             tupleIndex++;
                         }
 
@@ -1131,8 +1146,16 @@ public static class VmEngine
                         {
                             materializedTuples.Sort((x, y) =>
                             {
-                                int cmp = CompareTuples(x.Items, y.Items, orderInfo, context);
-                                return cmp != 0 ? cmp : x.Index.CompareTo(y.Index);
+                                for (int i = 0; i < orderInfo.KeyCount; i++)
+                                {
+                                    int cmp = CompareOrderByValues(x.Keys[i], y.Keys[i], orderInfo.EmptyOrder[i], orderInfo.CollationUri[i], context);
+                                    if (cmp != 0)
+                                        return orderInfo.Descending[i] ? -cmp : cmp;
+                                }
+                                // List<T>.Sort is introsort and NOT stable: decorate with the
+                                // original position so equal keys keep their input order
+                                // ('stable order by' semantics, fn-doc-33).
+                                return x.Index.CompareTo(y.Index);
                             });
                         }
                         catch (InvalidOperationException wrap) when (wrap.InnerException is not null
@@ -1144,9 +1167,13 @@ public static class VmEngine
                         }
 
                         var sorted = new List<XdmValue>(materializedTuples.Count);
-                        foreach (var (tupleItems, _) in materializedTuples)
+                        foreach (var (items, _, original, _) in materializedTuples)
                         {
-                            sorted.Add(XdmValue.FromArray(new XdmArray(tupleItems)));
+                            // Incoming array tuples pass through unchanged (TupleBind reads the
+                            // same value list); sequence/single items are wrapped as before.
+                            sorted.Add(original.IsArray && original.ArrayValue is not null
+                                ? original
+                                : XdmValue.FromArray(new XdmArray(items)));
                         }
 
                         registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(sorted));
@@ -1158,14 +1185,14 @@ public static class VmEngine
                     {
                         var bindInfo = (TupleBindInfo)literalPool[instr.Operand]!;
                         var tuple = registers[instr.RegisterA];
-                        XdmValue[] items;
+                        IReadOnlyList<XdmValue> items;
                         if (tuple.IsArray && tuple.ArrayValue is not null)
                         {
-                            items = tuple.ArrayValue.Values.ToArray();
+                            items = ArrayValuesView(tuple.ArrayValue);
                         }
                         else if (tuple.IsSequence && tuple.SequenceValue is not null)
                         {
-                            items = MaterializeSequence(tuple);
+                            items = MaterializeSequenceView(tuple);
                         }
                         else
                         {
@@ -1175,7 +1202,7 @@ public static class VmEngine
                         for (int i = 0; i < bindInfo.Variables.Count; i++)
                         {
                             var (localName, prefix, nsUri) = bindInfo.Variables[i];
-                            var item = i < items.Length ? items[i] : XdmValue.Undefined;
+                            var item = i < items.Count ? items[i] : XdmValue.Undefined;
                             string bindNs = nsUri ?? "";
                             if (nsUri is null && prefix is not null)
                             {
@@ -4554,6 +4581,14 @@ public static class VmEngine
                 throw new InvalidOperationException("XPTY0004");
         }
     }
+
+    /// <summary>
+    /// Exposes an array's item list without copying: the backing store is a list at runtime,
+    /// so the read-only-list view is free; falls back to a copy if that ever changes.
+    /// Callers must treat the view as read-only.
+    /// </summary>
+    private static IReadOnlyList<XdmValue> ArrayValuesView(XdmArray array)
+        => array.Values is IReadOnlyList<XdmValue> list ? list : array.Values.ToArray();
 
     private static XdmValue FilterNodes(XdmValue input, Func<IXdmNode, bool> predicate)
     {
@@ -13076,21 +13111,6 @@ public static class VmEngine
         if (items.Length > 1)
             throw new InvalidOperationException("XPTY0004: A grouping key must evaluate to a single atomic value or the empty sequence.");
         return items.Length == 0 ? XdmValue.Undefined : items[0];
-    }
-
-    private static int CompareTuples(XdmValue[] x, XdmValue[] y, OrderByInfo info, EvaluationContext context)
-    {
-        for (int i = 0; i < info.KeyCount; i++)
-        {
-            int keyIndex = info.ValueCount + i;
-            var keyX = keyIndex < x.Length ? x[keyIndex] : XdmValue.Undefined;
-            var keyY = keyIndex < y.Length ? y[keyIndex] : XdmValue.Undefined;
-
-            int cmp = CompareOrderByValues(keyX, keyY, info.EmptyOrder[i], info.CollationUri[i], context);
-            if (cmp != 0)
-                return info.Descending[i] ? -cmp : cmp;
-        }
-        return 0;
     }
 
     private static int CompareOrderByValues(XdmValue left, XdmValue right, EmptyOrder emptyOrder, string? collationUri, EvaluationContext context)
