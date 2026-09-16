@@ -1,5 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-16
+**Commit:** `84dc188` — REQ-085 performance wave 5: lazy node-test filtering, predicate-path views, ordered-normalize fast path
+**Current focus:** **Performance wave 5 landed: Evaluate_PathHeavy 22.08 → 16.10 ms, 30.96 → 21.18 MB (cumulative 32.77 → 16.10 ms, −51%; 56.05 → 21.18 MB, −62%); StringFunctions 15.58 → 10.43 ms / 19.87 → 10.06 MB; FLWOR 27.61 → 22.50 ms / 36.66 → 26.16 MB; Transform_HtmlTable 51.46 → 47.81 ms / 47.13 → 43.23 MB (cumulative 193.34 → 47.81 ms, −75%; 115.48 → 43.23 MB, −63%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
+**What was built (VmEngine 2.140, plus lazy-cardinality correctness follow-ups in VmEngine 2.141 / FunctionLibrary 5.101 / QT3 harness ResultComparer 2.9):**
+- **Probe-driven decomposition** (throwaway probe in `%TEMP%`, `GC.GetAllocatedBytesForCurrentThread` per sub-expression, same catalog shape as the benchmarks): the `Filter` opcode's own lists were only ~0.5 MB of PathHeavy's 31.7 MB; the mass was (i) `FilterNodes` materializing List + array + wrapper per node per name/kind test, (ii) `NormalizeSequence`'s LINQ tuple-list + HashSet + stable sort on every path result, (iii) per-descendant-node `PathStepMap` block execution (~600 B/node, structural — left for post-1.0 with axis+name-test fusion).
+- **Lazy node tests** — name/kind/namespace tests filter via `FilterNodesLazy` (`EnumerableXdmSequence`, no per-node intermediate lists); schema-element/attribute/type tests stay eager (they can throw and are cold). `NameTest` hoists the prefix-colon split out of the per-node predicate (was one `string[]` per node).
+- **`Filter` opcode rewrite** — `MaterializeSequenceView` (copy-free for materialized sequences, single List for lazy — no ToArray double copy); `ArrayPool<XdmValue>` kept-buffer (cleared on return so the pool never retains nodes); empty → `XdmSequence.Empty`; all-kept aliases the input sequence; `TryGetSingletonItem` probes the predicate result with at most two enumerated items, and a singleton node is kept as EBV-true without re-enumerating the (lazy) predicate result (the `a[b]` existence pattern).
+- **`SimpleMap` / `PathStepMap` / `ApplyAxis`** read step inputs via the view.
+- **`NormalizeSequence` ordered fast path** — strictly increasing `DocumentOrder` keys imply distinctness, making the stable partition sort the identity; HashSet + tuple list + LINQ + sort are skipped for axis-ordered results (the common case); the full algorithm is retained as the fallback. Keys are computed in sequence order (square-array-014 invariant preserved).
+- **Lazy-cardinality correctness follow-ups** — unknown `TryGetLength` was being read as definitive cardinality (latent since wave-1 lazy axes, exposed by wider laziness): `fn:exists`/`fn:empty`/`fn:has-children`/`fn:path`/`fn:format-integer` peek at most two items (FunctionLibrary 5.101); `JumpIfEmpty`, `Cast`, `Castable`, `TryCast`, and both `empty-sequence()` matchers use peek-based `SequenceHasAnyItem` (VmEngine 2.141); QT3 harness `CompareAssertEmpty` peeks lazy sequences (7 assert-empty false failures on the first sweep — the engine results were correct; the XSLT harness enumerates for assertions and was green on the first run).
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`; benchmarks: PathHeavy 16.10 ms / 21.18 MB, StringFunctions 10.43 ms / 10.06 MB, FLWOR 22.50 ms / 26.16 MB, Transform_HtmlTable 47.81 ms / 43.23 MB.
+**Next steps (agreed 2026-09-16):**
+1. **Wave 6 candidates (in order):** FLWOR tuple materialization; then per-transform thread-spawn reuse (`RunWithStack`, re-entrancy-sensitive — keep last). Structural items reserved for post-1.0: per-context-node `PathStepMap` block execution on `//` paths (~600 B/node residual), axis+name-test fusion (needs a provider-level API).
+2. **Consider cutting `v0.10.1-beta`** — unchanged from 2026-09-14: publishes the perf story (cumulative −75% time / −63% alloc on Transform_HtmlTable, −51%/−62% on PathHeavy, both W3C suites unchanged) and exercises the release pipeline before GA. Owner decision; release notes can be drafted on request.
+3. **Owner-side open items:** activate ruleset `protect-main` (id 22255065, Settings → Rules → Rulesets → enforcement Active — pending since 2026-09-05); define support channel per `COMMERCIAL.md`; SemVer/1.0 timing decision.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-14
 **Commit:** `be54533` — REQ-085 performance wave 4: result-tree append fast paths + cached LRE bookkeeping
 **Current focus:** **Performance wave 4 landed: Transform_HtmlTable 62.57 → 51.46 ms (−18%), 61.54 → 47.13 MB (−23%). Cumulative 193.34 → 51.46 ms (−73%), 115.48 → 47.13 MB (−59%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
