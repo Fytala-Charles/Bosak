@@ -271,7 +271,16 @@
 //                      | Charles Korthout | 2.138 | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 2.139 | 09-09-2026     | Perf: MaterializeSequence fast path for already-materialized inputs; wrappers via shared |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.140 | 16-09-2026     | REQ-085 perf wave 5: lazy name/kind/namespace-test filtering (no per-node intermediate  |
+//                      |                  |       |                | lists); Filter opcode: copy-free input view, pooled kept-buffer, singleton predicate     |
+//                      |                  |       |                | probe; PathStepMap/SimpleMap/ApplyAxis read inputs via materialization view              |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.141 | 16-09-2026     | Lazy-sequence cardinality fixes exposed by wave-5 lazy node tests: JumpIfEmpty, Cast,   |
+//                      |                  |       |                | Castable, TryCast, and empty-sequence() matching peek (at most two items) instead of     |
+//                      |                  |       |                | treating unknown length as non-empty                                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -355,10 +364,9 @@ public static class VmEngine
 
                 case IrOpCode.JumpIfEmpty:
                     {
-                        var seq = registers[instr.RegisterA];
-                        bool isEmpty = seq.IsUndefined ||
-                            (seq.IsSequence && seq.SequenceValue is not null &&
-                             TryGetSequenceLength(seq.SequenceValue, out var len) && len == 0);
+                        // Peek-based emptiness: lazy sequences report unknown length, so a
+                        // TryGetLength-only check would treat a lazy empty as non-empty.
+                        bool isEmpty = !SequenceHasAnyItem(registers[instr.RegisterA]);
                         ip = isEmpty ? instr.Operand : ip + 1;
                         break;
                     }
@@ -788,7 +796,7 @@ public static class VmEngine
                         int pathResultMode = instr.RegisterC;
                         bool enforceNodeResult = pathResultMode != 0;
 
-                        var items = MaterializeSequence(sequence);
+                        var items = MaterializeSequenceView(sequence);
                         var results = new List<XdmValue>();
 
                         // XPath path steps require every context item to be a node (XPTY0019).
@@ -807,9 +815,9 @@ public static class VmEngine
                         var savedPos = context.ContextPosition;
                         var savedSize = context.ContextSize;
 
-                        for (int i = 0; i < items.Length; i++)
+                        for (int i = 0; i < items.Count; i++)
                         {
-                            context.WithFocus(items[i], i + 1, items.Length);
+                            context.WithFocus(items[i], i + 1, items.Count);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
 
                             if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
@@ -865,7 +873,7 @@ public static class VmEngine
                         // preceding path step (LHS of '/'), not the ambient context item.
                         bool hasLhs = instr.RegisterC != 0;
 
-                        var items = MaterializeSequence(sequence);
+                        var items = MaterializeSequenceView(sequence);
                         var results = new List<XdmValue>();
 
                         // Save context
@@ -873,7 +881,7 @@ public static class VmEngine
                         var savedPos = context.ContextPosition;
                         var savedSize = context.ContextSize;
 
-                        for (int i = 0; i < items.Length; i++)
+                        for (int i = 0; i < items.Count; i++)
                         {
                             // A step whose input comes from a preceding path step raises
                             // XPTY0019 for atomic items; a standalone/first step applied to
@@ -2075,28 +2083,38 @@ public static class VmEngine
                     {
                         string name = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
-                        var filtered = FilterNodes(input, n =>
+                        XdmValue filtered;
+
+                        // Wildcard: match any name (kind test already restricted node kind).
+                        if (name == "*")
                         {
-                            // Wildcard: match any name (kind test already restricted node kind).
-                            if (name == "*")
-                                return true;
-
-                            // Namespace wildcard prefix:* — match any local name in the namespace.
-                            if (name.EndsWith(":*", StringComparison.Ordinal))
+                            filtered = FilterNodesLazy(input, static n => true);
+                        }
+                        // Namespace wildcard prefix:* — match any local name in the namespace.
+                        else if (name.EndsWith(":*", StringComparison.Ordinal))
+                        {
+                            var wildcardPrefix = name[..^2];
+                            if (context.TryResolveNamespace(wildcardPrefix, out var wildcardNsUri))
+                                filtered = FilterNodesLazy(input, n => n.NamespaceUri == wildcardNsUri);
+                            else
+                                filtered = FilterNodesLazy(input, static n => false);
+                        }
+                        else
+                        {
+                            // A prefixed name also matches on its local part; the split is
+                            // hoisted out of the per-node predicate (was one string[] per node).
+                            int colonIndex = name.IndexOf(':');
+                            string? colonLocalName = colonIndex >= 0 ? name[(colonIndex + 1)..] : null;
+                            filtered = FilterNodesLazy(input, n =>
                             {
-                                var wildcardPrefix = name[..^2];
-                                if (context.TryResolveNamespace(wildcardPrefix, out var wildcardNsUri))
-                                    return n.NamespaceUri == wildcardNsUri;
-                                return false;
-                            }
-
-                            if (n.LocalName != name && !(name.Contains(':') && n.LocalName == name.Split(':')[1]))
-                                return false;
-                            // Unprefixed attribute names always match no namespace
-                            if (n.NodeKind == XdmNodeKind.Attribute && !name.Contains(':'))
-                                return n.NamespaceUri == "";
-                            return true;
-                        });
+                                if (n.LocalName != name && !(colonLocalName is not null && n.LocalName == colonLocalName))
+                                    return false;
+                                // Unprefixed attribute names always match no namespace
+                                if (n.NodeKind == XdmNodeKind.Attribute && colonIndex < 0)
+                                    return n.NamespaceUri == "";
+                                return true;
+                            });
+                        }
                         registers[instr.RegisterA] = filtered;
                         ip++;
                         break;
@@ -2106,7 +2124,7 @@ public static class VmEngine
                     {
                         string kindName = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
-                        var filtered = FilterNodes(input, n => MatchesKindTest(n, kindName));
+                        var filtered = FilterNodesLazy(input, n => MatchesKindTest(n, kindName));
                         registers[instr.RegisterA] = filtered;
                         ip++;
                         break;
@@ -2154,22 +2172,22 @@ public static class VmEngine
                         {
                             // Sentinel from a Q{}* wildcard: match the empty namespace
                             // unconditionally (never the default element namespace).
-                            filtered = FilterNodes(input, n => n.NamespaceUri == "");
+                            filtered = FilterNodesLazy(input, n => n.NamespaceUri == "");
                         }
                         else if (context.TryResolveNamespace(prefix, out var nsUri))
                         {
-                            filtered = FilterNodes(input, n => n.NamespaceUri == nsUri);
+                            filtered = FilterNodesLazy(input, n => n.NamespaceUri == nsUri);
                         }
                         else if (prefix.Contains('/') || prefix.Contains(':'))
                         {
                             // Operand is a URI (e.g. from Q{uri}local syntax) — use directly
-                            filtered = FilterNodes(input, n => n.NamespaceUri == prefix);
+                            filtered = FilterNodesLazy(input, n => n.NamespaceUri == prefix);
                         }
                         else if (prefix.Length == 0)
                         {
                             // Empty prefix stands for the default element namespace:
                             // none is declared, so match the empty namespace.
-                            filtered = FilterNodes(input, n => n.NamespaceUri == "");
+                            filtered = FilterNodesLazy(input, n => n.NamespaceUri == "");
                         }
                         else
                         {
@@ -2189,17 +2207,29 @@ public static class VmEngine
                         var sequence = registers[instr.RegisterB];
                         int predicateEntry = instr.Operand;
 
-                        var items = MaterializeSequence(sequence);
-                        var kept = new List<XdmValue>();
+                        // Copy-free view over the input: no ToArray double copy for lazy
+                        // axis results, no copy at all for materialized sequences.
+                        var items = MaterializeSequenceView(sequence);
+                        if (items.Count == 0)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
+                            ip++;
+                            break;
+                        }
+
+                        // Pooled kept-item buffer instead of a per-evaluation List (cleared
+                        // on return so the pool never retains node references).
+                        var kept = ArrayPool<XdmValue>.Shared.Rent(items.Count);
+                        int keptCount = 0;
 
                         // Save context
                         var savedItem = context.ContextItem;
                         var savedPos = context.ContextPosition;
                         var savedSize = context.ContextSize;
 
-                        for (int i = 0; i < items.Length; i++)
+                        for (int i = 0; i < items.Count; i++)
                         {
-                            context.WithFocus(items[i], i + 1, items.Length);
+                            context.WithFocus(items[i], i + 1, items.Count);
                             var (predResult, _) = ExecuteBlock(module, context, registers, predicateEntry);
 
                             // Predicate semantics (XPath §2.4): a singleton whose single item
@@ -2215,17 +2245,21 @@ public static class VmEngine
                                     numericPredicate = true;
                                     numericValue = ToDouble(predResult);
                                 }
-                                else if (predResult.IsSequence && predResult.SequenceValue is not null)
+                                else if (predResult.IsSequence && predResult.SequenceValue is not null &&
+                                         TryGetSingletonItem(predResult.SequenceValue, out var singletonItem))
                                 {
-                                    var predItems = MaterializeSequence(predResult);
-                                    if (predItems.Length == 1 && !predItems[0].IsNode)
+                                    // A singleton node always has EBV true: keep it without
+                                    // re-enumerating a (possibly lazy) predicate result.
+                                    if (singletonItem.IsNode)
                                     {
-                                        var atomizedItem = Atomize(predItems[0]);
-                                        if (IsNumeric(atomizedItem))
-                                        {
-                                            numericPredicate = true;
-                                            numericValue = ToDouble(atomizedItem);
-                                        }
+                                        kept[keptCount++] = items[i];
+                                        continue;
+                                    }
+                                    var atomizedItem = Atomize(singletonItem);
+                                    if (IsNumeric(atomizedItem))
+                                    {
+                                        numericPredicate = true;
+                                        numericValue = ToDouble(atomizedItem);
                                     }
                                 }
                             }
@@ -2233,18 +2267,36 @@ public static class VmEngine
                             if (numericPredicate)
                             {
                                 if (numericValue == i + 1)
-                                    kept.Add(items[i]);
+                                    kept[keptCount++] = items[i];
                             }
                             else if (predResult.EffectiveBooleanValue())
                             {
-                                kept.Add(items[i]);
+                                kept[keptCount++] = items[i];
                             }
                         }
 
                         // Restore context
                         context.WithFocus(savedItem, savedPos, savedSize);
 
-                        registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromList(kept));
+                        if (keptCount == 0)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
+                        }
+                        else if (keptCount == items.Count)
+                        {
+                            // Nothing was filtered out: the input is the result (aliasing is
+                            // safe — sequences are immutable once produced).
+                            registers[instr.RegisterA] = sequence.IsSequence
+                                ? sequence
+                                : XdmValue.FromSequence(XdmSequence.Singleton(sequence));
+                        }
+                        else
+                        {
+                            var keptArray = new XdmValue[keptCount];
+                            Array.Copy(kept, keptArray, keptCount);
+                            registers[instr.RegisterA] = XdmValue.FromSequence(MaterializedSequence.FromArray(keptArray));
+                        }
+                        ArrayPool<XdmValue>.Shared.Return(kept, clearArray: true);
                         ip++;
                         break;
                     }
@@ -2663,7 +2715,8 @@ public static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var value = AtomizeForCast(registers[instr.RegisterB]);
-                        bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
+                        // Peek-based emptiness: a lazy sequence reports unknown length.
+                        bool isEmpty = !SequenceHasAnyItem(value);
                         if (isEmpty)
                         {
                             if (occurrence == OccurrenceIndicator.ZeroOrOne)
@@ -2692,7 +2745,8 @@ public static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var value = AtomizeForCast(registers[instr.RegisterB]);
-                        bool isEmpty = value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
+                        // Peek-based emptiness: a lazy sequence reports unknown length.
+                        bool isEmpty = !SequenceHasAnyItem(value);
                         bool castable;
                         if (isEmpty)
                         {
@@ -3734,7 +3788,7 @@ public static class VmEngine
 
         if (input.IsSequence)
         {
-            var items = MaterializeSequence(input);
+            var items = MaterializeSequenceView(input);
             var result = new List<XdmValue>();
             foreach (var item in items)
             {
@@ -4366,12 +4420,70 @@ public static class VmEngine
         if (value.IsUndefined || !value.IsSequence)
             return value;
 
-        var items = MaterializeSequence(value);
-        if (items.Length <= 1)
+        var items = MaterializeSequenceView(value);
+        if (items.Count <= 1)
             return value;
 
+        // Fast path: axis walks already produce duplicate-free node sequences in document
+        // order with a uniform document partition. Strictly increasing DocumentOrder keys
+        // imply distinctness, and the stable partition sort below is then the identity —
+        // so the HashSet, order-key list, and sort can all be skipped. Keys are computed
+        // eagerly in sequence order (parentless trees receive their tree sequence on first
+        // access — square-array-014).
+        bool alreadyOrdered = true;
+        bool sawInDocument = false;
+        bool sawDetached = false;
+        long previousKey = 0;
+        bool firstNode = true;
+        foreach (var item in items)
+        {
+            if (!item.IsNode)
+                continue;
+            var node = item.NodeValue!;
+            long key = node.DocumentOrder;
+            if (node.Document is not null)
+                sawInDocument = true;
+            else
+                sawDetached = true;
+            if ((!firstNode && key <= previousKey) || (sawInDocument && sawDetached))
+            {
+                alreadyOrdered = false;
+                break;
+            }
+            previousKey = key;
+            firstNode = false;
+        }
+
+        if (alreadyOrdered)
+        {
+            var orderedNodes = new List<XdmValue>(items.Count);
+            List<XdmValue>? orderedNonNodes = null;
+            bool sawAnyNode = false;
+            foreach (var item in items)
+            {
+                if (item.IsNode)
+                {
+                    orderedNodes.Add(item);
+                    sawAnyNode = true;
+                }
+                else
+                {
+                    (orderedNonNodes ??= new List<XdmValue>()).Add(item);
+                }
+            }
+
+            if (!sawAnyNode)
+                return XdmValue.FromSequence(MaterializedSequence.FromList(orderedNonNodes!));
+            if (orderedNonNodes is null)
+                return XdmValue.FromSequence(MaterializedSequence.FromList(orderedNodes));
+            var orderedCombined = new List<XdmValue>(orderedNodes.Count + orderedNonNodes.Count);
+            orderedCombined.AddRange(orderedNodes);
+            orderedCombined.AddRange(orderedNonNodes);
+            return XdmValue.FromSequence(MaterializedSequence.FromList(orderedCombined));
+        }
+
         // Separate nodes from non-node items and remove duplicate nodes.
-        var nodes = new List<XdmValue>(items.Length);
+        var nodes = new List<XdmValue>(items.Count);
         var nonNodes = new List<XdmValue>();
         var seen = new HashSet<IXdmNode>();
         bool hasNodes = false;
@@ -4401,7 +4513,9 @@ public static class VmEngine
             // sequence order first: parentless trees receive their tree sequence on first
             // access, and computing keys inside the comparator would assign them in
             // comparison order, scrambling detached copies (square-array-014).
-            var indexed = nodes.Select((n, i) => (Node: n, Index: i, OrderKey: n.NodeValue!.DocumentOrder)).ToList();
+            var indexed = new List<(XdmValue Node, int Index, long OrderKey)>(nodes.Count);
+            for (int i = 0; i < nodes.Count; i++)
+                indexed.Add((nodes[i], i, nodes[i].NodeValue!.DocumentOrder));
             indexed.Sort((a, b) =>
             {
                 bool aDoc = a.Node.NodeValue!.Document is not null;
@@ -4413,7 +4527,10 @@ public static class VmEngine
                     return cmp;
                 return a.Index.CompareTo(b.Index);
             });
-            nodes = indexed.Select(x => x.Node).ToList();
+            var sortedNodes = new List<XdmValue>(nodes.Count);
+            foreach (var entry in indexed)
+                sortedNodes.Add(entry.Node);
+            nodes = sortedNodes;
         }
 
         if (nonNodes.Count == 0)
@@ -4448,6 +4565,102 @@ public static class VmEngine
                 filtered.Add(item);
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(filtered));
+    }
+
+    /// <summary>
+    /// Lazy variant of <see cref="FilterNodes"/> for pure node tests (name/kind/namespace):
+    /// no intermediate list is materialized — each enumeration re-applies the predicate.
+    /// Mirrors FilterNodes exactly: undefined/empty input yields an empty sequence, non-node
+    /// items are dropped, and a matching single-item input is returned as a singleton sequence.
+    /// </summary>
+    private static XdmValue FilterNodesLazy(XdmValue input, Func<IXdmNode, bool> predicate)
+    {
+        if (input.IsUndefined)
+            return XdmValue.FromSequence(XdmSequence.Empty);
+
+        if (!input.IsSequence)
+        {
+            return input.IsNode && predicate(input.NodeValue)
+                ? XdmValue.FromSequence(XdmSequence.Singleton(input))
+                : XdmValue.FromSequence(XdmSequence.Empty);
+        }
+
+        var seq = input.SequenceValue;
+        if (seq is null)
+            return XdmValue.FromSequence(XdmSequence.Empty);
+
+        return XdmValue.FromSequence(XdmSequence.FromSource(
+            new EnumerableXdmSequence(FilterNodesLazyIterator(seq, predicate))));
+    }
+
+    private static IEnumerable<XdmValue> FilterNodesLazyIterator(IXdmSequence source, Func<IXdmNode, bool> predicate)
+    {
+        foreach (var item in XdmSequence.FromSource(source))
+        {
+            if (item.IsNode && predicate(item.NodeValue))
+                yield return item;
+        }
+    }
+
+    /// <summary>
+    /// Returns the single item of a sequence when it has exactly one item, without
+    /// materializing lazy sequences (at most two items are enumerated to decide).
+    /// </summary>
+    private static bool TryGetSingletonItem(IXdmSequence seq, out XdmValue item)
+    {
+        if (seq is MaterializedSequence materialized)
+        {
+            if (materialized.Items.Count == 1)
+            {
+                item = materialized.Items[0];
+                return true;
+            }
+            item = default;
+            return false;
+        }
+
+        var enumerator = XdmSequence.FromSource(seq).GetEnumerator();
+        if (!enumerator.MoveNext())
+        {
+            item = default;
+            return false;
+        }
+        var first = enumerator.Current;
+        if (enumerator.MoveNext())
+        {
+            item = default;
+            return false;
+        }
+        item = first;
+        return true;
+    }
+
+    /// <summary>
+    /// Materializes a sequence like <see cref="MaterializeSequence"/> but returns a read-only
+    /// view: an already-materialized sequence is exposed without copying, and a lazy sequence
+    /// is collected into a single list (no List-growth + ToArray double copy).
+    /// </summary>
+    private static IReadOnlyList<XdmValue> MaterializeSequenceView(XdmValue sequence)
+    {
+        if (sequence.IsUndefined)
+            return Array.Empty<XdmValue>();
+
+        if (sequence.IsSequence)
+        {
+            var seq = sequence.SequenceValue;
+            if (seq is null)
+                return Array.Empty<XdmValue>();
+
+            if (seq is MaterializedSequence materialized)
+                return materialized.Items;
+
+            var list = new List<XdmValue>();
+            foreach (var item in XdmSequence.FromSource(seq))
+                list.Add(item);
+            return list;
+        }
+
+        return new[] { sequence };
     }
 
     private static bool MatchesKindTest(IXdmNode node, string kindName)
@@ -6715,23 +6928,42 @@ public static class VmEngine
         // If value is a sequence, only allow single-item sequences for atomic casts
         if (value.IsSequence)
         {
-            if (!TryGetSequenceLength(value.SequenceValue, out var seqLen))
-                return false;
-            if (seqLen == 0)
+            if (TryGetSequenceLength(value.SequenceValue, out var seqLen))
             {
-                result = XdmValue.Undefined;
-                return true;
+                if (seqLen == 0)
+                {
+                    result = XdmValue.Undefined;
+                    return true;
+                }
+                if (seqLen != 1)
+                {
+                    // Casting a sequence of more than one item is a type error (XPTY0004),
+                    // not a cast failure (K-SeqExprCast-145).
+                    failureKind = CastFailureKind.NotPermitted;
+                    return false;
+                }
+                var knownEnumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
+                knownEnumerator.MoveNext();
+                value = knownEnumerator.Current;
             }
-            if (seqLen != 1)
+            else
             {
-                // Casting a sequence of more than one item is a type error (XPTY0004),
-                // not a cast failure (K-SeqExprCast-145).
-                failureKind = CastFailureKind.NotPermitted;
-                return false;
+                // Lazy sequence: at most two enumerated items decide the cardinality.
+                var enumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
+                if (!enumerator.MoveNext())
+                {
+                    result = XdmValue.Undefined;
+                    return true;
+                }
+                var first = enumerator.Current;
+                if (enumerator.MoveNext())
+                {
+                    // Same XPTY0004-as-NotPermitted rule as the known-length path.
+                    failureKind = CastFailureKind.NotPermitted;
+                    return false;
+                }
+                value = first;
             }
-            var enumerator = XdmSequence.FromSource(value.SequenceValue!).GetEnumerator();
-            enumerator.MoveNext();
-            value = enumerator.Current;
         }
 
         // Schema-imported simple types (not built-in xs:*): unions, lists, and atomic
@@ -8146,7 +8378,7 @@ public static class VmEngine
         string normalized = NormalizeTypeName(typeName);
 
         if (normalized is "empty-sequence" or "empty-sequence()")
-            return value.IsUndefined || (value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var len) && len == 0);
+            return !SequenceHasAnyItem(value);
 
         // Check cardinality
         int count;
@@ -9917,7 +10149,8 @@ public static class VmEngine
         if (typeName.Trim().Equals("empty-sequence()", StringComparison.OrdinalIgnoreCase))
         {
             if (value.IsUndefined) return true;
-            return value.IsSequence && TryGetSequenceLength(value.SequenceValue, out var esl) && esl == 0;
+            // Peek-based: a lazy empty sequence reports unknown length.
+            return value.IsSequence && !SequenceHasAnyItem(value);
         }
 
         // Sequence values (including the empty sequence) must be checked against the
@@ -12081,11 +12314,14 @@ public static class VmEngine
     {
         if (value.IsUndefined)
             return false;
-        if (value.IsSequence && value.SequenceValue is not null)
+        if (value.IsSequence)
         {
-            if (value.SequenceValue.TryGetLength(out var length))
+            var seq = value.SequenceValue;
+            if (seq is null)
+                return false; // a sequence value without a source is empty (matches MaterializeSequence/EBV)
+            if (seq.TryGetLength(out var length))
                 return length > 0;
-            foreach (var _ in XdmSequence.FromSource(value.SequenceValue))
+            foreach (var _ in XdmSequence.FromSource(seq))
                 return true;
             return false;
         }

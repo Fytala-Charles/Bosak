@@ -305,6 +305,10 @@
 //                      | Charles Korthout | 5.99  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 5.100 | 09-09-2026     | Perf: Populate installs a shared pre-built function-table template per evaluation (singl |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.101 | 16-09-2026     | Lazy-sequence cardinality fixes (REQ-085 wave 5 follow-up): fn:exists/fn:empty peek for |
+//                      |                  |       |                | a first item when length is unknown; fn:has-children/fn:path/fn:format-integer decide    |
+//                      |                  |       |                | cardinality from at most two enumerated items instead of rejecting unknown lengths       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3477,8 +3481,15 @@ public static class FunctionLibrary
         var arg = args[0];
         if (arg.IsUndefined)
             return XdmValue.FromBoolean(false);
-        if (arg.IsSequence && arg.SequenceValue is not null && arg.SequenceValue.TryGetLength(out var len))
-            return XdmValue.FromBoolean(len > 0);
+        if (arg.IsSequence && arg.SequenceValue is not null)
+        {
+            if (arg.SequenceValue.TryGetLength(out var len))
+                return XdmValue.FromBoolean(len > 0);
+            // Lazy sequence: length is unknown — peek for a first item.
+            foreach (var _ in XdmSequence.FromSource(arg.SequenceValue))
+                return XdmValue.FromBoolean(true);
+            return XdmValue.FromBoolean(false);
+        }
         return XdmValue.FromBoolean(true);
     }
 
@@ -3487,8 +3498,15 @@ public static class FunctionLibrary
         var arg = args[0];
         if (arg.IsUndefined)
             return XdmValue.FromBoolean(true);
-        if (arg.IsSequence && arg.SequenceValue is not null && arg.SequenceValue.TryGetLength(out var len))
-            return XdmValue.FromBoolean(len == 0);
+        if (arg.IsSequence && arg.SequenceValue is not null)
+        {
+            if (arg.SequenceValue.TryGetLength(out var len))
+                return XdmValue.FromBoolean(len == 0);
+            // Lazy sequence: length is unknown — peek for a first item.
+            foreach (var _ in XdmSequence.FromSource(arg.SequenceValue))
+                return XdmValue.FromBoolean(false);
+            return XdmValue.FromBoolean(true);
+        }
         return XdmValue.FromBoolean(false);
     }
 
@@ -5389,15 +5407,27 @@ public static class FunctionLibrary
         // Unwrap singleton sequences; empty sequence is valid and returns false.
         if (value.IsSequence && value.SequenceValue is not null)
         {
-            if (!value.SequenceValue.TryGetLength(out var len))
-                throw new InvalidOperationException("XPTY0004: fn:has-children argument must be a node or empty sequence.");
-            if (len == 0)
-                return XdmValue.False;
-            if (len != 1)
-                throw new InvalidOperationException("XPTY0004: fn:has-children argument must be a single node.");
-            var enumerator = XdmSequence.FromSource(value.SequenceValue).GetEnumerator();
-            enumerator.MoveNext();
-            value = enumerator.Current;
+            if (value.SequenceValue.TryGetLength(out var len))
+            {
+                if (len == 0)
+                    return XdmValue.False;
+                if (len != 1)
+                    throw new InvalidOperationException("XPTY0004: fn:has-children argument must be a single node.");
+                var knownEnumerator = XdmSequence.FromSource(value.SequenceValue).GetEnumerator();
+                knownEnumerator.MoveNext();
+                value = knownEnumerator.Current;
+            }
+            else
+            {
+                // Lazy sequence: at most two enumerated items decide the cardinality.
+                var enumerator = XdmSequence.FromSource(value.SequenceValue).GetEnumerator();
+                if (!enumerator.MoveNext())
+                    return XdmValue.False;
+                var first = enumerator.Current;
+                if (enumerator.MoveNext())
+                    throw new InvalidOperationException("XPTY0004: fn:has-children argument must be a single node.");
+                value = first;
+            }
         }
 
         if (value.IsUndefined)
@@ -5435,11 +5465,22 @@ public static class FunctionLibrary
                     return XdmValue.Undefined;
                 if (len > 1)
                     throw new InvalidOperationException("XPTY0004");
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                {
+                    value = item;
+                    break;
+                }
             }
-            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            else
             {
-                value = item;
-                break;
+                // Lazy sequence: at most two enumerated items decide the cardinality.
+                var enumerator = XdmSequence.FromSource(value.SequenceValue).GetEnumerator();
+                if (!enumerator.MoveNext())
+                    return XdmValue.Undefined;
+                var first = enumerator.Current;
+                if (enumerator.MoveNext())
+                    throw new InvalidOperationException("XPTY0004");
+                value = first;
             }
         }
 
@@ -11378,8 +11419,19 @@ public static class FunctionLibrary
         // Handle empty sequence and undefined
         if (value.IsUndefined)
             return XdmValue.FromString("");
-        if (value.IsSequence && value.SequenceValue is not null && value.SequenceValue.TryGetLength(out var len) && len == 0)
-            return XdmValue.FromString("");
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            if (value.SequenceValue.TryGetLength(out var len))
+            {
+                if (len == 0)
+                    return XdmValue.FromString("");
+            }
+            else if (IsEmptySequence(value))
+            {
+                // Lazy sequence: enumerate to detect the empty case.
+                return XdmValue.FromString("");
+            }
+        }
 
         long n = ToIntegerValue(value);
         string result = FormatIntegerEngine.Format(ctx, n, picture, language);

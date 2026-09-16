@@ -53,16 +53,18 @@ of the benchmark host.
 Waves 1–4 (wrapper cache, lazy axes, function-table clone; per-instruction compiled-XPath
 cache, engine Populate skip, static LRE namespace-info cache; serializer span escaping +
 copy-on-write namespace bindings; result-tree append fast paths): raw output in `baseline-0.10.0.txt`.
+Wave 5 (lazy node-test filtering, copy-free predicate-path views, pooled Filter kept-buffer,
+ordered-sequence fast path in document-order normalization — latest numbers below).
 
-| Benchmark | Baseline | After waves 1–4 | Δ time | Δ allocated |
+| Benchmark | Baseline | After waves 1–5 | Δ time | Δ allocated |
 |---|---|---|---|---|
 | Compile_ModerateExpression | 4.85 µs / 18.5 KB | 5.25 µs / 18.5 KB | — | — |
-| Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 22.08 ms / 30.96 MB | −33% | −45% |
-| Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 15.58 ms / 19.87 MB | −48% | −51% |
-| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 306.2 µs / 405 KB | — | −4% |
-| Compile_Flwor | 9.57 µs / 36.5 KB | 11.70 µs / 36.5 KB | — | — |
-| Evaluate_Flwor | 44.23 ms / 66.75 MB | 27.61 ms / 36.66 MB | −38% | −45% |
-| Compile_Stylesheet | 35.69 µs / 80.2 KB | 37.14 µs / 80.2 KB | — | — |
-| Transform_HtmlTable | 193.34 ms / 115.48 MB | 51.46 ms / 47.13 MB | −73% | −59% |
+| Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 16.10 ms / 21.18 MB | −51% | −62% |
+| Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 10.43 ms / 10.06 MB | −65% | −75% |
+| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 308.1 µs / 405 KB | — | −4% |
+| Compile_Flwor | 9.57 µs / 36.5 KB | 10.54 µs / 36.5 KB | — | — |
+| Evaluate_Flwor | 44.23 ms / 66.75 MB | 22.50 ms / 26.16 MB | −49% | −61% |
+| Compile_Stylesheet | 35.69 µs / 80.2 KB | 38.07 µs / 80.2 KB | — | — |
+| Transform_HtmlTable | 193.34 ms / 115.48 MB | 47.81 ms / 43.23 MB | −75% | −63% |
 
 Re-run with: `dotnet run -c Release --project benchmarks/Bosak.Benchmarks -- --filter '*'`

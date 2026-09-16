@@ -56,6 +56,9 @@
 //                      | Charles Korthout | 2.7   | 07-09-2026     | CompareError matches XPathErrorException.CodeLocalName structurally (FOER0000 family)   |
 //                      | Charles Korthout | 2.8   | 09-09-2026     | CompareError matches Q{uri}local expectation form against XPathErrorException structured |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.9   | 16-09-2026     | CompareAssertEmpty peeks one item for lazy (unknown-length) sequences instead of         |
+//                      |                  |       |                | failing them outright (REQ-085 wave 5: node tests are lazy-filtered now)                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -306,9 +309,21 @@ internal static class ResultComparer
         if (actual.IsUndefined)
             return new TestOutcome(TestOutcomeKind.Passed, null);
 
-        if (actual.IsSequence && actual.SequenceValue is not null &&
-            actual.SequenceValue.TryGetLength(out var len) && len == 0)
-            return new TestOutcome(TestOutcomeKind.Passed, null);
+        if (actual.IsSequence && actual.SequenceValue is not null)
+        {
+            if (actual.SequenceValue.TryGetLength(out var len))
+            {
+                if (len == 0)
+                    return new TestOutcome(TestOutcomeKind.Passed, null);
+            }
+            else
+            {
+                // Lazy sequence: length is unknown — peek one item to detect emptiness.
+                var enumerator = XdmSequence.FromSource(actual.SequenceValue).GetEnumerator();
+                if (!enumerator.MoveNext())
+                    return new TestOutcome(TestOutcomeKind.Passed, null);
+            }
+        }
 
         return new TestOutcome(TestOutcomeKind.Failed, $"assert-empty failed. Got: {SerializeValue(actual)}");
     }
