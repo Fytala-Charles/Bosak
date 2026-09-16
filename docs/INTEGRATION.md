@@ -20,6 +20,8 @@
 
 ## 0. Recent Changes
 
+- **2026-09-16** — **Streaming Phase A: burst-mode streaming input** — very large source documents can now be transformed record-at-a-time in bounded memory. New public surface: `XmlStreamingProvider` (`Bosak.XPath.Providers.Streaming`) presents an `XmlReader` source as a forward-only document node (records materialized one at a time as the engine pulls them), `XsltExecutable.TransformStreaming(Stream, StreamingTransformOptions?, …)` (with per-record `xsl:strip-space`/`xsl:preserve-space` application and an `xsl:accumulator` guard), and the `ISinglePassSequence` marker in Core. The VM and XSLT engine gained single-pass execution paths (`xsl:for-each` / `xsl:apply-templates` over the streamed children iterate without materializing; `fn:last()` over a streamed focus raises a clear error). Verified: 500k records through XPath and XSLT at ≤ 2 MB live input-side growth; 10 stylesheet parity tests byte-identical vs in-memory. `xsl:supports-streaming` still reports `no`; `streamable="yes"` and streaming accumulators are later phases. See §3.2a. Gates: QT3 31,142/0/679, XSLT 7,722/3/6,875, unit 2,249/0/0 + Xslt.Tests 391/0/0, build 0/0.
+
 - **2026-09-14** — **Performance wave 4 (REQ-085):** result-tree append path — constructed-element content normalization now skips its list rebuild unless a text merge/discard is actually required, literal AVT values (no braces) return without computing namespaces/base URI, and per-literal-result-element bookkeeping is cached/static (interned prefix hints, lazy duplicate-attribute set, variable-snapshot only when the subtree can declare variables). **Transform_HtmlTable 62.57 → 51.46 ms (cumulative 193.34 → 51.46, −73%), 61.54 → 47.13 MB (cumulative 115.48 → 47.13, −59%)**. No public API or behavior change; XSLT strict sweep 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged.
 
 - **2026-09-10** — **Performance wave 3 (REQ-085):** serializer path — HTML escaping no longer allocates per-character strings or performs per-character encoding lookups (clean spans are written whole; unicode encodings skip representability checks), and namespace bindings during HTML serialization are copy-on-write instead of two dictionary copies per element. **Transform_HtmlTable 73.06 → 62.57 ms (cumulative 193.34 → 62.57, −68%), 71.53 → 61.54 MB (cumulative 115.48 → 61.54, −47%)**; output bytes unchanged (XSLT strict sweep 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0).
@@ -1803,6 +1805,50 @@ var resultXml = executable.TransformToString(new XDocumentNode(source));
 // => "<output>42</output>"
 ```
 
+### 3.2a Streaming Input (Burst Mode)
+
+For very large documents, `TransformStreaming` reads the source lazily from a stream:
+the root's top-level nodes (*records*) are materialized one at a time as the stylesheet
+consumes them, and each record is released once processing moves on. Within a record all
+axes work as usual (it is a normal, detached tree); parent chains above a record reach
+the streamed root and document nodes, so patterns like `match="/inventory/product"` work.
+
+```csharp
+using Bosak.Xslt.Api;
+
+var executable = new XsltCompiler().Compile(xsl);
+using var source = File.OpenRead("orders-2gb.xml");
+var result = executable.TransformStreaming(source,
+    new StreamingTransformOptions { BaseUri = "file:///data/orders-2gb.xml" });
+```
+
+The lower-level primitive is provider-neutral and works with plain XPath too:
+
+```csharp
+using Bosak.XPath.Providers.Streaming;
+
+IXdmNode doc = XmlStreamingProvider.Load(stream, new StreamingLoadOptions { BaseUri = "…" });
+// pass to XPath31Expression.Evaluate or XsltExecutable.Transform like any other node
+```
+
+**Memory contract** — what stays bounded and what does not:
+
+| Access pattern | Memory |
+|---|---|
+| `xsl:for-each` / `xsl:apply-templates` over the root's children (or `//record`), record-local bodies | **Bounded** — records are released as they are consumed |
+| Predicates on the record step, `position()` | Bounded |
+| `xsl:sort`, `xsl:for-each-group`, `fn:count()`, `fn:last()` subscript `[last()]`, keys, variables retaining records | Unbounded but correct (buffers the stream) |
+| `fn:last()` in a streamed focus, a second pass over the streamed root, `preceding` axes across records, `following` axes past the current record | Clear `StreamingException`/error — never silently wrong data |
+| `xsl:accumulator` stylesheets | Rejected up front (`NotSupportedException`; later phase) |
+
+Notes and limitations: the streamed children of the root are **forward-only** (one pass).
+`xsl:strip-space`/`xsl:preserve-space` rules are applied per record (disable via
+`StreamingTransformOptions.HonorWhitespaceRules = false`). DTD is prohibited by default
+(pass `ReaderSettings` to relax). Comments/PIs before the root element and DTD entity
+declarations are not surfaced; `fn:snapshot` and `fn:transform` with a streaming source
+are unsupported; `fn:copy-of` returns the streamed node itself rather than a fresh copy
+(`xsl:copy-of` into the result tree works normally).
+
 ### 3.3 Named Templates & `call-template`
 
 ```csharp
@@ -1980,6 +2026,7 @@ through `WithNamespace`.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
+| Streaming input (burst mode) | ✅ Working | `XsltExecutable.TransformStreaming` + `XmlStreamingProvider`: record-at-a-time processing in bounded memory; forward-only root children; see §3.2a. `streamable="yes"` and streaming accumulators are later phases; `xsl:supports-streaming` reports `no` |
 | `xsl:template match="…"` | ✅ Working | Pattern compiler: element names, `*`, `@*`, predicates, union (`\|`) |
 | `xsl:template name="…"` | ✅ Working | Named template dispatch; raw XDM result via `XsltExecutable.Transform(..., rawResult: true)`; whitespace/EQName names normalized; `xsl:initial-template` permitted in XSLT namespace |
 | `xsl:call-template` | ✅ Working | With `xsl:with-param` support; matches named templates by expanded QName (different prefixes bound to the same URI); rejects template names in reserved namespaces (`XTSE0080`) except `xsl:initial-template` |

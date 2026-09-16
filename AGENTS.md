@@ -71,7 +71,7 @@ This is a layered XPath 3.1 implementation:
 | API | `Bosak.XPath.Api` | `XPath31Expression` — public compile/evaluate surface |
 | XSLT | `Bosak.Xslt` | `XsltCompiler`, `TransformEngine`, `fn:transform()` |
 | XQuery | `Bosak.XQuery` | XQuery 3.1 processor — `XQueryCompiler`, `XQueryParser` (prolog), `XQueryStaticContext`, FLWOR, constructors, modules |
-| Providers | `Bosak.XPath.Providers` | `IXdmNode` adapters (`XDocumentNode`) |
+| Providers | `Bosak.XPath.Providers` | `IXdmNode` adapters (`XDocumentNode`), burst-mode streaming input (`XmlStreamingProvider`) |
 
 The execution pipeline is:
 ```
