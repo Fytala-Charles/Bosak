@@ -292,6 +292,10 @@
 //                      |                  |       |                | (normalized name, occurrence flags, function-test marker) per distinct type string —    |
 //                      |                  |       |                | typed signatures no longer re-parse type names per argument per call                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.145 | 16-09-2026     | REQ-085 perf wave 9: ValueMatchesType caches the lowercase occurrence/prefix-stripped |
+//                      |                  |       |                | atomic-match type name per distinct input (was Trim().ToLowerInvariant() + slices per    |
+//                      |                  |       |                | call); parenthesized types still re-enter the full matcher unchanged                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -10187,6 +10191,40 @@ public static class VmEngine
             or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger";
     }
 
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, string> s_atomicMatchTypeNames = new();
+
+    /// <summary>
+    /// Computes the lowercased, occurrence- and xs:/xsd:-prefix-stripped type name used by
+    /// the atomic/kind-test matching path of <see cref="ValueMatchesType"/>, cached per
+    /// distinct input string (the same signature type names repeat on every call). The
+    /// parenthesized-type case is deliberately left in place: the matcher re-enters itself
+    /// for it, so fully parenthesized inputs flow through unchanged.
+    /// </summary>
+    private static string NormalizeTypeNameForAtomicMatch(string typeName)
+    {
+        string normalized = typeName.Trim().ToLowerInvariant();
+
+        // Strip occurrence indicator for non-sequence values. For function-family
+        // types a trailing indicator only counts as an outer occurrence when it
+        // directly follows the closing parenthesis of the parameter list; after an
+        // 'as' clause it belongs to the return type (ArrayTest-063).
+        if (normalized.Length > 0 && normalized[^1] is '?' or '*' or '+')
+        {
+            if (normalized.StartsWith("function(") || normalized.StartsWith("map(") || normalized.StartsWith("array("))
+                (normalized, _) = StripOuterOccurrence(normalized);
+            else
+                normalized = normalized[..^1].TrimEnd();
+        }
+
+        // Strip xs:/xsd: prefix
+        if (normalized.StartsWith("xs:"))
+            normalized = normalized[3..];
+        else if (normalized.StartsWith("xsd:"))
+            normalized = normalized[4..];
+
+        return normalized;
+    }
+
     /// <summary>
     /// Checks whether an XDM value matches a declared type name (e.g. "xs:string", "element(foo)").
     /// </summary>
@@ -10267,30 +10305,14 @@ public static class VmEngine
             return true;
         }
 
-        string normalized = typeName.Trim().ToLowerInvariant();
+        // Cached normalization (lowercase, occurrence/prefix strip) — the same signature
+        // type names repeat on every call.
+        string normalized = s_atomicMatchTypeNames.GetOrAdd(typeName, static t => NormalizeTypeNameForAtomicMatch(t));
 
         // Unwrap one layer of redundant outer parentheses: (function(...) as T) is
         // equivalent to function(...) as T.
         if (normalized.Length > 1 && normalized[0] == '(' && FindMatchingParen(normalized, 0) == normalized.Length - 1)
             return ValueMatchesType(value, typeName.Trim()[1..^1], context);
-
-        // Strip occurrence indicator for non-sequence values. For function-family
-        // types a trailing indicator only counts as an outer occurrence when it
-        // directly follows the closing parenthesis of the parameter list; after an
-        // 'as' clause it belongs to the return type (ArrayTest-063).
-        if (normalized.Length > 0 && normalized[^1] is '?' or '*' or '+')
-        {
-            if (normalized.StartsWith("function(") || normalized.StartsWith("map(") || normalized.StartsWith("array("))
-                (normalized, _) = StripOuterOccurrence(normalized);
-            else
-                normalized = normalized[..^1].TrimEnd();
-        }
-
-        // Strip xs:/xsd: prefix
-        if (normalized.StartsWith("xs:"))
-            normalized = normalized[3..];
-        else if (normalized.StartsWith("xsd:"))
-            normalized = normalized[4..];
 
         if (normalized == "item()")
             return !value.IsUndefined;
