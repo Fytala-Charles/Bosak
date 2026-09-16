@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 16-09-2026     | Phase B: implements IStreamingNode (UnderlyingXObject); unsealed for the document role   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
@@ -40,7 +42,7 @@ internal enum StreamingNodeRole
 /// <see cref="XObject"/>, so wrappers created from below (via <see cref="Parent"/>) are
 /// value-equal to wrappers handed out from above.
 /// </summary>
-internal sealed class StreamingNode : IXdmNode
+internal class StreamingNode : IXdmNode, IStreamingNode
 {
     private readonly StreamingSource _source;
     private readonly XDocumentNode _inner;
@@ -56,6 +58,11 @@ internal sealed class StreamingNode : IXdmNode
     }
 
     internal StreamingNodeRole Role => _role;
+
+    internal StreamingSource Source => _source;
+
+    /// <inheritdoc/>
+    public XObject UnderlyingXObject => _inner.UnderlyingObject;
 
     /// <summary>
     /// True when this wrapper represents a top-level record directly below the streamed

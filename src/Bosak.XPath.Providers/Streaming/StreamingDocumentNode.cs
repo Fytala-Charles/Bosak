@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 16 September 2026
-// PURPOSE              : Options for XsltExecutable.TransformStreaming (burst-mode streaming input)
+// PURPOSE              : The document node of a streamed source; exposes per-record and completion hooks
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
@@ -13,27 +13,41 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 0.2   | 16-09-2026     | Phase B: HonorWhitespaceRules removed (engine owns stripping for streamed sources)     |
-//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
-namespace Bosak.Xslt.Api;
+using System.Xml.Linq;
+using Bosak.XPath.Providers.Xml;
+
+namespace Bosak.XPath.Providers.Streaming;
 
 /// <summary>
-/// Options controlling how <see cref="XsltExecutable.TransformStreaming"/> reads the
-/// streamed source document.
+/// The document node of a streamed source. Routes the <see cref="IStreamingDocument"/>
+/// hook properties to the owning <see cref="StreamingSource"/> so the engine can compose
+/// per-record processing and stream-completion work.
 /// </summary>
-public sealed class StreamingTransformOptions
+internal sealed class StreamingDocumentNode : StreamingNode, IStreamingDocument
 {
-    /// <summary>
-    /// Gets or sets the base URI reported for the streamed document; also used as its
-    /// document URI. Used to resolve relative URIs (for example by <c>fn:doc</c>).
-    /// </summary>
-    public string? BaseUri { get; set; }
+    internal StreamingDocumentNode(StreamingSource source, XDocumentNode inner)
+        : base(source, inner, StreamingNodeRole.Document, recordIndex: -1)
+    {
+    }
 
-    /// <summary>
-    /// Gets or sets the <see cref="System.Xml.XmlReaderSettings"/> used to create the
-    /// stream reader. When null, safe defaults are used
-    /// (<see cref="System.Xml.DtdProcessing.Prohibit"/>, whitespace preserved).
-    /// </summary>
-    public System.Xml.XmlReaderSettings? ReaderSettings { get; set; }
+    /// <inheritdoc/>
+    public Func<XObject, Bosak.XPath.Core.Xdm.IXdmNode, bool>? RecordPostProcessor
+    {
+        get => Source.RecordPostProcessor;
+        set => Source.RecordPostProcessor = value;
+    }
+
+    /// <inheritdoc/>
+    public Action? StreamCompleted
+    {
+        get => Source.StreamCompleted;
+        set => Source.StreamCompleted = value;
+    }
+
+    /// <inheritdoc/>
+    public bool CanDrain => Source.CanDrain;
+
+    /// <inheritdoc/>
+    public void Drain() => Source.Drain();
 }

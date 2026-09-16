@@ -5757,12 +5757,16 @@ return fn:transform(map{""stylesheet-text"": $xsl,
     }
 
     [Theory]
-    [InlineData("node()[$value le $limit or $value gt $limit]", "$limit")]
-    [InlineData("*[@id eq $other]", "$other")]
-    [InlineData("$value[. eq $n]", "$n")]
-    [InlineData("section[$limit + $value gt 0]", "$limit")]
-    public void AccumulatorRule_MatchPattern_With_Variable_Other_Than_Value_Raises_XPST0008(string match, string offendingVariable)
+    [InlineData("node()[$value le 10]")]
+    [InlineData("node()[$value le $limit or $value gt $limit]")]
+    [InlineData("*[@id][$value gt 0]")]
+    [InlineData("section[$value instance of element()]")]
+    [InlineData("section[$limit + $value gt 0]")]
+    [InlineData("$value[. eq $n]")]
+    public void AccumulatorRule_MatchPattern_Using_Value_Raises_XPST0008(string match)
     {
+        // XSLT 3.0 §18.2.2 (Saxon bug 6095, accumulator-091): the accumulator $value
+        // variable is bound only in @select, never in @match — any reference raises XPST0008.
         var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
             xmlns:xs='http://www.w3.org/2001/XMLSchema'>
             <xsl:param name='limit' select='10'/>
@@ -5775,19 +5779,22 @@ return fn:transform(map{""stylesheet-text"": $xsl,
         var compiler = new Api.XsltCompiler();
         var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
         Assert.Contains("XPST0008", ex.Message);
-        Assert.Contains(offendingVariable, ex.Message);
+        Assert.Contains("$value", ex.Message);
     }
 
     [Theory]
     [InlineData("node()")]
-    [InlineData("node()[$value le 10]")]
-    [InlineData("*[@id][$value gt 0]")]
-    [InlineData("section[$value instance of element()]")]
+    [InlineData("chap[not(@nr = $seven)]")]
+    [InlineData("*[@id eq $other]")]
     [InlineData("*:foo[let $temp := namespace-uri() return $temp = &apos;&apos; or $temp=&apos;garbage&apos;]")]
-    public void AccumulatorRule_MatchPattern_Using_Value_Is_Allowed(string match)
+    public void AccumulatorRule_MatchPattern_With_Global_Or_Bound_Variables_Is_Allowed(string match)
     {
+        // Global variables/parameters and pattern-bound variables are in scope in an
+        // accumulator-rule @match pattern (accumulator-034).
         var xsl = $@"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
             xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xsl:variable name='seven' select='7'/>
+            <xsl:param name='other' select='1'/>
             <xsl:accumulator name='node-count' as='xs:integer' initial-value='0'>
                 <xsl:accumulator-rule match='{match}' select='$value + 1'/>
             </xsl:accumulator>

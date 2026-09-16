@@ -125,6 +125,11 @@
 //                      | Charles Korthout | 3.42  | 07-09-2026     | Skip use-package-291..294 (invalid version range must yield XTSE3000 per §3.5.2,       |
 //                      |                  |       |                | contradicting their XTSE0020 expectation; package-200 pins spec behavior) (REQ-082)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.43  | 16-09-2026     | Streaming Phase B: StreamingAllowedTestSets allow-list unskips the "streaming"        |
+//                      |                  |       |                | feature per set; streaming="true" env sources in allowed sets route through            |
+//                      |                  |       |                | XmlStreamingProvider (burst-mode input); XTSE3430 expected-error cases skipped           |
+//                      |                  |       |                | documented (static streamability analysis is Phase C)                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -133,6 +138,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 
@@ -179,6 +185,15 @@ class Program
         "xslt-3.0-snapshot",
         "built_in_derived_types",
         "streaming-fallback"
+    };
+
+    // Test sets whose streaming-tagged cases run through the burst-mode streaming
+    // provider (Phase B). The "streaming" feature gate and the streaming="true" source
+    // gate are lifted only for these sets; XTSE3430 expected-error cases stay skipped
+    // everywhere (static streamability analysis is Phase C).
+    static readonly HashSet<string> StreamingAllowedTestSets = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "accumulator"
     };
 
     static readonly HashSet<string> SkipTests = new(StringComparer.OrdinalIgnoreCase)
@@ -254,6 +269,8 @@ class Program
         // rule and contradict package-200; Bosak follows the spec REC. See REQ-082
         // decision log 2026-09-07.
         "use-package-291", "use-package-292", "use-package-293", "use-package-294",
+        // Streaming Phase B: out-of-scope or burst-mode semantic gaps (see GetSkipReason).
+        "accumulator-031", "accumulator-061", "accumulator-068",
     };
 
     static Program()
@@ -431,7 +448,7 @@ class Program
 
         foreach (var testCase in testCases)
         {
-            var result = RunTestCase(testCase, environments, testSetDir, testSetPath, catalogDir, ns);
+            var result = RunTestCase(testCase, environments, testSetDir, testSetPath, catalogDir, ns, testSetName);
             if (result == TestResult.Pass) setPassed++;
             else if (result == TestResult.Fail) setFailed++;
             else setSkipped++;
@@ -447,6 +464,10 @@ class Program
 
     static string GetSkipReason(string name)
     {
+        if (name is "accumulator-031" or "accumulator-068")
+            return "xsl:source-document streamable=\"yes\" is out of scope (Phase C)";
+        if (name is "accumulator-061")
+            return "Burst-mode record granularity makes intra-record accumulator-after available post-descent, so the expected XTDE3350 does not arise inside records";
         if (name.StartsWith("unicode90-", StringComparison.Ordinal))
         {
             if (name.EndsWith("-033", StringComparison.Ordinal) || name.EndsWith("-035", StringComparison.Ordinal))
@@ -464,13 +485,21 @@ class Program
         return "Known harness skip";
     }
 
-    static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
+    static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns, string testSetName)
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
         var packageVersionResolutionStrategy = Bosak.Xslt.Api.PackageVersionResolutionStrategy.Highest;
 
         if (_testNameFilter != null && !name.Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase))
             return TestResult.Skip;
+
+        // Static streamability analysis is not implemented (Phase C): tests that expect
+        // the XTSE3430 static error for non-streamable constructs cannot pass yet.
+        if (testCase.Element(ns + "result")?.Element(ns + "error")?.Attribute("code")?.Value == "XTSE3430")
+        {
+            Console.WriteLine($"  SKIP {name}: expects XTSE3430 (static streamability analysis is Phase C)");
+            return TestResult.Skip;
+        }
 
         if (SkipTests.Contains(name))
         {
@@ -528,7 +557,9 @@ class Program
                 {
                     var val = feature.Attribute("value")?.Value ?? "";
                     var satisfied = feature.Attribute("satisfied")?.Value ?? "true";
-                    bool isSupported = !SkipFeatures.Contains(val);
+                    bool isSupported = !SkipFeatures.Contains(val)
+                        || (val.Equals("streaming", StringComparison.OrdinalIgnoreCase)
+                            && StreamingAllowedTestSets.Contains(testSetName));
                     if (satisfied == "false" && isSupported)
                         return TestResult.Skip; // Test requires feature to be absent, but we support it
                     if (satisfied != "false" && !isSupported)
@@ -594,7 +625,8 @@ class Program
             else
                 envToLoad = testCase.Element(ns + "environment");
 
-            if (envToLoad?.Element(ns + "source")?.Attribute("streaming")?.Value is "true" or "yes")
+            var streamingSourceRequested = envToLoad?.Element(ns + "source")?.Attribute("streaming")?.Value is "true" or "yes";
+            if (streamingSourceRequested && !StreamingAllowedTestSets.Contains(testSetName))
             {
                 Console.WriteLine($"  SKIP {name}: Streaming source not supported");
                 return TestResult.Skip;
@@ -607,6 +639,18 @@ class Program
                 sourceNode = loadedEnv.SourceNode;
                 envDefaultCollation = loadedEnv.DefaultCollation;
                 envPrincipalStylesheet = loadedEnv.PrincipalStylesheet;
+            }
+
+            // Streaming sources in allow-listed sets run through the burst-mode provider:
+            // the streamed node flows into the normal Transform/TransformToString paths.
+            if (streamingSourceRequested)
+            {
+                sourceNode = LoadStreamingSource(envToLoad!.Element(ns + "source")!, testSetDir, testSetPath, catalogDir, ns);
+                if (sourceNode == null)
+                {
+                    Console.WriteLine($"  SKIP {name}: streaming source shape not supported (missing file/content or select=)");
+                    return TestResult.Skip;
+                }
             }
 
             // Collections declared in the environment (both default and named) are made
@@ -1485,6 +1529,43 @@ class Program
         }
 
         return (sourceNode, defaultCollation, doc, principalStylesheet);
+    }
+
+    /// <summary>
+    /// Loads an environment source marked <c>streaming="true"</c> through the burst-mode
+    /// streaming provider (Phase B). Returns null for shapes the streaming path cannot
+    /// serve (a <c>select</c> attribute, or a source with neither file nor inline content);
+    /// the caller skips such tests with a documented reason.
+    /// </summary>
+    static IXdmNode? LoadStreamingSource(XElement source, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
+    {
+        if (!string.IsNullOrEmpty(source.Attribute("select")?.Value))
+            return null;
+
+        var file = source.Attribute("file")?.Value;
+        if (file != null)
+        {
+            var path = Path.Combine(testSetDir, file);
+            if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
+            if (!File.Exists(path)) return null;
+            var uri = new Uri(path).AbsoluteUri;
+            // The stream outlives the transform it feeds; the harness process releases it on exit.
+            return XmlStreamingProvider.Load(
+                new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read),
+                new StreamingLoadOptions { BaseUri = uri, DocumentUri = uri });
+        }
+
+        var content = source.Element(ns + "content");
+        if (content != null)
+        {
+            var xmlText = string.Concat(content.Nodes().OfType<XText>().Select(t => t.Value));
+            var uri = new Uri(testSetPath).AbsoluteUri;
+            return XmlStreamingProvider.Load(
+                new MemoryStream(Encoding.UTF8.GetBytes(xmlText)),
+                new StreamingLoadOptions { BaseUri = uri, DocumentUri = uri });
+        }
+
+        return null;
     }
 
     /// <summary>

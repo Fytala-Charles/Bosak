@@ -28,6 +28,7 @@ namespace Bosak.Xslt.Tests;
 /// operations a single-pass source cannot support, the whitespace-rule handoff, and
 /// bounded-memory record processing.
 /// </summary>
+[Collection("MemorySensitive")]
 public class StreamingTransformTests
 {
     private const string Xml = """
@@ -218,21 +219,22 @@ public class StreamingTransformTests
     }
 
     [Fact]
-    public void AccumulatorStylesheet_IsRejected()
+    public void AccumulatorStylesheet_IsSupported()
     {
+        // Phase B: accumulators over a streamed source are supported (push-style).
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:accumulator name="total" initial-value="0">
                 <xsl:accumulator-rule match="price" select="$value + number(.)"/>
               </xsl:accumulator>
-              <xsl:template match="/"><out/></xsl:template>
+              <xsl:mode on-no-match="shallow-skip" use-accumulators="total"/>
+              <xsl:template match="price"><p n="{accumulator-before('total')}"/></xsl:template>
+              <xsl:template match="/"><out><xsl:apply-templates/></out></xsl:template>
             </xsl:stylesheet>
             """;
 
-        var ex = Assert.Throws<NotSupportedException>(
-            () => new XsltCompiler().Compile(xsl)
-                .TransformStreaming(new MemoryStream(Encoding.UTF8.GetBytes(Xml))));
-        Assert.Contains("accumulator", ex.Message);
+        var result = Streamed(xsl, Xml);
+        Assert.Contains("<p n=", result);
     }
 
     [Fact]

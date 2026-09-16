@@ -316,6 +316,9 @@
 //                      | Charles Korthout | 5.103 | 16-09-2026     | Streaming Phase A: fn:last() raises a streaming error when the context size is          |
 //                      |                  |       |                | unknown (negative) over a single-pass (streamed) focus                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.104 | 16-09-2026     | Streaming Phase B: fn:snapshot supports streaming (burst-mode) nodes via the           |
+//                      |                  |       |                | UnderlyingOf unwrap of IStreamingNode                                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3902,9 +3905,16 @@ public static class FunctionLibrary
         return XdmValue.FromSequence(MaterializedSequence.FromList(copies));
     }
 
+    private static XObject? UnderlyingOf(IXdmNode node) => node switch
+    {
+        Providers.Xml.XDocumentNode xdocNode => xdocNode.UnderlyingObject,
+        Providers.Streaming.IStreamingNode streamingNode => streamingNode.UnderlyingXObject,
+        _ => null,
+    };
+
     private static IXdmNode? SnapshotNode(IXdmNode node)
     {
-        if (node is not Providers.Xml.XDocumentNode xdocNode)
+        if (node is not Providers.Xml.XDocumentNode and not Providers.Streaming.IStreamingNode)
             return null;
 
         // Collect ancestor path from root to the target node.
@@ -3941,7 +3951,7 @@ public static class FunctionLibrary
                     break;
 
                 case XdmNodeKind.Element:
-                    if (((Providers.Xml.XDocumentNode)original).UnderlyingObject is not XElement elem)
+                    if (UnderlyingOf(original) is not XElement elem)
                         continue;
                     var elemCopy = ShallowCopyElement(elem);
                     container?.Add(elemCopy);
@@ -3951,7 +3961,7 @@ public static class FunctionLibrary
                     break;
 
                 case XdmNodeKind.Attribute:
-                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XAttribute attr)
+                    if (isLast && UnderlyingOf(original) is XAttribute attr)
                     {
                         // The shallow-copied parent already carries this attribute;
                         // reuse it so the snapshot copy keeps its parent element.
@@ -3972,7 +3982,7 @@ public static class FunctionLibrary
                     break;
 
                 case XdmNodeKind.Text:
-                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XText text)
+                    if (isLast && UnderlyingOf(original) is XText text)
                     {
                         var textCopy = new XText(text.Value);
                         container?.Add(textCopy);
@@ -3981,7 +3991,7 @@ public static class FunctionLibrary
                     break;
 
                 case XdmNodeKind.Comment:
-                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XComment comment)
+                    if (isLast && UnderlyingOf(original) is XComment comment)
                     {
                         var commentCopy = new XComment(comment.Value);
                         container?.Add(commentCopy);
@@ -3990,7 +4000,7 @@ public static class FunctionLibrary
                     break;
 
                 case XdmNodeKind.ProcessingInstruction:
-                    if (isLast && ((Providers.Xml.XDocumentNode)original).UnderlyingObject is XProcessingInstruction pi)
+                    if (isLast && UnderlyingOf(original) is XProcessingInstruction pi)
                     {
                         var piCopy = new XProcessingInstruction(pi.Target, pi.Data);
                         container?.Add(piCopy);
@@ -4036,7 +4046,7 @@ public static class FunctionLibrary
         // all in-scope namespace declarations, so descendants must not redeclare them.
         if (targetCopy is XElement targetElem && node.NodeKind == XdmNodeKind.Element)
         {
-            if (((Providers.Xml.XDocumentNode)node).UnderlyingObject is XElement origElem)
+            if (UnderlyingOf(node) is XElement origElem)
             {
                 var declared = new HashSet<string>(StringComparer.Ordinal);
                 foreach (var attr in targetElem.Attributes())

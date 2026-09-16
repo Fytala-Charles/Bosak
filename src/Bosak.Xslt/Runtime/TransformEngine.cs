@@ -312,6 +312,10 @@
 //                      |                  |       |                | overloads (unknown context size -1); extracted ExecuteForEachBody/                     |
 //                      |                  |       |                | ProcessApplyTemplatesItem; StripElementWhitespace for the streaming API                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.69  | 16-09-2026     | Streaming Phase B: push-style accumulators over streamed sources — per-record        |
+//                      |                  |       |                | StreamingAccumulatorDriver with carried values and annotation retrieval, drain-on-     |
+//                      |                  |       |                | read at doc/root, on-demand after-resolution, deferred rule errors (bug 29813)         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -324,6 +328,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
 using Bosak.Xslt.Api;
 using Bosak.Xslt.Stylesheet;
@@ -627,6 +632,9 @@ public sealed class TransformEngine
     private readonly HashSet<(Stylesheet.AccumulatorDefinition Acc, IXdmNode Root)> _accumulatorsInProgress = new();
     private readonly Dictionary<IXdmNode, HashSet<string>> _accumulatorApplicability = new();
 
+    // Push-style accumulator driver for streamed (burst-mode) sources; null for in-memory trees.
+    private StreamingAccumulatorDriver? _streamingAccumulatorDriver;
+
     // The initial context item supplied to the transformation (the global context item).
     private XdmValue _globalContextItem = XdmValue.Undefined;
 
@@ -914,6 +922,31 @@ public sealed class TransformEngine
                 source = null;
                 _initialSource = null;
             }
+        }
+
+        // Streamed (burst-mode) sources: per-record whitespace stripping and push-style
+        // accumulator evaluation are driven by the stream's record post-processor, since
+        // the full source tree never exists in memory.
+        if (source != null && (source is IStreamingDocument || source.Document is IStreamingDocument))
+        {
+            var streamingDoc = source is IStreamingDocument sd ? sd : (IStreamingDocument)source.Document!;
+            var spaceRules = GetPrincipalSpaceRules();
+            var backwardsCompatible = _context.BackwardsCompatible;
+            var docNode = source.NodeKind == XdmNodeKind.Document ? source : source.Document!;
+            _streamingAccumulatorDriver = _accumulators.Count > 0
+                ? new StreamingAccumulatorDriver(this, docNode)
+                : null;
+            streamingDoc.RecordPostProcessor = (record, recordNode) =>
+            {
+                if (spaceRules.Count > 0 && ShouldStripStreamedRecord(record, docNode, spaceRules, backwardsCompatible))
+                    return false; // drop whitespace text records stripped by xsl:strip-space
+                if (spaceRules.Count > 0 && record is XElement recordElement)
+                    StripElementWhitespace(recordElement, spaceRules, backwardsCompatible);
+                _streamingAccumulatorDriver?.ProcessRecord(recordNode);
+                return true;
+            };
+            if (_streamingAccumulatorDriver != null)
+                streamingDoc.StreamCompleted = _streamingAccumulatorDriver.OnStreamCompleted;
         }
 
         // Documents loaded by fn:doc / fn:document during the transformation are also
@@ -2219,17 +2252,77 @@ public sealed class TransformEngine
         if (node.NodeKind == XdmNodeKind.Attribute || node.NodeKind == XdmNodeKind.Namespace)
             throw new InvalidOperationException("XTTE3360: accumulator functions are not defined for attribute or namespace nodes");
 
-        // First check for values copied with copy-accumulators="yes"
-        if (node is XDocumentNode xdn && xdn.UnderlyingObject is XElement elem)
+        // First check for values attached per node: copy-accumulators copies, or a
+        // streamed (burst-mode) source where values are pushed per record.
+        var root = GetRootNode(node);
+        if (root is IStreamingDocument)
         {
-            var copied = elem.Annotation<AccumulatorValues>();
+            // Initialize the push driver on first use so the shell document/root
+            // annotations exist before they are read below.
+            _streamingAccumulatorDriver?.EnsureInitialized();
+        }
+
+        var underlying = node switch
+        {
+            XDocumentNode xdn => xdn.UnderlyingObject,
+            IStreamingNode sn => sn.UnderlyingXObject,
+            _ => null,
+        };
+        if (underlying != null)
+        {
+            var copied = underlying.Annotation<AccumulatorValues>();
             if (copied != null)
             {
                 if (copied.InapplicableNames.Contains(accName))
                     throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
+                if (_streamingAccumulatorDriver?.GetError(accName) is { } deferredError)
+                    throw deferredError;
                 if (copied.ApplicableNames.Contains(accName) && copied.Values.TryGetValue(accName, out var pair))
-                    return before ? pair.Before : pair.After;
+                {
+                    if (before)
+                        return pair.Before;
+                    if (!copied.AfterUnset.Contains(accName))
+                        return pair.After;
+
+                    // The after value is not published yet. At the document/root shells it
+                    // publishes at stream end: the read is a consuming (grounding)
+                    // operation that drains the rest of the stream when nothing is
+                    // mid-enumeration. Inside a record it resolves on demand.
+                    if (_streamingAccumulatorDriver?.IsShellNode(node) == true)
+                    {
+                        var sdoc = (IStreamingDocument)root!;
+                        if (!sdoc.CanDrain)
+                            throw new InvalidOperationException($"XTDE3350: accumulator-after('{name}') is not available while the stream is being consumed");
+                        sdoc.Drain();
+                        if (!copied.AfterUnset.Contains(accName))
+                            return copied.Values[accName].After;
+                        throw new InvalidOperationException($"XTDE3350: accumulator-after('{name}') is not available before the end of the streamed document");
+                    }
+                    if (_streamingAccumulatorDriver != null
+                        && _streamingAccumulatorDriver.TryResolveAfterOnDemand(accName, node, copied, out var onDemandAfter))
+                        return onDemandAfter;
+                }
             }
+        }
+
+        if (root is IStreamingDocument)
+        {
+            // Streamed tree: values are pushed per record; the single-pass tree is never
+            // walked lazily. Applicability, unknown names, and cyclic references behave
+            // as in memory; a missing annotation on an applicable accumulator can only be
+            // a rule select referencing a later-declared accumulator (declaration order
+            // governs push evaluation).
+            if (!IsAccumulatorApplicableToTree(accName, node))
+                throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
+            var streamedAcc = scopeAccumulators.FirstOrDefault(a => a.ClarkName == accName);
+            if (streamedAcc == null)
+                throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
+            _streamingAccumulatorDriver?.EnsureInitialized();
+            if (_streamingAccumulatorDriver?.IsInProgress(accName) == true)
+                throw new InvalidOperationException($"XTDE3400: cyclic dependency detected in accumulator '{accName}'");
+            throw new StreamingException(
+                $"Streaming: accumulator '{name}' is referenced before its value is available. " +
+                "Cross-accumulator references in rule selects must target accumulators declared earlier.");
         }
 
         // Otherwise compute from the source tree.
@@ -2240,7 +2333,6 @@ public sealed class TransformEngine
         if (acc == null)
             throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
 
-        var root = GetRootNode(node);
         var nodeValues = GetAccumulatorNodeValues(acc, root);
         if (nodeValues.TryGetValue(node, out var values))
             return before ? values.Before : values.After;
@@ -2718,22 +2810,40 @@ public sealed class TransformEngine
             return;
 
         var root = GetRootNode(sourceNode);
-        var values = new AccumulatorValues();
-        foreach (var acc in _accumulators)
+        if (root is IStreamingDocument)
         {
-            if (IsAccumulatorApplicableToTree(acc.ClarkName, sourceNode))
+            // Streamed nodes already carry their pushed per-record values as annotations;
+            // mirror the source node's annotation onto the copy without triggering a
+            // lazy whole-tree computation over the single-pass stream.
+            var streamedObj = sourceNode switch
             {
-                values.ApplicableNames.Add(acc.ClarkName);
-                var nodeValues = GetAccumulatorNodeValues(acc, root);
-                if (nodeValues.TryGetValue(sourceNode, out var pair))
-                    values.Values[acc.ClarkName] = pair;
-            }
-            else
-            {
-                values.InapplicableNames.Add(acc.ClarkName);
-            }
+                IStreamingNode sn => sn.UnderlyingXObject,
+                XDocumentNode xdn => xdn.UnderlyingObject,
+                _ => null,
+            };
+            if (streamedObj is XElement streamedElement
+                && streamedElement.Annotation<AccumulatorValues>() is { } streamedValues)
+                copy.AddAnnotation(streamedValues);
         }
-        copy.AddAnnotation(values);
+        else
+        {
+            var values = new AccumulatorValues();
+            foreach (var acc in _accumulators)
+            {
+                if (IsAccumulatorApplicableToTree(acc.ClarkName, sourceNode))
+                {
+                    values.ApplicableNames.Add(acc.ClarkName);
+                    var nodeValues = GetAccumulatorNodeValues(acc, root);
+                    if (nodeValues.TryGetValue(sourceNode, out var pair))
+                        values.Values[acc.ClarkName] = pair;
+                }
+                else
+                {
+                    values.InapplicableNames.Add(acc.ClarkName);
+                }
+            }
+            copy.AddAnnotation(values);
+        }
 
         // Recurse so each descendant of the copy carries its source counterpart's values
         // (fn:copy-of/fn:snapshot copy accumulator values; accumulator-046/047/064-067).
@@ -16143,6 +16253,29 @@ public sealed class TransformEngine
     internal static void StripElementWhitespace(XElement element, List<SpaceHandlingRule> rules, bool isBackwardsCompatible)
         => StripWhitespaceInElement(element, rules, preserveInherited: false, isBackwardsCompatible);
 
+    /// <summary>
+    /// Determines whether a top-level streamed record is a whitespace-only text node
+    /// that <c>xsl:strip-space</c> removes (a text child of the source root element),
+    /// mirroring the in-memory stripping of the root element's text children including
+    /// <c>xml:space="preserve"</c> on the root.
+    /// </summary>
+    private static bool ShouldStripStreamedRecord(XObject record, IXdmNode docNode, List<SpaceHandlingRule> rules, bool isBackwardsCompatible)
+    {
+        if (record is not XText text || !IsWhitespaceOnly(text.Value))
+            return false;
+        foreach (var child in docNode.Axis(XdmAxis.Child))
+        {
+            if (child.IsNode && child.NodeValue is IStreamingNode { UnderlyingXObject: XElement rootElement })
+            {
+                if (rootElement.Attribute(System.Xml.Linq.XNamespace.Xml + "space")?.Value == "preserve")
+                    return false;
+                return ShouldStripWhitespace(rootElement, rules, isBackwardsCompatible);
+            }
+            break;
+        }
+        return false;
+    }
+
     private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited, bool isBackwardsCompatible)
     {
         if (element == null)
@@ -18474,13 +18607,282 @@ public sealed class TransformEngine
         /// <summary>
         /// The names of the accumulators that are applicable to the copied tree.
         /// </summary>
-        public HashSet<string> ApplicableNames { get; } = new();
+        public HashSet<string> ApplicableNames { get; internal set; } = new();
 
         /// <summary>
         /// The names of the accumulators that are known but not applicable to the copied tree.
         /// Used to raise XTDE3362 when one of them is requested.
         /// </summary>
-        public HashSet<string> InapplicableNames { get; } = new();
+        public HashSet<string> InapplicableNames { get; internal set; } = new();
+
+        /// <summary>
+        /// The names of the accumulators whose <em>after</em> value is not yet known on a
+        /// streamed tree (the document and root element before the stream completes).
+        /// Reading accumulator-after for one of them raises XTDE3350.
+        /// </summary>
+        public HashSet<string> AfterUnset { get; } = new();
+    }
+
+    /// <summary>
+    /// Push-style accumulator evaluation for streamed (burst-mode) sources. The stream
+    /// delivers records in document order — exactly the traversal order accumulators
+    /// need — so each applicable accumulator's current value is carried across records,
+    /// start/end-phase rules fire per node as records arrive, and per-node before/after
+    /// values are attached as <see cref="AccumulatorValues"/> annotations that are
+    /// released with the record (bounded memory). Mirrors the lazy whole-tree walk in
+    /// <see cref="ComputeAccumulatorValues"/>; cross-accumulator references in rule
+    /// selects resolve in declaration order.
+    /// </summary>
+    private sealed class StreamingAccumulatorDriver
+    {
+        private readonly TransformEngine _engine;
+        private readonly List<AccumulatorState> _states = new();
+        private readonly HashSet<string> _inProgress = new();
+        private readonly IXdmNode _docNode;
+        private bool _initialized;
+        private IXdmNode? _rootNode;
+        private AccumulatorValues? _docAnnotation;
+        private AccumulatorValues? _rootAnnotation;
+
+        private sealed class AccumulatorState
+        {
+            internal required Stylesheet.AccumulatorDefinition Acc { get; init; }
+            internal required List<(Stylesheet.AccumulatorRule Rule, Patterns.PatternPredicate Match)> Rules { get; init; }
+            internal required XdmValue Current { get; set; }
+
+            /// <summary>
+            /// A deferred dynamic error from initial-value or rule evaluation. Per spec
+            /// bug 29813, accumulator evaluation errors surface at the point of access
+            /// (so xsl:try can catch them), not at the point the rule fires.
+            /// </summary>
+            internal Exception? Error { get; set; }
+        }
+
+        internal StreamingAccumulatorDriver(TransformEngine engine, IXdmNode docNode)
+        {
+            _engine = engine;
+            _docNode = docNode;
+        }
+
+        /// <summary>
+        /// Performs initialization on first use (first record or first accumulator
+        /// query): compiles rules, evaluates initial values, and fires the document-node
+        /// and root-element start-phase rules. Deferred from construction so global
+        /// variables and parameters are bound exactly as they are for the lazy in-memory
+        /// computation, which runs on first accumulator use as well.
+        /// </summary>
+        internal void EnsureInitialized()
+        {
+            if (_initialized)
+                return;
+            _initialized = true;
+
+            var engine = _engine;
+            var docNode = _docNode;
+
+            // Compile rules and evaluate initial values for the accumulators applicable
+            // to the streamed tree (the initial mode's use-accumulators, as in memory).
+            var patternCompiler = new Patterns.PatternCompiler(engine._context);
+            foreach (var acc in engine._accumulators)
+            {
+                if (!engine.IsAccumulatorApplicableToTree(acc.ClarkName, docNode))
+                    continue;
+                var rules = new List<(Stylesheet.AccumulatorRule, Patterns.PatternPredicate)>();
+                foreach (var rule in acc.Rules)
+                {
+                    var defaultNs = GetXPathDefaultNamespace(rule.Element);
+                    rules.Add((rule, patternCompiler.Compile(rule.Match, defaultNs ?? "")));
+                }
+                var initialCtx = engine.CreateAccumulatorEvaluationContext(focusNode: docNode, value: null);
+                XdmValue current;
+                Exception? initError = null;
+                try
+                {
+                    current = TransformEngine.ConvertVariableValue(
+                        engine.CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx),
+                        acc.As, context: engine._context, errorCodeOverride: "XPTY0004");
+                }
+                catch (Exception ex)
+                {
+                    // Deferred: initial-value errors surface at the point of access
+                    // (spec bug 29813) so xsl:try can catch them (accumulator-056s).
+                    current = XdmValue.Undefined;
+                    initError = ex;
+                }
+                _states.Add(new AccumulatorState { Acc = acc, Rules = rules, Current = current, Error = initError });
+            }
+
+            var sharedNames = SharedNameSets();
+
+            // Fire document-node and root-element start-phase rules and annotate the
+            // shell nodes, mirroring the recursive walk's treatment of the tree root.
+            // After values stay unset until the stream completes (XTDE3350 on read).
+            _docAnnotation = NewAnnotation(sharedNames);
+            ((XDocument)((IStreamingNode)docNode).UnderlyingXObject).AddAnnotation(_docAnnotation);
+            foreach (var state in _states)
+            {
+                foreach (var startRule in state.Rules.Where(r => TransformEngine.IsAccumulatorStartRule(r.Rule) && r.Match(XdmValue.FromNode(docNode), engine._context)))
+                    state.Current = Apply(state, startRule, docNode);
+                _docAnnotation.Values[state.Acc.ClarkName] = (state.Current, XdmValue.Undefined);
+                _docAnnotation.AfterUnset.Add(state.Acc.ClarkName);
+            }
+
+            foreach (var child in docNode.Axis(XdmAxis.Child))
+            {
+                if (child.IsNode && child.NodeValue is IStreamingNode { UnderlyingXObject: XElement } rootWrapper)
+                {
+                    _rootNode = rootWrapper;
+                    _rootAnnotation = NewAnnotation(sharedNames);
+                    ((XElement)((IStreamingNode)rootWrapper).UnderlyingXObject).AddAnnotation(_rootAnnotation);
+                    foreach (var state in _states)
+                    {
+                        foreach (var startRule in state.Rules.Where(r => TransformEngine.IsAccumulatorStartRule(r.Rule) && r.Match(XdmValue.FromNode(rootWrapper), engine._context)))
+                            state.Current = Apply(state, startRule, rootWrapper);
+                        _rootAnnotation.Values[state.Acc.ClarkName] = (state.Current, XdmValue.Undefined);
+                        _rootAnnotation.AfterUnset.Add(state.Acc.ClarkName);
+                    }
+                }
+                break;
+            }
+        }
+
+        internal bool IsInProgress(string accClarkName) => _inProgress.Contains(accClarkName);
+
+        internal Exception? GetError(string accClarkName)
+            => _states.FirstOrDefault(s => s.Acc.ClarkName == accClarkName)?.Error;
+
+        internal bool IsShellNode(IXdmNode node)
+            => node.IsSameNode(_docNode) || (_rootNode != null && node.IsSameNode(_rootNode));
+
+        /// <summary>
+        /// Resolves an unpublished record-level after value on demand: the accumulator's
+        /// current value is already post-descendants, so its end-phase rules can fire for
+        /// this node immediately. Used for cross-accumulator references from end-phase
+        /// rule selects that target later-declared accumulators; the in-progress guard
+        /// turns self-references into XTDE3400.
+        /// </summary>
+        internal bool TryResolveAfterOnDemand(string accClarkName, IXdmNode node, AccumulatorValues ann, out XdmValue value)
+        {
+            value = default;
+            var state = _states.FirstOrDefault(s => s.Acc.ClarkName == accClarkName);
+            if (state == null || !ann.Values.TryGetValue(accClarkName, out var pair))
+                return false;
+            if (state.Error != null)
+                throw state.Error;
+
+            foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(node), _engine._context)))
+                state.Current = Apply(state, endRule, node);
+            ann.Values[accClarkName] = (pair.Before, state.Current);
+            ann.AfterUnset.Remove(accClarkName);
+            value = state.Current;
+            return true;
+        }
+
+        internal void ProcessRecord(IXdmNode recordNode)
+        {
+            EnsureInitialized();
+            var sharedNames = SharedNameSets();
+            Walk(recordNode, sharedNames);
+        }
+
+        internal void OnStreamCompleted()
+        {
+            EnsureInitialized();
+            // Fire root-element then document-node end-phase rules and publish the
+            // after values on the shell annotations (mirroring the walk's ascent).
+            if (_rootNode != null && _rootAnnotation != null)
+            {
+                foreach (var state in _states)
+                {
+                    foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(_rootNode), _engine._context)))
+                        state.Current = Apply(state, endRule, _rootNode);
+                    _rootAnnotation.Values[state.Acc.ClarkName] = (_rootAnnotation.Values[state.Acc.ClarkName].Before, state.Current);
+                    _rootAnnotation.AfterUnset.Remove(state.Acc.ClarkName);
+                }
+            }
+
+            foreach (var state in _states)
+            {
+                foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(_docNode), _engine._context)))
+                    state.Current = Apply(state, endRule, _docNode);
+                _docAnnotation!.Values[state.Acc.ClarkName] = (_docAnnotation.Values[state.Acc.ClarkName].Before, state.Current);
+                _docAnnotation.AfterUnset.Remove(state.Acc.ClarkName);
+            }
+        }
+
+        private (HashSet<string> Applicable, HashSet<string> Inapplicable) SharedNameSets()
+        {
+            var applicable = new HashSet<string>(_states.Select(s => s.Acc.ClarkName));
+            var inapplicable = new HashSet<string>(
+                _engine._accumulators.Where(a => !_states.Any(s => s.Acc == a)).Select(a => a.ClarkName));
+            return (applicable, inapplicable);
+        }
+
+        private static AccumulatorValues NewAnnotation((HashSet<string> Applicable, HashSet<string> Inapplicable) sharedNames)
+            => new() { ApplicableNames = sharedNames.Applicable, InapplicableNames = sharedNames.Inapplicable };
+
+        private void Walk(IXdmNode node, (HashSet<string> Applicable, HashSet<string> Inapplicable) sharedNames)
+        {
+            // The annotation is attached BEFORE any rules fire so that, as it is filled
+            // progressively in declaration order, rule selects of later accumulators can
+            // read the before values of earlier-declared ones through the retrieval path.
+            var ann = NewAnnotation(sharedNames);
+            ((IStreamingNode)node).UnderlyingXObject.AddAnnotation(ann);
+
+            // Start-phase rules before descendants, in declaration order per accumulator;
+            // the value after the start rules is what accumulator-before() returns.
+            foreach (var state in _states)
+            {
+                foreach (var startRule in state.Rules.Where(r => TransformEngine.IsAccumulatorStartRule(r.Rule) && r.Match(XdmValue.FromNode(node), _engine._context)))
+                    state.Current = Apply(state, startRule, node);
+                ann.Values[state.Acc.ClarkName] = (state.Current, XdmValue.Undefined);
+                ann.AfterUnset.Add(state.Acc.ClarkName);
+            }
+
+            foreach (var child in node.Axis(XdmAxis.Child))
+            {
+                if (child.IsNode && child.NodeValue != null)
+                    Walk(child.NodeValue, sharedNames);
+            }
+
+            // End-phase rules after descendants; the final current value is what
+            // accumulator-after() returns for this node. An accumulator already resolved
+            // on demand by a cross-accumulator reference is not fired twice.
+            foreach (var state in _states)
+            {
+                if (!ann.AfterUnset.Contains(state.Acc.ClarkName))
+                    continue;
+                foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(node), _engine._context)))
+                    state.Current = Apply(state, endRule, node);
+                ann.Values[state.Acc.ClarkName] = (ann.Values[state.Acc.ClarkName].Before, state.Current);
+                ann.AfterUnset.Remove(state.Acc.ClarkName);
+            }
+        }
+
+        private XdmValue Apply(AccumulatorState state, (Stylesheet.AccumulatorRule Rule, Patterns.PatternPredicate Match) rulePair, IXdmNode node)
+        {
+            if (state.Error != null)
+                return state.Current; // poisoned: evaluation errors defer to the access point
+            if (!_inProgress.Add(state.Acc.ClarkName))
+                throw new InvalidOperationException($"XTDE3400: cyclic dependency detected in accumulator '{state.Acc.ClarkName}'");
+            try
+            {
+                return state.Current = _engine.ApplyAccumulatorRule(state.Acc, rulePair, node, state.Current);
+            }
+            catch (Exception ex)
+            {
+                // The cycle guard is structural and always surfaces immediately;
+                // data/evaluation errors defer to the point of access (spec bug 29813).
+                if (ex.Message.StartsWith("XTDE3400", StringComparison.Ordinal))
+                    throw;
+                state.Error = ex;
+                return state.Current;
+            }
+            finally
+            {
+                _inProgress.Remove(state.Acc.ClarkName);
+            }
+        }
     }
 
     /// <summary>

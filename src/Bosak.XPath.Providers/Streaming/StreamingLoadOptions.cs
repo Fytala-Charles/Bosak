@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 16-09-2026     | Phase B: RecordPostProcessor is a node-level Func with drop support (was element Action) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Providers.Streaming;
 
@@ -44,10 +46,12 @@ public sealed class StreamingLoadOptions
     public System.Xml.XmlReaderSettings? ReaderSettings { get; set; }
 
     /// <summary>
-    /// Gets or sets an optional callback invoked on each top-level record element
-    /// immediately after it is materialized from the stream, before any wrapper is
-    /// exposed to the engine. Used by the XSLT layer to apply
-    /// <c>xsl:strip-space</c>/<c>xsl:preserve-space</c> rules per record.
+    /// Gets or sets an optional callback invoked on each top-level record node
+    /// (element, text, comment, or processing instruction) immediately after it is
+    /// materialized from the stream and wrapped, before it is exposed to the engine.
+    /// Returning <c>false</c> drops the record from the stream. Used by the XSLT layer
+    /// to apply <c>xsl:strip-space</c>/<c>xsl:preserve-space</c> rules and accumulator
+    /// evaluation per record.
     /// </summary>
-    public Action<System.Xml.Linq.XElement>? RecordPostProcessor { get; set; }
+    public Func<System.Xml.Linq.XObject, Bosak.XPath.Core.Xdm.IXdmNode, bool>? RecordPostProcessor { get; set; }
 }

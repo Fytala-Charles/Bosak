@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4  | 02-09-2026     | EQName Q{uri}local support in accumulator name resolution (accumulator-021)|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 16-09-2026     | Inverted the @match variable rule: globals are in scope, $value is not (034/091)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -156,11 +158,12 @@ public sealed class AccumulatorRule
     }
 
     /// <summary>
-    /// Validates that an <c>xsl:accumulator-rule/@match</c> pattern only references
-    /// external variables that are available in the accumulator-rule context.
-    /// XSLT 3.0 §9.2 restricts those external bindings to the accumulator value
-    /// (<c>$value</c>); variables bound inside the pattern itself (for example by
-    /// <c>let</c>) are allowed. Any disallowed variable reference raises <c>XPST0008</c>.
+    /// Validates an <c>xsl:accumulator-rule/@match</c> pattern against the variables in
+    /// scope for that context. XSLT 3.0 §18.2.2 (Saxon bug 6095): the match pattern is
+    /// evaluated in the context of the document being traversed, so global variables and
+    /// parameters are in scope (accumulator-034 allows <c>$seven</c>), but the accumulator
+    /// <c>$value</c> variable is <em>not</em> — it is bound only in <c>@select</c>
+    /// (accumulator-091 raises <c>XPST0008</c>).
     /// </summary>
     private static void ValidateAccumulatorRuleMatchPattern(string match)
     {
@@ -177,7 +180,8 @@ public sealed class AccumulatorRule
 
     /// <summary>
     /// Returns <c>true</c> when the variable reference denotes the accumulator value
-    /// variable <c>$value</c> (possibly written as <c>Q{}value</c>).
+    /// variable <c>$value</c> (possibly written as <c>Q{}value</c>), which is not in
+    /// scope in an accumulator-rule <c>@match</c> pattern.
     /// </summary>
     private static bool IsAccumulatorValueReference(VariableReferenceNode variable)
         => variable.LocalName == "value"
@@ -185,10 +189,10 @@ public sealed class AccumulatorRule
            && string.IsNullOrEmpty(variable.NamespaceUri);
 
     /// <summary>
-    /// Recursively checks every variable reference in the AST against the supplied
-    /// in-scope variable set. Bindings introduced by <c>for</c>, <c>let</c>,
-    /// <c>some</c>/<c>every</c>, typeswitch, FLWOR clauses and inline functions are
-    /// added to the scope before checking their dependent expressions.
+    /// Recursively checks every variable reference in the AST: only references to the
+    /// accumulator <c>$value</c> variable raise <c>XPST0008</c>; all other variables
+    /// (globals, parameters, and variables bound by <c>for</c>/<c>let</c>/quantifiers)
+    /// are in scope in a match pattern.
     /// </summary>
     private static void CheckVariableReferences(XPathAstNode? node, HashSet<(string LocalName, string? NamespaceUri)> scope)
     {
@@ -197,12 +201,9 @@ public sealed class AccumulatorRule
         switch (node)
         {
             case VariableReferenceNode vrn:
-                if (!IsAccumulatorValueReference(vrn) && !scope.Contains((vrn.LocalName, vrn.NamespaceUri)))
+                if (IsAccumulatorValueReference(vrn))
                 {
-                    var displayName = string.IsNullOrEmpty(vrn.Prefix)
-                        ? vrn.LocalName
-                        : $"{vrn.Prefix}:{vrn.LocalName}";
-                    throw new InvalidOperationException($"XPST0008: Variable ${displayName} is not available in an xsl:accumulator-rule/@match pattern. Only $value is permitted.");
+                    throw new InvalidOperationException("XPST0008: Variable $value is not in scope in an xsl:accumulator-rule/@match pattern; it is bound only in @select.");
                 }
                 break;
 

@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 16-09-2026     | Phase B: IStreamingNode, per-record hook with drop support, Drain/CanDrain               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using System.Xml.Linq;
@@ -59,6 +61,7 @@ internal sealed class StreamingSource
         _reader = reader;
         _options = options;
         _ownsReader = ownsReader;
+        RecordPostProcessor = options.RecordPostProcessor;
 
         // Read to the root element, capturing any DOCTYPE on the way. Comments and
         // processing instructions before the root element are not surfaced (documented
@@ -104,7 +107,7 @@ FoundRoot:
         // Register first so the shell sorts before every record in document order.
         XDocumentNode.RegisterTree(_shellDoc);
 
-        _docNode = new StreamingNode(this, XDocumentNode.Wrap(_shellDoc), StreamingNodeRole.Document, recordIndex: -1);
+        _docNode = new StreamingDocumentNode(this, XDocumentNode.Wrap(_shellDoc));
         _rootNode = new StreamingNode(this, XDocumentNode.Wrap(_shellRoot), StreamingNodeRole.ShellRoot, recordIndex: -1);
     }
 
@@ -147,6 +150,42 @@ FoundRoot:
 
     /// <summary>Returns true when the stream has been read to the end of the root element.</summary>
     internal bool IsPumpDone => _pumpState == PumpState.Done;
+
+    /// <summary>
+    /// The per-record callback; seeded from <see cref="StreamingLoadOptions.RecordPostProcessor"/>
+    /// and composable by the engine (whitespace stripping, accumulator evaluation).
+    /// Returning false drops the record from the stream.
+    /// </summary>
+    internal Func<XObject, IXdmNode, bool>? RecordPostProcessor { get; set; }
+
+    /// <summary>Invoked once when the pump reaches the end of the root element.</summary>
+    internal Action? StreamCompleted { get; set; }
+
+    /// <summary>True when the stream can be drained (not started, or already done).</summary>
+    internal bool CanDrain => _pumpState != PumpState.Pumping;
+
+    /// <summary>
+    /// Consumes the remainder of the stream without exposing records: every record still
+    /// flows through <see cref="RecordPostProcessor"/> and is released. Used by the
+    /// engine for grounding reads such as document-level accumulator-after values.
+    /// </summary>
+    internal void Drain()
+    {
+        if (_pumpState == PumpState.Done)
+            return;
+        if (_pumpState == PumpState.Pumping)
+        {
+            throw new StreamingException(
+                "Streaming: the stream cannot be drained while another enumeration is reading it. " +
+                "Complete the current enumeration before performing the consuming read.");
+        }
+
+        var enumerator = Pump(XdmNodeKind.All);
+        while (enumerator.MoveNext())
+        {
+            // Records are post-processed and discarded; the stream is grounding input here.
+        }
+    }
 
     /// <summary>
     /// The number of top-level records yielded so far; equal to the total record count
@@ -252,10 +291,11 @@ FoundRoot:
                             skipRead = true;
 
                         InheritRootNamespaces(record);
-                        _options.RecordPostProcessor?.Invoke(record);
                         XDocumentNode.RegisterTree(record);
 
                         var wrapper = Wrap(XDocumentNode.Wrap(record), _nextRecordIndex++);
+                        if (RecordPostProcessor?.Invoke(record, wrapper) == false)
+                            break; // dropped by the post-processor (e.g. xsl:strip-space)
                         if (MatchesKind(wrapper.NodeKind, kind))
                             yield return XdmValue.FromNode(wrapper);
                         break;
@@ -265,7 +305,10 @@ FoundRoot:
                 case XmlNodeType.SignificantWhitespace:
                 case XmlNodeType.Whitespace:
                     {
-                        var wrapper = WrapNonElementRecord(new XText(_reader.Value));
+                        var record = new XText(_reader.Value);
+                        var wrapper = WrapNonElementRecord(record);
+                        if (RecordPostProcessor?.Invoke(record, wrapper) == false)
+                            break;
                         if (MatchesKind(wrapper.NodeKind, kind))
                             yield return XdmValue.FromNode(wrapper);
                         break;
@@ -273,7 +316,10 @@ FoundRoot:
 
                 case XmlNodeType.CDATA:
                     {
-                        var wrapper = WrapNonElementRecord(new XCData(_reader.Value));
+                        var record = new XCData(_reader.Value);
+                        var wrapper = WrapNonElementRecord(record);
+                        if (RecordPostProcessor?.Invoke(record, wrapper) == false)
+                            break;
                         if (MatchesKind(wrapper.NodeKind, kind))
                             yield return XdmValue.FromNode(wrapper);
                         break;
@@ -281,7 +327,10 @@ FoundRoot:
 
                 case XmlNodeType.Comment:
                     {
-                        var wrapper = WrapNonElementRecord(new XComment(_reader.Value));
+                        var record = new XComment(_reader.Value);
+                        var wrapper = WrapNonElementRecord(record);
+                        if (RecordPostProcessor?.Invoke(record, wrapper) == false)
+                            break;
                         if (MatchesKind(wrapper.NodeKind, kind))
                             yield return XdmValue.FromNode(wrapper);
                         break;
@@ -289,7 +338,10 @@ FoundRoot:
 
                 case XmlNodeType.ProcessingInstruction:
                     {
-                        var wrapper = WrapNonElementRecord(new XProcessingInstruction(_reader.Name, _reader.Value));
+                        var record = new XProcessingInstruction(_reader.Name, _reader.Value);
+                        var wrapper = WrapNonElementRecord(record);
+                        if (RecordPostProcessor?.Invoke(record, wrapper) == false)
+                            break;
                         if (MatchesKind(wrapper.NodeKind, kind))
                             yield return XdmValue.FromNode(wrapper);
                         break;
@@ -316,6 +368,7 @@ FoundRoot:
     private void FinishPump()
     {
         _pumpState = PumpState.Done;
+        StreamCompleted?.Invoke();
         if (_ownsReader)
             _reader.Dispose();
     }
