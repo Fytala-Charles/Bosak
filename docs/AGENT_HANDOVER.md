@@ -1,5 +1,20 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-16 (fifth session)
+**Commit:** `3f075ee` — REQ-085 performance wave 9: ValueMatchesType normalization cache
+**Current focus:** **Performance wave 9 landed: typed user-function call premium 424 → 280 → 120 B/call (−72% vs wave 7); the remaining typed-call cost is CPU-bound validation lookups (few allocations).** Tracked benchmarks allocation-flat (untyped workloads); one uniformly inflated outlier benchmark run discarded (compile benchmarks +27% with zero code changes — machine state, not code; clean re-run used). XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
+**What was built (VmEngine 2.145):**
+- **`ValueMatchesType` normalization cache** — the per-call `typeName.Trim().ToLowerInvariant()` + occurrence/prefix-strip slices (~90–130 B/typed call) are now computed once per distinct type string by `NormalizeTypeNameForAtomicMatch` (`ConcurrentDictionary`). The parenthesized-type branch is deliberately left in the matcher (it re-enters `ValueMatchesType`; unreachable after the earlier unwrap loop but kept defensively), and kind-test branches with their case-preserved forms are untouched — behavior identical on all paths.
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`; benchmarks (clean re-run): PathHeavy 16.04 ms / 21.18 MB, StringFunctions 9.23 ms / 9.94 MB, FLWOR 22.18 ms / 22.18 MB, Transform_HtmlTable 48.64 ms (median) / 42.87 MB.
+**Next steps (agreed 2026-09-16):**
+1. **Wave-9 follow-ups / wave-10 candidates:** typed-call validation lookups (ValidateFunctionConversionTarget, namespace-sensitivity — CPU-bound, diminishing returns); per-transform thread-spawn reuse (`RunWithStack`, re-entrancy-sensitive — keep last). Structural items reserved for post-1.0: per-context-node `PathStepMap` block execution on `//` paths (~600 B/node residual), per-item `$i/@x` path-step machinery in FLWOR bodies (~1 KB/item-step), axis+name-test fusion (provider-level API).
+2. **Consider cutting `v0.10.1-beta`** — unchanged: cumulative ≈ −75%/−63% transform, −51%/−62% path, −50%/−67% FLWOR, both W3C suites unchanged. Owner decision; release notes can be drafted on request.
+3. **Owner-side open items:** activate ruleset `protect-main` (id 22255065 — pending since 2026-09-05); define support channel per `COMMERCIAL.md`; SemVer/1.0 timing decision.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-16 (fourth session)
 **Commit:** `86715d4` — REQ-085 performance wave 8: ApplyFunctionConversion syntactic-parse cache
 **Current focus:** **Performance wave 8 landed: typed user-function call premium 424 → 280 B/call (−34%).** The four tracked benchmarks use untyped built-ins only and are allocation-flat by design (FLWOR 22.18 MB, PathHeavy 21.18 MB); times wobble ±5% run-to-run on this machine at identical allocations (FLWOR measured 20.80/22.28/22.23 ms across three identical-allocation runs — power-plan switching, not code deltas). XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
