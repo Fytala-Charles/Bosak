@@ -1,5 +1,23 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-16 (third session)
+**Commit:** `0f2712a` — REQ-085 performance wave 7: function-call machinery — span argument passing, fn:string/fn:concat single-pass
+**Current focus:** **Performance wave 7 landed: Evaluate_Flwor 21.49 → 20.80 ms, 24.24 → 22.18 MB (cumulative 44.23 → 20.80 ms, −53%; 66.75 → 22.18 MB, −67%); StringFunctions 10.43 → 9.80 ms / 10.06 → 9.94 MB (cumulative −67%/−76%); PathHeavy 16.10 → 15.93 ms / 21.18 MB; Transform_HtmlTable 47.23 ms / 42.87 MB (time within run noise). fn:string is now allocation-neutral; concat2 −75% per call.** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
+**What was built (VmEngine 2.143 + FunctionLibrary 5.102):**
+- **Call-cost probe decomposition:** 0-arg calls are already free; string() ≈ 280 B, number() ≈ 350 B, concat2 ≈ 615 B, concat5 ≈ 2.3 KB per call — the per-call `XdmValue[]` argument array plus impl-internal sequence unwrapping.
+- **Span argument passing (Call opcode)** — when no callee can rewrite its arguments (no `ParameterTypeNames` to convert to, no map/array/function-typed params to unwrap), the argument REGISTERS are passed directly as `ReadOnlySpan<XdmValue>`: no per-call array (24 + 40 B/arg). Safe by construction: implementations receive a read-only span (cannot mutate), the aliased argument registers are single-assignment (dead after the call), and higher-order/typed/user functions keep the array path because their signatures carry function-typed params or declared sequence types.
+- **fn:string single-pass unwrap** (FunctionLibrary 5.102) — sequence arguments were collected into a full `List<XdmValue>` per call just to read the first item; now one enumeration captures the first item and detects a second (XPTY0004 unless backwards-compatible).
+- **fn:concat single-pass multi-item detection** — sequence arguments were enumerated twice (cardinality check, then atomization); now one pass captures the first item and throws on a second, atomizing the captured item (identical XPTY0004 behavior).
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`; benchmarks: PathHeavy 15.93 ms / 21.18 MB, StringFunctions 9.80 ms / 9.94 MB, FLWOR 20.80 ms / 22.18 MB, Transform_HtmlTable 47.23 ms / 42.87 MB.
+**Next steps (agreed 2026-09-16):**
+1. **Wave 8 candidates (in order):** `ApplyFunctionConversion` type-name re-parsing per call (cache the parsed conversion target per signature — ~25 typed built-ins + all typed user functions pay string slicing/validation per arg per call); per-transform thread-spawn reuse (`RunWithStack`, re-entrancy-sensitive — keep last). Structural items reserved for post-1.0: per-context-node `PathStepMap` block execution on `//` paths (~600 B/node residual), per-item `$i/@x` path-step machinery in FLWOR bodies (~1 KB/item-step), axis+name-test fusion (provider-level API).
+2. **Consider cutting `v0.10.1-beta`** — unchanged: cumulative perf story now −76%/−63% transform, −51%/−62% path, −53%/−67% FLWOR, both W3C suites unchanged. Owner decision; release notes can be drafted on request.
+3. **Owner-side open items:** activate ruleset `protect-main` (id 22255065 — pending since 2026-09-05); define support channel per `COMMERCIAL.md`; SemVer/1.0 timing decision.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-16 (second session)
 **Commit:** `15dd5a6` — REQ-085 performance wave 6: FLWOR tuple materialization — keys atomized once per tuple, copy-free tuple views
 **Current focus:** **Performance wave 6 landed: Evaluate_Flwor 22.50 → 21.49 ms, 26.16 → 24.24 MB (cumulative 44.23 → 21.49 ms, −51%; 66.75 → 24.24 MB, −64%); FunctionHeavy alloc 405 → 366 KB; Transform_HtmlTable 45.92 ms / 43.23 MB (−4% time via the shared comparison path); PathHeavy byte-identical.** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
