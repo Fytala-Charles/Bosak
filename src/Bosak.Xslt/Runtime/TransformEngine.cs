@@ -308,6 +308,10 @@
 //                      | Charles Korthout | 6.66  | 09-09-2026     | Perf: per-instruction compiled-XPath cache, static LRE namespace-info cache; engine cont |
 //                      | Charles Korthout | 6.67  | 14-09-2026     | REQ-085 wave 4: NormalizeElementContent fast path, AVT literal fast path, LRE         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.68  | 16-09-2026     | Streaming Phase A: single-pass branches in xsl:for-each and both ApplyTemplates      |
+//                      |                  |       |                | overloads (unknown context size -1); extracted ExecuteForEachBody/                     |
+//                      |                  |       |                | ProcessApplyTemplatesItem; StripElementWhitespace for the streaming API                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -4452,62 +4456,82 @@ public sealed class TransformEngine
         try
         {
             // Determine the sequence to process
-            List<XdmValue> items;
+            List<XdmValue>? items = null;
+            XdmSequence singlePass = default;
+            bool hasSinglePass = false;
             if (string.IsNullOrEmpty(select))
             {
                 // Default: child nodes
-                items = EnumerateNodes(contextNode.Axis(XdmAxis.Child))
-                    .Select(XdmValue.FromNode)
-                    .ToList();
+                var axisResult = contextNode.Axis(XdmAxis.Child);
+                if (axisResult.IsSinglePass)
+                {
+                    singlePass = axisResult;
+                    hasSinglePass = true;
+                }
+                else
+                {
+                    items = EnumerateNodes(axisResult)
+                        .Select(XdmValue.FromNode)
+                        .ToList();
+                }
             }
             else
             {
                 // Evaluate select expression
                 var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
-                items = FlattenSelectedItems(result);
+                if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
+                {
+                    singlePass = XdmSequence.FromSource(result.SequenceValue);
+                    hasSinglePass = true;
+                }
+                else
+                {
+                    items = FlattenSelectedItems(result);
+                }
             }
 
-            bool allNodes = items.All(i => i.IsNode);
+            bool hasSort = sortKeys != null && sortKeys.Count > 0;
+            if (hasSinglePass && !hasSort)
+            {
+                // Single-pass (streamed) selection: iterate without materializing so
+                // streamed records are released as they are consumed. Position is
+                // tracked; the context size is unknown (-1) and fn:last() raises a
+                // streaming error.
+                int streamPos = 1;
+                foreach (var item in singlePass)
+                {
+                    ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, streamPos, -1);
+                    streamPos++;
+                }
+                return;
+            }
+
+            var itemList = items ?? MaterializeSinglePassItems(singlePass);
+            bool allNodes = itemList.All(i => i.IsNode);
 
             // Apply xsl:sort if present. Node sequences are sorted via SortNodes; mixed or
             // atomic sequences use SortItems, which evaluates each sort key with the current
             // output URI cleared.
-            if (sortKeys != null && sortKeys.Count > 0)
+            if (hasSort)
             {
                 if (allNodes)
                 {
-                    var nodes = items.Select(i => i.NodeValue!).ToList();
-                    nodes = SortNodes(nodes, sortKeys);
-                    items = nodes.Select(XdmValue.FromNode).ToList();
+                    var nodes = itemList.Select(i => i.NodeValue!).ToList();
+                    nodes = SortNodes(nodes, sortKeys!);
+                    itemList = nodes.Select(XdmValue.FromNode).ToList();
                 }
                 else
                 {
-                    items = SortItems(items, sortKeys);
+                    itemList = SortItems(itemList, sortKeys!);
                 }
             }
 
             int pos = 1;
-            int last = items.Count;
-            foreach (var item in items)
+            int last = itemList.Count;
+            foreach (var item in itemList)
             {
-                if (item.IsNode)
-                {
-                    var node = item.NodeValue!;
-                    var rule = FindBestTemplate(node, resolvedMode);
-                    if (rule != null)
-                    {
-                        ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
-                    }
-                    else
-                    {
-                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, callParams, position: pos, last: last);
-                    }
-                }
-                else
-                {
-                    ProcessNonNodeItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
-                }
+                ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
                 pos++;
             }
         }
@@ -4548,7 +4572,9 @@ public sealed class TransformEngine
         try
         {
             // Determine the sequence to process
-            List<XdmValue> items;
+            List<XdmValue>? items = null;
+            XdmSequence singlePass = default;
+            bool hasSinglePass = false;
             if (string.IsNullOrEmpty(select))
             {
                 // xsl:apply-templates with no @select requires a node context item (XTTE0510)
@@ -4565,49 +4591,58 @@ public sealed class TransformEngine
                 // Evaluate select expression with the given context item as focus
                 var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
                 var result = compiled.Evaluate(_context.WithFocus(contextItem, 1, 1));
-                items = FlattenSelectedItems(result);
+                if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
+                {
+                    singlePass = XdmSequence.FromSource(result.SequenceValue);
+                    hasSinglePass = true;
+                }
+                else
+                {
+                    items = FlattenSelectedItems(result);
+                }
             }
 
-            bool allNodes = items.All(i => i.IsNode);
+            bool hasSort = sortKeys != null && sortKeys.Count > 0;
+            if (hasSinglePass && !hasSort)
+            {
+                // Single-pass (streamed) selection: iterate without materializing so
+                // streamed records are released as they are consumed. Position is
+                // tracked; the context size is unknown (-1) and fn:last() raises a
+                // streaming error.
+                int streamPos = 1;
+                foreach (var item in singlePass)
+                {
+                    ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, streamPos, -1);
+                    streamPos++;
+                }
+                return;
+            }
+
+            var itemList = items ?? MaterializeSinglePassItems(singlePass);
+            bool allNodes = itemList.All(i => i.IsNode);
 
             // Apply xsl:sort if present. Node sequences are sorted via SortNodes; mixed or
             // atomic sequences use SortItems, which evaluates each sort key with the current
             // output URI cleared.
-            if (sortKeys != null && sortKeys.Count > 0)
+            if (hasSort)
             {
                 if (allNodes)
                 {
-                    var nodes = items.Select(i => i.NodeValue!).ToList();
-                    nodes = SortNodes(nodes, sortKeys);
-                    items = nodes.Select(XdmValue.FromNode).ToList();
+                    var nodes = itemList.Select(i => i.NodeValue!).ToList();
+                    nodes = SortNodes(nodes, sortKeys!);
+                    itemList = nodes.Select(XdmValue.FromNode).ToList();
                 }
                 else
                 {
-                    items = SortItems(items, sortKeys);
+                    itemList = SortItems(itemList, sortKeys!);
                 }
             }
 
             int pos = 1;
-            int last = items.Count;
-            foreach (var item in items)
+            int last = itemList.Count;
+            foreach (var item in itemList)
             {
-                if (item.IsNode)
-                {
-                    var node = item.NodeValue!;
-                    var rule = FindBestTemplate(node, resolvedMode);
-                    if (rule != null)
-                    {
-                        ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
-                    }
-                    else
-                    {
-                        ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, callParams, position: pos, last: last);
-                    }
-                }
-                else
-                {
-                    ProcessNonNodeItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
-                }
+                ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
                 pos++;
             }
         }
@@ -6127,92 +6162,55 @@ public sealed class TransformEngine
                     var select = instruction.Attribute("select")?.Value;
                     if (string.IsNullOrEmpty(select))
                         throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute");
-                    if (!string.IsNullOrEmpty(select))
-                    {
-                        var compiled = CompileXPath(select, instruction);
-                        var result = compiled.Evaluate(_context);
-                        var items = EnumerateItems(result).ToList();
 
-                        var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                    var compiled = CompileXPath(select, instruction);
+                    var result = compiled.Evaluate(_context);
+                    var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
+
+                    var savedFocus = _context.ContextItem;
+                    var savedCurrent = _context.CurrentItem;
+                    var savedTemplateRule = _currentTemplateRule;
+                    var savedNextMatchExcluded = _nextMatchExcluded;
+                    _currentTemplateRule = null;
+                    _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
+
+                    if (sortElements.Count == 0 && result.IsSequence && result.SequenceValue is ISinglePassSequence)
+                    {
+                        // Single-pass (streamed) selection: iterate without materializing
+                        // so streamed records are released as they are consumed. Position
+                        // is tracked; the context size is unknown (-1) and fn:last()
+                        // raises a streaming error.
+                        int pos = 1;
+                        foreach (var item in EnumerateItems(result))
+                        {
+                            _context.WithFocus(item, pos, -1);
+                            _context.WithCurrentItem(item);
+                            ExecuteForEachBody(instruction, item);
+                            pos++;
+                        }
+                    }
+                    else
+                    {
+                        var items = EnumerateItems(result).ToList();
                         if (sortElements.Count > 0)
                         {
                             items = SortItems(items, sortElements);
                         }
 
-                        var savedFocus = _context.ContextItem;
-                        var savedCurrent = _context.CurrentItem;
-                        var savedTemplateRule = _currentTemplateRule;
-                        var savedNextMatchExcluded = _nextMatchExcluded;
-                        _currentTemplateRule = null;
-                        _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
                         int pos = 1;
                         foreach (var item in items)
                         {
                             _context.WithFocus(item, pos, items.Count);
                             _context.WithCurrentItem(item);
-                            var feSnapshot = _context.SnapshotVariables();
-                            try
-                            {
-                                if (ContainsConditionalInstruction(instruction))
-                                {
-                                    var feItems = EvaluateSequenceConstructorToItems(instruction, item, e =>
-                                        e.Name.LocalName == "sort" && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace);
-                                    if (_sequenceAccumulator != null)
-                                    {
-                                        foreach (var feItem in feItems)
-                                            _sequenceAccumulator.Add(feItem);
-                                    }
-                                    else
-                                    {
-                                        foreach (var feItem in feItems)
-                                        {
-                                            if (feItem.IsSequence && feItem.SequenceValue != null)
-                                            {
-                                                foreach (var subItem in XdmSequence.FromSource(feItem.SequenceValue))
-                                                {
-                                                    if (!subItem.IsUndefined)
-                                                        CopyToResult(subItem);
-                                                }
-                                            }
-                                            else if (!feItem.IsUndefined)
-                                            {
-                                                CopyToResult(feItem);
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    foreach (var childNode in instruction.Nodes())
-                                    {
-                                        switch (childNode)
-                                        {
-                                            case XText text:
-                                                ProcessSequenceText(text, instruction);
-                                                break;
-                                            case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                                continue;
-                                            case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                                ExecuteXsltInstruction(elem, item);
-                                                break;
-                                            case XElement elem:
-                                                CopyLiteralElement(elem);
-                                                break;
-                                        }
-                                    }
-                                }
-                            }
-                            finally
-                            {
-                                _context.RestoreVariables(feSnapshot);
-                            }
+                            ExecuteForEachBody(instruction, item);
                             pos++;
                         }
-                        _context.WithFocus(savedFocus, 1, 1);
-                        _context.WithCurrentItem(savedCurrent);
-                        _currentTemplateRule = savedTemplateRule;
-                        _nextMatchExcluded = savedNextMatchExcluded;
                     }
+
+                    _context.WithFocus(savedFocus, 1, 1);
+                    _context.WithCurrentItem(savedCurrent);
+                    _currentTemplateRule = savedTemplateRule;
+                    _nextMatchExcluded = savedNextMatchExcluded;
                     break;
                 }
 
@@ -7150,6 +7148,111 @@ public sealed class TransformEngine
             _context.DefaultCollation = savedDefaultCollation;
             _context.BackwardsCompatible = savedBackwardsCompatible;
         }
+    }
+
+    /// <summary>
+    /// Executes the body of an xsl:for-each instruction for one item with per-item
+    /// variable scoping. Shared by the materialized and single-pass iteration paths.
+    /// </summary>
+    /// <param name="instruction">The xsl:for-each instruction element.</param>
+    /// <param name="item">The current item.</param>
+    private void ExecuteForEachBody(XElement instruction, XdmValue item)
+    {
+        var feSnapshot = _context.SnapshotVariables();
+        try
+        {
+            if (ContainsConditionalInstruction(instruction))
+            {
+                var feItems = EvaluateSequenceConstructorToItems(instruction, item, e =>
+                    e.Name.LocalName == "sort" && e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace);
+                if (_sequenceAccumulator != null)
+                {
+                    foreach (var feItem in feItems)
+                        _sequenceAccumulator.Add(feItem);
+                }
+                else
+                {
+                    foreach (var feItem in feItems)
+                    {
+                        if (feItem.IsSequence && feItem.SequenceValue != null)
+                        {
+                            foreach (var subItem in XdmSequence.FromSource(feItem.SequenceValue))
+                            {
+                                if (!subItem.IsUndefined)
+                                    CopyToResult(subItem);
+                            }
+                        }
+                        else if (!feItem.IsUndefined)
+                        {
+                            CopyToResult(feItem);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var childNode in instruction.Nodes())
+                {
+                    switch (childNode)
+                    {
+                        case XText text:
+                            ProcessSequenceText(text, instruction);
+                            break;
+                        case XElement elem when elem.Name.LocalName == "sort" && elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                            continue;
+                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                            ExecuteXsltInstruction(elem, item);
+                            break;
+                        case XElement elem:
+                            CopyLiteralElement(elem);
+                            break;
+                    }
+                }
+            }
+        }
+        finally
+        {
+            _context.RestoreVariables(feSnapshot);
+        }
+    }
+
+    /// <summary>
+    /// Processes one selected item of xsl:apply-templates: template rule dispatch for
+    /// nodes, the atomic/otherwise handling for non-nodes. Shared by the materialized
+    /// and single-pass iteration paths.
+    /// </summary>
+    private void ProcessApplyTemplatesItem(XdmValue item, string resolvedMode, Dictionary<string, XdmValue>? callParams, Dictionary<string, XdmValue>? incomingTunnelParams, int pos, int last)
+    {
+        if (item.IsNode)
+        {
+            var node = item.NodeValue!;
+            var rule = FindBestTemplate(node, resolvedMode);
+            if (rule != null)
+            {
+                ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
+            }
+            else
+            {
+                ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, callParams, position: pos, last: last);
+            }
+        }
+        else
+        {
+            ProcessNonNodeItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
+        }
+    }
+
+    /// <summary>
+    /// Materializes a single-pass (streamed) selection into a list. Used only when an
+    /// operation that inherently needs the whole selection (such as xsl:sort) is applied
+    /// to a streamed input; documented as an unbounded-but-correct path.
+    /// </summary>
+    private static List<XdmValue> MaterializeSinglePassItems(XdmSequence sequence)
+    {
+        var list = new List<XdmValue>();
+        foreach (var item in sequence)
+            list.Add(item);
+        return list;
     }
 
     /// <summary>
@@ -16028,11 +16131,22 @@ public sealed class TransformEngine
         }
     }
 
+    /// <summary>
+    /// Applies xsl:strip-space / xsl:preserve-space rules to a detached element tree.
+    /// Used by the streaming API (<see cref="Bosak.Xslt.Api.XsltExecutable.TransformStreaming"/>)
+    /// to strip each materialized record, since streamed trees are not XDocument-backed
+    /// and cannot be stripped at transform entry.
+    /// </summary>
+    /// <param name="element">The record element to strip in place.</param>
+    /// <param name="rules">The merged strip/preserve rules of the stylesheet package.</param>
+    /// <param name="isBackwardsCompatible">Whether XSLT 1.0 backwards-compatible conflict recovery applies.</param>
+    internal static void StripElementWhitespace(XElement element, List<SpaceHandlingRule> rules, bool isBackwardsCompatible)
+        => StripWhitespaceInElement(element, rules, preserveInherited: false, isBackwardsCompatible);
+
     private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited, bool isBackwardsCompatible)
     {
         if (element == null)
             return;
-
         bool preserve = preserveInherited;
         var xmlSpace = element.Attribute(System.Xml.Linq.XNamespace.Xml + "space")?.Value;
         if (xmlSpace == "preserve")

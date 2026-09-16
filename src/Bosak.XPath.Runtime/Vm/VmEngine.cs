@@ -296,6 +296,10 @@
 //                      |                  |       |                | atomic-match type name per distinct input (was Trim().ToLowerInvariant() + slices per    |
 //                      |                  |       |                | call); parenthesized types still re-enter the full matcher unchanged                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.146 | 16-09-2026     | Streaming Phase A: lazy single-pass branches — NormalizeSequence passthrough,          |
+//                      |                  |       |                | ApplyAxis/FilterNodesLazy marker propagation, lazy Filter, PathStepMap and SimpleMap   |
+//                      |                  |       |                | (marked input + single-item probe) over ISinglePassSequence inputs                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -840,8 +844,21 @@ public static class VmEngine
                         int pathResultMode = instr.RegisterC;
                         bool enforceNodeResult = pathResultMode != 0;
 
+                        // Single-pass (streamed) input: map lazily so streamed items are
+                        // pulled and released one at a time; path-mode result checks are
+                        // applied during enumeration.
+                        if (sequence.IsSequence && sequence.SequenceValue is ISinglePassSequence singlePassMapInput)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.FromSource(
+                                new SinglePassXdmSequence(LazySimpleMapIterator(
+                                    module, context, registers, rhsEntry, singlePassMapInput, pathResultMode))));
+                            ip++;
+                            break;
+                        }
+
                         var items = MaterializeSequenceView(sequence);
                         var results = new List<XdmValue>();
+                        int startIndex = 0;
 
                         // XPath path steps require every context item to be a node (XPTY0019).
                         // SimpleMap with ! allows non-node items, so only enforce in path mode.
@@ -854,12 +871,51 @@ public static class VmEngine
                             }
                         }
 
+                        // Single-context-item probe: evaluate the mapping once; when it
+                        // yields a streamed (single-pass) result, forward it (with the
+                        // path-mode result checks applied lazily) instead of
+                        // materializing the stream.
+                        if (items.Count == 1 && items[0].IsNode)
+                        {
+                            var probeItem = context.ContextItem;
+                            var probePos = context.ContextPosition;
+                            var probeSize = context.ContextSize;
+                            context.WithFocus(items[0], 1, 1);
+                            var (probeResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
+                            context.WithFocus(probeItem, probePos, probeSize);
+
+                            if (probeResult.IsSequence && probeResult.SequenceValue is ISinglePassSequence probeSinglePass)
+                            {
+                                registers[instr.RegisterA] = pathResultMode switch
+                                {
+                                    2 => XdmValue.FromSequence(XdmSequence.FromSource(
+                                        new SinglePassXdmSequence(RequireNodesLazy(probeSinglePass)))),
+                                    1 => XdmValue.FromSequence(XdmSequence.FromSource(
+                                        new SinglePassXdmSequence(RejectMixedNodesLazy(probeSinglePass)))),
+                                    _ => probeResult,
+                                };
+                                ip++;
+                                break;
+                            }
+
+                            if (probeResult.IsSequence && probeResult.SequenceValue is not null)
+                            {
+                                foreach (var r in XdmSequence.FromSource(probeResult.SequenceValue))
+                                    results.Add(r);
+                            }
+                            else if (!probeResult.IsUndefined)
+                            {
+                                results.Add(probeResult);
+                            }
+                            startIndex = 1;
+                        }
+
                         // Save context
                         var savedItem = context.ContextItem;
                         var savedPos = context.ContextPosition;
                         var savedSize = context.ContextSize;
 
-                        for (int i = 0; i < items.Count; i++)
+                        for (int i = startIndex; i < items.Count; i++)
                         {
                             context.WithFocus(items[i], i + 1, items.Count);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
@@ -917,15 +973,58 @@ public static class VmEngine
                         // preceding path step (LHS of '/'), not the ambient context item.
                         bool hasLhs = instr.RegisterC != 0;
 
+                        // Single-pass (streamed) step input: map the step lazily so
+                        // streamed records are pulled and released one at a time.
+                        if (sequence.IsSequence && sequence.SequenceValue is ISinglePassSequence singlePassStepInput)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.FromSource(
+                                new SinglePassXdmSequence(LazyPathStepIterator(
+                                    module, context, registers, rhsEntry, singlePassStepInput, hasLhs))));
+                            ip++;
+                            break;
+                        }
+
                         var items = MaterializeSequenceView(sequence);
                         var results = new List<XdmValue>();
+                        int startIndex = 0;
+
+                        // Single-context-item probe: evaluate the step once; when it
+                        // yields a streamed (single-pass) result, forward it untouched
+                        // instead of materializing the stream.
+                        if (items.Count == 1 && items[0].IsNode)
+                        {
+                            var probeItem = context.ContextItem;
+                            var probePos = context.ContextPosition;
+                            var probeSize = context.ContextSize;
+                            context.WithFocus(items[0], 1, 1);
+                            var (probeResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
+                            context.WithFocus(probeItem, probePos, probeSize);
+
+                            if (probeResult.IsSequence && probeResult.SequenceValue is ISinglePassSequence)
+                            {
+                                registers[instr.RegisterA] = probeResult;
+                                ip++;
+                                break;
+                            }
+
+                            if (probeResult.IsSequence && probeResult.SequenceValue is not null)
+                            {
+                                foreach (var r in XdmSequence.FromSource(probeResult.SequenceValue))
+                                    results.Add(r);
+                            }
+                            else if (!probeResult.IsUndefined)
+                            {
+                                results.Add(probeResult);
+                            }
+                            startIndex = 1;
+                        }
 
                         // Save context
                         var savedItem = context.ContextItem;
                         var savedPos = context.ContextPosition;
                         var savedSize = context.ContextSize;
 
-                        for (int i = 0; i < items.Count; i++)
+                        for (int i = startIndex; i < items.Count; i++)
                         {
                             // A step whose input comes from a preceding path step raises
                             // XPTY0019 for atomic items; a standalone/first step applied to
@@ -2272,6 +2371,18 @@ public static class VmEngine
                     {
                         var sequence = registers[instr.RegisterB];
                         int predicateEntry = instr.Operand;
+
+                        // Single-pass (streamed) input: filter lazily so records are
+                        // pulled and released one at a time. The context size is unknown;
+                        // fn:last() inside the predicate raises a streaming error.
+                        if (sequence.IsSequence && sequence.SequenceValue is ISinglePassSequence singlePassFilterInput)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.FromSource(
+                                new SinglePassXdmSequence(LazyFilterIterator(
+                                    module, context, registers, predicateEntry, singlePassFilterInput))));
+                            ip++;
+                            break;
+                        }
 
                         // Copy-free view over the input: no ToArray double copy for lazy
                         // axis results, no copy at all for materialized sequences.
@@ -3854,16 +3965,46 @@ public static class VmEngine
 
         if (input.IsSequence)
         {
+            // Single-pass (streamed) input: map the axis lazily so records are pulled
+            // one at a time. Forward axes preserve document order and keep the marker;
+            // reverse axes drop it so sequence normalization re-sorts as usual.
+            if (input.SequenceValue is ISinglePassSequence singlePassInput)
+            {
+                bool forward = axis is XdmAxis.Child or XdmAxis.Descendant or XdmAxis.DescendantOrSelf
+                    or XdmAxis.Attribute or XdmAxis.Namespace or XdmAxis.Self
+                    or XdmAxis.Following or XdmAxis.FollowingSibling;
+                var pull = LazyAxisMapIterator(singlePassInput, axis);
+                IXdmSequence mapped = forward
+                    ? new SinglePassXdmSequence(pull)
+                    : new EnumerableXdmSequence(pull);
+                return XdmValue.FromSequence(XdmSequence.FromSource(mapped));
+            }
+
             var items = MaterializeSequenceView(input);
             var result = new List<XdmValue>();
-            foreach (var item in items)
+            int startIndex = 0;
+
+            // Single-input-item probe: apply the axis once; when it yields a streamed
+            // (single-pass) sequence, forward it untouched instead of draining the
+            // stream into a list.
+            if (items.Count == 1 && items[0].IsNode)
+            {
+                var axisOutput = items[0].NodeValue.Axis(axis);
+                if (axisOutput.IsSinglePass)
+                    return XdmValue.FromSequence(axisOutput);
+                foreach (var node in axisOutput)
+                    result.Add(node);
+                startIndex = 1;
+            }
+
+            for (int i = startIndex; i < items.Count; i++)
             {
                 // A path step whose input contains atomic values is a type error
                 // (XPTY0019 — this covers both intermediate steps and axis steps
                 // applied to a mixed sequence, XPTY0019_1/2).
-                if (!item.IsNode)
+                if (!items[i].IsNode)
                     throw new InvalidOperationException("XPTY0019: A path step requires nodes, but the step input contains an atomic value.");
-                var seq = item.NodeValue.Axis(axis);
+                var seq = items[i].NodeValue.Axis(axis);
                 foreach (var node in seq)
                     result.Add(node);
             }
@@ -4486,6 +4627,12 @@ public static class VmEngine
         if (value.IsUndefined || !value.IsSequence)
             return value;
 
+        // Single-pass (streamed) sequences are produced duplicate-free in document
+        // order by construction; skip materialization, dedup, and sorting entirely
+        // so streamed items are released as they are consumed.
+        if (value.SequenceValue is ISinglePassSequence)
+            return value;
+
         var items = MaterializeSequenceView(value);
         if (items.Count <= 1)
             return value;
@@ -4663,6 +4810,14 @@ public static class VmEngine
         if (seq is null)
             return XdmValue.FromSequence(XdmSequence.Empty);
 
+        // A filtered subset of a single-pass (streamed) sequence keeps its order and
+        // stays duplicate-free, so the marker propagates.
+        if (seq is ISinglePassSequence)
+        {
+            return XdmValue.FromSequence(XdmSequence.FromSource(
+                new SinglePassXdmSequence(FilterNodesLazyIterator(seq, predicate))));
+        }
+
         return XdmValue.FromSequence(XdmSequence.FromSource(
             new EnumerableXdmSequence(FilterNodesLazyIterator(seq, predicate))));
     }
@@ -4674,6 +4829,192 @@ public static class VmEngine
             if (item.IsNode && predicate(item.NodeValue))
                 yield return item;
         }
+    }
+
+    // ------------------------------------------------------------------
+    // Lazy streaming (single-pass) iterators
+    //
+    // These mirror their eager opcode counterparts but pull the input one
+    // item at a time so a streamed sequence is consumed and released
+    // incrementally. Focus is saved at first pull and restored after each
+    // item; the context size is unknown (-1) for single-pass inputs.
+    // ------------------------------------------------------------------
+
+    private static IEnumerable<XdmValue> LazyAxisMapIterator(IXdmSequence source, XdmAxis axis)
+    {
+        foreach (var item in XdmSequence.FromSource(source))
+        {
+            if (!item.IsNode)
+                throw new InvalidOperationException("XPTY0019: A path step requires nodes, but the step input contains an atomic value.");
+            foreach (var node in item.NodeValue.Axis(axis))
+                yield return node;
+        }
+    }
+
+    private static IEnumerable<XdmValue> LazyFilterIterator(
+        IrModule module, EvaluationContext context, XdmValue[] registers, int predicateEntry, IXdmSequence input)
+    {
+        var savedItem = context.ContextItem;
+        var savedPos = context.ContextPosition;
+        var savedSize = context.ContextSize;
+
+        int pos = 0;
+        foreach (var item in XdmSequence.FromSource(input))
+        {
+            pos++;
+            context.WithFocus(item, pos, -1);
+            var (predResult, _) = ExecuteBlock(module, context, registers, predicateEntry);
+            context.WithFocus(savedItem, savedPos, savedSize);
+
+            // Predicate semantics (XPath §2.4) as in the eager Filter path: a numeric
+            // singleton is positional, a singleton node is kept, everything else uses
+            // the effective boolean value.
+            bool numericPredicate = false;
+            double numericValue = 0;
+            if (!predResult.IsUndefined)
+            {
+                if (IsNumeric(predResult))
+                {
+                    numericPredicate = true;
+                    numericValue = ToDouble(predResult);
+                }
+                else if (predResult.IsSequence && predResult.SequenceValue is not null &&
+                         TryGetSingletonItem(predResult.SequenceValue, out var singletonItem))
+                {
+                    if (singletonItem.IsNode)
+                    {
+                        yield return item;
+                        continue;
+                    }
+                    var atomizedItem = Atomize(singletonItem);
+                    if (IsNumeric(atomizedItem))
+                    {
+                        numericPredicate = true;
+                        numericValue = ToDouble(atomizedItem);
+                    }
+                }
+            }
+
+            if (numericPredicate)
+            {
+                if (numericValue == pos)
+                    yield return item;
+            }
+            else if (predResult.EffectiveBooleanValue())
+            {
+                yield return item;
+            }
+        }
+
+        context.WithFocus(savedItem, savedPos, savedSize);
+    }
+
+    private static IEnumerable<XdmValue> LazyPathStepIterator(
+        IrModule module, EvaluationContext context, XdmValue[] registers, int rhsEntry, IXdmSequence input, bool hasLhs)
+    {
+        var savedItem = context.ContextItem;
+        var savedPos = context.ContextPosition;
+        var savedSize = context.ContextSize;
+
+        foreach (var item in XdmSequence.FromSource(input))
+        {
+            if (!item.IsNode)
+            {
+                if (hasLhs)
+                    throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
+                throw new InvalidOperationException("XPTY0020: An axis step requires a context item that is a node.");
+            }
+
+            // Path-step predicates see position=1, size=1 for each context item.
+            context.WithFocus(item, 1, 1);
+            var (rhsResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
+            context.WithFocus(savedItem, savedPos, savedSize);
+
+            if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
+            {
+                foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
+                    yield return r;
+            }
+            else if (!rhsResult.IsUndefined)
+            {
+                yield return rhsResult;
+            }
+        }
+
+        context.WithFocus(savedItem, savedPos, savedSize);
+    }
+
+    private static IEnumerable<XdmValue> LazySimpleMapIterator(
+        IrModule module, EvaluationContext context, XdmValue[] registers, int rhsEntry, IXdmSequence input, int pathResultMode)
+    {
+        bool enforceNodeResult = pathResultMode != 0;
+        var savedItem = context.ContextItem;
+        var savedPos = context.ContextPosition;
+        var savedSize = context.ContextSize;
+
+        int pos = 0;
+        bool hasNode = false;
+        bool hasNonNode = false;
+        foreach (var item in XdmSequence.FromSource(input))
+        {
+            pos++;
+            if (enforceNodeResult && !item.IsNode)
+                throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
+
+            context.WithFocus(item, pos, -1);
+            var (rhsResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
+            context.WithFocus(savedItem, savedPos, savedSize);
+
+            if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
+            {
+                foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
+                {
+                    if (pathResultMode == 2 && !r.IsNode)
+                        throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
+                    if (r.IsNode) hasNode = true; else hasNonNode = true;
+                    yield return r;
+                }
+            }
+            else if (!rhsResult.IsUndefined)
+            {
+                if (pathResultMode == 2 && !rhsResult.IsNode)
+                    throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
+                if (rhsResult.IsNode) hasNode = true; else hasNonNode = true;
+                yield return rhsResult;
+            }
+        }
+
+        // The mixed-result check (XPTY0018) can only be decided at the end of a
+        // single-pass enumeration; eager evaluation raises it before returning.
+        if (enforceNodeResult && hasNode && hasNonNode)
+            throw new InvalidOperationException("XPTY0018: result of a path expression step contains both nodes and non-nodes");
+
+        context.WithFocus(savedItem, savedPos, savedSize);
+    }
+
+    /// <summary>Lazily enforces the all-nodes result contract of a non-final path step.</summary>
+    private static IEnumerable<XdmValue> RequireNodesLazy(IXdmSequence source)
+    {
+        foreach (var item in XdmSequence.FromSource(source))
+        {
+            if (!item.IsNode)
+                throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
+            yield return item;
+        }
+    }
+
+    /// <summary>Lazily enforces the no-mixed-results contract of a final path step.</summary>
+    private static IEnumerable<XdmValue> RejectMixedNodesLazy(IXdmSequence source)
+    {
+        bool hasNode = false;
+        bool hasNonNode = false;
+        foreach (var item in XdmSequence.FromSource(source))
+        {
+            if (item.IsNode) hasNode = true; else hasNonNode = true;
+            yield return item;
+        }
+        if (hasNode && hasNonNode)
+            throw new InvalidOperationException("XPTY0018: result of a path expression step contains both nodes and non-nodes");
     }
 
     /// <summary>

@@ -93,6 +93,9 @@
 //                      | Charles Korthout | 1.40  | 09-09-2026     | SimpleMap RegisterC encodes last/non-last step (XPTY0018/0019); XQST0094 for unbound gro |
 //                      | Charles Korthout | 1.41  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.42  | 16-09-2026     | Streaming Phase A: rewrite descendant-or-self::node()/child::TEST as                   |
+//                      |                  |       |                | descendant::TEST in path expressions (equivalent; single-pass friendly)                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -1114,13 +1117,46 @@ public sealed class IrLowerer
         return resultReg;
     }
 
+    /// <summary>
+    /// Rewrites <c>descendant-or-self::node()/child::TEST</c> as <c>descendant::TEST</c>.
+    /// The forms are equivalent (XPath §3.3.5 defines <c>//name</c> as
+    /// <c>/descendant-or-self::node()/child::name</c>), and the merged form evaluates in a
+    /// single pass over a streamed input instead of re-requesting the root's children
+    /// while the descendant enumeration is mid-stream. The child step must not carry
+    /// predicates: those bind per context item and would change meaning after merging.
+    /// </summary>
+    private static IReadOnlyList<XPathAstNode> MergeDescendantOrSelfSteps(IReadOnlyList<XPathAstNode> steps)
+    {
+        List<XPathAstNode>? merged = null;
+        for (int i = 0; i < steps.Count; i++)
+        {
+            if (steps[i] is StepNode { Axis: XdmAxis.DescendantOrSelf, Predicates.Count: 0 } descStep
+                && descStep.NodeTest.Kind == NameTestKind.KindTest
+                && descStep.NodeTest.Name == "node"
+                && i + 1 < steps.Count
+                && steps[i + 1] is StepNode { Axis: XdmAxis.Child, Predicates.Count: 0 } childStep)
+            {
+                merged ??= new List<XPathAstNode>(steps.Take(i));
+                merged.Add(new StepNode(XdmAxis.Descendant, childStep.NodeTest, childStep.Predicates));
+                i++;
+            }
+            else
+            {
+                merged?.Add(steps[i]);
+            }
+        }
+        return merged ?? steps;
+    }
+
     private int LowerPathExpr(PathExprNode node, int? targetReg)
     {
+        var steps = MergeDescendantOrSelfSteps(node.Steps);
+
         // Only load the context item if the path expression actually uses it.
         // A relative path whose first step is a non-axis expression (e.g. $x, parse-xml(...))
         // does not need the focus; loading it would force an XPDY0002 error when the focus
         // is absent and the context item is never referenced.
-        bool needsContext = node.IsAbsolute || (node.Steps.Count > 0 && node.Steps[0] is StepNode);
+        bool needsContext = node.IsAbsolute || (steps.Count > 0 && steps[0] is StepNode);
         int contextReg = needsContext ? AllocRegister() : -1;
         if (needsContext)
             Emit(IrOpCode.LoadContextItem, (ushort)contextReg);
@@ -1135,10 +1171,10 @@ public sealed class IrLowerer
         }
 
         bool isFirstStep = true;
-        for (int stepIndex = 0; stepIndex < node.Steps.Count; stepIndex++)
+        for (int stepIndex = 0; stepIndex < steps.Count; stepIndex++)
         {
-            var step = node.Steps[stepIndex];
-            bool isLastStep = stepIndex == node.Steps.Count - 1;
+            var step = steps[stepIndex];
+            bool isLastStep = stepIndex == steps.Count - 1;
             if (step is StepNode stepNode)
             {
                 // The first step applies to the ambient context item (XPTY0020 for

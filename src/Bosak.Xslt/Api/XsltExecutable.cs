@@ -34,11 +34,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 16-09-2026     | Added TransformStreaming (burst-mode streaming input via XmlStreamingProvider)         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
 using System.Threading;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 
@@ -112,6 +115,57 @@ public sealed class XsltExecutable
             LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
             return result;
         }, DefaultTransformStackSize);
+    }
+
+    /// <summary>
+    /// Transforms a streamed source document using this stylesheet (burst-mode streaming
+    /// input). The source is pulled from <paramref name="source"/> lazily: the root's
+    /// top-level elements (records) are materialized one at a time as the stylesheet
+    /// consumes them, so record-at-a-time processing (<c>xsl:for-each</c> or
+    /// <c>xsl:apply-templates</c> over the root's children with record-local bodies) runs
+    /// in bounded memory. The streamed children of the root are forward-only: they can be
+    /// read once, in one pass. Operations that inherently need the whole input
+    /// (<c>xsl:sort</c>, grouping, <c>fn:last()</c>) either buffer it or raise an error.
+    /// </summary>
+    /// <param name="source">The stream containing the source XML document.</param>
+    /// <param name="options">Optional streaming options (base URI, reader settings, whitespace handling).</param>
+    /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
+    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
+    /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
+    /// <returns>The result of the transformation as an XDM value.</returns>
+    /// <exception cref="NotSupportedException">The stylesheet declares an
+    /// <c>xsl:accumulator</c>; accumulators over a streamed source are not supported
+    /// (planned for a later streaming phase).</exception>
+    public XdmValue TransformStreaming(System.IO.Stream source, StreamingTransformOptions? options = null, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null)
+    {
+        if (_stylesheet.GetAllAccumulators().Any())
+        {
+            throw new NotSupportedException(
+                "Streaming: xsl:accumulator over a streamed source is not supported in this release. " +
+                "Use an in-memory transform for stylesheets that declare accumulators.");
+        }
+
+        options ??= new StreamingTransformOptions();
+        var loadOptions = new StreamingLoadOptions
+        {
+            BaseUri = options.BaseUri,
+            DocumentUri = options.BaseUri,
+            ReaderSettings = options.ReaderSettings,
+        };
+        if (options.HonorWhitespaceRules)
+        {
+            var spaceRules = _stylesheet.GetAllSpaceHandlingRules();
+            if (spaceRules.Count > 0)
+            {
+                bool backwardsCompatible = context?.BackwardsCompatible ?? false;
+                loadOptions.RecordPostProcessor = record =>
+                    Runtime.TransformEngine.StripElementWhitespace(record, spaceRules, backwardsCompatible);
+            }
+        }
+
+        var sourceNode = XmlStreamingProvider.Load(source, loadOptions);
+        return Transform(sourceNode, context, initialTemplate, initialMode, baseOutputUri: baseOutputUri);
     }
 
     /// <summary>

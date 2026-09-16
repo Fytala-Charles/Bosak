@@ -313,6 +313,9 @@
 //                      |                  |       |                | items (was a full List per call); fn:concat detects multi-item arguments in the same    |
 //                      |                  |       |                | single pass that captures the first item (was two enumerations per sequence argument)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.103 | 16-09-2026     | Streaming Phase A: fn:last() raises a streaming error when the context size is          |
+//                      |                  |       |                | unknown (negative) over a single-pass (streamed) focus                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4272,6 +4275,14 @@ public static class FunctionLibrary
     {
         if (ctx.ContextItem.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:last() called with no context item.");
+        if (ctx.ContextSize < 0)
+        {
+            // The engine uses a negative context size when the focus is a single-pass
+            // (streamed) sequence whose length cannot be known without consuming it.
+            throw new InvalidOperationException(
+                "Streaming: fn:last() is not available over a streamed (single-pass) sequence because its length is unknown. " +
+                "Restructure the expression to avoid fn:last(), or buffer the input.");
+        }
         return XdmValue.FromInteger(ctx.ContextSize);
     }
 

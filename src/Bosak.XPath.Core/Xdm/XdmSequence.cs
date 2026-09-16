@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 16-09-2026     | Added IsSinglePass for streamed (forward-only) sequence sources                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -40,6 +42,13 @@ public readonly struct XdmSequence
 
     /// <summary>An empty sequence (singleton, no allocation).</summary>
     public static XdmSequence Empty => new(EmptySequenceInstance);
+
+    /// <summary>
+    /// Gets a value indicating whether the underlying source is a forward-only
+    /// (single-pass, streamed) sequence. Such sequences can be enumerated at most
+    /// once and should not be materialized by consumers that can iterate lazily.
+    /// </summary>
+    public bool IsSinglePass => _source is ISinglePassSequence;
 
     /// <summary>Creates a singleton sequence from a single value.</summary>
     public static XdmSequence Singleton(XdmValue value) => new(new SingletonXdmSequence(value));
