@@ -20,6 +20,8 @@
 
 ## 0. Recent Changes
 
+- **2026-09-16 (b)** — **Streaming Phase B: accumulators over streamed sources** — `xsl:accumulator` now works over burst-mode streamed input. Values are computed *push-style*: each accumulator's current value is carried across records in declaration order and per-node before/after values are attached as annotations (bounded — they die with the record). Document/root-level `accumulator-after` is a consuming read that drains the rest of the stream when nothing is mid-enumeration (XTDE3350 while consumed); record-level after values resolve on demand (cross-accumulator references in declaration order, cycle guard XTDE3400); rule and initial-value errors defer to the point of access per spec bug 29813. Also: `fn:snapshot` supports streamed nodes; the accumulator-rule `@match` validator was corrected (globals are in scope, `$value` is not — accumulator-034/091); per-record `xsl:strip-space` now also drops top-level whitespace text records (engine-owned). **W3C `decl/accumulator`: 93/0/14 — 100% of runnable.** Gates: QT3 31,142/0/679, XSLT 7,759/3/6,838, unit 2,279/0/0, build 0/0.
+
 - **2026-09-16** — **Streaming Phase A: burst-mode streaming input** — very large source documents can now be transformed record-at-a-time in bounded memory. New public surface: `XmlStreamingProvider` (`Bosak.XPath.Providers.Streaming`) presents an `XmlReader` source as a forward-only document node (records materialized one at a time as the engine pulls them), `XsltExecutable.TransformStreaming(Stream, StreamingTransformOptions?, …)` (with per-record `xsl:strip-space`/`xsl:preserve-space` application and an `xsl:accumulator` guard), and the `ISinglePassSequence` marker in Core. The VM and XSLT engine gained single-pass execution paths (`xsl:for-each` / `xsl:apply-templates` over the streamed children iterate without materializing; `fn:last()` over a streamed focus raises a clear error). Verified: 500k records through XPath and XSLT at ≤ 2 MB live input-side growth; 10 stylesheet parity tests byte-identical vs in-memory. `xsl:supports-streaming` still reports `no`; `streamable="yes"` and streaming accumulators are later phases. See §3.2a. Gates: QT3 31,142/0/679, XSLT 7,722/3/6,875, unit 2,249/0/0 + Xslt.Tests 391/0/0, build 0/0.
 
 - **2026-09-14** — **Performance wave 4 (REQ-085):** result-tree append path — constructed-element content normalization now skips its list rebuild unless a text merge/discard is actually required, literal AVT values (no braces) return without computing namespaces/base URI, and per-literal-result-element bookkeeping is cached/static (interned prefix hints, lazy duplicate-attribute set, variable-snapshot only when the subtree can declare variables). **Transform_HtmlTable 62.57 → 51.46 ms (cumulative 193.34 → 51.46, −73%), 61.54 → 47.13 MB (cumulative 115.48 → 47.13, −59%)**. No public API or behavior change; XSLT strict sweep 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged.
@@ -1839,15 +1841,18 @@ IXdmNode doc = XmlStreamingProvider.Load(stream, new StreamingLoadOptions { Base
 | Predicates on the record step, `position()` | Bounded |
 | `xsl:sort`, `xsl:for-each-group`, `fn:count()`, `fn:last()` subscript `[last()]`, keys, variables retaining records | Unbounded but correct (buffers the stream) |
 | `fn:last()` in a streamed focus, a second pass over the streamed root, `preceding` axes across records, `following` axes past the current record | Clear `StreamingException`/error — never silently wrong data |
-| `xsl:accumulator` stylesheets | Rejected up front (`NotSupportedException`; later phase) |
+| `xsl:accumulator` declarations | **Bounded** — values are pushed per record and travel as annotations; document-level `accumulator-after` drains the stream when nothing is mid-enumeration |
 
 Notes and limitations: the streamed children of the root are **forward-only** (one pass).
-`xsl:strip-space`/`xsl:preserve-space` rules are applied per record (disable via
-`StreamingTransformOptions.HonorWhitespaceRules = false`). DTD is prohibited by default
-(pass `ReaderSettings` to relax). Comments/PIs before the root element and DTD entity
-declarations are not surfaced; `fn:snapshot` and `fn:transform` with a streaming source
-are unsupported; `fn:copy-of` returns the streamed node itself rather than a fresh copy
-(`xsl:copy-of` into the result tree works normally).
+`xsl:strip-space`/`xsl:preserve-space` rules are applied per record (including top-level
+whitespace text records, which are dropped). Cross-accumulator references in rule selects
+must target accumulators declared **earlier**; accumulator rule and initial-value errors
+surface at the point of access (spec bug 29813). DTD is prohibited by default (pass
+`ReaderSettings` to relax). Comments/PIs before the root element and DTD entity
+declarations are not surfaced; `fn:transform` with a streaming source and
+`xsl:source-document streamable="yes"` are unsupported; `fn:copy-of` returns the streamed
+node itself rather than a fresh copy (`xsl:copy-of` into the result tree works normally,
+and `fn:snapshot` deep-copies streamed nodes with their accumulator values).
 
 ### 3.3 Named Templates & `call-template`
 

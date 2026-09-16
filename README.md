@@ -69,7 +69,7 @@ Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)**
 - **XPath 3.1 Complete** — Maps, arrays, higher-order functions, arrow expressions (`=>`), string concat (`||`), FLWOR, JSON functions
 - **XSD Regex with Pinned Unicode 9.0** — Full `\p{X}`/`\P{X}` category and `\p{IsBlock}` support, class subtraction, astral-safe matching
 - **XSLT 3.0 Transform Engine** — Template matching, sequence constructors, `xsl:copy`/`xsl:copy-of`, `xsl:for-each-group`, `xsl:analyze-string`, `xsl:where-populated`, `xsl:on-empty`, `xsl:iterate`/`xsl:break`, `fn:transform()`
-- **Burst-Mode Streaming Input** — `XmlStreamingProvider` + `XsltExecutable.TransformStreaming` process multi-GB record documents in bounded memory (verified at 500k records); forward-only with loud errors instead of silent data loss
+- **Burst-Mode Streaming Input** — `XmlStreamingProvider` + `XsltExecutable.TransformStreaming` process multi-GB record documents in bounded memory (verified at 500k records); forward-only with loud errors instead of silent data loss; push-style streaming accumulators (`xsl:accumulator` works over the stream)
 - **XQuery 3.1 (Phase 4)** — full core FLWOR, direct and computed constructors, switch/typeswitch, `validate` (`strict`/`lax`/`type QName`), output declarations and serialization, user-defined functions and variables, library modules (`import module` with %public/%private visibility), schema-aware user-defined simple types, QName/NOTATION preservation and ID/IDREF detection, higher-order function item instance-of over element kind tests, empty `document-node()` matching, constructed-element `xs:anyType` annotations, QName accessor singleton-sequence XPTY0004, function return-type atomization for user-defined schema types, keywords as unprefixed function names, instance-of type-hierarchy semantics for user-defined schema types; schema-aware `fn:json-to-xml` with `validate:=true()` against the W3C schema-for-JSON; QT3 wired (31,142/0/679 strict — 100% of runnable)
 
 ---
@@ -205,7 +205,7 @@ flowchart TB
 | 1 | XPath 3.1 Core — compiler + VM + standard functions | ✅ Complete |
 | 2 | XSLT 2.0/3.0 — template matching, sequence constructors, `fn:transform()` | ✅ Complete — full option surface + QT3 Tier-2m (117/124 passed, 7 skipped) |
 | 3 | XQuery 3.1 — prolog parser, static context, prolog-less queries, full core FLWOR | 🚧 Phase 4 (constructors, modules, serialization, HOF, `fn:load-xquery-module`, schema-aware user-defined simple types, `validate`, QName/NOTATION/ID support, QName accessor singleton-sequence XPTY0004, function return-type atomization for user-defined schema types, schema-aware `fn:json-to-xml`); QT3 wired (31,142/0/679 strict — 100% of runnable) |
-| 4 | Streaming — `XmlReader`-backed `IXdmNode` | ✅ Phase A — burst-mode streaming input (`XmlStreamingProvider`, `TransformStreaming`); Phase B (streaming accumulators) and C (`streamable="yes"`) planned |
+| 4 | Streaming — `XmlReader`-backed `IXdmNode` | ✅ Phases A+B — burst-mode streaming input (`XmlStreamingProvider`, `TransformStreaming`) + push-style streaming accumulators; Phase C (`streamable="yes"`) planned |
 | 5 | Database backends — XML database adapters | 📋 Planned |
 
 ---

@@ -1,5 +1,25 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-16 (seventh session)
+**Commit:** `cc98a2b` — feat(streaming): Phase B — push-style streaming accumulators over burst-mode input
+**Current focus:** **Streaming Phase B landed: `xsl:accumulator` works over the burst-mode streamed source; W3C `decl/accumulator` at 93/0/14 (100% of runnable).** Phases A+B both shipped the same day; remaining streaming work is Phase C (`streamable="yes"`, §19 posture analysis, the `strm/` sets, `xsl:source-document`).
+**What was built:**
+- **Push model** (forced by the stream): the in-memory implementation computes accumulator values lazily per (acc, root) via a whole-tree walk — impossible over released records and cache-pinning. The stream delivers nodes in document order (= the accumulator traversal order), so a nested `StreamingAccumulatorDriver` in `TransformEngine` (6.69) carries each applicable accumulator's current value across records, fires start/end-phase rules per node (mirroring `Walk` at :2414), and stores per-node before/after values as `AccumulatorValues` annotations that die with the record (bounded).
+- **Provider seam** (Phase B additions): `IStreamingDocument` (per-record `Func<XObject,IXdmNode,bool>` hook with drop support, `StreamCompleted`, `Drain`/`CanDrain`), `IStreamingNode.UnderlyingXObject`, `StreamingDocumentNode`. The drop support also fixed a Phase A parity gap: top-level whitespace text records are now dropped when `xsl:strip-space` matches the root (engine-owned stripping for all streamed sources; `TransformStreaming`'s whitespace closure and accumulator `NotSupportedException` guard removed).
+- **Retrieval semantics**: annotation fast path (any `XObject`); document/root `accumulator-after` publishes at stream end — a read when nothing is mid-enumeration **drains** the stream (grounding, bounded; `XTDE3350` while consumed); record-level after values resolve **on demand** for cross-accumulator references in declaration order (in-progress guard → XTDE3400 self-cycles); rule/initial-value errors **defer to the point of access** (spec bug 29813, so `xsl:try` catches FOAR0001 — accumulator-056s/057s); forward (later-declared) cross-accumulator references poison the accumulator and surface loudly on read. Driver initializes lazily (first record or first query) so globals/params bind exactly as in memory.
+- **Validator inversion** (`AccumulatorDefinition` 0.5): `@match` patterns see globals (accumulator-034 legal), never `$value` (accumulator-091 XPST0008) — the pre-existing validator was exactly inverted; unit tests updated to match.
+- **`fn:snapshot`** (FunctionLibrary 5.104): streaming branch via `UnderlyingOf` unwrap; deep copy carries accumulator values through the existing annotation path.
+- **Harness** (`Program.cs` 3.43): `StreamingAllowedTestSets = { "accumulator" }` consulted at the feature gate and the streaming-source gate; streaming sources route through `XmlStreamingProvider` (file or inline content); documented skips: expected-error XTSE3430 (generic Phase-C rule), 031/068 (`xsl:source-document`), 061 (burst-mode granularity: intra-record `accumulator-after` is available post-descent, so its expected XTDE3350 does not arise).
+**Verification:** acceptance `decl/accumulator` 80/16/11 → **93/0/14** (16 failures triaged to 6 engine bugs fixed, 2 out-of-scope, 1 semantic gap); 16 parity-based unit tests + 2 drain/3350 tests in `StreamingAccumulatorTests`; gates: QT3 31,142/0/679, XSLT **7,759/3/6,838** (+37 streamed passes, same 3 residuals), unit **2,279/0/0** (incl. Xslt.Tests 409), build 0/0.
+**Next steps (agreed 2026-09-16):**
+1. **Phase C (spec streaming)** — `streamable="yes"` + §19 posture/sweep analysis, `xsl:supports-streaming` → `yes`, `xsl:source-document streamable="yes"`, unskip `strm/` sets (90 sets, 2,589 cases; ~77% plain output assertions, ~11% XTSE3430 static-analysis cases that need the analysis).
+2. **Provider follow-ups** — `StreamingNode` wrapper cache, DTD unparsed entities, pre-root comments/PIs, `fn:copy-of` deep-copy guard, `TransformStreamingToString` convenience.
+3. **1.0 items unchanged:** API freeze, version promotion, support channel; owner-side: ruleset `protect-main` (id 22255065), support channel per `COMMERCIAL.md`.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-16 (sixth session)
 **Commit:** `7333cc9` — feat(streaming): Phase A burst-mode streaming input — XmlStreamingProvider + TransformStreaming
 **Current focus:** **Streaming Phase A landed: burst-mode (semi-streaming) input.** Perf waves are paused (5–9 complete); the post-1.0 streaming track started with the input side. `xsl:supports-streaming` still reports `no`; `streamable="yes"`/§19 analysis (Phase C) and streaming accumulators (Phase B) are explicitly future phases; 1.0 proceeds independently.
