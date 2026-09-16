@@ -1,5 +1,23 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-16 (second session)
+**Commit:** `15dd5a6` — REQ-085 performance wave 6: FLWOR tuple materialization — keys atomized once per tuple, copy-free tuple views
+**Current focus:** **Performance wave 6 landed: Evaluate_Flwor 22.50 → 21.49 ms, 26.16 → 24.24 MB (cumulative 44.23 → 21.49 ms, −51%; 66.75 → 24.24 MB, −64%); FunctionHeavy alloc 405 → 366 KB; Transform_HtmlTable 45.92 ms / 43.23 MB (−4% time via the shared comparison path); PathHeavy byte-identical.** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
+**What was built (all in VmEngine 2.142):**
+- **FLWOR probe decomposition** (27.4 MB full query): base `//item` + For scaffolding 6.4 MB, where-clause keys 3.8 MB, concat/string return machinery 6.4 MB, order-by chunk 7.0 MB. The order-by chunk carried the avoidable churn.
+- **Sort keys atomized ONCE per tuple** in `OrderBy` (was: inside every comparison — a lazy node key like `$i/@id` re-materialized its attribute sequence per compared pair, ~33k atomizations per evaluation). Atomization errors (XPTY0004 multi-item, FOTY0012/0013) surface pre-sort with the same codes; the comparator still flows through the untouched `CompareOrderByValues` (collation, descending, empty-order semantics intact); dead `CompareTuples` removed.
+- **Copy-free tuple handling** — tuple item lists via `ArrayValuesView` (the `XdmArray` backing `List<XdmValue>` implements `IReadOnlyList`); incoming array tuples reused verbatim in the sorted stream (no `new XdmArray` re-wrap); `TupleBind` indexes the view (no per-tuple `ToArray`).
+- **`For`/`Some`/`Every`/`OrderBy` inputs** via `MaterializeSequenceView` (no List+ToArray double copy on lazy loop inputs — this alone accounts for the FunctionHeavy 405 → 366 KB drop: `1 to 1000` range input).
+**Expected state:** `dotnet build Bosak.sln` 0/0; `dotnet test Bosak.sln` green (2,216); QT3 `31,142/0/679`; XSLT `7,722/3/6,875`; benchmarks: PathHeavy 16.10 ms / 21.18 MB, StringFunctions 10.43 ms / 10.06 MB, FLWOR 21.49 ms / 24.24 MB, Transform_HtmlTable 45.92 ms / 43.23 MB.
+**Next steps (agreed 2026-09-16):**
+1. **Wave 7 candidates (in order):** function-call machinery micro-costs (per-call `XdmValue[]` args + function-conversion pass — ~4 KB/item in concat/number-heavy return clauses, visible in both FLWOR and predicate probes); per-transform thread-spawn reuse (`RunWithStack`, re-entrancy-sensitive — keep last). Structural items reserved for post-1.0: per-context-node `PathStepMap` block execution on `//` paths (~600 B/node residual), axis+name-test fusion (provider-level API).
+2. **Consider cutting `v0.10.1-beta`** — unchanged: cumulative perf story now −76%/−63% transform, −51%/−62% path, −51%/−64% FLWOR, both W3C suites unchanged. Owner decision; release notes can be drafted on request.
+3. **Owner-side open items:** activate ruleset `protect-main` (id 22255065 — pending since 2026-09-05); define support channel per `COMMERCIAL.md`; SemVer/1.0 timing decision.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-16
 **Commit:** `84dc188` — REQ-085 performance wave 5: lazy node-test filtering, predicate-path views, ordered-normalize fast path
 **Current focus:** **Performance wave 5 landed: Evaluate_PathHeavy 22.08 → 16.10 ms, 30.96 → 21.18 MB (cumulative 32.77 → 16.10 ms, −51%; 56.05 → 21.18 MB, −62%); StringFunctions 15.58 → 10.43 ms / 19.87 → 10.06 MB; FLWOR 27.61 → 22.50 ms / 36.66 → 26.16 MB; Transform_HtmlTable 51.46 → 47.81 ms / 47.13 → 43.23 MB (cumulative 193.34 → 47.81 ms, −75%; 115.48 → 43.23 MB, −63%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
