@@ -284,6 +284,10 @@
 //                      |                  |       |                | lists copy-free and reuses incoming array tuples in the sorted stream; TupleBind indexes  |
 //                      |                  |       |                | tuple values without ToArray; For/Some/Every/OrderBy/GroupBy inputs via view             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.143 | 16-09-2026     | REQ-085 perf wave 7: Call opcode passes argument registers as a span when no callee   |
+//                      |                  |       |                | can rewrite them (no map/array/function-typed params, no declared sequence types) —     |
+//                      |                  |       |                | eliminates the per-call argument array on the built-in hot path                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -405,6 +409,33 @@ public static class VmEngine
                                 throw new InvalidOperationException($"XPST0051: The type '{{{nsUri}}}{localName}' is not a known schema type.");
                             throw new InvalidOperationException(
                                 $"XPST0017: Function {{{nsUri}}}{localName}#{argCount} not found.");
+                        }
+
+                        // Fast path: when nothing can rewrite the arguments (no map/array/
+                        // function-typed params to unwrap, no declared sequence types to
+                        // convert), pass the argument registers directly as a span — no
+                        // per-call argument array. Implementations receive a ReadOnlySpan
+                        // (mutation is impossible), and the aliased argument registers are
+                        // single-assignment, so they are dead after this instruction.
+                        bool argsMayBeRewritten = sig.ParameterTypeNames is not null;
+                        if (!argsMayBeRewritten)
+                        {
+                            for (int i = 0; i < argCount && i < sig.ParameterTypes.Count; i++)
+                            {
+                                if (sig.ParameterTypes[i] is XdmValueKind.Map or XdmValueKind.Array or XdmValueKind.Function)
+                                {
+                                    argsMayBeRewritten = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!argsMayBeRewritten)
+                        {
+                            registers[instr.RegisterA] = sig.Implementation(
+                                context, registers.AsSpan(firstArgReg, argCount));
+                            ip++;
+                            break;
                         }
 
                         // Build argument span

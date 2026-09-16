@@ -56,17 +56,19 @@ copy-on-write namespace bindings; result-tree append fast paths): raw output in 
 Wave 5 (lazy node-test filtering, copy-free predicate-path views, pooled Filter kept-buffer,
 ordered-sequence fast path in document-order normalization) and wave 6 (FLWOR tuple
 materialization: sort keys atomized once per tuple, copy-free tuple item views, array-tuple
-reuse in the sorted stream) — latest numbers below.
+reuse in the sorted stream) and wave 7 (function-call machinery: argument registers passed
+as a span when no callee can rewrite them — no per-call argument array; fn:string/fn:concat
+single-pass sequence handling) — latest numbers below.
 
-| Benchmark | Baseline | After waves 1–6 | Δ time | Δ allocated |
+| Benchmark | Baseline | After waves 1–7 | Δ time | Δ allocated |
 |---|---|---|---|---|
-| Compile_ModerateExpression | 4.85 µs / 18.5 KB | 5.25 µs / 18.5 KB | — | — |
-| Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 16.10 ms / 21.18 MB | −51% | −62% |
-| Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 10.43 ms / 10.06 MB | −65% | −75% |
-| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 312.9 µs / 366 KB | — | −13% |
-| Compile_Flwor | 9.57 µs / 36.5 KB | 10.74 µs / 36.5 KB | — | — |
-| Evaluate_Flwor | 44.23 ms / 66.75 MB | 21.49 ms / 24.24 MB | −51% | −64% |
-| Compile_Stylesheet | 35.69 µs / 80.2 KB | 38.07 µs / 80.2 KB | — | — |
-| Transform_HtmlTable | 193.34 ms / 115.48 MB | 45.92 ms / 43.23 MB | −76% | −63% |
+| Compile_ModerateExpression | 4.85 µs / 18.5 KB | 5.21 µs / 18.5 KB | — | — |
+| Evaluate_PathHeavy | 32.77 ms / 56.05 MB | 15.93 ms / 21.18 MB | −51% | −62% |
+| Evaluate_StringFunctions | 30.01 ms / 40.71 MB | 9.80 ms / 9.94 MB | −67% | −76% |
+| Evaluate_FunctionHeavy | 299.4 µs / 420 KB | 308.0 µs / 366 KB | — | −13% |
+| Compile_Flwor | 9.57 µs / 36.5 KB | 10.32 µs / 36.5 KB | — | — |
+| Evaluate_Flwor | 44.23 ms / 66.75 MB | 20.80 ms / 22.18 MB | −53% | −67% |
+| Compile_Stylesheet | 35.69 µs / 80.2 KB | 36.94 µs / 80.2 KB | — | — |
+| Transform_HtmlTable | 193.34 ms / 115.48 MB | 47.23 ms / 42.87 MB | −76% | −63% |
 
 Re-run with: `dotnet run -c Release --project benchmarks/Bosak.Benchmarks -- --filter '*'`

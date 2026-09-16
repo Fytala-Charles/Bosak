@@ -309,6 +309,10 @@
 //                      |                  |       |                | a first item when length is unknown; fn:has-children/fn:path/fn:format-integer decide    |
 //                      |                  |       |                | cardinality from at most two enumerated items instead of rejecting unknown lengths       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.102 | 16-09-2026     | REQ-085 perf wave 7: fn:string unwraps a sequence argument with at most two enumerated  |
+//                      |                  |       |                | items (was a full List per call); fn:concat detects multi-item arguments in the same    |
+//                      |                  |       |                | single pass that captures the first item (was two enumerations per sequence argument)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3442,15 +3446,22 @@ public static class FunctionLibrary
             throw new InvalidOperationException("FOTY0014");
         if (arg.IsSequence)
         {
-            var items = new List<XdmValue>();
+            // Single pass: capture the first item and detect a second (no intermediate list).
+            XdmValue first = default;
+            int count = 0;
             foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
-                items.Add(item);
-            if (items.Count == 0)
+            {
+                if (count == 0)
+                    first = item;
+                if (++count > 1)
+                    break;
+            }
+            if (count == 0)
                 return XdmValue.FromString(string.Empty);
             // XPath 1.0 backwards compatibility uses the string value of the first item.
-            if (items.Count > 1 && !ctx.BackwardsCompatible)
+            if (count > 1 && !ctx.BackwardsCompatible)
                 throw new InvalidOperationException("XPTY0004");
-            return XdmValue.FromString(items[0].ToString());
+            return XdmValue.FromString(first.ToString());
         }
         return XdmValue.FromString(arg.ToString());
     }
@@ -9363,15 +9374,30 @@ public static class FunctionLibrary
             // (K2-ConcatFunc-1/2/3).
             if (arg.IsSequence && arg.SequenceValue is not null)
             {
-                int count = 0;
-                foreach (var unused in XdmSequence.FromSource(arg.SequenceValue))
+                // Single pass: capture the first item and detect a second (the count
+                // check and the atomization previously enumerated the argument twice).
+                XdmValue first = default;
+                bool sawAny = false;
+                foreach (var item in XdmSequence.FromSource(arg.SequenceValue))
                 {
-                    if (++count > 1)
+                    if (!sawAny)
+                    {
+                        first = item;
+                        sawAny = true;
+                    }
+                    else
+                    {
                         throw new InvalidOperationException(
                             "XPTY0004: fn:concat arguments must atomize to a single atomic value or the empty sequence.");
+                    }
                 }
+                if (sawAny)
+                    sb.Append(AtomizedString(first));
             }
-            sb.Append(AtomizedString(arg));
+            else
+            {
+                sb.Append(AtomizedString(arg));
+            }
         }
         return XdmValue.FromString(sb.ToString());
     }
