@@ -80,6 +80,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.110 | 06-09-2026     | xsl:product-version fallback bumped to 0.9.1-preview (packaging refresh release)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.111 | 17-09-2026     | Streaming Phase D: fn:snapshot grounds the streamed document node / shell root          |
+//                      |                    |       |                | (records fallback + skeleton re-read; loud error when nothing recoverable)              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -3893,11 +3896,14 @@ public static class FunctionLibrary
         {
             if (item.IsNode && item.NodeValue != null)
             {
-                var copied = SnapshotNode(item.NodeValue);
+                var copied = SnapshotNode(item.NodeValue, items, ctx);
                 if (copied == null)
                     throw new InvalidOperationException("FOTY0013");
-                // XSLT hook: fn:snapshot copies accumulator values onto the copy.
-                ctx.AccumulatorValueCopier?.Invoke(item.NodeValue, copied);
+                // XSLT hook: fn:snapshot copies accumulator values onto the copy. Streamed
+                // document nodes / shell root elements are grounded by SnapshotNode, which
+                // already copied the per-record accumulator values while pumping.
+                if (!IsStreamedShellTarget(item.NodeValue))
+                    ctx.AccumulatorValueCopier?.Invoke(item.NodeValue, copied);
                 copies.Add(XdmValue.FromNode(copied));
             }
             else
@@ -3918,10 +3924,26 @@ public static class FunctionLibrary
         _ => null,
     };
 
-    private static IXdmNode? SnapshotNode(IXdmNode node)
+    /// <summary>
+    /// True when <paramref name="node"/> is the streamed document node or its shell root
+    /// element — the two streamed nodes whose snapshot must ground the single-pass stream.
+    /// </summary>
+    private static bool IsStreamedShellTarget(IXdmNode node)
+        => node is Providers.Streaming.IStreamingDocument
+           || (node is Providers.Streaming.IStreamingNode
+               && node.NodeKind == XdmNodeKind.Element
+               && node.Parent is Providers.Streaming.IStreamingDocument);
+
+    private static IXdmNode? SnapshotNode(IXdmNode node, List<XdmValue> items, EvaluationContext ctx)
     {
         if (node is not Providers.Xml.XDocumentNode and not Providers.Streaming.IStreamingNode)
             return null;
+
+        // Streaming Phase D: snapshotting the streamed document node or its shell root
+        // element must ground the stream — pull every remaining record and deep-copy it
+        // beneath a copy of the shell root (sf-snapshot-0101a/b, 0311).
+        if (IsStreamedShellTarget(node))
+            return SnapshotStreamedShell(node, items, ctx);
 
         // Collect ancestor path from root to the target node.
         var path = new List<IXdmNode>();
@@ -4083,6 +4105,207 @@ public static class FunctionLibrary
             return null;
 
         return new Providers.Xml.XDocumentNode(targetCopy);
+    }
+
+    /// <summary>
+    /// Snapshots the streamed document node or its shell root element by grounding the
+    /// stream: every record still unread is pulled from the single-pass pump and deep-copied
+    /// beneath a copy of the shell root, producing an ordinary detached in-memory tree.
+    /// </summary>
+    /// <param name="node">The streamed document node or shell root element.</param>
+    /// <param name="items">All items of the fn:snapshot argument sequence.</param>
+    /// <param name="ctx">The evaluation context (document reload + accumulator copier hook).</param>
+    /// <returns>The snapshot copy: a document node, or the shell root copy inside one.</returns>
+    private static IXdmNode? SnapshotStreamedShell(IXdmNode node, List<XdmValue> items, EvaluationContext ctx)
+    {
+        // The shell root wrapper: the target itself, or the document node's element child
+        // (resolvable without touching the pump).
+        IXdmNode? rootNode = node;
+        XDocument? ownerDoc = null;
+        if (node.NodeKind == XdmNodeKind.Document)
+        {
+            ownerDoc = new XDocument();
+            if (!string.IsNullOrEmpty(node.BaseUri))
+                ownerDoc.AddAnnotation(node.BaseUri);
+            if (node.HasDocumentType)
+                ownerDoc.Add(new XDocumentType(node.DocumentTypeName, node.PublicId, node.SystemId, node.InternalSubset));
+            rootNode = null;
+            foreach (var child in node.Children(XdmNodeKind.Element))
+            {
+                rootNode = child.NodeValue;
+                break;
+            }
+            if (rootNode == null)
+                return new Providers.Xml.XDocumentNode(ownerDoc);
+        }
+
+        if (rootNode is null || UnderlyingOf(rootNode) is not XElement shellElem)
+            return null;
+        var shellCopy = ShallowCopyElement(shellElem);
+        AppendStreamedChildren(rootNode, shellCopy, items, ctx);
+        // The spec reference implementation retains the ancestors of the snapshot node,
+        // so the copy keeps its (new) document parent — as does the in-memory path.
+        ownerDoc ??= new XDocument();
+        if (ownerDoc.Annotation<string>() is null && !string.IsNullOrEmpty(node.BaseUri))
+            ownerDoc.AddAnnotation(node.BaseUri);
+        ownerDoc.Add(shellCopy);
+        return node.NodeKind == XdmNodeKind.Document
+            ? new Providers.Xml.XDocumentNode(ownerDoc)
+            : new Providers.Xml.XDocumentNode(shellCopy);
+    }
+
+    /// <summary>
+    /// Appends deep copies of the streamed children of the shell root <paramref name="parentNode"/>
+    /// to <paramref name="target"/>. Prefers pulling the records from the live pump; when the
+    /// stream has already been consumed (the argument sequence evaluation grounded it), the
+    /// records are gathered from the items of the fn:snapshot argument sequence and interleaved
+    /// with a fresh re-read of the source so that top-level whitespace text nodes an
+    /// element-only axis never delivered are preserved as well (sf-snapshot-0102).
+    /// </summary>
+    private static void AppendStreamedChildren(IXdmNode parentNode, XContainer target, List<XdmValue> items, EvaluationContext ctx)
+    {
+        List<IXdmNode> pulled;
+        bool consumed;
+        Providers.Streaming.StreamingException? streamEx = null;
+        try
+        {
+            pulled = new List<IXdmNode>();
+            foreach (var child in parentNode.Children(XdmNodeKind.All))
+            {
+                if (child.IsNode && child.NodeValue != null)
+                    pulled.Add(child.NodeValue);
+            }
+            consumed = false;
+        }
+        catch (Providers.Streaming.StreamingException ex)
+        {
+            // The stream was consumed while the argument sequence was being evaluated;
+            // the records survive as items of that sequence (in document order).
+            consumed = true;
+            streamEx = ex;
+            pulled = new List<IXdmNode>();
+            foreach (var item in items)
+            {
+                if (item.IsNode && item.NodeValue is { Parent: { } parent } && parent.IsSameNode(parentNode))
+                    pulled.Add(item.NodeValue);
+            }
+        }
+
+        // The pump path delivers everything (including whitespace records); only the
+        // consumed-stream path needs the re-read skeleton to recover what an element-only
+        // axis filtered away.
+        var skeleton = consumed ? ReloadStreamedRootChildren(parentNode, ctx) : null;
+        if (skeleton == null)
+        {
+            // Nothing could be recovered: a silently empty snapshot corrupts the result
+            // without any sign of failure, so report the exhaustion instead.
+            if (streamEx != null && pulled.Count == 0)
+                throw streamEx;
+            AppendShellChildCopies(target, pulled, ctx);
+            return;
+        }
+
+        // Merge: walk the re-read skeleton in document order; pair each node with the
+        // next matching gathered record (which carries the accumulator annotations and
+        // any per-record processing) and fall back to the skeleton node itself when the
+        // axis that consumed the stream delivered no counterpart (e.g. //* drops text).
+        var merged = new List<IXdmNode>();
+        int g = 0;
+        foreach (var skel in skeleton)
+        {
+            if (g < pulled.Count
+                && pulled[g].NodeKind == skel.NodeKind
+                && (skel.NodeKind != XdmNodeKind.Element
+                    || (pulled[g].LocalName == skel.LocalName && pulled[g].NamespaceUri == skel.NamespaceUri)))
+            {
+                merged.Add(pulled[g++]);
+            }
+            else
+            {
+                merged.Add(skel);
+            }
+        }
+        for (; g < pulled.Count; g++)
+            merged.Add(pulled[g]);
+        AppendShellChildCopies(target, merged, ctx);
+    }
+
+    /// <summary>
+    /// Deep-copies <paramref name="sources"/> (streamed wrappers or in-memory skeleton nodes)
+    /// beneath <paramref name="target"/>, invoking the accumulator copier per copied child.
+    /// </summary>
+    private static void AppendShellChildCopies(XContainer target, List<IXdmNode> sources, EvaluationContext ctx)
+    {
+        foreach (var child in sources)
+        {
+            XNode? childCopy;
+            if (IsStreamedShellTarget(child))
+            {
+                // The shell root reached as the document node's child: copy its shell and
+                // ground its streamed children recursively.
+                childCopy = UnderlyingOf(child) is XElement childShell ? ShallowCopyElement(childShell) : null;
+                if (childCopy != null)
+                {
+                    target.Add(childCopy);
+                    AppendStreamedChildren(child, (XElement)childCopy, new List<XdmValue>(), ctx);
+                }
+                continue;
+            }
+
+            childCopy = UnderlyingOf(child) switch
+            {
+                XElement elem => DeepCopyElement(elem),
+                XText text => new XText(text.Value),
+                XComment comment => new XComment(comment.Value),
+                XProcessingInstruction pi => new XProcessingInstruction(pi.Target, pi.Data),
+                _ => null,
+            };
+            if (childCopy == null)
+                continue;
+            target.Add(childCopy);
+            ctx.AccumulatorValueCopier?.Invoke(child, new Providers.Xml.XDocumentNode(childCopy));
+        }
+    }
+
+    /// <summary>
+    /// Re-reads the streamed source through the host document loader (bypassing the document
+    /// cache, which may hold the live streamed node) and returns the children of its root
+    /// element in document order, or <c>null</c> when the source cannot be re-read. The host
+    /// post-processor is applied so whitespace stripping matches fn:doc parity.
+    /// </summary>
+    private static List<IXdmNode>? ReloadStreamedRootChildren(IXdmNode streamedNode, EvaluationContext ctx)
+    {
+        var uri = streamedNode.DocumentUri;
+        if (string.IsNullOrEmpty(uri) || ctx.DocumentLoader == null)
+            return null;
+        try
+        {
+            var loadUri = ctx.ResourceUriMapper?.Invoke(uri) ?? uri;
+            var loaded = ctx.DocumentLoader(loadUri);
+            if (loaded is Providers.Streaming.IStreamingNode or Providers.Streaming.IStreamingDocument)
+                return null;
+            loaded = ctx.DocumentPostProcessor?.Invoke(loaded) ?? loaded;
+            ctx.DocumentLoaded?.Invoke(uri);
+            IXdmNode? root = null;
+            foreach (var child in loaded.Children(XdmNodeKind.Element))
+            {
+                root = child.NodeValue;
+                break;
+            }
+            if (root == null)
+                return null;
+            var children = new List<IXdmNode>();
+            foreach (var child in root.Children(XdmNodeKind.All))
+            {
+                if (child.IsNode && child.NodeValue != null)
+                    children.Add(child.NodeValue);
+            }
+            return children;
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or System.UriFormatException or System.Xml.XmlException or InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     private static XElement ShallowCopyElement(XElement element)
