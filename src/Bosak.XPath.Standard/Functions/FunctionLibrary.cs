@@ -321,6 +321,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.105 | 16-09-2026     | Streaming Phase C: xsl:supports-streaming reports "yes"                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.106 | 17-09-2026     | Streaming Phase D1: fn:boolean/fn:zero-or-one/fn:one-or-more/fn:exactly-one decide  |
+//                      |                  |       |                | ISinglePassSequence inputs from a single enumeration (SinglePassHeadedSequence lookahead) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -336,6 +339,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Vm;
@@ -8557,7 +8561,32 @@ public static class FunctionLibrary
     private static XdmValue Boolean_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
-        if (arg.IsUndefined || IsEmptySequence(arg))
+        if (arg.IsUndefined)
+            return XdmValue.FromBoolean(false);
+
+        // Single-pass (streamed) input: decide the EBV from a single enumeration
+        // (the empty-check and the materialization each used to enumerate separately).
+        if (arg.IsSequence && arg.SequenceValue is ISinglePassSequence)
+        {
+            XdmValue first = default;
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(arg.SequenceValue))
+            {
+                if (count == 0)
+                    first = item;
+                count++;
+                if (count == 2)
+                    break;
+            }
+            if (count == 0)
+                return XdmValue.FromBoolean(false);
+            if (first.IsNode)
+                return XdmValue.FromBoolean(true);
+            if (count > 1)
+                throw new InvalidOperationException("FORG0006");
+            arg = first;
+        }
+        else if (IsEmptySequence(arg))
             return XdmValue.FromBoolean(false);
 
         if (arg.IsSequence)
@@ -8638,6 +8667,69 @@ public static class FunctionLibrary
         return arg.NodeValue;
     }
 
+    /// <summary>
+    /// A single-pass sequence that replays a captured head item and then continues a
+    /// captured enumerator. Used to keep streamed (single-pass) inputs lazy after a
+    /// one-item lookahead (e.g. fn:one-or-more emptiness check).
+    /// </summary>
+    private sealed class SinglePassHeadedSequence : ISinglePassSequence
+    {
+        private readonly XdmValue _head;
+        private readonly IXdmSequenceEnumerator _rest;
+        private int _taken;
+
+        internal SinglePassHeadedSequence(XdmValue head, IXdmSequenceEnumerator rest)
+        {
+            _head = head;
+            _rest = rest;
+        }
+
+        public bool TryGetLength(out int length)
+        {
+            length = 0;
+            return false;
+        }
+
+        public IXdmSequenceEnumerator GetEnumerator()
+        {
+            if (Interlocked.Exchange(ref _taken, 1) != 0)
+            {
+                throw new StreamingException(
+                    "Streaming: a streamed sequence is forward-only and has already been consumed. " +
+                    "Restructure the expression so the streamed input is read in a single pass.");
+            }
+            return new HeadedEnumerator(_head, _rest);
+        }
+
+        private sealed class HeadedEnumerator : IXdmSequenceEnumerator
+        {
+            private readonly XdmValue _head;
+            private readonly IXdmSequenceEnumerator _rest;
+            private bool _started;
+            private bool _onHead;
+
+            internal HeadedEnumerator(XdmValue head, IXdmSequenceEnumerator rest)
+            {
+                _head = head;
+                _rest = rest;
+            }
+
+            public XdmValue Current => _onHead ? _head : _rest.Current;
+
+            public bool MoveNext()
+            {
+                if (!_started)
+                {
+                    _started = true;
+                    _onHead = true;
+                    return true;
+                }
+                _onHead = false;
+                return _rest.MoveNext();
+            }
+        }
+    }
+
     private static int SequenceLength(XdmValue value)
     {
         if (value.IsUndefined) return 0;
@@ -8654,10 +8746,30 @@ public static class FunctionLibrary
     private static XdmValue ZeroOrOne_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
-        if (IsEmptySequence(arg))
+        if (arg.IsUndefined)
             return XdmValue.Undefined;
         if (!arg.IsSequence)
             return arg;
+        // Single-pass (streamed) input: capture the first item and detect a second
+        // in the same enumeration (the count check and the item pass used to be two).
+        if (arg.SequenceValue is ISinglePassSequence)
+        {
+            XdmValue first = default;
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(arg.SequenceValue))
+            {
+                if (count == 0)
+                    first = item;
+                count++;
+                if (count == 2)
+                    break;
+            }
+            if (count == 0)
+                return XdmValue.Undefined;
+            if (count > 1)
+                throw new InvalidOperationException("FORG0003: fn:zero-or-one called with a sequence containing more than one item.");
+            return first;
+        }
         if (SequenceLength(arg) > 1)
             throw new InvalidOperationException("FORG0003: fn:zero-or-one called with a sequence containing more than one item.");
         // Sequence contains exactly one item: return that item.
@@ -8669,20 +8781,44 @@ public static class FunctionLibrary
     private static XdmValue OneOrMore_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
-        if (IsEmptySequence(arg))
+        if (arg.IsUndefined)
             throw new InvalidOperationException("FORG0004: fn:one-or-more called with an empty sequence.");
         if (!arg.IsSequence)
             return arg;
+        // Single-pass (streamed) input: verify non-emptiness with a one-item lookahead
+        // and keep the result lazy by replaying the captured head before the rest.
+        if (arg.SequenceValue is ISinglePassSequence oneOrMoreSource)
+        {
+            var enumerator = oneOrMoreSource.GetEnumerator();
+            if (!enumerator.MoveNext())
+                throw new InvalidOperationException("FORG0004: fn:one-or-more called with an empty sequence.");
+            return XdmValue.FromSequence(XdmSequence.FromSource(
+                new SinglePassHeadedSequence(enumerator.Current, enumerator)));
+        }
+        if (IsEmptySequence(arg))
+            throw new InvalidOperationException("FORG0004: fn:one-or-more called with an empty sequence.");
         return arg;
     }
 
     private static XdmValue ExactlyOne_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
-        if (IsEmptySequence(arg))
+        if (arg.IsUndefined)
             throw new InvalidOperationException("FORG0005: fn:exactly-one called with an empty sequence.");
         if (!arg.IsSequence)
             return arg;
+        // Single-pass (streamed) input: decide cardinality from at most two enumerated
+        // items (the empty-check used to enumerate once before this pass).
+        if (arg.SequenceValue is ISinglePassSequence exactlyOneSource)
+        {
+            var enumerator = exactlyOneSource.GetEnumerator();
+            if (!enumerator.MoveNext())
+                throw new InvalidOperationException("FORG0005: fn:exactly-one called with an empty sequence.");
+            var single = enumerator.Current;
+            if (enumerator.MoveNext())
+                throw new InvalidOperationException("FORG0005: fn:exactly-one called with a sequence containing more than one item.");
+            return single;
+        }
         XdmValue first = default;
         int count = 0;
         foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))

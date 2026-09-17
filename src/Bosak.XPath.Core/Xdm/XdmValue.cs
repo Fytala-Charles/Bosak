@@ -45,6 +45,8 @@
 //                      | Charles Korthout | 2.4   | 09-09-2026     | ThrowInvalidAccess prefixes XPTY0004 (function-argument type errors surface the declared |
 //                      | Charles Korthout | 2.5   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.6   | 17-09-2026     | EBV over ISinglePassSequence decided in a single enumeration (Streaming Phase D1)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -534,6 +536,22 @@ public readonly struct XdmValue
     {
         if (_reference is not IXdmSequence seq)
             return false;
+
+        // Single-pass (streamed) sequences can be enumerated exactly once: decide
+        // the EBV during that one pass instead of counting first (XPath 3.1 §2.4.3).
+        if (seq is ISinglePassSequence)
+        {
+            var enumerator = XdmSequence.FromSource(seq).GetEnumerator();
+            if (!enumerator.MoveNext())
+                return false;
+            var first = enumerator.Current;
+            if (first.IsNode)
+                return true;
+            if (enumerator.MoveNext())
+                throw new InvalidOperationException(
+                    "FORG0006: Invalid argument type for fn:boolean() / effective boolean value");
+            return first.EffectiveBooleanValue();
+        }
 
         int length = 0;
         if (seq.TryGetLength(out var knownLength))

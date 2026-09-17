@@ -13,8 +13,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 17-09-2026     | Second-enumeration guard raises StreamingException (Streaming Phase D1)                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Streaming;
 
 namespace Bosak.XPath.Runtime.Vm;
 
@@ -22,8 +25,8 @@ namespace Bosak.XPath.Runtime.Vm;
 /// An <see cref="ISinglePassSequence"/> produced by the VM's lazy streaming paths (lazy
 /// axis maps, filters, and path-step maps over a streamed input). Like the provider-side
 /// single-pass sequences it composes with, it can be enumerated at most once; a second
-/// enumeration throws so re-reads fail loudly instead of returning silently incomplete
-/// data or re-pulling an exhausted stream.
+/// enumeration throws a <see cref="StreamingException"/> so re-reads fail loudly instead
+/// of returning silently incomplete data or re-pulling an exhausted stream.
 /// </summary>
 internal sealed class SinglePassXdmSequence : ISinglePassSequence
 {
@@ -43,7 +46,7 @@ internal sealed class SinglePassXdmSequence : ISinglePassSequence
     {
         if (Interlocked.Exchange(ref _taken, 1) != 0)
         {
-            throw new InvalidOperationException(
+            throw new StreamingException(
                 "Streaming: a streamed sequence is forward-only and has already been consumed. " +
                 "Restructure the expression so the streamed input is read in a single pass.");
         }

@@ -300,6 +300,9 @@
 //                      |                  |       |                | ApplyAxis/FilterNodesLazy marker propagation, lazy Filter, PathStepMap and SimpleMap   |
 //                      |                  |       |                | (marked input + single-item probe) over ISinglePassSequence inputs                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.147 | 17-09-2026     | Streaming Phase D1: single-pass instance-of in one enumeration; TreatAs validates   |
+//                      |                  |       |                | ISinglePassSequence inputs lazily via TreatAsLazyIterator                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -2984,6 +2987,18 @@ public static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var value = registers[instr.RegisterB];
+                        // Single-pass (streamed) input: skip the eager instance-of check
+                        // (it would burn the stream) and validate lazily during the one
+                        // real enumeration instead, keeping the sequence single-pass for
+                        // the enclosing expression.
+                        if (value.IsSequence && value.SequenceValue is ISinglePassSequence treatSinglePass)
+                        {
+                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.FromSource(
+                                new SinglePassXdmSequence(TreatAsLazyIterator(
+                                    treatSinglePass, typeName, occurrence, context.DefaultElementNamespace, context))));
+                            ip++;
+                            break;
+                        }
                         if (!InstanceOf(value, typeName, occurrence, context.DefaultElementNamespace, context))
                             throw new InvalidOperationException($"XPDY0050: Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
                         registers[instr.RegisterA] = value;
@@ -5001,6 +5016,48 @@ public static class VmEngine
                 throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
             yield return item;
         }
+    }
+
+    /// <summary>
+    /// Lazily enforces a treat-as assertion over a single-pass (streamed) input: each
+    /// item is instance-checked as it flows through, and the cardinality assertion is
+    /// decided from the item count at the end of the single real enumeration.
+    /// </summary>
+    private static IEnumerable<XdmValue> TreatAsLazyIterator(
+        IXdmSequence source,
+        string typeName,
+        OccurrenceIndicator occurrence,
+        string? defaultElementNamespace,
+        EvaluationContext? context)
+    {
+        int count = 0;
+        foreach (var item in XdmSequence.FromSource(source))
+        {
+            count++;
+            if (!InstanceOf(item, typeName, OccurrenceIndicator.One, defaultElementNamespace, context))
+                throw new InvalidOperationException(
+                    $"XPDY0050: Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
+            if (count == 2 && occurrence is OccurrenceIndicator.One or OccurrenceIndicator.ZeroOrOne)
+                throw new InvalidOperationException(
+                    $"XPDY0050: Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
+            yield return item;
+        }
+
+        // 'treat as empty-sequence()' succeeds only for the empty sequence.
+        if (count == 0 && NormalizeTypeName(typeName) is "empty-sequence" or "empty-sequence()")
+            yield break;
+
+        bool cardinalityOk = occurrence switch
+        {
+            OccurrenceIndicator.One => count == 1,
+            OccurrenceIndicator.ZeroOrOne => count <= 1,
+            OccurrenceIndicator.ZeroOrMore => true,
+            OccurrenceIndicator.OneOrMore => count >= 1,
+            _ => count == 1,
+        };
+        if (!cardinalityOk)
+            throw new InvalidOperationException(
+                $"XPDY0050: Treat as assertion failed for type {typeName} with occurrence {occurrence}.");
     }
 
     /// <summary>Lazily enforces the no-mixed-results contract of a final path step.</summary>
@@ -8794,6 +8851,27 @@ public static class VmEngine
 
         if (normalized is "empty-sequence" or "empty-sequence()")
             return !SequenceHasAnyItem(value);
+
+        // Single-pass (streamed) input: run the cardinality and item-type checks in
+        // one enumeration — a separate counting pass would exhaust the stream.
+        if (value.IsSequence && value.SequenceValue is ISinglePassSequence singlePass)
+        {
+            int seen = 0;
+            foreach (var item in XdmSequence.FromSource(singlePass))
+            {
+                seen++;
+                if (!InstanceOf(item, typeName, OccurrenceIndicator.One, defaultElementNamespace, context))
+                    return false;
+                if (seen == 2 && occurrence is OccurrenceIndicator.One or OccurrenceIndicator.ZeroOrOne)
+                    return false;
+            }
+            return occurrence switch
+            {
+                OccurrenceIndicator.ZeroOrMore or OccurrenceIndicator.ZeroOrOne => true,
+                OccurrenceIndicator.OneOrMore => seen >= 1,
+                _ => seen == 1,
+            };
+        }
 
         // Check cardinality
         int count;
