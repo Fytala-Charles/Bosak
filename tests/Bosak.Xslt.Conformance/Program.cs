@@ -130,6 +130,18 @@
 //                      |                  |       |                | XmlStreamingProvider (burst-mode input); XTSE3430 expected-error cases skipped           |
 //                      |                  |       |                | documented (static streamability analysis is Phase C)                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.44  | 16-09-2026     | Streaming Phase C (C1): "streaming" feature supported (xsl:supports-streaming = yes);  |
+//                      |                  |       |                | all tests/strm/ catalog sets added to StreamingAllowedTestSets dynamically;            |
+//                      |                  |       |                | XTSE3430 expected-error skip retained until the §19 analyzer lands (C2)                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.45  | 17-09-2026     | Streaming Phase C (C2): §19 streamability analyzer live — XTSE3430 expected-error      |
+//                      |                  |       |                | skip removed; error cases run for real against the static analyzer                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.46  | 17-09-2026     | Comment sync: StreamingAllowedTestSets doc updated (XTSE3430 cases run for real)        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.47  | 17-09-2026     | Streaming Phase C (C3): unskip accumulator-031/068 — streamable xsl:source-document   |
+//                      |                  |       |                | is implemented since Phase C1; only accumulator-061 (burst-mode granularity) remains  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -179,7 +191,6 @@ class Program
     {
         "schema_aware",
         "schema-import",
-        "streaming",
 
         "dynamic-evaluation",
         "xslt-3.0-snapshot",
@@ -188,9 +199,10 @@ class Program
     };
 
     // Test sets whose streaming-tagged cases run through the burst-mode streaming
-    // provider (Phase B). The "streaming" feature gate and the streaming="true" source
-    // gate are lifted only for these sets; XTSE3430 expected-error cases stay skipped
-    // everywhere (static streamability analysis is Phase C).
+    // provider. "accumulator" is always allowed; from streaming Phase C onward every
+    // catalog test set under tests/strm/ is added dynamically at startup (the engine
+    // supports streaming: xsl:supports-streaming = "yes"). Expected-error XTSE3430
+    // cases run for real against the §19 static analyzer (Phase C2; skip removed).
     static readonly HashSet<string> StreamingAllowedTestSets = new(StringComparer.OrdinalIgnoreCase)
     {
         "accumulator"
@@ -269,8 +281,9 @@ class Program
         // rule and contradict package-200; Bosak follows the spec REC. See REQ-082
         // decision log 2026-09-07.
         "use-package-291", "use-package-292", "use-package-293", "use-package-294",
-        // Streaming Phase B: out-of-scope or burst-mode semantic gaps (see GetSkipReason).
-        "accumulator-031", "accumulator-061", "accumulator-068",
+        // Streaming: burst-mode semantic gap only (see GetSkipReason). accumulator-031 and
+        // accumulator-068 pass since Phase C1 implemented streamable xsl:source-document.
+        "accumulator-061",
     };
 
     static Program()
@@ -352,6 +365,16 @@ class Program
         XNamespace ns = "http://www.w3.org/2012/10/xslt-test-catalog";
 
         var testSets = catalog.Root!.Elements(ns + "test-set").ToList();
+
+        // Streaming Phase C: the engine supports streaming (xsl:supports-streaming = "yes"),
+        // so every catalog test set under tests/strm/ runs with the streaming gates lifted.
+        foreach (var testSetElem in testSets)
+        {
+            var file = testSetElem.Attribute("file")?.Value ?? "";
+            if (file.StartsWith("tests/strm/", StringComparison.OrdinalIgnoreCase))
+                StreamingAllowedTestSets.Add(testSetElem.Attribute("name")?.Value ?? "");
+        }
+
         Console.WriteLine($"Bosak XSLT Conformance Harness");
         Console.WriteLine($"Catalog: {catalogPath}");
         Console.WriteLine($"Test sets: {testSets.Count}");
@@ -464,8 +487,6 @@ class Program
 
     static string GetSkipReason(string name)
     {
-        if (name is "accumulator-031" or "accumulator-068")
-            return "xsl:source-document streamable=\"yes\" is out of scope (Phase C)";
         if (name is "accumulator-061")
             return "Burst-mode record granularity makes intra-record accumulator-after available post-descent, so the expected XTDE3350 does not arise inside records";
         if (name.StartsWith("unicode90-", StringComparison.Ordinal))
@@ -493,13 +514,8 @@ class Program
         if (_testNameFilter != null && !name.Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase))
             return TestResult.Skip;
 
-        // Static streamability analysis is not implemented (Phase C): tests that expect
-        // the XTSE3430 static error for non-streamable constructs cannot pass yet.
-        if (testCase.Element(ns + "result")?.Element(ns + "error")?.Attribute("code")?.Value == "XTSE3430")
-        {
-            Console.WriteLine($"  SKIP {name}: expects XTSE3430 (static streamability analysis is Phase C)");
-            return TestResult.Skip;
-        }
+        // XTSE3430 static streamability analysis is implemented (Phase C2): expected-error
+        // cases below run for real — the analyzer must raise XTSE3430 at compile time.
 
         if (SkipTests.Contains(name))
         {
@@ -557,9 +573,7 @@ class Program
                 {
                     var val = feature.Attribute("value")?.Value ?? "";
                     var satisfied = feature.Attribute("satisfied")?.Value ?? "true";
-                    bool isSupported = !SkipFeatures.Contains(val)
-                        || (val.Equals("streaming", StringComparison.OrdinalIgnoreCase)
-                            && StreamingAllowedTestSets.Contains(testSetName));
+                    bool isSupported = !SkipFeatures.Contains(val);
                     if (satisfied == "false" && isSupported)
                         return TestResult.Skip; // Test requires feature to be absent, but we support it
                     if (satisfied != "false" && !isSupported)

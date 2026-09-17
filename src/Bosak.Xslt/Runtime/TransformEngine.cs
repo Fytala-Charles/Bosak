@@ -316,6 +316,10 @@
 //                      |                  |       |                | StreamingAccumulatorDriver with carried values and annotation retrieval, drain-on-     |
 //                      |                  |       |                | read at doc/root, on-demand after-resolution, deferred rule errors (bug 29813)         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.70  | 16-09-2026     | Streaming Phase C: streamable xsl:source-document via XmlStreamingProvider (host       |
+//                      |                  |       |                | StreamingDocumentLoader hook or file fallback); AttachStreamingHooks shared with the   |
+//                      |                  |       |                | principal source; per-document accumulator driver list                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -632,8 +636,10 @@ public sealed class TransformEngine
     private readonly HashSet<(Stylesheet.AccumulatorDefinition Acc, IXdmNode Root)> _accumulatorsInProgress = new();
     private readonly Dictionary<IXdmNode, HashSet<string>> _accumulatorApplicability = new();
 
-    // Push-style accumulator driver for streamed (burst-mode) sources; null for in-memory trees.
-    private StreamingAccumulatorDriver? _streamingAccumulatorDriver;
+    // Push-style accumulator drivers for streamed (burst-mode) sources; empty for in-memory
+    // trees. One driver per streamed document (the principal source plus any streamable
+    // xsl:source-document loads); looked up by root node in GetAccumulatorValue.
+    private readonly List<StreamingAccumulatorDriver> _streamingDrivers = new();
 
     // The initial context item supplied to the transformation (the global context item).
     private XdmValue _globalContextItem = XdmValue.Undefined;
@@ -928,26 +934,7 @@ public sealed class TransformEngine
         // accumulator evaluation are driven by the stream's record post-processor, since
         // the full source tree never exists in memory.
         if (source != null && (source is IStreamingDocument || source.Document is IStreamingDocument))
-        {
-            var streamingDoc = source is IStreamingDocument sd ? sd : (IStreamingDocument)source.Document!;
-            var spaceRules = GetPrincipalSpaceRules();
-            var backwardsCompatible = _context.BackwardsCompatible;
-            var docNode = source.NodeKind == XdmNodeKind.Document ? source : source.Document!;
-            _streamingAccumulatorDriver = _accumulators.Count > 0
-                ? new StreamingAccumulatorDriver(this, docNode)
-                : null;
-            streamingDoc.RecordPostProcessor = (record, recordNode) =>
-            {
-                if (spaceRules.Count > 0 && ShouldStripStreamedRecord(record, docNode, spaceRules, backwardsCompatible))
-                    return false; // drop whitespace text records stripped by xsl:strip-space
-                if (spaceRules.Count > 0 && record is XElement recordElement)
-                    StripElementWhitespace(recordElement, spaceRules, backwardsCompatible);
-                _streamingAccumulatorDriver?.ProcessRecord(recordNode);
-                return true;
-            };
-            if (_streamingAccumulatorDriver != null)
-                streamingDoc.StreamCompleted = _streamingAccumulatorDriver.OnStreamCompleted;
-        }
+            AttachStreamingHooks(source);
 
         // Documents loaded by fn:doc / fn:document during the transformation are also
         // subject to the stylesheet's whitespace stripping rules, but the stylesheet
@@ -2255,11 +2242,13 @@ public sealed class TransformEngine
         // First check for values attached per node: copy-accumulators copies, or a
         // streamed (burst-mode) source where values are pushed per record.
         var root = GetRootNode(node);
+        StreamingAccumulatorDriver? streamingDriver = null;
         if (root is IStreamingDocument)
         {
             // Initialize the push driver on first use so the shell document/root
             // annotations exist before they are read below.
-            _streamingAccumulatorDriver?.EnsureInitialized();
+            streamingDriver = GetStreamingDriver(root);
+            streamingDriver?.EnsureInitialized();
         }
 
         var underlying = node switch
@@ -2275,7 +2264,7 @@ public sealed class TransformEngine
             {
                 if (copied.InapplicableNames.Contains(accName))
                     throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
-                if (_streamingAccumulatorDriver?.GetError(accName) is { } deferredError)
+                if (streamingDriver?.GetError(accName) is { } deferredError)
                     throw deferredError;
                 if (copied.ApplicableNames.Contains(accName) && copied.Values.TryGetValue(accName, out var pair))
                 {
@@ -2288,7 +2277,7 @@ public sealed class TransformEngine
                     // publishes at stream end: the read is a consuming (grounding)
                     // operation that drains the rest of the stream when nothing is
                     // mid-enumeration. Inside a record it resolves on demand.
-                    if (_streamingAccumulatorDriver?.IsShellNode(node) == true)
+                    if (streamingDriver?.IsShellNode(node) == true)
                     {
                         var sdoc = (IStreamingDocument)root!;
                         if (!sdoc.CanDrain)
@@ -2298,8 +2287,8 @@ public sealed class TransformEngine
                             return copied.Values[accName].After;
                         throw new InvalidOperationException($"XTDE3350: accumulator-after('{name}') is not available before the end of the streamed document");
                     }
-                    if (_streamingAccumulatorDriver != null
-                        && _streamingAccumulatorDriver.TryResolveAfterOnDemand(accName, node, copied, out var onDemandAfter))
+                    if (streamingDriver != null
+                        && streamingDriver.TryResolveAfterOnDemand(accName, node, copied, out var onDemandAfter))
                         return onDemandAfter;
                 }
             }
@@ -2317,8 +2306,9 @@ public sealed class TransformEngine
             var streamedAcc = scopeAccumulators.FirstOrDefault(a => a.ClarkName == accName);
             if (streamedAcc == null)
                 throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
-            _streamingAccumulatorDriver?.EnsureInitialized();
-            if (_streamingAccumulatorDriver?.IsInProgress(accName) == true)
+            streamingDriver ??= GetStreamingDriver(root);
+            streamingDriver?.EnsureInitialized();
+            if (streamingDriver?.IsInProgress(accName) == true)
                 throw new InvalidOperationException($"XTDE3400: cyclic dependency detected in accumulator '{accName}'");
             throw new StreamingException(
                 $"Streaming: accumulator '{name}' is referenced before its value is available. " +
@@ -6748,11 +6738,11 @@ public sealed class TransformEngine
                     var resolvedHref = EvaluateAvt(sdHref, instruction);
 
                     var streamableAttr = instruction.Attribute("streamable")?.Value ?? instruction.Attribute("_streamable")?.Value;
+                    var isStreamable = false;
                     if (!string.IsNullOrEmpty(streamableAttr))
                     {
                         var sv = EvaluateAvt(streamableAttr, instruction).Trim();
-                        if (sv == "yes" || sv == "true")
-                            throw new InvalidOperationException("Streaming is not supported");
+                        isStreamable = sv == "yes" || sv == "true";
                     }
 
                     var savedBaseUri = _context.BaseUri;
@@ -6771,7 +6761,22 @@ public sealed class TransformEngine
                             documentHref = resolvedHref[..hashIndex];
                         }
 
-                        var docNode = _context.LoadDocument(documentHref);
+                        IXdmNode docNode;
+                        if (isStreamable)
+                        {
+                            // Forward-only burst-mode load (streaming Phase C): the content
+                            // constructor sees a single-pass document; whitespace stripping
+                            // and accumulators are driven per record via AttachStreamingHooks.
+                            // A fragment identifier drives the pump via FindElementByXmlId.
+                            var resolvedUri = ResolveStreamingHref(documentHref);
+                            docNode = _context.StreamingDocumentLoader?.Invoke(resolvedUri)
+                                ?? LoadStreamingDocument(resolvedUri);
+                            AttachStreamingHooks(docNode);
+                        }
+                        else
+                        {
+                            docNode = _context.LoadDocument(documentHref);
+                        }
                         _context.RegisterDocument(documentHref, docNode);
 
                         IXdmNode contextNode = docNode;
@@ -16276,6 +16281,80 @@ public sealed class TransformEngine
         return false;
     }
 
+    /// <summary>
+    /// Composes the record post-processor for a streamed (burst-mode) document: per-record
+    /// whitespace stripping (xsl:strip-space / xsl:preserve-space) and push-style accumulator
+    /// evaluation. Used both for the principal source at transform entry and for documents
+    /// loaded by <c>xsl:source-document streamable="yes"</c> mid-transform.
+    /// </summary>
+    /// <param name="source">A node of the streamed document (any node inside it, or the document node).</param>
+    private void AttachStreamingHooks(IXdmNode source)
+    {
+        var streamingDoc = source is IStreamingDocument sd ? sd : (IStreamingDocument)source.Document!;
+        var spaceRules = GetPrincipalSpaceRules();
+        var backwardsCompatible = _context.BackwardsCompatible;
+        var docNode = source.NodeKind == XdmNodeKind.Document ? source : source.Document!;
+        StreamingAccumulatorDriver? driver = null;
+        if (_accumulators.Count > 0)
+        {
+            driver = new StreamingAccumulatorDriver(this, docNode);
+            _streamingDrivers.Add(driver);
+        }
+        streamingDoc.RecordPostProcessor = (record, recordNode) =>
+        {
+            if (spaceRules.Count > 0 && ShouldStripStreamedRecord(record, docNode, spaceRules, backwardsCompatible))
+                return false; // drop whitespace text records stripped by xsl:strip-space
+            if (spaceRules.Count > 0 && record is XElement recordElement)
+                StripElementWhitespace(recordElement, spaceRules, backwardsCompatible);
+            driver?.ProcessRecord(recordNode);
+            return true;
+        };
+        if (driver != null)
+            streamingDoc.StreamCompleted = driver.OnStreamCompleted;
+    }
+
+    /// <summary>
+    /// Finds the push-style accumulator driver for the streamed document containing the given
+    /// root node, or null when the tree is not streamed or has no applicable accumulators.
+    /// </summary>
+    private StreamingAccumulatorDriver? GetStreamingDriver(IXdmNode root)
+    {
+        foreach (var driver in _streamingDrivers)
+        {
+            if (driver.IsShellDocument(root))
+                return driver;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves a document href for streamable loading exactly as <see cref="EvaluationContext.LoadDocument"/>
+    /// does: relative URIs against the current base URI, then the resource URI mapper.
+    /// </summary>
+    private string ResolveStreamingHref(string href)
+    {
+        if (!Uri.IsWellFormedUriString(href, UriKind.Absolute) && !string.IsNullOrEmpty(_context.BaseUri))
+            href = new Uri(new Uri(_context.BaseUri), href).AbsoluteUri;
+        return _context.ResourceUriMapper?.Invoke(href) ?? href;
+    }
+
+    /// <summary>
+    /// Loads a document as a forward-only (burst-mode) streamed tree for
+    /// <c>xsl:source-document streamable="yes"</c>. Uses the host-registered
+    /// <see cref="EvaluationContext.StreamingDocumentLoader"/> when present; otherwise opens
+    /// <c>file:</c> URIs and local paths directly. Streamed documents are single-pass and are
+    /// never cached.
+    /// </summary>
+    /// <param name="resolvedUri">The absolute, resource-mapped document URI.</param>
+    private static IXdmNode LoadStreamingDocument(string resolvedUri)
+    {
+        string path = resolvedUri.StartsWith("file:", StringComparison.OrdinalIgnoreCase)
+            ? new Uri(resolvedUri).LocalPath
+            : resolvedUri;
+        var options = new StreamingLoadOptions { BaseUri = resolvedUri, DocumentUri = resolvedUri };
+        return XmlStreamingProvider.Load(System.IO.File.OpenRead(path), options);
+    }
+
     private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited, bool isBackwardsCompatible)
     {
         if (element == null)
@@ -18753,6 +18832,13 @@ public sealed class TransformEngine
 
         internal bool IsShellNode(IXdmNode node)
             => node.IsSameNode(_docNode) || (_rootNode != null && node.IsSameNode(_rootNode));
+
+        /// <summary>
+        /// True when <paramref name="root"/> is this driver's streamed document node
+        /// (used to find the right driver when several streamed documents are live,
+        /// e.g. a streamable xsl:source-document inside a streamed principal source).
+        /// </summary>
+        internal bool IsShellDocument(IXdmNode root) => root.IsSameNode(_docNode);
 
         /// <summary>
         /// Resolves an unpublished record-level after value on demand: the accumulator's

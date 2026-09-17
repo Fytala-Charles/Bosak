@@ -76,6 +76,8 @@
 //                      | Charles Korthout | 2.23  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 2.24  | 09-09-2026     | Perf: InstallStandardFunctionTable clone-install; indexed variadic resolution (no full-t |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.25  | 16-09-2026     | Streaming Phase C: StreamingDocumentLoader hook for streamable xsl:source-document     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -314,6 +316,15 @@ public sealed class EvaluationContext
     /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.
     /// </summary>
     public Func<string, IXdmNode>? DocumentLoader { get; set; }
+
+    /// <summary>
+    /// Optional loader for <c>xsl:source-document streamable="yes"</c>: receives the absolute,
+    /// resource-mapped document URI and returns a forward-only (burst-mode) streamed document
+    /// node, typically via <c>XmlStreamingProvider.Load</c>. When null, the XSLT engine opens
+    /// <c>file:</c> URIs and local paths itself. Streamed documents are never cached because
+    /// they are single-pass.
+    /// </summary>
+    public Func<string, IXdmNode>? StreamingDocumentLoader { get; set; }
 
     /// <summary>
     /// Optional mapper that translates a requested resource URI (for example an <c>http:</c> URI

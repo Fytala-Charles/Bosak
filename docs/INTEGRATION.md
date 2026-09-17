@@ -2031,7 +2031,7 @@ through `WithNamespace`.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Streaming input (burst mode) | ✅ Working | `XsltExecutable.TransformStreaming` + `XmlStreamingProvider`: record-at-a-time processing in bounded memory; forward-only root children; see §3.2a. `streamable="yes"` and streaming accumulators are later phases; `xsl:supports-streaming` reports `no` |
+| Streaming input (burst mode) | ✅ Working | `XsltExecutable.TransformStreaming` + `XmlStreamingProvider`: record-at-a-time processing in bounded memory; forward-only root children; see §3.2a. Streaming accumulators (Phase B) work over the streamed source. `streamable="yes"` constructs receive compile-time XTSE3430 streamability analysis (Phase C1–C3, `StreamabilityAnalyzer` — §19 posture/sweep rules with Saxon-compatible extensions incl. streamable accumulators and merge sources); the W3C static-error cases run for real — the harness skip is removed with zero genuine regressions vs the C1 per-set baselines (full sweep 9,929/344/4,327); streamable `xsl:source-document` is implemented (accumulator-031/068 pass); `xsl:supports-streaming` reports `yes` |
 | `xsl:template match="…"` | ✅ Working | Pattern compiler: element names, `*`, `@*`, predicates, union (`\|`) |
 | `xsl:template name="…"` | ✅ Working | Named template dispatch; raw XDM result via `XsltExecutable.Transform(..., rawResult: true)`; whitespace/EQName names normalized; `xsl:initial-template` permitted in XSLT namespace |
 | `xsl:call-template` | ✅ Working | With `xsl:with-param` support; matches named templates by expanded QName (different prefixes bound to the same URI); rejects template names in reserved namespaces (`XTSE0080`) except `xsl:initial-template` |

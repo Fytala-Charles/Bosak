@@ -216,6 +216,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.108 | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.109 | 16-09-2026     | XTSE3430 streamability analysis hooked into the constructor (Phase C milestone C2)      |
+//                      | Charles Korthout | 2.110 | 17-09-2026     | XTSE0545 per-attribute mode conflict detection; same-precedence xsl:mode declarations merge (mode-1903) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1691,8 +1694,12 @@ public sealed class Stylesheet
         }
 
         // Check for duplicate/conflicting local declarations in this stylesheet module.
-        // For non-root modules this is deferred to the root-level validation, because
-        // conflicts in imported modules may be overridden by a higher-precedence declaration.
+        // Declarations of the same mode at the same import precedence are merged per
+        // attribute (XSLT 3.0 §6.6.1): only an attribute explicitly specified on both
+        // declarations with different values is a conflict (XTSE0545, mode-1502/1510/1904);
+        // disjoint attributes merge (mode-1903). For non-root modules this is deferred
+        // to the root-level validation, because conflicts in imported modules may be
+        // overridden by a higher-precedence declaration.
         if (_isRootStylesheet)
         {
             var seenLocalModes = new Dictionary<string, ModeDefinition>();
@@ -1700,14 +1707,16 @@ public sealed class Stylesheet
             {
                 if (seenLocalModes.TryGetValue(def.Name, out var existing))
                 {
-                    if (!AreModesEquivalent(existing, def))
+                    if (existing.ConflictsWith(def))
                         throw new InvalidOperationException($"XTSE0545: Conflicting xsl:mode declarations for mode '{def.Name}' at the same import precedence.");
+                    seenLocalModes[def.Name] = ModeDefinition.MergeSamePrecedence(existing, def);
                 }
                 else
                 {
                     seenLocalModes[def.Name] = def;
                 }
             }
+            localModes = seenLocalModes.Values.ToList();
         }
 
         foreach (var def in localModes)
@@ -1949,6 +1958,28 @@ public sealed class Stylesheet
             // to the principal module of the compilation, not to used packages.
             if (ReferenceEquals(_rootStylesheet, this))
                 ValidateTopLevelPackageAbstractComponents();
+
+            // XTSE3430: streamability analysis of streamable constructs (§19). Deliberate
+            // XTSE3430 rule hits propagate; any other analyzer failure (an unexpected AST
+            // shape, a null, an index error) must not break compilation of stylesheets
+            // whose constructs the analyzer simply does not understand: streaming is a
+            // static guarantee, so an internal analysis bug conservatively passes.
+            if (_isRootStylesheet)
+            {
+                try
+                {
+                    StreamabilityAnalyzer.Analyze(this);
+                }
+                catch (InvalidOperationException ex)
+                    when (ex.Message.StartsWith("XTSE3430", StringComparison.Ordinal))
+                {
+                    throw;
+                }
+                catch (Exception)
+                {
+                    // Analysis bug: fail open (conservative pass).
+                }
+            }
         }
     }
 
@@ -7711,7 +7742,9 @@ public sealed class Stylesheet
             var first = top[0];
             for (int i = 1; i < top.Count; i++)
             {
-                if (!AreModesEquivalent(first, top[i]))
+                // XTSE0545 only when the same attribute is explicitly specified with
+                // different values; disjoint declarations merge per §6.6.1 (mode-1903).
+                if (first.ConflictsWith(top[i]))
                 {
                     var details = string.Join(", ", list.Select(x => $"(p={x.Precedence},on={x.Def.OnNoMatch},vis={x.Def.Visibility},acc={string.Join("|", x.Def.UseAccumulators)})"));
                     throw new InvalidOperationException($"XTSE0545: Conflicting xsl:mode declarations for mode '{name}' at the same import precedence. [{details}]");
@@ -7920,19 +7953,6 @@ public sealed class Stylesheet
                 return true;
         }
         return false;
-    }
-
-    private static bool AreModesEquivalent(ModeDefinition a, ModeDefinition b)
-    {
-        return a.OnNoMatch == b.OnNoMatch
-            && a.OnMultipleMatch == b.OnMultipleMatch
-            && a.Visibility == b.Visibility
-            && a.Typed == b.Typed
-            && a.WarningOnNoMatch == b.WarningOnNoMatch
-            && a.WarningOnMultipleMatch == b.WarningOnMultipleMatch
-            && a.Streamable == b.Streamable
-            && a.UseAllAccumulators == b.UseAllAccumulators
-            && a.UseAccumulators.SetEquals(b.UseAccumulators);
     }
 
     /// <summary>

@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 17-09-2026     | SpecifiedValues + ConflictsWith/MergeSamePrecedence: XTSE0545 only for same-attribute value conflicts; same-precedence declarations merge per attribute (mode-1903) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -115,6 +117,15 @@ public sealed class ModeDefinition
     public IReadOnlySet<string> SpecifiedAttributes { get; }
 
     /// <summary>
+    /// The raw values of the attributes explicitly specified on the xsl:mode declaration,
+    /// keyed by attribute name. Used for XTSE0545 conflict detection: two declarations of
+    /// the same mode at the same import precedence conflict only when they explicitly
+    /// supply different values for the same attribute; attributes specified on only one
+    /// declaration are merged (mode-1903 vs mode-1502/1510/1904).
+    /// </summary>
+    public IReadOnlyDictionary<string, string> SpecifiedValues { get; }
+
+    /// <summary>
     /// Creates a mode definition with private visibility and no warnings, accumulators, or streaming.
     /// </summary>
     /// <param name="name">The mode name (empty string for the unnamed mode).</param>
@@ -139,7 +150,7 @@ public sealed class ModeDefinition
     /// <param name="useAccumulators">The accumulator names (Clark notation) applicable to this mode.</param>
     /// <param name="useAllAccumulators">Whether this mode uses all accumulators.</param>
     /// <param name="specifiedAttributes">The attribute names explicitly specified on the xsl:mode declaration; defaults to an empty set.</param>
-    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, bool typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators, IReadOnlySet<string>? specifiedAttributes = null)
+    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, bool typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators, IReadOnlySet<string>? specifiedAttributes = null, IReadOnlyDictionary<string, string>? specifiedValues = null)
     {
         Name = name;
         OnNoMatch = onNoMatch;
@@ -152,6 +163,62 @@ public sealed class ModeDefinition
         UseAccumulators = useAccumulators;
         UseAllAccumulators = useAllAccumulators;
         SpecifiedAttributes = specifiedAttributes ?? new HashSet<string>();
+        SpecifiedValues = specifiedValues ?? new Dictionary<string, string>();
+    }
+
+    /// <summary>
+    /// Whether two declarations of the same mode at the same import precedence conflict
+    /// (XTSE0545): they explicitly supply different values for the same attribute.
+    /// use-accumulators values are compared as sets of resolved (Clark) accumulator names,
+    /// so differing prefixes or token order for the same accumulators do not conflict
+    /// (mode-1514), while the same prefixes naming different accumulators do (mode-1515).
+    /// </summary>
+    public bool ConflictsWith(ModeDefinition other)
+    {
+        foreach (var (attr, value) in SpecifiedValues)
+        {
+            if (!other.SpecifiedValues.TryGetValue(attr, out var otherValue))
+                continue;
+            if (attr == "use-accumulators")
+            {
+                if (UseAllAccumulators != other.UseAllAccumulators
+                    || !UseAccumulators.SetEquals(other.UseAccumulators))
+                    return true;
+            }
+            else if (!string.Equals(value, otherValue, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Merges two non-conflicting declarations of the same mode at the same import
+    /// precedence: each attribute is taken from the declaration that specifies it
+    /// explicitly, the later declaration winning for attributes both specify.
+    /// </summary>
+    public static ModeDefinition MergeSamePrecedence(ModeDefinition first, ModeDefinition second)
+    {
+        bool FromSecond(string attr) => second.SpecifiedAttributes.Contains(attr);
+        var specified = new HashSet<string>(first.SpecifiedAttributes, StringComparer.Ordinal);
+        specified.UnionWith(second.SpecifiedAttributes);
+        var values = new Dictionary<string, string>(first.SpecifiedValues, StringComparer.Ordinal);
+        foreach (var (attr, value) in second.SpecifiedValues)
+            values[attr] = value;
+        return new ModeDefinition(
+            first.Name,
+            FromSecond("on-no-match") ? second.OnNoMatch : first.OnNoMatch,
+            FromSecond("on-multiple-match") ? second.OnMultipleMatch : first.OnMultipleMatch,
+            FromSecond("visibility") ? second.Visibility : first.Visibility,
+            FromSecond("typed") ? second.Typed : first.Typed,
+            FromSecond("warning-on-no-match") ? second.WarningOnNoMatch : first.WarningOnNoMatch,
+            FromSecond("warning-on-multiple-match") ? second.WarningOnMultipleMatch : first.WarningOnMultipleMatch,
+            FromSecond("streamable") ? second.Streamable : first.Streamable,
+            FromSecond("use-accumulators") ? second.UseAccumulators : first.UseAccumulators,
+            FromSecond("use-accumulators") ? second.UseAllAccumulators : first.UseAllAccumulators,
+            specified,
+            values);
     }
 
     /// <summary>
@@ -223,13 +290,17 @@ public sealed class ModeDefinition
         }
 
         var specified = new HashSet<string>(StringComparer.Ordinal);
+        var specifiedValues = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var attr in element.Attributes())
         {
             if (!attr.IsNamespaceDeclaration && string.IsNullOrEmpty(attr.Name.NamespaceName))
+            {
                 specified.Add(attr.Name.LocalName);
+                specifiedValues[attr.Name.LocalName] = attr.Value.Trim();
+            }
         }
 
-        return new ModeDefinition(name, onNoMatch, onMultipleMatch, visibility, typed, warningOnNoMatch, warningOnMultipleMatch, streamable, useAccumulators, useAllAccumulators, specified);
+        return new ModeDefinition(name, onNoMatch, onMultipleMatch, visibility, typed, warningOnNoMatch, warningOnMultipleMatch, streamable, useAccumulators, useAllAccumulators, specified, specifiedValues);
     }
 
     private static bool ParseYesNoAttribute(XElement element, string attributeName)

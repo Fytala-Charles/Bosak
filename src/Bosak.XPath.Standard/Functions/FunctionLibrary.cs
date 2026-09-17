@@ -319,6 +319,8 @@
 //                      | Charles Korthout | 5.104 | 16-09-2026     | Streaming Phase B: fn:snapshot supports streaming (burst-mode) nodes via the           |
 //                      |                  |       |                | UnderlyingOf unwrap of IStreamingNode                                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.105 | 16-09-2026     | Streaming Phase C: xsl:supports-streaming reports "yes"                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4578,7 +4580,7 @@ public static class FunctionLibrary
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
             "xsl:supports-namespace-axis" => "yes",
-            "xsl:supports-streaming" => "no",
+            "xsl:supports-streaming" => "yes",
             "xsl:supports-dynamic-evaluation" => "yes",
             "xsl:supports-higher-order-functions" => "yes",
             "xsl:xpath-version" => "3.1",
