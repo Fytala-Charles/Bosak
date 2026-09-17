@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-17 (eighth session)
-**Commit:** `feat(streaming): Phase C — streamable source-document + §19 XTSE3430 analyzer` (this commit)
+**Commit:** `6a33456` — feat(streaming): Phase C — streamable source-document + §19 XTSE3430 analyzer
 **Current focus:** **REQ-086 Phase C COMPLETE (C1+C2+C3).** Final full XSLT sweep **9,929 passed / 344 failed / 4,327 skipped** — net vs the pre-analyzer C1 baseline **+117 passes, +3 failures**, and all 3 are documented accepted non-catches (`si-fork-116` analyzer miss, `si-fork-901/902` XTSE1650 schema artifacts that pre-empt the analyzer). Every per-set failure count is at-or-below its C1 baseline except si-fork (21→24, explained above). `decl/accumulator` 93/0/14 → **102/0/5** after `accumulator-031`/`068` were unskipped (streamable `xsl:source-document` from C1); only `accumulator-061` (burst-mode granularity) remains skipped. QT3 unchanged 31,142/0/679; unit tests **2,322/0/0** (Parser 192, Compiler 66, Runtime 232, Core 119, Api 87, XQuery 303, Standard 768, Providers 33, Xslt 450, LanguageServer 72); build 0/0.
 **What was built:**
 - **Phase C1 — declarations/plumbing**: `xsl:supports-streaming` → "yes" (`FunctionLibrary` 5.105); streamable `xsl:source-document` in `TransformEngine` (6.70, `isStreamable` + `AttachStreamingHooks`/`GetStreamingDriver`/`ResolveStreamingHref`/`LoadStreamingDocument`, per-document `_streamingDrivers`); `EvaluationContext.StreamingDocumentLoader` hook (2.25); harness `StreamingAllowedTestSets` filled dynamically from catalog `strm/` sets (88 sets, Program.cs 3.45); `StreamingSourceDocumentTests` (5 tests).
