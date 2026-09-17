@@ -320,6 +320,13 @@
 //                      |                  |       |                | StreamingDocumentLoader hook or file fallback); AttachStreamingHooks shared with the   |
 //                      |                  |       |                | principal source; per-document accumulator driver list                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.71  | 17-09-2026     | XSLT 3.0 §11.7.3 content evaluation: adjacent text nodes coalesce, all-text sequences  |
+//                      |                  |       |                | ignore the separator, empty-string atomics keep their slot (value-of/attribute/select  |
+//                      |                  |       |                | and sequence-constructor paths); xsl:copy of atomic context/select space-joins and no   |
+//                      |                  |       |                | longer raises XTTE0945 for non-node items; attribute copies delivered as sequence      |
+//                      |                  |       |                | items in accumulator context (si-copy-003/004); on-empty keeps its empty-string items;  |
+//                      |                  |       |                | apply-templates in simple content preserves atomic template results via placeholders   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3503,7 +3510,7 @@ public sealed class TransformEngine
                             var compiled = CompileXPath(select, instruction);
                             var result = compiled.Evaluate(_context);
                             var sep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
-                            textValue = XdmValueToString(result, sep);
+                            textValue = ConstructValueOfString(result, sep);
                         }
                         else if (GetExpandText(instruction))
                         {
@@ -4010,13 +4017,29 @@ public sealed class TransformEngine
                                     items.Add(item);
                                 if (items.Count > 1)
                                     throw new InvalidOperationException("XTTE3180");
-                                if (items.Count == 1 && items[0].IsNode && items[0].NodeValue != null)
+                                if (items.Count == 1)
                                 {
-                                    _context.WithFocus(items[0], 1, 1);
-                                    var fnCopied = CopyNodeForFunctionBody(items[0].NodeValue, instruction);
-                                    if (fnCopied != null)
-                                        results.Add(XdmValue.FromNode(fnCopied));
+                                    if (items[0].IsNode && items[0].NodeValue != null)
+                                    {
+                                        _context.WithFocus(items[0], 1, 1);
+                                        var fnCopied = CopyNodeForFunctionBody(items[0].NodeValue, instruction);
+                                        if (fnCopied != null)
+                                            results.Add(XdmValue.FromNode(fnCopied));
+                                    }
+                                    else if (!items[0].IsUndefined)
+                                    {
+                                        // Copying an atomic value contributes the atomic
+                                        // itself to the function result sequence.
+                                        results.Add(items[0]);
+                                    }
                                 }
+                                break;
+                            }
+                            else if (!result.IsUndefined)
+                            {
+                                // A single atomic (non-sequence) select result is copied
+                                // as the atomic value itself.
+                                results.Add(result);
                                 break;
                             }
                         }
@@ -4026,7 +4049,14 @@ public sealed class TransformEngine
                         }
 
                         if (nodeToCopy == null)
-                            throw new InvalidOperationException("XTTE0945");
+                        {
+                            // XSLT 3.0 permits copying an atomic context item; only an
+                            // absent context item raises XTTE0945.
+                            if (contextItem.IsUndefined)
+                                throw new InvalidOperationException("XTTE0945");
+                            results.Add(contextItem);
+                            break;
+                        }
 
                         var copied = CopyNodeForFunctionBody(nodeToCopy, instruction);
                         if (copied != null)
@@ -5761,7 +5791,7 @@ public sealed class TransformEngine
                         var compiled = CompileXPath(select, instruction);
                         var result = compiled.Evaluate(_context);
                         var attrSep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
-                        value = XdmValueToString(result, attrSep);
+                        value = ConstructValueOfString(result, attrSep);
                     }
                     else
                     {
@@ -5853,7 +5883,7 @@ public sealed class TransformEngine
                         else
                         {
                             var sep = EvaluateAvt(instruction.Attribute("separator")?.Value ?? " ", instruction);
-                            textValue = XdmValueToString(result, sep);
+                            textValue = ConstructValueOfString(result, sep);
                         }
                         bool doe = _temporaryOutputDepth == 0 && EvaluateDisableOutputEscaping(instruction);
                         _lastAddedWasAtomic = false;
@@ -6084,8 +6114,11 @@ public sealed class TransformEngine
                                     ExecuteSingleCopy(item.NodeValue, instruction);
                                 else if (!item.IsUndefined)
                                 {
-                                    _lastAddedWasAtomic = false;
-                                    AddTextNode(item.StringValue);
+                                    // Copying an atomic value behaves like supplying the
+                                    // atomic to the complex content rules: adjacent atomic
+                                    // copies are separated by a single space (XSLT 3.0
+                                    // §11.9.1, si-copy-001).
+                                    AppendAtomicText(item.ToString());
                                 }
                             }
                         }
@@ -6097,8 +6130,7 @@ public sealed class TransformEngine
                         }
                         else if (!result.IsUndefined)
                         {
-                            _lastAddedWasAtomic = false;
-                            AddTextNode(result.StringValue);
+                            AppendAtomicText(result.ToString());
                         }
 
                         _currentTemplateRule = savedCopyTemplateRule;
@@ -6107,7 +6139,16 @@ public sealed class TransformEngine
                     else
                     {
                         if (nodeToCopy == null)
-                            throw new InvalidOperationException("XTTE0945");
+                        {
+                            // XSLT 3.0 allows copying an atomic context item: it contributes
+                            // the atomic to the complex content rules (space-joined with
+                            // adjacent atomics). Only an ABSENT context item is an error
+                            // (XTTE0945, copy-4308/error-0945a).
+                            if (contextItem.IsUndefined)
+                                throw new InvalidOperationException("XTTE0945");
+                            AppendAtomicText(contextItem.ToString());
+                            break;
+                        }
                         ExecuteSingleCopy(nodeToCopy, instruction);
                     }
                     break;
@@ -8296,18 +8337,11 @@ public sealed class TransformEngine
             {
                 anyItemProcessed = true;
 
-                // An empty sequence item acts like a zero-length atomic value for the
-                // purpose of spacing: it contributes no characters, but a separator is
-                // still inserted before a following atomic value. This matches the
-                // expected spacing for sequences that intersperse empty results from
-                // constructor functions such as xs:language(()).
+                // An empty-sequence item contributes nothing at all: it occupies no
+                // slot and does not break the atomic chain. Only zero-length STRING
+                // atomics occupy a separator slot (si-on-empty-003).
                 if (item.IsUndefined)
                 {
-                    if (separateAtomicsWithSpace && prevWasAtomic)
-                    {
-                        sb.Append(atomicSeparator);
-                    }
-                    prevWasAtomic = true;
                     continue;
                 }
 
@@ -8913,6 +8947,9 @@ public sealed class TransformEngine
                     AddElementToContainer(copy, _currentContainer);
                     var prev = _currentContainer;
                     _currentContainer = copy;
+                    // An element node breaks a run of adjacent atomic values in the
+                    // containing complex content (XSLT 3.0 §5.7.1).
+                    _lastAddedWasAtomic = false;
 
                     // xsl:copy performs a shallow copy of an element: it copies the name and
                     // namespace bindings, but not the attributes or children of the source node.
@@ -8960,12 +8997,25 @@ public sealed class TransformEngine
                 AddTextNode(nodeToCopy.StringValue, disableOutputEscaping: IsRawTextNode(nodeToCopy));
                 break;
             case XdmNodeKind.Attribute:
-                if (_currentContainer is not XElement attrTarget)
-                    throw new InvalidOperationException("XTDE0420");
-                if (attrTarget.Nodes().Any())
-                    throw new InvalidOperationException("XTDE0410");
                 {
                     var attrNs = nodeToCopy.NamespaceUri;
+                    if (_sequenceAccumulator != null)
+                    {
+                        // In a raw sequence context (e.g. an xsl:variable/@as collecting
+                        // attribute copies), each copied attribute is a separate sequence
+                        // item. Attaching it to the shared temporary container instead
+                        // would overwrite same-named attributes and keep only the last
+                        // one (si-copy-003/004).
+                        var copiedAttr = new XAttribute(
+                            XName.Get(nodeToCopy.EncodedLocalName, attrNs),
+                            nodeToCopy.StringValue);
+                        _sequenceAccumulator.Add(XdmValue.FromNode(XDocumentNode.Wrap(copiedAttr)));
+                        break;
+                    }
+                    if (_currentContainer is not XElement attrTarget)
+                        throw new InvalidOperationException("XTDE0420");
+                    if (attrTarget.Nodes().Any())
+                        throw new InvalidOperationException("XTDE0410");
                     if (!string.IsNullOrEmpty(attrNs))
                     {
                         EnsureNamespaceDeclarationForAttribute(attrTarget, attrNs, nodeToCopy.Prefix);
@@ -8973,8 +9023,8 @@ public sealed class TransformEngine
                     attrTarget.SetAttributeValue(
                         XName.Get(nodeToCopy.EncodedLocalName, attrNs),
                         nodeToCopy.StringValue);
+                    break;
                 }
-                break;
             case XdmNodeKind.Comment:
                 _currentContainer.Add(new XComment(nodeToCopy.StringValue));
                 break;
@@ -11598,6 +11648,93 @@ public sealed class TransformEngine
             first = false;
         }
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Applies the XSLT 3.0 §11.7.3 content-evaluation rules used by
+    /// <c>xsl:value-of</c> (and <c>xsl:attribute</c>) to a selected item sequence:
+    /// adjacent text nodes are coalesced without a separator; the remaining items are
+    /// atomized and joined with the separator; a sequence consisting entirely of text
+    /// nodes ignores the separator altogether; zero-length text nodes are removed and
+    /// empty-string atomics still occupy a join slot.
+    /// </summary>
+    private static string ConstructValueOfString(XdmValue value, string separator)
+    {
+        if (value.IsUndefined)
+            return string.Empty;
+
+        var slots = new List<string>();
+        var pendingText = new StringBuilder();
+        bool hasPendingText = false;
+        bool sawNonText = false;
+
+        void FlushPendingText()
+        {
+            if (!hasPendingText)
+                return;
+            slots.Add(pendingText.ToString());
+            pendingText.Clear();
+            hasPendingText = false;
+        }
+
+        var items = new List<XdmValue>();
+        FlattenSequenceItems(value, items);
+        foreach (var item in items)
+        {
+            if (item.IsUndefined)
+                continue;
+
+            if (item.IsNode && item.NodeValue != null &&
+                item.NodeValue.NodeKind == XdmNodeKind.Text)
+            {
+                // Zero-length text nodes are removed before the all-text test.
+                if (item.NodeValue.StringValue.Length == 0)
+                    continue;
+                pendingText.Append(item.NodeValue.StringValue);
+                hasPendingText = true;
+                continue;
+            }
+
+            sawNonText = true;
+            FlushPendingText();
+            if (item.IsArray)
+            {
+                foreach (var atom in AtomizeForString(item))
+                    slots.Add(atom);
+            }
+            else if (item.IsMap || item.IsFunction)
+            {
+                // Consistent with XdmValueToString: maps/functions cannot be atomized.
+                throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
+            }
+            else
+            {
+                slots.Add(item.ToString());
+            }
+        }
+        FlushPendingText();
+
+        // A sequence consisting entirely of text nodes concatenates without
+        // using the separator at all (XSLT 3.0 §11.7.3).
+        string effectiveSeparator = sawNonText ? separator : string.Empty;
+        return string.Join(effectiveSeparator, slots);
+    }
+
+    /// <summary>
+    /// Flattens a (possibly nested) XDM sequence into a flat item list, skipping
+    /// undefined values but preserving empty-string atomics.
+    /// </summary>
+    private static void FlattenSequenceItems(XdmValue value, List<XdmValue> items)
+    {
+        if (value.IsUndefined)
+            return;
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                FlattenSequenceItems(item, items);
+            return;
+        }
+        items.Add(value);
     }
 
     /// <summary>
@@ -14992,6 +15129,7 @@ public sealed class TransformEngine
 
             bool hasContent = resultItems.Any(IsSignificantContentItem);
             bool anyOnEmptyFired = false;
+            var onEmptyContributions = new List<XdmValue>();
 
             for (int i = markers.Count - 1; i >= 0; i--)
             {
@@ -15009,6 +15147,8 @@ public sealed class TransformEngine
                 {
                     _context.RestoreVariables(markerVars);
                     var conditionalItems = EvaluateOnEmptyOrNonEmptyInstructionToItems(instruction);
+                    if (isOnEmpty)
+                        onEmptyContributions.AddRange(conditionalItems);
                     resultItems.InsertRange(position, conditionalItems);
                 }
                 finally
@@ -15019,8 +15159,10 @@ public sealed class TransformEngine
 
             // Expand any remaining sequence placeholders into their items. If an
             // xsl:on-empty fired, the sequence constructor was empty, so discard
-            // non-significant items (empty placeholders / zero-length text) and
-            // keep only the on-empty contributions and any real content.
+            // non-significant original items (empty placeholders / zero-length text).
+            // Items contributed by the xsl:on-empty instruction itself are kept as-is:
+            // zero-length atomics still occupy a separator slot in the output
+            // (si-on-empty-003).
             var expanded = new List<XdmValue>(resultItems.Count);
             foreach (var item in resultItems)
             {
@@ -15045,7 +15187,7 @@ public sealed class TransformEngine
                 }
             }
             resultItems = anyOnEmptyFired
-                ? expanded.Where(IsSignificantContentItem).ToList()
+                ? expanded.Where(item => onEmptyContributions.Contains(item) || IsSignificantContentItem(item)).ToList()
                 : expanded;
         }
         finally
@@ -15418,7 +15560,13 @@ public sealed class TransformEngine
                     var savedAtLastAtomic = _lastAddedWasAtomic;
                     var atTemp = new XElement("__apply-templates-content__");
                     _currentContainer = atTemp;
-                    _sequenceAccumulator = null;
+                    // Route raw sequence items (xsl:sequence results, typed template
+                    // results converted per @as) through a placeholder accumulator so
+                    // they keep their atomic identity and source position: each item is
+                    // stored in a synthetic placeholder element in the temporary
+                    // container and expanded back into the collected items below
+                    // (si-value-of-100).
+                    _sequenceAccumulator = new PlaceholderSequenceAccumulator(this);
                     _lastAddedWasAtomic = false;
                     try
                     {
@@ -15444,6 +15592,18 @@ public sealed class TransformEngine
 
                     foreach (var child in atTemp.Nodes())
                     {
+                        // Expand synthetic sequence placeholders back into their
+                        // constituent items, preserving atomics as atomic values.
+                        if (child is XElement placeholder && placeholder.Name.LocalName == "__xdm_seq__" &&
+                            placeholder.Annotation<SequencePlaceholderItems>() is { } holder)
+                        {
+                            foreach (var phItem in holder.Items)
+                            {
+                                if (!phItem.IsUndefined)
+                                    items.Add(phItem);
+                            }
+                            continue;
+                        }
                         switch (child)
                         {
                             case XText t:
@@ -15553,6 +15713,7 @@ public sealed class TransformEngine
         var groups = new List<List<string>>();
         var currentGroup = new List<string>();
         string? pendingText = null;
+        bool sawNonText = false;
 
         foreach (var item in items)
         {
@@ -15595,6 +15756,7 @@ public sealed class TransformEngine
             }
             else
             {
+                sawNonText = true;
                 if (pendingText != null)
                 {
                     currentGroup.Add(pendingText);
@@ -15624,9 +15786,12 @@ public sealed class TransformEngine
         }
 
         var sb = new StringBuilder();
+        // XSLT 3.0 §11.7.3: a sequence consisting entirely of text nodes ignores
+        // the separator (attribute content follows the same rule).
+        string effectiveSeparator = sawNonText ? separator : string.Empty;
         for (int i = 0; i < groups.Count; i++)
         {
-            sb.Append(string.Join(separator, groups[i]));
+            sb.Append(string.Join(effectiveSeparator, groups[i]));
         }
         return sb.ToString();
     }
