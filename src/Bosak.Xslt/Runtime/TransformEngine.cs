@@ -331,6 +331,18 @@
 //                      |                  |       |                | so crawling streamable shapes (union/except/intersect, xsl:fork, multi-entry maps) can  |
 //                      |                  |       |                | replay the record stream; the TransformStreaming entry point stays single-pass          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.73  | 17-09-2026     | copy-namespaces="no": ExecuteSingleCopy honors the attribute (required namespaces      |
+//                      |                  |       |                | only); copy attribute loops skip the default-namespace declaration, which carries no    |
+//                      |                  |       |                | xmlns namespace URI in the LINQ-to-XML model (si-copy-020/026, si-copy-of-020/026)       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.74  | 17-09-2026     | xsl:element with xsl:on-empty/on-non-empty children routes content through the          |
+//                      |                  |       |                | item-based sequence-constructor path so the fallback fires for streamed-empty content   |
+//                      |                  |       |                | (si-on-empty-021/023)                                                                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.75  | 17-09-2026     | Stylesheets containing xsl:fork opt the not-yet-started principal streamed source into  |
+//                      |                  |       |                | record replay (IStreamingDocument.EnableReplay) so every fork prong sees the full       |
+//                      |                  |       |                | record stream (si-fork-808/816)                                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -945,7 +957,17 @@ public sealed class TransformEngine
         // accumulator evaluation are driven by the stream's record post-processor, since
         // the full source tree never exists in memory.
         if (source != null && (source is IStreamingDocument || source.Document is IStreamingDocument))
+        {
             AttachStreamingHooks(source);
+            // xsl:fork requires every prong to see the full record stream; opt the
+            // not-yet-started principal stream into retention, mirroring the
+            // LoadStreamingDocument policy for xsl:source-document (si-fork-119/816).
+            if (StylesheetUsesStreamReplay())
+            {
+                var replayDoc = source as IStreamingDocument ?? (IStreamingDocument)source.Document!;
+                replayDoc.EnableReplay();
+            }
+        }
 
         // Documents loaded by fn:doc / fn:document during the transformation are also
         // subject to the stylesheet's whitespace stripping rules, but the stylesheet
@@ -5744,19 +5766,29 @@ public sealed class TransformEngine
 
                     try
                     {
-                        foreach (var childNode in instruction.Nodes())
+                        if (ContainsConditionalInstruction(instruction))
                         {
-                            switch (childNode)
+                            // xsl:on-empty / xsl:on-non-empty as direct children require the
+                            // item-based sequence-constructor path so the fallback fires when
+                            // the streamed-empty content produces nothing (si-on-empty-021/023).
+                            EvaluateSequenceConstructorIntoContainer(instruction, elem, contextItem);
+                        }
+                        else
+                        {
+                            foreach (var childNode in instruction.Nodes())
                             {
-                                case XText text:
-                                    ProcessSequenceText(text, instruction);
-                                    break;
-                                case XElement elemChild when elemChild.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                    ExecuteXsltInstruction(elemChild, contextItem);
-                                    break;
-                                case XElement elemChild:
-                                    CopyLiteralElement(elemChild);
-                                    break;
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        ProcessSequenceText(text, instruction);
+                                        break;
+                                    case XElement elemChild when elemChild.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elemChild, contextItem);
+                                        break;
+                                    case XElement elemChild:
+                                        CopyLiteralElement(elemChild);
+                                        break;
+                                }
                             }
                         }
                         NormalizeElementContent(elem);
@@ -8718,9 +8750,8 @@ public sealed class TransformEngine
                     if (!string.IsNullOrEmpty(node.BaseUri))
                         newDoc.AddAnnotation(node.BaseUri);
                     // Preserve DTD unparsed entity declarations so fn:unparsed-entity-uri()
-                    // still works on the copied document node.
-                    if (node is XDocumentNode srcDocNode)
-                        srcDocNode.CopyUnparsedEntitiesTo(newDoc);
+                    // still works on the copied document node (also for streamed sources).
+                    XDocumentNode.CopyUnparsedEntities(node, newDoc);
                     XDocumentNode.RegisterTree(newDoc);
                     return XDocumentNode.Wrap(newDoc);
                 }
@@ -8766,8 +8797,11 @@ public sealed class TransformEngine
                     {
                         // Skip namespace declarations — they are handled by the namespace axis
                         // (copy-all) or AddRequiredNamespaceDeclarations (copy-required) above.
+                        // The default-namespace declaration (xmlns="...") has no namespace URI
+                        // in the LINQ-to-XML model, so it needs its own check (si-copy-of-020).
                         if (attr.NodeValue is { } attrNode &&
-                            attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/")
+                            (attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/" ||
+                             (attrNode.LocalName == "xmlns" && attrNode.NamespaceUri.Length == 0)))
                             continue;
                         Xml11Attribute.SetValue(
                             copy,
@@ -8870,8 +8904,7 @@ public sealed class TransformEngine
                     XDocumentNode.RegisterTree(newDoc);
                     if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
                         newDoc.AddAnnotation(nodeToCopy.BaseUri);
-                    if (nodeToCopy is XDocumentNode srcDocNode2)
-                        srcDocNode2.CopyUnparsedEntitiesTo(newDoc);
+                    XDocumentNode.CopyUnparsedEntities(nodeToCopy, newDoc);
                     var savedContainer = _currentContainer;
                     var savedAccumulator = _sequenceAccumulator;
                     _currentContainer = newDoc;
@@ -8922,17 +8955,31 @@ public sealed class TransformEngine
                     {
                         copy.AddAnnotation(nodeToCopy.BaseUri);
                     }
-                    foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
+                    var copyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
+                        ?? instruction.Attribute("_copy-namespaces")?.Value
+                        ?? "yes";
+                    var copyNamespacesAttr = EvaluateAvt(copyNamespacesAttrRaw, instruction);
+                    bool copyAllNamespaces = copyNamespacesAttr != "no" && copyNamespacesAttr != "false";
+                    if (copyAllNamespaces)
                     {
-                        if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                        foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
                         {
-                            if (ns.NodeValue.LocalName == "")
-                                copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
-                            else
-                                copy.SetAttributeValue(
-                                    XNamespace.Xmlns + ns.NodeValue.EncodedLocalName,
-                                    ns.NodeValue.StringValue);
+                            if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                            {
+                                if (ns.NodeValue.LocalName == "")
+                                    copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
+                                else
+                                    copy.SetAttributeValue(
+                                        XNamespace.Xmlns + ns.NodeValue.EncodedLocalName,
+                                        ns.NodeValue.StringValue);
+                            }
                         }
+                    }
+                    else
+                    {
+                        // copy-namespaces="no": only namespaces actually needed to resolve
+                        // the element name and attribute names are copied (XSLT 3.0 §11.9.2).
+                        AddRequiredNamespaceDeclarations(nodeToCopy, copy);
                     }
 
                     var inheritNamespacesAttrNode = instruction.Attribute("inherit-namespaces");
@@ -9049,8 +9096,7 @@ public sealed class TransformEngine
                         XDocumentNode.RegisterTree(newDoc);
                         if (!string.IsNullOrEmpty(srcBaseUri))
                             newDoc.AddAnnotation(srcBaseUri);
-                        if (nodeToCopy is XDocumentNode srcDocNode)
-                            srcDocNode.CopyUnparsedEntitiesTo(newDoc);
+                        XDocumentNode.CopyUnparsedEntities(nodeToCopy, newDoc);
 
                         var savedDocAccumulator = _sequenceAccumulator;
                         if (ContainsConditionalInstruction(instruction))
@@ -9287,8 +9333,11 @@ public sealed class TransformEngine
                     {
                         // Skip namespace declarations — they are handled by the namespace axis
                         // (copy-all) or AddRequiredNamespaceDeclarations (copy-required) above.
+                        // The default-namespace declaration (xmlns="...") has no namespace URI
+                        // in the LINQ-to-XML model, so it needs its own check (si-copy-of-020).
                         if (attr.NodeValue is { } attrNode &&
-                            attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/")
+                            (attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/" ||
+                             (attrNode.LocalName == "xmlns" && attrNode.NamespaceUri.Length == 0)))
                             continue;
                         elem.SetAttributeValue(
                             XName.Get(attr.NodeValue!.EncodedLocalName, attr.NodeValue!.NamespaceUri),
@@ -16449,6 +16498,27 @@ public sealed class TransformEngine
         }
         return false;
     }
+
+    /// <summary>
+    /// Determines whether the stylesheet (principal module and its import tree) uses
+    /// constructs that require replaying a streamed record stream — currently
+    /// <c>xsl:fork</c>, whose prongs each consume the stream (XSLT 3.0 §8.3).
+    /// </summary>
+    private bool StylesheetUsesStreamReplay()
+    {
+        if (StylesheetTreeUsesReplayConstructs(_stylesheet.RootElement))
+            return true;
+        foreach (var imported in _stylesheet.TransitiveImports)
+        {
+            if (imported.RootElement != null && StylesheetTreeUsesReplayConstructs(imported.RootElement))
+                return true;
+        }
+        return false;
+    }
+
+    private static bool StylesheetTreeUsesReplayConstructs(XElement root)
+        => root.DescendantsAndSelf().Any(e =>
+            e.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace && e.Name.LocalName == "fork");
 
     /// <summary>
     /// Composes the record post-processor for a streamed (burst-mode) document: per-record

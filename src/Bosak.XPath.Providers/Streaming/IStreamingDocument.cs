@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 17-09-2026     | EnableReplay lets the XSLT engine opt a not-yet-started stream into record retention    |
+//                      |                  |       |                | when the stylesheet contains xsl:fork (si-fork-119/816)                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Providers.Streaming;
 
@@ -53,4 +56,13 @@ public interface IStreamingDocument
     /// </summary>
     /// <exception cref="StreamingException">Another enumeration is mid-flight (<see cref="CanDrain"/> is false).</exception>
     void Drain();
+
+    /// <summary>
+    /// Enables replay of the record stream: second and later enumerations of the root's
+    /// children or descendants then succeed, at the cost of retaining every record in
+    /// memory. Returns <c>false</c> when the stream has already been partially consumed
+    /// (records yielded before this call cannot be replayed). Idempotent: returns
+    /// <c>true</c> when replay was already enabled.
+    /// </summary>
+    bool EnableReplay();
 }

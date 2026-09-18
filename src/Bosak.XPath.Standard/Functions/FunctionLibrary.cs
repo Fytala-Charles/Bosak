@@ -327,6 +327,9 @@
 //                      | Charles Korthout | 5.106 | 17-09-2026     | Streaming Phase D1: fn:boolean/fn:zero-or-one/fn:one-or-more/fn:exactly-one decide  |
 //                      |                  |       |                | ISinglePassSequence inputs from a single enumeration (SinglePassHeadedSequence lookahead) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.107 | 17-09-2026     | Snapshot/deep-copy unparsed-entity preservation uses XDocumentNode.CopyUnparsedEntities |
+//                      |                  |       |                | so streamed documents keep DTD entities through fn:snapshot (sf-unparsed-entity-03/04/08) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3972,8 +3975,7 @@ public static class FunctionLibrary
                     var docCopy = new XDocument();
                     if (!string.IsNullOrEmpty(node.BaseUri))
                         docCopy.AddAnnotation(node.BaseUri);
-                    if (node is Providers.Xml.XDocumentNode srcDocNode)
-                        srcDocNode.CopyUnparsedEntitiesTo(docCopy);
+                    Providers.Xml.XDocumentNode.CopyUnparsedEntities(node, docCopy);
                     container = docCopy;
                     targetCopy = docCopy;
                     break;
@@ -4148,6 +4150,10 @@ public static class FunctionLibrary
         ownerDoc ??= new XDocument();
         if (ownerDoc.Annotation<string>() is null && !string.IsNullOrEmpty(node.BaseUri))
             ownerDoc.AddAnnotation(node.BaseUri);
+        // Preserve DTD unparsed entity declarations so fn:unparsed-entity-uri() /
+        // fn:unparsed-entity-public-id() remain usable on the grounded snapshot
+        // (sf-unparsed-entity-03/04/08).
+        Providers.Xml.XDocumentNode.CopyUnparsedEntities(node, ownerDoc);
         ownerDoc.Add(shellCopy);
         return node.NodeKind == XdmNodeKind.Document
             ? new Providers.Xml.XDocumentNode(ownerDoc)
@@ -14858,8 +14864,7 @@ public static class FunctionLibrary
             copy.AddAnnotation(baseUri);
         else if (document.Annotation<string>() is { Length: > 0 } annotatedBaseUri)
             copy.AddAnnotation(annotatedBaseUri);
-        if (new Providers.Xml.XDocumentNode(document) is { } srcDocNode)
-            srcDocNode.CopyUnparsedEntitiesTo(copy);
+        Providers.Xml.XDocumentNode.CopyUnparsedEntities(new Providers.Xml.XDocumentNode(document), copy);
         return copy;
     }
 

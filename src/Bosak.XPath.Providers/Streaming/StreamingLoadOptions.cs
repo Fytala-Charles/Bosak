@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 17-09-2026     | Phase D4: RetainRecords opt-in memoization (tee/replay) for crawling streamable shapes   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 17-09-2026     | ReaderSettings doc: defaults now parse DTDs with XmlUrlResolver (matches in-memory)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Providers.Streaming;
 
@@ -41,9 +43,10 @@ public sealed class StreamingLoadOptions
     /// <summary>
     /// Gets or sets the <see cref="System.Xml.XmlReaderSettings"/> used to create the
     /// underlying reader when loading from a <see cref="System.IO.Stream"/>. When null,
-    /// safe defaults are used (<see cref="System.Xml.DtdProcessing.Prohibit"/>,
-    /// whitespace preserved). Ignored when an <see cref="System.Xml.XmlReader"/> is
-    /// supplied directly.
+    /// defaults matching the in-memory load path are used
+    /// (<see cref="System.Xml.DtdProcessing.Parse"/> with
+    /// <see cref="System.Xml.XmlUrlResolver"/>, whitespace preserved). Ignored when an
+    /// <see cref="System.Xml.XmlReader"/> is supplied directly.
     /// </summary>
     public System.Xml.XmlReaderSettings? ReaderSettings { get; set; }
 

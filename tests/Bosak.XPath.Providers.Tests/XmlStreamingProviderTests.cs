@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 18-09-2026     | Updated DTD default tests: DTD now parsed by default; Prohibit remains configurable        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -201,9 +202,23 @@ public class XmlStreamingProviderTests
     }
 
     [Fact]
-    public void DtdIsProhibitedByDefault()
+    public void DtdIsParsedByDefault()
     {
-        Assert.Throws<XmlException>(() => LoadXml("<!DOCTYPE r [<!ELEMENT r ANY>]><r/>"));
+        var doc = LoadXml("<!DOCTYPE r [<!ELEMENT r ANY>]><r/>");
+
+        Assert.True(doc.HasDocumentType);
+        Assert.Equal("r", doc.DocumentTypeName);
+    }
+
+    [Fact]
+    public void DtdCanBeProhibitedViaReaderSettings()
+    {
+        var options = new StreamingLoadOptions
+        {
+            ReaderSettings = new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit },
+        };
+
+        Assert.Throws<XmlException>(() => LoadXml("<!DOCTYPE r [<!ELEMENT r ANY>]><r/>", options));
     }
 
     [Fact]

@@ -23,6 +23,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 17-09-2026     | Split unparsed-entity extraction into a shared XmlDocument-based helper;                 |
+//                      |                  |       |                | AttachUnparsedEntitiesFromDoctype lets the streaming provider annotate its shell         |
+//                      |                  |       |                | document from captured DOCTYPE components (sf-unparsed-entity-01..08)                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -360,6 +364,20 @@ public static class Xml11Loader
             return;
         }
 
+        AttachUnparsedEntities(xmlDoc, doc, baseUri);
+    }
+
+    /// <summary>
+    /// Extracts unparsed entity declarations from a parsed <see cref="XmlDocument"/>'s
+    /// DOCTYPE and attaches them as an <see cref="UnparsedEntityAnnotation"/> to the
+    /// given <see cref="XDocument"/>. Shared by the in-memory load path and the
+    /// streaming provider.
+    /// </summary>
+    /// <param name="xmlDoc">The parsed document whose DOCTYPE is inspected.</param>
+    /// <param name="doc">The document to annotate.</param>
+    /// <param name="baseUri">The base URI used to resolve relative entity system IDs.</param>
+    internal static void AttachUnparsedEntities(XmlDocument xmlDoc, XDocument doc, string baseUri)
+    {
         if (xmlDoc.DocumentType?.Entities is not { } entities || entities.Count == 0)
             return;
 
@@ -384,6 +402,48 @@ public static class Xml11Loader
 
         if (annotation.Entities.Count > 0)
             doc.AddAnnotation(annotation);
+    }
+
+    /// <summary>
+    /// Attaches unparsed entity declarations to a document built outside the in-memory
+    /// load path (for example the shell document of a streamed source), given the raw
+    /// DOCTYPE components captured from the reader. The internal subset and the external
+    /// subset (resolved through <see cref="XmlUrlResolver"/> against
+    /// <paramref name="baseUri"/>) are both inspected.
+    /// </summary>
+    /// <param name="doc">The document to annotate.</param>
+    /// <param name="doctypeName">The document element name of the DOCTYPE.</param>
+    /// <param name="publicId">The DOCTYPE public identifier, or empty.</param>
+    /// <param name="systemId">The DOCTYPE system identifier, or empty.</param>
+    /// <param name="internalSubset">The internal DTD subset, or empty.</param>
+    /// <param name="baseUri">The base URI used to resolve relative entity system IDs.</param>
+    internal static void AttachUnparsedEntitiesFromDoctype(XDocument doc, string doctypeName, string publicId, string systemId, string internalSubset, string baseUri)
+    {
+        var sb = new StringBuilder("<!DOCTYPE ");
+        sb.Append(doctypeName);
+        if (!string.IsNullOrEmpty(publicId))
+            sb.Append(" PUBLIC \"").Append(publicId).Append("\" \"").Append(systemId).Append('"');
+        else if (!string.IsNullOrEmpty(systemId))
+            sb.Append(" SYSTEM \"").Append(systemId).Append('"');
+        if (!string.IsNullOrEmpty(internalSubset))
+            sb.Append(" [").Append(internalSubset).Append(']');
+        sb.Append("> <").Append(doctypeName).Append("/>");
+
+        var settings = CreateSettings();
+        var xmlDoc = new XmlDocument();
+        try
+        {
+            using var reader = XmlReader.Create(new StringReader(sb.ToString()), settings, baseUri);
+            xmlDoc.Load(reader);
+        }
+        catch
+        {
+            // Unparseable DTD (for example an unresolvable external subset): leave the
+            // annotation absent rather than failing the load.
+            return;
+        }
+
+        AttachUnparsedEntities(xmlDoc, doc, baseUri);
     }
 
     /// <summary>

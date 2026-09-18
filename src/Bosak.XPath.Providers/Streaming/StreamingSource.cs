@@ -17,6 +17,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 17-09-2026     | Phase D4: opt-in record retention (tee/replay) for crawling streamable shapes          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 17-09-2026     | Annotate the shell document with DTD unparsed entities from the captured DOCTYPE;        |
+//                      |                  |       |                | TryGetUnparsedEntity delegates record lookups to the shell (sf-unparsed-entity-01..08)   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 17-09-2026     | EnableReplay opts a not-yet-started stream into record retention so xsl:fork prongs can  |
+//                      |                  |       |                | each replay the record stream (si-fork-808/816)                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using System.Xml.Linq;
@@ -63,7 +69,7 @@ internal sealed class StreamingSource
     // enumerator produces it; consumers enumerate the list by index and whichever
     // enumerator reaches the frontier advances the pump. Evaluation is single-threaded,
     // so the shared pump is never inside MoveNext for two consumers at once.
-    private readonly List<XdmValue>? _retainedRecords;
+    private List<XdmValue>? _retainedRecords;
     private IEnumerator<XdmValue>? _retainedPump;
 
     internal StreamingSource(XmlReader reader, StreamingLoadOptions options, bool ownsReader)
@@ -118,6 +124,15 @@ FoundRoot:
         // Register first so the shell sorts before every record in document order.
         XDocumentNode.RegisterTree(_shellDoc);
 
+        // Surface DTD unparsed entity declarations (fn:unparsed-entity-uri/-public-id)
+        // exactly as the in-memory load path does.
+        if (HasDocumentType)
+        {
+            Xml.Xml11Loader.AttachUnparsedEntitiesFromDoctype(
+                _shellDoc, DocumentTypeName, PublicId, SystemId, InternalSubset,
+                _options.BaseUri ?? string.Empty);
+        }
+
         _docNode = new StreamingDocumentNode(this, XDocumentNode.Wrap(_shellDoc));
         _rootNode = new StreamingNode(this, XDocumentNode.Wrap(_shellRoot), StreamingNodeRole.ShellRoot, recordIndex: -1);
     }
@@ -143,6 +158,13 @@ FoundRoot:
     internal string SystemId { get; } = string.Empty;
 
     internal string InternalSubset { get; } = string.Empty;
+
+    /// <summary>
+    /// Looks up an unparsed entity declared by the document's DTD. The shell document
+    /// carries the entity annotation; record nodes (detached trees) delegate here.
+    /// </summary>
+    internal bool TryGetUnparsedEntity(string name, out string? systemId, out string? publicId)
+        => XDocumentNode.Wrap(_shellDoc).TryGetUnparsedEntity(name, out systemId, out publicId);
 
     /// <summary>Wraps an engine-visible node of the streamed tree.</summary>
     /// <param name="inner">The shared <see cref="XDocumentNode"/> for the underlying object.</param>
@@ -206,6 +228,22 @@ FoundRoot:
         {
             // Records are post-processed and discarded; the stream is grounding input here.
         }
+    }
+
+    /// <summary>
+    /// Enables record retention so the record stream can be replayed (see
+    /// <see cref="StreamingLoadOptions.RetainRecords"/>). Only possible while the pump
+    /// has not started: records yielded before retention is enabled cannot be replayed.
+    /// Idempotent — returns true when retention was already enabled.
+    /// </summary>
+    internal bool EnableReplay()
+    {
+        if (_retainedRecords is not null)
+            return true;
+        if (_pumpState != PumpState.NotStarted)
+            return false;
+        _retainedRecords = new List<XdmValue>();
+        return true;
     }
 
     /// <summary>

@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 17-09-2026     | Default reader settings parse DTDs (XmlUrlResolver) matching the in-memory load path,    |
+//                      |                  |       |                | so documents with a DOCTYPE load and expose unparsed entities (sf-unparsed-entity-01..08) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using Bosak.XPath.Core.Xdm;
@@ -74,7 +77,11 @@ public static class XmlStreamingProvider
     private static XmlReaderSettings CreateDefaultSettings()
         => new()
         {
-            DtdProcessing = DtdProcessing.Prohibit,
+            // Match the in-memory load path (Xml11Loader): DTDs are parsed so that
+            // DOCTYPE information (unparsed entities) is available to fn:unparsed-entity-*;
+            // external resources resolve through XmlUrlResolver relative to the base URI.
+            DtdProcessing = DtdProcessing.Parse,
+            XmlResolver = new XmlUrlResolver(),
             IgnoreWhitespace = false,
             IgnoreComments = false,
             IgnoreProcessingInstructions = false,

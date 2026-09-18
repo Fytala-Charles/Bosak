@@ -91,6 +91,9 @@
 //                      | Charles Korthout | 0.26  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.27  | 09-09-2026     | Perf: shared XObject wrapper cache (ConditionalWeakTable); lazy yield-based child/descen |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.28  | 17-09-2026     | Static CopyUnparsedEntities(IXdmNode, XDocument) handles streaming nodes so DTD          |
+//                      |                  |       |                | unparsed entities survive copies of streamed documents (sf-unparsed-entity-03/04/06/08)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -1235,8 +1238,25 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     /// <param name="targetDocument">The document to receive the unparsed entity annotation.</param>
     public void CopyUnparsedEntitiesTo(System.Xml.Linq.XDocument targetDocument)
+        => CopyUnparsedEntities(this, targetDocument);
+
+    /// <summary>
+    /// Copies the unparsed entity declarations from the document containing
+    /// <paramref name="sourceNode"/> onto <paramref name="targetDocument"/>. Works for
+    /// any node implementation, including streaming nodes whose underlying document
+    /// carries the DTD annotation (sf-unparsed-entity-03/04/06/08).
+    /// </summary>
+    /// <param name="sourceNode">The node (or document) whose containing document supplies the entities.</param>
+    /// <param name="targetDocument">The document to receive the unparsed entity annotation.</param>
+    public static void CopyUnparsedEntities(IXdmNode sourceNode, System.Xml.Linq.XDocument targetDocument)
     {
-        var doc = _node as System.Xml.Linq.XDocument ?? _node.Document;
+        var sourceObject = sourceNode switch
+        {
+            XDocumentNode xdn => xdn.UnderlyingObject,
+            Streaming.IStreamingNode streaming => streaming.UnderlyingXObject,
+            _ => null,
+        };
+        var doc = sourceObject as System.Xml.Linq.XDocument ?? sourceObject?.Document;
         if (doc is null)
             return;
 

@@ -219,6 +219,9 @@
 //                      | Charles Korthout | 2.109 | 16-09-2026     | XTSE3430 streamability analysis hooked into the constructor (Phase C milestone C2)      |
 //                      | Charles Korthout | 2.110 | 17-09-2026     | XTSE0545 per-attribute mode conflict detection; same-precedence xsl:mode declarations merge (mode-1903) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.111 | 17-09-2026     | XTSE0020 for invalid enumerated values on xsl:attribute-set (@streamable yes/no,        |
+//                      |                  |       |                | @visibility public/private/final/abstract); AVT forms left to runtime (si-lre-906)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -3542,6 +3545,20 @@ public sealed class Stylesheet
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
                         "name", "use-attribute-sets", "visibility", "streamable"),
                         IsForwardsCompatibleElement(elem));
+
+                    // XTSE0020: enumerated attribute values are case-sensitive; AVT
+                    // forms (unescaped '{') are evaluated at runtime instead.
+                    var streamableAttr = elem.Attribute("streamable");
+                    if (streamableAttr != null && !IsAvtValue(streamableAttr.Value) && !IsYesNoValue(streamableAttr.Value))
+                        throw new InvalidOperationException($"XTSE0020: Invalid value '{streamableAttr.Value}' for xsl:attribute-set/@streamable. Must be a boolean (yes/no/true/false/0/1).");
+
+                    var visibilityAttr = elem.Attribute("visibility");
+                    if (visibilityAttr != null && !IsAvtValue(visibilityAttr.Value))
+                    {
+                        var vis = visibilityAttr.Value.Trim();
+                        if (vis is not "public" and not "private" and not "final" and not "abstract")
+                            throw new InvalidOperationException($"XTSE0020: Invalid visibility '{vis}' for xsl:attribute-set/@visibility.");
+                    }
                 }
                 else if (localName == "key")
                 {

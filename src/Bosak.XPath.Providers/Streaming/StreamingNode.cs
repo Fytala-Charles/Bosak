@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 16-09-2026     | Phase B: implements IStreamingNode (UnderlyingXObject); unsealed for the document role   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 17-09-2026     | TryGetUnparsedEntity falls back to the streaming source's shell-document DTD entities    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
@@ -153,7 +155,13 @@ internal class StreamingNode : IXdmNode, IStreamingNode
     public string InternalSubset => _source.InternalSubset;
 
     public bool TryGetUnparsedEntity(string name, out string? systemId, out string? publicId)
-        => _inner.TryGetUnparsedEntity(name, out systemId, out publicId);
+    {
+        // Record nodes live in detached trees without the DTD annotation; entity
+        // declarations come from the streamed document's DOCTYPE either way.
+        if (_inner.TryGetUnparsedEntity(name, out systemId, out publicId))
+            return true;
+        return _source.TryGetUnparsedEntity(name, out systemId, out publicId);
+    }
 
     // ------------------------------------------------------------------
     // Navigation — re-rooted at the streaming document

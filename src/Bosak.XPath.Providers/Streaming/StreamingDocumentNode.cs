@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 17-09-2026     | EnableReplay delegates to StreamingSource.EnableReplay (lazy record retention)           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
@@ -50,4 +52,7 @@ internal sealed class StreamingDocumentNode : StreamingNode, IStreamingDocument
 
     /// <inheritdoc/>
     public void Drain() => Source.Drain();
+
+    /// <inheritdoc/>
+    public bool EnableReplay() => Source.EnableReplay();
 }
