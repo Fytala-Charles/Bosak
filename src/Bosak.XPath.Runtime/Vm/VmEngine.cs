@@ -303,6 +303,9 @@
 //                      | Charles Korthout | 2.147 | 17-09-2026     | Streaming Phase D1: single-pass instance-of in one enumeration; TreatAs validates   |
 //                      |                  |       |                | ISinglePassSequence inputs lazily via TreatAsLazyIterator                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.148 | 17-09-2026     | UnaryPlus/Negate atomize their operand (+@att returned the attribute node, making a  |
+//                      |                  |       |                | final path step mix nodes/atomics and spuriously raise XPTY0018 on streamed docs)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -6306,10 +6309,9 @@ public static class VmEngine
         if (context.BackwardsCompatible)
             return XdmValue.FromDouble(-ToDoubleOrNaN(value));
 
-        // XPath 3.1 §3.1.5: an xs:untypedAtomic operand is converted to xs:double
-        // before negation (op-numeric-unary-minus-1).
-        if (IsUntypedAtomic(value))
-            return XdmValue.FromDouble(-ToDouble(value));
+        // The operand is atomized first (XPTY0004 for a multi-item sequence): unary
+        // minus on a node yields the negated typed value, not a node.
+        value = Atomize(value);
 
         if (value.Kind == XdmValueKind.Duration)
         {
@@ -6318,6 +6320,12 @@ public static class VmEngine
                 return XdmValue.FromDuration(s[1..]);
             return XdmValue.FromDuration("-" + s);
         }
+
+        // XPath 3.1 §3.1.5: an xs:untypedAtomic operand is converted to xs:double
+        // before negation (op-numeric-unary-minus-1).
+        if (IsUntypedAtomic(value))
+            return XdmValue.FromDouble(-ToDouble(value));
+
         ValidateNumericOperand(value);
         if (IsDouble(value))
             return XdmValue.FromDouble(-ToDouble(value));
@@ -6340,10 +6348,15 @@ public static class VmEngine
         if (context.BackwardsCompatible)
             return XdmValue.FromDouble(ToDoubleOrNaN(value));
 
+        // The operand is atomized first (XPTY0004 for a multi-item sequence): unary
+        // plus on a node yields its typed value, not the node itself.
+        ValidateNumericOperand(value);
+        value = Atomize(value);
+
+        // XPath 3.1 §3.1.5: an xs:untypedAtomic operand is converted to xs:double.
         if (IsUntypedAtomic(value))
             return XdmValue.FromDouble(ToDouble(value));
 
-        ValidateNumericOperand(value);
         return value;
     }
 
