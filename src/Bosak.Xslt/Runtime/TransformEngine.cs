@@ -327,6 +327,10 @@
 //                      |                  |       |                | items in accumulator context (si-copy-003/004); on-empty keeps its empty-string items;  |
 //                      |                  |       |                | apply-templates in simple content preserves atomic template results via placeholders   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.72  | 17-09-2026     | Streaming Phase D4: LoadStreamingDocument enables StreamingLoadOptions.RetainRecords   |
+//                      |                  |       |                | so crawling streamable shapes (union/except/intersect, xsl:fork, multi-entry maps) can  |
+//                      |                  |       |                | replay the record stream; the TransformStreaming entry point stays single-pass          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16507,8 +16511,11 @@ public sealed class TransformEngine
     /// Loads a document as a forward-only (burst-mode) streamed tree for
     /// <c>xsl:source-document streamable="yes"</c>. Uses the host-registered
     /// <see cref="EvaluationContext.StreamingDocumentLoader"/> when present; otherwise opens
-    /// <c>file:</c> URIs and local paths directly. Streamed documents are single-pass and are
-    /// never cached.
+    /// <c>file:</c> URIs and local paths directly. Record retention is enabled so that
+    /// spec-legal crawling constructs (unions, <c>except</c>/<c>intersect</c>,
+    /// <c>xsl:fork</c> branches, multi-entry map constructors) can each replay the full
+    /// record stream; the bounded-memory single-pass contract is preserved for the public
+    /// streaming transform entry point, which loads without retention.
     /// </summary>
     /// <param name="resolvedUri">The absolute, resource-mapped document URI.</param>
     private static IXdmNode LoadStreamingDocument(string resolvedUri)
@@ -16516,7 +16523,12 @@ public sealed class TransformEngine
         string path = resolvedUri.StartsWith("file:", StringComparison.OrdinalIgnoreCase)
             ? new Uri(resolvedUri).LocalPath
             : resolvedUri;
-        var options = new StreamingLoadOptions { BaseUri = resolvedUri, DocumentUri = resolvedUri };
+        var options = new StreamingLoadOptions
+        {
+            BaseUri = resolvedUri,
+            DocumentUri = resolvedUri,
+            RetainRecords = true,
+        };
         return XmlStreamingProvider.Load(System.IO.File.OpenRead(path), options);
     }
 

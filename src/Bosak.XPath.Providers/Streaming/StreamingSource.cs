@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 16-09-2026     | Phase B: IStreamingNode, per-record hook with drop support, Drain/CanDrain               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 17-09-2026     | Phase D4: opt-in record retention (tee/replay) for crawling streamable shapes          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using System.Xml.Linq;
@@ -56,12 +58,21 @@ internal sealed class StreamingSource
     private PumpState _pumpState = PumpState.NotStarted;
     private int _nextRecordIndex;
 
+    // Phase D4: opt-in record retention (tee/replay). When options.RetainRecords is set,                                                                     
+    // every accepted record is appended to _retainedRecords as the single shared pump
+    // enumerator produces it; consumers enumerate the list by index and whichever
+    // enumerator reaches the frontier advances the pump. Evaluation is single-threaded,
+    // so the shared pump is never inside MoveNext for two consumers at once.
+    private readonly List<XdmValue>? _retainedRecords;
+    private IEnumerator<XdmValue>? _retainedPump;
+
     internal StreamingSource(XmlReader reader, StreamingLoadOptions options, bool ownsReader)
     {
         _reader = reader;
         _options = options;
         _ownsReader = ownsReader;
         RecordPostProcessor = options.RecordPostProcessor;
+        _retainedRecords = options.RetainRecords ? new List<XdmValue>() : null;
 
         // Read to the root element, capturing any DOCTYPE on the way. Comments and
         // processing instructions before the root element are not surfaced (documented
@@ -161,18 +172,28 @@ FoundRoot:
     /// <summary>Invoked once when the pump reaches the end of the root element.</summary>
     internal Action? StreamCompleted { get; set; }
 
-    /// <summary>True when the stream can be drained (not started, or already done).</summary>
-    internal bool CanDrain => _pumpState != PumpState.Pumping;
+    /// <summary>True when the stream can be drained (not started, already done, or retained).</summary>
+    internal bool CanDrain => _retainedRecords is not null || _pumpState != PumpState.Pumping;
 
     /// <summary>
     /// Consumes the remainder of the stream without exposing records: every record still
-    /// flows through <see cref="RecordPostProcessor"/> and is released. Used by the
-    /// engine for grounding reads such as document-level accumulator-after values.
+    /// flows through <see cref="RecordPostProcessor"/> and is released (or, with retention
+    /// on, appended to the memo). Used by the engine for grounding reads such as
+    /// document-level accumulator-after values.
     /// </summary>
     internal void Drain()
     {
         if (_pumpState == PumpState.Done)
             return;
+        if (_retainedRecords is not null)
+        {
+            // Retained: any outstanding enumeration continues from the memo, so draining
+            // to the end (appending all remaining records) cannot corrupt it.
+            foreach (var _ in ReplayAll())
+            {
+            }
+            return;
+        }
         if (_pumpState == PumpState.Pumping)
         {
             throw new StreamingException(
@@ -194,18 +215,99 @@ FoundRoot:
     internal int TotalRecords => _nextRecordIndex;
 
     /// <summary>
-    /// The single-pass sequence of the root element's children (the streamed records),
-    /// filtered by node kind. Can be enumerated at most once.
+    /// The sequence of the root element's children (the streamed records), filtered by
+    /// node kind. Without retention this is a single-pass sequence that can be enumerated
+    /// at most once; with retention (see <see cref="StreamingLoadOptions.RetainRecords"/>)
+    /// every enumeration replays the records memoized so far and continues at the pump
+    /// frontier, so any number of consumers each see the full record stream.
     /// </summary>
     internal XdmSequence ChildRecords(XdmNodeKind kind)
-        => XdmSequence.FromSource(new StreamingSinglePassSequence(() => Pump(kind)));
+    {
+        if (_retainedRecords is not null)
+        {
+            return XdmSequence.FromSource(new EnumerableXdmSequence(ReplayChildren(kind)));
+        }
+        return XdmSequence.FromSource(new StreamingSinglePassSequence(() => Pump(kind)));
+    }
+
+    private IEnumerable<XdmValue> ReplayChildren(XdmNodeKind kind)
+    {
+        foreach (var item in ReplayAll())
+        {
+            if (MatchesKind(item.NodeValue!.NodeKind, kind))
+                yield return item;
+        }
+    }
 
     /// <summary>
-    /// The single-pass sequence of the root element's descendants: every record
-    /// followed by its own descendants, in document order.
+    /// The sequence of the root element's descendants: every record followed by its own
+    /// descendants, in document order. Single-pass without retention; replayable with
+    /// retention (see <see cref="ChildRecords"/>).
     /// </summary>
     internal XdmSequence DescendantRecords(bool includeRoot)
-        => XdmSequence.FromSource(new StreamingSinglePassSequence(() => PumpDescendants(includeRoot)));
+    {
+        if (_retainedRecords is not null)
+        {
+            return XdmSequence.FromSource(new EnumerableXdmSequence(ReplayDescendants(includeRoot)));
+        }
+        return XdmSequence.FromSource(new StreamingSinglePassSequence(() => PumpDescendants(includeRoot)));
+    }
+
+    private IEnumerable<XdmValue> ReplayDescendants(bool includeRoot)
+    {
+        if (includeRoot)
+            yield return XdmValue.FromNode(_rootNode);
+
+        foreach (var item in ReplayAll())
+        {
+            yield return item;
+            var record = (StreamingNode)item.NodeValue!;
+            foreach (var descendant in record.InnerAxis(XdmAxis.Descendant))
+            {
+                yield return descendant;
+            }
+        }
+    }
+
+    /// <summary>
+    /// The shared record source for retained streaming: replays records from the memo by
+    /// index; when a consumer reaches the frontier it advances the single shared pump,
+    /// which appends each accepted record to the memo before yielding it. Consumers that
+    /// are behind read only memo entries, which is the tee.
+    /// </summary>
+    private IEnumerable<XdmValue> ReplayAll()
+    {
+        var records = _retainedRecords!;
+        var pump = RetainedPump();
+        int index = 0;
+        while (true)
+        {
+            while (index < records.Count)
+            {
+                yield return records[index];
+                index++;
+            }
+            if (_pumpState == PumpState.Done)
+                yield break;
+            if (!pump.MoveNext())
+                yield break;
+            // The pump appended at least one record before yielding; re-check the memo.
+        }
+    }
+
+    /// <summary>Returns the single shared memoizing pump enumerator, creating it on first use.</summary>
+    private IEnumerator<XdmValue> RetainedPump()
+    {
+        if (_retainedPump is not null)
+            return _retainedPump;
+        if (_pumpState != PumpState.NotStarted)
+        {
+            throw new StreamingException(
+                "Streaming: the streamed record stream was consumed before retention could be established.");
+        }
+        _retainedPump = Pump(XdmNodeKind.All);
+        return _retainedPump;
+    }
 
     /// <summary>
     /// Consumes the remainder of the stream to compute the string value of the document
@@ -215,7 +317,7 @@ FoundRoot:
     internal string ReadAllText()
     {
         var builder = new System.Text.StringBuilder();
-        var enumerator = Pump(XdmNodeKind.All);
+        var enumerator = AllRecords();
         while (enumerator.MoveNext())
         {
             builder.Append(enumerator.Current.NodeValue!.StringValue);
@@ -229,13 +331,20 @@ FoundRoot:
     /// </summary>
     internal string SerializeContent(System.Text.StringBuilder builder)
     {
-        var enumerator = Pump(XdmNodeKind.All);
+        var enumerator = AllRecords();
         while (enumerator.MoveNext())
         {
             builder.Append(enumerator.Current.NodeValue!.ToXmlString());
         }
         return builder.ToString();
     }
+
+    /// <summary>
+    /// Enumerator over every record from the start of the stream: a replay over the
+    /// memoized records with retention on, or a fresh single-pass pump otherwise.
+    /// </summary>
+    private IEnumerator<XdmValue> AllRecords()
+        => _retainedRecords is not null ? ReplayAll().GetEnumerator() : Pump(XdmNodeKind.All);
 
     private IEnumerator<XdmValue> PumpDescendants(bool includeRoot)
     {
@@ -296,8 +405,11 @@ FoundRoot:
                         var wrapper = Wrap(XDocumentNode.Wrap(record), _nextRecordIndex++);
                         if (RecordPostProcessor?.Invoke(record, wrapper) == false)
                             break; // dropped by the post-processor (e.g. xsl:strip-space)
+                        var value = XdmValue.FromNode(wrapper);
+                        if (_retainedRecords is not null)
+                            _retainedRecords.Add(value); // memoize before yielding so replay sees the full stream
                         if (MatchesKind(wrapper.NodeKind, kind))
-                            yield return XdmValue.FromNode(wrapper);
+                            yield return value;
                         break;
                     }
 
@@ -309,8 +421,11 @@ FoundRoot:
                         var wrapper = WrapNonElementRecord(record);
                         if (RecordPostProcessor?.Invoke(record, wrapper) == false)
                             break;
+                        var value = XdmValue.FromNode(wrapper);
+                        if (_retainedRecords is not null)
+                            _retainedRecords.Add(value); // memoize before yielding so replay sees the full stream
                         if (MatchesKind(wrapper.NodeKind, kind))
-                            yield return XdmValue.FromNode(wrapper);
+                            yield return value;
                         break;
                     }
 
@@ -320,8 +435,11 @@ FoundRoot:
                         var wrapper = WrapNonElementRecord(record);
                         if (RecordPostProcessor?.Invoke(record, wrapper) == false)
                             break;
+                        var value = XdmValue.FromNode(wrapper);
+                        if (_retainedRecords is not null)
+                            _retainedRecords.Add(value); // memoize before yielding so replay sees the full stream
                         if (MatchesKind(wrapper.NodeKind, kind))
-                            yield return XdmValue.FromNode(wrapper);
+                            yield return value;
                         break;
                     }
 
@@ -331,8 +449,11 @@ FoundRoot:
                         var wrapper = WrapNonElementRecord(record);
                         if (RecordPostProcessor?.Invoke(record, wrapper) == false)
                             break;
+                        var value = XdmValue.FromNode(wrapper);
+                        if (_retainedRecords is not null)
+                            _retainedRecords.Add(value); // memoize before yielding so replay sees the full stream
                         if (MatchesKind(wrapper.NodeKind, kind))
-                            yield return XdmValue.FromNode(wrapper);
+                            yield return value;
                         break;
                     }
 
@@ -342,8 +463,11 @@ FoundRoot:
                         var wrapper = WrapNonElementRecord(record);
                         if (RecordPostProcessor?.Invoke(record, wrapper) == false)
                             break;
+                        var value = XdmValue.FromNode(wrapper);
+                        if (_retainedRecords is not null)
+                            _retainedRecords.Add(value); // memoize before yielding so replay sees the full stream
                         if (MatchesKind(wrapper.NodeKind, kind))
-                            yield return XdmValue.FromNode(wrapper);
+                            yield return value;
                         break;
                     }
 

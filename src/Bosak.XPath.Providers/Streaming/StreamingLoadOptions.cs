@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 16-09-2026     | Phase B: RecordPostProcessor is a node-level Func with drop support (was element Action) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 17-09-2026     | Phase D4: RetainRecords opt-in memoization (tee/replay) for crawling streamable shapes   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Providers.Streaming;
 
@@ -54,4 +56,24 @@ public sealed class StreamingLoadOptions
     /// evaluation per record.
     /// </summary>
     public Func<System.Xml.Linq.XObject, Bosak.XPath.Core.Xdm.IXdmNode, bool>? RecordPostProcessor { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether every materialized top-level record is
+    /// retained in memory as the pump produces it, so that the record stream can be
+    /// replayed: each enumeration of the root's children or descendants sees all records
+    /// already pumped (a tee), and whichever enumeration reaches the pump frontier
+    /// continues the read. Defaults to <c>false</c>: the stream is forward-only, its
+    /// children can be enumerated once, and a second enumeration throws a
+    /// <see cref="StreamingException"/>.
+    /// </summary>
+    /// <remarks>
+    /// Retention trades the bounded-memory guarantee for document-size memory. It exists
+    /// for spec-legal "crawling" streamable shapes (unions, <c>except</c>/<c>intersect</c>,
+    /// <c>xsl:fork</c> branches, multi-entry map constructors) in which each operand must
+    /// see the full record stream. The XSLT engine enables it for streamable
+    /// <c>xsl:source-document</c> documents loaded mid-transform; the public streaming
+    /// transform entry point leaves it off to preserve the documented bounded-memory
+    /// contract.
+    /// </remarks>
+    public bool RetainRecords { get; set; }
 }
