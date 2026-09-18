@@ -59,6 +59,8 @@
 //                      | Charles Korthout | 1.30  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      | Charles Korthout | 1.31  | 10-09-2026     | Perf: span-based HTML escaping (no per-char strings/encoding lookups); copy-on-write nam |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.32  | 17-09-2026     | SelfCloseVoidHtmlElements option emits "/>" for HTML void elements in file-written      |
+//                      |                  |       |                | result documents so the harness can reload them as XML (si-fork-119 secondary docs)     |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -2171,7 +2173,10 @@ public static class ResultTreeSerializer
             // 3.1, section 7 (HTML output method).
             if (props.HtmlVersion == "5.0" && IsHtmlVoidElement(localName))
             {
-                writer.Write('>');
+                // File-bound secondary result documents self-close void elements so the
+                // serialized document stays well-formed XML (both forms are allowed by
+                // the serialization spec; in-memory output keeps the unclosed form).
+                writer.Write(props.SelfCloseVoidHtmlElements ? "/>" : ">");
             }
             else
             {

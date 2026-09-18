@@ -39,6 +39,8 @@
 //                      | Charles Korthout | 2.0   | 28-08-2026     | Added DefaultHtmlVersion processor default for HTML version fallback.                    |
 //                      | Charles Korthout | 2.1   | 09-09-2026     | fn:transform character-map key error uses SEPM0017                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.2   | 17-09-2026     | SelfCloseVoidHtmlElements flag: file-written HTML result documents self-close void       |
+//                      |                  |       |                | elements so they remain reloadable as XML                                                |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -156,6 +158,15 @@ public sealed class OutputProperties
     /// by an explicit <c>xsl:result-document</c> instruction.
     /// </summary>
     internal bool ImplicitResultTree { get; set; }
+
+    /// <summary>
+    /// True when the HTML 5.0 void elements (meta, br, img, ...) must be self-closed
+    /// (<c>&lt;meta/&gt;</c>) instead of emitted without an end tag (<c>&lt;meta&gt;</c>).
+    /// Enabled when a secondary result document is written to a file so that the
+    /// serialized document remains well-formed XML and can be parsed back by consumers
+    /// (the XSLT serialization spec allows either form; si-fork-119).
+    /// </summary>
+    internal bool SelfCloseVoidHtmlElements { get; set; }
     internal bool OmitXmlDeclarationSpecified { get; set; }
     internal bool IndentSpecified { get; set; }
     internal bool EncodingSpecified { get; set; }

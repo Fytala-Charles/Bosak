@@ -306,6 +306,9 @@
 //                      | Charles Korthout | 2.148 | 17-09-2026     | UnaryPlus/Negate atomize their operand (+@att returned the attribute node, making a  |
 //                      |                  |       |                | final path step mix nodes/atomics and spuriously raise XPTY0018 on streamed docs)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.149 | 17-09-2026     | ValueMatchesType map(K,V)/array(T) params split from the case-preserved type name     |
+//                      |                  |       |                | so Q{...} key-type prefixes survive the lowercase normalization (si-fork-119)          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -10993,10 +10996,13 @@ public static class VmEngine
 
         // Parameterized map types: map(K, V). Empty maps match any key/value types;
         // otherwise every entry must match the declared key and value types.
+        // Split the parameters from the case-preserved type string: Q{uri} type names
+        // inside the parameter list lose the xs-namespace recognition when lowercased.
         if (normalized.StartsWith("map(") && normalized.EndsWith(')'))
         {
             if (!value.IsMap) return false;
-            var inner = normalized.Substring(4, normalized.Length - 5).Trim();
+            var casePreservedMap = GetCasePreservedTypeName(typeName);
+            var inner = casePreservedMap.Substring(4, casePreservedMap.Length - 5).Trim();
             if (string.IsNullOrEmpty(inner) || inner == "*")
                 return true;
             var parts = SplitTopLevel(inner, ',');
@@ -11017,11 +11023,13 @@ public static class VmEngine
         }
 
         // Parameterized array types: array(T). Empty arrays match any member type;
-        // otherwise every member must match the declared type.
+        // otherwise every member must match the declared type. As with map(K, V),
+        // split from the case-preserved string so Q{uri} member types survive intact.
         if (normalized.StartsWith("array(") && normalized.EndsWith(')'))
         {
             if (!value.IsArray) return false;
-            var inner = normalized.Substring(6, normalized.Length - 7).Trim();
+            var casePreservedArray = GetCasePreservedTypeName(typeName);
+            var inner = casePreservedArray.Substring(6, casePreservedArray.Length - 7).Trim();
             if (string.IsNullOrEmpty(inner) || inner == "*")
                 return true;
             foreach (var member in value.ArrayValue.Values)

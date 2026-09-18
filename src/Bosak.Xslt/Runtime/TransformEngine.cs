@@ -343,6 +343,10 @@
 //                      |                  |       |                | record replay (IStreamingDocument.EnableReplay) so every fork prong sees the full       |
 //                      |                  |       |                | record stream (si-fork-808/816)                                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.76  | 17-09-2026     | Function bodies accept xsl:fork/xsl:where-populated; tree-building result documents      |
+//                      |                  |       |                | suspend raw-item collection under global method=adaptive; file-written HTML result docs |
+//                      |                  |       |                | self-close void elements (si-fork-119/810/811/815)                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -4409,6 +4413,63 @@ public sealed class TransformEngine
 
                         if (iterCompletionResult.HasValue && !iterCompletionResult.Value.IsUndefined)
                             results.Add(iterCompletionResult.Value);
+                        break;
+                    }
+                case "where-populated":
+                    {
+                        var wpSelect = instruction.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(wpSelect))
+                        {
+                            var wpResult = CompileXPath(wpSelect, instruction).Evaluate(_context);
+                            // xsl:where-populated discards each "empty" item individually.
+                            results.AddRange(EnumerateItems(wpResult).Where(IsPopulated));
+                            break;
+                        }
+
+                        var wpItems = new List<XdmValue>();
+                        var wpXslNs = Stylesheet.Stylesheet.XslNamespace;
+                        foreach (var childNode in instruction.Nodes())
+                        {
+                            if (childNode is XElement e && e.Name.NamespaceName == wpXslNs
+                                && e.Name.LocalName == "on-empty")
+                                continue;
+                            ProcessFunctionBodyNode(childNode, wpItems, contextItem);
+                        }
+                        var populatedItems = wpItems.Where(IsPopulated).ToList();
+                        if (populatedItems.Count > 0)
+                        {
+                            results.AddRange(populatedItems);
+                        }
+                        else
+                        {
+                            foreach (var onEmpty in instruction.Elements(XName.Get("on-empty", wpXslNs)))
+                            {
+                                var oeSelect = onEmpty.Attribute("select")?.Value;
+                                if (!string.IsNullOrEmpty(oeSelect))
+                                {
+                                    FlattenToList(CompileXPath(oeSelect, onEmpty).Evaluate(_context), results);
+                                }
+                                else
+                                {
+                                    foreach (var childNode in onEmpty.Nodes())
+                                        ProcessFunctionBodyNode(childNode, results, contextItem);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case "fork":
+                    {
+                        // XSLT 3.0 §8.3: the result of xsl:fork is the concatenation of the
+                        // results of its prongs in prong order. Each prong instruction is
+                        // executed (establishing its own focus/group context) and its result
+                        // collected as items; side-effect-only prongs (e.g. an
+                        // xsl:result-document with no primary output) contribute zero items.
+                        foreach (var prong in instruction.Elements())
+                        {
+                            var prongItems = EvaluateInstructionToItems(prong, contextItem);
+                            results.AddRange(prongItems);
+                        }
                         break;
                     }
                 case "assert":
@@ -15065,6 +15126,64 @@ public sealed class TransformEngine
     }
 
     /// <summary>
+    /// Executes a single instruction (e.g. an <c>xsl:fork</c> prong) and returns its
+    /// result as a flat list of XDM items. The instruction runs with a placeholder
+    /// accumulator in a temporary container so that sequence-producing instructions
+    /// (<c>xsl:sequence</c>, <c>xsl:for-each-group</c>, <c>xsl:iterate</c>) keep their
+    /// position, and nodes, attributes and atomics are harvested in source order.
+    /// </summary>
+    /// <param name="instruction">The instruction element to execute.</param>
+    /// <param name="contextItem">The context item for the instruction.</param>
+    /// <returns>The flat list of items the instruction produced.</returns>
+    private List<XdmValue> EvaluateInstructionToItems(XElement instruction, XdmValue contextItem)
+    {
+        var savedContainer = _currentContainer;
+        var savedLastAtomic = _lastAddedWasAtomic;
+        var savedAccumulator = _sequenceAccumulator;
+        var temp = new XElement("__temp__");
+        _currentContainer = temp;
+        _lastAddedWasAtomic = false;
+        _sequenceAccumulator = new PlaceholderSequenceAccumulator(this);
+        try
+        {
+            ExecuteXsltInstruction(instruction, contextItem);
+        }
+        finally
+        {
+            _currentContainer = savedContainer;
+            _lastAddedWasAtomic = savedLastAtomic;
+            _sequenceAccumulator = savedAccumulator;
+        }
+
+        var items = new List<XdmValue>();
+        foreach (var attr in temp.Attributes())
+            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
+        foreach (var node in temp.Nodes())
+        {
+            if (node is XElement e)
+            {
+                if (e.Name.LocalName == "__xdm_seq__" && e.Name.NamespaceName == "")
+                {
+                    if (e.Annotation<SequencePlaceholderItems>() is { } holder)
+                    {
+                        foreach (var phItem in holder.Items)
+                            items.Add(phItem);
+                    }
+                }
+                else
+                {
+                    items.Add(XdmValue.FromNode(XDocumentNode.Wrap(e)));
+                }
+            }
+            else if (node is XText t)
+            {
+                items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(t.Value))));
+            }
+        }
+        return items;
+    }
+
+    /// <summary>
     /// Evaluates a sequence constructor as a flat list of XDM items, deferring
     /// xsl:on-empty / xsl:on-non-empty processing until all other items have
     /// been produced so the emptiness test is applied correctly.
@@ -15898,6 +16017,9 @@ public sealed class TransformEngine
         // for default output-method inference; carry the stylesheet version along.
         props.EffectiveVersion ??= _stylesheet.Version;
         props.ImplicitResultTree = false;
+        // A secondary result document written to a file self-closes HTML 5.0 void
+        // elements (meta, br, ...) so the document remains well-formed XML (si-fork-119).
+        props.SelfCloseVoidHtmlElements = true;
 
         // Wrap the result-document children in a document so that serialization
         // honours the effective output properties (version, undeclare-prefixes, etc.).
@@ -16148,12 +16270,13 @@ public sealed class TransformEngine
             _context.CurrentOutputUri = _baseOutputUri ?? string.Empty;
 
             // For raw output, enable raw-item collection and capture the result so that
-            // an enclosing non-JSON result document is not affected.
+            // an enclosing non-JSON result document is not affected. For tree output,
+            // suspend raw-item collection so literal elements build the result tree.
             var savedCollectRaw = _collectRawItems;
             var savedRawItems = _resultDocumentRawItems;
+            _collectRawItems = collectRaw;
             if (collectRaw)
             {
-                _collectRawItems = true;
                 _resultDocumentRawItems = new List<XdmValue>();
             }
 
@@ -16228,9 +16351,13 @@ public sealed class TransformEngine
 
             temp = new XElement("__result-document__");
             _currentContainer = temp;
+            // A tree-building result document must suspend any enclosing raw-item
+            // collection (global method=json/adaptive): its content is a result tree,
+            // and literal elements would otherwise be diverted into the raw-items list
+            // of the enclosing output (si-fork-119).
+            _collectRawItems = collectRaw;
             if (collectRaw)
             {
-                _collectRawItems = true;
                 _resultDocumentRawItems = new List<XdmValue>();
                 rawItems = _resultDocumentRawItems;
             }
