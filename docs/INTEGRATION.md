@@ -1840,6 +1840,7 @@ IXdmNode doc = XmlStreamingProvider.Load(stream, new StreamingLoadOptions { Base
 | `xsl:for-each` / `xsl:apply-templates` over the root's children (or `//record`), record-local bodies | **Bounded** — records are released as they are consumed |
 | Predicates on the record step, `position()` | Bounded |
 | `xsl:sort`, `xsl:for-each-group`, `fn:count()`, `fn:last()` subscript `[last()]`, keys, variables retaining records | Unbounded but correct (buffers the stream) |
+| Spec-streaming multi-operand shapes (`//A \| //B`, `except`/`intersect`, `xsl:fork` branches, multi-entry `map{}`) via `xsl:source-document streamable="yes"` | Unbounded but correct — the engine opts into record retention (`StreamingLoadOptions.RetainRecords` / `IStreamingDocument.EnableReplay`): records are memoized so each operand replays the stream; memory is bounded by document size |
 | `fn:last()` in a streamed focus, a second pass over the streamed root, `preceding` axes across records, `following` axes past the current record | Clear `StreamingException`/error — never silently wrong data |
 | `xsl:accumulator` declarations | **Bounded** — values are pushed per record and travel as annotations; document-level `accumulator-after` drains the stream when nothing is mid-enumeration |
 
@@ -1847,10 +1848,13 @@ Notes and limitations: the streamed children of the root are **forward-only** (o
 `xsl:strip-space`/`xsl:preserve-space` rules are applied per record (including top-level
 whitespace text records, which are dropped). Cross-accumulator references in rule selects
 must target accumulators declared **earlier**; accumulator rule and initial-value errors
-surface at the point of access (spec bug 29813). DTD is prohibited by default (pass
-`ReaderSettings` to relax). Comments/PIs before the root element and DTD entity
-declarations are not surfaced; `fn:transform` with a streaming source and
-`xsl:source-document streamable="yes"` are unsupported; `fn:copy-of` returns the streamed
+surface at the point of access (spec bug 29813). DTDs are processed by default (matching
+the in-memory loader; unparsed entities are surfaced on the document node) — pass
+`ReaderSettings` with `DtdProcessing.Prohibit` to reject them. Comments/PIs before the
+root element are not surfaced. `fn:transform` with a streaming source is unsupported;
+`xsl:source-document streamable="yes"` is implemented since Streaming Phase C (spec
+constructs compile under the §19 streamability analyzer and execute at runtime, with
+record retention for multi-operand shapes as documented above). `fn:copy-of` returns the streamed
 node itself rather than a fresh copy (`xsl:copy-of` into the result tree works normally,
 and `fn:snapshot` deep-copies streamed nodes with their accumulator values).
 
@@ -2031,7 +2035,7 @@ through `WithNamespace`.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Streaming input (burst mode) | ✅ Working | `XsltExecutable.TransformStreaming` + `XmlStreamingProvider`: record-at-a-time processing in bounded memory; forward-only root children; see §3.2a. Streaming accumulators (Phase B) work over the streamed source. `streamable="yes"` constructs receive compile-time XTSE3430 streamability analysis (Phase C1–C3, `StreamabilityAnalyzer` — §19 posture/sweep rules with Saxon-compatible extensions incl. streamable accumulators and merge sources); the W3C static-error cases run for real — the harness skip is removed with zero genuine regressions vs the C1 per-set baselines (full sweep 9,929/344/4,327); streamable `xsl:source-document` is implemented (accumulator-031/068 pass); `xsl:supports-streaming` reports `yes` |
+| Streaming input (burst mode) | ✅ Working | `XsltExecutable.TransformStreaming` + `XmlStreamingProvider`: record-at-a-time processing in bounded memory by default; forward-only root children; see §3.2a. Streaming accumulators (Phase B) work over the streamed source. `streamable="yes"` constructs receive compile-time XTSE3430 streamability analysis (Phase C, `StreamabilityAnalyzer` — §19 posture/sweep rules) and execute at runtime (Phase D: fused single-pass eager helpers, §11.7.3 content semantics, `fn:snapshot` grounding, opt-in record retention for crawling multi-operand shapes, streaming DTD). Full sweep 10,152/123/4,325; streamable `xsl:source-document` implemented; `xsl:supports-streaming` reports `yes` |
 | `xsl:template match="…"` | ✅ Working | Pattern compiler: element names, `*`, `@*`, predicates, union (`\|`) |
 | `xsl:template name="…"` | ✅ Working | Named template dispatch; raw XDM result via `XsltExecutable.Transform(..., rawResult: true)`; whitespace/EQName names normalized; `xsl:initial-template` permitted in XSLT namespace |
 | `xsl:call-template` | ✅ Working | With `xsl:with-param` support; matches named templates by expanded QName (different prefixes bound to the same URI); rejects template names in reserved namespaces (`XTSE0080`) except `xsl:initial-template` |
