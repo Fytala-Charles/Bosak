@@ -1,7 +1,8 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-17 (ninth session)
-**Commit:** `fix(streaming): D5 ...` series `d89e858`..`60486c1` (six commits, this session)
+**Commit:** `fix(streaming): D5 ...` series `d89e858`..`c226a09` (seven commits, this session)
+**Released:** **`v0.10.1-beta`** — main pushed (`6bd5995..c226a09`), tag pushed → release.yml → Trusted Publishing → **all 9 packages live on nuget.org** (~13 min); GitHub Release created manually by the owner (gh token in env was expired). Release notes: streaming track (Phases A–D) headline, XSLT 10,152/123/4,325 (98.8%), QT3 31,142/0/679, unit 2,437/0/0.
 **Current focus:** **Streaming Phase D COMPLETE — runtime posture enforcement.** The streamable constructs the Phase C §19 analyzer accepts now execute at runtime. Final full XSLT sweep **10,152 passed / 123 failed / 4,325 skipped** (14,600 tests) — **+223 passes / −221 failures vs Phase C3**, with **zero sets worse than their C3 baselines** (224 sets diffed). QT3 unchanged 31,142/0/679; unit **2,437/0/0** (10 projects). Commits: `d89e858` (D1), `4ffc346` (D2), `f6d4dd7` (D3), `7d98f37` (D4), `48b929b` (D4 regression fix), `60486c1` (D5).
 **What was built:**
 - **D1 — fused single-pass eager helpers** (`XdmValue.cs` 2.6, `VmEngine.cs` 2.147, `SinglePassXdmSequence.cs` 0.2, `FunctionLibrary.cs` 5.106): EBV (`SequenceEffectiveBooleanValue`), `instance of`, `treat as` (lazy `TreatAsLazyIterator`), `one-or-more`/`zero-or-one`/`exactly-one`, `fn:boolean` consume `ISinglePassSequence` exactly once (spec-exact FORG0003/4/5/6); `SinglePassXdmSequence` now throws `StreamingException` like the provider guard. ~40 strm failures cleared; sx-IfExpr/sf-one-or-more/sf-exactly-one/sf-zero-or-one at 0.
