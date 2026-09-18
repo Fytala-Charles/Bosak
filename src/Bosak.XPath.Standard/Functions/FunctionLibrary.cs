@@ -83,6 +83,8 @@
 //                      | Charles Korthout | 5.111 | 17-09-2026     | Streaming Phase D: fn:snapshot grounds the streamed document node / shell root          |
 //                      |                    |       |                | (records fallback + skeleton re-read; loud error when nothing recoverable)              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.112 | 17-09-2026     | xsl:product-version fallback bumped to 0.10.1-beta (streaming release)                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4808,7 +4810,7 @@ public static class FunctionLibrary
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
-            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.10.0-beta",
+            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.10.1-beta",
             "xsl:is-schema-aware" => "no",
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
