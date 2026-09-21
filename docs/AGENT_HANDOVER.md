@@ -2,6 +2,7 @@
 
 **Date:** 2026-09-21 (eleventh session)
 **Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Released:** **`v0.10.2-beta`** — main pushed (`980f9d8..c0c79ed`), tag pushed → release.yml → Trusted Publishing → **all 9 packages live on nuget.org** (verified via the flat-container API ~11 min after tag push); GitHub Release to be created manually by the owner (gh token still expired). Release notes drafted: si-fork residual batch + provider batch headline, XSLT 10,166/109/4,325 (98.9%), QT3 31,142/0/679, unit 2,394/0/0, new API `TransformStreamingToString`.
 **Current focus:** **REQ-088 streaming provider batch — the four provider follow-ups deferred since Phases A–D are done: `StreamingNode` wrapper cache, pre-root comment/PI surfacing, `fn:copy-of` deep-copy guard, `XsltExecutable.TransformStreamingToString`.** Full XSLT sweep **10,166 passed / 109 failed / 4,325 skipped** — **+2 passes / −2 failures vs the d003b8b baseline** (10,164/111/4,325; skips unchanged, per-set diff clean — zero sets worse; the flips are si-group-064 and sx-union-102, see the REQ-088 log). QT3 unchanged **31,142/0/679**; unit **2,394/0/0** across the 9 `Bosak.sln` test projects (+13: Providers 61/0/0, Xslt.Tests 509/0/0; the 2,453 figure in the previous session includes the 72 LanguageServer tests, which are not in `Bosak.sln`); build 0/0.
 **What was built:**
 - **Wrapper cache (allocation)** (`StreamingSource.cs` 0.6): `Wrap` now caches `StreamingNode`s per inner `XDocumentNode` in a `ConditionalWeakTable` — navigation allocates per node instead of per access. Index-consistency assumption verified across every `Wrap` call site: pump records are fresh `XObject`s (unique index), in-record navigation (`Parent`, `WrapEach`, `EnumerateAncestors`) always reuses the node's own `_recordIndex`, and pre-root shell nodes always use -1, so the per-node cached wrapper is always valid. CWT eviction releases wrappers with their record, preserving the bounded-memory contract (both 500k-record bounded-memory tests re-passed). Document/root wrappers remain the dedicated `_docNode`/`_rootNode` fields.
@@ -20,7 +21,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-21 (tenth session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d003b8b` — fix(xslt): si-fork residual batch (committed; full sweep re-verified after commit)
 **Current focus:** **si-fork residual batch — the 7 remaining W3C si-fork streaming failures fixed.** Full XSLT sweep **10,164 passed / 111 failed / 4,325 skipped** (+8/−8 vs the 10,156/119/4,325 baseline; zero sets worse — arithmetically guaranteed: passes +8 = failures −8, skips unchanged). si-fork set now **44 passed / 11 failed**, the 11 being the documented XTSE1650 schema-awareness artifacts (001–009, 901, 902). QT3 unchanged **31,142/0/679**; unit **2,453/0/0** (9 solution test projects; 8 new tests); build 0/0.
 **What was built:**
 - **Group-context isolation on template invocation** (`TransformEngine.cs` 6.77): `WithoutMergeContext` widened to `WithoutGroupAndMergeContext` — merge state plus `_currentGroup`/`_currentGroupingKey` saved/cleared/restored around `xsl:call-template` (main sequence-constructor path and the function-body `ProcessFunctionBodyNode` path) and around all `xsl:apply-templates` dispatch (`ProcessApplyTemplatesItem` wraps `ExecuteTemplate`/`ApplyBuiltInRules`; every apply-templates path flows through it). Templates invoked from a group body now see the group as absent: `current-group()`/`current-grouping-key()` raise XTDE1061/XTDE1071, caught by `xsl:catch` → `#absent#` (si-fork-113/114/115). The for-each-group body itself is deliberately untouched — `current-group()` stays available there.
@@ -41,7 +42,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-17 (ninth session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fix(streaming): D5 ...` series `d89e858`..`2d4a8c6` (nine commits, this session — post-release fork fix `9d81042` + docs)
 **Released:** **`v0.10.1-beta`** — main pushed (`6bd5995..c226a09`), tag pushed → release.yml → Trusted Publishing → **all 9 packages live on nuget.org** (~13 min); GitHub Release created manually by the owner (gh token in env was expired). Release notes: streaming track (Phases A–D) headline, XSLT 10,152/123/4,325 (98.8%), QT3 31,142/0/679, unit 2,437/0/0.
 **Current focus:** **Streaming Phase D COMPLETE — runtime posture enforcement.** The streamable constructs the Phase C §19 analyzer accepts now execute at runtime. Final full XSLT sweep **10,156 passed / 119 failed / 4,325 skipped** (14,600 tests) — **+227 passes / −225 failures vs Phase C3**, with **zero sets worse than their C3 baselines** (224 sets diffed). QT3 unchanged 31,142/0/679; unit **2,437/0/0** (10 projects). Commits: `d89e858` (D1), `4ffc346` (D2), `f6d4dd7` (D3), `7d98f37` (D4), `48b929b` (D4 regression fix), `60486c1` (D5).
 **What was built:**
@@ -63,7 +64,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-17 (eighth session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6a33456` — feat(streaming): Phase C — streamable source-document + §19 XTSE3430 analyzer
 **Current focus:** **REQ-086 Phase C COMPLETE (C1+C2+C3).** Final full XSLT sweep **9,929 passed / 344 failed / 4,327 skipped** — net vs the pre-analyzer C1 baseline **+117 passes, +3 failures**, and all 3 are documented accepted non-catches (`si-fork-116` analyzer miss, `si-fork-901/902` XTSE1650 schema artifacts that pre-empt the analyzer). Every per-set failure count is at-or-below its C1 baseline except si-fork (21→24, explained above). `decl/accumulator` 93/0/14 → **102/0/5** after `accumulator-031`/`068` were unskipped (streamable `xsl:source-document` from C1); only `accumulator-061` (burst-mode granularity) remains skipped. QT3 unchanged 31,142/0/679; unit tests **2,322/0/0** (Parser 192, Compiler 66, Runtime 232, Core 119, Api 87, XQuery 303, Standard 768, Providers 33, Xslt 450, LanguageServer 72); build 0/0.
 **What was built:**
 - **Phase C1 — declarations/plumbing**: `xsl:supports-streaming` → "yes" (`FunctionLibrary` 5.105); streamable `xsl:source-document` in `TransformEngine` (6.70, `isStreamable` + `AttachStreamingHooks`/`GetStreamingDriver`/`ResolveStreamingHref`/`LoadStreamingDocument`, per-document `_streamingDrivers`); `EvaluationContext.StreamingDocumentLoader` hook (2.25); harness `StreamingAllowedTestSets` filled dynamically from catalog `strm/` sets (88 sets, Program.cs 3.45); `StreamingSourceDocumentTests` (5 tests).
@@ -84,7 +85,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-16 (seventh session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `cc98a2b` — feat(streaming): Phase B — push-style streaming accumulators over burst-mode input
 **Current focus:** **Streaming Phase B landed: `xsl:accumulator` works over the burst-mode streamed source; W3C `decl/accumulator` at 93/0/14 (100% of runnable).** Phases A+B both shipped the same day; remaining streaming work is Phase C (`streamable="yes"`, §19 posture analysis, the `strm/` sets, `xsl:source-document`).
 **What was built:**
 - **Push model** (forced by the stream): the in-memory implementation computes accumulator values lazily per (acc, root) via a whole-tree walk — impossible over released records and cache-pinning. The stream delivers nodes in document order (= the accumulator traversal order), so a nested `StreamingAccumulatorDriver` in `TransformEngine` (6.69) carries each applicable accumulator's current value across records, fires start/end-phase rules per node (mirroring `Walk` at :2414), and stores per-node before/after values as `AccumulatorValues` annotations that die with the record (bounded).
@@ -104,7 +105,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-16 (sixth session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7333cc9` — feat(streaming): Phase A burst-mode streaming input — XmlStreamingProvider + TransformStreaming
 **Current focus:** **Streaming Phase A landed: burst-mode (semi-streaming) input.** Perf waves are paused (5–9 complete); the post-1.0 streaming track started with the input side. `xsl:supports-streaming` still reports `no`; `streamable="yes"`/§19 analysis (Phase C) and streaming accumulators (Phase B) are explicitly future phases; 1.0 proceeds independently.
 **What was built:**
 - **Provider** (`src/Bosak.XPath.Providers/Streaming/`, 6 files): `XmlStreamingProvider.Load(Stream|XmlReader, StreamingLoadOptions?)` presents the source as a forward-only document. Root start-tag → shell `XDocument` (registered first); records materialized per pull as detached `XElement`s via `XNode.ReadFrom`, `RegisterTree`'d in arrival order so cross-record document order falls out of the existing `(treeSeq<<32)|local` scheme with zero custom arithmetic. `StreamingNode` wrappers delegate everything to inner `XDocumentNode` except `Parent`/`Document` (re-rooted at streaming root/doc — `match="/doc/record"` and `/` work) and identity (`Equals`/`GetHashCode` by underlying `XObject`, so wrappers reached from below compare equal). Root-declared namespaces are inherited into records; whitespace/text/comment/PI records surface via holder-element tree roots. Single-pass enforcement: second enumerations, cross-record `preceding`, and cross-record `following` (unless genuinely last record of a finished stream) throw `StreamingException`.
@@ -126,7 +127,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-16 (fifth session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3f075ee` — REQ-085 performance wave 9: ValueMatchesType normalization cache
 **Current focus:** **Performance wave 9 landed: typed user-function call premium 424 → 280 → 120 B/call (−72% vs wave 7); the remaining typed-call cost is CPU-bound validation lookups (few allocations).** Tracked benchmarks allocation-flat (untyped workloads); one uniformly inflated outlier benchmark run discarded (compile benchmarks +27% with zero code changes — machine state, not code; clean re-run used). XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (VmEngine 2.145):**
 - **`ValueMatchesType` normalization cache** — the per-call `typeName.Trim().ToLowerInvariant()` + occurrence/prefix-strip slices (~90–130 B/typed call) are now computed once per distinct type string by `NormalizeTypeNameForAtomicMatch` (`ConcurrentDictionary`). The parenthesized-type branch is deliberately left in the matcher (it re-enters `ValueMatchesType`; unreachable after the earlier unwrap loop but kept defensively), and kind-test branches with their case-preserved forms are untouched — behavior identical on all paths.
@@ -141,7 +142,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-16 (fourth session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `86715d4` — REQ-085 performance wave 8: ApplyFunctionConversion syntactic-parse cache
 **Current focus:** **Performance wave 8 landed: typed user-function call premium 424 → 280 B/call (−34%).** The four tracked benchmarks use untyped built-ins only and are allocation-flat by design (FLWOR 22.18 MB, PathHeavy 21.18 MB); times wobble ±5% run-to-run on this machine at identical allocations (FLWOR measured 20.80/22.28/22.23 ms across three identical-allocation runs — power-plan switching, not code deltas). XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (VmEngine 2.144):**
 - **Typed-call probe** — `declare function f($x as xs:integer)` pays ~424 B/call over its untyped twin: the per-call sequence-type re-parse inside `ApplyFunctionConversion` (Trim/NormalizeEQNameTypeName/paren scan/function-family compaction/occurrence slicing per argument per call).
@@ -158,7 +159,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-16 (third session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `0f2712a` — REQ-085 performance wave 7: function-call machinery — span argument passing, fn:string/fn:concat single-pass
 **Current focus:** **Performance wave 7 landed: Evaluate_Flwor 21.49 → 20.80 ms, 24.24 → 22.18 MB (cumulative 44.23 → 20.80 ms, −53%; 66.75 → 22.18 MB, −67%); StringFunctions 10.43 → 9.80 ms / 10.06 → 9.94 MB (cumulative −67%/−76%); PathHeavy 16.10 → 15.93 ms / 21.18 MB; Transform_HtmlTable 47.23 ms / 42.87 MB (time within run noise). fn:string is now allocation-neutral; concat2 −75% per call.** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (VmEngine 2.143 + FunctionLibrary 5.102):**
 - **Call-cost probe decomposition:** 0-arg calls are already free; string() ≈ 280 B, number() ≈ 350 B, concat2 ≈ 615 B, concat5 ≈ 2.3 KB per call — the per-call `XdmValue[]` argument array plus impl-internal sequence unwrapping.
@@ -176,7 +177,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-16 (second session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `15dd5a6` — REQ-085 performance wave 6: FLWOR tuple materialization — keys atomized once per tuple, copy-free tuple views
 **Current focus:** **Performance wave 6 landed: Evaluate_Flwor 22.50 → 21.49 ms, 26.16 → 24.24 MB (cumulative 44.23 → 21.49 ms, −51%; 66.75 → 24.24 MB, −64%); FunctionHeavy alloc 405 → 366 KB; Transform_HtmlTable 45.92 ms / 43.23 MB (−4% time via the shared comparison path); PathHeavy byte-identical.** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (all in VmEngine 2.142):**
 - **FLWOR probe decomposition** (27.4 MB full query): base `//item` + For scaffolding 6.4 MB, where-clause keys 3.8 MB, concat/string return machinery 6.4 MB, order-by chunk 7.0 MB. The order-by chunk carried the avoidable churn.
@@ -194,7 +195,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-16
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `84dc188` — REQ-085 performance wave 5: lazy node-test filtering, predicate-path views, ordered-normalize fast path
 **Current focus:** **Performance wave 5 landed: Evaluate_PathHeavy 22.08 → 16.10 ms, 30.96 → 21.18 MB (cumulative 32.77 → 16.10 ms, −51%; 56.05 → 21.18 MB, −62%); StringFunctions 15.58 → 10.43 ms / 19.87 → 10.06 MB; FLWOR 27.61 → 22.50 ms / 36.66 → 26.16 MB; Transform_HtmlTable 51.46 → 47.81 ms / 47.13 → 43.23 MB (cumulative 193.34 → 47.81 ms, −75%; 115.48 → 43.23 MB, −63%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (VmEngine 2.140, plus lazy-cardinality correctness follow-ups in VmEngine 2.141 / FunctionLibrary 5.101 / QT3 harness ResultComparer 2.9):**
 - **Probe-driven decomposition** (throwaway probe in `%TEMP%`, `GC.GetAllocatedBytesForCurrentThread` per sub-expression, same catalog shape as the benchmarks): the `Filter` opcode's own lists were only ~0.5 MB of PathHeavy's 31.7 MB; the mass was (i) `FilterNodes` materializing List + array + wrapper per node per name/kind test, (ii) `NormalizeSequence`'s LINQ tuple-list + HashSet + stable sort on every path result, (iii) per-descendant-node `PathStepMap` block execution (~600 B/node, structural — left for post-1.0 with axis+name-test fusion).
@@ -214,7 +215,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `be54533` — REQ-085 performance wave 4: result-tree append fast paths + cached LRE bookkeeping
 **Current focus:** **Performance wave 4 landed: Transform_HtmlTable 62.57 → 51.46 ms (−18%), 61.54 → 47.13 MB (−23%). Cumulative 193.34 → 51.46 ms (−73%), 115.48 → 47.13 MB (−59%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (all in TransformEngine 6.67):**
 - **`NormalizeElementContent` fast path** — every constructed element's children were rebuilt (`ToList` + `RemoveNodes` + re-`Add`, plus fresh string/XText per text run via `ApplyComplexContentRules`). Now an allocation-free walk over the linked node list (`FirstNode`/`NextNode`) skips the rebuild unless a zero-length discard or adjacent-text merge is actually required; §5.7.1 semantics preserved (`XRawText : XText` covered by the same check; zero-length raw text still routes to the slow path).
@@ -232,7 +233,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-10 (second session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `223f38e` — REQ-085 performance wave 3: span-based HTML escaping + copy-on-write namespace bindings
 **Current focus:** **Performance wave 3 landed: Transform_HtmlTable 73.06 → 62.57 ms (cumulative 193.34 → 62.57, −68%), 71.53 → 61.54 MB (cumulative 115.48 → 61.54, −47%).** XSLT strict 7,722/3/6,875, QT3 31,142/0/679, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built:**
 - **Span-based HTML escaping** (`WriteHtmlEscapedFast`, ResultTreeSerializer 1.31): the serializer allocated a `Rune.ToString()` per ordinary character and resolved the output encoding + allocated char/byte arrays per `IsRepresentable` check (~150k allocations per transform). Now clean spans are written whole; per-codepoint handling only for specials; `IsUnicodeEncodingName` short-circuits representability for utf-8/utf-16/utf-32; unpaired surrogates keep the Rune U+FFFD semantics. Serialization share of the transform benchmark fell 7.5 → 1.3 MB.
@@ -245,7 +246,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-10
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `df8632c` — REQ-085 performance wave 2: XSLT transform path (compiled-XPath cache, Populate skip, LRE static-info cache)
 **Current focus:** **Performance wave 2 landed: Transform_HtmlTable 193.34 → 73.06 ms (−62%), 115.48 → 71.53 MB (−38%).** Xslt.Tests 377/0, QT3 31,142/0/679, XSLT strict 7,722/3/6,875, unit 2,216/0/0 — all unchanged; build 0/0.
 **What was built (bisect-driven, probe decomposition: ~6.4 MB fixed, ~8 KB per value-of, ~3.5 KB per LRE element):**
 - **Per-instruction compiled-XPath cache** (`CompiledXPathCache`, TransformEngine 6.66) — `CompileXPath` re-compiled the select expression on EVERY execution across all 72 call sites (value-of, for-each, sort keys, accumulator rules, AVT-adjacent paths); now cached per (instruction element, expression text) via ConditionalWeakTable — the stylesheet tree is immutable per executable.
@@ -260,7 +261,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09 (fourth session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5719f81` — REQ-085 performance wave 1: benchmark harness + baseline, wrapper cache, lazy axes, copy-free materialization
 **Current focus:** **Performance wave 1 landed: document benchmarks 33–48% faster, 45–51% less allocated.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.
 **What was built:**
 - **Benchmark harness** `benchmarks/Bosak.Benchmarks` (BenchmarkDotNet, not in Bosak.sln): 8 benchmarks over a synthetic 2,000-item catalog; baseline in `baseline-0.10.0.txt` + summary table in its README.
@@ -277,7 +278,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09 (third session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a787040` — REQ-084 Beta readiness: API review + XML-doc coverage + Beta version bump
 **Current focus:** **Alpha→Beta gates COMPLETE — status is Beta; version 0.10.0-beta.** QT3 31,142/0/679 and XSLT 7,722/3/6,875 unchanged; unit tests 2,216/0/0; build 0/0.
 **What was built:**
 - **API review inventory** (read-only, all 9 published packages) with findings triaged; fixes: `OccurrenceIndicator` moved to `Bosak.XPath.Core.Xdm` namespace (only breaking change — AST-level consumers); `Bosak.LanguageServer` `IsPackable=false`; dangling `ConsoleMessageListener` doc cref fixed (messages are discarded when no listener is set); file headers batch-normalized to `license.md (Apache-2.0)` + SPDX line (162 files — completes the 2026-09-05 convention).
@@ -293,7 +294,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09 (second session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a255003` — fix(XPath/XQuery): REQ-082 QT3 residual backlog cleared — 8 → 0 (QT3 31,142/0/679 = 100% of runnable)
 **Current focus:** **REQ-082 QT3 COMPLETE: 31,142 passed / 0 failed / 679 skipped with strict error-code matching — 100% of runnable QT3 tests pass.** XSLT strict sweep unchanged 7,722/3/6,875 (3 documented residuals); unit tests 2,216/0/0; build 0/0.
 **What was built (the final XPST0051 family):**
 - `ValidateFunctionConversionTarget` (VmEngine 2.137) — function-conversion targets are validated against XPath 3.1 §2.5.5.2 before conversion: pseudo-name `none`/`none()` → XPST0051 (K-FunctionProlog-57/58), built-in list types xs:NMTOKENS/IDREFS/ENTITIES → XPST0051 (FunctionCall-027), user-defined schema types whose variety is list or a union containing/derived from a list → XPST0051 (FunctionCall-032/033/034/039, reusing `IsDisallowedSequenceTypeItemType`).
@@ -306,7 +307,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-09
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3bc6fb5` — fix(XPath/XQuery): REQ-082 QT3 residual backlog triage — 233 → 8 (QT3 31,134/8/679; XSLT 7,722/3/6,875 unchanged)
 **Current focus:** **REQ-082 QT3 residual backlog triaged: QT3 30,909/233/679 → 31,134/8/679 (97.84%), zero new failure names; ~225 tests fixed across ~20 error-code families. Remaining 8 are documented XPST0051 schema-type validation gaps. XSLT strict sweep unchanged 7,722/3/6,875; unit tests 2,216/0/0 across all nine projects; build 0/0.**
 **What was built:**
 - **Value-accessor family (~41):** `XdmValue.ThrowInvalidAccess` (Core 2.4) prefixes XPTY0004; fn:local-name-from-QName / namespace-uri-from-QName raise XPTY0117 for untypedAtomic arguments (FunctionLibrary 5.98).
@@ -328,7 +329,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-07
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4107ce8` — fix(XPath/XQuery): REQ-082 QT3 strict error-code triage — 1,200 exposed, ~970 fixed, 233 documented residuals
 **Current focus:** **REQ-082 QT3 strict follow-up COMPLETE for this session: QT3 29,948/1,200/673 (tightened baseline) → 30,909/233/679 (97.13%), zero new failure names; XSLT strict sweep unchanged 7,722/3/6,875; `dotnet test Bosak.sln` green (exit 0).**
 **What was built:**
 - Earlier same session (commits `7781aa3`, `d7d1087`): Stan BOD→BOD regression coverage (REQ-015), social-preview PNG fix + SVG twin, XSLT residual triage 7,722/7 → 7,722/3.
@@ -345,7 +346,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-07
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f105066` — fix(XSLT): REQ-082 residual triage — strict sweep 7,722/7/6,871 → 7,722/3/6,875 (100% of runnable)
 **Current focus:** **REQ-082 residual triage complete: strict sweep 7,722/7/6,871 → 7,722/3/6,875 (100.0% of runnable). Xslt.Tests 377/0/0; build 0/0 warnings. QT3 untouched at 31,148/0/673.**
 **What was built:**
 - Earlier same session (commit `7781aa3`): Stan BOD→BOD regression coverage under REQ-015 (`BodTransformationRegressionTests`, 2 tests) + social-preview PNG regenerated (mojibake fixed) and SVG twin added.
@@ -363,7 +364,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-06
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `656dffa` — REQ-083 discoverability: NuGet package metadata polish (handover + registry updated)
 **Current focus:** **REQ-083 discoverability — NuGet package metadata polish. No engine/code changes; conformance numbers unchanged (strict 7,722/7/6,871; QT3 31,148/0/673; unit 2,214/0/0; build 0/0 warnings).**
 **What was built:**
 - All 9 src `.csproj` `<Description>` values rewritten into NuGet.org-searchable form ("Bosak:" prefix, feature keywords, stack cross-reference).
@@ -380,7 +381,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-06
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3b2f392` — REQ-082 deferral batch: 10 of 17 strict-sweep failures cleared
 **Current focus:** **REQ-082 residual deferrals swept: strict sweep 7,713/17/6,870 → 7,722/7/6,871 (99.9% of runnable), full QT3 unchanged at 31,148/0/673, unit tests 2,214/0/0 across all nine projects, build 0/0 warnings.**
 **What was built (6 batches, each sweep-verified):**
 - **strip-space-019 + math-3702:** `ShouldStripWhitespace` tie-break tracks declaration indices; the XTRE0270 recovery rule (later declaration wins) applies in XSLT 1.0 BC mode only (TransformEngine 6.59); reserved-namespace `extension-element-prefixes` now throws spec-correct XTSE0085 instead of retired XTSE0800 (Stylesheet 2.106); harness `ErrorCodeMatches` gains documented retired-code aliases (XTSE0800→XTSE0085, XTRE0270→XTSE0270) mirroring Saxon (Program.cs 3.40).
@@ -398,7 +399,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-05
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `99a637c` — strip-space-019 + math-3702 conformance fixes (REQ-082 deferrals)
 **Current focus:** **Two deferred W3C conformance tests fixed, strict sweep 7,713/17/6,870 → 7,715/15/6,870 (99.9%), zero regressions.** Both fixes use the "spec-correct engine + retired-code alias in the harness" pattern (mirrors Saxon).
 **What was built:**
 - **strip-space-019 / strip-space-019a:** both test cases run the *same* `version="2.0"` stylesheet, so the plan's "stylesheet version ≥ 3.0" condition cannot distinguish them. Resolution: `ShouldStripWhitespace` (`TransformEngine.cs`) keeps the XTSE0270 static error whenever the stylesheet is not in XSLT 1.0 backwards-compatible mode (the XSLT 3.0 REC makes the conflict an unconditional static error); the XTRE0270 recovery rule (later declaration in stylesheet document order wins, XSLT 1.0/2.0 §3.4.3) is implemented for BC mode via best-strip vs best-preserve rule indices. Harness `ErrorCodeMatches` aliases expected `XTRE0270` → raised `XTSE0270` (strip-space-019 was written for 1.0/2.0 processors, uncorrected).
@@ -413,7 +414,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-05
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6b13982` — conformance harnesses marked IsPackable=false (REQ-083 item 4 fallout)
 **Current focus:** **🚀 PUBLIC LAUNCH EXECUTED (2026-09-05) — repo is PUBLIC at Fytala-Charles/Bosak.** REQ-083 complete (all ten items done); flip actions done by Charles: Discussions on, stray conformance 1.0.0 packages unlisted, Sponsors enrollment pending approval, avatar live. Post-flip checks: CI green ×5, Discussions on, visibility PUBLIC. **TODO: ruleset `protect-main` (id 22255065) still `enforcement: disabled`** — switch to Active via Settings → Rules → Rulesets (admin-only; collaborator tokens 404). Release workflow `.github/workflows/release.yml` (filename registered in the nuget.org trusted-publishing policy — do not rename) triggers on `v*` tags + dispatch; needs `NUGET_USER` secret; conformance harnesses are IsPackable=false. NuGet: `v0.9.0-preview`, all 9 library packages live. **Next engine work resumes under REQ-082 deferrals** (evaluate-002/048, context-item-911, math-3702, collection-006, document-2401/2402, extension-functions-0201, strip-space-019).
 **What was built (2026-09-03 engine work, commit `2cc5f30`):**
 - **v-004:** the default mode is always public (XSLT 3.0 6.6.1). `GetTemplateLocalVisibility` no longer treats the empty default-mode token as a named mode filtering used-package template rules as private, so match patterns see overridden globals.
@@ -429,7 +430,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `0afd542` — fn:load-xquery-module wired into the XSLT engine (REQ-082)
 **Current focus:** **`fn:load-xquery-module` feature gap closed.** Strict full sweep **7,703/27/6,870 → 7,707/23/6,870 (99.7%)**: the 4 `load-xquery-module` tests fixed, zero regressions. Also drafted **REQ-083** (public-launch checklist: license placeholder, CI, ROADMAP, NuGet-from-CI, repo hygiene, submodule licensing, community/sponsorship/commercial layers).
 **What was built:**
 - XSLT transforms now resolve `fn:load-xquery-module` through the real `Bosak.XQuery` `XQueryModuleLoader` (Load1/Load2) instead of the `FOQM0001` stub. A registry-level re-register does NOT survive: `XPath31Expression.Evaluate` re-runs `FunctionLibrary.Populate` per compiled expression (cf. the existing note at `TransformEngine.cs:2682`). Root fix: new `EvaluationContext.XQueryModuleLoader` delegate hook — the `FunctionLibrary` stub dispatches through it and only raises `FOQM0001` when no loader is set; `XsltFunctionLibrary.Populate` installs it, and it also covers `xsl:evaluate` contexts now.
@@ -445,7 +446,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3bc2078` — accumulator cluster cleared + 22 singles (REQ-082 continuation)
 **Current focus:** **Accumulator cluster cleared (56/0/51, 100% runnable) plus 22 singles fixed across assert/merge/try/coco/sort/result-document/use-when/message/call-template/package/mode/transform/static/evaluate/id.** Strict full sweep **7,647/83/6,870 → 7,703/27/6,870 (99.7%)**, zero regressions.
 **What was built:**
 - Accumulator cluster (11 fixed: 021, 023, 026, 027, 040, 046, 047, 064-067): attribute/namespace nodes are not visited by accumulators (026); per-attribute import-precedence merging for xsl:mode (`ModeDefinition.SpecifiedAttributes` + `MergeModeDefinitions`, 023); EQName `Q{uri}local` support in accumulator name resolution at all three sites (021/027); `fn:copy-of`/`fn:snapshot` copy accumulator values via the new `EvaluationContext.AccumulatorValueCopier` hook and deep `AttachAccumulatorValues` (046/047/064-067); on-demand accumulator computation saves/restores the caller's focus (040).
@@ -458,7 +459,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `ea44175` — namespace/global-context-item/sort/merge error-code families (REQ-082 continuation)
 **Current focus:** **REQ-082 continuation — namespace + global-context-item + sort/merge/result-document families.** Strict full sweep **7,647/83/6,870 → 7,665/65/6,870 (99.2%)**: +18 fixed, zero regressions.
 **What was built:**
 - `namespace-2621..2624` (4): XTDE0835/XTDE0865 — constructed element/attribute namespace must not be the xmlns namespace URI; XTDE0905/XTDE0920 — `xsl:namespace` value must not be the xmlns URI, name must be a valid NCName other than `xmlns`.
@@ -473,7 +474,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `82c3834` — xsl:original for templates and variables + package-scope override contributions for templates
 **Current focus:** **REQ-081 residual: xsl:original beyond functions.** Strict full sweep **7,634/96/6,870 → 7,647/83/6,870 (98.9%)**: +13 fixed, zero regressions. W3C `override` cluster 80/19/4 → 93/6/4.
 **What was built:**
 - `call-template name="xsl:original"` dispatches to the overridden used-package template: `TemplateRule.OverriddenTemplate` link (set in `GetAllNamedTemplates` and the new `Stylesheet.GetPackageScopeNamedTemplates`), `_overriddenTemplateStack` pushed while an override template executes, `TryCallOriginalTemplate` intercepts both call-template paths (override-t-007/015).
@@ -491,7 +492,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e977104` — REQ-082 phase 3 (100 conformance fixes: XPTY0004/XTDE0820/FODT0001/XTTE0505 families, xml-to-json cluster, package-visibility family)
 **Current focus:** **REQ-082 phase 3 complete.** Strict full sweep **7,534/196/6,870 → 7,634/96/6,870 (98.8%)**: +100 fixed, zero regressions — the strict pass count now exceeds the 7,627 lenient baseline named in REQ-082's acceptance criterion.
 **What was built:**
 - `XPTY0004` (12): XPTY0004 guards for non-boolean `liberal`/`escape`/`indent` JSON options (`ParseJsonOptions`); `fn:resolve-QName` validates second-argument cardinality/kind; `xsl:merge-source/@for-each-source` requires string-family items; accumulator `@as` coercion raises XPTY0004 via new `ConvertVariableValue(errorCodeOverride)`; match+name initial templates exempt from the package public-visibility gate (`accumulator-038`).
@@ -509,7 +510,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-02
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `0f714a1` — REQ-082 phase 2 complete (override content model, accumulator/context-item/EQName/on-completion XTSE validation)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 complete (XTSE0020/XTSE0010 static-validation family cleared, 0 remaining).** This session fixed the final 15 tests: `xsl:override` content model enforced in `ParsePackageUseOptions` (non-whitespace text, LREs, and XSLT declarations other than template/function/variable/param/attribute-set raise XTSE0010 — fixes `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`); `xsl:accumulator` requires `initial-value`/`_initial-value` and at least one `xsl:accumulator-rule` (`accumulator-024/025`); `xsl:context-item` attribute check skips namespace declarations and rejects non-`required` `@use` in unnamed templates (`context-item-016/902/903`); braced-URI names without leading `Q` rejected as invalid EQNames in `xsl:function/@_name` (`initial-function-102i/j`); `xsl:on-completion` placement pre-pass in `ValidateInstructionTree` reports XTSE0010 before later attribute errors (`iterate-024`).
 **Results:** Clean strict full sweep **7,534 passed / 196 failed / 6,870 skipped** (97.5%), exactly +15/−15 vs. the 7,519/211 baseline; zero new failures. W3C `override` 53/46/4. Unit tests all green (`dotnet test Bosak.sln` exit 0).
 **Next steps:** Continue REQ-082 with the remaining error-code families: `XPTY0004` (12), `XTTE0505` (10), `XTDE3052` (10), `XTSE3070` (6), `XTDE0820` (6), `FODT0001` (4), misc. Acceptance target: strict sweep back at the lenient 7,627 pass count.
@@ -519,7 +520,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** ff76567 — XTSE0010 for required xsl:param with non-empty sequence constructor (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: package-version grammar (12 tests), static param error codes (5 tests), misplaced use-package/expose (2 tests), undeclared prefix in expose/accept names (1 test), required xsl:param with sequence constructor (1 test). Latest clean sweep pending.
 **Results:** `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass), `package` 64/8/0, `expose` 42/0/0, `param` 31/0/0. Unit tests 2,114/0/0.
 **Remaining in REQ-082 family (15 tests):** `accumulator-024/025`, `context-item-016/902/903`, `initial-function-102i/j`, `iterate-024`, `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`.
@@ -530,7 +531,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** 4129791 — XTSE0020 for undeclared prefix in xsl:expose/@names and xsl:accept/@names (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: package-version grammar (12 tests), static param error codes (5 tests), misplaced use-package/expose (2 tests), undeclared prefix in expose/accept names (1 test). Latest clean sweep: **7,517 passed / 213 failed / 6,870 skipped** (97.2%).
 **Results:** `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass), `package` 64/8/0, `expose` 42/0/0. Unit tests 2,114/0/0.
 **Remaining in REQ-082 family (16 tests):** `accumulator-024/025`, `context-item-016/902/903`, `initial-function-102i/j`, `iterate-024`, `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`, `param-0113`.
@@ -541,7 +542,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** 49cf229 — XTSE0010 validation for misplaced xsl:use-package and xsl:expose (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: package-version grammar (12 tests), static param error codes (5 tests), misplaced use-package/expose (2 tests). Latest clean sweep pending; expect previous strict baseline (7,511/219/6,870) to drop by ~2 more tests.
 **Results:** `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass), `package` 64/8/0 (903/904 fixed, 8 pre-existing failures remain). Unit tests 2,114/0/0.
 **Remaining in REQ-082 family (17 tests):** `accumulator-024/025`, `context-item-016/902/903`, `expose-927`, `initial-function-102i/j`, `iterate-024`, `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`, `param-0113`.
@@ -552,7 +553,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** 99c9bb4 — XTSE0010/0020 error codes for static param sequence constructor and tunnel attribute (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Completed so far: strict package-version grammar validation (12 tests fixed), static param sequence-constructor/tunnel error codes (5 tests fixed). Latest clean sweep: **7,511 passed / 219 failed / 6,870 skipped** (97.2%).
 **Results:** W3C `package-version` 35/0/2, `use-package` 53/0/1, `static` 47/2/0 (target tests pass; remaining 2 unrelated). Unit tests 2,114/0/0.
 **Remaining in REQ-082 family (19 tests):** `accumulator-024/025`, `context-item-016/902/903`, `expose-927`, `initial-function-102i/j`, `iterate-024`, `override-f-005/006/007`, `override-m-013`, `override-misc-001/002/003`, `package-903/904`, `param-0113`.
@@ -563,7 +564,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** 82a65b9 — strict package-version validation (XTSE0020) for xsl:package and xsl:use-package (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes — phase 2 in progress (XTSE0020/XTSE0010 static-validation family).** Just completed the package-version sub-family: strict validation for `xsl:package/@package-version` (PackageVersion grammar) and `xsl:use-package/@package-version` (PackageVersionRange grammar). Both clusters now pass with zero failures.
 **Results:** W3C `package-version` 35/0/2 (was 27/8/2), W3C `use-package` 53/0/1 (was 49/4/1). Unit tests 2,114/0/0. The strict full sweep is running; expect the previous strict baseline (7,499/231/6,870) to drop by ~12 tests.
 **Next steps:** Continue the remaining XTSE0020/XTSE0010 failures (24 tests), including `static-006/007/014`, `context-item-016/902/903`, `accumulator-024/025`, `override-f-005/006/007/m-013/misc`, `package-903/904`, `param-0113`, `iterate-024`, `initial-function-102i/j`, `expose-927`.
@@ -573,7 +574,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** 39d5925 — accept/abstract/XTSE3051 overlap validation (REQ-082)
 **Current focus:** **REQ-082 strict-conformance fixes for XSLT package/accept/abstract behavior — phase 1 complete.** Implemented: strict accept visibility compatibility table with `XTSE3040`; default `hidden` for unmatched abstract used-package components and `XTSE3080` for abstract acceptance in the principal package; `ValidateAcceptRules` reordered before `ValidateInstructionTree` (`accept-004`); abstract named templates raise `XTDE3052` with a `TransformEngine.ExecuteTemplateCore` finally-mask fix preventing `XTTE0570` conversion; lazy global variable references resolve in the declaring package scope (`accept-043b/c`); `XTSE3051` overlap validation for accept tokens that match an `xsl:override` declaration (`accept-916`); conformance harness registers secondary packages under their document-declared package name as well as the catalog URI.
 **Results:** W3C `accept` 50/0/0 (was 35/15); `override` 46/53/4 (5 fixes vs 250-failure baseline); `use-package` 49/4/1; `expose` 41/1/0; `package` 62/10/0; `declared-modes` 10/0/4; `function-lookup` 8/0/0. Clean strict full sweep **7,499 passed / 231 failed / 6,870 skipped** (97.0%), improving from previous strict baseline **7,480/250/6,870** (96.8%). No regression in any package cluster.
 **Next steps:** Phase 2 of REQ-082 — the `XTSE0020`/`XTSE0010` static-validation family (36 tests currently failing under strict matching). Then tighten QT3 harness `CompareError` strictness and measure fallout.
@@ -583,7 +584,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** 0768a48 — strict error-code matching in the XSLT conformance harness
 **Current focus:** **XSLT conformance harness now enforces declared error codes** — Previously, any exception satisfied an `<error>` result expectation (`Program.cs` catch block), which masked wrong-error-code failures (discovered when `override-f-019` passed via an unrelated `XPST0017`). The harness now requires the exception message to contain the declared `<error code="...">` (direct and `<any-of>` forms); a code mismatch fails with `Expected error X, got: Y`. The strict full sweep is **7,480 passed / 250 failed / 6,870 skipped** (96.8%), exposing **147 masked failures** that passed with a wrong error code (lenient figure: 7,627/103/6,870). No genuinely passing test was lost (zero flips from fail back to pass). Top expected-code families among the newly exposed: `XTSE0020` (15), `XTSE0010` (13), `XPTY0004` (12), `XTTE0505` (10), `XTDE3052` (10, mostly abstract-component handling), `XTSE3070` (6), `XTDE0820` (6), `XTSE3050`/`XTSE3080` (8, accept/abstract visibility), `FODT0001` (4). Tracked as **REQ-082**.
 **Expected state:** W3C `package` cluster **62 passed / 10 failed / 0 skipped**; W3C `accept` cluster **35 passed / 15 failed / 0 skipped**; W3C `expose` cluster **41 passed / 1 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **49 passed / 4 failed / 1 skipped**; W3C `override` cluster **41 passed / 58 failed / 4 skipped**; W3C `function-lookup` cluster **8 passed / 0 failed / 0 skipped**; W3C `package-version` cluster **27 passed / 8 failed / 2 skipped** (all under strict error-code matching); full W3C XSLT sweep **7,480 passed / 250 failed / 6,870 skipped** (96.8% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,114/0/0; language-server tests 72/0/0).
 
@@ -608,7 +609,7 @@
 ---
 
 **Date:** 2026-09-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** a490f0e — `xsl:override` scope propagation and `xsl:original` for functions (REQ-081)
 **Current focus:** **XSLT `package` conformance cluster is fully green** — The W3C `package` cluster is now **72 passed / 0 failed / 0 skipped**; `package-101` passes. `xsl:override` variable and function declarations are now visible inside used-package components that reference them (XSLT 3.0 §3.5.7.2): `Stylesheet.RegisterPackageOverrideContribution` records each use-package relationship carrying overrides on the used package's stylesheet instance, and the package-scope views (`GetPackageScopeFunctionDefinitions`, `CollectPackageScopeGlobalsInDocumentOrder`) apply those contributions whenever a used-package component executes. `XsltFunctionDefinition.OverriddenFunction` links an override to the declaration it replaces, and `TransformEngine` dispatches `xsl:original(...)` calls to that declaration while the override executes (registered per-arity in the root and package-scope function registries). `ValidateFunctionOverrides` now also raises `XTSE0770` for duplicate overriding functions in one `xsl:override` element. The `override` cluster improves to **56 passed / 43 failed / 4 skipped** (up from 49/50/4, zero regressions); residuals there are `$xsl:original` variable references, `xsl:original#N` named references, `xsl:original` partial application, and `xsl:call-template name="xsl:original"`.
 **Expected state:** W3C `package` cluster **72 passed / 0 failed / 0 skipped**; W3C `accept` cluster **50 passed / 0 failed / 0 skipped**; W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; W3C `override` cluster **56 passed / 43 failed / 4 skipped**; W3C `function-lookup` cluster **8 passed / 0 failed / 0 skipped**; full W3C XSLT sweep **7,627 passed / 103 failed / 6,870 skipped** (98.7% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,114/0/0; language-server tests 72/0/0).
 
@@ -692,7 +693,7 @@
 ---
 
 **Date:** 2026-08-31
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** *(work in progress; not yet committed)* — `xsl:accept` visibility enforcement and runtime checks
 **Current focus:** **XSLT `xsl:accept` conformance cluster** — `Stylesheet` now validates `xsl:accept` rules against the components exported by used packages, applying the correct visibility (`public`/`private`/`final`/`abstract`/`hidden`) with rule-precedence resolution. `GetEffectiveAcceptRule` selects the most specific matching rule by component type and name specificity; `GetEffectiveVisibility` applies both `xsl:expose` rules from the used package and `xsl:accept` rules from the using package. Private used-package templates that are explicitly accepted as `private` are tracked via `TemplateRule.AcceptedBy` and remain visible to the accepting package in `IsTemplateVisible`. Runtime checks now raise `XTDE0040` for hidden/private named templates and `XTDE3052` for abstract functions, templates, variables, and attribute-sets. The W3C `accept` cluster now passes with **50/0/0**.
 **Expected state:** W3C `accept` cluster **50 passed / 0 failed / 0 skipped**; W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full W3C XSLT sweep **7,585 passed / 145 failed / 6,870 skipped** (98.1% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,111/0/0). *(Note: the full sweep reports 22 `accept` failures caused by intra-test-set interactions; the targeted cluster is clean.)*
 
@@ -731,7 +732,7 @@
 ---
 
 **Date:** 2026-08-31
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** *(work in progress; not yet committed)* — `xsl:expose` static validation / runtime visibility
 **Current focus:** **XSLT `xsl:expose` conformance cluster** — `Stylesheet` now parses and validates `xsl:expose` declarations on `xsl:package` roots. Static validation raises `XTSE0020`, `XTSE3010`, `XTSE3020`, `XTSE3022`, and `XTSE3025` for malformed or invalid expose rules. Runtime visibility (`GetExposedVisibility`) and package export (`IsExportedFromPackage`) apply expose rules so that only exposed public/final components are visible to using packages. Match-only templates inherit the visibility of their mode when no explicit `@visibility` is present. A regression in `use-package` caused by the new visibility logic (templates defaulting to private in packages) was fixed by treating public/final modes as public for match-only templates. The W3C `expose` cluster now passes with **42/0/0** and `use-package` is back to **53/0/1**.
 **Expected state:** W3C `expose` cluster **42 passed / 0 failed / 0 skipped**; W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full W3C XSLT sweep **7,560 passed / 170 failed / 6,870 skipped** (97.8% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,111/0/0).
 
@@ -770,7 +771,7 @@
 ---
 
 **Date:** 2026-08-31
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** *(work in progress; not yet committed)* — `declared-modes` / `XTSE3085` validation
 **Current focus:** **XSLT `declared-modes` conformance cluster** — `Stylesheet.ValidateModeDefinitions` now enforces `xsl:package/@declared-modes="yes"` by checking that every mode used inside a package is declared. The check covers `xsl:template/@mode`, `xsl:apply-templates/@mode`, and implicit unnamed/default mode usages across the package's root stylesheet and its imports/includes; explicit `#default`/`#unnamed` are normalized to the unnamed mode, while `#current` and `#all` are ignored. Modes accepted from used packages (public/final) are also considered declared, so cross-package mode references continue to work.
 **Expected state:** W3C `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; W3C `use-package` cluster **53 passed / 0 failed / 1 skipped**; full XSLT sweep **7,523 / 207 / 6,870** (97.3% pass rate among runnable tests); `dotnet test Bosak.sln` passes (2,104/0/0); no new failures in `declared-modes` or `use-package` clusters.
 
@@ -792,7 +793,7 @@
 ---
 
 **Date:** 2026-08-31
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** de3146b582bde6fe4b9f2e09bff0c00580002725 — REQ-073: Richer XSLT document symbols / outline
 **Current focus:** **REQ-073 Richer XSLT document symbols / outline** — `DocumentSymbolHandler` now produces outline symbols for all top-level XSLT declarations requested in REQ-073: templates (named and matched), functions, variables, parameters, attribute-sets, keys, and output declarations. It also continues to cover imports/includes, modes, decimal formats, character maps, and accumulators. The `xsl:output` symbol now includes the serialization method (e.g., **output (html)**) when present. New unit tests verify every requested declaration type.
 **Expected state:** **2,111 unit tests / 0 failed / 0 skipped**; **language-server tests 72 / 0 / 0**; `dotnet test Bosak.sln` passes; `dotnet test tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj` passes; no regressions in unit tests or representative conformance sets.
 
@@ -2459,7 +2460,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fbe20a8` — HOF function-item instance-of for element kind-test result types without schema (hof-039/053)
 **Current focus:** **HOF residuals cluster** — `VmEngine.IsElementOrAttributeSchemaSubtype` now handles function-item `instance of` checks whose return type is an element kind test (`element(e)?`, `element(e, xs:anyAtomicType)`) even when no schema is imported. It strips outer occurrence indicators, defaults a missing type part to `xs:anyType`, honors the nillability `?` marker, and compares built-in schema types without requiring a user schema. `GetDirectSupertypes` now includes `anyatomictype → anysimpletype → anytype → item()` so `xs:anyAtomicType` is recognized as a subtype of `xs:anyType`. This closes the QT3 `misc-HigherOrderFunctions` failures `hof-039` and `hof-053`.
 
 Expected state: **1,827 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,948 passed / 11 failed / 862 skipped** (97.26%). Targeted verification: `hof-039` 1/0/0; `hof-053` 1/0/0.
@@ -2490,7 +2491,7 @@ Expected state: **1,827 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-23
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `de73c15` — schema-aware validate / QName-NOTATION / ID / typed-value cluster
 **Current focus:** **schema-aware validate / QName-NOTATION / ID / typed-value cluster** — `VmEngine.ValidateNode` now validates against the built-in schema set so `validate lax` honors `xsi:type` annotations, supports `validate type QName { Expr }`, returns a new validated `XDocumentNode`, and populates PSVI via `addSchemaInfo`. `XDocumentNode` typed-value construction resolves QName/NOTATION prefixes via an in-scope namespace resolver, preserves the lexical prefix, reports the declared schema type (not the member type) for schema-element tests, and recognizes `xsi:type='xs:ID'` and `xsi:type='xs:IDREF'/'xs:IDREFS'` elements as ID/IDREF even without a schema. `VmEngine` fixes: `xs:language` cast accepts any atomic operand, `xs:NOTATION` instance-of recognizes schema-typed NOTATION values, `IsUserDefinedSchemaType` rejects kind tests containing `(` while still allowing braced-URI names, function conversion atomizes operands, and `TryCast` is skipped for known sequence type names. Parser and IR lowerer support `validate type QName { Expr }`. `XdmValue` adds `FromQName(XsQName, string schemaTypeName)`.
 
 Expected state: **1,825 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,946 passed / 13 failed / 862 skipped** (97.25%). Targeted verification: `CastAsNamespaceSensitiveType-6` 1/0/0; `CastAs-UnionType-33` 1/0/0; `FunctionCall-049` 1/0/0; `qischema061` 1/0/0; `instanceof142` 1/0/0; `fo-test-fn-id-002` 1/0/0; `fo-test-fn-element-with-id-002` 1/0/0; `fo-test-fn-idref-001` 1/0/0; `fo-test-fn-idref-002` 1/0/0.
@@ -2544,7 +2545,7 @@ Expected state: **1,825 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `296b814` — XPTY0117 for xs:untypedAtomic to namespace-sensitive atomic types in function conversion
 **Current focus:** **`fn:load-xquery-module` / `validate` expression cluster** — `fn:load-xquery-module` now propagates schema imports from the loaded module into its evaluation context, so schema-aware XQuery (including the `validate` expression) runs correctly. The XQuery `validate { Expr }` expression is implemented as a contextual keyword: it parses as a validate expression only in XQuery mode and remains a valid `NCName` elsewhere. `validate lax` with no schema returns the operand unchanged; `validate strict`/plain `validate` without a schema raises `XQST0075`; invalid operands raise `XQTY0030`; validation failure raises `XQDY0027`.
 
 Expected state: **1,821 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,929 passed / 30 failed / 862 skipped** (97.20%). Targeted verification: `fn-load-xquery-module` 69/0/14 (14 dependency skips, 0 failures). Key `fn-load-xquery-module` schema-propagation tests now pass: `fn-load-xquery-module-050`, `-051`, `-052`, and `-056`.
@@ -2582,7 +2583,7 @@ Expected state: **1,821 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `296b814` — XPTY0117 for xs:untypedAtomic to namespace-sensitive atomic types in function conversion
 **Current focus:** **namespace-sensitive atomic function-conversion cluster** — `VmEngine.ApplyFunctionConversion` now rejects `xs:untypedAtomic` values supplied to namespace-sensitive atomic types (`xs:QName`, `xs:NOTATION`, and user-defined restrictions of those) with `XPTY0117`, before subtype substitution can silently accept them. A new `IsNamespaceSensitiveTargetType` helper covers built-in and user-defined namespace-sensitive atomic types. This closes the QT3 `prod-CastExpr` failures `CastAs675a`, `CastAsNamespaceSensitiveType-1`, and `CastAsNamespaceSensitiveType-2`.
 
 Expected state: **1,813 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,854 passed / 19 failed / 948 skipped** (96.96%). Targeted verification: `CastAs675a` 1/0/0; `CastAsNamespaceSensitiveType-1` 1/0/0; `CastAsNamespaceSensitiveType-2` 1/0/0.
@@ -2607,7 +2608,7 @@ Expected state: **1,813 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `245f90b` — schema-aware list/union regression tests and headers
 **Current focus:** **schema-aware list/union function-conversion cluster** — the remaining schema-aware residuals around attribute kind tests, union function conversion, unprefixed user-defined type names in instance-of, and element schema-type subtyping are now covered by regression tests. `VmEngine` already preserves case for the type part of `attribute(*, T)` kind tests; treats union types with membership semantics in `ValueMatchesType`; has a dedicated union-type branch in `ApplyFunctionConversion` that casts `xs:untypedAtomic` to the first matching member (rejecting namespace-sensitive unions with `XPTY0117`) and rejects non-matching values with `XPTY0004`; accepts unprefixed user-defined schema types via the default element namespace in `InstanceOf`; and handles `element(*, T1)` / `attribute(*, T1)` subtyping through the schema type hierarchy in `IsSequenceTypeSubtype`.
 
 Expected state: **1,813 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,851 passed / 22 failed / 948 skipped** (96.95%). Targeted verification: `prod-FLWORExpr` 21/0/28; `prod-FunctionCall` 120/0/32.
@@ -2631,7 +2632,7 @@ Expected state: **1,813 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `63e0a96` — op-numeric-add parser ambiguity / union named-member cast fix
 **Current focus:** **op-numeric-add / union named-member cluster** — `XPathParser.ParseSingleType` now treats `*` and `+` after a cast/castable target type as the surrounding additive/multiplicative operator when a valid operand follows, while still raising `XPST0003` for standalone occurrence indicators like `'string' cast as xs:string*` (`K-SeqExprCast-1/2`). `VmEngine.GetUnionMemberTypes` now returns both anonymous inline member types (`BaseTypes`) and named member types referenced via `@memberTypes`, so unions such as `t:integer-or-nothing` (`xs:integer` plus an empty-string `xs:string` restriction) can cast values that match the named member. This closes the QT3 `op-numeric-add` failures `op-numeric-add-13`–`op-numeric-add-16` and several other union/cast-related residuals.
 
 Expected state: **1,806 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,842 passed / 31 failed / 948 skipped** (96.92%). Targeted verification: `op-numeric-add` 155/0/11; `prod-CastableExpr` remains 951/0/8.
@@ -2658,7 +2659,7 @@ Expected state: **1,806 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5c18c78` — cast/castable array/map atomization
 **Current focus:** **castable cluster** — `VmEngine.TryCast`, the `Cast` opcode, and the `Castable` opcode now atomize operands through a shared `AtomizeForCast` helper. Arrays are recursively flattened and their members atomized; maps and function items raise `FOTY0013` as required by XPath 3.1 §18.2.1. `castable as` propagates type errors (`FOTY0013`, `XPTY0004`) rather than swallowing them as `false`. This fixes the QT3 `prod-CastableExpr` failures `CastableAs665`–`CastableAs668` (`[5] castable as xs:integer`, `map{} castable as xs:integer`, nested arrays with empty members, and nested arrays containing maps). `TryCast` also continues to update its `result` to the atomized value so that casts of a typed node to its own type return the atomic typed value (preserving the earlier orderBy decimal normalization fix).
 
 Expected state: **1,801 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,836 passed / 37 failed / 948 skipped** (96.90%). Targeted verification: `CastableAs665`–`CastableAs668` 4/4; `prod-CastableExpr` 951/0/8; `prod-CastExpr` 2778/2/0 (pre-existing `K2-SeqExprCast-157/158` boolean-to-language failures).
@@ -2680,7 +2681,7 @@ Expected state: **1,801 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7c5acde` — Preserve lexical timezone offsets in schema-validated date/time typed values
 **Current focus:** **schema-validated date/time timezone preservation cluster** — `XDocumentNode.GetTypedValue` now re-parses the lexical string for `xs:date`, `xs:time`, `xs:dateTime`, `xs:dateTimeStamp`, and the `g*` date/time types using `XmlConvert.ToDateTimeOffset`, preserving the original timezone offset instead of normalizing to the local offset. This fixes the QT3 `prod-CastExpr.schema` failures `casthcds30`–`casthcds34` (the `casthcds32`–`casthcds34` offset corruption and the `casthcds30`/`casthcds31` cast errors caused by UTC `DateTime` values), and the `prod-WindowClause` `WindowingUseCase*` residual failures that expected `Z` outputs. The `AGENTS.md` known limitation for `adjust-time-to-timezone` has been removed because the underlying issue was in typed-value construction, not the adjust functions themselves.
 
 Expected state: **1,792 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,832 passed / 41 failed / 948 skipped** (96.89%). Targeted verification: `casthcds30`–`casthcds34` 5/5; `prod-WindowClause` `WindowingUseCase*` 38/0/0; `fn-adjust-time-to-timezone` 42/0/0; `fn-adjust-date-to-timezone` 41/0/0; `fn-adjust-dateTime-to-timezone` 48/0/0.
@@ -2713,7 +2714,7 @@ Expected state: **1,792 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `56335f6` — docs: record orderBy decimal normalization handover (current working tree modifies cast code)
 **Current focus:** **schema-derived string/numeric/union cast cluster** — `VmEngine.TryCastToSchemaType` and related cast helpers now handle derived atomic string subtypes (`xs:normalizedString`, `xs:token`, etc.) from numeric operands by converting to string first, validate derived atomic type pattern facets against XSD canonical lexical forms (`12` → `"12.0"`, `93.7` → `"9.37E1"`), reject single non-string atomic values for list type casts, and convert `TimeSpan` values from schema parsing back to XSD duration lexical form. `XdmValue.ToString()` now respects `gYear`/`gYearMonth`/`gMonth`/`gMonthDay`/`gDay` schema type annotations and formats accordingly. The conformance runner now skips `app-Demos` and `app-XMark` (heavy demo/benchmark sets that dominate unattended sweeps) and `cbcl-codepoints-to-string-021` (an implementation-defined range-limit test that enumerates billions of integers).
 
 Expected state: **1,786 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30,821 passed / 52 failed / 948 skipped** (96.86%). Targeted verification: `cbcl-normalizedstring` 7/7, `cbcl-token` 7/7, `CastableAs65` 10/10, `cbcl-castable-impure-009`/`019` pass, `cbcl-cast-derived-001` pass.
@@ -2751,7 +2752,7 @@ Expected state: **1,786 unit tests / 0 failed / 0 skipped**; **full QT3 sweep 30
 ---
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e7e3f4b` — TryCast returns atomized node value for xs:T($node) casts
 **Current focus:** **orderBy decimal normalization cluster** — `VmEngine.TryCast` now updates the `result` variable to the atomized node value before checking the target type. Previously, when a schema-validated node was cast to its own typed value (for example, `xs:decimal($x)` where `$x` is an `xs:decimal` element), the function returned the original element node instead of the decimal atomic value, because `result` was initialized to the input node and never updated after atomization. This fixes the QT3 `prod-OrderByClause` residual failures `orderBy26`, `orderBy36`, `orderBy46`, `orderBy56`, `orderBy62`, `orderBy64`, and `orderBy65`, and restores correct behavior for any `xs:T($node)` constructor cast over a typed node.
 
 Expected state: **1,777 unit tests / 0 failed / 0 skipped**; **`prod-OrderByClause` 205 passed / 0 failed / 0 skipped**; **full QT3 sweep 30,831 passed / 68 failed / 922 skipped** (96.89%).
@@ -2779,7 +2780,7 @@ Expected state: **1,777 unit tests / 0 failed / 0 skipped**; **`prod-OrderByClau
 ---
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `1f0b022` — Reject non-atomic user-defined schema types as SequenceType item types (XPST0051)
 **Current focus:** **schema-aware SequenceType XPST0051 cluster** — `VmEngine.InstanceOf` now rejects all user-defined simple types that are not atomic as SequenceType item types: direct list types, restrictions of list types, restrictions of union types, and union types that transitively contain a list-type member (including built-in list types such as `xs:NMTOKENS`). Union types whose members are purely atomic (possibly via nested unions of atomic types) remain valid item types. This closes the QT3 `prod-InstanceofExpr` residual failures (`instanceof114`, `instanceof115`, `instanceof120`) and the `prod-TypeswitchExpr` residual failures (`typeswitch-114`, `typeswitch-115`).
 
 Expected state: **1,775 unit tests / 0 failed / 0 skipped**; **`prod-InstanceofExpr` 308 passed / 0 failed / 1 skipped**; **`prod-TypeswitchExpr` 72 passed / 0 failed / 1 skipped**. Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
@@ -2811,7 +2812,7 @@ Expected state: **1,775 unit tests / 0 failed / 0 skipped**; **`prod-InstanceofE
 ---
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `243c3cd` — schema-aware `fn:idref` PSVI support and name() prefix selection
 **Current focus:** **`fn:idref` cluster** — `IXdmNode.IsIdref` exposes the XDM *is-idrefs* property for schema-validated nodes. `XDocumentNode` computes it from PSVI: `xs:IDREF`/`xs:IDREFS`, derived restrictions and lists, unions where the selected member is `xs:IDREF`, and complex types with simple content whose base is an IDREF-bearing simple type. Nilled IDREF elements report `false`. `FunctionLibrary.CollectIdrefElements` now consults `IsIdref` instead of relying only on DTD declarations or attribute names, so schema-validated IDREF/IDREFS attributes and elements are collected. `XDocumentNode.Prefix` prefers the empty prefix when the element's namespace is also bound as the default namespace, so `fn:name()` returns the unprefixed lexical form used in the source document. This closes the QT3 `fn-idref` residual cluster.
 
 Expected state: **1,772 unit tests / 0 failed / 0 skipped**; **`fn-idref` 54 passed / 0 failed / 0 skipped**. Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
@@ -2855,7 +2856,7 @@ Expected state: **1,772 unit tests / 0 failed / 0 skipped**; **`fn-idref` 54 pas
 ---
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f83cfb8` — schema-aware `fn:json-to-xml` validation and kind-test fixes
 **Current focus:** **`fn:json-to-xml` cluster** — `validate:=true()` is now supported and drives schema validation against the embedded W3C schema-for-JSON; `validate:=true()` + `duplicates:='retain'` raises `FOJS0005`; schema/duplicate-key failures map to `FOJS0003`. `VmEngine.ValueMatchesType` now recognizes parameterized kind tests (`document-node(...)`, `schema-element(...)`) including `document-node(schema-element(...))` and preserves original case for schema type names in `element(name, type)`. XQuery now resolves `import schema "http://www.w3.org/2005/xpath-functions"` to the embedded JSON schema. This closes the QT3 `fn-json-to-xml` residual cluster.
 
 Expected state: **1,765 unit tests / 0 failed / 0 skipped**; **`fn-json-to-xml` 86 passed / 0 failed / 8 skipped** (skips are unsupported dependencies). Full QT3 sweep was interrupted at `fn-matches.re` (5,983 tests) and will be re-run separately.
@@ -2909,7 +2910,7 @@ Expected state: **1,765 unit tests / 0 failed / 0 skipped**; **`fn-json-to-xml` 
 ---
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3c25b2f` — honor PSVI nilled status in fn:nilled, fn:data, and element tests
 **Current focus:** **`fn:nilled` cluster** — `fn:nilled` now uses the PSVI `IsNil` annotation; `fn:data` returns the PSVI typed value for schema-validated nodes (empty for nilled elements); and `element(*, T)` / `element(N, T)` kind tests reject nilled elements while the nillable form `element(*, T?)` / `element(N, T?)` accepts them. This closes the QT3 `fn-nilled` residual cluster.
 
 Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; full QT3 sweep **30,780 passed / 119 failed / 922 skipped** (96.73%). `fn-nilled` is now **60/0/4** (skips are unsupported dependencies). `prod-CastExpr.schema` remains **123/6/1**; `prod-CastableExpr UnionType` **29/0/0**; `prod-CastableExpr ListType` **18/0/0**; `fn-for-each` **64/0/2**; `fn-function-lookup` **669/0/5**; `prod-InstanceofExpr` **305/3/1**. Remaining failures are concentrated in `json-to-xml`, `fn:idref`, decimal `orderBy` normalization, windowing date/time arithmetic, and a few schema-aware SequenceType static-error cases.
@@ -2952,7 +2953,7 @@ Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-serve
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `df522ee` — break recursion in FunctionItemInstanceOf and IsSchemaTypeSequenceSubtype
 **Current focus:** **Runtime recursion fixes** — the full QT3 conformance sweep that was aborting with a stack overflow in `FunctionItemInstanceOf` now completes. The recursive `ValueMatchesType` fallback for unresolved function items was replaced by an arity-only match, and the `IsSchemaTypeSequenceSubtype` → `IsSequenceTypeSubtype` → `IsSchemaAwareSequenceSubtype` cycle for atomic schema types was broken by handling `item()`, `xs:anyAtomicType`, union-test membership, and the built-in atomic hierarchy directly.
 
 Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; full QT3 sweep **30,761 passed / 138 failed / 922 skipped** (96.67%). `prod-CastExpr.schema` remains **123/6/1**; `prod-CastableExpr UnionType` **29/0/0**; `prod-CastableExpr ListType` **18/0/0**; `fn-for-each` **64/0/2**; `fn-function-lookup` **669/0/5**; `prod-InstanceofExpr` **305/3/1** (residual `XPST0051` static-validation gaps: `instanceof114/115/120`). The remaining failures are concentrated in `fn:nilled`, `json-to-xml`, `fn:idref`, decimal `orderBy` normalization, windowing date/time arithmetic, and a few schema-aware SequenceType static-error cases.
@@ -2989,7 +2990,7 @@ Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-serve
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `cb9bbb4` — schema-aware QName/NOTATION cast cluster fixes
 **Current focus:** **Schema-aware QName/NOTATION casts** — the residual `prod-CastExpr.schema` QName/NOTATION cluster (`qname-cast-3/4`, `notation-cast-3`, `user-defined-8/9/11`) is now fixed. Mixed-case schema prefixes no longer trigger spurious `XPST0081`; user-defined `xs:NOTATION` restrictions can be constructed and cast from lexical forms; and `XQST0034` conflicts between user-declared functions and schema simple-type constructor functions are detected at runtime registration. `CastAs-UnionType-20` is also restored by rejecting `xs:QName` values when casting to `xs:string`-derived subtypes such as `xs:NCName`, so union types correctly prefer the `xs:QName` member.
 
 Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; QT3 `prod-CastExpr.schema` at **123 passed / 6 failed / 1 skipped**; `prod-CastableExpr UnionType` at **29/0**; `prod-CastableExpr ListType` at **18/0**. The remaining six `prod-CastExpr.schema` failures are pre-existing timezone/float-formatting issues (`casthcds12/30/31/32/33/42`). A fresh full QT3 sweep is running to update the overall baseline.
@@ -3033,7 +3034,7 @@ Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-serve
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** uncommitted (base: 7bdafbc) — schema-aware XSD list/union simple types, residual namespace-context and restriction-of-union fixes
 **Current focus:** **Schema-aware XSD list/union simple types** — residual `prod-CastExpr.schema` failures `CastAs-UnionType-13/14/15` (namespace context for dynamic constructor calls) and `CastAs-UnionType-17` (restriction-of-union SequenceType raises `XPST0051`) are now fixed. Remaining failures are the pre-existing QName/NOTATION/timezone cluster.
 
 Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; QT3 `prod-CastExpr.schema` at **117 passed / 12 failed / 1 skipped**; `prod-CastableExpr UnionType` at **29/0**; `prod-CastableExpr ListType` at **18/0**. A full QT3 sweep is still pending to update the overall baseline.
@@ -3071,7 +3072,7 @@ Expected state: **1,762 unit tests / 0 failed / 0 skipped**; **61 language-serve
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** uncommitted (base: 7bdafbc) — schema-aware XSD list/union simple types
 **Current focus:** **Schema-aware XSD list/union simple types** — `VmEngine.TryCastToSchemaType` now recursively handles unions, lists, and restrictions of those varieties; sequence-type subtyping is schema-aware for user-defined atomic/list/union return types; typed `xs:QName` values are preserved when cast through namespace-sensitive unions. This closes the bulk of the QT3 `prod-CastExpr.schema` list/union cluster.
 
 Expected state: **1,759 unit tests / 0 failed / 0 skipped**; **61 language-server tests / 0 failed**; QT3 `prod-CastExpr.schema` at **110 passed / 19 failed / 1 skipped**; `prod-CastableExpr UnionType` at **29/0**; `prod-CastableExpr ListType` at **18/0**. A full QT3 sweep is running to update the overall baseline.
@@ -3119,7 +3120,7 @@ Expected state: **1,759 unit tests / 0 failed / 0 skipped**; **61 language-serve
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** 173cfda docs: add XSLT code lens backlog feature requests and handover sync
 **Current focus:** **QT3 skipped clusters** — ready to pick up the next tier of skipped W3C QT3 tests after VS Code restart. Before restart, the XSLT code lens backlog was captured as living feature requests (REQ-071, REQ-072, REQ-073) and the handover documentation was synchronized.
 
 Expected state: **1,731 unit tests / 0 failed**; **61 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3147,7 +3148,7 @@ Expected state: **1,731 unit tests / 0 failed**; **61 language-server tests / 0 
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** d07690e feat(languageserver,vscode): default source-document hint for XSLT code lens
 **Current focus:** **VS Code extension — XSLT code lens default source** — `CodeLensHandler` now parses a `<?bosak source-document="..."?>` processing instruction in `.xsl`/`.xslt` files. When the hint is present, the lens title shows the source file name (e.g., **Run XSLT transformation (input.xml)**) and the `bosak.transformXslt` command receives the resolved source path as a second argument, so the VS Code client can run the transform without prompting. If the hint is absent, the existing picker-based lens remains unchanged.
 
 Expected state: **1,731 unit tests / 0 failed** in the main solution; **61 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3176,7 +3177,7 @@ Expected state: **1,731 unit tests / 0 failed** in the main solution; **61 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fee2236` feat(languageserver,vscode): send serializable evaluation result from executeCommand
 **Current focus:** **VS Code extension — serializable execute-command result** — the `ExecuteCommandHandler` now sends a custom `bosak/evaluationResult` LSP notification containing `{ language, result, error }` instead of using `window/showMessage`. The VS Code extension listens for this notification and opens the result in a preview editor (or shows an error message). This restores the editor-preview behavior while keeping the `workspace/executeCommand` path.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **58 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3205,7 +3206,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **58 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `8e31515` feat(languageserver): extend code lens to XQuery documents
 **Current focus:** **VS Code extension — code lens (XQuery)** — the code lens now supports `.xq`, `.xqy`, and `.xquery` documents in addition to `.xpath`. XQuery files are evaluated via `XQueryCompiler`, while XPath files continue to use `XPath31Expression`; the lens title prefixes errors with the detected language (`XPath error:` or `XQuery error:`), and the command name is `bosak.evaluateXPath` or `bosak.evaluateXQuery` accordingly. Unsupported file types receive an empty lens container.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **54 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3232,7 +3233,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **54 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5af86a2` feat(languageserver): add code lens for XPath document evaluation
 **Current focus:** **VS Code extension — code lens** — `.xpath` documents now display a code lens at line 0 that evaluates the document's XPath expression and shows the serialized result or error message above the document. The handler implements `textDocument/codeLens` and `codeLens/resolve`, is registered in `Program.cs`, and is covered by three unit tests.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **52 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3261,7 +3262,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **52 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `2e226ca` feat(languageserver): add declare default element namespace code action
 **Current focus:** **VS Code extension — code actions (default element namespace)** — `CodeActionHandler` now offers a `declare default element namespace` quick fix for XQuery documents that contain unprefixed element constructors (e.g., `<root/>`) and do not already declare a default element namespace. The fix inserts `declare default element namespace "";` at the prolog position, giving users a placeholder to fill in the target namespace URI.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **49 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3288,7 +3289,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **49 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `154c93b` feat(languageserver): add XSLT root rename and version quick fixes
 **Current focus:** **VS Code extension — code actions (continued)** — the `CodeActionHandler` now renames a bare `<stylesheet>`/`<transform>` root to `<xsl:stylesheet>`/`<xsl:transform>`, adds the required `xmlns:xsl="http://www.w3.org/1999/XSL/Transform"` namespace declaration, and also renames the matching closing tag. A new quick fix adds a missing `version="3.0"` attribute to `xsl:stylesheet`/`xsl:transform`. `DiagnosticsHandler` emits a warning for a missing XSLT root `version`. These actions are covered by seven language-server unit tests.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **34 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3317,7 +3318,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **34 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a64a14e` feat(languageserver): add code actions for namespace quick fixes in XQuery and XSLT
 **Current focus:** **VS Code extension — code actions** — the language server now provides quick fixes for common namespace issues. In XQuery it offers to declare an undeclared namespace prefix (`declare namespace prefix = "";`). In XSLT it offers to declare an undeclared prefix on the root element (`xmlns:prefix=""`) and to add the required `xsl` namespace to a root element that is missing it (`xmlns:xsl="http://www.w3.org/1999/XSL/Transform"`). The handler implements `textDocument/codeAction` plus `codeAction/resolve`, is registered in `Program.cs`, and is covered by six new unit tests.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **33 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3346,7 +3347,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **33 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e649d84` feat(languageserver): add semantic tokens for XPath/XQuery/XSLT
 **Current focus:** **VS Code extension — semantic tokens** — the language server now provides semantic highlighting for XPath, XQuery, and XSLT documents. Tokens are emitted for function calls (`fn:concat`), variable references (`$var`), XSLT instructions (`xsl:*`), XQuery keywords, type names (`xs:string`), namespace prefixes, number literals, and XPath operators. The `vscode-bosak` extension is bumped to **0.1.3**. Client-side wiring is automatic because `vscode-languageclient` uses the server's advertised `textDocument/semanticTokens` capability.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution; **27 language-server tests / 0 failed**; QT3 unchanged at **29,929 / 0 / 1,892**.
@@ -3377,7 +3378,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution; **27 langu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a4f5a86` feat(runtime,standard,query): schema-awareness sweep — user-defined schema simple types
 **Current focus:** **Schema awareness closure** — the user-defined schema simple-type sweep is finalized. `FunctionLibrary.Populate` registers constructor functions for non-`xs:*` simple types from `EvaluationContext.SchemaSet`; `ValueMatchesType`, `ApplyFunctionConversion`, and `instance of` accept prefixed user-defined schema types; schema-validated typed values keep the integer XDM kind for integer-derived types and remain typed as date/time values. Full QT3 sweep is now **29,929 passed / 0 failed / 1,892 skipped** (94.05%). The 162 remaining schema-awareness skips are documented known gaps (list/union types, QName/NOTATION casts, `schema-element()`/`schema-attribute()` kind tests). Unit tests: **1,708 / 0 failed / 0 skipped**.
 
 Expected state: **1,708 unit tests / 0 failed** in the main solution, QT3 **29,929 / 0 / 1,892**.
@@ -3418,7 +3419,7 @@ Expected state: **1,708 unit tests / 0 failed** in the main solution, QT3 **29,9
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** feat(vscode): add XQuery language support (`.xq`/`.xqy`/`.xquery`)
 **Current focus:** **VS Code extension — XQuery language support** — the extension and language server now handle XQuery documents: a new TextMate grammar, XQuery keyword/constructor completion, XQuery diagnostics via `XQueryCompiler`, XQuery document symbols (modules, imports, functions, variables) and go-to-definition, and a `bosak/runXQuery` command backed by a new `bosak/evaluateXQuery` LSP request.
 
 Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged), plus **20 language-server tests / 0 failed**. QT3 unchanged at **30,344 / 0 / 1,477**.
@@ -3445,7 +3446,7 @@ Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged)
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** feat(languageserver): add hover, go-to-definition, document symbols, and evaluate/transform commands
 **Current focus:** **VS Code extension features** — the language server now supports hover, go-to-definition, document symbols, and two custom commands: `bosak/evaluateXPath` (evaluate the current `.xpath` document) and `bosak/transformXslt` (run the current stylesheet against a selected source XML document). The previously placeholder context-menu commands in `extension.ts` are now wired to these LSP requests. A `Bosak.LanguageServer.Tests` project covers all handlers.
 
 Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged), plus **15 language-server tests / 0 failed**. QT3 unchanged at **30,344 / 0 / 1,477**.
@@ -3481,7 +3482,7 @@ Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged)
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** feat(languageserver): add hover, go-to-definition, and document symbols
 **Current focus:** **VS Code extension features** — the language server gained three new LSP capabilities: **hover** (function signatures and descriptions for XPath functions), **go-to-definition** (jump to user-defined XSLT functions, variables, parameters, and named templates), and **document symbols** (an outline of top-level XSLT declarations). A new `Bosak.LanguageServer.Tests` project covers the handlers. The language server builds separately from `Bosak.sln` (it is not a solution member); its tests run via `dotnet test tests/Bosak.LanguageServer.Tests`.
 
 Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged), plus **11 language-server tests / 0 failed**. QT3 unchanged at **30,344 / 0 / 1,477**.
@@ -3516,7 +3517,7 @@ Expected state: **1,722 unit tests / 0 failed** in the main solution (unchanged)
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** feat(providers): XML 1.1 prefixed namespace undeclarations in element constructors (XQST0085b, K2-Serialization-20/21)
 **Current focus:** **XML 1.1 support — namespace undeclaration** — `XDocumentProvider.ConstructElement` now accepts `xmlns:p=""` in XML 1.1 mode and records a `PrefixedNamespaceUndeclarations` annotation instead of raising XQST0085. The existing namespace-axis and serialization infrastructure already understands the annotation. An `Xml11Mode` flag was added to `EvaluationContext` and `XdmElementSpec` and is set by the harness for `xml-version=1.1` tests. The two XML 1.1-only character-name tests (`XML10-4ed-Excluded-char-1-new`, `XML11-1ed-Included-char-1-new`) are documented as a known gap: .NET's `XDocument` cannot hold those names natively, and the harness's assert-xml comparison re-parses serialized output with `XDocument.Parse`, which rejects them.
 
 Expected QT3: **30,344 passed / 0 failed / 1,477 skipped (95.35%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,722 unit tests / 0 failed**. Targeted verification: `misc-CombinedErrorCodes` (`XQST0085b`) 1/0/0, `method-xml` (`K2-Serialization-20/21`) 2/0/0, plus `prod-CompNamespaceConstructor` and `prod-DirElemContent.namespace` unchanged.
@@ -3551,7 +3552,7 @@ Expected QT3: **30,344 passed / 0 failed / 1,477 skipped (95.35%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(xquery): main-module function bodies use the main module's static default element namespace (extvardeclwithtype-23)
 **Current focus:** **QT3 skip-cluster cleanup — external variable declared-type cluster** — `XQueryExecutable.InvokeWithModuleContext` now restores the main module's static default element namespace around main-module function calls. Previously, a direct element constructor's `xmlns="..."` declaration at the call site leaked into the called function's body, causing `element(Variable)` type tests to expect the wrong namespace and raise `XPTY0004`. `extvardeclwithtype-23` now passes.
 
 Expected QT3: **30,341 passed / 0 failed / 1,480 skipped (95.35%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,720 unit tests / 0 failed**. Targeted verification: `prod-VarDecl.external` (`extvardeclwithtype-23`) 1/0/0.
@@ -3581,7 +3582,7 @@ Expected QT3: **30,341 passed / 0 failed / 1,480 skipped (95.35%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(compiler): let between group by and order by evaluated during re-keying; for/window after group by lowered as nested FLWOR (use-case-groupby-Q6, TumblingWindowExpr545)
 **Current focus:** **QT3 skip-cluster cleanup — group-by post-clause cluster** — the group-by path now reuses the `LowerFlworRekeyStage` machinery: `let` clauses between `group by` and `order by` are evaluated during the re-key pass so order-by keys can reference them, and `for`/`window` clauses after `group by` are lowered as a nested FLWOR evaluated per group with the grouped bindings in scope. The two `NotSupportedException` guards are removed. `use-case-groupby-Q6` and `TumblingWindowExpr545` now pass.
 
 Expected QT3: **30,340 passed / 0 failed / 1,481 skipped (95.34%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,719 unit tests / 0 failed**. Targeted verification: `prod-GroupByClause` 36/0/0, `prod-WindowClause` 132/0/3.
@@ -3613,7 +3614,7 @@ Expected QT3: **30,340 passed / 0 failed / 1,481 skipped (95.34%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(compiler): support multiple order by clauses per FLWOR via stable-sort re-key stages (orderBy65/66)
 **Current focus:** **QT3 skip-cluster cleanup — multiple order by cluster** — `LowerFlworWithTuples` now splits FLWOR clauses at every `order by` and chains sort stages: build+sort for the first `order by`, then a re-key stage per additional `order by` that rebinds the tuple variables, processes intermediate `count`/`where`/`let` clauses, evaluates the new keys, and stable-sorts again. `orderBy65` and `orderBy66` now pass.
 
 Expected QT3: **30,338 passed / 0 failed / 1,483 skipped (95.34%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,717 unit tests / 0 failed**. Targeted verification: `prod-OrderByClause` 201/0/4 (orderBy65/66 pass), `prod-GroupByClause` 35/0/1 (unchanged).
@@ -3642,7 +3643,7 @@ Expected QT3: **30,338 passed / 0 failed / 1,483 skipped (95.34%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(parser/runtime): normalize line endings in direct attribute values; computed attribute names ignore default element namespace (K2-DirectConElemAttr-75, currencysvg)
 **Current focus:** **QT3 skip-cluster cleanup — attribute whitespace/namespace cluster** — `XPathParser.ScanConstructorAttributeValue` now applies XML 1.0 §2.11 line-ending normalization (`\r\n` and lone `\r` become `\n`) before the §3.3.3 attribute-value whitespace normalization, so a Windows line ending between value parts produces exactly one space instead of two. Literal whitespace runs within a single text part are preserved. `VmEngine.ResolveComputedName` no longer applies the default element namespace to unprefixed computed attribute names. `K2-DirectConElemAttr-75` and `currencysvg` now pass and are removed from `KnownXQueryGaps`.
 
 Expected QT3: **30,336 passed / 0 failed / 1,485 skipped (95.33%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,715 unit tests / 0 failed**. Targeted verification: `K2-DirectConElemAttr-75` 1/0/0, `currencysvg` 1/0/0, plus the previously regressed `K2-DirectConOther-49/58/59/60/68/69` all pass.
@@ -3674,7 +3675,7 @@ Expected QT3: **30,336 passed / 0 failed / 1,485 skipped (95.33%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(providers): computed attribute xml:space validation raises XQDY0092 (K2-ComputeConAttr-60)
 **Current focus:** **QT3 skip-cluster cleanup — xml:space computed-attribute cluster** — `XDocumentProvider.ConstructAttribute` now validates `xml:space` values at construction time and raises `XQDY0092` for anything other than `default` or `preserve`. Previously the invalid value was accepted and only failed later when LINQ's `XmlWellFormedWriter` serialized the attribute, surfacing as a harness `ArgumentException`.
 
 Expected QT3: **30,334 passed / 0 failed / 1,487 skipped (95.32%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,712 unit tests / 0 failed**. Targeted verification: `prod-CompAttrConstructor` (`K2-ComputeConAttr-60`) 1/0/0.
@@ -3702,7 +3703,7 @@ Expected QT3: **30,334 passed / 0 failed / 1,487 skipped (95.32%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(stdlib): UCA alternate=blanked + strength=identical uses codepoint tie-break (compare-042)
 **Current focus:** **QT3 skip-cluster cleanup — UCA identical/blanked cluster** — `fn:compare` with a UCA collation `strength=identical;alternate=blanked` previously combined `CompareOptions.Ordinal` with `CompareOptions.IgnoreSymbols`, which .NET rejects. `TryParseUca` now keeps those options separate and records an `IsIdenticalBlanked` flag; `CompareStrings` applies a final codepoint tie-break after the blanked comparison, and `UcaStringComparer` uses ordinal equality for that combination. `compare-042` now passes.
 
 Expected QT3: **30,333 passed / 0 failed / 1,488 skipped (95.32%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,711 unit tests / 0 failed**. Targeted verification: `fn-compare` 88/0/8.
@@ -3732,7 +3733,7 @@ Expected QT3: **30,333 passed / 0 failed / 1,488 skipped (95.32%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(xslt): fn:transform missing source raises FOXT0002; result-document text capture uses __xdm_doc__ wrapper
 **Current focus:** **QT3 skip-cluster cleanup — fn-transform cluster** — `fn-transform-err-1` no longer fails with a raw `ArgumentException` for a missing source document; `TransformEngine` now raises `FOXT0002`. `fn-transform-2` no longer fails with LINQ's "Non-whitespace characters cannot be added to content" when a secondary `xsl:result-document` contains a text node: the capture path now uses the synthetic `__xdm_doc__` wrapper for non-single-element content, matching the XDM document constructor behavior.
 
 Expected QT3: **30,332 passed / 0 failed / 1,489 skipped (95.32%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,710 unit tests / 0 failed**. Targeted verification: `fn-transform` 120/0/4.
@@ -3761,7 +3762,7 @@ Expected QT3: **30,332 passed / 0 failed / 1,489 skipped (95.32%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(compiler): support placeholder arguments in arrow static calls (ArrowPostfix-108)
 **Current focus:** **QT3 skip-cluster cleanup — arrow partial-application cluster** — `LowerArrow` now detects `ArgumentPlaceholderNode` in a static arrow target such as `"$" => concat(?)` and emits a `Curry` instead of a direct `Call`. The arrow source becomes the first argument, placeholders remain unfixed, and the result is a curried function item. `prod-ArrowPostfix` now passes **42/0/0**.
 
 Expected QT3: **30,330 passed / 0 failed / 1,491 skipped (95.31%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,708 unit tests / 0 failed**. Targeted verification: `prod-ArrowPostfix` 42/0/0.
@@ -3789,7 +3790,7 @@ Expected QT3: **30,330 passed / 0 failed / 1,491 skipped (95.31%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(parser/runtime): huge named-function-ref arity clamps to int.MaxValue and raises FOAR0002 (fn-function-arity-017, fn-function-name-018)
 **Current focus:** **QT3 skip-cluster cleanup — function-arity overflow cluster** — `fn:concat#340282366920938463463374607431768211456` caused the parser to overflow `Int32` when reading the arity literal. `XPathParser.ParseNamedFunctionRef` now falls back to `int.MaxValue` when `int.TryParse` fails, and `VmEngine` resolves an arity of `int.MaxValue` as `FOAR0002` instead of matching a variadic fallback. The two affected QT3 tests now pass.
 
 Expected QT3: **30,329 passed / 0 failed / 1,492 skipped (95.31%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,707 unit tests / 0 failed**. Targeted verification: `fn-function-arity` 21/0/2, `fn-function-name` 25/0/1.
@@ -3819,7 +3820,7 @@ Expected QT3: **30,329 passed / 0 failed / 1,492 skipped (95.31%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(harness): skip app-CatalogCheck catalog-consistency set to allow full QT3 sweep to complete
 **Current focus:** **QT3 skip-cluster cleanup — app-CatalogCheck hang** — the `app-CatalogCheck` set is a catalog-consistency (meta) set: each test case loads the entire QT3 catalog and all 428 referenced test-set files. Running it caused the full conformance sweep to hang/timeout before producing a final summary. The harness now records the 14 tests in this set as skipped with the reason "Catalog consistency checks load the full QT3 corpus per test; skipped to avoid hang". With this blocker removed, a full end-to-end QT3 sweep completes cleanly at **30,327 passed / 0 failed / 1,494 skipped (95.30%)**.
 
 Expected QT3: **30,327 passed / 0 failed / 1,494 skipped (95.30%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,705 unit tests / 0 failed**. Targeted verification: `app-CatalogCheck` 0/0/14; `misc-JsonTestSuite` 318/0/0; `fn-json-doc` 61/0/7.
@@ -3845,7 +3846,7 @@ Expected QT3: **30,327 passed / 0 failed / 1,494 skipped (95.30%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(stdlib): resolve fn:json-doc relative URIs against base URI and read local JSON files as text
 **Current focus:** **QT3 skip-cluster cleanup — misc-JsonTestSuite cluster** — `JsonDoc` now resolves relative URIs against `EvaluationContext.BaseUri` before loading, and when the resolved URI points to a local file it reads the file as plain text instead of routing it through the XML `DocumentLoader`. The root cause of the 318 skipped `misc-JsonTestSuite` tests was that the test cases use relative URIs such as `JSONTestSuite/test_parsing/...`; without base-URI resolution these were resolved against the process working directory (`D:\Development\Bosak`), so the files were not found. The fix brings the entire `misc-JsonTestSuite` set to **318 passed / 0 failed / 0 skipped**.
 
 Expected QT3: **30,327 passed / 0 failed / 1,494 skipped (95.30%)** — verified by a full end-to-end sweep. Full `dotnet test Bosak.sln` passes: **1,705 unit tests / 0 failed**. Targeted verification: `fn-json-doc` remains **61/0/7**; `misc-JsonTestSuite` is **318/0/0**. The full sweep completes cleanly now that `app-CatalogCheck` is skipped. The remaining small actionable clusters are surfaced in the full-sweep skip summary.
@@ -3873,7 +3874,7 @@ Expected QT3: **30,327 passed / 0 failed / 1,494 skipped (95.30%)** — verified
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(standard): wrap JsonDoc DocumentLoader failures as FOUT1170 (json-doc-error-028..032)
 **Current focus:** **QT3 skip-cluster cleanup — fn-json-doc error cluster** — `JsonDoc` in `FunctionLibrary.cs` now wraps the `EvaluationContext.DocumentLoader` path in the same try/catch used for direct file loads. Previously, when the conformance harness's document loader could not resolve an invalid or unreachable URI, raw `IOException`/`FileNotFoundException`/`DirectoryNotFoundException` bubbles escaped and were recorded as unexpected-error skips. The loader path now converts any non-`InvalidOperationException` into `InvalidOperationException("FOUT1170: Cannot load JSON document {uri}")`, so the five `json-doc-error-028..032` tests pass. A unit regression test (`JsonDoc_DocumentLoaderThrows_WrapsAsFOUT1170`) guards the behavior.
 
 Expected QT3: **30,009 passed / 0 failed / 1,813 skipped** (+5 passing, −5 skips) relative to the previous verified baseline. Full `dotnet test Bosak.sln` passes: **1,704 unit tests / 0 failed**. Targeted verification of the affected test set (`fn-json-doc`) shows **61 passed / 0 failed / 7 skipped** (the remaining skips are unsupported dependencies). The full sweep is again interrupted by `app-CatalogCheck`, which appears to hang/timeout before producing a final summary, so the total is derived from the previous documented sweep plus the verified targeted delta. The next actionable clusters are the `misc-JsonTestSuite` missing-test-data group (~318 skips) and the `app-CatalogCheck` full-sweep hang/timeout.
@@ -3900,7 +3901,7 @@ Expected QT3: **30,009 passed / 0 failed / 1,813 skipped** (+5 passing, −5 ski
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(compiler): support where/let clauses after group by and order by; reject unsupported let-before-order-by after group by
 **Current focus:** **QT3 skip-cluster cleanup — group-by/order-by cluster** — `IrLowerer` now supports `where` and `let` clauses after `group by` and after `order by`. Previously these post-grouping/post-ordering clauses were rejected by the lowerer's validation gate. The implementation emits `JumpIfFalse` for `where` and stores `let` bindings inside `LowerFlworBodyIteration`, restoring scoped variable names after each iteration. For `group by` followed by `order by`, a `let` whose variable is referenced by the order-by key cannot be evaluated before re-keying in the current lowerer; a targeted guard detects this pattern and throws `NotSupportedException` (recorded as a skip) instead of producing an `XPST0008` failure at runtime.
 
 Expected QT3: **30,004 passed / 0 failed / 1,818 skipped** (+0 passing, +1 skip, −0 failures) after full sweep verification. Full `dotnet test Bosak.sln` passes: **1,703 unit tests / 0 failed**. Targeted verification of the affected test sets (`prod-GroupByClause`, `prod-OrderByClause`, `app-Duplicates`) shows **0 failures**; `prod-GroupByClause` is 35/0/1, `prod-OrderByClause` is 199/0/6, `app-Duplicates` is 14/0/0. The full sweep was interrupted by `app-CatalogCheck`, which appears to hang in this run; the baseline is therefore derived from the previous documented sweep plus the verified targeted delta.
@@ -3931,7 +3932,7 @@ Expected QT3: **30,004 passed / 0 failed / 1,818 skipped** (+0 passing, +1 skip,
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(providers): strip document nodes used as element/document content to match XQuery constructor semantics
 **Current focus:** **QT3 skip-cluster cleanup — document-node cluster** — after clusters 3 and 1 were fixed, the next largest actionable skip group was the 20-test `ArgumentException: A node of type Document cannot be added to content` cluster. The root cause: `XDocumentProvider.ConstructElement` and `ConstructDocument` passed document nodes straight to LINQ-to-XML, which rejects them. XQuery semantics require document nodes in element/document content to be *stripped* and their children inserted into the surrounding content sequence. The fix unwraps document nodes, merges leading/trailing text with the surrounding `pendingText` so adjacent text nodes collapse, and inserts elements/comments/PIs directly. Targeted verification shows ~17 previously skipped tests now pass (e.g., `Constr-compelem-doc-1`, `K2-DirectConElem-42/43`, `Constr-cont-document-1/2`).
 
 Expected QT3: **30,004 passed / 0 failed / 1,817 skipped** (+20 passing, −20 skips) after full sweep verification. Full `dotnet test Bosak.sln` passes: **1,699 unit tests / 0 failed**. Targeted verification of the affected test sets (`prod-CompDocConstructor`, `prod-CompElemConstructor`, `prod-DirElemConstructor`, `prod-DirElemContent`) shows **0 failures**; remaining skips are unsupported dependencies or known gaps.
@@ -3957,7 +3958,7 @@ Expected QT3: **30,004 passed / 0 failed / 1,817 skipped** (+20 passing, −20 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(conformance): load external `<test file="..."/>` queries and raise spec error codes for reserved namespace bindings
 **Current focus:** **QT3 skip-cluster cleanup** — the user asked to tackle two of the 1,880 skipped QT3 validations: cluster 3 (`ArgumentException` on empty queries caused by `<test file="..."/>` not being loaded) and cluster 1 (`ArgumentException` on reserved namespace prefix/URI mistakes because they were surfacing as raw .NET errors instead of XQuery spec error codes).
 
 - **Cluster 3 (empty-query `ArgumentException`):** `TestCase.FromElement` only read the inline text of `<test>` and ignored the `file` attribute. Tests whose real XQuery lives in an external `.xq` file were passed to `XQueryCompiler` as an empty string, triggering `ArgumentException.ThrowIfNullOrEmpty(query)`. `TestCase.cs` now loads `<test file="..."/>` relative to the test-set base directory.
@@ -3998,7 +3999,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(parser): treat `if` as conditional only when followed by `(`; otherwise parse as name test (K2-NameTest-5)
 **Current focus:** **if-keyword-as-name cluster** — `K2-NameTest-5` is the last actionable QT3 engine gap. The test contains the tokenizer-torture expression `if(if) then then else else-...` and expects a runtime `XPTY0004`/`XPDY0002`. `XPathParser.ParseExprSingle` unconditionally routed `TokenKind.KeywordIf` to `ParseIfExpr()`, so the inner `if` (followed by `)`) caused `XPST0003: Expected LParen but found RParen`. The parser now gates `KeywordIf` on `Peek(1).Kind == TokenKind.LParen`, letting bare `if` fall through to `ParseOrExpr` as an ordinary name/name test (consistent with `for`/`let` gating). `K2-NameTest-5` now passes. Expected QT3: **29,941 passed / 0 failed / 1,880 skipped (94.09%)** (+1 passing, −1 skip); the known-gaps probe reports 1 admitted failure (`fn-unparsed-text-054a` — external Cloudflare block, not an engine gap). Full `dotnet test Bosak.sln` passes: **1,699 unit tests / 0 failed**.
 
 ## This Session Changes (if-keyword-as-name cluster)
@@ -4025,7 +4026,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(runtime): axis steps over empty sequence input return empty instead of XPDY0002 (Catalog004)
 **Current focus:** **axis-step cluster** — `Catalog004` failed with `XPDY0002: An axis step requires a context item` inside a nested `let`/`for` FLWOR. Investigation showed the error was not a lost context item: one `<fots:schema>` in the QT3 catalog has no `@file` attribute, so `$schema/@file` evaluates to the empty sequence, `resolve-uri((), ...)` returns empty, `doc(())` returns `XdmValue.Undefined`, and the following child step `/*` received the empty-sequence sentinel and misinterpreted it as a missing context item. `ApplyAxis` and `PathStepMap` in `VmEngine.cs` now treat an `Undefined` input as an empty result; the real "absent context item" case is still caught earlier by `LoadContextItem`. `Catalog004` now passes. Expected QT3: **29,940 passed / 0 failed / 1,881 skipped (94.09%)** (+1 passing, −1 skip); the known-gaps probe should report 2 admitted failures (`fn-unparsed-text-054a`, `K2-NameTest-5`). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (axis-step cluster)
@@ -4052,7 +4053,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** fix(stdlib): fn:distinct-values respects XSD string type families (cbcl-distinct-values-002b)
 **Current focus:** **distinct-values cluster** — `cbcl-distinct-values-002b` mixes many XSD string-stored types (`xs:string`, `xs:untypedAtomic`, `xs:anyURI`, `xs:gYear`, `xs:hexBinary`, `xs:base64Binary`, etc.) whose lexical forms collide. `TypedStringValuesEqual` previously compared all `XdmValueKind.String` values by lexical string, so `xs:gYear("2008")`, `xs:hexBinary("2008")`, `xs:base64Binary("2008")`, and `xs:string("2008")` were incorrectly collapsed. The helper now partitions string-stored values into XSD type families: the string family compares by string; g\* subtypes compare on the timeline only within the same subtype; binary types compare by decoded octets; cross-family values are distinct. Targeted verification of the remaining 3 admitted gaps (`fn-unparsed-text-054a`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,939 passed / 0 failed / 1,882 skipped (94.08%)** (+1 passing, −1 skip); the known-gaps probe reports 3 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (distinct-values cluster)
@@ -4077,7 +4078,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c1b31a0` (fix(providers): namespace fixup for clashing attribute prefixes (cbcl-ns-fixup-1))
 **Current focus:** **namespace fixup cluster** — `cbcl-ns-fixup-1` constructs `<root>{ $x/@*, $y/@* }</root>` where `$x/@*` and `$y/@*` both use the prefix `ns` but are bound to different URIs. `ConstructElement` previously added only one `xmlns:ns` declaration, so `fn:in-scope-prefixes` reported 2 prefixes instead of 3. The helper now tracks `prefix -> URI` mappings and, when two attributes share a prefix with different URIs, generates a new prefix for the second URI and annotates the attribute so its reported prefix matches the declaration. Targeted verification of the remaining 4 admitted gaps (`cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,938 passed / 0 failed / 1,883 skipped (94.08%)** (+1 passing, −1 skip); the known-gaps probe reports 4 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (namespace fixup cluster)
@@ -4102,7 +4103,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `1c685b0` (fix(stdlib): fn:analyze-string result element declares fn namespace explicitly (analyzeString-028))
 **Current focus:** **fn:analyze-string in-scope-prefixes cluster** — `analyzeString-028` expected the `fn:analyze-string-result` element to have two in-scope prefixes (`fn` and `xml`). The element was constructed with an `XNamespace`-qualified name, but LINQ to XML does not materialize an `xmlns:fn` attribute until serialization, so `fn:in-scope-prefixes` only saw the implicit `xml` prefix. `AnalyzeString` now adds an explicit `xmlns:fn` namespace declaration to the result element. `analyzeString-028` passes. Targeted verification of the remaining 5 admitted gaps (`cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`) confirms they still fail for their original reasons. Expected QT3: **29,937 passed / 0 failed / 1,884 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports 5 admitted failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (analyze-string cluster)
@@ -4127,7 +4128,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `2a2dafe` (fix(conformance): assert-xml strips trailing whitespace after last element in multi-root fragments)
 **Current focus:** **assert-xml trailing-whitespace cluster** — the known-gap probe showed `d1e74610` still failed. The actual sorted result matched the expected XML tree, but the expected `assert-xml` CDATA ended with a newline before `]]>`; `ResultComparer.NormalizeXml` wrapped the multi-root fragment in a temporary `<__x__>` element and preserved that trailing newline as a text node, while the actual result had no trailing whitespace. `NormalizeXml` now strips trailing whitespace from the wrapped fragment when the last non-whitespace character is an element's closing `>`, so formatting whitespace after the result tree is ignored. `d1e74610` now passes. The fresh known-gaps probe was interrupted at `fn-codepoints-to-string`, but targeted verification of `d1e74610`, `app-Walmsley`, `fn-json-to-xml`, and `prod-DirElemContent` shows no regressions. Expected QT3: **29,936 passed / 0 failed / 1,885 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe should report the 6 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (assert-xml cluster)
@@ -4152,7 +4153,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e3f46da` (fix(stdlib): unparsed-text-available#2 raises XPTY0004 on empty $encoding)
 **Current focus:** **unparsed-text-available $encoding cardinality cluster** — the known-gap probe showed `fn-unparsed-text-available-012` still failed. The test expects **XPTY0004** when the 2-argument form receives an empty sequence as `$encoding`. `UnparsedTextAvailable_2` was using `RequireString`, which silently converts an empty sequence to `string.Empty`; switching to `RequireStringRequired` for the `$encoding` argument makes the empty sequence raise **XPTY0004** while keeping `unparsed-text-available((), "utf-8")` returning `false`. `fn-unparsed-text-available-012` now passes. The fresh known-gaps probe shows the remaining 7 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,935 passed / 0 failed / 1,886 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 7 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (unparsed-text-available cluster)
@@ -4177,7 +4178,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6b2c2df` (fix(providers): fn:path returns correct step for document-level PIs/comments; avoid XDocument self-loop)
 **Current focus:** **fn:path document-level PI/comment cluster** — the known-gap probe showed `path009` still failed. `fn:path` on a document-level processing instruction returned `Q{http://www.w3.org/2005/xpath-functions}root()` because `XDocumentNode.GetXPathParent` returned `null` for top-level PIs/comments (LINQ-to-XML sets `Parent` to `null` for document-level nodes). Adding a fallback to the owning `XDocument` makes `fn:path` emit `/processing-instruction(xml-stylesheet)[1]`. The first fallback accidentally applied to `XDocument` itself (`XDocument.Document` returns itself), creating a self-referential loop that hung `fn-doc` and unit tests; restricting the fallback to `XProcessingInstruction` and `XComment` fixes the loop. `path009` now passes. The fresh known-gaps probe shows the remaining 8 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,934 passed / 0 failed / 1,887 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 8 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (fn:path cluster)
@@ -4202,7 +4203,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `376124d` (fix(conformance): assert-eq unwraps singleton sequences for QName comparison)
 **Current focus:** **assert-eq singleton-sequence unwrapping** — the known-gap probe showed `fn-node-name-26` still failed. The engine was returning the correct `QName` (`namespace=http://www.w3.org/XML/1998/namespace, localName=space, prefix=xml`), but the QT3 harness's `CompareAssertEq` compared the actual singleton sequence against the expected bare `QName` by string serialization first, producing `xml:space` vs `space`. Since `ValuesEqual` only applies QName-aware comparison when both operands are atomic QNames, the sequence wrapper caused a false failure. `CompareAssertEq` now unwraps singleton sequences before calling `ValuesEqual`, matching the existing `assert-true`/`assert-false` and `DeepEqual` semantics. `fn-node-name-26` now passes. The fresh known-gaps probe shows the remaining 9 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,933 passed / 0 failed / 1,888 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 9 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (assert-eq cluster)
@@ -4224,7 +4225,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `2ff6236` (fix(stdlib): date/time extraction functions declare ParameterTypeNames so nodes are atomized)
 **Current focus:** **date/time extraction cluster** — the known-gap probe showed `rdb-queries-results-q9` still failed. The test passes `end_date` elements to `fn:year-from-date`, `fn:month-from-date`, and `fn:day-from-date`. The function implementations accessed `.DateValue` directly on the argument, which fails when the argument is a node. Adding `ParameterTypeNames` (`xs:dateTime?`, `xs:date?`, `xs:time?`) to all `fn:*-from-dateTime`, `fn:*-from-date`, and `fn:*-from-time` functions makes the runtime apply function conversion rules, atomizing nodes to `xs:untypedAtomic` and casting them to the expected atomic type before the implementation extracts the component. `rdb-queries-results-q9` now passes. The fresh known-gaps probe shows the remaining 10 admitted failures: `analyzeString-028`, `cbcl-distinct-values-002b`, `fn-node-name-26`, `path009`, `fn-unparsed-text-054a`, `fn-unparsed-text-available-012`, `cbcl-ns-fixup-1`, `K2-NameTest-5`, `Catalog004`, and `d1e74610`. QT3: **29,932 passed / 0 failed / 1,889 skipped (94.07%)** (+1 passing, −1 skip); the known-gaps probe reports the 10 admitted gaps as failures. Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 **Note:** the `FirstStepRequiresContext` helper added during the `Catalog004` investigation was reverted; it did not fix the nested `let`/`for` runtime issue and is too risky to keep unverified. `Catalog004` remains an admitted gap pending further diagnosis.
@@ -4250,7 +4251,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `bbd5047` (fix(runtime): UseCaseR31 cluster — map missing keys return empty sequence; map/array coercion to typed function items)
 **Current focus:** **UseCaseR31 cluster** — the known-gap probe showed `UseCaseR31-009` and `UseCaseR31-012` still failed. `UseCaseR31-009` was caused by map dynamic calls returning `Undefined` for missing keys; a subsequent path step `/title` on `Undefined` raised `XPDY0002`. Returning the empty sequence for a missing key makes the path evaluate to `()`. `UseCaseR31-012` was caused by missing function coercion for maps: a map passed as the `function(xs:string) as xs:string` argument to `local:play` was rejected with `XPTY0004`. `ApplyFunctionConversion` now wraps a map or array in a `CoercedFunctionItem` (backed by a `DelegateFunctionItem`) when the target type is a compatible one-argument function type. Removing the two `KnownXQueryGaps` entries kept the suite at zero failures. QT3: **29,931 passed / 0 failed / 1,890 skipped (94.06%)** (+2 passing, −2 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (UseCaseR31 cluster)
@@ -4273,7 +4274,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d28bafb` (fix(runtime): preserve case of nested kind tests in document-node(element(...)) instance-of checks)
 **Current focus:** **NameTest `document-node(element(...))` case preservation** — the known-gap probe showed `NodeTest004` still failed. The `instance of` type matcher lowercased the entire type string before extracting the nested `element(...)` kind test inside `document-node(...)`, so `document-node(element(Root))` was checked against `element(root)` and the document element `Root` did not match. `ValueMatchesType` now uses the case-preserved type string for the nested kind test, and `NodeTest004` passes. The remaining `K2-NameTest-5` gap is a pathological tokenizer-torture test from an obsolete W3C note that expects XPTY0004/XPDY0002 but is currently rejected with XPST0003; broadening the parser to accept keywords as NCNames in that expression would be risky, so it stays a documented gap. QT3: **29,929 passed / 0 failed / 1,892 skipped (94.05%)** (+1 passing, −1 skip). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (NodeTest004 fix)
@@ -4295,7 +4296,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `8adf8eb` (feat(conformance): evaluate query-based environment collections in QT3 harness)
 **Current focus:** **Query-based environment collections** — the known-gap probe showed the `fn:collection` cluster (`cbcl-collection-002/003/004`) and two `UseCaseR31` tests (`UseCaseR31-026/027`) still failed. The QT3 harness only parsed `<collection><source file="...">` environment declarations; `<collection><query>...</query>` declarations were ignored, leaving the registered collections empty. Adding a `CollectionValues` precomputed-collection dictionary to `EvaluationContext`, wiring it into `fn:collection`/`fn:uri-collection`, and evaluating the query expressions in `TestEnvironment.ApplyTo` made the 5 tests pass. The stale `duplicates-maps-2` entry was also removed. QT3: **29,928 passed / 0 failed / 1,893 skipped (94.05%)** (+6 passing, −6 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (query-based collections cluster)
@@ -4321,7 +4322,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3244575` (feat(stdlib): map:merge default duplicates option is use-first per F+O 3.1)
 **Current focus:** **`map:merge` default duplicate handling** — the known-gap probe showed the Walmsley map:merge cluster (`d1e66015/26/48/70/81`) still failed. The F&O 3.1 specification defines the default `duplicates` option for `map:merge` as `use-first`, but the implementation was defaulting to `use-last`. Changing the default made the 5 tests pass and kept the suite at zero failures. The remaining Walmsley failure (`d1e74610`) is a sort-serialization edge case unrelated to `map:merge`. QT3: **29,922 passed / 0 failed / 1,899 skipped (94.03%)** (+5 passing, −5 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (map:merge cluster)
@@ -4343,7 +4344,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `66137c5` (feat(runtime): direct attribute constructors preserve comment/PI string values and validate xml:space)
 **Current focus:** **Direct constructor attribute values** — the known-gap probe showed the direct-constructor cluster (`K2-DirectConElemAttr-42/43`, `K2-DirectConOther-65`) still failed. Attribute value constructors containing a direct comment or processing instruction (`attr="{<!-- comment -->}"` or `attr="{<?target data?>}"`) produced empty attribute values because the runtime treated those parts as evaluated register values instead of literal string values. Additionally, `xml:space="   preserve"` was serialized as `xml:space="preserve"`; the fix now raises **XQDY0092** for invalid `xml:space` values, which the test accepts as an alternative to the literal value. Removing the 3 known-gap entries kept the suite at zero failures. QT3: **29,917 passed / 0 failed / 1,904 skipped (94.02%)** (+6 passing, −6 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (direct constructor attribute cluster)
@@ -4366,7 +4367,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `bff28af` (feat(stdlib): fn:deep-equal ignores comments and PIs in element children)
 **Current focus:** **fn:deep-equal node comparison** — the known-gap probe showed the deep-equal cluster (`K2-SeqDeepEqualFunc-21/23`, `cbcl-deep-equal-001`, `functx-fn-deep-equal-5`, `functx-fn-deep-equal-all`) still failed because element children were compared node-for-node without filtering out comments and processing instructions. The spec requires these to be ignored during element-content comparison. Adding the filter made the 5 tests pass and kept the suite at zero failures. QT3: **29,911 passed / 0 failed / 1,910 skipped (94.00%)** (+5 passing, −5 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (deep-equal cluster)
@@ -4388,7 +4389,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `2361504` (feat(xquery+stdlib): default collation honored by fn:sort, array:sort and order-by clauses)
 **Current focus:** **Default collation support in sorting and order-by clauses** — the previously recorded collation cluster (`fn-sort-collation-*`, `array-sort-collation-*`, `K-CollationProlog-1`, `defaultcolldecl-6`) was caused by three gaps: order-by comparisons used ordinal string comparison, `fn:sort`/`array:sort` ignored `EvaluationContext.DefaultCollation` when no collation argument was supplied, and `declare default collation` stored the unresolved URI literal. Fixing these made the 8 known-gap tests pass and kept the suite at zero failures. QT3: **29,906 passed / 0 failed / 1,915 skipped (93.98%)** (+8 passing, −8 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (collation sorting cluster)
@@ -4414,7 +4415,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b1fc270` (feat(runtime+xquery+conformance): QT3 sweep wave 3 — function items, constructors, validation, environment variables)
 **Current focus:** **QT3 conformance wave 3 + XQuery constructor/validation edge cases** — the uncommitted work from 2026-08-07 added a cluster of fixes around function-item subtyping, XQuery direct constructors, strict-schema whitespace, and harness assertions. The coarse named-function subtyping change initially regressed `xs-error-006/007`; treating a signature whose return kind is `Undefined` as `empty-sequence()` restored zero failures. A gap-cleanup probe then dropped 25 stale `KnownXQueryGaps` entries that are now passing. QT3: **29,898 passed / 0 failed / 1,923 skipped (93.96%)** (+153 passing, −153 skips). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed**.
 
 ## This Session Changes (QT3 sweep wave 3)
@@ -4433,7 +4434,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-03
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `ef18226` (feat(xpath+xslt): XSD 1.1 regex hyphen rules, environment stylesheets, engine conformance sweep)
 **Current focus:** **XSD 1.1 regex hyphen rules + XSLT harness environment stylesheets** — the recorded "XSD 1.1 regex character class subtraction not implemented" gap turned out to be stale: the engine already implements the XSD 1.1 rule (`-` is a subtraction operator only when immediately followed by `[`; `[a-d-b-c]` = `{a-d,'-',b-c}`). The real blocker was that the XSLT harness never ran test cases whose principal stylesheet is supplied by the referenced `<environment>` — ~4,800 tests silently skipped across 100+ sets. Enabling them (plus environment static `<param>` and a `unicode-version` dependency check) drove a conformance-sweep of newly-surfaced engine gaps. XSLT suite: **8,340 passed / 0 failed / 6,260 skipped** (14,600 total, 100% of runnable; was 7,109/0/7,491 — +1,231 passing). QT3: **29,745 passed / 0 failed / 2,076 skipped (93.48%)** (+4). Full `dotnet test Bosak.sln` passes: **1,695 unit tests / 0 failed** (+18 new).
 
 ## This Session Changes (regex + environment-stylesheet sweep)
@@ -4476,7 +4477,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-01 (third session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7b36f29` (feat(xslt+xquery): conformance sweep — XSLT zero-failing suite, fn:load-xquery-module, prolog declarations, HTML serialization matrix)
 **Current focus:** **`declare decimal-format` / `declare boundary-space` prolog support plus the HTML/XHTML serialization matrix** — prod/DecimalFormatDecl went 1/40 → **41 passed / 0 failed**, prod/BoundarySpaceDecl 2/26 → **28 passed / 0 failed**, the three recorded fn-load-xquery-module skips (040/045/046) now pass (set: **61/0/22**), and admitting the previously prolog-gated serialization tests drove the ser sets from 45/40 passing to **method-html 64/0, method-xhtml 49/0, method-xml 39/0, method-text 18/0, method-json 73/0, method-adaptive 87/0**. QT3 went from **29,571 passed / 0 failed / 2,250 skipped (92.74%)** to **29,741 passed / 0 failed / 2,080 skipped (93.46%)** (+170 passing). Full `dotnet test Bosak.sln` passes: **1,677 unit tests / 0 failed** (+7 new).
 
 ## This Session Changes (prolog declarations + serialization matrix)
@@ -4509,7 +4510,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-01 (second session)
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7b36f29` (feat(xslt+xquery): conformance sweep — XSLT zero-failing suite, fn:load-xquery-module, prolog declarations, HTML serialization matrix)
 **Current focus:** **fn:load-xquery-module implemented** (the last feature-level XQuery gap): dynamic library-module loading per F&O 3.1 §15.3.1 — URI resolution with location hints, transitive import closure, external-variable and context-item binding from the options map, and the result map of public declarations. The fn-load-xquery-module set went from fully skipped to **58 passed / 0 failed / 25 skipped**; QT3 went from **29,510 passed / 0 failed / 2,311 skipped (92.74%)** to **29,571 passed / 0 failed / 2,250 skipped (92.89%)** (+61 passing). Full `dotnet test Bosak.sln` passes: **1,670 unit tests / 0 failed** (+5 new).
 
 ## This Session Changes (fn:load-xquery-module)
@@ -4539,7 +4540,7 @@ Expected QT3: **29,984 passed / 0 failed / 1,837 skipped** (+43 passing, −43 s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-08-01
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7b36f29` (feat(xslt+xquery): conformance sweep — XSLT zero-failing suite, fn:load-xquery-module, prolog declarations, HTML serialization matrix)
 **Current focus:** **XSLT conformance sweep closed** — a fresh full run surfaced 32 failing tests (the July 4 log's 177 was stale; xml-version, collations, tunnel, normalize-unicode had been fixed by the July XQuery sessions). **19 engine/harness fixes** brought the W3C XSLT 3.0 suite to **0 failing tests**: XSLT conformance now **7,109 passed / 0 failed / 7,491 skipped (14,600 total, 100% of runnable)**. QT3 unchanged at **29,510 passed / 0 failed / 2,311 skipped (92.74%)** — full QT3 re-run confirms zero regressions. Full `dotnet test Bosak.sln` passes: **1,665 unit tests / 0 failed** (+5 new QName tests).
 
 ## This Session Changes (XSLT conformance sweep)
@@ -4581,7 +4582,7 @@ All 234 test sets run with 0 failures; skips are the standing bulk categories (s
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `2a0cb37` (feat(xquery): residual-cluster sweep — stable order-by, switch semantics, arrays, min/max, error codes)
 **Current focus:** **Residual-cluster sweep closed** (83 gaps → 0): a broad sweep across AxisStep, VarDecl, StepExpr, SwitchExpr, PathExpr, ArrayTest, DefaultNamespaceDecl, fn:id/idref, fn:in-scope-prefixes, fn:min, fn:base-uri, fn:doc, fn:generate-id, xs:error, and op/divide-dayTimeDuration. QT3 went from **29,427 passed / 0 failed / 2,394 skipped (92.48%)** to **29,510 passed / 0 failed / 2,311 skipped (92.74%)** (+83 passing). Full `dotnet test Bosak.sln` passes: **1,660 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (residual sweep)
@@ -4622,7 +4623,7 @@ Residual clusters: fn:min (0 — closed), AxisStep (0 — closed); remaining: ap
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `ce65b8c` (feat(xquery): reject plain xs:duration in date/time arithmetic)
 **Current focus:** **op/add-dayTimeDurations + op/subtract-dayTimeDurations clusters closed** (16 + 11 gaps → 0): plain `xs:duration` values are now rejected in date/time arithmetic. QT3 went from **29,400 passed / 0 failed / 2,421 skipped (92.39%)** to **29,427 passed / 0 failed / 2,394 skipped (92.48%)** (+27 passing). Full `dotnet test Bosak.sln` passes: **1,636 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (dayTimeDurations clusters)
@@ -4653,7 +4654,7 @@ Residual clusters: AxisStep (7), VarDecl (6), StepExpr (6), SwitchExpr (6), Arra
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `1f45d1f` (feat(xquery): higher-order function conformance — conversions, focus, base URI, error codes)
 **Current focus:** **misc/HigherOrderFunctions cluster closed** (11 gaps → 0): function-item error codes, partial-application arity, dynamic-call conversions, absent-focus named references, per-module base-URI capture, and parenthesized sequence types. QT3 went from **29,389 passed / 0 failed / 2,432 skipped (92.36%)** to **29,400 passed / 0 failed / 2,421 skipped (92.39%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,631 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (HigherOrderFunctions cluster)
@@ -4690,7 +4691,7 @@ Largest clusters: `op/add-dayTimeDurations` (16), `op/subtract-dayTimeDurations`
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `2eee587` (feat(xquery): computed namespace constructors in element content)
 **Current focus:** **prod/CompNamespaceConstructor cluster closed** (11 gaps → 0): computed namespace constructors as element content — interleaving with attributes, declaration dedupe, name-prefix conflict resolution, prefix type checking, and spec-correct namespace-node identity. QT3 went from **29,378 passed / 0 failed / 2,443 skipped (92.32%)** to **29,389 passed / 0 failed / 2,432 skipped (92.36%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,622 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (CompNamespaceConstructor cluster)
@@ -4726,7 +4727,7 @@ Largest clusters: `op/add-dayTimeDurations` (16), `misc/HigherOrderFunctions` (1
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `387153a` (feat(xquery): allowing empty in for clauses — grammar order and typed bindings)
 **Current focus:** **prod/AllowingEmpty cluster closed** (14 gaps → 0): `allowing empty` accepted in grammar position (before the positional variable) and checked against declared type occurrences. QT3 went from **29,364 passed / 0 failed / 2,457 skipped (92.28%)** to **29,378 passed / 0 failed / 2,443 skipped (92.32%)** (+14 passing). Full `dotnet test Bosak.sln` passes: **1,615 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (AllowingEmpty cluster)
@@ -4758,7 +4759,7 @@ Largest clusters: `op/add-dayTimeDurations` (16), `prod/CompNamespaceConstructor
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `758249e` (feat(xquery): map constructors in step position with key disambiguation)
 **Current focus:** **prod/MapConstructor cluster closed** (15 gaps → 0): map constructors in step/`!` position with step expressions as keys and values, plus the deep-equal sequence-semantics fix that their deep-equal expectations exposed. QT3 went from **29,349 passed / 0 failed / 2,472 skipped (92.23%)** to **29,364 passed / 0 failed / 2,457 skipped (92.28%)** (+15 passing). Full `dotnet test Bosak.sln` passes: **1,610 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (MapConstructor cluster)
@@ -4794,7 +4795,7 @@ Largest clusters: `op/add-dayTimeDurations` (16), `prod/AllowingEmpty` (14), `pr
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b8d6c79` (feat(xquery): combined error-code conformance — FODC0001, XPTY0019, collation and prolog statics)
 **Current focus:** **misc/CombinedErrorCodes cluster closed** (17 gaps → 0; 7 entries were stale after the NamespaceDecl/Literal sessions). QT3 went from **29,332 passed / 0 failed / 2,489 skipped (92.18%)** to **29,349 passed / 0 failed / 2,472 skipped (92.23%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,603 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (CombinedErrorCodes cluster)
@@ -4832,7 +4833,7 @@ Largest clusters: `op/add-dayTimeDurations` (16), `prod/MapConstructor` (15), `p
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4f95947` (feat(xquery): character and entity reference validation in literals and constructors)
 **Current focus:** **prod/Literal cluster closed** (16 gaps → 0): XQuery character-reference validation (XQST0090 for invalid/overflow values, XPST0003 for malformed references); 8 of the 16 entries turned out to be stale (XPath-mode non-expansion already worked). QT3 went from **29,316 passed / 0 failed / 2,505 skipped (92.13%)** to **29,332 passed / 0 failed / 2,489 skipped (92.18%)** (+16 passing). Full `dotnet test Bosak.sln` passes: **1,593 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Literal cluster)
@@ -4866,7 +4867,7 @@ Largest clusters: `misc/CombinedErrorCodes` (17), `op/add-dayTimeDurations` (16)
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3623b37` (feat(xquery): inline-function annotations and function-test annotation assertions)
 **Current focus:** **prod/Annotation cluster closed** (24 gaps → 0): annotations on inline function expressions, annotation assertions in function tests, literal-only annotation arguments, and reserved annotation namespaces (XQST0045). QT3 went from **29,292 passed / 0 failed / 2,529 skipped (92.05%)** to **29,316 passed / 0 failed / 2,505 skipped (92.13%)** (+24 passing). Full `dotnet test Bosak.sln` passes: **1,584 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Annotation cluster)
@@ -4902,7 +4903,7 @@ Largest clusters: `misc/CombinedErrorCodes` (17), `prod/Literal` (16), `op/add-d
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `658a077` (feat(xquery): namespace declaration static errors and prolog ordering)
 **Current focus:** **prod/NamespaceDecl cluster closed** (11 gaps → 0): duplicate namespace declarations (XQST0033), reserved `xml`/`xmlns` prefix rules (XQST0070), and two-phase prolog ordering (XPST0003). QT3 went from **29,281 passed / 0 failed / 2,540 skipped (92.02%)** to **29,292 passed / 0 failed / 2,529 skipped (92.05%)** (+11 passing). Full `dotnet test Bosak.sln` passes: **1,577 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (NamespaceDecl cluster)
@@ -4936,7 +4937,7 @@ Largest clusters: `prod/Annotation` (24 — inline-function annotations and anno
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `29309e1` (feat(xquery): variable declaration type strictness and external variables)
 **Current focus:** **prod/VarDecl.external cluster closed** (17 gaps → 0): variable initializers are ExprSingle, declared-type initializers are enforced strictly (no casts/promotions), kind-test type occurrence indicators validated, namespace undeclarations propagated to the runtime, and typed external-variable bindings checked. QT3 went from **29,264 passed / 0 failed / 2,557 skipped (91.96%)** to **29,281 passed / 0 failed / 2,540 skipped (92.02%)** (+17 passing). Full `dotnet test Bosak.sln` passes: **1,570 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (VarDecl.external cluster)
@@ -4972,7 +4973,7 @@ Largest clusters: `prod/Annotation` (24 — inline-function annotations and anno
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-28
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `66d9e70` (feat(xpath): name tests, kind-test types, and constructor namespace semantics)
 **Current focus:** **prod/NameTest cluster closed** (22 gaps → 2) plus a deep pass over constructor in-scope namespace semantics. QT3 went from **29,244 passed / 0 failed / 2,577 skipped (91.90%)** to **29,264 passed / 0 failed / 2,557 skipped (91.96%)** (+20 passing). Full `dotnet test Bosak.sln` passes: **1,558 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (NameTest cluster)
@@ -5009,7 +5010,7 @@ Largest clusters: `prod/Annotation` (24 — inline-function annotations and anno
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6c9e828` (feat(xquery): ordered/unordered expressions and ordering declarations)
 **Current focus:** **XQuery ordering features**: `ordered { E }` / `unordered { E }` expressions (identity in this engine — sequences are always produced in document order, a valid implementation of both ordering modes), the `declare ordering` prolog (XQST0065), and `declare default order empty least|greatest` (XQST0069) with the default applied to order-by clauses lacking an explicit empty modifier. QT3 went from **29,150 passed / 0 failed / 2,671 skipped (91.61%)** to **29,244 passed / 0 failed / 2,577 skipped (91.90%)** (+94 passing). Full `dotnet test Bosak.sln` passes: **1,544 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (ordering)
@@ -5044,7 +5045,7 @@ Largest clusters: `prod/Annotation` (24 — inline-function annotations and anno
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5413242` (feat(xquery): string constructors)
 **Current focus:** **XQuery 3.1 string constructors** (`` `[literal `{expr}` literal]``) implemented end-to-end: lexer whole-span tokenization with full nesting awareness, a `StringConstructorNode` AST, and a spec-faithful desugar to `fn:string-join`. QT3 went from **29,114 passed / 0 failed / 2,707 skipped (91.49%)** to **29,150 passed / 0 failed / 2,671 skipped (91.61%)** (+36 passing; the StringConstructor set went 14/0/38 to **49/0/3**). Full `dotnet test Bosak.sln` passes: **1,536 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (string constructors)
@@ -5081,7 +5082,7 @@ Largest clusters: `prod/Annotation` (24 — inline-function annotations and anno
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fe6fa9e` (feat(xpath): try/catch named error codes and error variables)
 **Current focus:** **try/catch completion — named error codes, multiple catch clauses, and the `err:*` error variables**: full XPath 3.1 try/catch semantics on both pipelines (it is XPath grammar, not XQuery-only). QT3 went from **28,931 passed / 0 failed / 2,890 skipped (90.92%)** to **29,114 passed / 0 failed / 2,707 skipped (91.49%)** (+183 passing). Full `dotnet test Bosak.sln` passes: **1,524 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (try/catch)
@@ -5119,7 +5120,7 @@ Largest clusters: `prod/StringConstructor` (35 — string constructors `` `[...]
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `57c5bc3` (feat(xquery): library modules — Phase 4 modules slice 2)
 **Current focus:** **XQuery 3.1 Phase 4 — library modules slice 2: `module namespace` / `import module`**: library module declarations, module imports with location hints, the transitive import graph with same-namespace merging and cycle tolerance, `%public`/`%private` declaration annotations with static visibility enforcement, and per-module static contexts at compile time and runtime. QT3 went from **28,735 passed / 0 failed / 3,086 skipped (90.30%)** to **28,931 passed / 0 failed / 2,890 skipped (90.92%)** (+196 passing). Full `dotnet test Bosak.sln` passes: **1,509 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (library modules)
@@ -5156,7 +5157,7 @@ Largest clusters: `prod/StringConstructor` (35 — string constructors `` `[...]
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f7bcda1` (feat(xquery): user-defined functions and variables — Phase 4 modules slice 1)
 **Current focus:** **XQuery 3.1 Phase 4 — library modules slice 1: `declare function` / `declare variable`**: prolog declarations with the full static-validation matrix, lazy globals with initial-focus semantics, absent-focus function bodies, per-call variable-scope snapshots, function-item coercion, and function-type syntax in both parsers. QT3 went from **26,299 passed / 0 failed / 5,522 skipped (82.64%)** to **28,735 passed / 0 failed / 3,086 skipped (90.30%)** (+2,436 passing; ~2,900 previously prolog-gated tests now run). Full `dotnet test Bosak.sln` passes: **1,491 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (user-defined functions and variables)
@@ -5193,7 +5194,7 @@ Largest clusters: `prod/StringConstructor` (35 — string constructors `` `[...]
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3c82b3d` (feat(xquery): Phase 4 output declarations and serialization round-out)
 **Current focus:** **XQuery 3.1 Phase 4 started — output declarations + serialization round-out**: `declare option output:*` prolog with static serialization parameter merging into `fn:serialize` (per-call parameters win), `output:parameter-document`, and a full Serialization 3.1 fidelity pass over the serializer. QT3 went from **25,928 passed / 0 failed / 5,893 skipped (81.48%)** to **26,299 passed / 0 failed / 5,522 skipped (82.64%)** (+371 passing). Full `dotnet test Bosak.sln` passes: **1,479 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (output declarations + serialization)
@@ -5229,7 +5230,7 @@ Largest clusters: `prod/Annotation` (23 — function/variable annotations), `pro
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b21848f` (feat(xquery): switch and typeswitch expressions)
 **Current focus:** **XQuery 3.1 — switch / typeswitch expressions** implemented: both forms parse as dedicated AST nodes in XQuery mode and desugar in the IR lowerer to synthetic `let` + nested `if` chains (`eq` value comparisons for switch, `instance of` checks for typeswitch) — no new opcodes. QT3 went from **25,846 passed / 0 failed / 5,975 skipped (81.22%)** to **25,928 passed / 0 failed / 5,893 skipped (81.48%)** (+82 passing). Full `dotnet test Bosak.sln` passes: **1,470 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (switch / typeswitch)
@@ -5263,7 +5264,7 @@ Largest clusters: `prod/Annotation` (23), `prod/NameTest` (21), `prod/DirAttribu
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `bcf4d52` (feat(xquery): Phase 3 computed constructors)
 **Current focus:** **XQuery 3.1 Phase 3 complete — computed constructors** implemented end-to-end: all seven forms (`element`/`attribute`/`document`/`text`/`comment`/`processing-instruction`/`namespace`) with static EQName or computed `{expr}` names, a single `ConstructComputed` IR opcode with per-kind VM handlers, and a shared content accumulator implementing the XQuery content rules. QT3 went from **25,060 passed / 0 failed / 6,761 skipped (78.75%)** to **25,846 passed / 0 failed / 5,975 skipped (81.22%)** (+786 passing). Full `dotnet test Bosak.sln` passes: **1,458 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Phase 3 computed constructors)
@@ -5301,7 +5302,7 @@ Largest clusters: `prod/Annotation` (23 — function/variable annotations), `pro
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `847574b` (feat(xquery): Phase 3 direct element constructors with constructor-local namespaces)
 **Current focus:** **XQuery 3.1 Phase 3 started — direct element constructors** implemented end-to-end: lexer constructor mode (single `Constructor` token per construct), source-level constructor scanner, `ConstructElement`/`ConstructContentNode` IR opcodes, and provider-neutral node construction with dynamic constructor-local namespace scoping. QT3 went from **22,983 passed / 0 failed / 8,838 skipped (72.23%)** to **25,060 passed / 0 failed / 6,761 skipped (78.75%)** (+2,077 passing). Full `dotnet test Bosak.sln` passes: **1,443 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (Phase 3 direct constructors)
@@ -5340,7 +5341,7 @@ Largest clusters: `misc/CombinedErrorCodes` (specific error codes), `prod/Annota
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6ed5988` (feat(xquery): close XPST0017/same-key gap clusters - variadic functions, date/time equality)
 **Current focus:** **XQuery conformance gap shrinkage (REQ-045 follow-up)** — closed the two largest `KnownXQueryGaps` clusters. QT3 went from **22,947 passed / 0 failed / 8,874 skipped (72.11%)** to **22,983 passed / 0 failed / 8,838 skipped (72.23%)**; gaps 203 → 167. Full `dotnet test Bosak.sln` passes: **1,429 unit tests / 0 failed**.
 
 ## This Session Changes (gap clusters: XPST0017 + same-key)
@@ -5378,7 +5379,7 @@ Largest clusters: `misc/CombinedErrorCodes` (specific error codes), `prod/Annota
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `532a340` (feat(conformance): wire QT3 harness to XQuery pipeline + conformance sweep)
 **Current focus:** **QT3 harness wired to the XQuery pipeline** — XQuery-syntax QT3 tests now run through `Bosak.XQuery` instead of skipping. QT3 went from **14,994 passed / 0 failed / 16,827 skipped (47.12%)** to **22,947 passed / 0 failed / 8,874 skipped (72.11%)** (+7,953 passing). The four FLWOR sets are green with 0 failures: WindowClause 34, OrderByClause 39, GroupByClause 14, CountClause 4. The 203 admitted-but-failing tests are recorded in `ConformanceRunner.KnownXQueryGaps` with per-set reasons (work items for future sessions). Full `dotnet test Bosak.sln` passes: **1,421 unit tests / 0 failed**; XSLT baseline unchanged.
 
 ## This Session Changes (QT3 XQuery routing + conformance sweep)
@@ -5419,7 +5420,7 @@ Largest clusters: `misc/CombinedErrorCodes` (specific error codes), `prod/Annota
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7fa58d5` (feat(xquery): Phase 2 window clause - Window opcode with tumbling/sliding windows)
 **Current focus:** **XQuery 3.1 Phase 2 complete** — `window` clause implemented on top of the tuple-based FLWOR infrastructure, completing the core FLWOR surface (`order by`, `count`, `group by`, `window`). Extended `XPathParser` to parse `for tumbling|sliding window $var in expr start ... when ... (only)? end ... when ...` in full-FLWOR mode (both as initial and intermediate clause), added `WindowClauseNode`/`WindowCondition` to the AST, and updated `XPathOptimizer`, `XQueryCompiler`, and `IrLowerer`. A new `Window` IR opcode and VM handler implement tumbling (windows open only when none is open) and sliding (possibly overlapping) semantics: conditions are evaluated via `ExecuteBlock` with the declared WindowVars (current/positional/previous/next) bound; each produced window binds the window variable to its items plus the start/end condition variables captured at open/close, then runs the body block. Start positions are 1-based in the input sequence, end positions 1-based within the window. Added 7 XQuery unit tests covering tumbling, `only end`, sliding overlap, start/end variables, previous/next, window + `order by`, and XPath-mode rejection. Full `dotnet test Bosak.sln` passes: **1,409 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 2 window)
@@ -5469,7 +5470,7 @@ XQuery 3.1 Phase 2 is complete. Candidates for the next session, in order:
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4c32e31` (feat(xquery): Phase 2 group by clause - GroupBy opcode with tuple merging)
 **Current focus:** **XQuery 3.1 Phase 2** — `group by` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to parse `group by` grouping specs (`$var` or `$var := expr`, optional `collation`) in full-FLWOR mode, added `GroupByClauseNode`/`GroupingSpec` to the AST, and updated `XPathOptimizer`, `XQueryCompiler`, and `IrLowerer`. A new `GroupBy` IR opcode and VM handler group the tuple stream by key equality (first-appearance order) and merge each group: grouping variables keep the shared key value, other variables bind to the concatenated group values. `:=` specs lower as synthetic `let` bindings; a post-group `order by` re-keys grouped tuples in a second tuple pass. Added 8 XQuery unit tests covering simple grouping, computed string keys, aggregation of non-grouping variables, `where`, post-group `order by`, post-group `count`, multiple grouping specs, and XPath-mode rejection. Full `dotnet test Bosak.sln` passes: **1,402 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 2 group by)
@@ -5518,7 +5519,7 @@ XQuery 3.1 Phase 2 is nearly complete. The remaining Phase 2 item is the **`wind
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-23
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `19ae4f7` (feat(xquery): Phase 2 count clause - tuple-path positional variable)
 **Current focus:** **XQuery 3.1 Phase 2** — `count` clause implemented on top of the tuple-based FLWOR infrastructure. Extended `XPathParser` to recognise `count $var` as a FLWOR intermediate clause in full-FLWOR mode, added `CountClauseNode` to the AST, and updated `XPathOptimizer` and `IrLowerer` to maintain compiler-managed integer counters during tuple construction and post-`order by` iteration. Added 5 XQuery unit tests covering simple count, count with `where`, count with `let`, pre-`order by` count, and post-`order by` count. Full `dotnet test Bosak.sln` passes: **1,394 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 2 count)
@@ -5553,7 +5554,7 @@ XQuery 3.1 Phase 2 (`order by` and `count`) is complete. The next step is the re
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `67ed9c4` (feat(xquery): Phase 2 order by clause - tuple-based VM sorting)
 **Current focus:** **XQuery 3.1 Phase 2** — `order by` clause implemented with tuple-based VM sorting. Extended `XPathParser` with an `allowFullFlwor` flag so `XQueryParser` can parse multi-clause `for`/`let`/`where`/`order by` while XPath mode rejects them per `LetExpr020a`. Added `FlworExpressionNode` and `OrderByClauseNode` AST nodes, `OrderBy` and `TupleBind` IR opcodes, and VM handlers. Added 13 XQuery unit tests covering ascending, descending, strings, where, let, and multiple keys. Full `dotnet test Bosak.sln` passes: **1,389 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 2 order by)
@@ -5607,7 +5608,7 @@ XQuery 3.1 Phase 2 (`order by`) is complete. The next step is the remainder of P
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-07-22
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e88ede4` (feat(xquery): Phase 1 foundation - prolog-less queries compile and execute via XPath pipeline)
 **Current focus:** **XQuery 3.1 Phase 1** — `Bosak.XQuery` now compiles and executes prolog-less XQuery queries by delegating to the proven XPath pipeline. Added `XQueryParser` (top-level grammar + prolog declarations), `XQueryStaticContext`, and wired `XQueryCompiler` / `XQueryExecutable` to the XPath parser, optimizer, IR lowerer, and VM. First passing tests: `for $i in 1 to 3 return $i`, `let $x := 42 return $x`, and `declare namespace math = '...'; math:pi()`. Full `dotnet test Bosak.sln` passes: **1,382 unit tests / 0 failed**; QT3 and XSLT baselines unchanged.
 
 ## This Session Changes (XQuery 3.1 Phase 1 foundation)
@@ -5649,7 +5650,7 @@ XQuery 3.1 Phase 1 is complete. The next step is **Phase 2 — Full core FLWOR**
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `57b7101` (refactor(conformance): move XML 1.0-only skips from DocumentedSkips to DependencyFilter xml-version)
 **Current focus:** **QT3 XML 1.0-only skip categorization cleanup** — The 5 XML 1.0-only tests (`cbcl-codepoints-to-string-023/024`, `K-CodepointToStringFunc-8/11/12`) were hardcoded as `DocumentedSkips` in `ConformanceRunner.cs` with the reason "XML 1.0-only test on an XML 1.1 implementation". All of them already declare `<dependency type="xml-version" value="1.0"/>`, but the existing `DependencyFilter` logic claimed to support XML 1.0 (commented as "Only support XML 1.0") while Bosak actually uses XML 1.1. Fixed by making `DependencyFilter` skip any `xml-version` dependency and removing the five hardcoded entries from `DocumentedSkips`. Full QT3 suite remains at **14,994 passed / 0 failed / 16,827 skipped (47.12%)**; runnable pass rate **100%** (14,994 / 14,994). Unit tests **1,379/0**.
 
 ## This Session Changes (5 XML 1.0-only tests re-categorized)
@@ -5689,7 +5690,7 @@ A sensible pause point: the harness is now at 100% of runnable QT3 tests passing
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f267246` (fix(conformance): refine XQuery syntax heuristic so schema-element/attribute tests and name-test constructors run)
 **Current focus:** **QT3 XQuery syntax heuristic cluster** — 10 runnable tests (`K2-ForExprWithout-45`, `K2-Literals-37`, `K2-NameTest-35/36/37/38`, `K2-NodeTest-19/25/26/27`) were skipped because `TestExecutor.LooksLikeXQuery` treated valid XPath constructs as XQuery-only syntax. The heuristic matched `import` at the start of any expression, matched `schema-element(` / `schema-attribute(` as XQuery-only (they are XPath 2.0+ node tests), and matched `element foo` / `attribute foo` name tests as direct constructors (which require a `{`). Fixed by narrowing `import` detection to XQuery prolog forms (`import module ...`, `import schema ...`), removing `schema-element`/`schema-attribute` from the regex, and requiring a `{` for `element`/`attribute` constructors. Full QT3 suite now at **14,994 passed / 0 failed / 16,827 skipped (47.12%)**; runnable pass rate **100%** (14,994 / 14,994). Unit tests **1,379/0**.
 
 ## This Session Fixes (10 XQuery-heuristic tests)
@@ -5724,7 +5725,7 @@ The **XML 1.0-only** cluster (5 tests) is the cleanest next target. These tests 
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4daa80e` (fix(api): empty XPath expression reports XPST0003 instead of ArgumentException)
 **Current focus:** **QT3 K-Literals-29 empty-expression singleton** — `K-Literals-29` expects `XPST0003` for an empty XPath expression, but `XPath31Expression.Compile` used `ArgumentException.ThrowIfNullOrEmpty(expression)`, which escaped to the harness as an unhandled `ArgumentException`. Fixed by detecting null/whitespace input and throwing a `ParseException` that is auto-prefixed with `XPST0003`. Full QT3 suite now at **14,984 passed / 0 failed / 16,837 skipped (47.09%)**; runnable pass rate **100%** (14,984 / 14,984). Unit tests **1,379/0**.
 
 ## This Session Fixes (1 empty-expression test)
@@ -5758,7 +5759,7 @@ The largest remaining actionable cluster is the **XQuery syntax** group (10 test
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `755cd1a` (fix(runtime): convert UriFormatException/IOException/XmlException to FODC0005/FODC0002 in LoadDocument)
 **Current focus:** **QT3 fn-doc document-loading cluster** — 6 runnable tests (`fn-doc-1`, `fn-doc-27`, `fn-doc-28`, `fn-doc-35`, `K2-SeqDocFunc-5`, `K2-SeqDocFunc-14`) were skipped because raw CLR exceptions (`UriFormatException`, `IOException`, `XmlException`) escaped from `EvaluationContext.LoadDocument` instead of being converted to the XPath errors the tests expect (`FODC0005` for invalid URIs, `FODC0002` for retrieval/parse failures). Fixed by wrapping URI resolution and the `DocumentLoader` invocation in a single try/catch that maps `UriFormatException` to `FODC0005` and `IOException`/`XmlException` to `FODC0002`. Full QT3 suite now at **14,983 passed / 0 failed / 16,838 skipped (47.09%)**; runnable pass rate **100%** (14,983 / 14,983). Unit tests **1,379/0**.
 
 ## This Session Fixes (6 fn-doc tests)
@@ -5796,7 +5797,7 @@ The `K-Literals-29` singleton is the next natural step: it is an empty expressio
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `861e3e8` (fix(conformance): evaluate multi-line assert-deep-eq as one expression; skip unicode-version dependencies)
 **Current focus:** **QT3 assert-deep-eq parse cluster** — 5 runnable tests (`last-23`, `fn-lower-case-18/19`, `fn-upper-case-18/19`) were skipped because `ResultComparer.CompareAssertDeepEq` split the assertion value by newlines and compiled each line as a separate XPath expression. Multi-line `assert-deep-eq` content is a single sequence expression with line breaks for readability; splitting it produced trailing commas on intermediate lines, which the parser rejected as "Unexpected token Eof in primary expression". Fixed by trimming the entire element value and compiling it as one expression. Two of the tests (`fn-lower-case-19` and `fn-upper-case-19`) require Unicode 7.0 case folding via a `unicode-version` dependency and would now fail on Bosak's .NET-based case folding; added `unicode-version` to `DependencyFilter` so these are correctly reported as unsupported dependencies. Full QT3 suite now at **14,977 passed / 0 failed / 16,844 skipped (47.07%)**; runnable pass rate **100%** (14,977 / 14,977). Unit tests **1,379/0**.
 
 ## This Session Fixes (5 assert-deep-eq tests)
@@ -5830,7 +5831,7 @@ The `fn-doc` singletons are the next natural cluster: they all involve `fn:doc` 
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c3984a7` (fix(regex): convert RegexParseException to FORX0002 in CacheRegex)
 **Current focus:** **QT3 regex-pattern skip cluster** — 2 runnable tests (`fn-matches-25`, `cbcl-matches-004`) were skipped because `fn:matches` allowed .NET `RegexParseException` to escape to the harness. The XSD validation in `RegexHelper.ValidateXsdRegex` rejects many invalid XPath regex constructs, but it does not catch every pattern that .NET's `Regex` constructor still rejects (e.g., `**%%` where the first `*` has no preceding atom, or `a{99999999999999999999999999}` where the quantifier exceeds `Int32.MaxValue`). Fixed by catching `RegexParseException` in `RegexHelper.CacheRegex` and throwing `InvalidOperationException("FORX0002")` so the conformance harness matches the expected `<error code="FORX0002"/>` assertions. Full QT3 suite now at **14,974 passed / 0 failed / 16,847 skipped (47.06%)**; runnable pass rate **100%** (14,974 / 14,974). Unit tests **1,379/0**.
 
 ## This Session Fixes (2 regex-pattern tests)
@@ -5866,7 +5867,7 @@ The 5 `assert-deep-eq` parse failures are a small, focused cluster that may be a
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3cff06f` (fix(optimizer): skip decimal constant folding on overflow to let runtime raise FOAR0002)
 **Current focus:** **QT3 decimal-overflow skip cluster** — 4 runnable tests (`cbcl-numeric-subtract-001`, `op-numeric-subtract-big-01`, `cbcl-numeric-divide-015`, `op-numeric-divide-big-01`) were skipped because `XPathOptimizer.OptimizeBinary` constant-folded decimal subtraction/division and allowed `OverflowException` to escape to the harness. The tests expect either the computed result or the XPath `FOAR0002` arithmetic-overflow error, but the raw `OverflowException` was treated as an unexpected harness error. Fixed by catching `OverflowException` in the decimal constant-folding path and skipping the fold, so the operation is evaluated at runtime where `VmEngine.Execute` already converts the overflow into `InvalidOperationException("FOAR0002")`. That exception is then matched against the expected `<error code="FOAR0002"/>` assertions. Full QT3 suite now at **14,972 passed / 0 failed / 16,849 skipped (47.05%)**; runnable pass rate **100%** (14,972 / 14,972). Unit tests **1,379/0**.
 
 ## This Session Fixes (4 decimal-overflow tests)
@@ -5903,7 +5904,7 @@ The 2 regex-pattern failures are a small, focused cluster: `fn:matches` should b
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c5854bf` (fix(dateTime): ResultComparer extended-year serialization; fn:*-from-time avoid DateTimeOffset out-of-range)
 **Current focus:** **QT3 date/time harness-error skip cluster** — 19 runnable tests were skipped because `ResultComparer.SerializeSingle` and `ResultComparer.ValuesEqual` converted `XPathDateTime` extended-year values (e.g., year `-1999`) to `DateTimeOffset`, which only supports years 1–9999. Two additional time tests (`fn-hours-from-time-3`, `fn-timezone-from-time-11`) failed because `fn:*-from-time` accessed `XdmValue.TimeValue`, which converts a time value anchored at `0001-01-01` to `DateTimeOffset`; positive timezone offsets for early-morning times pushed the UTC instant into year 0 and threw `ArgumentOutOfRangeException`. Fixed `ResultComparer` to use `XdmValue.ToString()` (which delegates to `XPathDateTime` formatting) for date/time serialization and to fall back to canonical string comparison in `ValuesEqual` when either operand is outside the `DateTimeOffset` range. Fixed `HoursFromTime`, `MinutesFromTime`, `SecondsFromTime`, and `TimezoneFromTime` to read components directly from `XdmValue.TimeXPathValue` instead of converting through `DateTimeOffset`. Full QT3 suite now at **14,968 passed / 0 failed / 16,853 skipped (47.04%)**; runnable pass rate **100%** (14,968 / 14,968). Unit tests **1,379/0**.
 
 ## This Session Fixes (19 date/time tests)
@@ -5939,7 +5940,7 @@ The 10 `XQuery syntax not supported` tests represent the next largest parser eff
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `268a480` (fix(gDateTime): regex-based parsing for xs:gDay/gMonth/gMonthDay/gYearMonth)
 **Current focus:** **QT3 `IndexOutOfRangeException` skip cluster** — 72 runnable tests across `op-gDay-equal`, `op-gMonth-equal`, `op-gMonthDay-equal`, `op-gYearMonth-equal`, and `prod-CastExpr` were skipped because `VmEngine.ParseGDateTime` misidentified the structural dashes in `xs:gDay` (`---DD`), `xs:gMonth` (`--MM`), `xs:gMonthDay` (`--MM-DD`), and `xs:gYearMonth` (`YYYY-MM`) as timezone signs. For `xs:gDay("---31")` it extracted the trailing `-31` as a timezone string and crashed inside `ParseTimezoneOffset`. Fixed by rewriting `ParseGDateTime` to use per-subtype regexes that match the entire lexical form including an optional `Z` or `[+-]HH:MM` timezone, and by normalizing the timezone with the existing `NormalizeTimezone` helper. Full QT3 suite now at **14,949 passed / 0 failed / 16,872 skipped (46.98%)**; runnable pass rate **100%** (14,949 / 14,949). Unit tests **1,279/0**.
 
 ## This Session Fixes (72 gDateTime comparison/cast tests)
@@ -5976,7 +5977,7 @@ The 13 `InvalidOperationException` harness errors are the quickest next target: 
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fb8fd81` (fix(assert-xml): load expected output from external `file` attribute)
 **Current focus:** **QT3 `assert-xml` file-reference tests** — `ForExpr013` and `string-queries-results-q1` were producing the correct element sequences, but the harness compared them against an empty expected string because `assert-xml` with a `file` attribute was not loading the referenced file. The expected output is stored in an external `.out` file (e.g., `ForClause/ForExpr-013.out`), not as inline XML. Fixed by threading the test-set base directory through `TestCase` / `ConformanceRunner` / `TestExecutor` into `ResultComparer`, and reading the file content when the `file` attribute is present. Full QT3 suite now at **14,877 passed / 0 failed / 16,944 skipped (46.75%)**; runnable pass rate **100%** (14,877 / 14,877). Unit tests **1,279/0**.
 
 ## This Session Fixes (`ForExpr013` / `string-queries-results-q1` / all `assert-xml file` references)
@@ -6005,7 +6006,7 @@ With all runnable QT3 tests passing, the remaining work is in skipped categories
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c017b51` (fix(instance-of): xs:NOTATION returns false; xs:QName is case-sensitive vs xs:qname)
 **Current focus:** **QT3 `K-SeqExprInstanceOf-46/51` pair** — `not("a string" instance of xs:NOTATION)` was raising `XPST0051` because `xs:NOTATION` was not in the known atomic type list; `3 instance of xs:qname` was succeeding (returning false) instead of raising `XPST0051` because the type-name lookup was case-insensitive and accepted the lower-case `qname` as a synonym for `xs:QName`. Fixed by adding `xs:NOTATION` as a known type whose instance-of check always returns false, and by making `xs:QName` case-sensitive so only the exact spelling `QName` is accepted. Full QT3 suite now at **14,875 passed / 2 failed / 16,944 skipped (46.75%)**; runnable pass rate **99.99%** (14875 / 14877). Unit tests **1,279/0**.
 
 ## This Session Fixes (`K-SeqExprInstanceOf-46/51`)
@@ -6031,7 +6032,7 @@ The only remaining QT3 failures are `ForExpr013` and `string-queries-results-q1`
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `917327c` (fix(xml): include in-scope namespaces in standalone element serialization and canonicalize multi-root XML fragments)
 **Current focus:** **QT3 `fn-intersect/union-node-args-*` namespace serialization cluster** — `(/atomic:root/atomic:integer) intersect (/atomic:root/atomic:integer)` and the equivalent union tests expected `xmlns:foo` and `xmlns:xsi` from the root element to appear in the serialized output of the standalone child element, but `XDocumentNode.ToXmlString()` only emitted the `atomic` namespace. Fixed by copying all in-scope namespace bindings to the cloned element before serialization. The multi-root fragment `fn-union-node-args-017` still failed because `assert-xml` could not canonicalize fragments with multiple top-level elements, so `ResultComparer.NormalizeXml` now wraps such fragments in a temporary root before canonical comparison. As a side effect, several other fragment-comparison failures also resolved. Full QT3 suite now at **14,873 passed / 4 failed / 16,944 skipped (46.74%)**; runnable pass rate **99.97%** (14873 / 14877). Unit tests **1,279/0**.
 
 ## This Session Fixes (`fn-intersect/union-node-args-*` and related fragment comparisons)
@@ -6058,7 +6059,7 @@ Continue with the remaining QT3 singletons. The four remaining failures are `For
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `9d83d53` (fix(dateTimeStamp): add xs:dateTimeStamp constructor, cast, and instance-of support)
 **Current focus:** **QT3 `xs-dateTimeStamp-*` singleton cluster** — `xs:dateTimeStamp("2011-07-28T12:34:56-08:00")` raised `XPST0017` because the `xs:dateTimeStamp#1` constructor was not registered; `xs:dateTimeStamp("2011-07-28T12:34:56")` without a timezone failed to raise `FORG0001`; and `current-date() castable as xs:dateTimeStamp` returned `false` because `TryCast` did not recognize the type. Fixed by registering the constructor in `FunctionLibrary`, adding a `dateTimeStamp` cast case in `VmEngine.TryCast` that requires a timezone, adding `dateTimeStamp` to `ValueMatchesType`/`ItemInstanceOf` and the type hierarchy, and adding `dateTimeStamp` to `fn:type-available`'s built-in list. Full QT3 suite now at **14,864 passed / 13 failed / 16,944 skipped (46.71%)**; runnable pass rate **99.91%** (14864 / 14877). Unit tests **1,279/0**.
 
 ## This Session Fixes (`xs-dateTimeStamp-*`)
@@ -6096,7 +6097,7 @@ Continue with the remaining QT3 singleton / small clusters. The highest-impact r
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-21
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b726414` (fix(dateTime): year/month-from-dateTime use XPathDateTime for extended years)
 **Current focus:** **QT3 `fn-month/from-dateTime-6` singleton pair** — `fn:year-from-dateTime` and `fn:month-from-dateTime` were failing for `xs:dateTime` values with extended years such as `-1999` because they read `XdmValue.DateTimeValue`, which converts to `DateTimeOffset` and cannot represent years outside the 1–9999 range. Fixed by switching to `XdmValue.DateTimeXPathValue.Year` / `.Month`; the `XPathDateTime` struct already supports `long` years. Full QT3 suite now at **14,861 passed / 16 failed / 16,944 skipped (46.70%)**; runnable pass rate **99.89%** (14861 / 14877). Unit tests **1,379/0**.
 
 ## This Session Fixes (`fn-month/from-dateTime-6`)
@@ -6188,7 +6189,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b8b8663` (Tier-2z: K-SeqExprCast-67 / cast as raises XPTY0004 for empty singleton input)
 **Current focus:** **QT3 Tier-2z: `K-SeqExprCast-67` singleton** — `() cast as xs:QName` expects either `XPTY0004` (empty-sequence cardinality) or `XPST0005` (static empty sequence). The `Cast` opcode was only checking for empty input when the target occurrence indicator was `?`, `*`, or `+`; for the default occurrence `One` it fell through to `Cast(value, typeName)`, which produced a success. Fixed by restructuring the empty-input branch: empty input with occurrence `One` now raises `XPTY0004`; empty input with `?` still returns `()`; `*`/`+` still raise the existing occurrence-indicator error. Targeted test now passes: `K-SeqExprCast-67`. Full QT3 suite now at **14,847 passed / 30 failed / 16,944 skipped (46.66%)**; runnable pass rate **99.80%** (14847 / 14877). Unit tests **1,376/0**.
 
 ## This Session Fixes (Tier-2z: K-SeqExprCast-67)
@@ -6213,7 +6214,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4197650` (Tier-2z: K-SeqExprTreat-16 / require closing parenthesis in sequence type tests)
 **Current focus:** **QT3 Tier-2z: `K-SeqExprTreat-16` singleton** — `3 treat as item(` is missing the closing parenthesis of the `item()` sequence type and expects `XPST0003`. The parser's `ParseTypeNameAndParens` consumed the opening `(` and then read tokens until EOF or until the parentheses balanced, but it never verified that the final paren depth was zero. For `item(` it simply exited at EOF with `parenDepth == 1`, returned the malformed type string `item(`, and the `treat as` expression succeeded. Fixed by checking `parenDepth` after consuming the parenthesized part and throwing `ParseException` (auto-prefixed `XPST0003`) when the sequence type is not properly closed. Targeted test now passes: `K-SeqExprTreat-16`. Full QT3 suite now at **14,846 passed / 31 failed / 16,944 skipped (46.65%)**; runnable pass rate **99.79%** (14846 / 14877). Unit tests **1,375/0**.
 
 ## This Session Fixes (Tier-2z: K-SeqExprTreat-16)
@@ -6238,7 +6239,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5e2c382` (Tier-2z: LetExpr020a / disallow consecutive for/let clauses in XPath FLWOR)
 **Current focus:** **QT3 Tier-2z: `LetExpr020a` singleton** — XPath 3.1 restricts a FLWOR expression to a single initial `for` or `let` clause; intermediate clauses may only be `where`, `order by`, or `count`. The expression `let $a := 1 let $b := $a let $c := $a+$b return ($c)` therefore expects `XPST0003`. The parser was treating each subsequent `let` keyword as a new intermediate clause, so the expression parsed successfully. Fixed by removing `KeywordFor` and `KeywordLet` from the intermediate-clause loop in `ParseFlworExpr`; after the initial clause, a following `let` now causes `Expect(TokenKind.KeywordReturn)` to fail with `XPST0003`. Targeted test now passes: `LetExpr020a`. Full QT3 suite now at **14,845 passed / 32 failed / 16,944 skipped (46.65%)**; runnable pass rate **99.79%** (14845 / 14877). Unit tests **1,373/0**.
 
 ## This Session Fixes (Tier-2z: LetExpr020a)
@@ -6263,7 +6264,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7de2193` (Tier-2z: K-XQueryComment-14/15 / unterminated XPath comments raise XPST0003)
 **Current focus:** **QT3 Tier-2z: `K-XQueryComment-14/15` comment-parsing singleton cluster** — `1(: this comment does not end` and `1(: content (: this comment does not end :)` are malformed XPath comments: the first never ends, and the second opens a nested comment but never closes the outer one. Both expect `XPST0003`. The lexer previously consumed unterminated comments to EOF and returned, so the parser saw only the leading `1` and the expression succeeded. Fixed by making `XPathLexer.SkipComment` throw `ParseException` (auto-prefixed `XPST0003`) when the comment is still open at end of input. Targeted tests now pass: `K-XQueryComment-14`, `K-XQueryComment-15`. Full QT3 suite now at **14,844 passed / 33 failed / 16,944 skipped (46.65%)**; runnable pass rate **99.78%** (14844 / 14877). Unit tests **1,371/0**.
 
 ## This Session Fixes (Tier-2z: K-XQueryComment-14/15)
@@ -6288,7 +6289,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f575dc3` (Tier-2z: CastAs009/091 / xs:float fixed-point formatting in decimal range)
 **Current focus:** **QT3 Tier-2z: `CastAs009/091` float-cast singleton cluster** — `xs:untypedAtomic("1e-5") cast as xs:float` and `xs:string("1e-5") cast as xs:float` expect the canonical string value `0.00001`. The value `1e-5` has magnitude `1e-5`, which falls in the XPath fixed-point range (`1e-6 <= |x| < 1e6`), but `FormatXPathFloat` was returning `NormalizeScientific` for `R`-format scientific strings inside that range, yielding `1.0E-5` instead of expanding to fixed-point. Fixed by aligning the float branch with the double branch: `R`-scientific strings in the decimal range are now expanded to fixed-point before trailing-zero trimming. Targeted tests now pass: `CastAs009`, `CastAs091`. Full QT3 suite now at **14,842 passed / 35 failed / 16,944 skipped (46.64%)**; runnable pass rate **99.77%** (14842 / 14877). Unit tests **1,369/0**.
 
 ## This Session Fixes (Tier-2z: CastAs009/091)
@@ -6313,7 +6314,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a14d404` (Tier-2z: Literals017/025/028 / XPath canonical double formatting)
 **Current focus:** **QT3 Tier-2z: `Literals017/025/028` singleton cluster** — `65535.032e2`, `-65535.032e2`, and `65535.032E2` expect the canonical XPath double strings `6.5535032E6`, `-6.5535032E6`, and `6.5535032E6`. `FormatXPathDouble` was using `G17` for values in the scientific range (`abs >= 1e6`), which for 6553503.2 produces the round-trip-noisy string `6553503.2000000002`. The subsequent fixed-point-to-scientific normalization then counted the total number of digits (including the fractional noise) to compute the exponent, yielding `6.5535032000000002E16` instead of `6.5535032E6`. Fixed by switching the scientific-range branch to the shortest round-trip `R` format and deriving the exponent from the original decimal-point position. `FormatXPathFloat` was updated to use the same decimal-point-based exponent calculation. Targeted tests now pass: `Literals017`, `Literals025`, `Literals028`. Full QT3 suite now at **14,840 passed / 37 failed / 16,944 skipped (46.64%)**; runnable pass rate **99.75%** (14840 / 14877). Unit tests **1,368/0**.
 
 ## This Session Fixes (Tier-2z: Literals017/025/028)
@@ -6338,7 +6339,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d6f6086` (Tier-2z: K-FilterExpr-82 / atomize predicate result before numeric/EBV check)
 **Current focus:** **QT3 Tier-2z: `K-FilterExpr-82` singleton** — `(0, 1, 2)[remove((1, "a string"), 2)]` expects either `assert-eq 0` or `XPTY0004`. The predicate returns the sequence `(1)`, which must be atomized to the integer `1` before deciding whether it is a numeric positional predicate or used for its effective boolean value. Previously the filter opcode treated the sequence `(1)` directly as a non-numeric sequence and fell back to EBV, which returned true for the whole input sequence. Fixed by atomizing `predResult` in `VmEngine.Filter` before the numeric/EBV branch. Atomization of a multi-item sequence correctly raises `XPTY0004`; a singleton integer is treated as a positional predicate. Targeted test now passes: `K-FilterExpr-82`. Full QT3 suite now at **14,836 passed / 41 failed / 16,944 skipped (46.62%)**; runnable pass rate **99.73%** (14836 / 14877). Unit tests **1,367/0**.
 
 ## This Session Fixes (Tier-2z: K-FilterExpr-82)
@@ -6363,7 +6364,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `03ab2c2` (Tier-2z: K2-Axes-50/53 / XPTY0019 for path steps on non-node context items)
 **Current focus:** **QT3 Tier-2z: `K2-Axes-50/53` small cluster** — `1/3` and `(1, 2, 3)[1]/(1, 2)[last()]/'a string'` must raise `XPTY0019` because a path step requires its context items to be nodes. The compiler lowers non-axis path steps (e.g., `3`, `(1, 2)[last()]`) to the `SimpleMap` opcode, which previously enforced `XPTY0018` (result contains both nodes and non-nodes) but not `XPTY0019`. Fixed by adding a non-node context-item check in `SimpleMap` when `RegisterC != 0` (path-step mode), while preserving the `!` operator's ability to map over non-node sequences. `PathStepMap` was also updated to enforce the same check for predicated axis steps. Targeted tests now pass: `K2-Axes-50`, `K2-Axes-53`. Full QT3 suite now at **14,835 passed / 42 failed / 16,944 skipped (46.62%)**; runnable pass rate **99.72%** (14835 / 14877). Unit tests **1,366/0**.
 
 ## This Session Fixes (Tier-2z: K2-Axes-50/53)
@@ -6388,7 +6389,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `abc91bf` (Tier-2z: Axes123 / namespace-node identity in 'is')
 **Current focus:** **QT3 Tier-2z: `Axes123` singleton** — Namespace nodes obtained via different paths from the same element must be identical when they represent the same prefix/URI binding. `XDocumentNode.IsSameNode` was using `ReferenceEquals` on the underlying `XAttribute`, but `GetNamespaceAxis` creates fresh `XAttribute` objects for each axis traversal, so two namespace nodes for the same binding compared as different. Fixed by comparing namespace nodes by owner element reference + prefix + URI. `GetHashCode` was updated to stay consistent with the new equality semantics. Targeted test now passes: `Axes123`. Full QT3 suite now at **14,833 passed / 44 failed / 16,944 skipped (46.61%)**; runnable pass rate **99.71%** (14833 / 14877). Unit tests **1,365/0**.
 
 ## This Session Fixes (Tier-2z: Axes123)
@@ -6413,7 +6414,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `1d27372` (Tier-2z: K2-NameTest-78/79 / let and for as name tests)
 **Current focus:** **QT3 Tier-2z: `K2-NameTest-78/79` singleton pair** — `let` and `for` are not reserved names. When used as a single name test (no following `$`), they must parse as path steps and raise `XPDY0002` because there is no context item, not `XPST0003`. The parser was eagerly dispatching `for`/`let` to the FLWOR parser in `ParseExprSingle`. Fixed by making that dispatch conditional on the next token being `$`; otherwise the tokens fall through to `ParseOrExpr()` and are treated as name tests. Targeted tests now pass: `K2-NameTest-78`, `K2-NameTest-79`. Full QT3 suite now at **14,832 passed / 45 failed / 16,944 skipped (46.61%)**; runnable pass rate **99.70%** (14832 / 14877). Unit tests **1,362/0**.
 
 ## This Session Fixes (Tier-2z: K2-NameTest-78/79)
@@ -6438,7 +6439,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3ed944e` (Tier-2z: K-NodeSame-6 / allow 'is' as non-reserved function name)
 **Current focus:** **QT3 Tier-2z: `K-NodeSame-6` singleton** — `is` is an operator keyword but not a reserved function name, so `is(...)` must parse as a function call and then raise `XPST0017` because no function named `is` exists. The parser was throwing `XPST0003` because `ValueIs` was not accepted in a primary expression. Fixed by adding a `case TokenKind.ValueIs` in `ParsePrimaryExpr` that parses `is(` as a function call. Targeted test now passes: `K-NodeSame-6`. Full QT3 suite now at **14,830 passed / 47 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.68%** (14830 / 14877). Unit tests **1,361/0**.
 
 ## This Session Fixes (Tier-2z: K-NodeSame-6)
@@ -6463,7 +6464,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c702302` (Tier-2z: K-NodeNumberFunc-13/15 / fn:number on non-numeric atomic types)
 **Current focus:** **QT3 Tier-2z: `K-NodeNumberFunc-13/15` cluster** — `fn:number` must return `NaN` for atomic types that are not numeric, not `xs:string`/`xs:untypedAtomic`, and not `xs:boolean`. The implementation was falling back to `ParseXPathDouble(value.ToString())` for any non-numeric atomic value, so `xs:anyURI("1")` and `xs:gYear("2005")` were incorrectly converted to `1.0` and `2005.0`. Fixed by routing `fn:number` through `VmEngine.TryCast(..., "xs:double")`, which respects the schema-type restrictions on casts (e.g., `anyURI` and `gYear` cannot cast to `double`). Targeted tests now pass: `K-NodeNumberFunc-13`, `K-NodeNumberFunc-15`. Full QT3 suite now at **14,829 passed / 48 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.68%** (14829 / 14877). Unit tests **1,361/0**.
 
 ## This Session Fixes (Tier-2z: K-NodeNumberFunc-13/15)
@@ -6488,7 +6489,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b544eea` (Tier-2z: K2-SeqDeepEqualFunc-40 / fn:deep-equal implicit timezone handling)
 **Current focus:** **QT3 Tier-2z: `K2-SeqDeepEqualFunc-40` singleton** — `fn:deep-equal` must compare `xs:dateTime`, `xs:date`, and `xs:time` values using the implicit timezone when one operand has no explicit timezone. The implementation was comparing `DateTimeOffset` values directly, so a no-timezone dateTime was treated as UTC rather than as the implicit timezone, causing the comparison to fail. Fixed by threading the evaluation context's implicit timezone through `DeepEqual`, `DeepEqualItem`, `DeepEqualMap`, and `DeepEqualArray`, and normalizing both operands to UTC before comparing. Targeted test now passes: `K2-SeqDeepEqualFunc-40`. Full QT3 suite now at **14,827 passed / 50 failed / 16,944 skipped (46.60%)**; runnable pass rate **99.66%** (14827 / 14877). Unit tests **1,360/0**.
 
 ## This Session Fixes (Tier-2z: K2-SeqDeepEqualFunc-40)
@@ -6513,7 +6514,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b42c4ac` (Tier-2z: K2-DataFunc-6 / fn:data() FOTY0012 for element-only complex elements)
 **Current focus:** **QT3 Tier-2z: `K2-DataFunc-6` singleton** — `fn:data()` on a complex element-only or empty schema-validated element must raise `FOTY0012` because such an element has no typed value. The implementation was returning the string value of the element instead of detecting the missing typed value. Fixed by adding `IXdmNode.HasNoTypedValue` (default `false`), implementing it for `XDocumentNode` using `XElement.GetSchemaInfo()` and `XmlSchemaComplexType.ContentType`, and having `FunctionLibrary.Data` throw `FOTY0012` when the flag is true. Targeted test now passes: `K2-DataFunc-6`. Full QT3 suite now at **14,826 passed / 51 failed / 16,944 skipped (46.63%)**; runnable pass rate **99.66%** (14826 / 14877). Unit tests **1,360/0**.
 
 ## This Session Fixes (Tier-2z: K2-DataFunc-6)
@@ -6540,7 +6541,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-20
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d444f0d` (Tier-2z: fn-upper-case-22 / Armenian ligature upper-case mapping)
 **Current focus:** **QT3 Tier-2z: `fn-upper-case-22` singleton** — `fn:upper-case` must use Unicode full case mapping for the Armenian small ligature men xeh (U+FB17), which upper-cases to two characters: U+0544 ARMENIAN CAPITAL LETTER MEN and U+053D ARMENIAN CAPITAL LETTER XEH. `FunctionLibrary.ApplyUnicodeCaseMapping` had no special case for this ligature, so `Rune.ToUpperInvariant` returned a single incorrect codepoint. Fixed by adding the explicit one-to-two mapping. Targeted test now passes: `fn-upper-case-22`. Full QT3 suite now at **14,825 passed / 52 failed / 16,944 skipped (46.59%)**; runnable pass rate **99.65%** (14825 / 14877). Unit tests **1,359/0**.
 
 ## This Session Fixes (Tier-2z: fn-upper-case-22)
@@ -6565,7 +6566,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a6b3a25` (Tier-2z: fn-doc-available-2 / fn:doc and fn:doc-available URI argument validation)
 **Current focus:** **QT3 Tier-2z: `fn-substring-after-23` / `fn-substring-before-23` cluster** — XPath collation arguments may be relative URI references that must be resolved against the static base URI. The test sets the static base URI to `http://www.w3.org/2005/xpath-functions/` and passes `"collation/codepoint"`, which should resolve to the canonical codepoint collation. `FunctionLibrary.SubstringBefore_3` and `SubstringAfter_3` were validating the raw relative URI, causing `FOCH0002`. Fixed by adding `ResolveCollationUri`, which absolutizes relative collation URIs using `EvaluationContext.BaseUri` before validation. Targeted tests now pass: `fn-substring-after-23`, `fn-substring-before-23`. Full QT3 suite now at **14,821 passed / 56 failed / 16,944 skipped (46.58%)**; runnable pass rate **99.62%** (14821 / 14877). Unit tests **1,355/0**.
 
 ## This Session Fixes (Tier-2z: fn-substring-after/before-23)
@@ -6590,7 +6591,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `28e7a13` (Tier-2z: fn-implicit-timezone-10/11/12 / duration div NaN/zero validation)
 **Current focus:** **QT3 Tier-2z: `fn-implicit-timezone-10/11/12` cluster** — XPath `xs:dayTimeDuration` divided by `NaN` must raise `FOCA0005`; divided by zero (or negative zero) must raise `FODT0002`. `VmEngine.DivideDuration` was short-circuiting zero-duration operands before checking the divisor, so `fn:implicit-timezone() div 0` (where the implicit timezone is UTC and the duration is `PT0S`) silently returned `PT0S` instead of raising `FODT0002`. Fixed by moving the `NaN` and zero-divisor checks ahead of the zero-duration short-circuit. Targeted tests now pass: `fn-implicit-timezone-10`, `fn-implicit-timezone-11`, `fn-implicit-timezone-12`. Full QT3 suite now at **14,819 passed / 58 failed / 16,944 skipped (46.57%)**; runnable pass rate **99.61%** (14819 / 14877). Unit tests **1,354/0**.
 
 ## This Session Fixes (Tier-2z: fn-implicit-timezone-10/11/12)
@@ -6615,7 +6616,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4403be1` (Tier-2z: fn:iri-to-uri / K2-IRIToURIfunc / non-string argument validation)
 **Current focus:** **QT3 Tier-2z: `fn:iri-to-uri` argument-validation cluster** — `fn:iri-to-uri($uri-part)` is defined only for a single `xs:string` (or `xs:untypedAtomic`) argument; non-string atomics such as `iri-to-uri(12)` or multi-item sequences such as `iri-to-uri(('a string','a string'))` must raise `XPTY0004`. The implementation was using `AtomizedString`, which silently converted any atomic to a string and ignored cardinality. Fixed by routing the argument through `RequireString` before encoding. Targeted tests now pass: `fn-iri-to-uri1args-5`, `K2-IRIToURIfunc-3`, `K2-IRIToURIfunc-4`. Full QT3 suite now at **14,816 passed / 61 failed / 16,944 skipped (46.56%)**; runnable pass rate **99.59%** (14816 / 14877). Unit tests **1,353/0**.
 
 ## This Session Fixes (Tier-2z: fn:iri-to-uri argument validation)
@@ -6640,7 +6641,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b7dd968` (Tier-2z: double MAX_VALUE string formatting / G17 round-trip cluster)
 **Current focus:** **QT3 Tier-2z: double `MAX_VALUE` string-formatting cluster** — XPath canonical `xs:double` string serialization must preserve enough digits to round-trip. `FormatXPathDouble` was using .NET's `"G16"` format, which drops the final digit of `double.MaxValue`, producing `1.797693134862316E308` instead of the expected `1.7976931348623157E308`. This caused a swarm of failures across `fn:ceiling`, `fn:concat`, `fn:data`, `fn:exactly-one`, `fn:floor`, `fn:number`, `fn:one-or-more`, `fn:string`, and `fn:zero-or-one` tests on `xs:double` boundary values. Fixed by switching the scientific-notation branch to `"G17"`, the shortest round-trip format. Targeted tests now pass: all `*dbl1args-*` boundary cases. Full QT3 suite now at **14,813 passed / 64 failed / 16,944 skipped (46.55%)**; runnable pass rate **99.57%** (14813 / 14877). Unit tests **1,352/0**.
 
 ## This Session Fixes (Tier-2z: double MAX_VALUE formatting)
@@ -6665,7 +6666,7 @@ Remaining singleton / small clusters from the full QT3 suite: `fn-numberulng1arg
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `9a1acec` (Tier-2z: compare-011 / fn:compare non-string argument validation)
 **Current focus:** **QT3 Tier-2z: `compare-011` cluster** — `fn:compare($collation1, $collation2)` is only defined when both atomized arguments are `xs:string` (or `xs:untypedAtomic`); non-string atomics such as `compare(123, 456)` must raise `XPTY0004`. The implementation was using `AtomizedString` without validation, so numeric arguments were silently accepted. Fixed by routing `fn:compare` arguments through `RequireString` before comparing. Targeted test now passes: `compare-011`. Full QT3 suite now at **14,791 passed / 86 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.42%** (14791 / 14877). Unit tests **1,350/0**.
 
 ## This Session Fixes (Tier-2z: compare-011)
@@ -6690,7 +6691,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `f
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6fdb7d5` (Tier-2z: K2-StringLT-1 / default codepoint collation for value comparisons)
 **Current focus:** **QT3 Tier-2z: `K2-StringLT-1` cluster** — XPath value comparisons (`lt`, `le`, `gt`, `ge`, `eq`, `ne`) must use the default codepoint collation, which compares Unicode scalar values, not UTF-16 code units. The API evaluation path did not set `EvaluationContext.CollationComparer`, so `VmEngine.CompareStrings` fell back to `string.CompareOrdinal`, causing `"&#60000;" lt "&#70000;"` to evaluate to `false` (U+EA60 vs the lead surrogate of U+11170). Fixed by having `FunctionLibrary.Populate` install the standard `FunctionLibrary.CompareStrings` comparer on contexts that do not already have one. Targeted test now passes: `K2-StringLT-1`. Full QT3 suite now at **14,790 passed / 87 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.42%** (14790 / 14877). Unit tests **1,350/0**.
 
 ## This Session Fixes (Tier-2z: K2-StringLT-1)
@@ -6715,7 +6716,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `c
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4d53cc8` (Tier-2z: K-NumericSubtract-34/35 / xs:untypedAtomic arithmetic promotion)
 **Current focus:** **QT3 Tier-2z: `K-NumericSubtract-34/35` cluster** — XPath operator mapping requires that when any operand of an arithmetic expression is `xs:untypedAtomic`, both operands are cast to `xs:double` and the result is `xs:double`. `Add`, `Subtract`, `Multiply`, `Divide`, `IntegerDivide`, and `Modulo` were checking the numeric type-specific branches before the untypedAtomic promotion, so `xs:untypedAtomic("3") - 1.1` returned `xs:decimal` instead of `xs:double`. Fixed by atomizing the operands and checking for `xs:untypedAtomic` before the double/float/decimal/integer branches. Targeted tests now pass: `K-NumericSubtract-34`, `K-NumericSubtract-35`. Full QT3 suite now at **14,789 passed / 88 failed / 16,944 skipped (46.48%)**; runnable pass rate **99.41%** (14789 / 14877). Unit tests **1,348/0**.
 
 ## This Session Fixes (Tier-2z: K-NumericSubtract-34/35)
@@ -6740,7 +6741,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `c
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3c8bca6` (Tier-2z: K-NumericUnaryPlus-1 / unary plus type check)
 **Current focus:** **QT3 Tier-2z: `K-NumericUnaryPlus-1` cluster** — XPath unary plus is only defined for numeric operands (and atomized `xs:untypedAtomic`); `+"a string"` must raise `XPTY0004`. The AST optimizer previously folded `+x` to `x` for every operand, and the IR lowerer emitted a simple `Move`. Fixed by limiting the optimizer fold to numeric literals and emitting a real `UnaryPlus` opcode that validates the operand at runtime. Targeted tests now pass: `K-NumericUnaryPlus-1`. Full QT3 suite now at **14,786 passed / 91 failed / 16,944 skipped (46.47%)**; runnable pass rate **99.38%** (14786 / 14877). Unit tests **1,348/0**.
 
 ## This Session Fixes (Tier-2z: K-NumericUnaryPlus-1)
@@ -6769,7 +6770,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `c
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `9417c55` (Tier-2z: op-boolean-equal-4 / and-or register reuse fix)
 
 ## This Session Fixes (Tier-2z: op-boolean-equal-4)
 
@@ -6793,7 +6794,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `c
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `277d17f` (Tier-2z: duration / date arithmetic cluster)
 **Current focus:** **QT3 Tier-2z: duration/date arithmetic cluster** — Fixed `xs:date` addition/subtraction of `xs:dayTimeDuration` so the result is an `xs:date` with time components zeroed. Fixed `xs:time` addition/subtraction of `xs:yearMonthDuration` to raise `XPTY0004` instead of returning the time unchanged. Fixed generic `xs:duration` component extraction in `fn:*-from-duration` so mixed year-month and day-time components are returned. Fixed `fn:distinct-values` and `fn:index-of` duration equality so zero `xs:yearMonthDuration` and `xs:dayTimeDuration` values are treated as equal. Targeted tests now pass: `fn-months-from-duration-20`, `K-MonthsFromDurationFunc-7`, `fn-years-from-duration-20`, `K-YearsFromDurationFunc-7`, `K-DateAddDTD-1/2`, `K-DateSubtractDTD-1`, `K-TimeSubtractDTD-2/3/5`, and `distinct-duration-equal-1`. Full QT3 suite now at **14,784 passed / 93 failed / 16,944 skipped (46.46%)**; runnable pass rate **99.38%** (14784 / 14877). Unit tests **1,346/0**.
 
 ## This Session Fixes (Tier-2z: duration/date arithmetic)
@@ -6825,7 +6826,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `c
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4dad663` (QT3 Tier-2z: union / intersect / except XPTY0004 validation)
 **Current focus:** **QT3 Tier-2z: sequence set-operator XPTY0004 cluster** — `union`, `intersect`, and `except` were silently ignoring non-node items instead of raising `XPTY0004` as required by XPath. The `Concatenate` VM opcode (used for `union`), `Intersect`, and `Except` now validate that every operand item is a node. This fixes the seven `K2-SeqExcept/Intersect/Union` failures. Added a `LoadNode` VM opcode so the unit test for `Concatenate` can exercise node sequences. Targeted tests now pass: `K2-SeqExcept-1`, `K2-SeqIntersect-1/43/44`, `K2-SeqUnion-5/46/47`. Full QT3 suite now at **14,773 passed / 104 failed / 16,944 skipped (46.43%)**; runnable pass rate **99.30%** (14773 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: sequence set-operator XPTY0004)
@@ -6855,7 +6856,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `c
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6d0cfff` (QT3 Tier-2z: adjust-date-to-timezone / adjust-time-to-timezone / adjust-dateTime-to-timezone FODT0003 validation)
 **Current focus:** **QT3 Tier-2z: timezone adjustment FODT0003 cluster** — `fn:adjust-date-to-timezone`, `fn:adjust-time-to-timezone`, and `fn:adjust-dateTime-to-timezone` two-arg forms were accepting timezone offsets outside the F+O-specified range of `-PT14H` to `+PT14H` and offsets with sub-minute resolution (seconds/milliseconds). Added a shared `ParseTimezoneOffset` helper that validates the offset and raises `FODT0003` for out-of-range or non-integral-minute values. Targeted pools now all **0 failed**: `fn-adjust-date-to-timezone` 37/0/4, `fn-adjust-time-to-timezone` 37/0/5, `fn-adjust-dateTime-to-timezone` 46/0/2. Full QT3 suite now at **14,766 passed / 111 failed / 16,944 skipped (46.40%)**; runnable pass rate **99.25%** (14766 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: timezone adjustment FODT0003)
@@ -6883,7 +6884,7 @@ Remaining singleton failures from the full QT3 suite: `fn-ceilingdbl1args-*`, `c
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `0ef1217` (QT3 Tier-2z: fn-string-length / fn-string-join / fn-string-to-codepoints / fn:remove / fn:replace type checks)
 **Current focus:** **QT3 Tier-2z: string/sequence function type-error cluster** — Fixed `fn:string-length()` zero-arg form to use `fn:string(.)` semantics so non-string atomic context items (e.g., integers) are converted to their string representation before counting code points. Hardened `fn:string-join`, `fn:string-to-codepoints`, `fn:replace`, and `fn:remove` against type errors by using `RequireStringRequired` for required string parameters and the new `RequireInteger` helper for the position argument. Added `RequireStringRequired` and `RequireInteger` helpers to `FunctionLibrary`. Targeted pools now all **0 failed**: `fn-string-length` 33/0/3, `fn-string-join` 32/0/14, `fn-string-to-codepoints` 44/0/0, `fn-remove` 51/0/0, `fn-replace` 81/0/10. Full QT3 suite now at **14,755 passed / 122 failed / 16,944 skipped (46.37%)**; runnable pass rate **99.18%** (14755 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: string/sequence function type checks)
@@ -6913,7 +6914,7 @@ Remaining singleton failures from the full QT3 suite: `K-AdjDateToTimezoneFunc-*
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c03a630` (QT3 Tier-2z: fn-lang / fn-in-scope-prefixes / fn-codepoints-to-string fixes)
 **Current focus:** **QT3 Tier-2z: `fn-lang` / `fn-in-scope-prefixes` / `fn-codepoints-to-string` clusters** — The residual failures were caused by missing type checks in `fn:lang` and `fn:in-scope-prefixes` and by XML 1.0-only `codepoints-to-string` tests running on an XML 1.1 implementation. Fixed `Lang_1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context item; fixed `Lang_2` to raise `XPTY0004` when the second argument is not a single node. Fixed `InScopePrefixes` to raise `XPTY0004` when the argument is not a single element node (including document nodes and empty sequence). Added `K-CodepointToStringFunc-8/11/12` to `DocumentedSkips` as XML 1.0-only tests on an XML 1.1 implementation. Targeted pools now **0 failed**: `fn-lang` 36/0/10, `fn-in-scope-prefixes` 9/0/53, `fn-codepoints-to-string` 61/0/18. Full QT3 suite now at **14,747 passed / 130 failed / 16,944 skipped (46.34%)**; runnable pass rate **98.92%** (14747 / 14877). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: fn-lang, fn-in-scope-prefixes, fn-codepoints-to-string)
@@ -6942,7 +6943,7 @@ Remaining singleton failures from the full QT3 suite: `K-AdjDateToTimezoneFunc-*
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `ebacc48` (QT3 Tier-2z: fn-root/fn-name/fn-local-name context-item and fn-QName QName fixes)
 **Current focus:** **QT3 Tier-2z: `fn-root` / `fn-name` / `fn-local-name` / `fn-prefix-from-QName` / `fn-QName` clusters** — The residual failures were caused by missing context-item error checks in the zero-arg node-name accessors and by incorrect empty-sequence / empty-prefix handling in the one-arg forms and in `fn:QName`. Added `GetOptionalSingleNode` helper for empty-sequence/single-node extraction with `XPTY0004` for non-node/multiple items. Fixed `LocalName_0/1`, `NamespaceUri_0/1`, `Name_0/1`, `NodeName_0/1`, and `Root_0/1` to raise `XPDY0002` for an absent context item and `XPTY0004` for a non-node context/argument. Fixed `LocalName_1` and `NamespaceUri_1` to return the zero-length `xs:string` / `xs:anyURI` (not the empty sequence) when the argument is empty, matching the F+O spec return type. Fixed `Qname` to accept an empty-sequence namespace URI argument and to reject lexical QNames that begin or end with a colon (`FOCA0002`). Targeted pools now all **0 failed**: `fn-root` 11/0/27, `fn-name` 72/0/54, `fn-local-name` 66/0/22, `fn-prefix-from-QName` 27/0/0, `fn-QName` 25/0/9. Full QT3 suite now at **14,743 passed / 137 failed / 16,941 skipped (46.33%)**; runnable pass rate **98.92%** (14743 / 14880). Unit tests **1,345/0**.
 
 ## This Session Fixes (Tier-2z: node-name accessors and QName construction)
@@ -6972,7 +6973,7 @@ Remaining singleton failures from the full QT3 suite: `K-AdjDateToTimezoneFunc-*
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `284a39b` (QT3 Tier-2z: duration-arithmetic round-half-up and overflow fixes)
 **Current focus:** **QT3 Tier-2z: `op-multiply-yearMonthDuration` / `op-divide-yearMonthDuration` / `op-multiply-dayTimeDuration` / `op-divide-dayTimeDuration` clusters** — YearMonth multiply/divide was using .NET `Math.Round` (banker's rounding), but the F+O Erratum FO.E12 expects round-half-up (`floor(x + 0.5)`), so ties such as `P5M div -2` and `P2Y11M * 2.3` were off by one month. DayTime multiply/divide was casting `xs:double` factors/divisors directly to `decimal`, causing `OverflowException`/`FOAR0002` for `1.7976931348623157E308` and underflow/division-by-zero for very small divisors. `VmEngine` now uses a `RoundHalfUp` helper for yearMonth results and overflow-safe decimal/double fallback for dayTime results. It also checks the dynamic `xs:duration` schema annotation so `xs:duration("P1Y3M") * 3` and `xs:duration("P1Y3M") div 3` raise `XPTY0004` as required. `TryCast` to `xs:duration` now preserves the generic `duration` schema annotation so the runtime can distinguish it from the subtypes. Targeted duration pools now **0 failed** (16 previously failing tests now pass). Full QT3 suite now at **14,720 passed / 160 failed / 16,941 skipped (46.26%)**; runnable pass rate **98.92%** (14720 / 14880). Unit tests **1,344/0**.
 ## This Session Fixes (Tier-2z: duration arithmetic)
 
@@ -7001,7 +7002,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `13295c6` (QT3 Tier-2z: fn-element-with-id schema-validated ID support)
 **Current focus:** **QT3 Tier-2z: `fn-element-with-id` cluster** — The five failures were caused by the conformance harness not loading the schema-validated source document and by `fn:id`/`fn:element-with-id` only recognizing attribute-based IDs. `TestEnvironment` now parses `<source validation="strict">` and `<schema>` elements, loads the source through a new `XDocumentProvider.LoadXml` overload that validates against the declared XML Schema and adds PSVI annotations. `IXdmNode` gains an `IsId` accessor; `XDocumentNode` implements it using `XmlSchemaInfo` so that typed values of type `xs:ID` (derived types, union ID members, and singleton lists of `xs:ID`) are recognized. `fn:id()` now returns ID-valued elements themselves, and `fn:element-with-id()` returns the parent element when the ID is supplied by a child element. DTD-declared ID attributes continue to work via `InternalSubset`. Targeted `fn-element-with-id` pool now **5 passed / 0 failed / 0 skipped** (5 previously failing tests now pass). Full QT3 suite now at **14,703 passed / 173 failed / 16,945 skipped (46.21%)**; runnable pass rate **98.84%** (14703 / 14876). Unit tests **1,344/0**.
 
 ---
@@ -7038,7 +7039,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d041979` (QT3 Tier-2z: fn-outermost/fn-innermost namespace-axis document order fix)
 **Current focus:** **QT3 Tier-2z: `fn-outermost` / `fn-innermost` cluster** — The eight remaining `fn-outermost-*` / `fn-innermost-*` failures were caused by namespace nodes not being returned in document order. `XDocumentNode.GetNamespaceAxis` now places the implicit `xml` namespace first and orders the remaining namespaces root-to-current; `XDocumentNode.DocumentOrder` for namespace nodes now uses the owner element's order; and `VmEngine.NormalizeSequence` uses a stable sort keyed by owner element so that namespace nodes of the same element retain their axis order while being sorted correctly across elements. Targeted `fn-outermost` / `fn-innermost` pools now **13 passed / 0 failed / 105 skipped** (8 previously failing tests now pass). Full QT3 suite now at **14,698 passed / 178 failed / 16,945 skipped (46.19%)**; runnable pass rate **98.80%** (14698 / 14876). Unit tests **1,344/0**.
 
 ---
@@ -7067,7 +7068,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4b74fc3` (QT3 Tier-2z: cbcl residual cluster fixes)
 **Current focus:** **QT3 Tier-2z: `cbcl-*` residual cluster** — Final two `cbcl-treat-as-*` failures were caused by `fn:zero-or-one` returning `()` for a single-item sequence instead of the item. Fixed `ZeroOrOne_1` to return the sole item. Also completed earlier cbcl work: test-name filter in the harness, `LoadOptions.PreserveWhitespace` so `assert-string-value` keeps CR/spaces, XQuery-only spec dependencies skipped, `current-dateTime/date/time` now honor the implicit timezone, `distinct-values`/`index-of` equality applies the implicit timezone, `gYear/gYearMonth/gMonth/gMonthDay/gDay` equality is timezone-aware, `xs:duration * NaN/Infinity` raises `FOCA0005`, `codepoints-to-string` reverted to XML 1.1 rules, and `xs:QName` whitespace/local-name validation now raises `FOCA0002`. Targeted `cbcl-` run now **516 passed / 0 failed / 1,332 skipped** (2 previously failing tests now pass). Full QT3 suite now at **14,690 passed / 186 failed / 16,945 skipped (46.16%)**; runnable pass rate **98.75%** (14690 / 14876). Unit tests **1,344/0**.
 
 ---
@@ -7108,7 +7109,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `0fa6196` (QT3 Tier-2z: RangeExpr big-integer and general-comparison lazy enumeration)
 **Current focus:** **QT3 Tier-2z: `op-to` / `RangeExpr` cluster** — `to` expressions now accept integer operands that exceed `long.MaxValue` by storing them as `XdmValueKind.Decimal` annotated with the `xs:integer` schema type and generating a lazy `DecimalRangeSequence`. `CompareGeneral` no longer materializes both operands before comparing; it enumerates items lazily so huge ranges (e.g. 10^21 to 10^21+5×10^9) do not allocate billions of items or run for minutes. Targeted `op-to` pool now **166 passed / 0 failed / 2 skipped** (12 previously failing tests now pass). Full QT3 suite now at **21,632 passed / 305 failed / 9,884 skipped (67.94%)**; runnable pass rate improved to **98.61%** (21632 / 21937). Unit tests **1,343/0**.
 
 ---
@@ -7134,7 +7135,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `16484ae` (QT3 Tier-2z: op/numeric-less-than unsignedLong overflow fix)
 **Current focus:** **QT3 Tier-2z: `op/numeric-less-than` cluster** — `xs:unsignedLong` values above `long.MaxValue` (e.g. `18446744073709551615`) are now represented as `XdmValueKind.Decimal` with the `unsignedLong` subtype annotation, so they can be cast from strings and compared correctly. `ItemInstanceOf` now accepts decimal-backed values whose schema type is an integer subtype. Targeted `op-numeric-less-than` pool now **154 passed / 0 failed / 29 skipped** (2 previously failing tests now pass). Full QT3 suite now at **21,620 passed / 317 failed / 9,884 skipped (67.93%)**; runnable pass rate improved to **98.56%** (21620 / 21937). Unit tests **1,343/0**.
 
 ---
@@ -7160,7 +7161,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c3c76a2` (QT3 Tier-2z: fn/contains collation/whitespace fixes)
 **Current focus:** **QT3 Tier-2z: `fn/contains` collation/whitespace cluster** — Fixed UCA collation strength mapping in `FunctionLibrary.TryParseUca` so `strength=secondary` ignores only case and `strength=tertiary` ignores no attributes. Implemented true ASCII-only case folding for the HTML ASCII case-insensitive collation in `StringContains`, `StringStartsWith`, `StringEndsWith`, `StringIndexOf`, `CompareStrings`, and `GetCollationEqualityComparer`. `fn:contains-token` now tokenizes on XPath whitespace only (`#x20`, `#x9`, `#xD`, `#xA`), so non-breaking space is no longer treated as a separator. Targeted `fn-contains` and `fn-contains-token` pools now **0 failed** (6 previously failing tests now pass). Full QT3 suite now at **21,618 passed / 319 failed / 9,884 skipped (67.93%)**; runnable pass rate improved to **98.54%** (21618 / 21937). Unit tests **1,343/0**.
 
 ---
@@ -7189,7 +7190,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `ef9dace` (QT3 Tier-2z: fn/format-number precision and dependency-filter fixes)
 **Current focus:** **QT3 Tier-2z: `fn/format-number` cluster** — `FormatNumberEngine` now raises `XPTY0004` for non-numeric string inputs in non-backwards-compatible mode, supports non-BMP (supplementary-plane) zero-digits in scientific notation, and counts exponent digit signs correctly for surrogate-pair zero-digits. The conformance harness `DependencyFilter` now ANDs spec dependencies across `<dependency>` elements, so XP30-only tests like `numberformat128` are skipped when Bosak runs as XP31+. `numberformat63` and `numberformat64` (decimal literals requiring >28 digits of precision) are documented as platform limitations because .NET `decimal` is fixed-precision. Targeted `fn-format-number` pool is now **246 passed / 0 failed / 23 skipped** (3 previously failing tests now pass; 2 precision tests skipped). Full QT3 suite now at **21,612 passed / 325 failed / 9,884 skipped (67.92%)**; runnable pass rate improved to **98.52%** (21612 / 21937). Unit tests **1,343/0**.
 
 ---
@@ -7219,7 +7220,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 ---
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4a5370b` (QT3 Tier-2z: fn/matches caseless-match i-flag fix)
 **Current focus:** **QT3 Tier-2z: `fn/matches` caseless-match cluster** — `RegexHelper.ParseRegexFlags` now maps the XPath `i` flag to `RegexOptions.IgnoreCase`, while `XsdCharClasses` wraps category escapes (`\p{}`, `\P{}`) in `(?-i:...)` to prevent .NET from expanding them. Bracketed class expressions are case-folded during translation (single code points and escaped atoms) and then completed by `IgnoreCase` (ranges and special Unicode foldings such as U+212A Kelvin sign). Back-references and quote mode now match case-insensitively. Targeted `fn-matches` pool (including `fn-matches.re`) is now **1,117 passed / 0 failed / 58 skipped** (5 previously failing caseless-match/back-reference tests now pass). Full QT3 suite now at **21,610 passed / 330 failed / 9,881 skipped (67.91%)**; runnable pass rate improved to **98.49%** (21610 / 21940). Unit tests **1,343/0**.
 
 ---
@@ -7251,7 +7252,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fd529e5` (QT3 Tier-2z: cbcl-castable castable-as overflow and empty-sequence fixes)
 **Current focus:** **QT3 Tier-2z: `cbcl-*` scattered clusters** — `VmEngine` `Castable` opcode now catches dynamic cast errors (FOCA0003, FOAR0002) and returns `false` for `castable as`, and correctly reports that an empty sequence is only castable to optional/zero-or-more sequence types. The `prod-CastableExpr` targeted pool is now **782 passed / 0 failed / 177 skipped** (was 772/10/177). Full QT3 suite now at **21,607 passed / 333 failed / 9,881 skipped (67.81%)**; runnable pass rate improved to **98.48%** (21607 / 21940). Unit tests **1,343/0**.
 
 ---
@@ -7279,7 +7280,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `33dfc94` (QT3 Tier-2z: prod-NamedFunctionRef reserved-function-name fixes)
 **Current focus:** **QT3 Tier-2z: `prod-NamedFunctionRef` / `named-function-ref-reserved-function-names`** — `XPathParser.ParseNamedFunctionRef` now raises `XPST0003` when a reserved function name (e.g., `attribute#0`, `element#0`) is used in a named function reference. The check is intentionally not applied to `ParseFunctionCall` because reserved names like `attribute()` are valid as kind tests. Targeted `prod-NamedFunctionRef` pool now **546 passed / 0 failed / 10 skipped** (was 534/12/10). Full QT3 suite now at **21,597 passed / 343 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.44%** (21597 / 21940). Unit tests **1,339/0**.
 
 ---
@@ -7307,7 +7308,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4c79b2c` (QT3 Tier-2y: fn:index-of eq-semantics and NaN handling)
 **Current focus:** **QT3 Tier-2y: `K-SeqIndexOfFunc` / `fn-index-of`** — `FunctionLibrary.IndexOfImpl` now uses XPath `eq` semantics via `AtomicValuesEqual` instead of string comparison. NaN no longer matches itself, empty / multi-item search arguments and empty collation arguments raise `XPTY0004`, and incompatible types (e.g., `xs:integer` vs `xs:string`) return empty. Targeted `fn-index-of` pool now **53 passed / 0 failed / 0 skipped** (was 44/9/0). Full QT3 suite now at **21,585 passed / 355 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.38%** (21585 / 21940). Unit tests **1,327/0**.
 
 ---
@@ -7339,7 +7340,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `8c81587` (QT3 Tier-2x: op-numeric-mod floating-point mod-by-zero returns NaN)
 **Current focus:** **QT3 Tier-2x: `op-numeric-mod`** — `VmEngine.Modulo` now follows IEEE 754 semantics for `xs:double` and `xs:float`: mod by zero returns `NaN` instead of raising `FOAR0001`. Integer and decimal mod by zero continue to raise `FOAR0001`. Targeted `op-numeric-mod` pool now **113 passed / 0 failed / 11 skipped** (was 107/6/11). Full QT3 suite now at **21,576 passed / 364 failed / 9,881 skipped (67.79%)**; runnable pass rate improved to **98.34%** (21576 / 21940). Unit tests **1,317/0**.
 
 ---
@@ -7367,7 +7368,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3ea70d1` (QT3 Tier-2w: fn:has-children context-item and singleton-sequence fixes)
 **Current focus:** **QT3 Tier-2w: `fn-has-children`** — `HasChildren_0` now raises `XPDY0002` when the context item is absent; `HasChildren`/`HasChildren_1` now unwrap singleton sequences so empty sequence returns `false` and multi-item / non-node arguments raise `XPTY0004`. Targeted `fn-has-children` pool now **34 passed / 0 failed / 3 skipped** (was 26/8/3). Full QT3 suite now at **21,570 passed / 370 failed / 9,881 skipped (67.77%)**; runnable pass rate improved to **98.31%** (21570 / 21940). Unit tests **1,311/0**.
 
 ---
@@ -7395,7 +7396,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7f3dc81` (QT3 Tier-2v: idiv NaN/INF handling and numeric-literal keyword boundary)
 **Current focus:** **QT3 Tier-2v: `op-numeric-integer-divide`** — `VmEngine.IntegerDivide` now raises `FOAR0002` for NaN/INF operands and returns `0` for finite-dividend `idiv` INF; `XPathLexer.ReadNumber` now rejects `NumericLiteral` tokens immediately followed by keyword operators (e.g. `10idiv 3`). Full QT3 suite now at **21,562 passed / 378 failed / 9,881 skipped (67.76%)**; runnable pass rate improved to **98.28%** (21562 / 21940). Unit tests **1,303/0**.
 
 ---
@@ -7427,7 +7428,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-19
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<uncommitted>`
 **Current focus:** **QT3 Tier-2u: `xs:numeric` support** — `VmEngine.TryCast` now handles the `xs:numeric` union type and `FunctionLibrary` registers the `xs:numeric#1` constructor. Full QT3 suite now at **21,545 passed / 395 failed / 9,881 skipped (67.71%)**; runnable pass rate improved to **98.20%** (21545 / 21940). Unit tests **1,299/0**.
 
 ---
@@ -7457,7 +7458,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7dfd1df` (QT3 Tier-2t: fn:id/fn:idref DTD support and XPTY0004 type checks)
 **Current focus:** **QT3 Tier-2t: `fn:id` / `fn:idref` / `fn:element-with-id` DTD support** — DTD-declared `ID`/`IDREF`/`IDREFS` attributes are now recognized, and the three functions raise `XPTY0004` when the context item or second argument is not a node. Full QT3 suite now at **21,535 passed / 405 failed / 9,881 skipped (67.68%)**; runnable pass rate improved to **98.15%** (21535 / 21940). Unit tests **1,147/0**.
 
 ---
@@ -7493,7 +7494,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6e2f111` (QT3 Tier-2s: fn:function-lookup context-focus capture + fn-load-xquery-module skip)
 **Current focus:** **QT3 Tier-2s: `fn:function-lookup` support** — `function-lookup` now returns `NamedFunctionItem`s that capture the creation focus, so context-dependent functions (`fn:base-uri#0`, `fn:document-uri#0`) use the creator's context item instead of the call-site item. `fn-load-xquery-module` is now declared unsupported so tests that assert the feature are skipped rather than run. Full QT3 suite now at **21,494 passed / 446 failed / 9,881 skipped (67.55%)**; runnable pass rate improved to **97.97%** (21494 / 21940). Unit tests **1,283/0**.
 
 ---
@@ -7524,7 +7525,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7c44257` (QT3 Tier-2r: fn:collection / fn:uri-collection support)
 **Current focus:** **QT3 Tier-2r: fn:collection / fn:uri-collection support** — `EvaluationContext.Collections` is now populated by the QT3 harness and used by `fn:collection()` and `fn:uri-collection()` to resolve registered collections, with directory-based fallback and FODC error codes. Full QT3 suite now at **21,511 passed / 482 failed / 9,828 skipped (67.60%)**; runnable pass rate **97.81%** (21511 / 21993). Unit tests **1,282/0**.
 
 ---
@@ -7556,7 +7557,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-18
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** uncommitted changes on `210e9f5`
 **Current focus:** **QT3 Tier-2q: XQ31-only dependency filter + XdmMap insertion-order fix** — `DependencyFilter` now skips positive `spec="XQ31"` dependencies, correctly reclassifying ~116 previously-failing tests and ~68 previously-passing XQuery-only tests as skipped. Full QT3 suite now at **21,475 passed / 518 failed / 9,828 skipped (67.49%)**; runnable pass rate improved to **97.65%** (21475 / 21993). Unit tests **1,282/0**.
 
 ---
@@ -7581,7 +7582,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4345314` (QT3 Tier-2p: persistent XdmMap + op-same-key hang fix)
 **Current focus:** **QT3 Tier-2p: `op-same-key` hang resolved** — `op-same-key` now completes with **14 passed / 0 failed / 14 skipped** (was hanging on `same-key-023` due to O(N²) map copying). Full QT3 suite now at **21,543 passed / 634 failed / 9,644 skipped (67.70%)**, up from **21,509/654/9,630** excluding `op-same-key`. Unit tests remain **1,286/0**.
 
 ---
@@ -7606,7 +7607,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5983996` (QT3 Tier-2n/2o: harness dependency inheritance + fn:unparsed-text fixes)
 **Current focus:** **QT3 Tier-2o: `fn:unparsed-text` function family** — `fn-unparsed-text`, `fn-unparsed-text-available`, and `fn-unparsed-text-lines` now at **153 passed / 4 failed / 9 skipped (92.17%)**, down from **134 passed / 23 failed / 9 skipped**. The 4 remaining failures are one HTTP 403 environmental test and 3 XPTY0004 type-checking cases that require broader function-call coercion changes. Unit tests remain **1,282/0**.
 
 ---
@@ -7629,7 +7630,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-17
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5983996` (QT3 Tier-2n/2o: harness dependency inheritance + fn:unparsed-text fixes)
 **Current focus:** **QT3 Tier-2n: test-set dependency inheritance** — `prod-AxisStep.static-typing` (15 tests) now correctly skipped via the inherited `staticTyping` feature dependency. Full QT3 suite execution is blocked by a pre-existing hang in `op-same-key` (28 tests); a run excluding that set yields **21,509 passed / 654 failed / 9,630 skipped** (67.65% of 31,793 tests). Unit tests remain **1,282/0**.
 
 ---
@@ -7653,7 +7654,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-16
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `9ac5b6e` (QT3 Tier-2m: fn:transform option handling)
 **Current focus:** **QT3 `fn:transform` Tier-2m suite: 117 passed / 0 failed / 7 skipped** — full option surface now implemented; 7 skipped tests depend on unsupported features (schema awareness, saxon-specific extensions, XSLT 1.0 source-required behavior). QT3 XPath 3.1 suite remains **21,838 passed / 699 failed / 9,284 skipped (68.63%)**.
 
 ---
@@ -7690,7 +7691,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-16
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `0ae8739` (QT3 Tier-2l: format picture/locale fixes)
 **Current focus:** **QT3 XPath 3.1 suite: 21,838 passed / 699 failed / 9,284 skipped (68.63%)** — up from 21,798/739 (68.50%): **+40 net passes, zero regressions** (name-level diff vs `tmp/fails-t2k.txt`: 42 format picture/locale failures fixed, 2 time-dependent `millisecs-*` tests newly failing). Tier-2l target pool CLEARED: `fn-format-date`/`fn-format-dateTime`/`fn-format-time`/`fn-format-integer` picture+locale fixes (~42 tests). Unit tests 1,282/0 (+32). Deferred (unchanged): fn-transform (61), fn-load-xquery-module (31), ST-Axes (15), fn-id/idref-dtd (27), fn-unparsed-text* (23), collection/fn-collection (18), xs-numeric (10), K-NumericIntegerDivide (9), cbcl-* (8), fn-function-lookup (7), K2-SeqIDFunc (6), K2-NumericMod (6), K-SeqIndexOfFunc (6).
 
 ---
@@ -7714,7 +7715,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-16
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `063e908` (QT3 Tier-2k: validation & type-strictness sweep)
 **Current focus:** **QT3 XPath 3.1 suite: 21,798 passed / 739 failed / 9,284 skipped (68.50%)** — up from 21,688/849 (68.16%): **+110 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2j-full.log`). Tier-2k target pools CLEARED: K2-SeqExprInstanceOf (16), eqname (11), K-QuantExprWithout (9), K-ValCompTypeChecking (9), K-GenCompEq (4) + GenCompEq-3/5, K-RangeExpr (4) + K2-RangeExpr (2), round family (9: fn-round2args-2, fn-round-half-to-even-30..35, cbcl-001/012), fn-outermost/innermost validation (8), plus bonus (K-GenCompGT/GTEQ/LT/LTEQ/NE 20, K-FilterExpr-91, K-ForExprWithout 3, cbcl-treat-as 2, instanceof110, predicates-33..36, K-SeqSUMFunc-33, fn-sum-7/9/10, …). Unit tests 1,250/0 (+64). Deferred (unchanged): fn-has-children (8) + outermost/innermost-018..021 (8) namespace-axis cluster; RangeExpr-409* BigInteger; LetExpr020a tradeoff. Next pools: fn-transform (61, genuine XSLT), fn-load-xquery-module (31), format-date/time/dateTime/integer picture+locale (~42), ST-Axes (15, XPST0005), fn-id/idref-dtd (27, harness-skip candidate via test-set dependency propagation), fn-unparsed-text* (23), collection/fn-collection (18), xs-numeric (10), K-NumericIntegerDivide (9, BigInteger), cbcl-* (8), fn-function-lookup (7), K2-SeqIDFunc (6), K2-NumericMod (6), K-SeqIndexOfFunc (6).
 
 ---
@@ -7747,7 +7748,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 ---
 
 **Date:** 2026-07-16
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e5bcb6c` (QT3 Tier-2j: FLWOR completion)
 **Current focus:** **QT3 XPath 3.1 suite: 21,688 passed / 849 failed / 9,284 skipped (68.16%)** — up from 21,543/994 (67.70%): **+146 fixed, 1 documented spec-superset tradeoff** (name-level diff vs `tmp/qt3-t2i-full.log`). FLWOR pool CLEARED: K-ForExprPositionalVar (29), statictyping (23), K-WhereExpr (11), whereClause (10) = 73/73, plus 73 bonus (WhereExpr 7, fn-abs-more-args 10, K-LogicExpr 7, cbcl-hash-join 6, K-Numeric* 11, K-SeqSUMFunc 4, K-SeqAVGFunc 2, K-QuantExprWithout 2, LetExpr 2, K2-ForExprPositionalVar 2, op-numeric-* 6, …). Unit tests 1,186/0 (+40). **Tradeoff:** `LetExpr020a` expects XPST0003 for chained `let` clauses (XPath 3.0/3.1 grammar restriction); Bosak intentionally implements the XQuery FLWOR superset (chains required by statictyping-21 et al.) — the two are mutually exclusive under one grammar. Next pools: fn-transform (61, genuine XSLT), format-date/time/dateTime/integer picture+locale (~42), K2-SeqExprInstanceOf (16, string-derived type chain missing in `GetDirectSupertypes`), RangeExpr/K-RangeExpr (16, XPTY0004 operand validation), fn-outermost/innermost (16), collection/fn-collection FODC (18), eqname (13, whitespace in `Q{ uri }local`), BigInteger/arbitrary-precision decimal (12+, deferred — same-key-008 needs it).
 
 ---
@@ -7776,7 +7777,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `56bd57d` (QT3 Tier-2i: MapTest/ArrayTest pool)
 **Current focus:** **QT3 XPath 3.1 suite: 21,543 passed / 994 failed / 9,284 skipped (67.70%)** — up from 21,454/1,083 (67.42%): **+89 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2h-full.log`). MapTest/ArrayTest pool CLEARED (all 86 + 3 bonus: instanceof128/129/130, same-key-004/005/021, d1e77419). Unit tests 1,146/0 (+59). Next pools: K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), format-date/time picture+locale (~50), collection/fn-doc FODC000x (11), cbcl-castable (8), duration arith FODT0002 (8), BigInteger/arbitrary-precision decimal (12+, deferred — same-key-008 needs it).
 
 ---
@@ -7812,7 +7813,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6c30c3e` (QT3 Tier-2h: fn:serialize full Serialization 3.1 + map-constructor XQDY0137)
 **Current focus:** **QT3 XPath 3.1 suite: 21,454 passed / 1,083 failed / 9,284 skipped (67.42%)** — up from 21,387/1,150/9,284 (67.21%): **+67 fixed, zero regressions** (name-level diff vs `tmp/qt3-t2g-final2.log`: fn-serialize pool CLEARED 56/0 → 119/119 in filtered run, +11 bonus map-constructor duplicate-key tests: MapConstructor-036/037/038/041/042, map-for-each-007, map-keys-007, map-size-007, same-key-003/027/028). Unit tests 1,087/0 (+19 serialize). Next pools: MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 
 ---
@@ -7838,7 +7839,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `930437c` (QT3 Tier-2g: fn:json-to-xml on JsonReader + canonical assert-xml)
 **Current focus:** **QT3 XPath 3.1 suite: 21,387 passed / 1,150 failed / 9,284 skipped (67.21%)** — up from 21,355/1,179/9,287 (67.11%): **+29 fixed, zero regressions** (name-level diff: json-to-xml 20 (pool cleared: 79/0), json-doc-012/error-016/error-026, plus comparer bonuses fn-doc-25/26/29, parse-xml-006/013, xml-to-json-017). Unit tests 1,068/0 (+11). Next pools: serialize-xml (37), MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 
 ---
@@ -7864,7 +7865,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6d873ba` (QT3 Tier-2f: fn:parse-json rewrite + fn:transform stylesheet-base-uri)
 **Current focus:** **QT3 XPath 3.1 suite: 21,355 passed / 1,179 failed / 9,287 skipped (67.11%)** — up from 21,311/1,224/9,286 (66.97%): **+45 fixed, zero regressions** (name-level diff vs Tier-2e: 45 fixed — 31 fn-parse-json + 5 fn-json-doc + duplicates/retain cluster + fn-transform-err-9a — 0 new; one fix moved a test fail→skip). Unit tests 1,057/0 (+21 parse-json). Next pools: serialize-xml (37), MapTest/ArrayTest (34), K-ForExprPositionalVar (29: parser lacks `at $pos`), fn-transform (57, genuine XSLT), json-to-xml (20: switch to JsonReader — root causes known), the Tier-2a-exposed gaps (format-date/time picture+locale ~50, collection/fn-doc FODC000x 11, cbcl-castable 8, duration arith FODT0002 8, BigInteger 12 deferred).
 
 ---
@@ -7892,7 +7893,7 @@ Scattered `fn-root`/`fn-name`/`fn-local-name` context-item error checks, and `fn
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a3be343` (QT3 Tier-2e: fn:min/fn:max — untypedAtomic→double, NaN propagation)
 **Current focus:** **QT3 XPath 3.1 suite: 21,311 passed / 1,224 failed / 9,286 skipped (66.97%)** — up from 21,266/1,269 (66.83%): **+45 fixed, zero regressions** (K-SeqMAX/MINFunc cluster + fn-min/fn-max). Unit tests 1,044/0 (+8 min/max).
 
 Tier-2e details: untypedAtomic→xs:double cast (invalid → FORG0001); any float/double/NaN or untypedAtomic → double path with NaN propagation; xs:string/QName/boolean mixed with numerics → FORG0006; homogeneous strings via collation; generic xs:duration (years+days, e.g. "P1Y1M1D") not orderable → FORG0006 (fn-max-9/fn-min-9); booleans-only still work (cbcl-max-019).
@@ -7900,7 +7901,7 @@ Tier-2e details: untypedAtomic→xs:double cast (invalid → FORG0001); any floa
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `eb8e5d5` (QT3 Tier-2d: fn:xml-to-json — F+O §17.5.4 spec compliance)
 **Current focus:** **QT3 XPath 3.1 suite: 21,266 passed / 1,269 failed / 9,286 skipped (66.83%)** — up from 21,218/1,317/9,286 (66.68%): **+48 passed, zero regressions** (name-level diff: 48 fixed — 46 xml-to-json cluster + CastAs014/096 — 0 new). Unit tests 1,036/0 (+8 xml-to-json). Next pools: serialize-xml (37), fn-parse-json (31: escape round-trip), K-ForExprPositionalVar (29: parser lacks `at $pos`), K-SeqMAX/MINFunc (39: untypedAtomic→double), MapTest/ArrayTest (34), fn-transform (57, genuine XSLT). xml-to-json remainder: xml-to-json-017 only.
 
 ---
@@ -7921,7 +7922,7 @@ Tier-2e details: untypedAtomic→xs:double cast (invalid → FORG0001); any floa
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `bb16583` (QT3 Tier-2c: `?` lookup operator — UnaryLookup parsing + spec-complete VM semantics)
 **Current focus:** **QT3 XPath 3.1 suite: 21,218 passed / 1,317 failed / 9,286 skipped (66.68%)** — up from 21,145/1,390/9,286 (66.45%): **+73 passed, zero regressions** (73 fixed, 0 new). Unit tests 1,028/0 (+8 lookup VM, +6 parser). Next pools: xml-to-json (43: `//*:template` paths + escape), serialize-xml (37), fn-parse-json (31: escape round-trip), K-ForExprPositionalVar (29: parser lacks `at $pos`), K-SeqMAX/MINFunc (39: untypedAtomic→double), MapTest/ArrayTest (34), fn-transform (57, genuine XSLT).
 
 ---
@@ -7943,7 +7944,7 @@ Tier-2e details: untypedAtomic→xs:double cast (invalid → FORG0001); any floa
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d1387bc` (QT3 Tier-2b: function-item registry — map:find, spec-correct dynamic-call param kinds)
 **Current focus:** **QT3 XPath 3.1 suite: 21,145 passed / 1,390 failed / 9,286 skipped (66.45%)** — up from 21,081/1,454/9,286 (66.25%): **+64 passed, zero regressions** (name-level diff: 64 fixed, 0 new failures). Unit tests 1,014/0 (+4 map:find). Next pools: `?` lookup operator semantics (Lookup/UnaryLookup ~65 — UnaryLookup parser gap fixed, VM semantics in flight); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps.
 
 ---
@@ -7969,7 +7970,7 @@ Remaining in cluster: fn-function-lookup-018/022 (xml:base vs document base-uri 
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `cc7c87c` (QT3 Tier-2a: OverflowException→FOAR0002 + external `<param select>` binding)
 **Current focus:** **QT3 XPath 3.1 suite: 21,081 passed / 1,454 failed / 9,286 skipped (66.25%)** — up from 20,684/1,361/9,776 (65.0%): **+397 passed, −490 skips, zero regressions** (name-level diff: all 93 new failures are previously-skipped tests now exposing genuine engine gaps, listed below). Unit tests 1,010/0. Next pools: map:find#2 + fn-function-lookup/function-literal function items (~65); `?` lookup operator (Lookup/UnaryLookup ~65); xml-to-json options (43); serialize (37); the Tier-2a-exposed gaps below.
 
 ---
@@ -7998,7 +7999,7 @@ Remaining in cluster: fn-function-lookup-018/022 (xml:base vs document base-uri 
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `8d9aab9` (QT3 Tier-1 harness cluster: assert-count/permutation, $var sources, XQuery detection)
 **Current focus:** **QT3 XPath 3.1 suite: 20,684 passed / 1,361 failed / 9,776 skipped (65.0%)** — up from 20,294/1,985/9,542 (63.8%): **+390 passed, −624 failed** (641 fixed; 17 new failures, all genuine newly-exposed engine gaps, listed below). Unit tests 1,010/0 (harness-only change).
 
 ---
@@ -8024,7 +8025,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `36ded23` (QT3 URI-mapping cluster: 2,106 UriFormatException skips cleared)
 **Current focus:** **QT3 XPath 3.1 suite: 20,294 passed / 1,985 failed / 9,542 skipped (63.78%)** — up from 18,698/1,742/11,381 (58.76%): **+1,596 passed, −1,839 skipped, zero regressions** (name-level diff per run; all new failures are previously-skipped tests now exposing genuine gaps). XSLT 3.0 suite smoke green (transform 9/9, json 10/0, analyze-string 53/0). Unit tests 1,010/0. Next QT3 pools: ~90 OverflowException→FOAR0002 (numeric range), 189 invalid assert-count + 72 assert-permutation (harness asserts), 460 external-variable binding, json-doc option semantics (escape/duplicates, FOJS0005, XPTY0004), map:find#2 function items, fn:unparsed-text residual (comparator newline quirk, flaky w3.org fetches for repo-missing files), fn:transform XSLT feature gaps (54).
 
 ---
@@ -8054,7 +8055,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c1ec4b0` (QT3 fn:transform harness registration + skip-reason inventory)
 **Current focus:** **QT3 fn:transform now registered in the conformance harness** — fn-transform set: **33 passed / 54 failed / 37 skipped** (was ~0 passing, all XPST0017). Remaining 54 failures are genuine XSLT feature gaps (stylesheet-node as parsed doc, static-base-uri, xsl:result-document, stylesheet params). **Skip-reason inventory revealed the next big fish: 2,106 skips from `Harness error: UriFormatException`** — the QT3 harness resolves `http://www.w3.org/qt3/...` doc/JSON URIs as local filesystem paths; mapping those to suite files should recover tests in bulk. Other recoverable skip pools: ~90 OverflowException (should be FOAR0002), ~40 JsonReaderException (should be FOJS0001), FileNotFoundException (should be FODC0002), 138 invalid assert-count + 50 assert-permutation (harness assert support), 460 external-variable binding.
 
 ---
@@ -8073,7 +8074,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 ---
 
 **Date:** 2026-07-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7865cab` (QT3 regex/string quick-wins cluster)
 **Current focus:** **QT3 XPath 3.1 suite: 18,698 passed / 1,742 failed / 11,381 skipped (58.76%)** — up from 18,482/1,940/11,399 (58.08%) at session start (+216 passed, −198 failed, zero regressions). XSLT 3.0 suite remains 7,109/0/7,491 (100% runnable). Next QT3 clusters: fn:transform (61), fn:unparsed-text (54), fn:parse-xml/json (32), fn:load-xquery-module (31), fn:function-lookup (29), serialize (17), op/xs-numeric (22), map:find (10), fn:normalize-space residuals; caseless 'i'-flag full case folding (needs CaseFolding data tables).
 
 ---
@@ -8114,7 +8115,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 ---
 
 **Date:** 2026-07-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `67a0a3d` (unicode-90 conformance set — suite still 100% green)
 **Current focus:** **W3C XSLT 3.0 suite fully green: 7,109 passed / 0 failed / 7,491 skipped (100% of runnable tests).** unicode-90 (1,460 tests) now enabled: **1,365 passed / 0 failed / 95 skipped** — all skips are upstream test/data defects, documented in the harness. Next frontiers: error test-set (~385), import-schema (~185), streaming, principal `xsl:package`/`xsl:use-package`, or the QT3 XPath suite (~59%).
 
 ---
@@ -8159,7 +8160,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `dd094ff` (fn:transform completion — suite 100% green)
 **Current focus:** **W3C XSLT 3.0 suite fully green: 5,744 passed / 0 failed / 8,856 skipped (100% of runnable tests).** Next frontiers: big skip pools (unicode-90 collation ~1,460; error test-set ~385; import-schema ~185; streaming; principal `xsl:package`/`xsl:use-package`), or the QT3 XPath suite (~59%).
 
 ---
@@ -8204,7 +8205,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-14
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `ee4bfb7` (HOF unskip + snapshot cluster)
 **Current focus:** All W3C XSLT 3.0 failures cleared except the `fn:transform` set (transform-002..009). Next: implement `fn:transform` properly, or attack the big skip pools (unicode-90 collation 1,460; error test-set 385; import-schema 185; streaming; packages).
 
 ---
@@ -8253,7 +8254,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `2f57f4d` (select-cluster fix)
 **Current focus:** Continue clearing the remaining 5 W3C XSLT 3.0 conformance regressions: `attribute-0701`, `backwards-019b`, `include-0101`, `maps-017`, `merge-021`.
 
 ---
@@ -8284,7 +8285,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5278c7a` (bug-cluster fixes)
 **Current focus:** Continue clearing the remaining 6 W3C XSLT 3.0 conformance regressions; next recommended targets are the `select` singleton (`select-6101`) or `attribute-0701`.
 
 ---
@@ -8320,7 +8321,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6f8864b` (for-each-group dynamic-call fix)
 **Current focus:** Continue clearing the remaining 10 W3C XSLT 3.0 conformance regressions; next recommended targets are the `bug` cluster (3 failures) or the `select` pair.
 
 ---
@@ -8354,7 +8355,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** *(working tree contains uncommitted output-cluster fixes)*
 **Current focus:** Continue clearing the remaining 12 W3C XSLT 3.0 conformance regressions; next recommended targets are the `bug` cluster (3 failures) or the `select`/`for-each-group` pairs.
 
 ---
@@ -8388,7 +8389,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** *(working tree contains uncommitted normalize-unicode serializer fix)*
 **Current focus:** Continue clearing remaining W3C XSLT 3.0 conformance regressions; next target is the `output` cluster.
 
 ---
@@ -8420,7 +8421,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `1085aab` (working tree contains uncommitted xml-version harness fix)
 **Current focus:** Remaining scattered W3C XSLT 3.0 conformance regressions.
 
 ---
@@ -8446,7 +8447,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5ec7130` (working tree contains uncommitted mode-cluster harness fixes)
 **Current focus:** Remaining W3C XSLT 3.0 conformance failures in `xml-version` cluster and scattered regressions.
 
 ---
@@ -8487,7 +8488,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-12
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7b67f27` (working tree contains uncommitted namespace-inheritance fixes)
 **Current focus:** Remaining W3C XSLT 3.0 conformance failures in `character-map`, `mode`, and `xml-version` clusters.
 
 ---
@@ -8562,7 +8563,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-12
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5ccf24d`
 **Current focus:** Phase 5d `xsl:result-document` serialization — stabilizing XML declaration defaults and eliminating a catalog-run hang.
 
 ---
@@ -8642,7 +8643,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `99137f9`
 **Current focus:** Phase 3 XSLT serialization — encoding-aware output for unrepresentable characters and CDATA section splitting.
 
 ---
@@ -8682,7 +8683,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `cc29815`
 **Current focus:** Phase 2 XSLT serialization — `xsl:character-map` support and remaining character-map edge cases.
 
 ---
@@ -8727,7 +8728,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `208afca`
 **Current focus:** Phase 1 XSLT serialization core — XHTML5 DOCTYPE formatting, `html-version` validation, case-folding, namespace prefix stripping, and HTML void-element handling.
 
 ---
@@ -8769,7 +8770,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c600423`
 **Current focus:** Phase 1 XSLT serialization core — implemented serialization error validation (SESU0007 / SEPM0009) for the encoding batch.
 
 ---
@@ -8800,7 +8801,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fb63ac4`
 **Current focus:** Phase 1 XSLT serialization core — implemented default serialization method inference (output-0130).
 
 ---
@@ -8829,7 +8830,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `8184ea3`
 **Current focus:** Phase 1 XSLT serialization core — fixed `output-0131` (XHTML fragment with multiple top-level elements).
 
 ---
@@ -8859,7 +8860,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c1f2a89`
 **Current focus:** Phase 1 XSLT serialization core — fixed the final failing unit test for `cdata-section-elements` merging across multiple `xsl:output` declarations.
 
 ---
@@ -8889,7 +8890,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-10
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c66c77c`
 **Current focus:** Cleared the final W3C DocBook conformance failure (`docbook-001`). The full W3C XSLT 3.0 conformance suite now passes with 0 failures.
 
 ---
@@ -8918,7 +8919,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-09
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `197d3d3`
 **Current focus:** Cleared the W3C `catalog-006` and `catalog-007` self-tests. Down to 3 remaining W3C failures.
 
 ---
@@ -8953,7 +8954,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e72addd`
 **Current focus:** Fixed `normalize-unicode-014` by applying `xsl:output/@normalization-form` to HTML result-tree serialization. Down to 5 remaining W3C failures.
 
 ---
@@ -8988,7 +8989,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e624a9b`
 **Current focus:** Fixed `function-1014` (FXSL higher-order recursion) by expanding `__xdm_seq__` placeholders produced by `xsl:apply-templates` and `xsl:call-template` inside `xsl:function` bodies. Down to 7 remaining W3C failures.
 
 ---
@@ -9017,7 +9018,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `751853b`
 **Current focus:** Cleared the `unparsed-text`, `match`, `forwards`, `lre`, `whitespace`, `xslt-compat`, `for-each-group`, `square-array`, and `choose` conformance clusters; down to 8 remaining W3C failures.
 
 ---
@@ -9087,7 +9088,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-08
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `aeb9473`
 **Current focus:** Corrected harness principal-module selection; `package` cluster now cleanly skipped.
 
 ---
@@ -9124,7 +9125,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-08
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `25081df`
 **Current focus:** Cleared the W3C XSLT 3.0 `normalize-unicode` conformance cluster and fixed encoding/BOM handling in `Xml11Loader`.
 
 ---
@@ -9162,7 +9163,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c9bc188`
 **Current focus:** XML 1.1 node-provider layer implemented; `xml-version`, `namespace`, `document`, and `base-uri` conformance clusters cleared.
 
 ---
@@ -9206,7 +9207,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4c0591e`
 **Current focus:** Cleared the W3C XSLT 3.0 `xpath-compat` conformance cluster.
 
 ---
@@ -9241,7 +9242,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b46dbf6`
 **Current focus:** Cleared the W3C XSLT 3.0 `bug` conformance cluster.
 
 ---
@@ -9276,7 +9277,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-07
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `cc4f81f`
 **Current focus:** Cleared the W3C XSLT 3.0 `backwards` conformance cluster.
 
 ---
@@ -9311,7 +9312,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-06
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `0af53ac`
 **Current focus:** Cleared the W3C XSLT 3.0 `seqtor` conformance cluster.
 
 ---
@@ -9346,7 +9347,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-06
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d37424d`
 **Current focus:** Cleared the W3C XSLT 3.0 `version` conformance cluster; fixed full-suite regressions in `copy`, `iterate`, `on-empty`, `on-non-empty`, `seqtor`, `try`, `assert`, and `xslt-compat`.
 
 ---
@@ -9392,7 +9393,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-05
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `24cbb68`
 **Current focus:** Cleared the W3C XSLT 3.0 `avt` and `tunnel` conformance clusters; fixed `call-template` regression tests.
 
 ---
@@ -9438,7 +9439,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-05
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `7b71fcd`
 **Current focus:** Cleared the W3C XSLT 3.0 `collations` conformance cluster.
 
 ---
@@ -9498,7 +9499,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-04
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4ebe44b`
 **Current focus:** Cleared the W3C XSLT 3.0 `context-item` conformance cluster.
 
 ---
@@ -9557,7 +9558,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-03
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c813a2a`
 **Current focus:** Cleared the W3C XSLT 3.0 `import` conformance cluster and `apply-imports`.
 
 ---
@@ -9611,7 +9612,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-03
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b34baed`
 **Current focus:** Cleared the W3C XSLT 3.0 `expand-text` / `cvt` conformance cluster.
 
 ---
@@ -9661,7 +9662,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-03
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `04f348f`
 **Current focus:** Cleared the quick-win conformance clusters `available-system-properties`, `on-empty`, `copy`, and `where-populated`.
 
 ---
@@ -9715,7 +9716,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-07-02
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `28115da`
 **Current focus:** Cleared the W3C `seqtor` conformance cluster.
 
 ---
@@ -9769,7 +9770,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `fea9403`
 **Current focus:** Cleared the W3C `as`, `xml-to-json`, and `json-to-xml` conformance clusters.
 
 ---
@@ -9816,7 +9817,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-30
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `bf3da80` (with uncommitted changes)
 **Current focus:** Cleared the W3C `match` conformance cluster.
 
 ---
@@ -9859,7 +9860,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-30
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f475bdb` (with uncommitted changes)
 **Current focus:** Cleared the W3C `current-output-uri` conformance cluster and fixed `xsl:apply-templates` inside `xsl:function`.
 
 ---
@@ -9905,7 +9906,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `934dece` (with uncommitted changes)
 **Current focus:** Cleared the W3C `result-document` conformance cluster.
 
 ---
@@ -9951,7 +9952,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3b4c220` (with uncommitted changes)
 **Current focus:** Fixed the `param-0301` false circular-reference failure without regressing global-variable visibility inside `xsl:function` bodies.
 
 ---
@@ -9999,7 +10000,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `1d1a9ba`
 **Current focus:** Cleared the W3C `shadow` conformance cluster.
 
 ---
@@ -10039,7 +10040,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `ea4a529`
 **Current focus:** Cleared the W3C `apply-templates` conformance cluster.
 
 ---
@@ -10094,7 +10095,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c40350d`
 **Current focus:** Restored the W3C `catalog` self-test set and fixed the O(N²) slowness that made it hang after the `document()` base-URI changes.
 
 ---
@@ -10145,7 +10146,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e56b3e1`
 **Current focus:** Cleared the `number` cluster (6 runnable failures) by adding German/Italian word and ordinal formatting to `fn:format-integer` / `xsl:number`.
 
 ---
@@ -10195,7 +10196,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-28
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `68bc099`
 **Current focus:** Cleared the `snapshot` cluster (6 runnable failures) by fixing `fn:snapshot` in-scope namespace copying and top-level `xsl:namespace` item extraction.
 
 ---
@@ -10263,7 +10264,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `9b57cdf`
 **Current focus:** Cleared the medium `choose` cluster and committed the previously-uncommitted `data-manipulation` fix.
 
 ---
@@ -10334,7 +10335,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `bf533fe`
 **Current focus:** Cleared the remaining single-failure clusters `arrays`, `merge`, and `sort`.
 
 ---
@@ -10402,7 +10403,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `87bfa33`
 **Current focus:** Cleared the entire XSLT `math` conformance cluster (the final runnable failure `math-3701`) by refining XPath `xs:double`/`xs:float` serialization and fixing numeric function edge cases.
 
 ---
@@ -10471,7 +10472,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-27
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3eba8d9`
 **Current focus:** Cleared the entire XSLT `maps` conformance cluster (35 runnable failures) and fixed follow-up regressions in `mode`, `static`, `next-match`, and `arrays`.
 
 ---
@@ -10568,7 +10569,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `8860b60`
 **Current focus:** Cleared the entire XSLT `date` conformance cluster (46 runnable failures across `date` constructor/serialization and `format-date`/`format-date-en` picture-string formatting).
 
 ---
@@ -10637,7 +10638,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `18f53bd`
 **Current focus:** Cleared the remaining single-failure clusters (`attribute-0601`, `system-property-022`, `unparsed-text-lines-004`, `regex-026`); `call-template-0201` was already passing.
 
 ---
@@ -10701,7 +10702,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `4a9a568`
 **Current focus:** Cleared the last `mode` cluster failure (`mode-1105`) by fixing `TransformEngine.IsNodeAttached` so the root element of a source document is not treated as detached after whitespace stripping.
 
 ---
@@ -10753,7 +10754,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `defefde`
 **Current focus:** Fixed precedence-aware XTSE3450 conflict detection for static variables, clearing `use-when-0137` and `use-when-0138`.
 
 ---
@@ -10803,7 +10804,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `49a562a`
 **Current focus:** Cleared the `static` cluster (49/49), then picked off a quick win by whitelisting `xsl:use-attribute-sets` on literal result elements.
 
 ---
@@ -10878,7 +10879,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-26
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `04e9f0f`
 **Current focus:** Cleared the `use-when` conformance cluster and added static-expression infrastructure; `static` cluster is still being debugged.
 
 ---
@@ -10925,7 +10926,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `b807e325`
 **Current focus:** Cleared the `on-empty` and `on-non-empty` conformance clusters by rewriting sequence-constructor evaluation as an item-based pipeline with deferred conditional instruction processing.
 
 ---
@@ -10988,7 +10989,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f85fc4a`
 **Current focus:** Cleared the `accessor` conformance cluster by separating `document-uri` from `base-uri` and registering source documents for `fn:doc` identity.
 
 ---
@@ -11052,7 +11053,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-25
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `8e92420`
 **Current focus:** Fixed `call-template-0110`, hardened `xsl:try`/`xsl:catch`, cleared the `type` and `strip-space` clusters, and pushed the accumulated changes.
 
 ---
@@ -11148,7 +11149,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `09e53c5`
 **Current focus:** XSLT `initial-function` cluster now 35/35 passing.
 
 ---
@@ -11189,7 +11190,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c4424f1`
 **Current focus:** Quick sweep of small XSLT conformance failure clusters; fixed `function` and `validation` regressions.
 
 ---
@@ -11232,7 +11233,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `1510f3f`
 **Current focus:** XSLT `copy` cluster now 128/128 runnable passing (100%). Full suite re-run clean.
 
 ---
@@ -11279,7 +11280,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-15
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `c6001e0`
 **Current focus:** XSLT `format-date-en` cluster now 33/33 passing (100%).
 
 ---
@@ -11322,7 +11323,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `5123ed7`
 **Current focus:** `mode` + `initial-mode` cluster completed (122/0/66 runnable, 100% pass rate); committed and pushed.
 
 ---
@@ -11368,7 +11369,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `d05660c`
 **Current focus:** `message` cluster completed (45/0/0, 100% runnable); code committed.
 
 ---
@@ -11412,7 +11413,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `21701f9`
 **Current focus:** `analyze-string` cluster completed; regex handling centralized in `RegexHelper`.
 
 ---
@@ -11462,7 +11463,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `37c7a19`
 **Current focus:** xsl:merge support committed; full-suite baseline re-established. Next step is to diff and pick the next cluster.
 
 ---
@@ -11528,7 +11529,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `607fb88`
 **Current focus:** `function` cluster now fully green (0 runnable failures); `function-available` green.
 
 ---
@@ -11596,7 +11597,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** (working tree — previous commit `b0c339c`)
 **Current focus:** `attribute` cluster now green except for harness-level assertion gaps; `id` cluster fully green.
 
 ---
@@ -11643,7 +11644,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** (working tree — previous commit `70cad7b`)
 **Current focus:** Quick-win cluster sweep continued — `attribute-set` cluster now green, `attribute` and `id` clusters reduced to 1 failure each.
 
 ---
@@ -11691,7 +11692,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `6482dae`
 **Current focus:** Quick-win cluster sweep — `type-available`, `construct-node`, `match`, and `select` clusters now green; continuing with remaining 1–5 failure clusters.
 
 ---
@@ -11759,7 +11760,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<uncommitted>`
 **Current focus:** XSLT `variable` cluster now 106/108 passing (2 skipped); all previously failing variable-scope/EQName tests resolved.
 
 ---
@@ -11802,7 +11803,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<uncommitted>`
 **Current focus:** XSLT `accumulator` cluster now 17/17 runnable tests passing (sequence-constructor rule bodies, initial-value focus, map/array apply, root/path fixes).
 
 ---
@@ -11856,7 +11857,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<uncommitted>`
 **Current focus:** XSLT `sort` cluster now 80/80 passing after implementing the UCA `alternate=shifted`/`blanked` tie-breaker.
 
 ---
@@ -11891,7 +11892,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-13
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<uncommitted>`
 **Current focus:** XSLT `sort` cluster restored to 79/80 passing; only `sort-079` remains due to incomplete UCA `alternate=shifted` collation semantics.
 
 ---
@@ -11948,7 +11949,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `f54de46`
 **Current focus:** Cleared the remaining quick-win XSLT conformance clusters (`element`, `xsl-document`, `declared-modes`, `include`, `collection`).
 
 ---
@@ -12007,7 +12008,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e69746c`
 **Current focus:** Full W3C XSLT 3.0 conformance suite re-run after restoring the `for-each-group` cluster.
 
 ---
@@ -12060,7 +12061,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<uncommitted>`
 **Current focus:** XSLT `for-each-group` cluster restored to 78/85 passing (0 failed, 7 skipped). Fixed `for-each-group-089` by making `XDocumentNode` honor XDM node identity in `Equals`/`GetHashCode`, so accumulator values copied with `copy-accumulators="yes"` are found by `accumulator-after()`.
 
 ---
@@ -12079,7 +12080,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `3740328`
 **Current focus:** XSLT `string` cluster restored to 136/136 passing (100%). Fixed global sequence-constructor variables to evaluate with the initial context item, and made named-template entry points without a source document use an absent initial context item.
 
 ---
@@ -12107,7 +12108,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `a9916d1`
 **Current focus:** XSLT `key` cluster now 91/91 runnable passing (0 failed, 8 skipped). Match cluster remains 0 runnable failures. Restored composite keys, content-constructor key typing, document-order results, pattern focus isolation, and `key()` pattern validation.
 
 ---
@@ -12142,7 +12143,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-12
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `81c51b5`
 **Current focus:** XSLT `base-uri` cluster now 50/50 passing (100%), 5 skipped. Fixed `document('')` resolving against template's effective base URI, `xsl:copy` / `xsl:copy-of` preserving base URIs through copies, and built-in template rules propagating base URIs.
 
 ---
@@ -12234,7 +12235,7 @@ cbcl-distinct-values-003 (numeric coercion); fn-innermost/outermost-018..021 (na
 ---
 
 **Date:** 2026-06-11
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<uncommitted>`
 **Current focus:** XSLT `base-uri` cluster 50/50 passing (100%), 5 skipped. Fixed `document('')` against template effective base URI, `xml:*` prefix resolution, and base URI propagation through copies / built-in rules. Copy cluster improved as a side effect.
 
 ---
@@ -13007,7 +13008,7 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-24
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `<to be amended after commit>`
 **Current focus:** Quick sweep of small XSLT conformance failure clusters; fixed `function` and `validation` regressions.
 
 ---
@@ -13050,7 +13051,7 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 # Handover — Bosak XPath/XSLT Implementation
 
 **Date:** 2026-06-29
-**Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
+**Commit:** `e67eb9a` (with uncommitted changes)
 **Current focus:** Cleared the W3C `try` conformance cluster (35/35 runnable tests pass).
 
 ---
