@@ -1,5 +1,21 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-21 (fifteenth session)
+**Commit:** pending — si-message assert-message harness batch (hash recorded below after commit)
+**Current focus:** **REQ-092 harness batch — si-message-005..010 were a harness bug, not an engine bug.** The W3C catalog schema allows "additional messages beyond those expected", but the conformance harness matched `assert-message` #N positionally against message #N; the six tests emit 6–8 messages for 3–5 assertions. Investigation verified the engine is fully correct (streamed nodes inside `xsl:message` serialize with markup; mixed grounded+streamed sequences emit all messages; atomic content space-joined). Fix (Program.cs 3.49): each assert-message claims the first *unclaimed* message that satisfies it; extra messages allowed. Full XSLT sweep **10,208 passed / 67 failed / 4,325 skipped** — **+6/−6 vs the 10,202/73 baseline** (skips identical, per-set diff exactly si-message-005..010, zero sets worse). QT3 unchanged **31,142/0/679**; unit Xslt.Tests **522/522** (unchanged); build 0/0.
+**What was built:**
+- **Non-positional assert-message matching** (`tests/Bosak.Xslt.Conformance/Program.cs` 3.49, both `CompareSingleResult` overloads): each `assert-message` scans the emitted messages for the first unclaimed match and claims it; claimed indexes live in a static set keyed by the per-test `RecordingMessageListener.Messages` list identity (a new test gets a fresh list, resetting the set). The reference W3C runner does not check messages at all, so the catalog-schema doc is the semantic authority.
+- **No engine change** — verified via scratch runs that d-005..d-010 emit exactly the expected message content and counts (earlier apparent d-008 "truncation" was an artifact of truncated console output).
+**Verification:** full sweep 10,208/67/4,325 (+6/−6, per-set diff exactly the six targets, zero sets worse); si-message 11/11 in isolation; QT3 31,142/0/679 unchanged; Xslt.Tests 522/522; Release build 0/0.
+**Known gaps (documented, accepted):** the 67 sweep failures = the pre-existing documented set minus the 6 fixed — schema-gated XTSE1650 ~24, error-code alignment (sx-MapExpr/si-map XTDE3365/XTTE3375, 5), sx-treat/sx-instance-of treat-as singles (5), xml-to-json fn:escape XPath 4.0 family (4), si-iterate-005 and other one-offs.
+**Next steps (agreed direction):**
+1. **Error-code alignment for map constructors** (sx-MapExpr-007/008/009 + si-map-007/009, 5 tests): emit XTDE3365 for duplicate xsl:map keys and XTTE3375 for non-entry content, matching the XSLT-spec error codes; verify INTEGRATION.md's documented codes before changing the contract.
+2. 1.0 items unchanged: API freeze, version promotion, support channel; owner-side: ruleset `protect-main` (id 22255065), GitHub Release notes for v0.10.2-beta still to be pasted manually (gh token expired).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-21 (fourteenth session)
 **Commit:** `89744e1` — fix(xslt): xsl:break/xsl:next-iteration permitted inside xsl:if of xsl:iterate (XTSE3120)
 **Current focus:** **REQ-091 iterate batch — the spurious XTSE3120 on the idiomatic early-exit shape is fixed.** `ValidateIterateDescendants` (`TransformEngine.cs` 6.80) rejected `xsl:break`/`xsl:next-iteration` whose parent is `xsl:if`; XSLT 3.0 §8.4 permits that position, so every stylesheet using `<xsl:if test="..."><xsl:break/></xsl:if>` inside `xsl:iterate` failed to compile. One-word fix (`parentLocal == "if"` added to the allowed-parent list); runtime needed no changes — si-iterate-099 (`<xsl:break select="true()"/>` + `xsl:on-completion` early exit) passes, confirming select-valued break was already supported. Full XSLT sweep **10,202 passed / 73 failed / 4,325 skipped** — **+4/−4 vs the 10,198/77 analyzer-batch baseline** (skips identical, per-set diff clean: exactly si-iterate-013/094/099/140, zero sets worse). QT3 unchanged **31,142/0/679**; unit Xslt.Tests **522/522** (+4); build 0/0.

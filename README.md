@@ -273,7 +273,7 @@ The harness:
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
 | Pass Rate (XPath+XQuery) | **31,142 passed / 0 failed / 679 skipped** (97.87%) with strict error-code matching (2026-09-09) — **100%** of runnable tests pass |
 | **XSLT 3.0** | 224 test sets, 14,600 tests |
-| Pass Rate (XSLT) | **10,202 passed / 73 failed / 4,325 skipped** (99.3%, 2026-09-21, streaming Phases A–D live + si-fork residual batch + provider batch + use-when batch + su-filter/su-unclassified analyzer batch + si-iterate XTSE3120 batch) — failures triaged: schema-gated XTSE1650 (~24), assorted documented singles; see REQ-086/REQ-087/REQ-088/REQ-089/REQ-090/REQ-091 decision logs |
+| Pass Rate (XSLT) | **10,208 passed / 67 failed / 4,325 skipped** (99.3%, 2026-09-21, streaming Phases A–D live + si-fork residual batch + provider batch + use-when batch + su-filter/su-unclassified analyzer batch + si-iterate XTSE3120 batch + si-message assert-message batch) — failures triaged: schema-gated XTSE1650 (~24), assorted documented singles; see REQ-086/REQ-087/REQ-088/REQ-089/REQ-090/REQ-091/REQ-092 decision logs |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |
 | Unsupported Features | Schema awareness (in progress), XQuery-only dependencies |
 

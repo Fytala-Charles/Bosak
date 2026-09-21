@@ -145,6 +145,9 @@
 //                      | Charles Korthout | 3.48  | 21-09-2026     | Streamed-source tests request rawResult so tree assertions (count(/out/text())) see   |
 //                      |                  |       |                | the result document instead of a serialized string (si-fork-809)                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.49  | 21-09-2026     | assert-message matching is non-positional: each assert-message claims a distinct      |
+//                      |                  |       |                | emitted message; extra messages are allowed (si-message-005..010)                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -182,6 +185,11 @@ class Program
     static int Passed = 0;
     static int Failed = 0;
     static int Skipped = 0;
+    // assert-message matching state: the messages list of the test currently being
+    // compared and the indexes already claimed by an assert-message. Each test run
+    // gets a fresh RecordingMessageListener, so a new list identity resets the set.
+    static List<string>? _assertClaimedMessages;
+    static readonly HashSet<int> _assertClaimedIndexes = new();
     static string? _testNameFilter = null;
     static string? _testSetFilter = null;
 
@@ -1977,13 +1985,27 @@ class Program
         var assertMessage = resultElem.Name.LocalName == "assert-message" ? resultElem : resultElem.Element(ns + "assert-message");
         if (assertMessage != null)
         {
-            if (messages == null || messageIndex >= messages.Count)
+            // W3C semantics (catalog-schema assert-message): each assert-message must be
+            // satisfied by at least one emitted message, and tests are free to output
+            // additional messages beyond those expected. Matching is non-positional; each
+            // message satisfies at most one assert-message per test (si-message-005..010
+            // emit six/eight messages for three/five assertions).
+            if (messages == null)
                 return false;
-            var messageText = messages[messageIndex];
-            if (CompareMessageAssertion(messageText, assertMessage, ns, testSetDir, catalogDir))
+            if (!ReferenceEquals(_assertClaimedMessages, messages))
             {
-                messageIndex++;
-                return true;
+                _assertClaimedMessages = messages;
+                _assertClaimedIndexes.Clear();
+            }
+            for (var i = 0; i < messages.Count; i++)
+            {
+                if (_assertClaimedIndexes.Contains(i))
+                    continue;
+                if (CompareMessageAssertion(messages[i], assertMessage, ns, testSetDir, catalogDir))
+                {
+                    _assertClaimedIndexes.Add(i);
+                    return true;
+                }
             }
             return false;
         }
@@ -2214,12 +2236,24 @@ class Program
         {
             if (messages == null || messageIndex >= messages.Count)
                 return false;
-
-            var messageText = messages[messageIndex];
-            if (CompareMessageAssertion(messageText, assertMessage, ns, testSetDir, catalogDir))
+            // Non-positional, distinct-message matching — see the CompareSingleResult
+            // (XdmValue) assert-message branch for the rationale.
+            if (messages == null)
+                return false;
+            if (!ReferenceEquals(_assertClaimedMessages, messages))
             {
-                messageIndex++;
-                return true;
+                _assertClaimedMessages = messages;
+                _assertClaimedIndexes.Clear();
+            }
+            for (var i = 0; i < messages.Count; i++)
+            {
+                if (_assertClaimedIndexes.Contains(i))
+                    continue;
+                if (CompareMessageAssertion(messages[i], assertMessage, ns, testSetDir, catalogDir))
+                {
+                    _assertClaimedIndexes.Add(i);
+                    return true;
+                }
             }
             return false;
         }
