@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-21 (fifteenth session)
-**Commit:** pending — si-message assert-message harness batch (hash recorded below after commit)
+**Commit:** `e8828e6` — test(conformance): non-positional assert-message matching (si-message batch)
 **Current focus:** **REQ-092 harness batch — si-message-005..010 were a harness bug, not an engine bug.** The W3C catalog schema allows "additional messages beyond those expected", but the conformance harness matched `assert-message` #N positionally against message #N; the six tests emit 6–8 messages for 3–5 assertions. Investigation verified the engine is fully correct (streamed nodes inside `xsl:message` serialize with markup; mixed grounded+streamed sequences emit all messages; atomic content space-joined). Fix (Program.cs 3.49): each assert-message claims the first *unclaimed* message that satisfies it; extra messages allowed. Full XSLT sweep **10,208 passed / 67 failed / 4,325 skipped** — **+6/−6 vs the 10,202/73 baseline** (skips identical, per-set diff exactly si-message-005..010, zero sets worse). QT3 unchanged **31,142/0/679**; unit Xslt.Tests **522/522** (unchanged); build 0/0.
 **What was built:**
 - **Non-positional assert-message matching** (`tests/Bosak.Xslt.Conformance/Program.cs` 3.49, both `CompareSingleResult` overloads): each `assert-message` scans the emitted messages for the first unclaimed match and claims it; claimed indexes live in a static set keyed by the per-test `RecordingMessageListener.Messages` list identity (a new test gets a fresh list, resetting the set). The reference W3C runner does not check messages at all, so the catalog-schema doc is the semantic authority.
