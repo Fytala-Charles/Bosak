@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-21 (fourteenth session)
-**Commit:** pending — si-iterate XTSE3120 batch (hash recorded below after commit)
+**Commit:** `89744e1` — fix(xslt): xsl:break/xsl:next-iteration permitted inside xsl:if of xsl:iterate (XTSE3120)
 **Current focus:** **REQ-091 iterate batch — the spurious XTSE3120 on the idiomatic early-exit shape is fixed.** `ValidateIterateDescendants` (`TransformEngine.cs` 6.80) rejected `xsl:break`/`xsl:next-iteration` whose parent is `xsl:if`; XSLT 3.0 §8.4 permits that position, so every stylesheet using `<xsl:if test="..."><xsl:break/></xsl:if>` inside `xsl:iterate` failed to compile. One-word fix (`parentLocal == "if"` added to the allowed-parent list); runtime needed no changes — si-iterate-099 (`<xsl:break select="true()"/>` + `xsl:on-completion` early exit) passes, confirming select-valued break was already supported. Full XSLT sweep **10,202 passed / 73 failed / 4,325 skipped** — **+4/−4 vs the 10,198/77 analyzer-batch baseline** (skips identical, per-set diff clean: exactly si-iterate-013/094/099/140, zero sets worse). QT3 unchanged **31,142/0/679**; unit Xslt.Tests **522/522** (+4); build 0/0.
 **What was built:**
 - **xsl:if accepted as a break/next-iteration parent** (`TransformEngine.cs` 6.80, `ValidateIterateDescendants`): the allowed-parent list now covers direct children of `xsl:iterate`, `xsl:when`/`xsl:otherwise`, `xsl:catch`, `xsl:try`, and `xsl:if`. The change is purely additive.
