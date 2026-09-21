@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-21 (tenth session)
-**Commit:** uncommitted (working tree — per instruction, no commit made)
+**Commit:** `d003b8b` — fix(xslt): si-fork residual batch (committed; full sweep re-verified after commit)
 **Current focus:** **si-fork residual batch — the 7 remaining W3C si-fork streaming failures fixed.** Full XSLT sweep **10,164 passed / 111 failed / 4,325 skipped** (+8/−8 vs the 10,156/119/4,325 baseline; zero sets worse — arithmetically guaranteed: passes +8 = failures −8, skips unchanged). si-fork set now **44 passed / 11 failed**, the 11 being the documented XTSE1650 schema-awareness artifacts (001–009, 901, 902). QT3 unchanged **31,142/0/679**; unit **2,453/0/0** (9 solution test projects; 8 new tests); build 0/0.
 **What was built:**
 - **Group-context isolation on template invocation** (`TransformEngine.cs` 6.77): `WithoutMergeContext` widened to `WithoutGroupAndMergeContext` — merge state plus `_currentGroup`/`_currentGroupingKey` saved/cleared/restored around `xsl:call-template` (main sequence-constructor path and the function-body `ProcessFunctionBodyNode` path) and around all `xsl:apply-templates` dispatch (`ProcessApplyTemplatesItem` wraps `ExecuteTemplate`/`ApplyBuiltInRules`; every apply-templates path flows through it). Templates invoked from a group body now see the group as absent: `current-group()`/`current-grouping-key()` raise XTDE1061/XTDE1071, caught by `xsl:catch` → `#absent#` (si-fork-113/114/115). The for-each-group body itself is deliberately untouched — `current-group()` stays available there.
