@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-21 (seventeenth session)
-**Commit:** *(pending — see git log after the batch commit)*
+**Commit:** `09cc8e1` — fix(parser): braced-URI function calls in step position misparsed as kind tests
 **Current focus:** **REQ-094 braced-EQName batch — braced-URI function calls in step position were misparsed as kind tests; +5/−5.** `ParseStepExpr` decides kind-test vs function call via `SplitQName`, which drops the URI of a `Q{uri}local` name — so `Q{f}text('x')` after `!` or `/` routed to the `text()` kind-test production and evaluated `child::text()[('x')]` over the context items instead of calling the function. Symptom triage via scratch repro: absent-context calls raised XPDY0002 (axis step needs a node), and `Q{f}text(string(.)||'$ ')` returned the PRICE elements' text children with the argument never evaluated. Fix (XPathParser.cs 1.58): a name starting with `Q{` is never a kind test — one condition. Primary-position braced calls (all QT3 EQName coverage) parse through `ParsePrimary` and were always correct. Full XSLT sweep **10,216 passed / 59 failed / 4,325 skipped** — **+5/−5 vs the 10,211/64 baseline** (skips identical, per-set diff exactly sx-treat-107/108/109 + sx-instance-of-107/108, zero sets worse). QT3 unchanged **31,142/0/679**; unit **2,479/2,479** across all projects (Parser 192, Xslt.Tests 522, LanguageServer 72); build 0/0.
 **What was built:**
 - **Kind-test routing fix** (`src/Bosak.XPath.Parser/Ast/XPathParser.cs` 1.58, `ParseStepExpr`): the kind-test shortcut excludes `Q{`-prefixed names; braced calls now fall through to `ParsePostfixExpr` → function call like prefixed calls.
