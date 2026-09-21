@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 5 September 2026
+> **Last updated:** 21 September 2026
 > **Bosak baseline:** 2,187 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
@@ -19,6 +19,8 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-09-21 (b)** — **Streaming provider batch** — four follow-ups to the burst-mode provider landed together: **(1) wrapper cache** — `StreamingSource.Wrap` now caches `StreamingNode` wrappers per underlying node in a `ConditionalWeakTable` (evicted with the record), so navigation allocates per node instead of per access while the 500k-record bounded-memory contract holds; **(2) pre-root comment/PI parity** — comments/PIs before the root element are captured into the shell document and surfaced as document-node children (children/child/descendant axes, document order before the root, document serialization); shell-root axes deliberately do not gain them; post-root comments/PIs remain unsurfaced; **(3) `fn:copy-of` deep-copy guard** — a provider-agnostic `IXdmNode`-based deep copy is the fallback for foreign-provider nodes, so `fn:copy-of` over streamed records returns grounded independent copies (document/root copies drain the stream, the documented "unbounded but correct" contract) instead of aliasing the live wrapper; **(4) `XsltExecutable.TransformStreamingToString`** — streaming input with the same output-property handling as `TransformToString`. Gates: full XSLT sweep **10,166/109/4,325** (+2 passes vs baseline, per-set diff clean), QT3 31,142/0/679 (unchanged), unit +13 (Providers 61, Xslt.Tests 509), build 0/0. See §3.2a.
 
 - **2026-09-16 (b)** — **Streaming Phase B: accumulators over streamed sources** — `xsl:accumulator` now works over burst-mode streamed input. Values are computed *push-style*: each accumulator's current value is carried across records in declaration order and per-node before/after values are attached as annotations (bounded — they die with the record). Document/root-level `accumulator-after` is a consuming read that drains the rest of the stream when nothing is mid-enumeration (XTDE3350 while consumed); record-level after values resolve on demand (cross-accumulator references in declaration order, cycle guard XTDE3400); rule and initial-value errors defer to the point of access per spec bug 29813. Also: `fn:snapshot` supports streamed nodes; the accumulator-rule `@match` validator was corrected (globals are in scope, `$value` is not — accumulator-034/091); per-record `xsl:strip-space` now also drops top-level whitespace text records (engine-owned). **W3C `decl/accumulator`: 93/0/14 — 100% of runnable.** Gates: QT3 31,142/0/679, XSLT 7,759/3/6,838, unit 2,279/0/0, build 0/0.
 
@@ -1822,6 +1824,10 @@ var executable = new XsltCompiler().Compile(xsl);
 using var source = File.OpenRead("orders-2gb.xml");
 var result = executable.TransformStreaming(source,
     new StreamingTransformOptions { BaseUri = "file:///data/orders-2gb.xml" });
+
+// Serialized directly (same output-property handling as TransformToString):
+string xml = executable.TransformStreamingToString(source2,
+    new StreamingTransformOptions { BaseUri = "file:///data/orders-2gb.xml" });
 ```
 
 The lower-level primitive is provider-neutral and works with plain XPath too:
@@ -1843,6 +1849,7 @@ IXdmNode doc = XmlStreamingProvider.Load(stream, new StreamingLoadOptions { Base
 | Spec-streaming multi-operand shapes (`//A \| //B`, `except`/`intersect`, `xsl:fork` branches, multi-entry `map{}`) via `xsl:source-document streamable="yes"` | Unbounded but correct — the engine opts into record retention (`StreamingLoadOptions.RetainRecords` / `IStreamingDocument.EnableReplay`): records are memoized so each operand replays the stream; memory is bounded by document size |
 | `fn:last()` in a streamed focus, a second pass over the streamed root, `preceding` axes across records, `following` axes past the current record | Clear `StreamingException`/error — never silently wrong data |
 | `xsl:accumulator` declarations | **Bounded** — values are pushed per record and travel as annotations; document-level `accumulator-after` drains the stream when nothing is mid-enumeration |
+| `fn:copy-of`/`xsl:copy-of` of a streamed node | Records: **bounded** (a grounded, detached copy of the record is built). Streamed document/root: unbounded but correct — the copy drains the stream into memory, the same contract as sorting |
 
 Notes and limitations: the streamed children of the root are **forward-only** (one pass).
 `xsl:strip-space`/`xsl:preserve-space` rules are applied per record (including top-level
@@ -1851,12 +1858,17 @@ must target accumulators declared **earlier**; accumulator rule and initial-valu
 surface at the point of access (spec bug 29813). DTDs are processed by default (matching
 the in-memory loader; unparsed entities are surfaced on the document node) — pass
 `ReaderSettings` with `DtdProcessing.Prohibit` to reject them. Comments/PIs before the
-root element are not surfaced. `fn:transform` with a streaming source is unsupported;
+root element are materialized eagerly and surfaced as document-node children before the
+root element (matching the in-memory provider); comments/PIs **after** the root element
+are not surfaced. Engine wrappers over streamed nodes are cached per underlying node
+(`ConditionalWeakTable`), so navigation allocates per node rather than per access without
+retaining released records. `fn:transform` with a streaming source is unsupported;
 `xsl:source-document streamable="yes"` is implemented since Streaming Phase C (spec
 constructs compile under the §19 streamability analyzer and execute at runtime, with
-record retention for multi-operand shapes as documented above). `fn:copy-of` returns the streamed
-node itself rather than a fresh copy (`xsl:copy-of` into the result tree works normally,
-and `fn:snapshot` deep-copies streamed nodes with their accumulator values).
+record retention for multi-operand shapes as documented above). `fn:copy-of` deep-copies
+streamed nodes into grounded copies (never returning the live streamed wrapper);
+`xsl:copy-of` into the result tree works normally, and `fn:snapshot` deep-copies
+streamed nodes with their accumulator values.
 
 ### 3.3 Named Templates & `call-template`
 
@@ -2035,7 +2047,7 @@ through `WithNamespace`.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Streaming input (burst mode) | ✅ Working | `XsltExecutable.TransformStreaming` + `XmlStreamingProvider`: record-at-a-time processing in bounded memory by default; forward-only root children; see §3.2a. Streaming accumulators (Phase B) work over the streamed source. `streamable="yes"` constructs receive compile-time XTSE3430 streamability analysis (Phase C, `StreamabilityAnalyzer` — §19 posture/sweep rules) and execute at runtime (Phase D: fused single-pass eager helpers, §11.7.3 content semantics, `fn:snapshot` grounding, opt-in record retention for crawling multi-operand shapes, streaming DTD). The current group is not visible inside templates invoked via xsl:call-template/xsl:apply-templates (dynamic XTDE1061/XTDE1071, XSLT 3.0 §14.4); current-group() in a streamable template with no group in scope is a static XTSE3430; fn:generate-id is stable across xsl:fork prongs; duplicate map-constructor keys inside xsl:fork raise XTDE3365. Full sweep 10,164/111/4,325; streamable `xsl:source-document` implemented; `xsl:supports-streaming` reports `yes` |
+| Streaming input (burst mode) | ✅ Working | `XsltExecutable.TransformStreaming`/`TransformStreamingToString` + `XmlStreamingProvider`: record-at-a-time processing in bounded memory by default; forward-only root children; pre-root comments/PIs surfaced as document children; per-node `StreamingNode` wrapper cache; see §3.2a. Streaming accumulators (Phase B) work over the streamed source. `streamable="yes"` constructs receive compile-time XTSE3430 streamability analysis (Phase C, `StreamabilityAnalyzer` — §19 posture/sweep rules) and execute at runtime (Phase D: fused single-pass eager helpers, §11.7.3 content semantics, `fn:snapshot` grounding, opt-in record retention for crawling multi-operand shapes, streaming DTD). `fn:copy-of` deep-copies streamed nodes into grounded copies (never the live wrapper). The current group is not visible inside templates invoked via xsl:call-template/xsl:apply-templates (dynamic XTDE1061/XTDE1071, XSLT 3.0 §14.4); current-group() in a streamable template with no group in scope is a static XTSE3430; fn:generate-id is stable across xsl:fork prongs; duplicate map-constructor keys inside xsl:fork raise XTDE3365. Full sweep 10,166/109/4,325; streamable `xsl:source-document` implemented; `xsl:supports-streaming` reports `yes` |
 | `xsl:template match="…"` | ✅ Working | Pattern compiler: element names, `*`, `@*`, predicates, union (`\|`) |
 | `xsl:template name="…"` | ✅ Working | Named template dispatch; raw XDM result via `XsltExecutable.Transform(..., rawResult: true)`; whitespace/EQName names normalized; `xsl:initial-template` permitted in XSLT namespace |
 | `xsl:call-template` | ✅ Working | With `xsl:with-param` support; matches named templates by expanded QName (different prefixes bound to the same URI); rejects template names in reserved namespaces (`XTSE0080`) except `xsl:initial-template` |

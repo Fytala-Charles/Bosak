@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 21-09-2026     | TransformStreamingToString parity tests                                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Core.Xdm;
@@ -280,5 +282,53 @@ public class StreamingTransformTests
         Assert.Equal(5, vCount);
         // Input side stays bounded: only the tiny result tree is retained.
         Assert.True(growth < 50_000_000, $"live growth {growth / 1_000_000.0:F1} MB exceeds the bounded-memory budget");
+    }
+
+    [Fact]
+    public void TransformStreamingToString_MatchesTransformStreamingPlusSerialization()
+    {
+        const string xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no" omit-xml-declaration="yes"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="/inventory/product">
+                  <item id="{@id}"><xsl:value-of select="name"/>|<xsl:value-of select="price"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+
+        var executable = new XsltCompiler().Compile(xsl);
+        var expected = executable
+            .TransformStreaming(new MemoryStream(Encoding.UTF8.GetBytes(Xml)))
+            .NodeValue!.ToXmlString();
+        var actual = executable.TransformStreamingToString(new MemoryStream(Encoding.UTF8.GetBytes(Xml)));
+
+        Assert.Equal(expected, actual);
+        Assert.Contains("<item id=\"1\">Hammer|9.99</item>", actual);
+    }
+
+    [Fact]
+    public void TransformStreamingToString_AppliesResultDocumentOutputProperties()
+    {
+        // A principal xsl:result-document overrides the stylesheet-level xsl:output,
+        // exactly as TransformToString does for in-memory sources.
+        const string xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:template match="/">
+                <xsl:result-document method="text">
+                  <xsl:for-each select="/inventory/product"><xsl:value-of select="name"/>,</xsl:for-each>
+                </xsl:result-document>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+
+        var executable = new XsltCompiler().Compile(xsl);
+        var streamed = executable.TransformStreamingToString(new MemoryStream(Encoding.UTF8.GetBytes(Xml)));
+        var inMemory = executable.TransformToString(Bosak.XPath.Providers.Xml.XDocumentProvider.ParseXml(Xml));
+
+        Assert.Equal(inMemory, streamed);
+        Assert.Equal("Hammer,Saw,Drill,", streamed);
     }
 }

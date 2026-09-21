@@ -16,6 +16,9 @@
 //                      | Charles Korthout | 0.2   | 17-09-2026     | Default reader settings parse DTDs (XmlUrlResolver) matching the in-memory load path,    |
 //                      |                  |       |                | so documents with a DOCTYPE load and expose unparsed entities (sf-unparsed-entity-01..08) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 21-09-2026     | Pre-root comments/PIs are captured into the shell document and surfaced on the document   |
+//                      |                  |       |                | axes; remarks updated                                                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using Bosak.XPath.Core.Xdm;
@@ -36,8 +39,10 @@ namespace Bosak.XPath.Providers.Streaming;
 /// current record) or would interleave with the active read (<c>following</c> axes past
 /// the current record) also throws. Operations that inherently need the whole input —
 /// sorting, grouping, <c>fn:last()</c> — still work but buffer the stream in memory.
-/// Comments and processing instructions before the root element and DTD entity
-/// declarations are not surfaced.
+/// Comments and processing instructions before the root element are materialized
+/// eagerly and surfaced as children of the document node (before the root element);
+/// comments and processing instructions after the root element are not surfaced, and
+/// DTD entity declarations are exposed only through the document's DTD properties.
 /// </remarks>
 public static class XmlStreamingProvider
 {

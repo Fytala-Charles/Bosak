@@ -39,6 +39,8 @@
 //                      | Charles Korthout | 1.12  | 16-09-2026     | Phase B: accumulators supported over streamed sources (guard removed); whitespace      |
 //                      |                  |       |                | stripping is engine-owned for all streamed sources                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.13  | 21-09-2026     | Added TransformStreamingToString (streaming input with serialized string output)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -151,6 +153,37 @@ public sealed class XsltExecutable
 
         var sourceNode = XmlStreamingProvider.Load(source, loadOptions);
         return Transform(sourceNode, context, initialTemplate, initialMode, baseOutputUri: baseOutputUri);
+    }
+
+    /// <summary>
+    /// Transforms a streamed source document using this stylesheet (burst-mode streaming
+    /// input) and serializes the result to a string. The source is pulled from
+    /// <paramref name="source"/> lazily: the root's top-level elements (records) are
+    /// materialized one at a time as the stylesheet consumes them, so record-at-a-time
+    /// processing runs in bounded memory (see <see cref="TransformStreaming"/> for the
+    /// full streaming contract). Output properties (including a principal
+    /// <c>xsl:result-document</c> and named character maps) are applied exactly as for
+    /// <see cref="TransformToString(IXdmNode?, EvaluationContext?, string?, string?, string?, Stylesheet.OutputProperties?)"/>.
+    /// </summary>
+    /// <param name="source">The stream containing the source XML document.</param>
+    /// <param name="options">Optional streaming options (base URI, reader settings).</param>
+    /// <param name="context">Optional evaluation context (variables, parameters, etc.).</param>
+    /// <param name="initialTemplate">Optional name of the initial template to execute.</param>
+    /// <param name="initialMode">Optional name of the initial mode to use.</param>
+    /// <param name="baseOutputUri">The base output URI for the transformation; used by fn:current-output-uri().</param>
+    /// <returns>The serialized result of the transformation.</returns>
+    public string TransformStreamingToString(System.IO.Stream source, StreamingTransformOptions? options = null, EvaluationContext? context = null, string? initialTemplate = null, string? initialMode = null, string? baseOutputUri = null)
+    {
+        options ??= new StreamingTransformOptions();
+        var loadOptions = new StreamingLoadOptions
+        {
+            BaseUri = options.BaseUri,
+            DocumentUri = options.BaseUri,
+            ReaderSettings = options.ReaderSettings,
+        };
+
+        var sourceNode = XmlStreamingProvider.Load(source, loadOptions);
+        return TransformToString(sourceNode, context, initialTemplate, initialMode, baseOutputUri);
     }
 
     /// <summary>

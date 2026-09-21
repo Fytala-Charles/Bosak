@@ -23,7 +23,12 @@
 //                      | Charles Korthout | 0.5   | 17-09-2026     | EnableReplay opts a not-yet-started stream into record retention so xsl:fork prongs can  |
 //                      |                  |       |                | each replay the record stream (si-fork-808/816)                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 21-09-2026     | Wrapper cache (ConditionalWeakTable on the shared XDocumentNode) so navigation wraps     |
+//                      |                  |       |                | per node, not per access; pre-root comments/PIs captured into the shell document and     |
+//                      |                  |       |                | surfaced on the document axes                                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
@@ -57,9 +62,17 @@ internal sealed class StreamingSource
     private readonly StreamingLoadOptions _options;
     private readonly XDocument _shellDoc;
     private readonly XElement _shellRoot;
+    private readonly List<XObject> _preRootNodes = new();
     private readonly StreamingNode _docNode;
     private readonly StreamingNode _rootNode;
     private readonly bool _rootEmpty;
+
+    // Wrapper cache keyed on the shared XDocumentNode (itself cached per XObject by
+    // XDocumentNode.Wrap). Each underlying XObject belongs to exactly one record with a
+    // fixed index, so the cached wrapper is always reached with the same recordIndex.
+    // ConditionalWeakTable gives automatic eviction when a released record is collected,
+    // preserving the bounded-memory contract for large streams.
+    private readonly ConditionalWeakTable<XDocumentNode, StreamingNode> _wrapperCache = new();
 
     private PumpState _pumpState = PumpState.NotStarted;
     private int _nextRecordIndex;
@@ -81,8 +94,9 @@ internal sealed class StreamingSource
         _retainedRecords = options.RetainRecords ? new List<XdmValue>() : null;
 
         // Read to the root element, capturing any DOCTYPE on the way. Comments and
-        // processing instructions before the root element are not surfaced (documented
-        // fidelity limitation of the streaming provider).
+        // processing instructions before the root element are materialized eagerly (they
+        // are typically tiny) and added to the shell document before the root, matching
+        // the in-memory provider's fidelity.
         while (reader.Read())
         {
             switch (reader.NodeType)
@@ -93,6 +107,12 @@ internal sealed class StreamingSource
                     PublicId = reader.GetAttribute("PUBLIC") ?? string.Empty;
                     SystemId = reader.GetAttribute("SYSTEM") ?? string.Empty;
                     InternalSubset = reader.Value ?? string.Empty;
+                    break;
+                case XmlNodeType.Comment:
+                    _preRootNodes.Add(new XComment(reader.Value ?? string.Empty));
+                    break;
+                case XmlNodeType.ProcessingInstruction:
+                    _preRootNodes.Add(new XProcessingInstruction(reader.Name ?? string.Empty, reader.Value ?? string.Empty));
                     break;
                 case XmlNodeType.Element:
                     goto FoundRoot;
@@ -121,6 +141,10 @@ FoundRoot:
         _rootEmpty = reader.IsEmptyElement;
 
         _shellDoc = new XDocument(_shellRoot);
+        // Pre-root comments/PIs are document-level children arriving before the root.
+        // Add them before registration so document-order ids place them before the root.
+        if (_preRootNodes.Count > 0)
+            _shellDoc.AddFirst(_preRootNodes);
         // Register first so the shell sorts before every record in document order.
         XDocumentNode.RegisterTree(_shellDoc);
 
@@ -142,6 +166,17 @@ FoundRoot:
     internal StreamingNode RootNode => _rootNode;
 
     internal XElement ShellRoot => _shellRoot;
+
+    /// <summary>The shell document holding the (empty) root element and the pre-root
+    /// comments/PIs. Used to recognize wrappers over shell-level nodes.</summary>
+    internal XDocument ShellXDocument => _shellDoc;
+
+    /// <summary>
+    /// The comments and processing instructions that preceded the root element in the
+    /// source, in document order. They are document-level children and sort before the
+    /// shell root in document order.
+    /// </summary>
+    internal IReadOnlyList<XObject> PreRootShellNodes => _preRootNodes;
 
     internal bool RootEmpty => _rootEmpty;
 
@@ -170,10 +205,17 @@ FoundRoot:
     /// <param name="inner">The shared <see cref="XDocumentNode"/> for the underlying object.</param>
     /// <param name="recordIndex">
     /// The arrival index of the top-level record the node belongs to (records and their
-    /// descendants), or -1 for the shell document and root.
+    /// descendants), or -1 for the shell document, the shell root, and pre-root
+    /// comments/PIs.
     /// </param>
+    /// <remarks>
+    /// The wrapper is cached per underlying object (see the class remarks): the same
+    /// inner node is always requested with the same index, so the cached instance is
+    /// valid. The cache is a <see cref="ConditionalWeakTable{TKey, TValue}"/> keyed on
+    /// the inner node, so wrappers of released records are collected with their record.
+    /// </remarks>
     internal StreamingNode Wrap(XDocumentNode inner, int recordIndex)
-        => new(this, inner, StreamingNodeRole.Record, recordIndex);
+        => _wrapperCache.GetValue(inner, k => new StreamingNode(this, k, StreamingNodeRole.Record, recordIndex));
 
     /// <summary>
     /// Returns true when the pump is mid-flight owned by another enumerator, which means

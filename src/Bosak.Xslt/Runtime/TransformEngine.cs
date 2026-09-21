@@ -353,6 +353,9 @@
 //                      | Charles Korthout | 6.78  | 21-09-2026     | xsl:fork branches evaluate with EvaluationContext.InStreamingMapContext so duplicate   |
 //                      |                  |       |                | map-constructor keys raise XTDE3365 instead of XQDY0137 (si-fork-814)                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.79  | 21-09-2026     | Streamed document-child scans skip pre-root comments/PIs when locating the shell root   |
+//                      |                  |       |                | (strip-space decision, accumulator start-phase annotations)                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16648,13 +16651,13 @@ public sealed class TransformEngine
             return false;
         foreach (var child in docNode.Axis(XdmAxis.Child))
         {
+            // Skip pre-root comments/PIs: the root element is the (sole) element child.
             if (child.IsNode && child.NodeValue is IStreamingNode { UnderlyingXObject: XElement rootElement })
             {
                 if (rootElement.Attribute(System.Xml.Linq.XNamespace.Xml + "space")?.Value == "preserve")
                     return false;
                 return ShouldStripWhitespace(rootElement, rules, isBackwardsCompatible);
             }
-            break;
         }
         return false;
     }
@@ -19231,6 +19234,7 @@ public sealed class TransformEngine
 
             foreach (var child in docNode.Axis(XdmAxis.Child))
             {
+                // Skip pre-root comments/PIs: the root element is the element child.
                 if (child.IsNode && child.NodeValue is IStreamingNode { UnderlyingXObject: XElement } rootWrapper)
                 {
                     _rootNode = rootWrapper;
@@ -19243,8 +19247,8 @@ public sealed class TransformEngine
                         _rootAnnotation.Values[state.Acc.ClarkName] = (state.Current, XdmValue.Undefined);
                         _rootAnnotation.AfterUnset.Add(state.Acc.ClarkName);
                     }
+                    break;
                 }
-                break;
             }
         }
 

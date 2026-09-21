@@ -17,6 +17,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 17-09-2026     | TryGetUnparsedEntity falls back to the streaming source's shell-document DTD entities    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 21-09-2026     | Document role surfaces pre-root comments/PIs (children, child/descendant axes,           |
+//                      |                  |       |                | serialization); shell-level wrappers route parent/ancestor/following-sibling to the      |
+//                      |                  |       |                | document/root correctly                                                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
@@ -65,6 +69,17 @@ internal class StreamingNode : IXdmNode, IStreamingNode
 
     /// <inheritdoc/>
     public XObject UnderlyingXObject => _inner.UnderlyingObject;
+
+    /// <summary>
+    /// True when this wrapper represents a pre-root comment or processing instruction
+    /// of the streamed document: a node whose containing document is the shell document.
+    /// Its parent chain is [document] — never the shell root — and it is not a record,
+    /// so record-local navigation must not apply to it.
+    /// </summary>
+    private bool IsShellChild
+        => _role == StreamingNodeRole.Record
+           && _inner.UnderlyingObject is XNode node
+           && ReferenceEquals(node.Document, _source.ShellXDocument);
 
     /// <summary>
     /// True when this wrapper represents a top-level record directly below the streamed
@@ -171,21 +186,57 @@ internal class StreamingNode : IXdmNode, IStreamingNode
     {
         StreamingNodeRole.Document => null,
         StreamingNodeRole.ShellRoot => _source.DocumentNode,
-        _ => IsTopLevelRecord
-            ? _source.RootNode
-            : _source.Wrap((XDocumentNode)_inner.Parent!, _recordIndex),
+        _ => IsShellChild
+            ? _source.DocumentNode
+            : IsTopLevelRecord
+                ? _source.RootNode
+                : _source.Wrap((XDocumentNode)_inner.Parent!, _recordIndex),
     };
 
     public IXdmNode? Document => _source.DocumentNode;
 
     public XdmSequence Children(XdmNodeKind kind = XdmNodeKind.All) => _role switch
     {
-        StreamingNodeRole.Document => MatchesKind(XdmNodeKind.Element, kind)
-            ? XdmSequence.Singleton(XdmValue.FromNode(_source.RootNode))
-            : XdmSequence.Empty,
+        StreamingNodeRole.Document => DocumentChildren(kind),
         StreamingNodeRole.ShellRoot => _source.ChildRecords(kind),
         _ => XdmSequence.FromSource(new EnumerableXdmSequence(WrapEach(_inner.Children(kind)))),
     };
+
+    /// <summary>
+    /// The children of the streamed document: the pre-root comments/PIs (if any),
+    /// followed by the root element. Records are children of the root, not the document.
+    /// </summary>
+    private XdmSequence DocumentChildren(XdmNodeKind kind)
+    {
+        var preRoot = _source.PreRootShellNodes;
+        bool includeRoot = MatchesKind(XdmNodeKind.Element, kind);
+        if (preRoot.Count == 0)
+        {
+            return includeRoot
+                ? XdmSequence.Singleton(XdmValue.FromNode(_source.RootNode))
+                : XdmSequence.Empty;
+        }
+        return XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateDocumentChildren(kind)));
+    }
+
+    private IEnumerable<XdmValue> EnumerateDocumentChildren(XdmNodeKind kind)
+    {
+        foreach (var item in EnumeratePreRootNodes(kind))
+            yield return item;
+        if (MatchesKind(XdmNodeKind.Element, kind))
+            yield return XdmValue.FromNode(_source.RootNode);
+    }
+
+    /// <summary>The pre-root comments/PIs whose kind matches <paramref name="kind"/>.</summary>
+    private IEnumerable<XdmValue> EnumeratePreRootNodes(XdmNodeKind kind)
+    {
+        foreach (var obj in _source.PreRootShellNodes)
+        {
+            var node = XDocumentNode.Wrap(obj);
+            if (MatchesKind(node.NodeKind, kind))
+                yield return XdmValue.FromNode(_source.Wrap(node, recordIndex: -1));
+        }
+    }
 
     public XdmSequence Attributes(string? localName = null, string? namespaceUri = null) =>
         _role == StreamingNodeRole.Document
@@ -199,9 +250,11 @@ internal class StreamingNode : IXdmNode, IStreamingNode
             case StreamingNodeRole.Document:
                 return axis switch
                 {
-                    XdmAxis.Child => XdmSequence.Singleton(XdmValue.FromNode(_source.RootNode)),
-                    XdmAxis.Descendant => _source.DescendantRecords(includeRoot: true),
-                    XdmAxis.DescendantOrSelf => Marked(EnumerateSelfThen(_source.DescendantRecords(includeRoot: true))),
+                    XdmAxis.Child => DocumentChildren(XdmNodeKind.All),
+                    // Both forward axes pull the record pump: keep them single-pass
+                    // marked so the VM's lookahead sees the same contract as before.
+                    XdmAxis.Descendant => Marked(EnumerateDocumentDescendants()),
+                    XdmAxis.DescendantOrSelf => Marked(EnumerateSelfThen(EnumerateDocumentDescendants())),
                     XdmAxis.Self => XdmSequence.Singleton(XdmValue.FromNode(this)),
                     _ => XdmSequence.Empty,
                 };
@@ -218,8 +271,9 @@ internal class StreamingNode : IXdmNode, IStreamingNode
                     XdmAxis.Parent => XdmSequence.Singleton(XdmValue.FromNode(_source.DocumentNode)),
                     XdmAxis.Ancestor => XdmSequence.Singleton(XdmValue.FromNode(_source.DocumentNode)),
                     XdmAxis.AncestorOrSelf => XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateSelfAndDocument())),
-                    // Nothing follows the root element; nodes before it (comments/PIs)
-                    // are not surfaced by the streaming provider.
+                    // Nothing follows the root element (post-root nodes are not surfaced),
+                    // and pre-root comments/PIs are not its siblings: they are children
+                    // of the document, never of the root.
                     _ => XdmSequence.Empty,
                 };
 
@@ -250,14 +304,20 @@ internal class StreamingNode : IXdmNode, IStreamingNode
             case XdmAxis.AncestorOrSelf:
                 return XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateAncestors(includeSelf: true)));
             case XdmAxis.FollowingSibling:
+                if (IsShellChild)
+                    return XdmSequence.Singleton(XdmValue.FromNode(_source.RootNode));
                 if (IsTopLevelRecord)
                     return CrossRecordForward();
                 return XdmSequence.FromSource(new EnumerableXdmSequence(InnerAxis(axis)));
             case XdmAxis.PrecedingSibling:
+                if (IsShellChild)
+                    return XdmSequence.Empty;
                 if (IsTopLevelRecord && _recordIndex > 0)
                     throw CrossRecordBackward();
                 return XdmSequence.FromSource(new EnumerableXdmSequence(InnerAxis(axis)));
             case XdmAxis.Following:
+                if (IsShellChild)
+                    throw CrossRecordForwardException();
                 return XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateFollowing()));
             case XdmAxis.Preceding:
                 if (_recordIndex > 0)
@@ -309,6 +369,14 @@ internal class StreamingNode : IXdmNode, IStreamingNode
         if (includeSelf)
             yield return XdmValue.FromNode(this);
 
+        if (IsShellChild)
+        {
+            // Pre-root comments/PIs are children of the document only; the shell root
+            // is not their ancestor.
+            yield return XdmValue.FromNode(_source.DocumentNode);
+            yield break;
+        }
+
         foreach (var item in _inner.Axis(XdmAxis.Ancestor))
         {
             var xn = (XDocumentNode)item.NodeValue!;
@@ -327,6 +395,18 @@ internal class StreamingNode : IXdmNode, IStreamingNode
     {
         yield return XdmValue.FromNode(this);
         yield return XdmValue.FromNode(_source.DocumentNode);
+    }
+
+    /// <summary>
+    /// The document's descendants in document order: pre-root comments/PIs first, then
+    /// the root element followed by all streamed records.
+    /// </summary>
+    private IEnumerable<XdmValue> EnumerateDocumentDescendants()
+    {
+        foreach (var item in EnumeratePreRootNodes(XdmNodeKind.All))
+            yield return item;
+        foreach (var item in _source.DescendantRecords(includeRoot: true))
+            yield return item;
     }
 
     private IEnumerable<XdmValue> EnumerateSelfThen(XdmSequence rest)
@@ -392,10 +472,30 @@ internal class StreamingNode : IXdmNode, IStreamingNode
             return _inner.ToXmlString();
 
         var shell = _source.ShellRoot;
-        if (_source.RootEmpty)
-            return shell.ToString(SaveOptions.DisableFormatting);
-
         var builder = new System.Text.StringBuilder();
+        if (_role == StreamingNodeRole.Document)
+        {
+            // Pre-root comments/PIs are document-level content and serialize before
+            // the root element; the shell root's serialization excludes them.
+            foreach (var obj in _source.PreRootShellNodes)
+            {
+                switch (obj)
+                {
+                    case XComment comment:
+                        builder.Append(comment.ToString(SaveOptions.DisableFormatting));
+                        break;
+                    case XProcessingInstruction pi:
+                        builder.Append(pi.ToString(SaveOptions.DisableFormatting));
+                        break;
+                }
+            }
+        }
+        if (_source.RootEmpty)
+        {
+            builder.Append(shell.ToString(SaveOptions.DisableFormatting));
+            return builder.ToString();
+        }
+
         var emptyShell = new XElement(shell.Name, shell.Attributes()).ToString(SaveOptions.DisableFormatting);
         builder.Append(emptyShell.AsSpan(0, emptyShell.Length - 2)).Append('>');
         _source.SerializeContent(builder);

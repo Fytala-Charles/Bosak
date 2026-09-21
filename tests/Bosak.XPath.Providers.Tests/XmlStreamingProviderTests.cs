@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 18-09-2026     | Updated DTD default tests: DTD now parsed by default; Prohibit remains configurable        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 21-09-2026     | Pre-root comment/PI surfacing, shell-child navigation, document-order, serialization,   |
+//                      |                  |       |                | and wrapper-cache tests                                                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using System.Xml;
@@ -282,5 +285,98 @@ public class XmlStreamingProviderTests
             kids.Select(k => k.NodeKind));
         Assert.Equal("note", kids[0].StringValue);
         Assert.Equal("pi", kids[1].LocalName);
+    }
+
+    [Fact]
+    public void PreRootCommentsAndPisSurfaceAsDocumentChildren()
+    {
+        var doc = LoadXml("<!--lead--><?config mode='x'?><r><a/></r>");
+        var kids = Nodes(doc.Axis(XdmAxis.Child));
+
+        Assert.Equal(3, kids.Count);
+        Assert.Equal(XdmNodeKind.Comment, kids[0].NodeKind);
+        Assert.Equal("lead", kids[0].StringValue);
+        Assert.Equal(XdmNodeKind.ProcessingInstruction, kids[1].NodeKind);
+        Assert.Equal("config", kids[1].LocalName);
+        Assert.Equal(XdmNodeKind.Element, kids[2].NodeKind);
+        Assert.Equal("r", kids[2].LocalName);
+    }
+
+    [Fact]
+    public void PreRootNodesSortBeforeRootAndRecordsInDocumentOrder()
+    {
+        var doc = LoadXml("<!--lead--><r><a/></r>");
+        var kids = Nodes(doc.Axis(XdmAxis.Child));
+        var record = Assert.Single(Nodes(kids[1].Axis(XdmAxis.Child)));
+
+        Assert.True(kids[0].DocumentOrder < kids[1].DocumentOrder,
+            "pre-root comment must sort before the root element");
+        Assert.True(kids[1].DocumentOrder < record.DocumentOrder,
+            "root element must sort before the first record");
+        Assert.True(doc.DocumentOrder < kids[0].DocumentOrder,
+            "document node must sort before its children");
+    }
+
+    [Fact]
+    public void PreRootNodesParentIsDocumentAndAncestorsExcludeRoot()
+    {
+        var doc = LoadXml("<!--lead--><r><a/></r>");
+        var comment = Nodes(doc.Axis(XdmAxis.Child))[0];
+
+        Assert.True(comment.Parent!.IsSameNode(doc));
+        var ancestors = Nodes(comment.Axis(XdmAxis.Ancestor));
+        var ancestor = Assert.Single(ancestors);
+        Assert.True(ancestor.IsSameNode(doc));
+
+        // Pre-root nodes are not children/siblings of the root element.
+        var root = Nodes(doc.Axis(XdmAxis.Child))[1];
+        Assert.Empty(Nodes(root.Axis(XdmAxis.PrecedingSibling)));
+        Assert.Single(Nodes(root.Axis(XdmAxis.Child)));
+        Assert.Empty(Nodes(comment.Axis(XdmAxis.PrecedingSibling)));
+        Assert.True(Nodes(comment.Axis(XdmAxis.FollowingSibling))[0].IsSameNode(root));
+    }
+
+    [Fact]
+    public void DocumentDescendantAxisYieldsPreRootNodesBeforeRoot()
+    {
+        var doc = LoadXml("<!--lead--><r><a/></r>");
+        var descendants = Nodes(doc.Axis(XdmAxis.Descendant));
+
+        Assert.Equal(XdmNodeKind.Comment, descendants[0].NodeKind);
+        Assert.Equal("lead", descendants[0].StringValue);
+        Assert.Equal(XdmNodeKind.Element, descendants[1].NodeKind);
+        Assert.Equal("r", descendants[1].LocalName);
+        Assert.Equal(XdmNodeKind.Element, descendants[2].NodeKind);
+        Assert.Equal("a", descendants[2].LocalName);
+    }
+
+    [Fact]
+    public void DocumentToXmlStringIncludesPreRootNodes()
+    {
+        var doc = LoadXml("<!--lead--><r><a>1</a></r>");
+        var xml = doc.ToXmlString();
+
+        Assert.StartsWith("<!--lead-->", xml);
+        Assert.Contains("<r", xml);
+        Assert.Contains("<a>1</a>", xml);
+        Assert.EndsWith("</r>", xml);
+    }
+
+    [Fact]
+    public void WrappersAreSharedPerUnderlyingNode()
+    {
+        var doc = LoadXml(Doc);
+        var root = Nodes(doc.Axis(XdmAxis.Child))[0];
+        var record = Nodes(root.Axis(XdmAxis.Child)).First(r => r.NodeKind == XdmNodeKind.Element);
+
+        // Reaching the same node from two navigation directions returns the cached
+        // wrapper instance, not a fresh allocation.
+        var name1 = Nodes(record.Axis(XdmAxis.Child)).First(v => v.LocalName == "name");
+        var name2 = Nodes(record.Axis(XdmAxis.Descendant)).First(v => v.LocalName == "name");
+        Assert.Same(name1, name2);
+
+        // ... and the child reached via Parent is the same instance as well.
+        var parent = name1.Parent!;
+        Assert.Same(record, parent);
     }
 }

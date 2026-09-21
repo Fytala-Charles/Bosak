@@ -335,6 +335,9 @@
 //                      | Charles Korthout | 5.108 | 21-09-2026     | fn:generate-id unwraps IStreamingNode to its underlying XObject so IDs are stable    |
 //                      |                  |       |                | across xsl:fork prongs replaying the same record (si-fork-801)                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.109 | 21-09-2026     | fn:copy-of deep-copy guard: provider-agnostic IXdmNode fallback in DeepCopyNode so     |
+//                      |                  |       |                | streamed (foreign-provider) nodes are grounded, never aliased live wrappers            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -14732,7 +14735,120 @@ public static class FunctionLibrary
                     return new Providers.Xml.XDocumentNode(new XAttribute(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value));
             }
         }
-        return null;
+        // Foreign providers (e.g. streaming wrappers): build a grounded copy off the
+        // provider-agnostic IXdmNode API so the result never aliases live source data.
+        // Copying a streamed document/root drains the stream into the copy — the same
+        // documented "unbounded but correct" contract as sorting over streams.
+        return DeepCopyForeignNode(node);
+    }
+
+    /// <summary>
+    /// Provider-agnostic deep copy used by <c>fn:copy-of</c> when the fast
+    /// <see cref="Providers.Xml.XDocumentNode"/> path does not apply. Works purely off
+    /// the <see cref="IXdmNode"/> axes, so any provider's nodes can be copied; the result
+    /// is always grounded in fresh LINQ-to-XML objects.
+    /// </summary>
+    /// <param name="node">The node to copy (any provider).</param>
+    /// <returns>The copied node as an <see cref="Providers.Xml.XDocumentNode"/>, or
+    /// <c>null</c> when the node kind has no copyable representation.</returns>
+    private static Providers.Xml.XDocumentNode? DeepCopyForeignNode(IXdmNode node)
+    {
+        switch (node.NodeKind)
+        {
+            case XdmNodeKind.Document:
+            {
+                var copy = new XDocument();
+                // Mirror the fast-path DeepCopyDocument contract: DOCTYPE first, then
+                // children, then base-uri and DTD unparsed-entity annotations so
+                // fn:unparsed-entity-uri/-public-id keep working on the grounded copy
+                // (sf-unparsed-entity-07).
+                if (node.HasDocumentType)
+                {
+                    copy.Add(new XDocumentType(
+                        node.DocumentTypeName,
+                        string.IsNullOrEmpty(node.PublicId) ? null : node.PublicId,
+                        string.IsNullOrEmpty(node.SystemId) ? null : node.SystemId,
+                        string.IsNullOrEmpty(node.InternalSubset) ? null : node.InternalSubset));
+                }
+                foreach (var child in EnumerateNodes(node.Children()))
+                {
+                    if (DeepCopyForeignNode(child) is not { } copied)
+                        continue;
+                    switch (copied.UnderlyingObject)
+                    {
+                        case XElement elem:
+                            copy.Add(elem);
+                            break;
+                        case XComment comment:
+                            copy.Add(comment);
+                            break;
+                        case XProcessingInstruction pi:
+                            copy.Add(pi);
+                            break;
+                        case XText text when text.Value.All(char.IsWhiteSpace):
+                            copy.Add(text);
+                            break;
+                    }
+                }
+                if (node.BaseUri is { Length: > 0 } baseUri)
+                    copy.AddAnnotation(baseUri);
+                Providers.Xml.XDocumentNode.CopyUnparsedEntities(node, copy);
+                return new Providers.Xml.XDocumentNode(copy);
+            }
+            case XdmNodeKind.Element:
+            {
+                var copy = new XElement(XName.Get(node.LocalName, node.NamespaceUri));
+                foreach (var attr in EnumerateNodes(node.Attributes()))
+                {
+                    copy.SetAttributeValue(
+                        XName.Get(attr.LocalName, attr.NamespaceUri),
+                        attr.StringValue);
+                }
+                foreach (var child in EnumerateNodes(node.Children()))
+                {
+                    if (DeepCopyForeignNode(child) is not { } copied)
+                        continue;
+                    switch (copied.UnderlyingObject)
+                    {
+                        case XElement elem:
+                            copy.Add(elem);
+                            break;
+                        case XText text:
+                            copy.Add(text);
+                            break;
+                        case XComment comment:
+                            copy.Add(comment);
+                            break;
+                        case XProcessingInstruction pi:
+                            copy.Add(pi);
+                            break;
+                    }
+                }
+                return new Providers.Xml.XDocumentNode(copy);
+            }
+            case XdmNodeKind.Attribute:
+                return new Providers.Xml.XDocumentNode(
+                    new XAttribute(XName.Get(node.LocalName, node.NamespaceUri), node.StringValue));
+            case XdmNodeKind.Text:
+                return new Providers.Xml.XDocumentNode(new XText(node.StringValue));
+            case XdmNodeKind.Comment:
+                return new Providers.Xml.XDocumentNode(new XComment(node.StringValue));
+            case XdmNodeKind.ProcessingInstruction:
+                return new Providers.Xml.XDocumentNode(
+                    new XProcessingInstruction(node.LocalName, node.StringValue));
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>Materializes the node items of a sequence (skipping any non-node items).</summary>
+    private static IEnumerable<IXdmNode> EnumerateNodes(XdmSequence sequence)
+    {
+        foreach (var item in sequence)
+        {
+            if (item.IsNode && item.NodeValue is { } node)
+                yield return node;
+        }
     }
 
     private static XElement DeepCopyElement(XElement element, IReadOnlySet<string>? inheritedPrefixes = null)
