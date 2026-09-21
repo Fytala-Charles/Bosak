@@ -118,6 +118,8 @@
 //                      | Charles Korthout | 1.55  | 09-09-2026     | Operator/invalid tokens rejected as function names (K-NodeAfter/Before-5/7, K-FunctionCallExpr-9); empty-sequence() occurrence indicator is XPST0003 (K-QuantExprWith-7/8); typed function test requires 'as' return type (hof-910) |
 //                      | Charles Korthout | 1.56  | 09-09-2026     | Integer literals beyond long range tagged IsIntegerLiteral (stay xs:integer)             |
 //                      | Charles Korthout | 1.57  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 1.58  | 21-09-2026     | Braced-URI names (Q{uri}local) in step position are function calls, never kind tests   |
+//                      |                  |       |                | (A ! Q{ns}text(...) misparsed as text() step; sx-treat-107/108/109, sx-instance-of-107/108) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1444,11 +1446,16 @@ public sealed class XPathParser
 
         // Name that is a kind test: node(), text(), etc.
         // Prefixed names are always function calls, never kind tests.
+        // A braced URI literal (Q{uri}text) is also never a kind test: SplitQName
+        // drops its namespace, leaving local 'text', so without this guard a
+        // braced function call in step position (A ! Q{ns}text(...)) would be
+        // misparsed as a text() kind-test step (sx-treat-107/108/109).
         if (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind))
         {
             var name = GetString(Current);
             var (prefix, local, _) = SplitQName(name);
-            if (string.IsNullOrEmpty(prefix) && IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
+            if (!name.StartsWith("Q{", StringComparison.Ordinal)
+                && string.IsNullOrEmpty(prefix) && IsKindTestName(local) && Peek(1).Kind == TokenKind.LParen)
             {
                 return ParseAxisStep(start);
             }

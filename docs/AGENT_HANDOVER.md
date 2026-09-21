@@ -1,5 +1,21 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-21 (seventeenth session)
+**Commit:** *(pending — see git log after the batch commit)*
+**Current focus:** **REQ-094 braced-EQName batch — braced-URI function calls in step position were misparsed as kind tests; +5/−5.** `ParseStepExpr` decides kind-test vs function call via `SplitQName`, which drops the URI of a `Q{uri}local` name — so `Q{f}text('x')` after `!` or `/` routed to the `text()` kind-test production and evaluated `child::text()[('x')]` over the context items instead of calling the function. Symptom triage via scratch repro: absent-context calls raised XPDY0002 (axis step needs a node), and `Q{f}text(string(.)||'$ ')` returned the PRICE elements' text children with the argument never evaluated. Fix (XPathParser.cs 1.58): a name starting with `Q{` is never a kind test — one condition. Primary-position braced calls (all QT3 EQName coverage) parse through `ParsePrimary` and were always correct. Full XSLT sweep **10,216 passed / 59 failed / 4,325 skipped** — **+5/−5 vs the 10,211/64 baseline** (skips identical, per-set diff exactly sx-treat-107/108/109 + sx-instance-of-107/108, zero sets worse). QT3 unchanged **31,142/0/679**; unit **2,479/2,479** across all projects (Parser 192, Xslt.Tests 522, LanguageServer 72); build 0/0.
+**What was built:**
+- **Kind-test routing fix** (`src/Bosak.XPath.Parser/Ast/XPathParser.cs` 1.58, `ParseStepExpr`): the kind-test shortcut excludes `Q{`-prefixed names; braced calls now fall through to `ParsePostfixExpr` → function call like prefixed calls.
+- No engine/runtime change — this was a pure parser misroute.
+**Verification:** full sweep 10,216/59/4,325 (+5/−5, per-set diff exactly the five targets, zero sets worse); sx-treat 36/36 and sx-instance-of 35/35 in isolation; QT3 31,142/0/679 unchanged; unit 2,479/2,479; Release build 0/0.
+**Known gaps (documented, accepted):** the 59 sweep failures = the pre-existing documented set minus the 5 fixed — schema-gated XTSE1650 ~24, xml-to-json fn:escape XPath 4.0 family (4), si-iterate-005 and other one-offs.
+**Next steps (agreed direction):**
+1. **xml-to-json fn:escape XPath 4.0 family** (4 tests) — last coherent non-schema family in the backlog.
+2. 1.0 items unchanged: API freeze, version promotion, support channel; owner-side: ruleset `protect-main` (id 22255065), GitHub Release notes for v0.10.2-beta still to be pasted manually (gh token expired).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-21 (sixteenth session)
 **Commit:** `8752d61` — fix(xslt): xsl:map content merges multi-entry maps (XTTE3365 spurious) + XTDE3365 for duplicate map keys in streaming source-document (XTTE3375 for non-map content)
 **Current focus:** **REQ-093 sx-MapExpr map-constructor batch — two `xsl:map` content bugs fixed, +3/−3.** **(1)** `BuildMapFromInstruction` (`TransformEngine.cs` 6.81) required every map in the `xsl:map` content sequence to have exactly one entry, spuriously raising XTTE3365 — XSLT 3.0 merges the entries of *any* maps the content produces, so the count check is deleted (sx-MapExpr-008 now builds its 6-book map from a 4-entry map plus a 1-entry map; sx-MapExpr-009 now reaches its expected XTTE3375 for atomic content). Non-map content still raises XTTE3375; duplicate merged keys still raise XTDE3365. **(2)** Duplicate map-constructor keys inside streamable `xsl:source-document` content raised XQDY0137 because `InStreamingMapContext` was only set around xsl:fork branches — the content constructor now sets it (save/set/restore), so `VmEngine` picks XTDE3365 (sx-MapExpr-007). Verified no catalog test anywhere expects XQDY0137, so the widened code is safe; QT3 (XQuery) untouched. Full XSLT sweep **10,211 passed / 64 failed / 4,325 skipped** — **+3/−3 vs the 10,208/67 baseline** (skips identical, per-set diff exactly the three targets, zero sets worse). QT3 unchanged **31,142/0/679**; unit Xslt.Tests **522/522** (unchanged); build 0/0.
