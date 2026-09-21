@@ -222,6 +222,11 @@
 //                      | Charles Korthout | 2.111 | 17-09-2026     | XTSE0020 for invalid enumerated values on xsl:attribute-set (@streamable yes/no,        |
 //                      |                  |       |                | @visibility public/private/final/abstract); AVT forms left to runtime (si-lre-906)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.112 | 21-09-2026     | use-when permitted on xsl:function / xsl:copy-of / xsl:copy (common attribute,           |
+//                      |                  |       |                | XSLT 3.0 §3.13); the three whitelist blocks now also require the XSLT namespace so a     |
+//                      |                  |       |                | literal result element named copy/copy-of is not validated as the XSLT instruction      |
+//                      |                  |       |                | (fixes false XTSE0090: su-absorbing/filter/inspection/unclassified, si-apply-templates)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2936,7 +2941,7 @@ public sealed class Stylesheet
             }
 
             // xsl:copy-of attribute validation
-            if (localName == "copy-of")
+            if (isXsltElement && localName == "copy-of")
             {
                 // XTSE0090: xsl:copy-of does not allow invalid attributes
                 foreach (var attr in elem.Attributes())
@@ -2949,7 +2954,8 @@ public sealed class Stylesheet
                         baseName != "copy-accumulators" &&
                         baseName != "copy-namespaces" &&
                         baseName != "type" &&
-                        baseName != "validation")
+                        baseName != "validation" &&
+                        baseName != "use-when")
                     {
                         throw new InvalidOperationException("XTSE0090");
                     }
@@ -2998,7 +3004,7 @@ public sealed class Stylesheet
             }
 
             // xsl:copy attribute validation
-            if (localName == "copy")
+            if (isXsltElement && localName == "copy")
             {
                 // XTSE0090: xsl:copy does not allow invalid attributes
                 foreach (var attr in elem.Attributes())
@@ -3011,7 +3017,8 @@ public sealed class Stylesheet
                         baseName != "inherit-namespaces" &&
                         baseName != "use-attribute-sets" &&
                         baseName != "type" &&
-                        baseName != "validation")
+                        baseName != "validation" &&
+                        baseName != "use-when")
                     {
                         throw new InvalidOperationException("XTSE0090");
                     }
@@ -3035,7 +3042,7 @@ public sealed class Stylesheet
             }
 
             // xsl:function static validation
-            if (localName == "function")
+            if (isXsltElement && localName == "function")
             {
                 foreach (var attr in elem.Attributes())
                 {
@@ -3052,7 +3059,8 @@ public sealed class Stylesheet
                         baseName != "cache" &&
                         baseName != "identity-sensitive" &&
                         baseName != "expand-text" &&
-                        baseName != "streamability")
+                        baseName != "streamability" &&
+                        baseName != "use-when")
                     {
                         throw new InvalidOperationException("XTSE0090");
                     }

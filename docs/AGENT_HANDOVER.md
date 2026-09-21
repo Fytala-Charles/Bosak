@@ -1,5 +1,22 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-21 (twelfth session)
+**Commit:** pending — use-when XTSE0090 batch (hash recorded below after commit)
+**Current focus:** **REQ-089 use-when triage — the ~32 "use-when artifacts" in the sweep backlog cleared.** They were two false XTSE0090 bugs in `ValidateInstructionTree` (`Stylesheet.cs` 2.112): the element-specific attribute whitelists for `xsl:function`/`xsl:copy-of`/`xsl:copy` rejected `use-when` (permitted on every XSLT element by XSLT 3.0 §3.13), and literal result elements named `<copy>`/`<copy-of>` were validated as `xsl:copy`/`xsl:copy-of` (root cause of si-apply-templates-005, whose literal `<copy of="{name()}">` LRE raised the spurious error). Full XSLT sweep **10,188 passed / 87 failed / 4,325 skipped** — **+22/−22 vs the 10,166/109 REQ-088 baseline** (skips identical; arithmetic reconciles exactly per set: su-absorbing +17, su-inspection +4, si-apply-templates +1; su-filter/su-unclassified +0 — their tests now run but fail for real analyzer reasons). QT3 unchanged **31,142/0/679** (Bosak.Xslt-only change); unit Xslt.Tests **512/512** (+3); build 0/0.
+**What was built:**
+- **`use-when` permitted on `xsl:function`/`xsl:copy-of`/`xsl:copy`** (`Stylesheet.cs` 2.112): `baseName != "use-when"` added to all three element-specific whitelist conditions, per XSLT 3.0 §3.13.
+- **Literal result elements no longer mis-validated**: all three whitelist guards gain an `isXsltElement &&` conjunct, so a literal result element named `copy`/`copy-of` is only validated as an LRE (XSLT-namespace check first), never as the XSLT instruction.
+- **Tests** (`StylesheetTests.cs` 0.93): `UseWhen_Permitted_On_Function_CopyOf_And_Copy` (uses `select='$v'` on copy-of and `use-when='false()'` on `xsl:copy` — a real run needs a context item; the first cut used `select='.'` and failed XPDY0002), `UseWhen_False_On_Function_Excludes_It`, `Literal_Result_Element_Named_Copy_Is_Not_Validated_As_XslCopy`. Scratch `ZzScratchDebugTests.cs` deleted.
+**Verification:** full sweep 10,188/87/4,325 (+22/−22, skips identical, per-set arithmetic reconciles); QT3 31,142/0/679 unchanged; Xslt.Tests 512/512 (+3); LanguageServer 72/72; solution Release build clean. No new failure causes — xml-to-json-B2-005/006/010/014 are pre-existing `fn:escape#1 not found` (XPath 4.0, unrelated).
+**Known gaps (documented, accepted):** the 87 sweep failures break down as schema-gated XTSE1650 ~24 (schema-awareness track), **10 real analyzer gaps exposed by this batch** — su-filter-001..004 ("positional predicate on a streamed variable is not streamable ('$test')") and su-unclassified-001..006 ("downward navigation from a non-striding operand is not streamable") — plus assorted singles (sf-reverse-001, sx-MapExpr-007/008/009, si-map-001..009, fn:escape family).
+**Next steps (agreed direction):**
+1. **su-filter / su-unclassified analyzer batch** — the 10 newly-exposed XTSE3430 false positives in `StreamabilityAnalyzer` are the natural next code target (streamed-variable positional predicates; downward navigation from non-striding operands).
+2. 1.0 items unchanged: API freeze, version promotion, support channel; owner-side: ruleset `protect-main` (id 22255065), GitHub Release notes for v0.10.2-beta still to be pasted manually (gh token expired).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-21 (eleventh session)
 **Commit:** `79e12d2` — feat(streaming): provider batch (wrapper cache, pre-root comments/PIs, copy-of guard, TransformStreamingToString)
 **Released:** **`v0.10.2-beta`** — main pushed (`980f9d8..c0c79ed`), tag pushed → release.yml → Trusted Publishing → **all 9 packages live on nuget.org** (verified via the flat-container API ~11 min after tag push); GitHub Release to be created manually by the owner (gh token still expired). Release notes drafted: si-fork residual batch + provider batch headline, XSLT 10,166/109/4,325 (98.9%), QT3 31,142/0/679, unit 2,394/0/0, new API `TransformStreamingToString`.

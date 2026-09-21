@@ -152,6 +152,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.92  | 07-09-2026     | Unregistered xsl:use-package now expects XTSE3000 (spec) instead of XTSE0165 (REQ-082)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.93  | 21-09-2026     | use-when permitted on xsl:function/xsl:copy-of/xsl:copy (su-absorbing false XTSE0090)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -3600,6 +3602,78 @@ return fn:transform(map{""stylesheet-text"": $xsl,
 
         Assert.Contains("<out", result);
         Assert.DoesNotContain("<in/>", result);
+    }
+
+    [Fact]
+    public void UseWhen_Permitted_On_Function_CopyOf_And_Copy()
+    {
+        // use-when is a common attribute permitted on every XSLT element
+        // (XSLT 3.0 §3.13); the element-specific XTSE0090 whitelists must not
+        // reject it (su-absorbing-001 et al.).
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:f='urn:f' xmlns:xs='http://www.w3.org/2001/XMLSchema' exclude-result-prefixes='f xs'>
+            <xsl:variable name='RUN' select='true()' static='yes'/>
+            <xsl:variable name='v'><a/></xsl:variable>
+            <xsl:function name='f:one' as='xs:integer' streamability='absorbing' use-when='$RUN'>
+                <xsl:param name='in' as='node()*'/>
+                <xsl:sequence select='count($in)'/>
+            </xsl:function>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:copy-of select='$v' use-when='$RUN'/>
+                    <xsl:copy use-when='false()'/>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("<out", result);
+        Assert.Contains("<a/>", result);
+    }
+
+    [Fact]
+    public void Literal_Result_Element_Named_Copy_Is_Not_Validated_As_XslCopy()
+    {
+        // Edge case: a literal result element named <copy> or <copy-of> must not be
+        // checked against the xsl:copy/xsl:copy-of attribute whitelists
+        // (si-apply-templates-005 shape).
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <copy of='{1 + 1}'><copy-of select=''/></copy>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("of=\"2\"", result);
+    }
+
+    [Fact]
+    public void UseWhen_False_On_Function_Excludes_It()
+    {
+        // Edge case: use-when='false()' must exclude the function declaration
+        // itself, not fail validation or leave a dangling declaration.
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+            xmlns:f='urn:f' xmlns:xs='http://www.w3.org/2001/XMLSchema' exclude-result-prefixes='f xs'>
+            <xsl:function name='f:gone' as='xs:integer' use-when='false()'>
+                <xsl:param name='in' as='node()*'/>
+                <xsl:sequence select='count($in)'/>
+            </xsl:function>
+            <xsl:template name='main'>
+                <out/>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new Api.XsltCompiler();
+        var executable = compiler.Compile(xsl);
+        var result = executable.TransformToString(null!, initialTemplate: "main");
+
+        Assert.Contains("<out", result);
     }
 
     [Fact]

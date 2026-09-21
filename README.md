@@ -12,7 +12,7 @@
 [![Status](https://img.shields.io/badge/Status-Alpha-518D8F)]()
 [![NuGet](https://img.shields.io/nuget/vpre/Bosak.XPath.Api?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Bosak.XPath.Api)
 [![CI](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml/badge.svg)](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml)
-[![XSLT 3.0 conformance](https://img.shields.io/badge/XSLT%203.0%20conformance-98.9%25-2F4F4F)](docs/ARCHITECTURE.md)
+[![XSLT 3.0 conformance](https://img.shields.io/badge/XSLT%203.0%20conformance-99.2%25-2F4F4F)](docs/ARCHITECTURE.md)
 
 </div>
 
@@ -273,7 +273,7 @@ The harness:
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
 | Pass Rate (XPath+XQuery) | **31,142 passed / 0 failed / 679 skipped** (97.87%) with strict error-code matching (2026-09-09) — **100%** of runnable tests pass |
 | **XSLT 3.0** | 224 test sets, 14,600 tests |
-| Pass Rate (XSLT) | **10,166 passed / 109 failed / 4,325 skipped** (98.9%, 2026-09-21, streaming Phases A–D live + si-fork residual batch + provider batch) — failures triaged: schema-gated XTSE1650 (~24), standalone `use-when` artifacts (32), assorted documented singles; see REQ-086/REQ-087/REQ-088 decision logs |
+| Pass Rate (XSLT) | **10,188 passed / 87 failed / 4,325 skipped** (99.2%, 2026-09-21, streaming Phases A–D live + si-fork residual batch + provider batch + use-when batch) — failures triaged: schema-gated XTSE1650 (~24), function-streamability analyzer gaps (su-filter/su-unclassified, 10), assorted documented singles; see REQ-086/REQ-087/REQ-088/REQ-089 decision logs |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |
 | Unsupported Features | Schema awareness (in progress), XQuery-only dependencies |
 
