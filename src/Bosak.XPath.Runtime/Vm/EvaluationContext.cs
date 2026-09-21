@@ -78,6 +78,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.25  | 16-09-2026     | Streaming Phase C: StreamingDocumentLoader hook for streamable xsl:source-document     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.26  | 21-09-2026     | InStreamingMapContext flag: map constructors inside XSLT streaming constructs raise  |
+//                      |                  |       |                | XTDE3365 instead of XQDY0137 on duplicate keys (si-fork-814)                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -283,6 +286,14 @@ public sealed class EvaluationContext
     /// are available. XPath-only contexts leave this false.
     /// </summary>
     public bool IsXsltMode { get; set; }
+
+    /// <summary>
+    /// When true, map constructors are evaluated inside an XSLT streaming construct
+    /// (e.g. an <c>xsl:fork</c> branch), where a duplicate key raises the XSLT error
+    /// XTDE3365 instead of the XQuery map-constructor error XQDY0137 (XSLT 3.0 §19
+    /// streamability rules; si-fork-814). Set and restored by the XSLT engine.
+    /// </summary>
+    public bool InStreamingMapContext { get; set; }
 
     /// <summary>
     /// When true, XML 1.1 semantics apply: prefixed namespace undeclarations

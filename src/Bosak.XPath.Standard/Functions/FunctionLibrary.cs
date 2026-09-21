@@ -332,6 +332,9 @@
 //                      | Charles Korthout | 5.107 | 17-09-2026     | Snapshot/deep-copy unparsed-entity preservation uses XDocumentNode.CopyUnparsedEntities |
 //                      |                  |       |                | so streamed documents keep DTD entities through fn:snapshot (sf-unparsed-entity-03/04/08) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.108 | 21-09-2026     | fn:generate-id unwraps IStreamingNode to its underlying XObject so IDs are stable    |
+//                      |                  |       |                | across xsl:fork prongs replaying the same record (si-fork-801)                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -13057,8 +13060,14 @@ public static class FunctionLibrary
     private static string GetNodeId(IXdmNode node)
     {
         // Use the underlying XObject as the key so that different XDocumentNode
-        // wrappers around the same LINQ-to-XML node get the same ID.
-        var key = node is Bosak.XPath.Providers.Xml.XDocumentNode xdoc ? (object)xdoc.UnderlyingObject : node;
+        // wrappers around the same LINQ-to-XML node get the same ID. Streaming
+        // nodes unwrap to the XObject they wrap so generate-id() is stable across
+        // xsl:fork prongs replaying the same record (si-fork-801).
+        var key = node is Bosak.XPath.Providers.Xml.XDocumentNode xdoc
+            ? (object)xdoc.UnderlyingObject
+            : node is Bosak.XPath.Providers.Streaming.IStreamingNode streaming
+                ? streaming.UnderlyingXObject
+                : node;
         if (_generateIdMap.TryGetValue(key, out var id))
             return id;
         lock (_generateIdLock)

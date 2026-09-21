@@ -309,6 +309,9 @@
 //                      | Charles Korthout | 2.149 | 17-09-2026     | ValueMatchesType map(K,V)/array(T) params split from the case-preserved type name     |
 //                      |                  |       |                | so Q{...} key-type prefixes survive the lowercase normalization (si-fork-119)          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.150 | 21-09-2026     | MapAdd raises XTDE3365 instead of XQDY0137 when EvaluationContext.InStreamingMapContext |
+//                      |                  |       |                | is set (xsl:fork branches, si-fork-814)                                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -3282,9 +3285,14 @@ public static class VmEngine
                     {
                         var map = registers[instr.RegisterA].MapValue;
                         var key = AtomizeMapKey(registers[instr.RegisterB]);
-                        // XPath 3.1 §3.11.4: duplicate keys in a map constructor are a dynamic error.
+                        // XPath 3.1 §3.11.4: duplicate keys in a map constructor are a dynamic
+                        // error (XQDY0137). Inside an XSLT streaming construct the XSLT error
+                        // XTDE3365 applies instead (si-fork-814).
                         if (map.ContainsKey(key))
-                            throw new InvalidOperationException($"XQDY0137: Duplicate key '{key}' in map constructor.");
+                        {
+                            var code = context.InStreamingMapContext ? "XTDE3365" : "XQDY0137";
+                            throw new InvalidOperationException($"{code}: Duplicate key '{key}' in map constructor.");
+                        }
                         map.Add(key, registers[instr.RegisterC]);
                         ip++;
                         break;

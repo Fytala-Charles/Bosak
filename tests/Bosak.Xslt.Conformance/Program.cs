@@ -142,6 +142,9 @@
 //                      | Charles Korthout | 3.47  | 17-09-2026     | Streaming Phase C (C3): unskip accumulator-031/068 — streamable xsl:source-document   |
 //                      |                  |       |                | is implemented since Phase C1; only accumulator-061 (burst-mode granularity) remains  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.48  | 21-09-2026     | Streamed-source tests request rawResult so tree assertions (count(/out/text())) see   |
+//                      |                  |       |                | the result document instead of a serialized string (si-fork-809)                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1035,6 +1038,7 @@ class Program
             bool isInitialFunction = initialFunctionElem != null;
             bool rawOutput = isInitialFunction ||
                 initialModeElem != null ||
+                streamingSourceRequested ||
                 ((initialTemplateElem != null || hasImplicitInitialTemplate) && testElem.Element(ns + "output")?.Attribute("tree")?.Value == "no");
 
             string resultXml = string.Empty;
@@ -2140,6 +2144,23 @@ class Program
             }
         }
 
+        // assert-serialization: serialize the value and compare (si-fork-815).
+        var assertSer = resultElem.Name.LocalName == "assert-serialization" ? resultElem : resultElem.Element(ns + "assert-serialization");
+        if (assertSer != null)
+        {
+            var expected = assertSer.Value.Trim();
+            var fileAttr = assertSer.Attribute("file")?.Value;
+            if (string.IsNullOrEmpty(expected) && !string.IsNullOrEmpty(fileAttr))
+            {
+                var filePath = Path.Combine(testSetDir, fileAttr);
+                if (!File.Exists(filePath)) filePath = Path.Combine(catalogDir, fileAttr);
+                if (File.Exists(filePath))
+                    expected = ReadAssertionFile(filePath, assertSer.Attribute("encoding")?.Value).Trim();
+            }
+            var actualSerialized = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(actual, outputProperties);
+            return NormalizeXml(actualSerialized) == NormalizeXml(expected);
+        }
+
         // assert: evaluate XPath expression against the value
         var assertExpr = resultElem.Name.LocalName == "assert" ? resultElem : resultElem.Element(ns + "assert");
         if (assertExpr != null)
@@ -2949,6 +2970,33 @@ class Program
         // of tree assertions such as not(/node()).
         if (value.IsUndefined)
             return XdmValue.FromNode(new XDocumentNode(new XDocument()));
+
+        // A raw result delivered as a sequence of nodes (e.g. a streamed source whose
+        // principal output was collected as raw items) stands in for the document node:
+        // wrap the node items into a single document (si-fork-119).
+        if (value.IsSequence && value.SequenceValue != null)
+        {
+            var doc = new XDocument();
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (!item.IsNode || item.NodeValue is not XDocumentNode nd)
+                    continue;
+                switch (nd.UnderlyingObject)
+                {
+                    case XElement el:
+                        doc.Add(new XElement(el));
+                        break;
+                    case XText txt:
+                        doc.Add(new XText(txt.Value));
+                        break;
+                    case XDocument d:
+                        if (d.Root != null)
+                            doc.Add(new XElement(d.Root));
+                        break;
+                }
+            }
+            return XdmValue.FromNode(new XDocumentNode(doc));
+        }
 
         if (value.IsNode && value.NodeValue != null && value.NodeValue.NodeKind == XdmNodeKind.Document)
             return value;

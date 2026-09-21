@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 16-09-2026     | Union/intersect/except: wider sweep (max) per §19.8.8.4; fixes sf-boolean-001 false positive |
 //                      | Charles Korthout | 0.3   | 16-09-2026     | Calibration vs XSLT 3.0 test suite strm sets: §19.10 striding unions, LeafItem buffered-item model, function streamability rules (absorbing consuming-ref limit, inspection/filter result postures, shallow-descent striding-arg + bang-delivery), source-document grounded-result escapes, constructor climbing-delivery check, xsl:map implicit-fork consuming-use rule, if-expression max sweep |
 //                      | Charles Korthout | 0.4   | 17-09-2026     | False-positive regression fixes: buffered leaf items atomizable after !, unclassified-function atomic-param atomization, map/array constructor implicit-fork max consumption, leaf child steps from crawling operands, no-arg atomizers on leaf contexts, current() captured only in leaf pattern predicates, streamable accumulator checks (initial-value motionless, rule pattern/body, post-descent accumulator-after), streamable merge-source select must be striding / no sort-before-merge |
+//                      | Charles Korthout | 0.5   | 21-09-2026     | current-group() with no group lexically in scope is a static XTSE3430 over a streamed context (si-fork-116); current-grouping-key() stays motionless |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -818,8 +819,18 @@ internal static class StreamabilityAnalyzer
                 return false;
             if (TryParse(select) is not { } ast)
                 return false;
-            var info = Analyze(ast, env);
-            return info.Consumes > 0;
+            try
+            {
+                var info = Analyze(ast, env);
+                return info.Consumes > 0;
+            }
+            catch (InvalidOperationException ex) when (ex.Message.StartsWith("XTSE3430:", StringComparison.Ordinal))
+            {
+                // The accumulator post-descent scan uses an approximate environment (no
+                // group context); a streamability error raised here does not reflect the
+                // real walk and is conservatively treated as a consuming expression.
+                return true;
+            }
         }
 
         // ------------------------------------------------------------------
@@ -1326,7 +1337,17 @@ internal static class StreamabilityAnalyzer
                 var ast = TryParse(expr);
                 if (ast == null)
                     continue;
-                var info = Analyze(ast, Env.Base.WithContext(Posture.Striding, streamed: true));
+                Info info;
+                try
+                {
+                    info = Analyze(ast, Env.Base.WithContext(Posture.Striding, streamed: true));
+                }
+                catch (InvalidOperationException ex) when (ex.Message.StartsWith("XTSE3430:", StringComparison.Ordinal))
+                {
+                    // Approximate environment (no lexical group context): streamability errors
+                    // raised here do not reflect the real walk and are left to it.
+                    continue;
+                }
                 if (info.UsesPosition || info.UsesLast)
                     throw Error("xsl:sort/@select must not use position() or last() over a streamed sequence.");
             }
@@ -2606,6 +2627,14 @@ internal static class StreamabilityAnalyzer
             {
                 if (!env.GroupInScope && env.GroupOutside)
                     throw Error("current-group() cannot be consumed inside a nested streamable document.");
+                if (!env.GroupInScope && env.ContextStreamed)
+                    // No group is lexically available (a called template never sees the
+                    // caller's group, XSLT 3.0 §14.4). Over a streamed context the group
+                    // members would be ungrounded streamed nodes, so current-group() is a
+                    // consuming reference that makes the construct non-streamable
+                    // (si-fork-116 → XTSE3430). In grounded contexts it stays a dynamic
+                    // XTDE1061. current-grouping-key() remains motionless (si-fork-115).
+                    throw Error("current-group() is not available in this streamable template.");
                 return env.GroupInScope
                     ? new Info(env.GroupSelectPosture ?? Posture.Striding, 0, Motionless: true, RefsStreamed: true, Fresh: true)
                     : Info.GroundedMotionless;

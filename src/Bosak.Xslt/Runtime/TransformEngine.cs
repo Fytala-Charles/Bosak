@@ -347,6 +347,12 @@
 //                      |                  |       |                | suspend raw-item collection under global method=adaptive; file-written HTML result docs |
 //                      |                  |       |                | self-close void elements (si-fork-119/810/811/815)                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.77  | 21-09-2026     | WithoutGroupAndMergeContext: call-template/apply-templates clear the current-group and   |
+//                      |                  |       |                | current-grouping-key context so templates see them as absent (XTDE1061/1071, si-fork-113/114/115) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.78  | 21-09-2026     | xsl:fork branches evaluate with EvaluationContext.InStreamingMapContext so duplicate   |
+//                      |                  |       |                | map-constructor keys raise XTDE3365 instead of XQDY0137 (si-fork-814)                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3886,7 +3892,8 @@ public sealed class TransformEngine
                                 if (!TryCallOriginalTemplate(calledName, instruction, contextItem, withParams, tunnelParams))
                                 {
                                     var resolvedName = ResolveNamedTemplateName(calledName, instruction);
-                                    CallTemplate(resolvedName, contextItem, withParams, tunnelParams);
+                                    WithoutGroupAndMergeContext(() =>
+                                        CallTemplate(resolvedName, contextItem, withParams, tunnelParams));
                                 }
                             }
                             finally
@@ -4465,10 +4472,21 @@ public sealed class TransformEngine
                         // executed (establishing its own focus/group context) and its result
                         // collected as items; side-effect-only prongs (e.g. an
                         // xsl:result-document with no primary output) contribute zero items.
-                        foreach (var prong in instruction.Elements())
+                        // Map constructors inside the branches use the XSLT streaming
+                        // duplicate-key error XTDE3365 (si-fork-814).
+                        var savedStreamingMap = _context.InStreamingMapContext;
+                        try
                         {
-                            var prongItems = EvaluateInstructionToItems(prong, contextItem);
-                            results.AddRange(prongItems);
+                            _context.InStreamingMapContext = true;
+                            foreach (var prong in instruction.Elements())
+                            {
+                                var prongItems = EvaluateInstructionToItems(prong, contextItem);
+                                results.AddRange(prongItems);
+                            }
+                        }
+                        finally
+                        {
+                            _context.InStreamingMapContext = savedStreamingMap;
                         }
                         break;
                     }
@@ -6763,7 +6781,7 @@ public sealed class TransformEngine
                         if (!TryCallOriginalTemplate(calledName, instruction, contextItem, withParams, tunnelParams))
                         {
                             var resolvedName = ResolveNamedTemplateName(calledName, instruction);
-                            WithoutMergeContext(() => CallTemplate(resolvedName, contextItem, withParams, tunnelParams));
+                            WithoutGroupAndMergeContext(() => CallTemplate(resolvedName, contextItem, withParams, tunnelParams));
                         }
                     }
                     break;
@@ -7357,10 +7375,20 @@ public sealed class TransformEngine
                 {
                     // Non-streaming evaluation of xsl:fork: the prongs are evaluated
                     // sequentially and their results concatenate in prong order
-                    // (XSLT 3.0 §8.3).
-                    foreach (var prong in instruction.Elements())
+                    // (XSLT 3.0 §8.3). Map constructors inside the branches use the XSLT
+                    // streaming duplicate-key error XTDE3365 (si-fork-814).
+                    var savedStreamingMap = _context.InStreamingMapContext;
+                    try
                     {
-                        ExecuteXsltInstruction(prong, contextItem);
+                        _context.InStreamingMapContext = true;
+                        foreach (var prong in instruction.Elements())
+                        {
+                            ExecuteXsltInstruction(prong, contextItem);
+                        }
+                    }
+                    finally
+                    {
+                        _context.InStreamingMapContext = savedStreamingMap;
                     }
                     break;
                 }
@@ -7480,13 +7508,18 @@ public sealed class TransformEngine
         {
             var node = item.NodeValue!;
             var rule = FindBestTemplate(node, resolvedMode);
+            // The current group / merge context is not visible inside an applied
+            // template (XSLT 3.0 §14.4; si-fork-113/114/115): calls to
+            // current-group() there must raise XTDE1061/XTDE1071.
             if (rule != null)
             {
-                ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last);
+                WithoutGroupAndMergeContext(() =>
+                    ExecuteTemplate(rule, node, callParams: callParams, incomingTunnelParams, position: pos, last: last));
             }
             else
             {
-                ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, callParams, position: pos, last: last);
+                WithoutGroupAndMergeContext(() =>
+                    ApplyBuiltInRules(node, resolvedMode, incomingTunnelParams, callParams, position: pos, last: last));
             }
         }
         else
@@ -19029,15 +19062,29 @@ public sealed class TransformEngine
     /// and current-merge-key() are not visible in the called template.
     /// </summary>
     private void WithoutMergeContext(Action action)
+        => WithoutGroupAndMergeContext(action);
+
+    /// <summary>
+    /// Executes <paramref name="action"/> with the group and merge contexts cleared.
+    /// Used for xsl:call-template and xsl:apply-templates so that current-group(),
+    /// current-grouping-key(), current-merge-group() and current-merge-key() are not
+    /// visible in the called template (XSLT 3.0 §14.4: the group is not part of the
+    /// dynamic context of a called template; si-fork-113/114/115).
+    /// </summary>
+    private void WithoutGroupAndMergeContext(Action action)
     {
         var savedMergeGroup = _currentMergeGroup;
         var savedMergeKey = _currentMergeKey;
         var savedNamedGroups = _currentNamedMergeGroups;
+        var savedGroup = _currentGroup;
+        var savedGroupingKey = _currentGroupingKey;
         try
         {
             _currentMergeGroup = null;
             _currentMergeKey = null;
             _currentNamedMergeGroups = null;
+            _currentGroup = null;
+            _currentGroupingKey = null;
             action();
         }
         finally
@@ -19045,6 +19092,8 @@ public sealed class TransformEngine
             _currentMergeGroup = savedMergeGroup;
             _currentMergeKey = savedMergeKey;
             _currentNamedMergeGroups = savedNamedGroups;
+            _currentGroup = savedGroup;
+            _currentGroupingKey = savedGroupingKey;
         }
     }
 
