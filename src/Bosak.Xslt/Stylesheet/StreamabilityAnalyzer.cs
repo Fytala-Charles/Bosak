@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 16-09-2026     | Calibration vs XSLT 3.0 test suite strm sets: §19.10 striding unions, LeafItem buffered-item model, function streamability rules (absorbing consuming-ref limit, inspection/filter result postures, shallow-descent striding-arg + bang-delivery), source-document grounded-result escapes, constructor climbing-delivery check, xsl:map implicit-fork consuming-use rule, if-expression max sweep |
 //                      | Charles Korthout | 0.4   | 17-09-2026     | False-positive regression fixes: buffered leaf items atomizable after !, unclassified-function atomic-param atomization, map/array constructor implicit-fork max consumption, leaf child steps from crawling operands, no-arg atomizers on leaf contexts, current() captured only in leaf pattern predicates, streamable accumulator checks (initial-value motionless, rule pattern/body, post-descent accumulator-after), streamable merge-source select must be striding / no sort-before-merge |
 //                      | Charles Korthout | 0.5   | 21-09-2026     | current-group() with no group lexically in scope is a static XTSE3430 over a streamed context (si-fork-116); current-grouping-key() stays motionless |
+//                      | Charles Korthout | 0.6   | 21-09-2026     | False-positive fixes (su-filter/su-unclassified): boolean-typed lone variable predicate is a filter predicate, not positional; positional motionless predicate on a striding step stays striding; unclassified functions atomize atomic-typed params in any argument position |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2260,9 +2261,11 @@ internal static class StreamabilityAnalyzer
                 RefsStreamed: input.RefsStreamed, Fresh: false, Captured: captured, Roaming: roaming,
                 LeafItem: StepSelectsBufferedItems(sn));
 
-            // Predicates on the step (F1): every predicate must be motionless; a consuming
-            // predicate makes the step roaming (§19.8.8.9 rule 5) and the path-level
-            // scanning reassessment below decides whether it is still streamable.
+            // Predicates on the step (F1): every predicate must be motionless, or positional
+            // over a striding operand (§19.8.8.9 rule 5: a positional predicate on a striding
+            // step filters each item as it passes — su-unclassified-001 ITEM[position() ne 42]).
+            // A consuming predicate or any use of last() makes the step roaming and the
+            // path-level scanning reassessment below decides whether it is still streamable.
             // A grounded variable predicate such as [$i] is motionless and allowed here
             // (§19.8.8.1: for $i in 1 to 3 return name(ancestor::x[$i]) is streamable).
             if (sn.Predicates.Count > 0 && result.Posture != Posture.Grounded)
@@ -2273,8 +2276,11 @@ internal static class StreamabilityAnalyzer
                 {
                     var expr = pred is PredicateNode pd ? pd.Expression : pred;
                     var info = Analyze(expr, predEnv);
-                    if (info.Consumes > 0 || info.UsesLast || !info.Motionless)
-                        return result with { Posture = Posture.Roaming };
+                    if (info.Consumes == 0 && !info.UsesLast && info.Motionless)
+                        continue;
+                    if (result.Posture == Posture.Striding && info.Consumes == 0 && !info.UsesLast)
+                        continue;
+                    return result with { Posture = Posture.Roaming };
                 }
             }
             return result;
@@ -2430,6 +2436,11 @@ internal static class StreamabilityAnalyzer
                 var v = env.Lookup(vref.LocalName);
                 if (v != null && !v.BooleanTyped)
                     throw Error($"a predicate that is a lone variable reference ('{vref.LocalName}') must be typed as xs:boolean.");
+                // A boolean-typed variable predicate is a filter predicate, not a positional
+                // one: it is motionless and keeps the posture and sweep of the base
+                // (su-filter-003/004: $input[$test] with $test as xs:boolean).
+                if (v != null && v.BooleanTyped && !v.Streamed)
+                    return baseInfo;
             }
             // A positional predicate on a bare streamed variable requires arbitrary access
             // to the buffered sequence (su-absorbing-905: deep-equal($element[1], $element[2])).
@@ -2776,17 +2787,18 @@ internal static class StreamabilityAnalyzer
             var infos = f.Arguments.Select(a => Analyze(a, env)).ToList();
             var combined = infos.Aggregate(Info.GroundedMotionless, Combine);
 
-            if (streamability == null)
+            var paramTypes = def.Element
+                .Elements(XName.Get("param", Stylesheet.XslNamespace))
+                .Select(p => p.Attribute("as")?.Value?.Trim())
+                .ToList();
+
+            // §19.8.5.1 shared by undeclared and unclassified functions: an argument whose
+            // declared parameter type is atomic is atomized — a consuming use that is allowed
+            // over a streamed node. Undeclared functions reject a streamed node bound to any
+            // other parameter outright (F4/F15); unclassified (declared) functions reject it
+            // with the declared-function wording.
+            Info AnalyzeAtomizingArgs(Func<int, string> nonAtomicError)
             {
-                // A call to an unclassified stylesheet function with a streamed argument is
-                // not streamable (F4/F15) — unless the function signature atomizes the
-                // argument (an atomic-typed parameter): §19.8.5.1 permits streamed nodes in
-                // arguments "unless the function signature causes such nodes to be atomized"
-                // (j:escape(.) with <xsl:param name="in" as="xs:string"/> in xml-to-json).
-                var paramTypes = def.Element
-                    .Elements(XName.Get("param", Stylesheet.XslNamespace))
-                    .Select(p => p.Attribute("as")?.Value?.Trim())
-                    .ToList();
                 var consumes = combined.Consumes;
                 for (var idx = 0; idx < infos.Count; idx++)
                 {
@@ -2797,10 +2809,29 @@ internal static class StreamabilityAnalyzer
                     var atomizing = asType != null
                         && (asType.StartsWith("xs:", StringComparison.Ordinal) || asType.StartsWith("xsd:", StringComparison.Ordinal));
                     if (!atomizing)
-                        throw Error($"stylesheet function '{def.LocalName}' is not declared streamable and cannot be called with a streamed node.");
+                        throw Error(nonAtomicError(idx));
                     consumes += ExtraConsume(i);
                 }
                 return combined with { Posture = Posture.Grounded, Consumes = consumes };
+            }
+
+            if (streamability == null)
+            {
+                // A call to an unclassified stylesheet function with a streamed argument is
+                // not streamable (F4/F15) — unless the function signature atomizes the
+                // argument (an atomic-typed parameter): §19.8.5.1 permits streamed nodes in
+                // arguments "unless the function signature causes such nodes to be atomized"
+                // (j:escape(.) with <xsl:param name="in" as="xs:string"/> in xml-to-json).
+                return AnalyzeAtomizingArgs(_ => $"stylesheet function '{def.LocalName}' is not declared streamable and cannot be called with a streamed node.");
+            }
+
+            if (streamability == "unclassified")
+            {
+                // The same atomization rule applies in every argument position: a streamed
+                // node may be supplied where the signature atomizes it (su-unclassified-006
+                // passes a striding path as argument 2 of an xs:decimal* parameter).
+                return AnalyzeAtomizingArgs(idx => $"a streamed node cannot be passed in argument {idx + 1} of stylesheet function '{def.LocalName}'.")
+                    with { Motionless = false, Fresh = false, Captured = false };
             }
 
             var first = infos.Count > 0 ? infos[0] : Info.GroundedMotionless;

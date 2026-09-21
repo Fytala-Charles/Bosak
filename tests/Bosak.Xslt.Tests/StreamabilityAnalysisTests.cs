@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | su-filter/su-unclassified batch: boolean-typed variable predicate, positional predicate on striding step, unclassified atomic-param atomization in any position |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.Xslt.Api;
@@ -211,4 +212,30 @@ public class StreamabilityAnalysisTests
     [Fact]
     public void SourceDocumentWithoutStreamable_Compiles()
         => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:template name="main"><xsl:source-document href="x.xml"><in><xsl:value-of select="count(*) + count(*/*)"/></in></xsl:source-document></xsl:template></xsl:stylesheet>""");
+
+    // ---------------- su-filter / su-unclassified batch (analyzer 0.6) ----------------
+
+    [Fact]
+    public void FilterFunctionWithBooleanVariablePredicate_Compiles()
+        => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xsl:function name="f:keep" streamability="filter" as="node()?"><xsl:param name="input" as="node()"/><xsl:param name="test" as="xs:boolean"/><xsl:sequence select="$input[$test]"/></xsl:function></xsl:stylesheet>""");
+
+    [Fact]
+    public void FilterFunctionWithClimbingPredicate_Compiles()
+        => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f"><xsl:function name="f:keep" streamability="filter" as="node()"><xsl:param name="input" as="node()"/><xsl:sequence select="$input[parent::BOOKS]"/></xsl:function></xsl:stylesheet>""");
+
+    [Fact]
+    public void PositionalPredicateOnStridingStep_Compiles()
+        => AssertCompiles(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><in><xsl:copy-of select="/A/B/C[position() ne 42]"/></in></xsl:source-document>"""));
+
+    [Fact]
+    public void PositionalPredicateUsingLastOnStridingStep_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><in><xsl:copy-of select="/A/B/C[position() ne last()]"/></in></xsl:source-document>"""));
+
+    [Fact]
+    public void UnclassifiedFunctionAtomizingStreamedArgInSecondPosition_Compiles()
+        => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xsl:function name="f:avg2" streamability="unclassified" as="xs:decimal?"><xsl:param name="two" as="xs:decimal"/><xsl:param name="in" as="xs:decimal*"/><xsl:sequence select="round(avg($in), 2) + $two"/></xsl:function><xsl:template name="main"><xsl:source-document streamable="yes" href="x.xml"><in><xsl:value-of select="f:avg2(2, /A/B/C)"/></in></xsl:source-document></xsl:template></xsl:stylesheet>""");
+
+    [Fact]
+    public void UnclassifiedFunctionStreamedNodeToNodeParamInSecondPosition_Throws()
+        => AssertXtse3430("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f"><xsl:function name="f:probe" streamability="unclassified" as="xs:string"><xsl:param name="two" as="xs:decimal"/><xsl:param name="n" as="node()*"/><xsl:sequence select="name($n[1])"/></xsl:function><xsl:template name="main"><xsl:source-document streamable="yes" href="x.xml"><in><xsl:value-of select="f:probe(2, /A/B/C)"/></in></xsl:source-document></xsl:template></xsl:stylesheet>""");
 }
