@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-21 (twelfth session)
-**Commit:** pending — use-when XTSE0090 batch (hash recorded below after commit)
+**Commit:** `db9c25f` — fix(xslt): use-when permitted on xsl:function/xsl:copy-of/xsl:copy; literal copy/copy-of no longer validated as XSLT instructions
 **Current focus:** **REQ-089 use-when triage — the ~32 "use-when artifacts" in the sweep backlog cleared.** They were two false XTSE0090 bugs in `ValidateInstructionTree` (`Stylesheet.cs` 2.112): the element-specific attribute whitelists for `xsl:function`/`xsl:copy-of`/`xsl:copy` rejected `use-when` (permitted on every XSLT element by XSLT 3.0 §3.13), and literal result elements named `<copy>`/`<copy-of>` were validated as `xsl:copy`/`xsl:copy-of` (root cause of si-apply-templates-005, whose literal `<copy of="{name()}">` LRE raised the spurious error). Full XSLT sweep **10,188 passed / 87 failed / 4,325 skipped** — **+22/−22 vs the 10,166/109 REQ-088 baseline** (skips identical; arithmetic reconciles exactly per set: su-absorbing +17, su-inspection +4, si-apply-templates +1; su-filter/su-unclassified +0 — their tests now run but fail for real analyzer reasons). QT3 unchanged **31,142/0/679** (Bosak.Xslt-only change); unit Xslt.Tests **512/512** (+3); build 0/0.
 **What was built:**
 - **`use-when` permitted on `xsl:function`/`xsl:copy-of`/`xsl:copy`** (`Stylesheet.cs` 2.112): `baseName != "use-when"` added to all three element-specific whitelist conditions, per XSLT 3.0 §3.13.
