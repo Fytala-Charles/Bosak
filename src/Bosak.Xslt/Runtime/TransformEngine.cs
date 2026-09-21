@@ -358,6 +358,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.80  | 21-09-2026     | xsl:break / xsl:next-iteration permitted as the last instruction of xsl:if inside       |
 //                      |                  |       |                | xsl:iterate (XSLT 3.0 §8.4; si-iterate-013/094/099/140)                                 |
+//                      | Charles Korthout | 6.81  | 21-09-2026     | xsl:map content merges all entries of each map (XTTE3365 count check removed;           |
+//                      |                  |       |                | sx-MapExpr-008/009); source-document content sets InStreamingMapContext so duplicate    |
+//                      |                  |       |                | map keys raise XTDE3365 (sx-MapExpr-007)                                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3480,8 +3483,6 @@ public sealed class TransformEngine
                     throw new InvalidOperationException("XTTE3375: xsl:map content must evaluate to a sequence of maps; a non-map item was produced");
 
                 var entryMap = entry.MapValue;
-                if (entryMap.Count != 1)
-                    throw new InvalidOperationException("XTTE3365: xsl:map content must produce map entries");
 
                 foreach (var kvp in entryMap.Entries)
                 {
@@ -6948,16 +6949,25 @@ public sealed class TransformEngine
                                 ?? throw new InvalidOperationException($"XTDE1160: No element with xml:id '{fragment}' found in {documentHref}");
                         }
 
-                        var content = EvaluateSequenceConstructor(instruction, XdmValue.FromNode(contextNode), wrapInDocumentNode: false);
-                        if (_sequenceAccumulator != null)
+                        var savedStreamingMap = _context.InStreamingMapContext;
+                        try
                         {
-                            foreach (var item in EnumerateItems(content))
-                                _sequenceAccumulator.Add(item);
+                            _context.InStreamingMapContext = true;
+                            var content = EvaluateSequenceConstructor(instruction, XdmValue.FromNode(contextNode), wrapInDocumentNode: false);
+                            if (_sequenceAccumulator != null)
+                            {
+                                foreach (var item in EnumerateItems(content))
+                                    _sequenceAccumulator.Add(item);
+                            }
+                            else
+                            {
+                                foreach (var item in EnumerateItems(content))
+                                    CopyToResult(item);
+                            }
                         }
-                        else
+                        finally
                         {
-                            foreach (var item in EnumerateItems(content))
-                                CopyToResult(item);
+                            _context.InStreamingMapContext = savedStreamingMap;
                         }
                     }
                     finally
