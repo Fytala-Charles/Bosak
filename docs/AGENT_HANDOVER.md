@@ -1,5 +1,22 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-21 (fourteenth session)
+**Commit:** pending — si-iterate XTSE3120 batch (hash recorded below after commit)
+**Current focus:** **REQ-091 iterate batch — the spurious XTSE3120 on the idiomatic early-exit shape is fixed.** `ValidateIterateDescendants` (`TransformEngine.cs` 6.80) rejected `xsl:break`/`xsl:next-iteration` whose parent is `xsl:if`; XSLT 3.0 §8.4 permits that position, so every stylesheet using `<xsl:if test="..."><xsl:break/></xsl:if>` inside `xsl:iterate` failed to compile. One-word fix (`parentLocal == "if"` added to the allowed-parent list); runtime needed no changes — si-iterate-099 (`<xsl:break select="true()"/>` + `xsl:on-completion` early exit) passes, confirming select-valued break was already supported. Full XSLT sweep **10,202 passed / 73 failed / 4,325 skipped** — **+4/−4 vs the 10,198/77 analyzer-batch baseline** (skips identical, per-set diff clean: exactly si-iterate-013/094/099/140, zero sets worse). QT3 unchanged **31,142/0/679**; unit Xslt.Tests **522/522** (+4); build 0/0.
+**What was built:**
+- **xsl:if accepted as a break/next-iteration parent** (`TransformEngine.cs` 6.80, `ValidateIterateDescendants`): the allowed-parent list now covers direct children of `xsl:iterate`, `xsl:when`/`xsl:otherwise`, `xsl:catch`, `xsl:try`, and `xsl:if`. The change is purely additive.
+- **Tests** (`IterateTests.cs` 0.2): +4 — `Break_Inside_If_Terminates_Iteration` (copy-of before the if; iteration stops at position 2), `Break_With_Select_Inside_If_Returns_Value`, `Break_Inside_ForEach_Still_Throws` (XTSE3120 negative — break must target the iterate loop), `Break_Not_Last_Inside_If_Still_Throws` (XTSE3120 not-last negative).
+**Verification:** full sweep 10,202/73/4,325 (+4/−4, per-set diff exactly the four targets, zero sets worse); si-iterate set 34/35 (only pre-existing si-iterate-005 result mismatch remains); QT3 31,142/0/679 unchanged; Xslt.Tests 522/522 (+4); Release build 0/0.
+**Known gaps (documented, accepted):** the 73 sweep failures = the pre-existing documented set minus the 4 fixed — schema-gated XTSE1650 ~24, si-message result-mismatch family (6, next batch candidate), error-code alignment (sx-MapExpr/si-map XTDE3365/XTTE3375, 5), sx-treat/sx-instance-of treat-as singles, xml-to-json fn:escape XPath 4.0 family (4), si-iterate-005 and other one-offs.
+**Next steps (agreed direction):**
+1. **si-message result-mismatch batch** (6 tests, one family) — the best count-per-investigation ratio remaining; needs triage to confirm a single cause.
+2. Error-code alignment for map constructors (XTDE3365/XTTE3375 vs XQDY0137/XTTE3365) — cheap, but verify INTEGRATION.md documents the current codes first.
+3. 1.0 items unchanged: API freeze, version promotion, support channel; owner-side: ruleset `protect-main` (id 22255065), GitHub Release notes for v0.10.2-beta still to be pasted manually (gh token expired).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-21 (thirteenth session)
 **Commit:** `d866f20` — fix(xslt): su-filter/su-unclassified analyzer batch (boolean variable predicates, positional predicates on striding steps, unclassified atomic-param atomization)
 **Current focus:** **REQ-090 analyzer batch — the 10 real `StreamabilityAnalyzer` gaps the use-when batch exposed are fixed.** All 10 failed at compile time with one of two XTSE3430 messages; both traced to over-strict analyzer rules in `StreamabilityAnalyzer.cs` (0.6), no runtime changes: **(1)** a lone *boolean-typed* variable predicate (`$input[$test]`) is a filter predicate, not positional (su-filter-003/004); **(2)** a positional but motionless predicate on a *striding* step keeps the step striding per §19.8.8.9 rule 5 — `last()` use, consuming predicates, and crawling operands still raise (su-unclassified-001); **(3)** `streamability="unclassified"` functions atomize atomic-typed parameters in **any** argument position, sharing the §19.8.5.1 rule already applied to undeclared functions (su-unclassified-006). Full XSLT sweep **10,198 passed / 77 failed / 4,325 skipped** — **+10/−10 vs the 10,188/87 use-when baseline** (skips identical, per-set diff clean: exactly su-filter +4, su-unclassified +6, zero sets worse). QT3 unchanged **31,142/0/679** (Bosak.Xslt-only change); unit Xslt.Tests **518/518** (+6); build 0/0.

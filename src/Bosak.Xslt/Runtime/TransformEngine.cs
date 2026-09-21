@@ -356,6 +356,9 @@
 //                      | Charles Korthout | 6.79  | 21-09-2026     | Streamed document-child scans skip pre-root comments/PIs when locating the shell root   |
 //                      |                  |       |                | (strip-space decision, accumulator start-phase annotations)                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.80  | 21-09-2026     | xsl:break / xsl:next-iteration permitted as the last instruction of xsl:if inside       |
+//                      |                  |       |                | xsl:iterate (XSLT 3.0 §8.4; si-iterate-013/094/099/140)                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -19708,7 +19711,10 @@ public sealed class TransformEngine
                 }
                 else
                 {
-                    parentAllowed = parentLocal == "when" || parentLocal == "otherwise" || parentLocal == "catch";
+                    // xsl:if is a permitted position (XSLT 3.0 §8.4: xsl:break may appear as
+                    // the last instruction of xsl:if within the iterate body — si-iterate-013/094).
+                    parentAllowed = parentLocal == "when" || parentLocal == "otherwise"
+                        || parentLocal == "catch" || parentLocal == "if";
                 }
             }
             else
