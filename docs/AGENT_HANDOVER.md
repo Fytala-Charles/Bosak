@@ -10,7 +10,7 @@
 **Known gaps (documented, accepted):** the 55 sweep failures = the pre-existing documented set minus the 4 fixed — schema-gated XTSE1650 ~24, sf-xml-to-json-004 (streaming "already consumed" one-off), si-iterate-005 and other assorted singles. The non-schema sweep backlog is now essentially exhausted.
 **Next steps (agreed direction):**
 1. **Schema-awareness track** — the ~24 XTSE1650 schema-gated failures (plus si-map-007/009) are the only coherent backlog family left; this is a bigger feature decision (schema-for-XSLT import, `xsl:import-schema` runtime support), not a triage batch. Alternatively pivot to 1.0 items.
-2. 1.0 items unchanged: API freeze, version promotion, support channel; owner-side: ruleset `protect-main` (id 22255065), GitHub Release notes for v0.10.2-beta still to be pasted manually (gh token expired).
+2. **1.0 items** (agreed direction after strategy discussion 2026-09-21: stability/discoverability first, schema awareness stays the paid differentiator): API freeze, version promotion, support channel. Owner-side items from earlier sessions are now done — `protect-main` ruleset (id 22255065) is **active** (enforcement on, targets `~DEFAULT_BRANCH`; note: direct pushes to main are now PR-gated unless a bypass actor is added) and the v0.10.2-beta release notes are replaced with a clean version.
 
 ---
 
