@@ -3917,7 +3917,7 @@ Verification: QT3 31,142/0/679, XSLT 7,722/3/6,875, unit tests 2,216/0/0 — all
 
 ### REQ-096: Pre-1.0 API Freeze — Wholesale Internalization + Reshape/Rename Pass
 
-**Status:** **Done** — executed 2026-09-21 in four stages (A: Parser+Compiler, B: Xslt, C: XQuery/Runtime/Core/Standard/Providers, D: reshape/rename); commit pending at handover-write time.
+**Status:** **Done** — executed 2026-09-21 in four stages (A: Parser+Compiler, B: Xslt, C: XQuery/Runtime/Core/Standard/Providers, D: reshape/rename); merged as PR #4 (`0225857`).
 **Raised by:** *(internal)* — 1.0 readiness track (strategy decision 2026-09-21: stability before schema-awareness; see `docs/API_FREEZE.md`).
 
 #### Decision Log
