@@ -3906,7 +3906,7 @@ Verification: QT3 31,142/0/679, XSLT 7,722/3/6,875, unit tests 2,216/0/0 — all
 
 ### REQ-095: xml-to-json Package-Namespace Batch — `xsl:sequence/@select` Compiled Without In-Scope Namespaces
 
-**Status:** **Done** — XSLT batch complete 2026-09-21 (working tree; not committed — see handover for the commit hash).
+**Status:** **Done** — XSLT batch complete 2026-09-21 (commit `ebdf1b7`).
 **Raised by:** *(internal)* — xml-to-json-B2-005/006/010/014 in the sweep backlog (see `docs/AGENT_HANDOVER.md`).
 
 #### Decision Log
