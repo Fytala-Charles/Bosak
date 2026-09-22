@@ -9,7 +9,7 @@
 - Docs: `docs/API_FREEZE.md` (EXECUTED + actuals), REQ-096 registry row + decision log, INTEGRATION/ARCHITECTURE rename references updated.
 **Known gaps (documented, accepted):** deferred items listed above; `XQuery.Compiler.ModuleImport`/`SchemaImport`/`UserFunctionParameter` DTOs remain public (small, arguably fine); `XdmValueComparer` lives in the Core namespace but the Runtime assembly (accepted mismatch).
 **Next steps (agreed direction):**
-1. **Version promotion prep** — with the API frozen, the 1.0 candidate is: regenerate inventory → tag 1.0.0 (or one more 0.11-beta soak first). Decide soak vs. promote.
+1. ~~Version promotion prep~~ **DONE same day — soak release shipped: `v0.11.0-beta`** (PR #6 `b9c3f67` bump, tag pushed, Release workflow success, release notes written via API; 0.11.0 is the 1.0-candidate API). Decide the 1.0.0 tag timing after the soak period.
 2. **Support channel** — the remaining 1.0 item: GitHub Discussions (owner flip) + support-policy paragraph in README/COMMERCIAL.md.
 3. Schema-awareness track remains the paid-feature candidate for post-1.0.
 
