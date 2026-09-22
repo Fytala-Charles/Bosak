@@ -14,6 +14,8 @@
 
 **Workflow change (2026-09-21):** the active ruleset makes direct pushes to main impossible — **all changes now travel branch → PR → merge** (PR #1 was the first). Working recipe: commit on a short-lived branch (`docs/…`/`fix/…`), push it, open the PR via the fine-grained PAT (needs Contents + Pull requests + Administration RW), merge with `merge_method: "merge"`, then `git pull` fast-forwards local main; delete the branch both sides. The merge commit preserves the exact commit hash, so local main stays in sync cleanly.
 
+**1.0 track started (2026-09-21):** pre-1.0 **API-freeze audit** complete — reflection-based inventory of all 9 published assemblies (238 public types, ~3,900 members; scratch tool `mult/apidump`, regenerable). Findings consolidated in **`docs/API_FREEZE.md`**: Parser/Compiler are ~100% leaked internals (internalize wholesale, keep only `ParseException`); Xslt leaks 26 of 37 types (`Stylesheet.*` object model, `TransformEngine`); the keep-public curated surface is ~70 types. Eight human decisions listed (AST-as-tooling?, XSD scope, IXdmNode facets, EvaluationContext pruning, custom-function surface, XsltExecutable consolidation, FunctionLibrary split, XQueryStaticContext fate) — that document is the agenda for the next session; the internalize/reshape lists are mechanical once decided.
+
 ---
 
 # Handover — Bosak XPath/XSLT/XQuery Implementation
