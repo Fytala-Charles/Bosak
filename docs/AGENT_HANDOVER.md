@@ -10,7 +10,7 @@
 **Known gaps (documented, accepted):** deferred items listed above; `XQuery.Compiler.ModuleImport`/`SchemaImport`/`UserFunctionParameter` DTOs remain public (small, arguably fine); `XdmValueComparer` lives in the Core namespace but the Runtime assembly (accepted mismatch).
 **Next steps (agreed direction):**
 1. ~~Version promotion prep~~ **DONE same day — soak release shipped: `v0.11.0-beta`** (PR #6 `b9c3f67` bump, tag pushed, Release workflow success, release notes written via API; 0.11.0 is the 1.0-candidate API). Decide the 1.0.0 tag timing after the soak period.
-2. **Support channel** — the remaining 1.0 item: GitHub Discussions (owner flip) + support-policy paragraph in README/COMMERCIAL.md.
+2. ~~Support channel~~ **DONE same day** — GitHub Discussions enabled by owner (welcome post drafted + pinned); support-policy text merged via PR #9 (`99d6b62`): README `## Support` section + COMMERCIAL.md `## How support works`, consistent with the welcome post (community-supported free core; contracts add speed/access, never gate conformance fixes).
 3. Schema-awareness track remains the paid-feature candidate for post-1.0.
 
 ---
