@@ -285,7 +285,7 @@ The harness:
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
 | Pass Rate (XPath+XQuery) | **31,142 passed / 0 failed / 679 skipped** (97.87%) with strict error-code matching (2026-09-09) — **100%** of runnable tests pass |
 | **XSLT 3.0** | 224 test sets, 14,600 tests |
-| Pass Rate (XSLT) | **10,220 passed / 55 failed / 4,325 skipped** (99.4%, 2026-09-21, streaming Phases A–D live + si-fork residual batch + provider batch + use-when batch + su-filter/su-unclassified analyzer batch + si-iterate XTSE3120 batch + si-message assert-message batch + sx-MapExpr map-constructor batch + sx-treat/sx-instance-of braced-EQName batch + xml-to-json package-namespace batch) — failures triaged: schema-gated XTSE1650 (~24), assorted documented singles; see REQ-086/REQ-087/REQ-088/REQ-089/REQ-090/REQ-091/REQ-092/REQ-093/REQ-094/REQ-095 decision logs |
+| Pass Rate (XSLT) | **10,220 passed / 55 failed / 4,325 skipped** (99.4%, 2026-09-21, streaming Phases A–D live + si-fork residual batch + provider batch + use-when batch + su-filter/su-unclassified analyzer batch + si-iterate XTSE3120 batch + si-message assert-message batch + sx-MapExpr map-constructor batch + sx-treat/sx-instance-of braced-EQName batch + xml-to-json package-namespace batch; re-run 2026-09-22 with REQ-097 schema-aware seam — unchanged) — failures triaged: schema-gated XTSE1650 (~24), assorted documented singles; see REQ-086/REQ-087/REQ-088/REQ-089/REQ-090/REQ-091/REQ-092/REQ-093/REQ-094/REQ-095 decision logs |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |
 | Unsupported Features | Schema awareness (in progress), XQuery-only dependencies |
 
@@ -308,7 +308,7 @@ The harness:
 | `assert-deep-eq` | ✅ Implemented | Recursive XDM comparison |
 | `assert-xml` | ⚠️ Partial | ~1,840 tests skipped |
 | `assert-permutation` | ❌ Not implemented | ~92 tests skipped |
-| Schema-aware | ❌ Not supported | ~5,000+ tests skipped |
+| Schema-aware | ⚠️ Opt-in (REQ-097) | ~5,000+ tests skipped — XSLT schema-aware compilation compiles `xsl:import-schema` and supports user-defined simple types via `SchemaAware` / `SchemaResolver` / `SchemaSet`; complex-type typed construction and runtime validation remain planned (Bosak.Schema track) |
 
 ### Adding New Tests
 
