@@ -51,6 +51,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11  | 09-09-2026     | Typed function test (args other than '*') requires an 'as' return type (hof-910)      |
 //                      | Charles Korthout | 1.12  | 09-09-2026     | XQST0098 for exponent-separator == digit sign; XQST0058 for duplicate schema-import targ |
+//                      | Charles Korthout | 1.13  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      | Charles Korthout | 1.14  | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
+//                      | Charles Korthout | 1.15  | 21-09-2026     | API freeze stage C: internalized XQueryParser and XQueryParseResult                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -69,7 +72,7 @@ namespace Bosak.XQuery.Compiler;
 /// The parser owns the XQuery top-level grammar (version declaration, prolog, and query body)
 /// and delegates expression parsing to the proven XPath parser.
 /// </summary>
-public sealed class XQueryParser
+internal sealed class XQueryParser
 {
     private readonly string _source;
     private int _position;
@@ -112,7 +115,7 @@ public sealed class XQueryParser
 
             // XQST0031: only XQuery versions supported by this implementation are accepted.
             if (versionLiteral is not ("1.0" or "3.0" or "3.1"))
-                throw new ParseException($"XQST0031: XQuery version '{versionLiteral}' is not supported.", _position);
+                throw new XPathParseException($"XQST0031: XQuery version '{versionLiteral}' is not supported.", _position);
 
             if (TryMatchLiteral("encoding"))
             {
@@ -120,7 +123,7 @@ public sealed class XQueryParser
                 var encoding = ReadStringLiteral();
                 // XQST0087: the encoding name must match the XML EncName production.
                 if (!IsValidEncodingName(encoding))
-                    throw new ParseException($"XQST0087: Encoding '{encoding}' is not supported.", _position);
+                    throw new XPathParseException($"XQST0087: Encoding '{encoding}' is not supported.", _position);
                 SkipWhitespace();
             }
 
@@ -137,7 +140,7 @@ public sealed class XQueryParser
             var encoding = ReadStringLiteral();
             // XQST0087: the encoding name must match the XML EncName production.
             if (!IsValidEncodingName(encoding))
-                throw new ParseException($"XQST0087: Encoding '{encoding}' is not supported.", _position);
+                throw new XPathParseException($"XQST0087: Encoding '{encoding}' is not supported.", _position);
             SkipWhitespace();
             ExpectChar(';');
             SkipWhitespace();
@@ -163,7 +166,7 @@ public sealed class XQueryParser
             ExpectChar(';');
             // XQST0088: the target namespace of a library module must not be empty.
             if (moduleNs.Length == 0)
-                throw new ParseException("XQST0088: The target namespace of a library module must not be a zero-length string.", _position);
+                throw new XPathParseException("XQST0088: The target namespace of a library module must not be a zero-length string.", _position);
             // The module declaration also binds its prefix in the module's own static context.
             context = context.WithModuleNamespace(moduleNs).WithNamespace(modulePrefix, moduleNs);
             _isLibraryModule = true;
@@ -192,7 +195,7 @@ public sealed class XQueryParser
         foreach (var (prefix, local, value, position) in _pendingOptions)
         {
             if (!context.Namespaces.TryGetValue(prefix, out var deferredNs))
-                throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", position);
+                throw new XPathParseException($"XPST0081: Prefix '{prefix}' is not declared.", position);
             ValidateOutputOption(context, local, deferredNs, position);
             context = context.WithOption(local, deferredNs, value);
         }
@@ -208,26 +211,26 @@ public sealed class XQueryParser
             foreach (var fn in context.UserFunctions)
             {
                 if (fn.NamespaceUri != targetNs)
-                    throw new ParseException($"XQST0048: Function '{fn.LocalName}' is not in the library module's target namespace '{targetNs}'.", fn.Position);
+                    throw new XPathParseException($"XQST0048: Function '{fn.LocalName}' is not in the library module's target namespace '{targetNs}'.", fn.Position);
             }
             foreach (var v in context.UserVariables)
             {
                 if (v.NamespaceUri != targetNs)
-                    throw new ParseException($"XQST0048: Variable '${v.LocalName}' is not in the library module's target namespace '{targetNs}'.", v.Position);
+                    throw new XPathParseException($"XQST0048: Variable '${v.LocalName}' is not in the library module's target namespace '{targetNs}'.", v.Position);
             }
             // XQST0108: an output declaration must not appear in a library module.
             foreach (var (local, optionNs, _) in context.Options)
             {
                 if (optionNs == "http://www.w3.org/2010/xslt-xquery-serialization")
-                    throw new ParseException($"XQST0108: An output declaration ('{local}') must not appear in a library module.", _position);
+                    throw new XPathParseException($"XQST0108: An output declaration ('{local}') must not appear in a library module.", _position);
             }
             // XPST0003: a library module must not contain a query body expression.
             if (!string.IsNullOrWhiteSpace(StripComments(remaining)))
-                throw new ParseException("XPST0003: A library module must not contain a query body expression.", _position);
+                throw new XPathParseException("XPST0003: A library module must not contain a query body expression.", _position);
             return new XQueryParseResult(context, new SequenceExpressionNode(Array.Empty<XPathAstNode>()), isLibraryModule: true);
         }
         if (string.IsNullOrWhiteSpace(remaining))
-            throw new ParseException("XPST0003: Query body is missing.", _position);
+            throw new XPathParseException("XPST0003: Query body is missing.", _position);
 
         var bodyAst = XPathParser.Parse(remaining, allowFullFlwor: true, xml11LineEndings: _xml11LineEndings,
             boundarySpaceStrip: _boundarySpaceStrip);
@@ -248,7 +251,7 @@ public sealed class XQueryParser
         // XQuery prolog ordering: imports are phase-1 declarations and must precede
         // variable, function, option, and context item declarations.
         if (_seenSecondPhaseDecl)
-            throw new ParseException("XPST0003: Module imports must precede variable, function, option, and context item declarations.", _position);
+            throw new XPathParseException("XPST0003: Module imports must precede variable, function, option, and context item declarations.", _position);
 
         SkipWhitespace();
         string? importPrefix = null;
@@ -276,16 +279,16 @@ public sealed class XQueryParser
 
         // XQST0088: the target namespace of a module import must not be empty.
         if (importNs.Length == 0)
-            throw new ParseException("XQST0088: The target namespace of a module import must not be a zero-length string.", _position);
+            throw new XPathParseException("XQST0088: The target namespace of a module import must not be a zero-length string.", _position);
         // XQST0070: the prefixes xml and xmlns must not be (re)bound by a module import.
         if (importPrefix == "xmlns"
             || (importPrefix == "xml" && importNs != "http://www.w3.org/XML/1998/namespace"))
         {
-            throw new ParseException($"XQST0070: The prefix '{importPrefix}' must not be bound by a module import.", _position);
+            throw new XPathParseException($"XQST0070: The prefix '{importPrefix}' must not be bound by a module import.", _position);
         }
         // XQST0047: one module must not import the same target namespace twice.
         if (context.ImportedModules.Any(m => m.NamespaceUri == importNs))
-            throw new ParseException($"XQST0047: The module namespace '{importNs}' is imported more than once.", _position);
+            throw new XPathParseException($"XQST0047: The module namespace '{importNs}' is imported more than once.", _position);
 
         if (importPrefix is not null)
             context = context.WithNamespace(importPrefix, importNs);
@@ -306,7 +309,7 @@ public sealed class XQueryParser
         // Schema imports are phase-1 declarations and must precede variable, function, option,
         // and context item declarations.
         if (_seenSecondPhaseDecl)
-            throw new ParseException("XPST0003: Schema imports must precede variable, function, option, and context item declarations.", _position);
+            throw new XPathParseException("XPST0003: Schema imports must precede variable, function, option, and context item declarations.", _position);
 
         SkipWhitespace();
         string? importPrefix = null;
@@ -350,16 +353,16 @@ public sealed class XQueryParser
 
         // XQST0057: a schema import that specifies a prefix must not specify the empty target namespace.
         if (importPrefix is not null && importNs == "")
-            throw new ParseException("XQST0057: A schema import must not bind a prefix to the empty namespace URI.", _position);
+            throw new XPathParseException("XQST0057: A schema import must not bind a prefix to the empty namespace URI.", _position);
         // XQST0070: the prefixes xml and xmlns must not be (re)bound by a schema import.
         if (importPrefix == "xmlns"
             || (importPrefix == "xml" && importNs != "http://www.w3.org/XML/1998/namespace"))
         {
-            throw new ParseException($"XQST0070: The prefix '{importPrefix}' must not be bound by a schema import.", _position);
+            throw new XPathParseException($"XQST0070: The prefix '{importPrefix}' must not be bound by a schema import.", _position);
         }
         // XQST0059: a schema import must have a target namespace or be default element namespace.
         if (importNs is null)
-            throw new ParseException("XPST0003: A schema import must specify a target namespace or 'default element namespace'.", _position);
+            throw new XPathParseException("XPST0003: A schema import must specify a target namespace or 'default element namespace'.", _position);
 
         if (importPrefix is not null)
             context = context.WithNamespace(importPrefix, importNs);
@@ -370,7 +373,7 @@ public sealed class XQueryParser
         foreach (var existing in context.ImportedSchemas)
         {
             if (string.Equals(existing.NamespaceUri ?? "", importNs, StringComparison.Ordinal))
-                throw new ParseException($"XQST0058: More than one schema import specifies the target namespace '{importNs}'.", _position);
+                throw new XPathParseException($"XQST0058: More than one schema import specifies the target namespace '{importNs}'.", _position);
         }
         context = context.WithImportedSchema(new SchemaImport(importPrefix, importNs, locationHints, _position));
         return true;
@@ -393,7 +396,7 @@ public sealed class XQueryParser
             // phase-1 declarations and must precede variable, function, option, and
             // context item declarations (K2-NamespaceProlog-14).
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string prefix = ReadNCName();
             SkipWhitespace();
@@ -407,13 +410,13 @@ public sealed class XQueryParser
             // namespaceDecl-3/5); no prefix may be bound to the XML or XMLNS namespace
             // names (namespaceDecl-4).
             if (prefix is "xml" or "xmlns")
-                throw new ParseException($"XQST0070: The namespace prefix '{prefix}' must not be declared.", _position);
+                throw new XPathParseException($"XQST0070: The namespace prefix '{prefix}' must not be declared.", _position);
             if (uri is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
-                throw new ParseException($"XQST0070: The namespace '{uri}' must not be bound to the prefix '{prefix}'.", _position);
+                throw new XPathParseException($"XQST0070: The namespace '{uri}' must not be bound to the prefix '{prefix}'.", _position);
             // XQST0033: a prefix must not be declared twice in one prolog — an
             // undeclaration counts as a declaration (K2-NamespaceProlog-1/2/3).
             if (!_declaredNamespacePrefixes.Add(prefix))
-                throw new ParseException($"XQST0033: The namespace prefix '{prefix}' is declared more than once.", _position);
+                throw new XPathParseException($"XQST0033: The namespace prefix '{prefix}' is declared more than once.", _position);
             context = context.WithNamespace(prefix, uri);
             return true;
         }
@@ -421,7 +424,7 @@ public sealed class XQueryParser
         if (TryMatchPhrase("default", "element", "namespace"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
@@ -429,10 +432,10 @@ public sealed class XQueryParser
             // XQST0070: the default element namespace must not be the XML or XMLNS
             // namespace (defaultnamespacedeclerr-3/5/7).
             if (uri is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
-                throw new ParseException($"XQST0070: The default element namespace must not be the reserved namespace '{uri}'.", _position);
+                throw new XPathParseException($"XQST0070: The default element namespace must not be the reserved namespace '{uri}'.", _position);
             // XQST0066: the default element namespace must not be declared twice.
             if (context.DefaultElementNamespace is not null)
-                throw new ParseException("XQST0066: More than one default element namespace declaration.", _position);
+                throw new XPathParseException("XQST0066: More than one default element namespace declaration.", _position);
             context = context.WithDefaultElementNamespace(uri);
             return true;
         }
@@ -440,7 +443,7 @@ public sealed class XQueryParser
         if (TryMatchPhrase("default", "function", "namespace"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Namespace declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
@@ -448,18 +451,18 @@ public sealed class XQueryParser
             // XQST0060: the default function namespace must not be a zero-length string
             // (unlike the default element namespace, it cannot be undeclared).
             if (uri.Length == 0)
-                throw new ParseException("XQST0060: The default function namespace must not be a zero-length string.", _position);
+                throw new XPathParseException("XQST0060: The default function namespace must not be a zero-length string.", _position);
             // XQST0070: the default function namespace must not be the XML or XMLNS
             // namespace (defaultnamespacedeclerr-4/6/8). The XML Schema namespaces are
             // legal here (hof-007 uses xs:date via the default function namespace).
             if (uri is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
             {
-                throw new ParseException($"XQST0070: The default function namespace must not be the reserved namespace '{uri}'.", _position);
+                throw new XPathParseException($"XQST0070: The default function namespace must not be the reserved namespace '{uri}'.", _position);
             }
             // XQST0066: the default function namespace must not be declared twice.
             if (context.DefaultFunctionNamespace is not null
                 && context.DefaultFunctionNamespace != "http://www.w3.org/2005/xpath-functions")
-                throw new ParseException("XQST0066: More than one default function namespace declaration.", _position);
+                throw new XPathParseException("XQST0066: More than one default function namespace declaration.", _position);
             context = context.WithDefaultFunctionNamespace(uri);
             return true;
         }
@@ -467,20 +470,20 @@ public sealed class XQueryParser
         if (TryMatchPhrase("default", "collation"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             string uri = ReadStringLiteral();
             SkipWhitespace();
             ExpectChar(';');
             // XQST0038: duplicate default collation declaration.
             if (context.DefaultCollation is not null)
-                throw new ParseException("XQST0038: More than one default collation declaration.", _position);
+                throw new XPathParseException("XQST0038: More than one default collation declaration.", _position);
             // XQST0038: the collation must be known to the implementation (XQST0038_3,
             // XQST0046_06 — an unsupported or malformed collation URI is the same error).
             // Store the resolved absolute URI so fn:default-collation() reports it correctly.
             string resolvedUri = ResolveCollationUri(uri, context.BaseUri);
             if (!IsSupportedCollation(resolvedUri))
-                throw new ParseException($"XQST0038: Collation '{uri}' is not supported.", _position);
+                throw new XPathParseException($"XQST0038: Collation '{uri}' is not supported.", _position);
             context = context.WithDefaultCollation(resolvedUri);
             return true;
         }
@@ -488,16 +491,16 @@ public sealed class XQueryParser
         if (TryMatchPhrase("default", "order", "empty"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             var emptyMode = ReadNCName();
             if (emptyMode is not ("least" or "greatest"))
-                throw new ParseException($"XPST0003: Expected 'least' or 'greatest' after 'declare default order empty' but found '{emptyMode}'.", _position);
+                throw new XPathParseException($"XPST0003: Expected 'least' or 'greatest' after 'declare default order empty' but found '{emptyMode}'.", _position);
             SkipWhitespace();
             ExpectChar(';');
             // XQST0069: the default order for empty sequences must not be declared twice.
             if (context.DefaultEmptyOrderLeast is not null)
-                throw new ParseException("XQST0069: More than one 'declare default order empty' declaration.", _position);
+                throw new XPathParseException("XQST0069: More than one 'declare default order empty' declaration.", _position);
             context = context.WithDefaultEmptyOrderLeast(emptyMode == "least");
             return true;
         }
@@ -505,16 +508,16 @@ public sealed class XQueryParser
         if (TryMatchPhrase("ordering"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             var mode = ReadNCName();
             if (mode is not ("ordered" or "unordered"))
-                throw new ParseException($"XPST0003: Expected 'ordered' or 'unordered' after 'declare ordering' but found '{mode}'.", _position);
+                throw new XPathParseException($"XPST0003: Expected 'ordered' or 'unordered' after 'declare ordering' but found '{mode}'.", _position);
             SkipWhitespace();
             ExpectChar(';');
             // XQST0065: the ordering mode must not be declared twice.
             if (_seenOrderingDecl)
-                throw new ParseException("XQST0065: More than one ordering mode declaration.", _position);
+                throw new XPathParseException("XQST0065: More than one ordering mode declaration.", _position);
             _seenOrderingDecl = true;
             return true;
         }
@@ -522,16 +525,16 @@ public sealed class XQueryParser
         if (TryMatchPhrase("boundary-space"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             var spaceMode = ReadNCName();
             if (spaceMode is not ("strip" or "preserve"))
-                throw new ParseException($"XPST0003: Expected 'strip' or 'preserve' after 'declare boundary-space' but found '{spaceMode}'.", _position);
+                throw new XPathParseException($"XPST0003: Expected 'strip' or 'preserve' after 'declare boundary-space' but found '{spaceMode}'.", _position);
             SkipWhitespace();
             ExpectChar(';');
             // XQST0068: the boundary-space policy must not be declared twice (boundaryspacedeclerr-1).
             if (context.BoundarySpaceStrip is not null)
-                throw new ParseException("XQST0068: More than one boundary-space declaration.", _position);
+                throw new XPathParseException("XQST0068: More than one boundary-space declaration.", _position);
             context = context.WithBoundarySpace(spaceMode == "strip");
             _boundarySpaceStrip = spaceMode == "strip";
             return true;
@@ -540,7 +543,7 @@ public sealed class XQueryParser
         if (TryMatchPhrase("default", "decimal-format"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             ParseDecimalFormatDeclaration(ref context, isDefault: true);
             return true;
         }
@@ -548,7 +551,7 @@ public sealed class XQueryParser
         if (TryMatchPhrase("decimal-format"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             ParseDecimalFormatDeclaration(ref context, isDefault: false);
             return true;
         }
@@ -556,7 +559,7 @@ public sealed class XQueryParser
         if (TryMatchPhrase("base-uri"))
         {
             if (_seenSecondPhaseDecl)
-                throw new ParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
+                throw new XPathParseException("XPST0003: Setter declarations must precede variable, function, option, and context item declarations.", _position);
             SkipWhitespace();
             // URILiteral whitespace is normalized per the fn:normalize-space rules
             // (XQ 3.1 §2.4.5): leading/trailing whitespace is stripped and internal
@@ -567,7 +570,7 @@ public sealed class XQueryParser
             ExpectChar(';');
             // XQST0032: the base URI must not be declared twice.
             if (context.BaseUri is not null)
-                throw new ParseException("XQST0032: More than one base URI declaration.", _position);
+                throw new XPathParseException("XQST0032: More than one base URI declaration.", _position);
             context = context.WithBaseUri(uri);
             return true;
         }
@@ -629,12 +632,12 @@ public sealed class XQueryParser
             ExpectChar(';');
             // XQST0113: more than one context item declaration in one module.
             if (_seenContextItemDecl)
-                throw new ParseException("XQST0113: More than one context item declaration in a module.", _position);
+                throw new XPathParseException("XQST0113: More than one context item declaration in a module.", _position);
             _seenContextItemDecl = true;
             _seenSecondPhaseDecl = true;
             // XQST0113: an initial or default value is not allowed in a library module.
             if (hasValue)
-                throw new ParseException("XQST0113: A context item declaration in a library module must not specify an initial or default value.", _position);
+                throw new XPathParseException("XQST0113: A context item declaration in a library module must not specify an initial or default value.", _position);
             context = context.WithContextItemType(contextItemType);
             return true;
         }
@@ -661,7 +664,7 @@ public sealed class XQueryParser
             fmtLocal = local;
             fmtNs = eqNameUri ?? (prefix is null ? string.Empty
                 : context.Namespaces.TryGetValue(prefix, out var prefixNs) ? prefixNs
-                : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
+                : throw new XPathParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
             SkipWhitespace();
             // A bare name with no property bindings uses all defaults.
             if (_position < _source.Length && _source[_position] == ';')
@@ -679,7 +682,7 @@ public sealed class XQueryParser
             string prop = ReadNCName();
             // XQST0114: a decimal-format property must not appear twice in one declaration.
             if (!seenProps.Add(prop))
-                throw new ParseException($"XQST0114: The decimal-format property '{prop}' is specified more than once.", _position);
+                throw new XPathParseException($"XQST0114: The decimal-format property '{prop}' is specified more than once.", _position);
             SkipWhitespace();
             ExpectLiteral("=");
             SkipWhitespace();
@@ -700,12 +703,12 @@ public sealed class XQueryParser
                 case "per-mille": format.PerMille = CheckSingleChar(prop, value); break;
                 case "zero-digit":
                     if (value.Length != 1 || char.GetNumericValue(value[0]) != 0.0)
-                        throw new ParseException($"XQST0097: The zero-digit property value '{value}' is not a character with digit value 0.", _position);
+                        throw new XPathParseException($"XQST0097: The zero-digit property value '{value}' is not a character with digit value 0.", _position);
                     format.ZeroDigit = value;
                     break;
                 case "digit":
                     if (value.Length != 1 || char.IsDigit(value[0]))
-                        throw new ParseException($"XQST0097: The digit property value '{value}' must be a single non-digit character.", _position);
+                        throw new XPathParseException($"XQST0097: The digit property value '{value}' must be a single non-digit character.", _position);
                     format.Digit = value;
                     break;
                 case "pattern-separator": format.PatternSeparator = CheckSingleChar(prop, value); break;
@@ -713,7 +716,7 @@ public sealed class XQueryParser
                 default:
                     // currency-symbol (an XSLT-only property) and any other name are
                     // not valid in an XQuery decimal format (decimal-format-07).
-                    throw new ParseException($"XPST0003: Unknown decimal-format property '{prop}'.", _position);
+                    throw new XPathParseException($"XPST0003: Unknown decimal-format property '{prop}'.", _position);
             }
             if (_position < _source.Length && _source[_position] == ';')
             {
@@ -727,13 +730,13 @@ public sealed class XQueryParser
         // or per-mille character either (numberformat111 — ambiguous in pictures).
         if (format.DecimalSeparator == format.GroupingSeparator
             || IsDigitChar(format.DecimalSeparator) || IsDigitChar(format.GroupingSeparator))
-            throw new ParseException("XQST0098: The decimal-separator and grouping-separator must be different characters and must not be digits.", _position);
+            throw new XPathParseException("XQST0098: The decimal-separator and grouping-separator must be different characters and must not be digits.", _position);
         if (format.ExponentSeparator == format.Percent || format.ExponentSeparator == format.PerMille)
-            throw new ParseException("XQST0098: The exponent-separator must not be the percent or per-mille character.", _position);
+            throw new XPathParseException("XQST0098: The exponent-separator must not be the percent or per-mille character.", _position);
         // numberformat126: the exponent-separator must not be the digit sign either
         // (it would be ambiguous with a mandatory-digit placeholder in a picture).
         if (format.ExponentSeparator == format.Digit)
-            throw new ParseException("XQST0098: The exponent-separator must not be the digit sign.", _position);
+            throw new XPathParseException("XQST0098: The exponent-separator must not be the digit sign.", _position);
 
         RegisterDecimalFormat(ref context, isDefault, fmtLocal, fmtNs, format);
     }
@@ -745,7 +748,7 @@ public sealed class XQueryParser
             // XQST0111: the default decimal format must not be declared twice
             // (decimal-format-903err).
             if (context.DeclaredDefaultDecimalFormat is not null)
-                throw new ParseException("XQST0111: More than one default decimal-format declaration.", _position);
+                throw new XPathParseException("XQST0111: More than one default decimal-format declaration.", _position);
             context = context.WithDeclaredDefaultDecimalFormat(format);
         }
         else
@@ -753,7 +756,7 @@ public sealed class XQueryParser
             // XQST0111: a named decimal format must not be declared twice
             // (decimal-format-904err).
             if (context.DecimalFormats.ContainsKey((fmtLocal!, fmtNs!)))
-                throw new ParseException($"XQST0111: The decimal format '{fmtLocal}' is declared more than once.", _position);
+                throw new XPathParseException($"XQST0111: The decimal format '{fmtLocal}' is declared more than once.", _position);
             context = context.WithDecimalFormat(fmtLocal!, fmtNs!, format);
         }
     }
@@ -761,7 +764,7 @@ public sealed class XQueryParser
     private string CheckSingleChar(string prop, string value)
     {
         if (value.Length != 1)
-            throw new ParseException($"XQST0097: The decimal-format property '{prop}' value '{value}' is not exactly one character.", _position);
+            throw new XPathParseException($"XQST0097: The decimal-format property '{prop}' value '{value}' is not exactly one character.", _position);
         return value;
     }
 
@@ -792,7 +795,7 @@ public sealed class XQueryParser
                 ? context.DefaultFunctionNamespace ?? "http://www.w3.org/2005/xpath-functions"
                 : context.Namespaces.TryGetValue(prefix, out var declaredFnNs)
                     ? declaredFnNs
-                    : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
+                    : throw new XPathParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
 
         SkipWhitespace();
         ExpectChar('(');
@@ -833,8 +836,8 @@ public sealed class XQueryParser
             SkipWhitespace();
             ExpectChar(';');
             if (IsReservedFunctionNamespace(fnNs))
-                throw new ParseException($"XQST0045: Functions must not be declared in the reserved namespace '{fnNs}'.", _position);
-            throw new ParseException($"XPST0017: External function declarations are not supported ('{local}').", _position);
+                throw new XPathParseException($"XQST0045: Functions must not be declared in the reserved namespace '{fnNs}'.", _position);
+            throw new XPathParseException($"XPST0017: External function declarations are not supported ('{local}').", _position);
         }
         var body = ReadBracedExpression();
         SkipWhitespace();
@@ -842,18 +845,18 @@ public sealed class XQueryParser
 
         // XQST0039: two parameters of one function must not have the same name.
         if (parameters.Select(p => p.Name).Distinct().Count() != parameters.Count)
-            throw new ParseException($"XQST0039: Function '{local}' declares a parameter name more than once.", _position);
+            throw new XPathParseException($"XQST0039: Function '{local}' declares a parameter name more than once.", _position);
         // XQST0034: the same function name and arity must not be declared twice.
         if (context.UserFunctions.Any(f => f.LocalName == local && f.NamespaceUri == fnNs && f.Parameters.Count == parameters.Count))
-            throw new ParseException($"XQST0034: Function '{local}' with arity {parameters.Count} is declared more than once.", _position);
+            throw new XPathParseException($"XQST0034: Function '{local}' with arity {parameters.Count} is declared more than once.", _position);
         // XQST0045: functions must not be declared in a reserved function namespace.
         if (IsReservedFunctionNamespace(fnNs))
         {
-            throw new ParseException($"XQST0045: Functions must not be declared in the reserved namespace '{fnNs}'.", _position);
+            throw new XPathParseException($"XQST0045: Functions must not be declared in the reserved namespace '{fnNs}'.", _position);
         }
         // XPST0003: reserved function names cannot be declared as user functions.
         if (prefix is null && ReservedFunctionNames.Contains(local))
-            throw new ParseException($"XPST0003: '{local}' is a reserved function name and cannot be declared.", _position);
+            throw new XPathParseException($"XPST0003: '{local}' is a reserved function name and cannot be declared.", _position);
         context = context.WithUserFunction(new UserFunctionDeclaration(local, fnNs, parameters, returnType, body, _position, isPrivate));
         _seenSecondPhaseDecl = true;
         return true;
@@ -894,7 +897,7 @@ public sealed class XQueryParser
                 ? string.Empty
                 : context.Namespaces.TryGetValue(prefix, out var declaredVarNs)
                     ? declaredVarNs
-                    : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
+                    : throw new XPathParseException($"XPST0081: Prefix '{prefix}' is not declared.", _position));
         SkipWhitespace();
         string? varType = null;
         if (TryMatchLiteral("as"))
@@ -929,7 +932,7 @@ public sealed class XQueryParser
 
         // XQST0049: the same variable name must not be declared twice.
         if (context.UserVariables.Any(v => v.LocalName == local && v.NamespaceUri == varNs))
-            throw new ParseException($"XQST0049: Variable '${local}' is declared more than once.", _position);
+            throw new XPathParseException($"XQST0049: Variable '${local}' is declared more than once.", _position);
         context = context.WithUserVariable(new UserVariableDeclaration(local, varNs, varType, varBody, isExternal, _position, isPrivate));
         _seenSecondPhaseDecl = true;
         return true;
@@ -975,7 +978,7 @@ public sealed class XQueryParser
     private void ReadAnnotationArgumentLiteral()
     {
         if (_position >= _source.Length)
-            throw new ParseException("XPST0003: Expected a literal in annotation arguments.", _position);
+            throw new XPathParseException("XPST0003: Expected a literal in annotation arguments.", _position);
         char c = _source[_position];
         if (c is '"' or '\'')
         {
@@ -1000,7 +1003,7 @@ public sealed class XQueryParser
                 _position++;
         }
         if (_position == start)
-            throw new ParseException("XPST0003: Annotation arguments must be literals.", start);
+            throw new XPathParseException("XPST0003: Annotation arguments must be literals.", start);
     }
 
     // Validates the annotations on a declaration and returns whether it is private:
@@ -1024,7 +1027,7 @@ public sealed class XQueryParser
                     ? null
                     : context.Namespaces.TryGetValue(prefix, out var annotationNs)
                         ? annotationNs
-                        : throw new ParseException($"XPST0081: Prefix '{prefix}' is not declared.", position));
+                        : throw new XPathParseException($"XPST0081: Prefix '{prefix}' is not declared.", position));
             // XQST0045: annotations must not be in a reserved namespace.
             if (ns is "http://www.w3.org/2005/xpath-functions"
                 or "http://www.w3.org/2005/xpath-functions/math"
@@ -1035,14 +1038,14 @@ public sealed class XQueryParser
                 or "http://www.w3.org/XML/1998/namespace"
                 or "http://www.w3.org/2000/xmlns/")
             {
-                throw new ParseException($"XQST0045: Annotation '%{local}' is in the reserved namespace '{ns}'.", position);
+                throw new XPathParseException($"XQST0045: Annotation '%{local}' is in the reserved namespace '{ns}'.", position);
             }
             // Unprefixed annotation names are in the XQuery namespace, where only the
             // reserved visibility annotations are defined; anything else is XQST0045.
             if (ns is null or "http://www.w3.org/2012/xquery")
             {
                 if (local is not ("public" or "private"))
-                    throw new ParseException($"XQST0045: Unknown annotation '%{local}' in the XQuery namespace.", position);
+                    throw new XPathParseException($"XQST0045: Unknown annotation '%{local}' in the XQuery namespace.", position);
                 visibilityCount++;
                 isPrivate = local == "private";
             }
@@ -1050,7 +1053,7 @@ public sealed class XQueryParser
         }
         if (visibilityCount > 1)
         {
-            throw new ParseException(
+            throw new XPathParseException(
                 isFunction
                     ? "XQST0106: A function declaration must not contain more than one %public or %private annotation."
                     : "XQST0116: A variable declaration must not contain more than one %public or %private annotation.",
@@ -1121,9 +1124,9 @@ public sealed class XQueryParser
         if (optionNs != "http://www.w3.org/2010/xslt-xquery-serialization")
             return;
         if (!SerializationParameterNames.Contains(local))
-            throw new ParseException($"XQST0109: Unknown serialization parameter '{local}'.", position);
+            throw new XPathParseException($"XQST0109: Unknown serialization parameter '{local}'.", position);
         if (context.Options.Any(o => o.NamespaceUri == optionNs && o.LocalName == local))
-            throw new ParseException($"XQST0110: Duplicate output declaration for serialization parameter '{local}'.", position);
+            throw new XPathParseException($"XQST0110: Duplicate output declaration for serialization parameter '{local}'.", position);
     }
 
     // ------------------------------------------------------------------
@@ -1232,7 +1235,7 @@ public sealed class XQueryParser
     {
         SkipWhitespace();
         if (!_source.AsSpan(_position).StartsWith(literal.AsSpan(), StringComparison.Ordinal))
-            throw new ParseException($"XPST0003: Expected '{literal}'.", _position);
+            throw new XPathParseException($"XPST0003: Expected '{literal}'.", _position);
         _position += literal.Length;
     }
 
@@ -1240,7 +1243,7 @@ public sealed class XQueryParser
     {
         SkipWhitespace();
         if (_position >= _source.Length || _source[_position] != c)
-            throw new ParseException($"XPST0003: Expected '{c}'.", _position);
+            throw new XPathParseException($"XPST0003: Expected '{c}'.", _position);
         _position++;
     }
 
@@ -1248,11 +1251,11 @@ public sealed class XQueryParser
     {
         SkipWhitespace();
         if (_position >= _source.Length)
-            throw new ParseException("XPST0003: Expected string literal.", _position);
+            throw new XPathParseException("XPST0003: Expected string literal.", _position);
 
         char quote = _source[_position];
         if (quote != '"' && quote != '\'')
-            throw new ParseException("XPST0003: Expected string literal.", _position);
+            throw new XPathParseException("XPST0003: Expected string literal.", _position);
 
         _position++;
         var value = new StringBuilder();
@@ -1281,7 +1284,7 @@ public sealed class XQueryParser
             value.Append(c);
             _position++;
         }
-        throw new ParseException("XPST0003: Unterminated string literal.", _position);
+        throw new XPathParseException("XPST0003: Unterminated string literal.", _position);
     }
 
     private string ExpandCharReference()
@@ -1290,7 +1293,7 @@ public sealed class XQueryParser
         int start = _position;
         int semi = _source.IndexOf(';', _position + 1);
         if (semi < 0)
-            throw new ParseException("XPST0003: Unterminated entity or character reference in string literal.", start);
+            throw new XPathParseException("XPST0003: Unterminated entity or character reference in string literal.", start);
         var reference = _source[(_position + 1)..semi];
         string result = reference switch
         {
@@ -1305,7 +1308,7 @@ public sealed class XQueryParser
             _ when reference.StartsWith('#') &&
                    int.TryParse(reference[1..], NumberStyles.Integer, CultureInfo.InvariantCulture, out var dec) &&
                    dec is >= 0 and <= 0x10FFFF => char.ConvertFromUtf32(dec),
-            _ => throw new ParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", start)
+            _ => throw new XPathParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", start)
         };
         _position = semi + 1;
         return result;
@@ -1315,7 +1318,7 @@ public sealed class XQueryParser
     {
         SkipWhitespace();
         if (_position >= _source.Length || !IsNameStartChar(_source[_position]))
-            throw new ParseException("XPST0003: Expected NCName.", _position);
+            throw new XPathParseException("XPST0003: Expected NCName.", _position);
 
         int start = _position;
         _position++;
@@ -1357,7 +1360,7 @@ public sealed class XQueryParser
         {
             int close = _source.IndexOf('}', _position);
             if (close < 0)
-                throw new ParseException("XPST0003: Unterminated braced URI literal in EQName.", _position);
+                throw new XPathParseException("XPST0003: Unterminated braced URI literal in EQName.", _position);
             var uri = _source[(_position + 1)..close];
             _position = close + 1;
             return (null, ReadNCName(), uri);
@@ -1399,7 +1402,7 @@ public sealed class XQueryParser
         if (text.StartsWith("empty-sequence(", StringComparison.Ordinal)
             && text.Length > "empty-sequence()".Length)
         {
-            throw new ParseException("XPST0003: empty-sequence() must not have an occurrence indicator.", start);
+            throw new XPathParseException("XPST0003: empty-sequence() must not have an occurrence indicator.", start);
         }
         return text;
     }
@@ -1425,7 +1428,7 @@ public sealed class XQueryParser
             {
                 int close = _source.IndexOf('}', _position);
                 if (close < 0)
-                    throw new ParseException("XPST0003: Unterminated EQName in sequence type.", _position);
+                    throw new XPathParseException("XPST0003: Unterminated EQName in sequence type.", _position);
                 _position = close + 1;
             }
             else
@@ -1434,7 +1437,7 @@ public sealed class XQueryParser
             }
         }
         if (_position == nameStart)
-            throw new ParseException("XPST0003: Expected item type.", _position);
+            throw new XPathParseException("XPST0003: Expected item type.", _position);
         var itemTypeName = _source[nameStart.._position];
         // Optional parenthesized arguments: (), (*), (element-name), (*:name), etc.
         bool isTypedFunctionTest = false;
@@ -1446,7 +1449,7 @@ public sealed class XQueryParser
             do
             {
                 if (_position >= _source.Length)
-                    throw new ParseException("XPST0003: Unterminated '(' in sequence type.", _position);
+                    throw new XPathParseException("XPST0003: Unterminated '(' in sequence type.", _position);
                 if (_source[_position] == '(') depth++;
                 else if (_source[_position] == ')') depth--;
                 _position++;
@@ -1462,7 +1465,7 @@ public sealed class XQueryParser
                     && !trimmed.EndsWith(":*", StringComparison.Ordinal)
                     && !trimmed.EndsWith("}*", StringComparison.Ordinal);
                 if (badOccurrence || badStar)
-                    throw new ParseException($"XPST0003: An occurrence indicator ('*' or '+') is not allowed inside the {itemTypeName}() type.", nameStart);
+                    throw new XPathParseException($"XPST0003: An occurrence indicator ('*' or '+') is not allowed inside the {itemTypeName}() type.", nameStart);
             }
             // A function test that lists argument types (anything other than the
             // any-function form function(*)) is a TypedFunctionTest and requires an
@@ -1482,7 +1485,7 @@ public sealed class XQueryParser
         }
         else if (isTypedFunctionTest)
         {
-            throw new ParseException("XPST0003: A function test with argument types requires an 'as' return type.", nameStart);
+            throw new XPathParseException("XPST0003: A function test with argument types requires an 'as' return type.", nameStart);
         }
     }
 
@@ -1520,7 +1523,7 @@ public sealed class XQueryParser
             _position++;
         }
         if (depth > 0)
-            throw new ParseException("XPST0003: Unterminated '{' in function declaration.", _position);
+            throw new XPathParseException("XPST0003: Unterminated '{' in function declaration.", _position);
         var inner = _source[start..(_position - 1)];
         // An empty (or comment-only) function body is the empty sequence (XQuery 3.1).
         if (string.IsNullOrWhiteSpace(StripComments(inner)))
@@ -1571,7 +1574,7 @@ public sealed class XQueryParser
             else if (c is ')' or ']' or '}') depth--;
             _position++;
         }
-        throw new ParseException($"XPST0003: Expected expression before '{terminator}'.", _position);
+        throw new XPathParseException($"XPST0003: Expected expression before '{terminator}'.", _position);
     }
 
     private void SkipStringLiteral(char quote)
@@ -1669,7 +1672,7 @@ public sealed class XQueryParser
 /// <summary>
 /// The result of parsing an XQuery module.
 /// </summary>
-public sealed class XQueryParseResult
+internal sealed class XQueryParseResult
 {
     /// <summary>
     /// The static context derived from the prolog.
@@ -1679,7 +1682,7 @@ public sealed class XQueryParseResult
     /// <summary>
     /// The query body expression AST (the empty sequence for a library module).
     /// </summary>
-    public XPathAstNode Body { get; }
+    internal XPathAstNode Body { get; }
 
     /// <summary>
     /// True when the source was a library module (<c>module namespace ...;</c>) rather

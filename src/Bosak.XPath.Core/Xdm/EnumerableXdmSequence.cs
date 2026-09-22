@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 09-09-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -23,7 +24,7 @@ namespace Bosak.XPath.Core.Xdm;
 /// Used by axis implementations where the consumer typically enumerates once
 /// (child/descendant/attribute axes on path-heavy evaluations).
 /// </summary>
-public sealed class EnumerableXdmSequence : IXdmSequence
+internal sealed class EnumerableXdmSequence : IXdmSequence
 {
     private readonly IEnumerable<XdmValue> _items;
 

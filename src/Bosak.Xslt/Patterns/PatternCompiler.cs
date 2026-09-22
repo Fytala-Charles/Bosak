@@ -49,6 +49,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      | Charles Korthout | 3.3   | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
+//                      | Charles Korthout | 3.4   | 21-09-2026     | API freeze stage B: internalized                                                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.5   | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -66,13 +69,13 @@ namespace Bosak.Xslt.Patterns;
 /// Signature for a compiled match pattern predicate.
 /// Receives the candidate node and the current evaluation context (needed for variable reference patterns).
 /// </summary>
-public delegate bool PatternPredicate(XdmValue item, EvaluationContext context);
+internal delegate bool PatternPredicate(XdmValue item, EvaluationContext context);
 
 /// <summary>
 /// Compiles XSLT match patterns (e.g. <c>foo[bar]</c>, <c>*</c>, <c>@id | ref</c>)
 /// into <c>PatternPredicate</c> predicates.
 /// </summary>
-public sealed class PatternCompiler
+internal sealed class PatternCompiler
 {
     private static readonly Regex UnionPattern = new(@"\s*\|\s*", RegexOptions.Compiled);
 
@@ -788,7 +791,7 @@ public sealed class PatternCompiler
                         continue;
                     }
 
-                    if (!result.EffectiveBooleanValue())
+                    if (!result.GetEffectiveBooleanValue())
                         return false;
                 }
                 return true;
@@ -2434,11 +2437,11 @@ public sealed class PatternCompiler
                     if (!item.IsNode)
                     {
                         var atomicResult = atomicCompiled.Evaluate(ctx.WithFocus(item, 1, 1));
-                        return atomicResult.EffectiveBooleanValue();
+                        return atomicResult.GetEffectiveBooleanValue();
                     }
 
                     var result = dotCompiled.Evaluate(ctx.WithFocus(item, 1, 1));
-                    return result.EffectiveBooleanValue();
+                    return result.GetEffectiveBooleanValue();
                 }
                 catch (Exception ex)
                 {
@@ -2499,7 +2502,7 @@ public sealed class PatternCompiler
                     {
                         // Parentless node: evaluate predicate directly (position() is 1/1)
                         result = fallbackPred.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
-                        return result.EffectiveBooleanValue();
+                        return result.GetEffectiveBooleanValue();
                     }
 
                     result = compiledStep.Evaluate(ctx.WithFocus(XdmValue.FromNode(parent), 1, 1));
@@ -2549,7 +2552,7 @@ public sealed class PatternCompiler
             try
             {
                 var result = compiledPred.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
-                return result.EffectiveBooleanValue();
+                return result.GetEffectiveBooleanValue();
             }
             catch (Exception ex)
             {
@@ -2639,7 +2642,7 @@ public sealed class PatternCompiler
             try
             {
                 var result = compiledPred.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
-                return result.EffectiveBooleanValue();
+                return result.GetEffectiveBooleanValue();
             }
             catch (Exception ex)
             {

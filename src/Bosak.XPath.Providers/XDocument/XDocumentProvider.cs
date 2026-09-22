@@ -51,6 +51,8 @@
 //                      | Charles Korthout | 0.20  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.21  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.22  | 21-09-2026     | API freeze stage D: LoadXml(filePath) overloads renamed to LoadFile                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -698,8 +700,8 @@ public static class XDocumentProvider
     /// </summary>
     /// <param name="filePath">The path or file URI of the document to load.</param>
     /// <returns>The loaded document node.</returns>
-    public static IXdmNode LoadXml(string filePath)
-        => LoadXml(filePath, baseUri: null);
+    public static IXdmNode LoadFile(string filePath)
+        => LoadFile(filePath, baseUri: null);
 
     /// <summary>
     /// Loads an XML file and returns the root as an <see cref="IXdmNode"/>.
@@ -711,7 +713,7 @@ public static class XDocumentProvider
     /// <param name="filePath">The path or file URI of the document to load.</param>
     /// <param name="baseUri">An optional published URI to use as the document's base URI.</param>
     /// <returns>The loaded document node.</returns>
-    public static IXdmNode LoadXml(string filePath, string? baseUri)
+    public static IXdmNode LoadFile(string filePath, string? baseUri)
     {
         var document = Xml11Loader.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
         StripDocumentLevelWhitespace(document);
@@ -754,13 +756,13 @@ public static class XDocumentProvider
     /// <param name="schemaSet">An optional compiled schema set to validate against.</param>
     /// <returns>The loaded (and optionally validated) document node.</returns>
     /// <exception cref="XmlSchemaValidationException">Validation against <paramref name="schemaSet"/> produces errors.</exception>
-    public static IXdmNode LoadXml(string filePath, string? baseUri, XmlSchemaSet? schemaSet)
+    public static IXdmNode LoadFile(string filePath, string? baseUri, XmlSchemaSet? schemaSet)
     {
         var document = Xml11Loader.Load(filePath, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
         StripDocumentLevelWhitespace(document);
         if (!string.IsNullOrEmpty(baseUri))
         {
-            // See LoadXml(filePath, baseUri): preserve XML 1.1 undeclaration annotations
+            // See LoadFile(filePath, baseUri): preserve XML 1.1 undeclaration annotations
             // across the reparse for the published base URI.
             var originals = document.Descendants().ToList();
             document = Xml11Loader.Parse(document.ToString(),

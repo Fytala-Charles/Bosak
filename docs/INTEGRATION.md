@@ -1654,7 +1654,7 @@
 
 - **2026-06-27** — Cleared the remaining XSLT `namespace` cluster failures (`namespace-0912` and `namespace-2611`) and the full `namespace-alias` cluster.
   - Built-in `shallow-copy` now suspends the outer sequence accumulator while applying templates to children, so typed variables containing shallow-copied elements keep child results nested instead of escaping as siblings.
-  - `XdmValue.EffectiveBooleanValue()` now follows XPath sequence EBV rules: empty sequence → `false`, singleton sequence → EBV of its item, multi-node sequence → `true`, multi-item atomic sequence → `FORG0006`.
+  - `XdmValue.GetEffectiveBooleanValue()` now follows XPath sequence EBV rules: empty sequence → `false`, singleton sequence → EBV of its item, multi-node sequence → `true`, multi-item atomic sequence → `FORG0006`.
 
 - **2026-06-26** — Cleared the XSLT `date` conformance cluster (46 runnable failures).
   - `xsl:value-of` now evaluates the `_select` AVT used by static-parameter test stylesheets.
@@ -1859,7 +1859,7 @@ IXdmNode doc = XmlStreamingProvider.Load(stream, new StreamingLoadOptions { Base
 | `xsl:for-each` / `xsl:apply-templates` over the root's children (or `//record`), record-local bodies | **Bounded** — records are released as they are consumed |
 | Predicates on the record step, `position()` | Bounded |
 | `xsl:sort`, `xsl:for-each-group`, `fn:count()`, `fn:last()` subscript `[last()]`, keys, variables retaining records | Unbounded but correct (buffers the stream) |
-| Spec-streaming multi-operand shapes (`//A \| //B`, `except`/`intersect`, `xsl:fork` branches, multi-entry `map{}`) via `xsl:source-document streamable="yes"` | Unbounded but correct — the engine opts into record retention (`StreamingLoadOptions.RetainRecords` / `IStreamingDocument.EnableReplay`): records are memoized so each operand replays the stream; memory is bounded by document size |
+| Spec-streaming multi-operand shapes (`//A \| //B`, `except`/`intersect`, `xsl:fork` branches, multi-entry `map{}`) via `xsl:source-document streamable="yes"` | Unbounded but correct — the engine opts into record retention (`StreamingLoadOptions.RetainRecords` / `IStreamingDocument.TryEnableReplay`): records are memoized so each operand replays the stream; memory is bounded by document size |
 | `fn:last()` in a streamed focus, a second pass over the streamed root, `preceding` axes across records, `following` axes past the current record | Clear `StreamingException`/error — never silently wrong data |
 | `xsl:accumulator` declarations | **Bounded** — values are pushed per record and travel as annotations; document-level `accumulator-after` drains the stream when nothing is mid-enumeration |
 | `fn:copy-of`/`xsl:copy-of` of a streamed node | Records: **bounded** (a grounded, detached copy of the record is built). Streamed document/root: unbounded but correct — the copy drains the stream into memory, the same contract as sorting |
@@ -2139,7 +2139,7 @@ Bosak provides an `IXsdValidator` abstraction for XML Schema validation:
 using Bosak.XPath.Api.Xsd;
 
 var validator = new XsdValidator();
-var result = validator.TryValidate(xmlString, xsdStream);
+var result = validator.ValidateSafe(xmlString, xsdStream);
 
 if (result.IsValid)
 {
@@ -2147,7 +2147,7 @@ if (result.IsValid)
 }
 else
 {
-    foreach (var error in result.OnlyErrors)
+    foreach (var error in result.ErrorsOnly)
     {
         Console.WriteLine($"Error at line {error.LineNumber}: {error.Message}");
     }
@@ -2157,7 +2157,7 @@ else
 Features:
 - Single-schema and multi-schema validation (handles `xs:import`/`xs:include`)
 - Structured error results with line/column numbers
-- Non-throwing `TryValidate` and throwing `Validate` variants
+- Non-throwing `ValidateSafe` and throwing `Validate` variants
 - Configurable via `XsdValidatorOptions` (max error count, treat warnings as errors)
 
 ---
@@ -2264,7 +2264,7 @@ dotnet test Bosak.sln
 | XSLT 1.0 backwards-compatible mode is fully implemented. | `CompileOptions.BackwardsCompatible` flows into the XPath optimizer, IR lowerer, VM arithmetic/comparisons, standard-function argument conversion, `xsl:value-of`, `xsl:number`, and `key()` string-valued lookups. Clears the `backwards` cluster (43/43 runnable). | 2026-07-07 |
 | The `bug` conformance cluster is fully passing. | Imported-template XTSE0680 validation, `<assert-serialization>` file loading in the harness, namespace fixup for copied attributes, and `current()` inside `xsl:sort`. Clears the `bug` cluster (69/69 runnable). | 2026-07-07 |
 | The `xpath-compat` conformance cluster is fully passing. | Backwards-compatible negative-zero constant folding and `fn:subsequence` numeric argument coercion for strings/untyped atoms. Clears the `xpath-compat` cluster (17/17 runnable). | 2026-07-07 |
-| Resource URIs can be redirected to local files. | `EvaluationContext.ResourceUriMapper` (`Func<string, string?>`) maps a requested URI to a local path; consulted by `fn:doc`, `fn:json-doc`, `fn:unparsed-text(-available/-lines)`, and `fn:transform`'s `stylesheet-location` before filesystem/network access. `XDocumentProvider.LoadXml` now absolutizes relative paths before deriving the document URI (previously `UriFormatException`). JSON parse failures in `fn:parse-json`/`fn:json-doc`/`fn:json-to-xml` raise `FOJS0001` instead of propagating `JsonException`. | 2026-07-15 |
+| Resource URIs can be redirected to local files. | `EvaluationContext.ResourceUriMapper` (`Func<string, string?>`) maps a requested URI to a local path; consulted by `fn:doc`, `fn:json-doc`, `fn:unparsed-text(-available/-lines)`, and `fn:transform`'s `stylesheet-location` before filesystem/network access. `XDocumentProvider.LoadFile` now absolutizes relative paths before deriving the document URI (previously `UriFormatException`). JSON parse failures in `fn:parse-json`/`fn:json-doc`/`fn:json-to-xml` raise `FOJS0001` instead of propagating `JsonException`. | 2026-07-15 |
 | QT3 `fn:transform` Tier-2m is fully passing. | Implemented `global-context-item`, `xslt-version` validation/propagation, default-mode routing, `template-params`/`tunnel-params`, `base-output-uri` raw-result delivery, serialization parameter merging, `suppress-indentation` override, and absent-principal-output suppression. Filtered suite: 117 passed / 0 failed / 7 skipped. | 2026-07-15 |
 | Whitespace stripping of loaded documents follows the calling package's rules. | Per XSLT 3.0 §2.13.4, documents loaded by `fn:doc`/`fn:document`/`fn:collection` from code in a used package are stripped with that package's own `xsl:strip-space`/`xsl:preserve-space` rules. `TransformEngine` sets `EvaluationContext.DocumentLoadPolicy` when entering used-package components (templates, functions, global initializers), and the document cache is keyed by `(URI, policy)` so the same URI yields a distinct stripped tree per distinct rule set. Principal-stylesheet code keeps the default policy, sharing the host-registered document pool (e.g. the initial source tree). Fixes `document-2401/2402` and `collection-006`. | 2026-09-05 |
 

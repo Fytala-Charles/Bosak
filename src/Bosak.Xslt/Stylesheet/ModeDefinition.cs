@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 0.9   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 17-09-2026     | SpecifiedValues + ConflictsWith/MergeSamePrecedence: XTSE0545 only for same-attribute value conflicts; same-precedence declarations merge per attribute (mode-1903) |
+//                      | Charles Korthout | 1.1   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -36,7 +37,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// <summary>
 /// Specifies the built-in template rule behavior when no explicit template matches a node.
 /// </summary>
-public enum OnNoMatch
+internal enum OnNoMatch
 {
     /// <summary>Shallow-copy the node.</summary>
     ShallowCopy,
@@ -55,7 +56,7 @@ public enum OnNoMatch
 /// <summary>
 /// Specifies the behavior when multiple template rules match with the same priority.
 /// </summary>
-public enum OnMultipleMatch
+internal enum OnMultipleMatch
 {
     /// <summary>Use the last matching template (default in XSLT 3.0).</summary>
     UseLast,
@@ -66,7 +67,7 @@ public enum OnMultipleMatch
 /// <summary>
 /// Specifies the visibility of an <c>xsl:mode</c> declaration.
 /// </summary>
-public enum ModeVisibility
+internal enum ModeVisibility
 {
     /// <summary>Visible to stylesheets that import this one.</summary>
     Public,
@@ -81,7 +82,7 @@ public enum ModeVisibility
 /// <summary>
 /// Represents a parsed xsl:mode declaration.
 /// </summary>
-public sealed class ModeDefinition
+internal sealed class ModeDefinition
 {
     /// <summary>The mode name (empty string for the default mode).</summary>
     public string Name { get; }

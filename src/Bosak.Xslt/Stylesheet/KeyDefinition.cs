@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Capture xsl:key @collation for effective collation resolution                           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -27,7 +28,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// <summary>
 /// Represents a single xsl:key declaration within a stylesheet.
 /// </summary>
-public sealed class KeyDefinition
+internal sealed class KeyDefinition
 {
     /// <summary>The expanded key name in Clark notation (<c>{uri}local</c>).</summary>
     public string Name { get; }

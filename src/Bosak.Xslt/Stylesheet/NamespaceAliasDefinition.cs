@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-06-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -22,7 +23,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// <summary>
 /// Represents a parsed <c>xsl:namespace-alias</c> declaration.
 /// </summary>
-public sealed class NamespaceAliasDefinition
+internal sealed class NamespaceAliasDefinition
 {
     /// <summary>The source prefix (empty string for <c>#default</c>).</summary>
     public string SourcePrefix { get; init; } = "";

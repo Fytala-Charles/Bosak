@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage D: TryValidate -> ValidateSafe, OnlyErrors -> ErrorsOnly               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Api.Xsd;
@@ -39,7 +41,7 @@ public class XsdValidatorTests
 <root>hello</root>";
 
         var validator = new XsdValidator();
-        var result = validator.TryValidate(xml, ToStream(xsd));
+        var result = validator.ValidateSafe(xml, ToStream(xsd));
 
         Assert.True(result.IsValid);
         Assert.Empty(result.Errors);
@@ -57,10 +59,10 @@ public class XsdValidatorTests
 <root>not-an-int</root>";
 
         var validator = new XsdValidator();
-        var result = validator.TryValidate(xml, ToStream(xsd));
+        var result = validator.ValidateSafe(xml, ToStream(xsd));
 
         Assert.False(result.IsValid);
-        Assert.NotEmpty(result.OnlyErrors);
+        Assert.NotEmpty(result.ErrorsOnly);
     }
 
     [Fact]
@@ -81,10 +83,10 @@ public class XsdValidatorTests
 <root></root>";
 
         var validator = new XsdValidator();
-        var result = validator.TryValidate(xml, ToStream(xsd));
+        var result = validator.ValidateSafe(xml, ToStream(xsd));
 
         Assert.False(result.IsValid);
-        Assert.NotEmpty(result.OnlyErrors);
+        Assert.NotEmpty(result.ErrorsOnly);
     }
 
     [Fact]
@@ -100,7 +102,7 @@ public class XsdValidatorTests
 <a:item xmlns:a=""http://example.org/a"">hello</a:item>";
 
         var validator = new XsdValidator();
-        var result = validator.TryValidate(xml, new[] { ToStream(schemaA) });
+        var result = validator.ValidateSafe(xml, new[] { ToStream(schemaA) });
 
         Assert.True(result.IsValid);
     }
@@ -132,7 +134,7 @@ public class XsdValidatorTests
         var xml = @"<root>unclosed";
 
         var validator = new XsdValidator();
-        var result = validator.TryValidate(xml, ToStream(xsd));
+        var result = validator.ValidateSafe(xml, ToStream(xsd));
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.Message.Contains("parse error", StringComparison.OrdinalIgnoreCase) || e.Message.Contains("unexpected end", StringComparison.OrdinalIgnoreCase));
@@ -150,10 +152,10 @@ public class XsdValidatorTests
 <root>not-an-int</root>";
 
         var validator = new XsdValidator();
-        var result = validator.TryValidate(xml, ToStream(xsd));
+        var result = validator.ValidateSafe(xml, ToStream(xsd));
 
         Assert.False(result.IsValid);
-        var error = result.OnlyErrors.First();
+        var error = result.ErrorsOnly.First();
         Assert.True(error.LineNumber > 0, "Expected line number to be set");
     }
 }

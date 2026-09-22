@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 23-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | ToDateTimeOffset range failure carries FODT0001                                          |
 //                      | Charles Korthout | 0.3   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage C: internalized XPathDateTimeExtensions                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -22,7 +23,7 @@ namespace Bosak.XPath.Core.Xdm;
 /// <summary>
 /// Extension methods for converting .NET date/time values to <see cref="XPathDateTime"/>.
 /// </summary>
-public static class XPathDateTimeExtensions
+internal static class XPathDateTimeExtensions
 {
     /// <summary>Converts a <see cref="DateTimeOffset"/> to an <see cref="XPathDateTime"/> with the given timezone presence.</summary>
     public static XPathDateTime ToXPathDateTime(this DateTimeOffset dto, bool hasTimezone)

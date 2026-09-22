@@ -1,12 +1,16 @@
-# API Freeze Proposal — pre-1.0 audit
+# API Freeze — executed
 
-> Status: **Draft for decision** — 2026-09-21. Source: reflection-based inventory of all 9 published
-> assemblies at v0.10.2-beta (`mult/apidump`, scratch, not committed): **238 public types, ~3,900
-> public member entries**. Per-package raw inventories: `mult/apidump/out/*.txt` (regenerate on demand).
+> Status: **EXECUTED 2026-09-21** (stages A–D, all gates green; see the REQ-096 decision log in
+> `docs/FEATURE_REQUESTS.md` and the session-18 handover). The decision tables below are kept as the
+> record of what was decided; the surviving surface **is the 1.0 contract** — everything public now
+> stays source- and binary-compatible from the 1.0 tag onward.
 >
-> The freeze rule once 1.0 ships: everything public stays source- and binary-compatible. Everything in
-> the "Internalize" tables below that is still public at the 1.0 tag locks implementation detail into
-> the permanent contract. Doing this now, pre-1.0, is the cheap moment.
+> Result: **238 → 79 public types** across the 9 published assemblies (measured by reflection on the
+> post-refactor build; inventories regenerate on demand from the scratch tool `mult/apidump`).
+> Deferred with documented acceptance: `XsltExecutable`'s Transform\* overload set (usable as-is,
+> consolidate in a 2.x), `XsltFunctionLibrary` static registry shape (split deferred to 2.x),
+> `FunctionSignature` setter-based construction (documented, non-validating), `IXdmNode` 33-member
+> shape (accepted as the provider contract), `DefiningElementDefaultNamespace` name (documented).
 
 ## Verdict at a glance
 

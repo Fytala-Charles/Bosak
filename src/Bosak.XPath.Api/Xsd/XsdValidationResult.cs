@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage D: OnlyErrors -> ErrorsOnly, OnlyWarnings -> WarningsOnly              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Api.Xsd;
@@ -30,10 +32,10 @@ public sealed class XsdValidationResult
     public bool IsValid => Errors.Count == 0 || !Errors.Any(e => e.Severity == XsdValidationSeverity.Error);
 
     /// <summary>Gets only the errors (excluding warnings).</summary>
-    public IEnumerable<XsdValidationError> OnlyErrors => Errors.Where(e => e.Severity == XsdValidationSeverity.Error);
+    public IEnumerable<XsdValidationError> ErrorsOnly => Errors.Where(e => e.Severity == XsdValidationSeverity.Error);
 
     /// <summary>Gets only the warnings.</summary>
-    public IEnumerable<XsdValidationError> OnlyWarnings => Errors.Where(e => e.Severity == XsdValidationSeverity.Warning);
+    public IEnumerable<XsdValidationError> WarningsOnly => Errors.Where(e => e.Severity == XsdValidationSeverity.Warning);
 
     /// <summary>Creates a result from the collected validation messages (errors and warnings).</summary>
     public XsdValidationResult(IReadOnlyList<XsdValidationError> errors)

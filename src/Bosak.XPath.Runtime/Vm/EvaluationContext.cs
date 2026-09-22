@@ -80,6 +80,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.26  | 21-09-2026     | InStreamingMapContext flag: map constructors inside XSLT streaming constructs raise  |
 //                      |                  |       |                | XTDE3365 instead of XQDY0137 on duplicate keys (si-fork-814)                          |
+//                      | Charles Korthout | 2.27  | 21-09-2026     | API freeze stage C: pruned engine-state members to internal                             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -125,7 +126,7 @@ public sealed class EvaluationContext
     /// <see cref="_evaluatedLazyGlobals"/>. Used by XSLT function calls to keep function-local
     /// lazy variables from leaking into the global cache.
     /// </summary>
-    public bool SuppressLazyGlobalCaching { get; set; }
+    internal bool SuppressLazyGlobalCaching { get; set; }
 
     /// <summary>
     /// When set to <c>true</c>, the next value returned by <see cref="LazyVariableResolver"/>
@@ -133,7 +134,7 @@ public sealed class EvaluationContext
     /// This allows a resolver to suppress caching for a specific resolution (e.g. a function-local
     /// variable) while still letting globals cache normally.
     /// </summary>
-    public bool SkipLazyGlobalCacheOnce { get; set; }
+    internal bool SkipLazyGlobalCacheOnce { get; set; }
 
     /// <summary>
     /// When true, the lazy variable resolver will only evaluate globals that have a <c>@select</c>
@@ -141,14 +142,14 @@ public sealed class EvaluationContext
     /// pattern validation so that globals whose value depends on the source document or template
     /// matching are not materialized prematurely.
     /// </summary>
-    public bool SuppressLazySequenceConstructorGlobals { get; set; }
+    internal bool SuppressLazySequenceConstructorGlobals { get; set; }
 
     /// <summary>
     /// When true, <see cref="Bosak.XPath.Standard.Functions.FunctionLibrary.Populate"/> will not
     /// be called automatically by <see cref="XPath31Expression.Evaluate"/>. Used by XSLT's
     /// <c>xsl:evaluate</c> to supply a restricted function library.
     /// </summary>
-    public bool SkipStandardFunctionPopulation { get; set; }
+    internal bool SkipStandardFunctionPopulation { get; set; }
 
     /// <summary>
     /// Names of variables declared <c>external</c> in the XQuery prolog for which the host
@@ -196,7 +197,7 @@ public sealed class EvaluationContext
     /// <c>{uri}local</c> tokens. Consumed by <c>fn:serialize</c> as default serialization
     /// parameters.
     /// </summary>
-    public IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? StaticOutputParameters { get; set; }
+    internal IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? StaticOutputParameters { get; set; }
 
     // Namespace prefixes
     private readonly Dictionary<string, string> _namespaces;
@@ -270,7 +271,7 @@ public sealed class EvaluationContext
     /// evaluation is in a temporary output state (e.g., inside xsl:variable, a
     /// stylesheet function, a sort key, or a pattern predicate).
     /// </summary>
-    public string? CurrentOutputUri { get; set; }
+    internal string? CurrentOutputUri { get; set; }
 
     /// <summary>
     /// When true, the expression is being evaluated in a static context (e.g. a
@@ -285,7 +286,7 @@ public sealed class EvaluationContext
     /// XSLT-only functions such as <c>fn:current</c> and <c>fn:system-property</c>
     /// are available. XPath-only contexts leave this false.
     /// </summary>
-    public bool IsXsltMode { get; set; }
+    internal bool IsXsltMode { get; set; }
 
     /// <summary>
     /// When true, map constructors are evaluated inside an XSLT streaming construct
@@ -293,7 +294,7 @@ public sealed class EvaluationContext
     /// XTDE3365 instead of the XQuery map-constructor error XQDY0137 (XSLT 3.0 §19
     /// streamability rules; si-fork-814). Set and restored by the XSLT engine.
     /// </summary>
-    public bool InStreamingMapContext { get; set; }
+    internal bool InStreamingMapContext { get; set; }
 
     /// <summary>
     /// When true, XML 1.1 semantics apply: prefixed namespace undeclarations
@@ -321,7 +322,7 @@ public sealed class EvaluationContext
     /// Captured substring values for the current <c>xsl:analyze-string</c> matching substring,
     /// indexed by group number (0 is the whole match). Used by <c>regex-group()</c>.
     /// </summary>
-    public string[]? RegexGroups { get; set; }
+    internal string[]? RegexGroups { get; set; }
 
     /// <summary>
     /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.
@@ -350,7 +351,7 @@ public sealed class EvaluationContext
     /// designates the default collection); values are the absolute URIs or file paths of the
     /// documents in the collection. Used by fn:collection and fn:uri-collection.
     /// </summary>
-    public Dictionary<string, IReadOnlyList<string>> Collections { get; } = new();
+    internal Dictionary<string, IReadOnlyList<string>> Collections { get; } = new();
 
     /// <summary>
     /// Precomputed collection values declared by environment &lt;collection&gt;&lt;query&gt; elements.
@@ -358,7 +359,7 @@ public sealed class EvaluationContext
     /// already-evaluated XDM sequences. Checked before <see cref="Collections"/> by
     /// fn:collection / fn:uri-collection.
     /// </summary>
-    public Dictionary<string, XdmValue> CollectionValues { get; } = new();
+    internal Dictionary<string, XdmValue> CollectionValues { get; } = new();
 
     /// <summary>
     /// XQuery library-module sources available to fn:load-xquery-module, keyed by the
@@ -367,7 +368,7 @@ public sealed class EvaluationContext
     /// <c>location-hints</c>). When no candidate matches a requested URI, the loader falls
     /// back to treating the URI as a filesystem path relative to the static base URI.
     /// </summary>
-    public Dictionary<string, List<(string? Location, string Source)>> XQueryModuleSources { get; } = new(StringComparer.Ordinal);
+    internal Dictionary<string, List<(string? Location, string Source)>> XQueryModuleSources { get; } = new(StringComparer.Ordinal);
 
     /// <summary>
     /// Host-language loader for <c>fn:load-xquery-module</c> (F&amp;O 3.1 §15.3.1). The
@@ -378,7 +379,7 @@ public sealed class EvaluationContext
     /// re-population of the standard function library (which would otherwise overwrite a
     /// registry-level replacement), because it lives on the context, not in the registry.
     /// </summary>
-    public XPathFunction? XQueryModuleLoader { get; set; }
+    internal XPathFunction? XQueryModuleLoader { get; set; }
 
     /// <summary>
     /// Optional post-processor applied to documents loaded through <see cref="DocumentLoader"/>.
@@ -395,7 +396,7 @@ public sealed class EvaluationContext
     /// different policies yields distinct trees. The default (null) is the host's
     /// default policy, shared with documents registered via <see cref="RegisterDocument"/>.
     /// </summary>
-    public object? DocumentLoadPolicy { get; set; }
+    internal object? DocumentLoadPolicy { get; set; }
 
     /// <summary>
     /// When true, XPath comparisons use XSLT 1.0 / XPath 1.0 backwards-compatible
@@ -407,7 +408,7 @@ public sealed class EvaluationContext
     /// Optional override for the effective XSLT version reported by
     /// <c>fn:system-property('xsl:version')</c> during a transformation.
     /// </summary>
-    public double? XsltVersion { get; set; }
+    internal double? XsltVersion { get; set; }
 
     /// <summary>
     /// The default element namespace URI for unprefixed element and type names.
@@ -427,14 +428,14 @@ public sealed class EvaluationContext
     /// Keys are expanded QNames in Clark notation (<c>{uri}local</c> or <c>local</c>);
     /// values are the corresponding XDM values.
     /// </summary>
-    public Dictionary<string, XdmValue>? InitialTemplateCallParameters { get; set; }
+    internal Dictionary<string, XdmValue>? InitialTemplateCallParameters { get; set; }
 
     /// <summary>
     /// Optional tunnel parameters supplied for the initial named-template entry point.
     /// Keys are expanded QNames in Clark notation (<c>{uri}local</c> or <c>local</c>);
     /// values are the corresponding XDM values.
     /// </summary>
-    public Dictionary<string, XdmValue>? InitialTemplateTunnelParameters { get; set; }
+    internal Dictionary<string, XdmValue>? InitialTemplateTunnelParameters { get; set; }
 
     /// <summary>
     /// Optional callback invoked with the resolved absolute URI whenever a document
@@ -516,7 +517,7 @@ public sealed class EvaluationContext
     /// accumulator values are copied by those functions). Arguments are the source node and
     /// the copy root node.
     /// </summary>
-    public Action<IXdmNode, IXdmNode>? AccumulatorValueCopier { get; set; }
+    internal Action<IXdmNode, IXdmNode>? AccumulatorValueCopier { get; set; }
 
     /// <summary>
     /// Registers a document node under the supplied URI without invoking <see cref="DocumentLoader"/>.
@@ -627,7 +628,7 @@ public sealed class EvaluationContext
     /// XSLT function calls isolate function-local lazy variables from the global cache.
     /// </summary>
     /// <returns>A token whose <see cref="IDisposable.Dispose"/> restores the saved cache.</returns>
-    public IDisposable SnapshotLazyGlobals()
+    internal IDisposable SnapshotLazyGlobals()
     {
         var saved = new Dictionary<(string LocalName, string NamespaceUri), XdmValue>(_evaluatedLazyGlobals);
         return new LazyGlobalsRestorer(this, saved);
@@ -683,14 +684,14 @@ public sealed class EvaluationContext
     /// Creates a snapshot of all current variable bindings.
     /// </summary>
     /// <returns>A copy of the current bindings, keyed by (local name, namespace URI).</returns>
-    public Dictionary<(string LocalName, string NamespaceUri), XdmValue> SnapshotVariables()
+    internal Dictionary<(string LocalName, string NamespaceUri), XdmValue> SnapshotVariables()
         => new Dictionary<(string, string), XdmValue>(_variables);
 
     /// <summary>
     /// Restores variable bindings from a snapshot, removing any variables added since.
     /// </summary>
     /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotVariables"/>.</param>
-    public void RestoreVariables(Dictionary<(string LocalName, string NamespaceUri), XdmValue> snapshot)
+    internal void RestoreVariables(Dictionary<(string LocalName, string NamespaceUri), XdmValue> snapshot)
     {
         _variables.Clear();
         foreach (var (key, value) in snapshot)
@@ -833,7 +834,7 @@ public sealed class EvaluationContext
     /// Returns a snapshot of the current namespace bindings.
     /// </summary>
     /// <returns>A copy of the current prefix-to-URI bindings.</returns>
-    public Dictionary<string, string> SnapshotNamespaces()
+    internal Dictionary<string, string> SnapshotNamespaces()
         => new(_namespaces);
 
     /// <summary>
@@ -841,7 +842,7 @@ public sealed class EvaluationContext
     /// added since the snapshot was taken.
     /// </summary>
     /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotNamespaces"/>.</param>
-    public void RestoreNamespaces(Dictionary<string, string> snapshot)
+    internal void RestoreNamespaces(Dictionary<string, string> snapshot)
     {
         _namespaces.Clear();
         foreach (var kv in snapshot)
@@ -879,7 +880,7 @@ public sealed class EvaluationContext
     /// <c>FunctionLibrary.Populate</c> semantics.
     /// </summary>
     /// <param name="template">The shared standard function table to install (never mutated).</param>
-    public void InstallStandardFunctionTable(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> template)
+    internal void InstallStandardFunctionTable(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> template)
     {
         if (_functions.Count == 0)
         {
@@ -976,14 +977,14 @@ public sealed class EvaluationContext
     /// Returns a shallow copy of the currently registered function signatures.
     /// </summary>
     /// <returns>A copy of the function registry, keyed by (namespace URI, local name, arity).</returns>
-    public Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> SnapshotFunctions()
+    internal Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> SnapshotFunctions()
         => new Dictionary<(string, string, int), FunctionSignature>(_functions);
 
     /// <summary>
     /// Replaces the current function library with the supplied snapshot.
     /// </summary>
     /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotFunctions"/>.</param>
-    public void RestoreFunctions(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> snapshot)
+    internal void RestoreFunctions(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> snapshot)
     {
         _functions.Clear();
         _variadicMinArity.Clear();
@@ -1099,12 +1100,12 @@ public sealed class EvaluationContext
     /// switches (a library module's decimal-format declarations apply only within that module).
     /// </summary>
     /// <returns>A copy of the named decimal formats, keyed by (local name, namespace URI).</returns>
-    public Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> SnapshotDecimalFormats()
+    internal Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> SnapshotDecimalFormats()
         => new(_namedDecimalFormats);
 
     /// <summary>Replaces the named decimal formats with a previously snapshotted set.</summary>
     /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotDecimalFormats"/>.</param>
-    public void RestoreDecimalFormats(Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> snapshot)
+    internal void RestoreDecimalFormats(Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> snapshot)
     {
         _namedDecimalFormats.Clear();
         foreach (var kv in snapshot)

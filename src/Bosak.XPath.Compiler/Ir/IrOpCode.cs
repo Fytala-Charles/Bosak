@@ -40,6 +40,7 @@
 //                      | Charles Korthout | 1.5   | 07-09-2026     | Added CheckFunction opcode for pre-argument callee resolution (XPST0017)                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 1.7   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -48,7 +49,7 @@ namespace Bosak.XPath.Compiler.Ir;
 /// Opcodes for the register-based XPath intermediate representation.
 /// These are lowered from the AST and consumed by the bytecode emitter or IL JIT.
 /// </summary>
-public enum IrOpCode : byte
+internal enum IrOpCode : byte
 {
     // ---- Control flow ------------------------------------------------
     /// <summary>No operation.</summary>

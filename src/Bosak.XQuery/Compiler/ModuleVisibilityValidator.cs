@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.5   | 07-08-2026     | Collect statically unresolvable names for the evaluation-time check (XPST0008/XPST0081/XPST0017); catch clauses bind the err:* variables |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 22-08-2026     | Traversal for ValidateExpressionNode |
+//                      | Charles Korthout | 0.7   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -280,7 +281,7 @@ internal static class ModuleVisibilityValidator
             if (_moduleNamespaces.Contains(ns))
             {
                 if (!_visibleFunctions.Contains((ns, local, arity)))
-                    throw new ParseException($"XPST0017: Function {{{ns}}}{local}#{arity} is not visible in this module.", 0);
+                    throw new XPathParseException($"XPST0017: Function {{{ns}}}{local}#{arity} is not visible in this module.", 0);
                 return;
             }
             // A static call into the local-functions namespace must name a declared user
@@ -316,7 +317,7 @@ internal static class ModuleVisibilityValidator
             if (!IsBound(node, ns) && _excludeVariable is { } excluded
                 && excluded.Local == node.LocalName && excluded.Ns == ns)
             {
-                throw new ParseException(
+                throw new XPathParseException(
                     $"XPST0008: Variable ${(node.Prefix is null ? "" : node.Prefix + ":")}{node.LocalName} is not defined in the initializer of the variable being declared.", 0);
             }
             if (IsBound(node, ns))
@@ -325,7 +326,7 @@ internal static class ModuleVisibilityValidator
             {
                 if (!_visibleVariables.Contains((ns, node.LocalName)))
                 {
-                    throw new ParseException(
+                    throw new XPathParseException(
                         $"XPST0008: Variable ${(node.Prefix is null ? "" : node.Prefix + ":")}{node.LocalName} is not visible in this module.", 0);
                 }
                 return;

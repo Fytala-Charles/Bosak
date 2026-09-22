@@ -17,6 +17,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.31  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.32  | 21-09-2026     | API freeze stage D: CharacterMap is IReadOnlyDictionary get/init; EncodeJsonString      |
+//                      |                  |       |                | overloads are internal (consumers use Serialize)                                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -48,8 +51,9 @@ public sealed class XdmJsonOptions
     /// <summary>
     /// Optional character map applied while serializing JSON string values.
     /// Mapped characters are replaced before JSON escaping is applied. Keys are Unicode codepoints.
+    /// The map can be supplied in the object initializer; it is otherwise engine-managed.
     /// </summary>
-    public Dictionary<int, string>? CharacterMap { get; set; }
+    public IReadOnlyDictionary<int, string>? CharacterMap { get; init; }
 }
 
 /// <summary>
@@ -249,7 +253,7 @@ public static class XdmJsonSerializer
     /// <param name="value">The string to encode.</param>
     /// <param name="escapeSolidus">Whether to escape <c>/</c> as <c>\/</c>.</param>
     /// <returns>The JSON string literal, including the surrounding quotes.</returns>
-    public static string EncodeJsonString(string value, bool escapeSolidus = false)
+    internal static string EncodeJsonString(string value, bool escapeSolidus = false)
     {
         return EncodeJsonString(value, escapeSolidus, null);
     }
@@ -262,7 +266,7 @@ public static class XdmJsonSerializer
     /// <param name="escapeSolidus">Whether to escape <c>/</c> as <c>\/</c>.</param>
     /// <param name="characterMap">An optional map from Unicode codepoint to literal replacement string.</param>
     /// <returns>The JSON string literal, including the surrounding quotes.</returns>
-    public static string EncodeJsonString(string value, bool escapeSolidus, Dictionary<int, string>? characterMap)
+    internal static string EncodeJsonString(string value, bool escapeSolidus, IReadOnlyDictionary<int, string>? characterMap)
     {
         var sb = new StringBuilder();
         sb.Append('"');

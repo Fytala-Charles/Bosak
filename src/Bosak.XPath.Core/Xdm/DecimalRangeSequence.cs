@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-07-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -22,7 +23,7 @@ namespace Bosak.XPath.Core.Xdm;
 /// endpoints do not fit in <see cref="long"/>. The items are decimal-backed values
 /// annotated with the <c>xs:integer</c> schema type.
 /// </summary>
-public sealed class DecimalRangeSequence : IXdmSequence
+internal sealed class DecimalRangeSequence : IXdmSequence
 {
     private readonly decimal _from;
     private readonly decimal _to;

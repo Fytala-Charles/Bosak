@@ -39,7 +39,7 @@
 //                      | Charles Korthout | 2.5   | 05-06-2026     | Removed global NormalizeSequence from Execute; path/union already normalize via opcodes     |
 //                      | Charles Korthout | 2.6   | 05-06-2026     | Added function(*)/map(*)/array(*) support to ValueMatchesType for instance-of checks      |
 //                      | Charles Korthout | 2.7   | 05-06-2026     | Added typed function signature matching (function(T...) as R) with contravariant params   |
-//                      | Charles Korthout | 2.8   | 05-06-2026     | Node comparison operators raise XPTY0004 for non-node operands; ParseException XPST0003  |
+//                      | Charles Korthout | 2.8   | 05-06-2026     | Node comparison operators raise XPTY0004 for non-node operands; XPathParseException XPST0003  |
 //                      | Charles Korthout | 2.9   | 05-06-2026     | ResolveVariableName handles Q{uri}local; inline function params bind by expanded QName     |
 //                      | Charles Korthout | 2.10  | 11-06-2026     | Apply opcode invokes map/array functions; date comparison casts untypedAtomic operands    |
 //                      | Charles Korthout | 2.11  | 13-06-2026     | Empty-URI EQName support in ResolveVariableName (Q{}local)                              |
@@ -96,6 +96,7 @@
 //                      | Charles Korthout | 2.54  | 19-07-2026     | Tier-2z: arithmetic with xs:untypedAtomic now casts the result to xs:double                |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.55  | 19-07-2026     | Tier-2z: duration div by NaN/0 checked before zero-duration short-circuit               |
+//                      | Charles Korthout | 2.153 | 21-09-2026     | API freeze stage C: internalized engine; conversion helpers exposed via XdmConversions  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.56  | 20-07-2026     | PathStepMap raises XPTY0019 when context item is not a node (K2-Axes-50/53)            |
 //                      | Charles Korthout | 2.57  | 20-07-2026     | Cast opcode raises XPTY0004 for empty input with occurrence One (K-SeqExprCast-67)     |
@@ -310,7 +311,11 @@
 //                      |                  |       |                | so Q{...} key-type prefixes survive the lowercase normalization (si-fork-119)          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.150 | 21-09-2026     | MapAdd raises XTDE3365 instead of XQDY0137 when EvaluationContext.InStreamingMapContext |
+//                      | Charles Korthout | 2.151 | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      | Charles Korthout | 2.152 | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Compiler types)                |
 //                      |                  |       |                | is set (xsl:fork branches, si-fork-814)                                                |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.153 | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
@@ -333,7 +338,7 @@ namespace Bosak.XPath.Runtime.Vm;
 /// <summary>
 /// A register-based virtual machine that interprets <see cref="IrModule"/> instructions.
 /// </summary>
-public static class VmEngine
+internal static class VmEngine
 {
     /// <summary>
     /// Executes a compiled IR module against the given evaluation context.
@@ -341,7 +346,7 @@ public static class VmEngine
     /// <param name="module">The compiled IR module to interpret.</param>
     /// <param name="context">The evaluation context holding the focus, variables, and functions.</param>
     /// <returns>The XDM value produced by the expression.</returns>
-    public static XdmValue Execute(IrModule module, EvaluationContext context)
+    internal static XdmValue Execute(IrModule module, EvaluationContext context)
     {
         try
         {
@@ -388,11 +393,11 @@ public static class VmEngine
                     break;
 
                 case IrOpCode.JumpIfTrue:
-                    ip = registers[instr.RegisterA].EffectiveBooleanValue() ? instr.Operand : ip + 1;
+                    ip = registers[instr.RegisterA].GetEffectiveBooleanValue() ? instr.Operand : ip + 1;
                     break;
 
                 case IrOpCode.JumpIfFalse:
-                    ip = !registers[instr.RegisterA].EffectiveBooleanValue() ? instr.Operand : ip + 1;
+                    ip = !registers[instr.RegisterA].GetEffectiveBooleanValue() ? instr.Operand : ip + 1;
                     break;
 
                 case IrOpCode.JumpIfEmpty:
@@ -1195,7 +1200,7 @@ public static class VmEngine
                             context.WithVariable(bindLocal, item, bindNs);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
-                            if (rhsResult.EffectiveBooleanValue())
+                            if (rhsResult.GetEffectiveBooleanValue())
                             {
                                 result = true;
                                 break;
@@ -1229,7 +1234,7 @@ public static class VmEngine
                             context.WithVariable(bindLocal, item, bindNs);
                             var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
 
-                            if (!rhsResult.EffectiveBooleanValue())
+                            if (!rhsResult.GetEffectiveBooleanValue())
                             {
                                 result = false;
                                 break;
@@ -2458,7 +2463,7 @@ public static class VmEngine
                                 if (numericValue == i + 1)
                                     kept[keptCount++] = items[i];
                             }
-                            else if (predResult.EffectiveBooleanValue())
+                            else if (predResult.GetEffectiveBooleanValue())
                             {
                                 kept[keptCount++] = items[i];
                             }
@@ -2720,8 +2725,8 @@ public static class VmEngine
                 // ------------------------------------------------------------------
                 case IrOpCode.And:
                     {
-                        bool result = registers[instr.RegisterB].EffectiveBooleanValue() &&
-                                      registers[instr.RegisterC].EffectiveBooleanValue();
+                        bool result = registers[instr.RegisterB].GetEffectiveBooleanValue() &&
+                                      registers[instr.RegisterC].GetEffectiveBooleanValue();
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         ip++;
                         break;
@@ -2729,15 +2734,15 @@ public static class VmEngine
 
                 case IrOpCode.Or:
                     {
-                        bool result = registers[instr.RegisterB].EffectiveBooleanValue() ||
-                                      registers[instr.RegisterC].EffectiveBooleanValue();
+                        bool result = registers[instr.RegisterB].GetEffectiveBooleanValue() ||
+                                      registers[instr.RegisterC].GetEffectiveBooleanValue();
                         registers[instr.RegisterA] = XdmValue.FromBoolean(result);
                         ip++;
                         break;
                     }
 
                 case IrOpCode.Not:
-                    registers[instr.RegisterA] = XdmValue.FromBoolean(!registers[instr.RegisterB].EffectiveBooleanValue());
+                    registers[instr.RegisterA] = XdmValue.FromBoolean(!registers[instr.RegisterB].GetEffectiveBooleanValue());
                     ip++;
                     break;
 
@@ -4929,7 +4934,7 @@ public static class VmEngine
                 if (numericValue == pos)
                     yield return item;
             }
-            else if (predResult.EffectiveBooleanValue())
+            else if (predResult.GetEffectiveBooleanValue())
             {
                 yield return item;
             }
@@ -6855,8 +6860,8 @@ public static class VmEngine
              (left.IsUndefined && SequenceContainsBooleanItem(right)) ||
              (right.IsUndefined && SequenceContainsBooleanItem(left))))
         {
-            int li = left.EffectiveBooleanValue() ? 1 : 0;
-            int ri = right.EffectiveBooleanValue() ? 1 : 0;
+            int li = left.GetEffectiveBooleanValue() ? 1 : 0;
+            int ri = right.GetEffectiveBooleanValue() ? 1 : 0;
             bool match = CompareCore(
                 MapGeneralToStrictOp(op),
                 XdmValue.FromInteger(li), XdmValue.FromInteger(ri), strict: false,
@@ -7104,8 +7109,8 @@ public static class VmEngine
         bool rightIsBool = right.Kind == XdmValueKind.Boolean;
         if (leftIsBool || rightIsBool)
         {
-            if (!leftIsBool) left = XdmValue.FromBoolean(left.EffectiveBooleanValue());
-            if (!rightIsBool) right = XdmValue.FromBoolean(right.EffectiveBooleanValue());
+            if (!leftIsBool) left = XdmValue.FromBoolean(left.GetEffectiveBooleanValue());
+            if (!rightIsBool) right = XdmValue.FromBoolean(right.GetEffectiveBooleanValue());
             return;
         }
 
@@ -13148,7 +13153,7 @@ public static class VmEngine
             context.WithVariable(local, value, ns);
         }
         var (condResult, _) = ExecuteBlock(module, context, registers, entryPoint);
-        return condResult.EffectiveBooleanValue();
+        return condResult.GetEffectiveBooleanValue();
     }
 
     private static void EmitFlworWindow(

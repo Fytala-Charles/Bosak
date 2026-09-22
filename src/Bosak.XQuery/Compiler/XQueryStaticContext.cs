@@ -26,6 +26,8 @@
 //                      | Charles Korthout | 0.7   | 01-08-2026     | ContextItemTypeName records the library-module context item type declaration         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 01-08-2026     | DecimalFormats/DeclaredDefaultDecimalFormat/BoundarySpaceStrip prolog state          |
+//                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
+//                      | Charles Korthout | 0.10  | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -36,7 +38,7 @@ using Bosak.XPath.Runtime.Vm;
 namespace Bosak.XQuery.Compiler;
 
 /// <summary>A user function declared in the prolog (<c>declare function p:name($p as T, ...) as R { body }</c>).</summary>
-public sealed record UserFunctionDeclaration(
+internal sealed record UserFunctionDeclaration(
     string LocalName,
     string NamespaceUri,
     IReadOnlyList<UserFunctionParameter> Parameters,
@@ -49,7 +51,7 @@ public sealed record UserFunctionDeclaration(
 public sealed record UserFunctionParameter(string Name, string? TypeName);
 
 /// <summary>A user variable declared in the prolog (<c>declare variable $p:name (as T)? := expr;</c> or <c>external</c>).</summary>
-public sealed record UserVariableDeclaration(
+internal sealed record UserVariableDeclaration(
     string LocalName,
     string NamespaceUri,
     string? TypeName,
@@ -77,7 +79,7 @@ public sealed record SchemaImport(
 /// and is used during compilation to resolve QNames and during execution to configure the
 /// <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext"/>.
 /// </summary>
-public sealed class XQueryStaticContext
+internal sealed class XQueryStaticContext
 {
     private readonly Dictionary<string, string> _namespaces;
     private readonly Dictionary<(string LocalName, string NamespaceUri), XdmValue> _variables;
@@ -260,10 +262,10 @@ public sealed class XQueryStaticContext
     public IReadOnlyList<(string LocalName, string NamespaceUri, string Value)> Options => _options;
 
     /// <summary>Returns a read-only view of the user function declarations.</summary>
-    public IReadOnlyList<UserFunctionDeclaration> UserFunctions => _userFunctions;
+    internal IReadOnlyList<UserFunctionDeclaration> UserFunctions => _userFunctions;
 
     /// <summary>Returns a read-only view of the user variable declarations.</summary>
-    public IReadOnlyList<UserVariableDeclaration> UserVariables => _userVariables;
+    internal IReadOnlyList<UserVariableDeclaration> UserVariables => _userVariables;
 
     /// <summary>Returns a read-only view of the module import declarations in prolog order.</summary>
     public IReadOnlyList<ModuleImport> ImportedModules => _importedModules;
@@ -287,14 +289,14 @@ public sealed class XQueryStaticContext
     }
 
     /// <summary>Creates a new context with a user function declaration appended.</summary>
-    public XQueryStaticContext WithUserFunction(UserFunctionDeclaration declaration)
+    internal XQueryStaticContext WithUserFunction(UserFunctionDeclaration declaration)
     {
         var copy = new List<UserFunctionDeclaration>(_userFunctions) { declaration };
         return CloneWith(userFunctions: copy);
     }
 
     /// <summary>Creates a new context with a user variable declaration appended.</summary>
-    public XQueryStaticContext WithUserVariable(UserVariableDeclaration declaration)
+    internal XQueryStaticContext WithUserVariable(UserVariableDeclaration declaration)
     {
         var copy = new List<UserVariableDeclaration>(_userVariables) { declaration };
         return CloneWith(userVariables: copy);

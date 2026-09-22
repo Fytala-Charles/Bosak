@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.6   | 24-06-2026     | Pass DefiningElementDefaultNamespace when compiling key use expressions                |
 //                      | Charles Korthout | 0.7   | 26-06-2026     | Per-key-name effective collation for key-value comparison; XTSE1220 detection           |
 //                      | Charles Korthout | 0.8   | 29-08-2026     | Index namespace nodes; set fn:current() during xsl:key/@use evaluation (key-058/087/090).|
+//                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -34,7 +35,7 @@ namespace Bosak.Xslt.Runtime;
 /// <summary>
 /// Maintains a per-document index for <c>xsl:key</c> / <c>key()</c> lookups.
 /// </summary>
-public sealed class KeyIndex
+internal sealed class KeyIndex
 {
     private readonly record struct KeyEntry(bool IsComposite, XdmValue[] KeyValues, IXdmNode Node);
 

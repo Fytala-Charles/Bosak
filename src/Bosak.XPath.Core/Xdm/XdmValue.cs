@@ -47,6 +47,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.6   | 17-09-2026     | EBV over ISinglePassSequence decided in a single enumeration (Streaming Phase D1)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.7   | 21-09-2026     | API freeze stage D: EffectiveBooleanValue renamed to GetEffectiveBooleanValue           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -486,7 +488,7 @@ public readonly struct XdmValue
     /// Returns the effective boolean value per XPath/XQuery semantics.
     /// Maps, arrays, and function items have no effective boolean value (FORG0006).
     /// </summary>
-    public bool EffectiveBooleanValue()
+    public bool GetEffectiveBooleanValue()
     {
         return _kind switch
         {
@@ -550,7 +552,7 @@ public readonly struct XdmValue
             if (enumerator.MoveNext())
                 throw new InvalidOperationException(
                     "FORG0006: Invalid argument type for fn:boolean() / effective boolean value");
-            return first.EffectiveBooleanValue();
+            return first.GetEffectiveBooleanValue();
         }
 
         int length = 0;
@@ -570,7 +572,7 @@ public readonly struct XdmValue
         if (length == 1)
         {
             foreach (var item in XdmSequence.FromSource(seq))
-                return item.EffectiveBooleanValue();
+                return item.GetEffectiveBooleanValue();
             return false;
         }
 

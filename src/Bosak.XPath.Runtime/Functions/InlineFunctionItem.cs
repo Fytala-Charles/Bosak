@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 13-07-2026     | Added CapturedVariables for closure semantics (higher-order-functions-029/041/042)     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.31  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.32  | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Compiler types)                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -26,16 +27,28 @@ namespace Bosak.XPath.Runtime.Functions;
 /// <summary>
 /// An inline function with parameter names, optional type declarations, and a compiled body module.
 /// </summary>
-/// <param name="Parameters">The declared parameter names.</param>
-/// <param name="Body">The compiled IR module for the function body.</param>
-/// <param name="ParameterTypes">The declared parameter sequence types (null entries are untyped).</param>
-/// <param name="ReturnType">The declared return sequence type, or null when undeclared.</param>
-public sealed record InlineFunctionItem(
-    IReadOnlyList<string> Parameters,
-    IrModule Body,
-    IReadOnlyList<string?> ParameterTypes,
-    string? ReturnType) : FunctionItem
+public sealed record InlineFunctionItem : FunctionItem
 {
+    /// <summary>The declared parameter names.</summary>
+    public IReadOnlyList<string> Parameters { get; }
+
+    /// <summary>The compiled IR module for the function body.</summary>
+    internal IrModule Body { get; }
+
+    /// <summary>The declared parameter sequence types (null entries are untyped).</summary>
+    public IReadOnlyList<string?> ParameterTypes { get; }
+
+    /// <summary>The declared return sequence type, or null when undeclared.</summary>
+    public string? ReturnType { get; }
+
+    internal InlineFunctionItem(IReadOnlyList<string> parameters, IrModule body, IReadOnlyList<string?> parameterTypes, string? returnType)
+    {
+        Parameters = parameters;
+        Body = body;
+        ParameterTypes = parameterTypes;
+        ReturnType = returnType;
+    }
+
     /// <inheritdoc/>
     public override int Arity => Parameters.Count;
 

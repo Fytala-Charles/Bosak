@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 03-09-2026     | Warning-free build: CS8602 null-conditional report access                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Diagnostics;
@@ -45,7 +47,7 @@ internal class Program
 
         string suitePath = args.Length > 0 ? args[0] : "tests/qt3tests";
         // Absolutize so document URIs derived from suite files are stable file:/// URIs
-        // (relative paths triggered UriFormatException in XDocumentProvider.LoadXml).
+        // (relative paths triggered UriFormatException in XDocumentProvider.LoadFile).
         suitePath = Path.GetFullPath(suitePath);
         string? setFilter = args.Length > 1 ? args[1] : null;
         string? testFilter = args.Length > 2 ? args[2] : null;

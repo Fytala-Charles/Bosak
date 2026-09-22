@@ -13,4 +13,15 @@
     <Description>Bosak: XQuery Data Model (XDM) foundation types — XdmValue, nodes, sequences and axis navigation. Shared foundation of the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 stack for .NET.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.XPath.Runtime" />
+    <InternalsVisibleTo Include="Bosak.XPath.Standard" />
+    <InternalsVisibleTo Include="Bosak.XPath.Providers" />
+    <InternalsVisibleTo Include="Bosak.XPath.Compiler" />
+    <InternalsVisibleTo Include="Bosak.Xslt" />
+    <InternalsVisibleTo Include="Bosak.XQuery" />
+    <InternalsVisibleTo Include="Bosak.XPath.Core.Tests" />
+    <InternalsVisibleTo Include="Bosak.XPath.Runtime.Tests" />
+  </ItemGroup>
+
 </Project>

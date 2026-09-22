@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Bosak.XQuery" />
+    <InternalsVisibleTo Include="Bosak.Xslt" />
+    <InternalsVisibleTo Include="Bosak.XPath.Runtime" />
   </ItemGroup>
 
 </Project>

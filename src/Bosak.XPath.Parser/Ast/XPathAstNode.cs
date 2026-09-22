@@ -50,6 +50,7 @@
 //                      | Charles Korthout | 1.15  | 07-09-2026     | NodeTest carries KindTestInnerName for document-node(element|schema-element(...))        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.16  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 1.17  | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -60,7 +61,7 @@ namespace Bosak.XPath.Parser.Ast;
 /// Base type for all nodes in the XPath Abstract Syntax Tree.
 /// The AST is immutable and produced by the parser.
 /// </summary>
-public abstract record XPathAstNode
+internal abstract record XPathAstNode
 {
     /// <summary>Source span for diagnostic reporting.</summary>
     public TextSpan Span { get; init; }
@@ -69,7 +70,7 @@ public abstract record XPathAstNode
 /// <summary>Represents a region in the source XPath text.</summary>
 /// <param name="Start">The zero-based character offset of the region in the source text.</param>
 /// <param name="Length">The length of the region in characters.</param>
-public readonly record struct TextSpan(int Start, int Length)
+internal readonly record struct TextSpan(int Start, int Length)
 {
     /// <summary>The zero-based character offset just past the end of the region.</summary>
     public int End => Start + Length;
@@ -81,27 +82,27 @@ public readonly record struct TextSpan(int Start, int Length)
 
 /// <summary>A boolean literal value, produced by folding the <c>true()</c>/<c>false()</c> functions.</summary>
 /// <param name="Value">The boolean value.</param>
-public sealed record BooleanLiteralNode(bool Value) : XPathAstNode;
+internal sealed record BooleanLiteralNode(bool Value) : XPathAstNode;
 /// <summary>An integer literal: <c>42</c>.</summary>
 /// <param name="Value">The integer value.</param>
-public sealed record IntegerLiteralNode(long Value) : XPathAstNode;
+internal sealed record IntegerLiteralNode(long Value) : XPathAstNode;
 /// <summary>A decimal literal: <c>3.14</c>.</summary>
 /// <param name="Value">The decimal value.</param>
 /// <param name="IsIntegerLiteral">True when the source literal was an integer that overflowed
 /// <see cref="long"/> and is stored as a decimal; the value keeps xs:integer typing.</param>
-public sealed record DecimalLiteralNode(decimal Value, bool IsIntegerLiteral = false) : XPathAstNode;
+internal sealed record DecimalLiteralNode(decimal Value, bool IsIntegerLiteral = false) : XPathAstNode;
 /// <summary>A double literal: <c>1e3</c>.</summary>
 /// <param name="Value">The double value.</param>
-public sealed record DoubleLiteralNode(double Value) : XPathAstNode;
+internal sealed record DoubleLiteralNode(double Value) : XPathAstNode;
 /// <summary>A string literal: <c>'abc'</c>.</summary>
 /// <param name="Value">The literal content with the delimiting quotes removed and escapes resolved.</param>
-public sealed record StringLiteralNode(string Value) : XPathAstNode;
+internal sealed record StringLiteralNode(string Value) : XPathAstNode;
 
 /// <summary>A variable reference: <c>$name</c>, <c>$prefix:name</c>, or <c>$Q{uri}name</c>.</summary>
 /// <param name="LocalName">The local name of the variable.</param>
 /// <param name="Prefix">The namespace prefix of the variable, or null.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName variable, or null.</param>
-public sealed record VariableReferenceNode(string LocalName, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
+internal sealed record VariableReferenceNode(string LocalName, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Path & Steps
@@ -111,19 +112,19 @@ public sealed record VariableReferenceNode(string LocalName, string? Prefix = nu
 /// <param name="Axis">The axis the step navigates.</param>
 /// <param name="NodeTest">The node test applied to the axis.</param>
 /// <param name="Predicates">The predicate expressions filtering the step's result.</param>
-public sealed record StepNode(XdmAxis Axis, NodeTest NodeTest, IReadOnlyList<XPathAstNode> Predicates) : XPathAstNode;
+internal sealed record StepNode(XdmAxis Axis, NodeTest NodeTest, IReadOnlyList<XPathAstNode> Predicates) : XPathAstNode;
 
 /// <summary>A path expression (relative or absolute).</summary>
 /// <param name="IsAbsolute">True when the path starts with <c>/</c> or <c>//</c>.</param>
 /// <param name="Steps">The steps composing the path.</param>
-public sealed record PathExprNode(bool IsAbsolute, IReadOnlyList<XPathAstNode> Steps) : XPathAstNode;
+internal sealed record PathExprNode(bool IsAbsolute, IReadOnlyList<XPathAstNode> Steps) : XPathAstNode;
 
 /// <summary>The context item expression: <c>.</c></summary>
-public sealed record ContextItemNode : XPathAstNode;
+internal sealed record ContextItemNode : XPathAstNode;
 
 /// <summary>Parenthesized expression: <c>(expr)</c></summary>
 /// <param name="Expression">The parenthesized expression.</param>
-public sealed record ParenthesizedExprNode(XPathAstNode Expression) : XPathAstNode;
+internal sealed record ParenthesizedExprNode(XPathAstNode Expression) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Predicates
@@ -131,7 +132,7 @@ public sealed record ParenthesizedExprNode(XPathAstNode Expression) : XPathAstNo
 
 /// <summary>A predicate in square brackets: <c>[expr]</c>.</summary>
 /// <param name="Expression">The predicate expression.</param>
-public sealed record PredicateNode(XPathAstNode Expression) : XPathAstNode;
+internal sealed record PredicateNode(XPathAstNode Expression) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Function calls
@@ -142,14 +143,14 @@ public sealed record PredicateNode(XPathAstNode Expression) : XPathAstNode;
 /// <param name="Arguments">The argument expressions.</param>
 /// <param name="Prefix">The namespace prefix of the function name, or null.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName function name, or null.</param>
-public sealed record FunctionCallNode(string LocalName, IReadOnlyList<XPathAstNode> Arguments, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
+internal sealed record FunctionCallNode(string LocalName, IReadOnlyList<XPathAstNode> Arguments, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
 
 /// <summary>Named function reference: <c>fn:abs#1</c></summary>
 /// <param name="LocalName">The local name of the function.</param>
 /// <param name="Arity">The function arity (the integer after <c>#</c>).</param>
 /// <param name="Prefix">The namespace prefix of the function name, or null.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName function name, or null.</param>
-public sealed record NamedFunctionRefNode(string LocalName, int Arity, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
+internal sealed record NamedFunctionRefNode(string LocalName, int Arity, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Sequence / Range
@@ -157,11 +158,11 @@ public sealed record NamedFunctionRefNode(string LocalName, int Arity, string? P
 
 /// <summary>A sequence (comma) expression: <c>1, 2, 3</c>.</summary>
 /// <param name="Expressions">The sub-expressions whose results are concatenated.</param>
-public sealed record SequenceExpressionNode(IReadOnlyList<XPathAstNode> Expressions) : XPathAstNode;
+internal sealed record SequenceExpressionNode(IReadOnlyList<XPathAstNode> Expressions) : XPathAstNode;
 /// <summary>A range expression: <c>1 to 10</c>.</summary>
 /// <param name="From">The lower bound expression.</param>
 /// <param name="To">The upper bound expression.</param>
-public sealed record RangeExpressionNode(XPathAstNode From, XPathAstNode To) : XPathAstNode;
+internal sealed record RangeExpressionNode(XPathAstNode From, XPathAstNode To) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Conditional & FLWOR
@@ -171,26 +172,26 @@ public sealed record RangeExpressionNode(XPathAstNode From, XPathAstNode To) : X
 /// <param name="Condition">The condition expression.</param>
 /// <param name="ThenBranch">The expression evaluated when the condition is true.</param>
 /// <param name="ElseBranch">The expression evaluated when the condition is false.</param>
-public sealed record IfExpressionNode(XPathAstNode Condition, XPathAstNode ThenBranch, XPathAstNode ElseBranch) : XPathAstNode;
+internal sealed record IfExpressionNode(XPathAstNode Condition, XPathAstNode ThenBranch, XPathAstNode ElseBranch) : XPathAstNode;
 /// <summary>A simple for expression: <c>for $x in E return R</c>.</summary>
 /// <param name="Bindings">The variable bindings of the for clause.</param>
 /// <param name="ReturnExpression">The expression evaluated once per binding tuple.</param>
-public sealed record ForExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode ReturnExpression) : XPathAstNode;
+internal sealed record ForExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode ReturnExpression) : XPathAstNode;
 /// <summary>A simple let expression: <c>let $x := E return R</c>.</summary>
 /// <param name="Bindings">The variable bindings of the let clause.</param>
 /// <param name="Body">The expression evaluated with the bindings in scope.</param>
-public sealed record LetExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode Body) : XPathAstNode;
+internal sealed record LetExpressionNode(IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode Body) : XPathAstNode;
 /// <summary>A quantified expression: <c>some|every $x in E satisfies C</c>.</summary>
 /// <param name="Quantifier">Whether this is an existential (<c>some</c>) or universal (<c>every</c>) quantification.</param>
 /// <param name="Bindings">The variable bindings of the quantified expression.</param>
 /// <param name="SatisfiesExpression">The test evaluated once per binding tuple.</param>
-public sealed record QuantifiedExpressionNode(QuantifierKind Quantifier, IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode SatisfiesExpression) : XPathAstNode;
+internal sealed record QuantifiedExpressionNode(QuantifierKind Quantifier, IReadOnlyList<QuantifiedBinding> Bindings, XPathAstNode SatisfiesExpression) : XPathAstNode;
 
 /// <summary>An XQuery switch expression: <c>switch (E) (case V)+ return R ... default return RD</c>.</summary>
 /// <param name="Operand">The operand expression compared against the case values.</param>
 /// <param name="Cases">The case clauses, tried in order; the first match wins.</param>
 /// <param name="Default">The result expression when no case matches.</param>
-public sealed record SwitchExpressionNode(
+internal sealed record SwitchExpressionNode(
     XPathAstNode Operand,
     IReadOnlyList<SwitchCaseClause> Cases,
     XPathAstNode Default) : XPathAstNode;
@@ -198,7 +199,7 @@ public sealed record SwitchExpressionNode(
 /// <summary>One case clause of a switch expression: operand values compared with <c>eq</c> semantics; first match wins.</summary>
 /// <param name="Values">The case operand values compared against the switch operand.</param>
 /// <param name="Return">The result expression of this case.</param>
-public sealed record SwitchCaseClause(IReadOnlyList<XPathAstNode> Values, XPathAstNode Return);
+internal sealed record SwitchCaseClause(IReadOnlyList<XPathAstNode> Values, XPathAstNode Return);
 
 /// <summary>An XQuery typeswitch expression: <c>typeswitch (E) (case ($v as)? T return R)+ default ($d)? return RD</c>.</summary>
 /// <param name="Operand">The operand expression whose type is matched.</param>
@@ -207,7 +208,7 @@ public sealed record SwitchCaseClause(IReadOnlyList<XPathAstNode> Values, XPathA
 /// <param name="DefaultVariableName">The local name of the variable bound to the operand in the default clause, or null.</param>
 /// <param name="DefaultVariablePrefix">The namespace prefix of the default variable, or null.</param>
 /// <param name="DefaultVariableNamespaceUri">The namespace URI of an EQName default variable, or null.</param>
-public sealed record TypeswitchExpressionNode(
+internal sealed record TypeswitchExpressionNode(
     XPathAstNode Operand,
     IReadOnlyList<TypeswitchCaseClause> Cases,
     XPathAstNode Default,
@@ -221,7 +222,7 @@ public sealed record TypeswitchExpressionNode(
 /// <param name="VariableName">The local name of the variable bound to the operand when this case matches, or null.</param>
 /// <param name="VariablePrefix">The namespace prefix of the case variable, or null.</param>
 /// <param name="VariableNamespaceUri">The namespace URI of an EQName case variable, or null.</param>
-public sealed record TypeswitchCaseClause(
+internal sealed record TypeswitchCaseClause(
     IReadOnlyList<TypeswitchCaseType> Types,
     XPathAstNode Return,
     string? VariableName = null,
@@ -232,37 +233,37 @@ public sealed record TypeswitchCaseClause(
 /// <param name="Prefix">The namespace prefix of the type name, or null.</param>
 /// <param name="Local">The local name of the type or kind test.</param>
 /// <param name="Occurrence">The occurrence indicator of this member type.</param>
-public sealed record TypeswitchCaseType(string? Prefix, string Local, OccurrenceIndicator Occurrence);
+internal sealed record TypeswitchCaseType(string? Prefix, string Local, OccurrenceIndicator Occurrence);
 
 /// <summary>Full XQuery FLWOR expression with clauses and return expression (replaces nested For/Let/Where for full XQuery FLWOR).</summary>
 /// <param name="Clauses">The FLWOR clauses in source order.</param>
 /// <param name="ReturnExpression">The return expression.</param>
-public sealed record FlworExpressionNode(IReadOnlyList<FlworClauseNode> Clauses, XPathAstNode ReturnExpression) : XPathAstNode;
+internal sealed record FlworExpressionNode(IReadOnlyList<FlworClauseNode> Clauses, XPathAstNode ReturnExpression) : XPathAstNode;
 
 /// <summary>Base type for a FLWOR clause.</summary>
-public abstract record FlworClauseNode : XPathAstNode;
+internal abstract record FlworClauseNode : XPathAstNode;
 
 /// <summary>A for clause: <c>for $var in expr</c> (possibly with multiple bindings).</summary>
 /// <param name="Bindings">The variable bindings of the clause.</param>
-public sealed record ForClauseNode(IReadOnlyList<QuantifiedBinding> Bindings) : FlworClauseNode;
+internal sealed record ForClauseNode(IReadOnlyList<QuantifiedBinding> Bindings) : FlworClauseNode;
 
 /// <summary>A let clause: <c>let $var := expr</c> (possibly with multiple bindings).</summary>
 /// <param name="Bindings">The variable bindings of the clause.</param>
-public sealed record LetClauseNode(IReadOnlyList<QuantifiedBinding> Bindings) : FlworClauseNode;
+internal sealed record LetClauseNode(IReadOnlyList<QuantifiedBinding> Bindings) : FlworClauseNode;
 
 /// <summary>A where clause: <c>where expr</c>.</summary>
 /// <param name="Condition">The boolean filter expression.</param>
-public sealed record WhereClauseNode(XPathAstNode Condition) : FlworClauseNode;
+internal sealed record WhereClauseNode(XPathAstNode Condition) : FlworClauseNode;
 
 /// <summary>A count clause: <c>count $var</c>.</summary>
 /// <param name="VariableName">The local name of the counter variable.</param>
 /// <param name="Prefix">The namespace prefix of the counter variable, or null.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName counter variable, or null.</param>
-public sealed record CountClauseNode(string VariableName, string? Prefix = null, string? NamespaceUri = null) : FlworClauseNode;
+internal sealed record CountClauseNode(string VariableName, string? Prefix = null, string? NamespaceUri = null) : FlworClauseNode;
 
 /// <summary>An order by clause: <c>order by key [ascending|descending] [empty least|greatest] [collation 'uri']</c>.</summary>
 /// <param name="Specs">The ordering specifications of the clause.</param>
-public sealed record OrderByClauseNode(IReadOnlyList<OrderSpec> Specs) : FlworClauseNode;
+internal sealed record OrderByClauseNode(IReadOnlyList<OrderSpec> Specs) : FlworClauseNode;
 
 /// <summary>A single ordering specification inside an order by clause. When
 /// <see cref="EmptyOrder"/> is null the static context's default order for empty
@@ -271,14 +272,14 @@ public sealed record OrderByClauseNode(IReadOnlyList<OrderSpec> Specs) : FlworCl
 /// <param name="Descending">True for a descending sort.</param>
 /// <param name="EmptyOrder">How empty sequences sort, or null to use the static context default.</param>
 /// <param name="CollationUri">The collation URI of a <c>collation</c> modifier, or null.</param>
-public sealed record OrderSpec(
+internal sealed record OrderSpec(
     XPathAstNode KeyExpression,
     bool Descending = false,
     EmptyOrder? EmptyOrder = null,
     string? CollationUri = null);
 
 /// <summary>How to order empty sequences in an order by clause.</summary>
-public enum EmptyOrder
+internal enum EmptyOrder
 {
     /// <summary>Empty sequences sort before all other values.</summary>
     Least,
@@ -288,7 +289,7 @@ public enum EmptyOrder
 
 /// <summary>A group by clause: <c>group by $var (:= expr)? (collation 'uri')?, ...</c>.</summary>
 /// <param name="Specs">The grouping specifications of the clause.</param>
-public sealed record GroupByClauseNode(IReadOnlyList<GroupingSpec> Specs) : FlworClauseNode;
+internal sealed record GroupByClauseNode(IReadOnlyList<GroupingSpec> Specs) : FlworClauseNode;
 
 /// <summary>A window clause: <c>for tumbling|sliding window $var (as SequenceType)? in expr start ... when ... ((only)? end ... when ...)?</c>.</summary>
 /// <param name="Sliding">True for a sliding window, false for a tumbling window.</param>
@@ -300,7 +301,7 @@ public sealed record GroupByClauseNode(IReadOnlyList<GroupingSpec> Specs) : Flwo
 /// <param name="Prefix">The namespace prefix of the window variable, or null.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName window variable, or null.</param>
 /// <param name="DeclaredType">The optional <c>as SequenceType</c> declaration of the window variable.</param>
-public sealed record WindowClauseNode(
+internal sealed record WindowClauseNode(
     bool Sliding,
     string VariableName,
     XPathAstNode InExpression,
@@ -317,7 +318,7 @@ public sealed record WindowClauseNode(
 /// <param name="PositionalVariable">The variable bound to the current position (<c>at $pos</c>), or null.</param>
 /// <param name="PreviousItemVariable">The variable bound to the previous item, or null.</param>
 /// <param name="NextItemVariable">The variable bound to the next item, or null.</param>
-public sealed record WindowCondition(
+internal sealed record WindowCondition(
     XPathAstNode WhenExpression,
     string? CurrentItemVariable = null,
     string? PositionalVariable = null,
@@ -331,7 +332,7 @@ public sealed record WindowCondition(
 /// <param name="Prefix">The namespace prefix of the grouping variable, or null.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName grouping variable, or null.</param>
 /// <param name="DeclaredType">The optional <c>as SequenceType</c> declaration of the grouping variable.</param>
-public sealed record GroupingSpec(
+internal sealed record GroupingSpec(
     string VariableName,
     XPathAstNode? KeyExpression = null,
     string? CollationUri = null,
@@ -343,7 +344,7 @@ public sealed record GroupingSpec(
 /// <param name="TypeName">The local name of the declared type.</param>
 /// <param name="Prefix">The namespace prefix of the declared type, or null.</param>
 /// <param name="Occurrence">The occurrence indicator of the declared type.</param>
-public sealed record FlworTypeDeclaration(string TypeName, string? Prefix, OccurrenceIndicator Occurrence);
+internal sealed record FlworTypeDeclaration(string TypeName, string? Prefix, OccurrenceIndicator Occurrence);
 
 // ------------------------------------------------------------------
 // XQuery direct constructors
@@ -359,7 +360,7 @@ public sealed record FlworTypeDeclaration(string TypeName, string? Prefix, Occur
 /// <param name="Prefix">The namespace prefix of the element tag, or null.</param>
 /// <param name="Attributes">The attribute constructors of the element.</param>
 /// <param name="Content">The content parts: literal text, enclosed expressions, and nested elements.</param>
-public sealed record DirectElementConstructorNode(
+internal sealed record DirectElementConstructorNode(
     string TagName,
     string? Prefix,
     IReadOnlyList<DirectAttributeNode> Attributes,
@@ -369,23 +370,23 @@ public sealed record DirectElementConstructorNode(
 /// <param name="Name">The local name of the attribute.</param>
 /// <param name="Prefix">The namespace prefix of the attribute, or null.</param>
 /// <param name="ValueParts">The value parts: literal text runs and enclosed expressions.</param>
-public sealed record DirectAttributeNode(
+internal sealed record DirectAttributeNode(
     string Name,
     string? Prefix,
     IReadOnlyList<XPathAstNode> ValueParts);
 
 /// <summary>A comment constructor inside direct element content: <c>&lt;!-- ... --&gt;</c>.</summary>
 /// <param name="Value">The comment text.</param>
-public sealed record DirectCommentNode(string Value) : XPathAstNode;
+internal sealed record DirectCommentNode(string Value) : XPathAstNode;
 
 /// <summary>A processing-instruction constructor inside direct element content: <c>&lt;?target data?&gt;</c>.</summary>
 /// <param name="Target">The processing-instruction target.</param>
 /// <param name="Value">The processing-instruction data.</param>
-public sealed record DirectProcessingInstructionNode(string Target, string Value) : XPathAstNode;
+internal sealed record DirectProcessingInstructionNode(string Target, string Value) : XPathAstNode;
 
 /// <summary>Literal text in element content that contains a character/entity reference and is therefore never boundary whitespace.</summary>
 /// <param name="Value">The literal text.</param>
-public sealed record SignificantTextNode(string Value) : XPathAstNode;
+internal sealed record SignificantTextNode(string Value) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // XQuery computed constructors
@@ -397,7 +398,7 @@ public sealed record SignificantTextNode(string Value) : XPathAstNode;
 /// <param name="TagPrefix">The static namespace prefix of the element, or null.</param>
 /// <param name="TagNamespaceUri">The static namespace URI of the element (EQName), or null.</param>
 /// <param name="ContentExpression">The expression producing the element content.</param>
-public sealed record ComputedElementConstructorNode(
+internal sealed record ComputedElementConstructorNode(
     XPathAstNode? NameExpression,
     string? TagName,
     string? TagPrefix,
@@ -410,7 +411,7 @@ public sealed record ComputedElementConstructorNode(
 /// <param name="Prefix">The static namespace prefix of the attribute, or null.</param>
 /// <param name="NamespaceUri">The static namespace URI of the attribute (EQName), or null.</param>
 /// <param name="ValueExpression">The expression producing the attribute value.</param>
-public sealed record ComputedAttributeConstructorNode(
+internal sealed record ComputedAttributeConstructorNode(
     XPathAstNode? NameExpression,
     string? Name,
     string? Prefix,
@@ -419,21 +420,21 @@ public sealed record ComputedAttributeConstructorNode(
 
 /// <summary>A computed document constructor: <c>document "{" Expr "}"</c>.</summary>
 /// <param name="ContentExpression">The expression producing the document content.</param>
-public sealed record ComputedDocumentConstructorNode(XPathAstNode ContentExpression) : XPathAstNode;
+internal sealed record ComputedDocumentConstructorNode(XPathAstNode ContentExpression) : XPathAstNode;
 
 /// <summary>A computed text constructor: <c>text "{" Expr "}"</c>.</summary>
 /// <param name="ValueExpression">The expression producing the text value.</param>
-public sealed record ComputedTextConstructorNode(XPathAstNode ValueExpression) : XPathAstNode;
+internal sealed record ComputedTextConstructorNode(XPathAstNode ValueExpression) : XPathAstNode;
 
 /// <summary>A computed comment constructor: <c>comment "{" Expr "}"</c>.</summary>
 /// <param name="ValueExpression">The expression producing the comment text.</param>
-public sealed record ComputedCommentConstructorNode(XPathAstNode ValueExpression) : XPathAstNode;
+internal sealed record ComputedCommentConstructorNode(XPathAstNode ValueExpression) : XPathAstNode;
 
 /// <summary>A computed processing-instruction constructor: <c>processing-instruction (NCName | "{" Expr "}") "{" Expr "}"</c>.</summary>
 /// <param name="TargetExpression">The expression computing the target, or null when the target is static.</param>
 /// <param name="Target">The static target NCName, or null.</param>
 /// <param name="ValueExpression">The expression producing the processing-instruction data.</param>
-public sealed record ComputedPIConstructorNode(
+internal sealed record ComputedPIConstructorNode(
     XPathAstNode? TargetExpression,
     string? Target,
     XPathAstNode ValueExpression) : XPathAstNode;
@@ -442,7 +443,7 @@ public sealed record ComputedPIConstructorNode(
 /// <param name="PrefixExpression">The expression computing the namespace prefix, or null when the prefix is static.</param>
 /// <param name="Prefix">The static prefix NCName, or null.</param>
 /// <param name="UriExpression">The expression producing the namespace URI.</param>
-public sealed record ComputedNamespaceConstructorNode(
+internal sealed record ComputedNamespaceConstructorNode(
     XPathAstNode? PrefixExpression,
     string? Prefix,
     XPathAstNode UriExpression) : XPathAstNode;
@@ -456,7 +457,7 @@ public sealed record ComputedNamespaceConstructorNode(
 /// <param name="VariableNamespaceUri">The namespace URI of an EQName bound variable, or null.</param>
 /// <param name="DeclaredType">The optional <c>as SequenceType</c> declaration of the binding.</param>
 /// <param name="AllowingEmpty">True when a for binding declares <c>allowing empty</c>.</param>
-public sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false);
+internal sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false);
 
 // ------------------------------------------------------------------
 // Binary / Unary expressions
@@ -466,11 +467,11 @@ public sealed record QuantifiedBinding(string VariableName, XPathAstNode Express
 /// <param name="Left">The left operand.</param>
 /// <param name="Operator">The binary operator.</param>
 /// <param name="Right">The right operand.</param>
-public sealed record BinaryExpressionNode(XPathAstNode Left, BinaryOperator Operator, XPathAstNode Right) : XPathAstNode;
+internal sealed record BinaryExpressionNode(XPathAstNode Left, BinaryOperator Operator, XPathAstNode Right) : XPathAstNode;
 /// <summary>A unary plus or minus expression.</summary>
 /// <param name="Operator">The unary operator.</param>
 /// <param name="Operand">The operand expression.</param>
-public sealed record UnaryExpressionNode(UnaryOperator Operator, XPathAstNode Operand) : XPathAstNode;
+internal sealed record UnaryExpressionNode(UnaryOperator Operator, XPathAstNode Operand) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Type expressions
@@ -481,25 +482,25 @@ public sealed record UnaryExpressionNode(UnaryOperator Operator, XPathAstNode Op
 /// <param name="TypeName">The local name of the target type.</param>
 /// <param name="Prefix">The namespace prefix of the target type, or null.</param>
 /// <param name="Occurrence">The occurrence indicator of the target type.</param>
-public sealed record CastNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
+internal sealed record CastNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
 /// <summary>A castable expression: <c>E castable as T</c>.</summary>
 /// <param name="Expression">The expression whose value is tested.</param>
 /// <param name="TypeName">The local name of the target type.</param>
 /// <param name="Prefix">The namespace prefix of the target type, or null.</param>
 /// <param name="Occurrence">The occurrence indicator of the target type.</param>
-public sealed record CastableNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
+internal sealed record CastableNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
 /// <summary>An instance-of expression: <c>E instance of T</c>.</summary>
 /// <param name="Expression">The expression whose value is tested.</param>
 /// <param name="TypeName">The local name of the tested type.</param>
 /// <param name="Prefix">The namespace prefix of the tested type, or null.</param>
 /// <param name="Occurrence">The occurrence indicator of the tested type.</param>
-public sealed record InstanceOfNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
+internal sealed record InstanceOfNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
 /// <summary>A treat-as expression: <c>E treat as T</c>.</summary>
 /// <param name="Expression">The expression whose value is asserted.</param>
 /// <param name="TypeName">The local name of the asserted type.</param>
 /// <param name="Prefix">The namespace prefix of the asserted type, or null.</param>
 /// <param name="Occurrence">The occurrence indicator of the asserted type.</param>
-public sealed record TreatNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
+internal sealed record TreatNode(XPathAstNode Expression, string TypeName, string? Prefix = null, OccurrenceIndicator Occurrence = OccurrenceIndicator.One) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // XPath 3.1 additions
@@ -508,24 +509,24 @@ public sealed record TreatNode(XPathAstNode Expression, string TypeName, string?
 /// <summary>Arrow expression: <c>$x => upper-case()</c></summary>
 /// <param name="Source">The input expression, passed as the first argument to the target.</param>
 /// <param name="Target">The function or inline function applied to the source value.</param>
-public sealed record ArrowExprNode(XPathAstNode Source, XPathAstNode Target) : XPathAstNode;
+internal sealed record ArrowExprNode(XPathAstNode Source, XPathAstNode Target) : XPathAstNode;
 
 /// <summary>Try/catch expression: <c>try { A } catch CodePatternList { B } (catch CodePatternList { C })*</c></summary>
 /// <param name="TryExpression">The guarded expression.</param>
 /// <param name="Clauses">The catch clauses, tried in order; the first pattern match wins.</param>
-public sealed record TryCatchNode(XPathAstNode TryExpression, IReadOnlyList<TryCatchClause> Clauses) : XPathAstNode;
+internal sealed record TryCatchNode(XPathAstNode TryExpression, IReadOnlyList<TryCatchClause> Clauses) : XPathAstNode;
 
 /// <summary>XQuery validate expression: <c>validate { Expr }</c>, <c>validate strict|lax { Expr }</c>, or <c>validate type QName { Expr }</c>.</summary>
 /// <param name="Expression">The expression whose result is validated.</param>
 /// <param name="Mode">The validation mode (<c>strict</c> or <c>lax</c>), or null for the default mode.</param>
 /// <param name="TypeName">The local name of the target type for <c>validate type QName</c>, or null.</param>
 /// <param name="TypePrefix">The namespace prefix of the target type, or null.</param>
-public sealed record ValidateExpressionNode(XPathAstNode Expression, string? Mode = null, string? TypeName = null, string? TypePrefix = null) : XPathAstNode;
+internal sealed record ValidateExpressionNode(XPathAstNode Expression, string? Mode = null, string? TypeName = null, string? TypePrefix = null) : XPathAstNode;
 
 /// <summary>One catch clause of a try/catch expression: <c>catch PatternList { Expr }</c>; first matching clause wins.</summary>
 /// <param name="Patterns">The error-code name-test patterns selecting this clause.</param>
 /// <param name="Expression">The handler expression evaluated when a pattern matches.</param>
-public sealed record TryCatchClause(IReadOnlyList<CatchCodePattern> Patterns, XPathAstNode Expression);
+internal sealed record TryCatchClause(IReadOnlyList<CatchCodePattern> Patterns, XPathAstNode Expression);
 
 /// <summary>
 /// One error-code pattern of a catch clause (an XPath NameTest over error codes):
@@ -539,34 +540,34 @@ public sealed record TryCatchClause(IReadOnlyList<CatchCodePattern> Patterns, XP
 /// <param name="LocalName">The local name of the error code, or null for a namespace-local wildcard.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName pattern, the empty string for an
 /// unprefixed name, or null when the prefix is resolved at runtime.</param>
-public sealed record CatchCodePattern(string? Prefix, string? LocalName, string? NamespaceUri);
+internal sealed record CatchCodePattern(string? Prefix, string? LocalName, string? NamespaceUri);
 
 /// <summary>Lookup (postfix): <c>$map?key</c> or <c>$array?1</c></summary>
 /// <param name="Expression">The map or array expression.</param>
 /// <param name="Key">The key or index expression.</param>
-public sealed record LookupNode(XPathAstNode Expression, XPathAstNode Key) : XPathAstNode;
+internal sealed record LookupNode(XPathAstNode Expression, XPathAstNode Key) : XPathAstNode;
 
 /// <summary>Lookup wildcard (postfix): <c>$map?*</c> or <c>$array?*</c></summary>
 /// <param name="Expression">The map or array expression.</param>
-public sealed record LookupWildcardNode(XPathAstNode Expression) : XPathAstNode;
+internal sealed record LookupWildcardNode(XPathAstNode Expression) : XPathAstNode;
 
 /// <summary>Inline function: <c>function($x as xs:int) as xs:int { $x + 1 }</c></summary>
 /// <param name="Parameters">The function parameters.</param>
 /// <param name="Body">The function body.</param>
 /// <param name="ReturnType">The declared return type (<c>as T</c>), or null.</param>
-public sealed record InlineFunctionNode(IReadOnlyList<ParamNode> Parameters, XPathAstNode Body, string? ReturnType = null) : XPathAstNode;
+internal sealed record InlineFunctionNode(IReadOnlyList<ParamNode> Parameters, XPathAstNode Body, string? ReturnType = null) : XPathAstNode;
 /// <summary>One parameter of an inline function.</summary>
 /// <param name="Name">The parameter name.</param>
 /// <param name="TypeName">The declared parameter type (<c>as T</c>), or null.</param>
-public sealed record ParamNode(string Name, string? TypeName = null);
+internal sealed record ParamNode(string Name, string? TypeName = null);
 
 /// <summary>Map constructor: <c>map { "a": 1, "b": 2 }</c></summary>
 /// <param name="Entries">The entries of the map.</param>
-public sealed record MapConstructorNode(IReadOnlyList<MapEntryNode> Entries) : XPathAstNode;
+internal sealed record MapConstructorNode(IReadOnlyList<MapEntryNode> Entries) : XPathAstNode;
 /// <summary>One key/value pair of a map constructor.</summary>
 /// <param name="Key">The key expression.</param>
 /// <param name="Value">The value expression.</param>
-public sealed record MapEntryNode(XPathAstNode Key, XPathAstNode Value) : XPathAstNode;
+internal sealed record MapEntryNode(XPathAstNode Key, XPathAstNode Value) : XPathAstNode;
 
 /// <summary>
 /// An XQuery string constructor: <c>``[literal `{expr}` literal]``</c>. Parts are literal
@@ -574,13 +575,13 @@ public sealed record MapEntryNode(XPathAstNode Key, XPathAstNode Value) : XPathA
 /// their concatenation, each interpolation's atomized items joined with single spaces.
 /// </summary>
 /// <param name="Parts">The literal text runs and interpolation expressions.</param>
-public sealed record StringConstructorNode(IReadOnlyList<XPathAstNode> Parts) : XPathAstNode;
+internal sealed record StringConstructorNode(IReadOnlyList<XPathAstNode> Parts) : XPathAstNode;
 
 /// <summary>Array constructor: <c>[1, 2, 3]</c> or <c>array { $seq }</c></summary>
 /// <param name="Items">The member expressions (square constructor) or the single sequence
 /// expression whose items become members (curly constructor).</param>
 /// <param name="IsSquare">True for the square <c>[...]</c> constructor, false for <c>array { }</c>.</param>
-public sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, bool IsSquare = true) : XPathAstNode;
+internal sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, bool IsSquare = true) : XPathAstNode;
 
 // ------------------------------------------------------------------
 // Node tests
@@ -602,7 +603,7 @@ public sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, boo
 /// <param name="KindTestTypeName">The schema type name of a kind test (e.g. <c>element(name, type)</c>), or null.</param>
 /// <param name="KindTestInnerName">The inner test name of a <c>document-node()</c> kind test
 /// (<c>element</c> or <c>schema-element</c>), or null.</param>
-public sealed record NodeTest(
+internal sealed record NodeTest(
     NameTestKind Kind,
     string? Name = null,
     string? NamespaceUri = null,
@@ -615,7 +616,7 @@ public sealed record NodeTest(
 // ------------------------------------------------------------------
 
 /// <summary>The binary operators of XPath 3.1 and XQuery 3.1.</summary>
-public enum BinaryOperator
+internal enum BinaryOperator
 {
     /// <summary>The <c>or</c> boolean operator.</summary>
     Or,
@@ -692,7 +693,7 @@ public enum BinaryOperator
 }
 
 /// <summary>The unary operators of XPath 3.1.</summary>
-public enum UnaryOperator
+internal enum UnaryOperator
 {
     /// <summary>Unary plus: <c>+E</c>.</summary>
     Plus,
@@ -701,7 +702,7 @@ public enum UnaryOperator
 }
 
 /// <summary>The kind of a <see cref="NodeTest"/>: wildcard, name test, or kind test.</summary>
-public enum NameTestKind
+internal enum NameTestKind
 {
     /// <summary>The <c>*</c> wildcard, matching any node of the principal node kind.</summary>
     AnyName,
@@ -720,16 +721,16 @@ public enum NameTestKind
 /// <summary>A predicate applied to a postfix expression: <c>E[P]</c>.</summary>
 /// <param name="Expression">The expression being filtered.</param>
 /// <param name="Predicate">The predicate expression.</param>
-public sealed record PostfixPredicateNode(XPathAstNode Expression, XPathAstNode Predicate) : XPathAstNode;
+internal sealed record PostfixPredicateNode(XPathAstNode Expression, XPathAstNode Predicate) : XPathAstNode;
 /// <summary>A call through a function item: <c>$f(1, 2)</c>.</summary>
 /// <param name="Function">The expression producing the function item.</param>
 /// <param name="Arguments">The argument expressions.</param>
-public sealed record DynamicFunctionCallNode(XPathAstNode Function, IReadOnlyList<XPathAstNode> Arguments) : XPathAstNode;
+internal sealed record DynamicFunctionCallNode(XPathAstNode Function, IReadOnlyList<XPathAstNode> Arguments) : XPathAstNode;
 /// <summary>A partial-application argument placeholder: <c>?</c>.</summary>
-public sealed record ArgumentPlaceholderNode : XPathAstNode;
+internal sealed record ArgumentPlaceholderNode : XPathAstNode;
 
 /// <summary>The quantifier of a quantified expression.</summary>
-public enum QuantifierKind
+internal enum QuantifierKind
 {
     /// <summary>Existential quantification: <c>some</c>.</summary>
     Some,

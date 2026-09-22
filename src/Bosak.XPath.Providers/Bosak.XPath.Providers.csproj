@@ -14,4 +14,10 @@
     <ProjectReference Include="..\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.Xslt" />
+    <InternalsVisibleTo Include="Bosak.XPath.Standard" />
+    <InternalsVisibleTo Include="Bosak.XQuery.Tests" />
+  </ItemGroup>
+
 </Project>

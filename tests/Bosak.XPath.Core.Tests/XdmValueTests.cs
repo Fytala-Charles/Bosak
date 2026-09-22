@@ -17,6 +17,8 @@
 //                      | Charles Korthout | 0.4   | 20-07-2026     | Added xs:double fixed-point-scientific formatting regression test                        |
 //                      | Charles Korthout | 0.5   | 20-07-2026     | Added xs:float decimal-range fixed-point formatting regression test                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -55,28 +57,28 @@ public class XdmValueTests
     [Fact]
     public void EffectiveBooleanValue_FollowsXPathRules()
     {
-        Assert.True(XdmValue.FromBoolean(true).EffectiveBooleanValue());
-        Assert.False(XdmValue.FromBoolean(false).EffectiveBooleanValue());
-        Assert.False(XdmValue.FromInteger(0).EffectiveBooleanValue());
-        Assert.True(XdmValue.FromInteger(1).EffectiveBooleanValue());
-        Assert.False(XdmValue.FromDouble(0.0).EffectiveBooleanValue());
-        Assert.True(XdmValue.FromDouble(1.5).EffectiveBooleanValue());
-        Assert.False(XdmValue.FromString("").EffectiveBooleanValue());
-        Assert.True(XdmValue.FromString("x").EffectiveBooleanValue());
-        Assert.False(XdmValue.Undefined.EffectiveBooleanValue());
+        Assert.True(XdmValue.FromBoolean(true).GetEffectiveBooleanValue());
+        Assert.False(XdmValue.FromBoolean(false).GetEffectiveBooleanValue());
+        Assert.False(XdmValue.FromInteger(0).GetEffectiveBooleanValue());
+        Assert.True(XdmValue.FromInteger(1).GetEffectiveBooleanValue());
+        Assert.False(XdmValue.FromDouble(0.0).GetEffectiveBooleanValue());
+        Assert.True(XdmValue.FromDouble(1.5).GetEffectiveBooleanValue());
+        Assert.False(XdmValue.FromString("").GetEffectiveBooleanValue());
+        Assert.True(XdmValue.FromString("x").GetEffectiveBooleanValue());
+        Assert.False(XdmValue.Undefined.GetEffectiveBooleanValue());
     }
 
     [Fact]
     public void EffectiveBooleanValue_SingletonSequence_UnwrapsItem()
     {
         var falseSeq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromBoolean(false) }));
-        Assert.False(falseSeq.EffectiveBooleanValue());
+        Assert.False(falseSeq.GetEffectiveBooleanValue());
 
         var trueSeq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromBoolean(true) }));
-        Assert.True(trueSeq.EffectiveBooleanValue());
+        Assert.True(trueSeq.GetEffectiveBooleanValue());
 
         var zeroSeq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromInteger(0) }));
-        Assert.False(zeroSeq.EffectiveBooleanValue());
+        Assert.False(zeroSeq.GetEffectiveBooleanValue());
     }
 
     [Fact]
@@ -85,7 +87,7 @@ public class XdmValueTests
         var doc = System.Xml.Linq.XDocument.Parse("<r><a/><b/></r>");
         var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
         var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new[] { XdmValue.FromNode(node), XdmValue.FromNode(node) }));
-        Assert.True(seq.EffectiveBooleanValue());
+        Assert.True(seq.GetEffectiveBooleanValue());
     }
 
     [Fact]
@@ -96,7 +98,7 @@ public class XdmValueTests
             XdmValue.FromBoolean(false),
             XdmValue.FromBoolean(true)
         }));
-        Assert.Throws<System.InvalidOperationException>(() => seq.EffectiveBooleanValue());
+        Assert.Throws<System.InvalidOperationException>(() => seq.GetEffectiveBooleanValue());
     }
 
     [Fact]

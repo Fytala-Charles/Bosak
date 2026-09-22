@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 09-09-2026     | Added Items view (copy-free access for the VM's materialization fast path)             |
+//                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -22,7 +23,7 @@ namespace Bosak.XPath.Core.Xdm;
 /// <summary>
 /// A materialized (eager) XDM sequence backed by a list of values.
 /// </summary>
-public sealed class MaterializedSequence : IXdmSequence
+internal sealed class MaterializedSequence : IXdmSequence
 {
     private readonly IReadOnlyList<XdmValue> _items;
 

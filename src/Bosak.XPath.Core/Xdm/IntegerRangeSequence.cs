@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -21,7 +22,7 @@ namespace Bosak.XPath.Core.Xdm;
 /// A lazy sequence representing an inclusive integer range (<c>from to to</c>).
 /// Avoids materialising the entire range into memory.
 /// </summary>
-public sealed class IntegerRangeSequence : IXdmSequence
+internal sealed class IntegerRangeSequence : IXdmSequence
 {
     private readonly long _from;
     private readonly long _to;

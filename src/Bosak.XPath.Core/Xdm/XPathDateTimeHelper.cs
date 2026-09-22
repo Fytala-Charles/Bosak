@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-06-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Fixed proleptic Gregorian leap-year calculation for negative years                       |
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -22,7 +23,7 @@ namespace Bosak.XPath.Core.Xdm;
 /// Provides proleptic-Gregorian calendar arithmetic for <see cref="XPathDateTime"/> values,
 /// including negative years, year zero, and years outside the .NET <see cref="DateTimeOffset"/> range.
 /// </summary>
-public static class XPathDateTimeHelper
+internal static class XPathDateTimeHelper
 {
     /// <summary>
     /// Returns the number of days between the civil date <c>1970-01-01</c> and the supplied date,

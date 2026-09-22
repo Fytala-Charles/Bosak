@@ -21,6 +21,7 @@
 //                      |                  |       |                | resolution (override-as-002/003/005)                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      | Charles Korthout | 0.6   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -32,7 +33,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// Represents a parsed <c>xsl:attribute-set</c> declaration.
 /// Attribute sets accumulate across imports/includes (merge semantics).
 /// </summary>
-public sealed class AttributeSetDefinition
+internal sealed class AttributeSetDefinition
 {
     /// <summary>The resolved local name of the attribute set.</summary>
     public string LocalName { get; }

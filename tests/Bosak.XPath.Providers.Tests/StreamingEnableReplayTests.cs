@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 17 september 2026
-// PURPOSE              : Unit tests for lazy record replay enablement (IStreamingDocument.EnableReplay).
+// PURPOSE              : Unit tests for lazy record replay enablement (IStreamingDocument.TryEnableReplay).
 // SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
 //
 // COPYRIGHT            : Fytala
@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 17-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage D: EnableReplay -> TryEnableReplay                                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Core.Xdm;
@@ -22,7 +24,7 @@ using Xunit;
 namespace Bosak.XPath.Providers.Tests.Streaming;
 
 /// <summary>
-/// Tests for <see cref="IStreamingDocument.EnableReplay"/>: a not-yet-started stream can
+/// Tests for <see cref="IStreamingDocument.TryEnableReplay"/>: a not-yet-started stream can
 /// be opted into record retention so later enumerations replay the full record stream;
 /// a partially consumed stream cannot.
 /// </summary>
@@ -54,10 +56,10 @@ public class StreamingEnableReplayTests
         var streamingDoc = Assert.IsAssignableFrom<IStreamingDocument>(
             doc.NodeKind == XdmNodeKind.Document ? doc : doc.Document!);
 
-        Assert.True(streamingDoc.EnableReplay());
+        Assert.True(streamingDoc.TryEnableReplay());
         Assert.Equal(new[] { "1", "2", "3" }, ChildNames(doc));
         // Idempotent and replayable.
-        Assert.True(streamingDoc.EnableReplay());
+        Assert.True(streamingDoc.TryEnableReplay());
         Assert.Equal(new[] { "1", "2", "3" }, ChildNames(doc));
     }
 
@@ -74,6 +76,6 @@ public class StreamingEnableReplayTests
         var childEnumerator = root.Axis(XdmAxis.Child).GetEnumerator();
         Assert.True(childEnumerator.MoveNext());
 
-        Assert.False(streamingDoc.EnableReplay());
+        Assert.False(streamingDoc.TryEnableReplay());
     }
 }

@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-07-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -24,7 +25,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// Character maps are resolved at serialization time and applied to text nodes
 /// and attribute values, but not to the contents of CDATA sections.
 /// </summary>
-public sealed class CharacterMapDefinition
+internal sealed class CharacterMapDefinition
 {
     /// <summary>The expanded name of the character map in Clark notation.</summary>
     public string ExpandedName { get; }

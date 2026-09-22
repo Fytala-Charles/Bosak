@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-08-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: use XdmConversions                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -99,7 +100,7 @@ public class SchemaDateTimeTypedValueTests
     public void Cast_DateTimeToTime_PreservesTimezone()
     {
         var node = CreateValidatedNode("dt", "xs:dateTime", "2002-04-02T12:00:00Z");
-        var timeValue = VmEngine.Cast(node.TypedValue, "xs:time");
+        var timeValue = XdmConversions.Cast(node.TypedValue, "xs:time");
 
         Assert.Equal(XdmValueKind.Time, timeValue.Kind);
         Assert.Equal("12:00:00Z", timeValue.ToString());
@@ -109,7 +110,7 @@ public class SchemaDateTimeTypedValueTests
     public void Cast_DateTimeToDate_PreservesTimezone()
     {
         var node = CreateValidatedNode("dt", "xs:dateTime", "2002-04-02T12:00:00Z");
-        var dateValue = VmEngine.Cast(node.TypedValue, "xs:date");
+        var dateValue = XdmConversions.Cast(node.TypedValue, "xs:date");
 
         Assert.Equal(XdmValueKind.Date, dateValue.Kind);
         Assert.Equal("2002-04-02Z", dateValue.ToString());

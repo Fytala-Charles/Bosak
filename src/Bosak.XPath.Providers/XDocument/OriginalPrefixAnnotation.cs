@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 12-07-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -21,7 +22,7 @@ namespace Bosak.XPath.Providers.Xml;
 /// Annotates an <see cref="System.Xml.Linq.XElement"/> with the namespace prefix that
 /// was used for the element in the original XML source document.
 /// </summary>
-public sealed class OriginalPrefixAnnotation
+internal sealed class OriginalPrefixAnnotation
 {
     /// <summary>
     /// The original namespace prefix, or the empty string if the element used the default

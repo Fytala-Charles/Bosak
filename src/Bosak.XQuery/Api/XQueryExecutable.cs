@@ -47,6 +47,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.7   | 07-09-2026     | Circular variable dependency raises XQDY0054 (XQuery 3.1 §4.15 dynamic detection)         |
 //                      | Charles Korthout | 2.8   | 09-09-2026     | Register unsupplied external variable declarations (XPDY0002 on reference)               |
+//                      | Charles Korthout | 2.9   | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
+//                      | Charles Korthout | 2.10  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -65,7 +67,7 @@ namespace Bosak.XQuery.Api;
 /// <summary>A user function declaration compiled to an executable body module. The optional
 /// module fields carry the declaring library module's runtime static context (null for the
 /// main module) so the body executes with that module's namespaces and base URI.</summary>
-public sealed record CompiledUserFunction(
+internal sealed record CompiledUserFunction(
     string LocalName,
     string NamespaceUri,
     IReadOnlyList<string> Parameters,
@@ -81,7 +83,7 @@ public sealed record CompiledUserFunction(
 
 /// <summary>A user variable declaration compiled to an executable body module (null for external).
 /// The optional module fields mirror <see cref="CompiledUserFunction"/>.</summary>
-public sealed record CompiledUserVariable(
+internal sealed record CompiledUserVariable(
     string LocalName,
     string NamespaceUri,
     string? TypeName,
@@ -156,7 +158,7 @@ public sealed class XQueryExecutable
             {
                 foreach (var contextItemType in _libraryModuleContextItemTypes)
                 {
-                    if (!VmEngine.ValueMatchesType(evaluationContext.ContextItem, contextItemType, evaluationContext))
+                    if (!XdmConversions.ValueMatchesType(evaluationContext.ContextItem, contextItemType, evaluationContext))
                         throw new InvalidOperationException(
                             $"XPTY0004: The initial context item does not match the context item type '{contextItemType}' declared in an imported library module.");
                 }
@@ -484,7 +486,7 @@ public sealed class XQueryExecutable
             if (!ctx.TryGetVariable(v.LocalName, out var externalValue, v.NamespaceUri))
                 continue;
             var valueToCheck = IsNodeKindTestText(v.TypeName) ? externalValue : AtomizeItemsForTypeCheck(externalValue);
-            if (!VmEngine.ValueMatchesType(valueToCheck, v.TypeName, ctx))
+            if (!XdmConversions.ValueMatchesType(valueToCheck, v.TypeName, ctx))
                 throw new InvalidOperationException($"XPTY0004: The value of the external variable '${v.LocalName}' does not match the declared type '{v.TypeName}'.");
         }
 
@@ -528,7 +530,7 @@ public sealed class XQueryExecutable
             try
             {
                 callCtx.DefaultElementNamespace = mainModuleDefaultElementNamespace;
-                return VmEngine.InvokeFunctionItem(
+                return XdmConversions.InvokeFunctionItem(
                     new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
                     callCtx, args);
             }
@@ -548,7 +550,7 @@ public sealed class XQueryExecutable
             ApplyModuleContext(callCtx, function.ModuleNamespaces, function.ModuleBaseUri,
                 function.ModuleDefaultElementNamespace, function.ModuleDefaultCollation,
                 function.ModuleDecimalFormats, function.ModuleDefaultDecimalFormat);
-            return VmEngine.InvokeFunctionItem(
+            return XdmConversions.InvokeFunctionItem(
                 new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
                 callCtx, args);
         }

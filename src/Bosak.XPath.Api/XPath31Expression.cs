@@ -15,7 +15,7 @@
 //                      | Charles Korthout | 0.2   | 24-06-2026     | Added DefiningElementDefaultNamespace for element-available default namespace            |
 //                      | Charles Korthout | 0.3   | 26-06-2026     | Compile-time namespace resolution and static errors for removed functions                |
 //                      | Charles Korthout | 0.4   | 27-06-2026     | Preserve explicit braced-URI namespace URIs in function calls and named function refs    |
-//                      | Charles Korthout | 0.5   | 21-07-2026     | Empty expression reports XPST0003 via ParseException instead of ArgumentException         |
+//                      | Charles Korthout | 0.5   | 21-07-2026     | Empty expression reports XPST0003 via XPathParseException instead of ArgumentException         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 25-07-2026     | Xml11LineEndings option threaded to the parser                                          |
 //                      |==================|=======|================|=========================================================================================
@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 0.8   | 27-07-2026     | Namespace resolution traversal for StringConstructorNode |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 07-09-2026     | Static name-test validation (XPST0081/XPST0008) against CompileOptions.Namespaces        |
+//                      | Charles Korthout | 0.10  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
@@ -71,7 +72,7 @@ public sealed class XPath31Expression
         ArgumentNullException.ThrowIfNull(options);
 
         if (string.IsNullOrWhiteSpace(expression))
-            throw new ParseException("Empty expression is not a valid XPath expression", 0);
+            throw new XPathParseException("Empty expression is not a valid XPath expression", 0);
 
         // 1. Lex + Parse -> AST
         var ast = XPathParser.Parse(expression, xml11LineEndings: options.Xml11LineEndings);

@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.9   | 15-07-2026     | Tier-2l: CJK kanji, French ordinal, Italian gender, o(-lang) suffix                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.11  | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -35,7 +36,7 @@ namespace Bosak.XPath.Standard.Functions;
 /// <summary>
 /// Implements fn:format-integer per XPath and XQuery Functions and Operators 3.1 §4.6.
 /// </summary>
-public static class FormatIntegerEngine
+internal static class FormatIntegerEngine
 {
     /// <summary>
     /// Formats an integer according to an <c>fn:format-integer</c> picture string.

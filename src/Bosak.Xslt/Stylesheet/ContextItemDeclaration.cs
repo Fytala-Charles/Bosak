@@ -17,6 +17,7 @@
 //                      |                  |       |                | unnamed xsl:template (REQ-082)                                                           |
 //                      | Charles Korthout | 0.3   | 07-09-2026     | use="absent" with @as raises XTSE3088, not XTSE3089 (XTSE3089 is for                      |
 //                      |                  |       |                | xsl:global-context-item); context-item-010 (REQ-082)                                     |
+//                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -31,7 +32,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// <summary>
 /// Indicates whether a template requires, allows, or ignores the context item.
 /// </summary>
-public enum ContextItemUse
+internal enum ContextItemUse
 {
     /// <summary>A context item must be supplied.</summary>
     Required,
@@ -47,7 +48,7 @@ public enum ContextItemUse
 /// Represents a parsed &lt;xsl:context-item&gt; declaration: its <c>use</c> value and
 /// optional required type (<c>as</c>).
 /// </summary>
-public sealed class ContextItemDeclaration
+internal sealed class ContextItemDeclaration
 {
     /// <summary>The required/optional/absent behavior for the context item.</summary>
     public ContextItemUse Use { get; }

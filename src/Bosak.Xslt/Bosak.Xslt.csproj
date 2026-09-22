@@ -21,4 +21,9 @@
     <ProjectReference Include="..\Bosak.XQuery\Bosak.XQuery.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.Xslt.Tests" />
+    <InternalsVisibleTo Include="Bosak.Xslt.Conformance" />
+  </ItemGroup>
+
 </Project>
