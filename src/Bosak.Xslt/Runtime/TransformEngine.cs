@@ -361,6 +361,9 @@
 //                      | Charles Korthout | 6.81  | 21-09-2026     | xsl:map content merges all entries of each map (XTTE3365 count check removed;           |
 //                      |                  |       |                | sx-MapExpr-008/009); source-document content sets InStreamingMapContext so duplicate    |
 //                      |                  |       |                | map keys raise XTDE3365 (sx-MapExpr-007)                                                |
+//                      | Charles Korthout | 6.82  | 21-09-2026     | xsl:sequence/@select compiled with the instruction's in-scope namespaces, not bare —    |
+//                      |                  |       |                | fixes package-prefix resolution in used-package template rules (xml-to-json-B2-005/006/  |
+//                      |                  |       |                | 010/014; REQ-095)                                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -6809,7 +6812,7 @@ public sealed class TransformEngine
 
                     if (hasSelect)
                     {
-                        var compiled = XPath31Expression.Compile(select!);
+                        var compiled = CompileXPath(select!, instruction);
                         var result = compiled.Evaluate(_context);
                         if (_sequenceAccumulator != null)
                         {
