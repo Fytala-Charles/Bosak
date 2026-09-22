@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-07-2026     | Creation — XPathErrorException, GetErrorDetails, catch pattern matching, err:* binding   |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage A: internalized (exposes Parser catch patterns)                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -83,7 +84,7 @@ public readonly record struct ErrorDetails(
 /// Helpers for try/catch error handling: extracting structured error details from
 /// exceptions, matching catch-clause code patterns, and binding the <c>err:*</c> variables.
 /// </summary>
-public static class XPathError
+internal static class XPathError
 {
     /// <summary>The standard XPath/XQuery error namespace.</summary>
     public const string ErrNs = "http://www.w3.org/2005/xqt-errors";

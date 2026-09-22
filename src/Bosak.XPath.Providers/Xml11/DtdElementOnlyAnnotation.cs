@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 31-08-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -21,6 +22,6 @@ namespace Bosak.XPath.Providers.Xml;
 /// Annotation attached to an <see cref="System.Xml.Linq.XElement"/> that records
 /// that the element was declared with element-only content in the document's DTD.
 /// </summary>
-public sealed class DtdElementOnlyAnnotation
+internal sealed class DtdElementOnlyAnnotation
 {
 }

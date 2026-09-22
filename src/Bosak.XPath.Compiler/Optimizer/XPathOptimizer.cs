@@ -44,6 +44,7 @@
 //                      | Charles Korthout | 1.9   | 22-08-2026     | Optimize ValidateExpressionNode |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 1.11  | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -54,7 +55,7 @@ namespace Bosak.XPath.Compiler.Optimizer;
 /// <summary>
 /// Performs bottom-up optimizations on the XPath AST before lowering to IR.
 /// </summary>
-public sealed class XPathOptimizer
+internal sealed class XPathOptimizer
 {
     private bool _backwardsCompatible;
 

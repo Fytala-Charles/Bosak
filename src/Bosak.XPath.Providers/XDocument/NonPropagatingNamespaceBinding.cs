@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 28-07-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -25,6 +26,6 @@ namespace Bosak.XPath.Providers.Xml;
 /// (K2-NameTest-30/31), unlike explicit xmlns declarations and element-name bindings,
 /// which do propagate (K2-DirectConElemNamespace-40/41, K2-InScopePrefixesFunc-9).
 /// </summary>
-public sealed class NonPropagatingNamespaceBinding
+internal sealed class NonPropagatingNamespaceBinding
 {
 }

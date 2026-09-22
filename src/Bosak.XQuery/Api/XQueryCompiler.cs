@@ -56,6 +56,8 @@
 //                      | Charles Korthout | 3.1   | 07-09-2026     | Static name-test validation (XPST0081/XPST0008) of the main module body against the p... |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.2   | 07-09-2026     | WithNamespace seeds host-environment namespace bindings into the static context (prolog wins) |
+//                      | Charles Korthout | 3.3   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      | Charles Korthout | 3.4   | 21-09-2026     | API freeze stage C: internalized XQueryModuleSource record                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -73,7 +75,7 @@ namespace Bosak.XQuery.Api;
 
 /// <summary>A library module source registered with the compiler: its target namespace URI,
 /// an optional location hint (matched by <c>import module ... at "..."</c>), and the source text.</summary>
-public sealed record XQueryModuleSource(string Uri, string? Location, string Source);
+internal sealed record XQueryModuleSource(string Uri, string? Location, string Source);
 
 /// <summary>
 /// Compiles XQuery 3.1 source text into an <see cref="XQueryExecutable"/> that can be executed repeatedly.
@@ -132,7 +134,7 @@ public sealed class XQueryCompiler
         var parseResult = XQueryParser.Parse(query, xml11LineEndings);
         // XPST0003: a library module cannot be evaluated as a query.
         if (parseResult.IsLibraryModule)
-            throw new ParseException("XPST0003: A library module ('module namespace ...') cannot be evaluated as a query.", 0);
+            throw new XPathParseException("XPST0003: A library module ('module namespace ...') cannot be evaluated as a query.", 0);
 
         // 1b. External (host-environment) namespace bindings seed the static context;
         // prolog declarations take precedence and are never overwritten.
@@ -285,7 +287,7 @@ public sealed class XQueryCompiler
             }
             // XQST0059: the import cannot be satisfied by any registered module.
             if (loaded.Count == 0)
-                throw new ParseException($"XQST0059: Unable to locate a library module with target namespace '{ns}'.", 0);
+                throw new XPathParseException($"XQST0059: Unable to locate a library module with target namespace '{ns}'.", 0);
 
             // XQST0034/XQST0049: modules sharing one target namespace must not declare the
             // same function (name+arity) or variable.
@@ -296,12 +298,12 @@ public sealed class XQueryCompiler
                 foreach (var fn in module.StaticContext.UserFunctions)
                 {
                     if (!functionKeys.Add((fn.LocalName, fn.Parameters.Count)))
-                        throw new ParseException($"XQST0034: Function '{fn.LocalName}' with arity {fn.Parameters.Count} is declared more than once in module namespace '{ns}'.", fn.Position);
+                        throw new XPathParseException($"XQST0034: Function '{fn.LocalName}' with arity {fn.Parameters.Count} is declared more than once in module namespace '{ns}'.", fn.Position);
                 }
                 foreach (var v in module.StaticContext.UserVariables)
                 {
                     if (!variableKeys.Add(v.LocalName))
-                        throw new ParseException($"XQST0049: Variable '${v.LocalName}' is declared more than once in module namespace '{ns}'.", v.Position);
+                        throw new XPathParseException($"XQST0049: Variable '${v.LocalName}' is declared more than once in module namespace '{ns}'.", v.Position);
                 }
             }
 
@@ -351,7 +353,7 @@ public sealed class XQueryCompiler
                             own.LocalName == fn.LocalName && own.NamespaceUri == fn.NamespaceUri
                             && own.Parameters.Count == fn.Parameters.Count))
                     {
-                        throw new ParseException($"XQST0034: Function '{fn.LocalName}' with arity {fn.Parameters.Count} is declared more than once.", fn.Position);
+                        throw new XPathParseException($"XQST0034: Function '{fn.LocalName}' with arity {fn.Parameters.Count} is declared more than once.", fn.Position);
                     }
                     functions.Add((fn.NamespaceUri, fn.LocalName, fn.Parameters.Count));
                 }
@@ -361,7 +363,7 @@ public sealed class XQueryCompiler
                         continue;
                     // XQST0049: an own declaration collides with an imported one.
                     if (context.UserVariables.Any(own => own.LocalName == v.LocalName && own.NamespaceUri == v.NamespaceUri))
-                        throw new ParseException($"XQST0049: Variable '${v.LocalName}' is declared more than once.", v.Position);
+                        throw new XPathParseException($"XQST0049: Variable '${v.LocalName}' is declared more than once.", v.Position);
                     variables.Add((v.NamespaceUri, v.LocalName));
                 }
             }

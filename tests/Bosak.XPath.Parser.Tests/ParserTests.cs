@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.8   | 22-08-2026     | Added cast-as followed by +/* operator regression tests                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 23-08-2026     | Added keyword-as-unprefixed-function-name regression tests                             |
+//                      | Charles Korthout | 0.10  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -318,7 +319,7 @@ public class ParserTests
     [InlineData("switch#0")]
     public void NamedFunctionRef_ReservedName_RaisesXPST0003(string expr)
     {
-        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse(expr));
+        var ex = Assert.Throws<XPathParseException>(() => XPathParser.Parse(expr));
         Assert.Contains("XPST0003", ex.Message);
     }
 
@@ -472,7 +473,7 @@ public class ParserTests
     {
         // Regression for QT3 LetExpr020a: XPath does not allow multiple let clauses.
         var expr = "let $a := 1 let $b := $a let $c := $a+$b return ($c)";
-        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse(expr));
+        var ex = Assert.Throws<XPathParseException>(() => XPathParser.Parse(expr));
         Assert.Contains("XPST0003", ex.Message);
     }
 
@@ -526,7 +527,7 @@ public class ParserTests
     public void CastExpr_StarOccurrenceIndicatorWithoutOperand_RaisesXPST0003()
     {
         // Standalone '*' after a SingleType is still a syntax error (K-SeqExprCast-1).
-        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse("'string' cast as xs:string*"));
+        var ex = Assert.Throws<XPathParseException>(() => XPathParser.Parse("'string' cast as xs:string*"));
         Assert.Contains("XPST0003", ex.Message);
     }
 
@@ -534,7 +535,7 @@ public class ParserTests
     public void CastExpr_PlusOccurrenceIndicatorWithoutOperand_RaisesXPST0003()
     {
         // Standalone '+' after a SingleType is still a syntax error (K-SeqExprCast-2).
-        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse("'string' cast as xs:string+"));
+        var ex = Assert.Throws<XPathParseException>(() => XPathParser.Parse("'string' cast as xs:string+"));
         Assert.Contains("XPST0003", ex.Message);
     }
 
@@ -558,7 +559,7 @@ public class ParserTests
     {
         // Regression for QT3 K-SeqExprTreat-16: missing closing paren in sequence type.
         var expr = "3 treat as item(";
-        var ex = Assert.Throws<ParseException>(() => XPathParser.Parse(expr));
+        var ex = Assert.Throws<XPathParseException>(() => XPathParser.Parse(expr));
         Assert.Contains("XPST0003", ex.Message);
     }
 
@@ -668,8 +669,8 @@ public class ParserTests
     [Fact]
     public void PostfixLookup_QualifiedNameKey_IsStaticError()
     {
-        Assert.Throws<ParseException>(() => XPathParser.Parse("map{'a':1}?xs:integer"));
-        Assert.Throws<ParseException>(() => XPathParser.Parse("map{'a':1}?Q{}integer"));
+        Assert.Throws<XPathParseException>(() => XPathParser.Parse("map{'a':1}?xs:integer"));
+        Assert.Throws<XPathParseException>(() => XPathParser.Parse("map{'a':1}?Q{}integer"));
     }
 
     [Fact]

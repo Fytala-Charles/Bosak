@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 05-06-2026     | Auto-prefix generic messages with XPST0003 when no error code is present                |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Parser;
@@ -22,31 +23,31 @@ namespace Bosak.XPath.Parser;
 /// <summary>
 /// Thrown when an XPath expression cannot be parsed due to syntactic errors.
 /// </summary>
-public sealed class ParseException : Exception
+public sealed class XPathParseException : Exception
 {
     /// <summary>The zero-based character offset in the source text where the error was detected.</summary>
     public int Position { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ParseException"/> class.
+    /// Initializes a new instance of the <see cref="XPathParseException"/> class.
     /// </summary>
     /// <param name="message">The error description; an XPST0003 prefix is added when the
     /// message does not already start with an XPST, XQST, or XPTY error code.</param>
     /// <param name="position">The zero-based character offset in the source text where the error was detected.</param>
-    public ParseException(string message, int position)
+    public XPathParseException(string message, int position)
         : base(FormatMessage(message, position))
     {
         Position = position;
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ParseException"/> class with an inner exception.
+    /// Initializes a new instance of the <see cref="XPathParseException"/> class with an inner exception.
     /// </summary>
     /// <param name="message">The error description; an XPST0003 prefix is added when the
     /// message does not already start with an XPST, XQST, or XPTY error code.</param>
     /// <param name="position">The zero-based character offset in the source text where the error was detected.</param>
     /// <param name="inner">The exception that caused this parse error.</param>
-    public ParseException(string message, int position, Exception inner)
+    public XPathParseException(string message, int position, Exception inner)
         : base(FormatMessage(message, position), inner)
     {
         Position = position;

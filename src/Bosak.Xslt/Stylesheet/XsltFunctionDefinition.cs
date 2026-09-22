@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.7   | 02-09-2026     | XTSE0020 for braced-URI names without leading 'Q' (invalid EQName) in @_name (REQ-082)   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
+//                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -36,7 +37,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// Represents a parsed &lt;xsl:function&gt; declaration, including its parameters,
 /// return type, and sequence-constructor body.
 /// </summary>
-public sealed class XsltFunctionDefinition
+internal sealed class XsltFunctionDefinition
 {
     /// <summary>Namespace URI of the function (resolved from the prefix in the name attribute).</summary>
     public string NamespaceUri { get; }

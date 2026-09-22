@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 17-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Streaming;
@@ -32,19 +34,19 @@ public class SinglePassSequenceEbvTests
     [Fact]
     public void Ebv_EmptySinglePassSequence_IsFalse()
     {
-        Assert.False(SinglePassValue().EffectiveBooleanValue());
+        Assert.False(SinglePassValue().GetEffectiveBooleanValue());
     }
 
     [Fact]
     public void Ebv_SingleNode_IsTrue()
     {
-        Assert.True(SinglePassValue(NodeItem()).EffectiveBooleanValue());
+        Assert.True(SinglePassValue(NodeItem()).GetEffectiveBooleanValue());
     }
 
     [Fact]
     public void Ebv_MultipleNodes_IsTrue()
     {
-        Assert.True(SinglePassValue(NodeItem("<a/>"), NodeItem("<b/>")).EffectiveBooleanValue());
+        Assert.True(SinglePassValue(NodeItem("<a/>"), NodeItem("<b/>")).GetEffectiveBooleanValue());
     }
 
     [Theory]
@@ -52,7 +54,7 @@ public class SinglePassSequenceEbvTests
     [InlineData("", false)]
     public void Ebv_SingleString_MatchesStringRules(string value, bool expected)
     {
-        Assert.Equal(expected, SinglePassValue(XdmValue.FromString(value)).EffectiveBooleanValue());
+        Assert.Equal(expected, SinglePassValue(XdmValue.FromString(value)).GetEffectiveBooleanValue());
     }
 
     [Theory]
@@ -60,7 +62,7 @@ public class SinglePassSequenceEbvTests
     [InlineData(0, false)]
     public void Ebv_SingleInteger_MatchesNumericRules(long value, bool expected)
     {
-        Assert.Equal(expected, SinglePassValue(XdmValue.FromInteger(value)).EffectiveBooleanValue());
+        Assert.Equal(expected, SinglePassValue(XdmValue.FromInteger(value)).GetEffectiveBooleanValue());
     }
 
     [Theory]
@@ -68,20 +70,20 @@ public class SinglePassSequenceEbvTests
     [InlineData(0.0, false)]
     public void Ebv_SingleDouble_MatchesNumericRules(double value, bool expected)
     {
-        Assert.Equal(expected, SinglePassValue(XdmValue.FromDouble(value)).EffectiveBooleanValue());
+        Assert.Equal(expected, SinglePassValue(XdmValue.FromDouble(value)).GetEffectiveBooleanValue());
     }
 
     [Fact]
     public void Ebv_SingleNaN_IsFalse()
     {
-        Assert.False(SinglePassValue(XdmValue.FromDouble(double.NaN)).EffectiveBooleanValue());
+        Assert.False(SinglePassValue(XdmValue.FromDouble(double.NaN)).GetEffectiveBooleanValue());
     }
 
     [Fact]
     public void Ebv_TwoAtomicItems_RaisesForg0006()
     {
         var ex = Assert.Throws<InvalidOperationException>(
-            () => SinglePassValue(XdmValue.FromInteger(1), XdmValue.FromInteger(2)).EffectiveBooleanValue());
+            () => SinglePassValue(XdmValue.FromInteger(1), XdmValue.FromInteger(2)).GetEffectiveBooleanValue());
         Assert.Contains("FORG0006", ex.Message);
     }
 
@@ -89,7 +91,7 @@ public class SinglePassSequenceEbvTests
     public void Ebv_NodeFollowedByAtomic_IsTrue()
     {
         // A sequence whose first item is a node has EBV true regardless of later items.
-        Assert.True(SinglePassValue(NodeItem(), XdmValue.FromInteger(1)).EffectiveBooleanValue());
+        Assert.True(SinglePassValue(NodeItem(), XdmValue.FromInteger(1)).GetEffectiveBooleanValue());
     }
 
     [Fact]
@@ -97,8 +99,8 @@ public class SinglePassSequenceEbvTests
     {
         var sequence = new FakeSinglePassSequence(XdmValue.FromInteger(1));
         var value = XdmValue.FromSequence(XdmSequence.FromSource(sequence));
-        Assert.True(value.EffectiveBooleanValue());
-        Assert.Throws<StreamingException>(() => value.EffectiveBooleanValue());
+        Assert.True(value.GetEffectiveBooleanValue());
+        Assert.Throws<StreamingException>(() => value.GetEffectiveBooleanValue());
     }
 
     /// <summary>

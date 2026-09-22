@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-06-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -24,7 +25,7 @@ namespace Bosak.XPath.Providers.Xml;
 /// are in scope for its children. This is used to calculate prefixed namespace
 /// undeclarations when <c>inherit-namespaces="no"</c> is in effect.
 /// </summary>
-public sealed class NamespaceInheritanceContext
+internal sealed class NamespaceInheritanceContext
 {
     /// <summary>
     /// Maps prefix (empty string for the default namespace) to namespace URI.

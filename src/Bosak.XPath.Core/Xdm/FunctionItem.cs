@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.6    | 02-09-2026     | NamedFunctionItem.CapturedSignature for cross-scope function-item                   |
 //                      |                  |        |                | invocation (override-f-014)                                                         |
 //                      | Charles Korthout | 0.7   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.8   | 21-09-2026     | API freeze stage C: internalized NamedFunctionItem and CurriedFunctionItem              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -41,7 +42,7 @@ public abstract record FunctionItem
 /// <param name="NamespaceUri">The namespace URI of the function name.</param>
 /// <param name="LocalName">The local name of the function.</param>
 /// <param name="ArityValue">The number of arguments the function accepts.</param>
-public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, int ArityValue) : FunctionItem
+internal sealed record NamedFunctionItem(string NamespaceUri, string LocalName, int ArityValue) : FunctionItem
 {
     /// <inheritdoc/>
     public override int Arity => ArityValue;
@@ -100,7 +101,7 @@ public sealed record NamedFunctionItem(string NamespaceUri, string LocalName, in
 /// </summary>
 /// <param name="BaseFunction">The function being partially applied.</param>
 /// <param name="FixedArgs">The argument list; null entries are placeholders that remain open.</param>
-public sealed record CurriedFunctionItem(FunctionItem BaseFunction, XdmValue?[] FixedArgs) : FunctionItem
+internal sealed record CurriedFunctionItem(FunctionItem BaseFunction, XdmValue?[] FixedArgs) : FunctionItem
 {
     /// <inheritdoc/>
     public override int Arity

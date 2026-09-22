@@ -36,6 +36,8 @@
 //                      | Charles Korthout | 1.4   | 07-09-2026     | Unterminated braced URI literal Q{ raises XPST0003 (eqname-907)                          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.5   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 1.6   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
+//                      | Charles Korthout | 1.7   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
@@ -46,7 +48,7 @@ namespace Bosak.XPath.Parser.Lexer;
 /// <summary>
 /// A zero-allocation XPath 3.1 lexer operating over <see cref="ReadOnlySpan{char}"/>.
 /// </summary>
-public ref struct XPathLexer
+internal ref struct XPathLexer
 {
     private readonly ReadOnlySpan<char> _source;
     private readonly bool _allowConstructors;
@@ -95,7 +97,7 @@ public ref struct XPathLexer
     /// Returns the next token and advances the lexer.
     /// </summary>
     /// <returns>The next token, or <see cref="Token.Eof"/> when the end of the source is reached.</returns>
-    /// <exception cref="ParseException">An XPath comment or braced URI literal is unterminated.</exception>
+    /// <exception cref="XPathParseException">An XPath comment or braced URI literal is unterminated.</exception>
     public Token NextToken()
     {
         SkipWhitespaceAndComments();
@@ -246,7 +248,7 @@ public ref struct XPathLexer
 
         if (depth > 0)
         {
-            throw new ParseException("Unterminated comment", start);
+            throw new XPathParseException("Unterminated comment", start);
         }
     }
 
@@ -380,7 +382,7 @@ public ref struct XPathLexer
             while (_position < _source.Length && _source[_position] != '}')
                 _position++;
             if (_position >= _source.Length)
-                throw new ParseException("XPST0003: Unterminated braced URI literal (missing '}').", start);
+                throw new XPathParseException("XPST0003: Unterminated braced URI literal (missing '}').", start);
             _position++; // consume '}'
 
             // URI-qualified wildcard: Q{uri}*

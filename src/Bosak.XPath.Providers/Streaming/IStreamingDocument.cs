@@ -16,32 +16,26 @@
 //                      | Charles Korthout | 0.2   | 17-09-2026     | EnableReplay lets the XSLT engine opt a not-yet-started stream into record retention    |
 //                      |                  |       |                | when the stylesheet contains xsl:fork (si-fork-119/816)                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage D: StreamCompleted is an event; EnableReplay -> TryEnableReplay;        |
+//                      |                  |       |                | RecordPostProcessor removed (supplied via StreamingLoadOptions; engine composes through  |
+//                      |                  |       |                | the internal implementation property)                                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Providers.Streaming;
 
 /// <summary>
 /// Implemented by the document node of a streaming (burst-mode) source. Lets the XSLT
-/// engine install per-record and stream-completion callbacks: whitespace stripping per
-/// record and push-style accumulator evaluation (Phase B streaming accumulators).
+/// engine install stream-completion callbacks: push-style accumulator evaluation
+/// (Phase B streaming accumulators). Per-record processing is supplied at load time via
+/// <see cref="StreamingLoadOptions.RecordPostProcessor"/>.
 /// </summary>
 public interface IStreamingDocument
 {
     /// <summary>
-    /// Gets or sets the callback invoked on each top-level record node (element, text,
-    /// comment, or processing instruction) immediately after it is materialized and
-    /// wrapped, before it is exposed to the engine. Seeded from
-    /// <see cref="StreamingLoadOptions.RecordPostProcessor"/>; the XSLT engine composes
-    /// whitespace stripping and accumulator evaluation into this slot. Returning
-    /// <c>false</c> drops the record from the stream (it is never yielded), which is how
-    /// <c>xsl:strip-space</c> removes whitespace text records between elements.
+    /// Raised once, when the stream has been read to the end of the root element.
+    /// Used to fire document-node <c>phase="end"</c> accumulator rules.
     /// </summary>
-    Func<System.Xml.Linq.XObject, Bosak.XPath.Core.Xdm.IXdmNode, bool>? RecordPostProcessor { get; set; }
-
-    /// <summary>
-    /// Gets or sets the callback invoked once, when the stream has been read to the end
-    /// of the root element. Used to fire document-node <c>phase="end"</c> accumulator rules.
-    /// </summary>
-    Action? StreamCompleted { get; set; }
+    event Action? StreamCompleted;
 
     /// <summary>
     /// Gets whether the stream can currently be drained: nothing has been pulled yet, or
@@ -52,7 +46,7 @@ public interface IStreamingDocument
     /// <summary>
     /// Consumes the remainder of the stream without exposing records to the caller
     /// (a grounding operation, e.g. publishing document-level accumulator-after values).
-    /// Records still flow through <see cref="RecordPostProcessor"/> and are released.
+    /// Records still flow through <see cref="StreamingLoadOptions.RecordPostProcessor"/> and are released.
     /// </summary>
     /// <exception cref="StreamingException">Another enumeration is mid-flight (<see cref="CanDrain"/> is false).</exception>
     void Drain();
@@ -64,5 +58,5 @@ public interface IStreamingDocument
     /// (records yielded before this call cannot be replayed). Idempotent: returns
     /// <c>true</c> when replay was already enabled.
     /// </summary>
-    bool EnableReplay();
+    bool TryEnableReplay();
 }

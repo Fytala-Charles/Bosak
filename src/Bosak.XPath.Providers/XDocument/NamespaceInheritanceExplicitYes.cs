@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-06-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -23,6 +24,6 @@ namespace Bosak.XPath.Providers.Xml;
 /// element must redeclare inherited prefixes during raw XML 1.1 serialization so that the
 /// inherited namespace nodes are visibly preserved.
 /// </summary>
-public sealed class NamespaceInheritanceExplicitYes
+internal sealed class NamespaceInheritanceExplicitYes
 {
 }

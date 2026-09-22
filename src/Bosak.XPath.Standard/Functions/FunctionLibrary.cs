@@ -340,6 +340,9 @@
 //                      | Charles Korthout | 5.109 | 21-09-2026     | fn:copy-of deep-copy guard: provider-agnostic IXdmNode fallback in DeepCopyNode so     |
 //                      |                  |       |                | streamed (foreign-provider) nodes are grounded, never aliased live wrappers            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.115 | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue; LoadFile method   |
+//                      |                  |       |                | group as default document loader                                                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3429,7 +3432,7 @@ public static class FunctionLibrary
         // Set up default document loader if not already configured
         if (context.DocumentLoader is null)
         {
-            context.DocumentLoader = XDocumentProvider.LoadXml;
+            context.DocumentLoader = XDocumentProvider.LoadFile;
         }
 
         // Provide the default collation-aware string comparer used by XPath value
@@ -4517,7 +4520,7 @@ public static class FunctionLibrary
     }
 
     private static XdmValue Not(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => XdmValue.FromBoolean(!args[0].EffectiveBooleanValue());
+        => XdmValue.FromBoolean(!args[0].GetEffectiveBooleanValue());
 
     private static XdmValue Position(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -8846,7 +8849,7 @@ public static class FunctionLibrary
             if (schemaType is "gyear" or "gyearmonth" or "gmonthday" or "gday" or "gmonth"
                 or "hexbinary" or "base64binary")
                 throw new InvalidOperationException("FORG0006");
-            return XdmValue.FromBoolean(arg.EffectiveBooleanValue());
+            return XdmValue.FromBoolean(arg.GetEffectiveBooleanValue());
         }
 
         return arg.Kind switch
@@ -8854,7 +8857,7 @@ public static class FunctionLibrary
             XdmValueKind.Boolean or XdmValueKind.Integer
                 or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float
                 or XdmValueKind.Node
-                => XdmValue.FromBoolean(arg.EffectiveBooleanValue()),
+                => XdmValue.FromBoolean(arg.GetEffectiveBooleanValue()),
             XdmValueKind.QName => throw new InvalidOperationException("FORG0006"),
             XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time
                 or XdmValueKind.Duration

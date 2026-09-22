@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 01-06-2026     | Expanded register fields from byte to ushort to support >255 registers                   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.InteropServices;
@@ -26,7 +27,7 @@ namespace Bosak.XPath.Compiler.Ir;
 /// Uses a compact, register-based encoding.
 /// </summary>
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct IrInstruction
+internal readonly struct IrInstruction
 {
     /// <summary>The operation the instruction performs.</summary>
     public readonly IrOpCode OpCode;
@@ -65,7 +66,7 @@ public readonly struct IrInstruction
 /// A compiled XPath expression represented as a sequence of IR instructions
 /// and an associated literal pool.
 /// </summary>
-public sealed class IrModule
+internal sealed class IrModule
 {
     private readonly IrInstruction[] _instructions;
     private readonly object?[] _literalPool;

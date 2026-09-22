@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 18-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Threading;
@@ -215,7 +217,7 @@ public class TransformXsltHandler : IJsonRpcRequestHandler<TransformXsltParams, 
         try
         {
             var executable = new XsltCompiler().Compile(xsltText);
-            var source = XDocumentProvider.LoadXml(request.SourcePath);
+            var source = XDocumentProvider.LoadFile(request.SourcePath);
             var result = executable.TransformToString(source);
             return Task.FromResult(new TransformXsltResult { Result = result });
         }

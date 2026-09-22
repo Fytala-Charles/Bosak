@@ -54,6 +54,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.15  | 18-08-2026     | Added ArrowPartialApplication_PlaceholderArg test (ArrowPostfix-108) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.16  | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -586,7 +588,7 @@ public class ApiTests
         var xml = "<root xmlns='urn:test'><child>text</child></root>";
         var tempPath = System.IO.Path.GetTempFileName();
         System.IO.File.WriteAllText(tempPath, xml);
-        var validatedDoc = XDocumentProvider.LoadXml(tempPath, baseUri: null, schemaSet: schemaSet);
+        var validatedDoc = XDocumentProvider.LoadFile(tempPath, baseUri: null, schemaSet: schemaSet);
 
         var ctx = new EvaluationContext();
         FunctionLibrary.Populate(ctx);

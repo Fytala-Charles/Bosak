@@ -88,6 +88,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.37  | 23-08-2026     | UCA fallback=no and numeric-strength regression tests |
 //                      | Charles Korthout | 2.38  | 27-08-2026     | Updated json-to-xml validate=true expectation to FOJS0004                              |
+//                      | Charles Korthout | 2.39  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -4730,7 +4731,7 @@ public class Tier2jFlworTests
 
     [Fact]
     public void ForPositional_MissingDollar_IsParseError()
-        => Assert.Throws<Bosak.XPath.Parser.ParseException>(() => Evaluate("for $a at p1 in 1 return 1"));
+        => Assert.Throws<Bosak.XPath.Parser.XPathParseException>(() => Evaluate("for $a at p1 in 1 return 1"));
 
     [Fact]
     public void ForPositional_RestoresShadowedOuterVariable()

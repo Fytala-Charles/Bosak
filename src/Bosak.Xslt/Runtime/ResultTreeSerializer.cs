@@ -61,6 +61,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.32  | 17-09-2026     | SelfCloseVoidHtmlElements option emits "/>" for HTML void elements in file-written      |
 //                      |                  |       |                | result documents so the harness can reload them as XML (si-fork-119 secondary docs)     |
+//                      | Charles Korthout | 1.33  | 21-09-2026     | API freeze stage B: internalized                                                       |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -76,7 +77,7 @@ namespace Bosak.Xslt.Runtime;
 /// <summary>
 /// Serializes XDM result trees to XML, HTML, XHTML, or text strings.
 /// </summary>
-public static class ResultTreeSerializer
+internal static class ResultTreeSerializer
 {
     /// <summary>
     /// Serializes an XDM value to an XML string using default settings.

@@ -17,6 +17,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 25-07-2026     | Added Xml11LineEndings for XML 1.1 line-ending normalization in string literals        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage D: Default now returns a fresh instance per access; clarified          |
+//                      |                  |       |                | DefiningElementDefaultNamespace summary                                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Api;
 
@@ -27,8 +30,9 @@ public sealed class CompileOptions
 {
     /// <summary>
     /// Default options: XPath 3.1 compatibility, no static context.
+    /// Returns a new instance on every access.
     /// </summary>
-    public static CompileOptions Default { get; } = new();
+    public static CompileOptions Default => new();
 
     /// <summary>
     /// The XPath language version to target. Defaults to <see cref="XPathCompatibility.XPath31"/>.
@@ -55,9 +59,12 @@ public sealed class CompileOptions
     public bool Xml11LineEndings { get; init; }
 
     /// <summary>
-    /// The default namespace URI of the element that contains the XPath expression.
-    /// Used by XSLT's <c>fn:element-available</c> to expand unprefixed lexical QNames
-    /// per the XSLT specification, which differs from the XPath default element namespace.
+    /// The default namespace of the <em>defining</em> element — the XSLT stylesheet or
+    /// XQuery module element in which the expression appears — used when resolving
+    /// unprefixed element names in that module's host markup. Used by XSLT's
+    /// <c>fn:element-available</c> to expand unprefixed lexical QNames per the XSLT
+    /// specification. Distinct from <see cref="DefaultElementNamespace"/>, which applies
+    /// to unprefixed element names inside the XPath expression itself.
     /// </summary>
     public string? DefiningElementDefaultNamespace { get; init; }
 

@@ -10,6 +10,7 @@
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      | Charles Korthout | 6.84  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
@@ -364,6 +365,10 @@
 //                      | Charles Korthout | 6.82  | 21-09-2026     | xsl:sequence/@select compiled with the instruction's in-scope namespaces, not bare —    |
 //                      |                  |       |                | fixes package-prefix resolution in used-package template rules (xml-to-json-B2-005/006/  |
 //                      |                  |       |                | 010/014; REQ-095)                                                                       |
+//                      | Charles Korthout | 6.83  | 21-09-2026     | API freeze stage B: internalized                                                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.84  | 21-09-2026     | API freeze stage D: EnableReplay -> TryEnableReplay; StreamCompleted is an event (+=);   |
+//                      |                  |       |                | RecordPostProcessor set through the internal StreamingDocumentNode property               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -387,7 +392,7 @@ namespace Bosak.Xslt.Runtime;
 /// <summary>
 /// The XSLT transform engine. Evaluates a compiled stylesheet against a source document.
 /// </summary>
-public sealed class TransformEngine
+internal sealed class TransformEngine
 {
     private readonly Stylesheet.Stylesheet _stylesheet;
     private EvaluationContext _context;
@@ -987,7 +992,7 @@ public sealed class TransformEngine
             if (StylesheetUsesStreamReplay())
             {
                 var replayDoc = source as IStreamingDocument ?? (IStreamingDocument)source.Document!;
-                replayDoc.EnableReplay();
+                replayDoc.TryEnableReplay();
             }
         }
 
@@ -2703,7 +2708,7 @@ public sealed class TransformEngine
                 case "if":
                     {
                         var test = child.Attribute("test")?.Value;
-                        if (!string.IsNullOrEmpty(test) && CompileXPath(test, child).Evaluate(ctx).EffectiveBooleanValue())
+                        if (!string.IsNullOrEmpty(test) && CompileXPath(test, child).Evaluate(ctx).GetEffectiveBooleanValue())
                             items.Add(EvaluateAccumulatorRuleBody(child, ctx));
                         break;
                     }
@@ -2712,7 +2717,7 @@ public sealed class TransformEngine
                         foreach (var when in child.Elements(XName.Get("when", Stylesheet.Stylesheet.XslNamespace)))
                         {
                             var test = when.Attribute("test")?.Value;
-                            if (!string.IsNullOrEmpty(test) && CompileXPath(test, when).Evaluate(ctx).EffectiveBooleanValue())
+                            if (!string.IsNullOrEmpty(test) && CompileXPath(test, when).Evaluate(ctx).GetEffectiveBooleanValue())
                             {
                                 items.Add(EvaluateAccumulatorRuleBody(when, ctx));
                                 break;
@@ -3632,7 +3637,7 @@ public sealed class TransformEngine
                             var compiled = CompileXPath(test, instruction);
                             WithDefaultCollation(instruction, () =>
                             {
-                                if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                if (compiled.Evaluate(_context).GetEffectiveBooleanValue())
                                 {
                                     foreach (var child in instruction.Elements())
                                         EvaluateFunctionBodyInstruction(child, results, contextItem);
@@ -3652,7 +3657,7 @@ public sealed class TransformEngine
                                 var compiled = CompileXPath(whenTest, when);
                                 WithDefaultCollation(when, () =>
                                 {
-                                    if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                    if (compiled.Evaluate(_context).GetEffectiveBooleanValue())
                                     {
                                         foreach (var childNode in when.Nodes())
                                             ProcessFunctionBodyNode(childNode, results, contextItem);
@@ -5166,7 +5171,7 @@ public sealed class TransformEngine
             else
             {
                 if (!string.IsNullOrEmpty(contextItemDecl.AsType)
-                    && !VmEngine.ValueMatchesType(contextItem, contextItemDecl.AsType))
+                    && !XdmConversions.ValueMatchesType(contextItem, contextItemDecl.AsType))
                     throw new InvalidOperationException($"XTTE0590: Supplied context item does not match required type '{contextItemDecl.AsType}'.");
             }
 
@@ -6622,7 +6627,7 @@ public sealed class TransformEngine
                         WithDefaultCollation(instruction, () =>
                         {
                             var result = compiled.Evaluate(_context);
-                            if (result.EffectiveBooleanValue())
+                            if (result.GetEffectiveBooleanValue())
                             {
                                 foreach (var childNode in instruction.Nodes())
                                 {
@@ -6657,7 +6662,7 @@ public sealed class TransformEngine
                             WithDefaultCollation(when, () =>
                             {
                                 var result = compiled.Evaluate(_context);
-                                if (result.EffectiveBooleanValue())
+                                if (result.GetEffectiveBooleanValue())
                                 {
                                     matched = true;
                                     foreach (var childNode in when.Nodes())
@@ -12117,7 +12122,7 @@ public sealed class TransformEngine
     {
         var assertTest = instruction.Attribute("test")?.Value ?? "false()";
         bool assertPassed = CompileXPath(assertTest, instruction)
-            .Evaluate(_context).EffectiveBooleanValue();
+            .Evaluate(_context).GetEffectiveBooleanValue();
         if (!assertPassed)
         {
             var assertValue = BuildMessageValue(instruction, contextItem);
@@ -14397,7 +14402,7 @@ public sealed class TransformEngine
         {
             foreach (var item in items)
             {
-                if (!VmEngine.ValueMatchesType(item, type, context))
+                if (!XdmConversions.ValueMatchesType(item, type, context))
                     throw new InvalidOperationException($"{errorCode}: Value does not match type {originalType}");
             }
             return value;
@@ -14417,14 +14422,14 @@ public sealed class TransformEngine
 
             // Subtype substitution: if the value is already an instance of the declared
             // type (including subtypes such as xs:integer for xs:decimal), use it unchanged.
-            if (VmEngine.ValueMatchesType(atomic, type, context))
+            if (XdmConversions.ValueMatchesType(atomic, type, context))
             {
                 converted.Add(atomic);
             }
             else if (IsUntypedAtomic(atomic))
             {
                 // xs:untypedAtomic values can be cast to the required atomic type.
-                if (VmEngine.TryCast(atomic, type, context, out var casted))
+                if (XdmConversions.TryCast(atomic, type, context, out var casted))
                     converted.Add(casted);
                 else
                     throw new InvalidOperationException($"{errorCode}: Cannot cast untypedAtomic to type {type}");
@@ -14432,7 +14437,7 @@ public sealed class TransformEngine
             else if (IsNumericPromotion(atomic, type))
             {
                 // Numeric promotion: integer/decimal/float -> double, integer/decimal -> float
-                if (VmEngine.TryCast(atomic, type, context, out var casted))
+                if (XdmConversions.TryCast(atomic, type, context, out var casted))
                     converted.Add(casted);
                 else
                     throw new InvalidOperationException($"{errorCode}: Cannot promote value to type {type}");
@@ -14440,7 +14445,7 @@ public sealed class TransformEngine
             else if (IsUriPromotion(atomic, type))
             {
                 // URI promotion: xs:anyURI -> xs:string
-                if (VmEngine.TryCast(atomic, type, context, out var casted))
+                if (XdmConversions.TryCast(atomic, type, context, out var casted))
                     converted.Add(casted);
                 else
                     throw new InvalidOperationException($"{errorCode}: Cannot promote URI to type {type}");
@@ -15696,7 +15701,7 @@ public sealed class TransformEngine
                         var compiled = CompileXPath(test, instruction);
                         WithDefaultCollation(instruction, () =>
                         {
-                            if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                            if (compiled.Evaluate(_context).GetEffectiveBooleanValue())
                             {
                                 CollectSimpleContentItems(instruction, contextItem, items);
                             }
@@ -15716,7 +15721,7 @@ public sealed class TransformEngine
                             var compiled = CompileXPath(whenTest, when);
                             WithDefaultCollation(when, () =>
                             {
-                                if (compiled.Evaluate(_context).EffectiveBooleanValue())
+                                if (compiled.Evaluate(_context).GetEffectiveBooleanValue())
                                 {
                                     CollectSimpleContentItems(when, contextItem, items);
                                     matched = true;
@@ -16718,7 +16723,7 @@ public sealed class TransformEngine
             driver = new StreamingAccumulatorDriver(this, docNode);
             _streamingDrivers.Add(driver);
         }
-        streamingDoc.RecordPostProcessor = (record, recordNode) =>
+        ((StreamingDocumentNode)streamingDoc).RecordPostProcessor = (record, recordNode) =>
         {
             if (spaceRules.Count > 0 && ShouldStripStreamedRecord(record, docNode, spaceRules, backwardsCompatible))
                 return false; // drop whitespace text records stripped by xsl:strip-space
@@ -16728,7 +16733,7 @@ public sealed class TransformEngine
             return true;
         };
         if (driver != null)
-            streamingDoc.StreamCompleted = driver.OnStreamCompleted;
+            streamingDoc.StreamCompleted += driver.OnStreamCompleted;
     }
 
     /// <summary>

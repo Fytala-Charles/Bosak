@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.5   | 19-07-2026     | idiv NaN/INF overflow tests                                                            |
 //                      | Charles Korthout | 0.6   | 19-07-2026     | floating-point mod by zero returns NaN; integer mod by zero raises FOAR0001            |
 //                      | Charles Korthout | 0.7   | 22-08-2026     | Added cast/castable atomization tests for arrays, maps, and empty sequences            |
+//                      | Charles Korthout | 0.8   | 21-09-2026     | API freeze stage C: use XdmConversions                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -696,14 +697,14 @@ public class VmEngineTests
             XdmValue.FromInteger(1),
             XdmValue.FromInteger(2)
         }));
-        Assert.True(VmEngine.ValueMatchesType(seq, "xs:integer*"));
+        Assert.True(XdmConversions.ValueMatchesType(seq, "xs:integer*"));
     }
 
     [Fact]
     public void ValueMatchesType_EmptySequence_MatchesIntegerStar()
     {
         var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>()));
-        Assert.True(VmEngine.ValueMatchesType(seq, "xs:integer*"));
+        Assert.True(XdmConversions.ValueMatchesType(seq, "xs:integer*"));
     }
 
     [Fact]
@@ -714,21 +715,21 @@ public class VmEngineTests
             XdmValue.FromString("one"),
             XdmValue.FromString("two")
         }));
-        Assert.False(VmEngine.ValueMatchesType(seq, "xs:string"));
+        Assert.False(XdmConversions.ValueMatchesType(seq, "xs:string"));
     }
 
     [Fact]
     public void ValueMatchesType_SingleInteger_MatchesIntegerOptional()
     {
         var value = XdmValue.FromInteger(42);
-        Assert.True(VmEngine.ValueMatchesType(value, "xs:integer?"));
+        Assert.True(XdmConversions.ValueMatchesType(value, "xs:integer?"));
     }
 
     [Fact]
     public void ValueMatchesType_EmptySequence_MatchesIntegerOptional()
     {
         var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>()));
-        Assert.True(VmEngine.ValueMatchesType(seq, "xs:integer?"));
+        Assert.True(XdmConversions.ValueMatchesType(seq, "xs:integer?"));
     }
 
     [Fact]
@@ -739,14 +740,14 @@ public class VmEngineTests
             XdmValue.FromString("a"),
             XdmValue.FromString("b")
         }));
-        Assert.True(VmEngine.ValueMatchesType(seq, "xs:string+"));
+        Assert.True(XdmConversions.ValueMatchesType(seq, "xs:string+"));
     }
 
     [Fact]
     public void ValueMatchesType_EmptySequence_DoesNotMatchStringPlus()
     {
         var seq = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>()));
-        Assert.False(VmEngine.ValueMatchesType(seq, "xs:string+"));
+        Assert.False(XdmConversions.ValueMatchesType(seq, "xs:string+"));
     }
 
     // ------------------------------------------------------------------

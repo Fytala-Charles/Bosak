@@ -119,6 +119,8 @@
 //                      | Charles Korthout | 1.56  | 09-09-2026     | Integer literals beyond long range tagged IsIntegerLiteral (stay xs:integer)             |
 //                      | Charles Korthout | 1.57  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 1.58  | 21-09-2026     | Braced-URI names (Q{uri}local) in step position are function calls, never kind tests   |
+//                      | Charles Korthout | 1.59  | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
+//                      | Charles Korthout | 1.60  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |                  |       |                | (A ! Q{ns}text(...) misparsed as text() step; sx-treat-107/108/109, sx-instance-of-107/108) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -134,7 +136,7 @@ namespace Bosak.XPath.Parser.Ast;
 /// Recursive-descent parser for XPath 3.1.
 /// Consumes tokens from <see cref="XPathLexer"/> and produces an immutable AST.
 /// </summary>
-public sealed class XPathParser
+internal sealed class XPathParser
 {
     private Token[] _tokens;
     private readonly string _source;
@@ -197,7 +199,7 @@ public sealed class XPathParser
     /// <param name="boundarySpaceStrip">When true (the default), whitespace-only text at the
     /// boundaries of direct element constructor content is stripped; false preserves it.</param>
     /// <returns>The root of the parsed AST.</returns>
-    /// <exception cref="ParseException">The expression is not syntactically valid.</exception>
+    /// <exception cref="XPathParseException">The expression is not syntactically valid.</exception>
     public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
@@ -221,7 +223,7 @@ public sealed class XPathParser
     /// <param name="boundarySpaceStrip">When true (the default), whitespace-only text at the
     /// boundaries of direct element constructor content is stripped; false preserves it.</param>
     /// <returns>The root of the parsed AST.</returns>
-    /// <exception cref="ParseException">The expression is not syntactically valid, or input remains after the ExprSingle.</exception>
+    /// <exception cref="XPathParseException">The expression is not syntactically valid, or input remains after the ExprSingle.</exception>
     public static XPathAstNode ParseExprSingle(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
@@ -233,7 +235,7 @@ public sealed class XPathParser
         var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip };
         var result = parser.ParseExprSingle();
         if (!parser.IsAtEnd)
-            throw new ParseException($"XPST0003: Unexpected token {parser.Current.Kind} after the expression.", parser.Current.Start);
+            throw new XPathParseException($"XPST0003: Unexpected token {parser.Current.Kind} after the expression.", parser.Current.Start);
         return result;
     }
 
@@ -274,7 +276,7 @@ public sealed class XPathParser
             _position++;
             return t;
         }
-        throw new ParseException($"Expected {kind} but found {Current.Kind}", Current.Start);
+        throw new XPathParseException($"Expected {kind} but found {Current.Kind}", Current.Start);
     }
 
     /// <summary>
@@ -289,7 +291,7 @@ public sealed class XPathParser
             _position++;
             return t;
         }
-        throw new ParseException($"Expected name but found {Current.Kind}", Current.Start);
+        throw new XPathParseException($"Expected name but found {Current.Kind}", Current.Start);
     }
 
     private static bool IsKeywordName(TokenKind kind) => kind switch
@@ -326,13 +328,13 @@ public sealed class XPathParser
     /// Parses the token stream as a complete XPath expression, requiring all tokens to be consumed.
     /// </summary>
     /// <returns>The root of the parsed AST.</returns>
-    /// <exception cref="ParseException">The token stream is not a syntactically valid expression, or tokens remain after it.</exception>
+    /// <exception cref="XPathParseException">The token stream is not a syntactically valid expression, or tokens remain after it.</exception>
     public XPathAstNode ParseExpression()
     {
         int start = Current.Start;
         var expr = ParseExpr();
         if (!IsAtEnd)
-            throw new ParseException($"Unexpected token {Current.Kind}", Current.Start);
+            throw new XPathParseException($"Unexpected token {Current.Kind}", Current.Start);
         return expr;
     }
 
@@ -413,7 +415,7 @@ public sealed class XPathParser
             if (IsWindowKeyword(Peek(1)))
             {
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: XPath does not allow a window clause.", Current.Start);
+                    throw new XPathParseException("XPST0003: XPath does not allow a window clause.", Current.Start);
                 clauses.Add(ParseWindowClause());
             }
             else
@@ -432,7 +434,7 @@ public sealed class XPathParser
             if (Current.Kind == TokenKind.KeywordFor)
             {
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
+                    throw new XPathParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
                 if (IsWindowKeyword(Peek(1)))
                     clauses.Add(ParseWindowClause());
                 else
@@ -441,7 +443,7 @@ public sealed class XPathParser
             else if (Current.Kind == TokenKind.KeywordLet)
             {
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
+                    throw new XPathParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
                 clauses.Add(new LetClauseNode(ParseLetClauseBindings()));
             }
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "where")
@@ -452,7 +454,7 @@ public sealed class XPathParser
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "count" && Peek(1).Kind == TokenKind.Dollar)
             {
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: XPath does not allow a count clause.", Current.Start);
+                    throw new XPathParseException("XPST0003: XPath does not allow a count clause.", Current.Start);
                 Advance();
                 Expect(TokenKind.Dollar);
                 var nameTok = ExpectName();
@@ -462,7 +464,7 @@ public sealed class XPathParser
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "order")
             {
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: XPath does not allow an order by clause.", Current.Start);
+                    throw new XPathParseException("XPST0003: XPath does not allow an order by clause.", Current.Start);
                 Advance();
                 if (Current.Kind == TokenKind.Name && GetString(Current) == "by")
                 {
@@ -471,7 +473,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XPST0003: Expected 'by' after 'order'.", Current.Start);
+                    throw new XPathParseException("XPST0003: Expected 'by' after 'order'.", Current.Start);
                 }
             }
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "stable" &&
@@ -479,7 +481,7 @@ public sealed class XPathParser
             {
                 // "stable" is the default ordering behavior; parse and ignore it.
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: XPath does not allow an order by clause.", Current.Start);
+                    throw new XPathParseException("XPST0003: XPath does not allow an order by clause.", Current.Start);
                 Advance();
                 Advance();
                 if (Current.Kind == TokenKind.Name && GetString(Current) == "by")
@@ -489,13 +491,13 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XPST0003: Expected 'by' after 'stable order'.", Current.Start);
+                    throw new XPathParseException("XPST0003: Expected 'by' after 'stable order'.", Current.Start);
                 }
             }
             else if (Current.Kind == TokenKind.Name && GetString(Current) == "group")
             {
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: XPath does not allow a group by clause.", Current.Start);
+                    throw new XPathParseException("XPST0003: XPath does not allow a group by clause.", Current.Start);
                 Advance();
                 if (Current.Kind == TokenKind.Name && GetString(Current) == "by")
                 {
@@ -504,7 +506,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XPST0003: Expected 'by' after 'group'.", Current.Start);
+                    throw new XPathParseException("XPST0003: Expected 'by' after 'group'.", Current.Start);
                 }
             }
             else
@@ -577,7 +579,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XPST0003: Expected 'greatest' or 'least' after 'empty'.", Current.Start);
+                    throw new XPathParseException("XPST0003: Expected 'greatest' or 'least' after 'empty'.", Current.Start);
                 }
             }
 
@@ -611,7 +613,7 @@ public sealed class XPathParser
                 // A type declaration in a grouping spec is only allowed together with a
                 // ':= value' clause (GroupingSpec ::= "$" VarName (TypeDeclaration? ":=" ExprSingle)? ...).
                 if (Current.Kind != TokenKind.Assign)
-                    throw new ParseException("XPST0003: A type declaration in a 'group by' spec requires a ':= value' clause.", Current.Start);
+                    throw new XPathParseException("XPST0003: A type declaration in a 'group by' spec requires a ':= value' clause.", Current.Start);
             }
 
             XPathAstNode? keyExpression = null;
@@ -644,7 +646,7 @@ public sealed class XPathParser
         Advance();
 
         if (Current.Kind != TokenKind.Name || GetString(Current) != "window")
-            throw new ParseException("XPST0003: Expected 'window' after 'tumbling'/'sliding'.", Current.Start);
+            throw new XPathParseException("XPST0003: Expected 'window' after 'tumbling'/'sliding'.", Current.Start);
         Advance();
 
         Expect(TokenKind.Dollar);
@@ -699,7 +701,7 @@ public sealed class XPathParser
             Collect(endCondition.NextItemVariable);
         }
         if (boundNames.Distinct().Count() != boundNames.Count)
-            throw new ParseException("XQST0103: Duplicate variable binding in window clause.", Current.Start);
+            throw new XPathParseException("XQST0103: Duplicate variable binding in window clause.", Current.Start);
 
         return new WindowClauseNode(sliding, local, inExpression, startCondition, endCondition, onlyEnd, prefix, ns, declaredType);
     }
@@ -708,7 +710,7 @@ public sealed class XPathParser
     {
         // Current must be the contextual keyword ('start' or 'end').
         if (Current.Kind != TokenKind.Name || GetString(Current) != keyword)
-            throw new ParseException($"XPST0003: Expected '{keyword}' condition in window clause.", Current.Start);
+            throw new XPathParseException($"XPST0003: Expected '{keyword}' condition in window clause.", Current.Start);
         Advance();
 
         string? currentItem = null, positional = null, previousItem = null, nextItem = null;
@@ -737,7 +739,7 @@ public sealed class XPathParser
         }
 
         if (Current.Kind != TokenKind.Name || GetString(Current) != "when")
-            throw new ParseException($"XPST0003: Expected 'when' in window {keyword} condition.", Current.Start);
+            throw new XPathParseException($"XPST0003: Expected 'when' in window {keyword} condition.", Current.Start);
         Advance();
 
         var whenExpression = ParseExprSingle();
@@ -777,7 +779,7 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.KeywordAs)
         {
             if (!_allowFullFlwor)
-                throw new ParseException("XPST0003: XPath does not allow a type declaration in a for binding.", Current.Start);
+                throw new XPathParseException("XPST0003: XPath does not allow a type declaration in a for binding.", Current.Start);
             Advance();
             var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
             declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
@@ -789,10 +791,10 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.Name && GetString(Current) == "allowing")
         {
             if (!_allowFullFlwor)
-                throw new ParseException("XPST0003: XPath does not allow 'allowing empty' in a for binding.", Current.Start);
+                throw new XPathParseException("XPST0003: XPath does not allow 'allowing empty' in a for binding.", Current.Start);
             Advance();
             if (Current.Kind != TokenKind.Name || GetString(Current) != "empty")
-                throw new ParseException("XPST0003: Expected 'empty' after 'allowing'.", Current.Start);
+                throw new XPathParseException("XPST0003: Expected 'empty' after 'allowing'.", Current.Start);
             Advance();
             allowingEmpty = true;
         }
@@ -806,7 +808,7 @@ public sealed class XPathParser
             var posTok = ExpectName();
             // XQST0089: the positional variable must not have the same name as the range variable.
             if (GetString(posTok) == GetString(nameTok))
-                throw new ParseException($"XQST0089: The positional variable '${GetString(posTok)}' has the same name as the range variable.", posTok.Start);
+                throw new XPathParseException($"XQST0089: The positional variable '${GetString(posTok)}' has the same name as the range variable.", posTok.Start);
             var (_, posLocal, _) = SplitQName(GetString(posTok));
             positionalVar = posLocal;
         }
@@ -827,7 +829,7 @@ public sealed class XPathParser
         if (Current.Kind == TokenKind.KeywordAs)
         {
             if (!_allowFullFlwor)
-                throw new ParseException("XPST0003: XPath does not allow a type declaration in a let binding.", Current.Start);
+                throw new XPathParseException("XPST0003: XPath does not allow a type declaration in a let binding.", Current.Start);
             Advance();
             var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
             declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
@@ -903,7 +905,7 @@ public sealed class XPathParser
             clauses.Add(new TryCatchClause(patterns, catchBody));
         }
         if (clauses.Count == 0)
-            throw new ParseException("XPST0003: Expected at least one catch clause after 'try { ... }'.", Current.Start);
+            throw new XPathParseException("XPST0003: Expected at least one catch clause after 'try { ... }'.", Current.Start);
         return WithSpan(new TryCatchNode(tryBody, clauses), start, End);
     }
 
@@ -953,7 +955,7 @@ public sealed class XPathParser
             return new CatchCodePattern(null, local, "");
         }
 
-        throw new ParseException($"XPST0003: Expected error code pattern but found {Current.Kind}", start);
+        throw new XPathParseException($"XPST0003: Expected error code pattern but found {Current.Kind}", start);
     }
 
     // SwitchExpr ::= "switch" "(" Expr ")" SwitchCaseClause+ "default" "return" ExprSingle
@@ -981,9 +983,9 @@ public sealed class XPathParser
             cases.Add(new SwitchCaseClause(values, ParseExprSingle()));
         }
         if (cases.Count == 0)
-            throw new ParseException("XPST0003: A switch expression requires at least one case clause.", Current.Start);
+            throw new XPathParseException("XPST0003: A switch expression requires at least one case clause.", Current.Start);
         if (Current.Kind != TokenKind.Name || GetString(Current) != "default")
-            throw new ParseException("XPST0003: Expected 'default' in switch expression.", Current.Start);
+            throw new XPathParseException("XPST0003: Expected 'default' in switch expression.", Current.Start);
         Advance();
         Expect(TokenKind.KeywordReturn);
         var defaultReturn = ParseExprSingle();
@@ -1025,9 +1027,9 @@ public sealed class XPathParser
             cases.Add(new TypeswitchCaseClause(types, ParseExprSingle(), varLocal, varPrefix, varNs));
         }
         if (cases.Count == 0)
-            throw new ParseException("XPST0003: A typeswitch expression requires at least one case clause.", Current.Start);
+            throw new XPathParseException("XPST0003: A typeswitch expression requires at least one case clause.", Current.Start);
         if (Current.Kind != TokenKind.Name || GetString(Current) != "default")
-            throw new ParseException("XPST0003: Expected 'default' in typeswitch expression.", Current.Start);
+            throw new XPathParseException("XPST0003: Expected 'default' in typeswitch expression.", Current.Start);
         Advance();
         string? defLocal = null, defPrefix = null, defNs = null;
         if (Current.Kind == TokenKind.Dollar)
@@ -1323,7 +1325,7 @@ public sealed class XPathParser
             var args = ParseArgumentList();
             return WithSpan(new DynamicFunctionCallNode(inlineFunc, args), start, End);
         }
-        throw new ParseException("Expected function name, variable reference, or parenthesized expression after =>", Current.Start);
+        throw new XPathParseException("Expected function name, variable reference, or parenthesized expression after =>", Current.Start);
     }
 
     // UnaryExpr ::= ("+" | "-")* ValueExpr
@@ -1367,7 +1369,7 @@ public sealed class XPathParser
     private void ThrowIfConstructorLessThan()
     {
         if (_allowFullFlwor && Current.Kind == TokenKind.LessThan)
-            throw new ParseException("XPST0003: '<' after '/' does not start a valid direct element constructor.", Current.Start);
+            throw new XPathParseException("XPST0003: '<' after '/' does not start a valid direct element constructor.", Current.Start);
     }
 
     private XPathAstNode ParsePathExpr()
@@ -1511,7 +1513,7 @@ public sealed class XPathParser
             // XPath 2.0+ removed the namespace axis; XQuery does not support it at all
             // (K2-Axes-54). XPath/XSLT keep the engine's namespace-axis support.
             if (axis == XdmAxis.Namespace && _allowFullFlwor)
-                throw new ParseException("XPST0003: The namespace axis is not supported in XQuery.", start);
+                throw new XPathParseException("XPST0003: The namespace axis is not supported in XQuery.", start);
             Expect(TokenKind.DoubleColon);
             axisExplicit = true;
         }
@@ -1524,7 +1526,7 @@ public sealed class XPathParser
         if (!axisExplicit && _allowFullFlwor
             && test.Kind == NameTestKind.KindTest && test.Name == "namespace-node")
         {
-            throw new ParseException("XQST0134: The namespace axis is not supported in XQuery.", start);
+            throw new XPathParseException("XQST0134: The namespace axis is not supported in XQuery.", start);
         }
 
         // XPath 2.0 §3.2.1.1: default axis for attribute/namespace kind tests
@@ -1560,7 +1562,7 @@ public sealed class XPathParser
             "preceding" => XdmAxis.Preceding,
             "preceding-sibling" => XdmAxis.PrecedingSibling,
             "self" => XdmAxis.Self,
-            _ => throw new ParseException($"Unknown axis: {name}", Current.Start)
+            _ => throw new XPathParseException($"Unknown axis: {name}", Current.Start)
         };
     }
 
@@ -1583,12 +1585,12 @@ public sealed class XPathParser
                 // Whitespace or comments may not intervene between the parts of a
                 // wildcard QName (K2-Axes-5..8/11/13/15/16).
                 if (HasTriviaGap(starTok, Current))
-                    throw new ParseException("XPST0003: Whitespace and comments are not allowed between '*' and ':' in a wildcard name test.", starTok.Start);
+                    throw new XPathParseException("XPST0003: Whitespace and comments are not allowed between '*' and ':' in a wildcard name test.", starTok.Start);
                 var colonTok = Current;
                 Advance(); // ':'
                 var local = ExpectName();
                 if (HasTriviaGap(colonTok, local))
-                    throw new ParseException("XPST0003: Whitespace and comments are not allowed between ':' and the local name in a wildcard name test.", colonTok.Start);
+                    throw new XPathParseException("XPST0003: Whitespace and comments are not allowed between ':' and the local name in a wildcard name test.", colonTok.Start);
                 return new NodeTest(NameTestKind.QName, GetString(local), "*");
             }
             return new NodeTest(NameTestKind.AnyName);
@@ -1632,11 +1634,11 @@ public sealed class XPathParser
                 // A braced URI literal is never followed by a colon: Q{uri}:* is malformed
                 // (nametest-23; the URI-qualified wildcard form is Q{uri}*).
                 if (name.StartsWith("Q{", StringComparison.Ordinal))
-                    throw new ParseException($"XPST0003: A braced URI literal must not be followed by ':*' ('{name}:*').", Current.Start);
+                    throw new XPathParseException($"XPST0003: A braced URI literal must not be followed by ':*' ('{name}:*').", Current.Start);
                 // Whitespace or comments may not intervene between the parts of a
                 // wildcard QName (K2-Axes-9/10/12/14).
                 if (HasTriviaGap(nameTok, Current) || HasTriviaGap(Current, Peek(1)))
-                    throw new ParseException($"XPST0003: Whitespace and comments are not allowed within the wildcard name test '{name}:*'.", nameTok.Start);
+                    throw new XPathParseException($"XPST0003: Whitespace and comments are not allowed within the wildcard name test '{name}:*'.", nameTok.Start);
                 Advance(); // ':'
                 Advance(); // '*'
                 return new NodeTest(NameTestKind.NamespaceAny, name);
@@ -1656,7 +1658,7 @@ public sealed class XPathParser
             return new NodeTest(NameTestKind.QName, local, prefix);
         }
 
-        throw new ParseException($"Expected node test but found {Current.Kind}", start);
+        throw new XPathParseException($"Expected node test but found {Current.Kind}", start);
     }
 
     private NodeTest ParseKindTest()
@@ -1673,13 +1675,13 @@ public sealed class XPathParser
         // item() is an ItemType in SequenceType syntax only; as a node test in a step
         // it is a reserved-name syntax error (function-call-reserved-function-names-026).
         if (name == "item")
-            throw new ParseException("XPST0003: item() is not a node test and cannot appear in a path step.", nameTok.Start);
+            throw new XPathParseException("XPST0003: item() is not a node test and cannot appear in a path step.", nameTok.Start);
 
         // Kind tests that take no argument at all (K2-NodeTest-4/5/6).
         if (name is "text" or "comment" or "node" or "namespace-node")
         {
             if (Current.Kind != TokenKind.RParen)
-                throw new ParseException($"XPST0003: The {name}() kind test does not allow an argument.", Current.Start);
+                throw new XPathParseException($"XPST0003: The {name}() kind test does not allow an argument.", Current.Start);
         }
         else if (name == "document-node")
         {
@@ -1706,7 +1708,7 @@ public sealed class XPathParser
                 {
                     argument = Unquote(GetString(Current)).Trim();
                     if (!IsValidNCName(argument))
-                        throw new ParseException($"XPTY0004: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
+                        throw new XPathParseException($"XPTY0004: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
                     Advance();
                 }
                 else if (Current.Kind == TokenKind.Name)
@@ -1714,12 +1716,12 @@ public sealed class XPathParser
                     argument = GetString(Current);
                     // Only an unprefixed NCName is a syntactically valid PI name (K2-NameTest-25).
                     if (!IsValidNCName(argument))
-                        throw new ParseException($"XPST0003: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
+                        throw new XPathParseException($"XPST0003: The processing-instruction() name '{argument}' is not a valid NCName.", Current.Start);
                     Advance();
                 }
                 else
                 {
-                    throw new ParseException($"XPST0003: The processing-instruction() argument must be a name or string literal but found {Current.Kind}.", Current.Start);
+                    throw new XPathParseException($"XPST0003: The processing-instruction() argument must be a name or string literal but found {Current.Kind}.", Current.Start);
                 }
                 // skip to closing paren
                 while (!IsAtEnd && Current.Kind != TokenKind.RParen)
@@ -1736,13 +1738,13 @@ public sealed class XPathParser
             if (name is "schema-element" or "schema-attribute")
             {
                 if (Current.Kind == TokenKind.RParen)
-                    throw new ParseException($"XPST0003: The {name}() kind test requires a name argument.", Current.Start);
+                    throw new XPathParseException($"XPST0003: The {name}() kind test requires a name argument.", Current.Start);
                 if (Current.Kind == TokenKind.Star)
-                    throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a wildcard.", Current.Start);
+                    throw new XPathParseException($"XPST0003: The {name}() kind test requires a name, not a wildcard.", Current.Start);
                 if (Current.Kind == TokenKind.StringLiteral)
-                    throw new ParseException($"XPST0003: The {name}() kind test requires a name, not a string literal.", Current.Start);
+                    throw new XPathParseException($"XPST0003: The {name}() kind test requires a name, not a string literal.", Current.Start);
                 if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
-                    throw new ParseException($"XPST0008: Schema-aware kind test {name}() is not supported (no schema awareness).", Current.Start);
+                    throw new XPathParseException($"XPST0008: Schema-aware kind test {name}() is not supported (no schema awareness).", Current.Start);
             }
 
             if (Current.Kind != TokenKind.RParen)
@@ -1773,7 +1775,7 @@ public sealed class XPathParser
                         }
                         else
                         {
-                            throw new ParseException($"XPST0003: Expected a local name or '*' after ':' in the {name}() name test.", Current.Start);
+                            throw new XPathParseException($"XPST0003: Expected a local name or '*' after ':' in the {name}() name test.", Current.Start);
                         }
                     }
                     else
@@ -1786,7 +1788,7 @@ public sealed class XPathParser
                     // Anything but a name or wildcard is a syntax error: reserved function
                     // names used as calls (element(1), attribute(1), ...) land here (K2-NodeTest
                     // via function-call-reserved-function-names-001/004/020/023).
-                    throw new ParseException($"XPST0003: The {name}() kind test argument must be a name or '*', not {Current.Kind}.", Current.Start);
+                    throw new XPathParseException($"XPST0003: The {name}() kind test argument must be a name or '*', not {Current.Kind}.", Current.Start);
                 }
                 // Optional schema type name after a comma (validated at evaluation time).
                 if (Match(TokenKind.Comma))
@@ -1830,15 +1832,15 @@ public sealed class XPathParser
     private (string? Argument, string? InnerName) ParseDocumentNodeContent()
     {
         if (Current.Kind == TokenKind.RParen)
-            throw new ParseException("XPST0003: The document-node() kind test requires an element() or schema-element() test, not empty parentheses.", Current.Start);
+            throw new XPathParseException("XPST0003: The document-node() kind test requires an element() or schema-element() test, not empty parentheses.", Current.Start);
         if (Current.Kind == TokenKind.Star)
-            throw new ParseException("XPST0003: The document-node() kind test requires an element() or schema-element() test, not a wildcard.", Current.Start);
+            throw new XPathParseException("XPST0003: The document-node() kind test requires an element() or schema-element() test, not a wildcard.", Current.Start);
         if (Current.Kind != TokenKind.Name && !IsKeywordName(Current.Kind))
-            throw new ParseException($"XPST0003: The document-node() kind test requires an element() or schema-element() test but found {Current.Kind}.", Current.Start);
+            throw new XPathParseException($"XPST0003: The document-node() kind test requires an element() or schema-element() test but found {Current.Kind}.", Current.Start);
 
         var inner = GetString(Current);
         if (inner is not ("element" or "schema-element"))
-            throw new ParseException($"XPST0003: Only element() or schema-element() tests are allowed inside document-node(), not {inner}().", Current.Start);
+            throw new XPathParseException($"XPST0003: Only element() or schema-element() tests are allowed inside document-node(), not {inner}().", Current.Start);
         Advance();
         Expect(TokenKind.LParen);
 
@@ -1851,13 +1853,13 @@ public sealed class XPathParser
             // and a string literal are XPST0003; an unprefixed name is XPST0008 because
             // schema-aware kind tests are unsupported (K2-NodeTest-19).
             if (Current.Kind == TokenKind.RParen)
-                throw new ParseException("XPST0003: The schema-element() kind test requires a name argument.", Current.Start);
+                throw new XPathParseException("XPST0003: The schema-element() kind test requires a name argument.", Current.Start);
             if (Current.Kind == TokenKind.Star)
-                throw new ParseException("XPST0003: The schema-element() kind test requires a name, not a wildcard.", Current.Start);
+                throw new XPathParseException("XPST0003: The schema-element() kind test requires a name, not a wildcard.", Current.Start);
             if (Current.Kind == TokenKind.StringLiteral)
-                throw new ParseException("XPST0003: The schema-element() kind test requires a name, not a string literal.", Current.Start);
+                throw new XPathParseException("XPST0003: The schema-element() kind test requires a name, not a string literal.", Current.Start);
             if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
-                throw new ParseException("XPST0008: Schema-aware kind test schema-element() is not supported (no schema awareness).", Current.Start);
+                throw new XPathParseException("XPST0008: Schema-aware kind test schema-element() is not supported (no schema awareness).", Current.Start);
         }
 
         // Inner element()/schema-element() argument: a name test (QName, *, prefix:*),
@@ -1886,7 +1888,7 @@ public sealed class XPathParser
                 }
                 else
                 {
-                    throw new ParseException("XPST0003: Expected a local name or '*' after ':' in the schema-element()/element() name test.", Current.Start);
+                    throw new XPathParseException("XPST0003: Expected a local name or '*' after ':' in the schema-element()/element() name test.", Current.Start);
                 }
             }
             else
@@ -1896,7 +1898,7 @@ public sealed class XPathParser
         }
         else
         {
-            throw new ParseException($"XPST0003: The {inner}() kind test argument must be a name or '*', not {Current.Kind}.", Current.Start);
+            throw new XPathParseException($"XPST0003: The {inner}() kind test argument must be a name or '*', not {Current.Kind}.", Current.Start);
         }
 
         // Optional schema type name after a comma (validated at evaluation time).
@@ -2000,7 +2002,7 @@ public sealed class XPathParser
             // KeySpecifier allows only a plain NCName — qualified names (xs:integer,
             // Q{}integer) are a static error here (Lookup-156/157).
             if (name.Contains(':') || name.Contains('{'))
-                throw new ParseException($"XPST0003: Qualified name '{name}' is not allowed as a lookup key", Current.Start);
+                throw new XPathParseException($"XPST0003: Qualified name '{name}' is not allowed as a lookup key", Current.Start);
             Advance();
             return WithSpan(new StringLiteralNode(name), start, End);
         }
@@ -2019,7 +2021,7 @@ public sealed class XPathParser
             Expect(TokenKind.RParen);
             return WithSpan(new ParenthesizedExprNode(expr), start, End);
         }
-        throw new ParseException("Expected lookup key", Current.Start);
+        throw new XPathParseException("Expected lookup key", Current.Start);
     }
 
     // ------------------------------------------------------------------
@@ -2121,16 +2123,16 @@ public sealed class XPathParser
                     return ParseFunctionCall(start);
                 if (Peek(1).Kind == TokenKind.Hash)
                     return ParseNamedFunctionRef(start);
-                throw new ParseException($"Unexpected name '{name}' in primary expression", start);
+                throw new XPathParseException($"Unexpected name '{name}' in primary expression", start);
 
             case TokenKind.Percent:
                 // Annotations on an inline function expression (annotation-3/30/31/32).
                 // Annotations are an XQuery-only grammar extension (inline-fn-016).
                 if (!_allowFullFlwor)
-                    throw new ParseException("XPST0003: Annotations are not allowed in XPath.", start);
+                    throw new XPathParseException("XPST0003: Annotations are not allowed in XPath.", start);
                 SkipInlineAnnotations();
                 if (Current.Kind != TokenKind.KeywordFunction)
-                    throw new ParseException($"XPST0003: Expected 'function' after annotations but found {Current.Kind}", Current.Start);
+                    throw new XPathParseException($"XPST0003: Expected 'function' after annotations but found {Current.Kind}", Current.Start);
                 return ParseInlineFunction(start);
 
             case TokenKind.KeywordFunction:
@@ -2163,7 +2165,7 @@ public sealed class XPathParser
                         if (Peek(1).Kind == TokenKind.Hash)
                             return ParseNamedFunctionRef(start);
                     }
-                    throw new ParseException($"Unexpected token {Current.Kind} in primary expression", start);
+                    throw new XPathParseException($"Unexpected token {Current.Kind} in primary expression", start);
                 }
         }
     }
@@ -2222,7 +2224,7 @@ public sealed class XPathParser
                     // A static processing-instruction target must be an NCName; a
                     // prefixed or URI-qualified name is a syntax error (XPST0003).
                     if (keyword == "processing-instruction" && (prefix is not null || ns is not null))
-                        throw new ParseException($"XPST0003: A processing-instruction target must be an unprefixed NCName, not '{GetString(nameTok)}'.", start);
+                        throw new XPathParseException($"XPST0003: A processing-instruction target must be an unprefixed NCName, not '{GetString(nameTok)}'.", start);
                 }
                 Expect(TokenKind.LBrace);
                 // Computed constructor content may be empty ({}), producing the empty sequence.
@@ -2256,14 +2258,14 @@ public sealed class XPathParser
                 };
             }
             default:
-                throw new ParseException($"XPST0003: Unknown computed constructor '{keyword}'.", start);
+                throw new XPathParseException($"XPST0003: Unknown computed constructor '{keyword}'.", start);
         }
     }
 
     private XPathAstNode ParseValidateExpression(int start)
     {
         if (Current.Kind != TokenKind.Name || GetString(Current) != "validate")
-            throw new ParseException($"XPST0003: Expected 'validate' but found {Current.Kind}.", Current.Start);
+            throw new XPathParseException($"XPST0003: Expected 'validate' but found {Current.Kind}.", Current.Start);
         Advance();
 
         string? mode = null;
@@ -2282,7 +2284,7 @@ public sealed class XPathParser
                 Advance();
                 var (prefix, local, hasParens) = ParseTypeNameAndParens();
                 if (hasParens)
-                    throw new ParseException("XPST0003: Type name in 'validate type' must not be parenthesised.", Current.Start);
+                    throw new XPathParseException("XPST0003: Type name in 'validate type' must not be parenthesised.", Current.Start);
                 typePrefix = prefix;
                 typeName = local;
             }
@@ -2290,7 +2292,7 @@ public sealed class XPathParser
 
         Expect(TokenKind.LBrace);
         if (Match(TokenKind.RBrace))
-            throw new ParseException("XPST0003: A validate expression must have a non-empty operand.", Current.Start);
+            throw new XPathParseException("XPST0003: A validate expression must have a non-empty operand.", Current.Start);
         var body = ParseExpr();
         Expect(TokenKind.RBrace);
         return WithSpan(new ValidateExpressionNode(body, mode, typeName, typePrefix), start, End);
@@ -2333,16 +2335,16 @@ public sealed class XPathParser
     private static void ThrowIfRemovedFunction(string? nsUri, string localName, int position)
     {
         if (nsUri == OldMapNamespace)
-            throw new ParseException($"XPST0017: Function in obsolete map namespace '{nsUri}' is not available", position);
+            throw new XPathParseException($"XPST0017: Function in obsolete map namespace '{nsUri}' is not available", position);
 
         if (!string.IsNullOrEmpty(nsUri) && RemovedFunctions.Contains((nsUri, localName)))
-            throw new ParseException($"XPST0017: Function {{{nsUri}}}{localName} has been removed", position);
+            throw new XPathParseException($"XPST0017: Function {{{nsUri}}}{localName} has been removed", position);
     }
 
     private static void ThrowIfReservedFunctionName(string? prefix, string localName, int position)
     {
         if (string.IsNullOrEmpty(prefix) && ReservedFunctionNames.Contains(localName))
-            throw new ParseException($"XPST0003: '{localName}' is a reserved function name and cannot be used in a function call or named function reference", position);
+            throw new XPathParseException($"XPST0003: '{localName}' is a reserved function name and cannot be used in a function call or named function reference", position);
     }
 
     private List<XPathAstNode> ParseArgumentList()
@@ -2405,7 +2407,7 @@ public sealed class XPathParser
                 var (pPrefix, pLocal, pNs) = SplitQName(param.Name);
                 var key = (pNs ?? pPrefix ?? "", pLocal);
                 if (!seenNames.Add(key))
-                    throw new ParseException($"XQST0039: Duplicate parameter name ${param.Name} in inline function.", start);
+                    throw new XPathParseException($"XQST0039: Duplicate parameter name ${param.Name} in inline function.", start);
             }
         }
         string? returnType = null;
@@ -2440,11 +2442,11 @@ public sealed class XPathParser
         {
             Advance();
             if (Current.Kind != TokenKind.Name)
-                throw new ParseException($"XPST0003: Expected an annotation name after '%' but found {Current.Kind}", Current.Start);
+                throw new XPathParseException($"XPST0003: Expected an annotation name after '%' but found {Current.Kind}", Current.Start);
             // XQST0125: an inline function must not be annotated %public or %private —
             // those are function-declaration annotations only.
             if (GetString(Current) is "public" or "private")
-                throw new ParseException($"XQST0125: An inline function expression must not be annotated %{GetString(Current)}.", Current.Start);
+                throw new XPathParseException($"XQST0125: An inline function expression must not be annotated %{GetString(Current)}.", Current.Start);
             Advance(); // EQName (plain, prefixed, or Q{uri}local)
             if (Current.Kind == TokenKind.LParen)
                 SkipAnnotationArguments();
@@ -2465,7 +2467,7 @@ public sealed class XPathParser
     private void SkipAnnotationLiteral()
     {
         if (Current.Kind is not (TokenKind.StringLiteral or TokenKind.IntegerLiteral or TokenKind.DecimalLiteral or TokenKind.DoubleLiteral))
-            throw new ParseException($"XPST0003: Expected a literal in the annotation argument list but found {Current.Kind}", Current.Start);
+            throw new XPathParseException($"XPST0003: Expected a literal in the annotation argument list but found {Current.Kind}", Current.Start);
         Advance();
     }
 
@@ -2591,7 +2593,7 @@ public sealed class XPathParser
                 {
                     // The interpolation must close with '}`' (XPST0003 otherwise).
                     if (pos + 1 >= _source.Length || _source[pos + 1] != '`')
-                        throw new ParseException("XPST0003: An interpolation in a string constructor must end with '}`'.", pos);
+                        throw new XPathParseException("XPST0003: An interpolation in a string constructor must end with '}`'.", pos);
                     var inner = _source[exprStart..pos];
                     pos += 2;
                     // An empty or comment-only interpolation is the empty sequence.
@@ -2790,13 +2792,13 @@ public sealed class XPathParser
             {
                 var nsValue = string.Concat(valueParts.OfType<StringLiteralNode>().Select(p => p.Value));
                 if (attrPrefix == "xmlns" && attrLocal == "xmlns")
-                    throw new ParseException("XQST0070: The 'xmlns' prefix must not be declared.", ctorStart);
+                    throw new XPathParseException("XQST0070: The 'xmlns' prefix must not be declared.", ctorStart);
                 if (attrPrefix == "xmlns" && attrLocal == "xml" &&
                     nsValue != "http://www.w3.org/XML/1998/namespace")
-                    throw new ParseException("XQST0070: The 'xml' prefix must only be bound to the XML namespace URI.", ctorStart);
+                    throw new XPathParseException("XQST0070: The 'xml' prefix must only be bound to the XML namespace URI.", ctorStart);
                 if (attrPrefix == "xmlns" && attrLocal != "xml" &&
                     nsValue == "http://www.w3.org/XML/1998/namespace")
-                    throw new ParseException("XQST0070: The XML namespace URI must only be bound to the 'xml' prefix.", ctorStart);
+                    throw new XPathParseException("XQST0070: The XML namespace URI must only be bound to the 'xml' prefix.", ctorStart);
             }
 
             // xml:space is an ordinary attribute for element constructors: it does NOT
@@ -2806,7 +2808,7 @@ public sealed class XPathParser
             {
                 string declPrefix = attrPrefix == "xmlns" ? attrLocal : "";
                 if (!declaredPrefixes.Add(declPrefix))
-                    throw new ParseException($"XQST0071: The namespace prefix '{(declPrefix.Length == 0 ? "(default)" : declPrefix)}' is declared more than once.", ctorStart);
+                    throw new XPathParseException($"XQST0071: The namespace prefix '{(declPrefix.Length == 0 ? "(default)" : declPrefix)}' is declared more than once.", ctorStart);
             }
 
             attributes.Add(new DirectAttributeNode(attrLocal, attrPrefix, valueParts));
@@ -2864,7 +2866,7 @@ public sealed class XPathParser
                     {
                         string expected = tagPrefix is null ? tagLocal : $"{tagPrefix}:{tagLocal}";
                         string found = endPrefix is null ? endLocal : $"{endPrefix}:{endLocal}";
-                        throw new ParseException($"XQST0118: Mismatched end tag '</{found}>' (expected '</{expected}>').", pos);
+                        throw new XPathParseException($"XQST0118: Mismatched end tag '</{found}>' (expected '</{expected}>').", pos);
                     }
                     FlushText();
                     return;
@@ -3009,7 +3011,7 @@ public sealed class XPathParser
                     continue;
                 }
                 if (isNamespaceDecl)
-                    throw new ParseException("XQST0022: A namespace declaration must have a literal URI.", pos);
+                    throw new XPathParseException("XQST0022: A namespace declaration must have a literal URI.", pos);
                 FlushText();
                 parts.Add(ScanEnclosedExpression(ref pos, ctorStart));
                 continue;
@@ -3259,7 +3261,7 @@ public sealed class XPathParser
         return true;
     }
 
-    private ParseException ConstructorError(string message, int pos) =>
+    private XPathParseException ConstructorError(string message, int pos) =>
         new($"XPST0003: {message}.", pos);
 
     private MapConstructorNode ParseMapConstructor(int start)
@@ -3273,7 +3275,7 @@ public sealed class XPathParser
             {
                 var key = ParseMapConstructorKey();
                 if (Current.Kind == TokenKind.Assign)
-                    throw new ParseException("XPST0003: Invalid map constructor syntax (use ':' to separate key and value)", Current.Start);
+                    throw new XPathParseException("XPST0003: Invalid map constructor syntax (use ':' to separate key and value)", Current.Start);
                 Expect(TokenKind.Colon);
                 var value = ParseExprSingle();
                 entries.Add(new MapEntryNode(key, value));
@@ -3364,21 +3366,21 @@ public sealed class XPathParser
             {
                 // Braced URI literals may not contain braces (XPST0003).
                 if (qname[2..closeBrace].Contains('{'))
-                    throw new ParseException($"XPST0003: Braces are not allowed in the URI part of an EQName ('{qname}').", 0);
+                    throw new XPathParseException($"XPST0003: Braces are not allowed in the URI part of an EQName ('{qname}').", 0);
                 string nsUri = NormalizeEQNameUri(ExpandEQNameRefs(qname[2..closeBrace]));
                 // The URI literal must be interpretable as an IRI reference: percent signs
                 // must introduce two hex digits and a fragment (after '#') may not contain
                 // further '#' or illegal characters (eqname-911/912, XQST0046).
                 if (!IsValidUriLiteral(nsUri))
-                    throw new ParseException($"XQST0046: The URI literal '{nsUri}' is not a valid URI reference.", 0);
+                    throw new XPathParseException($"XQST0046: The URI literal '{nsUri}' is not a valid URI reference.", 0);
                 // The xmlns namespace must not appear in any EQName (eqname-910).
                 if (nsUri == "http://www.w3.org/2000/xmlns/")
-                    throw new ParseException($"XQST0070: The namespace URI '{nsUri}' is reserved and must not be used in an EQName.", 0);
+                    throw new XPathParseException($"XQST0070: The namespace URI '{nsUri}' is reserved and must not be used in an EQName.", 0);
                 string rest = qname[(closeBrace + 1)..];
                 // A braced URI literal is followed by a single NCName only: a colon
                 // after '}' is a syntax error (eqname-901/904).
                 if (rest.Contains(':'))
-                    throw new ParseException($"XPST0003: A braced URI literal must be followed by a local name only, not '{qname}'.", 0);
+                    throw new XPathParseException($"XPST0003: A braced URI literal must be followed by a local name only, not '{qname}'.", 0);
                 return (null, rest, nsUri);
             }
         }
@@ -3476,18 +3478,18 @@ public sealed class XPathParser
             }
             int semi = uri.IndexOf(';', i + 1);
             if (semi < 0)
-                throw new ParseException($"XPST0003: Unterminated reference in EQName URI ('{uri}').", 0);
+                throw new XPathParseException($"XPST0003: Unterminated reference in EQName URI ('{uri}').", 0);
             var body = uri[(i + 1)..semi];
             if (body.StartsWith("#x", StringComparison.Ordinal) || body.StartsWith("#X", StringComparison.Ordinal))
             {
                 if (!int.TryParse(body[2..], System.Globalization.NumberStyles.HexNumber, null, out int hex) || hex is < 1 or > 0x10FFFF)
-                    throw new ParseException($"XPST0003: Invalid character reference '&{body};' in EQName URI.", 0);
+                    throw new XPathParseException($"XPST0003: Invalid character reference '&{body};' in EQName URI.", 0);
                 sb.Append(char.ConvertFromUtf32(hex));
             }
             else if (body.StartsWith('#'))
             {
                 if (!int.TryParse(body[1..], System.Globalization.NumberStyles.None, null, out int dec) || dec is < 1 or > 0x10FFFF)
-                    throw new ParseException($"XPST0003: Invalid character reference '&{body};' in EQName URI.", 0);
+                    throw new XPathParseException($"XPST0003: Invalid character reference '&{body};' in EQName URI.", 0);
                 sb.Append(char.ConvertFromUtf32(dec));
             }
             else
@@ -3499,7 +3501,7 @@ public sealed class XPathParser
                     "gt" => '>',
                     "quot" => '"',
                     "apos" => '\'',
-                    _ => throw new ParseException($"XPST0003: Unknown entity reference '&{body};' in EQName URI.", 0)
+                    _ => throw new XPathParseException($"XPST0003: Unknown entity reference '&{body};' in EQName URI.", 0)
                 });
             }
             i = semi;
@@ -3586,7 +3588,7 @@ public sealed class XPathParser
     {
         int semi = inner.IndexOf(';', i + 1);
         if (semi < 0)
-            throw new ParseException("XPST0003: Unterminated entity or character reference in string literal.", Current.Start);
+            throw new XPathParseException("XPST0003: Unterminated entity or character reference in string literal.", Current.Start);
         var reference = inner[(i + 1)..semi];
         string result = reference switch
         {
@@ -3599,7 +3601,7 @@ public sealed class XPathParser
                 ExpandNumericCharReference(reference, reference[2..], isHex: true, Current.Start),
             _ when reference.StartsWith('#') =>
                 ExpandNumericCharReference(reference, reference[1..], isHex: false, Current.Start),
-            _ => throw new ParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", Current.Start)
+            _ => throw new XPathParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", Current.Start)
         };
         i = semi;
         return result;
@@ -3612,12 +3614,12 @@ public sealed class XPathParser
     private static string ExpandNumericCharReference(string reference, string digits, bool isHex, int errorPosition)
     {
         if (digits.Length == 0 || !digits.All(isHex ? Uri.IsHexDigit : IsAsciiDigit))
-            throw new ParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", errorPosition);
+            throw new XPathParseException($"XPST0003: Invalid entity or character reference '&{reference};' in string literal.", errorPosition);
         // More digits than the maximum codepoint (0x10FFFF) needs: the value overflows
         // even if it exceeds 64 bits (K2-Literals-18/19).
         var trimmed = digits.TrimStart('0');
         if (trimmed.Length > (isHex ? 6 : 7))
-            throw new ParseException($"XQST0090: Character reference '&{reference};' does not denote a valid XML character.", errorPosition);
+            throw new XPathParseException($"XQST0090: Character reference '&{reference};' does not denote a valid XML character.", errorPosition);
         int codePoint = isHex
             ? int.Parse(digits, NumberStyles.HexNumber, CultureInfo.InvariantCulture)
             : int.Parse(digits, NumberStyles.None, CultureInfo.InvariantCulture);
@@ -3634,7 +3636,7 @@ public sealed class XPathParser
             || (codePoint >= 0xE000 && codePoint <= 0xFFFD)
             || (codePoint >= 0x10000 && codePoint <= 0x10FFFF);
         if (!valid)
-            throw new ParseException($"XQST0090: Character reference '&{reference};' does not denote a valid XML character.", errorPosition);
+            throw new XPathParseException($"XQST0090: Character reference '&{reference};' does not denote a valid XML character.", errorPosition);
     }
 
     private static bool IsAsciiDigit(char c) => c is >= '0' and <= '9';
@@ -3767,7 +3769,7 @@ public sealed class XPathParser
         if (prefix is null && local == "empty-sequence()"
             && Current.Kind is TokenKind.Question or TokenKind.Star or TokenKind.Plus)
         {
-            throw new ParseException("XPST0003: empty-sequence() must not have an occurrence indicator.", Current.Start);
+            throw new XPathParseException("XPST0003: empty-sequence() must not have an occurrence indicator.", Current.Start);
         }
 
         OccurrenceIndicator occurrence = OccurrenceIndicator.One;
@@ -3784,7 +3786,7 @@ public sealed class XPathParser
     {
         var (prefix, local, hasParens) = ParseTypeNameAndParens();
         if (hasParens)
-            throw new ParseException("XPST0003: Type tests with parentheses are not allowed in 'cast' or 'castable as' expressions.", Current.Start);
+            throw new XPathParseException("XPST0003: Type tests with parentheses are not allowed in 'cast' or 'castable as' expressions.", Current.Start);
 
         if (Match(TokenKind.Question))
             return (prefix, local, OccurrenceIndicator.ZeroOrOne);
@@ -3794,7 +3796,7 @@ public sealed class XPathParser
             // can start a new operand, treat them as the surrounding additive/multiplicative
             // operator rather than raising an occurrence-indicator error.
             if (!CanStartUnaryExpr(Peek(1).Kind))
-                throw new ParseException("XPST0003: '*' and '+' are not allowed as occurrence indicators in 'cast' or 'castable as' expressions.", Current.Start);
+                throw new XPathParseException("XPST0003: '*' and '+' are not allowed as occurrence indicators in 'cast' or 'castable as' expressions.", Current.Start);
         }
         return (prefix, local, OccurrenceIndicator.One);
     }
@@ -3841,7 +3843,7 @@ public sealed class XPathParser
         }
         else
         {
-            throw new ParseException($"Expected sequence type but found {Current.Kind}", Current.Start);
+            throw new XPathParseException($"Expected sequence type but found {Current.Kind}", Current.Start);
         }
 
         var (prefix, local, nsUri) = SplitQName(name);
@@ -3913,7 +3915,7 @@ public sealed class XPathParser
             {
                 var parensContent = local[baseLocal.Length..];
                 if (parensContent is "()" or "(*)")
-                    throw new ParseException("XPST0003: document() and document(*) are not valid sequence types.", Current.Start);
+                    throw new XPathParseException("XPST0003: document() and document(*) are not valid sequence types.", Current.Start);
             }
 
             // A function test that lists argument types (anything other than the
@@ -3923,7 +3925,7 @@ public sealed class XPathParser
                 && !local.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
                 && Current.Kind != TokenKind.KeywordAs)
             {
-                throw new ParseException("XPST0003: A function test with argument types requires an 'as' return type.", Current.Start);
+                throw new XPathParseException("XPST0003: A function test with argument types requires an 'as' return type.", Current.Start);
             }
 
             // Function tests may have a return type: function(item()*) as xs:double
@@ -3941,7 +3943,7 @@ public sealed class XPathParser
 
             if (parenDepth > 0)
             {
-                throw new ParseException("Unclosed sequence type parenthesis", Current.Start);
+                throw new XPathParseException("Unclosed sequence type parenthesis", Current.Start);
             }
         }
 
@@ -3957,14 +3959,14 @@ public sealed class XPathParser
             return string.Empty;
         // Annotation assertions are an XQuery-only grammar extension (inline-fn-016).
         if (!_allowFullFlwor)
-            throw new ParseException("XPST0003: Annotations are not allowed in XPath.", Current.Start);
+            throw new XPathParseException("XPST0003: Annotations are not allowed in XPath.", Current.Start);
         int start = Current.Start;
         int end = Current.Start;
         while (Current.Kind == TokenKind.Percent)
         {
             Advance();
             if (Current.Kind != TokenKind.Name)
-                throw new ParseException($"XPST0003: Expected an annotation name after '%' but found {Current.Kind}", Current.Start);
+                throw new XPathParseException($"XPST0003: Expected an annotation name after '%' but found {Current.Kind}", Current.Start);
             end = Current.Start + Current.Length;
             Advance(); // EQName (plain, prefixed, or Q{uri}local)
             if (Current.Kind == TokenKind.LParen)

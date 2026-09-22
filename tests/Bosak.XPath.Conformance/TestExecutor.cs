@@ -51,6 +51,7 @@
 //                      | Charles Korthout | 0.23  | 07-09-2026     | Pass environment namespace bindings to CompileOptions so compile-time XPST0081/XPST00... |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.24  | 07-09-2026     | Seed env namespaces into the XQuery compiler; route/skip namespace-axis feature tests |
+//                      | Charles Korthout | 0.25  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -189,7 +190,7 @@ internal sealed class TestExecutor
                 result = compiled.Evaluate(ctx);
             }
         }
-        catch (ParseException ex)
+        catch (XPathParseException ex)
         {
             caughtException = ex;
             result = default;

@@ -20,6 +20,8 @@
 //                      | Charles Korthout | 0.4  | 02-09-2026     | EQName Q{uri}local support in accumulator name resolution (accumulator-021)|
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 16-09-2026     | Inverted the @match variable rule: globals are in scope, $value is not (034/091)       |
+//                      | Charles Korthout | 0.6   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      | Charles Korthout | 0.7   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -35,7 +37,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// <summary>
 /// Represents a single <c>xsl:accumulator</c> declaration.
 /// </summary>
-public sealed class AccumulatorDefinition
+internal sealed class AccumulatorDefinition
 {
     /// <summary>The original XElement of the xsl:accumulator declaration.</summary>
     public XElement Element { get; }
@@ -119,7 +121,7 @@ public sealed class AccumulatorDefinition
 /// <summary>
 /// Represents a single <c>xsl:accumulator-rule</c> within an accumulator.
 /// </summary>
-public sealed class AccumulatorRule
+internal sealed class AccumulatorRule
 {
     /// <summary>The original XElement of the accumulator rule.</summary>
     public XElement Element { get; }
@@ -172,7 +174,7 @@ public sealed class AccumulatorRule
             var ast = XPathParser.Parse(match);
             CheckVariableReferences(ast, new HashSet<(string LocalName, string? NamespaceUri)>());
         }
-        catch (Bosak.XPath.Parser.ParseException)
+        catch (Bosak.XPath.Parser.XPathParseException)
         {
             // Leave XPath syntax errors for the pattern compiler / static-error machinery.
         }

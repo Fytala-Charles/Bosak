@@ -32,6 +32,9 @@
 //                      | Charles Korthout | 0.11  | 22-08-2026     | Added regression tests for schema-aware attribute kind tests and union function conversion |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 22-08-2026     | Added regression tests for XPTY0117 on namespace-sensitive atomic function conversion     |
+//                      | Charles Korthout | 0.13  | 21-09-2026     | API freeze stage C: use XdmConversions                                                  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14  | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
@@ -279,7 +282,7 @@ public class SchemaListUnionTests
         schemaSet.Compile();
 
         string docPath = Path.GetFullPath("../../../../qt3tests/prod/OrderByClause/orderData.xml");
-        var docNode = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+        var docNode = XDocumentProvider.LoadFile(docPath, null, schemaSet);
 
         var ctx = new EvaluationContext();
         ctx.SchemaSet = schemaSet;
@@ -562,7 +565,7 @@ public class SchemaListUnionTests
 
         var args = new[] { XdmValue.FromString("pre:local") };
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            VmEngine.InvokeFunctionItem(funcItem, callSiteContext, args));
+            XdmConversions.InvokeFunctionItem(funcItem, callSiteContext, args));
         Assert.Contains("FORG0001", ex.Message);
     }
 
@@ -678,8 +681,8 @@ public class SchemaListUnionTests
         var ctx = LoadUnionListContext();
         var value = XdmValue.FromString("123", "untypedAtomic");
 
-        var result = VmEngine.ApplyFunctionConversion(value, "s:myUnionType1", ctx);
-        Assert.True(VmEngine.ValueMatchesType(result, "s:myUnionType1", ctx));
+        var result = XdmConversions.ApplyFunctionConversion(value, "s:myUnionType1", ctx);
+        Assert.True(XdmConversions.ValueMatchesType(result, "s:myUnionType1", ctx));
     }
 
     [Fact]
@@ -691,7 +694,7 @@ public class SchemaListUnionTests
         var value = XdmValue.FromDecimal(1.5m);
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            VmEngine.ApplyFunctionConversion(value, "s:sensitiveUnion", ctx));
+            XdmConversions.ApplyFunctionConversion(value, "s:sensitiveUnion", ctx));
         Assert.Contains("XPTY0004", ex.Message);
     }
 
@@ -704,7 +707,7 @@ public class SchemaListUnionTests
         var value = XdmValue.FromString("foo", "untypedAtomic");
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            VmEngine.ApplyFunctionConversion(value, "s:sensitiveUnion", ctx));
+            XdmConversions.ApplyFunctionConversion(value, "s:sensitiveUnion", ctx));
         Assert.Contains("XPTY0117", ex.Message);
     }
 
@@ -752,7 +755,7 @@ public class SchemaListUnionTests
         var value = XdmValue.FromString("xs:integer", "untypedAtomic");
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            VmEngine.ApplyFunctionConversion(value, "xs:QName", ctx));
+            XdmConversions.ApplyFunctionConversion(value, "xs:QName", ctx));
         Assert.Contains("XPTY0117", ex.Message);
     }
 
@@ -764,7 +767,7 @@ public class SchemaListUnionTests
         var value = XdmValue.FromString("value1", "untypedAtomic");
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            VmEngine.ApplyFunctionConversion(value, "xs:NOTATION", ctx));
+            XdmConversions.ApplyFunctionConversion(value, "xs:NOTATION", ctx));
         Assert.Contains("XPTY0117", ex.Message);
     }
 
@@ -776,7 +779,7 @@ public class SchemaListUnionTests
         var value = XdmValue.FromString("value1", "untypedAtomic");
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            VmEngine.ApplyFunctionConversion(value, "t:QNameBased", ctx));
+            XdmConversions.ApplyFunctionConversion(value, "t:QNameBased", ctx));
         Assert.Contains("XPTY0117", ex.Message);
     }
 
@@ -787,7 +790,7 @@ public class SchemaListUnionTests
         var ctx = new EvaluationContext().WithNamespace("xs", "http://www.w3.org/2001/XMLSchema");
         var value = XdmValue.FromQName(new XsQName("integer", "http://www.w3.org/2001/XMLSchema", "xs"));
 
-        var result = VmEngine.ApplyFunctionConversion(value, "xs:QName", ctx);
+        var result = XdmConversions.ApplyFunctionConversion(value, "xs:QName", ctx);
         Assert.Equal(XdmValueKind.QName, result.Kind);
     }
 
@@ -801,7 +804,7 @@ public class SchemaListUnionTests
         var value = XdmValue.FromNode(elementNode);
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
-            VmEngine.ApplyFunctionConversion(value, "xs:QName", ctx));
+            XdmConversions.ApplyFunctionConversion(value, "xs:QName", ctx));
         Assert.Contains("XPTY0117", ex.Message);
     }
 }

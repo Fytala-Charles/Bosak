@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 08-06-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Added missing xsl:stylesheet version diagnostic                                          |
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -104,7 +105,7 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
         {
             new Bosak.XQuery.Api.XQueryCompiler().Compile(text);
         }
-        catch (Bosak.XPath.Parser.ParseException ex)
+        catch (Bosak.XPath.Parser.XPathParseException ex)
         {
             diagnostics.Add(CreateDiagnostic(ex.Message, 0, 0, DiagnosticSeverity.Error));
         }
@@ -120,7 +121,7 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
         {
             XPath31Expression.Compile(text);
         }
-        catch (ParseException ex)
+        catch (XPathParseException ex)
         {
             diagnostics.Add(CreateDiagnostic(ex.Message, 0, 0, DiagnosticSeverity.Error));
         }

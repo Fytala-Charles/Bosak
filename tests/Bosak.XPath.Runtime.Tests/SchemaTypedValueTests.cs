@@ -20,6 +20,9 @@
 //                      | Charles Korthout | 0.4   | 22-08-2026     | Regression tests for xsi:type ID/IDREF, language cast, and NOTATION instance-of          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 23-08-2026     | Regression test for xs:untypedAtomic not matching user-defined schema simple types       |
+//                      | Charles Korthout | 0.6   | 21-09-2026     | API freeze stage C: use XdmConversions                                                  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14  | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
@@ -51,7 +54,7 @@ public class SchemaTypedValueTests
         }
         schemaSet.Compile();
 
-        var doc = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+        var doc = XDocumentProvider.LoadFile(docPath, null, schemaSet);
         var ctx = new EvaluationContext();
         ctx = ctx.WithNamespace("atomic", "http://www.w3.org/XQueryTest");
         ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
@@ -86,7 +89,7 @@ public class SchemaTypedValueTests
         }
         schemaSet.Compile();
 
-        var doc = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+        var doc = XDocumentProvider.LoadFile(docPath, null, schemaSet);
         var ctx = new EvaluationContext();
         ctx = ctx.WithNamespace("atomic", "http://www.w3.org/XQueryTest");
         ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
@@ -125,7 +128,7 @@ public class SchemaTypedValueTests
         }
         schemaSet.Compile();
 
-        var doc = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+        var doc = XDocumentProvider.LoadFile(docPath, null, schemaSet);
         var ctx = new EvaluationContext();
         ctx = ctx.WithNamespace("atomic", "http://www.w3.org/XQueryTest");
         ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
@@ -159,7 +162,7 @@ public class SchemaTypedValueTests
         }
         schemaSet.Compile();
 
-        var doc = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+        var doc = XDocumentProvider.LoadFile(docPath, null, schemaSet);
         var ctx = new EvaluationContext();
         ctx = ctx.WithNamespace("atomic", "http://www.w3.org/XQueryTest");
         ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
@@ -296,7 +299,7 @@ public class SchemaTypedValueTests
     {
         var (doc, ctx) = LoadValidatedNilledDocument();
         var head = FindElement(doc, "schema-element-head");
-        Assert.True(VmEngine.ValueMatchesType(head, "schema-element(tc:schema-element-head)", ctx));
+        Assert.True(XdmConversions.ValueMatchesType(head, "schema-element(tc:schema-element-head)", ctx));
     }
 
     [Fact]
@@ -304,7 +307,7 @@ public class SchemaTypedValueTests
     {
         var (doc, ctx) = LoadValidatedNilledDocument();
         var nilled = FindElement(doc, "schema-element-group-nillable", isNilled: true);
-        Assert.True(VmEngine.ValueMatchesType(nilled, "schema-element(tc:schema-element-head)", ctx));
+        Assert.True(XdmConversions.ValueMatchesType(nilled, "schema-element(tc:schema-element-head)", ctx));
     }
 
     [Fact]
@@ -322,7 +325,7 @@ public class SchemaTypedValueTests
             }
         }
         Assert.NotEqual(default(XdmValue), attr);
-        Assert.True(VmEngine.ValueMatchesType(attr, "schema-attribute(tc:x)", ctx));
+        Assert.True(XdmConversions.ValueMatchesType(attr, "schema-attribute(tc:x)", ctx));
     }
 
     [Fact]
@@ -330,7 +333,7 @@ public class SchemaTypedValueTests
     {
         var (doc, ctx) = LoadValidatedNilledDocument();
         var elem = FindElement(doc, "schema-element-nillable-head");
-        Assert.False(VmEngine.ValueMatchesType(elem, "schema-element(tc:schema-element-head)", ctx));
+        Assert.False(XdmConversions.ValueMatchesType(elem, "schema-element(tc:schema-element-head)", ctx));
     }
 
     private static (IXdmNode Doc, EvaluationContext Ctx) LoadValidatedNilledDocument()
@@ -345,7 +348,7 @@ public class SchemaTypedValueTests
         }
         schemaSet.Compile();
 
-        var doc = XDocumentProvider.LoadXml(docPath, null, schemaSet);
+        var doc = XDocumentProvider.LoadFile(docPath, null, schemaSet);
         var ctx = new EvaluationContext();
         ctx.SchemaSet = schemaSet;
         ctx = ctx.WithNamespace("tc", "http://www.w3.org/XQueryTest/testcases");

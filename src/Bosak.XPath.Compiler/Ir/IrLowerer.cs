@@ -94,6 +94,7 @@
 //                      | Charles Korthout | 1.41  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.42  | 16-09-2026     | Streaming Phase A: rewrite descendant-or-self::node()/child::TEST as                   |
+//                      | Charles Korthout | 1.43  | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |                  |       |                | descendant::TEST in path expressions (equivalent; single-pass friendly)                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -113,7 +114,7 @@ namespace Bosak.XPath.Compiler.Ir;
 /// <param name="VariableNamespaceUri">The namespace URI of an EQName loop variable, or null.</param>
 /// <param name="AllowingEmpty">True when a for binding declares <c>allowing empty</c>.</param>
 /// <param name="ScopedVariableNames">The top-level let variable names in scope for the loop body, or null.</param>
-public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, bool AllowingEmpty = false, IReadOnlyList<string>? ScopedVariableNames = null);
+internal readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, bool AllowingEmpty = false, IReadOnlyList<string>? ScopedVariableNames = null);
 
 /// <summary>
 /// Try/catch information stored in the literal pool for the TryCatch opcode: the try block
@@ -121,7 +122,7 @@ public readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEnt
 /// </summary>
 /// <param name="TryEntryPoint">The instruction entry point of the try block.</param>
 /// <param name="Clauses">The catch clauses in declaration order.</param>
-public sealed record TryCatchInfo(int TryEntryPoint, IReadOnlyList<CatchClauseInfo> Clauses);
+internal sealed record TryCatchInfo(int TryEntryPoint, IReadOnlyList<CatchClauseInfo> Clauses);
 
 /// <summary>
 /// One catch clause of a <see cref="TryCatchInfo"/>: the error-code patterns that select it
@@ -129,7 +130,7 @@ public sealed record TryCatchInfo(int TryEntryPoint, IReadOnlyList<CatchClauseIn
 /// </summary>
 /// <param name="Patterns">The error-code name-test patterns that select the clause.</param>
 /// <param name="EntryPoint">The instruction entry point of the clause body.</param>
-public sealed record CatchClauseInfo(IReadOnlyList<CatchCodePattern> Patterns, int EntryPoint);
+internal sealed record CatchClauseInfo(IReadOnlyList<CatchCodePattern> Patterns, int EntryPoint);
 
 /// <summary>
 /// Ordering information stored in the literal pool for the OrderBy opcode.
@@ -140,7 +141,7 @@ public sealed record CatchClauseInfo(IReadOnlyList<CatchCodePattern> Patterns, i
 /// <param name="Descending">The descending flag of each sort key.</param>
 /// <param name="EmptyOrder">The empty-sequence ordering of each sort key.</param>
 /// <param name="CollationUri">The collation URI of each sort key, or null.</param>
-public readonly record struct OrderByInfo(
+internal readonly record struct OrderByInfo(
     int ValueCount,
     int KeyCount,
     bool[] Descending,
@@ -151,7 +152,7 @@ public readonly record struct OrderByInfo(
 /// Variable-binding information stored in the literal pool for the TupleBind opcode.
 /// </summary>
 /// <param name="Variables">The variables bound from tuple items, in tuple order.</param>
-public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, string? Prefix, string? NamespaceUri)> Variables);
+internal readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, string? Prefix, string? NamespaceUri)> Variables);
 
 /// <summary>
 /// Grouping information stored in the literal pool for the GroupBy opcode.
@@ -162,7 +163,7 @@ public readonly record struct TupleBindInfo(IReadOnlyList<(string LocalName, str
 /// <param name="CollationUri">The collation URI of each grouping key, or null.</param>
 /// <param name="DeclaredTypeNames">The declared type name of each grouping spec, or null.</param>
 /// <param name="DeclaredTypeOccurrences">The occurrence indicator of each declared type.</param>
-public readonly record struct GroupByInfo(
+internal readonly record struct GroupByInfo(
     IReadOnlyList<int> KeyIndices,
     IReadOnlyList<string?> CollationUri,
     IReadOnlyList<string?> DeclaredTypeNames,
@@ -175,7 +176,7 @@ public readonly record struct GroupByInfo(
 /// <param name="TypeName">The qualified name of the declared type.</param>
 /// <param name="Occurrence">The occurrence indicator of the declared type.</param>
 /// <param name="ErrorCode">The error code raised when the value is not an instance of the declared type.</param>
-public readonly record struct EnforceTypeInfo(string TypeName, OccurrenceIndicator Occurrence, string ErrorCode);
+internal readonly record struct EnforceTypeInfo(string TypeName, OccurrenceIndicator Occurrence, string ErrorCode);
 
 /// <summary>
 /// Attribute metadata for the ConstructElement opcode; the attribute's value parts are a
@@ -185,7 +186,7 @@ public readonly record struct EnforceTypeInfo(string TypeName, OccurrenceIndicat
 /// <param name="Prefix">The namespace prefix of the attribute, or null.</param>
 /// <param name="FirstPart">The index of the attribute's first value part in the shared parts list.</param>
 /// <param name="PartCount">The number of value parts of the attribute.</param>
-public readonly record struct ConstructAttributeInfo(string LocalName, string? Prefix, int FirstPart, int PartCount);
+internal readonly record struct ConstructAttributeInfo(string LocalName, string? Prefix, int FirstPart, int PartCount);
 
 /// <summary>
 /// Element construction information stored in the literal pool for the ConstructElement opcode.
@@ -198,7 +199,7 @@ public readonly record struct ConstructAttributeInfo(string LocalName, string? P
 /// <param name="FirstContentPart">The index of the first content part in <paramref name="Parts"/>.</param>
 /// <param name="ContentPartCount">The number of content parts.</param>
 /// <param name="Parts">The shared list of attribute value and content parts.</param>
-public readonly record struct ConstructElementInfo(
+internal readonly record struct ConstructElementInfo(
     string LocalName,
     string? Prefix,
     ConstructAttributeInfo[] Attributes,
@@ -214,10 +215,10 @@ public readonly record struct ConstructElementInfo(
 /// <param name="Kind">The kind of part.</param>
 /// <param name="Index">The literal-pool index or register offset of the part.</param>
 /// <param name="Index2">The second literal-pool index (the processing-instruction target), or -1.</param>
-public readonly record struct ConstructPartInfo(ConstructPartKind Kind, int Index, int Index2 = -1);
+internal readonly record struct ConstructPartInfo(ConstructPartKind Kind, int Index, int Index2 = -1);
 
 /// <summary>The kind of one element-construction part.</summary>
-public enum ConstructPartKind : byte
+internal enum ConstructPartKind : byte
 {
     /// <summary>Literal text; Index is the literal-pool index of the string.</summary>
     Literal,
@@ -230,7 +231,7 @@ public enum ConstructPartKind : byte
 }
 
 /// <summary>The kind of a computed constructor (element/attribute/document/text/comment/PI/namespace).</summary>
-public enum ComputedConstructorKind : byte
+internal enum ComputedConstructorKind : byte
 {
     /// <summary><c>element name { content }</c></summary>
     Element,
@@ -258,7 +259,7 @@ public enum ComputedConstructorKind : byte
 /// <param name="Prefix">The static namespace prefix, or null.</param>
 /// <param name="NamespaceUri">The static namespace URI, or null.</param>
 /// <param name="HasNameExpression">True when the name/target/prefix is computed from the register in RegisterB.</param>
-public readonly record struct ComputedConstructorInfo(
+internal readonly record struct ComputedConstructorInfo(
     ComputedConstructorKind Kind,
     string? LocalName,
     string? Prefix,
@@ -288,7 +289,7 @@ public readonly record struct ComputedConstructorInfo(
 /// <param name="EndNext">The end condition's next item variable name, or null.</param>
 /// <param name="DeclaredTypeName">The qualified name of the window variable's declared type, or null.</param>
 /// <param name="DeclaredTypeOccurrence">The occurrence indicator of the declared type.</param>
-public readonly record struct WindowInfo(
+internal readonly record struct WindowInfo(
     string VariableName,
     string? VariableNamespaceUri,
     bool Sliding,
@@ -312,7 +313,7 @@ public readonly record struct WindowInfo(
 /// Uses a simple stack-like register allocation model with a literal pool
 /// for constants that don't fit in the instruction operand.
 /// </summary>
-public sealed class IrLowerer
+internal sealed class IrLowerer
 {
     private readonly List<IrInstruction> _instructions = new();
     private readonly List<object?> _literalPool = new();

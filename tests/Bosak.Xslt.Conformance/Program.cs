@@ -97,6 +97,7 @@
 //                      | Charles Korthout | 3.30  | 29-08-2026     | Removed "dtd" from SkipFeatures so DTD-dependent tests run                               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.31  | 30-08-2026     | Enabled xsl:package/xsl:use-package tests; removed harness skips                         |
+//                      | Charles Korthout | 3.50  | 21-09-2026     | API freeze stage C: use XdmConversions                                                  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.32  | 30-08-2026     | Register inline test packages for xsl:use-package resolution                             |
 //                      |==================|=======|================|=========================================================================================
@@ -147,6 +148,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.49  | 21-09-2026     | assert-message matching is non-positional: each assert-message claims a distinct      |
 //                      |                  |       |                | emitted message; extra messages are allowed (si-message-005..010)                     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.50  | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -2037,7 +2040,7 @@ class Program
         var assertType = resultElem.Name.LocalName == "assert-type" ? resultElem : resultElem.Element(ns + "assert-type");
         if (assertType != null)
         {
-            return Bosak.XPath.Runtime.Vm.VmEngine.ValueMatchesType(actual, assertType.Value.Trim());
+            return Bosak.XPath.Runtime.Vm.XdmConversions.ValueMatchesType(actual, assertType.Value.Trim());
         }
 
         // assert-eq
@@ -2125,13 +2128,13 @@ class Program
         // assert-true
         if (resultElem.Name.LocalName == "assert-true" || resultElem.Element(ns + "assert-true") != null)
         {
-            return actual.EffectiveBooleanValue();
+            return actual.GetEffectiveBooleanValue();
         }
 
         // assert-false
         if (resultElem.Name.LocalName == "assert-false" || resultElem.Element(ns + "assert-false") != null)
         {
-            return !actual.EffectiveBooleanValue();
+            return !actual.GetEffectiveBooleanValue();
         }
 
         // serialization-matches: serialize the result and match against a regex.
@@ -2394,7 +2397,7 @@ class Program
                 textDoc.Add(new XText(GetStringValue(actual)));
                 resultValue = XdmValue.FromNode(new XDocumentNode(textDoc));
             }
-            return Bosak.XPath.Runtime.Vm.VmEngine.ValueMatchesType(resultValue, assertType.Value.Trim());
+            return Bosak.XPath.Runtime.Vm.XdmConversions.ValueMatchesType(resultValue, assertType.Value.Trim());
         }
 
         // assert-true
@@ -2925,7 +2928,7 @@ class Program
                     ctx.WithNamespace(prefix, uri);
             }
             var result = compiled.Evaluate(ctx);
-            return result.EffectiveBooleanValue();
+            return result.GetEffectiveBooleanValue();
         }
         catch (Exception ex)
         {
@@ -2985,7 +2988,7 @@ class Program
                     ctx.WithVariable(key.LocalName, value, key.NamespaceUri);
             }
             var result = compiled.Evaluate(ctx);
-            return result.EffectiveBooleanValue();
+            return result.GetEffectiveBooleanValue();
         }
         catch
         {
@@ -3117,7 +3120,7 @@ class Program
                 foreach (var (key, value) in assertContext.SnapshotVariables())
                     ctx.WithVariable(key.LocalName, value, key.NamespaceUri);
             }
-            return deepEq.Evaluate(ctx).EffectiveBooleanValue();
+            return deepEq.Evaluate(ctx).GetEffectiveBooleanValue();
         }
         catch
         {

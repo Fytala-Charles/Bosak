@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 13-06-2026     | Update IntegerFollowedByDot for decimal-literal grammar                                |
 //                      | Charles Korthout | 0.3   | 19-07-2026     | NumericLiteral+keyword boundary test (10idiv → Invalid)                                |
 //                      | Charles Korthout | 0.4   | 20-07-2026     | Unterminated comment regression tests                                                  |
+//                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Lexer;
@@ -78,7 +79,7 @@ public class LexerTests
     {
         // Regression for QT3 K-XQueryComment-14.
         var src = "1(: this comment does not end";
-        var ex = Assert.Throws<ParseException>(() => Tokenize(src));
+        var ex = Assert.Throws<XPathParseException>(() => Tokenize(src));
         Assert.Contains("XPST0003", ex.Message);
     }
 
@@ -87,7 +88,7 @@ public class LexerTests
     {
         // Regression for QT3 K-XQueryComment-15: inner comment opened but outer never closed.
         var src = "1(: content (: this comment does not end :)";
-        var ex = Assert.Throws<ParseException>(() => Tokenize(src));
+        var ex = Assert.Throws<XPathParseException>(() => Tokenize(src));
         Assert.Contains("XPST0003", ex.Message);
     }
 

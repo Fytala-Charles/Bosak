@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.Xslt" />
+  </ItemGroup>
+
 </Project>

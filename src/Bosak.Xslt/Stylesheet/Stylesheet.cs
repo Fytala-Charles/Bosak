@@ -226,6 +226,9 @@
 //                      |                  |       |                | XSLT 3.0 §3.13); the three whitelist blocks now also require the XSLT namespace so a     |
 //                      |                  |       |                | literal result element named copy/copy-of is not validated as the XSLT instruction      |
 //                      |                  |       |                | (fixes false XTSE0090: su-absorbing/filter/inspection/unclassified, si-apply-templates)  |
+//                      | Charles Korthout | 2.113 | 21-09-2026     | API freeze stage B: internalized                                                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.114 | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call site          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -248,7 +251,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// <summary>
 /// Represents a loaded XSLT stylesheet, including all imported and included modules.
 /// </summary>
-public sealed class Stylesheet
+internal sealed class Stylesheet
 {
     private XDocument _document;
     private readonly string? _baseUri;
@@ -418,7 +421,7 @@ public sealed class Stylesheet
         var compiled = XPath31Expression.Compile(useWhen);
         var ctx = CreateUseWhenContext(elem, explicitBaseUri);
         var result = compiled.Evaluate(ctx);
-        bool include = result.EffectiveBooleanValue();
+        bool include = result.GetEffectiveBooleanValue();
 
         if (isXsltElement)
         {
@@ -8502,7 +8505,7 @@ public sealed class Stylesheet
     /// distinguish unknown XSLT elements (whose descendants may be skipped in
     /// forwards-compatible mode) from recognized ones.
     /// </summary>
-    public static readonly HashSet<string> KnownXsltElementNames = new(StringComparer.Ordinal)
+    internal static readonly HashSet<string> KnownXsltElementNames = new(StringComparer.Ordinal)
     {
         "stylesheet", "transform", "include", "import", "strip-space", "preserve-space",
         "output", "namespace-alias", "attribute-set", "decimal-format", "key", "mode",
@@ -8652,7 +8655,7 @@ public sealed class Stylesheet
 /// <summary>
 /// Represents a parsed xsl:decimal-format declaration.
 /// </summary>
-public sealed class DecimalFormatDefinition
+internal sealed class DecimalFormatDefinition
 {
     /// <summary>The local name of the decimal format (empty for the default decimal format).</summary>
     public string LocalName { get; init; } = "";
@@ -8778,7 +8781,7 @@ public sealed class DecimalFormatDefinition
 /// <summary>
 /// Helper methods for stylesheet parsing.
 /// </summary>
-public static class StylesheetExtensions
+internal static class StylesheetExtensions
 {
     /// <summary>
     /// Resolves a namespace prefix in the stylesheet's root element.
@@ -8864,7 +8867,7 @@ public static class StylesheetExtensions
 /// <summary>
 /// The kind of name test stored in an <see cref="SpaceHandlingRule"/>.
 /// </summary>
-public enum SpaceNameTestKind
+internal enum SpaceNameTestKind
 {
     /// <summary>Matches any element name.</summary>
     Any,
@@ -8879,7 +8882,7 @@ public enum SpaceNameTestKind
 /// <summary>
 /// Represents a single xsl:strip-space or xsl:preserve-space rule.
 /// </summary>
-public readonly struct SpaceHandlingRule
+internal readonly struct SpaceHandlingRule
 {
     /// <summary>The kind of name test that selects the affected elements.</summary>
     public SpaceNameTestKind Kind { get; }

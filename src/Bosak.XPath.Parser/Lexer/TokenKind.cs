@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.3   | 22-08-2026     | Added KeywordValidate for XQuery validate expressions |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Parser.Lexer;
@@ -25,7 +26,7 @@ namespace Bosak.XPath.Parser.Lexer;
 /// <summary>
 /// The kinds of tokens produced by the XPath 3.1 lexer.
 /// </summary>
-public enum TokenKind : short
+internal enum TokenKind : short
 {
     /// <summary>An invalid token; no valid token could be scanned at the position.</summary>
     Invalid = 0,

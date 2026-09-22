@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 27-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage D: TryValidate renamed to ValidateSafe; OnlyErrors -> ErrorsOnly       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using System.Xml.Schema;
@@ -31,9 +33,9 @@ public sealed class XsdValidator : IXsdValidator
     /// </summary>
     public XsdValidationResult Validate(string xml, Stream xsdStream, XsdValidatorOptions? options = null)
     {
-        var result = TryValidate(xml, xsdStream, options);
+        var result = ValidateSafe(xml, xsdStream, options);
         if (!result.IsValid)
-            throw new XmlSchemaValidationException(string.Join("\n", result.OnlyErrors.Select(e => e.ToString())));
+            throw new XmlSchemaValidationException(string.Join("\n", result.ErrorsOnly.Select(e => e.ToString())));
         return result;
     }
 
@@ -43,9 +45,9 @@ public sealed class XsdValidator : IXsdValidator
     /// </summary>
     public XsdValidationResult Validate(string xml, IEnumerable<Stream> xsdStreams, XsdValidatorOptions? options = null)
     {
-        var result = TryValidate(xml, xsdStreams, options);
+        var result = ValidateSafe(xml, xsdStreams, options);
         if (!result.IsValid)
-            throw new XmlSchemaValidationException(string.Join("\n", result.OnlyErrors.Select(e => e.ToString())));
+            throw new XmlSchemaValidationException(string.Join("\n", result.ErrorsOnly.Select(e => e.ToString())));
         return result;
     }
 
@@ -53,14 +55,14 @@ public sealed class XsdValidator : IXsdValidator
     /// Validates an XML document against a single XSD schema.
     /// Non-throwing: returns a result with any errors rather than throwing.
     /// </summary>
-    public XsdValidationResult TryValidate(string xml, Stream xsdStream, XsdValidatorOptions? options = null)
-        => TryValidate(xml, new[] { xsdStream }, options);
+    public XsdValidationResult ValidateSafe(string xml, Stream xsdStream, XsdValidatorOptions? options = null)
+        => ValidateSafe(xml, new[] { xsdStream }, options);
 
     /// <summary>
     /// Validates an XML document against a set of XSD schemas.
     /// Non-throwing: returns a result with any errors rather than throwing.
     /// </summary>
-    public XsdValidationResult TryValidate(string xml, IEnumerable<Stream> xsdStreams, XsdValidatorOptions? options = null)
+    public XsdValidationResult ValidateSafe(string xml, IEnumerable<Stream> xsdStreams, XsdValidatorOptions? options = null)
     {
         options ??= XsdValidatorOptions.Default;
         var errors = new List<XsdValidationError>();

@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Parser.Lexer;
@@ -21,7 +22,7 @@ namespace Bosak.XPath.Parser.Lexer;
 /// A single token from the XPath lexer. Stores offset and length into the
 /// source text rather than allocating a substring.
 /// </summary>
-public readonly struct Token
+internal readonly struct Token
 {
     /// <summary>The end-of-input token.</summary>
     public static readonly Token Eof = new(TokenKind.Eof, -1, 0);

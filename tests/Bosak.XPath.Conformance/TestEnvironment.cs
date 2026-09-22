@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.4   | 21-08-2026     | Resolve role='import' for built-in JSON namespace schema (fn:json-to-xml validate tests) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.5   | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -316,7 +318,7 @@ internal sealed class TestEnvironment
             {
                 try
                 {
-                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri, strictSchemas);
+                    var doc = XDocumentProvider.LoadFile(src.FilePath, src.Uri, strictSchemas);
                     ctx = ctx.WithFocus(XdmValue.FromNode(doc), 1, 1);
                 }
                 catch (System.Xml.XmlException ex) when (ex.Message.Contains("1.1"))
@@ -331,7 +333,7 @@ internal sealed class TestEnvironment
                 // document nodes. Non-XML resources stay unbound (previous behavior).
                 try
                 {
-                    var doc = XDocumentProvider.LoadXml(src.FilePath, src.Uri, strictSchemas);
+                    var doc = XDocumentProvider.LoadFile(src.FilePath, src.Uri, strictSchemas);
                     ctx = ctx.WithVariable(src.Role.Substring(1), XdmValue.FromNode(doc));
                 }
                 catch (Exception)

@@ -40,6 +40,7 @@
 //                      |                  |       |                | stripping is engine-owned for all streamed sources                                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.13  | 21-09-2026     | Added TransformStreamingToString (streaming input with serialized string output)        |
+//                      | Charles Korthout | 1.14  | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -92,7 +93,7 @@ public sealed class XsltExecutable
     /// Gets the output properties of the principal <c>xsl:result-document</c> produced
     /// during the last transformation, if any.
     /// </summary>
-    public Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
+    internal Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
 
     /// <summary>
     /// Default stack size (bytes) allocated for the transformation thread.  A larger
@@ -224,7 +225,7 @@ public sealed class XsltExecutable
     /// <param name="baseOutputUri">Optional base output URI for resolving result-document hrefs.</param>
     /// <param name="secondaryResults">The captured secondary result documents, keyed by resolved URI.</param>
     /// <returns>The principal result in the requested delivery format.</returns>
-    public XdmValue TransformCaptured(
+    internal XdmValue TransformCaptured(
         IXdmNode? source,
         XdmValue? initialMatchSelection,
         EvaluationContext? context,
@@ -252,7 +253,7 @@ public sealed class XsltExecutable
     /// <param name="serializationParams">Optional user-supplied serialization parameters.</param>
     /// <param name="secondaryResults">The captured secondary result documents, keyed by resolved URI.</param>
     /// <returns>The principal result in the requested delivery format.</returns>
-    public XdmValue TransformCaptured(
+    internal XdmValue TransformCaptured(
         IXdmNode? source,
         XdmValue? initialMatchSelection,
         EvaluationContext? context,
@@ -281,7 +282,7 @@ public sealed class XsltExecutable
     /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
     /// <param name="secondaryResults">The captured secondary result documents, keyed by resolved URI.</param>
     /// <returns>The principal result in the requested delivery format.</returns>
-    public XdmValue TransformCaptured(
+    internal XdmValue TransformCaptured(
         IXdmNode? source,
         XdmValue? initialMatchSelection,
         EvaluationContext? context,
@@ -497,7 +498,7 @@ public sealed class XsltExecutable
     /// <param name="serializationParams">Optional user-supplied serialization parameters.</param>
     /// <param name="secondaryResults">The captured secondary result documents.</param>
     /// <returns>The principal result in the requested delivery format.</returns>
-    public XdmValue TransformFunctionCaptured(
+    internal XdmValue TransformFunctionCaptured(
         string name,
         XdmValue[] args,
         EvaluationContext? context,
@@ -521,7 +522,7 @@ public sealed class XsltExecutable
     /// <param name="source">Optional source node used as the global context item fallback.</param>
     /// <param name="secondaryResults">The captured secondary result documents.</param>
     /// <returns>The principal result in the requested delivery format.</returns>
-    public XdmValue TransformFunctionCaptured(
+    internal XdmValue TransformFunctionCaptured(
         string name,
         XdmValue[] args,
         EvaluationContext? context,
@@ -546,7 +547,7 @@ public sealed class XsltExecutable
     /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
     /// <param name="secondaryResults">The captured secondary result documents.</param>
     /// <returns>The principal result in the requested delivery format.</returns>
-    public XdmValue TransformFunctionCaptured(
+    internal XdmValue TransformFunctionCaptured(
         string name,
         XdmValue[] args,
         EvaluationContext? context,

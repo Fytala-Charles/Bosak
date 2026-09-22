@@ -16,4 +16,15 @@
     <ProjectReference Include="..\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.XPath.Standard" />
+    <InternalsVisibleTo Include="Bosak.XPath.Api" />
+    <InternalsVisibleTo Include="Bosak.XQuery" />
+    <InternalsVisibleTo Include="Bosak.XPath.Runtime.Tests" />
+    <InternalsVisibleTo Include="Bosak.Xslt" />
+    <InternalsVisibleTo Include="Bosak.Xslt.Conformance" />
+    <InternalsVisibleTo Include="Bosak.XPath.Conformance" />
+    <InternalsVisibleTo Include="Bosak.XPath.Standard.Tests" />
+  </ItemGroup>
+
 </Project>

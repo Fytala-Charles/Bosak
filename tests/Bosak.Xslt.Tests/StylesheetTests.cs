@@ -153,6 +153,7 @@
 //                      | Charles Korthout | 0.92  | 07-09-2026     | Unregistered xsl:use-package now expects XTSE3000 (spec) instead of XTSE0165 (REQ-082)  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.93  | 21-09-2026     | use-when permitted on xsl:function/xsl:copy-of/xsl:copy (su-absorbing false XTSE0090)   |
+//                      | Charles Korthout | 0.94  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -5822,7 +5823,7 @@ return fn:transform(map{""stylesheet-text"": $xsl,
             "  <xsl:template name='main'><out><xsl:value-of select=\"\u00B5\"/></out></xsl:template>\n" +
             "</xsl:stylesheet>";
 
-        var ex = Assert.Throws<Bosak.XPath.Parser.ParseException>(() =>
+        var ex = Assert.Throws<Bosak.XPath.Parser.XPathParseException>(() =>
         {
             var executable = new Api.XsltCompiler().Compile(xsl);
             executable.TransformToString(null, initialTemplate: "main");

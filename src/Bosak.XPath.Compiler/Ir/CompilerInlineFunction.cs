@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -25,4 +26,4 @@ namespace Bosak.XPath.Compiler.Ir;
 /// <param name="Body">The compiled body of the inline function.</param>
 /// <param name="ParameterTypes">The declared type name of each parameter, or null per parameter.</param>
 /// <param name="ReturnType">The declared return type name, or null.</param>
-public sealed record CompilerInlineFunction(IReadOnlyList<string> Parameters, IrModule Body, IReadOnlyList<string?> ParameterTypes, string? ReturnType);
+internal sealed record CompilerInlineFunction(IReadOnlyList<string> Parameters, IrModule Body, IReadOnlyList<string?> ParameterTypes, string? ReturnType);

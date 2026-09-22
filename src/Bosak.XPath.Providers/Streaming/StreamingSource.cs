@@ -27,6 +27,8 @@
 //                      |                  |       |                | per node, not per access; pre-root comments/PIs captured into the shell document and     |
 //                      |                  |       |                | surfaced on the document axes                                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 21-09-2026     | API freeze stage D: StreamCompleted is an event; EnableReplay -> TryEnableReplay         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using System.Xml;
@@ -234,7 +236,7 @@ FoundRoot:
     internal Func<XObject, IXdmNode, bool>? RecordPostProcessor { get; set; }
 
     /// <summary>Invoked once when the pump reaches the end of the root element.</summary>
-    internal Action? StreamCompleted { get; set; }
+    internal event Action? StreamCompleted;
 
     /// <summary>True when the stream can be drained (not started, already done, or retained).</summary>
     internal bool CanDrain => _retainedRecords is not null || _pumpState != PumpState.Pumping;
@@ -278,7 +280,7 @@ FoundRoot:
     /// has not started: records yielded before retention is enabled cannot be replayed.
     /// Idempotent — returns true when retention was already enabled.
     /// </summary>
-    internal bool EnableReplay()
+    internal bool TryEnableReplay()
     {
         if (_retainedRecords is not null)
             return true;

@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 0.9   | 21-07-2026     | CacheRegex converts RegexParseException to FORX0002 (fn-matches-25, cbcl-matches-004)  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.11  | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -35,7 +36,7 @@ namespace Bosak.XPath.Standard.Functions;
 /// Helpers for XSD regular expressions: flag parsing, zero-length checks, replacement-string
 /// translation, and conversion of XSD-specific syntax to .NET <see cref="Regex"/> syntax.
 /// </summary>
-public static class RegexHelper
+internal static class RegexHelper
 {
     /// <summary>
     /// Parses the flags string used by <c>fn:matches</c>, <c>fn:replace</c>,

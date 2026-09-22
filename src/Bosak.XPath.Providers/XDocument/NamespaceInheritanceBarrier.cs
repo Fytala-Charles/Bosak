@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-06-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -23,6 +24,6 @@ namespace Bosak.XPath.Providers.Xml;
 /// This corresponds to the XSLT <c>inherit-namespaces="no"</c> directive on
 /// <c>xsl:copy</c>, <c>xsl:element</c>, and literal result elements.
 /// </summary>
-public sealed class NamespaceInheritanceBarrier
+internal sealed class NamespaceInheritanceBarrier
 {
 }

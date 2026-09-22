@@ -37,6 +37,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.1   | 02-09-2026     | Added OverriddenTemplate link for xsl:original dispatch; xsl:override/@default-mode    |
 //                      |                  |       |                | applies to template rules declared inside xsl:override (override-m-010)                |
+//                      | Charles Korthout | 2.2   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -51,7 +52,7 @@ namespace Bosak.Xslt.Stylesheet;
 /// <summary>
 /// Represents a single xsl:template rule within a stylesheet.
 /// </summary>
-public sealed class TemplateRule
+internal sealed class TemplateRule
 {
     /// <summary>The original XElement of the xsl:template.</summary>
     public XElement Element { get; }

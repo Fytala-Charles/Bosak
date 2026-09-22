@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-06-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -22,7 +23,7 @@ namespace Bosak.XPath.Providers.Xml;
 /// that must be explicitly undeclared (e.g. <c>xmlns:prefix=""</c>) when the element is
 /// serialized. LINQ-to-XML cannot store such declarations directly.
 /// </summary>
-public sealed class PrefixedNamespaceUndeclarations
+internal sealed class PrefixedNamespaceUndeclarations
 {
     /// <summary>
     /// The prefixes to undeclare on the annotated element.

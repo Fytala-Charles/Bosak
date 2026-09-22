@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XQST0040 for duplicate expanded attribute names in direct element constructors           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
+//                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -36,7 +37,7 @@ namespace Bosak.XPath.Compiler;
 /// (<c>xmlns:p="uri"</c>) are tracked: their bindings are in scope for the enclosed
 /// expressions of the constructor (attributes and content) but not beyond it.
 /// </summary>
-public static class StaticNameTestValidator
+internal static class StaticNameTestValidator
 {
     /// <summary>
     /// Validates all name-test prefixes in the expression against the supplied static

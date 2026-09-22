@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 22-08-2026     | Inherit caller schema set and compile schemas imported by loaded modules (fn:load-xquery-module schema propagation) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 02-09-2026     | XQST0059 (not FOQM0002) for an unresolvable relative module URI (xslt30 load-xquery-module-001) |
+//                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -32,7 +33,7 @@ namespace Bosak.XQuery.Api;
 /// and returns <c>map { "variables": map { QName → value }, "functions": map { QName → map { arity → function } } }</c>
 /// containing the module's public declarations only.
 /// </summary>
-public static class XQueryModuleLoader
+internal static class XQueryModuleLoader
 {
     private const string FnNamespace = "http://www.w3.org/2005/xpath-functions";
 
@@ -80,7 +81,7 @@ public static class XQueryModuleLoader
         // FOQM0005: a supplied context item that does not match the module's declared
         // context item type (fn-load-xquery-module-060).
         if (options.ContextItem is not null && targetParse.StaticContext.ContextItemTypeName is not null
-            && !VmEngine.ValueMatchesType(options.ContextItem.Value, targetParse.StaticContext.ContextItemTypeName, ctx))
+            && !XdmConversions.ValueMatchesType(options.ContextItem.Value, targetParse.StaticContext.ContextItemTypeName, ctx))
             throw new InvalidOperationException(
                 $"FOQM0005: The supplied context item does not match the declared type '{targetParse.StaticContext.ContextItemTypeName}'.");
 
@@ -405,7 +406,7 @@ public static class XQueryModuleLoader
         bool nodeKind = typeName.Contains('(');
         if (!nodeKind && value.IsNode)
             value = XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
-        return VmEngine.ValueMatchesType(value, typeName, ctx);
+        return XdmConversions.ValueMatchesType(value, typeName, ctx);
     }
 
     private static LoadOptions ParseOptions(XdmValue optionsArg)
