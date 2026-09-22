@@ -4,6 +4,10 @@ Bosak's engine core — the `Bosak.XPath.*` and `Bosak.Xslt` packages — is fre
 
 This document describes what Fytala offers on top of the free core.
 
+## How support works
+
+The free core is community-supported: questions and usage help go to [GitHub Discussions](https://github.com/Fytala-Charles/Bosak/discussions), bugs to [GitHub Issues](https://github.com/Fytala-Charles/Bosak/issues), and engine-correctness work is always done in the open. A commercial support contract adds direct engineering access (email/video), guaranteed response times, and priority triage on top of that — it does not gate the community channels, and it never gates conformance fixes.
+
 ## What is free (no license needed, ever)
 
 - The complete XPath 3.1 / XSLT 3.0 / XQuery 3.1 engine
