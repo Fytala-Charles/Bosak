@@ -229,6 +229,7 @@
 //                      | Charles Korthout | 2.113 | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.114 | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call site          |
+//                      | Charles Korthout | 2.115 | 22-09-2026     | REQ-097 schema-aware seam H1/H2: gate XTSE1650/1660 on SchemaAware, collect xsl:import-schema, merged schema set |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -238,6 +239,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -288,6 +290,15 @@ internal sealed class Stylesheet
     private readonly StaticContext _staticContext = new();
     private readonly IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> _externalStaticParameters;
     private readonly Api.PackageVersionResolutionStrategy _packageVersionResolutionStrategy;
+    private readonly SchemaImportState _schemaState;
+
+    /// <summary>
+    /// The merged compiled schema set for schema-aware compilations (REQ-097), or null
+    /// for basic compilations and for not-yet-finalized modules. Built once by the root
+    /// module after every module in the import tree has been loaded.
+    /// </summary>
+    internal XmlSchemaSet? CompiledSchemaSet =>
+        ReferenceEquals(_rootStylesheet, this) ? _schemaState.CompiledSchemaSet : _rootStylesheet._schemaState.CompiledSchemaSet;
 
     /// <summary>
     /// Empty dictionary used when no external static parameters are supplied.
@@ -637,7 +648,7 @@ internal sealed class Stylesheet
     /// <param name="owningPackage">The package that owns this module, when loaded via xsl:use-package.</param>
     /// <param name="packageVersionResolutionStrategy">How to select among multiple matching package versions.</param>
     /// <param name="isPrincipalLevel">Whether this module is at the principal level of its package.</param>
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true)
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true, SchemaImportState? schemaState = null)
     {
         _document = document;
         _baseUri = baseUri;
@@ -650,6 +661,9 @@ internal sealed class Stylesheet
         _rootStylesheet = rootStylesheet ?? this;
         _packageVersionResolutionStrategy = packageVersionResolutionStrategy;
         IsPrincipalLevel = isPrincipalLevel;
+        // Schema-aware compilation state (REQ-097): shared across the whole import tree
+        // so xsl:import-schema declarations aggregate into one merged schema set.
+        _schemaState = schemaState ?? new SchemaImportState();
 
         // Add this stylesheet's own URI to the resolved set for circular-reference detection
         if (!string.IsNullOrEmpty(baseUri))
@@ -1929,6 +1943,12 @@ internal sealed class Stylesheet
         // Static validation: check for disallowed attributes and children on XSLT instructions
         ValidateInstructionTree(root);
 
+        // Schema-aware compilation (REQ-097): every module in the import tree has now
+        // been loaded and its xsl:import-schema declarations collected; compile the
+        // merged schema set once, at the root.
+        if (_isRootStylesheet && _schemaState is { SchemaAware: true })
+            _schemaState.CompiledSchemaSet = SchemaSetBuilder.Build(_schemaState);
+
         // XTSE1222: all xsl:key declarations with the same expanded name must agree on @composite.
         if (_isRootStylesheet)
         {
@@ -2393,6 +2413,37 @@ internal sealed class Stylesheet
             current = current.Parent;
         }
         return true;
+    }
+
+    /// <summary>
+    /// Records one <c>xsl:import-schema</c> declaration for schema-aware compilation
+    /// (REQ-097). The declaration is validated here; resolution and merging into the
+    /// compiled schema set happen once, at the root module, via <see cref="SchemaSetBuilder"/>.
+    /// </summary>
+    private void CollectImportSchema(XElement elem)
+    {
+        var parent = elem.Parent;
+        bool isTopLevel = parent != null &&
+            parent.Name.NamespaceName == XslNamespace &&
+            parent.Name.LocalName is "transform" or "stylesheet" or "package";
+        if (!isTopLevel)
+            throw new InvalidOperationException("XTSE0010: xsl:import-schema is permitted only as a top-level declaration");
+
+        var ns = elem.Attribute("namespace")?.Value;
+        var locationAttr = elem.Attribute("schema-location");
+        var locations = locationAttr is null
+            ? Array.Empty<string>()
+            : locationAttr.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var inline = elem.Elements().FirstOrDefault();
+
+        if (ns is null && locations.Length == 0 && inline is null)
+            throw new InvalidOperationException("XTSE0010: xsl:import-schema must specify a namespace, a schema-location, or an inline schema");
+        if (elem.Nodes().OfType<XText>().Any(t => !string.IsNullOrWhiteSpace(t.Value)))
+            throw new InvalidOperationException("XTSE0220: xsl:import-schema may contain only an inline xs:schema element");
+        if (inline is not null && (inline.Name.LocalName != "schema" || inline.Name.NamespaceName != XmlSchemaNamespace))
+            throw new InvalidOperationException("XTSE0220: the inline content of xsl:import-schema must be an xs:schema element");
+
+        _schemaState.Add(ns, locations, inline, ImportPrecedence, BaseUri);
     }
 
     private void ValidateInstructionTree(XElement root)
@@ -3137,9 +3188,16 @@ internal sealed class Stylesheet
             if (localName == "sequence" && elem.Attribute("as") != null)
                 throw new InvalidOperationException("XTSE0090");
 
-            // xsl:import-schema is only supported by schema-aware processors
+            // xsl:import-schema is only supported by schema-aware processors (XTSE1650 on a
+            // basic processor). In schema-aware mode the declaration is collected here and
+            // compiled into the merged schema set once every module has loaded (REQ-097).
             if (localName == "import-schema")
-                throw new InvalidOperationException("XTSE1650: xsl:import-schema requires a schema-aware processor");
+            {
+                if (_schemaState is not { SchemaAware: true })
+                    throw new InvalidOperationException("XTSE1650: xsl:import-schema requires a schema-aware processor");
+                if (isXsltElement)
+                    CollectImportSchema(elem);
+            }
 
             // XTSE0090: package-version is only permitted on xsl:package
             if ((localName == "stylesheet" || localName == "transform") && elem.Attribute("package-version") != null && !IsForwardsCompatibleElement(elem))
@@ -3147,12 +3205,15 @@ internal sealed class Stylesheet
 
             // XTSE1660: non-schema-aware processors do not support validation/type attributes
             // that require schema awareness. Only strict requires a schema-aware processor;
-            // lax is permitted (it behaves like skip on a basic processor).
+            // lax is permitted (it behaves like skip on a basic processor). In schema-aware
+            // mode (REQ-097) these declarations are accepted; runtime semantics land with
+            // the validation service hook (H4).
+            bool schemaAware = _schemaState is { SchemaAware: true };
             var validationAttr = elem.Attribute("validation") ?? elem.Attribute(XName.Get("validation", XslNamespace));
             if (validationAttr != null)
             {
                 var val = validationAttr.Value.Trim();
-                if (val == "strict")
+                if (val == "strict" && !schemaAware)
                     throw new InvalidOperationException("XTSE1660");
             }
             if (localName is "stylesheet" or "transform" or "package")
@@ -3161,14 +3222,14 @@ internal sealed class Stylesheet
                 if (defaultValidationAttr != null)
                 {
                     var val = defaultValidationAttr.Value.Trim();
-                    if (val == "strict")
+                    if (val == "strict" && !schemaAware)
                         throw new InvalidOperationException("XTSE1660");
                 }
             }
             var typeAttr = elem.Attribute("type") ?? elem.Attribute(XName.Get("type", XslNamespace));
-            if (isXsltElement && typeAttr != null && localName != "merge-source")
+            if (!schemaAware && isXsltElement && typeAttr != null && localName != "merge-source")
                 throw new InvalidOperationException("XTSE1660");
-            if (!isXsltElement && elem.Attribute(XName.Get("type", XslNamespace)) != null)
+            if (!schemaAware && !isXsltElement && elem.Attribute(XName.Get("type", XslNamespace)) != null)
                 throw new InvalidOperationException("XTSE1660");
 
             // xsl:merge validation
@@ -5249,7 +5310,7 @@ internal sealed class Stylesheet
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: false);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: false, schemaState: _schemaState);
             child.ApplyImportsContextModule = child;
             _imports.Add(child);
             importElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -5283,7 +5344,7 @@ internal sealed class Stylesheet
             // use-when on the root element of an included module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: this.IsPrincipalLevel);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: this.IsPrincipalLevel, schemaState: _schemaState);
             child.ApplyImportsContextModule = ApplyImportsContextModule;
             _includes.Add(child);
             includeElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -5327,7 +5388,7 @@ internal sealed class Stylesheet
             if (!UseWhen(root, location))
                 return;
 
-            var child = new Stylesheet(doc, location, _resolver, ImportPrecedence + 1, _resolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy);
+            var child = new Stylesheet(doc, location, _resolver, ImportPrecedence + 1, _resolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, schemaState: _schemaState);
             child.ApplyImportsContextModule = child;
             _usedPackages.Add(child);
             usePackageElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -8445,6 +8506,9 @@ internal sealed class Stylesheet
     /// <summary>The XSLT namespace URI.</summary>
     public const string XslNamespace = "http://www.w3.org/1999/XSL/Transform";
 
+    /// <summary>The XML Schema namespace, used to recognize inline xs:schema content in xsl:import-schema.</summary>
+    public const string XmlSchemaNamespace = "http://www.w3.org/2001/XMLSchema";
+
     /// <summary>The XML Schema namespace URI.</summary>
     public const string XsNamespace = "http://www.w3.org/2001/XMLSchema";
 
@@ -8528,13 +8592,14 @@ internal sealed class Stylesheet
 
     /// <summary>
     /// The set of XSLT element names that must be empty (no text or element children;
-    /// comments and processing instructions are permitted).
+    /// comments and processing instructions are permitted). xsl:import-schema is absent:
+    /// it may carry an inline xs:schema child, which CollectImportSchema validates.
     /// </summary>
     private static readonly HashSet<string> EmptyXsltElementNames = new(StringComparer.Ordinal)
     {
         "include", "import", "strip-space", "preserve-space", "output",
         "namespace-alias", "decimal-format", "output-character",
-        "copy-of", "mode", "import-schema", "expose", "accept",
+        "copy-of", "mode", "expose", "accept",
         "global-context-item", "context-item"
     };
 

@@ -17,10 +17,12 @@
 //                      | Charles Korthout | 0.4   | 11-06-2026     | Resolve external DTDs when compiling stylesheets from strings                           |
 //                      | Charles Korthout | 0.5   | 24-06-2026     | Preserve XDocument base URI via LoadOptions.SetBaseUri for document() resolution       |
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Added TreatRecoverableAmbiguousMatchAsError for test-harness error dependencies        |
+//                      | Charles Korthout | 0.7   | 22-09-2026     | REQ-097 schema-aware seam H1/H2: SchemaAware, SchemaResolver, SchemaSet options          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 
@@ -35,6 +37,35 @@ public sealed class XsltCompiler
     /// Optional URI resolver for xsl:import and xsl:include. Defaults to <see cref="FileSystemUriResolver"/>.
     /// </summary>
     public IXsltUriResolver? UriResolver { get; set; }
+
+    /// <summary>
+    /// Opt-in schema-aware compilation mode (XSLT 3.0 "schema-aware processor"). When
+    /// <c>false</c> (the default), stylesheets containing <c>xsl:import-schema</c>,
+    /// <c>validation="strict"</c>, or <c>@type</c> are rejected with XTSE1650/XTSE1660
+    /// exactly as before. When <c>true</c>, <c>xsl:import-schema</c> declarations are
+    /// compiled into a merged schema set (see <see cref="SchemaResolver"/> and
+    /// <see cref="SchemaSet"/>) that is in scope during the transformation. The core
+    /// performs no license validation; this flag simply declares that the host provides
+    /// schema-aware processing.
+    /// </summary>
+    public bool SchemaAware { get; set; }
+
+    /// <summary>
+    /// Optional resolver supplying schema documents for <c>xsl:import-schema</c> when
+    /// <see cref="SchemaAware"/> is true. Arguments are the target namespace URI and the
+    /// ordered <c>schema-location</c> hints from the declaration; the returned stream is
+    /// parsed as the schema document. When the resolver returns null (or is unset),
+    /// locations are resolved as URIs relative to the declaring module's base URI.
+    /// Same contract as <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.SchemaResolver"/>.
+    /// </summary>
+    public Func<string, IReadOnlyList<string>, Stream?>? SchemaResolver { get; set; }
+
+    /// <summary>
+    /// Optional pre-built schema set made in-scope for a schema-aware compilation
+    /// (lowest import precedence). Namespaces already present in this set need not be
+    /// re-declared via <c>xsl:import-schema</c>.
+    /// </summary>
+    public XmlSchemaSet? SchemaSet { get; set; }
 
     /// <summary>
     /// Optional listener for xsl:message output. When unset, xsl:message output is discarded.
@@ -85,7 +116,13 @@ public sealed class XsltCompiler
     public XsltExecutable Compile(XDocument document, string? baseUri = null)
     {
         var resolver = UriResolver ?? new FileSystemUriResolver();
-        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters, packageVersionResolutionStrategy: PackageVersionResolutionStrategy);
+        var schemaState = new Stylesheet.SchemaImportState
+        {
+            SchemaAware = SchemaAware,
+            SchemaResolver = SchemaResolver,
+            CompilerSchemaSet = SchemaSet,
+        };
+        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters, packageVersionResolutionStrategy: PackageVersionResolutionStrategy, schemaState: schemaState);
         return new XsltExecutable(stylesheet, MessageListener, TreatRecoverableAmbiguousMatchAsError);
     }
 

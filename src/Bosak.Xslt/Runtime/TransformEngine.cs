@@ -11,6 +11,7 @@
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      | Charles Korthout | 6.84  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
+//                      | Charles Korthout | 6.85  | 22-09-2026     | REQ-097 schema-aware seam H1/H2: fold compiled xsl:import-schema set into context        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
@@ -726,6 +727,11 @@ internal sealed class TransformEngine
         _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
         _context.BaseUri = stylesheet.BaseUri ?? string.Empty;
+        // Schema-aware stylesheets (REQ-097): fold the compiled xsl:import-schema set
+        // into the evaluation context before FunctionLibrary.Populate registers
+        // user-defined type constructors and kind tests from SchemaSet.
+        if (stylesheet.CompiledSchemaSet is { } compiledSchemas)
+            _context.SchemaSet = Stylesheet.SchemaSetBuilder.MergeIntoContext(compiledSchemas, _context.SchemaSet);
         FunctionLibrary.Populate(_context);
         _context.CollationComparer = FunctionLibrary.CompareStrings;
         XsltFunctionLibrary.Populate(_context);
