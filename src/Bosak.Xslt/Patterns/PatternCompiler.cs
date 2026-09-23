@@ -53,10 +53,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.5   | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.6   | 23-09-2026     | schema-element()/schema-attribute() kind tests in match patterns                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
@@ -1943,6 +1946,32 @@ internal sealed class PatternCompiler
             };
         }
 
+        if (name.StartsWith("schema-element("))
+        {
+            var arg = ExtractFunctionArg(name);
+            var (declNs, declLocal) = ParseQName(arg);
+            if (string.IsNullOrEmpty(declNs))
+                declNs = _defaultElementNamespace ?? "";
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return MatchesSchemaElement(node, declNs, declLocal);
+            };
+        }
+
+        if (name.StartsWith("schema-attribute("))
+        {
+            var arg = ExtractFunctionArg(name);
+            var (declNs, declLocal) = ParseQName(arg);
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return MatchesSchemaAttribute(node, declNs, declLocal);
+            };
+        }
+
         if (name == "attribute()")
         {
             return (item, ctx) =>
@@ -2221,6 +2250,15 @@ internal sealed class PatternCompiler
             return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local;
         }
 
+        if (nodeTest.StartsWith("schema-element("))
+        {
+            var arg = ExtractFunctionArg(nodeTest);
+            var (declNs, declLocal) = ParseQName(arg);
+            if (string.IsNullOrEmpty(declNs))
+                declNs = _defaultElementNamespace ?? "";
+            return node => MatchesSchemaElement(node, declNs, declLocal);
+        }
+
         var (nsUri, localName) = ParseQName(nodeTest);
         if (string.IsNullOrEmpty(nsUri))
         {
@@ -2251,6 +2289,14 @@ internal sealed class PatternCompiler
             return node => node.NodeKind == XdmNodeKind.Attribute;
         if (nodeTest == "element()")
             return node => node.NodeKind == XdmNodeKind.Attribute;
+
+        if (nodeTest.StartsWith("schema-attribute("))
+        {
+            var arg = ExtractFunctionArg(nodeTest);
+            var (declNs, declLocal) = ParseQName(arg);
+            // Unprefixed attribute names have no namespace (XPath default element namespace does not apply).
+            return node => MatchesSchemaAttribute(node, declNs, declLocal);
+        }
 
         var (nsUri, localName) = ParseQName(nodeTest);
         if (string.IsNullOrEmpty(nsUri))
@@ -2294,6 +2340,18 @@ internal sealed class PatternCompiler
             };
         }
 
+        if (name.StartsWith("schema-attribute("))
+        {
+            var arg = ExtractFunctionArg(name);
+            var (declNs, declLocal) = ParseQName(arg);
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null) return false;
+                return MatchesSchemaAttribute(node, declNs, declLocal);
+            };
+        }
+
         var (ns, local) = ParseQName(name);
 
         if (string.IsNullOrEmpty(ns))
@@ -2327,6 +2385,100 @@ internal sealed class PatternCompiler
             node.NamespaceUri == ns &&
             node.LocalName == local;
         };
+    }
+
+    /// <summary>
+    /// Matches an element node against a <c>schema-element(N)</c> kind test in a match pattern,
+    /// using the schema set captured in the validation context. Mirrors
+    /// <c>VmEngine.MatchesSchemaElement</c>: substitution-group walk, nillability, and type
+    /// derivation checks. Returns false (never throws) when no schema set is available or the
+    /// declaration is absent.
+    /// </summary>
+    private bool MatchesSchemaElement(IXdmNode node, string targetNs, string targetLocal)
+    {
+        if (node.NodeKind != XdmNodeKind.Element)
+            return false;
+
+        var context = _validationContext;
+        if (context?.SchemaSet is null)
+            return false;
+
+        var targetDecl = context.GetSchemaElement(targetNs, targetLocal);
+        if (targetDecl is null)
+            return false;
+
+        var nodeDeclName = node.SchemaElementDeclaration;
+        if (nodeDeclName is null)
+            return false;
+
+        var actualDecl = context.GetSchemaElement(nodeDeclName.Value.NamespaceUri, nodeDeclName.Value.LocalName);
+        if (actualDecl is null)
+            return false;
+
+        if (nodeDeclName.Value.NamespaceUri != targetNs || nodeDeclName.Value.LocalName != targetLocal)
+        {
+            var currentDecl = actualDecl;
+            while (currentDecl != null)
+            {
+                var sg = currentDecl.SubstitutionGroup;
+                if (sg is null || sg.IsEmpty)
+                    return false;
+                if (sg.Namespace == targetNs && sg.Name == targetLocal)
+                    break;
+                currentDecl = context.GetSchemaElement(sg.Namespace, sg.Name);
+            }
+            if (currentDecl is null)
+                return false;
+        }
+
+        if (node.IsNilled)
+            return actualDecl.IsNillable;
+
+        return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetDecl.SchemaType, context);
+    }
+
+    /// <summary>
+    /// Matches an attribute node against a <c>schema-attribute(N)</c> kind test in a match pattern,
+    /// using the schema set captured in the validation context. Mirrors
+    /// <c>VmEngine.MatchesSchemaAttribute</c>. Returns false (never throws) when no schema set
+    /// is available or the declaration is absent.
+    /// </summary>
+    private bool MatchesSchemaAttribute(IXdmNode node, string targetNs, string targetLocal)
+    {
+        if (node.NodeKind != XdmNodeKind.Attribute)
+            return false;
+
+        var context = _validationContext;
+        if (context?.SchemaSet is null)
+            return false;
+
+        var targetDecl = context.GetSchemaAttribute(targetNs, targetLocal);
+        if (targetDecl is null)
+            return false;
+
+        var nodeDeclName = node.SchemaAttributeDeclaration;
+        if (nodeDeclName is null || nodeDeclName.Value.NamespaceUri != targetNs || nodeDeclName.Value.LocalName != targetLocal)
+            return false;
+
+        return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetDecl.SchemaType, context);
+    }
+
+    /// <summary>
+    /// Returns true when the node's schema type annotation is the same as or derived from
+    /// the supplied target schema type.
+    /// </summary>
+    private static bool IsSchemaTypeCompatible((string NamespaceUri, string LocalName)? typeAnnotation, XmlSchemaType? targetType, EvaluationContext context)
+    {
+        if (targetType is null)
+            return true;
+        if (typeAnnotation is not { } annotation)
+            return false;
+        if (annotation.NamespaceUri == targetType.QualifiedName.Namespace && annotation.LocalName == targetType.QualifiedName.Name)
+            return true;
+        var actualType = context.GetSchemaType(annotation.NamespaceUri, annotation.LocalName);
+        if (actualType is null)
+            return false;
+        return XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
     }
 
     private PatternPredicate CompilePredicatePattern(string pattern)
