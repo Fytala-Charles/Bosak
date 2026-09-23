@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-09-2026     | Creation (REQ-098 seam H3)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-099 seam H4: class made partial for the validation-mode service (see                 |
+//                      |                  |       |                | XdmSchemaAnnotator.Validation.cs)                                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -33,7 +36,7 @@ namespace Bosak.XPath.Providers.Xml;
 /// <c>ConstructedDocumentProcessor</c> hooks on the runtime <c>EvaluationContext</c>, which
 /// allow a host to annotate XSLT-constructed nodes as they are built.
 /// </remarks>
-public static class XdmSchemaAnnotator
+public static partial class XdmSchemaAnnotator
 {
     /// <summary>
     /// Validates the supplied subtree in place against the compiled schema set and attaches

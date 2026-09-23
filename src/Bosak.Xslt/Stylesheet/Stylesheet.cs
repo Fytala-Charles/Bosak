@@ -231,6 +231,8 @@
 //                      | Charles Korthout | 2.114 | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call site          |
 //                      | Charles Korthout | 2.115 | 22-09-2026     | REQ-097 schema-aware seam H1/H2: gate XTSE1650/1660 on SchemaAware, collect xsl:import-schema, merged schema set |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.116 | 23-09-2026     | REQ-099 seam H4: EffectiveInputTypeAnnotations across modules                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -8520,6 +8522,33 @@ internal sealed class Stylesheet
 
     /// <summary>The value of xsl:stylesheet/@input-type-annotations, or null if absent.</summary>
     public string? InputTypeAnnotations { get; private set; }
+
+    /// <summary>
+    /// The effective xsl:stylesheet/@input-type-annotations value across all modules of the
+    /// stylesheet: the first non-"unspecified" value in document order. Module agreement is
+    /// enforced at load time (XTSE0265), so the first value found is the effective one.
+    /// Returns <c>null</c> when no module declares the attribute (spec default:
+    /// "unspecified", annotations kept).
+    /// </summary>
+    internal string? EffectiveInputTypeAnnotations
+    {
+        get
+        {
+            string? effective = null;
+            CollectEffectiveInputTypeAnnotations(this, ref effective);
+            return effective;
+        }
+    }
+
+    private static void CollectEffectiveInputTypeAnnotations(Stylesheet module, ref string? effective)
+    {
+        if (effective == null && !string.IsNullOrEmpty(module.InputTypeAnnotations) && module.InputTypeAnnotations != "unspecified")
+            effective = module.InputTypeAnnotations;
+        foreach (var import in module._imports)
+            CollectEffectiveInputTypeAnnotations(import, ref effective);
+        foreach (var include in module._includes)
+            CollectEffectiveInputTypeAnnotations(include, ref effective);
+    }
 
     /// <summary>
     /// Whether the stylesheet is in forwards-compatible mode (declared version greater
