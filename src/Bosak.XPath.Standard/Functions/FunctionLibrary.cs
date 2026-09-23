@@ -89,6 +89,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.114 | 21-09-2026     | xsl:product-version fallback bumped to 0.11.0-beta (API-freeze soak release)           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.115 | 28-09-2026     | xsl:product-version fallback bumped to 0.12.0-beta (schema seam release)               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4823,7 +4825,7 @@ public static class FunctionLibrary
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
-            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.11.0-beta",
+            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.12.0-beta",
             "xsl:is-schema-aware" => "no",
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
