@@ -20,6 +20,7 @@
 
 ## 0. Recent Changes
 
+- **2026-09-22 (l)** — **XSLT schema-awareness seam H4 (REQ-099) — public validation service + `validation`/`@type` runtime semantics** — the final seam hook: `XdmSchemaAnnotator` gains mode-aware validation (`XdmValidationMode` Strict/Lax/Strip/Preserve, `XdmValidationOptions` Mode/TypeName/DocumentLevel; `Validate`/`ValidateAttribute` port the XQuery validate algorithms — lax `xs:anyType` root augmentation, named-type `xsi:type` injection/removal, document-shape checks, element-only whitespace stripping; helpers `StripSchemaAnnotations`, `ResolveSchemaType`, `IsQNameOrNotationDerived`), and the XSLT engine now reads per-instruction `validation`/`type` (LREs: `xsl:validation`/`xsl:type`; `default-validation` inherited per module) and validates constructed elements/attributes/documents when a schema set is in scope, raising the catchable XTTE15xx family (1510/1512/1515/1535/1540/1545/1550/1555). Companion fixes: PSVI preserved across `xsl:copy`/`xsl:copy-of`, the secondary `xsl:result-document` finalize gap closed, `xsl:strip-type-annotations`/`input-type-annotations="strip"` honored. The service is error-code-agnostic (hosts map codes); with no schema set in scope the engine is bit-identical. See §3.1c. Gates: unit **2,513/2,513** in-solution (+75: Providers.Tests 108 = 74+34 new, Xslt.Tests 581 = 540+41 new) + LanguageServer 72/72, QT3 **31,142/0/679** unchanged, XSLT sweep aggregate identical to baseline (details in the REQ-099 decision log), build 0/0.
 - **2026-09-22 (k)** — **XSLT schema-awareness seam H3 (REQ-098) — typed-construction/annotation API** — two additions give a host full access to constructed nodes for schema annotation: **(1) `XdmSchemaAnnotator`** (`Bosak.XPath.Providers.Xml`, new) — `ValidateSubtree(XElement, XmlSchemaSet, ValidationEventHandler? = null, bool throwOnInvalid = false)` validates an in-memory subtree *in place* (temporary `XDocument` wrapper, `addSchemaInfo: true`; when the subtree is attached, a deep clone is validated and the PSVI annotations are copied back onto the live XObjects in document order, so node identity is preserved) and returns `XdmSubtreeValidationResult` (`IsValid`, `IReadOnlyList<ValidationEventArgs> Errors`; `throwOnInvalid: true` throws `XmlSchemaValidationException` with the first error); `Annotate(XObject, IXmlSchemaInfo)` attaches a host-built annotation without validation. **(2) `EvaluationContext.ConstructedElementProcessor` / `ConstructedDocumentProcessor`** (`Action<IXdmNode>?`, default null) — the element processor fires exactly once per constructed element after its content is complete, bottom-up (innermost first), covering `xsl:element`, literal result elements, and `xsl:copy` element results; the document processor fires at each result-document boundary with the wrapped document node. Every consultation is null-conditional: with the processors unset the engine is bit-identical (verified by the sweep and a byte-identity unit test). See §3.1b. Gates: full XSLT sweep **10,220/55/4,325, aggregate identical to the REQ-097 baseline**, QT3 **31,142/0/679** unchanged, unit **2,510/2,510** across all 10 projects (Providers.Tests 74 = 61+13 new, Xslt.Tests 540 = 534+6 new), build 0/0.
 - **2026-09-22 (j)** — **XSLT schema-awareness seam H1/H2 (REQ-097)** — opt-in schema-aware compilation: `XsltCompiler.SchemaAware` gates the XTSE1650/XTSE1660 throws (default basic processor unchanged, bit-identical); `XsltCompiler.SchemaResolver`/`SchemaSet` supply schema documents; `xsl:import-schema` declarations (inline / resolver / schema-location / host set) compile into one merged `XmlSchemaSet` with import-precedence merging (XTSE0215/XTSE0220) that is folded into `EvaluationContext.SchemaSet` before function-library population — user-defined simple-type constructors, `cast as` / `instance of`, and `schema-element()`/`schema-attribute()` kind tests work from stylesheet-declared schemas. No runtime enforcement of `validation`/`@type` yet (hook H4) and no complex-type typed construction (hook H3); both are scheduled with the Bosak.Schema commercial track. Gates: full XSLT sweep **10,220/55/4,325, aggregate identical to the REQ-096 baseline** (only delta: XTSE1650/1660 error-code precedence, unreachable by the failing set), QT3 **31,142/0/679** unchanged, unit **2,491/2,491** across all 10 projects (Xslt.Tests 534 = 522+12 new `SchemaAwareCompilationTests`), build 0/0.
 - **2026-09-21 (i)** — **xml-to-json package-namespace batch** — the four xml-to-json-B2 failures (B2-005/006/010/014) were never an XPath 4.0 gap: the error text `XPST0017: ...escape#1` came from a **namespace-contamination bug**. The W3C reference package `xml-to-json.xsl` (package `http://www.w3.org/2013/XSLT/xml-to-json`) calls its package-private `j:escape(.)` from template-rule `xsl:sequence/@select` attributes, while the using driver rebinds `xmlns:j` to the `fn` namespace. The engine compiled that select with `XPath31Expression.Compile(select)` **without the instruction's in-scope namespaces**, so the package's `j` prefix silently resolved against the default fn namespace. Fix (TransformEngine 6.82): the `xsl:sequence/@select` handler now compiles via `CompileXPath(select, instruction)`, which resolves prefixes against the element that lexically contains the select — exactly the XSLT namespace-scoping rule for used packages. Clears xml-to-json-B2-005/006/010/014. Gates: full XSLT sweep **10,220/55/4,325** (+4/−4, skips unchanged, per-set fail diff exactly the four targets, zero sets worse), QT3 **31,142/0/679** unchanged, unit 2,479/0/0 across all projects (Xslt.Tests 522, LanguageServer 72), build 0/0.
@@ -1832,7 +1833,7 @@ var executable = compiler.Compile(xsl);   // xsl:import-schema declarations are 
                                           // into one merged XmlSchemaSet
 ```
 
-Declarations may use an inline `xs:schema` child, a `schema-location` (resolved against the module's base URI), the resolver, or a namespace already present in the host `SchemaSet`. Declarations merge across the import tree by import precedence (same-precedence conflicts → XTSE0215; unlocatable/invalid schemas → XTSE0220). The merged set is in scope during the transform: user-defined simple-type constructor functions (`Q{uri}local#1`), `cast as` / `instance of` against user-defined types, and `schema-element()` / `schema-attribute()` kind tests work as they do for XQuery `import schema`. Runtime validation of constructed content (`validation` / `@type` semantics) is not yet enforced; typed construction of complex-typed nodes is possible via the interception hooks in §3.1b.
+Declarations may use an inline `xs:schema` child, a `schema-location` (resolved against the module's base URI), the resolver, or a namespace already present in the host `SchemaSet`. Declarations merge across the import tree by import precedence (same-precedence conflicts → XTSE0215; unlocatable/invalid schemas → XTSE0220). The merged set is in scope during the transform: user-defined simple-type constructor functions (`Q{uri}local#1`), `cast as` / `instance of` against user-defined types, and `schema-element()` / `schema-attribute()` kind tests work as they do for XQuery `import schema`. Runtime validation of constructed content (`validation` / `@type` semantics, XTTE15xx) is enforced when a schema set is in scope — see §3.1c; typed construction of complex-typed nodes via interception hooks is §3.1b.
 
 #### 3.1b Intercepting Constructed Nodes (Schema Annotation Seam)
 
@@ -1879,6 +1880,44 @@ Notes:
 - The processors observe the node as the engine sees it (`XDocumentNode` wrapper over the
   live `XObject`); mutating annotations on that object is the intended use.
 - An empty result produces no calls at all.
+
+#### 3.1c Schema-Aware Validation of Constructed Content (REQ-099)
+
+When a stylesheet is compiled schema-aware (§3.1a) and a schema set is in scope, the
+engine applies XSLT 3.0 validation semantics to constructed content automatically:
+`validation="strict|lax|preserve|strip"` and `type="QName"` on `xsl:element`,
+`xsl:attribute`, `xsl:copy`, `xsl:document`, `xsl:result-document`, and literal result
+elements (`xsl:validation` / `xsl:type`), with stylesheet-level `default-validation`
+inherited per module. Failures raise the XTTE15xx family as catchable dynamic errors
+(`xsl:try`/`xsl:catch`): XTTE1510 (strict content invalid), XTTE1512 (strict, no
+top-level element declaration), XTTE1515 (attribute invalid), XTTE1535 (complex type
+named for an attribute), XTTE1540 (lax or `type=` failure), XTTE1545 (QName/NOTATION
+content), XTTE1550 (document shape), XTTE1555 (parentless attribute).
+
+With `SchemaAware=false` (or no schema set in scope) none of this runs: `strict`/`type`
+still raise XTSE1660 at compile time, and `lax`/`preserve`/`strip` keep their basic-processor
+errata behavior — bit-identical to previous releases.
+
+Related declarations now honored: `xsl:strip-type-annotations` (PSVI removed from copied
+nodes), `input-type-annotations="strip"` (PSVI removed from loaded input documents), and
+PSVI annotations are preserved across `xsl:copy`/`xsl:copy-of` (`validation="preserve"`
+and nilled properties survive).
+
+The validation primitives are also public for host-side use
+(`Bosak.XPath.Providers.Xml`):
+
+```csharp
+var result = XdmSchemaAnnotator.Validate(element, schemas,
+    new XdmValidationOptions(XdmValidationMode.Strict, DocumentLevel: true));
+// or, for an attribute / a named type target:
+var attrResult = XdmSchemaAnnotator.ValidateAttribute(attribute, schemas,
+    new XdmValidationOptions(XdmValidationMode.Lax, TypeName: new XmlQualifiedName("size", "urn:t")));
+```
+
+`XdmValidationMode` = `Strict | Lax | Strip | Preserve`; `XdmValidationOptions` =
+`(Mode, TypeName?, DocumentLevel)`. The service is error-code-agnostic — it returns
+`XdmSubtreeValidationResult` (`IsValid`, `Errors`) and never raises XSLT/XQuery codes
+itself; hosts map failures to their own error family.
 
 ### 3.2 Transform a Document
 

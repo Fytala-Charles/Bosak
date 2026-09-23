@@ -15,6 +15,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 6.86  | 22-09-2026     | REQ-098 seam H3: consult ConstructedElement/DocumentProcessor at construction finalize   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.87  | 23-09-2026     | REQ-099 seam H4: validation/[xsl:]type runtime semantics at node-construction sites,     |
+//                      |                  |       |                | PSVI preserved across copies, result-document finalize gap closed,                       |
+//                      |                  |       |                | input-type-annotations="strip" applied to loaded documents                               |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -379,7 +383,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -773,6 +779,14 @@ internal sealed class TransformEngine
         // Build the effective namespace-alias map (source URI -> definition)
         _namespaceAliases = _stylesheet.GetEffectiveNamespaceAliases();
 
+        // Precompute whether any module declares [xsl:]default-validation so the per-element
+        // ancestors walk is skipped in the common case (REQ-099 seam H4).
+        _anyDefaultValidationDeclared = ScanForDefaultValidation(_stylesheet);
+
+        // The effective xsl:stylesheet/@input-type-annotations across all modules (REQ-099
+        // seam H4): "strip" removes PSVI from loaded input documents.
+        _effectiveInputTypeAnnotations = _stylesheet.EffectiveInputTypeAnnotations;
+
         // Register decimal-format declarations from the stylesheet
         RegisterDecimalFormats();
 
@@ -979,6 +993,8 @@ internal sealed class TransformEngine
         {
             var stripTarget = source.Document ?? source;
             ApplyWhitespaceStripping(stripTarget);
+            // REQ-099 seam H4: input-type-annotations="strip" removes PSVI from the input tree.
+            ApplyInputTypeAnnotations(stripTarget);
             // If the selected source node was a whitespace text node that has been
             // stripped from the tree, the initial context item is absent (XSLT 3.0 §5.4).
             if (!IsNodeAttached(source))
@@ -1340,11 +1356,15 @@ internal sealed class TransformEngine
             if (rdProps != null)
                 doc.AddAnnotation(rdProps);
             resultValue = XdmValue.FromNode(XDocumentNode.Wrap(doc));
+            // REQ-099 seam H4: default-validation on the principal module applies to the
+            // implicit final result tree (strip by default when a schema set is in scope).
+            ApplyImplicitResultTreeValidation(doc);
             FinalizeResultDocument(doc);
         }
         else
         {
             resultValue = XdmValue.FromNode(XDocumentNode.Wrap(_resultDocument));
+            ApplyImplicitResultTreeValidation(_resultDocument);
             FinalizeResultDocument(_resultDocument);
         }
 
@@ -1372,6 +1392,539 @@ internal sealed class TransformEngine
     {
         _context.ConstructedDocumentProcessor?.Invoke(XDocumentNode.Wrap(documentNode));
     }
+
+    // ------------------------------------------------------------------
+    // Schema-aware validation of constructed nodes (REQ-099 seam H4)
+    //
+    // The wiring is active only when schema information is in scope (the compiled
+    // xsl:import-schema set merged into the evaluation context, or a host-supplied
+    // context schema set). With no schema set in scope, validation="lax"/"strip"/"preserve"
+    // keep their basic-processor no-op behavior (bit-identical); validation="strict" and
+    // [xsl:]type are rejected at load time by the XTSE1660 gate on basic processors, and a
+    // surviving [xsl:]type still resolves the built-in types against an empty schema set.
+    // ------------------------------------------------------------------
+
+    // Used when [xsl:]type names a built-in XML Schema type and no user schema is in scope:
+    // .NET validity assessment intrinsically knows the built-in types. The xml:id declaration
+    // mirrors VmEngine's built-in set so xml:id attributes validate as xs:ID.
+    private static readonly XmlSchemaSet s_builtInOnlySchemaSet = CreateBuiltInOnlySchemaSet();
+
+    private static XmlSchemaSet CreateBuiltInOnlySchemaSet()
+    {
+        var set = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        const string XmlIdSchema = """
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                       targetNamespace="http://www.w3.org/XML/1998/namespace">
+              <xs:attribute name="id" type="xs:ID"/>
+            </xs:schema>
+            """;
+        using (var reader = XmlReader.Create(new StringReader(XmlIdSchema)))
+        {
+            set.Add(null, reader);
+        }
+        set.Compile();
+        return set;
+    }
+
+    /// <summary>
+    /// Reads the effective <c>validation</c>/<c>[xsl:]type</c> directives for a node
+    /// construction instruction (xsl:element, xsl:attribute, xsl:copy, xsl:copy-of,
+    /// xsl:document, xsl:result-document, or a literal result element carrying
+    /// xsl:validation/xsl:type). Returns <c>null</c> when no validation action is in play:
+    /// no directive anywhere (and no default-validation), or no schema information in scope
+    /// (basic-processor no-op errata behavior). The effective validation defaults to the
+    /// innermost <c>[xsl:]default-validation</c> and ultimately to <c>strip</c> (XSLT 3.0
+    /// §25.4.1.1).
+    /// </summary>
+    /// <param name="instruction">The instruction element (its own validation/type attributes are read).</param>
+    /// <param name="isLiteralResultElement">True for literal result elements (xsl:-prefixed attributes).</param>
+    private (XdmValidationMode Mode, XmlQualifiedName? TypeName)? GetConstructionValidation(
+        XElement instruction, bool isLiteralResultElement)
+    {
+        string? validationRaw;
+        string? typeRaw;
+        if (isLiteralResultElement)
+        {
+            validationRaw = instruction.Attribute(XName.Get("validation", Stylesheet.Stylesheet.XslNamespace))?.Value;
+            typeRaw = instruction.Attribute(XName.Get("type", Stylesheet.Stylesheet.XslNamespace))?.Value;
+        }
+        else
+        {
+            validationRaw = instruction.Attribute("validation")?.Value;
+            typeRaw = instruction.Attribute("type")?.Value;
+        }
+
+        if (validationRaw != null && typeRaw != null)
+        {
+            throw new InvalidOperationException(
+                $"XTSE1505: The validation and type attributes are mutually exclusive (on {instruction.Name.LocalName}).");
+        }
+
+        XmlQualifiedName? typeName = null;
+        if (typeRaw != null)
+            typeName = ResolveConstructionTypeName(instruction, typeRaw);
+
+        var validation = validationRaw?.Trim();
+        if (validation == null && typeName == null)
+        {
+            // The effective validation defaults to the innermost [xsl:]default-validation,
+            // and ultimately to "strip" (XSLT 3.0 §25.4.1.1) — strip matters when copied
+            // content carries PSVI annotations into a freshly constructed parent.
+            validation = GetDefaultValidation(instruction) ?? "strip";
+        }
+
+        // Without schema information in scope, declaration-driven validation cannot run:
+        // strip/preserve/lax (and even invalid values) keep their basic-processor no-op
+        // behavior — bit-identical to a processor that never reads the attributes. A named
+        // type still validates: the built-in XML Schema types are always in scope
+        // (error-1540a shape).
+        if (_context.SchemaSet == null && typeName == null)
+            return null;
+
+        var mode = validation switch
+        {
+            null => (XdmValidationMode?)null,
+            "strict" => XdmValidationMode.Strict,
+            "lax" => XdmValidationMode.Lax,
+            "strip" => XdmValidationMode.Strip,
+            "preserve" => XdmValidationMode.Preserve,
+            _ => throw new InvalidOperationException($"XTSE0020: Invalid validation attribute value '{validation}'."),
+        };
+
+        return (mode ?? XdmValidationMode.Strict, typeName);
+    }
+
+    /// <summary>
+    /// Resolves a [xsl:]type EQName against the static namespace context of the instruction;
+    /// an unprefixed name expands using the default namespace for elements and types
+    /// (xpath-default-namespace). An undefined prefix is XTSE1520.
+    /// </summary>
+    private static XmlQualifiedName ResolveConstructionTypeName(XElement instruction, string typeRaw)
+    {
+        var trimmed = typeRaw.Trim();
+        if (trimmed.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var closeBrace = trimmed.IndexOf('}');
+            if (closeBrace >= 2)
+                return new XmlQualifiedName(trimmed[(closeBrace + 1)..], trimmed[2..closeBrace]);
+        }
+
+        var colon = trimmed.IndexOf(':');
+        if (colon >= 0)
+        {
+            var prefix = trimmed[..colon];
+            var nsUri = prefix == "xml"
+                ? "http://www.w3.org/XML/1998/namespace"
+                : instruction.GetNamespaceOfPrefix(prefix)?.NamespaceName;
+            if (string.IsNullOrEmpty(nsUri))
+                throw new InvalidOperationException(
+                    $"XTSE1520: The prefix '{prefix}' in the type attribute value '{typeRaw}' is not defined in the in-scope namespace declarations.");
+            return new XmlQualifiedName(trimmed[(colon + 1)..], nsUri);
+        }
+
+        return new XmlQualifiedName(trimmed, GetXPathDefaultNamespace(instruction) ?? string.Empty);
+    }
+
+    /// <summary>
+    /// Returns the innermost <c>[xsl:]default-validation</c> value in scope on the supplied
+    /// instruction by walking the ancestor chain to the module root (the default does not
+    /// extend to included or imported modules — the walk never leaves the module tree), or
+    /// <c>null</c> when no element declares it (the spec default is <c>strip</c>).
+    /// </summary>
+    private string? GetDefaultValidation(XElement instruction)
+    {
+        if (!_anyDefaultValidationDeclared)
+            return null;
+
+        for (var current = instruction; current != null; current = current.Parent)
+        {
+            var value = current.Attribute(XName.Get("default-validation", Stylesheet.Stylesheet.XslNamespace))?.Value;
+            if (value == null
+                && current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                && current.Name.LocalName is "stylesheet" or "transform" or "package")
+            {
+                value = current.Attribute("default-validation")?.Value;
+            }
+            if (value != null)
+                return value.Trim();
+        }
+        return null;
+    }
+
+    // True when any module of the stylesheet declares [xsl:]default-validation; precomputed
+    // in the constructor so the ancestors walk is skipped entirely in the common case.
+    private readonly bool _anyDefaultValidationDeclared;
+
+    // The effective xsl:stylesheet/@input-type-annotations value ("strip"/"preserve"/null),
+    // computed in the constructor from all modules (XTSE0265 guarantees agreement).
+    private readonly string? _effectiveInputTypeAnnotations;
+
+    // > 0 while an xsl:attribute executes in a context that produces a free-standing
+    // attribute item (e.g. an xsl:function body returning attribute()); validation failures
+    // then surface as XTTE1555 (REQ-099 seam H4).
+    private int _standaloneAttributeDepth;
+
+    /// <summary>
+    /// Applies the stylesheet's effective <c>input-type-annotations</c> value to a source
+    /// tree (XSLT 3.0 §3.13): "strip" removes all PSVI annotations, leaving every element
+    /// <c>xs:untyped</c> and every attribute <c>xs:untypedAtomic</c>. No-op for
+    /// "preserve"/"unspecified" and for trees that carry no schema information.
+    /// </summary>
+    private void ApplyInputTypeAnnotations(IXdmNode node)
+    {
+        if (_effectiveInputTypeAnnotations != "strip")
+            return;
+        if (node is XDocumentNode xdn)
+            XdmSchemaAnnotator.StripSchemaAnnotations(xdn.UnderlyingObject);
+    }
+
+    private static bool ScanForDefaultValidation(Stylesheet.Stylesheet stylesheet, HashSet<Stylesheet.Stylesheet>? visited = null)
+    {
+        visited ??= new HashSet<Stylesheet.Stylesheet>();
+        if (!visited.Add(stylesheet))
+            return false;
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+        if (stylesheet.Root.DescendantsAndSelf().Any(e =>
+                e.Attribute("default-validation") != null || e.Attribute(XName.Get("default-validation", xslNs)) != null))
+            return true;
+        return stylesheet.Imports.Any(i => ScanForDefaultValidation(i, visited))
+               || stylesheet.Includes.Any(i => ScanForDefaultValidation(i, visited));
+    }
+
+    /// <summary>
+    /// Applies the XSLT validation semantics to a freshly constructed element (xsl:element,
+    /// xsl:copy, literal result element): the element is validated, stripped, or left with
+    /// its annotations preserved according to the effective directives, and PSVI annotations
+    /// attach to the live result tree.
+    /// </summary>
+    private void ApplyConstructedElementValidation(XElement element, XElement instruction, bool isLiteralResultElement)
+    {
+        if (GetConstructionValidation(instruction, isLiteralResultElement) is not { } directives)
+            return;
+        ValidateConstructedElement(element, directives.Mode, directives.TypeName);
+    }
+
+    /// <summary>
+    /// Validates a constructed (or copied) element with the requested directives, raising the
+    /// element-level XTTE1510/1512/1515/1540 error family on failure.
+    /// </summary>
+    private void ValidateConstructedElement(XElement element, XdmValidationMode mode, XmlQualifiedName? typeName)
+    {
+        var schemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
+
+        if (typeName is { } qn)
+        {
+            // xs:untyped acts as strip; xs:untypedAtomic validates as string content.
+            // Both are handled inside the service (no XSD counterpart exists for xs:untyped).
+            if (XdmSchemaAnnotator.ResolveSchemaType(schemas, qn) is null
+                && !(qn.Namespace == "http://www.w3.org/2001/XMLSchema" && qn.Name == "untyped"))
+            {
+                throw new XsltRuntimeException("XTSE1520",
+                    $"The type '{FormatQName(qn)}' is not the name of a type definition in the in-scope schema definitions.",
+                    XdmValue.Undefined);
+            }
+            var typeResult = XdmSchemaAnnotator.Validate(element, schemas,
+                new XdmValidationOptions(XdmValidationMode.Strict, qn));
+            if (!typeResult.IsValid)
+            {
+                throw new XsltRuntimeException("XTTE1540",
+                    $"The element '{element.Name.LocalName}' is not valid against type '{FormatQName(qn)}': {typeResult.FailureMessage}",
+                    XdmValue.Undefined);
+            }
+            return;
+        }
+
+        switch (mode)
+        {
+            case XdmValidationMode.Strict:
+                if (schemas.GlobalElements[new XmlQualifiedName(element.Name.LocalName, element.Name.NamespaceName)] is null)
+                {
+                    throw new XsltRuntimeException("XTTE1512",
+                        $"There is no top-level element declaration for '{element.Name.LocalName}' in the in-scope schema definitions.",
+                        XdmValue.Undefined);
+                }
+                var strictResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Strict));
+                if (!strictResult.IsValid)
+                {
+                    throw new XsltRuntimeException("XTTE1510",
+                        $"The element '{element.Name.LocalName}' is not valid against its governing element declaration: {strictResult.FailureMessage}",
+                        XdmValue.Undefined);
+                }
+                break;
+            case XdmValidationMode.Lax:
+                var laxResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Lax));
+                if (!laxResult.IsValid)
+                {
+                    throw new XsltRuntimeException("XTTE1515",
+                        $"Lax validation of the element '{element.Name.LocalName}' failed: {laxResult.FailureMessage}",
+                        XdmValue.Undefined);
+                }
+                break;
+            case XdmValidationMode.Strip:
+                XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Strip));
+                break;
+            case XdmValidationMode.Preserve:
+                // Copied nodes keep their annotations; newly constructed nodes are unannotated
+                // (xs:anyType / xs:untypedAtomic) already.
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Validates a constructed attribute value against the instruction's
+    /// validation/[xsl:]type directives and returns the (possibly annotated) attribute to
+    /// attach. Returns <c>null</c> when no validation action is in play.
+    /// </summary>
+    private XAttribute? ValidateConstructedAttribute(XName name, string value, XElement instruction,
+        string complexTypeErrorCode, bool standalone)
+    {
+        if (GetConstructionValidation(instruction, isLiteralResultElement: false) is not { } directives)
+            return null;
+
+        var attribute = new XAttribute(name, value);
+        ApplyAttributeValidationDirectives(attribute, directives.Mode, directives.TypeName, complexTypeErrorCode, standalone);
+        return attribute;
+    }
+
+    /// <summary>
+    /// Executes already-resolved validation directives on a constructed attribute node,
+    /// annotating it in place. <paramref name="complexTypeErrorCode"/> is XTSE1530 for
+    /// xsl:attribute and XTTE1535 for xsl:copy/xsl:copy-of (a complex type named for an
+    /// attribute); <paramref name="standalone"/> selects XTTE1555 for validation failures of
+    /// a parentless attribute (validation-0006 shape).
+    /// </summary>
+    private void ApplyAttributeValidationDirectives(XAttribute attribute, XdmValidationMode mode, XmlQualifiedName? typeName,
+        string complexTypeErrorCode, bool standalone)
+    {
+        var schemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
+
+        if (typeName is { } qn)
+        {
+            var namedType = XdmSchemaAnnotator.ResolveSchemaType(schemas, qn)
+                ?? throw new XsltRuntimeException("XTSE1520",
+                    $"The type '{FormatQName(qn)}' is not the name of a type definition in the in-scope schema definitions.",
+                    XdmValue.Undefined);
+            if (namedType is XmlSchemaComplexType)
+            {
+                throw new XsltRuntimeException(complexTypeErrorCode,
+                    $"The type '{FormatQName(qn)}' is a complex type and cannot be used to validate an attribute.",
+                    XdmValue.Undefined);
+            }
+            if (XdmSchemaAnnotator.IsQNameOrNotationDerived(namedType))
+            {
+                throw new XsltRuntimeException("XTTE1545",
+                    $"The attribute '{attribute.Name.LocalName}' cannot be validated against '{FormatQName(qn)}': types derived from xs:QName or xs:NOTATION cannot be used for constructed attributes.",
+                    XdmValue.Undefined);
+            }
+            var typeResult = XdmSchemaAnnotator.ValidateAttribute(attribute, schemas,
+                new XdmValidationOptions(XdmValidationMode.Strict, qn));
+            if (!typeResult.IsValid)
+            {
+                throw new XsltRuntimeException(standalone ? "XTTE1555" : "XTTE1540",
+                    $"The attribute '{attribute.Name.LocalName}' is not valid against type '{FormatQName(qn)}': {typeResult.FailureMessage}",
+                    XdmValue.Undefined);
+            }
+            return;
+        }
+
+        switch (mode)
+        {
+            case XdmValidationMode.Strict:
+            case XdmValidationMode.Lax:
+                var declaration = schemas.GlobalAttributes[
+                    new XmlQualifiedName(attribute.Name.LocalName, attribute.Name.NamespaceName)] as XmlSchemaAttribute;
+                if (declaration?.AttributeSchemaType is { } declaredType
+                    && XdmSchemaAnnotator.IsQNameOrNotationDerived(declaredType))
+                {
+                    throw new XsltRuntimeException("XTTE1545",
+                        $"The attribute '{attribute.Name.LocalName}' cannot be validated: its governing declaration uses a type derived from xs:QName or xs:NOTATION.",
+                        XdmValue.Undefined);
+                }
+                if (mode == XdmValidationMode.Strict && declaration is null)
+                {
+                    throw new XsltRuntimeException("XTTE1512",
+                        $"There is no top-level attribute declaration for '{attribute.Name.LocalName}' in the in-scope schema definitions.",
+                        XdmValue.Undefined);
+                }
+                var result = XdmSchemaAnnotator.ValidateAttribute(attribute, schemas, new XdmValidationOptions(mode));
+                if (!result.IsValid)
+                {
+                    var code = standalone ? "XTTE1555"
+                        : mode == XdmValidationMode.Strict ? "XTTE1510" : "XTTE1515";
+                    throw new XsltRuntimeException(code,
+                        $"The attribute '{attribute.Name.LocalName}' is not valid: {result.FailureMessage}",
+                        XdmValue.Undefined);
+                }
+                break;
+            case XdmValidationMode.Strip:
+                XdmSchemaAnnotator.ValidateAttribute(attribute, schemas, new XdmValidationOptions(XdmValidationMode.Strip));
+                break;
+            case XdmValidationMode.Preserve:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Carries the PSVI annotation of a source attribute (if any) onto a copied attribute,
+    /// so validation="preserve" and the is-id/nilled properties survive copies (REQ-099 seam
+    /// H4). Null-conditional: bit-identical when the source carries no schema information.
+    /// </summary>
+    private static void CopyAttributeSchemaInfo(IXdmNode sourceAttribute, XAttribute target)
+    {
+        if (sourceAttribute is XDocumentNode { UnderlyingObject: XAttribute sourceAttr }
+            && sourceAttr.GetSchemaInfo() is { } info)
+        {
+            target.RemoveAnnotations(typeof(IXmlSchemaInfo));
+            target.AddAnnotation(info);
+        }
+    }
+
+    /// <summary>
+    /// Applies document-node validation semantics (XSLT 3.0 §25.4.2) to a constructed result
+    /// document: the content must comprise exactly one element node and no text nodes
+    /// (XTTE1550), and the single element child is validated with the requested directives.
+    /// <paramref name="documentLike"/> is the document container as the engine built it: a
+    /// real <see cref="XDocument"/>, or a synthetic wrapper element holding the content.
+    /// </summary>
+    private void ApplyConstructedDocumentValidation(XObject documentLike, XElement? instruction)
+    {
+        var contextElement = instruction ?? _stylesheet.Root;
+        if (GetConstructionValidation(contextElement, isLiteralResultElement: false) is not { } directives)
+            return;
+        ApplyDocumentValidationDirectives(documentLike, directives.Mode, directives.TypeName);
+    }
+
+    /// <summary>
+    /// Executes already-resolved validation directives on document content: shape check
+    /// (XTTE1550), then element-level validation of the single root child.
+    /// </summary>
+    private void ApplyDocumentValidationDirectives(XObject documentLike, XdmValidationMode mode, XmlQualifiedName? typeName)
+    {
+        // Determine the document-content container. A real XDocument wraps the synthetic
+        // __xdm_doc__ element when the content is not a single element; otherwise its root is
+        // the content element itself.
+        XElement? contentContainer = null;
+        XElement? singleRoot = null;
+        switch (documentLike)
+        {
+            case XDocument doc when doc.Root is { } root && root.Name.LocalName == "__xdm_doc__" && root.Name.NamespaceName.Length == 0:
+                contentContainer = root;
+                break;
+            case XDocument doc:
+                singleRoot = doc.Root;
+                break;
+            case XElement wrapper:
+                contentContainer = wrapper;
+                break;
+        }
+
+        if (contentContainer is not null)
+        {
+            var elementChildren = 0;
+            XElement? rootChild = null;
+            var hasText = false;
+            foreach (var node in contentContainer.Nodes())
+            {
+                switch (node)
+                {
+                    case XElement child:
+                        elementChildren++;
+                        rootChild = child;
+                        break;
+                    case XText text when !string.IsNullOrWhiteSpace(text.Value):
+                        hasText = true;
+                        break;
+                }
+            }
+            if (elementChildren != 1 || hasText || rootChild is null)
+            {
+                throw new XsltRuntimeException("XTTE1550",
+                    "A document node that is validated must contain exactly one element node child and no text node children.",
+                    XdmValue.Undefined);
+            }
+            singleRoot = rootChild;
+        }
+
+        if (singleRoot is null)
+        {
+            throw new XsltRuntimeException("XTTE1550",
+                "A document node that is validated must contain exactly one element node child and no text node children.",
+                XdmValue.Undefined);
+        }
+
+        if (mode == XdmValidationMode.Strip)
+        {
+            XdmSchemaAnnotator.Validate(singleRoot, _context.SchemaSet ?? s_builtInOnlySchemaSet,
+                new XdmValidationOptions(XdmValidationMode.Strip));
+            return;
+        }
+        if (mode == XdmValidationMode.Preserve)
+            return;
+
+        ValidateConstructedElement(singleRoot, mode, typeName);
+    }
+
+    /// <summary>
+    /// Applies the validation directives of an xsl:copy-of (or the copy phase of other
+    /// instructions) to a freshly copied node: elements and documents are validated or
+    /// stripped; attributes are validated standalone (a copied attribute is parentless, so
+    /// failures surface as XTTE1555, and a complex type named for an attribute is XTTE1535).
+    /// Directives are ignored for other node kinds (validation-0208).
+    /// </summary>
+    private void ApplyCopiedNodeValidation(IXdmNode copied, XdmValidationMode mode, XmlQualifiedName? typeName)
+    {
+        if (copied is not XDocumentNode xdn)
+            return;
+        switch (copied.NodeKind)
+        {
+            case XdmNodeKind.Element when xdn.UnderlyingObject is XElement element:
+                ValidateConstructedElement(element, mode, typeName);
+                break;
+            case XdmNodeKind.Attribute when xdn.UnderlyingObject is XAttribute attribute:
+                ApplyAttributeValidationDirectives(attribute, mode, typeName, "XTTE1535", standalone: true);
+                break;
+            case XdmNodeKind.Document when xdn.UnderlyingObject is XDocument document:
+                ApplyDocumentValidationDirectives(document, mode, typeName);
+                break;
+        }
+    }
+
+    private static string FormatQName(XmlQualifiedName qn)
+        => string.IsNullOrEmpty(qn.Namespace) ? qn.Name : $"Q{{{qn.Namespace}}}{qn.Name}";
+
+    /// <summary>
+    /// Applies the principal module's <c>default-validation</c> to the implicit final result
+    /// tree (XSLT 3.0 §25.4.1.1: the outermost element's default-validation determines the
+    /// validation of the implicit result tree, i.e. one created in the absence of an
+    /// xsl:result-document instruction). Active only when a schema set is in scope;
+    /// bit-identical otherwise. "preserve" keeps the annotations produced by
+    /// instruction-level validation; "strip" (the default) removes them.
+    /// </summary>
+    private void ApplyImplicitResultTreeValidation(XObject resultTree)
+    {
+        if (_context.SchemaSet == null)
+            return;
+        // An explicit principal xsl:result-document was already validated with its own
+        // directives; the implicit-tree rule applies only in its absence.
+        if (_principalResultDocumentProperties != null)
+            return;
+        switch (GetDefaultValidation(_stylesheet.Root) ?? "strip")
+        {
+            case "strip":
+                XdmSchemaAnnotator.StripSchemaAnnotations(resultTree);
+                break;
+            case "strict":
+                // Bosak extension beyond the spec's preserve|strip values.
+                ApplyDocumentValidationDirectives(resultTree, XdmValidationMode.Strict, null);
+                break;
+            case "lax":
+                ApplyDocumentValidationDirectives(resultTree, XdmValidationMode.Lax, null);
+                break;
+            default:
+                break; // preserve: nothing to do
+        }
+    }
+
 
     /// <summary>
     /// Extracts the raw top-level items from the implicit result tree for
@@ -4055,13 +4608,24 @@ internal sealed class TransformEngine
                             var fnCopyAccumulatorsAttrRaw = instruction.Attribute("copy-accumulators")?.Value ?? "no";
                             var fnCopyAccumulatorsAttr = EvaluateAvt(fnCopyAccumulatorsAttrRaw, instruction);
                             bool fnCopyAccumulators = fnCopyAccumulatorsAttr == "yes" || fnCopyAccumulatorsAttr == "true";
+                            // REQ-099 seam H4: validation/[xsl:]type applies in this
+                            // item-collecting path too (e.g. xsl:variable as="document-node()"
+                            // with xsl:copy-of validation="strict"; validation-1202 shape).
+                            var fnCopyOfDirectives = GetConstructionValidation(instruction, isLiteralResultElement: false);
+                            IXdmNode FnCopyAndValidate(IXdmNode sourceNode)
+                            {
+                                var copiedNode = CopyXdmNode(sourceNode, fnCopyAllNs, fnCopyAccumulators);
+                                if (fnCopyOfDirectives is { } directives)
+                                    ApplyCopiedNodeValidation(copiedNode, directives.Mode, directives.TypeName);
+                                return copiedNode;
+                            }
                             if (result.IsSequence && result.SequenceValue != null)
                             {
                                 foreach (var item in XdmSequence.FromSource(result.SequenceValue))
                                 {
                                     if (item.IsNode && item.NodeValue != null)
                                     {
-                                        results.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, fnCopyAllNs, fnCopyAccumulators)));
+                                        results.Add(XdmValue.FromNode(FnCopyAndValidate(item.NodeValue)));
                                     }
                                     else
                                     {
@@ -4071,7 +4635,7 @@ internal sealed class TransformEngine
                             }
                             else if (result.IsNode && result.NodeValue != null)
                             {
-                                results.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, fnCopyAllNs, fnCopyAccumulators)));
+                                results.Add(XdmValue.FromNode(FnCopyAndValidate(result.NodeValue)));
                             }
                             else
                             {
@@ -4248,19 +4812,27 @@ internal sealed class TransformEngine
                         var temp = new XElement("__temp__");
                         _currentContainer = temp;
                         _lastAddedWasAtomic = false;
+                        // REQ-099 seam H4: the attribute produced here is a free-standing
+                        // sequence item (parentless) — validation failures are XTTE1555.
+                        _standaloneAttributeDepth++;
                         try
                         {
                             ExecuteXsltInstruction(instruction, contextItem);
                         }
                         finally
                         {
+                            _standaloneAttributeDepth--;
                             _currentContainer = savedContainer;
                             _lastAddedWasAtomic = savedLastAtomic;
                         }
                         var createdAttr = temp.Attributes().FirstOrDefault();
                         if (createdAttr != null)
                         {
-                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(createdAttr.Name, createdAttr.Value))));
+                            var detachedAttr = new XAttribute(createdAttr.Name, createdAttr.Value);
+                            // Carry any validation PSVI onto the detached attribute item.
+                            if (createdAttr.GetSchemaInfo() is { } createdAttrInfo)
+                                detachedAttr.AddAnnotation(createdAttrInfo);
+                            results.Add(XdmValue.FromNode(XDocumentNode.Wrap(detachedAttr)));
                         }
                         break;
                     }
@@ -5917,6 +6489,9 @@ internal sealed class TransformEngine
                             }
                         }
                         NormalizeElementContent(elem);
+                        // REQ-099 seam H4: apply validation/@type semantics to the constructed
+                        // element (null-conditional when no schema set is in scope).
+                        ApplyConstructedElementValidation(elem, instruction, isLiteralResultElement: false);
                         FinalizeConstructedElement(elem);
                     }
                     finally
@@ -5965,9 +6540,13 @@ internal sealed class TransformEngine
                     // a top-level xsl:attribute produces a free-standing attribute node.
                     if (IsRawCollectionTopLevel)
                     {
+                        var standaloneAttrName = XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri);
+                        // REQ-099 seam H4: a parentless attribute is validated standalone;
+                        // failures surface as XTTE1555.
+                        var validatedStandalone = ValidateConstructedAttribute(standaloneAttrName, value, instruction,
+                            complexTypeErrorCode: "XTSE1530", standalone: true);
                         var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
-                        rawList.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(
-                            XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri), value))));
+                        rawList.Add(XdmValue.FromNode(XDocumentNode.Wrap(validatedStandalone ?? new XAttribute(standaloneAttrName, value))));
                         break;
                     }
 
@@ -6016,7 +6595,19 @@ internal sealed class TransformEngine
 
                     if (attrTarget.Nodes().Any())
                         throw new InvalidOperationException("XTDE0410");
-                    Xml11Attribute.SetValue(attrTarget, XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri), value);
+                    var attrXName = XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri);
+                    // REQ-099 seam H4: validate the constructed attribute when validation/type
+                    // directives apply (null when no schema set is in scope). In a context that
+                    // produces a free-standing attribute item, failures surface as XTTE1555.
+                    var validatedAttr = ValidateConstructedAttribute(attrXName, value, instruction,
+                        complexTypeErrorCode: "XTSE1530", standalone: _standaloneAttributeDepth > 0);
+                    Xml11Attribute.SetValue(attrTarget, attrXName, value);
+                    if (validatedAttr?.GetSchemaInfo() is { } attrSchemaInfo)
+                    {
+                        var attachedAttr = attrTarget.Attribute(attrXName);
+                        attachedAttr?.RemoveAnnotations(typeof(IXmlSchemaInfo));
+                        attachedAttr?.AddAnnotation(attrSchemaInfo);
+                    }
                     break;
                 }
 
@@ -6906,6 +7497,10 @@ internal sealed class TransformEngine
                     var docContent = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: true);
                     if (docContent.IsNode && docContent.NodeValue != null)
                     {
+                        // REQ-099 seam H4: xsl:document validation/@type applies to the
+                        // constructed document content (XSLT 3.0 §25.4.2).
+                        if (docContent.NodeValue is XDocumentNode { UnderlyingObject: XObject docObject })
+                            ApplyConstructedDocumentValidation(docObject, instruction);
                         if (_sequenceAccumulator != null)
                         {
                             _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(docContent.NodeValue, copyAllNamespaces: true)));
@@ -7033,6 +7628,17 @@ internal sealed class TransformEngine
                         var copyAccumulatorsAttr = EvaluateAvt(copyAccumulatorsAttrRaw, instruction);
                         bool copyAccumulators = copyAccumulatorsAttr == "yes" || copyAccumulatorsAttr == "true";
 
+                        // REQ-099 seam H4: validation/[xsl:]type on xsl:copy-of applies to each
+                        // copied node (validation-1202 shape). Null when no schema is in scope.
+                        var copyOfDirectives = GetConstructionValidation(instruction, isLiteralResultElement: false);
+                        IXdmNode CopyAndValidate(IXdmNode sourceNode)
+                        {
+                            var copiedNode = CopyXdmNode(sourceNode, copyAllNs, copyAccumulators);
+                            if (copyOfDirectives is { } directives)
+                                ApplyCopiedNodeValidation(copiedNode, directives.Mode, directives.TypeName);
+                            return copiedNode;
+                        }
+
                         if (_sequenceAccumulator != null)
                         {
                             // In a sequence-returning context (variable with @as),
@@ -7043,7 +7649,7 @@ internal sealed class TransformEngine
                                 {
                                     if (item.IsNode && item.NodeValue != null)
                                     {
-                                        _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(item.NodeValue, copyAllNs, copyAccumulators)));
+                                        _sequenceAccumulator.Add(XdmValue.FromNode(CopyAndValidate(item.NodeValue)));
                                     }
                                     else
                                     {
@@ -7053,7 +7659,7 @@ internal sealed class TransformEngine
                             }
                             else if (result.IsNode && result.NodeValue != null)
                             {
-                                _sequenceAccumulator.Add(XdmValue.FromNode(CopyXdmNode(result.NodeValue, copyAllNs, copyAccumulators)));
+                                _sequenceAccumulator.Add(XdmValue.FromNode(CopyAndValidate(result.NodeValue)));
                             }
                             else
                             {
@@ -7067,14 +7673,14 @@ internal sealed class TransformEngine
                                 foreach (var item in XdmSequence.FromSource(result.SequenceValue))
                                 {
                                     if (item.IsNode && item.NodeValue != null)
-                                        CopyNodeToResult(CopyXdmNode(item.NodeValue, copyAllNs, copyAccumulators));
+                                        CopyNodeToResult(CopyAndValidate(item.NodeValue));
                                     else
                                         CopyToResult(item);
                                 }
                             }
                             else if (result.IsNode && result.NodeValue != null)
                             {
-                                CopyNodeToResult(CopyXdmNode(result.NodeValue, copyAllNs, copyAccumulators));
+                                CopyNodeToResult(CopyAndValidate(result.NodeValue));
                             }
                             else
                             {
@@ -8100,6 +8706,8 @@ internal sealed class TransformEngine
             }
 
             NormalizeElementContent(copy);
+            // REQ-099 seam H4: literal result elements carry xsl:validation/xsl:type.
+            ApplyConstructedElementValidation(copy, source, isLiteralResultElement: true);
             FinalizeConstructedElement(copy);
 
             if (collectAsRawItem)
@@ -8954,10 +9562,18 @@ internal sealed class TransformEngine
                             (attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/" ||
                              (attrNode.LocalName == "xmlns" && attrNode.NamespaceUri.Length == 0)))
                             continue;
-                        Xml11Attribute.SetValue(
-                            copy,
-                            XName.Get(attr.NodeValue!.EncodedLocalName, attr.NodeValue!.NamespaceUri),
-                            attr.NodeValue!.StringValue);
+                        var copyAttrName = XName.Get(attr.NodeValue!.EncodedLocalName, attr.NodeValue!.NamespaceUri);
+                        Xml11Attribute.SetValue(copy, copyAttrName, attr.NodeValue!.StringValue);
+                        // REQ-099 seam H4: carry the PSVI annotation onto the copied attribute
+                        // (no-op when the source carries no schema information).
+                        CopyAttributeSchemaInfo(attr.NodeValue!, copy.Attribute(copyAttrName)!);
+                    }
+                    // REQ-099 seam H4: carry the source element's PSVI annotation onto the copy
+                    // (no-op when the source carries no schema information).
+                    if (node is XDocumentNode copySrcNode && copySrcNode.UnderlyingObject is XElement copySrcElem
+                        && copySrcElem.GetSchemaInfo() is { } elemSchemaInfo)
+                    {
+                        copy.AddAnnotation(elemSchemaInfo);
                     }
                     foreach (var child in node.Axis(XdmAxis.Child))
                     {
@@ -8972,9 +9588,13 @@ internal sealed class TransformEngine
             case XdmNodeKind.ProcessingInstruction:
                 return XDocumentNode.Wrap(new XProcessingInstruction(node.LocalName, node.StringValue));
             case XdmNodeKind.Attribute:
-                return XDocumentNode.Wrap(Xml11Attribute.Create(
-                    XName.Get(node.EncodedLocalName, node.NamespaceUri),
-                    node.StringValue));
+                {
+                    var attrCopy = Xml11Attribute.Create(
+                        XName.Get(node.EncodedLocalName, node.NamespaceUri),
+                        node.StringValue);
+                    CopyAttributeSchemaInfo(node, attrCopy);
+                    return XDocumentNode.Wrap(attrCopy);
+                }
             case XdmNodeKind.Namespace:
                 {
                     var prefix = node.EncodedLocalName;
@@ -9037,6 +9657,8 @@ internal sealed class TransformEngine
                         _sequenceAccumulator = savedAccumulator;
                     }
                     NormalizeElementContent(copy);
+                    // REQ-099 seam H4: validation/@type on xsl:copy applies to the copy.
+                    ApplyConstructedElementValidation(copy, copyInstruction, isLiteralResultElement: false);
                     return XDocumentNode.Wrap(copy);
                 }
             case XdmNodeKind.Text:
@@ -9046,9 +9668,25 @@ internal sealed class TransformEngine
             case XdmNodeKind.ProcessingInstruction:
                 return XDocumentNode.Wrap(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
             case XdmNodeKind.Attribute:
-                return XDocumentNode.Wrap(new XAttribute(
-                    XName.Get(nodeToCopy.EncodedLocalName, nodeToCopy.NamespaceUri),
-                    nodeToCopy.StringValue));
+                {
+                    var attrCopy = new XAttribute(
+                        XName.Get(nodeToCopy.EncodedLocalName, nodeToCopy.NamespaceUri),
+                        nodeToCopy.StringValue);
+                    // REQ-099 seam H4: preserve the source annotation unless validation is
+                    // requested (a copied attribute is parentless: failures are XTTE1555).
+                    var attrDirectives = GetConstructionValidation(copyInstruction, isLiteralResultElement: false);
+                    if (attrDirectives is null
+                        || (attrDirectives.Value.Mode == XdmValidationMode.Preserve && attrDirectives.Value.TypeName is null))
+                    {
+                        CopyAttributeSchemaInfo(nodeToCopy, attrCopy);
+                    }
+                    else
+                    {
+                        ApplyAttributeValidationDirectives(attrCopy, attrDirectives.Value.Mode,
+                            attrDirectives.Value.TypeName, "XTTE1535", standalone: true);
+                    }
+                    return XDocumentNode.Wrap(attrCopy);
+                }
             case XdmNodeKind.Document:
                 {
                     var newDoc = new XDocument();
@@ -9075,6 +9713,9 @@ internal sealed class TransformEngine
                         _currentContainer = savedContainer;
                         _sequenceAccumulator = savedAccumulator;
                     }
+                    // REQ-099 seam H4: validation/@type on xsl:copy applies to the
+                    // constructed document content (XSLT 3.0 §25.4.2).
+                    ApplyConstructedDocumentValidation(newDoc, copyInstruction);
                     return XDocumentNode.Wrap(newDoc);
                 }
             default:
@@ -9191,6 +9832,8 @@ internal sealed class TransformEngine
 
                     _sequenceAccumulator = savedSequenceAccumulator;
                     NormalizeElementContent(copy);
+                    // REQ-099 seam H4: validation/@type on xsl:copy applies to the copy.
+                    ApplyConstructedElementValidation(copy, instruction, isLiteralResultElement: false);
                     FinalizeConstructedElement(copy);
                     _currentContainer = prev;
                     break;
@@ -9212,6 +9855,19 @@ internal sealed class TransformEngine
                         var copiedAttr = new XAttribute(
                             XName.Get(nodeToCopy.EncodedLocalName, attrNs),
                             nodeToCopy.StringValue);
+                        // REQ-099 seam H4: the source annotation survives the copy unless the
+                        // instruction requests validation (or the default strip).
+                        var attrCopyDirectives = GetConstructionValidation(instruction, isLiteralResultElement: false);
+                        if (attrCopyDirectives is null
+                            || (attrCopyDirectives.Value.Mode == XdmValidationMode.Preserve && attrCopyDirectives.Value.TypeName is null))
+                        {
+                            CopyAttributeSchemaInfo(nodeToCopy, copiedAttr);
+                        }
+                        else
+                        {
+                            ApplyAttributeValidationDirectives(copiedAttr, attrCopyDirectives.Value.Mode,
+                                attrCopyDirectives.Value.TypeName, "XTTE1535", standalone: true);
+                        }
                         _sequenceAccumulator.Add(XdmValue.FromNode(XDocumentNode.Wrap(copiedAttr)));
                         break;
                     }
@@ -9223,9 +9879,21 @@ internal sealed class TransformEngine
                     {
                         EnsureNamespaceDeclarationForAttribute(attrTarget, attrNs, nodeToCopy.Prefix);
                     }
-                    attrTarget.SetAttributeValue(
-                        XName.Get(nodeToCopy.EncodedLocalName, attrNs),
-                        nodeToCopy.StringValue);
+                    var copyAttrName = XName.Get(nodeToCopy.EncodedLocalName, attrNs);
+                    attrTarget.SetAttributeValue(copyAttrName, nodeToCopy.StringValue);
+                    // REQ-099 seam H4: the source annotation survives the copy unless the
+                    // instruction requests validation (or the default strip).
+                    var attachedAttrDirectives = GetConstructionValidation(instruction, isLiteralResultElement: false);
+                    if (attachedAttrDirectives is null
+                        || (attachedAttrDirectives.Value.Mode == XdmValidationMode.Preserve && attachedAttrDirectives.Value.TypeName is null))
+                    {
+                        CopyAttributeSchemaInfo(nodeToCopy, attrTarget.Attribute(copyAttrName)!);
+                    }
+                    else if (attrTarget.Attribute(copyAttrName) is { } attachedCopy)
+                    {
+                        ApplyAttributeValidationDirectives(attachedCopy, attachedAttrDirectives.Value.Mode,
+                            attachedAttrDirectives.Value.TypeName, "XTTE1535", standalone: false);
+                    }
                     break;
                 }
             case XdmNodeKind.Comment:
@@ -9285,6 +9953,9 @@ internal sealed class TransformEngine
                             }
                         }
 
+                        // REQ-099 seam H4: validation/@type on xsl:copy applies to the
+                        // constructed document content (XSLT 3.0 §25.4.2).
+                        ApplyConstructedDocumentValidation(newDoc, instruction);
                         _sequenceAccumulator!.Add(XdmValue.FromNode(XDocumentNode.Wrap(newDoc)));
                     }
                     else
@@ -9491,14 +10162,21 @@ internal sealed class TransformEngine
                             (attrNode.NamespaceUri == "http://www.w3.org/2000/xmlns/" ||
                              (attrNode.LocalName == "xmlns" && attrNode.NamespaceUri.Length == 0)))
                             continue;
-                        elem.SetAttributeValue(
-                            XName.Get(attr.NodeValue!.EncodedLocalName, attr.NodeValue!.NamespaceUri),
-                            attr.NodeValue!.StringValue);
+                        var elemAttrName = XName.Get(attr.NodeValue!.EncodedLocalName, attr.NodeValue!.NamespaceUri);
+                        elem.SetAttributeValue(elemAttrName, attr.NodeValue!.StringValue);
+                        // REQ-099 seam H4: carry the PSVI annotation onto the copied attribute.
+                        CopyAttributeSchemaInfo(attr.NodeValue!, elem.Attribute(elemAttrName)!);
                     }
                     if (node is XDocumentNode xdocNode2 && xdocNode2.UnderlyingObject is XElement srcElem2 &&
                         srcElem2.Annotation<NamespaceInheritanceBarrier>() != null)
                     {
                         elem.AddAnnotation(new NamespaceInheritanceBarrier());
+                    }
+                    // REQ-099 seam H4: carry the source element's PSVI annotation onto the copy.
+                    if (node is XDocumentNode xdocNode3 && xdocNode3.UnderlyingObject is XElement srcElem3
+                        && srcElem3.GetSchemaInfo() is { } elemSchemaInfo)
+                    {
+                        elem.AddAnnotation(elemSchemaInfo);
                     }
                     if (copyAccumulators)
                         AttachAccumulatorValues(node, elem);
@@ -9986,10 +10664,21 @@ internal sealed class TransformEngine
                 foreach (var attr in srcElem.Attributes())
                 {
                     Xml11Attribute.SetValue(copy, attr.Name, attr.Value);
+                    // REQ-099 seam H4: carry the PSVI annotation onto the copied attribute.
+                    if (attr.GetSchemaInfo() is { } attrInfo && copy.Attribute(attr.Name) is { } copiedAttr)
+                    {
+                        copiedAttr.RemoveAnnotations(typeof(IXmlSchemaInfo));
+                        copiedAttr.AddAnnotation(attrInfo);
+                    }
                 }
                 if (srcElem.Annotation<NamespaceInheritanceBarrier>() != null)
                 {
                     copy.AddAnnotation(new NamespaceInheritanceBarrier());
+                }
+                // REQ-099 seam H4: carry the source element's PSVI annotation onto the copy.
+                if (srcElem.GetSchemaInfo() is { } srcElemInfo)
+                {
+                    copy.AddAnnotation(srcElemInfo);
                 }
                 var accValues = srcElem.Annotation<AccumulatorValues>();
                 if (accValues != null)
@@ -10033,9 +10722,10 @@ internal sealed class TransformEngine
 
                 foreach (var attr in node.Attributes())
                 {
-                    copy.SetAttributeValue(
-                        XName.Get(attr.NodeValue!.EncodedLocalName, attr.NodeValue!.NamespaceUri),
-                        attr.NodeValue!.StringValue);
+                    var fallbackAttrName = XName.Get(attr.NodeValue!.EncodedLocalName, attr.NodeValue!.NamespaceUri);
+                    copy.SetAttributeValue(fallbackAttrName, attr.NodeValue!.StringValue);
+                    // REQ-099 seam H4: carry the PSVI annotation onto the copied attribute.
+                    CopyAttributeSchemaInfo(attr.NodeValue!, copy.Attribute(fallbackAttrName)!);
                 }
             }
 
@@ -16409,6 +17099,11 @@ internal sealed class TransformEngine
                 _resultDocumentStack.Pop();
             }
 
+            // REQ-099 seam H4: validation/@type on xsl:result-document applies to the built
+            // tree (raw output has no tree to validate).
+            if (!collectRaw)
+                ApplyConstructedDocumentValidation(principalContainer, instruction);
+
             // A top-level principal result document closes the principal output URI.
             if (_resultDocumentStack.Count == 0)
             {
@@ -16489,6 +17184,12 @@ internal sealed class TransformEngine
                 _resultDocumentRawItems = savedRawItems;
             }
 
+            // REQ-099 seam H4: validation/@type on xsl:result-document applies to the built
+            // tree, and the secondary path now fires the constructed-document hook like the
+            // principal path (previously it never called FinalizeResultDocument).
+            if (rawItems == null && temp != null)
+                ApplyConstructedDocumentValidation(temp, instruction);
+
             if (_captureResultDocuments)
             {
                 // fn:transform: capture the secondary result document instead of
@@ -16527,6 +17228,7 @@ internal sealed class TransformEngine
                         captureTarget.Add(node);
                     }
                     capturedValue = XdmValue.FromNode(XDocumentNode.Wrap(capturedDoc));
+                    FinalizeResultDocument(capturedDoc);
                 }
                 _capturedResultDocuments[resolvedHref] = (capturedValue, resultDocumentProps);
             }
@@ -16539,6 +17241,7 @@ internal sealed class TransformEngine
             }
             else
             {
+                FinalizeResultDocument(temp!);
                 WriteResultDocument(resolvedHref, temp!, resultDocumentProps);
             }
 
@@ -16560,6 +17263,9 @@ internal sealed class TransformEngine
     private IXdmNode PostProcessLoadedDocument(IXdmNode node)
     {
         ApplyWhitespaceStripping(node, CurrentLoadSpaceRules());
+        // REQ-099 seam H4: input-type-annotations="strip" applies to documents loaded
+        // during the transformation (fn:doc / fn:document) as well.
+        ApplyInputTypeAnnotations(node);
         return node;
     }
 
