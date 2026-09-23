@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 21 September 2026
+> **Last updated:** 22 September 2026
 > **Bosak baseline:** 2,187 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
@@ -20,6 +20,7 @@
 
 ## 0. Recent Changes
 
+- **2026-09-22 (k)** — **XSLT schema-awareness seam H3 (REQ-098) — typed-construction/annotation API** — two additions give a host full access to constructed nodes for schema annotation: **(1) `XdmSchemaAnnotator`** (`Bosak.XPath.Providers.Xml`, new) — `ValidateSubtree(XElement, XmlSchemaSet, ValidationEventHandler? = null, bool throwOnInvalid = false)` validates an in-memory subtree *in place* (temporary `XDocument` wrapper, `addSchemaInfo: true`; when the subtree is attached, a deep clone is validated and the PSVI annotations are copied back onto the live XObjects in document order, so node identity is preserved) and returns `XdmSubtreeValidationResult` (`IsValid`, `IReadOnlyList<ValidationEventArgs> Errors`; `throwOnInvalid: true` throws `XmlSchemaValidationException` with the first error); `Annotate(XObject, IXmlSchemaInfo)` attaches a host-built annotation without validation. **(2) `EvaluationContext.ConstructedElementProcessor` / `ConstructedDocumentProcessor`** (`Action<IXdmNode>?`, default null) — the element processor fires exactly once per constructed element after its content is complete, bottom-up (innermost first), covering `xsl:element`, literal result elements, and `xsl:copy` element results; the document processor fires at each result-document boundary with the wrapped document node. Every consultation is null-conditional: with the processors unset the engine is bit-identical (verified by the sweep and a byte-identity unit test). See §3.1b. Gates: full XSLT sweep **10,220/55/4,325, aggregate identical to the REQ-097 baseline**, QT3 **31,142/0/679** unchanged, unit **2,510/2,510** across all 10 projects (Providers.Tests 74 = 61+13 new, Xslt.Tests 540 = 534+6 new), build 0/0.
 - **2026-09-22 (j)** — **XSLT schema-awareness seam H1/H2 (REQ-097)** — opt-in schema-aware compilation: `XsltCompiler.SchemaAware` gates the XTSE1650/XTSE1660 throws (default basic processor unchanged, bit-identical); `XsltCompiler.SchemaResolver`/`SchemaSet` supply schema documents; `xsl:import-schema` declarations (inline / resolver / schema-location / host set) compile into one merged `XmlSchemaSet` with import-precedence merging (XTSE0215/XTSE0220) that is folded into `EvaluationContext.SchemaSet` before function-library population — user-defined simple-type constructors, `cast as` / `instance of`, and `schema-element()`/`schema-attribute()` kind tests work from stylesheet-declared schemas. No runtime enforcement of `validation`/`@type` yet (hook H4) and no complex-type typed construction (hook H3); both are scheduled with the Bosak.Schema commercial track. Gates: full XSLT sweep **10,220/55/4,325, aggregate identical to the REQ-096 baseline** (only delta: XTSE1650/1660 error-code precedence, unreachable by the failing set), QT3 **31,142/0/679** unchanged, unit **2,491/2,491** across all 10 projects (Xslt.Tests 534 = 522+12 new `SchemaAwareCompilationTests`), build 0/0.
 - **2026-09-21 (i)** — **xml-to-json package-namespace batch** — the four xml-to-json-B2 failures (B2-005/006/010/014) were never an XPath 4.0 gap: the error text `XPST0017: ...escape#1` came from a **namespace-contamination bug**. The W3C reference package `xml-to-json.xsl` (package `http://www.w3.org/2013/XSLT/xml-to-json`) calls its package-private `j:escape(.)` from template-rule `xsl:sequence/@select` attributes, while the using driver rebinds `xmlns:j` to the `fn` namespace. The engine compiled that select with `XPath31Expression.Compile(select)` **without the instruction's in-scope namespaces**, so the package's `j` prefix silently resolved against the default fn namespace. Fix (TransformEngine 6.82): the `xsl:sequence/@select` handler now compiles via `CompileXPath(select, instruction)`, which resolves prefixes against the element that lexically contains the select — exactly the XSLT namespace-scoping rule for used packages. Clears xml-to-json-B2-005/006/010/014. Gates: full XSLT sweep **10,220/55/4,325** (+4/−4, skips unchanged, per-set fail diff exactly the four targets, zero sets worse), QT3 **31,142/0/679** unchanged, unit 2,479/0/0 across all projects (Xslt.Tests 522, LanguageServer 72), build 0/0.
 - **2026-09-21 (h)** — **sx-treat / sx-instance-of braced-EQName batch** — braced-URI function calls in *step position* (`A ! Q{uri}fn(...)` or `A/Q{uri}fn(...)`) were misparsed as kind-test steps: `SplitQName` drops the URI of a `Q{uri}local` name, so `Q{f}text('x')` after `!` routed to the `text()` kind-test production — evaluating `child::text()[…]` (or `attribute::node()[…]`) over the context instead of calling the function. Primary-position calls were unaffected, which is why the extensive QT3 EQName coverage never caught it. One-condition fix in `XPathParser.ParseStepExpr` (1.58): a `Q{`-prefixed name is never a kind test. Clears sx-treat-107/108/109 and sx-instance-of-107/108. Gates: full XSLT sweep **10,216/59/4,325** (+5/−5, skips unchanged, per-set diff exactly the five targets, zero sets worse), QT3 **31,142/0/679** unchanged, unit 2,479/0/0 across all projects (Parser 192, Xslt.Tests 522, LanguageServer 72), build 0/0.
@@ -1831,7 +1832,53 @@ var executable = compiler.Compile(xsl);   // xsl:import-schema declarations are 
                                           // into one merged XmlSchemaSet
 ```
 
-Declarations may use an inline `xs:schema` child, a `schema-location` (resolved against the module's base URI), the resolver, or a namespace already present in the host `SchemaSet`. Declarations merge across the import tree by import precedence (same-precedence conflicts → XTSE0215; unlocatable/invalid schemas → XTSE0220). The merged set is in scope during the transform: user-defined simple-type constructor functions (`Q{uri}local#1`), `cast as` / `instance of` against user-defined types, and `schema-element()` / `schema-attribute()` kind tests work as they do for XQuery `import schema`. Runtime validation of constructed content (`validation` / `@type` semantics) is not yet enforced; typed construction of complex-typed nodes is planned with the schema-awareness track (Bosak.Schema).
+Declarations may use an inline `xs:schema` child, a `schema-location` (resolved against the module's base URI), the resolver, or a namespace already present in the host `SchemaSet`. Declarations merge across the import tree by import precedence (same-precedence conflicts → XTSE0215; unlocatable/invalid schemas → XTSE0220). The merged set is in scope during the transform: user-defined simple-type constructor functions (`Q{uri}local#1`), `cast as` / `instance of` against user-defined types, and `schema-element()` / `schema-attribute()` kind tests work as they do for XQuery `import schema`. Runtime validation of constructed content (`validation` / `@type` semantics) is not yet enforced; typed construction of complex-typed nodes is possible via the interception hooks in §3.1b.
+
+#### 3.1b Intercepting Constructed Nodes (Schema Annotation Seam)
+
+A host that provides schema-aware processing (see §3.1a) can intercept every node the
+transform constructs and annotate it with schema PSVI, so typed-value operations on the
+result tree (`TypedValue`, `instance of` against schema types, `SchemaTypeAnnotation`, …)
+work through the standard engine surfaces. Two optional processors on the
+`EvaluationContext` passed to `Transform`/`TransformToString` do this; both default to
+null, and with them unset the engine is bit-identical:
+
+```csharp
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+
+var context = new EvaluationContext
+{
+    // Fires once per constructed element, AFTER its attributes and content are
+    // complete, bottom-up (innermost element first). Covers xsl:element,
+    // literal result elements, and xsl:copy element results.
+    ConstructedElementProcessor = node =>
+        XdmSchemaAnnotator.ValidateSubtree(
+            ((XDocumentNode)node).UnderlyingObject as System.Xml.Linq.XElement
+                ?? throw new InvalidOperationException("expected element"),
+            mySchemaSet),
+
+    // Fires at each result-document boundary with the wrapped document node.
+    ConstructedDocumentProcessor = node => { /* document-level policy */ },
+};
+
+var result = executable.TransformToString(source, context, initialTemplate: "main");
+```
+
+`XdmSchemaAnnotator` (`Bosak.XPath.Providers.Xml`) supplies the annotation primitives:
+
+- `ValidateSubtree(XElement element, XmlSchemaSet schemas, ValidationEventHandler? handler = null, bool throwOnInvalid = false)` — validates the subtree **in place**: PSVI (`IXmlSchemaInfo`) annotations are attached to the live `XObject`s, so the caller's tree keeps its node identity and every typed-value surface works immediately (no serialize/parse round-trip). Returns `XdmSubtreeValidationResult` (`IsValid`, `IReadOnlyList<ValidationEventArgs> Errors`); the optional handler receives every validation event. With `throwOnInvalid: true` an invalid subtree throws `XmlSchemaValidationException` carrying the first error. Attribute nodes are annotated as part of validating their parent element.
+- `Annotate(XObject node, IXmlSchemaInfo annotation)` — attaches a host-built `IXmlSchemaInfo` (a simple read-only interface: implement it or reuse the instances validation produces) without performing validation — e.g. declaration-only annotation or nodes validated elsewhere.
+
+Notes:
+
+- Per-element validation runs bottom-up, so nested constructed subtrees are re-validated
+  O(depth) times; a host can instead do nothing per element and validate once at the
+  document boundary.
+- The processors observe the node as the engine sees it (`XDocumentNode` wrapper over the
+  live `XObject`); mutating annotations on that object is the intended use.
+- An empty result produces no calls at all.
 
 ### 3.2 Transform a Document
 

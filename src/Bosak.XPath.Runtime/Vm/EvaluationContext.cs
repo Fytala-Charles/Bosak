@@ -82,6 +82,8 @@
 //                      |                  |       |                | XTDE3365 instead of XQDY0137 on duplicate keys (si-fork-814)                          |
 //                      | Charles Korthout | 2.27  | 21-09-2026     | API freeze stage C: pruned engine-state members to internal                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.28  | 22-09-2026     | REQ-098 seam H3: ConstructedElementProcessor/ConstructedDocumentProcessor hooks         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -387,6 +389,24 @@ public sealed class EvaluationContext
     /// returned by fn:doc and fn:document.
     /// </summary>
     public Func<IXdmNode, IXdmNode>? DocumentPostProcessor { get; set; }
+
+    /// <summary>
+    /// Optional processor invoked by XSLT after an element's content has been fully
+    /// constructed (attributes and children attached). Consulted only when non-null;
+    /// invoked exactly once per constructed element, bottom-up (innermost element first),
+    /// with the constructed element node. Intended for schema annotation of constructed
+    /// nodes (e.g. attaching PSVI via <c>XdmSchemaAnnotator.ValidateSubtree</c>); core
+    /// behavior is bit-identical when unset.
+    /// </summary>
+    public Action<IXdmNode>? ConstructedElementProcessor { get; set; }
+
+    /// <summary>
+    /// Optional processor invoked by XSLT at a result-document boundary, after the final
+    /// result document has been assembled. Consulted only when non-null; invoked with the
+    /// constructed document node. Intended for schema annotation of the complete result
+    /// tree; core behavior is bit-identical when unset.
+    /// </summary>
+    public Action<IXdmNode>? ConstructedDocumentProcessor { get; set; }
 
     /// <summary>
     /// Optional identity object describing the whitespace-stripping policy of the code

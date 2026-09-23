@@ -13,6 +13,8 @@
 //                      | Charles Korthout | 6.84  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
 //                      | Charles Korthout | 6.85  | 22-09-2026     | REQ-097 schema-aware seam H1/H2: fold compiled xsl:import-schema set into context        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.86  | 22-09-2026     | REQ-098 seam H3: consult ConstructedElement/DocumentProcessor at construction finalize   |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -1338,14 +1340,37 @@ internal sealed class TransformEngine
             if (rdProps != null)
                 doc.AddAnnotation(rdProps);
             resultValue = XdmValue.FromNode(XDocumentNode.Wrap(doc));
+            FinalizeResultDocument(doc);
         }
         else
         {
             resultValue = XdmValue.FromNode(XDocumentNode.Wrap(_resultDocument));
+            FinalizeResultDocument(_resultDocument);
         }
 
         FinalizeResultTreeNamespaces(resultValue);
         return resultValue;
+    }
+
+    /// <summary>
+    /// Invokes <see cref="EvaluationContext.ConstructedElementProcessor"/> (when set) with
+    /// the fully constructed element, after all attributes and content have been attached.
+    /// Null-conditional: default behavior is bit-identical when the processor is unset.
+    /// </summary>
+    private void FinalizeConstructedElement(XElement element)
+    {
+        _context.ConstructedElementProcessor?.Invoke(XDocumentNode.Wrap(element));
+    }
+
+    /// <summary>
+    /// Invokes <see cref="EvaluationContext.ConstructedDocumentProcessor"/> (when set) with
+    /// the assembled result document at a result-document boundary, as the engine sees it
+    /// (an <see cref="XDocument"/>, or a synthetic wrapper element adapted as a document
+    /// node). Null-conditional: default behavior is bit-identical when the processor is unset.
+    /// </summary>
+    private void FinalizeResultDocument(XObject documentNode)
+    {
+        _context.ConstructedDocumentProcessor?.Invoke(XDocumentNode.Wrap(documentNode));
     }
 
     /// <summary>
@@ -5892,6 +5917,7 @@ internal sealed class TransformEngine
                             }
                         }
                         NormalizeElementContent(elem);
+                        FinalizeConstructedElement(elem);
                     }
                     finally
                     {
@@ -8074,6 +8100,7 @@ internal sealed class TransformEngine
             }
 
             NormalizeElementContent(copy);
+            FinalizeConstructedElement(copy);
 
             if (collectAsRawItem)
             {
@@ -9164,6 +9191,7 @@ internal sealed class TransformEngine
 
                     _sequenceAccumulator = savedSequenceAccumulator;
                     NormalizeElementContent(copy);
+                    FinalizeConstructedElement(copy);
                     _currentContainer = prev;
                     break;
                 }
@@ -10019,6 +10047,7 @@ internal sealed class TransformEngine
                 CopyNodeToResult(child.NodeValue!);
             }
             _currentContainer = prev;
+            FinalizeConstructedElement(copy);
         }
         else if (node.NodeKind == XdmNodeKind.Text)
         {
@@ -14486,6 +14515,7 @@ internal sealed class TransformEngine
                 var effectiveBaseUri = GetEffectiveBaseUri(parent);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     emptyDoc.AddAnnotation(effectiveBaseUri);
+                FinalizeResultDocument(emptyDoc);
                 return XdmValue.FromNode(XDocumentNode.Wrap(emptyDoc));
             }
             return XdmValue.FromSequence(XdmSequence.Empty);
@@ -14521,6 +14551,7 @@ internal sealed class TransformEngine
                 XDocumentNode.RegisterTree(tempDoc);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     tempDoc.AddAnnotation(effectiveBaseUri);
+                FinalizeResultDocument(tempDoc);
                 return XdmValue.FromNode(XDocumentNode.Wrap(tempDoc));
             }
             else
@@ -14540,6 +14571,7 @@ internal sealed class TransformEngine
                 XDocumentNode.RegisterTree(tempDoc);
                 if (!string.IsNullOrEmpty(effectiveBaseUri))
                     tempDoc.AddAnnotation(effectiveBaseUri);
+                FinalizeResultDocument(tempDoc);
                 return XdmValue.FromNode(XDocumentNode.Wrap(tempDoc));
             }
         }
