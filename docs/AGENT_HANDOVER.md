@@ -13,7 +13,7 @@
 - Per-element validation runs bottom-up, so nested constructed subtrees re-validate O(depth) times; hosts can defer to the document boundary (documented in INTEGRATION.md §3.1b).
 - The Bosak.Schema package that consumes H3 (validated-construction driver, license boundary) is a separate repo/session; the core stays license-free.
 **Next steps (agreed direction):**
-1. ~~Owner review, then push `feature/xslt-schema-seam-h3` and open the core PR~~ — **done same session: pushed as `21d66e5`, PR #13 open**; remaining: CI green check + merge (branch → PR → merge per the protect-main workflow).
+1. ~~Owner review, then push `feature/xslt-schema-seam-h3` and open the core PR~~ — **done: PR #13 merged 2026-09-22** (merge commit `65bf888`, CI "Build & test (net10.0)" green 4m31s); branch deleted both sides; local main fast-forwarded.
 2. Bosak.Schema track: consume H3 (ConstructElement/DocumentProcessor + `XdmSchemaAnnotator`) for validated construction, then H4.
 3. 1.0.0 tag timing after the v0.11.0-beta soak period (unchanged).
 
