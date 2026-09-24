@@ -42,6 +42,9 @@
 //                      | Charles Korthout | 1.13  | 21-09-2026     | Added TransformStreamingToString (streaming input with serialized string output)        |
 //                      | Charles Korthout | 1.14  | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.15  | 23-09-2026     | REQ-103: RunWithStack rethrows via ExceptionDispatchInfo (original stack preserved;   |
+//                      |                  |       |                | `throw exception` reset it, hiding engine stacks from conformance diagnostics)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -678,7 +681,7 @@ public sealed class XsltExecutable
         thread.Start();
         thread.Join();
         if (exception != null)
-            throw exception;
+            System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw(exception);
         return result!;
     }
 }
