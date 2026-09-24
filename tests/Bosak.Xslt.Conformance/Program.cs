@@ -160,6 +160,10 @@
 //                      |                  |       |                | module base URIs, preserving base URIs for xs:include + URI dedup vs the host set);      |
 //                      |                  |       |                | XXXX9999 error code = "any error" placeholder (import-schema-203)                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.53  | 24-09-2026     | REQ-104 (PA-2): source-reference env schemas join the host set (locationless imports   |
+//                      |                  |       |                | bind them); principal sources with validation="strict"/"lax" are schema-validated at   |
+//                      |                  |       |                | load so PSVI annotations reach kind tests/typed values; per-env document-URI dedup     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -212,6 +216,12 @@ class Program
     // documents into the compiler's SchemaSet (schema-location hints resolve against
     // module base URIs in the core, preserving base URIs for xs:include/xs:import).
     static bool _schemaAware = false;
+
+    // REQ-104 (PA-2): the merged schema set of the schema-aware test currently being run
+    // (captured from the transform's evaluation context), so assertion XPath evaluation —
+    // including the string-result compare path — compiles and matches schema-element()/
+    // schema-attribute() kind tests (validation-1705/1706). Null outside schema-aware runs.
+    static XmlSchemaSet? _currentTestSchemaSet;
 
     static readonly HashSet<string> SupportedSpecs = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -697,12 +707,14 @@ class Program
             }
 
             XDocument? envPrincipalStylesheet = null;
+            XDocument? envSourceDocument = null;
             if (envToLoad != null)
             {
                 var loadedEnv = LoadEnvironment(envToLoad, testSetDir, testSetPath, catalogDir, ns);
                 sourceNode = loadedEnv.SourceNode;
                 envDefaultCollation = loadedEnv.DefaultCollation;
                 envPrincipalStylesheet = loadedEnv.PrincipalStylesheet;
+                envSourceDocument = loadedEnv.SourceDocument;
             }
 
             // Streaming sources in allow-listed sets run through the burst-mode provider:
@@ -947,17 +959,20 @@ class Program
             // Schema-aware mode: compile with XsltCompiler.SchemaAware, serve
             // xsl:import-schema schema-location hints from the test set / catalog
             // directories, and merge the environment's catalog <schema
-            // role="stylesheet-import|secondary"> documents into the host schema set.
-            // Environments that pin XSD 1.1 cannot run: the engine is XSD 1.0 only
+            // role="stylesheet-import|secondary|source-reference"> documents into the host
+            // schema set (source-reference schemas are the environment's known schemas:
+            // locationless imports bind them, and the principal source validates against
+            // them). Environments that pin XSD 1.1 cannot run: the engine is XSD 1.0 only
             // (System.Xml.Schema). The set is passed uncompiled so the core reports
             // invalid/unlocatable schemas with its own XTSE0220 error code.
             XmlSchemaSet? envSchemaSet = null;
             if (_schemaAware && envToLoad != null)
             {
+                var addedSchemaDocs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var schemaElem in envToLoad.Elements(ns + "schema"))
                 {
                     var schemaRole = schemaElem.Attribute("role")?.Value ?? "stylesheet-import";
-                    if (schemaRole != "stylesheet-import" && schemaRole != "secondary")
+                    if (schemaRole != "stylesheet-import" && schemaRole != "secondary" && schemaRole != "source-reference")
                         continue;
                     var xsdVersion = schemaElem.Attribute("xsd-version")?.Value ?? "1.0";
                     if (xsdVersion != "1.0")
@@ -973,8 +988,34 @@ class Program
                         schemaPath = Path.Combine(catalogDir, schemaFile);
                     if (!File.Exists(schemaPath))
                         continue;
+                    var schemaUri = new Uri(schemaPath).AbsoluteUri;
+                    if (!addedSchemaDocs.Add(schemaUri))
+                        continue; // same document listed under multiple roles
                     envSchemaSet ??= new XmlSchemaSet();
-                    envSchemaSet.Add(null, new Uri(schemaPath).AbsoluteUri);
+                    envSchemaSet.Add(null, schemaUri);
+                }
+
+                // REQ-104 (PA-2): a principal source that requests validation="strict"/"lax"
+                // is validated against the environment's schemas so its nodes carry PSVI
+                // annotations — schema-element()/schema-attribute() kind tests and typed
+                // values operate on the validated tree. Validation errors never throw here
+                // (partial annotations still attach); an uncompilable environment schema
+                // leaves the source unvalidated and the transform raises its own error.
+                var sourceValidation = envToLoad.Element(ns + "source")?.Attribute("validation")?.Value;
+                if (envSchemaSet is not null && envSourceDocument?.Root is not null && sourceValidation is "strict" or "lax")
+                {
+                    try
+                    {
+                        var validationSet = new XmlSchemaSet();
+                        foreach (var uri in addedSchemaDocs)
+                            validationSet.Add(null, uri);
+                        validationSet.Compile();
+                        XdmSchemaAnnotator.ValidateSubtree(envSourceDocument.Root, validationSet);
+                    }
+                    catch (XmlSchemaException)
+                    {
+                        // Fall through unvalidated: the transform raises its own error.
+                    }
                 }
             }
 
@@ -1238,6 +1279,10 @@ class Program
             }
 
             bool compareOk;
+            // Publish the transform's merged schema set for the assertion helpers
+            // (REQ-104); the engine's constructor folded the stylesheet's compiled
+            // xsl:import-schema set into the context we supplied.
+            _currentTestSchemaSet = _schemaAware ? evalContext.SchemaSet : null;
             if (resultValue != null)
             {
                 compareOk = CompareResult(resultValue.Value, resultElem, ns, testSetDir, catalogDir, messageListener.Messages, messageListener.Warnings, ref messageIndex, ref warningIndex, evalContext, compareProperties, baseOutputUri);
@@ -2500,7 +2545,14 @@ class Program
         if (assertExpr != null)
         {
             var nsDecls = ExtractNamespaces(assertExpr);
-            return EvaluateAssert(actual, assertExpr.Value, nsDecls);
+            // REQ-104: assertions that reference schema kind tests need the typed result
+            // tree — the reparsed serialization has lost the stylesheet's PSVI, so the
+            // tree is revalidated against the test's merged schema set (validation-1705/1706).
+            // Assertions that don't mention kind tests keep the untyped reparse (catalog
+            // assertions are written for untyped trees; typing them breaks comparisons).
+            var needsTypedResult = assertExpr.Value.Contains("schema-element(", StringComparison.Ordinal)
+                || assertExpr.Value.Contains("schema-attribute(", StringComparison.Ordinal);
+            return EvaluateAssert(actual, assertExpr.Value, nsDecls, needsTypedResult);
         }
 
         // assert-eq: evaluate XPath and compare atomized value
@@ -2780,13 +2832,15 @@ class Program
             System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     }
 
-    static IXdmNode? ParseResultDocument(string actual)
+    static IXdmNode? ParseResultDocument(string actual, bool revalidateResult = false)
     {
         try
         {
             // Parse the result as XML 1.1 so that XML 1.1-only names and characters
             // that may appear in the serialized output are accepted.
             var doc = Xml11Loader.ParseXml11(actual, LoadOptions.PreserveWhitespace);
+            if (revalidateResult)
+                RevalidateResult(doc);
             return new XDocumentNode(doc);
         }
         catch
@@ -2801,6 +2855,8 @@ class Program
                 try
                 {
                     var doc = Xml11Loader.ParseXml11(lenient, LoadOptions.PreserveWhitespace);
+                    if (revalidateResult)
+                        RevalidateResult(doc);
                     return new XDocumentNode(doc);
                 }
                 catch
@@ -2819,6 +2875,8 @@ class Program
                 try
                 {
                     var doc = Xml11Loader.ParseXml11(unwrapped, LoadOptions.PreserveWhitespace);
+                    if (revalidateResult)
+                        RevalidateResult(doc);
                     return new XDocumentNode(doc);
                 }
                 catch
@@ -2843,6 +2901,33 @@ class Program
             {
                 return null;
             }
+        }
+    }
+
+    /// <summary>
+    /// REQ-104 (PA-2): in schema-aware runs the reparsed result tree has lost the PSVI
+    /// annotations the serializer dropped; revalidating against the test's merged schema
+    /// set restores them so schema-element()/schema-attribute() assertions observe the
+    /// typed tree (validation-1705/1706). Runs only for assertions that reference schema
+    /// kind tests and only when the serialized result carries <c>xsi:type</c>/<c>xsi:nil</c>
+    /// markers — evidence the stylesheet itself validated the result (catalog assertions
+    /// are otherwise written for untyped trees; typing them breaks comparisons).
+    /// Validation never throws here: an unvalidatable tree keeps partial or no annotations.
+    /// </summary>
+    static void RevalidateResult(XDocument doc)
+    {
+        if (_currentTestSchemaSet is null || doc.Root is null)
+            return;
+        var xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+        if (!doc.Descendants().Any(e => e.Attribute(xsi + "type") is not null || e.Attribute(xsi + "nil") is not null))
+            return;
+        try
+        {
+            XdmSchemaAnnotator.ValidateSubtree(doc.Root, _currentTestSchemaSet);
+        }
+        catch (Exception)
+        {
+            // An unvalidatable result tree stays untyped; assertions then just don't match.
         }
     }
 
@@ -2993,18 +3078,22 @@ class Program
         return result.ToString();
     }
 
-    static bool EvaluateAssert(string actual, string xpath, Dictionary<string, string>? namespaces = null)
+    static bool EvaluateAssert(string actual, string xpath, Dictionary<string, string>? namespaces = null, bool revalidateResult = false)
     {
-        var contextNode = ParseResultDocument(actual);
+        var contextNode = ParseResultDocument(actual, revalidateResult);
         if (contextNode == null)
             return false;
 
         try
         {
-            var compiled = XPath31Expression.Compile(xpath);
+            var compiled = _currentTestSchemaSet is { } assertSchemas
+                ? XPath31Expression.Compile(xpath, new CompileOptions { SchemaSet = assertSchemas })
+                : XPath31Expression.Compile(xpath);
             var contextValue = XdmValue.FromNode(contextNode);
             var ctx = new EvaluationContext().WithFocus(contextValue, 1, 1);
             ctx.WithVariable("result", contextValue);
+            if (_currentTestSchemaSet is not null)
+                ctx.SchemaSet = _currentTestSchemaSet;
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)
@@ -3026,13 +3115,17 @@ class Program
 
         try
         {
-            var compiled = XPath31Expression.Compile(xpath);
+            var compiled = _currentTestSchemaSet is { } assertSchemas
+                ? XPath31Expression.Compile(xpath, new CompileOptions { SchemaSet = assertSchemas })
+                : XPath31Expression.Compile(xpath);
             // For text-only results the serialization does not parse as XML; the
             // expression is then evaluated without a context item (literal and
             // context-independent expressions still work, e.g. seqtor-043b).
             var ctx = contextNode != null
                 ? new EvaluationContext().WithFocus(XdmValue.FromNode(contextNode), 1, 1)
                 : new EvaluationContext();
+            if (_currentTestSchemaSet is not null)
+                ctx.SchemaSet = _currentTestSchemaSet;
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)
@@ -3055,8 +3148,15 @@ class Program
     {
         try
         {
-            var compiled = XPath31Expression.Compile(xpath);
+            // REQ-104: in schema-aware tests the assertion XPath sees the transform's
+            // merged schema set, so schema-element()/schema-attribute() kind tests in
+            // assertions compile and match (validation-1705/1706).
+            var compiled = assertContext?.SchemaSet is { } assertSchemas
+                ? XPath31Expression.Compile(xpath, new CompileOptions { SchemaSet = assertSchemas })
+                : XPath31Expression.Compile(xpath);
             var ctx = new EvaluationContext().WithFocus(ResultAsDocument(actual), 1, 1);
+            if (assertContext?.SchemaSet is not null)
+                ctx.SchemaSet = assertContext.SchemaSet;
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)
@@ -3155,8 +3255,12 @@ class Program
     {
         try
         {
-            var compiled = XPath31Expression.Compile(xpath);
+            var compiled = assertContext?.SchemaSet is { } assertSchemas
+                ? XPath31Expression.Compile(xpath, new CompileOptions { SchemaSet = assertSchemas })
+                : XPath31Expression.Compile(xpath);
             var ctx = new EvaluationContext().WithFocus(actual, 1, 1);
+            if (assertContext?.SchemaSet is not null)
+                ctx.SchemaSet = assertContext.SchemaSet;
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)
@@ -3180,8 +3284,12 @@ class Program
     {
         try
         {
-            var expectedCompiled = XPath31Expression.Compile(expectedExpr);
+            var expectedCompiled = assertContext?.SchemaSet is { } assertSchemas
+                ? XPath31Expression.Compile(expectedExpr, new CompileOptions { SchemaSet = assertSchemas })
+                : XPath31Expression.Compile(expectedExpr);
             var expectedCtx = new EvaluationContext();
+            if (assertContext?.SchemaSet is not null)
+                expectedCtx.SchemaSet = assertContext.SchemaSet;
             if (namespaces != null)
             {
                 foreach (var (prefix, uri) in namespaces)

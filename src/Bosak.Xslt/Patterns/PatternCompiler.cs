@@ -55,6 +55,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.6   | 23-09-2026     | schema-element()/schema-attribute() kind tests in match patterns                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.7   | 24-09-2026     | REQ-104 (PA-2): CompilePatternXPath carries the validation context's schema set so    |
+//                      |                  |       |                | schema kind tests parse in schema-aware stylesheets                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -99,9 +102,14 @@ internal sealed class PatternCompiler
     /// </summary>
     private XPath31Expression CompilePatternXPath(string expression)
     {
-        if (string.IsNullOrEmpty(_defaultElementNamespace))
+        // REQ-104: carry the validation context's compiled schema set so
+        // schema-element()/schema-attribute() pattern tests parse in schema-aware
+        // stylesheets; REQ-100 evaluates the declaration against the same set at
+        // match time. Without a schema set the parse is unchanged (XPST0008).
+        var schemaSet = _validationContext?.SchemaSet;
+        if (string.IsNullOrEmpty(_defaultElementNamespace) && schemaSet is null)
             return XPath31Expression.Compile(expression);
-        var options = new CompileOptions { DefaultElementNamespace = _defaultElementNamespace };
+        var options = new CompileOptions { DefaultElementNamespace = _defaultElementNamespace, SchemaSet = schemaSet };
         return XPath31Expression.Compile(expression, options);
     }
 

@@ -17,14 +17,20 @@
 //                      | Charles Korthout | 0.3   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 24-09-2026     | REQ-104: optional schema set — schema-element()/schema-attribute() name arguments      |
+//                      |                  |       |                | validated against global declarations (XPST0008 when absent) instead of a blanket      |
+//                      |                  |       |                | no-schema-awareness XPST0008                                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Xml;
+using System.Xml.Schema;
 using Bosak.XPath.Parser.Ast;
 
 namespace Bosak.XPath.Compiler;
 
 /// <summary>
 /// Compile-time validation of namespace prefixes used in name tests (XPST0081) and of
-/// schema-aware kind tests (XPST0008, this engine has no schema awareness).
+/// schema-aware kind tests (XPST0008).
 ///
 /// The runtime resolves prefixes when a <c>NamespaceTest</c> opcode executes, which is
 /// too late: without a context item the step fails earlier with XPDY0002, and static
@@ -32,6 +38,12 @@ namespace Bosak.XPath.Compiler;
 /// rules of <c>VmEngine</c>'s NamespaceTest handler: an operand that binds in the static
 /// context is a prefix; an operand containing '/' or ':' is a literal URI (EQName form);
 /// anything else is an undeclared prefix (XPST0017-free XPST0081).
+///
+/// Schema-aware kind tests (<c>schema-element()</c>/<c>schema-attribute()</c>) are gated
+/// on the supplied schema set: with no set the engine has no schema awareness and every
+/// such test is XPST0008; with a set the name argument must match a global element or
+/// attribute declaration in the set (XPST0008 when absent), mirroring
+/// <c>VmEngine.MatchesSchemaElement</c>/<c>MatchesSchemaAttribute</c>.
 ///
 /// Direct element constructor namespace declaration attributes
 /// (<c>xmlns:p="uri"</c>) are tracked: their bindings are in scope for the enclosed
@@ -49,15 +61,26 @@ internal static class StaticNameTestValidator
     /// Maps a prefix to its namespace URI, or returns null when the prefix is not declared
     /// in the static context. The predefined <c>xml</c> prefix need not be supplied.
     /// </param>
+    /// <param name="schemaSet">
+    /// The compiled schema set in scope for a schema-aware compilation, or null (default)
+    /// when the expression is compiled without schema awareness. When null, every
+    /// schema-aware kind test with a resolvable name raises XPST0008; when non-null, the
+    /// kind test's name argument must resolve to a global declaration in the set.
+    /// </param>
+    /// <param name="defaultElementNamespace">
+    /// The default element namespace used to expand unprefixed kind-test name arguments;
+    /// unprefixed names are in no namespace when null or empty.
+    /// </param>
     /// <exception cref="ArgumentNullException"><paramref name="node"/> or <paramref name="resolvePrefix"/> is null.</exception>
     /// <exception cref="InvalidOperationException">A name-test prefix is not declared
-    /// (XPST0081), a kind test requires schema awareness (XPST0008), or a direct element
-    /// constructor declares duplicate attribute names (XQST0040).</exception>
-    public static void Validate(XPathAstNode node, Func<string, string?> resolvePrefix)
+    /// (XPST0081), a schema-aware kind test is used without schema awareness or names an
+    /// undeclared schema component (XPST0008), or a direct element constructor declares
+    /// duplicate attribute names (XQST0040).</exception>
+    public static void Validate(XPathAstNode node, Func<string, string?> resolvePrefix, XmlSchemaSet? schemaSet = null, string? defaultElementNamespace = null)
     {
         ArgumentNullException.ThrowIfNull(node);
         ArgumentNullException.ThrowIfNull(resolvePrefix);
-        ValidateNode(node, new Scope(resolvePrefix, null));
+        ValidateNode(node, new Scope(resolvePrefix, null, schemaSet, defaultElementNamespace));
     }
 
     private sealed class Scope
@@ -66,12 +89,20 @@ internal static class StaticNameTestValidator
         private readonly Dictionary<string, string>? _bindings;
         private readonly Func<string, string?> _resolve;
 
-        public Scope(Func<string, string?> resolve, Scope? parent, Dictionary<string, string>? bindings = null)
+        public Scope(Func<string, string?> resolve, Scope? parent, XmlSchemaSet? schemaSet = null, string? defaultElementNamespace = null, Dictionary<string, string>? bindings = null)
         {
             _resolve = resolve;
             _parent = parent;
             _bindings = bindings;
+            SchemaSet = schemaSet ?? parent?.SchemaSet;
+            DefaultElementNamespace = defaultElementNamespace ?? parent?.DefaultElementNamespace;
         }
+
+        /// <summary>The compiled schema set in scope, when schema-aware; otherwise null.</summary>
+        public XmlSchemaSet? SchemaSet { get; }
+
+        /// <summary>The default element namespace for unprefixed kind-test name arguments.</summary>
+        public string? DefaultElementNamespace { get; }
 
         public bool IsDeclared(string prefix)
             => prefix == "xml"
@@ -91,7 +122,7 @@ internal static class StaticNameTestValidator
 
         /// <summary>Returns a child scope with additional local bindings (constructor xmlns attributes).</summary>
         public Scope Extend(IReadOnlyDictionary<string, string> bindings)
-            => new(_resolve, this, new Dictionary<string, string>(bindings, StringComparer.Ordinal));
+            => new(_resolve, this, bindings: new Dictionary<string, string>(bindings, StringComparer.Ordinal));
     }
 
     private static void ValidateNode(XPathAstNode node, Scope scope)
@@ -390,9 +421,10 @@ internal static class StaticNameTestValidator
 
     /// <summary>
     /// Validates kind-test arguments: prefixed names are XPST0081 when the prefix is
-    /// undeclared (K2-NodeTest-22..27, K2-NameTest-35/36/41); schema-aware kind tests with
-    /// a resolvable prefix are XPST0008 because this engine has no schema awareness
-    /// (K2-NameTest-39/40, K2-NodeTest-20).
+    /// undeclared (K2-NodeTest-22..27, K2-NameTest-35/36/41); without schema awareness,
+    /// schema-aware kind tests with a resolvable prefix are XPST0008 (K2-NameTest-39/40,
+    /// K2-NodeTest-20). With schema awareness (REQ-104), the name argument must resolve to
+    /// a global element/attribute declaration in the compiled schema set (XPST0008 when absent).
     /// </summary>
     private static void ValidateKindTest(NodeTest test, Scope scope)
     {
@@ -409,6 +441,21 @@ internal static class StaticNameTestValidator
 
         void ValidateKindTestArgument(string argument, string testName)
         {
+            bool schemaKindTest = testName is "schema-element" or "schema-attribute";
+            if (schemaKindTest && scope.SchemaSet is { } schemaSet)
+            {
+                // Schema-aware compilation (REQ-104): the name argument must resolve to a
+                // global element/attribute declaration in the compiled schema set, else
+                // XPST0008. Name expansion mirrors VmEngine.ResolveTypeQName.
+                var (ns, local) = ExpandName(argument);
+                bool declared = testName == "schema-element"
+                    ? schemaSet.GlobalElements[new XmlQualifiedName(local, ns)] is not null
+                    : schemaSet.GlobalAttributes[new XmlQualifiedName(local, ns)] is not null;
+                if (!declared)
+                    throw new InvalidOperationException($"XPST0008: Schema {(testName == "schema-element" ? "element" : "attribute")} declaration Q{{{ns}}}{local} is not defined.");
+                return;
+            }
+
             if (argument.StartsWith("Q{", StringComparison.Ordinal))
                 return; // URI-qualified argument: no prefix to resolve
             int colon = argument.IndexOf(':');
@@ -417,8 +464,28 @@ internal static class StaticNameTestValidator
             var prefix = argument[..colon];
             if (!scope.IsDeclared(prefix))
                 throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
-            if (testName is "schema-element" or "schema-attribute")
+            if (schemaKindTest)
                 throw new InvalidOperationException("XPST0008: Schema-aware kind tests are not supported (no schema awareness).");
+        }
+
+        (string NamespaceUri, string LocalName) ExpandName(string argument)
+        {
+            if (argument.StartsWith("Q{", StringComparison.Ordinal))
+            {
+                int close = argument.IndexOf('}');
+                string ns = close > 2 ? argument[2..close] : string.Empty;
+                string local = close >= 0 ? argument[(close + 1)..] : argument;
+                return (ns, local);
+            }
+            int colon = argument.IndexOf(':');
+            if (colon > 0)
+            {
+                var prefix = argument[..colon];
+                if (scope.Resolve(prefix) is not { } ns)
+                    throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+                return (ns, argument[(colon + 1)..]);
+            }
+            return (scope.DefaultElementNamespace ?? string.Empty, argument);
         }
     }
 }

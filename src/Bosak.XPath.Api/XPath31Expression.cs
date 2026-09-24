@@ -26,6 +26,9 @@
 //                      | Charles Korthout | 0.9   | 07-09-2026     | Static name-test validation (XPST0081/XPST0008) against CompileOptions.Namespaces        |
 //                      | Charles Korthout | 0.10  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 24-09-2026     | REQ-104: CompileOptions.SchemaSet threaded to the parser (schemaAware) and the         |
+//                      |                  |       |                | static name-test validator (declaration-aware XPST0008)                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
@@ -75,19 +78,23 @@ public sealed class XPath31Expression
             throw new XPathParseException("Empty expression is not a valid XPath expression", 0);
 
         // 1. Lex + Parse -> AST
-        var ast = XPathParser.Parse(expression, xml11LineEndings: options.Xml11LineEndings);
+        var ast = XPathParser.Parse(expression, xml11LineEndings: options.Xml11LineEndings, schemaAware: options.SchemaSet is not null);
 
         // 2. Resolve function-call namespaces using the supplied static context and
         // report static errors for functions that have been removed from the spec.
         ast = ResolveFunctionNamespaces(ast, options);
 
         // 2b. Static name-test validation against the in-scope namespaces (XPST0081 for
-        // undeclared prefixes) and schema-aware kind tests (XPST0008, no schema awareness).
-        // Skipped when no static context is supplied: XSLT patterns compile without one
-        // and keep the runtime NamespaceTest resolution.
+        // undeclared prefixes) and schema-aware kind tests (XPST0008): without a schema
+        // set there is no schema awareness; with one (REQ-104) the kind-test name argument
+        // must resolve to a global declaration in the set. Skipped when no namespace
+        // context is supplied: XSLT patterns and runtime-namespace compilations keep the
+        // runtime NamespaceTest resolution (the runtime kind tests raise XPST0008 for
+        // undeclared schema names).
         if (options.Namespaces is not null)
             Compiler.StaticNameTestValidator.Validate(ast, prefix =>
-                options.Namespaces.TryGetValue(prefix, out var nsUri) ? nsUri : null);
+                options.Namespaces.TryGetValue(prefix, out var nsUri) ? nsUri : null,
+                options.SchemaSet, options.DefaultElementNamespace);
 
         // 3. Optimize AST
         var optimizer = new XPathOptimizer();

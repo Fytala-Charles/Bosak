@@ -317,6 +317,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.153 | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.154 | 24-09-2026     | REQ-104 (PA-2): ValueMatchesType accepts DateTime-kind g* values (gYear/gYearMonth/    |
+//                      |                  |       |                | gMonthDay/gDay/gMonth) — the PSVI typed-value path produces DateTime-kind values        |
+//                      |                  |       |                | annotated with the g* type name, previously rejected by the string-kind-only match      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -9305,11 +9309,11 @@ internal static class VmEngine
             "yearmonthduration" => value.Kind == XdmValueKind.Duration &&
                 (value.SchemaTypeName is null || value.SchemaTypeName.Equals("yearMonthDuration", StringComparison.OrdinalIgnoreCase)),
             "qname" => value.Kind == XdmValueKind.QName,
-            "gyear" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gYear", StringComparison.OrdinalIgnoreCase) == true,
-            "gyearmonth" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gYearMonth", StringComparison.OrdinalIgnoreCase) == true,
-            "gmonthday" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gMonthDay", StringComparison.OrdinalIgnoreCase) == true,
-            "gday" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gDay", StringComparison.OrdinalIgnoreCase) == true,
-            "gmonth" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("gMonth", StringComparison.OrdinalIgnoreCase) == true,
+            "gyear" => (value.Kind == XdmValueKind.String || value.Kind == XdmValueKind.DateTime) && value.SchemaTypeName?.Equals("gYear", StringComparison.OrdinalIgnoreCase) == true,
+            "gyearmonth" => (value.Kind == XdmValueKind.String || value.Kind == XdmValueKind.DateTime) && value.SchemaTypeName?.Equals("gYearMonth", StringComparison.OrdinalIgnoreCase) == true,
+            "gmonthday" => (value.Kind == XdmValueKind.String || value.Kind == XdmValueKind.DateTime) && value.SchemaTypeName?.Equals("gMonthDay", StringComparison.OrdinalIgnoreCase) == true,
+            "gday" => (value.Kind == XdmValueKind.String || value.Kind == XdmValueKind.DateTime) && value.SchemaTypeName?.Equals("gDay", StringComparison.OrdinalIgnoreCase) == true,
+            "gmonth" => (value.Kind == XdmValueKind.String || value.Kind == XdmValueKind.DateTime) && value.SchemaTypeName?.Equals("gMonth", StringComparison.OrdinalIgnoreCase) == true,
             "hexbinary" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("hexBinary", StringComparison.OrdinalIgnoreCase) == true,
             "base64binary" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("base64Binary", StringComparison.OrdinalIgnoreCase) == true,
             "anyuri" => value.Kind == XdmValueKind.String && value.SchemaTypeName?.Equals("anyURI", StringComparison.OrdinalIgnoreCase) == true,

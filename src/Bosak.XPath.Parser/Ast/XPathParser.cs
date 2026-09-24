@@ -123,6 +123,9 @@
 //                      | Charles Korthout | 1.60  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |                  |       |                | (A ! Q{ns}text(...) misparsed as text() step; sx-treat-107/108/109, sx-instance-of-107/108) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.61  | 24-09-2026     | REQ-104: schemaAware parse option — schema-element()/schema-attribute() unprefixed     |
+//                      |                  |       |                | names no longer raise XPST0008 when schema awareness is enabled                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -145,6 +148,10 @@ internal sealed class XPathParser
     // Boundary-space policy for direct element constructors: true = strip (the spec
     // default), false = preserve whitespace-only text runs at content boundaries.
     private bool _boundarySpaceStrip = true;
+    // Schema awareness (REQ-104): when true, schema-element()/schema-attribute() kind
+    // tests parse without the no-schema-awareness XPST0008; declaration existence is
+    // validated against the compiled schema set at compile time (XPST0008 when absent).
+    private bool _schemaAware;
     private int _position;
     // > 0 while parsing a map-constructor key: '*:local' name tests are no longer
     // greedy — the entry ':' must follow the local name (map{* :b}, MapConstructor-020).
@@ -198,9 +205,12 @@ internal sealed class XPathParser
     /// normalization; when false (default), references produce their exact characters.</param>
     /// <param name="boundarySpaceStrip">When true (the default), whitespace-only text at the
     /// boundaries of direct element constructor content is stripped; false preserves it.</param>
+    /// <param name="schemaAware">When true, schema-aware kind tests
+    /// (<c>schema-element()</c>/<c>schema-attribute()</c>) are permitted; when false (the
+    /// default) an unprefixed name argument raises XPST0008 (no schema awareness).</param>
     /// <returns>The root of the parsed AST.</returns>
     /// <exception cref="XPathParseException">The expression is not syntactically valid.</exception>
-    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
+    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true, bool schemaAware = false)
     {
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
         var tokens = new List<Token>();
@@ -208,7 +218,7 @@ internal sealed class XPathParser
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
             tokens.Add(tok);
 
-        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip };
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip, _schemaAware = schemaAware };
         return parser.ParseExpression();
     }
 
@@ -1730,11 +1740,13 @@ internal sealed class XPathParser
         }
         else if (name is "element" or "attribute" or "schema-element" or "schema-attribute")
         {
-            // Schema-aware kind tests require schema awareness, which this engine does not
-            // support. Grammar errors are checked here: the empty form, a wildcard, and a
-            // string literal argument are XPST0003 (K2-Axes-85, K2-NodeTest-8/9,
-            // K2-NameTest-33/34). Unprefixed names are XPST0008 (K2-Axes-84); prefixed
-            // names are namespace-checked at compile time (XPST0081, K2-NodeTest-23..27).
+            // Schema-aware kind tests require schema awareness. Grammar errors are checked
+            // here: the empty form, a wildcard, and a string literal argument are XPST0003
+            // (K2-Axes-85, K2-NodeTest-8/9, K2-NameTest-33/34). Without schema awareness an
+            // unprefixed name is XPST0008 (K2-Axes-84); prefixed names are namespace-checked
+            // at compile time (XPST0081, K2-NodeTest-23..27). With schema awareness
+            // (REQ-104) the name argument parses freely and its declaration is validated
+            // against the compiled schema set at compile time (XPST0008 when absent).
             if (name is "schema-element" or "schema-attribute")
             {
                 if (Current.Kind == TokenKind.RParen)
@@ -1743,7 +1755,7 @@ internal sealed class XPathParser
                     throw new XPathParseException($"XPST0003: The {name}() kind test requires a name, not a wildcard.", Current.Start);
                 if (Current.Kind == TokenKind.StringLiteral)
                     throw new XPathParseException($"XPST0003: The {name}() kind test requires a name, not a string literal.", Current.Start);
-                if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
+                if (!_schemaAware && Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
                     throw new XPathParseException($"XPST0008: Schema-aware kind test {name}() is not supported (no schema awareness).", Current.Start);
             }
 
@@ -1850,15 +1862,15 @@ internal sealed class XPathParser
         if (inner == "schema-element")
         {
             // Mirror the top-level schema-element() checks: the empty form, a wildcard,
-            // and a string literal are XPST0003; an unprefixed name is XPST0008 because
-            // schema-aware kind tests are unsupported (K2-NodeTest-19).
+            // and a string literal are XPST0003; an unprefixed name is XPST0008 unless
+            // schema awareness is enabled (K2-NodeTest-19, REQ-104).
             if (Current.Kind == TokenKind.RParen)
                 throw new XPathParseException("XPST0003: The schema-element() kind test requires a name argument.", Current.Start);
             if (Current.Kind == TokenKind.Star)
                 throw new XPathParseException("XPST0003: The schema-element() kind test requires a name, not a wildcard.", Current.Start);
             if (Current.Kind == TokenKind.StringLiteral)
                 throw new XPathParseException("XPST0003: The schema-element() kind test requires a name, not a string literal.", Current.Start);
-            if (Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
+            if (!_schemaAware && Current.Kind == TokenKind.Name && !GetString(Current).Contains(':'))
                 throw new XPathParseException("XPST0008: Schema-aware kind test schema-element() is not supported (no schema awareness).", Current.Start);
         }
 
