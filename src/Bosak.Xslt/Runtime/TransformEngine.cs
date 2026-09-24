@@ -388,6 +388,12 @@
 //                      | Charles Korthout | 6.86  | 24-09-2026     | REQ-105 (PA-3): PSVI schema info of a validated constructed attribute survives        |
 //                      |                  |       |                | harvesting into a raw item sequence (was re-created without annotations — match-186)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.87  | 24-09-2026     | REQ-106 (PA-3): grouping keys atomize schema-annotated nodes to their PSVI typed     |
+//                      |                  |       |                | value (was always untypedAtomic) — notation-0304/0305 group by QName value;          |
+//                      |                  |       |                | typed-template result harvest skips namespace-declaration attributes (the fixup      |
+//                      |                  |       |                | binding counted as a second item → spurious XTTE0505 with kind-tested @as —          |
+//                      |                  |       |                | as-1812/1813/1814)                                                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -5993,6 +5999,10 @@ internal sealed class TransformEngine
                 {
                     foreach (var attr in tempContainer.Attributes())
                     {
+                        // Namespace declarations (auto-added by attribute namespace fixup)
+                        // are not result items (as-1812/1813/1814).
+                        if (attr.IsNamespaceDeclaration)
+                            continue;
                         // Carry any validation PSVI onto the detached attribute item.
                         var typedResultAttr = new XAttribute(attr.Name, attr.Value);
                         if (attr.GetSchemaInfo() is { } typedResultAttrInfo)
@@ -14110,12 +14120,14 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
-    /// Atomizes a single grouping key item. Nodes become xs:untypedAtomic values.
+    /// Atomizes a single grouping key item. Schema-annotated nodes contribute their PSVI
+    /// typed value (e.g. a NOTATION-typed attribute groups by QName namespace+local —
+    /// notation-0304/0305); unvalidated nodes atomize to xs:untypedAtomic.
     /// </summary>
     private static XdmValue AtomizeKeyItem(XdmValue value)
     {
         if (value.IsNode)
-            return XdmValue.FromString(value.NodeValue.StringValue, "untypedAtomic");
+            return AtomizeForVariableCoercion(value.NodeValue);
         return value;
     }
 

@@ -164,6 +164,9 @@
 //                      |                  |       |                | bind them); principal sources with validation="strict"/"lax" are schema-validated at   |
 //                      |                  |       |                | load so PSVI annotations reach kind tests/typed values; per-env document-URI dedup     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.54  | 24-09-2026     | REQ-106 (PA-3): source-validation schema set gets an XmlUrlResolver so locationful   |
+//                      |                  |       |                | nested xs:import/xs:include resolve (URI-added docs populate the dedup table)          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1007,6 +1010,11 @@ class Program
                     try
                     {
                         var validationSet = new XmlSchemaSet();
+                        // REQ-106: URI-added documents populate the schemaLocations dedup
+                        // table, so an XmlUrlResolver safely resolves locationful nested
+                        // xs:import/xs:include targets (e.g. notation-03's chain) without
+                        // re-fetching documents already in the set.
+                        validationSet.XmlResolver = new XmlUrlResolver();
                         foreach (var uri in addedSchemaDocs)
                             validationSet.Add(null, uri);
                         validationSet.Compile();
