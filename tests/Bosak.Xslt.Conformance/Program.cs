@@ -151,10 +151,16 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.50  | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue call sites         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.51  | 23-09-2026     | Schema-aware mode (--schema-aware): un-gates schema_aware/schema-import features and      |
+//                      |                  |       |                | the import-schema test set; XsltCompiler.SchemaAware + file schema resolver; environment   |
+//                      |                  |       |                | catalog <schema> docs (stylesheet-import/secondary) merge into the host SchemaSet;        |
+//                      |                  |       |                | XSD 1.1 envs skip; fixed stale 185→205 comment (session-20 note)                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
 using System.Xml;
+using System.Xml.Schema;
 using System.Text;
 using System.Text.RegularExpressions;
 using Bosak.XPath.Api;
@@ -195,6 +201,12 @@ class Program
     static readonly HashSet<int> _assertClaimedIndexes = new();
     static string? _testNameFilter = null;
     static string? _testSetFilter = null;
+
+    // Schema-aware mode (--schema-aware): drops the schema feature gates from
+    // SkipFeatures, compiles every stylesheet with XsltCompiler.SchemaAware = true,
+    // supplies a file-based schema resolver, and merges the environment's catalog
+    // <schema role="stylesheet-import"> documents into the compiler's SchemaSet.
+    static bool _schemaAware = false;
 
     static readonly HashSet<string> SupportedSpecs = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -345,7 +357,7 @@ class Program
     {
         // Error tests require full static XSLT validator — 385 tests
         "error",
-        // Schema import requires schema-awareness — 185 tests
+        // Schema import requires schema-awareness — 205 tests; un-gated in --schema-aware mode
         "import-schema",
         // regex-syntax-xslt20 targets XSLT 2.0 processors ("For XSLT 3.0, see the regular
         // regex-syntax folder"); its expectations follow XPath 2.0/XSD 1.0 regex semantics
@@ -363,10 +375,28 @@ class Program
 
     static void Main(string[] args)
     {
-        string catalogPath = args.Length > 0 ? args[0] : "tests/xslt30-test/catalog.xml";
-        string? filter = args.Length > 1 ? args[1] : null;
+        // Schema-aware mode: any "--schema-aware" flag un-gates the schema features and
+        // switches every compile to XsltCompiler.SchemaAware (see RunTestCase).
+        var positional = new List<string>();
+        foreach (var arg in args)
+        {
+            if (arg is "--schema-aware" or "-s")
+            {
+                _schemaAware = true;
+                SkipFeatures.Remove("schema_aware");
+                SkipFeatures.Remove("schema-import");
+                SkipTestSets.Remove("import-schema");
+            }
+            else
+            {
+                positional.Add(arg);
+            }
+        }
+
+        string catalogPath = positional.Count > 0 ? positional[0] : "tests/xslt30-test/catalog.xml";
+        string? filter = positional.Count > 1 ? positional[1] : null;
         _testSetFilter = filter;
-        _testNameFilter = args.Length > 2 ? args[2] : null;
+        _testNameFilter = positional.Count > 2 ? positional[2] : null;
 
         if (!File.Exists(catalogPath))
         {
@@ -393,6 +423,7 @@ class Program
         Console.WriteLine($"Catalog: {catalogPath}");
         Console.WriteLine($"Test sets: {testSets.Count}");
         if (filter != null) Console.WriteLine($"Filter: {filter}");
+        if (_schemaAware) Console.WriteLine($"Mode: schema-aware (schema_aware / schema-import features un-gated)");
         Console.WriteLine();
 
         foreach (var testSetElem in testSets)
@@ -498,6 +529,22 @@ class Program
     }
 
     enum TestResult { Pass, Fail, Skip }
+
+    // Schema-aware mode: resolve an xsl:import-schema schema-location hint against the
+    // test set directory first, then the catalog directory (mirrors how stylesheets and
+    // documents are resolved). Returns null so the core falls back to URI resolution.
+    static Stream? ResolveSchemaHint(IReadOnlyList<string> hints, string testSetDir, string catalogDir)
+    {
+        foreach (var hint in hints)
+        {
+            var path = Path.Combine(testSetDir, hint);
+            if (!File.Exists(path))
+                path = Path.Combine(catalogDir, hint);
+            if (File.Exists(path))
+                return File.OpenRead(path);
+        }
+        return null;
+    }
 
     static string GetSkipReason(string name)
     {
@@ -908,6 +955,40 @@ class Program
             if (xslDoc.Root != null)
                 ExpandUnderscoreSelectAttributes(xslDoc.Root, staticParamValues);
 
+            // Schema-aware mode: compile with XsltCompiler.SchemaAware, serve
+            // xsl:import-schema schema-location hints from the test set / catalog
+            // directories, and merge the environment's catalog <schema
+            // role="stylesheet-import|secondary"> documents into the host schema set.
+            // Environments that pin XSD 1.1 cannot run: the engine is XSD 1.0 only
+            // (System.Xml.Schema). The set is passed uncompiled so the core reports
+            // invalid/unlocatable schemas with its own XTSE0220 error code.
+            XmlSchemaSet? envSchemaSet = null;
+            if (_schemaAware && envToLoad != null)
+            {
+                foreach (var schemaElem in envToLoad.Elements(ns + "schema"))
+                {
+                    var schemaRole = schemaElem.Attribute("role")?.Value ?? "stylesheet-import";
+                    if (schemaRole != "stylesheet-import" && schemaRole != "secondary")
+                        continue;
+                    var xsdVersion = schemaElem.Attribute("xsd-version")?.Value ?? "1.0";
+                    if (xsdVersion != "1.0")
+                    {
+                        Console.WriteLine($"  SKIP {name}: environment schema requires XSD {xsdVersion} (engine supports XSD 1.0 only)");
+                        return TestResult.Skip;
+                    }
+                    var schemaFile = schemaElem.Attribute("file")?.Value;
+                    if (schemaFile == null)
+                        continue;
+                    var schemaPath = Path.Combine(testSetDir, schemaFile);
+                    if (!File.Exists(schemaPath))
+                        schemaPath = Path.Combine(catalogDir, schemaFile);
+                    if (!File.Exists(schemaPath))
+                        continue;
+                    envSchemaSet ??= new XmlSchemaSet();
+                    envSchemaSet.Add(null, new Uri(schemaPath).AbsoluteUri);
+                }
+            }
+
             var messageListener = new RecordingMessageListener();
             var compiler = new Bosak.Xslt.Api.XsltCompiler
             {
@@ -917,6 +998,12 @@ class Program
                 TreatRecoverableAmbiguousMatchAsError = treatAmbiguousMatchAsError,
                 PackageVersionResolutionStrategy = packageVersionResolutionStrategy
             };
+            if (_schemaAware)
+            {
+                compiler.SchemaAware = true;
+                compiler.SchemaSet = envSchemaSet;
+                compiler.SchemaResolver = (_, hints) => ResolveSchemaHint(hints, testSetDir, catalogDir);
+            }
             var executable = compiler.Compile(xslDoc, baseUri);
 
             // Set up document loader that handles document('') by returning the stylesheet
