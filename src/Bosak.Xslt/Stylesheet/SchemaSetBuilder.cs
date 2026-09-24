@@ -18,6 +18,9 @@
 //                      |                  |       |                | imports are inert until used (XTSE0220 only for locationful failures); schema target    |
 //                      |                  |       |                | namespace must match the declaration; predefined XML namespace schema added             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 24-09-2026     | REQ-104 (PA-2): locationless import of the XPath functions namespace binds the          |
+//                      |                  |       |                | embedded W3C schema-for-JSON (json-to-xml-typed family)                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -241,6 +244,16 @@ internal static class SchemaSetBuilder
 
         if (state.CompilerSchemaSet is { } hostSet && hostSet.Schemas(ns).Cast<XmlSchema>().Any())
             return null; // namespace already supplied by the host set
+
+        if (decl.Locations.Count == 0 && ns == "http://www.w3.org/2005/xpath-functions")
+        {
+            // The W3C schema-for-JSON ships embedded in the engine (fn:json-to-xml
+            // validation): a locationless import of the XPath functions namespace binds
+            // it (json-to-xml-typed family). Read a fresh copy so the stylesheet's set
+            // owns and compiles its own XmlSchema instance.
+            using var jsonStream = Bosak.XPath.Standard.Functions.FunctionLibrary.GetJsonSchemaStream();
+            return XmlSchema.Read(jsonStream, null);
+        }
 
         if (decl.Locations.Count == 0 && !sawMismatch)
             return null; // locationless import: inert unless a component from the namespace is used

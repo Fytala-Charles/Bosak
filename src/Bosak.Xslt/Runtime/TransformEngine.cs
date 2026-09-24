@@ -377,6 +377,14 @@
 //                      | Charles Korthout | 6.84  | 21-09-2026     | API freeze stage D: EnableReplay -> TryEnableReplay; StreamCompleted is an event (+=);   |
 //                      |                  |       |                | RecordPostProcessor set through the internal StreamingDocumentNode property               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.85  | 24-09-2026     | REQ-104 (PA-2): the in-scope compiled schema set now flows into every XPath             |
+//                      |                  |       |                | compilation the transform touches — CompileXPath options, all bare select/catch/copy    |
+//                      |                  |       |                | compilations via CompileWithSchemaContext, xsl:evaluate, and AVTs — so                  |
+//                      |                  |       |                | schema-element()/schema-attribute() kind tests no longer fail statically with           |
+//                      |                  |       |                | XPST0008 in schema-aware transforms. Companion: ConvertVariableValue atomizes           |
+//                      |                  |       |                | schema-annotated nodes to their PSVI typed value (was: always untypedAtomic) so         |
+//                      |                  |       |                | subtype substitution applies in variable/param coercion (as-1702)                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -703,6 +711,10 @@ internal sealed class TransformEngine
     // The initial context item supplied to the transformation (the global context item).
     private XdmValue _globalContextItem = XdmValue.Undefined;
 
+    // REQ-104: shared compile options carrying the in-scope compiled schema set for
+    // schema-aware stylesheets; null when the transform has no schema awareness.
+    private readonly CompileOptions? _schemaCompileOptions;
+
     /// <summary>
     /// The stylesheet currently in scope for component lookups. When executing a component
     /// declared in a used package, this temporarily points to the declaring package so its
@@ -740,6 +752,12 @@ internal sealed class TransformEngine
         // user-defined type constructors and kind tests from SchemaSet.
         if (stylesheet.CompiledSchemaSet is { } compiledSchemas)
             _context.SchemaSet = Stylesheet.SchemaSetBuilder.MergeIntoContext(compiledSchemas, _context.SchemaSet);
+        // REQ-104: when a schema set is in scope, every XPath compilation in the transform
+        // (select/test expressions, assertion selects, xsl:evaluate, AVTs, patterns) must
+        // see it so schema-element()/schema-attribute() kind tests compile instead of
+        // failing statically with XPST0008 (no schema awareness).
+        if (_context.SchemaSet is { } inScopeSchemas)
+            _schemaCompileOptions = new CompileOptions { SchemaSet = inScopeSchemas };
         FunctionLibrary.Populate(_context);
         _context.CollationComparer = FunctionLibrary.CompareStrings;
         XsltFunctionLibrary.Populate(_context);
@@ -2385,6 +2403,17 @@ internal sealed class TransformEngine
         return cache.GetOrAdd(expression, expr => CompileXPathUncached(expr, instruction));
     }
 
+    /// <summary>
+    /// Compiles an XPath expression that has no instruction-level static namespace context,
+    /// carrying the stylesheet's compiled schema set when the transform is schema-aware
+    /// (REQ-104) so schema-element()/schema-attribute() kind tests compile; equivalent to
+    /// <see cref="XPath31Expression.Compile(string)"/> when no schema set is in scope.
+    /// </summary>
+    private XPath31Expression CompileWithSchemaContext(string expression)
+        => _schemaCompileOptions is { } options
+            ? XPath31Expression.Compile(expression, options)
+            : XPath31Expression.Compile(expression);
+
     private XPath31Expression CompileXPathUncached(string expression, XElement instruction)
     {
         var nsMap = GetInScopeNamespaces(instruction);
@@ -2400,11 +2429,12 @@ internal sealed class TransformEngine
                 DefaultElementNamespace = defaultNs,
                 DefiningElementDefaultNamespace = definingNs,
                 BaseUri = baseUri,
-                BackwardsCompatible = IsEffectiveBackwardsCompatible(instruction)
+                BackwardsCompatible = IsEffectiveBackwardsCompatible(instruction),
+                SchemaSet = _schemaCompileOptions?.SchemaSet
             };
             return XPath31Expression.Compile(expression, options);
         }
-        return XPath31Expression.Compile(expression);
+        return CompileWithSchemaContext(expression);
     }
 
     private static readonly HashSet<string> XPathAxisNames = new(StringComparer.Ordinal)
@@ -4270,7 +4300,7 @@ internal sealed class TransformEngine
                             throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute");
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = XPath31Expression.Compile(select);
+                            var compiled = CompileWithSchemaContext(select);
                             var feResult = compiled.Evaluate(_context);
                             var feItems = EnumerateItems(feResult).ToList();
 
@@ -4534,7 +4564,7 @@ internal sealed class TransformEngine
                             var select = instruction.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(select))
                             {
-                                var compiled = XPath31Expression.Compile(select);
+                                var compiled = CompileWithSchemaContext(select);
                                 var result = compiled.Evaluate(_context);
                                 FlattenToList(result, results);
                             }
@@ -4567,7 +4597,7 @@ internal sealed class TransformEngine
                                 var catchSelect = catchElem.Attribute("select")?.Value;
                                 if (!string.IsNullOrEmpty(catchSelect))
                                 {
-                                    var compiled = XPath31Expression.Compile(catchSelect);
+                                    var compiled = CompileWithSchemaContext(catchSelect);
                                     var catchResult = compiled.Evaluate(_context);
                                     FlattenToList(catchResult, results);
                                 }
@@ -4598,7 +4628,7 @@ internal sealed class TransformEngine
                         var copySelect = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(copySelect))
                         {
-                            var compiled = XPath31Expression.Compile(copySelect);
+                            var compiled = CompileWithSchemaContext(copySelect);
                             var result = compiled.Evaluate(_context);
                             var fnCopyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
                                 ?? instruction.Attribute("_copy-namespaces")?.Value
@@ -4650,7 +4680,7 @@ internal sealed class TransformEngine
                         var copySelect = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(copySelect))
                         {
-                            var compiled = XPath31Expression.Compile(copySelect);
+                            var compiled = CompileWithSchemaContext(copySelect);
                             var result = compiled.Evaluate(_context);
                             if (result.IsNode && result.NodeValue != null)
                             {
@@ -4762,7 +4792,7 @@ internal sealed class TransformEngine
                         List<XdmValue> psItems;
                         if (!string.IsNullOrEmpty(psSelect))
                         {
-                            var compiled = XPath31Expression.Compile(psSelect);
+                            var compiled = CompileWithSchemaContext(psSelect);
                             var psResult = compiled.Evaluate(_context);
                             psItems = EnumerateItems(psResult).ToList();
                         }
@@ -5331,7 +5361,7 @@ internal sealed class TransformEngine
             else
             {
                 // Evaluate select expression
-                var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
                 if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
                 {
@@ -5442,7 +5472,7 @@ internal sealed class TransformEngine
             else
             {
                 // Evaluate select expression with the given context item as focus
-                var compiled = instruction != null ? CompileXPath(select, instruction) : XPath31Expression.Compile(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select);
                 var result = compiled.Evaluate(_context.WithFocus(contextItem, 1, 1));
                 if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
                 {
@@ -6258,7 +6288,10 @@ internal sealed class TransformEngine
             Namespaces = nsMap,
             DefaultElementNamespace = defaultNs,
             DefiningElementDefaultNamespace = instruction.GetDefaultNamespace().NamespaceName,
-            BaseUri = baseUri
+            BaseUri = baseUri,
+            // REQ-104: xsl:evaluate's static context includes the stylesheet's imported
+            // schema definitions (XSLT 3.0 §5.3.3), so schema kind tests must compile.
+            SchemaSet = _schemaCompileOptions?.SchemaSet
         };
         XPath31Expression compiled;
         try
@@ -7005,7 +7038,7 @@ internal sealed class TransformEngine
                             var oeSelect = onEmpty.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(oeSelect))
                             {
-                                var compiled = XPath31Expression.Compile(oeSelect);
+                                var compiled = CompileWithSchemaContext(oeSelect);
                                 var oeResult = compiled.Evaluate(_context);
                                 CopyToResult(oeResult, separateAtomicsWithSpace: true);
                             }
@@ -7384,7 +7417,7 @@ internal sealed class TransformEngine
                         XdmValue varValue;
                         if (!string.IsNullOrEmpty(varSelect))
                         {
-                            var compiled = XPath31Expression.Compile(varSelect);
+                            var compiled = CompileWithSchemaContext(varSelect);
                             varValue = compiled.Evaluate(_context);
                         }
                         else
@@ -7843,7 +7876,7 @@ internal sealed class TransformEngine
                         var select = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = XPath31Expression.Compile(select);
+                            var compiled = CompileWithSchemaContext(select);
                             var result = compiled.Evaluate(_context);
                             CopyToResult(result);
                         }
@@ -7892,7 +7925,7 @@ internal sealed class TransformEngine
                             var catchSelect = catchElem.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(catchSelect))
                             {
-                                var compiled = XPath31Expression.Compile(catchSelect);
+                                var compiled = CompileWithSchemaContext(catchSelect);
                                 var catchResult = compiled.Evaluate(_context);
                                 CopyToResult(catchResult);
                             }
@@ -7962,7 +7995,7 @@ internal sealed class TransformEngine
                     List<XdmValue> psItems;
                     if (!string.IsNullOrEmpty(psSelect2))
                     {
-                        var compiled = XPath31Expression.Compile(psSelect2);
+                        var compiled = CompileWithSchemaContext(psSelect2);
                         var psResult = compiled.Evaluate(_context);
                         psItems = EnumerateItems(psResult).ToList();
                     }
@@ -8792,13 +8825,14 @@ internal sealed class TransformEngine
                                 DefaultElementNamespace = defaultNs,
                                 DefiningElementDefaultNamespace = definingNs,
                                 BaseUri = avtBaseUri,
-                                BackwardsCompatible = avtBackwards
+                                BackwardsCompatible = avtBackwards,
+                                SchemaSet = _schemaCompileOptions?.SchemaSet
                             };
                             compiled = XPath31Expression.Compile(expr, options);
                         }
                         else
                         {
-                            compiled = XPath31Expression.Compile(expr);
+                            compiled = CompileWithSchemaContext(expr);
                         }
                         var savedBackwardsCompatible = _context.BackwardsCompatible;
                         XdmValue result;
@@ -14290,6 +14324,24 @@ internal sealed class TransformEngine
            string.Equals(value.SchemaTypeName, "untypedAtomic", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
+    /// Atomizes a node for variable/parameter coercion (REQ-104): a validated node carries
+    /// its schema-typed value so subtype substitution applies (as-1702's xs:QName-typed
+    /// element into an <c>as="xs:QName"</c> variable); an unvalidated node atomizes to
+    /// xs:untypedAtomic for casting latitude. A plain xs:string typed value is the
+    /// typed-value fallback for lexicals the schema datatype could not parse (e.g.
+    /// negative-year dates) and is treated as untypedAtomic for the same reason.
+    /// </summary>
+    private static XdmValue AtomizeForVariableCoercion(IXdmNode node)
+    {
+        if (node.SchemaTypeAnnotation is null || node.HasNoTypedValue)
+            return XdmValue.FromString(node.StringValue, "untypedAtomic");
+        var typed = node.TypedValue;
+        if (typed.Kind == XdmValueKind.String && typed.SchemaTypeName is null)
+            return XdmValue.FromString(node.StringValue, "untypedAtomic");
+        return typed;
+    }
+
+    /// <summary>
     /// Returns true if the sequence type is a node-kind test such as
     /// <c>text()</c>, <c>element()</c>, <c>node()</c>, etc.
     /// </summary>
@@ -15140,9 +15192,11 @@ internal sealed class TransformEngine
         var converted = new List<XdmValue>();
         foreach (var item in items)
         {
-            // Atomize nodes to xs:untypedAtomic before casting
+            // Atomize nodes: validated nodes (PSVI annotations) contribute their schema-typed
+            // value so subtype substitution applies (REQ-104); unvalidated nodes atomize
+            // to xs:untypedAtomic for casting.
             XdmValue atomic = item.IsNode
-                ? XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic")
+                ? AtomizeForVariableCoercion(item.NodeValue)
                 : item;
 
             // Subtype substitution: if the value is already an instance of the declared
@@ -15509,7 +15563,7 @@ internal sealed class TransformEngine
                     var oeSelect = onEmpty.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(oeSelect))
                     {
-                        var compiled = XPath31Expression.Compile(oeSelect);
+                        var compiled = CompileWithSchemaContext(oeSelect);
                         var result = compiled.Evaluate(_context);
                         CopyToResult(result, separateAtomicsWithSpace: true);
                     }
@@ -16324,7 +16378,7 @@ internal sealed class TransformEngine
                     var seqSelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(seqSelect))
                     {
-                        var compiled = XPath31Expression.Compile(seqSelect);
+                        var compiled = CompileWithSchemaContext(seqSelect);
                         var result = compiled.Evaluate(_context);
                         if (result.IsSequence && result.SequenceValue != null)
                         {
@@ -16348,7 +16402,7 @@ internal sealed class TransformEngine
                     var copySelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(copySelect))
                     {
-                        var compiled = XPath31Expression.Compile(copySelect);
+                        var compiled = CompileWithSchemaContext(copySelect);
                         var result = compiled.Evaluate(_context);
                         if (result.IsSequence && result.SequenceValue != null)
                         {
@@ -16379,7 +16433,7 @@ internal sealed class TransformEngine
                     var feSelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(feSelect))
                     {
-                        var compiled = XPath31Expression.Compile(feSelect);
+                        var compiled = CompileWithSchemaContext(feSelect);
                         var result = compiled.Evaluate(_context);
                         var feItems = new List<XdmValue>();
                         if (result.IsSequence && result.SequenceValue != null)
@@ -16481,7 +16535,7 @@ internal sealed class TransformEngine
                         XdmValue varValue;
                         if (!string.IsNullOrEmpty(varSelect))
                         {
-                            var compiled = XPath31Expression.Compile(varSelect);
+                            var compiled = CompileWithSchemaContext(varSelect);
                             varValue = compiled.Evaluate(_context);
                         }
                         else
@@ -17861,7 +17915,7 @@ internal sealed class TransformEngine
                     expr = RemoveXPathComments(expr);
                     if (!string.IsNullOrWhiteSpace(expr))
                     {
-                        var compiled = contextElement != null ? CompileXPath(expr, contextElement) : XPath31Expression.Compile(expr);
+                        var compiled = contextElement != null ? CompileXPath(expr, contextElement) : CompileWithSchemaContext(expr);
                         var value = compiled.Evaluate(_context);
                         // XSLT 3.0 §5.6.2/§5.7.2: the expression value is converted to a
                         // string using the simple content construction rules with a single
@@ -18315,7 +18369,7 @@ internal sealed class TransformEngine
         IXdmNode? targetNode = currentNode;
         if (!string.IsNullOrEmpty(selectAttr))
         {
-            var compiled = XPath31Expression.Compile(selectAttr);
+            var compiled = CompileWithSchemaContext(selectAttr);
             var result = compiled.Evaluate(_context);
 
             // XTTE1000: select must return at most one node
@@ -18340,7 +18394,7 @@ internal sealed class TransformEngine
 
         if (!string.IsNullOrEmpty(valueAttr))
         {
-            var compiled = XPath31Expression.Compile(valueAttr);
+            var compiled = CompileWithSchemaContext(valueAttr);
             var result = compiled.Evaluate(_context);
 
             // XSLT 1.0 backwards compatibility: xsl:number/@value uses only the first item.

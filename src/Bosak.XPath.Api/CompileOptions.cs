@@ -20,7 +20,11 @@
 //                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage D: Default now returns a fresh instance per access; clarified          |
 //                      |                  |       |                | DefiningElementDefaultNamespace summary                                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 24-09-2026     | REQ-104: added SchemaSet — compiled schema set enabling schema-aware kind tests        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Xml.Schema;
+
 namespace Bosak.XPath.Api;
 
 /// <summary>
@@ -99,4 +103,14 @@ public sealed class CompileOptions
     /// promoted to <c>xs:double</c>) and may influence parser diagnostics.
     /// </summary>
     public bool BackwardsCompatible { get; init; }
+
+    /// <summary>
+    /// The compiled schema set in scope for a schema-aware compilation. When non-null,
+    /// <c>schema-element()</c>/<c>schema-attribute()</c> kind tests are permitted and their
+    /// name arguments are validated against the set's global declarations (XPST0008 when no
+    /// matching declaration exists). When null (the default), schema-aware kind tests raise
+    /// XPST0008 (no schema awareness). Mirrors <see cref="EvaluationContext.SchemaSet"/>,
+    /// which carries the set at evaluation time.
+    /// </summary>
+    public XmlSchemaSet? SchemaSet { get; init; }
 }
