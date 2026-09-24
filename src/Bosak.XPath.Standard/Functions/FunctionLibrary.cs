@@ -347,6 +347,9 @@
 //                      | Charles Korthout | 5.115 | 21-09-2026     | API freeze stage D: EffectiveBooleanValue -> GetEffectiveBooleanValue; LoadFile method   |
 //                      |                  |       |                | group as default document loader                                                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.116 | 24-09-2026     | REQ-106 (PA-3): xs:QName constructor accepts QName-kind input (NOTATION → QName        |
+//                      |                  |       |                | casting, XPath 3.0) — notation-0001/0003/0004                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -5549,6 +5552,10 @@ public static class FunctionLibrary
         if (arg.IsNode)
             arg = XdmValue.FromString(arg.NodeValue.StringValue, "untypedAtomic");
 
+        // XPath 3.0 casting rules permit xs:NOTATION → xs:QName; NOTATION values are
+        // stored as QName-kind atoms (REQ-106, notation-0001/0003/0004).
+        if (arg.Kind == XdmValueKind.QName)
+            return XdmValue.FromQName(arg.QNameValue);
         if (arg.Kind != XdmValueKind.String)
             throw new InvalidOperationException("XPTY0004");
 

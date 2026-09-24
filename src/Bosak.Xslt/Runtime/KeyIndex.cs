@@ -21,6 +21,10 @@
 //                      | Charles Korthout | 0.8   | 29-08-2026     | Index namespace nodes; set fn:current() during xsl:key/@use evaluation (key-058/087/090).|
 //                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 24-09-2026     | REQ-106 (PA-3): key values atomize schema-annotated nodes to their PSVI typed value    |
+//                      |                  |       |                | (NOTATION-typed attributes index by QName value — notation-0305)                       |
+//                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -512,7 +516,19 @@ internal sealed class KeyIndex
     private static XdmValue AtomizeKeyValue(XdmValue value, bool backwardsCompatible)
     {
         if (value.IsNode)
+        {
+            // Schema-annotated nodes contribute their PSVI typed value (e.g. a NOTATION-typed
+            // attribute indexes by its QName value — notation-0305); unvalidated nodes atomize
+            // to xs:untypedAtomic. XPath 1.0 backwards compatibility keeps the string form.
+            var node = value.NodeValue;
+            if (!backwardsCompatible && node.SchemaTypeAnnotation is not null && !node.HasNoTypedValue)
+            {
+                var typed = node.TypedValue;
+                if (!(typed.Kind == XdmValueKind.String && typed.SchemaTypeName is null))
+                    return typed;
+            }
             return XdmValue.FromString(value.ToString(), "untypedAtomic");
+        }
         // XPath 1.0 backwards compatibility: key values are strings.
         if (backwardsCompatible)
             return XdmValue.FromString(value.ToString(), "untypedAtomic");

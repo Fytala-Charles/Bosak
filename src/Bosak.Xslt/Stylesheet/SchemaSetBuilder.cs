@@ -21,6 +21,9 @@
 //                      | Charles Korthout | 0.3   | 24-09-2026     | REQ-104 (PA-2): locationless import of the XPath functions namespace binds the          |
 //                      |                  |       |                | embedded W3C schema-for-JSON (json-to-xml-typed family)                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 24-09-2026     | REQ-106 (PA-3): locationful nested xs:import/xs:include targets loaded eagerly        |
+//                      |                  |       |                | (Compile fetches nothing with a null resolver) — notation-0301 family                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -78,6 +81,13 @@ internal static class SchemaSetBuilder
                 AddTolerant(set, existing, addedDocuments);
         }
 
+        // Locationful nested xs:import/xs:include targets: XmlSchemaSet.Compile performs no
+        // external fetch with a null XmlResolver (.NET 10), so a nested reference whose
+        // document is neither a stylesheet declaration nor in the host set is silently
+        // dropped and its components surface as XTSE0220 (notation-0301 family). Load them
+        // eagerly instead, resolved against the including schema's SourceUri.
+        LoadNestedSchemaDocuments(set, addedDocuments);
+
         AddXmlNamespaceSchema(set);
 
         try
@@ -108,8 +118,66 @@ internal static class SchemaSetBuilder
         foreach (XmlSchema schema in contextSet.Schemas())
             AddTolerant(combined, schema, addedDocuments);
         AddXmlNamespaceSchema(combined);
+        LoadNestedSchemaDocuments(combined, addedDocuments);
         combined.Compile();
         return combined;
+    }
+
+    /// <summary>
+    /// Eagerly loads the locationful targets of nested <c>xs:import</c>/<c>xs:include</c>
+    /// references of every schema in the set, resolved against the including schema's
+    /// <see cref="XmlSchema.SourceUri"/> and deduped by document URI. Necessary because
+    /// <see cref="XmlSchemaSet.Compile"/> performs no external fetch when the set's
+    /// <c>XmlResolver</c> is null (the default in .NET 10): without this walk a nested
+    /// reference whose document is otherwise absent from the set is silently dropped and
+    /// its components surface as XTSE0220 at compile time. Imports whose namespace is
+    /// already covered by the set are skipped (namespace presence satisfies them);
+    /// unlocatable documents are skipped — an unused import stays inert, and a used one
+    /// still raises XTSE0220 from Compile.
+    /// </summary>
+    private static void LoadNestedSchemaDocuments(XmlSchemaSet set, HashSet<string> addedDocuments)
+    {
+        var queue = new Queue<XmlSchema>(set.Schemas().Cast<XmlSchema>().ToList());
+        while (queue.Count > 0)
+        {
+            var parent = queue.Dequeue();
+            if (string.IsNullOrEmpty(parent.SourceUri))
+                continue;
+            foreach (var external in parent.Includes)
+            {
+                if (external is XmlSchemaImport import
+                    && import.Namespace is { } importNs
+                    && set.Schemas(importNs).Cast<XmlSchema>().Any())
+                    continue; // namespace already covered by the set
+                string? location = external switch
+                {
+                    XmlSchemaImport imp => imp.SchemaLocation,
+                    XmlSchemaInclude inc => inc.SchemaLocation,
+                    _ => null,
+                };
+                if (string.IsNullOrEmpty(location))
+                    continue;
+                var absolute = ResolveLocation(location, parent.SourceUri);
+                if (absolute is null || addedDocuments.Contains(absolute))
+                    continue;
+                XmlSchema nested;
+                try
+                {
+                    using var stream = OpenLocation(absolute);
+                    nested = ReadSchema(stream, absolute);
+                }
+                catch (System.IO.IOException)
+                {
+                    continue;
+                }
+                catch (System.Net.Http.HttpRequestException)
+                {
+                    continue;
+                }
+                if (AddTolerant(set, nested, addedDocuments))
+                    queue.Enqueue(nested);
+            }
+        }
     }
 
     /// <summary>
@@ -330,19 +398,21 @@ internal static class SchemaSetBuilder
     /// namespace-keyed skip would silently drop their declarations. Schemas without a source
     /// URI (inline content) fall back to a namespace-keyed skip.
     /// </summary>
-    private static void AddTolerant(XmlSchemaSet set, XmlSchema schema, HashSet<string> addedDocuments)
+    /// <returns><c>true</c> when the schema was added to the set; <c>false</c> when it was a duplicate.</returns>
+    private static bool AddTolerant(XmlSchemaSet set, XmlSchema schema, HashSet<string> addedDocuments)
     {
         if (schema.SourceUri is { } uri)
         {
             if (!addedDocuments.Add(uri))
-                return;
+                return false;
             set.Add(schema);
-            return;
+            return true;
         }
 
         var ns = schema.TargetNamespace ?? string.Empty;
         if (set.Schemas(ns).Cast<XmlSchema>().Any())
-            return;
+            return false;
         set.Add(schema);
+        return true;
     }
 }

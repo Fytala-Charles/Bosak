@@ -324,6 +324,10 @@
 //                      | Charles Korthout | 2.155 | 24-09-2026     | REQ-105 (PA-3): schema-element/schema-attribute matching reads the post-compilation  |
 //                      |                  |       |                | ElementSchemaType/AttributeSchemaType (SchemaType is null for type-referenced decls)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.156 | 24-09-2026     | REQ-106 (PA-3): NOTATION-derived casts annotate xs:NOTATION; namespace-sensitive     |
+//                      |                  |       |                | casts restricted to the stringish source family; InstanceOf resolves unprefixed       |
+//                      |                  |       |                | schema types in no namespace (notation-0001..0102)                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -9072,6 +9076,13 @@ internal static class VmEngine
                 // are valid atomic item types (ForExprType052/053).
                 effective = $"Q{{{defaultElementNamespace}}}{typeName.Trim()}";
             }
+            else if (string.IsNullOrEmpty(defaultElementNamespace)
+                && TryGetSchemaSimpleTypeExpanded("", typeName.Trim(), context, out _))
+            {
+                // No xpath-default-namespace: unprefixed names are in no namespace, and a
+                // no-namespace schema may declare the type (REQ-106, notation-0101/0102).
+                effective = $"Q{{}}{typeName.Trim()}";
+            }
             else
             {
                 // No prefix and the default namespace is not XML Schema: only node kind
@@ -10216,7 +10227,13 @@ internal static class VmEngine
                                 {
                                     schemaSimpleType.Datatype!.ParseValue(originalLexical, new NameTable(), CreateNamespaceResolver(context));
                                 }
-                                result = value;
+                                // NOTATION-derived targets: re-annotate as xs:NOTATION so the
+                                // result matches instance of xs:NOTATION (the PSVI typed-value
+                                // path annotates the same way); QName targets keep their
+                                // original annotation (REQ-106, notation-0001/0003/0004).
+                                result = baseTypeName == "NOTATION" && value.SchemaTypeName != "NOTATION"
+                                    ? XdmValue.FromQName(value.QNameValue, "NOTATION")
+                                    : value;
                                 return true;
                             }
                             catch
@@ -10227,7 +10244,10 @@ internal static class VmEngine
 
                         // String (or untypedAtomic) input: parse with the schema datatype and
                         // preserve the original prefix when it resolves to the value's namespace.
-                        if (value.Kind == XdmValueKind.String)
+                        // The §19.3 cast matrix admits only the stringish family here (an
+                        // xs:anyURI value is stored as Kind=String but may not be cast to a
+                        // QName/NOTATION-derived type — notation-0002 case l).
+                        if (value.Kind == XdmValueKind.String && GetCastSourceFamily(value) == "stringish")
                         {
                             try
                             {
@@ -10243,7 +10263,9 @@ internal static class VmEngine
                                         if (context.TryResolveNamespace(origPrefix, out var origNs) && origNs == qn.Namespace)
                                             prefix = origPrefix;
                                     }
-                                    result = XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix));
+                                    result = baseTypeName == "NOTATION"
+                                        ? XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), "NOTATION")
+                                        : XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix));
                                     return true;
                                 }
                             }
