@@ -39,6 +39,9 @@
 //                      |                  |       |                | applies to template rules declared inside xsl:override (override-m-010)                |
 //                      | Charles Korthout | 2.2   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.3   | 24-09-2026     | REQ-105 (PA-3): default priority 0.25 for the typed kind-test pattern forms           |
+//                      |                  |       |                | element(*,T)/element(N,T)/attribute(*,T)/attribute(N,T), incl. after an axis          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -545,6 +548,12 @@ internal sealed class TemplateRule
             if ((axis == "child" || axis == "attribute") && IsQNameNodeTest(nodeTest))
                 return axis == "child" ? 0.0 : 0.5;
 
+            // element()/attribute() node tests take the same default priority as the
+            // axis-free form (XSLT 3.0 §6.4): wildcard name → -0.5, name only → 0.0,
+            // a type argument → 0.25 (match-167/171).
+            if (nodeTest.StartsWith("element(") || nodeTest.StartsWith("attribute("))
+                return ElementOrAttributeTestPriority(nodeTest);
+
             // Namespace wildcards: NCName:*, *:NCName, or Q{uri}* → -0.25
             if (nodeTest.EndsWith(":*") || nodeTest.StartsWith("*:") ||
                 (nodeTest.StartsWith("Q{") && nodeTest.EndsWith("*")))
@@ -578,32 +587,10 @@ internal sealed class TemplateRule
 
         // ElementTest and AttributeTest with arguments
         if (trimmed.StartsWith("element(") && trimmed.EndsWith(")"))
-        {
-            var arg = ExtractFunctionArg(trimmed);
-            if (string.IsNullOrEmpty(arg) || arg == "*")
-                return -0.5;                    // element() or element(*)
-            if (arg.Contains(','))
-            {
-                var parts = arg.Split(',').Select(s => s.Trim()).ToArray();
-                if (parts.Length == 2)
-                    return parts[0] == "*" ? 0.0 : 0.25; // element(*,T) or element(E,T)
-            }
-            return 0.0;                         // element(E)
-        }
+            return ElementOrAttributeTestPriority(trimmed);
 
         if (trimmed.StartsWith("attribute(") && trimmed.EndsWith(")"))
-        {
-            var arg = ExtractFunctionArg(trimmed);
-            if (string.IsNullOrEmpty(arg) || arg == "*")
-                return -0.5;                    // attribute() or attribute(*)
-            if (arg.Contains(','))
-            {
-                var parts = arg.Split(',').Select(s => s.Trim()).ToArray();
-                if (parts.Length == 2)
-                    return parts[0] == "*" ? 0.0 : 0.25; // attribute(*,T) or attribute(A,T)
-            }
-            return 0.0;                         // attribute(A)
-        }
+            return ElementOrAttributeTestPriority(trimmed);
 
         // processing-instruction("name") or processing-instruction(name) → 0
         if (trimmed.StartsWith("processing-instruction(") && trimmed.EndsWith(")"))
@@ -662,6 +649,52 @@ internal sealed class TemplateRule
             or "namespace-node()" or "document-node()" => true,
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Computes the default priority of an <c>element(...)</c> or <c>attribute(...)</c>
+    /// kind test per XSLT 3.0 §6.4: no argument or a wildcard name only → -0.5; a name
+    /// only → 0.0; a type argument after a top-level comma → 0.25.
+    /// </summary>
+    private static double ElementOrAttributeTestPriority(string nodeTest)
+    {
+        var arg = ExtractFunctionArg(nodeTest);
+        if (string.IsNullOrEmpty(arg) || arg == "*")
+            return -0.5;                    // element() / element(*) / attribute() / attribute(*)
+        if (HasTopLevelComma(arg))
+            return 0.25;                    // element(*, T) / element(E, T) / attribute(*, T) / attribute(A, T)
+        return 0.0;                         // element(E) / attribute(A)
+    }
+
+    /// <summary>
+    /// Returns true when the text contains a comma at the top level (not inside
+    /// parentheses, brackets, or <c>Q{uri}</c> braces).
+    /// </summary>
+    private static bool HasTopLevelComma(string text)
+    {
+        int depth = 0;
+        int braceDepth = 0;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{')
+            {
+                braceDepth++;
+                i++;
+                continue;
+            }
+            if (braceDepth > 0)
+            {
+                if (c == '}')
+                    braceDepth--;
+                continue;
+            }
+            if (c == '(' || c == '[') depth++;
+            else if (c == ')' || c == ']') depth--;
+            else if (c == ',' && depth == 0)
+                return true;
+        }
+        return false;
     }
 
     /// <summary>

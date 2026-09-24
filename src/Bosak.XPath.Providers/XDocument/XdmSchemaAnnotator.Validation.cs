@@ -16,6 +16,9 @@
 //                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-103 (PB-1): named-simple-type attribute validation passes a real NameTable +       |
 //                      |                  |       |                | in-scope namespace resolver — NCName-family datatypes NRE'd on null (import-schema-001) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 24-09-2026     | REQ-105 (PA-3): apply whiteSpace-facet normalization to simple-typed content after     |
+//                      |                  |       |                | successful validation (schema-normalized values, XDM 3.3.2; match-136..141)            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -228,6 +231,10 @@ public static partial class XdmSchemaAnnotator
         // content (XDM §3.3.1.1). Applied to the live tree, guided by the fresh PSVI.
         if (errors.Count == 0)
             StripElementOnlyContentWhitespace(element);
+
+        // Schema-normalized values (the whiteSpace facet) apply wherever validation
+        // succeeded, including in partially validated trees (match-136..141).
+        ApplySchemaNormalizedValues(element);
 
         var result = new XdmSubtreeValidationResult(errors.Count == 0, errors);
         if (throwOnInvalid && !result.IsValid)
@@ -612,6 +619,133 @@ public static partial class XdmSchemaAnnotator
             index++;
         } while (element.GetNamespaceOfPrefix(prefix) is not null);
         return prefix;
+    }
+
+    /// <summary>
+    /// Applies the whiteSpace facet of the governing simple type to the text content of
+    /// elements and to attribute values in the subtree: validating XDM construction records
+    /// the schema-normalized value, so the string-value of a simple-typed node is the
+    /// normalized form (XDM §3.3.2; match-136..141). Only nodes whose PSVI validity is
+    /// <see cref="XmlSchemaValidity.Valid"/> are rewritten, so partially validated trees
+    /// (some siblings invalid) are normalized exactly where validation succeeded. Only
+    /// single-text-node simple content is rewritten; mixed or multi-node content is left
+    /// untouched.
+    /// </summary>
+    /// <param name="root">The root of the validated subtree (already PSVI-annotated).</param>
+    internal static void ApplySchemaNormalizedValues(XElement root)
+    {
+        foreach (var element in root.DescendantsAndSelf())
+        {
+            foreach (var attribute in element.Attributes())
+            {
+                if (attribute.IsNamespaceDeclaration)
+                    continue;
+                var attributeInfo = attribute.GetSchemaInfo();
+                if (attributeInfo?.Validity == XmlSchemaValidity.Valid
+                    && attributeInfo.SchemaType is XmlSchemaSimpleType
+                    && GetEffectiveWhiteSpace(attributeInfo.SchemaType) is { } attrWhiteSpace)
+                {
+                    var normalized = NormalizeWhiteSpace(attribute.Value, attrWhiteSpace);
+                    if (normalized != attribute.Value)
+                        attribute.Value = normalized;
+                }
+            }
+
+            if (element.Elements().Any())
+                continue; // not simple content
+            var elementInfo = element.GetSchemaInfo();
+            if (elementInfo?.Validity != XmlSchemaValidity.Valid)
+                continue;
+            var elementType = elementInfo.SchemaType;
+            bool isSimpleContent = elementType is XmlSchemaSimpleType
+                || elementType is XmlSchemaComplexType { ContentType: XmlSchemaContentType.TextOnly };
+            if (!isSimpleContent || GetEffectiveWhiteSpace(elementType) is not { } whiteSpace)
+                continue;
+            var textNodes = element.Nodes().OfType<XText>().ToList();
+            if (textNodes.Count != 1)
+                continue;
+            var normalizedText = NormalizeWhiteSpace(textNodes[0].Value, whiteSpace);
+            if (normalizedText != textNodes[0].Value)
+                textNodes[0].Value = normalizedText;
+        }
+    }
+
+    /// <summary>
+    /// Computes the effective whiteSpace facet of a schema type: an explicit
+    /// <c>xs:whiteSpace</c> facet on the nearest restriction wins; list and union types
+    /// always collapse; built-in types follow the fixed XSD facet (preserve for
+    /// <c>xs:string</c>, replace for <c>xs:normalizedString</c>, collapse otherwise).
+    /// </summary>
+    /// <param name="type">The governing schema type, or <c>null</c>.</param>
+    /// <returns>"preserve", "replace", or "collapse"; <c>null</c> when no facet applies.</returns>
+    private static string? GetEffectiveWhiteSpace(XmlSchemaType? type)
+    {
+        var visited = new HashSet<XmlSchemaType>();
+        for (var current = type; current is not null && visited.Add(current);)
+        {
+            switch (current)
+            {
+                case XmlSchemaSimpleType simple:
+                    if (simple.Content is XmlSchemaSimpleTypeRestriction restriction)
+                    {
+                        foreach (var facet in restriction.Facets)
+                        {
+                            if (facet is XmlSchemaWhiteSpaceFacet whiteSpaceFacet)
+                                return whiteSpaceFacet.Value;
+                        }
+                    }
+                    else if (simple.Content is XmlSchemaSimpleTypeList or XmlSchemaSimpleTypeUnion)
+                    {
+                        return "collapse";
+                    }
+                    if (simple.Content is null && simple.QualifiedName.Namespace == XsNamespaceUri)
+                    {
+                        return simple.QualifiedName.Name switch
+                        {
+                            "string" or "anySimpleType" or "anyAtomicType" or "untypedAtomic" => "preserve",
+                            "normalizedString" => "replace",
+                            _ => "collapse",
+                        };
+                    }
+                    current = simple.BaseXmlSchemaType;
+                    break;
+                case XmlSchemaComplexType complex:
+                    if (complex.ContentType != XmlSchemaContentType.TextOnly)
+                        return null;
+                    current = complex.BaseXmlSchemaType;
+                    break;
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Applies an XSD whiteSpace facet to a value: "replace" turns tab/newline/CR into
+    /// spaces; "collapse" additionally merges runs of spaces and trims the ends.
+    /// </summary>
+    private static string NormalizeWhiteSpace(string value, string whiteSpace)
+    {
+        if (whiteSpace == "preserve")
+            return value;
+        var replaced = value.Replace('\t', ' ').Replace('\n', ' ').Replace('\r', ' ');
+        if (whiteSpace == "replace")
+            return replaced;
+        // collapse
+        var sb = new System.Text.StringBuilder(replaced.Length);
+        bool pendingSpace = false;
+        foreach (var c in replaced)
+        {
+            if (c == ' ')
+            {
+                pendingSpace = sb.Length > 0;
+                continue;
+            }
+            if (pendingSpace)
+                sb.Append(' ');
+            pendingSpace = false;
+            sb.Append(c);
+        }
+        return sb.ToString();
     }
 
     /// <summary>

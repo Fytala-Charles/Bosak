@@ -16,6 +16,9 @@
 //                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-099 seam H4: class made partial for the validation-mode service (see                 |
 //                      |                  |       |                | XdmSchemaAnnotator.Validation.cs)                                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 24-09-2026     | REQ-105 (PA-3): ValidateSubtree applies whiteSpace-facet normalization to              |
+//                      |                  |       |                | simple-typed content after successful validation (match-136..141)                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -90,6 +93,11 @@ public static partial class XdmSchemaAnnotator
 
         if (isAttached)
             CopySchemaAnnotations(root, element);
+
+        // Validating XDM construction records the schema-normalized value for simple-typed
+        // content (XDM §3.3.2); apply the governing type's whiteSpace facet to the live tree.
+        // The per-node validity check makes this safe for partially validated trees.
+        ApplySchemaNormalizedValues(element);
 
         var result = new XdmSubtreeValidationResult(errors.Count == 0, errors);
         if (throwOnInvalid && !result.IsValid)

@@ -53,6 +53,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.22  | 21-09-2026     | API freeze stage D: LoadXml(filePath) overloads renamed to LoadFile                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.23  | 24-09-2026     | REQ-105 (PA-3): validated documents get schema-normalized simple-typed values          |
+//                      |                  |       |                | (whiteSpace facet, XDM 3.3.2; match-136..141)                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -803,6 +806,10 @@ public static class XDocumentProvider
                 $"Document validation failed against the supplied schema(s):\n{string.Join("\n", errors)}");
         }
         StripElementOnlyContentWhitespace(document);
+        // Validating XDM construction records the schema-normalized value for simple-typed
+        // content (XDM §3.3.2); apply the governing type's whiteSpace facet.
+        if (document.Root is not null)
+            XdmSchemaAnnotator.ApplySchemaNormalizedValues(document.Root);
     }
 
     /// <summary>

@@ -58,9 +58,13 @@
 //                      | Charles Korthout | 3.7   | 24-09-2026     | REQ-104 (PA-2): CompilePatternXPath carries the validation context's schema set so    |
 //                      |                  |       |                | schema kind tests parse in schema-aware stylesheets                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.8   | 24-09-2026     | REQ-105 (PA-3): schema-aware type dispatch for element(N,T)/attribute(N,T) match      |
+//                      |                  |       |                | patterns; built-in type resolution in IsSchemaTypeCompatible                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Api;
@@ -1926,14 +1930,17 @@ internal sealed class PatternCompiler
         if (name.StartsWith("element("))
         {
             var arg = ExtractFunctionArg(name);
-            // element(name) or element(QName); may include a type argument: element(name, type)
-            var nameArg = string.IsNullOrEmpty(arg) ? "" : arg.Split(',')[0].Trim();
+            // element(name) or element(QName); may include a type argument: element(name, type).
+            // The type argument is enforced only in schema-aware stylesheets (REQ-105);
+            // without a schema set the pattern matches by name/kind only, as before.
+            var (nameArg, typeArg) = SplitKindTestArgs(arg);
+            var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: true);
             if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return (item, ctx) =>
                 {
                     var node = AsNode(item);
                     if (node == null) return false;
-                    return node.NodeKind == XdmNodeKind.Element;
+                    return node.NodeKind == XdmNodeKind.Element && (typeCheck is null || typeCheck(node));
                 };
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
@@ -1943,14 +1950,14 @@ internal sealed class PatternCompiler
                 {
                     var node = AsNode(item);
                     if (node == null) return false;
-                    return node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == defaultNs && node.LocalName == local;
+                    return node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == defaultNs && node.LocalName == local && (typeCheck is null || typeCheck(node));
                 };
             }
             return (item, ctx) =>
             {
                 var node = AsNode(item);
                 if (node == null) return false;
-                return node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local;
+                return node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local && (typeCheck is null || typeCheck(node));
             };
         }
 
@@ -1993,28 +2000,44 @@ internal sealed class PatternCompiler
         if (name.StartsWith("attribute("))
         {
             var arg = ExtractFunctionArg(name);
-            // attribute(name) or attribute(QName); may include a type argument: attribute(name, type)
-            var nameArg = string.IsNullOrEmpty(arg) ? "" : arg.Split(',')[0].Trim();
+            // attribute(name) or attribute(QName); may include a type argument: attribute(name, type).
+            // The type argument is enforced only in schema-aware stylesheets (REQ-105);
+            // without a schema set the pattern matches by name/kind only, as before.
+            var (nameArg, typeArg) = SplitKindTestArgs(arg);
+            var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: false);
             if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return (item, ctx) =>
                 {
                     var node = AsNode(item);
                     if (node == null) return false;
-                    return node.NodeKind == XdmNodeKind.Attribute;
+                    return node.NodeKind == XdmNodeKind.Attribute && (typeCheck is null || typeCheck(node));
                 };
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
+            {
+                if (typeCheck is not null)
+                {
+                    // Typed form: an unprefixed attribute name is in no namespace
+                    // (the xpath-default-namespace does not apply — match-205/206/207).
+                    return (item, ctx) =>
+                    {
+                        var node = AsNode(item);
+                        if (node == null) return false;
+                        return node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri.Length == 0 && node.LocalName == local && typeCheck(node);
+                    };
+                }
                 return (item, ctx) =>
                 {
                     var node = AsNode(item);
                     if (node == null) return false;
                     return node.NodeKind == XdmNodeKind.Attribute && node.LocalName == local;
                 };
+            }
             return (item, ctx) =>
             {
                 var node = AsNode(item);
                 if (node == null) return false;
-                return node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == ns && node.LocalName == local;
+                return node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == ns && node.LocalName == local && (typeCheck is null || typeCheck(node));
             };
         }
 
@@ -2246,16 +2269,19 @@ internal sealed class PatternCompiler
         if (nodeTest.StartsWith("element("))
         {
             var arg = ExtractFunctionArg(nodeTest);
-            var nameArg = string.IsNullOrEmpty(arg) ? "" : arg.Split(',')[0].Trim();
+            // element(name) or element(QName); may include a type argument: element(name, type).
+            // The type argument is enforced only in schema-aware stylesheets (REQ-105).
+            var (nameArg, typeArg) = SplitKindTestArgs(arg);
+            var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: true);
             if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
-                return node => node.NodeKind == XdmNodeKind.Element;
+                return node => node.NodeKind == XdmNodeKind.Element && (typeCheck is null || typeCheck(node));
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
             {
                 var defaultNs = _defaultElementNamespace ?? "";
-                return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == defaultNs && node.LocalName == local;
+                return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == defaultNs && node.LocalName == local && (typeCheck is null || typeCheck(node));
             }
-            return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local;
+            return node => node.NodeKind == XdmNodeKind.Element && node.NamespaceUri == ns && node.LocalName == local && (typeCheck is null || typeCheck(node));
         }
 
         if (nodeTest.StartsWith("schema-element("))
@@ -2304,6 +2330,22 @@ internal sealed class PatternCompiler
             var (declNs, declLocal) = ParseQName(arg);
             // Unprefixed attribute names have no namespace (XPath default element namespace does not apply).
             return node => MatchesSchemaAttribute(node, declNs, declLocal);
+        }
+
+        if (nodeTest.StartsWith("attribute("))
+        {
+            var arg = ExtractFunctionArg(nodeTest);
+            // attribute(name) or attribute(QName); may include a type argument: attribute(name, type).
+            // The type argument is enforced only in schema-aware stylesheets (REQ-105).
+            var (nameArg, typeArg) = SplitKindTestArgs(arg);
+            var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: false);
+            if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
+                return node => node.NodeKind == XdmNodeKind.Attribute && (typeCheck is null || typeCheck(node));
+            var (attrNs, attrLocal) = ParseQName(nameArg);
+            // Unprefixed attribute names have no namespace (XPath default element namespace does not apply).
+            if (string.IsNullOrEmpty(attrNs))
+                return node => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri.Length == 0 && node.LocalName == attrLocal && (typeCheck is null || typeCheck(node));
+            return node => node.NodeKind == XdmNodeKind.Attribute && node.NamespaceUri == attrNs && node.LocalName == attrLocal && (typeCheck is null || typeCheck(node));
         }
 
         var (nsUri, localName) = ParseQName(nodeTest);
@@ -2442,14 +2484,28 @@ internal sealed class PatternCompiler
         if (node.IsNilled)
             return actualDecl.IsNillable;
 
-        return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetDecl.SchemaType, context);
+        // XmlSchemaElement.SchemaType is null for type-referenced declarations; the
+        // post-compilation ElementSchemaType carries the effective type (REQ-105).
+        var targetType = targetDecl.ElementSchemaType ?? targetDecl.SchemaType;
+        if (targetType is null)
+            return true;
+
+        // The annotation names the node's type; an anonymous type has no name, in which
+        // case the governing declaration's own type is the annotation (validation-0501).
+        var actualType = ResolveSchemaTypeAnnotation(context, node.SchemaTypeAnnotation)
+            ?? actualDecl.ElementSchemaType ?? actualDecl.SchemaType;
+        return actualType is not null
+            && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
     }
 
     /// <summary>
     /// Matches an attribute node against a <c>schema-attribute(N)</c> kind test in a match pattern,
     /// using the schema set captured in the validation context. Mirrors
     /// <c>VmEngine.MatchesSchemaAttribute</c>. Returns false (never throws) when no schema set
-    /// is available or the declaration is absent.
+    /// is available or the declaration is absent. An attribute validated by named type alone
+    /// (no governing declaration, e.g. a constructed <c>xsl:attribute</c> with a
+    /// <c>type</c> attribute) matches when its expanded name equals the declaration name and
+    /// its type annotation is derived from the declared type (match-191).
     /// </summary>
     private bool MatchesSchemaAttribute(IXdmNode node, string targetNs, string targetLocal)
     {
@@ -2464,11 +2520,29 @@ internal sealed class PatternCompiler
         if (targetDecl is null)
             return false;
 
+        // XmlSchemaAttribute.SchemaType is null for type-referenced declarations; the
+        // post-compilation AttributeSchemaType carries the effective type (REQ-105).
+        var targetType = targetDecl.AttributeSchemaType ?? targetDecl.SchemaType;
+
         var nodeDeclName = node.SchemaAttributeDeclaration;
-        if (nodeDeclName is null || nodeDeclName.Value.NamespaceUri != targetNs || nodeDeclName.Value.LocalName != targetLocal)
+        if (nodeDeclName is null)
+        {
+            // No governing declaration (validated by named type only): match by name and
+            // by type derivation from the declared type.
+            if (node.NamespaceUri != targetNs || node.LocalName != targetLocal)
+                return false;
+            return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetType, context);
+        }
+        if (nodeDeclName.Value.NamespaceUri != targetNs || nodeDeclName.Value.LocalName != targetLocal)
             return false;
 
-        return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetDecl.SchemaType, context);
+        // The annotation names the node's type; an anonymous type has no name, in which
+        // case the governing declaration's own type is the annotation.
+        var nodeDecl = context.GetSchemaAttribute(nodeDeclName.Value.NamespaceUri, nodeDeclName.Value.LocalName);
+        var actualType = ResolveSchemaTypeAnnotation(context, node.SchemaTypeAnnotation)
+            ?? nodeDecl?.AttributeSchemaType ?? nodeDecl?.SchemaType;
+        return actualType is not null && targetType is not null
+            && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
     }
 
     /// <summary>
@@ -2483,10 +2557,174 @@ internal sealed class PatternCompiler
             return false;
         if (annotation.NamespaceUri == targetType.QualifiedName.Namespace && annotation.LocalName == targetType.QualifiedName.Name)
             return true;
-        var actualType = context.GetSchemaType(annotation.NamespaceUri, annotation.LocalName);
+        // Resolve through the built-in type table as well: XmlSchemaSet.GlobalTypes does not
+        // surface the built-in XML Schema types, so a node annotated xs:NMTOKEN must still be
+        // found to derive from xs:token (match-208).
+        var actualType = ResolveSchemaType(context, annotation.NamespaceUri, annotation.LocalName);
         if (actualType is null)
             return false;
         return XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
+    }
+
+    /// <summary>
+    /// Resolves a schema type by expanded name. User-defined types come from the in-scope
+    /// compiled schema set; the built-in XML Schema types are not surfaced by
+    /// <see cref="XmlSchemaSet.GlobalTypes"/> and are resolved from the System.Xml.Schema
+    /// built-in type table instead.
+    /// </summary>
+    /// <param name="context">The evaluation context carrying the in-scope schema set.</param>
+    /// <param name="namespaceUri">The type's namespace URI.</param>
+    /// <param name="localName">The type's local name.</param>
+    /// <returns>The resolved type definition, or <c>null</c> when the name is unknown.</returns>
+    private static XmlSchemaType? ResolveSchemaType(EvaluationContext context, string namespaceUri, string localName)
+    {
+        if (context.GetSchemaType(namespaceUri, localName) is { } fromSet)
+            return fromSet;
+        if (namespaceUri != XmlSchema.Namespace)
+            return null;
+        var qualifiedName = new XmlQualifiedName(localName, namespaceUri);
+        if (XmlSchemaType.GetBuiltInSimpleType(qualifiedName) is { } builtInSimple)
+            return builtInSimple;
+        if (XmlSchemaType.GetBuiltInComplexType(qualifiedName) is { } builtInComplex)
+            return builtInComplex;
+        // XPath type-hierarchy members that are not XSD 1.0 built-ins.
+        return localName switch
+        {
+            "anyAtomicType" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.AnyAtomicType),
+            "untypedAtomic" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.UntypedAtomic),
+            "dayTimeDuration" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.DayTimeDuration),
+            "yearMonthDuration" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.YearMonthDuration),
+            _ => null,
+        };
+    }
+
+    /// <summary>
+    /// Resolves a node's schema type annotation to a type definition, returning
+    /// <c>null</c> for absent or anonymous (unnamed) annotations.
+    /// </summary>
+    /// <param name="context">The evaluation context carrying the in-scope schema set.</param>
+    /// <param name="annotation">The node's type annotation, or <c>null</c>.</param>
+    /// <returns>The resolved type definition, or <c>null</c>.</returns>
+    private static XmlSchemaType? ResolveSchemaTypeAnnotation(EvaluationContext context, (string NamespaceUri, string LocalName)? annotation)
+        => annotation is { } a && a.LocalName.Length > 0
+            ? ResolveSchemaType(context, a.NamespaceUri, a.LocalName)
+            : null;
+
+    /// <summary>
+    /// Splits the argument of an <c>element(...)</c> / <c>attribute(...)</c> kind test into
+    /// the name part and the optional schema type part, e.g. <c>element(N, T)</c> yields
+    /// <c>("N", "T")</c>. The separating comma is found at the top level of the argument.
+    /// </summary>
+    /// <param name="arg">The raw kind-test argument text.</param>
+    /// <returns>The name (or wildcard) part, and the type part when a comma is present.</returns>
+    private static (string NameArg, string? TypeArg) SplitKindTestArgs(string arg)
+    {
+        int comma = FindTopLevelComma(arg);
+        if (comma < 0)
+            return (arg.Trim(), null);
+        return (arg[..comma].Trim(), arg[(comma + 1)..].Trim());
+    }
+
+    /// <summary>
+    /// Compiles the optional schema type argument of an <c>element(N, T)</c> /
+    /// <c>attribute(N, T)</c> kind test into a node predicate enforcing the type at match
+    /// time. Returns <c>null</c> when no type argument is present or when no schema set is
+    /// in scope — a basic (non-schema-aware) processor ignores the type argument entirely.
+    /// A trailing <c>?</c> on the type name allows nilled elements to match.
+    /// </summary>
+    /// <param name="typeArg">The type part of the kind test, or <c>null</c> when absent.</param>
+    /// <param name="isElement">True for an element kind test, false for an attribute kind test.</param>
+    /// <returns>A predicate over the candidate node, or <c>null</c> when no type check applies.</returns>
+    private Func<IXdmNode, bool>? CompileKindTestTypeCheck(string? typeArg, bool isElement)
+    {
+        if (string.IsNullOrEmpty(typeArg))
+            return null;
+        var context = _validationContext;
+        if (context?.SchemaSet is null)
+            return null;
+
+        var typeName = typeArg.Trim();
+        bool nillable = false;
+        if (typeName.EndsWith('?'))
+        {
+            nillable = true;
+            typeName = typeName[..^1].TrimEnd();
+        }
+        if (typeName.Length == 0)
+            return null;
+
+        var (targetNs, targetLocal) = ParseQName(typeName);
+        if (targetNs.Length == 0 && !typeName.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            if (!typeName.Contains(':'))
+            {
+                // Unprefixed type names expand against the xpath-default-namespace (match-165).
+                targetNs = _defaultElementNamespace ?? "";
+            }
+            else
+            {
+                // A prefixed name that survived prefix resolution has an unbound prefix:
+                // the type cannot resolve, so the kind test never matches.
+                return node => false;
+            }
+        }
+        if (targetLocal.Length == 0)
+            return node => false;
+
+        var ns = targetNs;
+        var local = targetLocal;
+        return node => MatchesTypeAnnotation(node, isElement, ns, local, nillable);
+    }
+
+    /// <summary>
+    /// Returns true when the node's schema type annotation is the same as, or derived from,
+    /// the named target type, per <c>element(N, T)</c> / <c>attribute(N, T)</c> kind-test
+    /// semantics (XPath 3.1 §2.5.4). A nilled element matches only when the type name carried
+    /// the <c>?</c> nillable marker. A node without a type annotation (unvalidated, or
+    /// annotations stripped via <c>input-type-annotations="strip"</c>) matches an element
+    /// target of <c>xs:untyped</c>/<c>xs:anyType</c>, or an attribute target of
+    /// <c>xs:untypedAtomic</c> and its supertypes.
+    /// </summary>
+    /// <param name="node">The candidate node (element or attribute).</param>
+    /// <param name="isElement">True when matching an element, false for an attribute.</param>
+    /// <param name="targetNs">The expanded namespace URI of the target type.</param>
+    /// <param name="targetLocal">The local name of the target type.</param>
+    /// <param name="nillable">True when the type name carried the <c>?</c> nillable marker.</param>
+    /// <returns>True when the node's type annotation satisfies the typed kind test.</returns>
+    private bool MatchesTypeAnnotation(IXdmNode node, bool isElement, string targetNs, string targetLocal, bool nillable)
+    {
+        var context = _validationContext!;
+
+        if (isElement && node.IsNilled)
+            return nillable;
+
+        bool targetIsSchemaNamespace = targetNs == XmlSchema.Namespace;
+
+        if (node.SchemaTypeAnnotation is not { } actual)
+        {
+            if (!targetIsSchemaNamespace)
+                return false;
+            return isElement
+                ? targetLocal is "untyped" or "anyType"
+                : targetLocal is "untypedAtomic" or "anyAtomicType" or "anySimpleType" or "anyType";
+        }
+
+        if (actual.NamespaceUri == targetNs && actual.LocalName == targetLocal)
+            return true;
+
+        // xs:anySimpleType and xs:anyAtomicType head the simple-type hierarchy, but
+        // System.Xml.Schema does not model derivation into them; match them structurally.
+        if (targetIsSchemaNamespace && targetLocal is "anySimpleType" or "anyAtomicType")
+        {
+            if (ResolveSchemaType(context, actual.NamespaceUri, actual.LocalName) is not XmlSchemaSimpleType simple)
+                return false;
+            return targetLocal == "anySimpleType" || simple.Datatype?.Variety == XmlSchemaDatatypeVariety.Atomic;
+        }
+
+        var targetType = ResolveSchemaType(context, targetNs, targetLocal);
+        if (targetType is null)
+            return false;
+        return IsSchemaTypeCompatible(actual, targetType, context);
     }
 
     private PatternPredicate CompilePredicatePattern(string pattern)
@@ -2619,8 +2857,12 @@ internal sealed class PatternCompiler
 
         // For simple element/attribute patterns with predicates, evaluate from the parent
         // so that position() and last() reflect the node's position among its siblings.
-        bool isSimpleElement = !basePattern.Contains('/') && !basePattern.Contains('|') && !basePattern.Contains("::") && !basePattern.StartsWith('$') && !basePattern.StartsWith('(') && !basePattern.StartsWith('@') && !basePattern.Contains('.');
-        bool isSimpleAttribute = !basePattern.Contains('/') && !basePattern.Contains('|') && !basePattern.Contains("::") && basePattern.StartsWith('@');
+        // Kind tests may carry Q{uri} names whose URI contains '.', '/' etc.; mask the URI
+        // parts before the structural check so typed kind tests with predicates take this
+        // path as well (match-197).
+        string structuralBase = IsKindTestPattern(basePattern) ? MaskEQNameUris(basePattern) : basePattern;
+        bool isSimpleElement = !structuralBase.Contains('/') && !structuralBase.Contains('|') && !structuralBase.Contains("::") && !basePattern.StartsWith('$') && !basePattern.StartsWith('(') && !basePattern.StartsWith('@') && !structuralBase.Contains('.');
+        bool isSimpleAttribute = !structuralBase.Contains('/') && !structuralBase.Contains('|') && !structuralBase.Contains("::") && basePattern.StartsWith('@');
 
         // Function-call patterns like root(), doc(), id(), key() are not valid node tests
         // and cannot be used in child::/attribute:: axis steps. Kind tests (node(), element() etc.) are OK.
@@ -3129,5 +3371,29 @@ internal sealed class PatternCompiler
                 return i;
         }
         return -1;
+    }
+
+    /// <summary>
+    /// Replaces the URI part of every <c>Q{uri}local</c> EQName with spaces, so that
+    /// structural character checks ('/', '.', '|', '::') are not confused by URI contents.
+    /// </summary>
+    private static string MaskEQNameUris(string text)
+    {
+        if (!text.Contains("Q{", StringComparison.Ordinal))
+            return text;
+        var chars = text.ToCharArray();
+        for (int i = 0; i + 1 < chars.Length; i++)
+        {
+            if (chars[i] == 'Q' && chars[i + 1] == '{')
+            {
+                int close = text.IndexOf('}', i + 2);
+                if (close < 0)
+                    break;
+                for (int j = i + 2; j < close; j++)
+                    chars[j] = ' ';
+                i = close;
+            }
+        }
+        return new string(chars);
     }
 }
