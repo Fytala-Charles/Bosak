@@ -13,6 +13,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-09-2026     | Creation (schema-awareness seam hooks H1/H2, REQ-097)                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-102 (PA-1): host set now lowest precedence (added after stylesheet winners);        |
+//                      |                  |       |                | document-URI dedup instead of namespace-skip (xs:include merge case); namespace-only    |
+//                      |                  |       |                | imports are inert until used (XTSE0220 only for locationful failures); schema target    |
+//                      |                  |       |                | namespace must match the declaration; predefined XML namespace schema added             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -44,18 +49,33 @@ internal static class SchemaSetBuilder
             return null;
 
         var set = new XmlSchemaSet();
-        if (state.CompilerSchemaSet is { } hostSet)
-        {
-            foreach (XmlSchema existing in hostSet.Schemas())
-                AddTolerant(set, existing);
-        }
+        var addedDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+        // Stylesheet declarations are added first. One winner per namespace by construction
+        // (SelectWinners), so no dedup is needed here.
         foreach (var decl in winners)
         {
             var schema = LoadSchema(state, decl);
             if (schema is not null)
-                AddTolerant(set, schema);
+            {
+                set.Add(schema);
+                if (schema.SourceUri is { } uri)
+                    addedDocuments.Add(uri);
+            }
         }
+
+        // Host-supplied schemas merge alongside the stylesheet declarations (catalog
+        // semantics: environment schemas are in scope in addition to the stylesheet's own
+        // imports). Dedup is by document URI only — same-namespace companions from an
+        // xs:include pair must both survive (import-schema-056); genuine duplicate
+        // definitions surface as XTSE0220 at Compile.
+        if (state.CompilerSchemaSet is { } hostSet)
+        {
+            foreach (XmlSchema existing in hostSet.Schemas())
+                AddTolerant(set, existing, addedDocuments);
+        }
+
+        AddXmlNamespaceSchema(set);
 
         try
         {
@@ -78,13 +98,44 @@ internal static class SchemaSetBuilder
         if (contextSet is null || !contextSet.Schemas().Cast<XmlSchema>().Any())
             return compiled;
 
+        var addedDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var combined = new XmlSchemaSet();
         foreach (XmlSchema schema in compiled.Schemas())
-            AddTolerant(combined, schema);
+            AddTolerant(combined, schema, addedDocuments);
         foreach (XmlSchema schema in contextSet.Schemas())
-            AddTolerant(combined, schema);
+            AddTolerant(combined, schema, addedDocuments);
+        AddXmlNamespaceSchema(combined);
         combined.Compile();
         return combined;
+    }
+
+    /// <summary>
+    /// The predefined XML namespace (<c>http://www.w3.org/XML/1998/namespace</c>) is implicitly
+    /// available in every schema (XSD 1.0 §4.2.6.2), but <see cref="XmlSchemaSet"/> does not
+    /// pre-populate it — schemas that reference <c>xml:lang</c> etc. without an explicit import
+    /// fail to compile. The canonical attribute declarations are added here instead.
+    /// </summary>
+    private const string XmlNamespaceUri = "http://www.w3.org/XML/1998/namespace";
+
+    private const string XmlNamespaceSchema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='http://www.w3.org/XML/1998/namespace'>
+  <xs:attribute name='lang' type='xs:string'/>
+  <xs:attribute name='space'>
+    <xs:simpleType>
+      <xs:restriction base='xs:NCName'>
+        <xs:enumeration value='default'/>
+        <xs:enumeration value='preserve'/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name='base' type='xs:anyURI'/>
+  <xs:attribute name='id' type='xs:ID'/>
+</xs:schema>";
+
+    private static void AddXmlNamespaceSchema(XmlSchemaSet set)
+    {
+        if (set.Schemas(XmlNamespaceUri).Cast<XmlSchema>().Any())
+            return;
+        set.Add(ReadSchema(XmlNamespaceSchema, baseUri: null));
     }
 
     /// <summary>
@@ -116,47 +167,87 @@ internal static class SchemaSetBuilder
     /// <summary>
     /// Loads one schema document: inline schema content, the host resolver, then
     /// schema-location URIs resolved against the declaring module's base URI.
-    /// Returns null when the namespace is already satisfied (host set covers it).
+    /// Returns null when the declaration is inert: the namespace is already covered by the
+    /// host set, or the declaration is locationless and unresolvable (XSLT 3.0 §3.14.1 — a
+    /// namespace-only import raises no error unless components from the namespace are used).
     /// </summary>
     private static XmlSchema? LoadSchema(SchemaImportState state, SchemaImportState.Declaration decl)
     {
         var ns = decl.Namespace ?? string.Empty;
 
+        XmlSchema? schema = null;
+        var sawMismatch = false;
+
         if (decl.InlineSchema is { } inline)
-            return ReadSchema(inline.ToString(SaveOptions.DisableFormatting), decl.BaseUri);
+        {
+            schema = ReadSchema(inline.ToString(SaveOptions.DisableFormatting), decl.BaseUri);
+            // xsl:import-schema without @namespace takes the inline schema's target namespace
+            // (the spec example, import-schema-179); with @namespace they must match, and an
+            // inline schema has no fallback — XTSE0215 (import-schema-154).
+            if (ns.Length > 0 && (schema.TargetNamespace ?? string.Empty) != ns)
+                throw new InvalidOperationException(
+                    $"XTSE0215: inline schema target namespace '{schema.TargetNamespace ?? ""}' conflicts with the xsl:import-schema namespace '{ns}'");
+            return schema;
+        }
 
         if (state.SchemaResolver is { } resolver)
         {
             using var stream = resolver(ns, decl.Locations);
             if (stream is not null)
-                return ReadSchema(stream, baseUri: null);
+            {
+                var candidate = ReadSchema(stream, baseUri: null);
+                // The resolver was asked for namespace ns; a document with a different target
+                // namespace is not a schema for that namespace (import-schema-201).
+                if ((candidate.TargetNamespace ?? string.Empty) == ns)
+                    schema = candidate;
+                else
+                    sawMismatch = true;
+            }
         }
 
-        foreach (var location in decl.Locations)
+        if (schema is null)
         {
-            var absolute = ResolveLocation(location, decl.BaseUri);
-            if (absolute is null)
-                continue;
-            try
+            foreach (var location in decl.Locations)
             {
-                using var stream = OpenLocation(absolute);
-                return ReadSchema(stream, absolute);
-            }
-            catch (System.IO.IOException)
-            {
-                // Try the next location hint.
-            }
-            catch (System.Net.Http.HttpRequestException)
-            {
-                // Try the next location hint.
+                var absolute = ResolveLocation(location, decl.BaseUri);
+                if (absolute is null)
+                    continue;
+                try
+                {
+                    using var stream = OpenLocation(absolute);
+                    var candidate = ReadSchema(stream, absolute);
+                    // A schema-location is a hint: a document whose target namespace does not
+                    // match the declared namespace simply yields nothing (import-schema-186).
+                    if ((candidate.TargetNamespace ?? string.Empty) == ns)
+                    {
+                        schema = candidate;
+                        break;
+                    }
+                    sawMismatch = true;
+                }
+                catch (System.IO.IOException)
+                {
+                    // Try the next location hint.
+                }
+                catch (System.Net.Http.HttpRequestException)
+                {
+                    // Try the next location hint.
+                }
             }
         }
+
+        if (schema is not null)
+            return schema;
 
         if (state.CompilerSchemaSet is { } hostSet && hostSet.Schemas(ns).Cast<XmlSchema>().Any())
             return null; // namespace already supplied by the host set
 
-        throw new InvalidOperationException(
-            $"XTSE0220: no schema document found for namespace '{ns}' (schema-location: {string.Join(" ", decl.Locations)})");
+        if (decl.Locations.Count == 0 && !sawMismatch)
+            return null; // locationless import: inert unless a component from the namespace is used
+
+        throw new InvalidOperationException(sawMismatch
+            ? $"XTSE0220: no schema document for namespace '{ns}' — resolved document(s) carry a different target namespace (schema-location: {string.Join(" ", decl.Locations)})"
+            : $"XTSE0220: no schema document found for namespace '{ns}' (schema-location: {string.Join(" ", decl.Locations)})");
     }
 
     private static string? ResolveLocation(string location, string? baseUri)
@@ -219,9 +310,23 @@ internal static class SchemaSetBuilder
         XmlResolver = new XmlUrlResolver(),
     };
 
-    /// <summary>Adds a schema, tolerating duplicate target namespaces (duplicate imports are ignored).</summary>
-    private static void AddTolerant(XmlSchemaSet set, XmlSchema schema)
+    /// <summary>
+    /// Adds a schema, tolerating documents added twice (e.g. a schema that is both included by
+    /// another and listed separately). Dedup is keyed on the document's source URI: multiple
+    /// schema documents for the same target namespace are legitimate (xs:include merge), so a
+    /// namespace-keyed skip would silently drop their declarations. Schemas without a source
+    /// URI (inline content) fall back to a namespace-keyed skip.
+    /// </summary>
+    private static void AddTolerant(XmlSchemaSet set, XmlSchema schema, HashSet<string> addedDocuments)
     {
+        if (schema.SourceUri is { } uri)
+        {
+            if (!addedDocuments.Add(uri))
+                return;
+            set.Add(schema);
+            return;
+        }
+
         var ns = schema.TargetNamespace ?? string.Empty;
         if (set.Schemas(ns).Cast<XmlSchema>().Any())
             return;
