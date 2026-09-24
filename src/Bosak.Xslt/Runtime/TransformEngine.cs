@@ -385,6 +385,9 @@
 //                      |                  |       |                | schema-annotated nodes to their PSVI typed value (was: always untypedAtomic) so         |
 //                      |                  |       |                | subtype substitution applies in variable/param coercion (as-1702)                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.86  | 24-09-2026     | REQ-105 (PA-3): PSVI schema info of a validated constructed attribute survives        |
+//                      |                  |       |                | harvesting into a raw item sequence (was re-created without annotations — match-186)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -4855,7 +4858,7 @@ internal sealed class TransformEngine
                             _currentContainer = savedContainer;
                             _lastAddedWasAtomic = savedLastAtomic;
                         }
-                        var createdAttr = temp.Attributes().FirstOrDefault();
+                        var createdAttr = temp.Attributes().FirstOrDefault(a => !a.IsNamespaceDeclaration);
                         if (createdAttr != null)
                         {
                             var detachedAttr = new XAttribute(createdAttr.Name, createdAttr.Value);
@@ -5990,7 +5993,11 @@ internal sealed class TransformEngine
                 {
                     foreach (var attr in tempContainer.Attributes())
                     {
-                        items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
+                        // Carry any validation PSVI onto the detached attribute item.
+                        var typedResultAttr = new XAttribute(attr.Name, attr.Value);
+                        if (attr.GetSchemaInfo() is { } typedResultAttrInfo)
+                            typedResultAttr.AddAnnotation(typedResultAttrInfo);
+                        items.Add(XdmValue.FromNode(XDocumentNode.Wrap(typedResultAttr)));
                     }
                     foreach (var node in tempContainer.Nodes().ToList())
                     {
@@ -9451,7 +9458,11 @@ internal sealed class TransformEngine
             if (attr.IsNamespaceDeclaration)
                 continue;
             attr.Remove();
-            result.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
+            // Carry any validation PSVI onto the detached attribute item.
+            var populatedAttr = new XAttribute(attr.Name, attr.Value);
+            if (attr.GetSchemaInfo() is { } populatedAttrInfo)
+                populatedAttr.AddAnnotation(populatedAttrInfo);
+            result.Add(XdmValue.FromNode(XDocumentNode.Wrap(populatedAttr)));
         }
 
         // Child nodes are detached and wrapped as XDM nodes. Synthetic sequence
@@ -15435,7 +15446,11 @@ internal sealed class TransformEngine
             }
             else
             {
-                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
+                // Carry any validation PSVI onto the detached attribute item.
+                var resultAttr = new XAttribute(attr.Name, attr.Value);
+                if (attr.GetSchemaInfo() is { } resultAttrInfo)
+                    resultAttr.AddAnnotation(resultAttrInfo);
+                results.Add(XdmValue.FromNode(XDocumentNode.Wrap(resultAttr)));
             }
         }
 
@@ -15996,7 +16011,13 @@ internal sealed class TransformEngine
 
         var items = new List<XdmValue>();
         foreach (var attr in temp.Attributes())
-            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
+        {
+            // Carry any validation PSVI onto the detached attribute item.
+            var instructionAttr = new XAttribute(attr.Name, attr.Value);
+            if (attr.GetSchemaInfo() is { } instructionAttrInfo)
+                instructionAttr.AddAnnotation(instructionAttrInfo);
+            items.Add(XdmValue.FromNode(XDocumentNode.Wrap(instructionAttr)));
+        }
         foreach (var node in temp.Nodes())
         {
             if (node is XElement e)
@@ -16110,7 +16131,13 @@ internal sealed class TransformEngine
                             }
                             continue;
                         }
-                        resultItems.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(attr.Name, attr.Value))));
+                        // Re-create the attribute detached from the temporary container, but
+                        // carry over the PSVI annotation when the attribute was validated
+                        // (xsl:attribute with type/validation — REQ-105; match-186/191/193).
+                        var harvestedAttr = new XAttribute(attr.Name, attr.Value);
+                        if (attr.GetSchemaInfo() is { } harvestedSchemaInfo)
+                            harvestedAttr.AddAnnotation(harvestedSchemaInfo);
+                        resultItems.Add(XdmValue.FromNode(XDocumentNode.Wrap(harvestedAttr)));
                     }
                 }
                 foreach (var node in tempContainer.Nodes().ToList())
@@ -16650,10 +16677,14 @@ internal sealed class TransformEngine
                         _currentContainer = savedAttrContainer;
                         _lastAddedWasAtomic = savedAttrLastAtomic;
                     }
-                    var createdAttr = attrTemp.Attributes().FirstOrDefault();
+                    var createdAttr = attrTemp.Attributes().FirstOrDefault(a => !a.IsNamespaceDeclaration);
                     if (createdAttr != null)
                     {
-                        items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XAttribute(createdAttr.Name, createdAttr.Value))));
+                        // Carry any validation PSVI onto the detached attribute item.
+                        var simpleContentAttr = new XAttribute(createdAttr.Name, createdAttr.Value);
+                        if (createdAttr.GetSchemaInfo() is { } simpleContentAttrInfo)
+                            simpleContentAttr.AddAnnotation(simpleContentAttrInfo);
+                        items.Add(XdmValue.FromNode(XDocumentNode.Wrap(simpleContentAttr)));
                     }
                     break;
                 }

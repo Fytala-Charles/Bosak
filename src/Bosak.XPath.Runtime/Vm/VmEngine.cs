@@ -321,6 +321,9 @@
 //                      |                  |       |                | gMonthDay/gDay/gMonth) — the PSVI typed-value path produces DateTime-kind values        |
 //                      |                  |       |                | annotated with the g* type name, previously rejected by the string-kind-only match      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.155 | 24-09-2026     | REQ-105 (PA-3): schema-element/schema-attribute matching reads the post-compilation  |
+//                      |                  |       |                | ElementSchemaType/AttributeSchemaType (SchemaType is null for type-referenced decls)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -5224,7 +5227,18 @@ internal static class VmEngine
         if (isNilled)
             return actualDecl.IsNillable;
 
-        return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetDecl.SchemaType, context);
+        // XmlSchemaElement.SchemaType is null for type-referenced declarations; the
+        // post-compilation ElementSchemaType carries the effective type (REQ-105).
+        var targetType = targetDecl.ElementSchemaType ?? targetDecl.SchemaType;
+        if (targetType is null)
+            return true;
+
+        // The annotation names the node's type; an anonymous type has no name, in which
+        // case the governing declaration's own type is the annotation (validation-0501).
+        var actualType = ResolveSchemaTypeAnnotation(context, node.SchemaTypeAnnotation)
+            ?? actualDecl.ElementSchemaType ?? actualDecl.SchemaType;
+        return actualType is not null
+            && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
     }
 
     /// <summary>
@@ -5243,11 +5257,30 @@ internal static class VmEngine
         var targetDecl = context.GetSchemaAttribute(targetNs, targetLocal)
             ?? throw new InvalidOperationException($"XPST0008: Schema attribute declaration Q{{{targetNs}}}{targetLocal} is not defined.");
 
+        // XmlSchemaAttribute.SchemaType is null for type-referenced declarations; the
+        // post-compilation AttributeSchemaType carries the effective type (REQ-105).
+        var targetType = targetDecl.AttributeSchemaType ?? targetDecl.SchemaType;
+
         var nodeDeclName = node.SchemaAttributeDeclaration;
-        if (nodeDeclName is null || !IsSameQName(nodeDeclName.Value, targetNs, targetLocal))
+        if (nodeDeclName is null)
+        {
+            // No governing declaration (validated by named type only, e.g. a constructed
+            // xsl:attribute with a type attribute): match by name and by type derivation
+            // from the declared type (match-191).
+            if (node.NamespaceUri != targetNs || node.LocalName != targetLocal)
+                return false;
+            return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetType, context);
+        }
+        if (!IsSameQName(nodeDeclName.Value, targetNs, targetLocal))
             return false;
 
-        return IsSchemaTypeCompatible(node.SchemaTypeAnnotation, targetDecl.SchemaType, context);
+        // The annotation names the node's type; an anonymous type has no name, in which
+        // case the governing declaration's own type is the annotation.
+        var nodeDecl = context.GetSchemaAttribute(nodeDeclName.Value.NamespaceUri, nodeDeclName.Value.LocalName);
+        var actualType = ResolveSchemaTypeAnnotation(context, node.SchemaTypeAnnotation)
+            ?? nodeDecl?.AttributeSchemaType ?? nodeDecl?.SchemaType;
+        return actualType is not null && targetType is not null
+            && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
     }
 
     private static bool IsSameQName((string NamespaceUri, string LocalName) qname, string ns, string local)
@@ -5265,10 +5298,47 @@ internal static class VmEngine
             return false;
         if (IsSameQName(annotation, targetType.QualifiedName.Namespace, targetType.QualifiedName.Name))
             return true;
-        var actualType = context.GetSchemaType(annotation.NamespaceUri, annotation.LocalName);
+        var actualType = ResolveSchemaType(context, annotation.NamespaceUri, annotation.LocalName);
         if (actualType is null)
             return false;
         return XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
+    }
+
+    /// <summary>
+    /// Resolves a node's schema type annotation to a type definition, returning
+    /// <c>null</c> for absent or anonymous (unnamed) annotations.
+    /// </summary>
+    private static XmlSchemaType? ResolveSchemaTypeAnnotation(EvaluationContext context, (string NamespaceUri, string LocalName)? annotation)
+        => annotation is { } a && a.LocalName.Length > 0
+            ? ResolveSchemaType(context, a.NamespaceUri, a.LocalName)
+            : null;
+
+    /// <summary>
+    /// Resolves a schema type by expanded name: user-defined types come from the in-scope
+    /// compiled schema set; the built-in XML Schema types are not surfaced by
+    /// <see cref="XmlSchemaSet.GlobalTypes"/> and are resolved from the System.Xml.Schema
+    /// built-in type table instead.
+    /// </summary>
+    private static XmlSchemaType? ResolveSchemaType(EvaluationContext context, string namespaceUri, string localName)
+    {
+        if (context.GetSchemaType(namespaceUri, localName) is { } fromSet)
+            return fromSet;
+        if (namespaceUri != XmlSchema.Namespace)
+            return null;
+        var qualifiedName = new XmlQualifiedName(localName, namespaceUri);
+        if (XmlSchemaType.GetBuiltInSimpleType(qualifiedName) is { } builtInSimple)
+            return builtInSimple;
+        if (XmlSchemaType.GetBuiltInComplexType(qualifiedName) is { } builtInComplex)
+            return builtInComplex;
+        // XPath type-hierarchy members that are not XSD 1.0 built-ins.
+        return localName switch
+        {
+            "anyAtomicType" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.AnyAtomicType),
+            "untypedAtomic" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.UntypedAtomic),
+            "dayTimeDuration" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.DayTimeDuration),
+            "yearMonthDuration" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.YearMonthDuration),
+            _ => null,
+        };
     }
 
     // ------------------------------------------------------------------
