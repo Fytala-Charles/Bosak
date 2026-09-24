@@ -1,5 +1,21 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
+**Date:** 2026-09-23 (twenty-sixth session)
+**Commit:** `fix/attr-validation-ncname-crash` (uncommitted at entry time) — fix(providers): named-type attribute validation no longer crashes on NCName-family types (REQ-103, Bosak.Schema PB-1)
+**Current focus:** **REQ-103 — the crash cluster from the Phase A failure analysis (PB-1).** The REQ-101 schema-aware sweep showed 21 `NullReferenceException`s in the import-schema set, undiagnosable from the log because `XsltExecutable.RunWithStack` rethrew with `throw exception`, resetting the stack trace to the API boundary. Two-part fix: **(1)** `RunWithStack` now rethrows via `ExceptionDispatchInfo.Throw` (all transform entry points; behavior unchanged, diagnostics preserved). **(2)** Root cause in `XdmSchemaAnnotator.ValidateAttribute` (named simple-type path, 0.2): it passed `null` for the `XmlNameTable` and `IXmlNamespaceResolver` to `DatatypeImplementation.ParseValue`, and NCName-family datatypes (`xs:ID` etc.) dereference them — the import-schema-001 family (`xsl:attribute` + `@type="xs:ID"` + `default-validation="preserve"` on temporary trees). Now passes a fresh `NameTable` + an `XmlNamespaceManager` seeded with the original attribute's in-scope bindings (innermost-first, first-wins; QName/NOTATION content is rejected upstream with XTTE1545 before this path).
+**What was built:**
+- Modified: `src/Bosak.Xslt/Api/XsltExecutable.cs` (1.15 — `ExceptionDispatchInfo.Throw` rethrow), `src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.Validation.cs` (0.2 — the namespace-context fix).
+- Modified: `tests/Bosak.XPath.Providers.Tests/XdmSchemaValidatorTests.cs` (0.2 — +2 tests: xs:ID named-type validation valid/invalid, no crash, annotation attached).
+- Docs: REQ-103 registry row + detail section + decision log, INTEGRATION.md §0 entry (p), this entry.
+**Verification:** unit **2,530/2,530** (Providers.Tests 110 = 108+2 new) + LanguageServer 72/72; Release build 0/0; QT3 **31,142/0/679** unchanged; basic sweep **10,220/55/4,325** identical; schema-aware sweep **10,665/418/3,517** (was 10,648/435; +17, zero pass→fail regressions); `import-schema` set **153/51/1** (was 136/68/1).
+**Next steps (agreed direction):**
+1. Push the branch, open the core PR, merge on green CI, delete branch both sides, fast-forward local main.
+2. Bosak.Schema track: PA-2 (XPST0008 schema visibility in XPath static contexts, ~35 tests) next; then PA-3 (typed-value/pattern surface) / PB-2 (XTTE15xx details).
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
 **Date:** 2026-09-23 (twenty-fifth session)
 **Commit:** `2cb81a2` (merge of PR #20, CI green 4m27s) — fix(xslt): schema import resolution/merge correctness (REQ-102, Bosak.Schema PA-1); branch deleted both sides, local main fast-forwarded
 **Current focus:** **REQ-102 — the first Bosak.Schema Phase A work item**, driven by `D:/Development/Bosak.Schema/docs/PHASE_A_ANALYSIS.md` (the 546-failure breakdown from the REQ-101 schema-aware sweep). Four corrections to `src/Bosak.Xslt/Stylesheet/SchemaSetBuilder.cs` (0.2), each backed by W3C test evidence: **(1) Host set merges alongside stylesheet declarations, dedup by document URI** — the namespace-keyed `AddTolerant` dropped `xs:include` companions sharing a target namespace (import-schema-056: `colors` in schema066a silently lost) and could shadow catalog environment schemas (186); dedup is now keyed on `XmlSchemaObject.SourceUri` (namespace-keyed fallback for source-less inline schemas), and genuine duplicate definitions surface as XTSE0220 at `Compile`. **(2) `schema-location` is a hint** — a resolved document whose target namespace mismatches the declaration yields nothing (fallback to host set / next hint); XTSE0220 only when no source covers the namespace and locations were given (200/201); an inline-schema mismatch has no fallback and raises **XTSE0215** (154). **(3) Locationless imports are inert** (XSLT 3.0 §3.14.1) — no error while no component from the namespace is used (178/184); a `@namespace`-less inline schema imports its own target namespace (179, the spec example). **(4) The predefined XML namespace schema** (`xml:lang`/`xml:space`/`xml:base`/`xml:id`) is added to every built/merged set — XSD 1.0 §4.2.6.2 implies it, System.Xml.Schema does not (si-* `xml:lang` family).

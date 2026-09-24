@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 23-09-2026     | Creation (REQ-099 seam H4)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-103 (PB-1): named-simple-type attribute validation passes a real NameTable +       |
+//                      |                  |       |                | in-scope namespace resolver — NCName-family datatypes NRE'd on null (import-schema-001) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -310,7 +313,25 @@ public static partial class XdmSchemaAnnotator
             string? valueError = null;
             try
             {
-                simpleType.Datatype?.ParseValue(clone.Value, null, null);
+                // NCName-family datatypes dereference the name table and namespace resolver;
+                // passing null crashes inside System.Xml.Schema (import-schema-001 family).
+                // The namespace context is the original attribute's in-scope bindings, so a
+                // QName-family value would resolve the same prefixes (QName/NOTATION content
+                // is rejected upstream with XTTE1545 before reaching this path).
+                var nameTable = new NameTable();
+                var nsmgr = new XmlNamespaceManager(nameTable);
+                for (var scope = attribute.Parent; scope is not null; scope = scope.Parent)
+                {
+                    foreach (var nsAttr in scope.Attributes())
+                    {
+                        if (!nsAttr.IsNamespaceDeclaration)
+                            continue;
+                        var prefix = nsAttr.Name.LocalName == "xmlns" ? string.Empty : nsAttr.Name.LocalName;
+                        if (nsmgr.LookupNamespace(prefix) is null)
+                            nsmgr.AddNamespace(prefix, nsAttr.Value);
+                    }
+                }
+                simpleType.Datatype?.ParseValue(clone.Value, nameTable, nsmgr);
             }
             catch (Exception ex) when (ex is XmlSchemaException or XmlException or FormatException or OverflowException)
             {

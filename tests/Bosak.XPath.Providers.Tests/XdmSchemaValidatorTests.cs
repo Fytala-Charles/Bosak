@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 23-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-103: NCName-family named-type attribute validation regression tests (NullRef fix)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -420,6 +422,38 @@ public class XdmSchemaValidatorTests
 
         Assert.False(result.IsValid);
         Assert.Empty(result.Errors);
+        Assert.NotNull(result.FailureMessage);
+    }
+
+    [Fact]
+    public void ValidateAttribute_NamedType_NcNameFamily_DoesNotThrow()
+    {
+        // Regression for REQ-103 (PB-1): NCName-family datatypes (xs:ID) dereference the name
+        // table / namespace resolver passed to ParseValue; null arguments crashed with a
+        // NullReferenceException (the import-schema-001 family: @type="xs:ID" on xsl:attribute).
+        var schemas = new XmlSchemaSet();
+        schemas.Compile();
+        var parent = new XElement("e", new XAttribute("id", "A001"));
+        var attr = parent.Attribute("id")!;
+
+        var result = XdmSchemaAnnotator.ValidateAttribute(attr, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict, new XmlQualifiedName("ID", "http://www.w3.org/2001/XMLSchema")));
+
+        Assert.True(result.IsValid);
+        Assert.Equal(("http://www.w3.org/2001/XMLSchema", "ID"), XDocumentNode.Wrap(attr).SchemaTypeAnnotation);
+    }
+
+    [Fact]
+    public void ValidateAttribute_NamedType_NcNameFamily_InvalidValue_IsInvalid()
+    {
+        var schemas = new XmlSchemaSet();
+        schemas.Compile();
+        var attr = new XAttribute("id", "1-not-an-ncname");
+
+        var result = XdmSchemaAnnotator.ValidateAttribute(attr, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict, new XmlQualifiedName("ID", "http://www.w3.org/2001/XMLSchema")));
+
+        Assert.False(result.IsValid);
         Assert.NotNull(result.FailureMessage);
     }
 
