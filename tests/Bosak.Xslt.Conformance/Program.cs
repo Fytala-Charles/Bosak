@@ -156,6 +156,10 @@
 //                      |                  |       |                | catalog <schema> docs (stylesheet-import/secondary) merge into the host SchemaSet;        |
 //                      |                  |       |                | XSD 1.1 envs skip; fixed stale 185→205 comment (session-20 note)                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.52  | 23-09-2026     | REQ-102 (PA-1): dropped the file-based SchemaResolver (the core resolves hints against  |
+//                      |                  |       |                | module base URIs, preserving base URIs for xs:include + URI dedup vs the host set);      |
+//                      |                  |       |                | XXXX9999 error code = "any error" placeholder (import-schema-203)                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -204,8 +208,9 @@ class Program
 
     // Schema-aware mode (--schema-aware): drops the schema feature gates from
     // SkipFeatures, compiles every stylesheet with XsltCompiler.SchemaAware = true,
-    // supplies a file-based schema resolver, and merges the environment's catalog
-    // <schema role="stylesheet-import"> documents into the compiler's SchemaSet.
+    // and merges the environment's catalog <schema role="stylesheet-import|secondary">
+    // documents into the compiler's SchemaSet (schema-location hints resolve against
+    // module base URIs in the core, preserving base URIs for xs:include/xs:import).
     static bool _schemaAware = false;
 
     static readonly HashSet<string> SupportedSpecs = new(StringComparer.OrdinalIgnoreCase)
@@ -529,22 +534,6 @@ class Program
     }
 
     enum TestResult { Pass, Fail, Skip }
-
-    // Schema-aware mode: resolve an xsl:import-schema schema-location hint against the
-    // test set directory first, then the catalog directory (mirrors how stylesheets and
-    // documents are resolved). Returns null so the core falls back to URI resolution.
-    static Stream? ResolveSchemaHint(IReadOnlyList<string> hints, string testSetDir, string catalogDir)
-    {
-        foreach (var hint in hints)
-        {
-            var path = Path.Combine(testSetDir, hint);
-            if (!File.Exists(path))
-                path = Path.Combine(catalogDir, hint);
-            if (File.Exists(path))
-                return File.OpenRead(path);
-        }
-        return null;
-    }
 
     static string GetSkipReason(string name)
     {
@@ -1000,9 +989,12 @@ class Program
             };
             if (_schemaAware)
             {
+                // No SchemaResolver: schema-location hints resolve against the module's base
+                // URI in the core, which preserves the schema's base URI for xs:include /
+                // xs:import resolution and document-URI dedup against the host set. The
+                // environment's catalog <schema> documents arrive via the host SchemaSet.
                 compiler.SchemaAware = true;
                 compiler.SchemaSet = envSchemaSet;
-                compiler.SchemaResolver = (_, hints) => ResolveSchemaHint(hints, testSetDir, catalogDir);
             }
             var executable = compiler.Compile(xslDoc, baseUri);
 
@@ -1329,6 +1321,10 @@ class Program
     private static bool ErrorCodeMatches(string? expectedCode, Exception ex)
     {
         if (string.IsNullOrEmpty(expectedCode) || expectedCode == "*")
+            return true;
+        // XXXX9999 is the catalog's "any error, code unspecified" placeholder
+        // (import-schema-203 — the test only requires the import-schema declaration to fail).
+        if (expectedCode == "XXXX9999")
             return true;
         if (ex.Message.Contains(expectedCode, StringComparison.Ordinal))
             return true;
