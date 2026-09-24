@@ -1,7 +1,7 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-09-23 (twenty-fourth session)
-**Commit:** `feature/conformance-schema-aware-mode` — feat(conformance): --schema-aware mode for the XSLT 3.0 runner (REQ-101); branch → PR → merge per protect-main workflow
+**Commit:** `72425e6` (merge of PR #18, CI green 4m32s) — feat(conformance): --schema-aware mode for the XSLT 3.0 runner (REQ-101); branch deleted both sides, local main fast-forwarded
 **Current focus:** **REQ-101 — schema-aware mode for the W3C XSLT conformance harness** (Bosak.Schema Phase A acceptance track; the runner-side companion to the REQ-097/098/099 seam now that all four hooks ship in v0.12.0-beta). The runner skipped all 913 schema-gated tests via the `schema_aware`/`schema-import` feature dependencies and the `import-schema` SkipTestSets entry — there was no way to measure the seam end-to-end against the catalog. New opt-in: `--schema-aware` (or `-s`) anywhere on the command line removes those gates; when set, every stylesheet compiles with `XsltCompiler.SchemaAware = true`, a `SchemaResolver` serves `xsl:import-schema` `schema-location` hints from the test-set directory (fallback: catalog directory), and the environment's catalog `<schema role="stylesheet-import|secondary">` documents merge into the host `SchemaSet` — passed **uncompiled** so the core reports invalid/unlocatable schemas with its own XTSE0220 code. XSD 1.1 environments skip with a reason (engine is XSD 1.0 only). Without the flag the harness is bit-identical (the arg parser consumes only the flag itself).
 **What was built:**
 - Modified: `tests/Bosak.Xslt.Conformance/Program.cs` (3.51 — `_schemaAware` field, flag parsing, feature/set un-gating, compile-site wiring incl. the new `ResolveSchemaHint` helper; also fixed the stale "185 tests" comment noted in session 20 → 205).
@@ -13,8 +13,8 @@
 - Source-document schema validation (`<source validation="strict">`) is not exercised by the harness mode (catalog environments only declare stylesheet-import/secondary schemas; sources are loaded unvalidated as before).
 - XSD 1.1 environments (5 schema declarations across `strip-space` and `misc/catalog`) skip — System.Xml.Schema is XSD 1.0 only.
 **Next steps (agreed direction):**
-1. Push the branch, open the core PR, merge on green CI, delete branch both sides, fast-forward local main.
-2. Bosak.Schema track: per-test analysis of the schema-aware failures into Phase A work items; the package consumes the seam against the published v0.12.0-beta.
+1. ~~Push the branch, open the core PR, merge on green CI, delete branch both sides, fast-forward local main~~ — **done: PR #18 merged 2026-09-23** (merge commit `72425e6`, CI "Build & test (net10.0)" green 4m32s).
+2. Bosak.Schema track: per-test analysis of the 546 schema-aware failures into Phase A work items (top buckets: import-schema 75, match 66, nodetest 33/38, as 33, validation 30/67, si-* streaming sets ~135 — Phase C); the package consumes the seam against the published v0.12.0-beta.
 3. Core 1.0 tag timing remains an owner decision after the v0.12.0-beta soak.
 
 ---
