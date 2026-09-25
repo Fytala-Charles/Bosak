@@ -15,6 +15,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-103: NCName-family named-type attribute validation regression tests (NullRef fix)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 22-10-2026     | REQ-107: no-namespace named-type validation (as-2905) — no prefix binding, default-ns  |
+//                      |                  |       |                | in scope does not capture the unprefixed xsi:type                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -203,6 +206,89 @@ public class XdmSchemaValidatorTests
 
         Assert.True(result.IsValid);
         Assert.Equal(XdmValueKind.Integer, XDocumentNode.Wrap(element).TypedValue.Kind);
+    }
+
+    [Fact]
+    public void Validate_NamedType_NoNamespaceType_ValidatesWithoutPrefixBindingError()
+    {
+        // REQ-107 (as-2905 t3): a no-namespace target type cannot carry a prefix (XML 1.0
+        // forbids binding a prefix to the empty namespace name), so xsi:type is written
+        // unprefixed and no xmlns:t="" is synthesized.
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:simpleType name='derivedCode'>
+                    <xs:restriction base='xs:string'>
+                        <xs:enumeration value='123-AB'/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:schema>
+            """;
+        var schemas = new XmlSchemaSet();
+        schemas.Add(XmlSchema.Read(new StringReader(xsd), null)!);
+        schemas.Compile();
+        var element = new XElement("code", "123-AB");
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict, new XmlQualifiedName("derivedCode", string.Empty)));
+
+        Assert.True(result.IsValid);
+        Assert.Equal("123-AB", XDocumentNode.Wrap(element).TypedValue.ToString());
+        // The temporary namespace machinery must not leak into the live tree.
+        Assert.DoesNotContain(element.Attributes(), a => a.IsNamespaceDeclaration && a.Value.Length == 0);
+        Assert.Null(element.Attribute(XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance") + "type"));
+    }
+
+    [Fact]
+    public void Validate_NamedType_NoNamespaceType_DefaultNsInScope_UnprefixedXsiTypeStaysNoNamespace()
+    {
+        // Edge: with a default namespace in scope, an unprefixed xsi:type QName could
+        // resolve to that namespace; the clone drops the default declaration for the
+        // duration of the validity assessment, and the live element keeps its xmlns.
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:simpleType name='derivedCode'>
+                    <xs:restriction base='xs:string'>
+                        <xs:enumeration value='123-AB'/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:schema>
+            """;
+        var schemas = new XmlSchemaSet();
+        schemas.Add(XmlSchema.Read(new StringReader(xsd), null)!);
+        schemas.Compile();
+        var element = new XElement(XNamespace.Get("urn:default") + "code",
+            new XAttribute("xmlns", "urn:default"), "123-AB");
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict, new XmlQualifiedName("derivedCode", string.Empty)));
+
+        Assert.True(result.IsValid);
+        Assert.Equal("urn:default", element.Attribute("xmlns")!.Value);
+        Assert.Equal("123-AB", XDocumentNode.Wrap(element).TypedValue.ToString());
+    }
+
+    [Fact]
+    public void Validate_NamedType_NoNamespaceType_InvalidValue_IsInvalid()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:simpleType name='derivedCode'>
+                    <xs:restriction base='xs:string'>
+                        <xs:enumeration value='123-AB'/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:schema>
+            """;
+        var schemas = new XmlSchemaSet();
+        schemas.Add(XmlSchema.Read(new StringReader(xsd), null)!);
+        schemas.Compile();
+        var element = new XElement("code", "not-a-code");
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict, new XmlQualifiedName("derivedCode", string.Empty)));
+
+        Assert.False(result.IsValid);
+        Assert.NotEmpty(result.Errors);
     }
 
     [Fact]

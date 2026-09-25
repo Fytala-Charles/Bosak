@@ -19,6 +19,9 @@
 //                      |                  |       |                | PSVI preserved across copies, result-document finalize gap closed,                       |
 //                      |                  |       |                | input-type-annotations="strip" applied to loaded documents                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.88  | 22-10-2026     | REQ-107: value-of atomizes schema-validated nodes via their PSVI typed value            |
+//                      |                  |       |                | (canonical decimal/duration lexical forms, as-1803)                                     |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -12422,6 +12425,22 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
+    /// String form of a node for <c>xsl:value-of</c> output: schema-validated
+    /// element/attribute nodes contribute their PSVI typed value (canonical lexical
+    /// forms), everything else the plain string value.
+    /// </summary>
+    private static string NodeAtomizedString(IXdmNode node)
+    {
+        if (node.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && node.SchemaTypeAnnotation is not null)
+        {
+            if (node.HasNoTypedValue)
+                throw new InvalidOperationException("FOTY0012: Cannot atomize a node that has no typed value.");
+            return node.TypedValue.ToString();
+        }
+        return node.StringValue;
+    }
+
+    /// <summary>
     /// Flattens sequences and arrays for <c>xsl:apply-templates</c> selection,
     /// so arrays are processed member-by-member.
     /// </summary>
@@ -12657,6 +12676,28 @@ internal sealed class TransformEngine
             {
                 // Consistent with XdmValueToString: maps/functions cannot be atomized.
                 throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
+            }
+            else if (item.IsNode && item.NodeValue != null
+                && item.NodeValue.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute
+                && item.NodeValue.SchemaTypeAnnotation is not null)
+            {
+                // Schema-validated nodes contribute their PSVI typed value (XDM §2.7.2), so
+                // canonical lexical forms apply (xs:decimal trailing zeros, xs:duration
+                // component normalization). Element-only/empty complex content has no typed
+                // value and raises FOTY0012, matching fn:data (as-1803).
+                var node = item.NodeValue;
+                var typed = node.TypedValue;
+                if (typed.IsUndefined)
+                    continue; // nilled element: the typed value is the empty sequence
+                if (typed.IsSequence && typed.SequenceValue != null)
+                {
+                    foreach (var atom in XdmSequence.FromSource(typed.SequenceValue))
+                        slots.Add(atom.ToString());
+                }
+                else
+                {
+                    slots.Add(NodeAtomizedString(node));
+                }
             }
             else
             {

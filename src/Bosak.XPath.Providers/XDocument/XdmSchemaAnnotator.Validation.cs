@@ -203,13 +203,28 @@ public static partial class XdmSchemaAnnotator
                 .Where(a => a.IsNamespaceDeclaration && a.Value == typeNs)
                 .Select(a => a.Name.LocalName)
                 .FirstOrDefault(p => p.Length > 0);
+            XAttribute? removedDefaultNs = null;
             if (typePrefix is null)
             {
-                typePrefix = typeNs == XsNamespaceUri ? "xs" : GenerateUniquePrefix(clone, "t");
-                clone.SetAttributeValue(XNamespace.Xmlns + typePrefix, typeNs);
-                addedTypePrefix = typePrefix;
+                if (typeNs.Length > 0)
+                {
+                    typePrefix = typeNs == XsNamespaceUri ? "xs" : GenerateUniquePrefix(clone, "t");
+                    clone.SetAttributeValue(XNamespace.Xmlns + typePrefix, typeNs);
+                    addedTypePrefix = typePrefix;
+                }
+                else
+                {
+                    // A no-namespace target type cannot carry a prefix (XML 1.0 forbids
+                    // binding a prefix to the empty namespace name), so xsi:type is written
+                    // unprefixed; any in-scope default namespace is dropped from the clone
+                    // for the duration of the validity assessment so the unprefixed QName
+                    // cannot resolve to it.
+                    removedDefaultNs = clone.Attribute("xmlns");
+                    removedDefaultNs?.Remove();
+                }
             }
-            clone.SetAttributeValue(XNamespace.Get(XsiNamespaceUri) + "type", $"{typePrefix}:{typeLocal}");
+            clone.SetAttributeValue(XNamespace.Get(XsiNamespaceUri) + "type",
+                typePrefix is null ? typeLocal : $"{typePrefix}:{typeLocal}");
         }
 
         var wrapper = new XDocument(clone);

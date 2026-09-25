@@ -73,6 +73,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.17  | 21-08-2026     | Nilled elements have an empty typed value and are not element(*, T)-compatible          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.18  | 22-10-2026     | REQ-107: canonical XSD duration lexical form stored in PSVI typed values (as-1803)      |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.18  | 21-08-2026     | Added IsIdref property using PSVI for schema-validated IDREF nodes                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.19  | 22-08-2026     | Preserve lexical timezone offsets in schema-validated date/time typed values            |
@@ -99,6 +101,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
@@ -430,9 +433,11 @@ public sealed class XDocumentNode : IXdmNode
     /// <summary>
     /// Gets a value indicating whether this node has no typed value per XDM.
     /// For elements this is true when schema validation produced a complex type
-    /// with element-only or empty content (no simple typed value), which means
-    /// <c>fn:data()</c> must raise FOTY0012. Nilled elements always have an empty
-    /// typed value, so this returns <c>false</c> for them.
+    /// with element-only content (no simple typed value), which means
+    /// <c>fn:data()</c> must raise FOTY0012. Complex types with empty content DO
+    /// have a typed value — the zero-length string (XDM §2.7.2; nodetest-008 E8).
+    /// Nilled elements always have an empty typed value, so this returns
+    /// <c>false</c> for them.
     /// </summary>
     public bool HasNoTypedValue
     {
@@ -447,9 +452,9 @@ public sealed class XDocumentNode : IXdmNode
             var info = element.GetSchemaInfo();
             if (info?.SchemaType is XmlSchemaComplexType complex)
             {
-                // Complex types with element-only or empty content have no typed value.
-                return complex.ContentType is XmlSchemaContentType.ElementOnly
-                    or XmlSchemaContentType.Empty;
+                // Complex types with element-only content have no typed value; complex
+                // types with empty content have the zero-length string as their value.
+                return complex.ContentType is XmlSchemaContentType.ElementOnly;
             }
 
             return false;
@@ -666,6 +671,23 @@ public sealed class XDocumentNode : IXdmNode
             typeName = GetBuiltInBaseTypeName(schemaType) ?? "untypedAtomic";
         }
 
+        // Duration-family values keep their canonical XSD lexical form (XSD 1.0 App D /
+        // F&O canonical form): months fold into years, zero components are omitted. .NET
+        // parses xs:duration into a TimeSpan that loses the year-month part, so the
+        // canonical form is rebuilt from the original lexical value instead (as-1803).
+        if (lexicalValue is not null
+            && typeName is "duration" or "yearMonthDuration" or "dayTimeDuration"
+            && TryCanonicalizeDuration(lexicalValue, typeName, out var canonicalDuration))
+        {
+            return XdmValue.FromDuration(canonicalDuration, typeName);
+        }
+
+        // .NET parses xs:anyURI into System.Uri, whose ToString() rewrites the lexical
+        // form (e.g. appends a trailing slash); the typed value must preserve the lexical
+        // form, so it is kept verbatim (as-1803).
+        if (lexicalValue is not null && typeName.Equals("anyURI", StringComparison.OrdinalIgnoreCase))
+            return XdmValue.FromString(lexicalValue, "anyURI");
+
         switch (value)
         {
             case bool b:
@@ -820,6 +842,138 @@ public sealed class XDocumentNode : IXdmNode
             current = current.BaseXmlSchemaType;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Rebuilds the canonical XSD lexical form of a duration value (XML Schema 1.0
+    /// Part 2 Appendix D, as adopted by XPath F&O): the total month count folds into
+    /// years and remaining months, zero components are omitted, fractional-second
+    /// trailing zeros are trimmed, and an all-zero value is <c>PT0S</c>. For
+    /// <c>xs:yearMonthDuration</c> only the year/month part is emitted; for
+    /// <c>xs:dayTimeDuration</c> only the day/time part. Returns false when the
+    /// lexical value is not a valid duration, leaving callers to fall back to the
+    /// platform representation.
+    /// </summary>
+    private static bool TryCanonicalizeDuration(string lexical, string typeName, out string canonical)
+    {
+        canonical = string.Empty;
+        if (lexical.Length < 3 || lexical[0] == '-' && lexical.Length < 4)
+            return false;
+        var span = lexical.AsSpan();
+        var negative = false;
+        if (span[0] == '-')
+        {
+            negative = true;
+            span = span[1..];
+        }
+        if (span.Length < 2 || span[0] != 'P')
+            return false;
+        span = span[1..];
+
+        long years = 0, months = 0, days = 0, hours = 0, minutes = 0;
+        decimal seconds = 0m;
+        var inTimePart = false;
+        var any = false;
+
+        while (span.Length > 0)
+        {
+            if (span[0] == 'T')
+            {
+                if (inTimePart)
+                    return false;
+                inTimePart = true;
+                span = span[1..];
+                continue;
+            }
+            var digits = 0;
+            while (digits < span.Length && char.IsDigit(span[digits]))
+                digits++;
+            if (digits == 0)
+                return false;
+            var componentEnd = digits;
+            // Seconds may carry a decimal fraction (PT1.5S).
+            if (componentEnd < span.Length && span[componentEnd] == '.')
+            {
+                var fracDigits = 0;
+                while (componentEnd + 1 + fracDigits < span.Length && char.IsDigit(span[componentEnd + 1 + fracDigits]))
+                    fracDigits++;
+                if (fracDigits == 0)
+                    return false;
+                componentEnd += 1 + fracDigits;
+            }
+            if (!decimal.TryParse(span[..componentEnd], System.Globalization.CultureInfo.InvariantCulture, out var number))
+                return false;
+            if (componentEnd >= span.Length)
+                return false;
+            var designator = span[componentEnd];
+            span = span[(componentEnd + 1)..];
+            any = true;
+            switch (designator)
+            {
+                case 'Y' when !inTimePart: years = (long)number; break;
+                case 'M' when !inTimePart: months = (long)number; break;
+                case 'D' when !inTimePart: days = (long)number; break;
+                case 'H' when inTimePart: hours = (long)number; break;
+                case 'M' when inTimePart: minutes = (long)number; break;
+                case 'S' when inTimePart: seconds = number; break;
+                default: return false;
+            }
+        }
+        if (!any)
+            return false;
+
+        // Fold the total month count into years and remaining months.
+        months += years * 12;
+        years = months / 12;
+        months %= 12;
+
+        var sb = new StringBuilder();
+        if (negative)
+            sb.Append('-');
+        sb.Append('P');
+        var wrote = false;
+        void Component(long value, char designator)
+        {
+            if (value == 0)
+                return;
+            sb.Append(value).Append(designator);
+            wrote = true;
+        }
+        if (typeName != "dayTimeDuration")
+        {
+            Component(years, 'Y');
+            Component(months, 'M');
+            Component(days, 'D');
+        }
+        else
+        {
+            Component(days, 'D');
+        }
+        if (typeName != "yearMonthDuration")
+        {
+            if (hours != 0 || minutes != 0 || seconds != 0m || !wrote)
+            {
+                sb.Append('T');
+                wrote = true;
+                Component(hours, 'H');
+                Component(minutes, 'M');
+                if (seconds != 0m || (!wrote && hours == 0 && minutes == 0))
+                {
+                    var sec = seconds.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    if (sec.Contains('.'))
+                        sec = sec.TrimEnd('0').TrimEnd('.');
+                    sb.Append(sec).Append('S');
+                    wrote = true;
+                }
+            }
+        }
+        if (!wrote || (years == 0 && months == 0 && days == 0 && hours == 0 && minutes == 0 && seconds == 0m))
+        {
+            canonical = negative ? "-PT0S" : "PT0S";
+            return true;
+        }
+        canonical = sb.ToString();
+        return true;
     }
 
     /// <summary>

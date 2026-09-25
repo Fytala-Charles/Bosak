@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 23-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 22-10-2026     | REQ-107: value-of typed-value atomization tests (canonical forms, FOTY0012, as-1803)    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -83,6 +85,9 @@ public class SchemaAwareValidationTests
         "<xs:element name='holder'><xs:complexType><xs:sequence>" +
         "<xs:any namespace='##any' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>" +
         "</xs:sequence></xs:complexType></xs:element>" +
+        "<xs:element name='price' type='xs:decimal'/>" +
+        "<xs:element name='span' type='xs:duration'/>" +
+        "<xs:element name='flag'><xs:complexType><xs:attribute name='code' type='xs:string'/></xs:complexType></xs:element>" +
         "</xs:schema></xsl:import-schema>";
 
     private static XmlSchemaSet CompileH4Schema()
@@ -738,5 +743,71 @@ public class SchemaAwareValidationTests
         var executable = new Xslt.Api.XsltCompiler { SchemaAware = true }.Compile(xsl, "file:///test.xsl");
         var awareResult = executable.TransformToString(new XDocumentNode(new XDocument(new XElement("dummy"))), initialTemplate: "main");
         Assert.Equal(schemaAwareNoSchema, awareResult);
+    }
+
+    // ----- REQ-107 (as-1803): value-of atomizes validated nodes via their typed value -----
+
+    [Fact]
+    public void ValueOf_ValidatedDecimalElement_EmitsCanonicalForm()
+    {
+        var result = RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='v'>
+                    <xsl:element name='t:price' validation='strict'>1000.000</xsl:element>
+                </xsl:variable>
+                <out><xsl:value-of select="$v/t:price"/></out>
+            </xsl:template>
+            """);
+        Assert.Contains(">1000<", result);
+        Assert.DoesNotContain("1000.000", result);
+    }
+
+    [Fact]
+    public void ValueOf_ValidatedDurationElement_EmitsCanonicalForm()
+    {
+        var result = RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='v'>
+                    <xsl:element name='t:span' validation='strict'>-P12M23DT0M59.123S</xsl:element>
+                </xsl:variable>
+                <out><xsl:value-of select="$v/t:span"/></out>
+            </xsl:template>
+            """);
+        Assert.Contains(">-P1Y23DT59.123S<", result);
+    }
+
+    [Fact]
+    public void ValueOf_ElementOnlyValidatedElement_RaisesFoty0012()
+    {
+        var ex = Assert.ThrowsAny<InvalidOperationException>(() => RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='v'>
+                    <xsl:element name='t:order' validation='strict'>
+                        <xsl:attribute name='code' select='5'/>
+                        <xsl:element name='t:id'>7</xsl:element>
+                    </xsl:element>
+                </xsl:variable>
+                <out><xsl:value-of select="$v/t:order"/></out>
+            </xsl:template>
+            """));
+        Assert.Contains("FOTY0012", ex.Message);
+    }
+
+    [Fact]
+    public void ValueOf_EmptyContentValidatedElement_EmitsEmptyString()
+    {
+        // Complex type with EMPTY content has the zero-length string as its typed value
+        // (XDM §2.7.2, nodetest-008 E8); only element-only content raises FOTY0012.
+        var result = RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='v'>
+                    <xsl:element name='t:flag' validation='strict'>
+                        <xsl:attribute name='code' select='5'/>
+                    </xsl:element>
+                </xsl:variable>
+                <out><xsl:value-of select="$v/t:flag"/>|<xsl:value-of select="data($v/t:flag)"/></out>
+            </xsl:template>
+            """);
+        Assert.Contains(">|<", result);
     }
 }
