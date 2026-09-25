@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 25-09-2026     | REQ-108: no-namespace instance-of asserts identity on a cast (user-typed) value          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -191,7 +193,7 @@ public class NotationAndNestedImportTests
             + "<xs:notation name='mp3' public='audio/mpeg'/>"
             + "<xs:simpleType name='nota'><xs:restriction base='xs:NOTATION'>"
             + "<xs:enumeration value='mp3'/></xs:restriction></xs:simpleType></xs:schema></xsl:import-schema>"
-            + "<xsl:template match='/'><out><xsl:value-of select=\"'mp3' instance of nota\"/></out></xsl:template>"
+            + "<xsl:template match='/'><out><xsl:value-of select=\"('mp3' cast as nota) instance of nota\"/></out></xsl:template>"
             + "</xsl:stylesheet>";
         var compiler = new Xslt.Api.XsltCompiler { SchemaAware = true };
         var executable = compiler.Compile(xsl, "file:///test.xsl");

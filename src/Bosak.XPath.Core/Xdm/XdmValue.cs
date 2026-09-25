@@ -49,6 +49,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.7   | 21-09-2026     | API freeze stage D: EffectiveBooleanValue renamed to GetEffectiveBooleanValue           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.8   | 25-09-2026     | REQ-108: user-defined type identity annotation (UserSchemaTypeName, Q{uri}local)        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.9   | 25-09-2026     | REQ-108: annotated FromBoolean/FromDouble/FromFloat/FromDate/FromTime overloads so     |
+//                      |                  |       |                | bool/float/double/date/time typed values keep their user-defined type identity          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -69,18 +74,20 @@ public readonly struct XdmValue
     private readonly double _double;
     private readonly object? _reference;
     private readonly string? _schemaTypeName;
+    private readonly string? _userSchemaTypeName;
 
     // ------------------------------------------------------------------
     // Constructors
     // ------------------------------------------------------------------
 
-    private XdmValue(XdmValueKind kind, long integer = 0, double @double = 0, object? reference = null, string? schemaTypeName = null)
+    private XdmValue(XdmValueKind kind, long integer = 0, double @double = 0, object? reference = null, string? schemaTypeName = null, string? userSchemaTypeName = null)
     {
         _kind = kind;
         _integer = integer;
         _double = @double;
         _reference = reference;
         _schemaTypeName = schemaTypeName;
+        _userSchemaTypeName = userSchemaTypeName;
     }
 
     /// <summary>The undefined (absent) value, used for out-of-range lookups and empty results.</summary>
@@ -94,21 +101,33 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromBoolean(bool value) => value ? True : False;
 
+    /// <summary>Creates a boolean-family value with a schema type annotation (e.g. xs:boolean, a user-defined restriction of it).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromBoolean(bool value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Boolean, integer: value ? 1 : 0, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
     /// <summary>Creates an xs:integer value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromInteger(long value) => new(XdmValueKind.Integer, integer: value);
 
     /// <summary>Creates an integer-family value with a derived-type annotation (e.g. xs:long, xs:byte).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromInteger(long value, string schemaTypeName) => new(XdmValueKind.Integer, integer: value, schemaTypeName: schemaTypeName);
+    public static XdmValue FromInteger(long value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Integer, integer: value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     /// <summary>Creates an xs:double value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDouble(double value) => new(XdmValueKind.Double, @double: value);
 
+    /// <summary>Creates a double-family value with a schema type annotation (e.g. xs:double, a user-defined restriction of it).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDouble(double value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Double, @double: value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
     /// <summary>Creates an xs:float value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromFloat(float value) => new(XdmValueKind.Float, @double: value);
+
+    /// <summary>Creates a float-family value with a schema type annotation (e.g. xs:float, a user-defined restriction of it).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromFloat(float value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Float, @double: value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     /// <summary>Creates an xs:decimal value (negative zero is normalized).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,7 +135,7 @@ public readonly struct XdmValue
 
     /// <summary>Creates a decimal-family value with a derived-type annotation (e.g. xs:unsignedLong overflow).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromDecimal(decimal value, string schemaTypeName) => new(XdmValueKind.Decimal, reference: NormalizeZero(value), schemaTypeName: schemaTypeName);
+    public static XdmValue FromDecimal(decimal value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Decimal, reference: NormalizeZero(value), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     // XPath decimals have no negative zero; the .NET decimal type preserves a -0.0 sign
     // that would leak into casts and string conversions. Clear it, preserving scale.
@@ -129,7 +148,7 @@ public readonly struct XdmValue
 
     /// <summary>Creates a string-family value with a schema type annotation (e.g. xs:hexBinary, xs:gYear).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromString(string value, string schemaTypeName) => new(XdmValueKind.String, reference: value, schemaTypeName: schemaTypeName);
+    public static XdmValue FromString(string value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.String, reference: value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     /// <summary>Creates an xs:duration value from its lexical representation.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -137,7 +156,7 @@ public readonly struct XdmValue
 
     /// <summary>Creates a duration-family value with a derived-type annotation (e.g. xs:dayTimeDuration).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromDuration(string value, string schemaTypeName) => new(XdmValueKind.Duration, reference: value, schemaTypeName: schemaTypeName);
+    public static XdmValue FromDuration(string value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Duration, reference: value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     /// <summary>Creates a node value; a null node yields <see cref="Undefined"/>.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -178,8 +197,8 @@ public readonly struct XdmValue
 
     /// <summary>Creates a dateTime-family value with a schema type annotation (e.g. xs:dateTimeStamp).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromDateTime(DateTimeOffset value, bool hasTimezone, string schemaTypeName)
-        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName);
+    public static XdmValue FromDateTime(DateTimeOffset value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     /// <summary>Creates an xs:dateTime value from an extended-year date/time.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -188,8 +207,8 @@ public readonly struct XdmValue
 
     /// <summary>Creates a dateTime-family value from an extended-year date/time with a schema type annotation.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromDateTime(XPathDateTime value, bool hasTimezone, string schemaTypeName)
-        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone), schemaTypeName: schemaTypeName);
+    public static XdmValue FromDateTime(XPathDateTime value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.DateTime, reference: new DateTimeWrapper(value, hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     /// <summary>Creates an xs:date value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -206,6 +225,11 @@ public readonly struct XdmValue
     public static XdmValue FromDate(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.Date, reference: new DateTimeWrapper(value, hasTimezone));
 
+    /// <summary>Creates a date-family value with a schema type annotation (e.g. xs:date, a user-defined restriction of it).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDate(DateTimeOffset value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.Date, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
     /// <summary>Creates an xs:time value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value)
@@ -221,6 +245,11 @@ public readonly struct XdmValue
     public static XdmValue FromTime(XPathDateTime value, bool hasTimezone)
         => new(XdmValueKind.Time, reference: new DateTimeWrapper(value, hasTimezone));
 
+    /// <summary>Creates a time-family value with a schema type annotation (e.g. xs:time, a user-defined restriction of it).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromTime(DateTimeOffset value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.Time, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
     /// <summary>Creates an xs:QName value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromQName(XsQName value)
@@ -228,8 +257,8 @@ public readonly struct XdmValue
 
     /// <summary>Creates a QName value with a schema type annotation (e.g. xs:NOTATION).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static XdmValue FromQName(XsQName value, string schemaTypeName)
-        => new(XdmValueKind.QName, reference: value, schemaTypeName: schemaTypeName);
+    public static XdmValue FromQName(XsQName value, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.QName, reference: value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     // ------------------------------------------------------------------
     // Accessors
@@ -239,6 +268,12 @@ public readonly struct XdmValue
     public XdmValueKind Kind => _kind;
     /// <summary>Gets the schema type annotation local name (e.g. integer, dateTimeStamp), or null when unannotated.</summary>
     public string? SchemaTypeName => _schemaTypeName;
+    /// <summary>
+    /// Gets the user-defined schema type annotation in <c>Q{uri}local</c> form when the
+    /// value's actual type is a user-defined simple type; null for built-in-typed or
+    /// untyped values.
+    /// </summary>
+    public string? UserSchemaTypeName => _userSchemaTypeName;
 
     /// <summary>Returns whether this is the undefined (absent) value.</summary>
     public bool IsUndefined => _kind == XdmValueKind.Undefined;

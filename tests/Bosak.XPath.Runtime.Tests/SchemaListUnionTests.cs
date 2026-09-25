@@ -36,6 +36,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15  | 25-09-2026     | REQ-108: union instance-of tests assert member-type identity, not castability            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -127,12 +129,25 @@ public class SchemaListUnionTests
     }
 
     [Fact]
-    public void UnionInstanceOf_AcceptsMatchingDecimalValue()
+    public void UnionInstanceOf_MemberTypedValue_Matches()
     {
+        // QT3 instanceof118 shape: a value constructed as a union member type is an
+        // instance of the union (REQ-108 identity semantics).
+        var ctx = LoadUnionListContext();
+
+        var result = XPath31Expression.Compile("s:unrestrictedInteger(3) instance of s:myUnionType1").Evaluate(ctx);
+        Assert.True(result.BooleanValue);
+    }
+
+    [Fact]
+    public void UnionInstanceOf_BareLiteral_DoesNotMatch()
+    {
+        // A bare xs:decimal literal is not typed as a union member, so identity (not
+        // castability) answers false (REQ-108).
         var ctx = LoadUnionListContext();
 
         var result = XPath31Expression.Compile("123.12 instance of s:myUnionType1").Evaluate(ctx);
-        Assert.True(result.BooleanValue);
+        Assert.False(result.BooleanValue);
     }
 
     [Fact]
@@ -145,11 +160,13 @@ public class SchemaListUnionTests
     }
 
     [Fact]
-    public void UnionInstanceOf_AcceptsMatchingStringValue()
+    public void UnionInstanceOf_MemberTypedStringValue_Matches()
     {
+        // QT3 instanceof119 shape: a value constructed as a union member type is an
+        // instance of the union (REQ-108 identity semantics).
         var ctx = LoadUnionListContext();
 
-        var result = XPath31Expression.Compile("'IB123' instance of s:myUnionType2").Evaluate(ctx);
+        var result = XPath31Expression.Compile("s:restrictedString('IB123') instance of s:myUnionType2").Evaluate(ctx);
         Assert.True(result.BooleanValue);
     }
 
@@ -189,11 +206,13 @@ public class SchemaListUnionTests
     [Fact]
     public void UnionOfAtomicInstanceOf_BracedUriLiteralAcceptsMatchingValue()
     {
-        // Positive regression: a braced-URI-literal union of atomic types is a valid item type.
+        // Positive regression: a braced-URI-literal union of atomic types is a valid item
+        // type, and a member-typed value is an instance of it (QT3 instanceof118 shape;
+        // REQ-108 identity semantics).
         var ctx = LoadUnionListContext();
 
         var result = XPath31Expression.Compile(
-            "123.12 instance of Q{http://www.w3.org/XQueryTest/unionListDefined}myUnionType1")
+            "Q{http://www.w3.org/XQueryTest/unionListDefined}unrestrictedInteger(3) instance of Q{http://www.w3.org/XQueryTest/unionListDefined}myUnionType1")
             .Evaluate(ctx);
         Assert.True(result.BooleanValue);
     }
@@ -715,11 +734,13 @@ public class SchemaListUnionTests
     public void InstanceOf_UnprefixedUserDefinedTypeUsesDefaultElementNamespace()
     {
         // Regression for InstanceOf: unprefixed user-defined schema simple types in the
-        // default element namespace are valid atomic item types (ForExprType052/053).
+        // default element namespace are valid atomic item types (ForExprType052/053), and a
+        // member-typed value matches the union by identity (REQ-108).
         var ctx = LoadUnionListContext();
         ctx.DefaultElementNamespace = "http://www.w3.org/XQueryTest/unionListDefined";
 
-        var result = XPath31Expression.Compile("123 instance of myUnionType1").Evaluate(ctx);
+        var result = XPath31Expression.Compile(
+            "Q{http://www.w3.org/XQueryTest/unionListDefined}unrestrictedInteger(3) instance of myUnionType1").Evaluate(ctx);
         Assert.True(result.BooleanValue);
     }
 

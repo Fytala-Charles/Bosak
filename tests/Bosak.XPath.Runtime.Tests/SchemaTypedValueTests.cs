@@ -24,6 +24,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15  | 25-09-2026     | REQ-108: user-defined instance-of asserts identity (constructed type matches, literal    |
+//                      |                  |       |                | merely castable does not)                                                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -246,8 +249,13 @@ public class SchemaTypedValueTests
         ctx = ctx.WithNamespace("ex", "http://example.com/schema");
         FunctionLibrary.Populate(ctx);
 
-        var result = XPath31Expression.Compile("21 instance of ex:age").Evaluate(ctx);
-        Assert.True(result.BooleanValue);
+        // REQ-108: instance-of for a user-defined type is identity, not castability —
+        // a value constructed as the user type matches, a merely castable literal does not.
+        var typed = XPath31Expression.Compile("ex:age(21) instance of ex:age").Evaluate(ctx);
+        Assert.True(typed.BooleanValue);
+
+        var castable = XPath31Expression.Compile("21 instance of ex:age").Evaluate(ctx);
+        Assert.False(castable.BooleanValue);
     }
 
     [Fact]
