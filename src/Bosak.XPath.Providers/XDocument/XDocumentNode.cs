@@ -101,6 +101,9 @@
 //                      | Charles Korthout | 0.30  | 25-09-2026     | REQ-108: complex simple-content typed values tag the simple content base type (cbcl-    |
 //                      |                  |       |                | module-001)                                                                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.31  | 25-09-2026     | REQ-108: bool/float/double/date/time typed values keep their user-defined type          |
+//                      |                  |       |                | identity (evaluate-009, type-expr-0201/0401, type-functions-0201)                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -707,16 +710,16 @@ public sealed class XDocumentNode : IXdmNode
         switch (value)
         {
             case bool b:
-                return XdmValue.FromBoolean(b);
+                return XdmValue.FromBoolean(b, typeName, userTypeName);
             case decimal d:
                 // Integer-derived schema types preserve the integer XDM kind when the value fits.
                 if (IsIntegerTypeName(typeName) && d >= long.MinValue && d <= long.MaxValue && d == (long)d)
                     return XdmValue.FromInteger((long)d, typeName, userTypeName);
                 return XdmValue.FromDecimal(d, typeName, userTypeName);
             case float f:
-                return XdmValue.FromFloat(f);
+                return XdmValue.FromFloat(f, typeName, userTypeName);
             case double d:
-                return XdmValue.FromDouble(d);
+                return XdmValue.FromDouble(d, typeName, userTypeName);
             case byte u8: return XdmValue.FromInteger(u8, typeName, userTypeName);
             case sbyte i8: return XdmValue.FromInteger(i8, typeName, userTypeName);
             case short i16: return XdmValue.FromInteger(i16, typeName, userTypeName);
@@ -794,8 +797,8 @@ public sealed class XDocumentNode : IXdmNode
     private static XdmValue ConvertDateTime(DateTimeOffset dto, string typeName, bool hasTimezone, string? userSchemaTypeName = null)
         => typeName.ToLowerInvariant() switch
         {
-            "date" => XdmValue.FromDate(dto, hasTimezone),
-            "time" => XdmValue.FromTime(dto, hasTimezone),
+            "date" => XdmValue.FromDate(dto, hasTimezone, "date", userSchemaTypeName),
+            "time" => XdmValue.FromTime(dto, hasTimezone, "time", userSchemaTypeName),
             "gyear" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYear", userSchemaTypeName: userSchemaTypeName),
             "gyearmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYearMonth", userSchemaTypeName: userSchemaTypeName),
             "gmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonth", userSchemaTypeName: userSchemaTypeName),

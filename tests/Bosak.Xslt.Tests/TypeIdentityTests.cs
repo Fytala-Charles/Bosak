@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 25-09-2026     | REQ-108: bool/date/double/float identity tests + xsl:evaluate constructor coverage      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -35,6 +37,7 @@ public class TypeIdentityTests
     private const string TestNs = "urn:req108";
 
     // partNumberType: string restriction with a pattern facet; part: element of that type.
+    // flagType/whenType/measureType/weightType: restrictions of xs:boolean/xs:date/xs:double/xs:float.
     private const string TestSchema = """
         <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='urn:req108' xmlns:t='urn:req108' elementFormDefault='qualified'>
             <xs:simpleType name='partNumberType'>
@@ -43,6 +46,31 @@ public class TypeIdentityTests
                 </xs:restriction>
             </xs:simpleType>
             <xs:element name='part' type='t:partNumberType'/>
+            <xs:simpleType name='flagType'>
+                <xs:restriction base='xs:boolean'>
+                    <xs:whiteSpace value='collapse'/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name='flag' type='t:flagType'/>
+            <xs:simpleType name='whenType'>
+                <xs:restriction base='xs:date'>
+                    <xs:enumeration value='2004-11-02'/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name='when' type='t:whenType'/>
+            <xs:simpleType name='measureType'>
+                <xs:restriction base='xs:double'>
+                    <xs:minInclusive value='-1'/>
+                    <xs:maxInclusive value='2'/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name='measure' type='t:measureType'/>
+            <xs:simpleType name='weightType'>
+                <xs:restriction base='xs:float'>
+                    <xs:maxInclusive value='10'/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name='weight' type='t:weightType'/>
         </xs:schema>
         """;
 
@@ -50,7 +78,19 @@ public class TypeIdentityTests
         "targetNamespace='urn:req108' xmlns:t='urn:req108' elementFormDefault='qualified'>" +
         "<xs:simpleType name='partNumberType'><xs:restriction base='xs:string'>" +
         "<xs:pattern value='[A-Z]{2}[0-9]{4}'/></xs:restriction></xs:simpleType>" +
-        "<xs:element name='part' type='t:partNumberType'/></xs:schema></xsl:import-schema>";
+        "<xs:element name='part' type='t:partNumberType'/>" +
+        "<xs:simpleType name='flagType'><xs:restriction base='xs:boolean'>" +
+        "<xs:whiteSpace value='collapse'/></xs:restriction></xs:simpleType>" +
+        "<xs:element name='flag' type='t:flagType'/>" +
+        "<xs:simpleType name='whenType'><xs:restriction base='xs:date'>" +
+        "<xs:enumeration value='2004-11-02'/></xs:restriction></xs:simpleType>" +
+        "<xs:element name='when' type='t:whenType'/>" +
+        "<xs:simpleType name='measureType'><xs:restriction base='xs:double'>" +
+        "<xs:minInclusive value='-1'/><xs:maxInclusive value='2'/></xs:restriction></xs:simpleType>" +
+        "<xs:element name='measure' type='t:measureType'/>" +
+        "<xs:simpleType name='weightType'><xs:restriction base='xs:float'>" +
+        "<xs:maxInclusive value='10'/></xs:restriction></xs:simpleType>" +
+        "<xs:element name='weight' type='t:weightType'/></xs:schema></xsl:import-schema>";
 
     private static XmlSchemaSet CompileTestSchema()
     {
@@ -63,6 +103,13 @@ public class TypeIdentityTests
     private static XDocument ValidatedPartDocument()
     {
         var source = new XDocument(new XElement(XNamespace.Get(TestNs) + "part", "AB1234"));
+        XdmSchemaAnnotator.ValidateSubtree(source.Root!, CompileTestSchema());
+        return source;
+    }
+
+    private static XDocument ValidatedDocument(string localName, string value)
+    {
+        var source = new XDocument(new XElement(XNamespace.Get(TestNs) + localName, value));
         XdmSchemaAnnotator.ValidateSubtree(source.Root!, CompileTestSchema());
         return source;
     }
@@ -159,5 +206,49 @@ public class TypeIdentityTests
             </xsl:template>
             """, ValidatedPartDocument());
         Assert.Contains(">true<", result);
+    }
+
+    [Theory]
+    [InlineData("flag", "true", "flagType", "xs:boolean")]
+    [InlineData("when", "2004-11-02", "whenType", "xs:date")]
+    [InlineData("measure", "0.99", "measureType", "xs:double")]
+    [InlineData("weight", "1.5", "weightType", "xs:float")]
+    public void InstanceOf_PsviValueForBoolDateDoubleFloatRestrictions_MatchesUserTypeAndBaseType(
+        string element, string value, string userType, string baseType)
+    {
+        // PSVI typed values for boolean/date/double/float restrictions keep their
+        // user-defined type identity (type-expr-0201/0401, type-functions-0201).
+        var result = RunSchemaAware($$"""
+            <xsl:template name='main'>
+                <out>
+                    <user><xsl:value-of select="data(/t:{{element}}) instance of t:{{userType}}"/></user>
+                    <base><xsl:value-of select="data(/t:{{element}}) instance of {{baseType}}"/></base>
+                </out>
+            </xsl:template>
+            """, ValidatedDocument(element, value));
+        Assert.Contains("<user>true</user>", result);
+        Assert.Contains("<base>true</base>", result);
+    }
+
+    [Fact]
+    public void Constructor_UserDefinedDateType_ResultMatchesUserType()
+    {
+        // User-defined constructor over a date value tags the result with the user type
+        // identity so instance-of succeeds inside and outside xsl:evaluate (evaluate-009).
+        var result = RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='val' select="t:whenType(xs:date('2004-11-02'))"/>
+                <out>
+                    <direct><xsl:value-of select="$val instance of t:whenType"/></direct>
+                    <via-eval><xsl:evaluate xpath="'$val instance of t:whenType'" schema-aware='yes'>
+                        <xsl:with-param name='val' select='$val'/>
+                    </xsl:evaluate></via-eval>
+                    <plain-date><xsl:value-of select="xs:date('2004-11-02') instance of t:whenType"/></plain-date>
+                </out>
+            </xsl:template>
+            """);
+        Assert.Contains("<direct>true</direct>", result);
+        Assert.Contains("<via-eval>true</via-eval>", result);
+        Assert.Contains("<plain-date>false</plain-date>", result);
     }
 }
