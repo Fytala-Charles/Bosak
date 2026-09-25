@@ -96,6 +96,8 @@
 //                      | Charles Korthout | 0.28  | 17-09-2026     | Static CopyUnparsedEntities(IXdmNode, XDocument) handles streaming nodes so DTD          |
 //                      |                  |       |                | unparsed entities survive copies of streamed documents (sf-unparsed-entity-03/04/06/08)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.29  | 25-09-2026     | REQ-108: user-defined type identity annotation on PSVI typed values (Q{uri}local)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -665,10 +667,13 @@ public sealed class XDocumentNode : IXdmNode
         string typeName = schemaType.QualifiedName.Name;
         string typeNs = schemaType.QualifiedName.Namespace;
 
+        string? userTypeName = null;
         if (typeNs != XmlSchema.Namespace)
         {
-            // User-defined type: derive the annotation from the ultimate built-in base type.
+            // User-defined type: derive the annotation from the ultimate built-in base type,
+            // but keep the user-defined type identity in Q{uri}local form (REQ-108).
             typeName = GetBuiltInBaseTypeName(schemaType) ?? "untypedAtomic";
+            userTypeName = $"Q{{{typeNs}}}{schemaType.QualifiedName.Name}";
         }
 
         // Duration-family values keep their canonical XSD lexical form (XSD 1.0 App D /
@@ -679,14 +684,14 @@ public sealed class XDocumentNode : IXdmNode
             && typeName is "duration" or "yearMonthDuration" or "dayTimeDuration"
             && TryCanonicalizeDuration(lexicalValue, typeName, out var canonicalDuration))
         {
-            return XdmValue.FromDuration(canonicalDuration, typeName);
+            return XdmValue.FromDuration(canonicalDuration, typeName, userTypeName);
         }
 
         // .NET parses xs:anyURI into System.Uri, whose ToString() rewrites the lexical
         // form (e.g. appends a trailing slash); the typed value must preserve the lexical
         // form, so it is kept verbatim (as-1803).
         if (lexicalValue is not null && typeName.Equals("anyURI", StringComparison.OrdinalIgnoreCase))
-            return XdmValue.FromString(lexicalValue, "anyURI");
+            return XdmValue.FromString(lexicalValue, "anyURI", userTypeName);
 
         switch (value)
         {
@@ -695,27 +700,27 @@ public sealed class XDocumentNode : IXdmNode
             case decimal d:
                 // Integer-derived schema types preserve the integer XDM kind when the value fits.
                 if (IsIntegerTypeName(typeName) && d >= long.MinValue && d <= long.MaxValue && d == (long)d)
-                    return XdmValue.FromInteger((long)d, typeName);
-                return XdmValue.FromDecimal(d, typeName);
+                    return XdmValue.FromInteger((long)d, typeName, userTypeName);
+                return XdmValue.FromDecimal(d, typeName, userTypeName);
             case float f:
                 return XdmValue.FromFloat(f);
             case double d:
                 return XdmValue.FromDouble(d);
-            case byte u8: return XdmValue.FromInteger(u8, typeName);
-            case sbyte i8: return XdmValue.FromInteger(i8, typeName);
-            case short i16: return XdmValue.FromInteger(i16, typeName);
-            case ushort u16: return XdmValue.FromInteger(u16, typeName);
-            case int i32: return XdmValue.FromInteger(i32, typeName);
+            case byte u8: return XdmValue.FromInteger(u8, typeName, userTypeName);
+            case sbyte i8: return XdmValue.FromInteger(i8, typeName, userTypeName);
+            case short i16: return XdmValue.FromInteger(i16, typeName, userTypeName);
+            case ushort u16: return XdmValue.FromInteger(u16, typeName, userTypeName);
+            case int i32: return XdmValue.FromInteger(i32, typeName, userTypeName);
             case uint u32:
-                return XdmValue.FromInteger((long)u32, typeName);
+                return XdmValue.FromInteger((long)u32, typeName, userTypeName);
             case long i64:
-                return XdmValue.FromInteger(i64, typeName);
+                return XdmValue.FromInteger(i64, typeName, userTypeName);
             case ulong u64:
                 if (u64 <= (ulong)long.MaxValue)
-                    return XdmValue.FromInteger((long)u64, typeName);
-                return XdmValue.FromDecimal(u64, typeName);
+                    return XdmValue.FromInteger((long)u64, typeName, userTypeName);
+                return XdmValue.FromDecimal(u64, typeName, userTypeName);
             case DateTimeOffset dto:
-                return ConvertDateTime(dto, typeName, hasTimezone);
+                return ConvertDateTime(dto, typeName, hasTimezone, userTypeName);
             case DateTime dt:
                 // Re-parse the lexical form for date/time values so the original timezone offset
                 // is preserved. XmlSchemaDatatype.ParseValue normalizes the returned DateTime to
@@ -725,7 +730,7 @@ public sealed class XDocumentNode : IXdmNode
                 {
                     try
                     {
-                        return ConvertDateTime(XmlConvert.ToDateTimeOffset(lexicalValue), typeName, hasTimezone);
+                        return ConvertDateTime(XmlConvert.ToDateTimeOffset(lexicalValue), typeName, hasTimezone, userTypeName);
                     }
                     catch (FormatException)
                     {
@@ -733,7 +738,7 @@ public sealed class XDocumentNode : IXdmNode
                         // not a supported date/time lexical form.
                     }
                 }
-                return ConvertDateTime(dt, typeName, hasTimezone);
+                return ConvertDateTime(dt, typeName, hasTimezone, userTypeName);
             case XmlQualifiedName qn:
             {
                 string qnType = typeName;
@@ -746,21 +751,21 @@ public sealed class XDocumentNode : IXdmNode
                     if (colon > 0)
                         prefix = lexicalValue[..colon];
                 }
-                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), qnType);
+                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), qnType, userTypeName);
             }
             case string s:
-                return XdmValue.FromString(s, typeName);
+                return XdmValue.FromString(s, typeName, userTypeName);
             case byte[] bytes:
                 // XdmValue stores binary types as annotated strings.
                 string text = typeName.Equals("hexBinary", StringComparison.OrdinalIgnoreCase)
                     ? Convert.ToHexString(bytes)
                     : Convert.ToBase64String(bytes);
-                return XdmValue.FromString(text, typeName);
+                return XdmValue.FromString(text, typeName, userTypeName);
             case TimeSpan ts:
                 // xs:dayTimeDuration / xs:yearMonthDuration are represented as strings in Bosak.
-                return XdmValue.FromDuration(ts.ToString(), typeName);
+                return XdmValue.FromDuration(ts.ToString(), typeName, userTypeName);
             default:
-                return XdmValue.FromString(value.ToString() ?? string.Empty, typeName);
+                return XdmValue.FromString(value.ToString() ?? string.Empty, typeName, userTypeName);
         }
     }
 
@@ -775,24 +780,24 @@ public sealed class XDocumentNode : IXdmNode
             || typeName.Equals("gMonthDay", StringComparison.OrdinalIgnoreCase)
             || typeName.Equals("gDay", StringComparison.OrdinalIgnoreCase);
 
-    private static XdmValue ConvertDateTime(DateTimeOffset dto, string typeName, bool hasTimezone)
+    private static XdmValue ConvertDateTime(DateTimeOffset dto, string typeName, bool hasTimezone, string? userSchemaTypeName = null)
         => typeName.ToLowerInvariant() switch
         {
             "date" => XdmValue.FromDate(dto, hasTimezone),
             "time" => XdmValue.FromTime(dto, hasTimezone),
-            "gyear" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYear"),
-            "gyearmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYearMonth"),
-            "gmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonth"),
-            "gmonthday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonthDay"),
-            "gday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gDay"),
-            _ => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: typeName)
+            "gyear" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYear", userSchemaTypeName: userSchemaTypeName),
+            "gyearmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYearMonth", userSchemaTypeName: userSchemaTypeName),
+            "gmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonth", userSchemaTypeName: userSchemaTypeName),
+            "gmonthday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonthDay", userSchemaTypeName: userSchemaTypeName),
+            "gday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gDay", userSchemaTypeName: userSchemaTypeName),
+            _ => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: typeName, userSchemaTypeName: userSchemaTypeName)
         };
 
-    private static XdmValue ConvertDateTime(DateTime dt, string typeName, bool hasTimezone)
+    private static XdmValue ConvertDateTime(DateTime dt, string typeName, bool hasTimezone, string? userSchemaTypeName = null)
     {
         var offset = dt.Kind == DateTimeKind.Unspecified ? TimeSpan.Zero : TimeZoneInfo.Local.GetUtcOffset(dt);
         var dto = new DateTimeOffset(dt, offset);
-        return ConvertDateTime(dto, typeName, hasTimezone);
+        return ConvertDateTime(dto, typeName, hasTimezone, userSchemaTypeName);
     }
 
     /// <summary>

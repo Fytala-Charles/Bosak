@@ -328,6 +328,9 @@
 //                      |                  |       |                | casts restricted to the stringish source family; InstanceOf resolves unprefixed       |
 //                      |                  |       |                | schema types in no namespace (notation-0001..0102)                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.157 | 25-09-2026     | REQ-108: user-defined type identity annotation on cast/PSVI values; instance-of        |
+//                      |                  |       |                | for user-defined types uses identity, not castability (as-2002/2101, as-1806..1809)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -10196,6 +10199,11 @@ internal static class VmEngine
                     if (baseTypeName == "untypedAtomic")
                         return false;
 
+                    // REQ-108: a user-defined target keeps its type identity on the result.
+                    string? userTypeName = schemaSimpleType.QualifiedName.Namespace != XmlSchema.Namespace
+                        ? $"Q{{{schemaSimpleType.QualifiedName.Namespace}}}{schemaSimpleType.QualifiedName.Name}"
+                        : null;
+
                     // Preserve the original lexical form: namespace-sensitive types (QName,
                     // NOTATION) lose prefix information when cast to a typed value, so validation
                     // must use the source lexical string.
@@ -10232,7 +10240,7 @@ internal static class VmEngine
                                 // path annotates the same way); QName targets keep their
                                 // original annotation (REQ-106, notation-0001/0003/0004).
                                 result = baseTypeName == "NOTATION" && value.SchemaTypeName != "NOTATION"
-                                    ? XdmValue.FromQName(value.QNameValue, "NOTATION")
+                                    ? XdmValue.FromQName(value.QNameValue, "NOTATION", userTypeName)
                                     : value;
                                 return true;
                             }
@@ -10264,7 +10272,7 @@ internal static class VmEngine
                                             prefix = origPrefix;
                                     }
                                     result = baseTypeName == "NOTATION"
-                                        ? XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), "NOTATION")
+                                        ? XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), "NOTATION", userTypeName)
                                         : XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix));
                                     return true;
                                 }
@@ -10310,10 +10318,13 @@ internal static class VmEngine
         string typeName = schemaType.QualifiedName.Name;
         string typeNs = schemaType.QualifiedName.Namespace;
 
+        string? userTypeName = null;
         if (typeNs != XmlSchema.Namespace)
         {
-            // User-defined type: derive the annotation from the ultimate built-in base type.
+            // User-defined type: derive the annotation from the ultimate built-in base type,
+            // but keep the user-defined type identity in Q{uri}local form (REQ-108).
             typeName = GetBuiltInBaseTypeName(schemaType) ?? "untypedAtomic";
+            userTypeName = $"Q{{{typeNs}}}{schemaType.QualifiedName.Name}";
         }
 
         switch (value)
@@ -10323,29 +10334,29 @@ internal static class VmEngine
             case decimal d:
                 // Integer-derived schema types preserve the integer XDM kind when the value fits.
                 if (IsIntegerTypeName(typeName) && d >= long.MinValue && d <= long.MaxValue && d == (long)d)
-                    return XdmValue.FromInteger((long)d, typeName);
-                return XdmValue.FromDecimal(d, typeName);
+                    return XdmValue.FromInteger((long)d, typeName, userTypeName);
+                return XdmValue.FromDecimal(d, typeName, userTypeName);
             case float f:
                 return XdmValue.FromFloat(f);
             case double d:
                 return XdmValue.FromDouble(d);
-            case byte u8: return XdmValue.FromInteger(u8, typeName);
-            case sbyte i8: return XdmValue.FromInteger(i8, typeName);
-            case short i16: return XdmValue.FromInteger(i16, typeName);
-            case ushort u16: return XdmValue.FromInteger(u16, typeName);
-            case int i32: return XdmValue.FromInteger(i32, typeName);
+            case byte u8: return XdmValue.FromInteger(u8, typeName, userTypeName);
+            case sbyte i8: return XdmValue.FromInteger(i8, typeName, userTypeName);
+            case short i16: return XdmValue.FromInteger(i16, typeName, userTypeName);
+            case ushort u16: return XdmValue.FromInteger(u16, typeName, userTypeName);
+            case int i32: return XdmValue.FromInteger(i32, typeName, userTypeName);
             case uint u32:
-                return XdmValue.FromInteger((long)u32, typeName);
+                return XdmValue.FromInteger((long)u32, typeName, userTypeName);
             case long i64:
-                return XdmValue.FromInteger(i64, typeName);
+                return XdmValue.FromInteger(i64, typeName, userTypeName);
             case ulong u64:
                 if (u64 <= (ulong)long.MaxValue)
-                    return XdmValue.FromInteger((long)u64, typeName);
-                return XdmValue.FromDecimal(u64, typeName);
+                    return XdmValue.FromInteger((long)u64, typeName, userTypeName);
+                return XdmValue.FromDecimal(u64, typeName, userTypeName);
             case DateTime dt:
-                return ConvertSchemaDateTime(dt, typeName, hasTimezone);
+                return ConvertSchemaDateTime(dt, typeName, hasTimezone, userTypeName);
             case DateTimeOffset dto:
-                return ConvertSchemaDateTime(dto.DateTime, typeName, hasTimezone);
+                return ConvertSchemaDateTime(dto.DateTime, typeName, hasTimezone, userTypeName);
             case XmlQualifiedName qn:
             {
                 string qnType = typeName;
@@ -10358,26 +10369,26 @@ internal static class VmEngine
                     if (colon > 0)
                         prefix = lexicalValue[..colon];
                 }
-                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), qnType);
+                return XdmValue.FromQName(new XsQName(qn.Name, qn.Namespace, prefix), qnType, userTypeName);
             }
             case string s:
-                return XdmValue.FromString(s, typeName);
+                return XdmValue.FromString(s, typeName, userTypeName);
             case byte[] bytes:
                 // XdmValue stores binary types as annotated strings.
                 string text = typeName.Equals("hexBinary", StringComparison.OrdinalIgnoreCase)
                     ? Convert.ToHexString(bytes)
                     : Convert.ToBase64String(bytes);
-                return XdmValue.FromString(text, typeName);
+                return XdmValue.FromString(text, typeName, userTypeName);
             case TimeSpan ts:
                 // xs:duration values parsed by .NET come back as TimeSpan; convert back to
                 // the XSD lexical duration form (cbcl-cast-derived-001).
-                return XdmValue.FromDuration(TimeSpanToXsdDuration(ts), typeName);
+                return XdmValue.FromDuration(TimeSpanToXsdDuration(ts), typeName, userTypeName);
             default:
-                return XdmValue.FromString(value.ToString() ?? string.Empty, typeName);
+                return XdmValue.FromString(value.ToString() ?? string.Empty, typeName, userTypeName);
         }
     }
 
-    private static XdmValue ConvertSchemaDateTime(DateTime dt, string typeName, bool hasTimezone)
+    private static XdmValue ConvertSchemaDateTime(DateTime dt, string typeName, bool hasTimezone, string? userSchemaTypeName = null)
     {
         var offset = dt.Kind switch
         {
@@ -10390,12 +10401,12 @@ internal static class VmEngine
         {
             "date" => XdmValue.FromDate(dto, hasTimezone),
             "time" => XdmValue.FromTime(dto, hasTimezone),
-            "gyear" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYear"),
-            "gyearmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYearMonth"),
-            "gmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonth"),
-            "gmonthday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonthDay"),
-            "gday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gDay"),
-            _ => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: typeName)
+            "gyear" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYear", userSchemaTypeName: userSchemaTypeName),
+            "gyearmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gYearMonth", userSchemaTypeName: userSchemaTypeName),
+            "gmonth" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonth", userSchemaTypeName: userSchemaTypeName),
+            "gmonthday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gMonthDay", userSchemaTypeName: userSchemaTypeName),
+            "gday" => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: "gDay", userSchemaTypeName: userSchemaTypeName),
+            _ => XdmValue.FromDateTime(dto, hasTimezone, schemaTypeName: typeName, userSchemaTypeName: userSchemaTypeName)
         };
     }
 
@@ -11154,8 +11165,10 @@ internal static class VmEngine
         if (normalized is "array(*)" or "array")
             return value.IsArray;
 
-        // User-defined schema simple types: a value matches when it can be cast to the type
-        // under XSD facet rules. Union types are different: instance-of uses membership
+        // User-defined schema simple types: a value matches by IDENTITY, not castability —
+        // the value must carry the user-defined type annotation itself (REQ-108). A built-in
+        // typed or untyped value is not an instance of a user-defined type even when it is
+        // castable to it (as-2002). Union types are different: instance-of uses membership
         // semantics, so the value must already match one of the member types.
         if (IsUserDefinedSchemaType(typeName, context, out var schemaSimpleType)
             && TryGetSchemaSimpleType(schemaSimpleType.QualifiedName.Namespace, schemaSimpleType.QualifiedName.Name, context, out var concreteType))
@@ -11171,7 +11184,31 @@ internal static class VmEngine
                 }
                 return false;
             }
-            return TryCastToSchemaType(value, concreteType, context, out _);
+
+            string? userTypeName = value.UserSchemaTypeName;
+            if (userTypeName is null)
+                return false;
+
+            // Parse the Q{uri}local annotation into its namespace and local parts; a
+            // malformed annotation cannot establish identity.
+            if (!userTypeName.StartsWith("Q{", StringComparison.Ordinal))
+                return false;
+            int separator = userTypeName.IndexOf('}');
+            if (separator < 2)
+                return false;
+            string userNs = userTypeName.Substring(2, separator - 2);
+            string userLocal = userTypeName[(separator + 1)..];
+
+            if (context?.SchemaSet is null)
+            {
+                // Without a schema set the hierarchy cannot be walked: only exact QName
+                // equality establishes identity.
+                return string.Equals(userNs, concreteType.QualifiedName.Namespace, StringComparison.Ordinal)
+                    && string.Equals(userLocal, concreteType.QualifiedName.Name, StringComparison.Ordinal);
+            }
+
+            return IsSchemaTypeSubtype(context, userNs, userLocal,
+                concreteType.QualifiedName.Namespace, concreteType.QualifiedName.Name);
         }
 
         return ItemInstanceOf(value, normalized);
