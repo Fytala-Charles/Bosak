@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 22-10-2026     | REQ-107: canonical PSVI typed-value lexical forms (duration/decimal/anyURI, as-1803)    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -227,5 +229,80 @@ public class XdmSchemaAnnotatorTests
     public void Annotate_NullAnnotation_Throws()
     {
         Assert.Throws<ArgumentNullException>(() => XdmSchemaAnnotator.Annotate(new XElement("a"), null!));
+    }
+
+    // ----- REQ-107 (as-1803): canonical lexical forms of PSVI typed values -----
+
+    private static XDocumentNode ValidatedNode(string xsd, XElement element)
+    {
+        var schemas = CompileSchema(xsd);
+        var doc = new XDocument(element);
+        doc.Validate(schemas, null, true);
+        XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+        return XDocumentNode.Wrap(element);
+    }
+
+    [Fact]
+    public void TypedValue_Duration_UsesCanonicalXsdForm()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='d' type='xs:duration'/>
+            </xs:schema>
+            """;
+        var node = ValidatedNode(xsd, new XElement("d", "-P12M23DT0M59.123S"));
+        Assert.Equal("-P1Y23DT59.123S", node.TypedValue.ToString());
+    }
+
+    [Fact]
+    public void TypedValue_YearMonthOnlyDuration_FoldsMonthsIntoYears()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='d' type='xs:duration'/>
+            </xs:schema>
+            """;
+        var node = ValidatedNode(xsd, new XElement("d", "P12M"));
+        Assert.Equal("P1Y", node.TypedValue.ToString());
+    }
+
+    [Fact]
+    public void TypedValue_DayTimeOnlyDuration_OmitsZeroComponents()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='d' type='xs:duration'/>
+            </xs:schema>
+            """;
+        var node = ValidatedNode(xsd, new XElement("d", "PT0M59.500S"));
+        Assert.Equal("PT59.5S", node.TypedValue.ToString());
+    }
+
+    [Fact]
+    public void TypedValue_Decimal_StripsTrailingFractionalZeros()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='p' type='xs:decimal'/>
+            </xs:schema>
+            """;
+        var node = ValidatedNode(xsd, new XElement("p", "1000.000"));
+        Assert.Equal("1000", node.TypedValue.ToString());
+    }
+
+    [Fact]
+    public void TypedValue_AnyUri_PreservesLexicalForm()
+    {
+        // .NET parses xs:anyURI into System.Uri, whose ToString() appends a trailing
+        // slash; the typed value must keep the lexical form.
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='u' type='xs:anyURI'/>
+            </xs:schema>
+            """;
+        var node = ValidatedNode(xsd, new XElement("u", "http://www.uri.com"));
+        var typed = node.TypedValue;
+        Assert.Equal("http://www.uri.com", typed.ToString());
+        Assert.Equal("anyURI", typed.SchemaTypeName);
     }
 }
