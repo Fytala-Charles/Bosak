@@ -98,6 +98,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.29  | 25-09-2026     | REQ-108: user-defined type identity annotation on PSVI typed values (Q{uri}local)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.30  | 25-09-2026     | REQ-108: complex simple-content typed values tag the simple content base type (cbcl-    |
+//                      |                  |       |                | module-001)                                                                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -664,6 +667,14 @@ public sealed class XDocumentNode : IXdmNode
                 schemaType = atomicSchemaType;
         }
 
+        // Complex types with simple content: the typed value's type is the simple content
+        // base type, not the complex type itself (XDM §2.7.2). The element declaration's
+        // complex type (anonymous for inline simpleContent) would otherwise tag the value
+        // with an identity that is not a simple type, so `instance of` against the content
+        // type fails (cbcl-module-001).
+        if (schemaType is XmlSchemaComplexType { ContentType: XmlSchemaContentType.TextOnly } complexContent)
+            schemaType = GetSimpleContentBaseType(complexContent) ?? schemaType;
+
         string typeName = schemaType.QualifiedName.Name;
         string typeNs = schemaType.QualifiedName.Namespace;
 
@@ -844,6 +855,24 @@ public sealed class XDocumentNode : IXdmNode
         {
             if (current.QualifiedName.Namespace == XmlSchema.Namespace)
                 return current.QualifiedName.Name;
+            current = current.BaseXmlSchemaType;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Walks a complex type with simple content up to its simple content base type
+    /// (the first <see cref="XmlSchemaSimpleType"/> in the base-type chain), or null
+    /// when the chain contains no simple type.
+    /// </summary>
+    private static XmlSchemaSimpleType? GetSimpleContentBaseType(XmlSchemaComplexType complexType)
+    {
+        var visited = new HashSet<XmlSchemaType>();
+        var current = complexType.BaseXmlSchemaType;
+        while (current is not null && visited.Add(current))
+        {
+            if (current is XmlSchemaSimpleType simple)
+                return simple;
             current = current.BaseXmlSchemaType;
         }
         return null;
