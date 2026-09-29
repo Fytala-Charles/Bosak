@@ -19,6 +19,9 @@
 //                      | Charles Korthout | 0.3   | 24-09-2026     | REQ-105 (PA-3): apply whiteSpace-facet normalization to simple-typed content after     |
 //                      |                  |       |                | successful validation (schema-normalized values, XDM 3.3.2; match-136..141)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 29-09-2026     | REQ-109 (PA-3 tail): strip snapshots is-id/is-idref onto XdmIdProperties so fn:id/      |
+//                      |                  |       |                | fn:idref keep working after annotation stripping (strip-type-annotations-021)           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -409,7 +412,9 @@ public static partial class XdmSchemaAnnotator
     /// at <paramref name="root"/> (a document, element, or attribute), leaving all elements
     /// <c>xs:untyped</c>, all attributes <c>xs:untypedAtomic</c>, and the nilled property
     /// false — the XSLT <c>validation="strip"</c> and <c>input-type-annotations="strip"</c>
-    /// semantics. Annotations of other kinds are left untouched.
+    /// semantics. The is-id and is-idref properties are preserved as a lightweight snapshot
+    /// annotation (XSLT 3.0 §3.13; <c>fn:id</c>/<c>fn:idref</c> keep working after stripping).
+    /// Annotations of other kinds are left untouched.
     /// </summary>
     /// <param name="root">The document, element, or attribute whose PSVI annotations are removed.</param>
     /// <exception cref="ArgumentNullException"><paramref name="root"/> is null.</exception>
@@ -429,9 +434,48 @@ public static partial class XdmSchemaAnnotator
                     StripElementAnnotations(descendant);
                 break;
             case XAttribute attribute:
+                SnapshotIdProperties(attribute);
                 attribute.RemoveAnnotations(typeof(IXmlSchemaInfo));
                 break;
         }
+    }
+
+    /// <summary>
+    /// Snapshots the is-id / is-idref properties of <paramref name="element"/> (when its PSVI
+    /// carries ID types) onto a <see cref="XdmIdProperties"/> annotation, then removes the PSVI.
+    /// </summary>
+    private static void StripElementAnnotations(XElement element)
+    {
+        var info = element.GetSchemaInfo();
+        if (info is not null)
+        {
+            if (XDocumentNode.HasIdTypeFromSchemaInfo(info, element.Value))
+                element.AddAnnotation(new XdmIdProperties(isId: true, isIdref: false));
+            else if (XDocumentNode.HasIdrefTypeFromSchemaInfo(info, element.Value))
+                element.AddAnnotation(new XdmIdProperties(isId: false, isIdref: true));
+        }
+
+        element.RemoveAnnotations(typeof(IXmlSchemaInfo));
+        foreach (var attribute in element.Attributes())
+        {
+            SnapshotIdProperties(attribute);
+            attribute.RemoveAnnotations(typeof(IXmlSchemaInfo));
+        }
+    }
+
+    /// <summary>
+    /// Snapshots the is-id / is-idref properties of <paramref name="attribute"/> (when its PSVI
+    /// carries ID types) onto a <see cref="XdmIdProperties"/> annotation, then removes the PSVI.
+    /// </summary>
+    private static void SnapshotIdProperties(XAttribute attribute)
+    {
+        var info = attribute.GetSchemaInfo();
+        if (info is null)
+            return;
+        if (XDocumentNode.HasIdTypeFromSchemaInfo(info, attribute.Value))
+            attribute.AddAnnotation(new XdmIdProperties(isId: true, isIdref: false));
+        else if (XDocumentNode.HasIdrefTypeFromSchemaInfo(info, attribute.Value))
+            attribute.AddAnnotation(new XdmIdProperties(isId: false, isIdref: true));
     }
 
     /// <summary>
@@ -615,13 +659,6 @@ public static partial class XdmSchemaAnnotator
                 text.Remove();
             }
         }
-    }
-
-    private static void StripElementAnnotations(XElement element)
-    {
-        element.RemoveAnnotations(typeof(IXmlSchemaInfo));
-        foreach (var attribute in element.Attributes())
-            attribute.RemoveAnnotations(typeof(IXmlSchemaInfo));
     }
 
     private static string GenerateUniquePrefix(XElement element, string basePrefix)

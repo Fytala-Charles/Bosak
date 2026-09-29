@@ -104,6 +104,10 @@
 //                      | Charles Korthout | 0.31  | 25-09-2026     | REQ-108: bool/float/double/date/time typed values keep their user-defined type          |
 //                      |                  |       |                | identity (evaluate-009, type-expr-0201/0401, type-functions-0201)                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.32  | 29-09-2026     | REQ-109: extended-year date/time typed values survive ParseValue overflow (strip-type-  |
+//                      |                  |       |                | annotations-001/012); mixed-content typed value tagged xs:untypedAtomic (-014);         |
+//                      |                  |       |                | is-id/is-idref consult the stripped-PSVI snapshot (-021)                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -523,12 +527,34 @@ public sealed class XDocumentNode : IXdmNode
         }
 
         if (datatype is null)
+        {
+            // XDM §2.7.2: the typed value of an element whose type is a complex type with
+            // mixed content is the concatenated descendant text as xs:untypedAtomic
+            // (strip-type-annotations-014: data($e) instance of xs:untypedAtomic).
+            if (info.SchemaType is XmlSchemaComplexType { ContentType: XmlSchemaContentType.Mixed })
+                return XdmValue.FromString(StringValue, "untypedAtomic");
             return XdmValue.FromString(StringValue);
+        }
 
         try
         {
             var nsResolver = CreateInScopeNamespaceResolver();
-            object parsed = datatype.ParseValue(StringValue, new NameTable(), nsResolver);
+            object parsed;
+            try
+            {
+                parsed = datatype.ParseValue(StringValue, new NameTable(), nsResolver);
+            }
+            catch (Exception)
+            {
+                // .NET parses every XSD date/time datatype into System.DateTime, whose year
+                // range (1..9999) is narrower than XSD's unbounded year range, so ParseValue
+                // throws for conformant lexicals like -0012-12-03 or 21999-05. Re-parse those
+                // with Bosak's extended-year representation so the type annotation survives
+                // (strip-type-annotations-001/012: data($e) instance of xs:date etc.).
+                if (TryConvertExtendedYearDateTime(StringValue, annotationType ?? simpleType!, LexicalHasTimezone(StringValue), out var extended))
+                    return extended;
+                throw;
+            }
             bool hasTz = LexicalHasTimezone(StringValue);
             if (datatype.Variety == XmlSchemaDatatypeVariety.List && parsed is System.Collections.IEnumerable list && parsed is not string)
             {
@@ -581,6 +607,195 @@ public sealed class XDocumentNode : IXdmNode
             return XdmValue.FromString(StringValue);
         }
     }
+
+    /// <summary>
+    /// Re-parses a schema-validated date/time lexical value whose year is outside the .NET
+    /// <see cref="DateTime"/> range (1..9999; XSD years are unbounded). Mirrors
+    /// <see cref="ConvertSchemaValue"/>'s annotation naming so the typed value keeps its
+    /// built-in type name and user-defined type identity. Returns <c>false</c> for non
+    /// date/time types, whose parse failures are genuine lexical errors.
+    /// </summary>
+    private static bool TryConvertExtendedYearDateTime(string lexical, XmlSchemaType schemaType, bool hasTimezone, out XdmValue value)
+    {
+        value = default;
+
+        if (schemaType is XmlSchemaComplexType { ContentType: XmlSchemaContentType.TextOnly } complexContent)
+            schemaType = GetSimpleContentBaseType(complexContent) ?? schemaType;
+
+        string typeName = schemaType.QualifiedName.Name;
+        string typeNs = schemaType.QualifiedName.Namespace;
+        string? userTypeName = null;
+        if (typeNs != XmlSchema.Namespace)
+        {
+            typeName = GetBuiltInBaseTypeName(schemaType) ?? "untypedAtomic";
+            userTypeName = $"Q{{{typeNs}}}{schemaType.QualifiedName.Name}";
+        }
+
+        if (!TryParseExtendedDateTime(lexical, typeName, out XPathDateTime xdt))
+            return false;
+
+        value = typeName.ToLowerInvariant() switch
+        {
+            "date" => XdmValue.FromDate(xdt, hasTimezone, "date", userTypeName),
+            "time" => XdmValue.FromTime(xdt, hasTimezone, "time", userTypeName),
+            // The g* types are represented as annotated strings here (their XdmValueKind
+            // stays String); ValueMatchesType's g* arms accept annotated strings, matching
+            // how the xs:gYear() constructors produce values.
+            "gyear" => XdmValue.FromString(lexical, "gYear", userTypeName),
+            "gyearmonth" => XdmValue.FromString(lexical, "gYearMonth", userTypeName),
+            "gmonth" => XdmValue.FromString(lexical, "gMonth", userTypeName),
+            "gmonthday" => XdmValue.FromString(lexical, "gMonthDay", userTypeName),
+            "gday" => XdmValue.FromString(lexical, "gDay", userTypeName),
+            _ => XdmValue.FromDateTime(xdt, hasTimezone, typeName, userTypeName),
+        };
+        return true;
+    }
+
+    private static bool TryParseExtendedDateTime(string lexical, string typeName, out XPathDateTime xdt)
+    {
+        xdt = default;
+        var m = typeName.ToLowerInvariant() switch
+        {
+            "date" => ExtendedDateRegex.Match(lexical),
+            "datetime" or "datetimestamp" => ExtendedDateTimeRegex.Match(lexical),
+            "time" => ExtendedTimeRegex.Match(lexical),
+            "gyear" => ExtendedGYearRegex.Match(lexical),
+            "gyearmonth" => ExtendedGYearMonthRegex.Match(lexical),
+            "gmonth" => ExtendedGMonthRegex.Match(lexical),
+            "gmonthday" => ExtendedGMonthDayRegex.Match(lexical),
+            "gday" => ExtendedGDayRegex.Match(lexical),
+            _ => System.Text.RegularExpressions.Match.Empty,
+        };
+        if (!m.Success)
+            return false;
+
+        long year = m.Groups["year"].Success ? long.Parse(m.Groups["year"].Value, System.Globalization.CultureInfo.InvariantCulture) : 0;
+        int month = m.Groups["month"].Success ? int.Parse(m.Groups["month"].Value, System.Globalization.CultureInfo.InvariantCulture) : 1;
+        int day = m.Groups["day"].Success ? int.Parse(m.Groups["day"].Value, System.Globalization.CultureInfo.InvariantCulture) : 1;
+        int hour = m.Groups["hour"].Success ? int.Parse(m.Groups["hour"].Value, System.Globalization.CultureInfo.InvariantCulture) : 0;
+        int minute = m.Groups["minute"].Success ? int.Parse(m.Groups["minute"].Value, System.Globalization.CultureInfo.InvariantCulture) : 0;
+        int second = m.Groups["second"].Success ? int.Parse(m.Groups["second"].Value, System.Globalization.CultureInfo.InvariantCulture) : 0;
+        int millisecond = 0;
+        if (m.Groups["frac"].Success)
+        {
+            string frac = m.Groups["frac"].Value[1..];
+            if (frac.Length > 3) frac = frac[..3];
+            millisecond = int.Parse(frac.PadRight(3, '0'), System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        if (month is < 1 or > 12)
+            return false;
+        // Full dates validate the day against the actual (possibly negative/extended) year;
+        // gMonthDay allows 29 February (valid in some year).
+        int maxDay = m.Groups["year"].Success && m.Groups["day"].Success
+            ? DaysInMonthExtended(year, month)
+            : DaysInMonthExtended(2000, month);
+        if (day is < 1 or > 31 || day > maxDay)
+            return false;
+        if (hour is > 24 || minute > 59 || second > 59)
+            return false;
+
+        bool hasTz = m.Groups["tz"].Success;
+        int tzMinutes = 0;
+        if (hasTz && m.Groups["tz"].Value is not ("Z" or "z"))
+        {
+            string tz = m.Groups["tz"].Value;
+            int tzHours = int.Parse(tz[1..3], System.Globalization.CultureInfo.InvariantCulture);
+            int tzMins = int.Parse(tz[4..6], System.Globalization.CultureInfo.InvariantCulture);
+            if (tzHours > 14 || tzMins > 59)
+                return false;
+            tzMinutes = tzHours * 60 + tzMins;
+            if (tz[0] == '-') tzMinutes = -tzMinutes;
+        }
+
+        // 24:00:00 is midnight at the end of the day: normalize to 00:00:00 next day.
+        if (hour == 24)
+        {
+            if (minute != 0 || second != 0 || millisecond != 0)
+                return false;
+            hour = 0;
+            (year, month, day) = AddOneDay(year, month, day);
+        }
+
+        xdt = new XPathDateTime(year, month, day, hour, minute, second, millisecond, tzMinutes, hasTz);
+        return true;
+    }
+
+    private static int DaysInMonthExtended(long year, int month) => month switch
+    {
+        1 or 3 or 5 or 7 or 8 or 10 or 12 => 31,
+        4 or 6 or 9 or 11 => 30,
+        2 => IsLeapYearExtended(year) ? 29 : 28,
+        _ => 0,
+    };
+
+    private static bool IsLeapYearExtended(long year)
+    {
+        if (year == 0) return true;
+        if (year < 0) year = -year;
+        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    }
+
+    /// <summary>Adds one day to a civil date in the proleptic Gregorian calendar (any year).</summary>
+    private static (long Year, int Month, int Day) AddOneDay(long year, int month, int day)
+    {
+        // Howard Hinnant's public-domain days_from_civil / civil_from_days algorithm,
+        // using floor division so negative years are handled correctly.
+        static long DaysFromCivil(long y, int m, int d)
+        {
+            if (m <= 2) { y -= 1; m += 12; }
+            long era = y >= 0 ? y / 400 : (y - 399) / 400;
+            long yoe = y - era * 400;
+            long mp = m - 3;
+            long doy = (153 * mp + 2) / 5 + d - 1;
+            long doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+            return era * 146097 + doe - 719468;
+        }
+
+        long z = DaysFromCivil(year, month, day) + 1 + 719468;
+        long era = z >= 0 ? z / 146097 : (z - 146096) / 146097;
+        long doe = z - era * 146097;
+        long yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+        long y = yoe + era * 400;
+        long doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+        long mp = (5 * doy + 2) / 153;
+        long d = doy - (153 * mp + 2) / 5 + 1;
+        long mo = mp + (mp < 10 ? 3 : -9);
+        y += mo <= 2 ? 1 : 0;
+        return (y, (int)mo, (int)d);
+    }
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedDateRegex = new(
+        @"^(?<year>-?\d{4,})-(?<month>\d{2})-(?<day>\d{2})(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedDateTimeRegex = new(
+        @"^(?<year>-?\d{4,})-(?<month>\d{2})-(?<day>\d{2})T(?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2})(?<frac>\.\d+)?(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedTimeRegex = new(
+        @"^(?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2})(?<frac>\.\d+)?(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedGYearRegex = new(
+        @"^(?<year>-?\d{4,})(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedGYearMonthRegex = new(
+        @"^(?<year>-?\d{4,})-(?<month>\d{2})(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedGMonthRegex = new(
+        @"^--(?<month>\d{2})(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedGMonthDayRegex = new(
+        @"^--(?<month>\d{2})-(?<day>\d{2})(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+    private static readonly System.Text.RegularExpressions.Regex ExtendedGDayRegex = new(
+        @"^---(?<day>\d{2})(?<tz>Z|z|[+-]\d{2}:\d{2})?$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
 
     /// <summary>
     /// Splits the lexical value of an XSD list type into its item strings.
@@ -2324,6 +2539,37 @@ public sealed class XDocumentNode : IXdmNode
         return false;
     }
 
+    /// <summary>
+    /// Determines whether the node's PSVI marks it as an xs:ID-typed node (element content or
+    /// attribute), before any infoset (name/xml:id) or xsi:type fallbacks. Used by the
+    /// annotation-strip pass to snapshot the is-id property, which XSLT 3.0 §3.13 requires
+    /// to survive stripping.
+    /// </summary>
+    /// <param name="info">The node's PSVI annotation.</param>
+    /// <param name="value">The node's string value.</param>
+    /// <returns><c>true</c> when the schema types carry xs:ID.</returns>
+    internal static bool HasIdTypeFromSchemaInfo(IXmlSchemaInfo info, string value)
+    {
+        if (info.IsNil)
+            return false;
+        return IsIdSchemaType(info.MemberType, value) || IsIdSchemaType(info.SchemaType, value);
+    }
+
+    /// <summary>
+    /// Determines whether the node's PSVI marks it as an xs:IDREF/xs:IDREFS-typed node, before
+    /// any xsi:type fallback. Used by the annotation-strip pass to snapshot the is-idref
+    /// property, which XSLT 3.0 §3.13 requires to survive stripping.
+    /// </summary>
+    /// <param name="info">The node's PSVI annotation.</param>
+    /// <param name="value">The node's string value.</param>
+    /// <returns><c>true</c> when the schema types carry xs:IDREF/xs:IDREFS.</returns>
+    internal static bool HasIdrefTypeFromSchemaInfo(IXmlSchemaInfo info, string value)
+    {
+        if (info.IsNil)
+            return false;
+        return IsIdrefFromSchemaInfo(info, value);
+    }
+
     private static bool IsIdAttribute(XAttribute attr)
     {
         var info = attr.GetSchemaInfo();
@@ -2334,6 +2580,11 @@ public sealed class XDocumentNode : IXdmNode
             if (IsIdSchemaType(info.SchemaType, attr.Value))
                 return true;
         }
+
+        // Stripped PSVI snapshot: stripping removes type annotations but preserves the
+        // is-id property (XSLT 3.0 §3.13; strip-type-annotations-021).
+        if (attr.Annotation<XdmIdProperties>() is { IsId: true })
+            return true;
 
         // Infoset fallback: attributes named "id" (no namespace) or "xml:id" are IDs when
         // the value is a valid NCName after xml:id normalization (attribute-value
@@ -2380,6 +2631,11 @@ public sealed class XDocumentNode : IXdmNode
             if (IsIdSchemaType(info.SchemaType, element.Value))
                 return true;
         }
+
+        // Stripped PSVI snapshot: stripping removes type annotations but preserves the
+        // is-id property (XSLT 3.0 §3.13; strip-type-annotations-021).
+        if (element.Annotation<XdmIdProperties>() is { IsId: true })
+            return true;
 
         // Schema-less but typed via xsi:type: an element whose xsi:type attribute resolves
         // to xs:ID is treated as an ID element (app-spec-examples fo-test-fn-id-002).
@@ -2479,6 +2735,12 @@ public sealed class XDocumentNode : IXdmNode
         var info = attr.GetSchemaInfo();
         if (info is not null && IsIdrefFromSchemaInfo(info, attr.Value))
             return true;
+
+        // Stripped PSVI snapshot: stripping removes type annotations but preserves the
+        // is-idref property (XSLT 3.0 §3.13; strip-type-annotations-021).
+        if (attr.Annotation<XdmIdProperties>() is { IsIdref: true })
+            return true;
+
         return false;
     }
 
@@ -2486,6 +2748,11 @@ public sealed class XDocumentNode : IXdmNode
     {
         var info = element.GetSchemaInfo();
         if (info is not null && !info.IsNil && IsIdrefFromSchemaInfo(info, element.Value))
+            return true;
+
+        // Stripped PSVI snapshot: stripping removes type annotations but preserves the
+        // is-idref property (XSLT 3.0 §3.13; strip-type-annotations-021).
+        if (element.Annotation<XdmIdProperties>() is { IsIdref: true })
             return true;
 
         // Schema-less but typed via xsi:type: an element whose xsi:type attribute resolves
