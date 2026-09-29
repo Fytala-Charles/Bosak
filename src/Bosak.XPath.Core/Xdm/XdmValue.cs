@@ -54,6 +54,9 @@
 //                      | Charles Korthout | 2.9   | 25-09-2026     | REQ-108: annotated FromBoolean/FromDouble/FromFloat/FromDate/FromTime overloads so     |
 //                      |                  |       |                | bool/float/double/date/time typed values keep their user-defined type identity          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.10  | 29-09-2026     | REQ-109: annotated FromDate/FromTime overloads taking XPathDateTime (extended-year      |
+//                      |                  |       |                | PSVI date/time values outside the DateTimeOffset year range)                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -230,6 +233,11 @@ public readonly struct XdmValue
     public static XdmValue FromDate(DateTimeOffset value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
         => new(XdmValueKind.Date, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
+    /// <summary>Creates a date-family value from an extended-year date/time with a schema type annotation.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromDate(XPathDateTime value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.Date, reference: new DateTimeWrapper(value, hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
     /// <summary>Creates an xs:time value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value)
@@ -249,6 +257,11 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromTime(DateTimeOffset value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
         => new(XdmValueKind.Time, reference: new DateTimeWrapper(value.ToXPathDateTime(hasTimezone), hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
+    /// <summary>Creates a time-family value from an extended-year time with a schema type annotation.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromTime(XPathDateTime value, bool hasTimezone, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.Time, reference: new DateTimeWrapper(value, hasTimezone), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     /// <summary>Creates an xs:QName value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

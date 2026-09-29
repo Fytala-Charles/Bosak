@@ -15,6 +15,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 22-10-2026     | REQ-107: canonical PSVI typed-value lexical forms (duration/decimal/anyURI, as-1803)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 29-09-2026     | REQ-109: extended-year date/time typed values, mixed-content untypedAtomic tag,         |
+//                      |                  |       |                | is-id/is-idref surviving annotation stripping                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -304,5 +307,219 @@ public class XdmSchemaAnnotatorTests
         var typed = node.TypedValue;
         Assert.Equal("http://www.uri.com", typed.ToString());
         Assert.Equal("anyURI", typed.SchemaTypeName);
+    }
+
+    // ----- REQ-109 (PA-3 tail): extended-year date/time typed values -----
+    // .NET parses every XSD date/time datatype into System.DateTime (year 1..9999);
+    // XSD years are unbounded, so ParseValue throws for conformant lexicals like
+    // -0012-12-03 or 21999-05 and the typed value used to collapse to an untagged string.
+
+    private static XDocumentNode LenientValidatedNode(string xsd, XElement element)
+    {
+        var schemas = CompileSchema(xsd);
+        var doc = new XDocument(element);
+        doc.Validate(schemas, (_, _) => { }, true);
+        XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+        return XDocumentNode.Wrap(element);
+    }
+
+    [Fact]
+    public void TypedValue_DateNegativeYear_KeepsDateKindAndAnnotation()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='d' type='xs:date'/>
+            </xs:schema>
+            """;
+        var typed = LenientValidatedNode(xsd, new XElement("d", "-0012-12-03-05:00")).TypedValue;
+        Assert.Equal(XdmValueKind.Date, typed.Kind);
+        Assert.Equal("date", typed.SchemaTypeName);
+    }
+
+    [Fact]
+    public void TypedValue_DateTimeNegativeYear_KeepsDateTimeKindAndAnnotation()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='dt' type='xs:dateTime'/>
+            </xs:schema>
+            """;
+        var typed = LenientValidatedNode(xsd, new XElement("dt", "-0012-01-16T13:20:00Z")).TypedValue;
+        Assert.Equal(XdmValueKind.DateTime, typed.Kind);
+        Assert.Equal("dateTime", typed.SchemaTypeName);
+    }
+
+    [Fact]
+    public void TypedValue_GYearNegativeYear_KeepsAnnotation()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='y' type='xs:gYear'/>
+            </xs:schema>
+            """;
+        var typed = LenientValidatedNode(xsd, new XElement("y", "-0012-05:00")).TypedValue;
+        Assert.Equal(XdmValueKind.String, typed.Kind);
+        Assert.Equal("gYear", typed.SchemaTypeName);
+    }
+
+    [Fact]
+    public void TypedValue_GYearMonthExtendedYear_KeepsAnnotation()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='ym' type='xs:gYearMonth'/>
+            </xs:schema>
+            """;
+        var typed = LenientValidatedNode(xsd, new XElement("ym", "21999-05+14:00")).TypedValue;
+        Assert.Equal(XdmValueKind.String, typed.Kind);
+        Assert.Equal("gYearMonth", typed.SchemaTypeName);
+    }
+
+    [Fact]
+    public void TypedValue_DateInRange_StillParsesNormally()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='d' type='xs:date'/>
+            </xs:schema>
+            """;
+        var typed = LenientValidatedNode(xsd, new XElement("d", "2020-06-01")).TypedValue;
+        Assert.Equal(XdmValueKind.Date, typed.Kind);
+        Assert.Equal("date", typed.SchemaTypeName);
+    }
+
+    [Fact]
+    public void TypedValue_DateInvalidLexical_FallsBackToUntypedString()
+    {
+        // A genuinely invalid lexical is not rescued by the extended-year re-parse.
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='d' type='xs:date'/>
+            </xs:schema>
+            """;
+        var typed = LenientValidatedNode(xsd, new XElement("d", "not-a-date")).TypedValue;
+        Assert.Equal(XdmValueKind.String, typed.Kind);
+        Assert.Null(typed.SchemaTypeName);
+    }
+
+    // ----- REQ-109 (PA-3 tail): mixed-content typed value is xs:untypedAtomic -----
+
+    [Fact]
+    public void TypedValue_MixedContent_TagsUntypedAtomic()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='m' type='mixedType'/>
+                <xs:complexType name='mixedType' mixed='true'>
+                    <xs:sequence>
+                        <xs:element name='name' type='xs:string'/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:schema>
+            """;
+        var element = new XElement("m", "Mr ", new XElement("name", "Peter"), " has brown hair");
+        var typed = LenientValidatedNode(xsd, element).TypedValue;
+        Assert.Equal(XdmValueKind.String, typed.Kind);
+        Assert.Equal("untypedAtomic", typed.SchemaTypeName);
+        Assert.Equal("Mr Peter has brown hair", typed.ToString());
+    }
+
+    [Fact]
+    public void TypedValue_ElementOnlyContent_HasNoTypedValue()
+    {
+        const string xsd = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='eo' type='eoType'/>
+                <xs:complexType name='eoType'>
+                    <xs:sequence>
+                        <xs:element name='child' type='xs:string'/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:schema>
+            """;
+        var node = LenientValidatedNode(xsd, new XElement("eo", new XElement("child", "x")));
+        Assert.True(node.HasNoTypedValue);
+    }
+
+    // ----- REQ-109 (PA-3 tail): is-id / is-idref survive annotation stripping -----
+
+    private const string IdIdrefSchema = """
+        <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+            <xs:element name='doc' type='docType'/>
+            <xs:complexType name='docType'>
+                <xs:sequence>
+                    <xs:element name='id-elem' type='idElemType'/>
+                    <xs:element name='plain' type='xs:string' minOccurs='0'/>
+                </xs:sequence>
+                <xs:attribute name='ident' type='xs:ID'/>
+                <xs:attribute name='ref' type='xs:IDREF'/>
+            </xs:complexType>
+            <xs:complexType name='idElemType'>
+                <xs:simpleContent>
+                    <xs:extension base='xs:ID'/>
+                </xs:simpleContent>
+            </xs:complexType>
+        </xs:schema>
+        """;
+
+    private static XElement ValidatedIdDoc(out XAttribute ident, out XAttribute reference, out XElement idElem, out XElement plain)
+    {
+        var schemas = CompileSchema(IdIdrefSchema);
+        var element = new XElement("doc",
+            new XAttribute("ident", "a1"),
+            new XAttribute("ref", "a1"),
+            new XElement("id-elem", "id1"),
+            new XElement("plain", "x"));
+        ident = element.Attribute("ident")!;
+        reference = element.Attribute("ref")!;
+        idElem = element.Element("id-elem")!;
+        plain = element.Element("plain")!;
+        new XDocument(element).Validate(schemas, (_, _) => { }, true);
+        XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+        return element;
+    }
+
+    [Fact]
+    public void Strip_IdAttribute_KeepsIsId()
+    {
+        var element = ValidatedIdDoc(out var ident, out _, out _, out _);
+        XdmSchemaAnnotator.StripSchemaAnnotations(element);
+        Assert.True(XDocumentNode.Wrap(ident).IsId);
+        Assert.False(XDocumentNode.Wrap(ident).IsIdref);
+    }
+
+    [Fact]
+    public void Strip_IdrefAttribute_KeepsIsIdref()
+    {
+        var element = ValidatedIdDoc(out _, out var reference, out _, out _);
+        XdmSchemaAnnotator.StripSchemaAnnotations(element);
+        Assert.True(XDocumentNode.Wrap(reference).IsIdref);
+        Assert.False(XDocumentNode.Wrap(reference).IsId);
+    }
+
+    [Fact]
+    public void Strip_IdElementContent_KeepsIsId()
+    {
+        var element = ValidatedIdDoc(out _, out _, out var idElem, out _);
+        XdmSchemaAnnotator.StripSchemaAnnotations(element);
+        Assert.True(XDocumentNode.Wrap(idElem).IsId);
+    }
+
+    [Fact]
+    public void Strip_NonIdNode_GetsNoIdProperties()
+    {
+        var element = ValidatedIdDoc(out _, out _, out _, out var plain);
+        XdmSchemaAnnotator.StripSchemaAnnotations(element);
+        Assert.False(XDocumentNode.Wrap(plain).IsId);
+        Assert.False(XDocumentNode.Wrap(plain).IsIdref);
+    }
+
+    [Fact]
+    public void Strip_RemovesTypeAnnotations()
+    {
+        var element = ValidatedIdDoc(out var ident, out _, out _, out _);
+        XdmSchemaAnnotator.StripSchemaAnnotations(element);
+        Assert.Null(element.GetSchemaInfo());
+        Assert.Null(ident.GetSchemaInfo());
     }
 }
