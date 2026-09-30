@@ -22,6 +22,9 @@
 //                      | Charles Korthout | 6.88  | 22-10-2026     | REQ-107: value-of atomizes schema-validated nodes via their PSVI typed value            |
 //                      |                  |       |                | (canonical decimal/duration lexical forms, as-1803)                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.89  | 30-09-2026     | PA-4/C7: ConvertVariableValue resolves unprefixed @as QNames against the declaring      |
+//                      |                  |       |                | instruction's xpath-default-namespace (import-schema-202, xpath-default-namespace-0701) |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -3192,7 +3195,7 @@ internal sealed class TransformEngine
     {
         var result = new Dictionary<IXdmNode, (XdmValue Before, XdmValue After)>();
         var initialCtx = CreateAccumulatorEvaluationContext(focusNode: root, value: null);
-        var current = ConvertVariableValue(CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx), acc.As, context: _context, errorCodeOverride: "XPTY0004");
+        var current = ConvertVariableValue(CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx), acc.As, context: _context, errorCodeOverride: "XPTY0004", declaration: acc.Element);
 
         var compiledRules = new List<(Stylesheet.AccumulatorRule Rule, Patterns.PatternPredicate Match)>();
         var patternCompiler = new Patterns.PatternCompiler(_context);
@@ -3269,7 +3272,7 @@ internal sealed class TransformEngine
         }
         // Accumulator value coercion against @as raises the generic XPath type error
         // (accumulator-038), not the XSLT variable-coercion code.
-        return ConvertVariableValue(newValue, acc.As, context: _context, errorCodeOverride: "XPTY0004");
+        return ConvertVariableValue(newValue, acc.As, context: _context, errorCodeOverride: "XPTY0004", declaration: acc.Element);
     }
 
     /// <summary>
@@ -3796,7 +3799,7 @@ internal sealed class TransformEngine
             var result = EvaluateFunctionBody(def.Element, XdmValue.Undefined);
             // XTTE0780: the function's sequence-constructor result must be convertible to
             // the function's @as type (coco-102).
-            var convertedResult = ConvertVariableValue(result, def.ReturnType, context: _context, errorCodeOverride: "XTTE0780");
+            var convertedResult = ConvertVariableValue(result, def.ReturnType, context: _context, errorCodeOverride: "XTTE0780", declaration: def.Element);
             if (cacheKey.HasValue)
                 _xsltFunctionCache[cacheKey.Value] = convertedResult;
             return convertedResult;
@@ -3874,7 +3877,7 @@ internal sealed class TransformEngine
                 _context.CurrentOutputUri = savedOutputUri;
             }
         }
-        return ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, context: _context);
+        return ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, context: _context, declaration: instruction);
     }
 
     /// <summary>
@@ -5967,7 +5970,7 @@ internal sealed class TransformEngine
                     if (required == "yes" && !gotValue)
                         throw new InvalidOperationException($"XTDE0700: No value supplied for required parameter '{paramName}'.");
 
-                    paramValue = ConvertVariableValue(paramValue, paramAs, isParam: true, _context);
+                    paramValue = ConvertVariableValue(paramValue, paramAs, isParam: true, _context, declaration: child);
                     _context.WithVariable(paramLocal, paramValue, paramNs);
                 }
                 else
@@ -6099,11 +6102,11 @@ internal sealed class TransformEngine
                             XdmValue.FromSequence(MaterializedSequence.FromList(items));
                         // XTTE0505: the template's sequence-constructor result must be
                         // convertible to the template's @as type (as-1602, sequence-0133+).
-                        typedResult = ConvertVariableValue(result, asType, context: _context, errorCodeOverride: "XTTE0505");
+                        typedResult = ConvertVariableValue(result, asType, context: _context, errorCodeOverride: "XTTE0505", declaration: rule.Element);
                     }
                     else
                     {
-                        typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context, errorCodeOverride: "XTTE0505");
+                        typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context, errorCodeOverride: "XTTE0505", declaration: rule.Element);
                     }
 
                     if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
@@ -6422,7 +6425,7 @@ internal sealed class TransformEngine
             if (!string.IsNullOrEmpty(asAttr))
                 // The xsl:evaluate result is converted using function conversion rules;
                 // a failure is XTTE0780 (evaluate-023).
-                result = ConvertVariableValue(result, asAttr, isParam: false, _context, errorCodeOverride: "XTTE0780");
+                result = ConvertVariableValue(result, asAttr, isParam: false, _context, errorCodeOverride: "XTTE0780", declaration: instruction);
             return result;
         }
         catch (InvalidOperationException ex) when (IsXPathStaticError(ex))
@@ -7446,7 +7449,7 @@ internal sealed class TransformEngine
                                 _context.CurrentOutputUri = savedOutputUri;
                             }
                         }
-                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, context: _context);
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, context: _context, declaration: instruction);
                         _context.WithVariable(varLocal, varValue, varNs);
                     }
                     break;
@@ -7482,7 +7485,7 @@ internal sealed class TransformEngine
                                 _context.CurrentOutputUri = savedOutputUri;
                             }
                         }
-                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true, _context);
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true, _context, declaration: instruction);
                         _context.WithVariable(varLocal, varValue, varNs);
                     }
                     break;
@@ -11903,7 +11906,7 @@ internal sealed class TransformEngine
                             var globalFocus = root != null ? XdmValue.FromNode(root) : XdmValue.Undefined;
                             _context.WithFocus(globalFocus, globalFocus.IsUndefined ? 0 : 1, globalFocus.IsUndefined ? 0 : 1);
                             var value = EvaluateSequenceConstructor(currentInfo.Element, globalFocus, wrapInDocumentNode: true);
-                            value = ConvertVariableValue(value, currentInfo.AsType, context: _context);
+                            value = ConvertVariableValue(value, currentInfo.AsType, context: _context, declaration: currentInfo.Element);
                             _context.WithVariable(name.LocalName, value, name.NamespaceUri);
                         }
                         finally
@@ -12048,7 +12051,7 @@ internal sealed class TransformEngine
             {
                 if (staticValue.IsUndefined)
                     throw new InvalidOperationException($"XTDE0050: No value supplied for required parameter '{localName}'.");
-                var converted = ConvertVariableValue(staticValue, info.AsType, isParam: info.Element.Name.LocalName == "param", _context);
+                var converted = ConvertVariableValue(staticValue, info.AsType, isParam: info.Element.Name.LocalName == "param", _context, declaration: info.Element);
                 _context.WithVariable(localName, converted, namespaceUri);
                 return converted;
             }
@@ -12153,7 +12156,7 @@ internal sealed class TransformEngine
                 {
                     _context.BackwardsCompatible = savedBc;
                 }
-                value = ConvertVariableValue(value, info.AsType, context: _context);
+                value = ConvertVariableValue(value, info.AsType, context: _context, declaration: info.Element);
             }
             catch (Exception evalEx)
             {
@@ -15035,7 +15038,7 @@ internal sealed class TransformEngine
                     _context.CurrentOutputUri = savedOutputUri;
                 }
             }
-            wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value, isParam: true, _context);
+            wpValue = ConvertVariableValue(wpValue, wp.Attribute("as")?.Value, isParam: true, _context, declaration: wp);
             if (IsTunnelParameter(wp))
                 tunnelParams[wpKey] = wpValue;
             else
@@ -15103,7 +15106,7 @@ internal sealed class TransformEngine
             if (source == null || !source.TryGetValue(paramKey, out var value))
                 continue;
 
-            value = ConvertVariableValue(value, paramAs, isParam: true, _context);
+            value = ConvertVariableValue(value, paramAs, isParam: true, _context, declaration: child);
 
             if (isTunnel)
                 tunnelParams[paramKey] = value;
@@ -15267,7 +15270,49 @@ internal sealed class TransformEngine
         return -1;
     }
 
-    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false, EvaluationContext? context = null, string? errorCodeOverride = null)
+    /// <summary>
+    /// Applies type conversion and validation for an <c>as</c> attribute, resolving
+    /// unprefixed QNames in the sequence type against the <c>xpath-default-namespace</c>
+    /// in scope on the declaring instruction (XSLT 3.0 §8.3): element names in
+    /// <c>element(N)</c>/<c>schema-element(N)</c> kind tests and unprefixed type names
+    /// such as <c>as="myPartNumberType"</c> use that namespace. The default namespace is
+    /// published on the evaluation context only for the duration of the coercion and
+    /// restored afterwards (import-schema-202, xpath-default-namespace-0701).
+    /// </summary>
+    /// <param name="value">The value to convert/validate.</param>
+    /// <param name="asType">The declared sequence type, or null/empty for no constraint.</param>
+    /// <param name="isParam">If true, type/cardinality mismatches raise <c>XTTE0590</c>; otherwise <c>XTTE0570</c>.</param>
+    /// <param name="context">Evaluation context carrying namespaces and the schema set.</param>
+    /// <param name="errorCodeOverride">Optional error code overriding the default coercion error.</param>
+    /// <param name="declaration">The element carrying the <c>as</c> attribute, used to resolve the in-scope <c>xpath-default-namespace</c>; may be null.</param>
+    /// <returns>The (possibly converted) value.</returns>
+    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false, EvaluationContext? context = null, string? errorCodeOverride = null, XElement? declaration = null)
+    {
+        if (string.IsNullOrEmpty(asType))
+            return value;
+
+        if (declaration is not null && context is not null)
+        {
+            var defaultNs = GetXPathDefaultNamespace(declaration);
+            if (!string.IsNullOrEmpty(defaultNs) && context.DefaultElementNamespace != defaultNs)
+            {
+                var savedDefaultNs = context.DefaultElementNamespace;
+                context.DefaultElementNamespace = defaultNs;
+                try
+                {
+                    return ConvertVariableValueCore(value, asType, isParam, context, errorCodeOverride);
+                }
+                finally
+                {
+                    context.DefaultElementNamespace = savedDefaultNs;
+                }
+            }
+        }
+
+        return ConvertVariableValueCore(value, asType, isParam, context, errorCodeOverride);
+    }
+
+    private static XdmValue ConvertVariableValueCore(XdmValue value, string? asType, bool isParam, EvaluationContext? context, string? errorCodeOverride)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
@@ -16745,7 +16790,7 @@ internal sealed class TransformEngine
                         {
                             varValue = EvaluateSequenceConstructor(instruction, contextItem, wrapInDocumentNode: string.IsNullOrEmpty(instruction.Attribute("as")?.Value));
                         }
-                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true, _context);
+                        varValue = ConvertVariableValue(varValue, instruction.Attribute("as")?.Value, isParam: true, _context, declaration: instruction);
                         _context.WithVariable(varLocal, varValue, varNs);
                     }
                     break;
@@ -20231,7 +20276,7 @@ internal sealed class TransformEngine
                 {
                     current = TransformEngine.ConvertVariableValue(
                         engine.CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx),
-                        acc.As, context: engine._context, errorCodeOverride: "XPTY0004");
+                        acc.As, context: engine._context, errorCodeOverride: "XPTY0004", declaration: acc.Element);
                 }
                 catch (Exception ex)
                 {
@@ -20562,7 +20607,7 @@ internal sealed class TransformEngine
                     _context.CurrentOutputUri = savedOutputUri;
                 }
             }
-            pvalue = ConvertVariableValue(pvalue, pas, isParam: true, _context);
+            pvalue = ConvertVariableValue(pvalue, pas, isParam: true, _context, declaration: p);
 
             var paramKey = (plocal, pns);
             if (paramValues.ContainsKey(paramKey))
@@ -20907,9 +20952,9 @@ internal sealed class TransformEngine
                     _context.CurrentOutputUri = savedOutputUri;
                 }
             }
-            wpValue = ConvertVariableValue(wpValue, wpAs, isParam: false, _context);
+            wpValue = ConvertVariableValue(wpValue, wpAs, isParam: false, _context, declaration: wp);
             if (paramTypeByName.TryGetValue(wpKey, out var paramAs))
-                wpValue = ConvertVariableValue(wpValue, paramAs, isParam: true, _context);
+                wpValue = ConvertVariableValue(wpValue, paramAs, isParam: true, _context, declaration: wp);
             newValues[wpKey] = wpValue;
         }
 
