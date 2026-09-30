@@ -170,6 +170,9 @@
 //                      | Charles Korthout | 3.55  | 30-09-2026     | REQ-112 (PA-5): skip tests whose environment schema or inline schema uses              |
 //                      |                  |       |                | xs:assert/xs:alternative (XSD 1.1; engine is XSD 1.0 only); per-URI scan cache          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.56  | 30-09-2026     | REQ-113 (PB-2): kind-test asserts without xsi:type markers revalidate the reparsed     |
+//                      |                  |       |                | result at element level (validation-1601/1603-1607)                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -228,6 +231,13 @@ class Program
     // including the string-result compare path — compiles and matches schema-element()/
     // schema-attribute() kind tests (validation-1705/1706). Null outside schema-aware runs.
     static XmlSchemaSet? _currentTestSchemaSet;
+
+    // REQ-113 (PB-2): scoped to one CompareResult evaluation — true when the result's
+    // assertion set (anywhere in its all-of/any-of tree) references a schema kind test
+    // (schema-element(/schema-attribute(). EVERY assert of such a result is then evaluated
+    // against the revalidated (typed) tree: the validation-160x family pairs a
+    // schema-element() assert with a not(...xs:untyped) assert, and both need the PSVI.
+    static bool _currentResultNeedsTypedTree;
 
     // REQ-112 (PA-5): per-URI memo of SchemaUsesXsd11Assertions results (books.xsd is
     // re-read by 20+ tests across the accumulator/merge/source-document/streaming sets).
@@ -2068,6 +2078,30 @@ class Program
 
     static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, Bosak.Xslt.Stylesheet.OutputProperties? outputProperties = null, string? baseOutputUri = null)
     {
+        // REQ-113 (PB-2): a schema kind test anywhere in this result's assertion set upgrades
+        // every assert of the result to the typed (revalidated) tree. The flag is monotonic
+        // (OR) for nested CompareResult calls and restored on exit.
+        var savedTypedTree = _currentResultNeedsTypedTree;
+        if (!savedTypedTree && ResultNeedsTypedTree(resultElem))
+            _currentResultNeedsTypedTree = true;
+        try
+        {
+            return CompareResultCore(actual, resultElem, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, outputProperties, baseOutputUri);
+        }
+        finally
+        {
+            _currentResultNeedsTypedTree = savedTypedTree;
+        }
+    }
+
+    static bool ResultNeedsTypedTree(XElement resultElem)
+        => resultElem.DescendantsAndSelf().Any(e =>
+            e.Name.LocalName == "assert"
+            && (e.Value.Contains("schema-element(", StringComparison.Ordinal)
+                || e.Value.Contains("schema-attribute(", StringComparison.Ordinal)));
+
+    static bool CompareResultCore(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, Bosak.Xslt.Stylesheet.OutputProperties? outputProperties = null, string? baseOutputUri = null)
+    {
         // Handle <not>
         var notElem = resultElem.Name.LocalName == "not" ? resultElem : resultElem.Element(ns + "not");
         if (notElem != null)
@@ -2621,12 +2655,14 @@ class Program
         if (assertExpr != null)
         {
             var nsDecls = ExtractNamespaces(assertExpr);
-            // REQ-104: assertions that reference schema kind tests need the typed result
-            // tree — the reparsed serialization has lost the stylesheet's PSVI, so the
-            // tree is revalidated against the test's merged schema set (validation-1705/1706).
+            // REQ-104/REQ-113: assertions that reference schema kind tests — or share a
+            // result with one — need the typed result tree: the reparsed serialization has
+            // lost the stylesheet's PSVI, so the tree is revalidated against the test's
+            // merged schema set (validation-1601/1603-1607, validation-1705/1706).
             // Assertions that don't mention kind tests keep the untyped reparse (catalog
             // assertions are written for untyped trees; typing them breaks comparisons).
-            var needsTypedResult = assertExpr.Value.Contains("schema-element(", StringComparison.Ordinal)
+            var needsTypedResult = _currentResultNeedsTypedTree
+                || assertExpr.Value.Contains("schema-element(", StringComparison.Ordinal)
                 || assertExpr.Value.Contains("schema-attribute(", StringComparison.Ordinal);
             return EvaluateAssert(actual, assertExpr.Value, nsDecls, needsTypedResult);
         }
@@ -2996,7 +3032,24 @@ class Program
             return;
         var xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
         if (!doc.Descendants().Any(e => e.Attribute(xsi + "type") is not null || e.Attribute(xsi + "nil") is not null))
+        {
+            // REQ-113 (PB-2): schema kind-test asserts (schema-element(...) / schema-attribute(...))
+            // need the reparsed result annotated even when it carries no xsi:type markers
+            // (validation-1601/1603-1607: the stylesheet's own construction annotations are
+            // lost in serialization). Element-level lax validation approximates them, and the
+            // annotator's ID/IDREF partition keeps duplicate-ID content assertable.
+            try
+            {
+                XdmSchemaAnnotator.Validate(doc.Root, _currentTestSchemaSet,
+                    new XdmValidationOptions(XdmValidationMode.Lax));
+            }
+            catch (Exception)
+            {
+                // An unvalidatable result tree stays untyped; assertions then just don't match.
+            }
             return;
+            return;
+        }
         try
         {
             XdmSchemaAnnotator.ValidateSubtree(doc.Root, _currentTestSchemaSet);

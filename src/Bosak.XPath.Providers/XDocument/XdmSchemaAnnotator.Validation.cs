@@ -26,6 +26,13 @@
 //                      |                  |       |                | declaration, so .NET cannot enforce xsi:type derivation against the declaration       |
 //                      |                  |       |                | type — t:type validates against the named type alone (match-220/221 decoys)           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 30-09-2026     | REQ-113 (PB-2): ID/IDREF root-valid errors partitioned by level — suppressed at         |
+//                      |                  |       |                | element validation (§25.4.1.3), surfaced as HasDocumentLevelConstraintFailure at        |
+//                      |                  |       |                | document validation (§25.4.2 → XTTE1555); xsi:type prefix scan skips default-ns decls   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 30-09-2026     | REQ-113 (PB-2): CheckDocumentIdentityConstraints — duplicate-ID / dangling-IDREF pass   |
+//                      |                  |       |                | for undeclared roots (xml:id, attribute/element-content xsi:type typed ID/IDREF(S))     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -90,7 +97,7 @@ public static partial class XdmSchemaAnnotator
                 return new XdmSubtreeValidationResult(true, []);
         }
 
-        if (options.DocumentLevel)
+        if (options.DocumentLevel && !options.DocumentEpisode)
         {
             // Document-node validation (XSLT 3.0 §25.4.2): the content must comprise exactly
             // one element node, no text nodes, and zero or more comment/PI nodes; validation
@@ -120,9 +127,25 @@ public static partial class XdmSchemaAnnotator
                     throw new XmlSchemaValidationException(shapeMessage);
                 return shapeResult;
             }
-            return Validate(rootChild, schemas, options with { DocumentLevel = false }, handler, throwOnInvalid);
+            // The single root is validated as a document-level episode: ID/IDREF root-validity
+            // constraints stay enabled (surfaced via HasDocumentLevelConstraintFailure), but
+            // the container shape check is not re-applied to the root's own content (which
+            // may legitimately hold several element children — validation-0214).
+            return ValidateCore(rootChild, schemas, options, handler, throwOnInvalid, documentLevel: true);
         }
 
+        return ValidateCore(element, schemas, options, handler, throwOnInvalid, options.DocumentLevel);
+    }
+
+    /// <summary>
+    /// Shared validation body of <see cref="Validate"/> after mode short-circuits and the
+    /// optional document shape check. <paramref name="documentLevel"/> carries the document
+    /// episode treatment down from the container check so ID/IDREF root-validity constraint
+    /// messages are partitioned (or kept) exactly once.
+    /// </summary>
+    private static XdmSubtreeValidationResult ValidateCore(XElement element, XmlSchemaSet schemas,
+        XdmValidationOptions options, ValidationEventHandler? handler, bool throwOnInvalid, bool documentLevel)
+    {
         // Named-type validation (XSLT [xsl:]type): resolve the type up-front; unknown types
         // are a usage error of the service (the host maps it to its own static error code).
         XmlSchemaType? namedType = null;
@@ -227,9 +250,14 @@ public static partial class XdmSchemaAnnotator
                 clone.SetAttributeValue(XNamespace.Xmlns + "xsi", XsiNamespaceUri);
                 injectedXsiNs = true;
             }
+            // REQ-113: a default-namespace declaration (xmlns="uri") has Name.LocalName
+            // "xmlns" (its Name carries no namespace), so the naive LocalName scan picks it
+            // as a prefix and writes xsi:type="xmlns:local" — resolved by System.Xml.Schema
+            // to the reserved http://www.w3.org/2000/xmlns/ namespace. Only prefixed
+            // declarations (Name.NamespaceName == xmlns) yield a usable prefix.
             var typePrefix = clone.Attributes()
                 .Where(a => a.IsNamespaceDeclaration && a.Value == typeNs)
-                .Select(a => a.Name.LocalName)
+                .Select(a => a.Name.NamespaceName == XNamespace.Xmlns ? a.Name.LocalName : string.Empty)
                 .FirstOrDefault(p => p.Length > 0);
             XAttribute? removedDefaultNs = null;
             if (typePrefix is null)
@@ -258,6 +286,17 @@ public static partial class XdmSchemaAnnotator
         var wrapper = new XDocument(clone);
         wrapper.Validate(effectiveSet, recorder, addSchemaInfo: true);
 
+        // REQ-113 (PB-2): the XDocument wrapper makes .NET validate with
+        // ProcessIdentityConstraints, so raw xs:ID uniqueness and xs:IDREF referential
+        // checks fire for element-level validation too. XSLT 3.0 §25.4.1.3 forbids those
+        // at element level (they apply only when a document node is validated, §25.4.2,
+        // where they map to XTTE1555) — so the two frozen System.Private.Xml message
+        // families are partitioned out here. xs:unique/xs:key/xs:keyref messages are
+        // deliberately NOT matched: identity constraints do apply at element level.
+        var contentErrors = errors.Where(e => !IsIdIdrefConstraintMessage(e.Message)).ToList();
+        var hasConstraintFailure = contentErrors.Count != errors.Count;
+        var effectiveErrors = documentLevel ? errors : contentErrors;
+
         if (namedType is not null)
         {
             clone.SetAttributeValue(XNamespace.Get(XsiNamespaceUri) + "type", null);
@@ -272,14 +311,15 @@ public static partial class XdmSchemaAnnotator
 
         // Validating XDM construction discards whitespace-only text nodes in element-only
         // content (XDM §3.3.1.1). Applied to the live tree, guided by the fresh PSVI.
-        if (errors.Count == 0)
+        if (effectiveErrors.Count == 0)
             StripElementOnlyContentWhitespace(element);
 
         // Schema-normalized values (the whiteSpace facet) apply wherever validation
         // succeeded, including in partially validated trees (match-136..141).
         ApplySchemaNormalizedValues(element);
 
-        var result = new XdmSubtreeValidationResult(errors.Count == 0, errors);
+        var result = new XdmSubtreeValidationResult(effectiveErrors.Count == 0, effectiveErrors,
+            effectiveErrors.Count > 0 ? effectiveErrors[0].Message : null, hasConstraintFailure);
         if (throwOnInvalid && !result.IsValid)
         {
             var first = result.Errors[0];
@@ -566,9 +606,123 @@ public static partial class XdmSchemaAnnotator
         return ResolveSchemaTypeCore(schemas, typeName);
     }
 
-    private static XmlSchemaType? ResolveSchemaTypeCore(XmlSchemaSet schemas, XmlQualifiedName typeName)
+    // REQ-113 (PB-2): the two frozen System.Private.Xml message families for raw ID/IDREF
+    // root-validity checks ("Sch_DupId" / "Sch_UndeclaredId"). Invariant across
+    // .NET Framework → .NET 10; matched on stable substrings rather than the full
+    // template so the formatted value cannot break the probe.
+    private static bool IsIdIdrefConstraintMessage(string message)
+        => message.EndsWith("is already used as an ID.", StringComparison.Ordinal)
+           || message.StartsWith("Reference to undeclared ID is ", StringComparison.Ordinal);
+
+    /// <summary>
+    /// Checks the subtree rooted at <paramref name="root"/> for document-level identity
+    /// constraint violations that element-level validation deliberately suppresses (XSLT 3.0
+    /// §25.4.1.3 vs §25.4.2): duplicate ID values and dangling IDREF/IDREFS references. The
+    /// .NET validator enforces these only for declared-schema content; this pass additionally
+    /// covers IDs that arise without a declaration — attributes named <c>xml:id</c>, and
+    /// attributes or element content whose <c>xsi:type</c> resolves to
+    /// <c>xs:ID</c>/<c>xs:IDREF</c>/<c>xs:IDREFS</c>.
+    /// </summary>
+    /// <param name="root">The root of the (single-element) document content to check.</param>
+    /// <param name="schemas">The compiled schema set used to resolve xsi:type values.</param>
+    /// <returns>
+    /// The message of the first duplicate-ID or dangling-IDREF violation found, or
+    /// <c>null</c> when the content satisfies the constraints.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="root"/> or <paramref name="schemas"/> is null.</exception>
+    internal static string? CheckDocumentIdentityConstraints(XElement root, XmlSchemaSet schemas)
     {
-        if (schemas.GlobalTypes[typeName] is XmlSchemaType declared)
+        ArgumentNullException.ThrowIfNull(root);
+        ArgumentNullException.ThrowIfNull(schemas);
+
+        var idValues = new HashSet<string>(StringComparer.Ordinal);
+        var idrefTokens = new List<string>();
+
+        foreach (var element in root.DescendantsAndSelf())
+        {
+            // Element content typed as xs:IDREF/xs:IDREFS contributes reference tokens.
+            var elementTypeName = element.Attribute(XNamespace.Get(XsiNamespaceUri) + "type") is { } elementXsiType
+                ? ParseXsiTypeQName(elementXsiType, element)
+                : null;
+            if (elementTypeName is not null
+                && ResolveSchemaType(schemas, elementTypeName)?.Datatype?.TokenizedType
+                    is XmlTokenizedType.IDREF or XmlTokenizedType.IDREFS)
+            {
+                idrefTokens.AddRange(SplitIdrefTokens(element.Value));
+            }
+            else if (element.GetSchemaInfo() is { } elementInfo
+                     && XDocumentNode.HasIdrefTypeFromSchemaInfo(elementInfo, element.Value))
+            {
+                idrefTokens.AddRange(SplitIdrefTokens(element.Value));
+            }
+
+            foreach (var attribute in element.Attributes())
+            {
+                if (attribute.IsNamespaceDeclaration)
+                    continue;
+
+                // An xsi:type attribute types its PARENT element's content (handled above);
+                // it never types the attribute itself. Attribute ID/IDREF typing comes from
+                // declarations via the PSVI, or from the xml:id infoset rule.
+                var isId = attribute.GetSchemaInfo() is { } attributeInfo
+                        && XDocumentNode.HasIdTypeFromSchemaInfo(attributeInfo, attribute.Value)
+                    || attribute.Name == XNamespace.Xml + "id";
+                if (isId)
+                {
+                    var id = attribute.Value.Trim();
+                    if (id.Length > 0 && !idValues.Add(id))
+                        return $"The ID value '{id}' is already used as an ID.";
+                    continue;
+                }
+
+                var isIdref = attribute.GetSchemaInfo() is { } attrInfo
+                    && XDocumentNode.HasIdrefTypeFromSchemaInfo(attrInfo, attribute.Value);
+                if (isIdref)
+                    idrefTokens.AddRange(SplitIdrefTokens(attribute.Value));
+            }
+        }
+
+        foreach (var token in idrefTokens)
+        {
+            if (!idValues.Contains(token))
+                return $"Reference to undeclared ID is '{token}'.";
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Parses an <c>xsi:type</c> attribute value as a QName. An unprefixed value is in no
+    /// namespace (QName rules — the default namespace declaration does not apply).
+    /// </summary>
+    private static XmlQualifiedName ParseXsiTypeQName(XAttribute xsiType, XElement scope)
+    {
+        var value = xsiType.Value.Trim();
+        var colon = value.IndexOf(':');
+        string prefix;
+        string local;
+        if (colon >= 0)
+        {
+            prefix = value[..colon];
+            local = value[(colon + 1)..];
+        }
+        else
+        {
+            prefix = string.Empty;
+            local = value;
+        }
+
+        var ns = prefix.Length == 0
+            ? string.Empty
+            : scope.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+        return new XmlQualifiedName(local, ns);
+    }
+
+    private static IEnumerable<string> SplitIdrefTokens(string value)
+        => value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+
+    private static XmlSchemaType? ResolveSchemaTypeCore(XmlSchemaSet schemas, XmlQualifiedName typeName)
+    {        if (schemas.GlobalTypes[typeName] is XmlSchemaType declared)
             return declared;
         if (typeName.Namespace == XsNamespaceUri)
         {

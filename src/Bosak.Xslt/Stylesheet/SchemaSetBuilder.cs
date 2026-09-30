@@ -24,6 +24,9 @@
 //                      | Charles Korthout | 0.4   | 24-09-2026     | REQ-106 (PA-3): locationful nested xs:import/xs:include targets loaded eagerly        |
 //                      |                  |       |                | (Compile fetches nothing with a null resolver) — notation-0301 family                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 30-09-2026     | REQ-113 (PB-2): embedded XML-namespace schema declares xml:lang as the W3C xml.xsd      |
+//                      |                  |       |                | union of xs:language and the empty string (attribute-1502)                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -189,7 +192,20 @@ internal static class SchemaSetBuilder
     private const string XmlNamespaceUri = "http://www.w3.org/XML/1998/namespace";
 
     private const string XmlNamespaceSchema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='http://www.w3.org/XML/1998/namespace'>
-  <xs:attribute name='lang' type='xs:string'/>
+  <!-- REQ-113 (PB-2): the W3C xml.xsd declares xml:lang as a union of xs:language and the
+       empty string, so xml:lang='!@$%^*' fails validation (attribute-1502) while the empty
+       string stays valid. -->
+  <xs:attribute name='lang'>
+    <xs:simpleType>
+      <xs:union memberTypes='xs:language'>
+        <xs:simpleType>
+          <xs:restriction base='xs:string'>
+            <xs:enumeration value=''/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:union>
+    </xs:simpleType>
+  </xs:attribute>
   <xs:attribute name='space'>
     <xs:simpleType>
       <xs:restriction base='xs:NCName'>

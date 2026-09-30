@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 23-09-2026     | Creation (REQ-099 seam H4)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 30-09-2026     | REQ-113 (PB-2): internal DocumentEpisode flag — the single-root document shape is       |
+//                      |                  |       |                | pre-established by the caller, so only the ID/IDREF document-level treatment applies    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -38,4 +41,14 @@ namespace Bosak.XPath.Providers.Xml;
 /// document node: it must contain exactly one element child and no text node children, and
 /// the validation applies to that single child element (XSLT 3.0 §25.4.2).
 /// </param>
-public sealed record XdmValidationOptions(XdmValidationMode Mode, XmlQualifiedName? TypeName = null, bool DocumentLevel = false);
+public sealed record XdmValidationOptions(XdmValidationMode Mode, XmlQualifiedName? TypeName = null, bool DocumentLevel = false)
+{
+    /// <summary>
+    /// Internal (REQ-113): set by hosts that have already established the single-root
+    /// document shape themselves and now validate that root element directly. The
+    /// document-level ID/IDREF constraint treatment of <see cref="DocumentLevel"/> applies,
+    /// but the content-container shape check is skipped (the element is the single root,
+    /// not the container).
+    /// </summary>
+    internal bool DocumentEpisode { get; init; }
+}

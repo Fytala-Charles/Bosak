@@ -405,6 +405,14 @@
 //                      |                  |       |                | the PSVI + is-id properties onto the copied attribute (match-219/263); per-mode      |
 //                      |                  |       |                | typed strict/lax pattern variants, XTSE3105 static check, XTTE3110 (match set)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.89  | 30-09-2026     | REQ-113 (PB-2): XTTE15xx completion — document-level identity constraints before     |
+//                      |                  |       |                | element validation; unresolvable xsi:type under lax; strip w/o shape check; implicit   |
+//                      |                  |       |                | result tree never validated (bug 30211); streaming seq-accumulator isolation in        |
+//                      |                  |       |                | result-document; transformation-scoped XTDE1490; copied-attribute XTTE1510/1515 codes  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.90  | 30-09-2026     | REQ-113 fix: XTDE1490 restored to transformation-scoped duplicate-URI check           |
+//                      |                  |       |                | (stack-scoped variant regressed try-021; si-result-document-111/115 are single-write)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1645,9 +1653,12 @@ internal sealed class TransformEngine
 
     /// <summary>
     /// Validates a constructed (or copied) element with the requested directives, raising the
-    /// element-level XTTE1510/1512/1515/1540 error family on failure.
+    /// element-level XTTE1510/1512/1515/1540 error family on failure. When
+    /// <paramref name="documentLevel"/> is <c>true</c> the element acts as a document node's
+    /// root: ID/IDREF root-validity constraint failures (only enforced by the validator for
+    /// document sources) surface as XTTE1555 per XSLT 3.0 §25.4.2.
     /// </summary>
-    private void ValidateConstructedElement(XElement element, XdmValidationMode mode, XmlQualifiedName? typeName)
+    private void ValidateConstructedElement(XElement element, XdmValidationMode mode, XmlQualifiedName? typeName, bool documentLevel = false)
     {
         var schemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
 
@@ -1663,7 +1674,13 @@ internal sealed class TransformEngine
                     XdmValue.Undefined);
             }
             var typeResult = XdmSchemaAnnotator.Validate(element, schemas,
-                new XdmValidationOptions(XdmValidationMode.Strict, qn));
+                new XdmValidationOptions(XdmValidationMode.Strict, qn, documentLevel) { DocumentEpisode = documentLevel });
+            if (documentLevel && typeResult.HasDocumentLevelConstraintFailure)
+            {
+                throw new XsltRuntimeException("XTTE1555",
+                    $"Document-level constraints are not satisfied: {typeResult.FailureMessage}",
+                    XdmValue.Undefined);
+            }
             if (!typeResult.IsValid)
             {
                 throw new XsltRuntimeException("XTTE1540",
@@ -1682,7 +1699,13 @@ internal sealed class TransformEngine
                         $"There is no top-level element declaration for '{element.Name.LocalName}' in the in-scope schema definitions.",
                         XdmValue.Undefined);
                 }
-                var strictResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Strict));
+                var strictResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Strict, null, documentLevel) { DocumentEpisode = documentLevel });
+                if (documentLevel && strictResult.HasDocumentLevelConstraintFailure)
+                {
+                    throw new XsltRuntimeException("XTTE1555",
+                        $"Document-level constraints are not satisfied: {strictResult.FailureMessage}",
+                        XdmValue.Undefined);
+                }
                 if (!strictResult.IsValid)
                 {
                     throw new XsltRuntimeException("XTTE1510",
@@ -1691,7 +1714,22 @@ internal sealed class TransformEngine
                 }
                 break;
             case XdmValidationMode.Lax:
-                var laxResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Lax));
+                // REQ-113 (PB-2): an xsi:type QName that cannot be resolved (undeclared
+                // prefix, or naming no type definition) is XTTE1510 even under lax — the
+                // catalog family validation-1701..1704 pins the same code for both modes.
+                if (HasUnresolvableXsiType(element, schemas))
+                {
+                    throw new XsltRuntimeException("XTTE1510",
+                        $"The element '{element.Name.LocalName}' has an xsi:type attribute naming an undeclared prefix or unknown type.",
+                        XdmValue.Undefined);
+                }
+                var laxResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Lax, null, documentLevel) { DocumentEpisode = documentLevel });
+                if (documentLevel && laxResult.HasDocumentLevelConstraintFailure)
+                {
+                    throw new XsltRuntimeException("XTTE1555",
+                        $"Document-level constraints are not satisfied: {laxResult.FailureMessage}",
+                        XdmValue.Undefined);
+                }
                 if (!laxResult.IsValid)
                 {
                     throw new XsltRuntimeException("XTTE1515",
@@ -1707,6 +1745,49 @@ internal sealed class TransformEngine
                 // (xs:anyType / xs:untypedAtomic) already.
                 break;
         }
+    }
+
+    /// <summary>
+    /// Determines whether the element carries an <c>xsi:type</c> attribute whose QName value
+    /// cannot be resolved — either the namespace prefix is undeclared or the type name matches
+    /// no type definition in the in-scope schema definitions. Elements with no xsi:type, or a
+    /// resolvable one, return <c>false</c>.
+    /// </summary>
+    private static bool HasUnresolvableXsiType(XElement element, XmlSchemaSet schemas)
+    {
+        var xsiNamespace = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+        var xsiType = element.Attribute(xsiNamespace + "type");
+        if (xsiType is null)
+            return false;
+
+        var value = xsiType.Value.Trim();
+        var colon = value.IndexOf(':');
+        string prefix;
+        string local;
+        if (colon >= 0)
+        {
+            prefix = value[..colon];
+            local = value[(colon + 1)..];
+        }
+        else
+        {
+            // QName rules: an unprefixed xsi:type value is in no namespace; the default
+            // namespace declaration does not apply.
+            prefix = string.Empty;
+            local = value;
+        }
+
+        string ns = prefix.Length == 0
+            ? string.Empty
+            : element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? string.Empty;
+
+        // An unbound prefix can never resolve to a type definition.
+        if (prefix.Length > 0 && ns.Length == 0)
+            return true;
+        if (local.Length == 0)
+            return true;
+
+        return XdmSchemaAnnotator.ResolveSchemaType(schemas, new XmlQualifiedName(local, ns)) is null;
     }
 
     /// <summary>
@@ -1730,10 +1811,12 @@ internal sealed class TransformEngine
     /// annotating it in place. <paramref name="complexTypeErrorCode"/> is XTSE1530 for
     /// xsl:attribute and XTTE1535 for xsl:copy/xsl:copy-of (a complex type named for an
     /// attribute); <paramref name="standalone"/> selects XTTE1555 for validation failures of
-    /// a parentless attribute (validation-0006 shape).
+    /// a parentless constructed attribute (validation-0006 shape); <paramref name="copied"/>
+    /// marks the attribute as copied (xsl:copy/xsl:copy-of), whose named-type failure is
+    /// XTTE1510 (strict) / XTTE1515 (lax) rather than XTTE1540/XTTE1555 (REQ-113, PB-2).
     /// </summary>
     private void ApplyAttributeValidationDirectives(XAttribute attribute, XdmValidationMode mode, XmlQualifiedName? typeName,
-        string complexTypeErrorCode, bool standalone)
+        string complexTypeErrorCode, bool standalone = false, bool copied = false)
     {
         var schemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
 
@@ -1759,7 +1842,10 @@ internal sealed class TransformEngine
                 new XdmValidationOptions(XdmValidationMode.Strict, qn));
             if (!typeResult.IsValid)
             {
-                throw new XsltRuntimeException(standalone ? "XTTE1555" : "XTTE1540",
+                var namedTypeCode = standalone ? "XTTE1555"
+                    : copied ? (mode == XdmValidationMode.Lax ? "XTTE1515" : "XTTE1510")
+                    : "XTTE1540";
+                throw new XsltRuntimeException(namedTypeCode,
                     $"The attribute '{attribute.Name.LocalName}' is not valid against type '{FormatQName(qn)}': {typeResult.FailureMessage}",
                     XdmValue.Undefined);
             }
@@ -1854,8 +1940,10 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
-    /// Executes already-resolved validation directives on document content: shape check
-    /// (XTTE1550), then element-level validation of the single root child.
+    /// Executes already-resolved validation directives on document content. Strip and
+    /// preserve apply to every element child without a shape check; strict/lax/typed first
+    /// enforce the document shape (XTTE1550), then document-level identity constraints
+    /// (XTTE1555), then element-level validation of the single root child.
     /// </summary>
     private void ApplyDocumentValidationDirectives(XObject documentLike, XdmValidationMode mode, XmlQualifiedName? typeName)
     {
@@ -1876,6 +1964,21 @@ internal sealed class TransformEngine
                 contentContainer = wrapper;
                 break;
         }
+
+        // REQ-113 (PB-2): strip/preserve are not subject to the XTTE1550 document shape
+        // check. Strip must annotate every element child of the container (the __xdm_doc__
+        // wrapper may hold several); preserve is a no-op.
+        if (mode == XdmValidationMode.Strip)
+        {
+            var stripSchemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
+            if (contentContainer is not null)
+                XdmSchemaAnnotator.Validate(contentContainer, stripSchemas, new XdmValidationOptions(XdmValidationMode.Strip));
+            else if (singleRoot is not null)
+                XdmSchemaAnnotator.Validate(singleRoot, stripSchemas, new XdmValidationOptions(XdmValidationMode.Strip));
+            return;
+        }
+        if (mode == XdmValidationMode.Preserve)
+            return;
 
         if (contentContainer is not null)
         {
@@ -1911,16 +2014,19 @@ internal sealed class TransformEngine
                 XdmValue.Undefined);
         }
 
-        if (mode == XdmValidationMode.Strip)
+        // REQ-113 (PB-2): document-level identity constraints (duplicate IDs, dangling
+        // IDREFs) are enforced before element-level validation, so they take precedence over
+        // the XTTE1512 declaration pre-check inside ValidateConstructedElement
+        // (attribute-1506/1507).
+        if (XdmSchemaAnnotator.CheckDocumentIdentityConstraints(singleRoot,
+                _context.SchemaSet ?? s_builtInOnlySchemaSet) is { } constraintMessage)
         {
-            XdmSchemaAnnotator.Validate(singleRoot, _context.SchemaSet ?? s_builtInOnlySchemaSet,
-                new XdmValidationOptions(XdmValidationMode.Strip));
-            return;
+            throw new XsltRuntimeException("XTTE1555",
+                $"Document-level constraints are not satisfied: {constraintMessage}",
+                XdmValue.Undefined);
         }
-        if (mode == XdmValidationMode.Preserve)
-            return;
 
-        ValidateConstructedElement(singleRoot, mode, typeName);
+        ValidateConstructedElement(singleRoot, mode, typeName, documentLevel: true);
     }
 
     /// <summary>
@@ -1940,7 +2046,7 @@ internal sealed class TransformEngine
                 ValidateConstructedElement(element, mode, typeName);
                 break;
             case XdmNodeKind.Attribute when xdn.UnderlyingObject is XAttribute attribute:
-                ApplyAttributeValidationDirectives(attribute, mode, typeName, "XTTE1535", standalone: true);
+                ApplyAttributeValidationDirectives(attribute, mode, typeName, "XTTE1535", copied: true);
                 break;
             case XdmNodeKind.Document when xdn.UnderlyingObject is XDocument document:
                 ApplyDocumentValidationDirectives(document, mode, typeName);
@@ -1952,36 +2058,15 @@ internal sealed class TransformEngine
         => string.IsNullOrEmpty(qn.Namespace) ? qn.Name : $"Q{{{qn.Namespace}}}{qn.Name}";
 
     /// <summary>
-    /// Applies the principal module's <c>default-validation</c> to the implicit final result
-    /// tree (XSLT 3.0 §25.4.1.1: the outermost element's default-validation determines the
-    /// validation of the implicit result tree, i.e. one created in the absence of an
-    /// xsl:result-document instruction). Active only when a schema set is in scope;
-    /// bit-identical otherwise. "preserve" keeps the annotations produced by
-    /// instruction-level validation; "strip" (the default) removes them.
+    /// REQ-113 (PB-2): the implicit final result tree is deliberately NOT validated or
+    /// stripped, regardless of the principal module's <c>default-validation</c>. Per W3C bug
+    /// 30211 (accepted against XSLT 3.0), document-level validation applies only to trees
+    /// created by <c>xsl:result-document</c>; the implicit result tree keeps whatever
+    /// annotations its individual construction instructions produced
+    /// (validation-1603/1604/1606/1607). Kept as a no-op so the call sites stay explicit.
     /// </summary>
     private void ApplyImplicitResultTreeValidation(XObject resultTree)
     {
-        if (_context.SchemaSet == null)
-            return;
-        // An explicit principal xsl:result-document was already validated with its own
-        // directives; the implicit-tree rule applies only in its absence.
-        if (_principalResultDocumentProperties != null)
-            return;
-        switch (GetDefaultValidation(_stylesheet.Root) ?? "strip")
-        {
-            case "strip":
-                XdmSchemaAnnotator.StripSchemaAnnotations(resultTree);
-                break;
-            case "strict":
-                // Bosak extension beyond the spec's preserve|strip values.
-                ApplyDocumentValidationDirectives(resultTree, XdmValidationMode.Strict, null);
-                break;
-            case "lax":
-                ApplyDocumentValidationDirectives(resultTree, XdmValidationMode.Lax, null);
-                break;
-            default:
-                break; // preserve: nothing to do
-        }
     }
 
 
@@ -9780,7 +9865,7 @@ internal sealed class TransformEngine
                     else
                     {
                         ApplyAttributeValidationDirectives(attrCopy, attrDirectives.Value.Mode,
-                            attrDirectives.Value.TypeName, "XTTE1535", standalone: true);
+                            attrDirectives.Value.TypeName, "XTTE1535", copied: true);
                     }
                     return XDocumentNode.Wrap(attrCopy);
                 }
@@ -9963,7 +10048,7 @@ internal sealed class TransformEngine
                         else
                         {
                             ApplyAttributeValidationDirectives(copiedAttr, attrCopyDirectives.Value.Mode,
-                                attrCopyDirectives.Value.TypeName, "XTTE1535", standalone: true);
+                                attrCopyDirectives.Value.TypeName, "XTTE1535", copied: true);
                         }
                         _sequenceAccumulator.Add(XdmValue.FromNode(XDocumentNode.Wrap(copiedAttr)));
                         break;
@@ -17371,6 +17456,14 @@ internal sealed class TransformEngine
                 _resultDocumentRawItems = new List<XdmValue>();
             }
 
+            // REQ-113 (PB-2): isolate the streaming sequence accumulator. An xsl:copy-of
+            // under streaming would otherwise insert an annotated __xdm_seq__ placeholder
+            // as the temp container's only child, so validation validates the wrapper and
+            // serialization drops the payload (si-result-document family).
+            var savedAccumulator = _sequenceAccumulator;
+            if (!collectRaw)
+                _sequenceAccumulator = null;
+
             try
             {
                 foreach (var childNode in instruction.Nodes())
@@ -17391,6 +17484,8 @@ internal sealed class TransformEngine
             }
             finally
             {
+                _sequenceAccumulator = savedAccumulator;
+
                 if (collectRaw)
                 {
                     _principalRawResultDocument = _resultDocumentRawItems.Count == 0
@@ -17420,6 +17515,9 @@ internal sealed class TransformEngine
         }
         else
         {
+            // XTDE1490 is transformation-scoped (XSLT 3.0 §25.2): generating two final
+            // result trees with the same URI is an error, even when the writes are
+            // sequential episodes (try-021).
             if (_resultDocumentUris.Contains(resolvedHref))
                 throw new InvalidOperationException("XTDE1490: A result document with the same URI has already been created.");
 
@@ -17442,6 +17540,9 @@ internal sealed class TransformEngine
             var savedOutputUri = _context.CurrentOutputUri;
             var savedCollectRaw = _collectRawItems;
             var savedRawItems = _resultDocumentRawItems;
+            // REQ-113 (PB-2): isolate the streaming sequence accumulator (see the principal
+            // path above).
+            var savedAccumulator = _sequenceAccumulator;
             XElement? temp = null;
             List<XdmValue>? rawItems = null;
 
@@ -17452,6 +17553,7 @@ internal sealed class TransformEngine
             // and literal elements would otherwise be diverted into the raw-items list
             // of the enclosing output (si-fork-119).
             _collectRawItems = collectRaw;
+            _sequenceAccumulator = null;
             if (collectRaw)
             {
                 _resultDocumentRawItems = new List<XdmValue>();
@@ -17488,6 +17590,7 @@ internal sealed class TransformEngine
                 _resultDocumentStack.Pop();
                 _collectRawItems = savedCollectRaw;
                 _resultDocumentRawItems = savedRawItems;
+                _sequenceAccumulator = savedAccumulator;
             }
 
             // REQ-099 seam H4: validation/@type on xsl:result-document applies to the built

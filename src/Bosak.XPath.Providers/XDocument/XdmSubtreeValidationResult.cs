@@ -15,6 +15,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 23-09-2026     | REQ-099 seam H4: FailureMessage added for failures without validator events              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 30-09-2026     | REQ-113 (PB-2): HasDocumentLevelConstraintFailure surfaces ID/IDREF root-valid          |
+//                      |                  |       |                | constraint errors (XSLT 3.0 §25.4.2 → XTTE1555 at document level, suppressed at        |
+//                      |                  |       |                | element level per §25.4.1.3)                                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Schema;
@@ -32,15 +36,21 @@ namespace Bosak.XPath.Providers.Xml;
 public sealed record XdmSubtreeValidationResult
 {
     internal XdmSubtreeValidationResult(bool isValid, IReadOnlyList<ValidationEventArgs> errors)
-        : this(isValid, errors, errors.Count > 0 ? errors[0].Message : null)
+        : this(isValid, errors, errors.Count > 0 ? errors[0].Message : null, false)
     {
     }
 
     internal XdmSubtreeValidationResult(bool isValid, IReadOnlyList<ValidationEventArgs> errors, string? failureMessage)
+        : this(isValid, errors, failureMessage, false)
+    {
+    }
+
+    internal XdmSubtreeValidationResult(bool isValid, IReadOnlyList<ValidationEventArgs> errors, string? failureMessage, bool hasDocumentLevelConstraintFailure)
     {
         IsValid = isValid;
         Errors = errors;
         FailureMessage = failureMessage;
+        HasDocumentLevelConstraintFailure = hasDocumentLevelConstraintFailure;
     }
 
     /// <summary>
@@ -63,4 +73,13 @@ public sealed record XdmSubtreeValidationResult
     /// message of the first entry in <see cref="Errors"/>.
     /// </summary>
     public string? FailureMessage { get; }
+
+    /// <summary>
+    /// <c>true</c> when the failure set contains document-level identity-constraint
+    /// violations only enforced when the validation source is a document node: duplicate
+    /// <c>xs:ID</c> values or dangling <c>xs:IDREF</c> references (XSLT 3.0 §25.4.2 maps
+    /// these to XTTE1555). At element level the validator suppresses these via the
+    /// wrapper-source flag (§25.4.1.3), so this is <c>false</c> there.
+    /// </summary>
+    public bool HasDocumentLevelConstraintFailure { get; }
 }
