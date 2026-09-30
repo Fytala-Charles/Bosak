@@ -167,6 +167,9 @@
 //                      | Charles Korthout | 3.54  | 24-09-2026     | REQ-106 (PA-3): source-validation schema set gets an XmlUrlResolver so locationful   |
 //                      |                  |       |                | nested xs:import/xs:include resolve (URI-added docs populate the dedup table)          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.55  | 30-09-2026     | REQ-112 (PA-5): skip tests whose environment schema or inline schema uses              |
+//                      |                  |       |                | xs:assert/xs:alternative (XSD 1.1; engine is XSD 1.0 only); per-URI scan cache          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -226,6 +229,10 @@ class Program
     // schema-attribute() kind tests (validation-1705/1706). Null outside schema-aware runs.
     static XmlSchemaSet? _currentTestSchemaSet;
 
+    // REQ-112 (PA-5): per-URI memo of SchemaUsesXsd11Assertions results (books.xsd is
+    // re-read by 20+ tests across the accumulator/merge/source-document/streaming sets).
+    static readonly Dictionary<string, bool> _xsd11SchemaCache = new(StringComparer.OrdinalIgnoreCase);
+
     static readonly HashSet<string> SupportedSpecs = new(StringComparer.OrdinalIgnoreCase)
     {
         "XSLT20+", "XSLT20", "XSLT30+", "XSLT30", "XSLT"
@@ -240,6 +247,13 @@ class Program
         "xslt-3.0-snapshot",
         "built_in_derived_types",
         "streaming-fallback"
+
+        // REQ-112 (PA-5): deliberately NOT skipping feature "XSD_1.1" here. Tests that
+        // pin <feature value="XSD_1.1" satisfied="false"/> are XSD-1.0-only applicability
+        // probes (regex-syntax-0056/0086/0102 expect FORX0002 under 1.0 char-class rules,
+        // type-available-0151 probes the 1.0 type set) and must keep their silent skip;
+        // listing the feature would flip them to "supported" and make them run. The
+        // schema scan in RunTestCase is the authoritative gate for true XSD 1.1 content.
     };
 
     // Test sets whose streaming-tagged cases run through the burst-mode streaming
@@ -567,6 +581,40 @@ class Program
         if (name is "json-to-xml-typed-010")
             return "Spec contradiction: xsl:import-schema must raise XTSE1650 statically on a non-schema-aware processor (XSLT 3.0 27.2), so XTDE3245 at runtime is unreachable; W3C submissions concur";
         return "Known harness skip";
+    }
+
+    // Matches an xs:assert / xs:alternative element start in raw schema text. Prefix-
+    // agnostic (any namespace prefix, or none) because the XSD 1.1-ness lives in the
+    // element, not the prefix; the lookahead excludes lookalikes such as xs:assertion.
+    static readonly Regex Xsd11AssertionPattern = new(
+        "<(?:(?:[A-Za-z_][\\w.-]*):)?(assert|alternative)(?=[\\s/>])",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+    // REQ-112 (PA-5): the engine's schema stack is XSD 1.0 (System.Xml.Schema), so a
+    // schema containing xs:assert/xs:alternative cannot compile. Catalog xsd-version
+    // pins cannot be trusted for this (books.xsd is wrongly pinned "1.0") and probing
+    // by compiling is what throws — a cheap raw-text scan decides instead. Results are
+    // cached per URI; books.xsd is re-read by 20+ tests.
+    static bool SchemaUsesXsd11Assertions(string schemaPath)
+    {
+        var uri = new Uri(schemaPath).AbsoluteUri;
+        lock (_xsd11SchemaCache)
+        {
+            if (_xsd11SchemaCache.TryGetValue(uri, out var cached))
+                return cached;
+        }
+        bool uses;
+        try
+        {
+            uses = Xsd11AssertionPattern.IsMatch(File.ReadAllText(schemaPath));
+        }
+        catch (IOException)
+        {
+            return false; // unreadable schemas surface their own error downstream
+        }
+        lock (_xsd11SchemaCache)
+            _xsd11SchemaCache[uri] = uses;
+        return uses;
     }
 
     static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns, string testSetName)
@@ -907,6 +955,18 @@ class Program
                 xslDoc = new XDocument();
             }
 
+            // REQ-112 (PA-5): stylesheets that inline xs:assert/xs:alternative type
+            // definitions are XSD 1.1; the engine's schema stack is XSD 1.0 only.
+            // validation-1301 declares its alternative inline with no environment
+            // schema, so the environment-schema scan below cannot see it.
+            if (xslDoc.Root != null && xslDoc.Descendants().Any(e =>
+                    e.Name.NamespaceName == "http://www.w3.org/2001/XMLSchema" &&
+                    (e.Name.LocalName is "assert" or "alternative")))
+            {
+                Console.WriteLine($"  SKIP {name}: stylesheet declares xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)");
+                return TestResult.Skip;
+            }
+
             // Collect all <param> elements for static-parameter substitution.
             // The environment may also declare static stylesheet parameters.
             var paramElements = testElem.Elements(ns + "param").ToList();
@@ -991,6 +1051,14 @@ class Program
                         schemaPath = Path.Combine(catalogDir, schemaFile);
                     if (!File.Exists(schemaPath))
                         continue;
+                    // REQ-112 (PA-5): a schema using xs:assert/xs:alternative is XSD 1.1
+                    // and cannot compile on the XSD 1.0 stack. Catalog xsd-version pins
+                    // are not authoritative here (books.xsd is wrongly pinned "1.0").
+                    if (SchemaUsesXsd11Assertions(schemaPath))
+                    {
+                        Console.WriteLine($"  SKIP {name}: environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)");
+                        return TestResult.Skip;
+                    }
                     var schemaUri = new Uri(schemaPath).AbsoluteUri;
                     if (!addedSchemaDocs.Add(schemaUri))
                         continue; // same document listed under multiple roles
