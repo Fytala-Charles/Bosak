@@ -26,6 +26,9 @@
 //                      | Charles Korthout | 1.0   | 17-09-2026     | SpecifiedValues + ConflictsWith/MergeSamePrecedence: XTSE0545 only for same-attribute value conflicts; same-precedence declarations merge per attribute (mode-1903) |
 //                      | Charles Korthout | 1.1   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 29-09-2026     | @typed parsed into ModeTyped enum (yes/true/1/strict, no/false/0, lax, unspecified);  |
+//                      |                  |       |                | QName→schema-element rewriting in strict/lax modes (match-218/219/220/221/222/243/244)|
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -80,6 +83,23 @@ internal enum ModeVisibility
 }
 
 /// <summary>
+/// Specifies the value of the <c>xsl:mode/@typed</c> attribute (XSLT 3.0 §3.5).
+/// <c>yes</c>/<c>true</c>/<c>1</c> are synonyms of <see cref="Strict"/>;
+/// <c>no</c>/<c>false</c>/<c>0</c> are synonyms of <see cref="Untyped"/>.
+/// </summary>
+internal enum ModeTyped
+{
+    /// <summary>The attribute is absent or <c>unspecified</c>: no typed-mode semantics.</summary>
+    Unspecified,
+    /// <summary>Nodes must be schema-validated; top-level QName patterns mean schema-element(QName).</summary>
+    Strict,
+    /// <summary>Like strict, but a QName with no element declaration matches by name alone.</summary>
+    Lax,
+    /// <summary>Nodes must be untyped; schema-dependent patterns raise XTTE3110 on typed nodes.</summary>
+    Untyped
+}
+
+/// <summary>
 /// Represents a parsed xsl:mode declaration.
 /// </summary>
 internal sealed class ModeDefinition
@@ -96,8 +116,8 @@ internal sealed class ModeDefinition
     /// <summary>The visibility of the mode.</summary>
     public ModeVisibility Visibility { get; }
 
-    /// <summary>Whether the mode requires typed (schema-validated) nodes.</summary>
-    public bool Typed { get; }
+    /// <summary>The typed-mode semantics of the mode (xsl:mode/@typed).</summary>
+    public ModeTyped Typed { get; }
 
     /// <summary>Whether to emit a warning when no template matches a node.</summary>
     public bool WarningOnNoMatch { get; }
@@ -133,7 +153,7 @@ internal sealed class ModeDefinition
     /// <param name="onNoMatch">The behavior when no template matches a node.</param>
     /// <param name="onMultipleMatch">The behavior when multiple templates match with the same priority.</param>
     public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch = OnMultipleMatch.UseLast)
-        : this(name, onNoMatch, onMultipleMatch, ModeVisibility.Private, false, false, false, false, new HashSet<string>(), false)
+        : this(name, onNoMatch, onMultipleMatch, ModeVisibility.Private, ModeTyped.Unspecified, false, false, false, new HashSet<string>(), false)
     {
     }
 
@@ -144,14 +164,14 @@ internal sealed class ModeDefinition
     /// <param name="onNoMatch">The behavior when no template matches a node.</param>
     /// <param name="onMultipleMatch">The behavior when multiple templates match with the same priority.</param>
     /// <param name="visibility">The visibility of the mode.</param>
-    /// <param name="typed">Whether the mode requires typed (schema-validated) nodes.</param>
+    /// <param name="typed">The typed-mode semantics of the mode.</param>
     /// <param name="warningOnNoMatch">Whether to emit a warning when no template matches a node.</param>
     /// <param name="warningOnMultipleMatch">Whether to emit a warning when multiple templates match with the same priority.</param>
     /// <param name="streamable">Whether the mode is declared streamable.</param>
     /// <param name="useAccumulators">The accumulator names (Clark notation) applicable to this mode.</param>
     /// <param name="useAllAccumulators">Whether this mode uses all accumulators.</param>
     /// <param name="specifiedAttributes">The attribute names explicitly specified on the xsl:mode declaration; defaults to an empty set.</param>
-    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, bool typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators, IReadOnlySet<string>? specifiedAttributes = null, IReadOnlyDictionary<string, string>? specifiedValues = null)
+    public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, ModeTyped typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators, IReadOnlySet<string>? specifiedAttributes = null, IReadOnlyDictionary<string, string>? specifiedValues = null)
     {
         Name = name;
         OnNoMatch = onNoMatch;
@@ -265,7 +285,7 @@ internal sealed class ModeDefinition
         if (!string.IsNullOrEmpty(name) && visibility == ModeVisibility.Abstract)
             throw new InvalidOperationException("XTSE0020");
 
-        var typed = ParseYesNoAttribute(element, "typed");
+        var typed = ParseTypedAttribute(element);
 
         var warningOnNoMatch = ParseYesNoAttribute(element, "warning-on-no-match");
         var warningOnMultipleMatch = ParseYesNoAttribute(element, "warning-on-multiple-match");
@@ -315,6 +335,27 @@ internal sealed class ModeDefinition
         if (value is "no" or "false" or "0")
             return false;
         throw new InvalidOperationException("XTSE0020");
+    }
+
+    /// <summary>
+    /// Parses the xsl:mode/@typed attribute into a <see cref="ModeTyped"/> value.
+    /// The tokens are whitespace-trimmed and case-sensitive: yes/true/1 → strict,
+    /// no/false/0 → untyped, plus strict, lax, and unspecified. Any other value
+    /// is a static error (XTSE0020).
+    /// </summary>
+    private static ModeTyped ParseTypedAttribute(XElement element)
+    {
+        var value = element.Attribute("typed")?.Value?.Trim();
+        if (string.IsNullOrEmpty(value))
+            return ModeTyped.Unspecified;
+        return value switch
+        {
+            "yes" or "true" or "1" or "strict" => ModeTyped.Strict,
+            "no" or "false" or "0" => ModeTyped.Untyped,
+            "lax" => ModeTyped.Lax,
+            "unspecified" => ModeTyped.Unspecified,
+            _ => throw new InvalidOperationException("XTSE0020")
+        };
     }
 
     private static string ExpandModeName(string mode, XElement element)

@@ -16,6 +16,8 @@
 //                       | Charles Korthout | 0.3   | 11-06-2026     | Restored key() second-arg restriction test (literal/variable only)                                 |                                    |
 //                      | Charles Korthout | 0.4   | 25-08-2026     | Added XTSE0340 tests for PI names, numeric path steps, and numeric pattern starts          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 29-09-2026     | Added XTSE0340 tests for '..' top-level steps (match-213) and element-with-id() start      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -204,5 +206,34 @@ public class PatternCompilerPredicateTests
     {
         var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("2+2"));
         Assert.Contains("XTSE0340", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("/..")]
+    [InlineData("foo/..")]
+    [InlineData("//..")]
+    [InlineData("..")]
+    public void ParentStepAtTopLevel_ThrowsXtse0340(string pattern)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile(pattern));
+        Assert.Contains("XTSE0340", ex.Message);
+    }
+
+    [Fact]
+    public void ParentStepInsidePredicate_Compiles()
+    {
+        // ".." as a top-level step is XTSE0340, but inside a predicate it is fine.
+        var compiled = _compiler.Compile("foo[../bar]");
+        Assert.NotNull(compiled);
+    }
+
+    [Theory]
+    [InlineData("element-with-id('x')")]
+    [InlineData("element-with-id('x', $doc)")]
+    public void ElementWithIdAtPatternStart_Compiles(string pattern)
+    {
+        // XSLT 3.0 §5.5.3 allows element-with-id(...) at the start of a pattern.
+        var compiled = _compiler.Compile(pattern);
+        Assert.NotNull(compiled);
     }
 }

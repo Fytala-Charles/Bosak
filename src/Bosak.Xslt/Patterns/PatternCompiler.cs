@@ -61,6 +61,10 @@
 //                      | Charles Korthout | 3.8   | 24-09-2026     | REQ-105 (PA-3): schema-aware type dispatch for element(N,T)/attribute(N,T) match      |
 //                      |                  |       |                | patterns; built-in type resolution in IsSchemaTypeCompatible                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.9   | 29-09-2026     | element-with-id(...) patterns (match-054/055); '..' top-level step is XTSE0340        |
+//                      |                  |       |                | (match-213); typed-mode compile: top-level QName rewritten as schema-element(QName)   |
+//                      |                  |       |                | for strict/lax modes + GetSchemaRewriteableQNames for the XTSE3105 static check       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -72,6 +76,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
+using Bosak.Xslt.Stylesheet;
 
 namespace Bosak.Xslt.Patterns;
 
@@ -91,6 +96,13 @@ internal sealed class PatternCompiler
 
     private readonly EvaluationContext? _validationContext;
     private string? _defaultElementNamespace;
+    private ModeTyped? _typedMode;
+
+    /// <summary>
+    /// Whether the validation context carries a compiled schema set. TemplateRule only
+    /// compiles strict/lax typed-mode pattern variants when a schema set is in scope.
+    /// </summary>
+    public bool HasSchemaSet => _validationContext?.SchemaSet is not null;
 
     /// <summary>
     /// Creates a pattern compiler.
@@ -177,7 +189,7 @@ internal sealed class PatternCompiler
                         };
                         var allowedAtStart = new HashSet<string>(nodeTestFunctions, StringComparer.Ordinal)
                         {
-                            "key", "id", "doc", "root"
+                            "key", "id", "element-with-id", "doc", "root"
                         };
                         if (!allowedAtStart.Contains(funcName))
                         {
@@ -202,6 +214,11 @@ internal sealed class PatternCompiler
 
         // 3b. The argument of processing-instruction() must be a string literal or an NCName (XTSE0340).
         ValidateProcessingInstructionNames(trimmed);
+
+        // 3c. A top-level path step must not be ".." (XTSE0340).
+        //     Examples: "/..", "foo/..", "//..". A ".." inside a predicate,
+        //     parentheses, or a string literal is not a top-level step.
+        ValidateNoParentSteps(trimmed);
 
         // 4.  Invalid predicate patterns (XTSE0340).
         {
@@ -388,6 +405,57 @@ internal sealed class PatternCompiler
                 if (j < stripped.Length && IsNumericLiteralStart(stripped[j..]))
                     throw new InvalidOperationException("XTSE0340: A path step must not be a numeric literal.");
             }
+        }
+    }
+
+    /// <summary>
+    /// Validates that no top-level path step of the pattern is exactly <c>..</c> (XTSE0340).
+    /// Catches patterns such as <c>/..</c>, <c>foo/..</c>, and <c>//..</c>; a <c>..</c>
+    /// inside a predicate, parentheses, or a string literal is not a top-level step and
+    /// is allowed.
+    /// </summary>
+    private static void ValidateNoParentSteps(string trimmed)
+    {
+        var stripped = StripStringLiterals(trimmed);
+        int qDepth = 0;
+        int depth = 0;
+        int stepStart = 0;
+        for (int i = 0; i <= stripped.Length; i++)
+        {
+            if (i < stripped.Length)
+            {
+                char c = stripped[i];
+                if (c == 'Q' && i + 1 < stripped.Length && stripped[i + 1] == '{')
+                {
+                    qDepth++;
+                    i++;
+                    continue;
+                }
+                if (qDepth > 0)
+                {
+                    if (c == '}') qDepth--;
+                    continue;
+                }
+                if (c == '[' || c == '(' || c == '{')
+                {
+                    depth++;
+                    continue;
+                }
+                if (c == ']' || c == ')' || c == '}')
+                {
+                    depth--;
+                    continue;
+                }
+                if (depth != 0 || c != '/')
+                    continue;
+            }
+            // Top-level '/' (or end of pattern): check the step that ends here.
+            if (stripped.AsSpan(stepStart, i - stepStart).Trim().SequenceEqual(".."))
+                throw new InvalidOperationException("XTSE0340: '..' is not allowed as a step in a match pattern.");
+            // Skip the second '/' of '//' (an empty middle step is not an error).
+            if (i + 1 < stripped.Length && stripped[i] == '/' && stripped[i + 1] == '/')
+                i++;
+            stepStart = i + 1;
         }
     }
 
@@ -672,35 +740,52 @@ internal sealed class PatternCompiler
     /// <summary>
     /// Compiles a match pattern string into a predicate function.
     /// </summary>
-    public PatternPredicate Compile(string pattern, string? defaultElementNamespace = null)
+    /// <param name="pattern">The match pattern (XPath comments stripped by the caller or here).</param>
+    /// <param name="defaultElementNamespace">The xpath-default-namespace in scope, if any.</param>
+    /// <param name="typedMode">
+    /// When the pattern is compiled for a strict or lax typed mode, a plain QName at the
+    /// top level of the pattern (or of a union branch, or after a leading <c>/</c> or <c>//</c>)
+    /// is interpreted as <c>schema-element(QName)</c> per XSLT 3.0 §5.5.3. Null compiles
+    /// the default (untyped) semantics.
+    /// </param>
+    public PatternPredicate Compile(string pattern, string? defaultElementNamespace = null, ModeTyped? typedMode = null)
     {
         _defaultElementNamespace = defaultElementNamespace;
-        var trimmed = StripXPathComments(pattern).Trim();
-
-        // Normalize top-level "union" to "|" so both syntaxes split uniformly.
-        var unionParts = SplitTopLevel(trimmed, "union");
-        if (unionParts.Length > 1)
+        var savedTypedMode = _typedMode;
+        _typedMode = typedMode;
+        try
         {
-            trimmed = string.Join("|", unionParts);
+            var trimmed = StripXPathComments(pattern).Trim();
+
+            // Normalize top-level "union" to "|" so both syntaxes split uniformly.
+            var unionParts = SplitTopLevel(trimmed, "union");
+            if (unionParts.Length > 1)
+            {
+                trimmed = string.Join("|", unionParts);
+            }
+
+            ValidatePatternSyntax(trimmed);
+
+            var branches = SplitTopLevel(trimmed, '|');
+            if (branches.Length == 1)
+            {
+                var atomic = CompileAtomicMatch(branches[0]);
+                if (atomic != null)
+                    return WrapWithCurrentItem(atomic);
+                return WrapWithCurrentItem(CompileSinglePattern(branches[0]));
+            }
+
+            var compiledBranches = branches.Select(b =>
+            {
+                var atomic = CompileAtomicMatch(b);
+                return atomic ?? CompileSinglePattern(b);
+            }).ToArray();
+            return WrapWithCurrentItem((item, ctx) => compiledBranches.Any(b => b(item, ctx)));
         }
-
-        ValidatePatternSyntax(trimmed);
-
-        var branches = SplitTopLevel(trimmed, '|');
-        if (branches.Length == 1)
+        finally
         {
-            var atomic = CompileAtomicMatch(branches[0]);
-            if (atomic != null)
-                return WrapWithCurrentItem(atomic);
-            return WrapWithCurrentItem(CompileSinglePattern(branches[0]));
+            _typedMode = savedTypedMode;
         }
-
-        var compiledBranches = branches.Select(b =>
-        {
-            var atomic = CompileAtomicMatch(b);
-            return atomic ?? CompileSinglePattern(b);
-        }).ToArray();
-        return WrapWithCurrentItem((item, ctx) => compiledBranches.Any(b => b(item, ctx)));
     }
 
     /// <summary>
@@ -2074,6 +2159,40 @@ internal sealed class PatternCompiler
             };
         }
 
+        // element-with-id('x') / element-with-id('x', $doc) pattern (XSLT 3.0 §5.5.3) —
+        // equivalent to id() but only matches element nodes; check membership.
+        if (name.StartsWith("element-with-id(") && name.EndsWith(')'))
+        {
+            var compiledElementWithId = CompilePatternXPath(name);
+            return (item, ctx) =>
+            {
+                var node = AsNode(item);
+                if (node == null || node.NodeKind != XdmNodeKind.Element) return false;
+                try
+                {
+                    var result = compiledElementWithId.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
+                    if (result.IsSequence && result.SequenceValue != null)
+                    {
+                        foreach (var seqItem in XdmSequence.FromSource(result.SequenceValue))
+                        {
+                            if (seqItem.IsNode && seqItem.NodeValue is IXdmNode n && n.IsSameNode(node))
+                                return true;
+                        }
+                    }
+                    else if (result.IsNode && result.NodeValue is IXdmNode n2 && n2.IsSameNode(node))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    if (IsStaticError(ex)) throw;
+                    return false;
+                }
+            };
+        }
+
         // key('k', 'v') pattern — key() may return multiple nodes; check membership.
         if (name.StartsWith("key(") && name.EndsWith(')'))
         {
@@ -2109,6 +2228,25 @@ internal sealed class PatternCompiler
 
         // Qualified name: prefix:local or Q{uri}local
         var (nsUri, localName) = ParseQName(name);
+
+        // XSLT 3.0 §5.5.3: in a strict typed mode a plain QName at the top level of the
+        // pattern (or union branch, or after a leading / or //) is interpreted as
+        // schema-element(QName). In a lax mode the same applies, except that a QName with
+        // no element declaration in the schema set falls back to plain name matching.
+        if (localName != "*" && _typedMode is ModeTyped.Strict or ModeTyped.Lax
+            && _validationContext?.SchemaSet is not null)
+        {
+            var schemaNs = string.IsNullOrEmpty(nsUri) ? (_defaultElementNamespace ?? "") : nsUri;
+            var hasDeclaration = _validationContext.GetSchemaElement(schemaNs, localName) is not null;
+            if (_typedMode == ModeTyped.Strict || hasDeclaration)
+            {
+                return (item, ctx) =>
+                {
+                    var node = AsNode(item);
+                    return node != null && MatchesSchemaElement(node, schemaNs, localName);
+                };
+            }
+        }
 
         if (string.IsNullOrEmpty(nsUri))
         {
@@ -2435,6 +2573,50 @@ internal sealed class PatternCompiler
             node.NamespaceUri == ns &&
             node.LocalName == local;
         };
+    }
+
+    /// <summary>
+    /// Returns the expanded names of the plain-QName steps that a strict/lax typed mode
+    /// would interpret as <c>schema-element(QName)</c>: a branch consisting of exactly
+    /// one QName step, at the top level of the pattern or of a union branch, optionally
+    /// after a leading <c>//</c>. Path patterns (<c>a/b</c>), wildcards, kind tests, and
+    /// axis steps are not rewriteable and are not returned. The pattern must already be
+    /// prefix-resolved (Q{{uri}}local form) as done by TemplateRule.
+    /// </summary>
+    public static IReadOnlyList<(string NamespaceUri, string LocalName)> GetSchemaRewriteableQNames(string resolvedPattern, string? defaultElementNamespace)
+    {
+        var result = new List<(string NamespaceUri, string LocalName)>();
+        var trimmed = StripXPathComments(resolvedPattern).Trim();
+        foreach (var branch in SplitTopLevel(trimmed, '|'))
+        {
+            var step = branch.Trim();
+            if (step.StartsWith("//"))
+                step = step[2..].Trim();
+            if (!IsPlainQNameStep(step))
+                continue;
+            var (ns, local) = ParseQName(step);
+            result.Add((string.IsNullOrEmpty(ns) ? (defaultElementNamespace ?? "") : ns, local));
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Returns true when the step is exactly one lexical QName (<c>prefix:local</c>,
+    /// <c>Q{{uri}}local</c>, or unprefixed <c>local</c>): no wildcards, predicates,
+    /// parentheses, axes, or operators.
+    /// </summary>
+    private static bool IsPlainQNameStep(string step)
+    {
+        if (step.Length == 0)
+            return false;
+        if (!char.IsLetter(step[0]) && step[0] != '_')
+            return false;
+        foreach (char c in step)
+        {
+            if (c is '*' or '(' or ')' or '[' or ']' or '/' or '|' or '@' or ',')
+                return false;
+        }
+        return true;
     }
 
     /// <summary>
