@@ -235,6 +235,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.117 | 29-09-2026     | GetDeclaredModeNames: all xsl:mode declaration names for the XTSE3105 static check      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.118 | 30-09-2026     | REQ-113 (PB-2): xsl:import-schema content model — at most one inline xs:schema           |
+//                      |                  |       |                | (import-schema-157 pins XTSE0010)                                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2438,6 +2441,10 @@ internal sealed class Stylesheet
         var locations = locationAttr is null
             ? Array.Empty<string>()
             : locationAttr.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        // REQ-113 (PB-2): the content model allows at most one inline xs:schema
+        // (import-schema-157 pins XTSE0010 for two).
+        if (elem.Elements().Skip(1).Any())
+            throw new InvalidOperationException("XTSE0010: xsl:import-schema may contain at most one inline xs:schema element");
         var inline = elem.Elements().FirstOrDefault();
 
         if (ns is null && locations.Length == 0 && inline is null)

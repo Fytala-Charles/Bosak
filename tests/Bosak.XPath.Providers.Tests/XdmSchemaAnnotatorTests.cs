@@ -18,8 +18,13 @@
 //                      | Charles Korthout | 0.3   | 29-09-2026     | REQ-109: extended-year date/time typed values, mixed-content untypedAtomic tag,         |
 //                      |                  |       |                | is-id/is-idref surviving annotation stripping                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 30-09-2026     | REQ-113 (PB-2): ID/IDREF level partition (element vs document episode),                 |
+//                      |                  |       |                | DocumentEpisode shape-check skip, CheckDocumentIdentityConstraints, default-ns          |
+//                      |                  |       |                | prefix-scan for named-type xsi:type injection                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
@@ -521,5 +526,173 @@ public class XdmSchemaAnnotatorTests
         XdmSchemaAnnotator.StripSchemaAnnotations(element);
         Assert.Null(element.GetSchemaInfo());
         Assert.Null(ident.GetSchemaInfo());
+    }
+
+    // ----- REQ-113 (PB-2): ID/IDREF level partition, document episodes, identity constraints -----
+
+    [Fact]
+    public void Validate_ElementLevelDuplicateId_SuppressedButFlagged()
+    {
+        // XSLT 3.0 §25.4.1.3: raw xs:ID uniqueness is not enforced for element-level
+        // validation; the constraint failure surfaces via HasDocumentLevelConstraintFailure.
+        var dupSchema = CompileSchema("""
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='doc'>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name='item' maxOccurs='unbounded'>
+                                <xs:complexType>
+                                    <xs:attribute name='ref' type='xs:ID'/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:schema>
+            """);
+        var element = new XElement("doc",
+            new XElement("item", new XAttribute("ref", "a")),
+            new XElement("item", new XAttribute("ref", "a")));
+
+        var result = XdmSchemaAnnotator.Validate(element, dupSchema,
+            new XdmValidationOptions(XdmValidationMode.Strict));
+
+        Assert.True(result.IsValid);
+        Assert.True(result.HasDocumentLevelConstraintFailure);
+    }
+
+    [Fact]
+    public void Validate_DocumentLevelDuplicateId_SurfacesAsFailure()
+    {
+        // XSLT 3.0 §25.4.2: the same content validated as a document episode is invalid.
+        var dupSchema = CompileSchema("""
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='doc'>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name='item' maxOccurs='unbounded'>
+                                <xs:complexType>
+                                    <xs:attribute name='ref' type='xs:ID'/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:schema>
+            """);
+        var container = new XElement("__xdm_doc__",
+            new XElement("doc",
+                new XElement("item", new XAttribute("ref", "a")),
+                new XElement("item", new XAttribute("ref", "a"))));
+
+        var result = XdmSchemaAnnotator.Validate(container, dupSchema,
+            new XdmValidationOptions(XdmValidationMode.Strict, null, DocumentLevel: true));
+
+        Assert.False(result.IsValid);
+        Assert.True(result.HasDocumentLevelConstraintFailure);
+        Assert.Contains("is already used as an ID", result.FailureMessage, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Validate_DocumentEpisode_SkipsSecondShapeCheck()
+    {
+        // A document episode validates the single root directly; the root's own (multi-child)
+        // content must not be shape-checked again (validation-0214).
+        var htmlSchema = CompileSchema("""
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+                <xs:element name='html'>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name='head'/>
+                            <xs:element name='body'/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:schema>
+            """);
+        var html = new XElement("html", new XElement("head"), new XElement("body"));
+
+        var result = XdmSchemaAnnotator.Validate(html, htmlSchema,
+            new XdmValidationOptions(XdmValidationMode.Strict, null, DocumentLevel: true)
+            { DocumentEpisode = true });
+
+        Assert.True(result.IsValid);
+        Assert.False(result.HasDocumentLevelConstraintFailure);
+    }
+
+    [Fact]
+    public void CheckDocumentIdentityConstraints_DuplicateXmlId_ReturnsMessage()
+    {
+        var schemas = CompileSchema(IdIdrefSchema);
+        var root = new XElement("wrapper",
+            new XElement("a", new XAttribute(XNamespace.Xml + "id", "k1")),
+            new XElement("b", new XAttribute(XNamespace.Xml + "id", "k1")));
+
+        var message = XdmSchemaAnnotator.CheckDocumentIdentityConstraints(root, schemas);
+
+        Assert.NotNull(message);
+        Assert.Contains("is already used as an ID", message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void CheckDocumentIdentityConstraints_DanglingIdrefsType_ReturnsMessage()
+    {
+        var schemas = CompileSchema(IdIdrefSchema);
+        var root = new XElement("wrapper",
+            new XElement("e",
+                new XAttribute(XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance") + "type", "xs:IDREFS"),
+                new XAttribute(XNamespace.Xmlns + "xs", "http://www.w3.org/2001/XMLSchema"),
+                "missing"));
+
+        var message = XdmSchemaAnnotator.CheckDocumentIdentityConstraints(root, schemas);
+
+        Assert.NotNull(message);
+        Assert.Contains("Reference to undeclared ID is 'missing'", message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void CheckDocumentIdentityConstraints_ValidIdAndIdrefs_ReturnsNull()
+    {
+        var schemas = CompileSchema(IdIdrefSchema);
+        var xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+        var xs = "http://www.w3.org/2001/XMLSchema";
+        var root = new XElement("wrapper",
+            new XElement("target", new XAttribute(XNamespace.Xml + "id", "t1")),
+            new XElement("e",
+                new XAttribute(xsi + "type", "xs:IDREFS"),
+                new XAttribute(XNamespace.Xmlns + "xs", xs),
+                "t1"));
+
+        Assert.Null(XdmSchemaAnnotator.CheckDocumentIdentityConstraints(root, schemas));
+    }
+
+    [Fact]
+    public void Validate_NamedType_DefaultNamespacePrefixScan_ResolvesTypeNamespace()
+    {
+        // REQ-113 (PB-2): a default-namespace declaration (xmlns='uri') on the element must
+        // not be picked up as the prefix for the injected xsi:type (import-schema-072 family).
+        var namespacedSchema = CompileSchema("""
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+                       targetNamespace='http://example.com/ns' xmlns:t='http://example.com/ns'
+                       elementFormDefault='qualified'>
+                <xs:element name='out' type='t:outType'/>
+                <xs:complexType name='outType'>
+                    <xs:sequence>
+                        <xs:element name='code' type='xs:string'/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:schema>
+            """);
+        var ns = "http://example.com/ns";
+        var element = new XElement(XNamespace.Get(ns) + "out",
+            new XAttribute("xmlns", ns),
+            new XElement(XNamespace.Get(ns) + "code", "x"));
+
+        var result = XdmSchemaAnnotator.Validate(element, namespacedSchema,
+            new XdmValidationOptions(XdmValidationMode.Strict, new XmlQualifiedName("outType", ns)));
+
+        Assert.True(result.IsValid);
+        Assert.False(result.HasDocumentLevelConstraintFailure);
+        Assert.DoesNotContain("xmlns", result.FailureMessage ?? "", StringComparison.Ordinal);
     }
 }
