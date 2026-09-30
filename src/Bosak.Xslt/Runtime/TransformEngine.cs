@@ -397,6 +397,11 @@
 //                      |                  |       |                | binding counted as a second item → spurious XTTE0505 with kind-tested @as —          |
 //                      |                  |       |                | as-1812/1813/1814)                                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.88  | 29-09-2026     | Typed modes: XTTE3100 only for annotation-absent nodes at dispatch and built-in    |
+//                      |                  |       |                | rules; deep-copy/shallow-copy built-in attribute rule and CopyNodeToResult carry     |
+//                      |                  |       |                | the PSVI + is-id properties onto the copied attribute (match-219/263); per-mode      |
+//                      |                  |       |                | typed strict/lax pattern variants, XTSE3105 static check, XTTE3110 (match set)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1131,6 +1136,7 @@ internal sealed class TransformEngine
         foreach (var rule in _allTemplateRules)
         {
             rule.CompileMatch(patternCompiler);
+            ValidateStrictModePatternDeclarations(rule);
         }
 
         // Build key indices iteratively to handle cross-key dependencies
@@ -1797,17 +1803,37 @@ internal sealed class TransformEngine
     /// <summary>
     /// Carries the PSVI annotation of a source attribute (if any) onto a copied attribute,
     /// so validation="preserve" and the is-id/nilled properties survive copies (REQ-099 seam
-    /// H4). Null-conditional: bit-identical when the source carries no schema information.
+    /// H4). The <see cref="XdmIdProperties"/> snapshot (REQ-109) is carried too, so ID-typed
+    /// attributes keep their is-id/is-idref properties across copies (match-263 shape).
+    /// Null-conditional: bit-identical when the source carries no schema information.
     /// </summary>
     private static void CopyAttributeSchemaInfo(IXdmNode sourceAttribute, XAttribute target)
     {
-        if (sourceAttribute is XDocumentNode { UnderlyingObject: XAttribute sourceAttr }
-            && sourceAttr.GetSchemaInfo() is { } info)
+        if (sourceAttribute is XDocumentNode { UnderlyingObject: XAttribute sourceAttr })
         {
-            target.RemoveAnnotations(typeof(IXmlSchemaInfo));
-            target.AddAnnotation(info);
+            if (sourceAttr.GetSchemaInfo() is { } info)
+            {
+                target.RemoveAnnotations(typeof(IXmlSchemaInfo));
+                target.AddAnnotation(info);
+            }
+            if (sourceAttr.Annotation<XdmIdProperties>() is { } idProperties)
+            {
+                target.RemoveAnnotations(typeof(XdmIdProperties));
+                target.AddAnnotation(idProperties);
+            }
         }
     }
+
+    /// <summary>
+    /// Returns true when an element or attribute node carries no schema type annotation at
+    /// all: neither a type name nor a governing element/attribute declaration. Such nodes
+    /// are "untyped" for the XTTE3100 strict-mode check; nodes validated by named type
+    /// alone (e.g. <c>t:type</c> constructions) carry an annotation and are accepted.
+    /// </summary>
+    private static bool IsUntypedNode(IXdmNode node)
+        => node.SchemaTypeAnnotation is null
+        && node.SchemaElementDeclaration is null
+        && node.SchemaAttributeDeclaration is null;
 
     /// <summary>
     /// Applies document-node validation semantics (XSLT 3.0 §25.4.2) to a constructed result
@@ -2051,6 +2077,7 @@ internal sealed class TransformEngine
         foreach (var rule in _allTemplateRules)
         {
             rule.CompileMatch(patternCompiler);
+            ValidateStrictModePatternDeclarations(rule);
         }
 
         RegisterGroupingFunctions();
@@ -5276,7 +5303,7 @@ internal sealed class TransformEngine
                 continue;
             if (rule.CompiledMatch == null)
                 continue;
-            if (!EvaluatePatternMatch(rule, XdmValue.FromNode(_initialSource!)))
+            if (!EvaluatePatternMatch(rule.CompiledMatch, XdmValue.FromNode(_initialSource!)))
                 continue;
 
             // XSLT spec §6.4: import precedence is checked BEFORE priority.
@@ -8222,6 +8249,15 @@ internal sealed class TransformEngine
         if (item.IsNode)
         {
             var node = item.NodeValue!;
+            // XTTE3100: a strict typed mode requires schema-validated nodes; an element or
+            // attribute node carrying no type annotation at all is rejected before template
+            // dispatch, even when a template rule would match it by name (match-219).
+            if (CurrentStylesheet.GetModeDefinition(resolvedMode)?.Typed == Stylesheet.ModeTyped.Strict
+                && (node.NodeKind == XdmNodeKind.Element || node.NodeKind == XdmNodeKind.Attribute)
+                && IsUntypedNode(node))
+            {
+                throw new InvalidOperationException($"XTTE3100: Mode '{resolvedMode}' is typed, but the context node is untyped.");
+            }
             var rule = FindBestTemplate(node, resolvedMode);
             // The current group / merge context is not visible inside an applied
             // template (XSLT 3.0 §14.4; si-fork-113/114/115): calls to
@@ -10830,10 +10866,15 @@ internal sealed class TransformEngine
             {
                 EnsureNamespaceDeclarationForAttribute(attrParent, attrNs, node.Prefix);
             }
+            var resultAttrName = XName.Get(node.EncodedLocalName, attrNs);
             Xml11Attribute.SetValue(
                 attrParent,
-                XName.Get(node.EncodedLocalName, attrNs),
+                resultAttrName,
                 node.StringValue);
+            // Carry the PSVI annotation (and is-id properties) onto the copied attribute
+            // so deep-copy keeps type annotations (match-263).
+            if (attrParent.Attribute(resultAttrName) is { } resultAttr)
+                CopyAttributeSchemaInfo(node, resultAttr);
         }
     }
 
@@ -10985,7 +11026,7 @@ internal sealed class TransformEngine
         try
         {
             var modeDef = CurrentStylesheet.GetModeDefinition(mode);
-            var typed = modeDef?.Typed ?? false;
+            var typed = modeDef?.Typed ?? Stylesheet.ModeTyped.Unspecified;
             // Named modes with no explicit xsl:mode declaration inherit the
             // unnamed mode's on-no-match behavior (XSLT 3.0 §3.5.2).
             if (modeDef == null && !string.IsNullOrEmpty(mode))
@@ -10999,9 +11040,13 @@ internal sealed class TransformEngine
                 _messageListener?.OnWarning($"No matching template for node '{node.LocalName}' in mode '{mode}'.");
             }
 
-            // typed="yes" requires schema-validated nodes; untyped element/attribute
-            // nodes raise XTTE3100 when the built-in rule would process them.
-            if (typed && (node.NodeKind == XdmNodeKind.Element || node.NodeKind == XdmNodeKind.Attribute))
+            // typed="strict" requires schema-validated nodes; an element/attribute node
+            // reaching the built-in rule without any type annotation raises XTTE3100.
+            // Annotated nodes are processed by the built-in rule as usual (match-219
+            // guards the annotation-absent narrowing; mode-1439 still errors).
+            if (typed == Stylesheet.ModeTyped.Strict
+                && (node.NodeKind == XdmNodeKind.Element || node.NodeKind == XdmNodeKind.Attribute)
+                && IsUntypedNode(node))
             {
                 throw new InvalidOperationException($"XTTE3100: Mode '{mode}' is typed, but the context node is untyped.");
             }
@@ -11068,10 +11113,16 @@ internal sealed class TransformEngine
                     {
                         if (_currentContainer is XElement elem)
                         {
+                            var copiedAttrName = XName.Get(node.EncodedLocalName, node.NamespaceUri);
                             Xml11Attribute.SetValue(
                                 elem,
-                                XName.Get(node.EncodedLocalName, node.NamespaceUri),
+                                copiedAttrName,
                                 node.StringValue);
+                            // Carry the PSVI annotation (and is-id properties) onto the
+                            // copied attribute so deep-copy keeps type annotations
+                            // (match-263: instance of attribute(N, T) must survive).
+                            if (elem.Attribute(copiedAttrName) is { } copiedAttr)
+                                CopyAttributeSchemaInfo(node, copiedAttr);
                         }
                     }
                     else if (behavior == Stylesheet.OnNoMatch.TextOnlyCopy)
@@ -12141,18 +12192,66 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
+    /// XTSE3105 (static): when every mode a template rule applies to is declared with
+    /// <c>typed="strict"</c>, a top-level QName pattern branch naming an element with no
+    /// declaration in the schema set is a static error (the QName would be interpreted as
+    /// <c>schema-element(QName)</c> and can never match). Not raised when the rule also
+    /// applies to a non-strict mode (the branch can still match by name there), nor for
+    /// lax modes (a missing declaration falls back to name matching). Patterns that can
+    /// match nothing for other reasons (path steps, predicates) are not affected.
+    /// </summary>
+    private void ValidateStrictModePatternDeclarations(Stylesheet.TemplateRule rule)
+    {
+        if (rule.SchemaRewriteableQNames.Count == 0)
+            return;
+
+        // Resolve the modes this rule applies to.
+        var appliedModes = new List<string>();
+        if (rule.MatchesAllModes)
+        {
+            foreach (var name in CurrentStylesheet.GetDeclaredModeNames())
+                appliedModes.Add(name);
+        }
+        else
+        {
+            foreach (var m in rule.Modes)
+            {
+                // #current is only known at runtime; be lenient rather than guess.
+                if (m == "#current")
+                    return;
+                appliedModes.Add(m);
+            }
+        }
+        if (appliedModes.Count == 0)
+            return;
+
+        foreach (var modeName in appliedModes)
+        {
+            if (CurrentStylesheet.GetModeDefinition(modeName)?.Typed != Stylesheet.ModeTyped.Strict)
+                return;
+        }
+
+        foreach (var (ns, local) in rule.SchemaRewriteableQNames)
+        {
+            if (_context.GetSchemaElement(ns, local) is null)
+            {
+                throw new InvalidOperationException(
+                    $"XTSE3105: There is no element declaration for '{local}' in namespace '{ns}' in the schema, but the template rule with match='{rule.Match}' is applied in a mode with typed='strict'.");
+            }
+        }
+    }
+
+    /// <summary>
     /// Evaluates a compiled match pattern with the current output URI cleared, because
     /// pattern predicates are evaluated in a temporary output state.
     /// </summary>
-    private bool EvaluatePatternMatch(Stylesheet.TemplateRule rule, XdmValue item)
+    private bool EvaluatePatternMatch(Patterns.PatternPredicate predicate, XdmValue item)
     {
-        if (rule.CompiledMatch == null)
-            return false;
         var savedOutputUri = _context.CurrentOutputUri;
         _context.CurrentOutputUri = null;
         try
         {
-            return rule.CompiledMatch(item, _context);
+            return predicate(item, _context);
         }
         finally
         {
@@ -12179,6 +12278,10 @@ internal sealed class TransformEngine
         double bestPriority = double.NegativeInfinity;
         int bestImportPrecedence = int.MaxValue;
         bool hasConflict = false;
+        // Typed-mode semantics select the pattern variant: in a strict mode top-level
+        // QName branches mean schema-element(QName); in a lax mode a QName without an
+        // element declaration falls back to plain name matching (XSLT 3.0 §5.5.3).
+        var modeTyped = CurrentStylesheet.GetModeDefinition(mode)?.Typed ?? Stylesheet.ModeTyped.Unspecified;
 
         foreach (var rule in _allTemplateRules)
         {
@@ -12192,10 +12295,30 @@ internal sealed class TransformEngine
                 continue;
             if (!IsTemplateVisible(rule))
                 continue;
-            if (rule.CompiledMatch == null)
+            var predicate = modeTyped switch
+            {
+                Stylesheet.ModeTyped.Strict => rule.CompiledMatchStrict ?? rule.CompiledMatch,
+                Stylesheet.ModeTyped.Lax => rule.CompiledMatchLax ?? rule.CompiledMatch,
+                _ => rule.CompiledMatch,
+            };
+            if (predicate == null)
                 continue;
-            if (!EvaluatePatternMatch(rule, item))
+            if (!EvaluatePatternMatch(predicate, item))
                 continue;
+
+            // XTTE3110: in a mode with typed="no", a schema-dependent pattern rule
+            // (schema-element()/schema-attribute()/kind test with a type argument) must
+            // not match a node that carries a type annotation (match-231).
+            if (modeTyped == Stylesheet.ModeTyped.Untyped
+                && rule.HasSchemaDependentPattern
+                && item.IsNode
+                && item.NodeValue is { } matchedNode
+                && matchedNode.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute
+                && matchedNode.SchemaTypeAnnotation is not null)
+            {
+                throw new InvalidOperationException(
+                    $"XTTE3110: The template rule with match='{rule.Match}' has a schema-dependent pattern, but mode '{mode}' is declared with typed='no' and the context node has a type annotation.");
+            }
 
             // XSLT spec §6.4: import precedence is checked BEFORE priority.
             // Higher import precedence (lower numeric value in our system) always wins.

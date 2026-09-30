@@ -22,6 +22,10 @@
 //                      | Charles Korthout | 0.4   | 29-09-2026     | REQ-109 (PA-3 tail): strip snapshots is-id/is-idref onto XdmIdProperties so fn:id/      |
 //                      |                  |       |                | fn:idref keep working after annotation stripping (strip-type-annotations-021)           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 29-09-2026     | Named-type validation: rename the clone root when it matches a global element          |
+//                      |                  |       |                | declaration, so .NET cannot enforce xsi:type derivation against the declaration       |
+//                      |                  |       |                | type — t:type validates against the named type alone (match-220/221 decoys)           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -176,6 +180,27 @@ public static partial class XdmSchemaAnnotator
         var clone = isAttached || namedType is not null ? new XElement(element) : element;
         if (!ReferenceEquals(clone, element))
             ImportInScopeNamespaces(element, clone);
+
+        // Named-type validation (XSLT [xsl:]type) semantics differ from raw xsi:type
+        // derivation rules: when the element name matches a global declaration AND the
+        // named type is validly derived from the declaration's type, the declaration
+        // stays relevant — .NET then validates via xsi:type rules and records both the
+        // declaration and the named type in the PSVI (match-179/181/185 rely on the
+        // governing declaration surviving t:type). When the named type is NOT derived
+        // from the declaration's type (match-220/221 decoys), the named type alone
+        // governs; the clone root is renamed to an undeclared synthetic name so .NET
+        // cannot enforce xsi:type derivation against the declaration type, and the PSVI
+        // names the named type with no governing declaration.
+        if (namedType is not null
+            && schemas.GlobalElements[new XmlQualifiedName(clone.Name.LocalName, clone.Name.NamespaceName)] is XmlSchemaElement { } rootDecl)
+        {
+            var declaredType = rootDecl.ElementSchemaType ?? rootDecl.SchemaType;
+            if (declaredType is null
+                || !XmlSchemaType.IsDerivedFrom(namedType, declaredType, XmlSchemaDerivationMethod.Empty))
+            {
+                clone.Name = XNamespace.Get("urn:bosak:validation-by-type") + "root";
+            }
+        }
 
         var errors = new List<ValidationEventArgs>();
         ValidationEventHandler recorder = (sender, e) =>

@@ -233,6 +233,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.116 | 23-09-2026     | REQ-099 seam H4: EffectiveInputTypeAnnotations across modules                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.117 | 29-09-2026     | GetDeclaredModeNames: all xsl:mode declaration names for the XTSE3105 static check      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -7891,6 +7893,18 @@ internal sealed class Stylesheet
             }
             CollectModeDefinitions(package, map);
         }
+    }
+
+    /// <summary>
+    /// Returns the names of all modes declared in this stylesheet and its imports/includes
+    /// (including exported modes from used packages). Used to determine whether a template
+    /// rule applying to <c>#all</c> modes targets only strict typed modes (XTSE3105).
+    /// </summary>
+    public IReadOnlySet<string> GetDeclaredModeNames()
+    {
+        var declaredModes = new HashSet<string>();
+        CollectDeclaredModes(this, declaredModes);
+        return declaredModes;
     }
 
     /// <summary>

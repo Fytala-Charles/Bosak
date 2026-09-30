@@ -42,6 +42,10 @@
 //                      | Charles Korthout | 2.3   | 24-09-2026     | REQ-105 (PA-3): default priority 0.25 for the typed kind-test pattern forms           |
 //                      |                  |       |                | element(*,T)/element(N,T)/attribute(*,T)/attribute(N,T), incl. after an axis          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.4   | 29-09-2026     | Typed-mode pattern variants: strict/lax compilations where top-level QName branches  |
+//                      |                  |       |                | mean schema-element(QName); SchemaRewriteableQNames + HasSchemaDependentPattern       |
+//                      |                  |       |                | (XTTE3110) wiring; match-218/219/220/221/222/243/244                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -80,6 +84,36 @@ internal sealed class TemplateRule
 
     /// <summary>The compiled match predicate, or null for named-only templates.</summary>
     public Patterns.PatternPredicate? CompiledMatch { get; private set; }
+
+    /// <summary>
+    /// The compiled match predicate for a strict typed mode: top-level QName branches are
+    /// interpreted as <c>schema-element(QName)</c>. Null when the rule has no rewriteable
+    /// QName branch or no schema set was in scope at compile time.
+    /// </summary>
+    public Patterns.PatternPredicate? CompiledMatchStrict { get; private set; }
+
+    /// <summary>
+    /// The compiled match predicate for a lax typed mode: like the strict variant, except
+    /// that a QName with no element declaration in the schema set falls back to plain name
+    /// matching. Null under the same conditions as <see cref="CompiledMatchStrict"/>.
+    /// </summary>
+    public Patterns.PatternPredicate? CompiledMatchLax { get; private set; }
+
+    /// <summary>
+    /// The expanded names of the plain-QName steps that a strict/lax typed mode would
+    /// interpret as <c>schema-element(QName)</c> (empty when none). Computed at compile
+    /// time for the XTSE3105 static check.
+    /// </summary>
+    public IReadOnlyList<(string NamespaceUri, string LocalName)> SchemaRewriteableQNames { get; private set; }
+        = Array.Empty<(string NamespaceUri, string LocalName)>();
+
+    /// <summary>
+    /// Whether the match pattern is schema-dependent: it contains <c>schema-element()</c>,
+    /// <c>schema-attribute()</c>, or a kind test with a type argument (<c>element(N, T)</c> /
+    /// <c>attribute(N, T)</c>). In a mode with <c>typed="no"</c> such a rule matching a
+    /// schema-annotated node raises XTTE3110.
+    /// </summary>
+    public bool HasSchemaDependentPattern { get; private set; }
 
     /// <summary>The parent stylesheet.</summary>
     public Stylesheet Stylesheet { get; }
@@ -336,6 +370,7 @@ internal sealed class TemplateRule
     {
         if (!string.IsNullOrEmpty(Match))
         {
+            HasSchemaDependentPattern = ComputeSchemaDependentPattern(Match);
             if (Match.Trim() == "/")
                 CompiledMatch = (item, ctx) => item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Document;
             else
@@ -345,9 +380,55 @@ internal sealed class TemplateRule
                 var resolved = ResolveNamespacePrefixes(Match);
                 var defaultNs = GetXPathDefaultNamespace(Element);
                 CompiledMatch = compiler.Compile(resolved, defaultNs);
+                // In a schema-aware stylesheet, also compile the strict/lax typed-mode
+                // variants in which a top-level QName branch means schema-element(QName)
+                // (XSLT 3.0 §5.5.3). Rules without rewriteable QName branches keep using
+                // the default predicate in every mode.
+                if (compiler.HasSchemaSet)
+                {
+                    SchemaRewriteableQNames = Patterns.PatternCompiler.GetSchemaRewriteableQNames(resolved, defaultNs);
+                    if (SchemaRewriteableQNames.Count > 0)
+                    {
+                        CompiledMatchStrict = compiler.Compile(resolved, defaultNs, ModeTyped.Strict);
+                        CompiledMatchLax = compiler.Compile(resolved, defaultNs, ModeTyped.Lax);
+                    }
+                }
             }
         }
     }
+
+    /// <summary>
+    /// Lexically detects whether a match pattern is schema-dependent: it contains
+    /// <c>schema-element()</c>, <c>schema-attribute()</c>, or a kind test with a type
+    /// argument (<c>element(N, T)</c> / <c>attribute(N, T)</c>).
+    /// </summary>
+    private static bool ComputeSchemaDependentPattern(string match)
+    {
+        var trimmed = StripXPathComments(match);
+        if (trimmed.Contains("schema-element(", StringComparison.Ordinal)
+            || trimmed.Contains("schema-attribute(", StringComparison.Ordinal))
+            return true;
+        for (int i = 0; i < trimmed.Length; i++)
+        {
+            bool isElement = trimmed.AsSpan(i).StartsWith("element(", StringComparison.Ordinal);
+            bool isAttribute = !isElement && trimmed.AsSpan(i).StartsWith("attribute(", StringComparison.Ordinal);
+            if (!isElement && !isAttribute)
+                continue;
+            // Not a kind test when part of a longer name (schema-element()).
+            if (i > 0 && IsQNameChar(trimmed[i - 1]))
+                continue;
+            int open = i + (isElement ? "element".Length : "attribute".Length);
+            int close = FindMatchingParen(trimmed, open);
+            if (close < 0)
+                continue;
+            if (HasTopLevelComma(trimmed[(open + 1)..close]))
+                return true;
+            i = close;
+        }
+        return false;
+    }
+
+    private static bool IsQNameChar(char c) => char.IsLetterOrDigit(c) || c is '-' or '_' or '.';
 
     /// <summary>
     /// Returns the effective xpath-default-namespace for the given element by walking
