@@ -97,6 +97,9 @@
 //                      | Charles Korthout | 1.43  | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |                  |       |                | descendant::TEST in path expressions (equivalent; single-pass friendly)                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.44  | 30-09-2026     | REQ-114/PB-3 C9: document-node(element(E[,T])) keeps the inner test in the KindTest      |
+//                      |                  |       |                | operand so the runtime enforces it (validation-1401, import-schema-055)                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -1423,15 +1426,32 @@ internal sealed class IrLowerer
                 }
                 else
                 {
-                    namePoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "node");
+                    // document-node(element(E[,T])) / document-node(schema-element(E)):
+                    // keep the inner test in the KindTest operand so the runtime can
+                    // enforce exactly-one-element, no text children, and the inner
+                    // name/type test (validation-1401, import-schema-055). The VM's
+                    // MatchesKindTest parses the operand form.
+                    string kindOperand;
+                    if (node.NodeTest.Name == "document-node"
+                        && node.NodeTest.KindTestInnerName is { Length: > 0 } innerTestName)
+                    {
+                        string innerArg = node.NodeTest.KindTestArgument ?? "*";
+                        kindOperand = node.NodeTest.KindTestTypeName is { Length: > 0 } innerTypeName
+                            ? $"document-node({innerTestName}({innerArg}, {innerTypeName}))"
+                            : $"document-node({innerTestName}({innerArg}))";
+                    }
+                    else
+                    {
+                        kindOperand = node.NodeTest.Name ?? "node";
+                    }
+                    namePoolIdx = AddToLiteralPool(kindOperand);
                     Emit(IrOpCode.KindTest, (ushort)afterTestReg, (ushort)axisReg, operand: namePoolIdx);
                     FreeRegister(axisReg);
                     axisReg = afterTestReg;
 
                     // If the kind test has an argument (e.g. processing-instruction('name')),
-                    // emit a NameTest to filter by that name. document-node(element(x)) keeps
-                    // its argument in the node test for static validation only; the runtime
-                    // match remains a plain document-node() kind test (K2-Axes-86).
+                    // emit a NameTest to filter by that name. A parameterized document-node()
+                    // carries its argument inside the KindTest operand instead.
                     if (!string.IsNullOrEmpty(node.NodeTest.KindTestArgument) && node.NodeTest.Name != "document-node")
                     {
                         var kindArg = node.NodeTest.KindTestArgument;

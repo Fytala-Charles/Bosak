@@ -108,6 +108,9 @@
 //                      |                  |       |                | annotations-001/012); mixed-content typed value tagged xs:untypedAtomic (-014);         |
 //                      |                  |       |                | is-id/is-idref consult the stripped-PSVI snapshot (-021)                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.33  | 30-09-2026     | REQ-114 (PB-3 C9): GetSchemaTypeAnnotation normalizes .NET's xdt-namespace              |
+//                      |                  |       |                | untypedAtomic to xs:untypedAtomic (validation-0108)                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -1287,6 +1290,11 @@ public sealed class XDocumentNode : IXdmNode
         // may be a transient union member, while XPath/XQuery expects the declared type name
         // for type matching (schema-element tests, instanceof on validated nodes).
         var qn = schemaType.QualifiedName;
+        // REQ-114 (PB-3 C9, validation-0108): .NET reports the xs:untypedAtomic built-in in
+        // the XPath datatypes namespace; XDM names it in the XML Schema namespace. Normalize
+        // at this single choke point so instance-of / type-name comparisons see xs:.
+        if (qn.Name == "untypedAtomic" && qn.Namespace == "http://www.w3.org/2003/11/xpath-datatypes")
+            return (XmlSchema.Namespace, "untypedAtomic");
         return (qn.Namespace, qn.Name);
     }
 

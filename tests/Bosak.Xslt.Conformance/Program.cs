@@ -173,6 +173,17 @@
 //                      | Charles Korthout | 3.56  | 30-09-2026     | REQ-113 (PB-2): kind-test asserts without xsi:type markers revalidate the reparsed     |
 //                      |                  |       |                | result at element level (validation-1601/1603-1607)                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.57  | 30-09-2026     | REQ-114 (PB-3 C9): host environment schema set gets an XmlUrlResolver so URI-added     |
+//                      |                  |       |                | xs:redefine documents preprocess during Add (import-schema-190)                        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.58  | 30-09-2026     | REQ-114 (PB-3 C9): pre-validate ALL environment sources (F1: secondary sources get     |
+//                      |                  |       |                | PSVI; validated-document cache per test run keyed by absolute URI serves doc());        |
+//                      |                  |       |                | F8: schema-aware LAX validation for sources carrying xsi:schemaLocation (never        |
+//                      |                  |       |                | hard-fails; raw fallback) (validation-2001/2002, type-functions-0101)                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.59  | 01-10-2026     | REQ-114 (PB-3 C9) follow-up: drop duplicated return in the reparsed-result annotation  |
+//                      |                  |       |                | path (unreachable-code warning)                                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1038,6 +1049,13 @@ class Program
             // them). Environments that pin XSD 1.1 cannot run: the engine is XSD 1.0 only
             // (System.Xml.Schema). The set is passed uncompiled so the core reports
             // invalid/unlocatable schemas with its own XTSE0220 error code.
+            // REQ-114 (PB-3 C9, F1/F8): per-test cache of successfully validated environment
+            // source documents, keyed by absolute URI. The DocumentLoader below consults it
+            // before touching the file system, so doc() observes the same PSVI-annotated
+            // tree (validation-2001/2002, type-functions-0101). The cache dies with this
+            // test run, so doc() for the same URI outside environments keeps its untyped
+            // behavior.
+            var validatedSourceCache = new Dictionary<string, XDocument>(StringComparer.OrdinalIgnoreCase);
             XmlSchemaSet? envSchemaSet = null;
             if (_schemaAware && envToLoad != null)
             {
@@ -1072,35 +1090,95 @@ class Program
                     var schemaUri = new Uri(schemaPath).AbsoluteUri;
                     if (!addedSchemaDocs.Add(schemaUri))
                         continue; // same document listed under multiple roles
-                    envSchemaSet ??= new XmlSchemaSet();
+                    // REQ-114 (PB-3 C9): the set needs a resolver while URI-adding: a document
+                    // whose xs:redefine has children is preprocessed during Add and its
+                    // schemaLocation must resolve (import-schema-190).
+                    envSchemaSet ??= new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
                     envSchemaSet.Add(null, schemaUri);
                 }
 
-                // REQ-104 (PA-2): a principal source that requests validation="strict"/"lax"
-                // is validated against the environment's schemas so its nodes carry PSVI
-                // annotations — schema-element()/schema-attribute() kind tests and typed
-                // values operate on the validated tree. Validation errors never throw here
-                // (partial annotations still attach); an uncompilable environment schema
-                // leaves the source unvalidated and the transform raises its own error.
-                var sourceValidation = envToLoad.Element(ns + "source")?.Attribute("validation")?.Value;
-                if (envSchemaSet is not null && envSourceDocument?.Root is not null && sourceValidation is "strict" or "lax")
+                // REQ-114 (PB-3 C9, F1/F8): pre-validate every environment source, not just
+                // the principal one. A source declaring validation="strict"/"lax" validates
+                // against the environment's schemas (REQ-104 semantics: errors never throw,
+                // partial annotations still attach); a source carrying xsi:schemaLocation
+                // without a validation attribute is validated with LAX semantics, matching
+                // Saxon in schema-aware runs. Only successfully validated documents enter
+                // the cache. LAX failures never fail the load: annotations are stripped and
+                // the raw document is used.
+                if (envToLoad != null)
                 {
-                    try
+                    var isPrincipal = true;
+                    foreach (var srcElem in envToLoad.Elements(ns + "source"))
                     {
-                        var validationSet = new XmlSchemaSet();
-                        // REQ-106: URI-added documents populate the schemaLocations dedup
-                        // table, so an XmlUrlResolver safely resolves locationful nested
-                        // xs:import/xs:include targets (e.g. notation-03's chain) without
-                        // re-fetching documents already in the set.
-                        validationSet.XmlResolver = new XmlUrlResolver();
-                        foreach (var uri in addedSchemaDocs)
-                            validationSet.Add(null, uri);
-                        validationSet.Compile();
-                        XdmSchemaAnnotator.ValidateSubtree(envSourceDocument.Root, validationSet);
-                    }
-                    catch (XmlSchemaException)
-                    {
-                        // Fall through unvalidated: the transform raises its own error.
+                        XDocument? srcDoc;
+                        string? srcAbsoluteUri = null;
+                        if (isPrincipal)
+                        {
+                            srcDoc = envSourceDocument;
+                            if (srcDoc is not null && srcElem.Attribute("file")?.Value is { } principalFile)
+                            {
+                                var principalPath = Path.Combine(testSetDir, principalFile);
+                                if (!File.Exists(principalPath)) principalPath = Path.Combine(catalogDir, principalFile);
+                                if (File.Exists(principalPath)) srcAbsoluteUri = new Uri(principalPath).AbsoluteUri;
+                            }
+                        }
+                        else
+                        {
+                            (srcDoc, srcAbsoluteUri) = LoadEnvironmentSourceDoc(srcElem, testSetDir, catalogDir, ns);
+                        }
+                        isPrincipal = false;
+                        if (srcDoc?.Root is null)
+                            continue;
+
+                        var validationAttr = srcElem.Attribute("validation")?.Value;
+                        if (validationAttr is "strict" or "lax")
+                        {
+                            if (addedSchemaDocs.Count == 0)
+                                continue;
+                            try
+                            {
+                                var validationSet = new XmlSchemaSet();
+                                // REQ-106: URI-added documents populate the schemaLocations dedup
+                                // table, so an XmlUrlResolver safely resolves locationful nested
+                                // xs:import/xs:include targets (e.g. notation-03's chain) without
+                                // re-fetching documents already in the set.
+                                validationSet.XmlResolver = new XmlUrlResolver();
+                                foreach (var uri in addedSchemaDocs)
+                                    validationSet.Add(null, uri);
+                                validationSet.Compile();
+                                var result = XdmSchemaAnnotator.ValidateSubtree(srcDoc.Root, validationSet);
+                                if (result.IsValid && srcAbsoluteUri != null)
+                                    validatedSourceCache[srcAbsoluteUri] = srcDoc;
+                            }
+                            catch (XmlSchemaException)
+                            {
+                                // Fall through unvalidated: the transform raises its own error.
+                            }
+                        }
+                        else if (string.IsNullOrEmpty(validationAttr) &&
+                                 TryBuildLaxSourceValidationSet(srcDoc.Root, srcAbsoluteUri, addedSchemaDocs, out var laxSet))
+                        {
+                            try
+                            {
+                                var result = XdmSchemaAnnotator.Validate(srcDoc.Root, laxSet,
+                                    new XdmValidationOptions(XdmValidationMode.Lax));
+                                // F8: tolerate .NET's Date/Time/DateTime value-representational
+                                // errors only (years outside 0001-9999 that the engine's own
+                                // date parser does support); the PSVI still names the governing
+                                // type. Genuine schema violations fall back to the raw document.
+                                var tolerable = !result.IsValid && result.Errors.Count > 0
+                                    && result.Errors.All(e => IsDotNetDateTimeValueLimit(e.Message));
+                                if ((result.IsValid || tolerable) && srcAbsoluteUri != null)
+                                    validatedSourceCache[srcAbsoluteUri] = srcDoc;
+                                else
+                                    XdmSchemaAnnotator.StripSchemaAnnotations(srcDoc.Root);
+                            }
+                            catch (Exception)
+                            {
+                                // An unvalidatable source stays raw; the transform raises its own error.
+                                XdmSchemaAnnotator.StripSchemaAnnotations(srcDoc.Root);
+                            }
+                        }
                     }
                 }
             }
@@ -1147,6 +1225,16 @@ class Program
                 var resolvedUri = uri;
                 if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(baseUri))
                     resolvedUri = new Uri(new Uri(baseUri), uri).AbsoluteUri;
+                // REQ-114 (PB-3 C9, F1): environment sources validated at load time are
+                // served from the per-test cache so doc() observes the PSVI-annotated tree.
+                if (validatedSourceCache.TryGetValue(resolvedUri, out var validatedDoc))
+                {
+                    if (string.IsNullOrEmpty(validatedDoc.BaseUri))
+                        validatedDoc.AddAnnotation(resolvedUri);
+                    var validatedNode = new XDocumentNode(validatedDoc);
+                    validatedNode.SetDocumentUri(resolvedUri);
+                    return validatedNode;
+                }
                 var localPath = new Uri(resolvedUri).LocalPath;
                 if (File.Exists(localPath))
                 {
@@ -1772,6 +1860,108 @@ class Program
         }
 
         return (sourceNode, defaultCollation, doc, principalStylesheet);
+    }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9, F1): loads a non-principal environment source for pre-validation.
+    /// File-based sources resolve like <see cref="LoadEnvironment"/> (test set directory,
+    /// then the catalog directory); inline content is parsed with whitespace preserved.
+    /// Select-only sources return no document and are skipped.
+    /// </summary>
+    static (XDocument? Doc, string? AbsoluteUri) LoadEnvironmentSourceDoc(XElement source, string testSetDir, string catalogDir, XNamespace ns)
+    {
+        var file = source.Attribute("file")?.Value;
+        if (file != null)
+        {
+            var path = Path.Combine(testSetDir, file);
+            if (!File.Exists(path)) path = Path.Combine(catalogDir, file);
+            if (File.Exists(path))
+                return (LoadDocumentFromFile(path), new Uri(path).AbsoluteUri);
+            return (null, null);
+        }
+        var content = source.Element(ns + "content");
+        if (content != null)
+        {
+            var xmlText = string.Concat(content.Nodes().OfType<XText>().Select(t => t.Value));
+            var isXml11 = source.Attribute("xml-version")?.Value == "1.1";
+            var doc = isXml11
+                ? Xml11Loader.ParseXml11(xmlText, LoadOptions.PreserveWhitespace)
+                : Xml11Loader.Parse(xmlText, LoadOptions.PreserveWhitespace);
+            return (doc, null);
+        }
+        return (null, null);
+    }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9, F8): true when a validation-event message is .NET's
+    /// "not a valid Date/Time/DateTime value" family — the XSD 1.0 validator rejecting a
+    /// lexical value <see cref="System.DateTime"/> cannot represent (years outside
+    /// 0001-9999) that the engine's own date parser does support. Genuine schema
+    /// violations do not match and keep the raw-document fallback.
+    /// </summary>
+    static bool IsDotNetDateTimeValueLimit(string message) =>
+        message.Contains("is not a valid Date value", StringComparison.Ordinal)
+            || message.Contains("is not a valid Time value", StringComparison.Ordinal)
+            || message.Contains("is not a valid DateTime value", StringComparison.Ordinal);
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9, F8): builds the LAX validation set for a source that carries
+    /// <c>xsi:schemaLocation</c> without a validation attribute. The set unions the
+    /// environment's schemas with the schema-location hints resolved against the source
+    /// file's directory. Returns <c>false</c> when the source has no hint or no hint
+    /// resolves to a loadable schema, in which case the source stays raw.
+    /// </summary>
+    static bool TryBuildLaxSourceValidationSet(XElement root, string? sourceAbsoluteUri, HashSet<string> envSchemaUris,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out XmlSchemaSet? set)
+    {
+        var xsi = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+        var hint = root.Attribute(xsi + "schemaLocation")?.Value;
+        set = null;
+        if (string.IsNullOrWhiteSpace(hint))
+            return false;
+        // Location tokens sit at odd indices: namespace-URI/location pairs per XML Schema Part 1 §2.6.3.
+        var tokens = hint.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        string? sourceDir = null;
+        if (sourceAbsoluteUri != null)
+            sourceDir = Path.GetDirectoryName(new Uri(sourceAbsoluteUri).LocalPath);
+        var candidate = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        var added = false;
+        foreach (var uri in envSchemaUris)
+        {
+            candidate.Add(null, uri);
+            added = true;
+        }
+        for (var i = 1; i < tokens.Length; i += 2)
+        {
+            string? path = null;
+            if (Uri.TryCreate(tokens[i], UriKind.Absolute, out var absolute) && absolute.IsFile)
+                path = absolute.LocalPath;
+            else if (sourceDir != null)
+                path = Path.Combine(sourceDir, tokens[i]);
+            if (path == null || !File.Exists(path))
+                continue;
+            try
+            {
+                candidate.Add(null, new Uri(path).AbsoluteUri);
+                added = true;
+            }
+            catch (XmlSchemaException)
+            {
+                // Unusable hint: ignore it; the remaining hints may still form a set.
+            }
+        }
+        if (!added)
+            return false;
+        try
+        {
+            candidate.Compile();
+        }
+        catch (XmlSchemaException)
+        {
+            return false;
+        }
+        set = candidate;
+        return true;
     }
 
     /// <summary>
@@ -3047,7 +3237,6 @@ class Program
             {
                 // An unvalidatable result tree stays untyped; assertions then just don't match.
             }
-            return;
             return;
         }
         try

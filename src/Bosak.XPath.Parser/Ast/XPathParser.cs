@@ -126,6 +126,9 @@
 //                      | Charles Korthout | 1.61  | 24-09-2026     | REQ-104: schemaAware parse option — schema-element()/schema-attribute() unprefixed     |
 //                      |                  |       |                | names no longer raise XPST0008 when schema awareness is enabled                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.62  | 30-09-2026     | REQ-114/PB-3 C9: ParseDocumentNodeContent surfaces the inner element() type name so   |
+//                      |                  |       |                | document-node(element(E,T)) keeps T in the NodeTest (validation-1401)                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1704,7 +1707,7 @@ internal sealed class XPathParser
             {
                 // Only element() or schema-element() tests may appear inside document-node()
                 // (K2-NodeTest-7/12/14..20/22).
-                (argument, innerName) = ParseDocumentNodeContent();
+                (argument, innerName, typeName) = ParseDocumentNodeContent();
             }
         }
         else if (name == "processing-instruction")
@@ -1838,10 +1841,11 @@ internal sealed class XPathParser
 
     /// <summary>
     /// Parses the content of <c>document-node(...)</c>: only an <c>element()</c> or
-    /// <c>schema-element()</c> test is allowed inside. Returns the inner argument and
-    /// the inner test name ("element" or "schema-element").
+    /// <c>schema-element()</c> test is allowed inside. Returns the inner argument, the
+    /// inner test name ("element" or "schema-element"), and the optional inner schema
+    /// type name (<c>element(E, T)</c>).
     /// </summary>
-    private (string? Argument, string? InnerName) ParseDocumentNodeContent()
+    private (string? Argument, string? InnerName, string? TypeName) ParseDocumentNodeContent()
     {
         if (Current.Kind == TokenKind.RParen)
             throw new XPathParseException("XPST0003: The document-node() kind test requires an element() or schema-element() test, not empty parentheses.", Current.Start);
@@ -1929,7 +1933,7 @@ internal sealed class XPathParser
             Advance();
 
         Expect(TokenKind.RParen);
-        return (argument, inner);
+        return (argument, inner, typeName);
     }
 
     private List<XPathAstNode> ParsePredicateList()

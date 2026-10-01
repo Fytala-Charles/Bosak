@@ -65,6 +65,10 @@
 //                      |                  |       |                | (match-213); typed-mode compile: top-level QName rewritten as schema-element(QName)   |
 //                      |                  |       |                | for strict/lax modes + GetSchemaRewriteableQNames for the XTSE3105 static check       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.10  | 30-09-2026     | REQ-114/PB-3 C9: document-node(element(E[,T])) patterns enforce exactly one element     |
+//                      |                  |       |                | child + no text children; built-in xs: typed attribute/element patterns no longer      |
+//                      |                  |       |                | require an in-scope schema set (validation-1401, import-schema-055, conflict-1402)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -1961,12 +1965,26 @@ internal sealed class PatternCompiler
                 if (node == null || node.NodeKind != XdmNodeKind.Document)
                     return false;
 
-                var enumerator = node.Children(XdmNodeKind.Element).GetEnumerator();
-                if (!enumerator.MoveNext())
+                // XPath 3.1 §2.5.4: the document node must have exactly one element child,
+                // no text-node children, and that element must satisfy the inner test
+                // (import-schema-055, validation-1401).
+                IXdmNode? root = null;
+                int elementCount = 0;
+                foreach (var child in node.Children())
+                {
+                    if (child.NodeValue?.NodeKind == XdmNodeKind.Element)
+                    {
+                        elementCount++;
+                        root ??= child.NodeValue;
+                    }
+                    else if (child.NodeValue?.NodeKind == XdmNodeKind.Text)
+                    {
+                        return false;
+                    }
+                }
+                if (elementCount != 1 || root is null)
                     return false;
-
-                var root = enumerator.Current;
-                return root.IsNode && elementTest(root, ctx);
+                return elementTest(XdmValue.FromNode(root), ctx);
             };
         }
 
@@ -2812,7 +2830,10 @@ internal sealed class PatternCompiler
     /// <c>attribute(N, T)</c> kind test into a node predicate enforcing the type at match
     /// time. Returns <c>null</c> when no type argument is present or when no schema set is
     /// in scope — a basic (non-schema-aware) processor ignores the type argument entirely.
-    /// A trailing <c>?</c> on the type name allows nilled elements to match.
+    /// Built-in <c>xs:</c> type names are resolved without an in-scope schema set, so a
+    /// schema-aware stylesheet without imports still honors typed patterns
+    /// (conflict-resolution-1402). A trailing <c>?</c> on the type name allows nilled
+    /// elements to match.
     /// </summary>
     /// <param name="typeArg">The type part of the kind test, or <c>null</c> when absent.</param>
     /// <param name="isElement">True for an element kind test, false for an attribute kind test.</param>
@@ -2822,8 +2843,6 @@ internal sealed class PatternCompiler
         if (string.IsNullOrEmpty(typeArg))
             return null;
         var context = _validationContext;
-        if (context?.SchemaSet is null)
-            return null;
 
         var typeName = typeArg.Trim();
         bool nillable = false;
@@ -2853,9 +2872,42 @@ internal sealed class PatternCompiler
         if (targetLocal.Length == 0)
             return node => false;
 
+        // Without an in-scope schema set only built-in xs: types can be resolved; a
+        // user-defined type name is ignored, as on a basic processor.
+        if (context?.SchemaSet is null && ResolveBuiltInSchemaType(targetNs, targetLocal) is null)
+            return null;
+
         var ns = targetNs;
         var local = targetLocal;
         return node => MatchesTypeAnnotation(node, isElement, ns, local, nillable);
+    }
+
+    /// <summary>
+    /// Resolves a built-in XML Schema type by expanded name without requiring an evaluation
+    /// context: the XSD 1.0 built-in type table plus the XPath-only type-hierarchy members
+    /// (<c>xs:anyAtomicType</c>, <c>xs:untypedAtomic</c>, <c>xs:dayTimeDuration</c>,
+    /// <c>xs:yearMonthDuration</c>).
+    /// </summary>
+    /// <param name="namespaceUri">The type's namespace URI.</param>
+    /// <param name="localName">The type's local name.</param>
+    /// <returns>The built-in type definition, or <c>null</c> when the name is not a built-in type.</returns>
+    private static XmlSchemaType? ResolveBuiltInSchemaType(string namespaceUri, string localName)
+    {
+        if (namespaceUri != XmlSchema.Namespace)
+            return null;
+        var qualifiedName = new XmlQualifiedName(localName, namespaceUri);
+        if (XmlSchemaType.GetBuiltInSimpleType(qualifiedName) is { } builtInSimple)
+            return builtInSimple;
+        if (XmlSchemaType.GetBuiltInComplexType(qualifiedName) is { } builtInComplex)
+            return builtInComplex;
+        return localName switch
+        {
+            "anyAtomicType" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.AnyAtomicType),
+            "untypedAtomic" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.UntypedAtomic),
+            "dayTimeDuration" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.DayTimeDuration),
+            "yearMonthDuration" => XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.YearMonthDuration),
+            _ => null,
+        };
     }
 
     /// <summary>
@@ -2875,7 +2927,13 @@ internal sealed class PatternCompiler
     /// <returns>True when the node's type annotation satisfies the typed kind test.</returns>
     private bool MatchesTypeAnnotation(IXdmNode node, bool isElement, string targetNs, string targetLocal, bool nillable)
     {
-        var context = _validationContext!;
+        // The validation context may be absent (built-in xs: type checks compiled without
+        // an in-scope schema set, conflict-resolution-1402); built-in names still resolve.
+        var context = _validationContext;
+
+        XmlSchemaType? ResolveType(string ns, string local) => context is not null
+            ? ResolveSchemaType(context, ns, local)
+            : ResolveBuiltInSchemaType(ns, local);
 
         if (isElement && node.IsNilled)
             return nillable;
@@ -2898,15 +2956,35 @@ internal sealed class PatternCompiler
         // System.Xml.Schema does not model derivation into them; match them structurally.
         if (targetIsSchemaNamespace && targetLocal is "anySimpleType" or "anyAtomicType")
         {
-            if (ResolveSchemaType(context, actual.NamespaceUri, actual.LocalName) is not XmlSchemaSimpleType simple)
+            if (ResolveType(actual.NamespaceUri, actual.LocalName) is not XmlSchemaSimpleType simple)
                 return false;
             return targetLocal == "anySimpleType" || simple.Datatype?.Variety == XmlSchemaDatatypeVariety.Atomic;
         }
 
-        var targetType = ResolveSchemaType(context, targetNs, targetLocal);
+        var targetType = ResolveType(targetNs, targetLocal);
         if (targetType is null)
             return false;
-        return IsSchemaTypeCompatible(actual, targetType, context);
+        return context is not null
+            ? IsSchemaTypeCompatible(actual, targetType, context)
+            : IsBuiltInSchemaTypeCompatible(actual, targetType);
+    }
+
+    /// <summary>
+    /// Context-free variant of <see cref="IsSchemaTypeCompatible"/> used when no validation
+    /// context exists: only built-in type annotations can be resolved, through the built-in
+    /// type table.
+    /// </summary>
+    /// <param name="typeAnnotation">The node's schema type annotation.</param>
+    /// <param name="targetType">The resolved target schema type.</param>
+    /// <returns>True when the annotation derives from the target type.</returns>
+    private static bool IsBuiltInSchemaTypeCompatible((string NamespaceUri, string LocalName) typeAnnotation, XmlSchemaType targetType)
+    {
+        if (typeAnnotation.NamespaceUri == targetType.QualifiedName.Namespace
+            && typeAnnotation.LocalName == targetType.QualifiedName.Name)
+            return true;
+        var actualType = ResolveBuiltInSchemaType(typeAnnotation.NamespaceUri, typeAnnotation.LocalName);
+        return actualType is not null
+            && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
     }
 
     private PatternPredicate CompilePredicatePattern(string pattern)

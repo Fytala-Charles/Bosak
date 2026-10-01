@@ -19,6 +19,10 @@
 //                      | Charles Korthout | 0.3   | 24-09-2026     | REQ-105 (PA-3): ValidateSubtree applies whiteSpace-facet normalization to              |
 //                      |                  |       |                | simple-typed content after successful validation (match-136..141)                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 30-09-2026     | REQ-114 (PB-3 C9): CopySchemaAnnotations pairs attributes by XName and ports XSD      |
+//                      |                  |       |                | default attributes (clone-only nodes) onto the live tree; ValidateSubtree strips      |
+//                      |                  |       |                | element-only whitespace on success (strip-space-007); GetSchemaContentModel helper     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -94,6 +98,13 @@ public static partial class XdmSchemaAnnotator
         if (isAttached)
             CopySchemaAnnotations(root, element);
 
+        // Validating XDM construction discards whitespace-only text nodes in element-only
+        // content (XDM §3.3.1.1) — applied to the live tree, guided by the fresh PSVI, so
+        // strip-space rules over an already-validated tree see the canonical shape
+        // (strip-space-007; mirrors the ValidateCore treatment).
+        if (errors.Count == 0)
+            StripElementOnlyContentWhitespace(element);
+
         // Validating XDM construction records the schema-normalized value for simple-typed
         // content (XDM §3.3.2); apply the governing type's whiteSpace facet to the live tree.
         // The per-node validity check makes this safe for partially validated trees.
@@ -127,8 +138,13 @@ public static partial class XdmSchemaAnnotator
 
     /// <summary>
     /// Copies the PSVI annotations attached by validation from the validated clone onto the
-    /// live subtree, walking both trees in document order (attributes in attribute order,
-    /// elements in child order).
+    /// live subtree, walking both trees in document order. Attributes are paired by
+    /// <see cref="XName"/> (never by position): the validated clone can legitimately carry
+    /// MORE attributes than the live element, because <c>XDocument.Validate</c> adds the XSD
+    /// default attributes to the clone only. Such clone-only attributes are default
+    /// attributes of the governing type: they are ported onto the live element together with
+    /// their PSVI annotation, so the live tree reflects the validated infoset exactly
+    /// (REQ-114/PB-3 C9; validation-0701, import-schema-048).
     /// </summary>
     private static void CopySchemaAnnotations(XElement annotated, XElement live)
     {
@@ -136,14 +152,33 @@ public static partial class XdmSchemaAnnotator
         if (info != null)
             live.AddAnnotation(info);
 
-        using var liveAttrEnumerator = live.Attributes().GetEnumerator();
         foreach (var attr in annotated.Attributes())
         {
-            if (!liveAttrEnumerator.MoveNext())
-                break;
+            var liveAttr = live.Attribute(attr.Name);
+            if (liveAttr is null)
+            {
+                // Clone-only namespace declarations are validation-time namespace fixup;
+                // they must not leak into the live tree — EXCEPT the XSD 1.1-style fixup
+                // declarations pre-injected for a ref use-site default attribute, which are
+                // part of the validated infoset (import-schema-164: the default attribute's
+                // namespace must be declared and visible on the namespace axis).
+                if (attr.IsNamespaceDeclaration)
+                {
+                    if (attr.Annotation<RefDefaultInjection>() is null)
+                        continue;
+                    liveAttr = new XAttribute(attr);
+                    live.Add(liveAttr);
+                    continue;
+                }
+                // XSD default attribute added to the clone by validation only: port it onto
+                // the live element, with its PSVI annotation (validation-0701, import-schema-048).
+                liveAttr = new XAttribute(attr);
+                live.Add(liveAttr);
+            }
+
             var attrInfo = attr.GetSchemaInfo();
             if (attrInfo != null)
-                liveAttrEnumerator.Current.AddAnnotation(attrInfo);
+                liveAttr.AddAnnotation(attrInfo);
         }
 
         using var liveChildEnumerator = live.Elements().GetEnumerator();
@@ -153,5 +188,29 @@ public static partial class XdmSchemaAnnotator
                 break;
             CopySchemaAnnotations(child, liveChildEnumerator.Current);
         }
+    }
+
+    /// <summary>
+    /// Returns the PSVI content model of the element's governing schema type —
+    /// <see cref="XmlSchemaContentType.ElementOnly"/> for element-only content,
+    /// <see cref="XmlSchemaContentType.Mixed"/> for mixed content, and
+    /// <see cref="XmlSchemaContentType.TextOnly"/> for complex types with simple content.
+    /// Whitespace-only text nodes are ignorable only in element-only content (XDM §3.3.1.1);
+    /// simple-typed and mixed content preserve them (strip-space-008).
+    /// </summary>
+    /// <param name="element">The element whose content model is queried.</param>
+    /// <returns>
+    /// The governing complex type's content type, or <c>null</c> when the element carries
+    /// no PSVI annotation, is governed by a simple type, or has no governing schema type —
+    /// callers must treat <c>null</c> as "not known to be element-only".
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is null.</exception>
+    public static XmlSchemaContentType? GetSchemaContentModel(XElement element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+        var info = element.GetSchemaInfo();
+        if ((info?.SchemaElement?.ElementSchemaType ?? info?.SchemaType) is not XmlSchemaComplexType complexType)
+            return null;
+        return complexType.ContentType;
     }
 }

@@ -27,6 +27,20 @@
 //                      | Charles Korthout | 0.5   | 30-09-2026     | REQ-113 (PB-2): embedded XML-namespace schema declares xml:lang as the W3C xml.xsd      |
 //                      |                  |       |                | union of xs:language and the empty string (attribute-1502)                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 30-09-2026     | REQ-114 (PB-3 C9): XmlResolver on the set before Compile replaces the retired           |
+//                      |                  |       |                | LoadNestedSchemaDocuments walk — chameleon includes and redefines now resolve           |
+//                      |                  |       |                | (import-schema-189/190); IOException/WebException mapped to XTSE0220                  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 30-09-2026     | REQ-114/PB-3 C9 fix: AddTolerant treats an empty SourceUri (in-memory schemas) as      |
+//                      |                  |       |                | absent — XmlSchemaSet.Add(ns, "") throws ArgumentNullException (SchemaAwareCompilation |
+//                      |                  |       |                | host-set tests)                                                                        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 30-09-2026     | REQ-114/PB-3 C9 fix: host-set merge skips documents whose SourceUri matches a          |
+//                      |                  |       |                | shadowed lower-precedence declaration location (import-schema-177); SelectWinners      |
+//                      |                  |       |                | records losing declarations' resolved URIs and now orders winners lowest-first        |
+//                      |                  |       |                | (the importing module wins, XSLT 3.0 §3.14.1); import-schema-056 include companions    |
+//                      |                  |       |                | survive                                                                                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -53,53 +67,79 @@ internal static class SchemaSetBuilder
     /// </summary>
     public static XmlSchemaSet? Build(SchemaImportState state)
     {
-        var winners = SelectWinners(state.Declarations);
+        var winners = SelectWinners(state.Declarations, out var shadowedHostUris);
         if (winners.Count == 0 && state.CompilerSchemaSet is null)
             return null;
 
-        var set = new XmlSchemaSet();
+        var set = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
         var addedDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-        // Stylesheet declarations are added first. One winner per namespace by construction
-        // (SelectWinners), so no dedup is needed here.
-        foreach (var decl in winners)
-        {
-            var schema = LoadSchema(state, decl);
-            if (schema is not null)
-            {
-                set.Add(schema);
-                if (schema.SourceUri is { } uri)
-                    addedDocuments.Add(uri);
-            }
-        }
-
-        // Host-supplied schemas merge alongside the stylesheet declarations (catalog
-        // semantics: environment schemas are in scope in addition to the stylesheet's own
-        // imports). Dedup is by document URI only — same-namespace companions from an
-        // xs:include pair must both survive (import-schema-056); genuine duplicate
-        // definitions surface as XTSE0220 at Compile.
-        if (state.CompilerSchemaSet is { } hostSet)
-        {
-            foreach (XmlSchema existing in hostSet.Schemas())
-                AddTolerant(set, existing, addedDocuments);
-        }
-
-        // Locationful nested xs:import/xs:include targets: XmlSchemaSet.Compile performs no
-        // external fetch with a null XmlResolver (.NET 10), so a nested reference whose
-        // document is neither a stylesheet declaration nor in the host set is silently
-        // dropped and its components surface as XTSE0220 (notation-0301 family). Load them
-        // eagerly instead, resolved against the including schema's SourceUri.
-        LoadNestedSchemaDocuments(set, addedDocuments);
-
-        AddXmlNamespaceSchema(set);
 
         try
         {
+            // Stylesheet declarations are added first. One winner per namespace by
+            // construction (SelectWinners), so no dedup is needed here.
+            foreach (var decl in winners)
+            {
+                var schema = LoadSchema(state, decl);
+                if (schema is null)
+                    continue;
+                if (decl.InlineSchema is not null)
+                {
+                    // Inline content: add by object. Its SourceUri is the declaring
+                    // stylesheet's base URI (used to resolve nested xs:import targets at
+                    // Compile), not a schema document — a URI add would re-read the
+                    // stylesheet itself as a schema document.
+                    set.Add(schema);
+                }
+                else
+                {
+                    AddTolerant(set, schema, addedDocuments);
+                }
+            }
+
+            // Host-supplied schemas merge alongside the stylesheet declarations (catalog
+            // semantics: environment schemas are in scope in addition to the stylesheet's
+            // own imports). Dedup is by document URI only — same-namespace companions from
+            // an xs:include pair must both survive (import-schema-056); genuine duplicate
+            // definitions surface as XTSE0220 at Compile.
+            //
+            // REQ-114 (PB-3 C9, import-schema-177): a host-set document whose source URI is
+            // the resolved location of a shadowed lower-precedence xsl:import-schema
+            // declaration re-introduces declarations the import-precedence rules dropped
+            // (XTSE0220 duplicate globals at Compile) — it is skipped. Documents merely
+            // included by a shadowed schema are unaffected: their URIs are not a
+            // declaration location, and the xs:include chain still resolves at Compile.
+            if (state.CompilerSchemaSet is { } hostSet)
+            {
+                foreach (XmlSchema existing in hostSet.Schemas())
+                {
+                    if (existing.SourceUri is { Length: > 0 } uri && IsShadowedHostUri(uri, shadowedHostUris))
+                        continue;
+                    AddTolerant(set, existing, addedDocuments);
+                }
+            }
+
+            // Nested locationful xs:import/xs:include/xs:redefine targets are fetched by
+            // XmlSchemaSet.Compile itself: the set's XmlResolver (above) resolves them against
+            // each schema's SourceUri — including chameleon includes (no targetNamespace) and
+            // redefines, which a null resolver dropped silently (REQ-114, PB-3 C9:
+            // import-schema-189/190). An unresolvable location is now a hard XTSE0220 instead
+            // of a silent skip (the pre-REQ-106 behavior returned by the resolver).
+            AddXmlNamespaceSchema(set);
+
             set.Compile();
         }
         catch (XmlSchemaException ex)
         {
             throw new InvalidOperationException($"XTSE0220: invalid schema for xsl:import-schema: {ex.Message}", ex);
+        }
+        catch (System.IO.IOException ex)
+        {
+            throw new InvalidOperationException($"XTSE0220: unable to load schema for xsl:import-schema: {ex.Message}", ex);
+        }
+        catch (System.Net.WebException ex)
+        {
+            throw new InvalidOperationException($"XTSE0220: unable to load schema for xsl:import-schema: {ex.Message}", ex);
         }
         return set;
     }
@@ -115,72 +155,14 @@ internal static class SchemaSetBuilder
             return compiled;
 
         var addedDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var combined = new XmlSchemaSet();
+        var combined = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
         foreach (XmlSchema schema in compiled.Schemas())
             AddTolerant(combined, schema, addedDocuments);
         foreach (XmlSchema schema in contextSet.Schemas())
             AddTolerant(combined, schema, addedDocuments);
         AddXmlNamespaceSchema(combined);
-        LoadNestedSchemaDocuments(combined, addedDocuments);
         combined.Compile();
         return combined;
-    }
-
-    /// <summary>
-    /// Eagerly loads the locationful targets of nested <c>xs:import</c>/<c>xs:include</c>
-    /// references of every schema in the set, resolved against the including schema's
-    /// <see cref="XmlSchema.SourceUri"/> and deduped by document URI. Necessary because
-    /// <see cref="XmlSchemaSet.Compile"/> performs no external fetch when the set's
-    /// <c>XmlResolver</c> is null (the default in .NET 10): without this walk a nested
-    /// reference whose document is otherwise absent from the set is silently dropped and
-    /// its components surface as XTSE0220 at compile time. Imports whose namespace is
-    /// already covered by the set are skipped (namespace presence satisfies them);
-    /// unlocatable documents are skipped — an unused import stays inert, and a used one
-    /// still raises XTSE0220 from Compile.
-    /// </summary>
-    private static void LoadNestedSchemaDocuments(XmlSchemaSet set, HashSet<string> addedDocuments)
-    {
-        var queue = new Queue<XmlSchema>(set.Schemas().Cast<XmlSchema>().ToList());
-        while (queue.Count > 0)
-        {
-            var parent = queue.Dequeue();
-            if (string.IsNullOrEmpty(parent.SourceUri))
-                continue;
-            foreach (var external in parent.Includes)
-            {
-                if (external is XmlSchemaImport import
-                    && import.Namespace is { } importNs
-                    && set.Schemas(importNs).Cast<XmlSchema>().Any())
-                    continue; // namespace already covered by the set
-                string? location = external switch
-                {
-                    XmlSchemaImport imp => imp.SchemaLocation,
-                    XmlSchemaInclude inc => inc.SchemaLocation,
-                    _ => null,
-                };
-                if (string.IsNullOrEmpty(location))
-                    continue;
-                var absolute = ResolveLocation(location, parent.SourceUri);
-                if (absolute is null || addedDocuments.Contains(absolute))
-                    continue;
-                XmlSchema nested;
-                try
-                {
-                    using var stream = OpenLocation(absolute);
-                    nested = ReadSchema(stream, absolute);
-                }
-                catch (System.IO.IOException)
-                {
-                    continue;
-                }
-                catch (System.Net.Http.HttpRequestException)
-                {
-                    continue;
-                }
-                if (AddTolerant(set, nested, addedDocuments))
-                    queue.Enqueue(nested);
-            }
-        }
     }
 
     /// <summary>
@@ -229,12 +211,26 @@ internal static class SchemaSetBuilder
     /// Applies import-precedence selection per namespace and detects same-precedence
     /// conflicts (XTSE0215). A null namespace groups under the empty string.
     /// </summary>
-    private static List<SchemaImportState.Declaration> SelectWinners(List<SchemaImportState.Declaration> declarations)
+    /// <param name="declarations">All collected declarations across the import tree.</param>
+    /// <param name="shadowedHostUris">
+    /// Receives the resolved location URIs of declarations that lost import-precedence
+    /// selection: host-set schema documents with these source URIs must not re-enter the
+    /// merged set (REQ-114, PB-3 C9: import-schema-177).
+    /// </param>
+    private static List<SchemaImportState.Declaration> SelectWinners(
+        List<SchemaImportState.Declaration> declarations,
+        out HashSet<string> shadowedHostUris)
     {
+        shadowedHostUris = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var winners = new List<SchemaImportState.Declaration>();
         foreach (var group in declarations.GroupBy(d => d.Namespace ?? string.Empty))
         {
-            var ordered = group.OrderByDescending(d => d.ImportPrecedence).ThenBy(d => d.DocumentOrder).ToList();
+            // The declaration of the importing module wins: the principal module has
+            // import precedence 0 and every xsl:import level adds one, so the lowest
+            // number carries the highest import precedence (XSLT 3.0 §3.14.1;
+            // import-schema-177 pins the direction — the principal module's schema
+            // supplies the namespace).
+            var ordered = group.OrderBy(d => d.ImportPrecedence).ThenBy(d => d.DocumentOrder).ToList();
             var highest = ordered[0];
             // XTSE0215: same namespace, same import precedence, different locations.
             foreach (var other in ordered.Skip(1))
@@ -244,8 +240,51 @@ internal static class SchemaSetBuilder
                         $"XTSE0215: conflicting xsl:import-schema declarations for namespace '{highest.Namespace}' at the same import precedence");
             }
             winners.Add(highest);
+            foreach (var other in ordered.Skip(1))
+            {
+                // Inline schema content always survives: it cannot be URI-deduped, and
+                // declarations from different packages (xsl:use-package) do not compete
+                // for a namespace — the merged set is their union (override-f-031 and
+                // override-v-005 declare same-namespace union types in used and using
+                // packages). Same-namespace documents merge at Compile; genuinely
+                // duplicate components surface as XTSE0220 there.
+                if (other.InlineSchema is not null)
+                {
+                    winners.Add(other);
+                    continue;
+                }
+                // Location-based losers are shadowed by the winner: their resolved
+                // schema locations must not leak back in via the host-set merge.
+                if (other.ImportPrecedence == highest.ImportPrecedence)
+                    continue; // same-location duplicate of the winner; URI dedup covers it
+                foreach (var location in other.Locations)
+                {
+                    var absolute = ResolveLocation(location, other.BaseUri);
+                    if (absolute is not null)
+                        shadowedHostUris.Add(absolute);
+                }
+            }
         }
         return winners;
+    }
+
+    /// <summary>
+    /// Whether a host-set document URI matches one of the shadowed declaration locations.
+    /// Compares raw strings and normalized absolute-URI forms (the harness and the
+    /// declaration resolution may render the same file path differently).
+    /// </summary>
+    private static bool IsShadowedHostUri(string uri, HashSet<string> shadowedHostUris)
+    {
+        if (shadowedHostUris.Contains(uri))
+            return true;
+        if (!Uri.TryCreate(uri, UriKind.Absolute, out var parsed))
+            return false;
+        var absolute = parsed.AbsoluteUri;
+        if (shadowedHostUris.Contains(absolute))
+            return true;
+        return shadowedHostUris.Any(shadowed =>
+            Uri.TryCreate(shadowed, UriKind.Absolute, out var shadowedParsed) &&
+            string.Equals(shadowedParsed.AbsoluteUri, absolute, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool SameLocations(IReadOnlyList<string> a, IReadOnlyList<string> b)
@@ -411,17 +450,24 @@ internal static class SchemaSetBuilder
     /// Adds a schema, tolerating documents added twice (e.g. a schema that is both included by
     /// another and listed separately). Dedup is keyed on the document's source URI: multiple
     /// schema documents for the same target namespace are legitimate (xs:include merge), so a
-    /// namespace-keyed skip would silently drop their declarations. Schemas without a source
-    /// URI (inline content) fall back to a namespace-keyed skip.
+    /// namespace-keyed skip would silently drop their declarations. Schemas with a source URI
+    /// are re-added <em>by URI</em> rather than by object: a URI-keyed add populates the set's
+    /// internal schemaLocations table, so <see cref="XmlSchemaSet.Compile"/>'s own
+    /// include/import/redefine resolution reuses the already-added document instead of
+    /// fetching a duplicate copy (REQ-114, PB-3 C9: import-schema-188/190). Schemas without a
+    /// source URI (inline content) fall back to an object add with a namespace-keyed skip.
     /// </summary>
     /// <returns><c>true</c> when the schema was added to the set; <c>false</c> when it was a duplicate.</returns>
     private static bool AddTolerant(XmlSchemaSet set, XmlSchema schema, HashSet<string> addedDocuments)
     {
-        if (schema.SourceUri is { } uri)
+        // SourceUri is string.Empty (not null) for schemas compiled from in-memory
+        // documents — XmlSchemaSet.Add(ns, "") throws ArgumentNullException — so only
+        // a non-empty URI takes the by-URI re-add path.
+        if (schema.SourceUri is { Length: > 0 } uri)
         {
             if (!addedDocuments.Add(uri))
                 return false;
-            set.Add(schema);
+            set.Add(null, uri);
             return true;
         }
 

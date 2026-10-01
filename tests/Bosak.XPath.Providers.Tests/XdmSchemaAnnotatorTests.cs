@@ -22,6 +22,10 @@
 //                      |                  |       |                | DocumentEpisode shape-check skip, CheckDocumentIdentityConstraints, default-ns          |
 //                      |                  |       |                | prefix-scan for named-type xsi:type injection                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 30-09-2026     | REQ-114 (PB-3 C9): default-attribute porting, element-only whitespace stripping,        |
+//                      |                  |       |                | GetSchemaContentModel, preserve→xs:anyType, xdt untypedAtomic normalization,            |
+//                      |                  |       |                | ref use-site default/fixed pre-injection (RC3)                                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -694,5 +698,319 @@ public class XdmSchemaAnnotatorTests
         Assert.True(result.IsValid);
         Assert.False(result.HasDocumentLevelConstraintFailure);
         Assert.DoesNotContain("xmlns", result.FailureMessage ?? "", StringComparison.Ordinal);
+    }
+
+    // ----- REQ-114 (PB-3 C9): XSD default attributes port from the validation clone -----
+
+    private const string DefaultAttrSchema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+        <xs:element name='doc'>
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name='item' maxOccurs='unbounded'>
+                        <xs:complexType>
+                            <xs:attribute name='a' type='xs:string'/>
+                            <xs:attribute name='b' type='xs:string' default='B-DEFAULT'/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>";
+
+    [Fact]
+    public void ValidateSubtree_DefaultAttribute_PortsToLiveTreeWithPsvi()
+    {
+        var schemas = CompileSchema(DefaultAttrSchema);
+        var element = new XElement("doc", new XElement("item", new XAttribute("a", "x")));
+        var doc = new XDocument(element);
+
+        var result = XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+
+        Assert.True(result.IsValid);
+        var item = element.Element("item")!;
+        // The XSD default attribute added to the validation clone only is ported onto the
+        // live element, with its PSVI annotation (validation-0701, import-schema-048).
+        var defaultAttr = item.Attribute("b");
+        Assert.NotNull(defaultAttr);
+        Assert.Equal("B-DEFAULT", defaultAttr!.Value);
+        Assert.NotNull(defaultAttr.GetSchemaInfo());
+        Assert.Equal(("http://www.w3.org/2001/XMLSchema", "string"),
+            XDocumentNode.Wrap(defaultAttr).SchemaTypeAnnotation);
+        // The existing attribute keeps its value and is paired by name, not position.
+        Assert.Equal("x", item.Attribute("a")!.Value);
+        Assert.NotNull(item.Attribute("a")!.GetSchemaInfo());
+    }
+
+    [Fact]
+    public void Validate_Strict_PortsDefaultAttributesToLiveTree()
+    {
+        var schemas = CompileSchema(DefaultAttrSchema);
+        var element = new XElement("doc", new XElement("item", new XAttribute("a", "x")));
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict));
+
+        Assert.True(result.IsValid);
+        Assert.Equal("B-DEFAULT", element.Element("item")!.Attribute("b")?.Value);
+    }
+
+    [Fact]
+    public void Validate_CloneOnlyNamespaceFixup_DoesNotLeakIntoLiveTree()
+    {
+        // The clone receives the in-scope namespace bindings for validation (QName content,
+        // xsi:type); those clone-only declarations must not be ported back as pseudo-default
+        // attributes.
+        const string xsd = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:q='http://q.com/'>
+            <xs:element name='root'>
+                <xs:complexType>
+                    <xs:attribute name='qn' type='xs:QName'/>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>";
+        var schemas = CompileSchema(xsd);
+        var element = new XElement("root", new XAttribute("qn", "q:thing"));
+        new XElement("wrap", new XAttribute(XNamespace.Xmlns + "q", "http://q.com/")).Add(element);
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict));
+
+        Assert.True(result.IsValid);
+        Assert.DoesNotContain(element.Attributes(), a => a.IsNamespaceDeclaration);
+        Assert.NotNull(element.Attribute("qn")!.GetSchemaInfo());
+    }
+
+    // ----- REQ-114 (PB-3 C9): element-only whitespace stripping on validated subtrees -----
+
+    private const string ContentModelSchema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+        <xs:element name='elist'>
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name='child' type='xs:string'/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+        <xs:element name='mixed'>
+            <xs:complexType mixed='true'>
+                <xs:sequence>
+                    <xs:element name='child' type='xs:string'/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>";
+
+    [Fact]
+    public void ValidateSubtree_ElementOnlyContent_StripsWhitespaceTextNodes()
+    {
+        var schemas = CompileSchema(ContentModelSchema);
+        var element = XElement.Parse("<elist> <child>x</child> </elist>", LoadOptions.PreserveWhitespace);
+
+        var result = XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+
+        Assert.True(result.IsValid);
+        Assert.DoesNotContain(element.Nodes(),
+            n => n is XText text && string.IsNullOrWhiteSpace(text.Value));
+    }
+
+    [Fact]
+    public void ValidateSubtree_MixedContent_KeepsWhitespaceTextNodes()
+    {
+        var schemas = CompileSchema(ContentModelSchema);
+        var element = XElement.Parse("<mixed> <child>x</child> </mixed>", LoadOptions.PreserveWhitespace);
+
+        var result = XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+
+        Assert.True(result.IsValid);
+        Assert.Equal(2, element.Nodes().OfType<XText>()
+            .Count(t => string.IsNullOrWhiteSpace(t.Value)));
+    }
+
+    // ----- REQ-114 (PB-3 C9): GetSchemaContentModel helper for strip-space gating -----
+
+    [Fact]
+    public void GetSchemaContentModel_ElementOnlyContent_ReturnsElementOnly()
+    {
+        var schemas = CompileSchema(ContentModelSchema);
+        var element = XElement.Parse("<elist><child>x</child></elist>");
+        XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+
+        Assert.Equal(XmlSchemaContentType.ElementOnly, XdmSchemaAnnotator.GetSchemaContentModel(element));
+    }
+
+    [Fact]
+    public void GetSchemaContentModel_MixedContent_ReturnsMixed()
+    {
+        var schemas = CompileSchema(ContentModelSchema);
+        var element = XElement.Parse("<mixed> <child>x</child> </mixed>", LoadOptions.PreserveWhitespace);
+        XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+
+        Assert.Equal(XmlSchemaContentType.Mixed, XdmSchemaAnnotator.GetSchemaContentModel(element));
+    }
+
+    [Fact]
+    public void GetSchemaContentModel_UnvalidatedElement_ReturnsNull()
+    {
+        Assert.Null(XdmSchemaAnnotator.GetSchemaContentModel(new XElement("elist")));
+    }
+
+    // ----- REQ-114 (PB-3 C9): preserve annotates unannotated nodes xs:anyType -----
+
+    [Fact]
+    public void PreserveSchemaAnnotations_UnannotatedTree_MarksAnyTypeAndUntypedAtomic()
+    {
+        var element = new XElement("root",
+            new XAttribute("a", "1"),
+            new XElement("child", "text"));
+
+        var result = XdmSchemaAnnotator.PreserveSchemaAnnotations(element);
+
+        Assert.True(result.IsValid);
+        Assert.Equal(("http://www.w3.org/2001/XMLSchema", "anyType"),
+            XDocumentNode.Wrap(element).SchemaTypeAnnotation);
+        Assert.Equal(("http://www.w3.org/2001/XMLSchema", "anyType"),
+            XDocumentNode.Wrap(element.Element("child")!).SchemaTypeAnnotation);
+        // .NET's xdt-namespace untypedAtomic is normalized to xs: at the schema-type surface.
+        Assert.Equal(("http://www.w3.org/2001/XMLSchema", "untypedAtomic"),
+            XDocumentNode.Wrap(element.Attribute("a")!).SchemaTypeAnnotation);
+    }
+
+    [Fact]
+    public void PreserveSchemaAnnotations_ValidatedSubtree_KeepsExistingPsvi()
+    {
+        var schemas = CompileSchema(AmountSchema);
+        var element = new XElement("amount", new XAttribute("currency", "EUR"), "12.5");
+        XdmSchemaAnnotator.ValidateSubtree(element, schemas);
+
+        XdmSchemaAnnotator.PreserveSchemaAnnotations(element);
+
+        // Existing PSVI annotations survive preserve untouched (import-schema-076 p).
+        Assert.Equal(("", "money"), XDocumentNode.Wrap(element).SchemaTypeAnnotation);
+    }
+
+    // ----- REQ-114 (PB-3 C9): xs:untypedAtomic normalization (validation-0108) -----
+
+    private static readonly XmlQualifiedName UntypedAtomicTypeName =
+        new("untypedAtomic", "http://www.w3.org/2001/XMLSchema");
+
+    [Fact]
+    public void ValidateAttribute_UntypedAtomicType_NormalizesToXsNamespace()
+    {
+        var schemas = CompileSchema(AmountSchema);
+        var attribute = new XAttribute("u", "abcd");
+
+        var result = XdmSchemaAnnotator.ValidateAttribute(attribute, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict, UntypedAtomicTypeName));
+
+        Assert.True(result.IsValid);
+        Assert.Equal(("http://www.w3.org/2001/XMLSchema", "untypedAtomic"),
+            XDocumentNode.Wrap(attribute).SchemaTypeAnnotation);
+    }
+
+    [Fact]
+    public void Validate_UntypedAtomicElementType_NormalizesToXsNamespace()
+    {
+        var schemas = CompileSchema(AmountSchema);
+        var element = new XElement("u", "abcd");
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict, UntypedAtomicTypeName));
+
+        Assert.True(result.IsValid);
+        Assert.Equal(("http://www.w3.org/2001/XMLSchema", "untypedAtomic"),
+            XDocumentNode.Wrap(element).SchemaTypeAnnotation);
+    }
+
+    // ----- REQ-114 (RC3): ref + use-site default/fixed pre-injection -----
+
+    private const string RefGlobalSchema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+        targetNamespace='http://p.com/' xmlns:p='http://p.com/'>
+        <xs:attribute name='foo' type='xs:string'/>
+    </xs:schema>";
+
+    private const string RefDefaultUserSchema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+        xmlns:p='http://p.com/'>
+        <xs:import namespace='http://p.com/'/>
+        <xs:element name='holder'>
+            <xs:complexType>
+                <xs:attribute ref='p:foo' default='fred'/>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>";
+
+    private static XmlSchemaSet CompileSchemas(params string[] xsds)
+    {
+        var set = new XmlSchemaSet();
+        foreach (var xsd in xsds)
+            set.Add(XmlSchema.Read(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xsd)), null)!);
+        set.Compile();
+        return set;
+    }
+
+    [Fact]
+    public void Validate_RefUseSiteDefault_PreInjectsAndPortsAttribute()
+    {
+        // Without the pre-injection, .NET's GetUnspecifiedDefaultAttributes crashes with
+        // ArgumentNullException (new XAttribute(name, null)) on the ref use (import-schema-164).
+        var schemas = CompileSchemas(RefGlobalSchema, RefDefaultUserSchema);
+        var element = new XElement("holder");
+        _ = new XDocument(element);
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict));
+
+        Assert.True(result.IsValid);
+        var attr = element.Attribute(XNamespace.Get("http://p.com/") + "foo");
+        Assert.NotNull(attr);
+        Assert.Equal("fred", attr!.Value);
+        Assert.NotNull(attr.GetSchemaInfo());
+        // XSD 1.1-style namespace fixup: the result is serializable with a declared prefix.
+        Assert.Contains("xmlns", element.ToString(SaveOptions.DisableFormatting), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Validate_RefUseSiteDefault_ExistingAttributeIsKept()
+    {
+        var schemas = CompileSchemas(RefGlobalSchema, RefDefaultUserSchema);
+        var p = XNamespace.Get("http://p.com/");
+        var element = new XElement("holder",
+            new XAttribute(XNamespace.Xmlns + "p", "http://p.com/"),
+            new XAttribute(p + "foo", "custom"));
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict));
+
+        Assert.True(result.IsValid);
+        Assert.Single(element.Attributes(), a => !a.IsNamespaceDeclaration);
+        Assert.Equal("custom", element.Attribute(p + "foo")?.Value);
+    }
+
+    [Fact]
+    public void Validate_RefUseSiteFixed_XmlSpace_IsNotInjectedIntoLiveTree()
+    {
+        // validation-0201/0202 shape: <xs:attribute ref='xml:space' fixed='preserve'/> on an
+        // anonymous complex type (xhtml1-transitional style/script). The injection only
+        // keeps .NET's validator from crashing; Saxon semantics (pinned by the catalog)
+        // leave fixed values OUT of the validated infoset.
+        const string xsd = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:x='http://www.w3.org/XML/1998/namespace'
+            targetNamespace='http://www.w3.org/XML/1998/namespace'>
+            <xs:attribute name='space' type='xs:string'/>
+        </xs:schema>";
+        const string user = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+            xmlns:xml='http://www.w3.org/XML/1998/namespace'>
+            <xs:import namespace='http://www.w3.org/XML/1998/namespace'/>
+            <xs:element name='style'>
+                <xs:complexType mixed='true'>
+                    <xs:attribute ref='xml:space' fixed='preserve'/>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>";
+        var schemas = CompileSchemas(xsd, user);
+        var element = new XElement("style", "body{}");
+
+        var result = XdmSchemaAnnotator.Validate(element, schemas,
+            new XdmValidationOptions(XdmValidationMode.Strict));
+
+        Assert.True(result.IsValid);
+        Assert.Null(element.Attribute(XNamespace.Xml + "space"));
     }
 }

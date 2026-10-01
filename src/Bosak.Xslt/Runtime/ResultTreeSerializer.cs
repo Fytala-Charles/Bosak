@@ -62,6 +62,8 @@
 //                      | Charles Korthout | 1.32  | 17-09-2026     | SelfCloseVoidHtmlElements option emits "/>" for HTML void elements in file-written      |
 //                      |                  |       |                | result documents so the harness can reload them as XML (si-fork-119 secondary docs)     |
 //                      | Charles Korthout | 1.33  | 21-09-2026     | API freeze stage B: internalized                                                       |
+//                      | Charles Korthout | 1.34  | 30-09-2026     | REQ-114 (PB-3 C9): item-separator honored for xml method sequences and xhtml fragments  |
+//                      |                  |       |                | (validation-0215)                                                                      |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -126,6 +128,18 @@ internal static class ResultTreeSerializer
         }
 
         // method="xml" (default)
+        // REQ-114 (PB-3 C9): an explicit item-separator serializes the top-level items
+        // individually, separated by the separator (validation-0215 family).
+        if (props.ItemSeparatorSpecified && props.ItemSeparator != "#absent"
+            && value.IsNode && value.NodeValue is XDocumentNode sepXdn
+            && (sepXdn.UnderlyingObject is XDocument
+                || (sepXdn.UnderlyingObject is XElement sepElem
+                    && sepElem.Name.LocalName == "__xdm_doc__" && sepElem.Name.NamespaceName == "")))
+        {
+            var separatedItems = FlattenItems(value).ToList();
+            return SerializeSequenceItems(XdmValue.FromSequence(MaterializedSequence.FromList(separatedItems)), props);
+        }
+
         if (value.IsNode)
         {
             return SerializeNode(value.NodeValue, props);
@@ -991,6 +1005,11 @@ internal static class ResultTreeSerializer
         }
         else
         {
+            // REQ-114 (PB-3 C9): an explicit item-separator is written between the
+            // serialized top-level items (validation-0215).
+            bool useSeparator = props.ItemSeparatorSpecified && props.ItemSeparator != "#absent";
+            string separator = props.ItemSeparator;
+            bool wroteItem = false;
             foreach (var node in fragmentNodes)
             {
                 if (!doctypeWritten && node is XElement)
@@ -998,11 +1017,17 @@ internal static class ResultTreeSerializer
                     WriteDoctype(writer, doctypeRoot, props);
                     doctypeWritten = true;
                 }
+                if (useSeparator && wroteItem)
+                    writer.Write(separator);
                 WriteXhtmlNode(writer, node, props, 0, new Dictionary<string, string>(initialBindings));
+                wroteItem = true;
             }
             foreach (var item in items.Where(i => !i.IsNode && !i.IsUndefined))
             {
+                if (useSeparator && wroteItem)
+                    writer.Write(separator);
                 WriteXmlEscaped(writer, item.ToString(), props);
+                wroteItem = true;
             }
         }
 
@@ -1233,6 +1258,13 @@ internal static class ResultTreeSerializer
     }
 
     private static string SerializeSequence(IXdmSequence sequence, Stylesheet.OutputProperties props)
+        => SerializeSequenceItems(XdmValue.FromSequence(XdmSequence.FromSource(sequence)), props);
+
+    /// <summary>
+    /// Serializes a (possibly multi-item) sequence with the XML method, honoring an
+    /// explicit item-separator between the top-level items.
+    /// </summary>
+    private static string SerializeSequenceItems(XdmValue value, Stylesheet.OutputProperties props)
     {
         using var writer = new StringWriter();
         WriteByteOrderMark(writer, props);
@@ -1242,7 +1274,7 @@ internal static class ResultTreeSerializer
         using var xmlWriter = XmlWriter.Create(writer, settings);
 
         bool separatorAbsent = !props.ItemSeparatorSpecified || props.ItemSeparator == "#absent";
-        var normalized = NormalizeRawSequence(XdmValue.FromSequence(XdmSequence.FromSource(sequence)), separatorAbsent ? null : props.ItemSeparator);
+        var normalized = NormalizeRawSequence(value, separatorAbsent ? null : props.ItemSeparator);
         foreach (var obj in normalized)
         {
             if (obj is string s)

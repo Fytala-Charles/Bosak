@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 01-10-2026     | REQ-114/PB-3 C9: built-in xs: typed patterns enforced without a schema set (conflict-    |
+//                      |                  |       |                | resolution-1402); basic-mode tests split per built-in vs user-defined type names         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -29,7 +32,9 @@ namespace Bosak.Xslt.Tests;
 /// patterns are compiled in a schema-aware stylesheet (REQ-105, Bosak.Schema Phase A item
 /// PA-3). Before the fix the type argument was silently dropped, so typed templates matched
 /// by name and kind only (W3C match-164: every attribute matched the first typed template).
-/// The type argument stays a no-op for basic (non-schema-aware) processors.
+/// Since REQ-114 (PB-3 C9) built-in xs: type names are also enforced without an in-scope
+/// schema set (conflict-resolution-1402); only user-defined type names stay a no-op on a
+/// basic (non-schema-aware) processor.
 /// </summary>
 public class TypedPatternDispatchTests
 {
@@ -304,18 +309,37 @@ public class TypedPatternDispatchTests
         Assert.DoesNotContain("PLAIN", result);
     }
 
-    // ----- basic processor: type argument ignored -----
+    // ----- basic processor: built-in xs: types are enforced -----
 
     [Fact]
-    public void BasicProcessor_TypeArgumentIgnored()
+    public void BasicProcessor_BuiltInXsTypePattern_Enforced()
     {
-        // Without a schema set in scope the type argument is ignored and the kind test
-        // matches by kind alone — the pre-REQ-105 behavior is bit-identical.
+        // REQ-114 (PB-3 C9, conflict-resolution-1402): built-in xs: type names are resolved
+        // without an in-scope schema set, so a typed pattern is enforced even on a basic
+        // processor: untyped source elements (xs:anyType annotation) do NOT match
+        // element(*, xs:string).
         var result = RunTransform("""
             <xsl:template match='/'>
                 <out><xsl:apply-templates select='/order/*'/></out>
             </xsl:template>
             <xsl:template match='element(*, xs:string)'>ANY-ELEMENT[<xsl:value-of select='name()'/>]</xsl:template>
+            """,
+            source: new XDocument(new XElement("order", new XElement("part", "x"), new XElement("count", "7"))),
+            schemaAware: false);
+        Assert.DoesNotContain("ANY-ELEMENT", result);
+    }
+
+    [Fact]
+    public void BasicProcessor_UserDefinedTypePattern_ArgumentIgnored()
+    {
+        // Without a schema set in scope a user-defined type name cannot be resolved and the
+        // type argument is ignored — the kind test matches by kind alone (the pre-REQ-105
+        // behavior is bit-identical for user-defined types).
+        var result = RunTransform("""
+            <xsl:template match='/'>
+                <out><xsl:apply-templates select='/order/*'/></out>
+            </xsl:template>
+            <xsl:template match='element(*, p:partNumberType)'>ANY-ELEMENT[<xsl:value-of select='name()'/>]</xsl:template>
             """,
             source: new XDocument(new XElement("order", new XElement("part", "x"), new XElement("count", "7"))),
             schemaAware: false);

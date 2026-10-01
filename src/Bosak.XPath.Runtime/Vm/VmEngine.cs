@@ -334,6 +334,16 @@
 //                      | Charles Korthout | 2.158 | 25-09-2026     | REQ-108: bool/float/double/date/time cast results keep their user-defined type        |
 //                      |                  |       |                | identity (evaluate-009, type-expr-0201/0401, type-functions-0201)                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.159 | 30-09-2026     | REQ-114/PB-3 C9: general comparisons and function conversion flatten multi-item       |
+//                      |                  |       |                | atomized sequences (list-typed schema nodes) — existential pairwise comparison and     |
+//                      |                  |       |                | per-member conversion to xs:T* targets (import-schema-020/029/030, validation-0301/    |
+//                      |                  |       |                | 0401)                                                                                  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.160 | 30-09-2026     | REQ-114/PB-3 C9: parameterized document-node() KindTest enforces exactly one element    |
+//                      |                  |       |                | child, no text children, and the inner element(E[,T])/schema-element(E) test;           |
+//                      |                  |       |                | element(*,T) matches anonymous simple-type annotations; anyURI schema values keep       |
+//                      |                  |       |                | their lexical form (validation-1401, import-schema-052/055, type-0302)                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -2323,7 +2333,7 @@ internal static class VmEngine
                     {
                         string kindName = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
-                        var filtered = FilterNodesLazy(input, n => MatchesKindTest(n, kindName));
+                        var filtered = FilterNodesLazy(input, n => MatchesKindTest(n, kindName, context));
                         registers[instr.RegisterA] = filtered;
                         ip++;
                         break;
@@ -5171,8 +5181,22 @@ internal static class VmEngine
         return new[] { sequence };
     }
 
-    private static bool MatchesKindTest(IXdmNode node, string kindName)
+    /// <summary>
+    /// Matches a node against a kind-test name carried by the <see cref="IrOpCode.KindTest"/>
+    /// operand. A parameterized <c>document-node(element(E[,T]))</c> /
+    /// <c>document-node(schema-element(E))</c> operand is matched structurally: the document
+    /// must have exactly one element child, no text-node children, and the element child must
+    /// satisfy the inner test (validation-1401, import-schema-055).
+    /// </summary>
+    /// <param name="node">The candidate node.</param>
+    /// <param name="kindName">The kind-test name, optionally a full document-node(...) test.</param>
+    /// <param name="context">The evaluation context (namespace and schema lookups).</param>
+    /// <returns>True when the node satisfies the kind test.</returns>
+    private static bool MatchesKindTest(IXdmNode node, string kindName, EvaluationContext? context)
     {
+        if (kindName.StartsWith("document-node(", StringComparison.Ordinal) && kindName.EndsWith(')'))
+            return MatchesDocumentNodeTest(node, kindName, context);
+
         return kindName.ToLowerInvariant() switch
         {
             "node" => true,
@@ -5188,6 +5212,128 @@ internal static class VmEngine
             // NamespaceTest opcode (XPST0081 for unbound prefixes, K2-NameTest-35/36).
             _ => true // permissive fallback
         };
+    }
+
+    /// <summary>
+    /// Matches a document node against a parameterized <c>document-node(element(E[,T]))</c> or
+    /// <c>document-node(schema-element(E))</c> kind test: exactly one element child, no
+    /// text-node children, and the element child must satisfy the inner name/type test.
+    /// </summary>
+    /// <param name="node">The candidate node.</param>
+    /// <param name="kindName">The full kind-test text, e.g. <c>document-node(element(E, T))</c>.</param>
+    /// <param name="context">The evaluation context (namespace and schema lookups).</param>
+    /// <returns>True when the document node satisfies the inner test.</returns>
+    private static bool MatchesDocumentNodeTest(IXdmNode node, string kindName, EvaluationContext? context)
+    {
+        if (node.NodeKind != XdmNodeKind.Document)
+            return false;
+
+        string inner = kindName["document-node(".Length..^1].Trim();
+        if (inner.Length == 0)
+            return true; // bare document-node() form
+
+        IXdmNode? elementChild = null;
+        int elementCount = 0;
+        foreach (var child in node.Children())
+        {
+            if (child.NodeValue?.NodeKind == XdmNodeKind.Element)
+            {
+                elementCount++;
+                elementChild ??= child.NodeValue;
+            }
+            else if (child.NodeValue?.NodeKind == XdmNodeKind.Text)
+            {
+                // A document-node(element(...)) test requires no text-node children.
+                return false;
+            }
+        }
+        if (elementCount != 1 || elementChild is null)
+            return false;
+
+        return MatchesInnerElementTest(elementChild, inner, context);
+    }
+
+    /// <summary>
+    /// Matches an element node against the inner test of a parameterized document-node() kind
+    /// test: <c>element(E)</c>, <c>element(E, T)</c>, <c>element(*, T)</c>, or
+    /// <c>schema-element(E)</c>. Element names resolve like path-step name tests (unprefixed
+    /// names use the default element namespace); the type argument is checked with the same
+    /// compatibility rules as the <c>element(*, T)</c> kind test.
+    /// </summary>
+    /// <param name="element">The document's single element child.</param>
+    /// <param name="inner">The inner test text, e.g. <c>element(E, T)</c> or <c>schema-element(E)</c>.</param>
+    /// <param name="context">The evaluation context (namespace and schema lookups).</param>
+    /// <returns>True when the element satisfies the inner test.</returns>
+    private static bool MatchesInnerElementTest(IXdmNode element, string inner, EvaluationContext? context)
+    {
+        if (inner.StartsWith("schema-element(", StringComparison.Ordinal) && inner.EndsWith(')'))
+        {
+            var arg = inner["schema-element(".Length..^1].Trim();
+            return MatchesSchemaElement(element, arg, context);
+        }
+
+        if (!inner.StartsWith("element(", StringComparison.Ordinal) || !inner.EndsWith(')'))
+            return false;
+        var content = inner["element(".Length..^1].Trim();
+
+        // Split the inner argument into name and type parts at the top-level comma.
+        string namePart = content;
+        string? typePart = null;
+        int depth = 0;
+        for (int i = 0; i < content.Length; i++)
+        {
+            if (content[i] == '(') depth++;
+            else if (content[i] == ')') depth--;
+            else if (content[i] == ',' && depth == 0)
+            {
+                namePart = content[..i].Trim();
+                typePart = content[(i + 1)..].Trim();
+                break;
+            }
+        }
+
+        if (namePart.Length > 0 && namePart != "*")
+        {
+            if (namePart.StartsWith("Q{", StringComparison.Ordinal))
+            {
+                int close = namePart.IndexOf('}');
+                string ns = close > 2 ? namePart[2..close] : string.Empty;
+                string local = close >= 0 ? namePart[(close + 1)..] : namePart;
+                if (element.NamespaceUri != ns || element.LocalName != local)
+                    return false;
+            }
+            else
+            {
+                int colon = namePart.IndexOf(':');
+                string expectedNs;
+                string local;
+                if (colon > 0)
+                {
+                    var prefix = namePart[..colon];
+                    if (context is null || !context.TryResolveNamespace(prefix, out var resolvedNs))
+                        throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+                    expectedNs = resolvedNs;
+                    local = namePart[(colon + 1)..];
+                }
+                else
+                {
+                    // Unprefixed element-test names use the default element namespace,
+                    // mirroring path-step name tests.
+                    expectedNs = context?.DefaultElementNamespace ?? string.Empty;
+                    local = namePart;
+                }
+                if (element.LocalName != local || element.NamespaceUri != expectedNs)
+                    return false;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(typePart))
+        {
+            if (context is not null)
+                ValidateKindTestTypeName(typePart, context);
+            return IsElementTypeCompatible(typePart, context, element);
+        }
+        return true;
     }
 
     /// <summary>
@@ -6954,57 +7100,103 @@ internal static class VmEngine
         }
 
         bool relational = IsRelationalGeneralComparison(op);
+        var leftBuffer = new List<XdmValue>(4);
+        var rightBuffer = new List<XdmValue>(4);
 
         foreach (var l in leftItems)
         {
             foreach (var r in rightItems)
             {
-                // Atomize and check for empty sequence on each pair
+                // Atomize each operand. Atomizing a schema-validated node whose type is a
+                // list type yields a multi-item sequence; XPath 3.1 §3.5.2 gives general
+                // comparisons existential semantics over the Cartesian product of both
+                // atomized sequences, so each member pair is compared individually
+                // (import-schema-020/029/030, validation-0401).
                 var atomizedL = Atomize(l);
                 var atomizedR = Atomize(r);
-                if (atomizedL.IsUndefined || atomizedR.IsUndefined)
+
+                leftBuffer.Clear();
+                rightBuffer.Clear();
+                AddAtomizedComparisonItems(atomizedL, leftBuffer);
+                AddAtomizedComparisonItems(atomizedR, rightBuffer);
+                if (leftBuffer.Count == 0 || rightBuffer.Count == 0)
                     continue;
 
-                // Function items cannot be atomized: a comparison involving one is
-                // FOTY0013 (inline-fn-031: comparing two inline functions with '=').
-                if (atomizedL.IsFunction || atomizedR.IsFunction)
-                    throw new InvalidOperationException("FOTY0013: A comparison operand must not be a function item.");
-
-                // XPath 1.0 backwards compatibility coercion rules
-                if (context.BackwardsCompatible)
+                foreach (var al in leftBuffer)
                 {
-                    if (relational)
+                    foreach (var ar in rightBuffer)
                     {
-                        // Relational operators convert both operands to numbers.
-                        if (atomizedL.Kind != XdmValueKind.Boolean)
-                            atomizedL = XdmValue.FromDouble(ToDoubleOrNaN(atomizedL));
-                        if (atomizedR.Kind != XdmValueKind.Boolean)
-                            atomizedR = XdmValue.FromDouble(ToDoubleOrNaN(atomizedR));
-                    }
-                    else
-                    {
-                        ApplyBackwardsCompatibleCoercion(ref atomizedL, ref atomizedR);
+                        var pairL = al;
+                        var pairR = ar;
+
+                        // XPath 1.0 backwards compatibility coercion rules
+                        if (context.BackwardsCompatible)
+                        {
+                            if (relational)
+                            {
+                                // Relational operators convert both operands to numbers.
+                                if (pairL.Kind != XdmValueKind.Boolean)
+                                    pairL = XdmValue.FromDouble(ToDoubleOrNaN(pairL));
+                                if (pairR.Kind != XdmValueKind.Boolean)
+                                    pairR = XdmValue.FromDouble(ToDoubleOrNaN(pairR));
+                            }
+                            else
+                            {
+                                ApplyBackwardsCompatibleCoercion(ref pairL, ref pairR);
+                            }
+                        }
+
+                        // XPath 3.1 §3.5.3 general-comparison casting rules: when exactly one
+                        // value is xs:untypedAtomic, cast it to a type depending on the other
+                        // value's type (numeric -> xs:double, duration subtypes -> same subtype,
+                        // otherwise the primitive base type of T).
+                        if (!context.BackwardsCompatible)
+                            CastUntypedForGeneralComparison(ref pairL, ref pairR, context);
+
+                        bool match = CompareCore(
+                            MapGeneralToStrictOp(op),
+                            pairL, pairR, strict: !context.BackwardsCompatible,
+                            IsNodeOrigin(l), IsNodeOrigin(r), context);
+
+                        if (match)
+                            return XdmValue.FromBoolean(true);
                     }
                 }
-
-                // XPath 3.1 §3.5.3 general-comparison casting rules: when exactly one
-                // value is xs:untypedAtomic, cast it to a type depending on the other
-                // value's type (numeric -> xs:double, duration subtypes -> same subtype,
-                // otherwise the primitive base type of T).
-                if (!context.BackwardsCompatible)
-                    CastUntypedForGeneralComparison(ref atomizedL, ref atomizedR, context);
-
-                bool match = CompareCore(
-                    MapGeneralToStrictOp(op),
-                    atomizedL, atomizedR, strict: !context.BackwardsCompatible,
-                    IsNodeOrigin(l), IsNodeOrigin(r), context);
-
-                if (match)
-                    return XdmValue.FromBoolean(true);
             }
         }
 
         return XdmValue.FromBoolean(false);
+    }
+
+    /// <summary>
+    /// Appends the items of an atomized general-comparison operand to <paramref name="items"/>,
+    /// flattening the multi-item sequences produced by atomizing list-typed schema nodes.
+    /// An undefined operand contributes nothing; a function item is FOTY0013.
+    /// </summary>
+    /// <param name="atomized">The atomized operand value.</param>
+    /// <param name="items">The buffer receiving the operand's items.</param>
+    private static void AddAtomizedComparisonItems(XdmValue atomized, List<XdmValue> items)
+    {
+        if (atomized.IsUndefined)
+            return;
+        if (atomized.IsSequence && atomized.SequenceValue is not null)
+        {
+            foreach (var inner in XdmSequence.FromSource(atomized.SequenceValue))
+            {
+                if (inner.IsUndefined)
+                    continue;
+                if (inner.IsFunction)
+                    throw new InvalidOperationException("FOTY0013: A comparison operand must not be a function item.");
+                items.Add(inner);
+            }
+            return;
+        }
+
+        // Function items cannot be atomized: a comparison involving one is
+        // FOTY0013 (inline-fn-031: comparing two inline functions with '=').
+        if (atomized.IsFunction)
+            throw new InvalidOperationException("FOTY0013: A comparison operand must not be a function item.");
+        items.Add(atomized);
     }
 
     /// <summary>
@@ -9501,6 +9693,15 @@ internal static class VmEngine
                 if (IsSchemaTypeSubtype(context, qn.Namespace, qn.Name, targetNs, targetLocal))
                     return true;
             }
+            // Anonymous simple types (e.g. an inline xs:restriction base="xs:string") derive
+            // from the target exactly like a named simple type (import-schema-052/053/054).
+            else if (anonymousType is XmlSchemaSimpleType anonSimple && context is not null)
+            {
+                var targetType = ResolveSchemaType(context, targetNs, targetLocal);
+                if (targetType is not null
+                    && XmlSchemaType.IsDerivedFrom(anonSimple, targetType, XmlSchemaDerivationMethod.Empty))
+                    return true;
+            }
         }
         return false;
     }
@@ -10386,6 +10587,12 @@ internal static class VmEngine
                 // xs:duration values parsed by .NET come back as TimeSpan; convert back to
                 // the XSD lexical duration form (cbcl-cast-derived-001).
                 return XdmValue.FromDuration(TimeSpanToXsdDuration(ts), typeName, userTypeName);
+            case Uri uri:
+                // .NET parses xs:anyURI to System.Uri, whose ToString() normalizes the
+                // lexical form (appends '/' to a bare authority). Keep the original
+                // whitespace-collapsed lexical form, mirroring the built-in xs:anyURI
+                // cast (type-0302); identity and the type annotation are unaffected.
+                return XdmValue.FromString(CollapseWhitespace(lexicalValue ?? uri.OriginalString), typeName, userTypeName);
             default:
                 return XdmValue.FromString(value.ToString() ?? string.Empty, typeName, userTypeName);
         }
@@ -11841,94 +12048,26 @@ internal static class VmEngine
             // comment/processing-instruction/namespace nodes, which atomize to xs:string
             // and are therefore not promoted to numeric types (K2-FunctionProlog-18/20).
             var atomic = Atomize(item);
-            if (ValueMatchesType(atomic, type, context))
+            // Atomizing a schema-validated node whose type is a list type yields a
+            // multi-item sequence (e.g. a 3-item xs:decimal sequence from a list-typed
+            // element); a plural target such as xs:decimal* accepts each member
+            // individually (validation-0301). A singular target keeps its cardinality
+            // error when atomization produced more than one member.
+            if (atomic.IsSequence && atomic.SequenceValue is not null)
             {
-                converted.Add(atomic);
-            }
-            else if (isFunctionTest && atomic.IsFunction && FunctionItemCoercibleTo(atomic, type))
-            {
-                // XPath 3.1 function conversion: wrap the item in a CoercedFunctionItem so
-                // invocation converts the arguments and the result to the declared types
-                // (the XSLT engine applies the same pattern — hof-028).
-                if (!type.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
-                    && TryParseFunctionType(type, out var coercionParamTypes, out var coercionReturnType)
-                    && !(coercionParamTypes.Length == 1 && coercionParamTypes[0] == "*")
-                    && atomic.FunctionValue is FunctionItem functionItem)
+                int added = 0;
+                foreach (var member in XdmSequence.FromSource(atomic.SequenceValue))
                 {
-                    converted.Add(XdmValue.FromFunction(new CoercedFunctionItem(functionItem, coercionParamTypes, coercionReturnType)));
-                }
-                else
-                {
-                    converted.Add(atomic);
-                }
-            }
-            else if (isFunctionTest && (atomic.IsMap || atomic.IsArray)
-                && !type.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
-                && TryParseFunctionType(type, out var mapCoercionParamTypes, out var mapCoercionReturnType)
-                && !(mapCoercionParamTypes.Length == 1 && mapCoercionParamTypes[0] == "*")
-                && MapOrArrayCoercibleToFunctionType(atomic, mapCoercionParamTypes, mapCoercionReturnType, context))
-            {
-                var capturedValue = atomic;
-                var inner = new DelegateFunctionItem(1, (ctx, args) => InvokeFunctionItem(capturedValue, ctx, args));
-                converted.Add(XdmValue.FromFunction(new CoercedFunctionItem(inner, mapCoercionParamTypes, mapCoercionReturnType)));
-            }
-            else if (IsUserDefinedSchemaType(type, context, out var targetSchemaType)
-                && GetSchemaTypeVariety(targetSchemaType) == SchemaTypeVariety.Union)
-            {
-                // Function conversion to a union type: xs:untypedAtomic is cast to the
-                // first matching member unless the union is namespace-sensitive (XPTY0117);
-                // other values must already be instances of a member type.
-                if (IsUntypedAtomicValue(atomic))
-                {
-                    if (IsNamespaceSensitiveSchemaType(targetSchemaType, context))
-                        throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
-                    if (TryCastToSchemaType(atomic, targetSchemaType, context, out var unionCasted))
-                    {
-                        converted.Add(unionCasted);
+                    if (member.IsUndefined)
                         continue;
-                    }
+                    ConvertAtomizedItem(member, type, targetType, isFunctionTest, bcNumeric, context, converted);
+                    added++;
                 }
-                throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
+                if (added > 1 && !allowsMultiple)
+                    throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
+                continue;
             }
-            else if (IsUntypedAtomicValue(atomic) && IsNamespaceSensitiveTargetType(type, context))
-            {
-                // XPath 3.1 function conversion: xs:untypedAtomic cannot be implicitly cast to a
-                // namespace-sensitive type such as xs:QName or xs:NOTATION (XPTY0117).
-                throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
-            }
-            else if (IsUntypedAtomicValue(atomic) && !IsKnownSequenceTypeName(type) && TryCast(atomic, type, context, out var casted))
-            {
-                converted.Add(casted);
-            }
-            else if (IsUntypedAtomicValue(atomic) && !IsKnownSequenceTypeName(type)
-                     && type.StartsWith("xs:", StringComparison.OrdinalIgnoreCase)
-                     && IsKnownAtomicTypeName(type[3..].ToLowerInvariant()))
-            {
-                // Function conversion casts xs:untypedAtomic to the required atomic type;
-                // when the target is a built-in type, a failed cast is the cast's own
-                // lexical error (FORG0001), not the generic XPTY0004 (K2-FunctionProlog-24).
-                throw new InvalidOperationException($"FORG0001: Cannot cast xs:untypedAtomic '{atomic}' to {targetType}");
-            }
-            else if (TryPromoteNumericOrUri(atomic, type, out var promoted))
-            {
-                converted.Add(promoted);
-            }
-            else if (IsUserDefinedSchemaType(type, context, out _) && TryCast(atomic, type, context, out var schemaCasted))
-            {
-                // Derived schema simple types (e.g. hat:hatsize) accept values that can be
-                // cast to them under XSD facet rules (qischema040).
-                converted.Add(schemaCasted);
-            }
-            else if (bcNumeric)
-            {
-                // backwards-022: round(concat(...)) under version="1.0" — xs:string and
-                // xs:boolean arguments convert to xs:double via fn:number semantics.
-                converted.Add(XdmValue.FromDouble(ToDoubleOrNaN(atomic)));
-            }
-            else
-            {
-                throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
-            }
+            ConvertAtomizedItem(atomic, type, targetType, isFunctionTest, bcNumeric, context, converted);
         }
 
         if (converted.Count == 0)
@@ -11936,6 +12075,113 @@ internal static class VmEngine
         if (converted.Count == 1)
             return converted[0];
         return XdmValue.FromSequence(MaterializedSequence.FromList(converted));
+    }
+
+    /// <summary>
+    /// Converts a single atomized item against the target item type of a function
+    /// conversion: exact type match, function-item coercion, union member casting,
+    /// xs:untypedAtomic casting, numeric/URI promotion, and derived schema type
+    /// casting. Raises XPTY0004/XPTY0117/FORG0001 when no rule applies.
+    /// </summary>
+    /// <param name="atomic">The atomized item to convert.</param>
+    /// <param name="type">The target item type without occurrence indicator.</param>
+    /// <param name="targetType">The original target sequence type (used in error messages).</param>
+    /// <param name="isFunctionTest">Whether the target is a function test.</param>
+    /// <param name="bcNumeric">Whether backwards-compatible numeric conversion applies.</param>
+    /// <param name="context">The evaluation context used for namespace and schema resolution.</param>
+    /// <param name="converted">The buffer receiving the converted value.</param>
+    private static void ConvertAtomizedItem(
+        XdmValue atomic, string type, string targetType, bool isFunctionTest, bool bcNumeric,
+        EvaluationContext? context, List<XdmValue> converted)
+    {
+        if (ValueMatchesType(atomic, type, context))
+        {
+            converted.Add(atomic);
+        }
+        else if (isFunctionTest && atomic.IsFunction && FunctionItemCoercibleTo(atomic, type))
+        {
+            // XPath 3.1 function conversion: wrap the item in a CoercedFunctionItem so
+            // invocation converts the arguments and the result to the declared types
+            // (the XSLT engine applies the same pattern — hof-028).
+            if (!type.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
+                && TryParseFunctionType(type, out var coercionParamTypes, out var coercionReturnType)
+                && !(coercionParamTypes.Length == 1 && coercionParamTypes[0] == "*")
+                && atomic.FunctionValue is FunctionItem functionItem)
+            {
+                converted.Add(XdmValue.FromFunction(new CoercedFunctionItem(functionItem, coercionParamTypes, coercionReturnType)));
+            }
+            else
+            {
+                converted.Add(atomic);
+            }
+        }
+        else if (isFunctionTest && (atomic.IsMap || atomic.IsArray)
+            && !type.StartsWith("function(*)", StringComparison.OrdinalIgnoreCase)
+            && TryParseFunctionType(type, out var mapCoercionParamTypes, out var mapCoercionReturnType)
+            && !(mapCoercionParamTypes.Length == 1 && mapCoercionParamTypes[0] == "*")
+            && MapOrArrayCoercibleToFunctionType(atomic, mapCoercionParamTypes, mapCoercionReturnType, context))
+        {
+            var capturedValue = atomic;
+            var inner = new DelegateFunctionItem(1, (ctx, args) => InvokeFunctionItem(capturedValue, ctx, args));
+            converted.Add(XdmValue.FromFunction(new CoercedFunctionItem(inner, mapCoercionParamTypes, mapCoercionReturnType)));
+        }
+        else if (IsUserDefinedSchemaType(type, context, out var targetSchemaType)
+            && GetSchemaTypeVariety(targetSchemaType) == SchemaTypeVariety.Union)
+        {
+            // Function conversion to a union type: xs:untypedAtomic is cast to the
+            // first matching member unless the union is namespace-sensitive (XPTY0117);
+            // other values must already be instances of a member type.
+            if (IsUntypedAtomicValue(atomic))
+            {
+                if (IsNamespaceSensitiveSchemaType(targetSchemaType, context))
+                    throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
+                if (TryCastToSchemaType(atomic, targetSchemaType, context, out var unionCasted))
+                {
+                    converted.Add(unionCasted);
+                    return;
+                }
+            }
+            throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
+        }
+        else if (IsUntypedAtomicValue(atomic) && IsNamespaceSensitiveTargetType(type, context))
+        {
+            // XPath 3.1 function conversion: xs:untypedAtomic cannot be implicitly cast to a
+            // namespace-sensitive type such as xs:QName or xs:NOTATION (XPTY0117).
+            throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
+        }
+        else if (IsUntypedAtomicValue(atomic) && !IsKnownSequenceTypeName(type) && TryCast(atomic, type, context, out var casted))
+        {
+            converted.Add(casted);
+        }
+        else if (IsUntypedAtomicValue(atomic) && !IsKnownSequenceTypeName(type)
+                 && type.StartsWith("xs:", StringComparison.OrdinalIgnoreCase)
+                 && IsKnownAtomicTypeName(type[3..].ToLowerInvariant()))
+        {
+            // Function conversion casts xs:untypedAtomic to the required atomic type;
+            // when the target is a built-in type, a failed cast is the cast's own
+            // lexical error (FORG0001), not the generic XPTY0004 (K2-FunctionProlog-24).
+            throw new InvalidOperationException($"FORG0001: Cannot cast xs:untypedAtomic '{atomic}' to {targetType}");
+        }
+        else if (TryPromoteNumericOrUri(atomic, type, out var promoted))
+        {
+            converted.Add(promoted);
+        }
+        else if (IsUserDefinedSchemaType(type, context, out _) && TryCast(atomic, type, context, out var schemaCasted))
+        {
+            // Derived schema simple types (e.g. hat:hatsize) accept values that can be
+            // cast to them under XSD facet rules (qischema040).
+            converted.Add(schemaCasted);
+        }
+        else if (bcNumeric)
+        {
+            // backwards-022: round(concat(...)) under version="1.0" — xs:string and
+            // xs:boolean arguments convert to xs:double via fn:number semantics.
+            converted.Add(XdmValue.FromDouble(ToDoubleOrNaN(atomic)));
+        }
+        else
+        {
+            throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
+        }
     }
 
     /// <summary>

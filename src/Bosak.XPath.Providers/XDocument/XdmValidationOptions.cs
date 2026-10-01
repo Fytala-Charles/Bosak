@@ -16,6 +16,10 @@
 //                      | Charles Korthout | 0.2   | 30-09-2026     | REQ-113 (PB-2): internal DocumentEpisode flag — the single-root document shape is       |
 //                      |                  |       |                | pre-established by the caller, so only the ID/IDREF document-level treatment applies    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 01-10-2026     | REQ-114 (PB-3 C9): ExtraNamespaceBindings — prefixes in scope at the constructing       |
+//                      |                  |       |                | instruction but not on the detached result-tree element, so QName-valued content        |
+//                      |                  |       |                | resolves identically during validity assessment (error-0950a/b)                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -51,4 +55,15 @@ public sealed record XdmValidationOptions(XdmValidationMode Mode, XmlQualifiedNa
     /// not the container).
     /// </summary>
     internal bool DocumentEpisode { get; init; }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9): additional prefix bindings that are in scope where the element was
+    /// constructed (the stylesheet instruction's static namespace context) but are not
+    /// declared on the detached result-tree element itself. They are added to the validation
+    /// clone after the element's own in-scope bindings, so QName-valued content and
+    /// <c>xsi:type</c> resolve identically during validity assessment even when a prefix is
+    /// used only inside an attribute VALUE (error-0950a/b). The element's own bindings win
+    /// on conflict.
+    /// </summary>
+    public IReadOnlyList<KeyValuePair<string, string>>? ExtraNamespaceBindings { get; init; }
 }
