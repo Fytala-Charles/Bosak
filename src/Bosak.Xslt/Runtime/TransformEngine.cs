@@ -25,6 +25,39 @@
 //                      | Charles Korthout | 6.89  | 30-09-2026     | PA-4/C7: ConvertVariableValue resolves unprefixed @as QNames against the declaring      |
 //                      |                  |       |                | instruction's xpath-default-namespace (import-schema-202, xpath-default-namespace-0701) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.90  | 30-09-2026     | REQ-114 (PB-3 C9): CopyNodeToResult reuses CopyAttributeSchemaInfo and carries          |
+//                      |                  |       |                | element-level XdmIdProperties (copy-5034); nested strict validation under a directive-  |
+//                      |                  |       |                | carrying constructed ancestor defers XTTE1512 to the ancestor pass (import-schema-137)  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.91  | 30-09-2026     | REQ-114 (PB-3 C9): unprefixed default-validation on any XSLT element (import-schema-    |
+//                      |                  |       |                | 199); xsl:evaluate schema-aware yes/no AVT with XTSE0020/XTDE0030/XTDE3160 (evaluate-   |
+//                      |                  |       |                | 012/013/014/038); @type on copied/validated document is XTTE1540 (import-schema-163);  |
+//                      |                  |       |                | result-document item-separator serialization + XTTE1550 (validation-0214/0215); TVT    |
+//                      |                  |       |                | atomized typed value (cvt-025); merge per-source XTDE2220 sortedness, codepoint merge- |
+//                      |                  |       |                | key default (merge-072/074), streamable-source snapshot isolation (merge-079/097s)     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.92  | 30-09-2026     | REQ-114 (PB-3 C9): merge XTDE2220 sortedness scoped per input sequence (§13.2.1);      |
+//                      |                  |       |                | sort-before-merge sorts runs with the merge-key collation (merge-018/059-061/073/095); |
+//                      |                  |       |                | literal current-merge-group names pre-validated as XTDE3490 (merge-047/077); snapshot  |
+//                      |                  |       |                | documents carry the source base URI (merge-065a)                                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.93  | 01-10-2026     | REQ-114 (PB-3 C9) follow-up: deferred XTTE1512 now surfaces when the validating ancestor |
+//                      |                  |       |                | completes without a contextual failure (import-schema-137 stays XTTE1510, undeclared    |
+//                      |                  |       |                | child under lax-wildcard ancestor is XTTE1512 again); document-node [xsl:]type validation|
+//                      |                  |       |                | reuses element machinery: XTTE1550 shape check first, then root-element named-type       |
+//                      |                  |       |                | validation (XTTE1540/1510/1512) — blanket document XTTE1540 throws removed (import-schema- |
+//                      |                  |       |                | 072-075/159/160/161/163, si-copy-105/108, si-copy-of-105)                               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.94  | 01-10-2026     | REQ-114 (PB-3 C9): XTTE0950 on copying QName/NOTATION-typed attributes whose value     |
+//                      |                  |       |                | prefix is not in scope on the copied-to element (copy-of-009, error-0950a/b);          |
+//                      |                  |       |                | construction validation resolves QName values against the instruction's in-scope       |
+//                      |                  |       |                | prefixes via XdmValidationOptions.ExtraNamespaceBindings                               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.95  | 01-10-2026     | REQ-114 (PB-3 C9): XTTE0950 rule refined to XSLT 3.0 §11.8.2 — a QName/NOTATION-derived |
+//                      |                  |       |                | attribute copied without its parent element (annotation preserved/carried) is an        |
+//                      |                  |       |                | unconditional XTTE0950; the prefix-resolvability check only applies when the parent     |
+//                      |                  |       |                | element is copied (error-0950a); check wired into xsl:copy attribute case too             |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -413,6 +446,10 @@
 //                      | Charles Korthout | 6.90  | 30-09-2026     | REQ-113 fix: XTDE1490 restored to transformation-scoped duplicate-URI check           |
 //                      |                  |       |                | (stack-scoped variant regressed try-021; si-result-document-111/115 are single-write)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.91  | 30-09-2026     | REQ-114/PB-3 C9: xsl:evaluate registers throwing fn:document#1/#2 stubs (XTDE3160)    |
+//                      |                  |       |                | instead of unregistering — dynamic function-lookup calls must resolve and fail with    |
+//                      |                  |       |                | XTDE3160, not a bare XPTY0004 (evaluate-048; evaluate-047 static call unchanged)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -742,6 +779,12 @@ internal sealed class TransformEngine
     // REQ-104: shared compile options carrying the in-scope compiled schema set for
     // schema-aware stylesheets; null when the transform has no schema awareness.
     private readonly CompileOptions? _schemaCompileOptions;
+
+    // REQ-114 (PB-3 C9 follow-up): strict XTTE1512 declaration errors deferred because a
+    // validating constructed ancestor was in scope (import-schema-137 shape). The entry
+    // surfaces as XTTE1512 when the ancestor completes validation without a contextual
+    // failure, or at the final result-tree sweep when the ancestor never validates at all.
+    private readonly List<(XElement Ancestor, string LocalName, string NamespaceUri)> _deferredStrictDeclarationErrors = new();
 
     /// <summary>
     /// The stylesheet currently in scope for component lookups. When executing a component
@@ -1586,9 +1629,10 @@ internal sealed class TransformEngine
         for (var current = instruction; current != null; current = current.Parent)
         {
             var value = current.Attribute(XName.Get("default-validation", Stylesheet.Stylesheet.XslNamespace))?.Value;
-            if (value == null
-                && current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
-                && current.Name.LocalName is "stylesheet" or "transform" or "package")
+            // REQ-114 (PB-3 C9): the unprefixed form is a standard attribute on every
+            // XSLT element (XSLT 3.0 §3.5), not just the module roots. On non-XSLT
+            // elements (literal result elements) only the xsl:-prefixed form counts.
+            if (value == null && current.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
             {
                 value = current.Attribute("default-validation")?.Value;
             }
@@ -1646,9 +1690,46 @@ internal sealed class TransformEngine
     /// </summary>
     private void ApplyConstructedElementValidation(XElement element, XElement instruction, bool isLiteralResultElement)
     {
+        // A deferred nested XTTE1512 tied to this ancestor surfaces when the ancestor
+        // completes validation without a contextual failure; an ancestor with no
+        // validation directive in play still surfaces it (the deferral only delayed
+        // the child's own declaration check).
         if (GetConstructionValidation(instruction, isLiteralResultElement) is not { } directives)
+        {
+            ThrowDeferredStrictDeclarationError(element);
             return;
-        ValidateConstructedElement(element, directives.Mode, directives.TypeName);
+        }
+        // REQ-114 (PB-3 C9, error-0950a/b): the result-tree element may not declare every
+        // prefix the stylesheet instruction has in scope — a prefix can be used only inside
+        // an attribute VALUE (QName-typed content). Validation must resolve values against
+        // the instruction's static namespace context, so the in-scope prefixed bindings are
+        // passed to the validation clone as gap-fillers.
+        var extraBindings = GetInScopeNamespaceDeclarations(instruction)
+            .Where(b => b.Prefix.Length > 0)
+            .Select(b => new KeyValuePair<string, string>(b.Prefix, b.Namespace.NamespaceName))
+            .ToList();
+        ValidateConstructedElement(element, directives.Mode, directives.TypeName,
+            promotePreserveShell: true, extraNamespaceBindings: extraBindings);
+        ThrowDeferredStrictDeclarationError(element);
+    }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9 follow-up): throws the first deferred strict XTTE1512 declaration
+    /// error recorded against <paramref name="ancestor"/> and drops every entry tied to it.
+    /// No-op when nothing was deferred for the element.
+    /// </summary>
+    private void ThrowDeferredStrictDeclarationError(XElement ancestor)
+    {
+        for (var i = 0; i < _deferredStrictDeclarationErrors.Count; i++)
+        {
+            if (!ReferenceEquals(_deferredStrictDeclarationErrors[i].Ancestor, ancestor))
+                continue;
+            var (_, localName, namespaceUri) = _deferredStrictDeclarationErrors[i];
+            _deferredStrictDeclarationErrors.RemoveAt(i);
+            throw new XsltRuntimeException("XTTE1512",
+                $"There is no top-level element declaration for '{localName}' in the in-scope schema definitions.",
+                XdmValue.Undefined);
+        }
     }
 
     /// <summary>
@@ -1657,8 +1738,16 @@ internal sealed class TransformEngine
     /// <paramref name="documentLevel"/> is <c>true</c> the element acts as a document node's
     /// root: ID/IDREF root-validity constraint failures (only enforced by the validator for
     /// document sources) surface as XTTE1555 per XSLT 3.0 §25.4.2.
+    /// <paramref name="promotePreserveShell"/> selects the §25.1.1 untyped→anyType promotion
+    /// for an element shell constructed under <c>validation="preserve"</c> (xsl:element,
+    /// xsl:copy, literal result elements); xsl:copy-of passes <c>false</c> so a preserved
+    /// untyped tree stays <c>xs:untyped</c> (import-schema-076).
+    /// <paramref name="extraNamespaceBindings"/> carries the constructing instruction's
+    /// in-scope prefixed bindings so QName-valued content resolves during validity
+    /// assessment even when the result-tree element never declared the prefix (REQ-114,
+    /// error-0950a/b).
     /// </summary>
-    private void ValidateConstructedElement(XElement element, XdmValidationMode mode, XmlQualifiedName? typeName, bool documentLevel = false)
+    private void ValidateConstructedElement(XElement element, XdmValidationMode mode, XmlQualifiedName? typeName, bool documentLevel = false, bool promotePreserveShell = false, IReadOnlyList<KeyValuePair<string, string>>? extraNamespaceBindings = null)
     {
         var schemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
 
@@ -1674,7 +1763,7 @@ internal sealed class TransformEngine
                     XdmValue.Undefined);
             }
             var typeResult = XdmSchemaAnnotator.Validate(element, schemas,
-                new XdmValidationOptions(XdmValidationMode.Strict, qn, documentLevel) { DocumentEpisode = documentLevel });
+                new XdmValidationOptions(XdmValidationMode.Strict, qn, documentLevel) { DocumentEpisode = documentLevel, ExtraNamespaceBindings = extraNamespaceBindings });
             if (documentLevel && typeResult.HasDocumentLevelConstraintFailure)
             {
                 throw new XsltRuntimeException("XTTE1555",
@@ -1695,11 +1784,39 @@ internal sealed class TransformEngine
             case XdmValidationMode.Strict:
                 if (schemas.GlobalElements[new XmlQualifiedName(element.Name.LocalName, element.Name.NamespaceName)] is null)
                 {
+                    // REQ-114 (PB-3 C9, import-schema-137): a nested strict element whose
+                    // enclosing constructed tree is itself validated (an ancestor carrying a
+                    // construction validation directive — proxied by an ancestor matching a
+                    // global element declaration or carrying xsi:type, since the directive is
+                    // only resolved when the ancestor completes) defers its standalone
+                    // declaration check. The ancestor's validation pass covers the whole
+                    // subtree and its contextual failure (XTTE1510) wins over the nested
+                    // XTTE1512, per the catalog's Saxon expectation. The nested element is
+                    // validated lax in the meantime: a use-site with its own declaration
+                    // still gets annotated, an undeclared one stays unannotated for the
+                    // ancestor pass to report in context. The deferred error is NOT dropped:
+                    // it surfaces as XTTE1512 when the ancestor completes validation
+                    // successfully (e.g. the ancestor's content model has lax wildcards),
+                    // see ThrowDeferredStrictDeclarationError.
+                    if (FindValidatingConstructedAncestor(element, schemas) is { } deferredAncestor)
+                    {
+                        var deferredResult = XdmSchemaAnnotator.Validate(element, schemas,
+                            new XdmValidationOptions(XdmValidationMode.Lax, null, documentLevel) { DocumentEpisode = documentLevel, ExtraNamespaceBindings = extraNamespaceBindings });
+                        if (documentLevel && deferredResult.HasDocumentLevelConstraintFailure)
+                        {
+                            throw new XsltRuntimeException("XTTE1555",
+                                $"Document-level constraints are not satisfied: {deferredResult.FailureMessage}",
+                                XdmValue.Undefined);
+                        }
+                        _deferredStrictDeclarationErrors.Add(
+                            (deferredAncestor, element.Name.LocalName, element.Name.NamespaceName));
+                        break;
+                    }
                     throw new XsltRuntimeException("XTTE1512",
                         $"There is no top-level element declaration for '{element.Name.LocalName}' in the in-scope schema definitions.",
                         XdmValue.Undefined);
                 }
-                var strictResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Strict, null, documentLevel) { DocumentEpisode = documentLevel });
+                var strictResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Strict, null, documentLevel) { DocumentEpisode = documentLevel, ExtraNamespaceBindings = extraNamespaceBindings });
                 if (documentLevel && strictResult.HasDocumentLevelConstraintFailure)
                 {
                     throw new XsltRuntimeException("XTTE1555",
@@ -1723,7 +1840,7 @@ internal sealed class TransformEngine
                         $"The element '{element.Name.LocalName}' has an xsi:type attribute naming an undeclared prefix or unknown type.",
                         XdmValue.Undefined);
                 }
-                var laxResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Lax, null, documentLevel) { DocumentEpisode = documentLevel });
+                var laxResult = XdmSchemaAnnotator.Validate(element, schemas, new XdmValidationOptions(XdmValidationMode.Lax, null, documentLevel) { DocumentEpisode = documentLevel, ExtraNamespaceBindings = extraNamespaceBindings });
                 if (documentLevel && laxResult.HasDocumentLevelConstraintFailure)
                 {
                     throw new XsltRuntimeException("XTTE1555",
@@ -1742,8 +1859,86 @@ internal sealed class TransformEngine
                 break;
             case XdmValidationMode.Preserve:
                 // Copied nodes keep their annotations; newly constructed nodes are unannotated
-                // (xs:anyType / xs:untypedAtomic) already.
+                // (xs:anyType / xs:untypedAtomic) already. REQ-114 (PB-3 C9, import-schema-076
+                // r/s): a shell constructed under preserve (xsl:element, xsl:copy, literal
+                // result element) is explicitly marked xs:anyType — without the marker the
+                // unannotated shell reads as xs:untyped, which belongs to stripped/copied
+                // trees. xsl:copy-of suppresses the promotion (q stays untyped).
+                if (promotePreserveShell)
+                    XdmSchemaAnnotator.PreserveConstructedElementAnnotations(element);
                 break;
+        }
+    }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9): the nearest ancestor element of
+    /// <paramref name="element"/> inside the same constructed tree that will itself be
+    /// processed by a construction validation directive — proxied by an ancestor whose name
+    /// matches a global element declaration (strict/lax validation will then assess the whole
+    /// subtree) or that carries an <c>xsi:type</c> attribute (named-type validation). The
+    /// directive itself is only resolved when the ancestor completes, so it cannot be
+    /// inspected directly; synthetic containers (templates without @as build content directly
+    /// into the enclosing tree) are still real ancestors, while a template's
+    /// <c>__temp__</c> container matches no declaration and correctly does not defer
+    /// (import-schema-136 keeps its XTTE1512). Returns <c>null</c> when no ancestor defers.
+    /// </summary>
+    private static XElement? FindValidatingConstructedAncestor(XElement element, XmlSchemaSet schemas)
+    {
+        var xsiNamespace = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+        for (var ancestor = element.Parent; ancestor is XElement ancestorElement; ancestor = ancestor.Parent)
+        {
+            if (schemas.GlobalElements[new XmlQualifiedName(ancestorElement.Name.LocalName, ancestorElement.Name.NamespaceName)] is not null)
+                return ancestorElement;
+            if (ancestorElement.Attribute(xsiNamespace + "type") is not null)
+                return ancestorElement;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9): XSLT 3.0 §11.8.2 XTTE0950 — an attribute with namespace-sensitive
+    /// content (a carried schema type derived from <c>xs:QName</c> or <c>xs:NOTATION</c>)
+    /// whose annotation survives the copy (no validation directive, or
+    /// <c>validation="preserve"</c>) may only be copied together with its parent element.
+    /// When <paramref name="parentCopied"/> is <c>false</c> the copy is unconditional:
+    /// copying such an attribute standalone would leave the validity of its typed value at
+    /// the mercy of the destination's namespace context (copy-of-009, error-0950b). When
+    /// <paramref name="parentCopied"/> is <c>true</c> (the attribute rides an element copy),
+    /// the check narrows to resolvability: the lexical value's prefix must be in scope on
+    /// the copied element, which <c>copy-namespaces="no"</c> deliberately breaks
+    /// (error-0950a). Annotations produced by a successful strict/lax re-validation of the
+    /// copy are not checked: the validator already resolved the prefix in the copied
+    /// context.
+    /// </summary>
+    /// <param name="attribute">The freshly attached attribute in its final annotation state.</param>
+    /// <param name="targetParent">The element the attribute was attached to (unused for the standalone rule).</param>
+    /// <param name="parentCopied">Whether the attribute's parent element is being copied in the same operation.</param>
+    private static void CheckNamespaceSensitiveAttributeCopy(XAttribute attribute, XElement? targetParent, bool parentCopied)
+    {
+        if (attribute.GetSchemaInfo()?.SchemaType is not { } schemaType)
+            return;
+        if (!XdmSchemaAnnotator.IsQNameOrNotationDerived(schemaType))
+            return;
+        var value = attribute.Value.Trim();
+        var colon = value.IndexOf(':');
+        if (colon <= 0)
+            return; // unprefixed QName value — nothing to resolve
+        var prefix = value[..colon];
+        if (prefix == "xml")
+            return; // always in scope
+        if (!parentCopied)
+        {
+            throw new XsltRuntimeException("XTTE0950",
+                $"Cannot copy the attribute '{attribute.Name.LocalName}': it has namespace-sensitive content ('{value}') and its parent element is not copied, so the namespace context of its typed value cannot be preserved.",
+                XdmValue.Undefined);
+        }
+        if (targetParent is null
+            || targetParent.GetNamespaceOfPrefix(prefix) is not { } ns
+            || string.IsNullOrEmpty(ns.NamespaceName))
+        {
+            throw new XsltRuntimeException("XTTE0950",
+                $"Cannot copy the attribute '{attribute.Name.LocalName}': its namespace-sensitive value '{value}' uses the prefix '{prefix}', which is not in scope on the copied-to element.",
+                XdmValue.Undefined);
         }
     }
 
@@ -1940,10 +2135,43 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
+    /// REQ-114 (PB-3 C9): when an <c>item-separator</c> serialization property is in
+    /// effect for a tree-building result document, the top-level content is serialized
+    /// as individual items; declaration-driven validation (strict/lax) then requires the
+    /// result to consist of exactly one element item. Any other top-level content is
+    /// XTTE1550 (validation-0214). Strip/preserve are not subject to this rule
+    /// (validation-0215).
+    /// </summary>
+    /// <param name="container">The element holding the result-document content.</param>
+    /// <param name="instruction">The <c>xsl:result-document</c> instruction.</param>
+    /// <param name="props">The effective output properties of the result document.</param>
+    private void ApplyItemSeparatorDocumentValidation(XElement container, XElement instruction, Stylesheet.OutputProperties props)
+    {
+        if (!props.ItemSeparatorSpecified || props.ItemSeparator == "#absent")
+            return;
+        if (GetConstructionValidation(instruction, isLiteralResultElement: false) is not { } directives)
+            return;
+        if (directives.Mode is not (XdmValidationMode.Strict or XdmValidationMode.Lax))
+            return;
+        var topLevel = container.Nodes()
+            .Where(n => n is not XText t || !string.IsNullOrWhiteSpace(t.Value))
+            .ToList();
+        if (topLevel.Count != 1 || topLevel[0] is not XElement)
+        {
+            throw new XsltRuntimeException("XTTE1550",
+                "A result document with an item-separator that is validated must consist of exactly one element node.",
+                XdmValue.Undefined);
+        }
+    }
+
+    /// <summary>
     /// Executes already-resolved validation directives on document content. Strip and
     /// preserve apply to every element child without a shape check; strict/lax/typed first
     /// enforce the document shape (XTTE1550), then document-level identity constraints
-    /// (XTTE1555), then element-level validation of the single root child.
+    /// (XTTE1555), then element-level validation of the single root child — a named
+    /// [xsl:]type governs the root element itself: content invalid against the named type
+    /// is XTTE1540, an unresolvable type name XTSE1520, an undeclared root under strict is
+    /// XTTE1512 (import-schema-072/073/074/075/159/160/161/163, si-copy-105/106/108).
     /// </summary>
     private void ApplyDocumentValidationDirectives(XObject documentLike, XdmValidationMode mode, XmlQualifiedName? typeName)
     {
@@ -2067,9 +2295,19 @@ internal sealed class TransformEngine
     /// </summary>
     private void ApplyImplicitResultTreeValidation(XObject resultTree)
     {
+        // REQ-114 (PB-3 C9 follow-up): any deferred strict XTTE1512 whose validating
+        // ancestor never completed validation (temporary trees that are discarded without
+        // an element-validation funnel) still surfaces — the deferral delayed, never
+        // cancelled, the child's declaration check.
+        if (_deferredStrictDeclarationErrors.Count > 0)
+        {
+            var (_, localName, _) = _deferredStrictDeclarationErrors[0];
+            _deferredStrictDeclarationErrors.Clear();
+            throw new XsltRuntimeException("XTTE1512",
+                $"There is no top-level element declaration for '{localName}' in the in-scope schema definitions.",
+                XdmValue.Undefined);
+        }
     }
-
-
     /// <summary>
     /// Extracts the raw top-level items from the implicit result tree for
     /// <c>fn:transform</c> delivery-format="raw".
@@ -2847,11 +3085,26 @@ internal sealed class TransformEngine
         context.UnregisterFunction(Fn, "current-merge-key", 0);
         context.UnregisterFunction(Fn, "system-property", 1);
         context.UnregisterFunction(Fn, "current-output-uri", 0);
-        // document() is an XSLT-defined function and is not available inside xsl:evaluate;
-        // removing it makes such calls XPST0008/XPST0017 static errors, reported as
-        // XTDE3160 (evaluate-047/048).
-        context.UnregisterFunction(Fn, "document", 1);
-        context.UnregisterFunction(Fn, "document", 2);
+        // document() is an XSLT-defined function and is not available inside xsl:evaluate.
+        // A static call fails at compile time (XPST0017, reported as XTDE3160), but a
+        // dynamic call via fn:function-lookup must still resolve and fail at invocation
+        // with XTDE3160 rather than a bare XPTY0004 from invoking an empty sequence
+        // (evaluate-047/048, spec bug 30049) — so register throwing stubs instead of
+        // leaving the function unregistered.
+        context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = Fn, LocalName = "document", Arity = 1,
+            ParameterTypes = [XdmValueKind.Sequence], ReturnType = XdmValueKind.Sequence,
+            Implementation = static (ctx, args) => throw new InvalidOperationException(
+                "XTDE3160: fn:document is not available inside xsl:evaluate")
+        });
+        context.RegisterFunction(new FunctionSignature
+        {
+            NamespaceUri = Fn, LocalName = "document", Arity = 2,
+            ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence], ReturnType = XdmValueKind.Sequence,
+            Implementation = static (ctx, args) => throw new InvalidOperationException(
+                "XTDE3160: fn:document is not available inside xsl:evaluate")
+        });
     }
 
     /// <summary>
@@ -6400,6 +6653,33 @@ internal sealed class TransformEngine
         var baseUriRaw = instruction.Attribute("base-uri")?.Value;
         var baseUri = !string.IsNullOrEmpty(baseUriRaw) ? EvaluateAvt(baseUriRaw, instruction) : GetEffectiveBaseUri(instruction);
 
+        // REQ-114 (PB-3 C9): schema-aware controls whether the stylesheet's imported schema
+        // definitions are available to the dynamic expression (XSLT 3.0 §15.5). The default
+        // is "no": a dynamic expression referencing an imported schema type then fails with
+        // XPST0051, wrapped as XTDE3160 (evaluate-012/013). Acceptable values (case
+        // sensitive) are yes/true/1 and no/false/0; a static invalid value is XTSE0020,
+        // an AVT-produced invalid effective value is XTDE0030 (evaluate-014/038).
+        var schemaAwareRaw = instruction.Attribute("schema-aware")?.Value;
+        bool schemaAware = false;
+        if (!string.IsNullOrEmpty(schemaAwareRaw))
+        {
+            string effective;
+            if (ContainsAvt(schemaAwareRaw))
+            {
+                effective = EvaluateAvt(schemaAwareRaw, instruction).Trim();
+                if (!IsSchemaAwareValue(effective, out schemaAware))
+                    throw new InvalidOperationException(
+                        $"XTDE0030: Invalid effective value for the schema-aware attribute of xsl:evaluate: '{effective}'.");
+            }
+            else
+            {
+                effective = schemaAwareRaw.Trim();
+                if (!IsSchemaAwareValue(effective, out schemaAware))
+                    throw new InvalidOperationException(
+                        $"XTSE0020: Invalid schema-aware attribute value '{schemaAwareRaw}'.");
+            }
+        }
+
         string? defaultNs;
         Dictionary<string, string> nsMap;
         if (!string.IsNullOrEmpty(nsContextSelect))
@@ -6426,7 +6706,8 @@ internal sealed class TransformEngine
             BaseUri = baseUri,
             // REQ-104: xsl:evaluate's static context includes the stylesheet's imported
             // schema definitions (XSLT 3.0 §5.3.3), so schema kind tests must compile.
-            SchemaSet = _schemaCompileOptions?.SchemaSet
+            // REQ-114 (PB-3 C9): only when schema-aware resolves to yes.
+            SchemaSet = schemaAware ? _schemaCompileOptions?.SchemaSet : null
         };
         XPath31Expression compiled;
         try
@@ -6470,6 +6751,7 @@ internal sealed class TransformEngine
         var savedCurrentItem = _context.CurrentItem;
         var savedDefaultCollation = _context.DefaultCollation;
         var savedSkipPopulation = _context.SkipStandardFunctionPopulation;
+        var savedSchemaSet = _context.SchemaSet;
         var savedMergeGroup = _currentMergeGroup;
         var savedMergeKey = _currentMergeKey;
         var savedNamedMergeGroups = _currentNamedMergeGroups;
@@ -6501,6 +6783,11 @@ internal sealed class TransformEngine
             _context.WithCurrentItem(XdmValue.Undefined);
             _context.DefaultCollation = GetEffectiveDefaultCollation(instruction);
             _context.SkipStandardFunctionPopulation = true;
+            // REQ-114 (PB-3 C9): with schema-aware absent/no the dynamic expression is
+            // evaluated with a basic (schema-less) context: `instance of` against an
+            // imported schema type then raises XPST0051, wrapped as XTDE3160
+            // (evaluate-012/013).
+            _context.SchemaSet = schemaAware ? savedSchemaSet : null;
             _currentMergeGroup = null;
             _currentMergeKey = null;
             _currentNamedMergeGroups = null;
@@ -6521,6 +6808,7 @@ internal sealed class TransformEngine
         {
             _context.DefaultCollation = savedDefaultCollation;
             _context.SkipStandardFunctionPopulation = savedSkipPopulation;
+            _context.SchemaSet = savedSchemaSet;
             _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
             _context.WithCurrentItem(savedCurrentItem);
             _context.RestoreFunctions(savedFunctions);
@@ -10044,6 +10332,9 @@ internal sealed class TransformEngine
                             || (attrCopyDirectives.Value.Mode == XdmValidationMode.Preserve && attrCopyDirectives.Value.TypeName is null))
                         {
                             CopyAttributeSchemaInfo(nodeToCopy, copiedAttr);
+                            // REQ-114 (PB-3 C9): the carried annotation is namespace-sensitive
+                            // and the parent element is not copied with the attribute.
+                            CheckNamespaceSensitiveAttributeCopy(copiedAttr, targetParent: null, parentCopied: false);
                         }
                         else
                         {
@@ -10070,6 +10361,9 @@ internal sealed class TransformEngine
                         || (attachedAttrDirectives.Value.Mode == XdmValidationMode.Preserve && attachedAttrDirectives.Value.TypeName is null))
                     {
                         CopyAttributeSchemaInfo(nodeToCopy, attrTarget.Attribute(copyAttrName)!);
+                        // REQ-114 (PB-3 C9): the carried annotation is namespace-sensitive
+                        // and the parent element is not copied with the attribute.
+                        CheckNamespaceSensitiveAttributeCopy(attrTarget.Attribute(copyAttrName)!, attrTarget, parentCopied: false);
                     }
                     else if (attrTarget.Attribute(copyAttrName) is { } attachedCopy)
                     {
@@ -10185,6 +10479,11 @@ internal sealed class TransformEngine
                         {
                             throw new InvalidOperationException("XTDE0420");
                         }
+
+                        // REQ-099/REQ-114 seam H4: validation/[xsl:]type on the copied document
+                        // applies to the constructed document content before it is spliced into
+                        // the enclosing result tree (import-schema-075 success, -163 XTTE1540).
+                        ApplyConstructedDocumentValidation(tempCollector, instruction);
 
                         foreach (var node in tempCollector.Nodes().ToList())
                         {
@@ -10846,12 +11145,11 @@ internal sealed class TransformEngine
                 foreach (var attr in srcElem.Attributes())
                 {
                     Xml11Attribute.SetValue(copy, attr.Name, attr.Value);
-                    // REQ-099 seam H4: carry the PSVI annotation onto the copied attribute.
-                    if (attr.GetSchemaInfo() is { } attrInfo && copy.Attribute(attr.Name) is { } copiedAttr)
-                    {
-                        copiedAttr.RemoveAnnotations(typeof(IXmlSchemaInfo));
-                        copiedAttr.AddAnnotation(attrInfo);
-                    }
+                    // REQ-099 seam H4 / REQ-114 (PB-3 C9, copy-5034): carry the PSVI annotation
+                    // and the is-id/is-idref snapshot onto the copied attribute — the same
+                    // both-annotations contract as CopyAttributeSchemaInfo.
+                    if (copy.Attribute(attr.Name) is { } copiedAttr)
+                        CopyAttributeSchemaInfo(XDocumentNode.Wrap(attr), copiedAttr);
                 }
                 if (srcElem.Annotation<NamespaceInheritanceBarrier>() != null)
                 {
@@ -10861,6 +11159,12 @@ internal sealed class TransformEngine
                 if (srcElem.GetSchemaInfo() is { } srcElemInfo)
                 {
                     copy.AddAnnotation(srcElemInfo);
+                }
+                // REQ-114 (PB-3 C9, copy-5034): carry the element-level is-id/is-idref
+                // snapshot too, so fn:id/fn:idref keep working after a strip-copy.
+                if (srcElem.Annotation<XdmIdProperties>() is { } srcElemIdProperties)
+                {
+                    copy.AddAnnotation(srcElemIdProperties);
                 }
                 var accValues = srcElem.Annotation<AccumulatorValues>();
                 if (accValues != null)
@@ -10910,6 +11214,13 @@ internal sealed class TransformEngine
                     CopyAttributeSchemaInfo(attr.NodeValue!, copy.Attribute(fallbackAttrName)!);
                 }
             }
+
+            // REQ-114 (PB-3 C9, error-0950a): a copied attribute with namespace-sensitive
+            // content keeps its annotation under preserve; every attached attribute's
+            // value prefix must resolve on the copied element (copy-namespaces="no"
+            // deliberately strips the source declarations).
+            foreach (var attachedAttr in copy.Attributes())
+                CheckNamespaceSensitiveAttributeCopy(attachedAttr, copy, parentCopied: true);
 
             AddElementToContainer(copy, _currentContainer);
             var prev = _currentContainer;
@@ -10962,7 +11273,13 @@ internal sealed class TransformEngine
             // Carry the PSVI annotation (and is-id properties) onto the copied attribute
             // so deep-copy keeps type annotations (match-263).
             if (attrParent.Attribute(resultAttrName) is { } resultAttr)
+            {
                 CopyAttributeSchemaInfo(node, resultAttr);
+                // REQ-114 (PB-3 C9, copy-of-009 / error-0950b): a QName/NOTATION-derived attribute
+                // copied without its parent element loses its namespace context (XSLT 3.0 §11.8.2)
+                // and is an unconditional XTTE0950.
+                CheckNamespaceSensitiveAttributeCopy(resultAttr, attrParent, parentCopied: false);
+            }
         }
     }
 
@@ -13137,8 +13454,10 @@ internal sealed class TransformEngine
             value == "0")
             return false;
 
-        // Invalid effective value is a dynamic error.
-        throw new InvalidOperationException("XTDE0975");
+        // Invalid effective value is a dynamic error (XSLT 3.0 §2.5: an AVT effective
+        // value that is not a permitted value for the attribute is XTDE0030 —
+        // error-0030a pins the code).
+        throw new InvalidOperationException("XTDE0030");
     }
 
     /// <summary>
@@ -13861,6 +14180,31 @@ internal sealed class TransformEngine
         return false;
     }
 
+    /// <summary>
+    /// REQ-114 (PB-3 C9): recognizes the effective values of the xsl:evaluate
+    /// <c>schema-aware</c> attribute (case sensitive): <c>yes</c>/<c>true</c>/<c>1</c>
+    /// select a schema-aware dynamic context, <c>no</c>/<c>false</c>/<c>0</c> a basic one.
+    /// </summary>
+    private static bool IsSchemaAwareValue(string value, out bool schemaAware)
+    {
+        switch (value)
+        {
+            case "yes":
+            case "true":
+            case "1":
+                schemaAware = true;
+                return true;
+            case "no":
+            case "false":
+            case "0":
+                schemaAware = false;
+                return true;
+            default:
+                schemaAware = false;
+                return false;
+        }
+    }
+
     private static bool IsLexicalQName(string value)
     {
         // A lexical QName is either a local name or prefix:local-name.
@@ -13900,7 +14244,13 @@ internal sealed class TransformEngine
         return TryParseUcaCollation(collation, out _);
     }
 
-    private int CompareSortKey(SortKey a, SortKey b)
+    /// <summary>
+    /// Compares two sort/merge keys. When <paramref name="mergeKey"/> is set (xsl:merge),
+    /// a merge-key without an explicit collation falls back to the codepoint collation:
+    /// the ambient default collation does not apply to merge keys (XSLT 3.0 §13.2.2,
+    /// bug 29117; merge-074).
+    /// </summary>
+    private int CompareSortKey(SortKey a, SortKey b, bool mergeKey = false)
     {
         int cmp;
         bool numeric = a.Control.DataType == SortDataType.Number ||
@@ -13911,8 +14261,9 @@ internal sealed class TransformEngine
                  !string.IsNullOrEmpty(a.Control.Collation) ||
                  !string.IsNullOrEmpty(a.Control.Lang) ||
                  !string.IsNullOrEmpty(a.Control.CaseOrder) ||
-                 !string.IsNullOrEmpty(_context.DefaultCollation))
-            cmp = CompareTextSortKey(a.Value, b.Value, a.Control.Collation ?? _context.DefaultCollation, a.Control.Lang, a.Control.CaseOrder);
+                 (!mergeKey && !string.IsNullOrEmpty(_context.DefaultCollation)))
+            cmp = CompareTextSortKey(a.Value, b.Value,
+                a.Control.Collation ?? (mergeKey ? null : _context.DefaultCollation), a.Control.Lang, a.Control.CaseOrder);
         else
         {
             // XTDE1030: sort key values that are not comparable raise the sort-specific
@@ -17117,6 +17468,23 @@ internal sealed class TransformEngine
                     foreach (var atom in AtomizeForString(item))
                         currentGroup.Add(atom);
                 }
+                else if (item.IsNode && item.NodeValue is { } contentNode)
+                {
+                    // Simple content construction atomizes nodes (fn:data semantics,
+                    // XSLT 3.0 §5.7.2): a schema-validated node contributes its typed
+                    // value, so an xs:integer attribute "0023" renders as "23" (cvt-025)
+                    // rather than its string value.
+                    var typed = contentNode.TypedValue;
+                    if (typed.IsSequence && typed.SequenceValue != null)
+                    {
+                        foreach (var atom in XdmSequence.FromSource(typed.SequenceValue))
+                            currentGroup.Add(atom.ToString());
+                    }
+                    else
+                    {
+                        currentGroup.Add(typed.ToString());
+                    }
+                }
                 else
                 {
                     currentGroup.Add(item.ToString());
@@ -17500,6 +17868,12 @@ internal sealed class TransformEngine
                 _resultDocumentStack.Pop();
             }
 
+            // REQ-114 (PB-3 C9): with an item-separator in effect, declaration-driven
+            // validation requires the result to consist of exactly one element item
+            // (validation-0214); strip/preserve are unaffected (validation-0215).
+            if (!collectRaw && principalContainer is XElement principalContent)
+                ApplyItemSeparatorDocumentValidation(principalContent, instruction, resultDocumentProps);
+
             // REQ-099 seam H4: validation/@type on xsl:result-document applies to the built
             // tree (raw output has no tree to validate).
             if (!collectRaw)
@@ -17592,6 +17966,11 @@ internal sealed class TransformEngine
                 _resultDocumentRawItems = savedRawItems;
                 _sequenceAccumulator = savedAccumulator;
             }
+
+            // REQ-114 (PB-3 C9): item-separator + declaration-driven validation on a tree
+            // result document requires exactly one element item (validation-0214).
+            if (rawItems == null && temp != null)
+                ApplyItemSeparatorDocumentValidation(temp, instruction, resultDocumentProps);
 
             // REQ-099 seam H4: validation/@type on xsl:result-document applies to the built
             // tree, and the secondary path now fires the constructed-document hook like the
@@ -17781,6 +18160,10 @@ internal sealed class TransformEngine
         // same-precedence, same-specificity strip/preserve conflict as a static
         // error (XTSE0270).
         bool isBackwardsCompatible = _context.BackwardsCompatible;
+        // REQ-114 (PB-3 C9, strip-space-008): with schema information in scope, whitespace
+        // is never stripped from elements whose content is simple (a simple type, or a
+        // complex type with simple content).
+        var schemas = _context.SchemaSet;
         // Only strip whitespace in XDocument-backed nodes for now
         if (source is XDocumentNode xdocNode)
         {
@@ -17792,11 +18175,11 @@ internal sealed class TransformEngine
                     if (IsWhitespaceOnly(textNode.Value))
                         textNode.Remove();
                 }
-                StripWhitespaceInElement(doc.Root, rules, preserveInherited: false, isBackwardsCompatible);
+                StripWhitespaceInElement(doc.Root, rules, preserveInherited: false, isBackwardsCompatible, schemas);
             }
             else if (xdocNode.UnderlyingObject is XElement elem)
             {
-                StripWhitespaceInElement(elem, rules, preserveInherited: false, isBackwardsCompatible);
+                StripWhitespaceInElement(elem, rules, preserveInherited: false, isBackwardsCompatible, schemas);
             }
         }
     }
@@ -17939,7 +18322,7 @@ internal sealed class TransformEngine
         return XmlStreamingProvider.Load(System.IO.File.OpenRead(path), options);
     }
 
-    private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited, bool isBackwardsCompatible)
+    private static void StripWhitespaceInElement(XElement? element, List<SpaceHandlingRule> rules, bool preserveInherited, bool isBackwardsCompatible, XmlSchemaSet? schemas = null)
     {
         if (element == null)
             return;
@@ -17952,10 +18335,14 @@ internal sealed class TransformEngine
 
         foreach (var child in element.Elements().ToList())
         {
-            StripWhitespaceInElement(child, rules, preserve, isBackwardsCompatible);
+            StripWhitespaceInElement(child, rules, preserve, isBackwardsCompatible, schemas);
         }
 
-        if (!preserve && ShouldStripWhitespace(element, rules, isBackwardsCompatible))
+        // REQ-114 (PB-3 C9, strip-space-008): whitespace text nodes are never stripped
+        // from elements with simple content (a simple type, or a complex type with simple
+        // content), regardless of a matching xsl:strip-space rule.
+        if (!preserve && !HasSchemaSimpleContent(element, schemas)
+            && ShouldStripWhitespace(element, rules, isBackwardsCompatible))
         {
             foreach (var textNode in element.Nodes().OfType<XText>().ToList())
             {
@@ -17966,6 +18353,31 @@ internal sealed class TransformEngine
             }
         }
     }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9): true when <paramref name="element"/> is known (through its PSVI
+    /// annotation or, failing that, a global element declaration in the in-scope schema
+    /// set) to have simple content — a simple type, or a complex type with simple content.
+    /// Returns <c>false</c> when no schema information is in scope (basic-processor
+    /// behavior is unchanged) or the element is not declared.
+    /// </summary>
+    private static bool HasSchemaSimpleContent(XElement element, XmlSchemaSet? schemas)
+    {
+        if (element.GetSchemaInfo()?.SchemaType is { } psviType)
+            return IsSimpleContentType(psviType);
+        if (schemas is null)
+            return false;
+        if (schemas.GlobalElements[new XmlQualifiedName(element.Name.LocalName, element.Name.NamespaceName)] is XmlSchemaElement declaration
+            && declaration.ElementSchemaType is { } declaredType)
+        {
+            return IsSimpleContentType(declaredType);
+        }
+        return false;
+    }
+
+    private static bool IsSimpleContentType(XmlSchemaType type)
+        => type is XmlSchemaSimpleType
+           || (type is XmlSchemaComplexType { ContentModel: XmlSchemaSimpleContent });
 
     /// <summary>
     /// Returns <c>true</c> when the element is declared with element-only content in
@@ -19566,7 +19978,7 @@ internal sealed class TransformEngine
     // xsl:merge implementation
     // ---------------------------------------------------------------------------------------------
 
-    private readonly record struct MergeEntry(XdmValue Item, int SourceIndex, int OriginalIndex, List<SortKey> Keys);
+    private readonly record struct MergeEntry(XdmValue Item, int SourceIndex, int OriginalIndex, List<SortKey> Keys, int InputSequence);
 
     /// <summary>
     /// Evaluates an <c>xsl:merge</c> instruction.
@@ -19579,7 +19991,10 @@ internal sealed class TransformEngine
         if (sourceElements.Count == 0 || actionElement == null)
             return;
 
+        ValidateMergeGroupReferences(actionElement, sourceElements);
+
         var sourceNames = new List<string?>();
+        var sortBeforeMergeFlags = new List<bool>();
         var sourceControls = new List<List<SortControl>>();
         var sourceKeyElems = new List<List<XElement>>();
         var allEntries = new List<MergeEntry>();
@@ -19596,6 +20011,39 @@ internal sealed class TransformEngine
                 sourceNames.Add(name);
                 var keySpecElems = sourceElem.Elements(XName.Get("merge-key", xsl)).ToList();
 
+                // sort-before-merge="yes" sorts the source's input sequences into
+                // merge-key order instead of requiring pre-sorted input (merge-018/
+                // 059/060/061/073/095); invalid boolean values are XTSE0020 (merge-032c).
+                var sortBeforeMergeAttr = sourceElem.Attribute("sort-before-merge")?.Value
+                    ?? sourceElem.Attribute("_sort-before-merge")?.Value;
+                var sortBeforeMerge = false;
+                if (!string.IsNullOrEmpty(sortBeforeMergeAttr))
+                {
+                    var sv = EvaluateAvt(sortBeforeMergeAttr, sourceElem).Trim();
+                    sortBeforeMerge = sv switch
+                    {
+                        "yes" or "true" or "1" => true,
+                        "no" or "false" or "0" => false,
+                        _ => throw new InvalidOperationException("XTSE0020: xsl:merge-source/@sort-before-merge must be a boolean value (yes/no/true/false/1/0)."),
+                    };
+                }
+                sortBeforeMergeFlags.Add(sortBeforeMerge);
+
+                // REQ-114 (PB-3 C9): items selected by a streamable merge source are
+                // grounded snapshots: the subtree of the selected node is copied in
+                // full, while ancestors are copied with only the path child, so
+                // ancestor/parent access still works but sibling content and content
+                // outside the selected subtree is no longer reachable
+                // (merge-079/090/097s).
+                var streamableAttr = sourceElem.Attribute("streamable")?.Value
+                    ?? sourceElem.Attribute("_streamable")?.Value;
+                var isStreamable = false;
+                if (!string.IsNullOrEmpty(streamableAttr))
+                {
+                    var sv = EvaluateAvt(streamableAttr, sourceElem).Trim();
+                    isStreamable = sv is "yes" or "true";
+                }
+
                 // Evaluate sort controls using the current focus (the focus of the
                 // containing xsl:merge instruction), so AVTs such as order="{if(position()...)}"
                 // see the correct position/size.
@@ -19605,7 +20053,7 @@ internal sealed class TransformEngine
                 sourceControls.Add(controls);
                 sourceKeyElems.Add(keySpecElems);
 
-                var sourceItems = EvaluateMergeSourceItems(sourceElem, contextItem);
+                var sourceItems = EvaluateMergeSourceItems(sourceElem, contextItem, out var sourceOrdinals);
 
                 for (int originalIndex = 0; originalIndex < sourceItems.Count; originalIndex++)
                 {
@@ -19616,7 +20064,11 @@ internal sealed class TransformEngine
                         var keyValue = EvaluateMergeKeyValue(keySpecElems[k], item, controls[k]);
                         keys.Add(new SortKey(keyValue, controls[k]));
                     }
-                    allEntries.Add(new MergeEntry(item, sourceIndex, originalIndex, keys));
+                    // Merge keys are evaluated against the original (possibly streamed)
+                    // node; the snapshot replaces the item only afterwards.
+                    if (isStreamable && item.IsNode && item.NodeValue is { } selectedNode)
+                        item = XdmValue.FromNode(SnapshotMergeItem(selectedNode));
+                    allEntries.Add(new MergeEntry(item, sourceIndex, originalIndex, keys, sourceOrdinals[originalIndex]));
                 }
                 sourceIndex++;
             }
@@ -19673,19 +20125,63 @@ internal sealed class TransformEngine
         if (allEntries.Count == 0)
             return;
 
+        // REQ-114 (PB-3 C9): each input sequence of a merge source must be pre-sorted
+        // in merge-key order; a violation is XTDE2220 (merge-072/074). With a plain
+        // @select the whole source is one input sequence; @for-each-item and
+        // @for-each-source start a new input sequence per iteration (XSLT 3.0
+        // §13.2.1), so consecutive entries across such boundaries must not be
+        // compared. Sources with sort-before-merge="yes" are exempt: they are sorted
+        // below instead.
+        for (int i = 1; i < allEntries.Count; i++)
+        {
+            if (allEntries[i].SourceIndex != allEntries[i - 1].SourceIndex ||
+                allEntries[i].InputSequence != allEntries[i - 1].InputSequence ||
+                sortBeforeMergeFlags[allEntries[i].SourceIndex])
+                continue;
+            if (CompareMergeEntryKeys(allEntries[i - 1], allEntries[i]) > 0)
+            {
+                throw new InvalidOperationException(
+                    $"XTDE2220: Merge source '{sourceNames[allEntries[i].SourceIndex] ?? (allEntries[i].SourceIndex + 1).ToString()}' is not sorted in merge-key order.");
+            }
+        }
+
+        // sort-before-merge="yes": stably sort each input sequence (a contiguous run
+        // of same-source, same-input-sequence entries) into merge-key order using the
+        // merge-key collation (merge-018/059/060/061/073/095).
+        for (int s = 0; s < sortBeforeMergeFlags.Count; s++)
+        {
+            if (!sortBeforeMergeFlags[s])
+                continue;
+            var keyComparer = Comparer<MergeEntry>.Create((a, b) => CompareMergeEntryKeys(a, b));
+            int i = 0;
+            while (i < allEntries.Count)
+            {
+                if (allEntries[i].SourceIndex != s)
+                {
+                    i++;
+                    continue;
+                }
+                int runStart = i;
+                int seq = allEntries[i].InputSequence;
+                while (i < allEntries.Count && allEntries[i].SourceIndex == s && allEntries[i].InputSequence == seq)
+                    i++;
+                int count = i - runStart;
+                if (count > 1)
+                {
+                    var sorted = allEntries.GetRange(runStart, count).OrderBy(e => e, keyComparer).ToList();
+                    allEntries.RemoveRange(runStart, count);
+                    allEntries.InsertRange(runStart, sorted);
+                }
+            }
+        }
+
         // Sort globally by key tuple, then source order, then original document order.
         try
         {
             allEntries.Sort((a, b) =>
             {
-                int minKeys = Math.Min(a.Keys.Count, b.Keys.Count);
-                for (int i = 0; i < minKeys; i++)
-                {
-                    int cmp = CompareSortKey(a.Keys[i], b.Keys[i]);
-                    if (cmp != 0) return cmp;
-                }
-                if (a.Keys.Count != b.Keys.Count)
-                    return a.Keys.Count.CompareTo(b.Keys.Count);
+                int cmp = CompareMergeEntryKeys(a, b);
+                if (cmp != 0) return cmp;
                 int srcCmp = a.SourceIndex.CompareTo(b.SourceIndex);
                 if (srcCmp != 0) return srcCmp;
                 return a.OriginalIndex.CompareTo(b.OriginalIndex);
@@ -19714,7 +20210,7 @@ internal sealed class TransformEngine
                 bool equal = true;
                 for (int i = 0; i < groupKey.Count; i++)
                 {
-                    if (CompareSortKey(groupKey[i], otherKey[i]) != 0)
+                    if (CompareSortKey(groupKey[i], otherKey[i], mergeKey: true) != 0)
                     {
                         equal = false;
                         break;
@@ -19805,6 +20301,194 @@ internal sealed class TransformEngine
                 _currentMergeSourceNames = savedSourceNames;
                 _context.WithFocus(savedActionFocus, savedActionPosition, savedActionSize);
             }
+        }
+    }
+
+    /// <summary>
+    /// Compares the merge-key tuples of two merge entries lexicographically under the
+    /// merge-key collation rules (codepoint default; the ambient default collation does
+    /// not apply to merge keys).
+    /// </summary>
+    private int CompareMergeEntryKeys(MergeEntry a, MergeEntry b)
+    {
+        int minKeys = Math.Min(a.Keys.Count, b.Keys.Count);
+        for (int i = 0; i < minKeys; i++)
+        {
+            int cmp = CompareSortKey(a.Keys[i], b.Keys[i], mergeKey: true);
+            if (cmp != 0) return cmp;
+        }
+        return a.Keys.Count.CompareTo(b.Keys.Count);
+    }
+
+    /// <summary>
+    /// Validates literal <c>current-merge-group('name')</c> references in the
+    /// <c>xsl:merge-action</c> against the declared merge-source names. Referencing an
+    /// unknown source is XTDE3490; validating before the merge runs keeps the error
+    /// ahead of merge-key-order violations (merge-077). Only attribute values are
+    /// scanned (select/test/AVT expressions), never text content, so literal result
+    /// text mentioning the function is not misfired.
+    /// </summary>
+    private static void ValidateMergeGroupReferences(XElement actionElement, List<XElement> sourceElements)
+    {
+        var names = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var se in sourceElements)
+        {
+            var n = se.Attribute("name")?.Value;
+            if (n != null)
+                names.Add(n);
+        }
+
+        foreach (var el in actionElement.DescendantsAndSelf())
+        {
+            foreach (var attr in el.Attributes())
+            {
+                foreach (Match m in MergeGroupCallRegex.Matches(attr.Value))
+                {
+                    var name = m.Groups[2].Value;
+                    if (!names.Contains(name))
+                        throw new InvalidOperationException($"XTDE3490: no xsl:merge-source named '{name}'");
+                }
+            }
+        }
+    }
+
+    private static readonly Regex MergeGroupCallRegex =
+        new(@"current-merge-group\s*\(\s*(['""])(.*?)\1\s*\)", RegexOptions.Compiled);
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9): grounds a node selected by a streamable merge source into a
+    /// snapshot. The selected node's subtree is deep-copied in full; its ancestors are
+    /// copied with only the child on the path to the selected node, so parent/ancestor
+    /// access keeps working while sibling content and content outside the subtree (e.g.
+    /// the enclosing record of a merged element) is no longer reachable
+    /// (merge-079/090/097s). Non-element nodes are copied standalone.
+    /// </summary>
+    private static IXdmNode SnapshotMergeItem(IXdmNode node)
+    {
+        if (node.NodeKind != XdmNodeKind.Element)
+        {
+            // Attribute/text/comment/PI snapshots are standalone copies; a document
+            // snapshot is a full grounded copy.
+            return DeepCopyMergeSubtree(node) is { } copied ? copied : node;
+        }
+
+        var subtreeCopy = DeepCopyMergeSubtree(node);
+        if (subtreeCopy?.UnderlyingObject is not XElement elementCopy)
+            return node;
+
+        // Wrap in path-only ancestor copies up to the root (document included). The
+        // returned item stays the selected element itself — the ancestor copies only
+        // back its parent/ancestor axes.
+        var top = (XObject)elementCopy;
+        var parent = node.Parent;
+        while (parent != null)
+        {
+            if (parent.NodeKind == XdmNodeKind.Element && top is XElement pathChild)
+            {
+                var ancestorCopy = new XElement(XName.Get(parent.LocalName, parent.NamespaceUri));
+                foreach (var attrValue in parent.Attributes())
+                {
+                    if (attrValue.IsNode && attrValue.NodeValue is { } attrNode)
+                        ancestorCopy.SetAttributeValue(
+                            XName.Get(attrNode.LocalName, attrNode.NamespaceUri), attrNode.StringValue);
+                }
+                ancestorCopy.Add(pathChild);
+                top = ancestorCopy;
+                parent = parent.Parent;
+            }
+            else if (parent.NodeKind == XdmNodeKind.Document && top is XElement docChild)
+            {
+                var docCopy = new XDocument();
+                XDocumentNode.RegisterTree(docCopy);
+                // Preserve the source document's base URI on the snapshot (as a string
+                // annotation, the same mechanism used for constructed documents) so
+                // base-uri(/) — and accumulator rules that use it — resolve against the
+                // original document rather than the stylesheet (merge-065a).
+                var originalRoot = node;
+                while (originalRoot.Parent != null)
+                    originalRoot = originalRoot.Parent;
+                var originalBaseUri = originalRoot.NodeKind == XdmNodeKind.Document
+                    ? originalRoot.BaseUri
+                    : node.BaseUri;
+                if (!string.IsNullOrEmpty(originalBaseUri))
+                    docCopy.AddAnnotation(originalBaseUri);
+                docCopy.Add(docChild);
+                top = docCopy;
+                parent = parent.Parent;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return elementCopy.Parent is not null ? XDocumentNode.Wrap(elementCopy) : XDocumentNode.Wrap(top);
+    }
+
+    /// <summary>
+    /// Deep-copies a node subtree into fresh LINQ-to-XML objects, working purely off
+    /// the provider-agnostic <see cref="IXdmNode"/> axes so streamed (foreign-provider)
+    /// nodes are grounded the same way as <c>XDocumentNode</c> trees.
+    /// </summary>
+    private static XDocumentNode? DeepCopyMergeSubtree(IXdmNode node)
+    {
+        switch (node.NodeKind)
+        {
+            case XdmNodeKind.Element:
+            {
+                var copy = new XElement(XName.Get(node.LocalName, node.NamespaceUri));
+                foreach (var attr in node.Attributes())
+                {
+                    if (attr.IsNode && attr.NodeValue is { } attrNode)
+                        copy.SetAttributeValue(XName.Get(attrNode.LocalName, attrNode.NamespaceUri), attrNode.StringValue);
+                }
+                foreach (var child in node.Children())
+                {
+                    if (child.IsNode && child.NodeValue is { } childNode &&
+                        DeepCopyMergeSubtree(childNode) is { } childCopy)
+                    {
+                        switch (childCopy.UnderlyingObject)
+                        {
+                            case XElement e: copy.Add(e); break;
+                            case XText t: copy.Add(t); break;
+                            case XComment c: copy.Add(c); break;
+                            case XProcessingInstruction pi: copy.Add(pi); break;
+                        }
+                    }
+                }
+                return XDocumentNode.Wrap(copy);
+            }
+            case XdmNodeKind.Attribute:
+                return XDocumentNode.Wrap(new XAttribute(
+                    XName.Get(node.LocalName, node.NamespaceUri), node.StringValue));
+            case XdmNodeKind.Text:
+                return XDocumentNode.Wrap(new XText(node.StringValue));
+            case XdmNodeKind.Comment:
+                return XDocumentNode.Wrap(new XComment(node.StringValue));
+            case XdmNodeKind.ProcessingInstruction:
+                return XDocumentNode.Wrap(new XProcessingInstruction(node.LocalName, node.StringValue));
+            case XdmNodeKind.Document:
+            {
+                var copy = new XDocument();
+                XDocumentNode.RegisterTree(copy);
+                foreach (var child in node.Children())
+                {
+                    if (child.IsNode && child.NodeValue is { } childNode &&
+                        DeepCopyMergeSubtree(childNode) is { } childCopy)
+                    {
+                        switch (childCopy.UnderlyingObject)
+                        {
+                            case XElement e: copy.Add(e); break;
+                            case XText t when t.Value.All(char.IsWhiteSpace): copy.Add(t); break;
+                            case XComment c: copy.Add(c); break;
+                            case XProcessingInstruction pi: copy.Add(pi); break;
+                        }
+                    }
+                }
+                return XDocumentNode.Wrap(copy);
+            }
+            default:
+                return null;
         }
     }
 
@@ -20021,7 +20705,11 @@ internal sealed class TransformEngine
     /// <summary>
     /// Evaluates the selected items for a single <c>xsl:merge-source</c>.
     /// </summary>
-    private List<XdmValue> EvaluateMergeSourceItems(XElement sourceElem, XdmValue contextItem)
+    /// <param name="sourceElem">The <c>xsl:merge-source</c> element.</param>
+    /// <param name="contextItem">The context item for the containing instruction.</param>
+    /// <param name="inputSequenceOrdinals">On return, holds one ordinal per returned item identifying the input sequence (XSLT 3.0 §13.2.1) it belongs to; consecutive items sharing an ordinal form one pre-sorted run.</param>
+    /// <returns>The selected items in document order.</returns>
+    private List<XdmValue> EvaluateMergeSourceItems(XElement sourceElem, XdmValue contextItem, out List<int> inputSequenceOrdinals)
     {
         var selectAttr = sourceElem.Attribute("select")?.Value;
         if (string.IsNullOrEmpty(selectAttr))
@@ -20033,6 +20721,8 @@ internal sealed class TransformEngine
         var forEachItemAttr = sourceElem.Attribute("for-each-item")?.Value;
         var forEachSourceAttr = sourceElem.Attribute("for-each-source")?.Value;
         var result = new List<XdmValue>();
+        inputSequenceOrdinals = new List<int>();
+        var ordinals = inputSequenceOrdinals;
 
         var savedFocus = _context.ContextItem;
         var savedPosition = _context.ContextPosition;
@@ -20044,19 +20734,24 @@ internal sealed class TransformEngine
                 var compiled = CompileXPath(forEachItemAttr, sourceElem);
                 var feResult = compiled.Evaluate(_context);
                 var feItems = EnumerateItems(feResult).ToList();
+                int inputSeq = -1;
                 for (int idx = 0; idx < feItems.Count; idx++)
                 {
+                    inputSeq++;
                     _context.WithFocus(feItems[idx], idx + 1, feItems.Count);
                     RecordAccumulatorApplicability(sourceElem, feItems[idx]);
                     if (!string.IsNullOrEmpty(selectAttr))
                     {
                         var selCompiled = CompileXPath(selectAttr, sourceElem);
                         var selResult = selCompiled.Evaluate(_context);
-                        result.AddRange(EnumerateItems(selResult));
+                        var selItems = EnumerateItems(selResult).ToList();
+                        result.AddRange(selItems);
+                        for (int n = 0; n < selItems.Count; n++) ordinals.Add(inputSeq);
                     }
                     else
                     {
                         result.Add(feItems[idx]);
+                        ordinals.Add(inputSeq);
                     }
                 }
                 return result;
@@ -20067,8 +20762,10 @@ internal sealed class TransformEngine
                 var compiled = CompileXPath(forEachSourceAttr, sourceElem);
                 var fsResult = compiled.Evaluate(_context);
                 var fsItems = EnumerateItems(fsResult).ToList();
+                int inputSeq = -1;
                 for (int idx = 0; idx < fsItems.Count; idx++)
                 {
+                    inputSeq++;
                     XdmValue sourceContext;
                     if (fsItems[idx].IsNode)
                     {
@@ -20103,11 +20800,14 @@ internal sealed class TransformEngine
                     {
                         var selCompiled = CompileXPath(selectAttr, sourceElem);
                         var selResult = selCompiled.Evaluate(_context);
-                        result.AddRange(EnumerateItems(selResult));
+                        var selItems = EnumerateItems(selResult).ToList();
+                        result.AddRange(selItems);
+                        for (int n = 0; n < selItems.Count; n++) ordinals.Add(inputSeq);
                     }
                     else
                     {
                         result.Add(sourceContext);
+                        ordinals.Add(inputSeq);
                     }
                 }
                 return result;
@@ -20117,7 +20817,9 @@ internal sealed class TransformEngine
             {
                 var compiled = CompileXPath(selectAttr, sourceElem);
                 var selResult = compiled.Evaluate(_context);
-                return EnumerateItems(selResult).ToList();
+                var items = EnumerateItems(selResult).ToList();
+                for (int n = 0; n < items.Count; n++) ordinals.Add(0);
+                return items;
             }
         }
         finally

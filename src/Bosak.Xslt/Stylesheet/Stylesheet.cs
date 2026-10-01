@@ -238,6 +238,16 @@
 //                      | Charles Korthout | 2.118 | 30-09-2026     | REQ-113 (PB-2): xsl:import-schema content model — at most one inline xs:schema           |
 //                      |                  |       |                | (import-schema-157 pins XTSE0010)                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.119 | 30-09-2026     | REQ-114 (PB-3 C9): inline xs:schema cloned with in-scope namespaces (180/188); empty    |
+//                      |                  |       |                | xsl:import-schema is a legal no-op (183); xpath-default-namespace/default-collation      |
+//                      |                  |       |                | whitelisted on xsl:variable/param/with-param (xpath-default-namespace-0703);             |
+//                      |                  |       |                | pre-E36 component="function#0" suffix tolerated in xsl:accept/xsl:expose (package-022err) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.120 | 30-09-2026     | REQ-114/PB-3 C9: XTSE0020 for lax/strict default-validation below version 3.0            |
+//                      |                  |       |                | (validation-0110); XTSE0770 for xsl:function vs schema type constructor                  |
+//                      |                  |       |                | (type-functions-0503); deferred semantic XTSE3070 override type identity — mutual        |
+//                      |                  |       |                | subtyping incl. unordered union member sets (override-f-031, override-v-005)            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -298,6 +308,26 @@ internal sealed class Stylesheet
     private readonly IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> _externalStaticParameters;
     private readonly Api.PackageVersionResolutionStrategy _packageVersionResolutionStrategy;
     private readonly SchemaImportState _schemaState;
+    private readonly List<DeferredTypeIdentityCheck> _deferredTypeIdentityChecks = new();
+
+    /// <summary>
+    /// One deferred XTSE3070 type-identity check: a lexical <c>@as</c> mismatch recorded
+    /// during override validation, re-examined semantically once the merged schema set
+    /// exists (REQ-114, PB-3 C9).
+    /// </summary>
+    /// <param name="OverrideType">The <c>@as</c> value of the overriding declaration (null = item()*).</param>
+    /// <param name="OverrideElem">The overriding element, used to resolve its type-name prefixes.</param>
+    /// <param name="BaseType">The <c>@as</c> value of the overridden declaration (null = item()*).</param>
+    /// <param name="BaseElem">The overridden element, used to resolve its type-name prefixes.</param>
+    /// <param name="BaseStylesheet">The package that declared the overridden component; its compiled schema set resolves the base type.</param>
+    /// <param name="ErrorMessage">The XTSE3070 error raised when the types turn out not to be identical.</param>
+    private sealed record DeferredTypeIdentityCheck(
+        string? OverrideType,
+        XElement? OverrideElem,
+        string? BaseType,
+        XElement? BaseElem,
+        Stylesheet? BaseStylesheet,
+        string ErrorMessage);
 
     /// <summary>
     /// The merged compiled schema set for schema-aware compilations (REQ-097), or null
@@ -1954,7 +1984,14 @@ internal sealed class Stylesheet
         // been loaded and its xsl:import-schema declarations collected; compile the
         // merged schema set once, at the root.
         if (_isRootStylesheet && _schemaState is { SchemaAware: true })
+        {
             _schemaState.CompiledSchemaSet = SchemaSetBuilder.Build(_schemaState);
+            if (_schemaState.CompiledSchemaSet is { } compiledSet)
+                ValidateFunctionConstructorCollisions(compiledSet);
+            // XTSE3070 type-identity mismatches deferred during override validation are
+            // now re-examined semantically against the compiled schema sets.
+            ResolveDeferredTypeIdentityChecks();
+        }
 
         // XTSE1222: all xsl:key declarations with the same expanded name must agree on @composite.
         if (_isRootStylesheet)
@@ -2447,14 +2484,43 @@ internal sealed class Stylesheet
             throw new InvalidOperationException("XTSE0010: xsl:import-schema may contain at most one inline xs:schema element");
         var inline = elem.Elements().FirstOrDefault();
 
-        if (ns is null && locations.Length == 0 && inline is null)
-            throw new InvalidOperationException("XTSE0010: xsl:import-schema must specify a namespace, a schema-location, or an inline schema");
+        // XSLT 2.0 §3.14.2: both attributes are optional, so an empty xsl:import-schema
+        // declaration is a legal no-op (import-schema-183) — no check here.
         if (elem.Nodes().OfType<XText>().Any(t => !string.IsNullOrWhiteSpace(t.Value)))
             throw new InvalidOperationException("XTSE0220: xsl:import-schema may contain only an inline xs:schema element");
         if (inline is not null && (inline.Name.LocalName != "schema" || inline.Name.NamespaceName != XmlSchemaNamespace))
             throw new InvalidOperationException("XTSE0220: the inline content of xsl:import-schema must be an xs:schema element");
 
-        _schemaState.Add(ns, locations, inline, ImportPrecedence, BaseUri);
+        _schemaState.Add(ns, locations, inline is null ? null : CloneWithInScopeNamespaces(inline), ImportPrecedence, BaseUri);
+    }
+
+    /// <summary>
+    /// Clones an inline xs:schema element with every in-scope namespace declaration
+    /// materialized onto the clone (REQ-114, PB-3 C9: import-schema-180/188). An
+    /// XElement subtree does not carry its ancestors' xmlns attributes, so serializing
+    /// the stored element directly drops prefixes such as foo/local that are declared
+    /// on the xsl:stylesheet root, and the schema document then fails with XTSE0220.
+    /// The default (prefixless) namespace is deliberately not copied: it could relocate
+    /// unprefixed schema component names into the stylesheet's default namespace.
+    /// </summary>
+    private static XElement CloneWithInScopeNamespaces(XElement inline)
+    {
+        var clone = new XElement(inline);
+        // Nearest-first: a declaration on the schema element or a close ancestor wins
+        // over the same prefix redeclared higher up.
+        foreach (var current in inline.AncestorsAndSelf().Reverse())
+        {
+            foreach (var attr in current.Attributes())
+            {
+                if (!attr.IsNamespaceDeclaration)
+                    continue;
+                var prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
+                if (prefix.Length == 0 || clone.Attribute(XNamespace.Xmlns + prefix) is not null)
+                    continue;
+                clone.Add(new XAttribute(XNamespace.Xmlns + prefix, attr.Value));
+            }
+        }
+        return clone;
     }
 
     private void ValidateInstructionTree(XElement root)
@@ -2865,17 +2931,23 @@ internal sealed class Stylesheet
 
                 var allowedAttributes = localName switch
                 {
+                    // XSLT 2.0 §3.4: xpath-default-namespace and default-collation are global
+                    // attributes permitted on any XSLT element (REQ-114, PB-3 C9:
+                    // xpath-default-namespace-0703).
                     "variable" => new HashSet<string>(StringComparer.Ordinal)
                     {
-                        "name", "select", "as", "static", "use-when", "visibility", "version", "expand-text"
+                        "name", "select", "as", "static", "use-when", "visibility", "version", "expand-text",
+                        "xpath-default-namespace", "default-collation"
                     },
                     "param" => new HashSet<string>(StringComparer.Ordinal)
                     {
-                        "name", "select", "as", "required", "tunnel", "static", "use-when", "version", "expand-text"
+                        "name", "select", "as", "required", "tunnel", "static", "use-when", "version", "expand-text",
+                        "xpath-default-namespace", "default-collation"
                     },
                     "with-param" => new HashSet<string>(StringComparer.Ordinal)
                     {
-                        "name", "select", "as", "tunnel", "use-when"
+                        "name", "select", "as", "tunnel", "use-when",
+                        "xpath-default-namespace", "default-collation"
                     },
                     _ => new HashSet<string>(StringComparer.Ordinal)
                 };
@@ -3235,6 +3307,13 @@ internal sealed class Stylesheet
                     var val = defaultValidationAttr.Value.Trim();
                     if (val == "strict" && !schemaAware)
                         throw new InvalidOperationException("XTSE1660");
+                    // XTSE0020: lax and strict are not permitted values of
+                    // [xsl:]default-validation in an XSLT 3.0 stylesheet — a stylesheet
+                    // whose effective version is less than 3.0 that uses them is flagged
+                    // (validation-0110; the XTSE1660 branch above still wins on a basic
+                    // processor, validation-0104).
+                    if ((val == "lax" || val == "strict") && schemaAware && GetEffectiveVersion(elem) < 3.0)
+                        throw new InvalidOperationException("XTSE0020: default-validation='" + val + "' is not permitted when the effective version is less than 3.0.");
                 }
             }
             var typeAttr = elem.Attribute("type") ?? elem.Attribute(XName.Get("type", XslNamespace));
@@ -3864,7 +3943,15 @@ internal sealed class Stylesheet
                 {
                     var nameAttr = elem.Attribute("name");
                     if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value))
-                        ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name");
+                    {
+                        // REQ-114 (PB-3 C9): tolerate the pre-E36 name="#arity" form on
+                        // xsl:function (package-021err) — a valid trailing "#N" is stripped
+                        // before QName validation.
+                        var nameValue = localName == "function"
+                            ? StripAritySuffix(nameAttr.Value)
+                            : nameAttr.Value;
+                        ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name");
+                    }
                 }
 
                 // XTSE0340: validate match patterns on xsl:template and xsl:key, and
@@ -4201,6 +4288,40 @@ internal sealed class Stylesheet
     }
 
     /// <summary>
+    /// Validates that no user-declared <c>xsl:function</c> has the same expanded QName as
+    /// the constructor function implicitly declared for a named simple type in the
+    /// compiled schema set (XTSE0770; type-functions-0503 — the XQST0034 check from
+    /// XQueryExecutable ported to the XSLT static phase). Runs at the root once the
+    /// merged schema set exists, across the whole import/include tree.
+    /// </summary>
+    /// <param name="schemaSet">The merged compiled schema set for this compilation.</param>
+    private void ValidateFunctionConstructorCollisions(XmlSchemaSet schemaSet)
+    {
+        var checkedModules = new HashSet<Stylesheet>();
+        CheckModule(this);
+
+        void CheckModule(Stylesheet module)
+        {
+            if (!checkedModules.Add(module))
+                return;
+            foreach (var def in module._functionDefinitions)
+            {
+                // Constructor functions have arity one; only a user function with the
+                // same name and arity collides. xs:* names are already rejected as
+                // reserved function namespaces (XTSE0080).
+                if (def.Arity != 1 || string.IsNullOrEmpty(def.NamespaceUri))
+                    continue;
+                if (schemaSet.GlobalTypes[new XmlQualifiedName(def.LocalName, def.NamespaceUri)] is XmlSchemaSimpleType)
+                    throw new InvalidOperationException($"XTSE0770: Function '{def.LocalName}' with arity 1 conflicts with the constructor function for the schema type '{def.LocalName}'.");
+            }
+            foreach (var imported in module._imports)
+                CheckModule(imported);
+            foreach (var included in module._includes)
+                CheckModule(included);
+        }
+    }
+
+    /// <summary>
     /// Validates <c>xsl:override</c> variable and parameter declarations against the used
     /// package: the target must exist (XTSE3058), must be public or abstract (XTSE3060),
     /// and must have an identical declared type (XTSE3070; an overriding parameter for a
@@ -4227,9 +4348,11 @@ internal sealed class Stylesheet
                 // XTSE3060: only public or abstract components may be overridden.
                 if (effective is not "public" and not "abstract")
                     throw new InvalidOperationException($"XTSE3060: Cannot override variable '{nameAttr}' whose visibility is '{effective}'.");
-                // XTSE3070: the declared types must be identical (override-v-007).
-                if (!TypesAreIdentical(overrideElem.Attribute("as")?.Value, element.Attribute("as")?.Value))
-                    throw new InvalidOperationException($"XTSE3070: The declared type of overriding variable '{nameAttr}' differs from the overridden variable.");
+                // XTSE3070: the declared types must be identical (override-v-005/006/007).
+                RequireIdenticalTypes(
+                    overrideElem.Attribute("as")?.Value, overrideElem,
+                    element.Attribute("as")?.Value, element, package,
+                    $"XTSE3070: The declared type of overriding variable '{nameAttr}' differs from the overridden variable.");
             }
         }
     }
@@ -4275,17 +4398,21 @@ internal sealed class Stylesheet
     /// overriding function: argument types must be pairwise identical to the overridden
     /// function's and the return types must be identical.
     /// </summary>
-    private static void ValidateFunctionOverrideSignature(XElement overrideElem, XsltFunctionDefinition def, string displayName)
+    private void ValidateFunctionOverrideSignature(XElement overrideElem, XsltFunctionDefinition def, string displayName)
     {
         var overrideParams = overrideElem.Elements(XName.Get("param", XslNamespace)).ToList();
         var baseParams = def.Element.Elements(XName.Get("param", XslNamespace)).ToList();
         for (int i = 0; i < baseParams.Count && i < overrideParams.Count; i++)
         {
-            if (!TypesAreIdentical(overrideParams[i].Attribute("as")?.Value, baseParams[i].Attribute("as")?.Value))
-                throw new InvalidOperationException($"XTSE3070: The signature of overriding function '{displayName}' is not compatible with the overridden function (parameter '{overrideParams[i].Attribute("name")?.Value}' type differs).");
+            RequireIdenticalTypes(
+                overrideParams[i].Attribute("as")?.Value, overrideParams[i],
+                baseParams[i].Attribute("as")?.Value, baseParams[i], def.Stylesheet,
+                $"XTSE3070: The signature of overriding function '{displayName}' is not compatible with the overridden function (parameter '{overrideParams[i].Attribute("name")?.Value}' type differs).");
         }
-        if (!TypesAreIdentical(overrideElem.Attribute("as")?.Value, def.Element.Attribute("as")?.Value))
-            throw new InvalidOperationException($"XTSE3070: The return type of overriding function '{displayName}' differs from the overridden function.");
+        RequireIdenticalTypes(
+            overrideElem.Attribute("as")?.Value, overrideElem,
+            def.Element.Attribute("as")?.Value, def.Element, def.Stylesheet,
+            $"XTSE3070: The return type of overriding function '{displayName}' differs from the overridden function.");
 
         // The effective new-each-time value must be the same on both declarations
         // (default "yes"; override-f-021).
@@ -4313,6 +4440,192 @@ internal sealed class Stylesheet
         // "element( * )" and "element(*)" compare equal (glob-cxt-item-008).
         return Regex.Replace(s, @"\s+", "");
     }
+
+    /// <summary>
+    /// Requires two <c>@as</c> SequenceType values to denote identical types (XSLT 3.0
+    /// §3.5.7.2, XTSE3070). Lexically equal types pass immediately. On a schema-aware
+    /// compilation a lexical mismatch is deferred: the two named types may still be
+    /// identical — union types with the same member-type set are identical regardless
+    /// of the union's name or the member order (override-f-031, override-v-005) — so
+    /// the decision is re-made semantically against the compiled schema sets once the
+    /// merged set exists. On a basic compilation (no schema set can exist) the lexical
+    /// mismatch is conclusive and <paramref name="errorMessage"/> is thrown at once.
+    /// </summary>
+    /// <param name="overrideType">The <c>@as</c> value of the overriding declaration (null = item()*).</param>
+    /// <param name="overrideElem">The overriding element; resolves its type-name prefixes.</param>
+    /// <param name="baseType">The <c>@as</c> value of the overridden declaration (null = item()*).</param>
+    /// <param name="baseElem">The overridden element; resolves its type-name prefixes.</param>
+    /// <param name="baseStylesheet">The package declaring the overridden component; its compiled schema set resolves the base type.</param>
+    /// <param name="errorMessage">The XTSE3070 error raised when the types are not identical.</param>
+    private void RequireIdenticalTypes(string? overrideType, XElement? overrideElem, string? baseType, XElement? baseElem, Stylesheet? baseStylesheet, string errorMessage)
+    {
+        if (TypesAreIdentical(overrideType, baseType))
+            return;
+        if (_schemaState is { SchemaAware: true })
+        {
+            _deferredTypeIdentityChecks.Add(new DeferredTypeIdentityCheck(overrideType, overrideElem, baseType, baseElem, baseStylesheet, errorMessage));
+            return;
+        }
+        throw new InvalidOperationException(errorMessage);
+    }
+
+    /// <summary>
+    /// Resolves the deferred XTSE3070 type-identity checks now that the merged compiled
+    /// schema set exists. Each side is resolved against the compiled schema set of its
+    /// own package; the types must be mutually subtyped to be identical. Raises the
+    /// recorded XTSE3070 error for the first pair that is not identical (REQ-114, PB-3 C9).
+    /// </summary>
+    private void ResolveDeferredTypeIdentityChecks()
+    {
+        if (_deferredTypeIdentityChecks.Count == 0)
+            return;
+        var overrideSet = CompiledSchemaSet;
+        foreach (var check in _deferredTypeIdentityChecks)
+        {
+            var baseSet = check.BaseStylesheet?.CompiledSchemaSet;
+            if (!TypesAreIdenticalSemantically(check.OverrideType, check.OverrideElem, overrideSet, check.BaseType, check.BaseElem, baseSet))
+                throw new InvalidOperationException(check.ErrorMessage);
+        }
+        _deferredTypeIdentityChecks.Clear();
+    }
+
+    /// <summary>
+    /// Semantic type identity for two <c>@as</c> values whose lexical comparison failed:
+    /// identical iff subtype(S,T) and subtype(T,S) (XSLT 3.0 §3.5.7.2). Only bare
+    /// named-type item types qualify for semantic equivalence; anything lexically
+    /// different that is not a bare named type (kind tests, multiple names) is not
+    /// identical. The occurrence indicators must also match: <c>u1?</c> is a subtype of
+    /// <c>u1*</c> but not vice versa, so the two are not identical.
+    /// </summary>
+    private static bool TypesAreIdenticalSemantically(string? a, XElement? aElem, XmlSchemaSet? aSet, string? b, XElement? bElem, XmlSchemaSet? bSet)
+    {
+        return TryResolveSingleNamedType(a, aElem, aSet, out var typeA, out var occurrenceA)
+            && TryResolveSingleNamedType(b, bElem, bSet, out var typeB, out var occurrenceB)
+            && occurrenceA == occurrenceB
+            && IsNamedTypeIdentical(typeA!, typeB!);
+    }
+
+    /// <summary>
+    /// Extracts a single named type from a normalized <c>@as</c> value and resolves it
+    /// against the supplied compiled schema set. Accepts an optional occurrence indicator
+    /// and the EQName forms; unprefixed names resolve to the no-namespace type (the
+    /// override tests declare their unions in no-namespace inline schemas).
+    /// </summary>
+    private static bool TryResolveSingleNamedType(string? type, XElement? elem, XmlSchemaSet? set, out XmlSchemaType? schemaType, out char occurrence)
+    {
+        schemaType = null;
+        occurrence = '\0';
+        var normalized = NormalizeTypeForComparison(type);
+        if (normalized.Length == 0)
+            return false;
+        if (normalized[^1] is '?' or '*' or '+')
+        {
+            occurrence = normalized[^1];
+            normalized = normalized[..^1];
+        }
+        if (normalized.Length == 0)
+            return false;
+
+        string ns;
+        string local;
+        if (normalized.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var close = normalized.IndexOf('}');
+            if (close < 2)
+                return false;
+            ns = normalized[2..close];
+            local = normalized[(close + 1)..];
+        }
+        else
+        {
+            var colon = normalized.IndexOf(':');
+            if (colon < 0)
+            {
+                ns = string.Empty;
+                local = normalized;
+            }
+            else
+            {
+                var prefix = normalized[..colon];
+                local = normalized[(colon + 1)..];
+                if (elem?.GetNamespaceOfPrefix(prefix) is not { } nsAttr)
+                    return false;
+                ns = nsAttr.NamespaceName;
+            }
+        }
+        if (local.Length == 0)
+            return false;
+
+        var qualifiedName = new XmlQualifiedName(local, ns);
+        if (set is not null)
+            schemaType = set.GlobalTypes[qualifiedName] as XmlSchemaType;
+        // Built-in simple types resolve even when the set carries no user schemas.
+        schemaType ??= XmlSchemaType.GetBuiltInSimpleType(qualifiedName);
+        return schemaType is not null;
+    }
+
+    /// <summary>
+    /// Two named types are identical iff they are mutually subtyped (XSLT 3.0 §3.5.7.2).
+    /// Same-qualified-name types are trivially identical; otherwise a union type is
+    /// identical to another union type exactly when their member-type sets are equal
+    /// (order- and name-insensitive), and any other pair is identical only when one
+    /// derives from the other by restriction in both directions — i.e. never, unless
+    /// they share the qualified name.
+    /// </summary>
+    private static bool IsNamedTypeIdentical(XmlSchemaType a, XmlSchemaType b)
+    {
+        if (SameQName(a.QualifiedName, b.QualifiedName))
+            return true;
+        return IsSubtypeOf(a, b) && IsSubtypeOf(b, a);
+    }
+
+    /// <summary>
+    /// Approximates XSD type subtyping for override identity: a union is a subtype of
+    /// another union when every member type of the sub union is covered by a member of
+    /// the super union; any other pair follows the restriction/derivation base chain.
+    /// </summary>
+    private static bool IsSubtypeOf(XmlSchemaType sub, XmlSchemaType super)
+    {
+        if (sub is XmlSchemaSimpleType { Content: XmlSchemaSimpleTypeUnion subUnion })
+        {
+            if (super is not XmlSchemaSimpleType { Content: XmlSchemaSimpleTypeUnion superUnion })
+                return false;
+            var superMembers = UnionMemberKeys(superUnion);
+            return UnionMemberKeys(subUnion).All(superMembers.Contains);
+        }
+        for (var t = sub; t is not null; t = t.BaseXmlSchemaType)
+        {
+            if (SameQName(t.QualifiedName, super.QualifiedName))
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// The member-type keys of a union: qualified names of the declared members plus a
+    /// positional sentinel per inline member type, in declaration order. Two unions are
+    /// identical only when these key lists match pairwise as sets — anonymous inline
+    /// members can never match a named member of another union.
+    /// </summary>
+    private static List<string> UnionMemberKeys(XmlSchemaSimpleTypeUnion union)
+    {
+        var members = union.MemberTypes;
+        var baseTypes = union.BaseTypes;
+        var keys = new List<string>((members?.Length ?? 0) + (baseTypes?.Count ?? 0));
+        if (members is not null)
+            for (var i = 0; i < members.Length; i++)
+            {
+                var member = members[i];
+                keys.Add(member is null || member.IsEmpty ? "#anonymous-" + i : $"{{{member.Namespace}}}{member.Name}");
+            }
+        if (baseTypes is not null)
+            for (var i = 0; i < baseTypes.Count; i++)
+                keys.Add("#inline-" + i);
+        return keys;
+    }
+
+    private static bool SameQName(XmlQualifiedName a, XmlQualifiedName b)
+        => a.Name == b.Name && a.Namespace == b.Namespace;
 
     /// <summary>
     /// Validates that no <c>xsl:override</c> mode tries to override a used-package
@@ -4379,7 +4692,7 @@ internal sealed class Stylesheet
                 // XTSE3060: only public or abstract components may be overridden.
                 if (effective is not "public" and not "abstract")
                     throw new InvalidOperationException($"XTSE3060: Cannot override template '{nameAttr}' whose visibility is '{effective}'.");
-                ValidateTemplateOverrideSignature(overrideElem, rule.Element, nameAttr);
+                ValidateTemplateOverrideSignature(overrideElem, rule.Element, nameAttr, declaringPackage);
             }
         }
     }
@@ -4436,10 +4749,12 @@ internal sealed class Stylesheet
     /// with identical types, additional overriding parameters optional, and equivalent
     /// xsl:context-item children.
     /// </summary>
-    private static void ValidateTemplateOverrideSignature(XElement overrideElem, XElement baseElem, string displayName)
+    private void ValidateTemplateOverrideSignature(XElement overrideElem, XElement baseElem, string displayName, Stylesheet declaringPackage)
     {
-        if (!TypesAreIdentical(overrideElem.Attribute("as")?.Value, baseElem.Attribute("as")?.Value))
-            throw new InvalidOperationException($"XTSE3070: The return type of overriding template '{displayName}' differs from the overridden template.");
+        RequireIdenticalTypes(
+            overrideElem.Attribute("as")?.Value, overrideElem,
+            baseElem.Attribute("as")?.Value, baseElem, declaringPackage,
+            $"XTSE3070: The return type of overriding template '{displayName}' differs from the overridden template.");
 
         var overrideParams = overrideElem.Elements(XName.Get("param", XslNamespace))
             .Select(p => (Name: p.Attribute("name")?.Value ?? "", Element: p))
@@ -4464,8 +4779,10 @@ internal sealed class Stylesheet
             bool overrideTunnel = match.Element.Attribute("tunnel")?.Value?.Trim() is "yes" or "true" or "1";
             if (baseTunnel != overrideTunnel)
                 throw new InvalidOperationException($"XTSE3070: The tunnel value of parameter '{baseParam.Name}' on overriding template '{displayName}' differs from the overridden template.");
-            if (!TypesAreIdentical(match.Element.Attribute("as")?.Value, baseParam.Element.Attribute("as")?.Value))
-                throw new InvalidOperationException($"XTSE3070: The type of parameter '{baseParam.Name}' on overriding template '{displayName}' differs from the overridden template.");
+            RequireIdenticalTypes(
+                match.Element.Attribute("as")?.Value, match.Element,
+                baseParam.Element.Attribute("as")?.Value, baseParam.Element, declaringPackage,
+                $"XTSE3070: The type of parameter '{baseParam.Name}' on overriding template '{displayName}' differs from the overridden template.");
             if (!baseTunnel)
             {
                 bool baseRequired = baseParam.Element.Attribute("required")?.Value?.Trim() is "yes" or "true" or "1";
@@ -4495,8 +4812,10 @@ internal sealed class Stylesheet
             throw new InvalidOperationException($"XTSE3070: The xsl:context-item of overriding template '{displayName}' is not equivalent to the overridden template's.");
         var overrideCiAs = overrideCi?.Attribute("as")?.Value;
         var baseCiAs = baseCi?.Attribute("as")?.Value;
-        if (!TypesAreIdentical(overrideCiAs ?? "item()", baseCiAs ?? "item()"))
-            throw new InvalidOperationException($"XTSE3070: The xsl:context-item type of overriding template '{displayName}' differs from the overridden template's.");
+        RequireIdenticalTypes(
+            overrideCiAs ?? "item()", overrideCi,
+            baseCiAs ?? "item()", baseCi, declaringPackage,
+            $"XTSE3070: The xsl:context-item type of overriding template '{displayName}' differs from the overridden template's.");
     }
 
     /// <summary>
@@ -5441,7 +5760,7 @@ internal sealed class Stylesheet
             var localName = child.Name.LocalName;
             if (localName == "accept")
             {
-                var component = child.Attribute("component")?.Value?.Trim() ?? "";
+                var component = StripAritySuffix(child.Attribute("component")?.Value?.Trim() ?? "");
                 var visibility = child.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant() ?? "public";
                 var namesAttr = child.Attribute("names")?.Value?.Trim() ?? "*";
 
@@ -5557,7 +5876,7 @@ internal sealed class Stylesheet
         if (!IsPackage)
             throw new InvalidOperationException("XTSE0010: xsl:expose is only allowed as a child of xsl:package.");
 
-        var component = exposeElement.Attribute("component")?.Value?.Trim() ?? "";
+        var component = StripAritySuffix(exposeElement.Attribute("component")?.Value?.Trim() ?? "");
         var visibility = exposeElement.Attribute("visibility")?.Value?.Trim()?.ToLowerInvariant() ?? "";
         var namesAttr = exposeElement.Attribute("names")?.Value?.Trim() ?? "";
 
@@ -5672,6 +5991,26 @@ internal sealed class Stylesheet
                     yield return new ExposeName("", localName);
             }
         }
+    }
+
+    /// <summary>
+    /// Strips a trailing <c>#N</c> arity suffix (N a non-negative integer) from an
+    /// <c>xsl:accept</c>/<c>xsl:expose</c> component token or an <c>xsl:function</c>
+    /// function name, tolerating the pre-E36 forms such as <c>component="function#0"</c>
+    /// and <c>name="me:f#0"</c> (REQ-114, PB-3 C9: package-021err/022err). Anything
+    /// without a valid suffix is returned unchanged so the existing XTSE0020 paths
+    /// still apply.
+    /// </summary>
+    private static string StripAritySuffix(string token)
+    {
+        var hash = token.LastIndexOf('#');
+        if (hash > 0 &&
+            int.TryParse(token[(hash + 1)..], NumberStyles.None, CultureInfo.InvariantCulture, out var arity) &&
+            arity >= 0)
+        {
+            return token[..hash];
+        }
+        return token;
     }
 
     private static (string LocalName, int Arity) ParseFunctionNameWithArity(string localName)
@@ -6172,11 +6511,34 @@ internal sealed class Stylesheet
     /// Detects conflicting visible components exported by multiple used packages when
     /// no <c>xsl:accept</c> rule resolves the conflict. Raises <c>XTSE3050</c>.
     /// </summary>
+    /// <summary>
+    /// Returns every (used package, accept options) pair declared by this module or by
+    /// any module it includes, recursively. xsl:include places the included module's
+    /// top-level declarations at the same stylesheet level as the including module
+    /// (XSLT 3.0 §3.10.2), so xsl:use-package declarations from the whole include tree
+    /// participate in same-level conflict detection (REQ-114, PB-3 C9: the
+    /// package-021err/022err diamond scenarios, bug #30389).
+    /// </summary>
+    private IEnumerable<(Stylesheet Package, PackageUseOptions? Options)> GetSameLevelUsedPackageOptions()
+    {
+        foreach (var (package, options) in _usedPackageOptions)
+            yield return (package, options);
+        foreach (var included in _includes)
+        {
+            foreach (var entry in included.GetSameLevelUsedPackageOptions())
+                yield return entry;
+        }
+    }
+
     private void ValidateUsedPackageConflicts()
     {
         var visibleComponents = new Dictionary<(string ComponentType, string? NamespaceUri, string LocalName, int Arity), List<(Stylesheet Package, string Visibility)>>();
+        // REQ-114 (PB-3 C9): every effective accept visibility per component, across all
+        // used-package instances — accepting the same component with two different
+        // non-hidden visibilities is XTSE3050 (bug #30389; package-022err).
+        var acceptedVisibilities = new Dictionary<(string ComponentType, string? NamespaceUri, string LocalName, int Arity), List<string?>>();
 
-        foreach (var (package, options) in _usedPackageOptions)
+        foreach (var (package, options) in GetSameLevelUsedPackageOptions())
         {
             if (options == null)
                 continue;
@@ -6189,10 +6551,15 @@ internal sealed class Stylesheet
                 var baseVisibility = exposed ?? component.DeclaredVisibility;
                 var effectiveRule = GetEffectiveAcceptRule(options, component.ComponentType, component.LocalName, component.NamespaceUri, component.Arity, baseVisibility);
                 var effectiveVis = effectiveRule?.Visibility ?? GetDefaultUsedPackageVisibility(component.ComponentType, component.LocalName, component.NamespaceUri, baseVisibility, options);
+
+                var key = (component.ComponentType, component.NamespaceUri, component.LocalName ?? "", component.Arity);
+                if (!acceptedVisibilities.TryGetValue(key, out var visibilities))
+                    acceptedVisibilities[key] = visibilities = new List<string?>();
+                visibilities.Add(effectiveVis);
+
                 if (effectiveVis is null || (effectiveVis != "public" && effectiveVis != "final" && effectiveVis != "abstract"))
                     continue;
 
-                var key = (component.ComponentType, component.NamespaceUri, component.LocalName ?? "", component.Arity);
                 if (!visibleComponents.TryGetValue(key, out var list))
                     visibleComponents[key] = list = new List<(Stylesheet, string)>();
                 list.Add((package, effectiveVis));
@@ -6215,6 +6582,16 @@ internal sealed class Stylesheet
                 continue;
 
             throw new InvalidOperationException($"XTSE3050: Conflicting visible {key.ComponentType} '{DisplayComponentName(key.LocalName, key.NamespaceUri, key.Arity)}' exported by multiple used packages.");
+        }
+
+        foreach (var (key, visibilities) in acceptedVisibilities)
+        {
+            // XTSE3050: the same component accepted from multiple used packages with
+            // different non-hidden visibilities (hidden in one instance and visible in
+            // another is permitted — package-021/022 resolve conflicts that way).
+            var distinct = visibilities.Where(v => v is not null && v != "hidden").Distinct().ToList();
+            if (distinct.Count > 1)
+                throw new InvalidOperationException($"XTSE3050: {key.ComponentType} '{DisplayComponentName(key.LocalName, key.NamespaceUri, key.Arity)}' is accepted from multiple used packages with conflicting visibilities.");
         }
     }
 

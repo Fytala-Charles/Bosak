@@ -23,7 +23,10 @@
 //                      | Charles Korthout | 0.8   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 30-09-2026     | REQ-114 (PB-3 C9): tolerate pre-E36 xsl:function/@name="#arity" suffix (package-021err) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Globalization;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -140,6 +143,20 @@ internal sealed class XsltFunctionDefinition
 
         // Resolve the (possibly AVT) name to an expanded QName.
         var (nsUri, localName) = ResolveFunctionName(element, nameAttr, underscoreNameAttr, stylesheet);
+
+        // REQ-114 (PB-3 C9): tolerate the pre-E36 form name="#arity" in xsl:function/@name
+        // (package-021err) — strip a valid trailing "#N" (N a non-negative integer) before
+        // NCName validation; an invalid suffix stays and fails as XTSE0020 below.
+        if (localName.LastIndexOf('#') is int arityHash && arityHash >= 0)
+        {
+            var arityText = localName[(arityHash + 1)..];
+            if (arityHash > 0 &&
+                int.TryParse(arityText, NumberStyles.None, CultureInfo.InvariantCulture, out var declaredArity) &&
+                declaredArity >= 0)
+            {
+                localName = localName[..arityHash];
+            }
+        }
 
         if (string.IsNullOrEmpty(localName))
             return null;

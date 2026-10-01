@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 22-10-2026     | REQ-107: value-of typed-value atomization tests (canonical forms, FOTY0012, as-1803)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 01-10-2026     | REQ-114: XTTE0950 on copying QName-typed attributes without their parent element        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -69,6 +71,11 @@ public class SchemaAwareValidationTests
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name='q'>
+                <xs:complexType>
+                    <xs:attribute name='ref' type='xs:QName'/>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
         """;
 
@@ -88,6 +95,7 @@ public class SchemaAwareValidationTests
         "<xs:element name='price' type='xs:decimal'/>" +
         "<xs:element name='span' type='xs:duration'/>" +
         "<xs:element name='flag'><xs:complexType><xs:attribute name='code' type='xs:string'/></xs:complexType></xs:element>" +
+        "<xs:element name='q'><xs:complexType><xs:attribute name='ref' type='xs:QName'/></xs:complexType></xs:element>" +
         "</xs:schema></xsl:import-schema>";
 
     private static XmlSchemaSet CompileH4Schema()
@@ -809,5 +817,50 @@ public class SchemaAwareValidationTests
             </xsl:template>
             """);
         Assert.Contains(">|<", result);
+    }
+
+    // ----- REQ-114 (XTTE0950): copying namespace-sensitive attributes -----
+
+    [Fact]
+    public void CopyOf_QNameAttributeWithParentElementAndNamespaces_NoError()
+    {
+        var result = RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='x' as="element()">
+                    <t:q xmlns:qq='urn:qq' ref='qq:v' xsl:validation='strict'/>
+                </xsl:variable>
+                <out><xsl:copy-of select="$x" validation='preserve'/></out>
+            </xsl:template>
+            """);
+        Assert.Contains("ref=\"qq:v\"", result);
+        Assert.Contains("urn:qq", result);
+    }
+
+    [Fact]
+    public void CopyOf_StandaloneQNameAttribute_Xtte0950()
+    {
+        var ex = Assert.ThrowsAny<InvalidOperationException>(() => RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='x' as="element()">
+                    <t:q xmlns:qq='urn:qq' ref='qq:v' xsl:validation='strict'/>
+                </xsl:variable>
+                <out><xsl:copy-of select="$x/@ref" validation='preserve'/></out>
+            </xsl:template>
+            """));
+        Assert.Contains("XTTE0950", ex.Message);
+    }
+
+    [Fact]
+    public void CopyOf_ParentElementCopyNamespacesNo_QNameAttribute_Xtte0950()
+    {
+        var ex = Assert.ThrowsAny<InvalidOperationException>(() => RunSchemaAware("""
+            <xsl:template name='main'>
+                <xsl:variable name='x' as="element()">
+                    <t:q xmlns:qq='urn:qq' ref='qq:v' xsl:validation='strict'/>
+                </xsl:variable>
+                <out><xsl:copy-of select="$x" copy-namespaces="no" validation='preserve'/></out>
+            </xsl:template>
+            """));
+        Assert.Contains("XTTE0950", ex.Message);
     }
 }

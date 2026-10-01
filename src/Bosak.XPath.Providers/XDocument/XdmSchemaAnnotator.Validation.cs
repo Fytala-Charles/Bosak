@@ -33,6 +33,19 @@
 //                      | Charles Korthout | 0.7   | 30-09-2026     | REQ-113 (PB-2): CheckDocumentIdentityConstraints — duplicate-ID / dangling-IDREF pass   |
 //                      |                  |       |                | for undeclared roots (xml:id, attribute/element-content xsi:type typed ID/IDREF(S))     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 30-09-2026     | REQ-114 (PB-3 C9): PreserveSchemaAnnotations marks unannotated nodes xs:anyType /      |
+//                      |                  |       |                | xs:untypedAtomic (XSLT §25.1.1, import-schema-076 r/s); ref+use-site default/fixed       |
+//                      |                  |       |                | attributes pre-injected into the validation clone (RC3, import-schema-164,              |
+//                      |                  |       |                | validation-0201/0202) so .NET GetUnspecifiedDefaultAttributes no longer crashes          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 01-10-2026     | REQ-114 (PB-3 C9) follow-up: PreserveConstructedElementAnnotations wires the §25.1.1    |
+//                      |                  |       |                | untyped→anyType promotion into the engine's preserve path for constructed shells        |
+//                      |                  |       |                | (xsl:element/xsl:copy/literal result element, import-schema-076 r/s)                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 01-10-2026     | REQ-114 (PB-3 C9): XdmValidationOptions.ExtraNamespaceBindings merged into the          |
+//                      |                  |       |                | validation clone, so prefixes used only in QName-valued attribute values stay           |
+//                      |                  |       |                | resolvable during construction-time validity assessment (error-0950a/b)                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -94,6 +107,11 @@ public static partial class XdmSchemaAnnotator
                 StripSchemaAnnotations(element);
                 return new XdmSubtreeValidationResult(true, []);
             case XdmValidationMode.Preserve:
+                // XSLT 3.0 §25.1.1 preserve semantics are instruction-specific (a copied
+                // untyped node stays untyped under xsl:copy-of, while a node constructed
+                // by xsl:copy/xsl:element is annotated xs:anyType), so the blanket mode
+                // short-circuit stays a no-op; hosts apply PreserveSchemaAnnotations to
+                // the nodes their instruction semantics require.
                 return new XdmSubtreeValidationResult(true, []);
         }
 
@@ -202,7 +220,7 @@ public static partial class XdmSchemaAnnotator
         var isAttached = element.Document != null || element.Parent != null;
         var clone = isAttached || namedType is not null ? new XElement(element) : element;
         if (!ReferenceEquals(clone, element))
-            ImportInScopeNamespaces(element, clone);
+            ImportInScopeNamespaces(element, clone, options.ExtraNamespaceBindings);
 
         // Named-type validation (XSLT [xsl:]type) semantics differ from raw xsi:type
         // derivation rules: when the element name matches a global declaration AND the
@@ -284,7 +302,21 @@ public static partial class XdmSchemaAnnotator
         }
 
         var wrapper = new XDocument(clone);
+        // REQ-114 (RC3): .NET's XNodeValidator.GetUnspecifiedDefaultAttributes follows an
+        // attribute use's RefName to the GLOBAL attribute and ignores a use-site
+        // default/fixed value; when the resolved global carries neither, the validator
+        // crashes constructing new XAttribute(name, null) (import-schema-164: default on
+        // <xsd:attribute ref="p:foo">; validation-0201/0202: fixed on <xs:attribute
+        // ref="xml:space"> in xhtml1-transitional). The risky uses are pre-injected into the
+        // validation clone (with XSD 1.1-style namespace fixup when the attribute namespace
+        // is not in scope), so GetUnspecifiedDefaultAttributes no longer returns them; the
+        // live tree receives the attributes through the regular CopySchemaAnnotations
+        // default-attribute porting.
+        PreInjectRefUseSiteDefaultAttributes(clone, effectiveSet);
         wrapper.Validate(effectiveSet, recorder, addSchemaInfo: true);
+        // Fixed-value injections satisfied the validator but are not part of the validated
+        // infoset (Saxon semantics, validation-0201/0202); remove them before the copy-back.
+        RemoveFixedInjectedAttributes(clone);
 
         // REQ-113 (PB-2): the XDocument wrapper makes .NET validate with
         // ProcessIdentityConstraints, so raw xs:ID uniqueness and xs:IDREF referential
@@ -544,6 +576,84 @@ public static partial class XdmSchemaAnnotator
     }
 
     /// <summary>
+    /// Applies the XSLT 3.0 §25.1.1 <c>validation="preserve"</c> annotation to the subtree:
+    /// every node that already carries PSVI from prior validation keeps that annotation
+    /// untouched, while a node with NO annotation is marked <c>xs:anyType</c> (elements) or
+    /// <c>xs:untypedAtomic</c> (attributes) — the annotation a newly constructed node has
+    /// under preserve. Callers apply this only where their instruction semantics demand the
+    /// untyped→anyType promotion (xsl:copy, xsl:element, literal result elements); a node
+    /// copied by xsl:copy-of stays unmarked, so a copied untyped tree remains
+    /// <c>xs:untyped</c> (import-schema-076 distinguishes q from r/s).
+    /// </summary>
+    /// <param name="element">The root of the subtree to annotate in place.</param>
+    /// <returns>A successful <see cref="XdmSubtreeValidationResult"/> (preserve never fails).</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is null.</exception>
+    public static XdmSubtreeValidationResult PreserveSchemaAnnotations(XElement element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+
+        var anyType = XmlSchemaType.GetBuiltInComplexType(new XmlQualifiedName("anyType", XsNamespaceUri))
+            ?? throw new InvalidOperationException("The built-in xs:anyType definition is unavailable.");
+        // .NET keeps untypedAtomic in the XPath datatypes namespace; the xs: alias is
+        // normalized at XDocumentNode's schema-type choke point (REQ-114, validation-0108).
+        var untypedAtomic = XmlSchemaType.GetBuiltInSimpleType(
+            new XmlQualifiedName("untypedAtomic", "http://www.w3.org/2003/11/xpath-datatypes"));
+
+        foreach (var node in element.DescendantsAndSelf())
+        {
+            if (node.GetSchemaInfo() is null)
+                node.AddAnnotation(new BuiltinTypeSchemaInfo(anyType));
+            foreach (var attribute in node.Attributes())
+            {
+                if (attribute.IsNamespaceDeclaration)
+                    continue;
+                if (attribute.GetSchemaInfo() is null && untypedAtomic is not null)
+                    attribute.AddAnnotation(new BuiltinTypeSchemaInfo(untypedAtomic));
+            }
+        }
+
+        return new XdmSubtreeValidationResult(true, []);
+    }
+
+    /// <summary>
+    /// REQ-114 (PB-3 C9) follow-up: <see cref="PreserveSchemaAnnotations"/> scoped to the
+    /// constructed element shell only (the element itself and its own attributes, not its
+    /// descendants). XSLT 3.0 §25.1.1 gives an element constructed under
+    /// <c>validation="preserve"</c> (xsl:element, the shallow xsl:copy shell, a literal
+    /// result element) the annotation <c>xs:anyType</c> when it carries no type — without
+    /// the marker an unannotated shell reads as <c>xs:untyped</c>, which belongs to
+    /// stripped/copied trees instead (import-schema-076 pins r/s as anyType while q, the
+    /// copy-of-preserved untyped tree, stays untyped). Descendants keep whatever the
+    /// content-producing instructions annotated them with.
+    /// </summary>
+    /// <param name="element">The constructed element shell to annotate in place.</param>
+    /// <returns>A successful <see cref="XdmSubtreeValidationResult"/> (preserve never fails).</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is null.</exception>
+    public static XdmSubtreeValidationResult PreserveConstructedElementAnnotations(XElement element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+
+        var anyType = XmlSchemaType.GetBuiltInComplexType(new XmlQualifiedName("anyType", XsNamespaceUri))
+            ?? throw new InvalidOperationException("The built-in xs:anyType definition is unavailable.");
+        // .NET keeps untypedAtomic in the XPath datatypes namespace; the xs: alias is
+        // normalized at XDocumentNode's schema-type choke point (REQ-114, validation-0108).
+        var untypedAtomic = XmlSchemaType.GetBuiltInSimpleType(
+            new XmlQualifiedName("untypedAtomic", "http://www.w3.org/2003/11/xpath-datatypes"));
+
+        if (element.GetSchemaInfo() is null)
+            element.AddAnnotation(new BuiltinTypeSchemaInfo(anyType));
+        foreach (var attribute in element.Attributes())
+        {
+            if (attribute.IsNamespaceDeclaration)
+                continue;
+            if (attribute.GetSchemaInfo() is null && untypedAtomic is not null)
+                attribute.AddAnnotation(new BuiltinTypeSchemaInfo(untypedAtomic));
+        }
+
+        return new XdmSubtreeValidationResult(true, []);
+    }
+
+    /// <summary>
     /// Returns <c>true</c> when the supplied schema type is, or is derived (by restriction,
     /// list, or union) from, the primitive types <c>xs:QName</c> or <c>xs:NOTATION</c>.
     /// Attribute values cannot be validated against such types in XSLT construction because
@@ -783,9 +893,13 @@ public static partial class XdmSchemaAnnotator
     /// attributes resolve against the same namespace context during validity assessment.
     /// Only bindings the clone does not already declare are added; they are appended after
     /// the clone's own attributes, which keeps the attribute-order pairing used by
-    /// <see cref="CopySchemaAnnotations"/> intact.
+    /// <see cref="CopySchemaAnnotations"/> intact. <paramref name="extraBindings"/> (the
+    /// constructing instruction's static context, REQ-114 PB-3 C9) fills any remaining
+    /// gaps after the source's own bindings, so a prefix used only inside an attribute
+    /// VALUE stays resolvable even when the result-tree element never declared it.
     /// </summary>
-    private static void ImportInScopeNamespaces(XElement source, XElement clone)
+    private static void ImportInScopeNamespaces(XElement source, XElement clone,
+        IReadOnlyList<KeyValuePair<string, string>>? extraBindings = null)
     {
         var bindings = new Dictionary<string, string>();
         for (var current = source; current is not null; current = current.Parent)
@@ -797,6 +911,12 @@ public static partial class XdmSchemaAnnotator
                 var prefix = attr.Name.NamespaceName == XNamespace.Xmlns ? attr.Name.LocalName : string.Empty;
                 bindings.TryAdd(prefix, attr.Value);
             }
+        }
+
+        if (extraBindings is not null)
+        {
+            foreach (var (prefix, uri) in extraBindings)
+                bindings.TryAdd(prefix, uri);
         }
 
         foreach (var (prefix, uri) in bindings)
@@ -850,6 +970,176 @@ public static partial class XdmSchemaAnnotator
             index++;
         } while (element.GetNamespaceOfPrefix(prefix) is not null);
         return prefix;
+    }
+
+    /// <summary>
+    /// REQ-114 (RC3): scans the compiled schema set for attribute uses that crash .NET's
+    /// <c>XNodeValidator.ValidateAttributes</c> — a use with a non-empty <c>RefName</c> and a
+    /// use-site <c>default</c>/<c>fixed</c> value whose resolved global attribute declaration
+    /// carries neither. Returns the risky uses keyed by the expanded name of the element
+    /// declaration whose complex type owns them (local element declarations are reached by
+    /// recursing through anonymous complex types and particles).
+    /// </summary>
+    private static Dictionary<XmlQualifiedName, List<(XmlQualifiedName Name, string Value, bool IsFixed)>>? FindRefUseSiteDefaultAttributes(XmlSchemaSet schemas)
+    {
+        Dictionary<XmlQualifiedName, List<(XmlQualifiedName Name, string Value, bool IsFixed)>>? map = null;
+        // Recursive schemas (xhtml1-transitional: block content nests div within div through
+        // named and anonymous types) require a visited set — declarations and types are
+        // reached many times over.
+        var visitedElements = new HashSet<XmlSchemaElement>(ReferenceEqualityComparer.Instance);
+        var visitedTypes = new HashSet<XmlSchemaComplexType>(ReferenceEqualityComparer.Instance);
+        foreach (XmlSchemaObject value in schemas.GlobalElements.Values)
+        {
+            if (value is XmlSchemaElement globalElement)
+                CollectRefUseSiteDefaultAttributes(globalElement, schemas, visitedElements, visitedTypes, ref map);
+        }
+        return map;
+    }
+
+    private static void CollectRefUseSiteDefaultAttributes(XmlSchemaElement element, XmlSchemaSet schemas,
+        HashSet<XmlSchemaElement> visitedElements, HashSet<XmlSchemaComplexType> visitedTypes,
+        ref Dictionary<XmlQualifiedName, List<(XmlQualifiedName Name, string Value, bool IsFixed)>>? map)
+    {
+        if (!visitedElements.Add(element))
+            return;
+        if ((element.ElementSchemaType ?? element.SchemaType) is not XmlSchemaComplexType complexType)
+            return;
+
+        List<(XmlQualifiedName Name, string Value, bool IsFixed)>? risky = null;
+        foreach (XmlSchemaObject useObject in complexType.AttributeUses.Values)
+        {
+            if (useObject is not XmlSchemaAttribute use || use.RefName is null || use.RefName.IsEmpty)
+                continue;
+            var value = use.DefaultValue ?? use.FixedValue;
+            if (value is null)
+                continue;
+            // Only risky when the resolved global carries neither default nor fixed: .NET
+            // then builds the unspecified-default attribute from the global's null value.
+            if (schemas.GlobalAttributes[use.RefName] is XmlSchemaAttribute global
+                && (global.DefaultValue is not null || global.FixedValue is not null))
+                continue;
+            risky ??= [];
+            risky.Add((use.RefName, value, use.FixedValue is not null));
+        }
+
+        if (risky is not null && !element.QualifiedName.IsEmpty)
+        {
+            map ??= [];
+            if (map.TryGetValue(element.QualifiedName, out var existing))
+                existing.AddRange(risky);
+            else
+                map[element.QualifiedName] = risky;
+        }
+
+        // Recurse into nested local element declarations only for a not-yet-walked type:
+        // recursive schemas (xhtml block content) would otherwise loop forever. The risky-use
+        // registration above still runs for every element declaration, including ones whose
+        // governing type was already walked for a sibling element.
+        if (!visitedTypes.Add(complexType))
+            return;
+        foreach (var localElement in LocalElementDeclarations(complexType))
+            CollectRefUseSiteDefaultAttributes(localElement, schemas, visitedElements, visitedTypes, ref map);
+    }
+
+    /// <summary>
+    /// Enumerates the local element declarations reachable from a complex type's content
+    /// particle (sequences, choices, all-groups, nested group bases). Group references are
+    /// not resolved (no test schema relies on them for risky uses).
+    /// </summary>
+    private static IEnumerable<XmlSchemaElement> LocalElementDeclarations(XmlSchemaComplexType complexType)
+    {
+        if (complexType.ContentTypeParticle is not XmlSchemaGroupBase rootGroup)
+            yield break;
+        foreach (var element in LocalElementDeclarations(rootGroup))
+            yield return element;
+    }
+
+    private static IEnumerable<XmlSchemaElement> LocalElementDeclarations(XmlSchemaGroupBase group)
+    {
+        foreach (XmlSchemaObject item in group.Items)
+        {
+            switch (item)
+            {
+                case XmlSchemaElement localElement:
+                    yield return localElement;
+                    break;
+                case XmlSchemaGroupBase nestedGroup:
+                    foreach (var nested in LocalElementDeclarations(nestedGroup))
+                        yield return nested;
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Marker annotation for attributes (and their namespace-fixup declarations) that
+    /// <see cref="PreInjectRefUseSiteDefaultAttributes"/> added to the validation clone.
+    /// <see cref="IsFixed"/> injections are removed again after validation: XSD injects a
+    /// use-site <c>default</c> into the validated infoset (import-schema-164), while Saxon
+    /// (whose expectation the W3C catalog pins) does NOT inject <c>fixed</c> values
+    /// (validation-0201/0202 xml:space) — the injection only exists to keep .NET's
+    /// validator from crashing on them.
+    /// </summary>
+    private sealed class RefDefaultInjection(bool isFixed)
+    {
+        public bool IsFixed { get; } = isFixed;
+    }
+
+    /// <summary>
+    /// REQ-114 (RC3): pre-injects the risky ref use-site default/fixed attributes into the
+    /// validation clone, so .NET's <c>GetUnspecifiedDefaultAttributes</c> no longer returns
+    /// them (and no longer crashes). When the attribute namespace has no in-scope prefix,
+    /// an XSD 1.1-style namespace fixup declaration is added on the element (the XML namespace
+    /// needs none — the <c>xml</c> prefix is always in scope). Every injection is marked with
+    /// a <see cref="RefDefaultInjection"/> annotation so the post-validation cleanup and the
+    /// copy-back can tell them from genuinely validated nodes.
+    /// </summary>
+    private static void PreInjectRefUseSiteDefaultAttributes(XElement clone, XmlSchemaSet schemas)
+    {
+        if (FindRefUseSiteDefaultAttributes(schemas) is not { } map)
+            return;
+
+        foreach (var element in clone.DescendantsAndSelf())
+        {
+            if (!map.TryGetValue(new XmlQualifiedName(element.Name.LocalName, element.Name.NamespaceName), out var uses))
+                continue;
+            foreach (var (attributeName, value, isFixed) in uses)
+            {
+                var xName = XNamespace.Get(attributeName.Namespace) + attributeName.Name;
+                if (element.Attribute(xName) is not null)
+                    continue;
+                if (attributeName.Namespace.Length > 0
+                    && attributeName.Namespace != "http://www.w3.org/XML/1998/namespace"
+                    && element.GetPrefixOfNamespace(attributeName.Namespace) is null)
+                {
+                    var prefix = GenerateUniquePrefix(element, attributeName.Name);
+                    element.SetAttributeValue(XNamespace.Xmlns + prefix, attributeName.Namespace);
+                    element.Attribute(XNamespace.Xmlns + prefix)!.AddAnnotation(new RefDefaultInjection(isFixed));
+                }
+                var injected = new XAttribute(xName, value);
+                injected.AddAnnotation(new RefDefaultInjection(isFixed));
+                element.Add(injected);
+            }
+        }
+    }
+
+    /// <summary>
+    /// REQ-114 (RC3): removes the injected <c>fixed</c> attributes — and their namespace-fixup
+    /// declarations — from the validation clone after validation. Fixed values satisfy the
+    /// validator while present but are not part of the validated infoset the host tree
+    /// receives (Saxon semantics, validation-0201/0202); injected <c>default</c> attributes
+    /// stay and are copied back by <see cref="CopySchemaAnnotations"/> (import-schema-164).
+    /// </summary>
+    private static void RemoveFixedInjectedAttributes(XElement clone)
+    {
+        foreach (var element in clone.DescendantsAndSelf())
+        {
+            foreach (var attribute in element.Attributes().ToList())
+            {
+                if (attribute.Annotation<RefDefaultInjection>() is { IsFixed: true })
+                    attribute.Remove();
+            }
+        }
     }
 
     /// <summary>
@@ -986,6 +1276,23 @@ public static partial class XdmSchemaAnnotator
     private sealed class SimpleTypeSchemaInfo(XmlSchemaSimpleType schemaType, XmlSchemaValidity validity) : IXmlSchemaInfo
     {
         public XmlSchemaValidity Validity => validity;
+        public bool IsDefault => false;
+        public bool IsNil => false;
+        public XmlSchemaSimpleType? MemberType => null;
+        public XmlSchemaType SchemaType => schemaType;
+        public XmlSchemaElement? SchemaElement => null;
+        public XmlSchemaAttribute? SchemaAttribute => null;
+    }
+
+    /// <summary>
+    /// Host-built <see cref="IXmlSchemaInfo"/> annotation marking a node with a built-in
+    /// schema type without a governing declaration: the <c>xs:anyType</c> /
+    /// <c>xs:untypedAtomic</c> annotations assigned by the XSLT preserve construction rules
+    /// (XSLT 3.0 §25.1.1; <see cref="PreserveSchemaAnnotations"/>).
+    /// </summary>
+    private sealed class BuiltinTypeSchemaInfo(XmlSchemaType schemaType) : IXmlSchemaInfo
+    {
+        public XmlSchemaValidity Validity => XmlSchemaValidity.Valid;
         public bool IsDefault => false;
         public bool IsNil => false;
         public XmlSchemaSimpleType? MemberType => null;

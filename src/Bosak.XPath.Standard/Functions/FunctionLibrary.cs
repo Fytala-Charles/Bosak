@@ -350,6 +350,14 @@
 //                      | Charles Korthout | 5.116 | 24-09-2026     | REQ-106 (PA-3): xs:QName constructor accepts QName-kind input (NOTATION → QName        |
 //                      |                  |       |                | casting, XPath 3.0) — notation-0001/0003/0004                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.117 | 30-09-2026     | REQ-114/PB-3 C9: format-date/time/dateTime declare ParameterTypeNames so node args      |
+//                      |                  |       |                | are atomized to their PSVI typed value; fn:string-join atomizes list-typed nodes per    |
+//                      |                  |       |                | member (copy-of-005, import-schema-020); fn:copy-of deep copies carry the               |
+//                      |                  |       |                | IXmlSchemaInfo annotation onto element/attribute clones (validation preserve)           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.118 | 30-09-2026     | REQ-114/PB-3 C9: fn:type-available lists xs:ENTITIES/IDREFS/NMTOKENS and consults       |
+//                      |                  |       |                | imported schema types (type-available-0147/0149)                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -1823,36 +1831,42 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 2,
                 ParameterTypes = [XdmValueKind.Date, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:date?", "xs:string"],
                 Implementation = FormatDate_2
             },
             [(Namespaces.Fn, "format-date", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 5,
                 ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
                 Implementation = FormatDate_5
             },
             [(Namespaces.Fn, "format-time", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 2,
                 ParameterTypes = [XdmValueKind.Time, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:time?", "xs:string"],
                 Implementation = FormatTime_2
             },
             [(Namespaces.Fn, "format-time", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 5,
                 ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
                 Implementation = FormatTime_5
             },
             [(Namespaces.Fn, "format-dateTime", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 2,
                 ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:dateTime?", "xs:string"],
                 Implementation = FormatDateTime_2
             },
             [(Namespaces.Fn, "format-dateTime", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 5,
                 ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
                 Implementation = FormatDateTime_5
             },
 
@@ -4923,14 +4937,6 @@ public static class FunctionLibrary
         var (nsUri, localName) = ParseTypeAvailableName(ctx, name);
         string lowerLocal = localName.ToLowerInvariant();
 
-        // If an explicit namespace URI was supplied, the type is only available
-        // when it is the XML Schema namespace.
-        if (nsUri is not null && nsUri != Namespaces.Xs)
-            return XdmValue.False;
-
-        // For an EQName with no namespace (Q{}local), no schema is in scope.
-        if (nsUri == string.Empty && name.StartsWith("Q{"))
-            return XdmValue.False;
         string[] builtInTypes =
         [
             "string", "boolean", "integer", "decimal", "float", "double",
@@ -4938,13 +4944,29 @@ public static class FunctionLibrary
             "yearMonthDuration", "daytimeduration", "dayTimeDuration",
             "gday", "gmonth", "gyear", "gmonthday", "gyearmonth",
             "hexbinary", "base64binary", "anyuri", "qname", "notation",
-            "normalizedstring", "token", "language", "nmtoken", "name", "ncname",
-            "id", "idref", "entity", "int", "long", "short", "byte",
+            "normalizedstring", "token", "language", "nmtoken", "nmtokens", "name", "ncname",
+            "id", "idref", "idrefs", "entity", "entities", "int", "long", "short", "byte",
             "nonnegativeinteger", "positiveinteger", "unsignedlong", "unsignedint",
             "unsignedshort", "unsignedbyte", "nonpositiveinteger", "negativeinteger",
             "untyped", "anytype", "anysimpletype", "untypedatomic", "anyatomictype"
         ];
-        return XdmValue.FromBoolean(builtInTypes.Contains(lowerLocal));
+
+        // xs: prefixed names: the built-in XML Schema types (schema-aware mode).
+        if (nsUri == Namespaces.Xs)
+            return XdmValue.FromBoolean(builtInTypes.Contains(lowerLocal));
+
+        // An explicit no-namespace EQName (Q{}local) never names a type (type-available-0150).
+        if (nsUri == string.Empty && name.StartsWith("Q{", StringComparison.Ordinal))
+            return XdmValue.False;
+
+        // xsl:* is never a type name (type-available-0147).
+        if (nsUri == Namespaces.Xsl)
+            return XdmValue.False;
+
+        // User-defined types declared in imported schemas (type-available-0149): an
+        // unprefixed name has no namespace; any other non-xs namespace URI names an
+        // imported type in that namespace.
+        return XdmValue.FromBoolean(ctx.GetSchemaType(nsUri ?? string.Empty, localName) is not null);
     }
 
     /// <summary>
@@ -9772,7 +9794,21 @@ public static class FunctionLibrary
         string sep = RequireStringRequired(args[1], ctx.BackwardsCompatible);
         var strings = new List<string>(items.Count);
         foreach (var item in items)
-            strings.Add(AtomizedString(item));
+        {
+            // Atomize each item: a schema-validated node with a list type contributes
+            // one string per typed-value member, not its raw string value
+            // (import-schema-020: string-join over an xs:NMTOKENS attribute).
+            var atomized = AtomizeValue(item);
+            if (atomized.IsSequence && atomized.SequenceValue is not null)
+            {
+                foreach (var member in XdmSequence.FromSource(atomized.SequenceValue))
+                    strings.Add(AtomizedString(member));
+            }
+            else
+            {
+                strings.Add(AtomizedString(atomized));
+            }
+        }
         return XdmValue.FromString(string.Join(sep, strings));
     }
 
@@ -14748,7 +14784,11 @@ public static class FunctionLibrary
                 case XProcessingInstruction pi:
                     return new Providers.Xml.XDocumentNode(new XProcessingInstruction(pi.Target, pi.Data));
                 case XAttribute attr:
-                    return new Providers.Xml.XDocumentNode(new XAttribute(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value));
+                {
+                    var attrCopy = new XAttribute(XName.Get(attr.Name.LocalName, attr.Name.NamespaceName), attr.Value);
+                    CopySchemaInfoAnnotation(attr, attrCopy);
+                    return new Providers.Xml.XDocumentNode(attrCopy);
+                }
             }
         }
         // Foreign providers (e.g. streaming wrappers): build a grounded copy off the
@@ -14756,6 +14796,28 @@ public static class FunctionLibrary
         // Copying a streamed document/root drains the stream into the copy — the same
         // documented "unbounded but correct" contract as sorting over streams.
         return DeepCopyForeignNode(node);
+    }
+
+    /// <summary>
+    /// Copies the PSVI (<see cref="IXmlSchemaInfo"/>) annotation of a source node onto its
+    /// deep-copy clone, so <c>fn:copy-of</c> preserves the validation status of
+    /// schema-annotated elements and attributes (validation="preserve", copy-of-005).
+    /// </summary>
+    /// <param name="source">The original node (element or attribute).</param>
+    /// <param name="target">The freshly constructed clone.</param>
+    private static void CopySchemaInfoAnnotation(XObject source, XObject target)
+    {
+        IXmlSchemaInfo? info = source switch
+        {
+            XElement e => e.GetSchemaInfo(),
+            XAttribute a => a.GetSchemaInfo(),
+            _ => null
+        };
+        if (info is { })
+        {
+            target.RemoveAnnotations(typeof(IXmlSchemaInfo));
+            target.AddAnnotation(info);
+        }
     }
 
     /// <summary>
@@ -14926,6 +14988,14 @@ public static class FunctionLibrary
                     copy.Add(new XProcessingInstruction(pi.Target, pi.Data));
                     break;
             }
+        }
+        CopySchemaInfoAnnotation(element, copy);
+        foreach (var attr in element.Attributes())
+        {
+            if (attr.IsNamespaceDeclaration)
+                continue;
+            if (copy.Attribute(attr.Name) is { } copiedAttr)
+                CopySchemaInfoAnnotation(attr, copiedAttr);
         }
         return copy;
     }
