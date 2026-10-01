@@ -253,7 +253,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-All 2,683 unit tests pass (0 failures) across 9 assemblies, plus 72 in the separate Bosak.LanguageServer project (not in `Bosak.sln`).
+All 2,702 unit tests pass (0 failures) across 9 assemblies, plus 72 in the separate Bosak.LanguageServer project (not in `Bosak.sln`).
 
 ---
 
@@ -308,7 +308,7 @@ The harness:
 | `assert-deep-eq` | ✅ Implemented | Recursive XDM comparison |
 | `assert-xml` | ⚠️ Partial | ~1,840 tests skipped |
 | `assert-permutation` | ❌ Not implemented | ~92 tests skipped |
-| Schema-aware | ⚠️ Opt-in (REQ-097) | ~5,000+ tests skipped — XSLT schema-aware compilation compiles `xsl:import-schema` and supports user-defined simple types via `SchemaAware` / `SchemaResolver` / `SchemaSet`; complex-type typed construction and runtime validation (`validation`/`@type`, XTTE15xx family) are implemented in the core behind the same opt-in (REQ-098–REQ-114 — last schema-aware sweep **11,015 passed / 39 failed / 3,546 skipped**) |
+| Schema-aware | ⚠️ Opt-in (REQ-097) | ~5,000+ tests skipped — XSLT schema-aware compilation compiles `xsl:import-schema` and supports user-defined simple types via `SchemaAware` / `SchemaResolver` / `SchemaSet`; complex-type typed construction and runtime validation (`validation`/`@type`, XTTE15xx family) are implemented in the core behind the same opt-in (REQ-098–REQ-115 — last schema-aware sweep **11,027 passed / 28 failed / 3,546 skipped**) |
 
 ### Adding New Tests
 
