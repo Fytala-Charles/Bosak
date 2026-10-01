@@ -29,6 +29,9 @@
 //                      | Charles Korthout | 1.2   | 29-09-2026     | @typed parsed into ModeTyped enum (yes/true/1/strict, no/false/0, lax, unspecified);  |
 //                      |                  |       |                | QName→schema-element rewriting in strict/lax modes (match-218/219/220/221/222/243/244)|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.3   | 01-10-2026     | ConflictsWith takes resolvedAttributes: conflicts on attributes explicitly specified  |
+//                      |                  |       |                | by a higher-import-precedence declaration are resolved (mode-1505 vs mode-1506)          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -190,14 +193,19 @@ internal sealed class ModeDefinition
     /// <summary>
     /// Whether two declarations of the same mode at the same import precedence conflict
     /// (XTSE0545): they explicitly supply different values for the same attribute.
+    /// Attributes named in <paramref name="resolvedAttributes"/> are excluded: a
+    /// higher-import-precedence declaration explicitly specifying the attribute
+    /// resolves the conflict (XSLT 3.0 §6.6.1; mode-1505 vs mode-1506).
     /// use-accumulators values are compared as sets of resolved (Clark) accumulator names,
     /// so differing prefixes or token order for the same accumulators do not conflict
     /// (mode-1514), while the same prefixes naming different accumulators do (mode-1515).
     /// </summary>
-    public bool ConflictsWith(ModeDefinition other)
+    public bool ConflictsWith(ModeDefinition other, IReadOnlySet<string>? resolvedAttributes = null)
     {
         foreach (var (attr, value) in SpecifiedValues)
         {
+            if (resolvedAttributes != null && resolvedAttributes.Contains(attr))
+                continue;
             if (!other.SpecifiedValues.TryGetValue(attr, out var otherValue))
                 continue;
             if (attr == "use-accumulators")

@@ -358,6 +358,26 @@
 //                      | Charles Korthout | 5.118 | 30-09-2026     | REQ-114/PB-3 C9: fn:type-available lists xs:ENTITIES/IDREFS/NMTOKENS and consults       |
 //                      |                  |       |                | imported schema types (type-available-0147/0149)                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.119 | 01-10-2026     | fn:xml-to-json checks emptiness and arity in one enumeration so single-pass streamed   |
+//                      |                  |       |                | args raise XPTY0004 instead of a streaming re-read error (sf-xml-to-json-004)           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.120 | 01-10-2026     | fn:sum casts xs:untypedAtomic terms to xs:double with FORG0001 on uncastable values    |
+//                      |                  |       |                | (sf-insert-before-011)                                                                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.121 | 01-10-2026     | fn:resolve-uri validates relative refs with an RFC 3986 char scan (IRI-tolerant: spaces |
+//                      |                  |       |                | kept literal) instead of .NET well-formedness; restores literal spaces (type-functions-0304)|
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.122 | 01-10-2026     | LoadDocumentWithFragment (fn:document entry) rejects URI references with raw backslashes  |
+//                      |                  |       |                | with FODC0005 — moved out of EvaluationContext.LoadDocument, which also serves internal   |
+//                      |                  |       |                | platform-path callers (collection unit tests, non-stream-006)                            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.123 | 01-10-2026     | fn:distinct-values codepoint-collation fast path: ordinal hash sets for string-family    |
+//                      |                  |       |                | values (untypedAtomic/anyURI join membership checks); removes O(n²) pairwise scan on      |
+//                      |                  |       |                | large inputs (sf-distinct-values-001: 481s → ~2s)                                        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.124 | 01-10-2026     | IsValidRelativeUriReference rejects malformed percent-encodings ("%gg" → FORG0002;      |
+//                      |                  |       |                | CombinedErrorCodes FORG0002) while valid "%20" stays encoded (fn-resolve-uri-31)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4427,13 +4447,15 @@ public static class FunctionLibrary
                 throw new InvalidOperationException("FORG0002: Invalid relative URI");
         }
 
-        // Validate the relative reference by attempting to resolve it against a well-formed
-        // dummy base. This catches malformed references such as "##some.uri".
-        if (!Uri.TryCreate(baseUriObj, relative, out var dummyResolved)
-            || !Uri.IsWellFormedUriString(dummyResolved.OriginalString, UriKind.Absolute))
-        {
+        // Validate the relative reference with an RFC 3986 character scan rather than
+        // .NET's Uri well-formedness rules: LEIRI/IRI characters such as spaces and
+        // non-ASCII characters are accepted and kept literal in the result (bug 20602;
+        // type-functions-0304 expects "two organizations" unencoded). Characters that
+        // are never valid in a URI reference — controls, '<' '>' '"' '{' '}' '|' '\'
+        // '^' '`' — and a '#' inside the fragment ("##some.uri", resolve-uri-018)
+        // raise FORG0002.
+        if (!IsValidRelativeUriReference(relative))
             throw new InvalidOperationException("FORG0002: Invalid relative URI");
-        }
 
         var resolved = ResolveRelativeUri(baseUri, relative);
         return XdmValue.FromString(resolved, "anyURI");
@@ -4472,6 +4494,58 @@ public static class FunctionLibrary
     }
 
     /// <summary>
+    /// Validates the characters of a relative URI reference per RFC 3986, tolerating
+    /// LEIRI/IRI characters (spaces, non-ASCII) that .NET's <see cref="Uri"/> rejects.
+    /// </summary>
+    /// <param name="reference">The relative URI reference to validate.</param>
+    /// <returns><c>true</c> when every character is permitted in a URI reference.</returns>
+    private static bool IsValidRelativeUriReference(string reference)
+    {
+        var inFragment = false;
+        for (var i = 0; i < reference.Length; i++)
+        {
+            var c = reference[i];
+            if (c == '#')
+            {
+                if (inFragment)
+                    return false; // '#' is not allowed inside a fragment
+                inFragment = true;
+                continue;
+            }
+            if (c == '%')
+            {
+                // A '%' introduces a percent-encoding and must be followed by
+                // exactly two hex digits ("%gg", CombinedErrorCodes FORG0002).
+                if (i + 2 >= reference.Length
+                    || !IsHexDigit(reference[i + 1])
+                    || !IsHexDigit(reference[i + 2]))
+                    return false;
+                i += 2;
+                continue;
+            }
+            if (c < 0x20 || c == 0x7F)
+                return false; // control characters
+            switch (c)
+            {
+                case '<':
+                case '>':
+                case '"':
+                case '{':
+                case '}':
+                case '|':
+                case '\\':
+                case '^':
+                case '`':
+                    return false;
+            }
+        }
+        return true;
+
+        static bool IsHexDigit(char c) =>
+            (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+    }
+
+    /// <summary>
     /// Resolves a relative URI against a base URI, handling edge cases
     /// that .NET's <see cref="Uri"/> class misinterprets.
     /// </summary>
@@ -4484,8 +4558,8 @@ public static class FunctionLibrary
             // fn:resolve-uri keeps IRI characters literal (fn-resolve-uri-30). Restore the
             // literal non-ASCII characters of the inputs; percent-encodings already present
             // in the inputs stay encoded (fn-resolve-uri-31).
-            resolved = RestoreLiteralIriCharacters(resolved, relative);
-            resolved = RestoreLiteralIriCharacters(resolved, baseUri);
+            resolved = RestoreLiteralIriCharacters(resolved, relative, restoreSpaces: true);
+            resolved = RestoreLiteralIriCharacters(resolved, baseUri, restoreSpaces: false);
             // RFC 3986: network-path references like //g have empty path.
             // .NET normalizes empty path to "/", so strip trailing "/" when
             // the relative URI is //authority with no path.
@@ -4514,11 +4588,20 @@ public static class FunctionLibrary
     /// Replaces the percent-encoded UTF-8 forms of the non-ASCII characters that appear
     /// literally in <paramref name="source"/> with the characters themselves.
     /// </summary>
-    private static string RestoreLiteralIriCharacters(string resolved, string source)
+    /// <param name="restoreSpaces">Spaces are only restored from the relative reference: a
+    /// <c>%20</c> legitimately present in the base URI must stay encoded.</param>
+    private static string RestoreLiteralIriCharacters(string resolved, string source, bool restoreSpaces)
     {
         for (int i = 0; i < source.Length; i++)
         {
             char c = source[i];
+            // LEIRI: spaces are kept literal in the result rather than percent-encoded
+            // (bug 20602; type-functions-0304 expects "two organizations" unencoded).
+            if (restoreSpaces && c == ' ')
+            {
+                resolved = resolved.Replace("%20", " ");
+                continue;
+            }
             if (c <= 0x7F)
                 continue;
             string literal;
@@ -7612,6 +7695,14 @@ public static class FunctionLibrary
 
     private static XdmValue LoadDocumentWithFragment(EvaluationContext ctx, string uri, string? baseUri)
     {
+        // A URI reference must use RFC 3986 syntax: a raw backslash is invalid
+        // (non-stream-006 expects FODC0005 for c:\my\doc\... rather than a
+        // file-not-found FODC0002). Checked here — where the value is a URI reference
+        // by definition — because internal LoadDocument callers (collections, loaders)
+        // pass platform file paths containing backslashes.
+        if (uri.Contains('\\'))
+            throw new InvalidOperationException($"FODC0005: Invalid document URI: {uri}");
+
         string? fragment = null;
         var hash = uri.IndexOf('#');
         if (hash >= 0)
@@ -9391,6 +9482,65 @@ public static class FunctionLibrary
     private static XdmValue DistinctValuesImpl(XdmValue sequence, string collation, int implicitTimezoneOffsetMinutes)
     {
         var items = Materialize(sequence);
+        // Codepoint collation: string-family values deduplicate through ordinal hash sets
+        // (equality under the codepoint collation is ordinal equality for well-formed
+        // strings). An empty collation URI is the processor default and compares as
+        // codepoint. untypedAtomic and anyURI values join the membership checks because
+        // XPath's untypedAtomic comparison rules equate them with plain strings; every
+        // other value falls back to the pairwise scan against non-string values only.
+        if (collation.Length == 0 || collation == CodepointCollation)
+        {
+            var seenStrings = new HashSet<string>(StringComparer.Ordinal);
+            var seenUntyped = new HashSet<string>(StringComparer.Ordinal);
+            var seenUris = new HashSet<string>(StringComparer.Ordinal);
+            var seenOthers = new List<XdmValue>();
+            var fastResult = new List<XdmValue>();
+            foreach (var item in items)
+            {
+                var atomized = AtomizeValue(item);
+                bool isDistinct;
+                if (atomized.Kind == XdmValueKind.String
+                    && StringTypeFamily(atomized.SchemaTypeName) == StringTypeFamilyKind.String)
+                {
+                    if (IsUntypedAtomic(atomized))
+                    {
+                        isDistinct = seenUntyped.Add(atomized.StringValue)
+                            && !seenStrings.Contains(atomized.StringValue)
+                            && !seenUris.Contains(atomized.StringValue);
+                    }
+                    else
+                    {
+                        isDistinct = seenStrings.Add(atomized.StringValue)
+                            && !seenUntyped.Contains(atomized.StringValue);
+                    }
+                }
+                else if (atomized.Kind == XdmValueKind.Uri)
+                {
+                    isDistinct = seenUris.Add(atomized.StringValue)
+                        && !seenUntyped.Contains(atomized.StringValue);
+                }
+                else
+                {
+                    isDistinct = true;
+                    foreach (var s in seenOthers)
+                    {
+                        if (AtomicValuesEqual(atomized, s, collation, implicitTimezoneOffsetMinutes) || BothNaN(atomized, s))
+                        {
+                            isDistinct = false;
+                            break;
+                        }
+                    }
+                    if (isDistinct)
+                        seenOthers.Add(atomized);
+                }
+                if (isDistinct)
+                {
+                    // fn:distinct-values returns the atomized values, not the original nodes.
+                    fastResult.Add(atomized);
+                }
+            }
+            return XdmValue.FromSequence(MaterializedSequence.FromList(fastResult));
+        }
         var seen = new List<XdmValue>();
         var result = new List<XdmValue>();
         foreach (var item in items)
@@ -10757,14 +10907,22 @@ public static class FunctionLibrary
         {
             float sumF = 0.0f;
             foreach (var a in atomized)
-                sumF += (float)ToDoubleValue(a);
+                sumF += (float)SumTermToDouble(a);
             return XdmValue.FromFloat(sumF);
         }
         double sumD = 0.0;
         foreach (var a in atomized)
-            sumD += ToDoubleValue(a);
+            sumD += SumTermToDouble(a);
         return XdmValue.FromDouble(sumD);
     }
+
+    /// <summary>
+    /// Converts one fn:sum term to xs:double. An xs:untypedAtomic term is cast to
+    /// xs:double and raises FORG0001 when the lexical form is uncastable
+    /// (sf-insert-before-011); numeric terms convert as-is.
+    /// </summary>
+    private static double SumTermToDouble(XdmValue a)
+        => IsUntypedAtomic(a) ? CastUntypedAtomicToDouble(a.StringValue) : ToDoubleValue(a);
 
     private static XdmValue MinMax(List<XdmValue> items, bool min, string collation)
     {
@@ -14181,22 +14339,27 @@ public static class FunctionLibrary
     {
         // fn:xml-to-json takes node()?: the empty sequence yields the empty sequence
         // (xml-to-json-066); a single-node sequence is unwrapped (xml-to-json-D cluster);
-        // more than one node is XPTY0004 (xml-to-json-C-001).
-        if (nodeValue.IsUndefined || IsEmptySequence(nodeValue))
-            return XdmValue.Undefined;
+        // more than one node is XPTY0004 (xml-to-json-C-001). Emptiness and arity are
+        // checked in ONE enumeration: the argument can be a single-pass streamed
+        // sequence (sf-xml-to-json-004), which a second enumeration would reject.
         if (nodeValue.IsSequence)
         {
             XdmValue? single = null;
+            int count = 0;
             foreach (var item in XdmSequence.FromSource(nodeValue.SequenceValue!))
             {
-                if (single is not null)
+                if (count == 0)
+                    single = item;
+                count++;
+                if (count > 1)
                     throw new InvalidOperationException("XPTY0004: xml-to-json requires a single node, got a sequence");
-                single = item;
             }
-            nodeValue = single ?? XdmValue.Undefined;
-            if (nodeValue.IsUndefined)
+            if (count == 0)
                 return XdmValue.Undefined;
+            nodeValue = single.GetValueOrDefault();
         }
+        else if (nodeValue.IsUndefined)
+            return XdmValue.Undefined;
         if (!nodeValue.IsNode)
             throw new InvalidOperationException("XPTY0004: xml-to-json requires a node");
 

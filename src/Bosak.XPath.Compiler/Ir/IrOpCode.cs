@@ -158,7 +158,7 @@ internal enum IrOpCode : byte
     SimpleMap,
     /// <summary>Evaluates a predicated path step per context item.</summary>
     PathStepMap,
-    /// <summary>Sorts nodes into document order and removes duplicates.</summary>
+    /// <summary>Sorts nodes into document order and removes duplicates. RegisterC: 1 marks a forward-axis path step, whose sort/dedup is suppressed inside a streamable pipeline.</summary>
     Normalize,
 
     // ---- Nodes / Axes ------------------------------------------------

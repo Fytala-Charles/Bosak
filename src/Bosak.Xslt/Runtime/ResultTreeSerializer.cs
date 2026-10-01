@@ -64,6 +64,10 @@
 //                      | Charles Korthout | 1.33  | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      | Charles Korthout | 1.34  | 30-09-2026     | REQ-114 (PB-3 C9): item-separator honored for xml method sequences and xhtml fragments  |
 //                      |                  |       |                | (validation-0215)                                                                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.35  | 01-10-2026     | indent=yes adds no whitespace inside mixed-content elements (any non-whitespace text   |
+//                      |                  |       |                | child disables indentation); html/xhtml/raw paths — validation-0202                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -2243,7 +2247,8 @@ internal static class ResultTreeSerializer
         }
         else
         {
-            bool hasElementChildren = element.Elements().Any();
+            bool hasElementChildren = element.Elements().Any()
+                && !element.Nodes().OfType<XText>().Any(t => !string.IsNullOrWhiteSpace(t.Value));
             foreach (var child in element.Nodes())
             {
                 if (props.Indent && hasElementChildren && child is XElement)
@@ -2656,7 +2661,8 @@ internal static class ResultTreeSerializer
         }
         else
         {
-            bool hasElementChildren = element.Elements().Any();
+            bool hasElementChildren = element.Elements().Any()
+                && !element.Nodes().OfType<XText>().Any(t => !string.IsNullOrWhiteSpace(t.Value));
             foreach (var child in element.Nodes())
             {
                 if (props.Indent && hasElementChildren && child is XElement && !IsSuppressIndentationElement((child as XElement)!.Name, props))
@@ -3615,7 +3621,8 @@ internal static class ResultTreeSerializer
 
         writer.Write('>');
 
-        bool hasElementChildren = children.Any(c => c is XElement);
+        bool hasElementChildren = children.Any(c => c is XElement)
+            && !children.OfType<XText>().Any(t => !string.IsNullOrWhiteSpace(t.Value));
         // suppress-indentation applies to the whole content of a listed element,
         // descendants included (output-0232: whitespace is suppressed inside <p> but
         // not before <p> itself).
