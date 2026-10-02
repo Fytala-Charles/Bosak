@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Version>0.12.0-beta</Version>
+    <Version>0.12.1-beta</Version>
     <Authors>Fytala</Authors>
     <Company>Fytala</Company>
     <Copyright>Copyright (c) 2026 FYTALA</Copyright>
