@@ -206,6 +206,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.66  | 02-10-2026     | Environment <schema> split by role: secondary -> compiler.EnvironmentSchemaSet          |
 //                      |                  |       |                | (source-validation only); stylesheet-import stays in compiler.SchemaSet                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.67  | 02-10-2026     | ErrorCodeMatches normalizes Clark-notation Q{uri}local (and Q{}local) expected codes;   |
+//                      |                  |       |                | a namespaced expectation must match uri AND local against XPathErrorException parts     |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1654,11 +1657,29 @@ class Program
             return true;
         // XPathErrorException carries the error code as structured parts (namespace/local)
         // rather than embedded in the message (xsl:assert / xsl:message error paths).
-        // Match on the local name; catalog prefixes bind in the test stylesheet, not here.
+        // Catalog codes may be Clark notation (Q{uri}local, Q{}local) or a plain local
+        // name; a prefixed QName binds in the test stylesheet, not here, so only the
+        // local part is compared. A namespaced expectation (Q{uri}local with a non-empty
+        // uri) must match BOTH parts; Q{}local / plain local match the local name only
+        // (si-assert-901 expects Q{}XX99 from xsl:assert/@error-code="XX99").
         if (ex is Bosak.XPath.Runtime.Vm.XPathErrorException xpe)
         {
-            var expectedLocal = expectedCode.Contains(':') ? expectedCode[(expectedCode.IndexOf(':') + 1)..] : expectedCode;
-            if (xpe.CodeLocalName == expectedLocal)
+            string? expectedNs = null;
+            var expectedLocal = expectedCode;
+            if (expectedCode.StartsWith("Q{", StringComparison.Ordinal))
+            {
+                var close = expectedCode.IndexOf('}');
+                if (close >= 2)
+                {
+                    expectedNs = expectedCode[2..close];
+                    expectedLocal = expectedCode[(close + 1)..];
+                }
+            }
+            else if (expectedCode.Contains(':'))
+            {
+                expectedLocal = expectedCode[(expectedCode.IndexOf(':') + 1)..];
+            }
+            if (xpe.CodeLocalName == expectedLocal && (expectedNs == null || xpe.CodeNamespaceUri == expectedNs))
                 return true;
         }
         return false;

@@ -471,6 +471,13 @@
 //                      |                  |       |                | (xsl:import-schema winners); host/environment schemas no longer annotate constructed     |
 //                      |                  |       |                | trees or supply default attributes under lax validation (XSLT 3.0 §11.9)                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.96  | 02-10-2026     | Streamable xsl:source-document branch: backslash href -> FODC0005, load IO/URI/XML       |
+//                      |                  |       |                | failures -> FODC0002/FODC0005, mirroring the non-streamable branch (stream-002/006)      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.97  | 02-10-2026     | xsl:assert/@error-code: explicit unprefixed NCName is a local name in NO namespace        |
+//                      |                  |       |                | (XSLT 3.0 §5.2, like xsl:message — si-assert-901 pins Q{}XX99); the default XTMM9001      |
+//                      |                  |       |                | stays in the xqt-errors namespace, supplied by the caller instead of the expansion helper |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -8144,9 +8151,39 @@ internal sealed class TransformEngine
                             // constructor sees a single-pass document; whitespace stripping
                             // and accumulators are driven per record via AttachStreamingHooks.
                             // A fragment identifier drives the pump via FindElementByXmlId.
-                            var resolvedUri = ResolveStreamingHref(documentHref);
-                            docNode = _context.StreamingDocumentLoader?.Invoke(resolvedUri)
-                                ?? LoadStreamingDocument(resolvedUri);
+                            // The URI-reference rules and error mapping mirror the
+                            // non-streamable branch below: raw backslashes are invalid
+                            // syntax (FODC0005, stream-006) and load failures map to
+                            // FODC0002/FODC0005 instead of leaking raw IO exceptions
+                            // (stream-002), per fn:doc FODC0002/FODC0005 semantics.
+                            if (documentHref.Contains('\\'))
+                                throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
+                            try
+                            {
+                                var resolvedUri = ResolveStreamingHref(documentHref);
+                                docNode = _context.StreamingDocumentLoader?.Invoke(resolvedUri)
+                                    ?? LoadStreamingDocument(resolvedUri);
+                            }
+                            catch (FileNotFoundException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
+                            catch (DirectoryNotFoundException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
+                            catch (UriFormatException)
+                            {
+                                throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
+                            }
+                            catch (IOException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
+                            catch (XmlException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
                             AttachStreamingHooks(docNode);
                         }
                         else
@@ -13613,9 +13650,22 @@ internal sealed class TransformEngine
         if (!assertPassed)
         {
             var assertValue = BuildMessageValue(instruction, contextItem);
-            var assertCode = EvaluateAvt(
-                instruction.Attribute("error-code")?.Value ?? "XTMM9001", instruction).Trim();
-            var (assertNs, assertLocal) = ExpandAssertErrorCode(assertCode, instruction);
+            string assertNs, assertLocal;
+            var codeAttr = instruction.Attribute("error-code")?.Value;
+            if (string.IsNullOrEmpty(codeAttr))
+            {
+                // The default code is XTMM9001 in the standard error namespace
+                // (XSLT 3.0 §23.1); an explicit unprefixed code is a local name in no
+                // namespace (si-assert-901 expects Q{}XX99, mirroring the xsl:message
+                // rule and the unprefixed-QName rule of §5.2).
+                assertNs = "http://www.w3.org/2005/xqt-errors";
+                assertLocal = "XTMM9001";
+            }
+            else
+            {
+                var assertCode = EvaluateAvt(codeAttr, instruction).Trim();
+                (assertNs, assertLocal) = ExpandAssertErrorCode(assertCode, instruction);
+            }
             throw new Bosak.XPath.Runtime.Vm.XPathErrorException(
                 assertNs, assertLocal, string.Empty,
                 $"xsl:assert evaluation failed: {SerializeMessageValue(assertValue)}", assertValue);
@@ -13662,12 +13712,13 @@ internal sealed class TransformEngine
 
     /// <summary>
     /// Expands an <c>xsl:assert/@error-code</c> value (after AVT evaluation) to its
-    /// namespace URI and local name. Unprefixed codes are in the standard error
-    /// namespace; prefixed names resolve against the instruction's in-scope namespaces.
+    /// namespace URI and local name. An unprefixed NCName is a local name in no namespace
+    /// (XSLT 3.0 §5.2 unprefixed-QName rule, as for xsl:message error-code — the catalog
+    /// pins Q{}XX99 for si-assert-901); prefixed names resolve against the instruction's
+    /// in-scope namespaces. The namespaceless default XTMM9001 is supplied by the caller.
     /// </summary>
     private static (string NamespaceUri, string LocalName) ExpandAssertErrorCode(string expanded, XElement instruction)
     {
-        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
         if (expanded.StartsWith("Q{", StringComparison.Ordinal))
         {
             var close = expanded.IndexOf('}');
@@ -13682,7 +13733,7 @@ internal sealed class TransformEngine
                 ? throw new InvalidOperationException("XTDE0040")
                 : (ns.NamespaceName, expanded[(colon + 1)..]);
         }
-        return (ErrNs, expanded);
+        return (string.Empty, expanded);
     }
 
     /// <summary>
