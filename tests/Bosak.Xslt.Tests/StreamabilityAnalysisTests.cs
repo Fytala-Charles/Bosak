@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 21-09-2026     | su-filter/su-unclassified batch: boolean-typed variable predicate, positional predicate on striding step, unclassified atomic-param atomization in any position |
 //                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W3+W4: map-entry key/value atomization, grounded-group current-group() in nested scopes, xsl:fork grounded delivery, shallow-descent arity, absorbing constructor-feed exception, next-match with-param transmission |
+//                      | Charles Korthout | 0.4   | 02-10-2026     | Positional group-starting-with/group-ending-with: numeric-literal predicates ([1]) raise XTSE3430 over a streamed population; non-positional keep compiling |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.Xslt.Api;
@@ -261,6 +262,32 @@ public class StreamabilityAnalysisTests
     [Fact]
     public void StreamedGroup_NestedForEachCurrentGroup_Throws()
         => AssertXtse3430(Templated("""<xsl:for-each-group select="tr" group-starting-with="tr[th]"><xsl:for-each select="current-group()"><Entry><xsl:value-of select="substring(current-group()[1]/th, 1, 4)"/></Entry></xsl:for-each></xsl:for-each-group>""", match: "tbody"));
+
+    // ---------------- positional group-starting-with/group-ending-with (analyzer 0.9) ----------------
+
+    [Fact]
+    public void StreamedGroupStartingWithNumericPredicate_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each-group select="*" group-starting-with="item[1]"><in><xsl:value-of select="count(current-group())"/></in></xsl:for-each-group></xsl:source-document>"""));
+
+    [Fact]
+    public void StreamedGroupEndingWithNumericPredicate_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each-group select="*" group-ending-with="item[(2)]"><in><xsl:value-of select="count(current-group())"/></in></xsl:for-each-group></xsl:source-document>"""));
+
+    [Fact]
+    public void StreamedGroupStartingWithPositionCall_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each-group select="*" group-starting-with="item[position() = 1]"><in><xsl:value-of select="count(current-group())"/></in></xsl:for-each-group></xsl:source-document>"""));
+
+    [Fact]
+    public void StreamedGroupEndingWithLastCall_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each-group select="*" group-ending-with="item[last()]"><in><xsl:value-of select="count(current-group())"/></in></xsl:for-each-group></xsl:source-document>"""));
+
+    [Fact]
+    public void StreamedGroupStartingWithNonPositionalPredicate_Compiles()
+        => AssertCompiles(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each-group select="*" group-starting-with="item[@kind = 'head']"><in><xsl:value-of select="count(current-group())"/></in></xsl:for-each-group></xsl:source-document>"""));
+
+    [Fact]
+    public void StreamedGroupEndingWithNonPositionalPredicate_Compiles()
+        => AssertCompiles(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each-group select="*" group-ending-with="item[@kind = 'tail']"><in><xsl:value-of select="count(current-group())"/></in></xsl:for-each-group></xsl:source-document>"""));
 
     [Fact]
     public void ForkWithTwoStreamingSequenceChildren_Throws()
