@@ -478,6 +478,10 @@
 //                      |                  |       |                | (XSLT 3.0 §5.2, like xsl:message — si-assert-901 pins Q{}XX99); the default XTMM9001      |
 //                      |                  |       |                | stays in the xqt-errors namespace, supplied by the caller instead of the expansion helper |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.98  | 02-10-2026     | Streamable-branch backslash check: existing rooted platform paths (File.Exists) are      |
+//                      |                  |       |                | accepted for programmatic callers (StreamingSnapshot/SourceDocument unit tests); only    |
+//                      |                  |       |                | backslash hrefs that do not resolve to a file stay FODC0005 (stream-006 unchanged)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -8156,7 +8160,10 @@ internal sealed class TransformEngine
                             // syntax (FODC0005, stream-006) and load failures map to
                             // FODC0002/FODC0005 instead of leaking raw IO exceptions
                             // (stream-002), per fn:doc FODC0002/FODC0005 semantics.
-                            if (documentHref.Contains('\\'))
+                            // Existing rooted platform paths are accepted for
+                            // programmatic callers passing filesystem paths (mirrors
+                            // fn:doc's rooted-path rule).
+                            if (documentHref.Contains('\\') && !File.Exists(documentHref))
                                 throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
                             try
                             {
