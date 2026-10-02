@@ -36,6 +36,7 @@ Everything below lands before the repo and packages are called Beta:
 
 ### Beta → 1.0 (GA)
 
+- [x] `v0.12.1-beta` published to nuget.org 2026-10-02 (all 9 packages via Trusted Publishing OIDC; carries REQ-101…REQ-115 — schema-aware sweep 11,027/28/3,546, QT3 31,142/0/679). Package version is pinned in `src/Directory.Build.props` — bump the pin before tagging.
 - [x] Strict XSLT sweep at 100% of runnable tests that are not proven upstream artifacts
 - [ ] API frozen; SemVer commitment begins
 - [ ] Version promoted from `0.9.x-preview` to `1.0.0`; public release notes
