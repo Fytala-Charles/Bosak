@@ -482,6 +482,11 @@
 //                      |                  |       |                | accepted for programmatic callers (StreamingSnapshot/SourceDocument unit tests); only    |
 //                      |                  |       |                | backslash hrefs that do not resolve to a file stay FODC0005 (stream-006 unchanged)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.99  | 02-10-2026     | PC-1 W6 (§19.8.5): absorbing functions materialize forward-only single-pass arguments     |
+//                      |                  |       |                | into snapshot deep copies at the call boundary (RegisterXsltFunctions + package scope    |
+//                      |                  |       |                | skip VM call-site typed conversion for absorbing callees; ExecuteXsltFunction binds and   |
+//                      |                  |       |                | converts after materialization) — su-absorbing-202/203/301 pass                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3013,6 +3018,12 @@ internal sealed class TransformEngine
         foreach (var (key, def) in allFuncs)
         {
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
+            // PC-1 W6 (§19.8.5): for absorbing functions the VM's call-site typed
+            // conversion is skipped (ParameterTypeNames null) because it enumerates the
+            // argument, consuming a forward-only streamed sequence before the callee
+            // sees it. ExecuteXsltFunction materializes single-pass arguments and then
+            // applies the xsl:param/@as conversion itself.
+            var absorbing = IsAbsorbingFunction(def);
             var sig = new FunctionSignature
             {
                 NamespaceUri = def.NamespaceUri,
@@ -3020,7 +3031,7 @@ internal sealed class TransformEngine
                 Arity = def.Arity,
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
-                ParameterTypeNames = Enumerable.Range(0, def.Arity)
+                ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
                     .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
                     .ToList(),
                 ReturnTypeName = def.ReturnType,
@@ -3030,6 +3041,50 @@ internal sealed class TransformEngine
             _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
         }
         RegisterXslOriginalFunctions(allFuncs.Values);
+    }
+
+    /// <summary>
+    /// Whether the function is declared <c>streamability="absorbing"</c>, via the static
+    /// attribute or a <c>_streamability</c> AVT. Fails open (false) when the AVT cannot
+    /// be evaluated in the current context.
+    /// </summary>
+    private bool IsAbsorbingFunction(Stylesheet.XsltFunctionDefinition def)
+    {
+        try
+        {
+            return string.Equals(
+                GetEffectiveFunctionAttribute(def.Element, "streamability"),
+                "absorbing", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// PC-1 W6 (§19.8.5): deep-materializes a single-pass streamed argument for an
+    /// absorbing callee. The sequence items are lazy streaming nodes whose attributes and
+    /// children read from the advancing input, so each node is snapshotted into a grounded
+    /// deep copy; atoms and already-grounded (XDocumentNode) nodes pass through unchanged.
+    /// </summary>
+    private static XdmValue MaterializeAbsorbedArgument(XdmValue raw)
+    {
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(raw.SequenceValue!))
+        {
+            if (item.IsNode && item.NodeValue is IXdmNode node && node is not XDocumentNode)
+            {
+                items.Add(DeepCopyMergeSubtree(node) is { } copy
+                    ? XdmValue.FromNode(copy)
+                    : item);
+            }
+            else
+            {
+                items.Add(item);
+            }
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
 
     /// <summary>
@@ -4099,6 +4154,9 @@ internal sealed class TransformEngine
             foreach (var (key, def) in scopeFunctions)
             {
                 var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                // PC-1 W6: absorbing functions skip VM call-site typed conversion (see
+                // RegisterXsltFunctions); ExecuteXsltFunction converts after materializing.
+                var absorbing = IsAbsorbingFunction(def);
                 _context.RegisterFunction(new FunctionSignature
                 {
                     NamespaceUri = def.NamespaceUri,
@@ -4106,7 +4164,7 @@ internal sealed class TransformEngine
                     Arity = def.Arity,
                     ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                     ReturnType = XdmValueKind.Sequence,
-                    ParameterTypeNames = Enumerable.Range(0, def.Arity)
+                    ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
                         .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
                         .ToList(),
                     ReturnTypeName = def.ReturnType,
@@ -4203,6 +4261,16 @@ internal sealed class TransformEngine
         _context.RegexGroups = null;
         var effectiveNewEachTime = GetEffectiveFunctionAttribute(def.Element, "new-each-time");
         bool memoize = IsDeterministicNewEachTime(effectiveNewEachTime);
+        // PC-1 W6 (§19.8.5): an absorbing function consumes its streamed argument in
+        // full, so a forward-only single-pass argument is deep-materialized into memory
+        // at the parameter-binding boundary below; the body may then reference it any
+        // number of times (su-absorbing-202/203 head()+tail() recursion) or deliver
+        // buffered copies into constructors (su-absorbing-301's wrap-rows). Non-absorbing
+        // callees keep the lazy single-pass sequence untouched. Evaluated here, next to
+        // new-each-time, while the caller's static context is still in place.
+        var isAbsorbing = string.Equals(
+            GetEffectiveFunctionAttribute(def.Element, "streamability"),
+            "absorbing", StringComparison.OrdinalIgnoreCase);
         XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
         PackageScopeState packageScopeState = default;
         try
@@ -4235,12 +4303,16 @@ internal sealed class TransformEngine
             _context.RestoreVariables(new Dictionary<(string, string), XdmValue>());
 
             // Bind parameters, applying the XPath function conversion rules for each
-            // xsl:param/@as type.
+            // xsl:param/@as type (absorbing callees materialize single-pass args — see
+            // the isAbsorbing computation above).
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
             for (int i = 0; i < def.ParameterNames.Count && i < args.Length; i++)
             {
+                var raw = args[i];
+                if (isAbsorbing && raw.IsSequence && raw.SequenceValue is ISinglePassSequence)
+                    raw = MaterializeAbsorbedArgument(raw);
                 var asType = i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null;
-                var converted = ConvertFunctionArgument(args[i], asType, _context);
+                var converted = ConvertFunctionArgument(raw, asType, _context);
                 var (fpLocal, fpNs) = ExpandVariableName(def.Element, def.ParameterNames[i]);
                 _context.WithVariable(fpLocal, converted, fpNs);
             }

@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 02-10-2026     | PC-1 W3+W4: map-entry key/value modeled as atomization usage (striding atomizes within the one-consuming-use budget, crawling rejected — si-map-001..009 and expected-error si-map-901 pass); current-group() stays available in nested scopes of a GROUNDED group (si-group-048/051, streamed-group rejection kept); xsl:fork allows at most one node-delivering prong (si-fork-901, single-prong delivery per si-fork-006); shallow-descent arity zero is XTSE3155; absorbing-function result check skips constructor-feeding sequences (su-absorbing-301, bare delivery still rejected per su-absorbing-901); next-match with-param streamed-value transmission checked against reachable callee param types (si-next-match-108) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 02-10-2026     | PC-1 W6: unprefixed inspection calls (exists/has-children/...) carry Prefix null from the parser, so they were not whitelisted in CountConsumingRefs and were miscounted as consuming references (false XTSE3430 for a 2nd inspection ref in an absorbing function) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -3076,7 +3078,7 @@ internal static class StreamabilityAnalyzer
         // at the already-absorbed in-memory argument and do not consume it. Every other use
         // — navigation, atomization, head/tail — consumes.
         private static bool IsInspectionCall(FunctionCallNode f)
-            => f.Prefix is "" or "fn"
+            => f.Prefix is null or "" or "fn"
                && f.LocalName is "exists" or "has-children" or "not" or "boolean" or "true" or "false"
                    or "namespace-uri" or "local-name";
 

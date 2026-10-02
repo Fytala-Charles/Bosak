@@ -15,6 +15,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 21-09-2026     | TransformStreamingToString parity tests                                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W6: absorbing functions materialize forward-only arguments (readable twice);         |
+//                      |                  |       |                | non-absorbing callees keep single-pass semantics (second read still fails)               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Core.Xdm;
@@ -330,5 +333,52 @@ public class StreamingTransformTests
 
         Assert.Equal(inMemory, streamed);
         Assert.Equal("Hammer,Saw,Drill,", streamed);
+    }
+
+    // ---------------- PC-1 W6: absorbing functions materialize streamed arguments (§19.8.5) ----------------
+
+    private const string AbsorbingXsl = """
+        <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+          xmlns:f="urn:f" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="f xs">
+          <xsl:output method="xml" indent="no"/>
+          <xsl:mode streamable="yes"/>
+          <xsl:function name="f:reads" streamability="absorbing" as="xs:integer">
+            <xsl:param name="items" as="element()*"/>
+            <xsl:sequence select="count($items) + (if (exists($items/@id)) then 1 else 0)"/>
+          </xsl:function>
+          <xsl:template match="inventory">
+            <out><xsl:value-of select="f:reads(product)"/></out>
+          </xsl:template>
+        </xsl:stylesheet>
+        """;
+
+    [Fact]
+    public void AbsorbingFunction_MaterializesStreamedArgument_ReadableTwice()
+    {
+        // Without materialization the second read (the captured @id attributes of the
+        // absorbed argument) hits the exhausted forward-only stream; §19.8.5 lets an
+        // absorbing function consume its argument in full. 3 items + 1 = 4.
+        var result = Streamed(AbsorbingXsl, Xml);
+        Assert.Equal("<out>4</out>", result);
+    }
+
+    [Fact]
+    public void NonAbsorbingInspectionFunction_StillReceivesStreamedNode()
+    {
+        // Edge: a non-absorbing (inspection) callee keeps the lazy single-pass argument
+        // path — it is neither materialized nor broken by the absorbing-only change
+        // (su-absorbing-902's model makes untyped/unclassified node parameters a static
+        // error, so inspection is the non-absorbing category that may receive a streamed
+        // node). exists() is motionless, so the body does not advance the stream.
+        var xsl = AbsorbingXsl
+            .Replace(" streamability=\"absorbing\"", " streamability=\"inspection\"")
+            .Replace("""<xsl:param name="items" as="element()*"/>""",
+                     """<xsl:param name="items" as="element()"/>""")
+            .Replace("""<xsl:sequence select="count($items) + (if (exists($items/@id)) then 1 else 0)"/>""",
+                     """<xsl:sequence select="if (exists($items/@id)) then 1 else 0"/>""")
+            .Replace("""<out><xsl:value-of select="f:reads(product)"/></out>""",
+                     """<out><xsl:value-of select="f:reads(head(product))"/></out>""");
+        var result = Streamed(xsl, Xml);
+        Assert.Equal("<out>1</out>", result);
     }
 }

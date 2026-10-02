@@ -69,6 +69,8 @@
 //                      |                  |       |                | child + no text children; built-in xs: typed attribute/element patterns no longer      |
 //                      |                  |       |                | require an in-scope schema set (validation-1401, import-schema-055, conflict-1402)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.11  | 02-10-2026     | PC-1 W5: XSLT 3.0 §10.1.4 relaxation — key() 2nd pattern argument may be a context-       |
+//                      |                  |       |                | dependent step (@id), evaluated per candidate node (stream-211); 40+2 stays XTSE0340   |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -77,6 +79,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
@@ -589,6 +592,13 @@ internal sealed class PatternCompiler
         if (arg[0] == '(' && FindMatchingParen(arg, 0) == arg.Length - 1)
             return true;
 
+        // XSLT 3.0 §10.1.4 relaxes the XSLT 2.0 constraint: the second argument may be a
+        // context-dependent step such as @id or child::item, evaluated with the candidate
+        // node as the context item (stream-211's item[key('change', @id, $doc2)]/foo).
+        // General expressions (e.g. 40+2) remain XTSE0340 (match-079/080).
+        if (IsContextDependentKeyArgument(arg))
+            return true;
+
         // Numeric literals (integer/decimal), optionally negative.
         int pos = 0;
         if (arg[0] == '-')
@@ -614,6 +624,34 @@ internal sealed class PatternCompiler
         }
         return hasDigits && pos == arg.Length;
     }
+
+    /// <summary>Whether the key() second argument is a context-dependent step — a bare
+    /// axis step (@id, child::item), the context item (.), or a filtered form of either —
+    /// which XSLT 3.0 §10.1.4 permits in a pattern and the predicate machinery evaluates
+    /// per candidate node. Anything that does not parse, or parses to a non-step shape
+    /// (arithmetic, function calls, sequences), is not allowed.</summary>
+    private static bool IsContextDependentKeyArgument(string arg)
+    {
+        XPathAstNode ast;
+        try
+        {
+            ast = XPathParser.Parse(arg);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        return IsStepShapedKeyArgument(ast);
+    }
+
+    private static bool IsStepShapedKeyArgument(XPathAstNode node) => node switch
+    {
+        ParenthesizedExprNode p => IsStepShapedKeyArgument(p.Expression),
+        StepNode => true,
+        ContextItemNode => true,
+        PostfixPredicateNode pp => IsStepShapedKeyArgument(pp.Expression),
+        _ => false,
+    };
 
     /// <summary>
     /// Returns true when the supplied pattern contains a call to the named function,
