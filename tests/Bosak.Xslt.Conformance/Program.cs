@@ -215,6 +215,10 @@
 //                      |                  |       |                | TransformCaptured and evaluate against the in-memory secondary document — file           |
 //                      |                  |       |                | round-tripping destroys the PSVI annotations the assertions inspect                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.69  | 02-10-2026     | RunRawTransform non-capture path restores the pre-W7 call shapes: an initial match      |
+//                      |                  |       |                | selection keeps its own Transform overload — dropping matchSel threw XTDE0044 for        |
+//                      |                  |       |                | package-001d..s (<initial-mode select="42">, no source) in the full-catalog sweeps       |
+//                      |==================|=======|================|=========================================================================================
 
 using System.Xml.Linq;
 using System.Xml;
@@ -1497,7 +1501,12 @@ class Program
             XdmValue RunRawTransform(IXdmNode? src, XdmValue? matchSel, string? tmpl, string? mode)
             {
                 if (!captureSecondaryResults)
-                    return executable.Transform(src, evalContext, tmpl, mode, rawResult: true, baseOutputUri: baseOutputUri);
+                    // Preserve the pre-W7 call shapes: an initial match selection uses its
+                    // own overload — dropping it here threw XTDE0044 for package-001d..s
+                    // (<initial-mode select="42"> with no source document).
+                    return matchSel != null
+                        ? executable.Transform(null, matchSel, evalContext, tmpl, mode, rawResult: true, baseOutputUri: baseOutputUri)
+                        : executable.Transform(src, evalContext, tmpl, mode, rawResult: true, baseOutputUri: baseOutputUri);
                 var value = executable.TransformCaptured(src, matchSel, evalContext, tmpl, mode,
                     "document", baseOutputUri, out var captured);
                 _capturedSecondaryResults = captured;
