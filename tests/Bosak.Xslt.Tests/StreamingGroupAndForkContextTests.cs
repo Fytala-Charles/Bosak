@@ -12,11 +12,13 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 21-09-2026     | Creation (si-fork-113/114/115/116/801/814 fixes)                                         |
+//                      | Charles Korthout | 0.2   | 02-10-2026     | PC-1 W7-4: streamed group-starting-with predicate patterns (si-group-054/056)          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
 using Bosak.XPath.Providers.Streaming;
+using Bosak.XPath.Providers.Xml;
 using Bosak.Xslt.Api;
 using Xunit;
 
@@ -231,5 +233,55 @@ public class StreamingGroupAndForkContextTests
         var ex = Assert.Throws<InvalidOperationException>(() =>
             new XsltCompiler().Compile(xsl).Transform(null));
         Assert.StartsWith("XQDY0137", ex.Message, StringComparison.Ordinal);
+    }
+
+    // ---------------- streamed group-starting-with predicate patterns (PC-1 W7-4) ----------------
+
+    private const string ContentsXml = """
+        <contents>
+          <unnumbered type="PT"><title>Title one</title></unnumbered>
+          <unnumbered type="chapter" manid="01"/>
+          <unnumbered type="PT"><title>Title Two</title></unnumbered>
+          <unnumbered type="chapter" manid="04"/>
+        </contents>
+        """;
+
+    private const string GroupStartingXsl = """
+        <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+          <xsl:mode streamable="yes"/>
+          <xsl:strip-space elements="*"/>
+          <xsl:template match="contents">
+            <out>
+              <xsl:for-each-group select="unnumbered" group-starting-with="unnumbered[@type = 'PT']">
+                <g size="{count(current-group())}" ctx="{@type}"/>
+              </xsl:for-each-group>
+            </out>
+          </xsl:template>
+        </xsl:stylesheet>
+        """;
+
+    [Fact]
+    public void GroupStartingWith_AttributePredicateOnStreamedNodes_GroupsCorrectly()
+    {
+        // Regression (si-group-054/056): pattern matching re-ran child::base[pred] from
+        // the parent, which a streamed parent cannot service (its child pump is consumed);
+        // the swallowed StreamingException made every candidate fail the pattern, so all
+        // items collapsed into one group. Non-positional predicates now self-evaluate.
+        var result = Streamed(GroupStartingXsl, ContentsXml);
+        Assert.Equal(
+            "<out><g size=\"2\" ctx=\"PT\"/><g size=\"2\" ctx=\"PT\"/></out>",
+            result);
+    }
+
+    [Fact]
+    public void GroupStartingWith_AttributePredicate_InMemoryParityUnchanged()
+    {
+        // Edge: in-memory documents keep the parent-based evaluation path; the streamed
+        // self-evaluation shortcut must not change their grouping semantics.
+        var doc = XDocumentProvider.ParseXml(ContentsXml);
+        var result = new XsltCompiler().Compile(GroupStartingXsl).Transform(doc).NodeValue!.ToXmlString();
+        Assert.Equal(
+            "<out><g size=\"2\" ctx=\"PT\"/><g size=\"2\" ctx=\"PT\"/></out>",
+            result.Replace(" />", "/>"));
     }
 }

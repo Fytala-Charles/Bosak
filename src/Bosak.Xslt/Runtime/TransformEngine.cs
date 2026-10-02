@@ -64,6 +64,9 @@
 //                      | Charles Korthout | 6.97  | 01-10-2026     | xsl:source-document (non-streamed) rejects @href URI references with raw backslashes     |
 //                      |                  |       |                | with FODC0005 (non-stream-006) — the check moved here from EvaluationContext.LoadDocument|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.98  | 02-10-2026     | PC-1 W7-3: xsl:iterate body processes text-node children (text templates / literal    |
+//                      |                  |       |                | text) instead of silently dropping them — si-iterate-005                            |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -21721,14 +21724,22 @@ internal sealed class TransformEngine
                 var iterationVariables = _context.SnapshotVariables();
                 try
                 {
-                    foreach (var child in instruction.Elements())
+                    foreach (var childNode in instruction.Nodes())
                     {
-                        if (child.Name.LocalName == "param" || child.Name.LocalName == "on-completion")
-                            continue;
-                        if (child.Name.NamespaceName == xslNs)
-                            ExecuteXsltInstruction(child, item);
-                        else
-                            CopyLiteralElement(child);
+                        switch (childNode)
+                        {
+                            case XText text:
+                                ProcessSequenceText(text, instruction);
+                                break;
+                            case XElement child when child.Name.LocalName == "param" || child.Name.LocalName == "on-completion":
+                                continue;
+                            case XElement child when child.Name.NamespaceName == xslNs:
+                                ExecuteXsltInstruction(child, item);
+                                break;
+                            case XElement child:
+                                CopyLiteralElement(child);
+                                break;
+                        }
                     }
                 }
                 catch (NextIterationSignal next)

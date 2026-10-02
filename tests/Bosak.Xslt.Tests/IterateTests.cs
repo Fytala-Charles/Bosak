@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 26-06-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 21-09-2026     | xsl:break inside xsl:if (XSLT 3.0 §8.4): termination/select value, for-each and not-last negative cases |
+//                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W7-3: text-template children of xsl:iterate are executed (si-iterate-005)            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -187,5 +188,39 @@ public class IterateTests
         var executable = compiler.Compile(xsl);
         var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(source)));
         Assert.StartsWith("XTSE3120", ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Iterate_TextTemplateBody_ExecutesPerItem()
+    {
+        // Regression (si-iterate-005): a text template directly inside xsl:iterate
+        // was silently dropped because the body loop only visited element children.
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' expand-text='yes'>
+            <xsl:template match='/'>
+                <out><xsl:iterate select='(//*)[position() = 1 to 3]'>{position()}:{name()} </xsl:iterate></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = XDocument.Parse("<BOOKLIST><BOOKS><ITEM/></BOOKS></BOOKLIST>");
+        var executable = new XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("<out>1:BOOKLIST 2:BOOKS 3:ITEM </out>", result);
+    }
+
+    [Fact]
+    public void Iterate_LiteralTextAndConditionalElement_PreservesOrder()
+    {
+        // Edge: literal text and xsl instruction children interleave
+        // in document order; whitespace-only indentation text contributes nothing.
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template match='/'>
+                <out><xsl:iterate select='/r/i'>[<xsl:if test='. = 2'>two</xsl:if>]</xsl:iterate></out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var source = XDocument.Parse("<r><i>1</i><i>2</i></r>");
+        var executable = new XsltCompiler().Compile(xsl);
+        var result = executable.TransformToString(new XDocumentNode(source));
+        Assert.Contains("<out>[][two]</out>", result);
     }
 }

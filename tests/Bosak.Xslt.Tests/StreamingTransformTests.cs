@@ -18,6 +18,8 @@
 //                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W6: absorbing functions materialize forward-only arguments (readable twice);         |
 //                      |                  |       |                | non-absorbing callees keep single-pass semantics (second read still fails)               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 02-10-2026     | PC-1 W7-2: descendant step merge with non-positional child predicates (si-for-each-801)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Core.Xdm;
@@ -380,5 +382,79 @@ public class StreamingTransformTests
                      """<out><xsl:value-of select="f:reads(head(product))"/></out>""");
         var result = Streamed(xsl, Xml);
         Assert.Equal("<out>1</out>", result);
+    }
+
+    [Fact]
+    public void ForEach_DescendantNodeTestWithNonPositionalNamePredicate_Parity()
+    {
+        // Regression (si-for-each-801): //node()[name()=$v] lowered to
+        // descendant-or-self::node()/child::node()[...] double-enumerated the
+        // root-child pump of a streamed source ("children ... already consumed").
+        // Non-positional child predicates are now merged into a single descendant step.
+        var xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:param name="node-name" select="'product'"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//node()[name() = $node-name]">
+                  <item><xsl:value-of select="@id"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+        var result = Streamed(xsl, Xml);
+        Assert.Equal("<out><item>1</item><item>2</item><item>3</item></out>", result);
+    }
+
+    [Fact]
+    public void ForEach_DescendantNameTestWithValuePredicate_Parity()
+        => AssertParity("""
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//product[@id = '2']">
+                  <item><xsl:value-of select="name"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """, Xml);
+
+    [Fact]
+    public void ForEach_DescendantNameTestWithPositionalPredicate_InMemorySemanticsPreserved()
+    {
+        // Edge: positional child predicates must stay unmerged so [1] keeps its
+        // XPath semantics (first product child of its parent) in the in-memory engine.
+        var xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//product[1]">
+                  <item><xsl:value-of select="@id"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+        var result = InMemory(xsl, Xml);
+        Assert.Equal("<out><item>1</item></out>", result);
+    }
+
+    [Fact]
+    public void ForEach_DescendantNameTestWithPositionalPredicate_StreamedRejectsDoublePass()
+    {
+        // Edge: //product[1] cannot run over a forward-only source — per-parent
+        // positional access needs a second pass over the child axis, which the
+        // stream rejects (the non-positional merge must not hide this).
+        var xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//product[1]">
+                  <item><xsl:value-of select="@id"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+        var ex = Assert.ThrowsAny<Exception>(() => Streamed(xsl, Xml));
+        Assert.Contains("forward-only", ex.Message);
     }
 }

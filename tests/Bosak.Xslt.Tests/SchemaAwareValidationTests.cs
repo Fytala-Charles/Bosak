@@ -15,7 +15,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 22-10-2026     | REQ-107: value-of typed-value atomization tests (canonical forms, FOTY0012, as-1803)    |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 0.3   | 01-10-2026     | REQ-114: XTTE0950 on copying QName-typed attributes without their parent element        |
+//                      | Charles Korthout | 0.4   | 02-10-2026     | PC-1 W7: xsl:result-document @type inside streaming xsl:source-document keeps the        |
+//                      |                  |       |                | PSVI annotation on the captured secondary document (si-result-document-116); invalid      |
+//                      |                  |       |                | content on the streaming path still raises XTTE1540 (si-result-document-117)              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -862,5 +864,83 @@ public class SchemaAwareValidationTests
             </xsl:template>
             """));
         Assert.Contains("XTTE0950", ex.Message);
+    }
+
+    // ----- PC-1 W7: xsl:result-document @type on the streaming source-document path -----
+
+    private const string StreamingResultDocumentXsl = """
+        <xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+                        xmlns:xs='http://www.w3.org/2001/XMLSchema' exclude-result-prefixes='xs'>
+          <xsl:mode streamable='yes'/>
+          <xsl:template name='main'>
+            <out>
+              <xsl:source-document streamable='yes' href='FILE.xml'>
+                <xsl:result-document href='out.xml' type='xs:decimal'>
+                  <in><xsl:value-of select="head(//@version)"/></in>
+                </xsl:result-document>
+              </xsl:source-document>
+            </out>
+          </xsl:template>
+        </xsl:stylesheet>
+        """;
+
+    [Fact]
+    public void ResultDocument_TypeOnStreamingSourceDocument_PsviAnnotationSurvives()
+    {
+        // si-result-document-116: within xsl:source-document (streaming), xsl:result-document
+        // @type validates the constructed tree and the PSVI annotation must be present on the
+        // captured secondary document (file round-tripping cannot preserve it).
+        var inputFile = Path.Combine(Path.GetTempPath(), $"bosak-w7-{Guid.NewGuid():N}.xml");
+        File.WriteAllText(inputFile, "<myroot><ACERequest version='2.1'><loan id='a'/></ACERequest></myroot>");
+        try
+        {
+            var compiler = new Xslt.Api.XsltCompiler { SchemaAware = true };
+            var executable = compiler.Compile(StreamingResultDocumentXsl.Replace("FILE.xml", Path.GetFileName(inputFile)),
+                new Uri(inputFile).AbsoluteUri);
+            var baseOutputUri = new Uri(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")) + "/x").AbsoluteUri;
+            executable.TransformCaptured(null, null, null, "main", null, "document", baseOutputUri, out var secondary);
+            var captured = Assert.Single(secondary);
+            IXdmNode? docNode = captured.Value.IsNode ? captured.Value.NodeValue : null;
+            Assert.NotNull(docNode);
+            IXdmNode? inEl = null;
+            foreach (var item in docNode!.Axis(XdmAxis.Child))
+                if (item.IsNode && item.NodeValue is { } n && n.NodeKind == XdmNodeKind.Element) { inEl = n; break; }
+            Assert.NotNull(inEl);
+            Assert.Equal("2.1", inEl!.StringValue);
+            Assert.Equal(("http://www.w3.org/2001/XMLSchema", "decimal"), inEl.SchemaTypeAnnotation);
+        }
+        finally
+        {
+            // The streaming provider may still hold the file open; a leaked temp file
+            // is preferable to a failing cleanup.
+            try { File.Delete(inputFile); } catch (IOException) { }
+            catch (UnauthorizedAccessException) { }
+        }
+    }
+
+    [Fact]
+    public void ResultDocument_TypeOnStreamingSourceDocument_InvalidContent_Xtte1540()
+    {
+        // Edge: the streaming path must still enforce the named type (si-result-document-117).
+        var inputFile = Path.Combine(Path.GetTempPath(), $"bosak-w7-{Guid.NewGuid():N}.xml");
+        File.WriteAllText(inputFile, "<myroot><ACERequest version='2.1'><loan id='a'/></ACERequest></myroot>");
+        try
+        {
+            var compiler = new Xslt.Api.XsltCompiler { SchemaAware = true };
+            var executable = compiler.Compile(
+                StreamingResultDocumentXsl.Replace("FILE.xml", Path.GetFileName(inputFile)).Replace("head(//@version)", "'abc'"),
+                new Uri(inputFile).AbsoluteUri);
+            var baseOutputUri = new Uri(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")) + "/x").AbsoluteUri;
+            var ex = Assert.ThrowsAny<InvalidOperationException>(() =>
+                executable.TransformCaptured(null, null, null, "main", null, "document", baseOutputUri, out _));
+            Assert.Contains("XTTE1540", ex.Message);
+        }
+        finally
+        {
+            // The streaming provider may still hold the file open; a leaked temp file
+            // is preferable to a failing cleanup.
+            try { File.Delete(inputFile); } catch (IOException) { }
+            catch (UnauthorizedAccessException) { }
+        }
     }
 }

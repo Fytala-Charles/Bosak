@@ -209,7 +209,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.67  | 02-10-2026     | ErrorCodeMatches normalizes Clark-notation Q{uri}local (and Q{}local) expected codes;   |
 //                      |                  |       |                | a namespaced expectation must match uri AND local against XPathErrorException parts     |
-// ===========================================================================================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.68  | 02-10-2026     | PC-1 W7 (si-result-document-116): schema-aware tests whose assert-result-document       |
+//                      |                  |       |                | assertions use a typed kind test (instance of element(*, T), T != xs:untyped) run via    |
+//                      |                  |       |                | TransformCaptured and evaluate against the in-memory secondary document — file           |
+//                      |                  |       |                | round-tripping destroys the PSVI annotations the assertions inspect                     |
+//                      |==================|=======|================|=========================================================================================
 
 using System.Xml.Linq;
 using System.Xml;
@@ -273,6 +278,14 @@ class Program
     // including the string-result compare path — compiles and matches schema-element()/
     // schema-attribute() kind tests (validation-1705/1706). Null outside schema-aware runs.
     static XmlSchemaSet? _currentTestSchemaSet;
+
+    // PC-1 W7 (si-result-document-116): secondary result documents captured in memory
+    // (TransformCaptured) instead of written to files. A schema-aware test whose
+    // assert-result-document assertions use a typed kind test (instance of element(*, T))
+    // needs the PSVI annotations of the constructed tree — file round-tripping destroys
+    // them, so the assertions are evaluated against the captured value. Null for tests
+    // that run through the normal file-writing path.
+    static IReadOnlyDictionary<string, XdmValue>? _capturedSecondaryResults;
 
     // REQ-113 (PB-2): scoped to one CompareResult evaluation — true when the result's
     // assertion set (anywhere in its all-of/any-of tree) references a schema kind test
@@ -1468,6 +1481,29 @@ class Program
                 }
             }
 
+            // PC-1 W7 (si-result-document-116): when a schema-aware test asserts a typed kind
+            // test (instance of element(*, T), T != xs:untyped) against a secondary result
+            // document, run through the capture path so the PSVI annotations survive; the
+            // assert-result-document comparator below prefers the captured value.
+            _capturedSecondaryResults = null;
+            var resultSpecElem = testCase.Element(ns + "result");
+            bool captureSecondaryResults = _schemaAware && resultSpecElem != null
+                && resultSpecElem.Descendants().Any(e =>
+                    e.Name.LocalName == "assert-result-document"
+                    && e.Descendants().Any(a => a.Name.LocalName == "assert"
+                        && a.Value.Contains("instance of", StringComparison.Ordinal)
+                        && !a.Value.Contains("xs:untyped", StringComparison.Ordinal)));
+
+            XdmValue RunRawTransform(IXdmNode? src, XdmValue? matchSel, string? tmpl, string? mode)
+            {
+                if (!captureSecondaryResults)
+                    return executable.Transform(src, evalContext, tmpl, mode, rawResult: true, baseOutputUri: baseOutputUri);
+                var value = executable.TransformCaptured(src, matchSel, evalContext, tmpl, mode,
+                    "document", baseOutputUri, out var captured);
+                _capturedSecondaryResults = captured;
+                return value;
+            }
+
             if (isInitialFunction)
             {
                 var (funcName, args) = ResolveInitialFunction(initialFunctionElem!, evalContext, ns);
@@ -1483,7 +1519,9 @@ class Program
             else if (sourceNode != null)
             {
                 if (rawOutput)
-                    resultValue = executable.Transform(sourceNode, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                    resultValue = RunRawTransform(sourceNode, null, initialTemplate, initialMode);
+                else if (captureSecondaryResults)
+                    resultValue = RunRawTransform(sourceNode, null, initialTemplate, initialMode);
                 else
                     resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
@@ -1491,7 +1529,9 @@ class Program
             {
                 // Initial mode with an explicit initial match selection.
                 if (rawOutput)
-                    resultValue = executable.Transform(null, initialMatchSelection, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                    resultValue = RunRawTransform(null, initialMatchSelection, initialTemplate, initialMode);
+                else if (captureSecondaryResults)
+                    resultValue = RunRawTransform(null, initialMatchSelection, initialTemplate, initialMode);
                 else
                     resultXml = executable.TransformToString(null, initialMatchSelection, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
@@ -1500,7 +1540,9 @@ class Program
                 // Named-template entry points with no explicit source document have no
                 // initial context item (XSLT 3.0 §6.5 / §9.6).
                 if (rawOutput)
-                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
+                else if (captureSecondaryResults)
+                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
                 else
                     resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
@@ -1508,7 +1550,9 @@ class Program
             {
                 // Initial mode with no source document: let the runtime detect XTDE0044.
                 if (rawOutput)
-                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
+                else if (captureSecondaryResults)
+                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
                 else
                     resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
@@ -1518,7 +1562,9 @@ class Program
                 // appropriate error (XTDE0044 or, for a package with no public initial
                 // template, XTDE0040) instead of fabricating a dummy source document.
                 if (rawOutput)
-                    resultValue = executable.Transform(null, evalContext, initialTemplate, initialMode, rawResult: true, baseOutputUri);
+                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
+                else if (captureSecondaryResults)
+                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
                 else
                     resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
             }
@@ -2638,6 +2684,31 @@ class Program
             var uri = assertDoc.Attribute("uri")?.Value;
             if (!string.IsNullOrEmpty(uri))
             {
+                // PC-1 W7 (si-result-document-116): when the test ran through the capture
+                // path (typed kind-test assertions), the in-memory secondary document keeps
+                // the constructed tree's PSVI annotations, which file round-tripping would
+                // destroy — evaluate the nested assertions against it.
+                if (_capturedSecondaryResults != null)
+                {
+                    var capturePath = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
+                    var captureUri = new Uri(Path.GetFullPath(capturePath)).AbsoluteUri;
+                    if (_capturedSecondaryResults.TryGetValue(captureUri, out var capturedValue))
+                    {
+                        try
+                        {
+                            foreach (var child in assertDoc.Elements())
+                            {
+                                if (!CompareResult(capturedValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, null, baseOutputUri))
+                                    return false;
+                            }
+                            return true;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    }
+                }
                 var path = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
                 if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
                 if (File.Exists(path))
@@ -2861,6 +2932,29 @@ class Program
                         var childNames = assertDoc.Descendants().Select(e => e.Name.LocalName).ToHashSet();
                         bool isText = childNames.All(n => n is "assert-serialization" or "assert-string-value"
                             or "serialization-matches" or "any-of" or "all-of" or "not");
+                        // PC-1 W7 (si-result-document-116): typed kind-test assertions need the
+                        // captured in-memory document (PSVI survives); see the XdmValue overload.
+                        if (!isText && _capturedSecondaryResults != null)
+                        {
+                            var capturePath = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
+                            var captureUri = new Uri(Path.GetFullPath(capturePath)).AbsoluteUri;
+                            if (_capturedSecondaryResults.TryGetValue(captureUri, out var capturedValue))
+                            {
+                                try
+                                {
+                                    foreach (var child in assertDoc.Elements())
+                                    {
+                                        if (!CompareResult(capturedValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, null, null, baseOutputUri))
+                                            return false;
+                                    }
+                                    return true;
+                                }
+                                catch
+                                {
+                                    return false;
+                                }
+                            }
+                        }
                         if (isText)
                         {
                             var text = File.ReadAllText(path);
