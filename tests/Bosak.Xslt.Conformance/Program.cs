@@ -200,6 +200,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.64  | 01-10-2026     | CS8602 fix: null-forgiving envToLoad in the streaming validation block (non-null      |
 //                      |                  |       |                | whenever streamingSourceRequested is true)                                              |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.65  | 02-10-2026     | ReadAssertionFile honors the XML-prolog encoding of golden files when @encoding is     |
+//                      |                  |       |                | absent (schvalid001.out is ISO-8859-1; fixes validation-0201 U+FFFD corruption)         |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.66  | 02-10-2026     | Environment <schema> split by role: secondary -> compiler.EnvironmentSchemaSet          |
+//                      |                  |       |                | (source-validation only); stylesheet-import stays in compiler.SchemaSet                   |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -1078,13 +1084,14 @@ class Program
 
             // Schema-aware mode: compile with XsltCompiler.SchemaAware, serve
             // xsl:import-schema schema-location hints from the test set / catalog
-            // directories, and merge the environment's catalog <schema
-            // role="stylesheet-import|secondary|source-reference"> documents into the host
-            // schema set (source-reference schemas are the environment's known schemas:
-            // locationless imports bind them, and the principal source validates against
-            // them). Environments that pin XSD 1.1 cannot run: the engine is XSD 1.0 only
-            // (System.Xml.Schema). The set is passed uncompiled so the core reports
-            // invalid/unlocatable schemas with its own XTSE0220 error code.
+            // directories, and split the environment's catalog <schema role="...">
+            // documents by role: stylesheet-import/source-reference schemas join the
+            // compiler's in-scope SchemaSet, secondary schemas go to EnvironmentSchemaSet
+            // (source-validation context only, never construction-validation scope —
+            // validation-0201, XSLT 3.0 §11.9). Environments that pin XSD 1.1 cannot run:
+            // the engine is XSD 1.0 only (System.Xml.Schema). The sets are passed
+            // uncompiled so the core reports invalid/unlocatable schemas with its own
+            // XTSE0220 error code.
             // REQ-114 (PB-3 C9, F1/F8): per-test cache of successfully validated environment
             // source documents, keyed by absolute URI. The DocumentLoader below consults it
             // before touching the file system, so doc() observes the same PSVI-annotated
@@ -1092,7 +1099,14 @@ class Program
             // test run, so doc() for the same URI outside environments keeps its untyped
             // behavior.
             var validatedSourceCache = new Dictionary<string, XDocument>(StringComparer.OrdinalIgnoreCase);
+            // validation-0201 role split (XSLT 3.0 §11.9): "stylesheet-import"/default and
+            // "source-reference" schemas are part of the stylesheet's in-scope definitions
+            // (locationless xsl:import-schema binds them); "secondary" schemas are
+            // source-validation context only and must never annotate constructed/result
+            // trees. Both sets still reach source validation: the engine folds the merged
+            // compile-time set (which contains both) into the evaluation context.
             XmlSchemaSet? envSchemaSet = null;
+            XmlSchemaSet? envSecondarySchemaSet = null;
             // Schema set for record-by-record validation of a streamed principal source
             // (populated inside the block below; consumed by the deferred streaming load).
             XmlSchemaSet? streamingValidationSet = null;
@@ -1132,8 +1146,13 @@ class Program
                     // REQ-114 (PB-3 C9): the set needs a resolver while URI-adding: a document
                     // whose xs:redefine has children is preprocessed during Add and its
                     // schemaLocation must resolve (import-schema-190).
-                    envSchemaSet ??= new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
-                    envSchemaSet.Add(null, schemaUri);
+                    var targetSet = schemaRole == "secondary" ? envSecondarySchemaSet : envSchemaSet;
+                    targetSet ??= new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+                    targetSet.Add(null, schemaUri);
+                    if (schemaRole == "secondary")
+                        envSecondarySchemaSet = targetSet;
+                    else
+                        envSchemaSet = targetSet;
                 }
 
                 // REQ-114 (PB-3 C9, F1/F8): pre-validate every environment source, not just
@@ -1268,9 +1287,12 @@ class Program
                 // No SchemaResolver: schema-location hints resolve against the module's base
                 // URI in the core, which preserves the schema's base URI for xs:include /
                 // xs:import resolution and document-URI dedup against the host set. The
-                // environment's catalog <schema> documents arrive via the host SchemaSet.
+                // environment's catalog <schema> documents arrive via the host SchemaSet;
+                // role="secondary" documents go to EnvironmentSchemaSet (source-validation
+                // context only, never construction-validation scope — validation-0201).
                 compiler.SchemaAware = true;
                 compiler.SchemaSet = envSchemaSet;
+                compiler.EnvironmentSchemaSet = envSecondarySchemaSet;
             }
             var executable = compiler.Compile(xslDoc, baseUri);
 
@@ -3215,7 +3237,17 @@ class Program
     static string ReadAssertionFile(string filePath, string? encodingName)
     {
         if (string.IsNullOrEmpty(encodingName))
+        {
+            // No explicit @encoding: honor the encoding declared in the file's own XML
+            // prolog. Golden serialization files are frequently ISO-8859-1 (e.g.
+            // schvalid001.out); reading them as UTF-8 corrupts non-ASCII bytes such as
+            // the nbsp in validation-0201 into U+FFFD.
+            var head = Encoding.ASCII.GetString(File.ReadAllBytes(filePath).Take(200).ToArray());
+            var m = Regex.Match(head, @"encoding\s*=\s*[""']([^""']+)[""']");
+            if (m.Success && !m.Groups[1].Value.Equals("utf-8", StringComparison.OrdinalIgnoreCase))
+                return File.ReadAllText(filePath, Encoding.GetEncoding(m.Groups[1].Value));
             return File.ReadAllText(filePath);
+        }
         try
         {
             return File.ReadAllText(filePath, System.Text.Encoding.GetEncoding(encodingName));

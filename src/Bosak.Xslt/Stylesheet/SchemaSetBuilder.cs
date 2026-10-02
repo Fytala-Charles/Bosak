@@ -41,6 +41,11 @@
 //                      |                  |       |                | (the importing module wins, XSLT 3.0 §3.14.1); import-schema-056 include companions    |
 //                      |                  |       |                | survive                                                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 02-10-2026     | validation-0201: Build also emits the imported-only set (xsl:import-schema winners    |
+//                      |                  |       |                | without host-merge) for construction/result validation scoping (XSLT 3.0 §11.9)        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 02-10-2026     | validation-0201 role split: CompilerSchemaSet joins both scopes, EnvironmentSchemaSet |
+//                      |                  |       |                | compile-time only; imported-only set re-loads fresh XmlSchema instances per winner       |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -61,18 +66,26 @@ namespace Bosak.Xslt.Stylesheet;
 internal static class SchemaSetBuilder
 {
     /// <summary>
-    /// Builds the compiled schema set for a schema-aware compilation.
+    /// Builds the compiled schema sets for a schema-aware compilation.
     /// Returns null when there is nothing to compile (no declarations and no
-    /// host-supplied set).
+    /// host-supplied set); <paramref name="importedOnlySet"/> receives the set containing
+    /// only the stylesheet's own xsl:import-schema declarations (null when there are none).
     /// </summary>
-    public static XmlSchemaSet? Build(SchemaImportState state)
+    public static XmlSchemaSet? Build(SchemaImportState state, out XmlSchemaSet? importedOnlySet)
     {
+        importedOnlySet = null;
         var winners = SelectWinners(state.Declarations, out var shadowedHostUris);
-        if (winners.Count == 0 && state.CompilerSchemaSet is null)
+        if (winners.Count == 0 && state.CompilerSchemaSet is null && state.EnvironmentSchemaSet is null)
             return null;
 
         var set = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
         var addedDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        // Imported-only set: filled in parallel with the winner loop below. It is the
+        // construction-validation component scope (XSLT 3.0 §11.9): host-supplied
+        // environment schemas are visible to compilation (type constructors, locationless
+        // imports) but never to validation of constructed/result trees.
+        XmlSchemaSet? importedOnly = null;
+        var importedOnlyDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         try
         {
@@ -90,10 +103,17 @@ internal static class SchemaSetBuilder
                     // Compile), not a schema document — a URI add would re-read the
                     // stylesheet itself as a schema document.
                     set.Add(schema);
+                    // The imported-only set gets its own freshly-read XmlSchema instance:
+                    // a schema object added to (and compiled by) one XmlSchemaSet must not
+                    // be shared with another — the second set's Compile silently loses its
+                    // declarations (import-schema-081/185b/186/187/202).
+                    importedOnly ??= NewSet();
+                    importedOnly.Add(LoadSchema(state, decl)!);
                 }
                 else
                 {
                     AddTolerant(set, schema, addedDocuments);
+                    AddTolerant(importedOnly ??= NewSet(), LoadSchema(state, decl)!, importedOnlyDocuments);
                 }
             }
 
@@ -109,9 +129,31 @@ internal static class SchemaSetBuilder
             // (XTSE0220 duplicate globals at Compile) — it is skipped. Documents merely
             // included by a shadowed schema are unaffected: their URIs are not a
             // declaration location, and the xs:include chain still resolves at Compile.
+            //
+            // validation-0201 role split: a "stylesheet-import" host schema (CompilerSchemaSet)
+            // is part of the stylesheet's in-scope definitions, so it joins BOTH the merged
+            // compile-time set and the imported-only construction-validation set
+            // (import-schema-081/185b/186/187/202 resolve xsl:type against it). A
+            // "secondary" host schema (EnvironmentSchemaSet) is source-validation context
+            // only: merged into the compile-time set (static context keeps pre-split
+            // behavior) but never into the construction-validation scope.
             if (state.CompilerSchemaSet is { } hostSet)
             {
                 foreach (XmlSchema existing in hostSet.Schemas())
+                {
+                    if (existing.SourceUri is { Length: > 0 } uri && IsShadowedHostUri(uri, shadowedHostUris))
+                        continue;
+                    AddTolerant(set, existing, addedDocuments);
+                    AddTolerant(importedOnly ??= NewSet(), existing, importedOnlyDocuments);
+                }
+            }
+
+            if (state.EnvironmentSchemaSet is { } envSet)
+            {
+                // Same shadowed-URI skip as the host merge above (import-schema-177): a
+                // secondary document whose URI is the resolved location of a shadowed
+                // xsl:import-schema declaration re-introduces dropped declarations.
+                foreach (XmlSchema existing in envSet.Schemas())
                 {
                     if (existing.SourceUri is { Length: > 0 } uri && IsShadowedHostUri(uri, shadowedHostUris))
                         continue;
@@ -128,6 +170,18 @@ internal static class SchemaSetBuilder
             AddXmlNamespaceSchema(set);
 
             set.Compile();
+
+            // The imported-only set exists whenever the stylesheet has any import-schema
+            // declarations at all (even a locationless one whose document the host does not
+            // supply — attribute-1501/1502/1503 import the XML namespace locationlessly and
+            // validate against its synthesized declarations) or a stylesheet-import host set.
+            if (winners.Count > 0 || state.CompilerSchemaSet is not null)
+            {
+                importedOnly ??= NewSet();
+                AddXmlNamespaceSchema(importedOnly);
+                importedOnly.Compile();
+                importedOnlySet = importedOnly;
+            }
         }
         catch (XmlSchemaException ex)
         {
@@ -164,6 +218,8 @@ internal static class SchemaSetBuilder
         combined.Compile();
         return combined;
     }
+
+    private static XmlSchemaSet NewSet() => new() { XmlResolver = new XmlUrlResolver() };
 
     /// <summary>
     /// The predefined XML namespace (<c>http://www.w3.org/XML/1998/namespace</c>) is implicitly

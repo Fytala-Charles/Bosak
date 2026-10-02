@@ -467,6 +467,10 @@
 //                      |                  |       |                | overwriting it, so record-level schema validation of a strictly validated streamed       |
 //                      |                  |       |                | source survives (sf-avg-100 typed @value)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.95  | 02-10-2026     | validation-0201: construction/result validation scoped to ImportedOnlySchemaSet          |
+//                      |                  |       |                | (xsl:import-schema winners); host/environment schemas no longer annotate constructed     |
+//                      |                  |       |                | trees or supply default attributes under lax validation (XSLT 3.0 §11.9)                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -495,6 +499,18 @@ internal sealed class TransformEngine
 {
     private readonly Stylesheet.Stylesheet _stylesheet;
     private EvaluationContext _context;
+
+    /// <summary>
+    /// Schema component scope for validation of constructed/result trees: the components
+    /// the stylesheet itself imported via xsl:import-schema plus host stylesheet-import
+    /// schemas (XSLT 3.0 §11.9), or the built-in-only set when neither exists. Host
+    /// secondary-environment schemas merged into <see cref="EvaluationContext.SchemaSet"/>
+    /// stay visible to compilation (type constructors, locationless imports) and to
+    /// source-document validation, but must not annotate constructed trees — otherwise a
+    /// lax-validated result would pick up default attributes from schemas the stylesheet
+    /// never imported (validation-0201).
+    /// </summary>
+    private readonly XmlSchemaSet _constructionValidationSchemas;
 
     /// <summary>
     /// The XSLT version supported by this processor. Used when deciding whether
@@ -840,6 +856,9 @@ internal sealed class TransformEngine
         // user-defined type constructors and kind tests from SchemaSet.
         if (stylesheet.CompiledSchemaSet is { } compiledSchemas)
             _context.SchemaSet = Stylesheet.SchemaSetBuilder.MergeIntoContext(compiledSchemas, _context.SchemaSet);
+        // validation-0201 (XSLT 3.0 §11.9): construction/result validation is scoped to
+        // the stylesheet's own xsl:import-schema components, not the merged host set.
+        _constructionValidationSchemas = stylesheet.ImportedOnlySchemaSet ?? s_builtInOnlySchemaSet;
         // REQ-104: when a schema set is in scope, every XPath compilation in the transform
         // (select/test expressions, assertion selects, xsl:evaluate, AVTs, patterns) must
         // see it so schema-element()/schema-attribute() kind tests compile instead of
@@ -1509,6 +1528,10 @@ internal sealed class TransformEngine
     // keep their basic-processor no-op behavior (bit-identical); validation="strict" and
     // [xsl:]type are rejected at load time by the XTSE1660 gate on basic processors, and a
     // surviving [xsl:]type still resolves the built-in types against an empty schema set.
+    // validation-0201: the components consulted at validation time are the stylesheet's
+    // own imports plus host stylesheet-import schemas (_constructionValidationSchemas),
+    // never the secondary-environment merge — XSLT 3.0 §11.9 scopes result validation to
+    // the imported component set.
     // ------------------------------------------------------------------
 
     // Used when [xsl:]type names a built-in XML Schema type and no user schema is in scope:
@@ -1766,7 +1789,7 @@ internal sealed class TransformEngine
     /// </summary>
     private void ValidateConstructedElement(XElement element, XdmValidationMode mode, XmlQualifiedName? typeName, bool documentLevel = false, bool promotePreserveShell = false, IReadOnlyList<KeyValuePair<string, string>>? extraNamespaceBindings = null)
     {
-        var schemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
+        var schemas = _constructionValidationSchemas;
 
         if (typeName is { } qn)
         {
@@ -2070,7 +2093,7 @@ internal sealed class TransformEngine
     private void ApplyAttributeValidationDirectives(XAttribute attribute, XdmValidationMode mode, XmlQualifiedName? typeName,
         string complexTypeErrorCode, bool standalone = false, bool copied = false)
     {
-        var schemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
+        var schemas = _constructionValidationSchemas;
 
         if (typeName is { } qn)
         {
@@ -2255,7 +2278,7 @@ internal sealed class TransformEngine
         // wrapper may hold several); preserve is a no-op.
         if (mode == XdmValidationMode.Strip)
         {
-            var stripSchemas = _context.SchemaSet ?? s_builtInOnlySchemaSet;
+            var stripSchemas = _constructionValidationSchemas;
             if (contentContainer is not null)
                 XdmSchemaAnnotator.Validate(contentContainer, stripSchemas, new XdmValidationOptions(XdmValidationMode.Strip));
             else if (singleRoot is not null)
@@ -2304,7 +2327,7 @@ internal sealed class TransformEngine
         // the XTTE1512 declaration pre-check inside ValidateConstructedElement
         // (attribute-1506/1507).
         if (XdmSchemaAnnotator.CheckDocumentIdentityConstraints(singleRoot,
-                _context.SchemaSet ?? s_builtInOnlySchemaSet) is { } constraintMessage)
+                _constructionValidationSchemas) is { } constraintMessage)
         {
             throw new XsltRuntimeException("XTTE1555",
                 $"Document-level constraints are not satisfied: {constraintMessage}",

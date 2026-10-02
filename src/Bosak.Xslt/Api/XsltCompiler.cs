@@ -19,6 +19,8 @@
 //                      | Charles Korthout | 0.6   | 26-06-2026     | Added TreatRecoverableAmbiguousMatchAsError for test-harness error dependencies        |
 //                      | Charles Korthout | 0.7   | 22-09-2026     | REQ-097 schema-aware seam H1/H2: SchemaAware, SchemaResolver, SchemaSet options          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 02-10-2026     | validation-0201: EnvironmentSchemaSet (role=secondary host schemas) — source-validation |
+//                      |                  |       |                | context only, never part of construction/result-validation scope                       |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -63,9 +65,22 @@ public sealed class XsltCompiler
     /// <summary>
     /// Optional pre-built schema set made in-scope for a schema-aware compilation
     /// (lowest import precedence). Namespaces already present in this set need not be
-    /// re-declared via <c>xsl:import-schema</c>.
+    /// re-declared via <c>xsl:import-schema</c>. These components count as part of the
+    /// stylesheet's in-scope schema definitions: they are visible to validation of
+    /// constructed and result trees (unlike <see cref="EnvironmentSchemaSet"/>).
+    /// This maps to the W3C test-catalog <c>role="stylesheet-import"</c> semantics.
     /// </summary>
     public XmlSchemaSet? SchemaSet { get; set; }
+
+    /// <summary>
+    /// Optional pre-built schema set holding "secondary" environment schemas
+    /// (W3C test-catalog <c>role="secondary"</c>): visible to compilation and to
+    /// source-document validation, but never part of the stylesheet's in-scope schema
+    /// definitions — validation of constructed/result trees (xsl:validation, xsl:type,
+    /// result-document validation) does not see these components (XSLT 3.0 §11.9
+    /// scoping; validation-0201).
+    /// </summary>
+    public XmlSchemaSet? EnvironmentSchemaSet { get; set; }
 
     /// <summary>
     /// Optional listener for xsl:message output. When unset, xsl:message output is discarded.
@@ -121,6 +136,7 @@ public sealed class XsltCompiler
             SchemaAware = SchemaAware,
             SchemaResolver = SchemaResolver,
             CompilerSchemaSet = SchemaSet,
+            EnvironmentSchemaSet = EnvironmentSchemaSet,
         };
         var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters, packageVersionResolutionStrategy: PackageVersionResolutionStrategy, schemaState: schemaState);
         return new XsltExecutable(stylesheet, MessageListener, TreatRecoverableAmbiguousMatchAsError);

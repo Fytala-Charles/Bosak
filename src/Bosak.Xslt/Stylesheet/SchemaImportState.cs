@@ -13,6 +13,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-09-2026     | Creation (schema-awareness seam hooks H1/H2, REQ-097)                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 02-10-2026     | ImportedOnlySchemaSet: declaration-only component scope for construction validation     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 02-10-2026     | EnvironmentSchemaSet: host "secondary" schemas (source-validation only, never part of   |
+//                      |                  |       |                | the stylesheet's in-scope definitions for construction/result validation)               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -47,11 +52,29 @@ internal sealed class SchemaImportState
     /// <summary>Optional host-supplied pre-built schema set made in-scope for the compilation.</summary>
     public XmlSchemaSet? CompilerSchemaSet { get; init; }
 
+    /// <summary>
+    /// Optional host-supplied schema set holding "secondary" environment schemas: visible
+    /// to compilation and source-document validation, but never part of the stylesheet's
+    /// own in-scope schema definitions — validation of constructed/result trees does not
+    /// see these components (XSLT 3.0 §11.9 scoping; validation-0201).
+    /// </summary>
+    public XmlSchemaSet? EnvironmentSchemaSet { get; init; }
+
     /// <summary>All import-schema declarations collected across the import tree, in collection order.</summary>
     public List<Declaration> Declarations { get; } = new();
 
     /// <summary>The merged, compiled schema set; built once by the root module after all modules are loaded.</summary>
     public XmlSchemaSet? CompiledSchemaSet { get; set; }
+
+    /// <summary>
+    /// The compiled schema set containing the components in scope for validation of
+    /// constructed/result trees (XSLT 3.0 §11.9): the stylesheet's own
+    /// <c>xsl:import-schema</c> declarations plus host <c>stylesheet-import</c> schemas,
+    /// but never host <c>secondary</c> environment schemas (<see cref="EnvironmentSchemaSet"/>)
+    /// — validation-0201: environment schemas must not add default attributes to a
+    /// lax-validated result document.
+    /// </summary>
+    public XmlSchemaSet? ImportedOnlySchemaSet { get; set; }
 
     private int _documentOrder;
 
