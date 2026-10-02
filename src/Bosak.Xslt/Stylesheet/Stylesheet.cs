@@ -257,6 +257,8 @@
 //                      | Charles Korthout | 2.122 | 02-10-2026     | validation-0201: build/store ImportedOnlySchemaSet (xsl:import-schema winners only)      |
 //                      |                  |       |                | as the construction/result-validation component scope                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.123 | 02-10-2026     | PC-1 W4: deliberate analyzer XTSE3155 (shallow-descent arity) propagates past the         |
+//                      |                  |       |                | fail-open wrapper, not just XTSE3430 (su-shallow-descent-901)                           |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2076,7 +2078,8 @@ internal sealed class Stylesheet
                     StreamabilityAnalyzer.Analyze(this);
                 }
                 catch (InvalidOperationException ex)
-                    when (ex.Message.StartsWith("XTSE3430", StringComparison.Ordinal))
+                    when (ex.Message.StartsWith("XTSE3430", StringComparison.Ordinal)
+                        || ex.Message.StartsWith("XTSE3155", StringComparison.Ordinal))
                 {
                     throw;
                 }

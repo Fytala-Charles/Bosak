@@ -18,6 +18,10 @@
 //                      | Charles Korthout | 0.5   | 21-09-2026     | current-group() with no group lexically in scope is a static XTSE3430 over a streamed context (si-fork-116); current-grouping-key() stays motionless |
 //                      | Charles Korthout | 0.6   | 21-09-2026     | False-positive fixes (su-filter/su-unclassified): boolean-typed lone variable predicate is a filter predicate, not positional; positional motionless predicate on a striding step stays striding; unclassified functions atomize atomic-typed params in any argument position |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 02-10-2026     | PC-1 W3+W4: map-entry key/value modeled as atomization usage (striding atomizes within the one-consuming-use budget, crawling rejected — si-map-001..009 and expected-error si-map-901 pass); current-group() stays available in nested scopes of a GROUNDED group (si-group-048/051, streamed-group rejection kept); xsl:fork allows at most one node-delivering prong (si-fork-901, single-prong delivery per si-fork-006); shallow-descent arity zero is XTSE3155; absorbing-function result check skips constructor-feeding sequences (su-absorbing-301, bare delivery still rejected per su-absorbing-901); next-match with-param streamed-value transmission checked against reachable callee param types (si-next-match-108) |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 02-10-2026     | PC-1 W6: unprefixed inspection calls (exists/has-children/...) carry Prefix null from the parser, so they were not whitelisted in CountConsumingRefs and were miscounted as consuming references (false XTSE3430 for a 2nd inspection ref in an absorbing function) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -188,6 +192,7 @@ internal static class StreamabilityAnalyzer
         public bool CurrentStreamed;
         public bool GroupInScope;
         public bool GroupOutside;
+        public bool GroupUsableOutside;
         public Posture? GroupSelectPosture;
         public bool InPattern;
         public bool LeafContext;
@@ -204,6 +209,7 @@ internal static class StreamabilityAnalyzer
             CurrentStreamed = CurrentStreamed,
             GroupInScope = GroupInScope,
             GroupOutside = GroupOutside,
+            GroupUsableOutside = GroupUsableOutside,
             GroupSelectPosture = GroupSelectPosture,
             InPattern = InPattern,
             LeafContext = LeafContext,
@@ -249,6 +255,9 @@ internal static class StreamabilityAnalyzer
         private readonly Dictionary<string, bool> _staticBools = new(StringComparer.Ordinal);
         private Dictionary<(string ns, string name, int arity), XsltFunctionDefinition>? _functions;
         private Dictionary<(string local, string ns), List<AttributeSetDefinition>>? _attrSets;
+        /// <summary>The template rule currently being walked, for next-match callee
+        /// resolution; null in named templates, functions and source-document scans.</summary>
+        private TemplateRule? _currentRule;
 
         public Worker(Stylesheet stylesheet)
         {
@@ -396,12 +405,17 @@ internal static class StreamabilityAnalyzer
 
         private void ValidateFunctionBody(XsltFunctionDefinition def, string streamability)
         {
+            _currentRule = null;
             // Parameter declarations and types.
             var paramEls = def.Element.Elements(XName.Get("param", Stylesheet.XslNamespace)).ToList();
             if (streamability == "shallow-descent")
             {
+                // The descent argument requires a parameter: arity zero is a static
+                // error in its own right, not XTSE3430 (su-shallow-descent-901).
+                if (paramEls.Count == 0)
+                    throw new InvalidOperationException("XTSE3155: A function declared with streamability 'shallow-descent' must have at least one parameter.");
                 // The first (descent) parameter must be explicitly typed.
-                if (paramEls.Count > 0 && string.IsNullOrEmpty(paramEls[0].Attribute("as")?.Value))
+                if (string.IsNullOrEmpty(paramEls[0].Attribute("as")?.Value))
                     throw Error($"shallow-descent function '{def.LocalName}' must declare a type on its first parameter.");
             }
             if (streamability is "inspection" or "filter" or "ascent" && paramEls.Count > 0)
@@ -442,6 +456,14 @@ internal static class StreamabilityAnalyzer
                 {
                     var ast = TryParse(seq.Attribute("select")?.Value ?? "");
                     if (ast == null)
+                        continue;
+                    // A sequence feeding a node constructor (xsl:element, xsl:attribute,
+                    // xsl:comment, xsl:copy, or a literal result element) becomes content
+                    // of a NEW node, so the constructor's result is grounded even when the
+                    // sequence delivers absorbed argument nodes (su-absorbing-301's
+                    // ex:wrap-rows). Only result-delivering sequences are checked; a bare
+                    // delivery of the absorbed argument stays an error (su-absorbing-901).
+                    if (FeedsConstructor(seq, def.Element))
                         continue;
                     if (Analyze(ast, env) is { Posture: not Posture.Grounded, Captured: false })
                         throw Error($"absorbing function '{def.LocalName}' has a non-grounded result and is not streamable.");
@@ -523,6 +545,50 @@ internal static class StreamabilityAnalyzer
 
         private static bool IsBooleanTyped(string? asType)
             => asType != null && asType.Trim().StartsWith("xs:boolean", StringComparison.Ordinal);
+
+        /// <summary>Whether an <c>as</c> type annotation designates an atomic <c>xs:</c>/<c>xsd:</c>
+        /// type (possibly with an occurrence indicator), i.e. a parameter that atomizes its
+        /// bound value.</summary>
+        private static bool IsAtomicTypeName(string asType)
+            => asType.StartsWith("xs:", StringComparison.Ordinal) || asType.StartsWith("xsd:", StringComparison.Ordinal);
+
+        /// <summary>Whether an xsl:sequence sits inside a node constructor (xsl:element,
+        /// xsl:attribute, xsl:namespace, xsl:comment, xsl:processing-instruction, xsl:copy,
+        /// or a literal result element) relative to its declaring function: such sequences
+        /// feed the content of a newly constructed node rather than delivering the
+        /// function result.</summary>
+        private static bool FeedsConstructor(XElement seq, XElement functionElement)
+        {
+            for (var p = seq.Parent; p != null && !ReferenceEquals(p, functionElement); p = p.Parent)
+            {
+                if (p.Name.NamespaceName != Stylesheet.XslNamespace)
+                    return true; // literal result element
+                switch (p.Name.LocalName)
+                {
+                    case "element":
+                    case "attribute":
+                    case "namespace":
+                    case "comment":
+                    case "processing-instruction":
+                    case "copy":
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>Whether a fork-child xsl:sequence select delivers nodes via a path
+        /// expression (bare step, path, context reference, or filtered path) rather than
+        /// an atomizing or otherwise value-producing expression.</summary>
+        private static bool DeliversPathNodes(XPathAstNode node) => node switch
+        {
+            ParenthesizedExprNode p => DeliversPathNodes(p.Expression),
+            PathExprNode => true,
+            StepNode => true,
+            ContextItemNode => true,
+            PostfixPredicateNode pp => DeliversPathNodes(pp.Expression),
+            _ => false,
+        };
 
         private static bool IsBareParamRef(XPathAstNode node, string name) => node switch
         {
@@ -624,7 +690,9 @@ internal static class StreamabilityAnalyzer
                     env.CurrentStreamed = true;
                 }
                 CheckAccumulatorUsage(rule.Element);
+                _currentRule = rule;
                 WalkConstructor(rule.Element, env);
+                _currentRule = null;
             }
         }
 
@@ -674,6 +742,7 @@ internal static class StreamabilityAnalyzer
                 if (el.Ancestors().Any(a => a.Name.NamespaceName == Stylesheet.XslNamespace
                     && a.Name.LocalName == "template" && a.Attribute("match") != null))
                     continue;
+                _currentRule = null;
                 var env = Env.Base.Spawn();
                 env.ContextStreamed = true;
                 env.ContextPosture = Posture.Striding;
@@ -859,11 +928,9 @@ internal static class StreamabilityAnalyzer
                     var streamable = ResolveStreamable(el);
                     if (streamable == true)
                     {
-                        var inner = env.Spawn();
+                        var inner = ExitGroupScope(env);
                         inner.ContextStreamed = true;
                         inner.ContextPosture = Posture.Striding;
-                        inner.GroupInScope = false;
-                        inner.GroupOutside = env.GroupInScope || env.GroupOutside;
                         // §19.8.4.41: the result of the instruction must be grounded. A bare
                         // direct-child xsl:sequence returning streamed nodes escapes the
                         // streaming pass; nested sequences feed a constructor and are fine
@@ -908,9 +975,7 @@ internal static class StreamabilityAnalyzer
                     // §19.8.4.18/22: a crawling select is allowed unless the body's sweep is
                     // consuming; the body is walked with the select's context posture, in
                     // which any consuming access already raises XTSE3430 (si-group-B/C feg-005).
-                    var body = env.Spawn();
-                    body.GroupInScope = false;
-                    body.GroupOutside = env.GroupInScope || env.GroupOutside;
+                    var body = ExitGroupScope(env);
                     if (sel.Posture != Posture.Grounded)
                     {
                         body.ContextStreamed = true;
@@ -1040,10 +1105,20 @@ internal static class StreamabilityAnalyzer
                 }
 
                 case "call-template":
-                case "next-match":
                 {
                     foreach (var child in el.Elements(XName.Get("with-param", Stylesheet.XslNamespace)))
                         WalkWithParam(child, env);
+                    WalkConstructor(el, env);
+                    return;
+                }
+
+                case "next-match":
+                {
+                    foreach (var child in el.Elements(XName.Get("with-param", Stylesheet.XslNamespace)))
+                    {
+                        WalkWithParam(child, env);
+                        CheckNextMatchWithParamTransmission(child, env);
+                    }
                     WalkConstructor(el, env);
                     return;
                 }
@@ -1178,11 +1253,12 @@ internal static class StreamabilityAnalyzer
                     var value = el.Attribute("select") != null
                         ? AnalyzeSurface(el, "select", env)
                         : AnalyzeSurface(el, "value", env);
-                    // Keys are atomized; captured attributes/namespaces of streamed nodes are
-                    // buffered and may be stored. Elements/texts of the streamed document
-                    // cannot (si-map-901: select="//AUTHOR" must fail).
-                    if (key.Posture != Posture.Grounded && !key.Captured
-                        || value.Posture != Posture.Grounded && !value.Captured)
+                    // Keys and values are atomized (§19.8.4.23): a grounded or striding
+                    // operand atomizes as the consuming use AnalyzeSurface already counts
+                    // (si-map-001..009, including node-valued keys like key="AUTHOR" in
+                    // si-map-006); crawling or roaming operands cannot be atomized in a
+                    // single pass (si-map-901: select="//AUTHOR" must still fail).
+                    if (!Atomizable(key) || !Atomizable(value))
                         throw Error("xsl:map-entry must not contain nodes from a streamed document.");
                     if (key.Consumes + value.Consumes > 1)
                         throw Error("xsl:map-entry has more than one consuming use of a streamed value.");
@@ -1214,10 +1290,36 @@ internal static class StreamabilityAnalyzer
                 case "on-completion":
                 case "matching-substring":
                 case "non-matching-substring":
-                case "fork":
                 case "where-populated":
                 {
                     WalkConstructor(el, env);
+                    return;
+                }
+
+                case "fork":
+                {
+                    // §19.8.4.12: each fork prong reads the same input, so at most ONE prong
+                    // may deliver non-grounded items — "xsl:fork can return streamed nodes if
+                    // only one branch is consuming" (si-fork-006). A second node-delivering
+                    // prong is XTSE3430 (si-fork-901's AUTHOR/TITLE); atomizing selects like
+                    // string(TITLE) deliver grounded atoms (si-fork-004/005) and constructor
+                    // content builds grounded nodes (si-fork-808/816).
+                    var streamingProngs = 0;
+                    foreach (var child in el.Elements())
+                    {
+                        if (child.Name.NamespaceName == Stylesheet.XslNamespace
+                            && child.Name.LocalName == "sequence"
+                            && child.Attribute("select") != null
+                            && TryParse(child.Attribute("select")?.Value ?? "") is { } selectAst
+                            && DeliversPathNodes(selectAst)
+                            && AnalyzeSurface(child, "select", env) is { Posture: not Posture.Grounded, Captured: false })
+                        {
+                            streamingProngs++;
+                            if (streamingProngs > 1)
+                                throw Error("at most one child of xsl:fork may deliver nodes from a streamed document.");
+                        }
+                        WalkInstruction(child, env);
+                    }
                     return;
                 }
 
@@ -1268,6 +1370,44 @@ internal static class StreamabilityAnalyzer
                 throw Error("an xsl:iterate parameter must not be bound to a node from a streamed document.");
             if (info.UsesLast && env.ContextStreamed)
                 throw Error("last() cannot be evaluated over a streamed node (with-param select).");
+        }
+
+        /// <summary>xsl:next-match with-param transmission: a non-grounded, uncaptured value
+        /// passed to xsl:next-match is transmitted to every lower-priority rule in an
+        /// overlapping mode; if such a reachable rule declares the target parameter without
+        /// an atomic type (or with no type at all), the streamed node escapes into that
+        /// rule's body as a navigating value (si-next-match-108). Parameters declared with
+        /// an atomic type atomize the transmitted value and impose no constraint. A rule
+        /// that does not declare the parameter never receives it.</summary>
+        private void CheckNextMatchWithParamTransmission(XElement withParam, Env env)
+        {
+            var name = withParam.Attribute("name")?.Value?.Trim();
+            if (string.IsNullOrEmpty(name) || withParam.Attribute("select") == null)
+                return; // content constructor values are grounded
+            if (AnalyzeSurface(withParam, "select", env) is { Posture: Posture.Grounded } or { Captured: true })
+                return;
+            if (IsAtomicTypeName(withParam.Attribute("as")?.Value ?? ""))
+                return; // the with-param itself atomizes the transmitted value
+            var rule = _currentRule;
+            if (rule == null)
+                return; // not inside a template-rule walk: nothing to resolve against
+            foreach (var candidate in _stylesheet.GetAllTemplateRules())
+            {
+                if (ReferenceEquals(candidate, rule) || candidate.Priority >= rule.Priority)
+                    continue;
+                if (!candidate.MatchesAllModes && !rule.MatchesAllModes
+                    && !candidate.Modes.Any(m => rule.Modes.Contains(m)))
+                    continue;
+                var param = candidate.Element
+                    .Elements(XName.Get("param", Stylesheet.XslNamespace))
+                    .FirstOrDefault(p => p.Attribute("name")?.Value == name
+                        && string.Equals(p.Attribute("tunnel")?.Value,
+                            withParam.Attribute("tunnel")?.Value, StringComparison.Ordinal));
+                if (param == null)
+                    continue; // the parameter is not declared here, so nothing is transmitted
+                if (!IsAtomicTypeName(param.Attribute("as")?.Value ?? ""))
+                    throw Error($"a streamed node cannot be passed to template parameter '{name}' of a rule reached via xsl:next-match.");
+            }
         }
 
         /// <summary>Local xsl:variable / xsl:param: a variable must not be bound to a node from
@@ -1700,6 +1840,34 @@ internal static class StreamabilityAnalyzer
         /// the whole select attribute) that the instruction atomizes.</summary>
         private static int UseCount(Info i)
             => i.Consumes + (i.Consumes == 0 && i.Posture != Posture.Grounded && !i.Captured && i.RefsStreamed ? 1 : 0);
+
+        /// <summary>Whether an expression in an atomizing position (map key/value, atomic
+        /// function argument) can be atomized in a single pass: grounded values, striding
+        /// sequences and captured buffered items can; crawling, climbing and roaming
+        /// operands cannot (XSLT 3.0 §19.8 posture rules).</summary>
+        private static bool Atomizable(Info i)
+            => i.Posture is Posture.Grounded or Posture.Striding || i.Captured;
+
+        /// <summary>Whether entering a nested lexical scope (xsl:for-each, a nested streamable
+        /// xsl:source-document, xsl:copy content) moves the enclosing group population out of
+        /// streaming reach: only when the population itself is streamed (non-grounded). A
+        /// grounded population (selected via copy-of()/snapshot()) stays usable through
+        /// current-group() inside any nested scope (si-group-048/051; streamed rejection as
+        /// in si-group-031 is unchanged).</summary>
+        private static bool GroupEscapesScope(Env env)
+            => env.GroupInScope && env.GroupSelectPosture != Posture.Grounded;
+
+        /// <summary>Marks a nested-scope env so a GROUNDED group population remains reachable
+        /// through current-group() below it (GroupUsableOutside); a streamed population keeps
+        /// GroupOutside and stays unreachable.</summary>
+        private static Env ExitGroupScope(Env env)
+        {
+            var e = env.Spawn();
+            e.GroupInScope = false;
+            e.GroupOutside = env.GroupOutside || GroupEscapesScope(env);
+            e.GroupUsableOutside = !e.GroupOutside && (env.GroupInScope || env.GroupUsableOutside);
+            return e;
+        }
 
         /// <summary>R3 unit check over several surfaces of one instruction.</summary>
         private void CheckUnit(XElement el, Env env, IEnumerable<string> surfaces)
@@ -2638,13 +2806,14 @@ internal static class StreamabilityAnalyzer
             {
                 if (!env.GroupInScope && env.GroupOutside)
                     throw Error("current-group() cannot be consumed inside a nested streamable document.");
-                if (!env.GroupInScope && env.ContextStreamed)
+                if (!env.GroupInScope && !env.GroupUsableOutside && env.ContextStreamed)
                     // No group is lexically available (a called template never sees the
                     // caller's group, XSLT 3.0 §14.4). Over a streamed context the group
                     // members would be ungrounded streamed nodes, so current-group() is a
                     // consuming reference that makes the construct non-streamable
                     // (si-fork-116 → XTSE3430). In grounded contexts it stays a dynamic
-                    // XTDE1061. current-grouping-key() remains motionless (si-fork-115).
+                    // XTDE1061. A GROUNDED group population remains reachable through
+                    // nested scopes (GroupUsableOutside, si-group-051).
                     throw Error("current-group() is not available in this streamable template.");
                 return env.GroupInScope
                     ? new Info(env.GroupSelectPosture ?? Posture.Striding, 0, Motionless: true, RefsStreamed: true, Fresh: true)
@@ -2909,7 +3078,7 @@ internal static class StreamabilityAnalyzer
         // at the already-absorbed in-memory argument and do not consume it. Every other use
         // — navigation, atomization, head/tail — consumes.
         private static bool IsInspectionCall(FunctionCallNode f)
-            => f.Prefix is "" or "fn"
+            => f.Prefix is null or "" or "fn"
                && f.LocalName is "exists" or "has-children" or "not" or "boolean" or "true" or "false"
                    or "namespace-uri" or "local-name";
 

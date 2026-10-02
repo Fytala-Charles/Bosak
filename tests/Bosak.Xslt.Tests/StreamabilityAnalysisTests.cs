@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 21-09-2026     | su-filter/su-unclassified batch: boolean-typed variable predicate, positional predicate on striding step, unclassified atomic-param atomization in any position |
+//                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W3+W4: map-entry key/value atomization, grounded-group current-group() in nested scopes, xsl:fork grounded delivery, shallow-descent arity, absorbing constructor-feed exception, next-match with-param transmission |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.Xslt.Api;
@@ -238,4 +239,61 @@ public class StreamabilityAnalysisTests
     [Fact]
     public void UnclassifiedFunctionStreamedNodeToNodeParamInSecondPosition_Throws()
         => AssertXtse3430("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f"><xsl:function name="f:probe" streamability="unclassified" as="xs:string"><xsl:param name="two" as="xs:decimal"/><xsl:param name="n" as="node()*"/><xsl:sequence select="name($n[1])"/></xsl:function><xsl:template name="main"><xsl:source-document streamable="yes" href="x.xml"><in><xsl:value-of select="f:probe(2, /A/B/C)"/></in></xsl:source-document></xsl:template></xsl:stylesheet>""");
+
+    // ---------------- PC-1 W3+W4 batch (analyzer 0.7) ----------------
+
+    [Fact]
+    public void MapEntryWithStridingAtomizedKey_Compiles()
+        => AssertCompiles(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each select="*"><xsl:variable name="m" as="map(*)"><xsl:map><xsl:map-entry key="A" select="true()"/></xsl:map></xsl:variable><in><xsl:value-of select="$m('k')"/></in></xsl:for-each></xsl:source-document>"""));
+
+    [Fact]
+    public void MapEntryWithCrawlingKey_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:variable name="m" as="map(*)"><xsl:map><xsl:map-entry key="//A" select="true()"/></xsl:map></xsl:variable><in/></xsl:source-document>"""));
+
+    [Fact]
+    public void MapEntryWithTwoStridingOperands_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:for-each select="*"><xsl:variable name="m" as="map(*)"><xsl:map><xsl:map-entry key="A" select="B"/></xsl:map></xsl:variable><in/></xsl:for-each></xsl:source-document>"""));
+
+    [Fact]
+    public void GroundedGroup_NestedForEachCurrentGroup_Compiles()
+        => AssertCompiles(Templated("""<xsl:for-each-group select="copy-of(tr)" group-starting-with="tr[th]"><xsl:for-each select="current-group()"><Entry><xsl:value-of select="substring(current-group()[1]/th, 1, 4)"/></Entry></xsl:for-each></xsl:for-each-group>""", match: "tbody"));
+
+    [Fact]
+    public void StreamedGroup_NestedForEachCurrentGroup_Throws()
+        => AssertXtse3430(Templated("""<xsl:for-each-group select="tr" group-starting-with="tr[th]"><xsl:for-each select="current-group()"><Entry><xsl:value-of select="substring(current-group()[1]/th, 1, 4)"/></Entry></xsl:for-each></xsl:for-each-group>""", match: "tbody"));
+
+    [Fact]
+    public void ForkWithTwoStreamingSequenceChildren_Throws()
+        => AssertXtse3430(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:fork><xsl:sequence select="/*/*"/><xsl:sequence select="/*/*/*"/></xsl:fork></xsl:source-document>"""));
+
+    [Fact]
+    public void ForkWithSingleStreamingSequenceChild_Compiles()
+        => AssertCompiles(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><in><xsl:fork><xsl:sequence select="/*/*"/></xsl:fork></in></xsl:source-document>"""));
+
+    [Fact]
+    public void ForkWithGroundedSequenceChild_Compiles()
+        => AssertCompiles(Streamed("""<xsl:source-document streamable="yes" href="x.xml"><xsl:fork><xsl:for-each select="*"><v><xsl:value-of select="name()"/></v></xsl:for-each><xsl:sequence select="1 to 3"/></xsl:fork></xsl:source-document>"""));
+
+    [Fact]
+    public void ShallowDescentFunctionWithZeroArity_ThrowsXTSE3155()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => new XsltCompiler().Compile("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xsl:function name="f:bad" streamability="shallow-descent" as="xs:string"><xsl:sequence select="'x'"/></xsl:function></xsl:stylesheet>"""));
+        Assert.StartsWith("XTSE3155", ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void AbsorbingFunctionDeliveringIntoConstructor_Compiles()
+        => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xsl:function name="f:wrap" as="element()" streamability="absorbing"><xsl:param name="group" as="element()*"/><xsl:element name="chunk"><xsl:sequence select="$group"/></xsl:element></xsl:function></xsl:stylesheet>""");
+
+    [Fact]
+    public void AbsorbingFunctionDeliveringArgumentBare_Throws()
+        => AssertXtse3430("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f"><xsl:function name="f:bad" as="node()*" streamability="absorbing"><xsl:param name="element" as="node()*"/><xsl:sequence select="$element"/></xsl:function></xsl:stylesheet>""");
+
+    [Fact]
+    public void NextMatchStreamedParamBoundToNavigatingCalleeParam_Throws()
+        => AssertXtse3430("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:mode name="m" streamable="yes"/><xsl:template match="item" mode="m" priority="2"><xsl:next-match><xsl:with-param name="x" select="."/></xsl:next-match></xsl:template><xsl:template match="*" mode="m" priority="1"><xsl:param name="x" select="()"/><xsl:copy><xsl:attribute name="count" select="count($x/*)"/></xsl:copy></xsl:template></xsl:stylesheet>""");
+
+    [Fact]
+    public void NextMatchStreamedParamBoundToAtomicCalleeParam_Compiles()
+        => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xsl:mode name="m" streamable="yes"/><xsl:template match="item" mode="m" priority="2"><xsl:next-match><xsl:with-param name="x" select="."/></xsl:next-match></xsl:template><xsl:template match="*" mode="m" priority="1"><xsl:param name="x" as="xs:string" select="'?'"/><xsl:copy><xsl:attribute name="name" select="$x"/></xsl:copy></xsl:template></xsl:stylesheet>""");
 }

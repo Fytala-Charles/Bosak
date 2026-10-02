@@ -64,6 +64,9 @@
 //                      | Charles Korthout | 6.97  | 01-10-2026     | xsl:source-document (non-streamed) rejects @href URI references with raw backslashes     |
 //                      |                  |       |                | with FODC0005 (non-stream-006) — the check moved here from EvaluationContext.LoadDocument|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.98  | 02-10-2026     | PC-1 W7-3: xsl:iterate body processes text-node children (text templates / literal    |
+//                      |                  |       |                | text) instead of silently dropping them — si-iterate-005                            |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -470,6 +473,22 @@
 //                      | Charles Korthout | 6.95  | 02-10-2026     | validation-0201: construction/result validation scoped to ImportedOnlySchemaSet          |
 //                      |                  |       |                | (xsl:import-schema winners); host/environment schemas no longer annotate constructed     |
 //                      |                  |       |                | trees or supply default attributes under lax validation (XSLT 3.0 §11.9)                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.96  | 02-10-2026     | Streamable xsl:source-document branch: backslash href -> FODC0005, load IO/URI/XML       |
+//                      |                  |       |                | failures -> FODC0002/FODC0005, mirroring the non-streamable branch (stream-002/006)      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.97  | 02-10-2026     | xsl:assert/@error-code: explicit unprefixed NCName is a local name in NO namespace        |
+//                      |                  |       |                | (XSLT 3.0 §5.2, like xsl:message — si-assert-901 pins Q{}XX99); the default XTMM9001      |
+//                      |                  |       |                | stays in the xqt-errors namespace, supplied by the caller instead of the expansion helper |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.98  | 02-10-2026     | Streamable-branch backslash check: existing rooted platform paths (File.Exists) are      |
+//                      |                  |       |                | accepted for programmatic callers (StreamingSnapshot/SourceDocument unit tests); only    |
+//                      |                  |       |                | backslash hrefs that do not resolve to a file stay FODC0005 (stream-006 unchanged)       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.99  | 02-10-2026     | PC-1 W6 (§19.8.5): absorbing functions materialize forward-only single-pass arguments     |
+//                      |                  |       |                | into snapshot deep copies at the call boundary (RegisterXsltFunctions + package scope    |
+//                      |                  |       |                | skip VM call-site typed conversion for absorbing callees; ExecuteXsltFunction binds and   |
+//                      |                  |       |                | converts after materialization) — su-absorbing-202/203/301 pass                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -3002,6 +3021,12 @@ internal sealed class TransformEngine
         foreach (var (key, def) in allFuncs)
         {
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
+            // PC-1 W6 (§19.8.5): for absorbing functions the VM's call-site typed
+            // conversion is skipped (ParameterTypeNames null) because it enumerates the
+            // argument, consuming a forward-only streamed sequence before the callee
+            // sees it. ExecuteXsltFunction materializes single-pass arguments and then
+            // applies the xsl:param/@as conversion itself.
+            var absorbing = IsAbsorbingFunction(def);
             var sig = new FunctionSignature
             {
                 NamespaceUri = def.NamespaceUri,
@@ -3009,7 +3034,7 @@ internal sealed class TransformEngine
                 Arity = def.Arity,
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
-                ParameterTypeNames = Enumerable.Range(0, def.Arity)
+                ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
                     .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
                     .ToList(),
                 ReturnTypeName = def.ReturnType,
@@ -3019,6 +3044,50 @@ internal sealed class TransformEngine
             _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
         }
         RegisterXslOriginalFunctions(allFuncs.Values);
+    }
+
+    /// <summary>
+    /// Whether the function is declared <c>streamability="absorbing"</c>, via the static
+    /// attribute or a <c>_streamability</c> AVT. Fails open (false) when the AVT cannot
+    /// be evaluated in the current context.
+    /// </summary>
+    private bool IsAbsorbingFunction(Stylesheet.XsltFunctionDefinition def)
+    {
+        try
+        {
+            return string.Equals(
+                GetEffectiveFunctionAttribute(def.Element, "streamability"),
+                "absorbing", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// PC-1 W6 (§19.8.5): deep-materializes a single-pass streamed argument for an
+    /// absorbing callee. The sequence items are lazy streaming nodes whose attributes and
+    /// children read from the advancing input, so each node is snapshotted into a grounded
+    /// deep copy; atoms and already-grounded (XDocumentNode) nodes pass through unchanged.
+    /// </summary>
+    private static XdmValue MaterializeAbsorbedArgument(XdmValue raw)
+    {
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(raw.SequenceValue!))
+        {
+            if (item.IsNode && item.NodeValue is IXdmNode node && node is not XDocumentNode)
+            {
+                items.Add(DeepCopyMergeSubtree(node) is { } copy
+                    ? XdmValue.FromNode(copy)
+                    : item);
+            }
+            else
+            {
+                items.Add(item);
+            }
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
 
     /// <summary>
@@ -4088,6 +4157,9 @@ internal sealed class TransformEngine
             foreach (var (key, def) in scopeFunctions)
             {
                 var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
+                // PC-1 W6: absorbing functions skip VM call-site typed conversion (see
+                // RegisterXsltFunctions); ExecuteXsltFunction converts after materializing.
+                var absorbing = IsAbsorbingFunction(def);
                 _context.RegisterFunction(new FunctionSignature
                 {
                     NamespaceUri = def.NamespaceUri,
@@ -4095,7 +4167,7 @@ internal sealed class TransformEngine
                     Arity = def.Arity,
                     ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                     ReturnType = XdmValueKind.Sequence,
-                    ParameterTypeNames = Enumerable.Range(0, def.Arity)
+                    ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
                         .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
                         .ToList(),
                     ReturnTypeName = def.ReturnType,
@@ -4192,6 +4264,16 @@ internal sealed class TransformEngine
         _context.RegexGroups = null;
         var effectiveNewEachTime = GetEffectiveFunctionAttribute(def.Element, "new-each-time");
         bool memoize = IsDeterministicNewEachTime(effectiveNewEachTime);
+        // PC-1 W6 (§19.8.5): an absorbing function consumes its streamed argument in
+        // full, so a forward-only single-pass argument is deep-materialized into memory
+        // at the parameter-binding boundary below; the body may then reference it any
+        // number of times (su-absorbing-202/203 head()+tail() recursion) or deliver
+        // buffered copies into constructors (su-absorbing-301's wrap-rows). Non-absorbing
+        // callees keep the lazy single-pass sequence untouched. Evaluated here, next to
+        // new-each-time, while the caller's static context is still in place.
+        var isAbsorbing = string.Equals(
+            GetEffectiveFunctionAttribute(def.Element, "streamability"),
+            "absorbing", StringComparison.OrdinalIgnoreCase);
         XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
         PackageScopeState packageScopeState = default;
         try
@@ -4224,12 +4306,16 @@ internal sealed class TransformEngine
             _context.RestoreVariables(new Dictionary<(string, string), XdmValue>());
 
             // Bind parameters, applying the XPath function conversion rules for each
-            // xsl:param/@as type.
+            // xsl:param/@as type (absorbing callees materialize single-pass args — see
+            // the isAbsorbing computation above).
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
             for (int i = 0; i < def.ParameterNames.Count && i < args.Length; i++)
             {
+                var raw = args[i];
+                if (isAbsorbing && raw.IsSequence && raw.SequenceValue is ISinglePassSequence)
+                    raw = MaterializeAbsorbedArgument(raw);
                 var asType = i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null;
-                var converted = ConvertFunctionArgument(args[i], asType, _context);
+                var converted = ConvertFunctionArgument(raw, asType, _context);
                 var (fpLocal, fpNs) = ExpandVariableName(def.Element, def.ParameterNames[i]);
                 _context.WithVariable(fpLocal, converted, fpNs);
             }
@@ -8144,9 +8230,42 @@ internal sealed class TransformEngine
                             // constructor sees a single-pass document; whitespace stripping
                             // and accumulators are driven per record via AttachStreamingHooks.
                             // A fragment identifier drives the pump via FindElementByXmlId.
-                            var resolvedUri = ResolveStreamingHref(documentHref);
-                            docNode = _context.StreamingDocumentLoader?.Invoke(resolvedUri)
-                                ?? LoadStreamingDocument(resolvedUri);
+                            // The URI-reference rules and error mapping mirror the
+                            // non-streamable branch below: raw backslashes are invalid
+                            // syntax (FODC0005, stream-006) and load failures map to
+                            // FODC0002/FODC0005 instead of leaking raw IO exceptions
+                            // (stream-002), per fn:doc FODC0002/FODC0005 semantics.
+                            // Existing rooted platform paths are accepted for
+                            // programmatic callers passing filesystem paths (mirrors
+                            // fn:doc's rooted-path rule).
+                            if (documentHref.Contains('\\') && !File.Exists(documentHref))
+                                throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
+                            try
+                            {
+                                var resolvedUri = ResolveStreamingHref(documentHref);
+                                docNode = _context.StreamingDocumentLoader?.Invoke(resolvedUri)
+                                    ?? LoadStreamingDocument(resolvedUri);
+                            }
+                            catch (FileNotFoundException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
+                            catch (DirectoryNotFoundException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
+                            catch (UriFormatException)
+                            {
+                                throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
+                            }
+                            catch (IOException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
+                            catch (XmlException)
+                            {
+                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                            }
                             AttachStreamingHooks(docNode);
                         }
                         else
@@ -13613,9 +13732,22 @@ internal sealed class TransformEngine
         if (!assertPassed)
         {
             var assertValue = BuildMessageValue(instruction, contextItem);
-            var assertCode = EvaluateAvt(
-                instruction.Attribute("error-code")?.Value ?? "XTMM9001", instruction).Trim();
-            var (assertNs, assertLocal) = ExpandAssertErrorCode(assertCode, instruction);
+            string assertNs, assertLocal;
+            var codeAttr = instruction.Attribute("error-code")?.Value;
+            if (string.IsNullOrEmpty(codeAttr))
+            {
+                // The default code is XTMM9001 in the standard error namespace
+                // (XSLT 3.0 §23.1); an explicit unprefixed code is a local name in no
+                // namespace (si-assert-901 expects Q{}XX99, mirroring the xsl:message
+                // rule and the unprefixed-QName rule of §5.2).
+                assertNs = "http://www.w3.org/2005/xqt-errors";
+                assertLocal = "XTMM9001";
+            }
+            else
+            {
+                var assertCode = EvaluateAvt(codeAttr, instruction).Trim();
+                (assertNs, assertLocal) = ExpandAssertErrorCode(assertCode, instruction);
+            }
             throw new Bosak.XPath.Runtime.Vm.XPathErrorException(
                 assertNs, assertLocal, string.Empty,
                 $"xsl:assert evaluation failed: {SerializeMessageValue(assertValue)}", assertValue);
@@ -13662,12 +13794,13 @@ internal sealed class TransformEngine
 
     /// <summary>
     /// Expands an <c>xsl:assert/@error-code</c> value (after AVT evaluation) to its
-    /// namespace URI and local name. Unprefixed codes are in the standard error
-    /// namespace; prefixed names resolve against the instruction's in-scope namespaces.
+    /// namespace URI and local name. An unprefixed NCName is a local name in no namespace
+    /// (XSLT 3.0 §5.2 unprefixed-QName rule, as for xsl:message error-code — the catalog
+    /// pins Q{}XX99 for si-assert-901); prefixed names resolve against the instruction's
+    /// in-scope namespaces. The namespaceless default XTMM9001 is supplied by the caller.
     /// </summary>
     private static (string NamespaceUri, string LocalName) ExpandAssertErrorCode(string expanded, XElement instruction)
     {
-        const string ErrNs = "http://www.w3.org/2005/xqt-errors";
         if (expanded.StartsWith("Q{", StringComparison.Ordinal))
         {
             var close = expanded.IndexOf('}');
@@ -13682,7 +13815,7 @@ internal sealed class TransformEngine
                 ? throw new InvalidOperationException("XTDE0040")
                 : (ns.NamespaceName, expanded[(colon + 1)..]);
         }
-        return (ErrNs, expanded);
+        return (string.Empty, expanded);
     }
 
     /// <summary>
@@ -21591,14 +21724,22 @@ internal sealed class TransformEngine
                 var iterationVariables = _context.SnapshotVariables();
                 try
                 {
-                    foreach (var child in instruction.Elements())
+                    foreach (var childNode in instruction.Nodes())
                     {
-                        if (child.Name.LocalName == "param" || child.Name.LocalName == "on-completion")
-                            continue;
-                        if (child.Name.NamespaceName == xslNs)
-                            ExecuteXsltInstruction(child, item);
-                        else
-                            CopyLiteralElement(child);
+                        switch (childNode)
+                        {
+                            case XText text:
+                                ProcessSequenceText(text, instruction);
+                                break;
+                            case XElement child when child.Name.LocalName == "param" || child.Name.LocalName == "on-completion":
+                                continue;
+                            case XElement child when child.Name.NamespaceName == xslNs:
+                                ExecuteXsltInstruction(child, item);
+                                break;
+                            case XElement child:
+                                CopyLiteralElement(child);
+                                break;
+                        }
                     }
                 }
                 catch (NextIterationSignal next)

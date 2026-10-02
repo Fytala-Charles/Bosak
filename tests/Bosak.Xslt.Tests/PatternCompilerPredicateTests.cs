@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 29-09-2026     | Added XTSE0340 tests for '..' top-level steps (match-213) and element-with-id() start      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 02-10-2026     | PC-1 W5: key() context-dependent step 2nd argument compiles (stream-211); function-call  |
+//                      |                  |       |                | 2nd argument still XTSE0340                                                              |
 // ===========================================================================================================================================================
 
 using System;
@@ -235,5 +237,29 @@ public class PatternCompilerPredicateTests
         // XSLT 3.0 §5.5.3 allows element-with-id(...) at the start of a pattern.
         var compiled = _compiler.Compile(pattern);
         Assert.NotNull(compiled);
+    }
+
+    // ---------------- PC-1 W5: key() context-dependent second argument (XSLT 3.0 §10.1.4) ----------------
+
+    [Theory]
+    [InlineData("item[key('change', @id, $doc2)]/foo")]
+    [InlineData("item[key('change', @id)]/foo")]
+    [InlineData("item[key('change', .)]")]
+    [InlineData("item[key('change', @id[. ne ''])]/foo")]
+    public void KeyContextDependentStepArgument_Compiles(string pattern)
+    {
+        // XSLT 3.0 §10.1.4 relaxes the XSLT 2.0 literal-only rule: the second argument
+        // may be a context-dependent step (@id), evaluated per candidate node (stream-211).
+        var compiled = _compiler.Compile(pattern);
+        Assert.NotNull(compiled);
+    }
+
+    [Fact]
+    public void KeyFunctionCallArgument_StillThrowsXtse0340()
+    {
+        // General expressions remain rejected (match-079 pins 40+2); a function-call
+        // second argument is not a step shape either.
+        var ex = Assert.Throws<InvalidOperationException>(() => _compiler.Compile("key('k', string(@id))//a"));
+        Assert.Contains("XTSE0340", ex.Message);
     }
 }

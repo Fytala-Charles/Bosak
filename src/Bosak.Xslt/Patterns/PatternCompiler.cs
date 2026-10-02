@@ -69,6 +69,12 @@
 //                      |                  |       |                | child + no text children; built-in xs: typed attribute/element patterns no longer      |
 //                      |                  |       |                | require an in-scope schema set (validation-1401, import-schema-055, conflict-1402)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.11  | 02-10-2026     | PC-1 W5: XSLT 3.0 §10.1.4 relaxation — key() 2nd pattern argument may be a context-       |
+//                      |                  |       |                | dependent step (@id), evaluated per candidate node (stream-211); 40+2 stays XTSE0340   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.12  | 02-10-2026     | PC-1 W7-4: non-positional simple-step predicates self-evaluate on streamed nodes       |
+//                      |                  |       |                | (IStreamingNode) instead of re-enumerating the consumed child axis from the parent     |
+//                      |                  |       |                | (si-group-054/056 streamed group-starting-with)                                        |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -77,6 +83,8 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Parser.Ast;
+using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
@@ -589,6 +597,13 @@ internal sealed class PatternCompiler
         if (arg[0] == '(' && FindMatchingParen(arg, 0) == arg.Length - 1)
             return true;
 
+        // XSLT 3.0 §10.1.4 relaxes the XSLT 2.0 constraint: the second argument may be a
+        // context-dependent step such as @id or child::item, evaluated with the candidate
+        // node as the context item (stream-211's item[key('change', @id, $doc2)]/foo).
+        // General expressions (e.g. 40+2) remain XTSE0340 (match-079/080).
+        if (IsContextDependentKeyArgument(arg))
+            return true;
+
         // Numeric literals (integer/decimal), optionally negative.
         int pos = 0;
         if (arg[0] == '-')
@@ -613,6 +628,109 @@ internal sealed class PatternCompiler
             }
         }
         return hasDigits && pos == arg.Length;
+    }
+
+    /// <summary>Whether the key() second argument is a context-dependent step — a bare
+    /// axis step (@id, child::item), the context item (.), or a filtered form of either —
+    /// which XSLT 3.0 §10.1.4 permits in a pattern and the predicate machinery evaluates
+    /// per candidate node. Anything that does not parse, or parses to a non-step shape
+    /// (arithmetic, function calls, sequences), is not allowed.</summary>
+    private static bool IsContextDependentKeyArgument(string arg)
+    {
+        XPathAstNode ast;
+        try
+        {
+            ast = XPathParser.Parse(arg);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        return IsStepShapedKeyArgument(ast);
+    }
+
+    private static bool IsStepShapedKeyArgument(XPathAstNode node) => node switch
+    {
+        ParenthesizedExprNode p => IsStepShapedKeyArgument(p.Expression),
+        StepNode => true,
+        ContextItemNode => true,
+        PostfixPredicateNode pp => IsStepShapedKeyArgument(pp.Expression),
+        _ => false,
+    };
+
+    /// <summary>Whether a pattern predicate cannot act as a positional predicate and
+    /// does not read the focus position/size anywhere: its value depends only on the
+    /// candidate node. Such a predicate may be evaluated as
+    /// <c>self::node()[pred]</c> on the candidate itself, which is the only option for
+    /// streamed nodes whose parents cannot re-enumerate consumed child axes.</summary>
+    private static bool IsNonPositionalPredicateExpr(string predicateExpr)
+    {
+        XPathAstNode ast;
+        try
+        {
+            ast = XPathParser.Parse(predicateExpr);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        static bool ReadsPosition(XPathAstNode node) => node switch
+        {
+            FunctionCallNode f => (f.LocalName is "position" or "last" && f.Prefix is null or "" or "fn")
+                || f.Arguments.Any(ReadsPosition),
+            NamedFunctionRefNode rf => rf.LocalName is "position" or "last" && rf.Prefix is null or "" or "fn",
+            ArrowExprNode a => ReadsPosition(a.Source) || ReadsPosition(a.Target),
+            StepNode s => s.Predicates.Any(ReadsPosition),
+            PathExprNode p => p.Steps.Any(ReadsPosition),
+            PostfixPredicateNode pp => ReadsPosition(pp.Expression) || ReadsPosition(pp.Predicate),
+            PredicateNode pd => ReadsPosition(pd.Expression),
+            ParenthesizedExprNode par => ReadsPosition(par.Expression),
+            SequenceExpressionNode seq => seq.Expressions.Any(ReadsPosition),
+            RangeExpressionNode r => ReadsPosition(r.From) || ReadsPosition(r.To),
+            IfExpressionNode i => ReadsPosition(i.Condition) || ReadsPosition(i.ThenBranch) || ReadsPosition(i.ElseBranch),
+            BinaryExpressionNode b => ReadsPosition(b.Left) || ReadsPosition(b.Right),
+            UnaryExpressionNode u => ReadsPosition(u.Operand),
+            CastNode c => ReadsPosition(c.Expression),
+            CastableNode ca => ReadsPosition(ca.Expression),
+            InstanceOfNode io => ReadsPosition(io.Expression),
+            TreatNode t => ReadsPosition(t.Expression),
+            LetExpressionNode l => l.Bindings.Any(x => ReadsPosition(x.Expression)) || ReadsPosition(l.Body),
+            ForExpressionNode f => f.Bindings.Any(x => ReadsPosition(x.Expression)) || ReadsPosition(f.ReturnExpression),
+            QuantifiedExpressionNode q => q.Bindings.Any(x => ReadsPosition(x.Expression)) || ReadsPosition(q.SatisfiesExpression),
+            LookupNode lk => ReadsPosition(lk.Expression) || ReadsPosition(lk.Key),
+            LookupWildcardNode lw => ReadsPosition(lw.Expression),
+            DynamicFunctionCallNode d => ReadsPosition(d.Function) || d.Arguments.Any(ReadsPosition),
+            InlineFunctionNode inf => ReadsPosition(inf.Body),
+            MapConstructorNode m => m.Entries.Any(e => ReadsPosition(e.Key) || ReadsPosition(e.Value)),
+            ArrayConstructorNode a => a.Items.Any(ReadsPosition),
+            TryCatchNode t => ReadsPosition(t.TryExpression) || t.Clauses.Any(c => ReadsPosition(c.Expression)),
+            // Conservative: any exotic form (FLWOR, constructors, switch/typeswitch,
+            // validate, string constructors, ...) blocks self-evaluation.
+            _ => node is FlworClauseNode or FlworExpressionNode or SwitchExpressionNode or TypeswitchExpressionNode
+                or ValidateExpressionNode or StringConstructorNode or DirectElementConstructorNode
+                or ComputedElementConstructorNode or ComputedAttributeConstructorNode
+                or ComputedDocumentConstructorNode or ComputedTextConstructorNode or ComputedCommentConstructorNode
+                or ComputedPIConstructorNode or ComputedNamespaceConstructorNode or DirectCommentNode
+                or DirectProcessingInstructionNode or SignificantTextNode,
+        };
+
+        static bool GuaranteedNonNumeric(XPathAstNode node) => node switch
+        {
+            BinaryExpressionNode b => b.Operator is BinaryOperator.Or or BinaryOperator.And
+                or BinaryOperator.Eq or BinaryOperator.Ne or BinaryOperator.Lt or BinaryOperator.Le
+                or BinaryOperator.Gt or BinaryOperator.Ge or BinaryOperator.Equal or BinaryOperator.NotEqual
+                or BinaryOperator.LessThan or BinaryOperator.LessThanOrEqual or BinaryOperator.GreaterThan
+                or BinaryOperator.GreaterThanOrEqual or BinaryOperator.Is or BinaryOperator.Precedes
+                or BinaryOperator.Follows,
+            ParenthesizedExprNode par => GuaranteedNonNumeric(par.Expression),
+            StepNode => true,
+            ContextItemNode => true,
+            BooleanLiteralNode => true,
+            _ => false,
+        };
+
+        return GuaranteedNonNumeric(ast) && !ReadsPosition(ast);
     }
 
     /// <summary>
@@ -3145,6 +3263,14 @@ internal sealed class PatternCompiler
                 axisStep = $"child::{basePattern}[{predicateExpr}]{remaining}";
             var compiledStep = CompilePatternXPath(axisStep);
             var fallbackPred = CompilePatternXPath($"self::node()[{predicateExpr}]{remaining}");
+            // Streamed parents cannot re-enumerate their children (the population pass
+            // already consumed the forward-only child pump). For non-positional
+            // predicates the predicate value depends only on the candidate node, so
+            // self::node()[pred] is equivalent to child::base[pred] + identity check
+            // and can be evaluated directly on the node (si-group-054/056). A trailing
+            // path/predicate after the bracket (e.g. [@a][1]) may need sibling-list
+            // context and keeps the parent-based evaluation.
+            bool selfEvaluateOnStream = remaining.Length == 0 && IsNonPositionalPredicateExpr(predicateExpr);
 
             return (item, ctx) =>
             {
@@ -3159,6 +3285,12 @@ internal sealed class PatternCompiler
                 var savedSize = ctx.ContextSize;
                 try
                 {
+                    if (selfEvaluateOnStream && node is IStreamingNode)
+                    {
+                        var selfResult = fallbackPred.Evaluate(ctx.WithFocus(XdmValue.FromNode(node), 1, 1));
+                        return selfResult.GetEffectiveBooleanValue();
+                    }
+
                     XdmValue result;
                     if (parent == null)
                     {

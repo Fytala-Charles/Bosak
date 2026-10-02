@@ -103,6 +103,11 @@
 //                      | Charles Korthout | 1.45  | 01-10-2026     | Path-step Normalize carries a forward-axis flag (RegisterC): streamable pipelines keep |
 //                      |                  |       |                | encounter order for forward steps (sf-reverse-001) while reverse axes still sort        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.46  | 02-10-2026     | PC-1 W7 (si-for-each-801): descendant-or-self::node()/child::TEST merge extended to     |
+//                      |                  |       |                | child steps with non-positional predicates (IsNonPositionalPredicate: boolean-valued,   |
+//                      |                  |       |                | no position()/last() anywhere) — //node()[name()=$v] now evaluates as one descendant     |
+//                      |                  |       |                | pass instead of interleaving two single-pass root pumps                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -1129,8 +1134,10 @@ internal sealed class IrLowerer
     /// The forms are equivalent (XPath §3.3.5 defines <c>//name</c> as
     /// <c>/descendant-or-self::node()/child::name</c>), and the merged form evaluates in a
     /// single pass over a streamed input instead of re-requesting the root's children
-    /// while the descendant enumeration is mid-stream. The child step must not carry
-    /// predicates: those bind per context item and would change meaning after merging.
+    /// while the descendant enumeration is mid-stream. A child step carrying predicates
+    /// merges only when every predicate is <see cref="IsNonPositionalPredicate"/> — a
+    /// predicate that cannot observe its context position/size evaluates identically per
+    /// child (unmerged) and per descendant (merged).
     /// </summary>
     private static IReadOnlyList<XPathAstNode> MergeDescendantOrSelfSteps(IReadOnlyList<XPathAstNode> steps)
     {
@@ -1141,7 +1148,9 @@ internal sealed class IrLowerer
                 && descStep.NodeTest.Kind == NameTestKind.KindTest
                 && descStep.NodeTest.Name == "node"
                 && i + 1 < steps.Count
-                && steps[i + 1] is StepNode { Axis: XdmAxis.Child, Predicates.Count: 0 } childStep)
+                && steps[i + 1] is StepNode { Axis: XdmAxis.Child } childStep
+                && (childStep.Predicates.Count == 0 || childStep.Predicates.All(p =>
+                    IsNonPositionalPredicate(p is PredicateNode pd ? pd.Expression : p))))
             {
                 merged ??= new List<XPathAstNode>(steps.Take(i));
                 merged.Add(new StepNode(XdmAxis.Descendant, childStep.NodeTest, childStep.Predicates));
@@ -1153,6 +1162,79 @@ internal sealed class IrLowerer
             }
         }
         return merged ?? steps;
+    }
+
+    /// <summary>
+    /// Whether a step predicate is guaranteed independent of the context position and
+    /// size, so it evaluates to the same boolean for a candidate whether the step is
+    /// evaluated per parent child (unmerged <c>//x[p]</c>) or across the whole descendant
+    /// axis (merged <c>descendant::x[p]</c>). Positional predicates — numeric literals
+    /// (<c>[1]</c>), <c>position()</c>/<c>last()</c> (including inside operands), or any
+    /// expression whose top-level value can be numeric — are rejected. Exotic expression
+    /// forms (FLWOR, constructors, switch, validate, ...) are conservatively rejected.
+    /// </summary>
+    private static bool IsNonPositionalPredicate(XPathAstNode predicate)
+    {
+        // The whole subtree must not read the focus position/size (position() or last(),
+        // resolved from no prefix or fn).
+        static bool ReadsPosition(XPathAstNode node) => node switch
+        {
+            FunctionCallNode f => (f.LocalName is "position" or "last" && f.Prefix is null or "" or "fn")
+                || f.Arguments.Any(ReadsPosition),
+            NamedFunctionRefNode rf => rf.LocalName is "position" or "last" && rf.Prefix is null or "" or "fn",
+            ArrowExprNode a => ReadsPosition(a.Source) || ReadsPosition(a.Target),
+            StepNode s => s.Predicates.Any(ReadsPosition),
+            PathExprNode p => p.Steps.Any(ReadsPosition),
+            PostfixPredicateNode pp => ReadsPosition(pp.Expression) || ReadsPosition(pp.Predicate),
+            PredicateNode pd => ReadsPosition(pd.Expression),
+            ParenthesizedExprNode par => ReadsPosition(par.Expression),
+            SequenceExpressionNode seq => seq.Expressions.Any(ReadsPosition),
+            RangeExpressionNode r => ReadsPosition(r.From) || ReadsPosition(r.To),
+            IfExpressionNode i => ReadsPosition(i.Condition) || ReadsPosition(i.ThenBranch) || ReadsPosition(i.ElseBranch),
+            BinaryExpressionNode b => ReadsPosition(b.Left) || ReadsPosition(b.Right),
+            UnaryExpressionNode u => ReadsPosition(u.Operand),
+            CastNode c => ReadsPosition(c.Expression),
+            CastableNode ca => ReadsPosition(ca.Expression),
+            InstanceOfNode io => ReadsPosition(io.Expression),
+            TreatNode t => ReadsPosition(t.Expression),
+            LetExpressionNode l => l.Bindings.Any(x => ReadsPosition(x.Expression)) || ReadsPosition(l.Body),
+            ForExpressionNode f => f.Bindings.Any(x => ReadsPosition(x.Expression)) || ReadsPosition(f.ReturnExpression),
+            QuantifiedExpressionNode q => q.Bindings.Any(x => ReadsPosition(x.Expression)) || ReadsPosition(q.SatisfiesExpression),
+            LookupNode lk => ReadsPosition(lk.Expression) || ReadsPosition(lk.Key),
+            LookupWildcardNode lw => ReadsPosition(lw.Expression),
+            DynamicFunctionCallNode d => ReadsPosition(d.Function) || d.Arguments.Any(ReadsPosition),
+            InlineFunctionNode inf => ReadsPosition(inf.Body),
+            MapConstructorNode m => m.Entries.Any(e => ReadsPosition(e.Key) || ReadsPosition(e.Value)),
+            ArrayConstructorNode a => a.Items.Any(ReadsPosition),
+            TryCatchNode t => ReadsPosition(t.TryExpression) || t.Clauses.Any(c => ReadsPosition(c.Expression)),
+            // Conservative: any exotic form (FLWOR, constructors, switch/typeswitch,
+            // validate, string constructors, ...) blocks the merge.
+            _ => node is FlworClauseNode or FlworExpressionNode or SwitchExpressionNode or TypeswitchExpressionNode
+                or ValidateExpressionNode or StringConstructorNode or DirectElementConstructorNode
+                or ComputedElementConstructorNode or ComputedAttributeConstructorNode
+                or ComputedDocumentConstructorNode or ComputedTextConstructorNode or ComputedCommentConstructorNode
+                or ComputedPIConstructorNode or ComputedNamespaceConstructorNode or DirectCommentNode
+                or DirectProcessingInstructionNode or SignificantTextNode,
+        };
+
+        // The top-level predicate VALUE must be unable to act as a positional predicate
+        // (XPath treats a numeric predicate value as position() = value).
+        static bool GuaranteedNonNumeric(XPathAstNode node) => node switch
+        {
+            BinaryExpressionNode b => b.Operator is BinaryOperator.Or or BinaryOperator.And
+                or BinaryOperator.Eq or BinaryOperator.Ne or BinaryOperator.Lt or BinaryOperator.Le
+                or BinaryOperator.Gt or BinaryOperator.Ge or BinaryOperator.Equal or BinaryOperator.NotEqual
+                or BinaryOperator.LessThan or BinaryOperator.LessThanOrEqual or BinaryOperator.GreaterThan
+                or BinaryOperator.GreaterThanOrEqual or BinaryOperator.Is or BinaryOperator.Precedes
+                or BinaryOperator.Follows,
+            ParenthesizedExprNode par => GuaranteedNonNumeric(par.Expression),
+            StepNode => true,
+            ContextItemNode => true,
+            BooleanLiteralNode => true,
+            _ => false,
+        };
+
+        return GuaranteedNonNumeric(predicate) && !ReadsPosition(predicate);
     }
 
     private int LowerPathExpr(PathExprNode node, int? targetReg)

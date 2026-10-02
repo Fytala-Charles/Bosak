@@ -15,6 +15,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 21-09-2026     | TransformStreamingToString parity tests                                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W6: absorbing functions materialize forward-only arguments (readable twice);         |
+//                      |                  |       |                | non-absorbing callees keep single-pass semantics (second read still fails)               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 02-10-2026     | PC-1 W7-2: descendant step merge with non-positional child predicates (si-for-each-801)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Core.Xdm;
@@ -330,5 +335,126 @@ public class StreamingTransformTests
 
         Assert.Equal(inMemory, streamed);
         Assert.Equal("Hammer,Saw,Drill,", streamed);
+    }
+
+    // ---------------- PC-1 W6: absorbing functions materialize streamed arguments (§19.8.5) ----------------
+
+    private const string AbsorbingXsl = """
+        <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+          xmlns:f="urn:f" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="f xs">
+          <xsl:output method="xml" indent="no"/>
+          <xsl:mode streamable="yes"/>
+          <xsl:function name="f:reads" streamability="absorbing" as="xs:integer">
+            <xsl:param name="items" as="element()*"/>
+            <xsl:sequence select="count($items) + (if (exists($items/@id)) then 1 else 0)"/>
+          </xsl:function>
+          <xsl:template match="inventory">
+            <out><xsl:value-of select="f:reads(product)"/></out>
+          </xsl:template>
+        </xsl:stylesheet>
+        """;
+
+    [Fact]
+    public void AbsorbingFunction_MaterializesStreamedArgument_ReadableTwice()
+    {
+        // Without materialization the second read (the captured @id attributes of the
+        // absorbed argument) hits the exhausted forward-only stream; §19.8.5 lets an
+        // absorbing function consume its argument in full. 3 items + 1 = 4.
+        var result = Streamed(AbsorbingXsl, Xml);
+        Assert.Equal("<out>4</out>", result);
+    }
+
+    [Fact]
+    public void NonAbsorbingInspectionFunction_StillReceivesStreamedNode()
+    {
+        // Edge: a non-absorbing (inspection) callee keeps the lazy single-pass argument
+        // path — it is neither materialized nor broken by the absorbing-only change
+        // (su-absorbing-902's model makes untyped/unclassified node parameters a static
+        // error, so inspection is the non-absorbing category that may receive a streamed
+        // node). exists() is motionless, so the body does not advance the stream.
+        var xsl = AbsorbingXsl
+            .Replace(" streamability=\"absorbing\"", " streamability=\"inspection\"")
+            .Replace("""<xsl:param name="items" as="element()*"/>""",
+                     """<xsl:param name="items" as="element()"/>""")
+            .Replace("""<xsl:sequence select="count($items) + (if (exists($items/@id)) then 1 else 0)"/>""",
+                     """<xsl:sequence select="if (exists($items/@id)) then 1 else 0"/>""")
+            .Replace("""<out><xsl:value-of select="f:reads(product)"/></out>""",
+                     """<out><xsl:value-of select="f:reads(head(product))"/></out>""");
+        var result = Streamed(xsl, Xml);
+        Assert.Equal("<out>1</out>", result);
+    }
+
+    [Fact]
+    public void ForEach_DescendantNodeTestWithNonPositionalNamePredicate_Parity()
+    {
+        // Regression (si-for-each-801): //node()[name()=$v] lowered to
+        // descendant-or-self::node()/child::node()[...] double-enumerated the
+        // root-child pump of a streamed source ("children ... already consumed").
+        // Non-positional child predicates are now merged into a single descendant step.
+        var xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:param name="node-name" select="'product'"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//node()[name() = $node-name]">
+                  <item><xsl:value-of select="@id"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+        var result = Streamed(xsl, Xml);
+        Assert.Equal("<out><item>1</item><item>2</item><item>3</item></out>", result);
+    }
+
+    [Fact]
+    public void ForEach_DescendantNameTestWithValuePredicate_Parity()
+        => AssertParity("""
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//product[@id = '2']">
+                  <item><xsl:value-of select="name"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """, Xml);
+
+    [Fact]
+    public void ForEach_DescendantNameTestWithPositionalPredicate_InMemorySemanticsPreserved()
+    {
+        // Edge: positional child predicates must stay unmerged so [1] keeps its
+        // XPath semantics (first product child of its parent) in the in-memory engine.
+        var xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//product[1]">
+                  <item><xsl:value-of select="@id"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+        var result = InMemory(xsl, Xml);
+        Assert.Equal("<out><item>1</item></out>", result);
+    }
+
+    [Fact]
+    public void ForEach_DescendantNameTestWithPositionalPredicate_StreamedRejectsDoublePass()
+    {
+        // Edge: //product[1] cannot run over a forward-only source — per-parent
+        // positional access needs a second pass over the child axis, which the
+        // stream rejects (the non-positional merge must not hide this).
+        var xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:template match="/">
+                <out><xsl:for-each select="//product[1]">
+                  <item><xsl:value-of select="@id"/></item>
+                </xsl:for-each></out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+        var ex = Assert.ThrowsAny<Exception>(() => Streamed(xsl, Xml));
+        Assert.Contains("forward-only", ex.Message);
     }
 }
