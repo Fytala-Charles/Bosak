@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 02-10-2026     | PC-1 W6: unprefixed inspection calls (exists/has-children/...) carry Prefix null from the parser, so they were not whitelisted in CountConsumingRefs and were miscounted as consuming references (false XTSE3430 for a 2nd inspection ref in an absorbing function) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 02-10-2026     | Positional group-starting-with/group-ending-with over a streamed population: numeric-literal predicates ([1], [(2.5)]) are positional per XPath §2.4.3 but carried no UsesPosition/UsesLast flag, so they slipped past CheckPattern and silently collapsed to one group at runtime — now XTSE3430 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -1605,10 +1607,24 @@ internal static class StreamabilityAnalyzer
                 var info = Analyze(ast, env);
                 if (info.Consumes > 0 || !info.Motionless)
                     throw Error($"{what} contains a predicate that is not motionless ('{predicate}').");
-                if (info.UsesPosition || info.UsesLast)
+                if (info.UsesPosition || info.UsesLast || IsNumericLiteralPredicate(ast))
                     throw Error($"{what} contains a positional predicate ('{predicate}').");
             }
         }
+
+        // XPath §2.4.3 numeric predicate semantics: a predicate that evaluates to a number
+        // selects the item at that position, so item[1] is positional even though it calls
+        // neither position() nor last() (the UsesPosition/UsesLast flags above only
+        // cover those calls). Over a streamed group population such a pattern cannot be
+        // evaluated (XTSE3430, §19.10.9.4); at runtime it silently collapsed to one group
+        // because each candidate was tested in isolation. Numeric literals — including
+        // parenthesized ones — are recognized structurally here.
+        private static bool IsNumericLiteralPredicate(XPathAstNode node) => node switch
+        {
+            IntegerLiteralNode or DecimalLiteralNode or DoubleLiteralNode => true,
+            ParenthesizedExprNode par => IsNumericLiteralPredicate(par.Expression),
+            _ => false,
+        };
 
         private static bool ContainsCall(string expr, string name)        {
             var idx = 0;
