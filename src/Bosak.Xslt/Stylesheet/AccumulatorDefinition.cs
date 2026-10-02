@@ -23,6 +23,8 @@
 //                      | Charles Korthout | 0.6   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      | Charles Korthout | 0.7   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 01-10-2026     | UniqueId/UniqueKey so same-named accumulators in different packages don't collide       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -50,6 +52,14 @@ internal sealed class AccumulatorDefinition
 
     /// <summary>The accumulator name in Clark notation.</summary>
     public string ClarkName => string.IsNullOrEmpty(NamespaceUri) ? LocalName : $"{{{NamespaceUri}}}{LocalName}";
+
+    /// <summary>A process-unique id distinguishing accumulator declarations that share a Clark name across packages.</summary>
+    internal int UniqueId { get; } = Interlocked.Increment(ref _nextUniqueId);
+
+    /// <summary>Dictionary/annotation key that stays unique even when two packages declare same-named accumulators.</summary>
+    internal string UniqueKey => $"{ClarkName}#{UniqueId}";
+
+    private static int _nextUniqueId;
 
     /// <summary>The declared type of the accumulator value.</summary>
     public string? As { get; }

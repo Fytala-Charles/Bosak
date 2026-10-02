@@ -89,6 +89,17 @@
 //                      | Charles Korthout | 2.37  | 23-08-2026     | UCA fallback=no and numeric-strength regression tests |
 //                      | Charles Korthout | 2.38  | 27-08-2026     | Updated json-to-xml validate=true expectation to FOJS0004                              |
 //                      | Charles Korthout | 2.39  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.40  | 01-10-2026     | xml-to-json single-pass sequence tests: multi-node raises XPTY0004, empty returns empty |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.41  | 01-10-2026     | resolve-uri LEIRI tests: literal spaces, scheme-like relative, FORG0002 for "##" and ":"|
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.42  | 01-10-2026     | fn:distinct-values codepoint fast-path tests: ordinal string dedup, untypedAtomic/    |
+//                      |                  |       |                | string cross-equality, NaN deduplication                                                |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.43  | 01-10-2026     | resolve-uri percent-encoding tests: FORG0002 for "%gg"/"100%", valid "%20" stays       |
+//                      |                  |       |                | encoded (CombinedErrorCodes FORG0002, fn-resolve-uri-31)                               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -423,6 +434,28 @@ public class FunctionLibraryTests
         Assert.Contains("1", items);
         Assert.Contains("2", items);
         Assert.Contains("3", items);
+    }
+
+    [Fact]
+    public void DistinctValues_Strings_OrdinalFastPath()
+    {
+        var items = EvalSequence("fn:distinct-values((\"a\",\"b\",\"a\",\"c\",\"b\"))");
+        Assert.Equal(new[] { "a", "b", "c" }, items);
+    }
+
+    [Fact]
+    public void DistinctValues_UntypedAtomic_EqualsPlainString()
+    {
+        var items = EvalSequence("fn:distinct-values((xs:untypedAtomic(\"x\"), \"x\", xs:untypedAtomic(\"x\")))");
+        Assert.Single(items);
+        Assert.Equal("x", items[0]);
+    }
+
+    [Fact]
+    public void DistinctValues_NaN_Deduplicated()
+    {
+        var items = EvalSequence("fn:distinct-values((xs:double('NaN'), xs:double('NaN')))");
+        Assert.Single(items);
     }
 
     [Fact]
@@ -3585,6 +3618,76 @@ public class FunctionLibraryTests
         Assert.Contains("FOJS0006", ex.Message);
     }
 
+    /// <summary>
+    /// Test-local single-pass sequence: the second enumeration throws, mirroring the
+    /// forward-only streamed sequences produced by the VM and the streaming provider.
+    /// </summary>
+    private sealed class SingleUseSequence : ISinglePassSequence
+    {
+        private readonly XdmValue[] _items;
+        private int _taken;
+
+        internal SingleUseSequence(params XdmValue[] items) => _items = items;
+
+        public bool TryGetLength(out int length)
+        {
+            length = 0;
+            return false;
+        }
+
+        public IXdmSequenceEnumerator GetEnumerator()
+        {
+            if (Interlocked.Exchange(ref _taken, 1) != 0)
+                throw new InvalidOperationException("single-pass sequence re-read");
+            return new ListEnumerator(_items);
+        }
+
+        private sealed class ListEnumerator : IXdmSequenceEnumerator
+        {
+            private readonly XdmValue[] _items;
+            private int _index = -1;
+
+            internal ListEnumerator(XdmValue[] items) => _items = items;
+
+            public XdmValue Current => _items[_index];
+
+            public bool MoveNext() => ++_index < _items.Length;
+        }
+    }
+
+    private static XdmValue EvaluateWithVariable(string xpath, string name, XdmValue value)
+    {
+        var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        ctx.WithVariable(name, value);
+        return XPath31Expression.Compile(xpath).Evaluate(ctx);
+    }
+
+    [Fact]
+    public void XmlToJson_SinglePassMultiNodeSequence_RaisesXPTY0004()
+    {
+        // sf-xml-to-json-004: with a forward-only streamed argument the arity check must
+        // raise XPTY0004 on the first pass, not fail on a second enumeration of the stream.
+        var doc = new System.Xml.Linq.XDocument(
+            new System.Xml.Linq.XElement("__xdm_doc__",
+                new System.Xml.Linq.XElement("{http://www.w3.org/2005/xpath-functions}string", "a"),
+                new System.Xml.Linq.XElement("{http://www.w3.org/2005/xpath-functions}string", "b")));
+        var wrapped = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var items = new List<XdmValue>();
+        foreach (var child in wrapped.Axis(XdmAxis.Child))
+            items.Add(child);
+        var sequence = XdmValue.FromSequence(XdmSequence.FromSource(new SingleUseSequence(items.ToArray())));
+        var ex = Assert.Throws<InvalidOperationException>(() => EvaluateWithVariable("xml-to-json($in)", "in", sequence));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void XmlToJson_SinglePassEmptySequence_ReturnsEmpty()
+    {
+        var sequence = XdmValue.FromSequence(XdmSequence.FromSource(new SingleUseSequence()));
+        Assert.True(EvaluateWithVariable("xml-to-json($in)", "in", sequence).IsUndefined);
+    }
+
     [Fact]
     public void Snapshot_NoArgument_SnapshotsContextItem()
     {
@@ -4874,6 +4977,88 @@ public class Tier2jFlworTests
     [Fact]
     public void Sum_UntypedAtomicItems_SumsAsDouble()
         => Assert.Equal("3", EvalStr("fn:sum((xs:untypedAtomic('1'), xs:untypedAtomic('2')))"));
+
+    [Fact]
+    public void Sum_UntypedAtomicUncastable_RaisesFORG0001()
+    {
+        // sf-insert-before-011: xs:untypedAtomic that fails the cast to xs:double is
+        // FORG0001, not a silent NaN.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:sum((xs:untypedAtomic('1'), xs:untypedAtomic('A')))"));
+        Assert.Contains("FORG0001", ex.Message);
+    }
+
+    [Fact]
+    public void Sum_UntypedAtomicMixedWithNodes_ParsesNumericUntyped()
+    {
+        // Untyped element nodes in the sequence atomize to xs:untypedAtomic; numeric
+        // lexical forms still sum correctly alongside typed numerics.
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a>2</a><a>3</a></root>");
+        var node = new Bosak.XPath.Providers.Xml.XDocumentNode(doc);
+        var result = XPath31Expression.Compile("fn:sum((/root/a, 1.5))").Evaluate(node);
+        Assert.Equal(6.5, result.DoubleValue);
+    }
+
+    // ----- fn:resolve-uri LEIRI / RFC 3986 validation (type-functions-0304) -----
+
+    [Fact]
+    public void ResolveUri_SpaceInRelative_KeepsLiteralSpace()
+        => Assert.Equal("http://base.example.org/ns/two organizations",
+            EvalStr("fn:resolve-uri('two organizations', 'http://base.example.org/ns/')"));
+
+    [Fact]
+    public void ResolveUri_SchemeLikeRelative_ReturnedUnchanged()
+        => Assert.Equal("business-enforcement::link-chain.common",
+            EvalStr("fn:resolve-uri('business-enforcement::link-chain.common', 'http://base.example.org/ns/')"));
+
+    [Fact]
+    public void ResolveUri_HashInsideFragment_RaisesFORG0002()
+    {
+        // resolve-uri-018: "##some.uri" — '#' is not allowed inside a fragment.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:resolve-uri('##some.uri', 'http://localhost/base/')"));
+        Assert.Contains("FORG0002", ex.Message);
+    }
+
+    [Fact]
+    public void ResolveUri_EmptyScheme_RaisesFORG0002()
+    {
+        // fn-resolve-uri-3: ":" is neither an absolute URI (empty scheme) nor a valid
+        // relative reference (colon in the first path segment).
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:resolve-uri(':', 'http://www.example.com/')"));
+        Assert.Contains("FORG0002", ex.Message);
+    }
+
+    [Fact]
+    public void ResolveUri_SpaceInBase_RaisesFORG0002()
+    {
+        // The base URI must still be strictly well-formed (erratum FO.E1).
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:resolve-uri('a.html', 'http://www.example.com/that doc.html')"));
+        Assert.Contains("FORG0002", ex.Message);
+    }
+
+    [Fact]
+    public void ResolveUri_InvalidPercentEncoding_RaisesFORG0002()
+    {
+        // CombinedErrorCodes FORG0002: resolve-uri("%gg") — a '%' must be followed
+        // by two hex digits; .NET's Uri well-formedness check caught this before the
+        // RFC 3986 char scan replaced it.
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:resolve-uri('%gg', 'http://www.w3.org/')"));
+        Assert.Contains("FORG0002", ex.Message);
+    }
+
+    [Fact]
+    public void ResolveUri_TruncatedPercentEncoding_RaisesFORG0002()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Evaluate("fn:resolve-uri('100%', 'http://www.w3.org/')"));
+        Assert.Contains("FORG0002", ex.Message);
+    }
+
+    [Fact]
+    public void ResolveUri_ValidPercentEncoding_StaysEncoded()
+    {
+        // fn-resolve-uri-31: percent-encodings already present in the input stay encoded.
+        Assert.Equal("http://www.example.com/a%20b.html",
+            EvalStr("fn:resolve-uri('a%20b.html', 'http://www.example.com/')"));
+    }
 
     // ----- fn:max / fn:min / fn:sum annotation preservation (K2) ---------
 

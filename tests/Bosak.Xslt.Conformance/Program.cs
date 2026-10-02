@@ -184,6 +184,22 @@
 //                      | Charles Korthout | 3.59  | 01-10-2026     | REQ-114 (PB-3 C9) follow-up: drop duplicated return in the reparsed-result annotation  |
 //                      |                  |       |                | path (unreachable-code warning)                                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.60  | 01-10-2026     | Bare-file-name doc fallback gating on URI scheme REVERTED: the FODC0005 backslash   |
+//                      |                  |       |                | check moved into the engine's fn:doc/fn:document/xsl:source-document entry points, so  |
+//                      |                  |       |                | the fallback can no longer mask it (non-stream-006) and merge-008 finds its file again |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.61  | 01-10-2026     | Streamed env sources declaring validation="strict"/"lax" are schema-validated per      |
+//                      |                  |       |                | record via RecordPostProcessor; the streaming load defers until the env schemas are    |
+//                      |                  |       |                | known (sf-avg-100: avg() sees xs:decimal @value on the streamed records)               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.62  | 01-10-2026     | Fix CS0136 in the string-actual assertion overload: bool local renamed to              |
+//                      |                  |       |                | serializationEquals (collided with the serialization-matches XElement local)           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.63  | 01-10-2026     | --resume-file <path>: skip test sets listed in the file and append each set that       |
+//                      |                  |       |                | completes, so a driver loop survives external process kills during long sweeps          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.64  | 01-10-2026     | CS8602 fix: null-forgiving envToLoad in the streaming validation block (non-null      |
+//                      |                  |       |                | whenever streamingSourceRequested is true)                                              |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -229,6 +245,12 @@ class Program
     static readonly HashSet<int> _assertClaimedIndexes = new();
     static string? _testNameFilter = null;
     static string? _testSetFilter = null;
+
+    // Resume support (--resume-file <path>): the file lists test-set names that completed
+    // in earlier (possibly killed) sweep runs; those sets are skipped and every set that
+    // finishes is appended, so a driver loop can relaunch the sweep until it completes.
+    static string? _resumeFile = null;
+    static readonly HashSet<string> _completedSets = new(StringComparer.OrdinalIgnoreCase);
 
     // Schema-aware mode (--schema-aware): drops the schema feature gates from
     // SkipFeatures, compiles every stylesheet with XsltCompiler.SchemaAware = true,
@@ -431,14 +453,19 @@ class Program
         // Schema-aware mode: any "--schema-aware" flag un-gates the schema features and
         // switches every compile to XsltCompiler.SchemaAware (see RunTestCase).
         var positional = new List<string>();
-        foreach (var arg in args)
+        for (int i = 0; i < args.Length; i++)
         {
+            var arg = args[i];
             if (arg is "--schema-aware" or "-s")
             {
                 _schemaAware = true;
                 SkipFeatures.Remove("schema_aware");
                 SkipFeatures.Remove("schema-import");
                 SkipTestSets.Remove("import-schema");
+            }
+            else if (arg == "--resume-file" && i + 1 < args.Length)
+            {
+                _resumeFile = args[++i];
             }
             else
             {
@@ -479,12 +506,25 @@ class Program
         if (_schemaAware) Console.WriteLine($"Mode: schema-aware (schema_aware / schema-import features un-gated)");
         Console.WriteLine();
 
+        if (_resumeFile != null && File.Exists(_resumeFile))
+        {
+            foreach (var line in File.ReadAllLines(_resumeFile))
+            {
+                if (line.Length > 0)
+                    _completedSets.Add(line);
+            }
+            Console.WriteLine($"Resume: skipping {_completedSets.Count} completed test sets (from {_resumeFile})");
+        }
+
         foreach (var testSetElem in testSets)
         {
             var testSetName = testSetElem.Attribute("name")?.Value ?? "";
             var testSetFile = testSetElem.Attribute("file")?.Value ?? "";
 
             if (filter != null && !testSetName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (_completedSets.Contains(testSetName))
                 continue;
 
             var testSetPath = Path.Combine(catalogDir, testSetFile);
@@ -495,6 +535,8 @@ class Program
             }
 
             RunTestSet(testSetPath, testSetName, catalogDir);
+            if (_resumeFile != null)
+                File.AppendAllText(_resumeFile, testSetName + Environment.NewLine);
         }
 
         Console.WriteLine();
@@ -791,15 +833,9 @@ class Program
 
             // Streaming sources in allow-listed sets run through the burst-mode provider:
             // the streamed node flows into the normal Transform/TransformToString paths.
-            if (streamingSourceRequested)
-            {
-                sourceNode = LoadStreamingSource(envToLoad!.Element(ns + "source")!, testSetDir, testSetPath, catalogDir, ns);
-                if (sourceNode == null)
-                {
-                    Console.WriteLine($"  SKIP {name}: streaming source shape not supported (missing file/content or select=)");
-                    return TestResult.Skip;
-                }
-            }
+            // The actual load is deferred until after the environment's schemas are
+            // processed, so a validation="strict"/"lax" streamed source can be validated
+            // record-by-record against them (sf-avg-100 needs the typed @value PSVI).
 
             // Collections declared in the environment (both default and named) are made
             // available to fn:collection / fn:uri-collection (collection-001..003).
@@ -1057,6 +1093,9 @@ class Program
             // behavior.
             var validatedSourceCache = new Dictionary<string, XDocument>(StringComparer.OrdinalIgnoreCase);
             XmlSchemaSet? envSchemaSet = null;
+            // Schema set for record-by-record validation of a streamed principal source
+            // (populated inside the block below; consumed by the deferred streaming load).
+            XmlSchemaSet? streamingValidationSet = null;
             if (_schemaAware && envToLoad != null)
             {
                 var addedSchemaDocs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -1180,6 +1219,38 @@ class Program
                             }
                         }
                     }
+                }
+
+                // A streamed principal source declaring validation="strict"/"lax" is
+                // schema-validated per record as the burst-mode provider materializes it,
+                // mirroring the in-memory pre-validation above: the streamed nodes then
+                // carry their PSVI type annotations (sf-avg-100: avg() must see xs:decimal
+                // @value, not untypedAtomic). validation="skip" stays untyped.
+                if (streamingSourceRequested)
+                {
+                    // streamingSourceRequested can only be true when envToLoad is non-null
+                    // (see the null-conditional check that computes it above).
+                    var streamingSrcElem = envToLoad!.Element(ns + "source")!;
+                    var streamingValidation = streamingSrcElem.Attribute("validation")?.Value;
+                    if (streamingValidation is "strict" or "lax" && addedSchemaDocs.Count > 0)
+                    {
+                        streamingValidationSet = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+                        foreach (var schemaUri in addedSchemaDocs)
+                            streamingValidationSet.Add(null, schemaUri);
+                        streamingValidationSet.Compile();
+                    }
+                }
+            }
+
+            // Deferred streaming load (see above): only after the environment's schemas
+            // are known so record validation can be wired in.
+            if (streamingSourceRequested)
+            {
+                sourceNode = LoadStreamingSource(envToLoad!.Element(ns + "source")!, testSetDir, testSetPath, catalogDir, ns, streamingValidationSet);
+                if (sourceNode == null)
+                {
+                    Console.WriteLine($"  SKIP {name}: streaming source shape not supported (missing file/content or select=)");
+                    return TestResult.Skip;
                 }
             }
 
@@ -1970,10 +2041,39 @@ class Program
     /// serve (a <c>select</c> attribute, or a source with neither file nor inline content);
     /// the caller skips such tests with a documented reason.
     /// </summary>
-    static IXdmNode? LoadStreamingSource(XElement source, string testSetDir, string testSetPath, string catalogDir, XNamespace ns)
+    static IXdmNode? LoadStreamingSource(XElement source, string testSetDir, string testSetPath, string catalogDir, XNamespace ns, XmlSchemaSet? validationSet = null)
     {
         if (!string.IsNullOrEmpty(source.Attribute("select")?.Value))
             return null;
+
+        // Record-level schema validation for a source whose environment declares
+        // validation="strict"/"lax": each materialized record is validated against the
+        // environment's schemas so the streamed nodes expose PSVI type annotations
+        // (StreamingNode delegates to the wrapped node). Errors never throw: partial
+        // annotations still attach, matching the in-memory pre-validation path.
+        StreamingLoadOptions CreateOptions(string uri)
+        {
+            var options = new StreamingLoadOptions { BaseUri = uri, DocumentUri = uri };
+            if (validationSet != null)
+            {
+                options.RecordPostProcessor = (record, _) =>
+                {
+                    if (record is XElement recordElement)
+                    {
+                        try
+                        {
+                            XdmSchemaAnnotator.ValidateSubtree(recordElement, validationSet);
+                        }
+                        catch (XmlSchemaException)
+                        {
+                            // An unvalidatable record stays untyped.
+                        }
+                    }
+                    return true;
+                };
+            }
+            return options;
+        }
 
         var file = source.Attribute("file")?.Value;
         if (file != null)
@@ -1985,7 +2085,7 @@ class Program
             // The stream outlives the transform it feeds; the harness process releases it on exit.
             return XmlStreamingProvider.Load(
                 new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read),
-                new StreamingLoadOptions { BaseUri = uri, DocumentUri = uri });
+                CreateOptions(uri));
         }
 
         var content = source.Element(ns + "content");
@@ -1995,7 +2095,7 @@ class Program
             var uri = new Uri(testSetPath).AbsoluteUri;
             return XmlStreamingProvider.Load(
                 new MemoryStream(Encoding.UTF8.GetBytes(xmlText)),
-                new StreamingLoadOptions { BaseUri = uri, DocumentUri = uri });
+                CreateOptions(uri));
         }
 
         return null;
@@ -2880,7 +2980,16 @@ class Program
                 if (File.Exists(filePath))
                     expected = ReadAssertionFile(filePath, assertSer.Attribute("encoding")?.Value).Trim();
             }
-            return NormalizeXml(actual) == NormalizeXml(expected);
+            var serializationEquals = NormalizeXml(actual) == NormalizeXml(expected);
+            if (!serializationEquals && Environment.GetEnvironmentVariable("BOSAK_DUMP_ASSERT") != null)
+            {
+                var dumpDir = Path.Combine(Path.GetTempPath(), "bosak-assert-dump");
+                Directory.CreateDirectory(dumpDir);
+                File.WriteAllText(Path.Combine(dumpDir, "actual.xml"), actual);
+                File.WriteAllText(Path.Combine(dumpDir, "expected.xml"), expected);
+                Console.WriteLine($"    [dump] actual/expected written to {dumpDir}");
+            }
+            return serializationEquals;
         }
 
         // serialization-matches: match the serialized markup against a regex.

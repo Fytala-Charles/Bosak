@@ -243,6 +243,12 @@
 //                      |                  |       |                | whitelisted on xsl:variable/param/with-param (xpath-default-namespace-0703);             |
 //                      |                  |       |                | pre-E36 component="function#0" suffix tolerated in xsl:accept/xsl:expose (package-022err) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.120 | 01-10-2026     | XTSE0545 evaluated per import-precedence level; a same-attribute conflict is resolved    |
+//                      |                  |       |                | only when a higher-precedence declaration specifies that attribute (mode-1506)          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.121 | 01-10-2026     | New ImportDepth (sibling imports share a level) drives xsl:mode XTSE0545 grouping;      |
+//                      |                  |       |                | ImportPrecedence still ranks every imported module distinctly                            |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.120 | 30-09-2026     | REQ-114/PB-3 C9: XTSE0020 for lax/strict default-validation below version 3.0            |
 //                      |                  |       |                | (validation-0110); XTSE0770 for xsl:function vs schema type constructor                  |
 //                      |                  |       |                | (type-functions-0503); deferred semantic XTSE3070 override type identity — mutual        |
@@ -678,6 +684,7 @@ internal sealed class Stylesheet
     /// <param name="baseUri">The base URI of the module, used to resolve relative references.</param>
     /// <param name="resolver">The resolver used for xsl:import, xsl:include, and xsl:use-package locations.</param>
     /// <param name="importPrecedence">The import precedence of this module (0 for the principal module).</param>
+    /// <param name="importDepth">The import depth of this module (0 for the principal module); sibling imports share a depth.</param>
     /// <param name="resolvedUris">URIs already resolved in this import/include tree, used for circular-reference detection.</param>
     /// <param name="inheritedStaticContext">The static context inherited from an including module (xsl:include), if any.</param>
     /// <param name="externalStaticParameters">Externally supplied values for static parameters.</param>
@@ -685,12 +692,13 @@ internal sealed class Stylesheet
     /// <param name="owningPackage">The package that owns this module, when loaded via xsl:use-package.</param>
     /// <param name="packageVersionResolutionStrategy">How to select among multiple matching package versions.</param>
     /// <param name="isPrincipalLevel">Whether this module is at the principal level of its package.</param>
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true, SchemaImportState? schemaState = null)
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true, SchemaImportState? schemaState = null, int importDepth = 0)
     {
         _document = document;
         _baseUri = baseUri;
         _resolver = resolver;
         ImportPrecedence = importPrecedence;
+        ImportDepth = importDepth;
         ApplyImportsContextModule = this;
         _resolvedUris = resolvedUris ?? new HashSet<string>();
         _isRootStylesheet = _resolvedUris.Count == 0;
@@ -758,6 +766,15 @@ internal sealed class Stylesheet
 
     /// <summary>The import precedence of this stylesheet (0 = main, higher = deeper import).</summary>
     public int ImportPrecedence { get; private set; }
+
+    /// <summary>
+    /// The import depth of this module: 0 for the principal module, one more than the
+    /// importing module for <c>xsl:import</c>, and the same as the including module for
+    /// <c>xsl:include</c>. Sibling imports share a depth, which is the granularity at
+    /// which same-precedence <c>xsl:mode</c> conflicts (XTSE0545) are evaluated —
+    /// <see cref="ImportPrecedence"/> ranks every imported module distinctly.
+    /// </summary>
+    public int ImportDepth { get; }
 
     /// <summary>
     /// The stylesheet module whose import tree is used by <c>xsl:apply-imports</c>
@@ -5640,7 +5657,7 @@ internal sealed class Stylesheet
             // use-when on the root element of an imported module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: false, schemaState: _schemaState);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence + 1, childResolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: false, schemaState: _schemaState, importDepth: ImportDepth + 1);
             child.ApplyImportsContextModule = child;
             _imports.Add(child);
             importElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -5674,7 +5691,7 @@ internal sealed class Stylesheet
             // use-when on the root element of an included module excludes the whole module.
             if (root != null && !UseWhen(root, moduleBaseUri))
                 return;
-            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: this.IsPrincipalLevel, schemaState: _schemaState);
+            var child = new Stylesheet(moduleDoc, moduleBaseUri, _resolver, ImportPrecedence, childResolvedUris, _staticContext, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, isPrincipalLevel: this.IsPrincipalLevel, schemaState: _schemaState, importDepth: ImportDepth);
             child.ApplyImportsContextModule = ApplyImportsContextModule;
             _includes.Add(child);
             includeElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -5718,7 +5735,7 @@ internal sealed class Stylesheet
             if (!UseWhen(root, location))
                 return;
 
-            var child = new Stylesheet(doc, location, _resolver, ImportPrecedence + 1, _resolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, schemaState: _schemaState);
+            var child = new Stylesheet(doc, location, _resolver, ImportPrecedence + 1, _resolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, schemaState: _schemaState, importDepth: ImportDepth + 1);
             child.ApplyImportsContextModule = child;
             _usedPackages.Add(child);
             usePackageElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
@@ -8211,21 +8228,34 @@ internal sealed class Stylesheet
 
         foreach (var (name, list) in all)
         {
-            var minPrecedence = list.Min(x => x.Precedence);
-            var top = list.Where(x => x.Precedence == minPrecedence).Select(x => x.Def).ToList();
-            if (top.Count <= 1)
-                continue;
-
-            var first = top[0];
-            for (int i = 1; i < top.Count; i++)
+            // Conflicts are evaluated per import-precedence level, highest precedence
+            // first. Within one level, two declarations explicitly supplying different
+            // values for the same attribute are XTSE0545 — unless an attribute is also
+            // explicitly specified by a declaration at a higher import precedence, in
+            // which case that attribute's conflict is resolved (XSLT 3.0 §6.6.1:
+            // mode-1505 resolves through the higher-precedence streamable attribute,
+            // mode-1506 raises XTSE0545 because the higher-precedence declaration does
+            // not specify the conflicting attribute).
+            var higherSpecified = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var level in list.GroupBy(x => x.Precedence).OrderBy(g => g.Key))
             {
-                // XTSE0545 only when the same attribute is explicitly specified with
-                // different values; disjoint declarations merge per §6.6.1 (mode-1903).
-                if (first.ConflictsWith(top[i]))
+                var defs = level.Select(x => x.Def).ToList();
+                if (defs.Count > 1)
                 {
-                    var details = string.Join(", ", list.Select(x => $"(p={x.Precedence},on={x.Def.OnNoMatch},vis={x.Def.Visibility},acc={string.Join("|", x.Def.UseAccumulators)})"));
-                    throw new InvalidOperationException($"XTSE0545: Conflicting xsl:mode declarations for mode '{name}' at the same import precedence. [{details}]");
+                    var first = defs[0];
+                    for (int i = 1; i < defs.Count; i++)
+                    {
+                        // XTSE0545 only when the same attribute is explicitly specified with
+                        // different values; disjoint declarations merge per §6.6.1 (mode-1903).
+                        if (first.ConflictsWith(defs[i], higherSpecified))
+                        {
+                            var details = string.Join(", ", list.Select(x => $"(p={x.Precedence},on={x.Def.OnNoMatch},vis={x.Def.Visibility},acc={string.Join("|", x.Def.UseAccumulators)})"));
+                            throw new InvalidOperationException($"XTSE0545: Conflicting xsl:mode declarations for mode '{name}' at the same import precedence. [{details}]");
+                        }
+                    }
                 }
+                foreach (var d in defs)
+                    higherSpecified.UnionWith(d.SpecifiedAttributes);
             }
         }
 
@@ -8249,6 +8279,9 @@ internal sealed class Stylesheet
 
     private static void CollectModeDefinitions(Stylesheet stylesheet, Dictionary<string, List<(int Precedence, ModeDefinition Def)>> map)
     {
+        // Group by import depth, not per-module rank: sibling xsl:imports are at the
+        // same import precedence (XSLT 3.0 §3.10.1), so their xsl:mode declarations
+        // must be compared for same-attribute conflicts (XTSE0545, mode-1506 shape).
         foreach (var kv in stylesheet._modeDefinitions)
         {
             if (!map.TryGetValue(kv.Key, out var list))
@@ -8256,7 +8289,7 @@ internal sealed class Stylesheet
                 list = new List<(int, ModeDefinition)>();
                 map[kv.Key] = list;
             }
-            list.Add((stylesheet.ImportPrecedence, kv.Value));
+            list.Add((stylesheet.ImportDepth, kv.Value));
         }
         foreach (var included in stylesheet._includes)
             CollectModeDefinitions(included, map);

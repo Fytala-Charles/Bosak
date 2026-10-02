@@ -84,6 +84,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.28  | 22-09-2026     | REQ-098 seam H3: ConstructedElementProcessor/ConstructedDocumentProcessor hooks         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.29  | 01-10-2026     | InStreamedPipeline flag: path-step document-order normalization is suppressed inside    |
+//                      |                  |       |                | streamable xsl:source-document bodies (sf-reverse-001)                                   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.30  | 01-10-2026     | LoadDocument reports FODC0005 for URI references with raw backslashes (non-stream-006)   |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.31  | 01-10-2026     | Backslash FODC0005 check moved to the fn:doc/fn:document/xsl:source-document entry       |
+//                      |                  |       |                | points: internal callers (collections, loaders) pass platform paths with backslashes     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -299,6 +307,16 @@ public sealed class EvaluationContext
     internal bool InStreamingMapContext { get; set; }
 
     /// <summary>
+    /// When true, the evaluation runs inside a <c>streamable="yes"</c>
+    /// <c>xsl:source-document</c> body. Within a streamed pipeline the engine keeps
+    /// order-sensitive sequences (for example the result of <c>fn:reverse</c>) in
+    /// encounter order instead of re-sorting path-step results into document order,
+    /// matching the XSLT 3.0 streaming reference behavior (sf-reverse-001). Set and
+    /// restored by the XSLT engine.
+    /// </summary>
+    internal bool InStreamedPipeline { get; set; }
+
+    /// <summary>
     /// When true, XML 1.1 semantics apply: prefixed namespace undeclarations
     /// (<c>xmlns:p=""</c>) are accepted in element constructors instead of raising
     /// XQST0085. This is set by the host based on the document's declared XML version.
@@ -478,6 +496,10 @@ public sealed class EvaluationContext
         IXdmNode node;
         try
         {
+            // Backslash (URI-reference) validation lives at the fn:doc/fn:document and
+            // xsl:source-document entry points, not here: internal callers (collections,
+            // loaders) pass platform file paths that legitimately contain backslashes.
+
             if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(BaseUri))
             {
                 uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;

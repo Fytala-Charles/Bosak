@@ -24,6 +24,9 @@
 //                      | Charles Korthout | 0.10  | 24-09-2026     | REQ-106 (PA-3): key values atomize schema-annotated nodes to their PSVI typed value    |
 //                      |                  |       |                | (NOTATION-typed attributes index by QName value — notation-0305)                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 01-10-2026     | Match patterns compiled with the evaluation context so schema-element() in xsl:key/@match|
+//                      |                  |       |                | sees the in-scope schema set (validation-0202)                                         |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -318,7 +321,7 @@ internal sealed class KeyIndex
     /// </summary>
     public static KeyIndex Build(IXdmNode sourceDocument, IEnumerable<Stylesheet.KeyDefinition> keyDefinitions, EvaluationContext context, KeyIndex index)
     {
-        var patternCompiler = new Patterns.PatternCompiler();
+        var patternCompiler = new Patterns.PatternCompiler(context);
 
         foreach (var keyDef in keyDefinitions)
         {
@@ -333,7 +336,7 @@ internal sealed class KeyIndex
     /// </summary>
     public static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index)
     {
-        var patternCompiler = new Patterns.PatternCompiler();
+        var patternCompiler = new Patterns.PatternCompiler(context);
         BuildSingleKey(sourceDocument, keyDef, context, index, patternCompiler);
     }
 
@@ -366,7 +369,7 @@ internal sealed class KeyIndex
     /// </summary>
     public static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index, Func<IXdmNode, XdmValue> useEvaluator)
     {
-        var patternCompiler = new Patterns.PatternCompiler();
+        var patternCompiler = new Patterns.PatternCompiler(context);
         var defaultNs = Bosak.Xslt.Stylesheet.Stylesheet.GetXPathDefaultNamespace(keyDef.Element!);
         var resolvedMatch = ResolveNamespacePrefixes(keyDef.Match, keyDef.Element);
         var compiledMatch = patternCompiler.Compile(resolvedMatch, defaultNs);

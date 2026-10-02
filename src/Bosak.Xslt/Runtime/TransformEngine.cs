@@ -58,6 +58,12 @@
 //                      |                  |       |                | unconditional XTTE0950; the prefix-resolvability check only applies when the parent     |
 //                      |                  |       |                | element is copied (error-0950a); check wired into xsl:copy attribute case too             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.96  | 01-10-2026     | XTTE0950 skips values outside the xs:QName lexical space (union member unknown in the    |
+//                      |                  |       |                | XSD 1.0 PSVI): catalog-001 @code='Q{uri}local' validated against the EQName string member |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.97  | 01-10-2026     | xsl:source-document (non-streamed) rejects @href URI references with raw backslashes     |
+//                      |                  |       |                | with FODC0005 (non-stream-006) — the check moved here from EvaluationContext.LoadDocument|
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 25-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-05-2026     | Added call-template, with-param, variable/param binding, lexical scoping               |
 //                      | Charles Korthout | 0.3   | 24-05-2026     | Added cross-stylesheet template dispatch with import precedence                        |
@@ -449,6 +455,17 @@
 //                      | Charles Korthout | 6.91  | 30-09-2026     | REQ-114/PB-3 C9: xsl:evaluate registers throwing fn:document#1/#2 stubs (XTDE3160)    |
 //                      |                  |       |                | instead of unregistering — dynamic function-lookup calls must resolve and fail with    |
 //                      |                  |       |                | XTDE3160, not a bare XPTY0004 (evaluate-048; evaluate-047 static call unchanged)       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.92  | 01-10-2026     | streamable xsl:source-document bodies set EvaluationContext.InStreamedPipeline so      |
+//                      |                  |       |                | path steps keep encounter order (reverse() results survive; sf-reverse-001)            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.93  | 01-10-2026     | Streamed/copy accumulator values keyed by package-unique definition id and the push    |
+//                      |                  |       |                | driver evaluates the package-closure union (override-misc-007); xsl:source-document    |
+//                      |                  |       |                | records use-accumulators applicability streamed or not (non-stream-200/201)             |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 6.94  | 01-10-2026     | AttachStreamingHooks composes with a host-attached RecordPostProcessor instead of       |
+//                      |                  |       |                | overwriting it, so record-level schema validation of a strictly validated streamed       |
+//                      |                  |       |                | source survives (sf-avg-100 typed @value)                                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1920,6 +1937,13 @@ internal sealed class TransformEngine
         if (!XdmSchemaAnnotator.IsQNameOrNotationDerived(schemaType))
             return;
         var value = attribute.Value.Trim();
+        // XSD 1.0 PSVI does not expose which union member validated the value, so a
+        // union-typed attribute that happens to include a QName member reaches this check
+        // even when the value validated against another member (catalog-001: @code is
+        // NCName|QName|EQName with the EQName string 'Q{uri}local'). Only a value in the
+        // lexical space of xs:QName can actually carry a namespace prefix.
+        if (!IsValidLexicalQNameValue(value))
+            return;
         var colon = value.IndexOf(':');
         if (colon <= 0)
             return; // unprefixed QName value — nothing to resolve
@@ -1939,6 +1963,39 @@ internal sealed class TransformEngine
             throw new XsltRuntimeException("XTTE0950",
                 $"Cannot copy the attribute '{attribute.Name.LocalName}': its namespace-sensitive value '{value}' uses the prefix '{prefix}', which is not in scope on the copied-to element.",
                 XdmValue.Undefined);
+        }
+    }
+
+    /// <summary>
+    /// Determines whether the value is in the lexical space of <c>xs:QName</c>: an NCName
+    /// or <c>prefix:local</c> where both parts are non-empty NCNames. Approximates NCName
+    /// with letters, digits, '.', '-' and '_' — sufficient to discriminate real QName
+    /// values from look-alikes such as the EQName syntax <c>Q{uri}local</c>.
+    /// </summary>
+    private static bool IsValidLexicalQNameValue(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return false;
+        var colon = value.IndexOf(':');
+        var local = colon < 0 ? value : value[(colon + 1)..];
+        var prefix = colon < 0 ? null : value[..colon];
+        if (local.Length == 0 || (prefix != null && prefix.Length == 0))
+            return false;
+        if (prefix != null && !IsNcName(prefix))
+            return false;
+        return IsNcName(local);
+
+        static bool IsNcName(string name)
+        {
+            if (!char.IsLetter(name[0]) && name[0] != '_')
+                return false;
+            for (var i = 1; i < name.Length; i++)
+            {
+                var c = name[i];
+                if (!char.IsLetterOrDigit(c) && c != '.' && c != '-' && c != '_')
+                    return false;
+            }
+            return true;
         }
     }
 
@@ -3283,6 +3340,11 @@ internal sealed class TransformEngine
         if (string.IsNullOrEmpty(accName))
             throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
 
+        // Resolve the definition in the current package scope up front: the per-node
+        // annotation values are keyed by a package-unique key so same-named accumulators
+        // declared in different packages (override-misc-007) resolve to their own values.
+        var scopedAcc = scopeAccumulators.FirstOrDefault(a => a.ClarkName == accName);
+
         var contextItem = ctx.ContextItem;
         if (!contextItem.IsNode || contextItem.NodeValue == null)
             throw new InvalidOperationException("XTDE3362: accumulator functions require a context item that is a node");
@@ -3318,13 +3380,15 @@ internal sealed class TransformEngine
             {
                 if (copied.InapplicableNames.Contains(accName))
                     throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
-                if (streamingDriver?.GetError(accName) is { } deferredError)
+                if (streamingDriver?.GetError(scopedAcc) is { } deferredError)
                     throw deferredError;
-                if (copied.ApplicableNames.Contains(accName) && copied.Values.TryGetValue(accName, out var pair))
+                if (scopedAcc != null
+                    && copied.ApplicableNames.Contains(accName)
+                    && copied.Values.TryGetValue(scopedAcc.UniqueKey, out var pair))
                 {
                     if (before)
                         return pair.Before;
-                    if (!copied.AfterUnset.Contains(accName))
+                    if (!copied.AfterUnset.Contains(scopedAcc.UniqueKey))
                         return pair.After;
 
                     // The after value is not published yet. At the document/root shells it
@@ -3337,12 +3401,12 @@ internal sealed class TransformEngine
                         if (!sdoc.CanDrain)
                             throw new InvalidOperationException($"XTDE3350: accumulator-after('{name}') is not available while the stream is being consumed");
                         sdoc.Drain();
-                        if (!copied.AfterUnset.Contains(accName))
-                            return copied.Values[accName].After;
+                        if (!copied.AfterUnset.Contains(scopedAcc.UniqueKey))
+                            return copied.Values[scopedAcc.UniqueKey].After;
                         throw new InvalidOperationException($"XTDE3350: accumulator-after('{name}') is not available before the end of the streamed document");
                     }
                     if (streamingDriver != null
-                        && streamingDriver.TryResolveAfterOnDemand(accName, node, copied, out var onDemandAfter))
+                        && streamingDriver.TryResolveAfterOnDemand(scopedAcc, node, copied, out var onDemandAfter))
                         return onDemandAfter;
                 }
             }
@@ -3357,12 +3421,11 @@ internal sealed class TransformEngine
             // governs push evaluation).
             if (!IsAccumulatorApplicableToTree(accName, node))
                 throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
-            var streamedAcc = scopeAccumulators.FirstOrDefault(a => a.ClarkName == accName);
-            if (streamedAcc == null)
+            if (scopedAcc == null)
                 throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
             streamingDriver ??= GetStreamingDriver(root);
             streamingDriver?.EnsureInitialized();
-            if (streamingDriver?.IsInProgress(accName) == true)
+            if (streamingDriver?.IsInProgress(scopedAcc) == true)
                 throw new InvalidOperationException($"XTDE3400: cyclic dependency detected in accumulator '{accName}'");
             throw new StreamingException(
                 $"Streaming: accumulator '{name}' is referenced before its value is available. " +
@@ -3373,7 +3436,7 @@ internal sealed class TransformEngine
         if (!IsAccumulatorApplicableToTree(accName, node))
             throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not applicable to the current node");
 
-        var acc = scopeAccumulators.FirstOrDefault(a => a.ClarkName == accName);
+        var acc = scopedAcc;
         if (acc == null)
             throw new InvalidOperationException($"XTDE3341: accumulator '{name}' not found");
 
@@ -3402,6 +3465,42 @@ internal sealed class TransformEngine
             _packageAccumulators[scope] = list;
         }
         return list;
+    }
+
+    // Lazily computed union of accumulator declarations across the package closure.
+    private List<Stylesheet.AccumulatorDefinition>? _allPackageAccumulators;
+
+    /// <summary>
+    /// Returns every accumulator declaration across the principal stylesheet and its
+    /// transitive <c>xsl:use-package</c> closure. Streamed documents evaluate this union
+    /// (keyed per definition, not per Clark name) so a template executing inside a used
+    /// package reads that package's accumulator even when the using package declares an
+    /// accumulator with the same name (override-misc-007).
+    /// </summary>
+    private List<Stylesheet.AccumulatorDefinition> GetAllPackageAccumulators()
+        => _allPackageAccumulators ??= ComputeAllPackageAccumulators();
+
+    private List<Stylesheet.AccumulatorDefinition> ComputeAllPackageAccumulators()
+    {
+        var result = new List<Stylesheet.AccumulatorDefinition>();
+        var seen = new HashSet<Stylesheet.AccumulatorDefinition>();
+        var visited = new HashSet<Stylesheet.Stylesheet>();
+        var stack = new Stack<Stylesheet.Stylesheet>();
+        stack.Push(_stylesheet);
+        while (stack.Count > 0)
+        {
+            var package = stack.Pop();
+            if (!visited.Add(package))
+                continue;
+            foreach (var acc in package.GetAllAccumulators())
+            {
+                if (seen.Add(acc))
+                    result.Add(acc);
+            }
+            foreach (var used in package.UsedPackages)
+                stack.Push(used);
+        }
+        return result;
     }
 
     /// <summary>
@@ -3850,7 +3949,7 @@ internal sealed class TransformEngine
     /// </summary>
     private void AttachAccumulatorValues(IXdmNode sourceNode, XElement copy)
     {
-        if (_accumulators.Count == 0)
+        if (GetAllPackageAccumulators().Count == 0)
             return;
 
         var root = GetRootNode(sourceNode);
@@ -3872,14 +3971,14 @@ internal sealed class TransformEngine
         else
         {
             var values = new AccumulatorValues();
-            foreach (var acc in _accumulators)
+            foreach (var acc in GetAllPackageAccumulators())
             {
                 if (IsAccumulatorApplicableToTree(acc.ClarkName, sourceNode))
                 {
                     values.ApplicableNames.Add(acc.ClarkName);
                     var nodeValues = GetAccumulatorNodeValues(acc, root);
                     if (nodeValues.TryGetValue(sourceNode, out var pair))
-                        values.Values[acc.ClarkName] = pair;
+                        values.Values[acc.UniqueKey] = pair;
                 }
                 else
                 {
@@ -8029,9 +8128,20 @@ internal sealed class TransformEngine
                         }
                         else
                         {
+                            // The href is a URI reference by definition: raw backslashes are
+                            // invalid syntax (FODC0005, non-stream-006) rather than a missing
+                            // file (FODC0002).
+                            if (documentHref.Contains('\\'))
+                                throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
                             docNode = _context.LoadDocument(documentHref);
                         }
                         _context.RegisterDocument(documentHref, docNode);
+
+                        // use-accumulators restricts which accumulators are applicable to
+                        // this tree, streamed or not: reading an unlisted accumulator is
+                        // XTDE3362 (non-stream-201), reading a listed one works
+                        // (non-stream-200).
+                        RecordAccumulatorApplicability(instruction, XdmValue.FromNode(docNode));
 
                         IXdmNode contextNode = docNode;
                         if (!string.IsNullOrEmpty(fragment))
@@ -8041,9 +8151,11 @@ internal sealed class TransformEngine
                         }
 
                         var savedStreamingMap = _context.InStreamingMapContext;
+                        var savedStreamedPipeline = _context.InStreamedPipeline;
                         try
                         {
                             _context.InStreamingMapContext = true;
+                            _context.InStreamedPipeline = savedStreamedPipeline || isStreamable;
                             var content = EvaluateSequenceConstructor(instruction, XdmValue.FromNode(contextNode), wrapInDocumentNode: false);
                             if (_sequenceAccumulator != null)
                             {
@@ -8059,6 +8171,7 @@ internal sealed class TransformEngine
                         finally
                         {
                             _context.InStreamingMapContext = savedStreamingMap;
+                            _context.InStreamedPipeline = savedStreamedPipeline;
                         }
                     }
                     finally
@@ -18254,13 +18367,20 @@ internal sealed class TransformEngine
         var backwardsCompatible = _context.BackwardsCompatible;
         var docNode = source.NodeKind == XdmNodeKind.Document ? source : source.Document!;
         StreamingAccumulatorDriver? driver = null;
-        if (_accumulators.Count > 0)
+        if (GetAllPackageAccumulators().Count > 0)
         {
             driver = new StreamingAccumulatorDriver(this, docNode);
             _streamingDrivers.Add(driver);
         }
+        // Compose with a post-processor the host already attached at load time (for
+        // example record-level schema validation of a strictly-validated streamed
+        // environment source): stripping/accumulators run after it, and a dropped
+        // record stays dropped (sf-avg-100 needs the typed @value PSVI annotations).
+        var previousProcessor = ((StreamingDocumentNode)streamingDoc).RecordPostProcessor;
         ((StreamingDocumentNode)streamingDoc).RecordPostProcessor = (record, recordNode) =>
         {
+            if (previousProcessor?.Invoke(record, recordNode) == false)
+                return false;
             if (spaceRules.Count > 0 && ShouldStripStreamedRecord(record, docNode, spaceRules, backwardsCompatible))
                 return false; // drop whitespace text records stripped by xsl:strip-space
             if (spaceRules.Count > 0 && record is XElement recordElement)
@@ -20848,13 +20968,18 @@ internal sealed class TransformEngine
         HashSet<string> set;
         if (trimmed == "#all")
         {
-            set = new HashSet<string>(_accumulators.Select(a => a.ClarkName));
+            set = new HashSet<string>(GetAllPackageAccumulators().Select(a => a.ClarkName));
         }
         else
         {
             set = new HashSet<string>();
-            foreach (var name in trimmed.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var rawName in trimmed.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                // A leading '?' marks the name as provisionally applied: it restricts
+                // applicability the same way for dynamic evaluation.
+                var name = rawName.StartsWith('?') ? rawName[1..] : rawName;
                 set.Add(ResolveAccumulatorClarkName(name, sourceElem));
+            }
         }
 
         _accumulatorApplicability[root] = set;
@@ -20982,7 +21107,7 @@ internal sealed class TransformEngine
     /// </summary>
     private sealed class AccumulatorValues
     {
-        /// <summary>The before/after values of each accumulator, keyed by accumulator Clark name.</summary>
+        /// <summary>The before/after values of each accumulator, keyed by the accumulator's package-unique key.</summary>
         public Dictionary<string, (XdmValue Before, XdmValue After)> Values { get; } = new();
 
         /// <summary>
@@ -20997,7 +21122,7 @@ internal sealed class TransformEngine
         public HashSet<string> InapplicableNames { get; internal set; } = new();
 
         /// <summary>
-        /// The names of the accumulators whose <em>after</em> value is not yet known on a
+        /// The keys of the accumulators whose <em>after</em> value is not yet known on a
         /// streamed tree (the document and root element before the stream completes).
         /// Reading accumulator-after for one of them raises XTDE3350.
         /// </summary>
@@ -21063,8 +21188,10 @@ internal sealed class TransformEngine
 
             // Compile rules and evaluate initial values for the accumulators applicable
             // to the streamed tree (the initial mode's use-accumulators, as in memory).
+            // The union across the package closure is evaluated, keyed per definition, so
+            // same-named accumulators in different packages keep separate pushed values.
             var patternCompiler = new Patterns.PatternCompiler(engine._context);
-            foreach (var acc in engine._accumulators)
+            foreach (var acc in engine.GetAllPackageAccumulators())
             {
                 if (!engine.IsAccumulatorApplicableToTree(acc.ClarkName, docNode))
                     continue;
@@ -21104,8 +21231,8 @@ internal sealed class TransformEngine
             {
                 foreach (var startRule in state.Rules.Where(r => TransformEngine.IsAccumulatorStartRule(r.Rule) && r.Match(XdmValue.FromNode(docNode), engine._context)))
                     state.Current = Apply(state, startRule, docNode);
-                _docAnnotation.Values[state.Acc.ClarkName] = (state.Current, XdmValue.Undefined);
-                _docAnnotation.AfterUnset.Add(state.Acc.ClarkName);
+                _docAnnotation.Values[state.Acc.UniqueKey] = (state.Current, XdmValue.Undefined);
+                _docAnnotation.AfterUnset.Add(state.Acc.UniqueKey);
             }
 
             foreach (var child in docNode.Axis(XdmAxis.Child))
@@ -21120,18 +21247,18 @@ internal sealed class TransformEngine
                     {
                         foreach (var startRule in state.Rules.Where(r => TransformEngine.IsAccumulatorStartRule(r.Rule) && r.Match(XdmValue.FromNode(rootWrapper), engine._context)))
                             state.Current = Apply(state, startRule, rootWrapper);
-                        _rootAnnotation.Values[state.Acc.ClarkName] = (state.Current, XdmValue.Undefined);
-                        _rootAnnotation.AfterUnset.Add(state.Acc.ClarkName);
+                        _rootAnnotation.Values[state.Acc.UniqueKey] = (state.Current, XdmValue.Undefined);
+                        _rootAnnotation.AfterUnset.Add(state.Acc.UniqueKey);
                     }
                     break;
                 }
             }
         }
 
-        internal bool IsInProgress(string accClarkName) => _inProgress.Contains(accClarkName);
+        internal bool IsInProgress(Stylesheet.AccumulatorDefinition acc) => _inProgress.Contains(acc.UniqueKey);
 
-        internal Exception? GetError(string accClarkName)
-            => _states.FirstOrDefault(s => s.Acc.ClarkName == accClarkName)?.Error;
+        internal Exception? GetError(Stylesheet.AccumulatorDefinition? acc)
+            => acc == null ? null : _states.FirstOrDefault(s => s.Acc == acc)?.Error;
 
         internal bool IsShellNode(IXdmNode node)
             => node.IsSameNode(_docNode) || (_rootNode != null && node.IsSameNode(_rootNode));
@@ -21150,19 +21277,19 @@ internal sealed class TransformEngine
         /// rule selects that target later-declared accumulators; the in-progress guard
         /// turns self-references into XTDE3400.
         /// </summary>
-        internal bool TryResolveAfterOnDemand(string accClarkName, IXdmNode node, AccumulatorValues ann, out XdmValue value)
+        internal bool TryResolveAfterOnDemand(Stylesheet.AccumulatorDefinition acc, IXdmNode node, AccumulatorValues ann, out XdmValue value)
         {
             value = default;
-            var state = _states.FirstOrDefault(s => s.Acc.ClarkName == accClarkName);
-            if (state == null || !ann.Values.TryGetValue(accClarkName, out var pair))
+            var state = _states.FirstOrDefault(s => s.Acc == acc);
+            if (state == null || !ann.Values.TryGetValue(acc.UniqueKey, out var pair))
                 return false;
             if (state.Error != null)
                 throw state.Error;
 
             foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(node), _engine._context)))
                 state.Current = Apply(state, endRule, node);
-            ann.Values[accClarkName] = (pair.Before, state.Current);
-            ann.AfterUnset.Remove(accClarkName);
+            ann.Values[acc.UniqueKey] = (pair.Before, state.Current);
+            ann.AfterUnset.Remove(acc.UniqueKey);
             value = state.Current;
             return true;
         }
@@ -21185,8 +21312,8 @@ internal sealed class TransformEngine
                 {
                     foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(_rootNode), _engine._context)))
                         state.Current = Apply(state, endRule, _rootNode);
-                    _rootAnnotation.Values[state.Acc.ClarkName] = (_rootAnnotation.Values[state.Acc.ClarkName].Before, state.Current);
-                    _rootAnnotation.AfterUnset.Remove(state.Acc.ClarkName);
+                    _rootAnnotation.Values[state.Acc.UniqueKey] = (_rootAnnotation.Values[state.Acc.UniqueKey].Before, state.Current);
+                    _rootAnnotation.AfterUnset.Remove(state.Acc.UniqueKey);
                 }
             }
 
@@ -21194,8 +21321,8 @@ internal sealed class TransformEngine
             {
                 foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(_docNode), _engine._context)))
                     state.Current = Apply(state, endRule, _docNode);
-                _docAnnotation!.Values[state.Acc.ClarkName] = (_docAnnotation.Values[state.Acc.ClarkName].Before, state.Current);
-                _docAnnotation.AfterUnset.Remove(state.Acc.ClarkName);
+                _docAnnotation!.Values[state.Acc.UniqueKey] = (_docAnnotation.Values[state.Acc.UniqueKey].Before, state.Current);
+                _docAnnotation.AfterUnset.Remove(state.Acc.UniqueKey);
             }
         }
 
@@ -21203,7 +21330,7 @@ internal sealed class TransformEngine
         {
             var applicable = new HashSet<string>(_states.Select(s => s.Acc.ClarkName));
             var inapplicable = new HashSet<string>(
-                _engine._accumulators.Where(a => !_states.Any(s => s.Acc == a)).Select(a => a.ClarkName));
+                _engine.GetAllPackageAccumulators().Where(a => !_states.Any(s => s.Acc == a)).Select(a => a.ClarkName));
             return (applicable, inapplicable);
         }
 
@@ -21224,8 +21351,8 @@ internal sealed class TransformEngine
             {
                 foreach (var startRule in state.Rules.Where(r => TransformEngine.IsAccumulatorStartRule(r.Rule) && r.Match(XdmValue.FromNode(node), _engine._context)))
                     state.Current = Apply(state, startRule, node);
-                ann.Values[state.Acc.ClarkName] = (state.Current, XdmValue.Undefined);
-                ann.AfterUnset.Add(state.Acc.ClarkName);
+                ann.Values[state.Acc.UniqueKey] = (state.Current, XdmValue.Undefined);
+                ann.AfterUnset.Add(state.Acc.UniqueKey);
             }
 
             foreach (var child in node.Axis(XdmAxis.Child))
@@ -21239,12 +21366,12 @@ internal sealed class TransformEngine
             // on demand by a cross-accumulator reference is not fired twice.
             foreach (var state in _states)
             {
-                if (!ann.AfterUnset.Contains(state.Acc.ClarkName))
+                if (!ann.AfterUnset.Contains(state.Acc.UniqueKey))
                     continue;
                 foreach (var endRule in state.Rules.Where(r => TransformEngine.IsAccumulatorEndRule(r.Rule) && r.Match(XdmValue.FromNode(node), _engine._context)))
                     state.Current = Apply(state, endRule, node);
-                ann.Values[state.Acc.ClarkName] = (ann.Values[state.Acc.ClarkName].Before, state.Current);
-                ann.AfterUnset.Remove(state.Acc.ClarkName);
+                ann.Values[state.Acc.UniqueKey] = (ann.Values[state.Acc.UniqueKey].Before, state.Current);
+                ann.AfterUnset.Remove(state.Acc.UniqueKey);
             }
         }
 
@@ -21252,7 +21379,7 @@ internal sealed class TransformEngine
         {
             if (state.Error != null)
                 return state.Current; // poisoned: evaluation errors defer to the access point
-            if (!_inProgress.Add(state.Acc.ClarkName))
+            if (!_inProgress.Add(state.Acc.UniqueKey))
                 throw new InvalidOperationException($"XTDE3400: cyclic dependency detected in accumulator '{state.Acc.ClarkName}'");
             try
             {
@@ -21269,7 +21396,7 @@ internal sealed class TransformEngine
             }
             finally
             {
-                _inProgress.Remove(state.Acc.ClarkName);
+                _inProgress.Remove(state.Acc.UniqueKey);
             }
         }
     }

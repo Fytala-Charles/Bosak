@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 01-10-2026     | href values use a file:/// URI (not a raw platform path): @href is a URI reference, and  |
+//                      |                  |       |                | raw backslashes are rejected with FODC0005 (non-stream-006)                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Providers.Xml;
@@ -66,7 +69,7 @@ public class StreamingSourceDocumentTests : IDisposable
     }
 
     private string SourceDocument(string extraAttrs, string content)
-        => Transform($"<xsl:source-document href=\"{_sourcePath}\" {extraAttrs}>{content}</xsl:source-document>");
+        => Transform($"<xsl:source-document href=\"{new Uri(_sourcePath).AbsoluteUri}\" {extraAttrs}>{content}</xsl:source-document>");
 
     [Fact]
     public void ForEach_ParityWithInMemorySourceDocument()

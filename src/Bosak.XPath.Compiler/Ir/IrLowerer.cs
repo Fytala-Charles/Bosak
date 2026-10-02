@@ -100,6 +100,9 @@
 //                      | Charles Korthout | 1.44  | 30-09-2026     | REQ-114/PB-3 C9: document-node(element(E[,T])) keeps the inner test in the KindTest      |
 //                      |                  |       |                | operand so the runtime enforces it (validation-1401, import-schema-055)                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.45  | 01-10-2026     | Path-step Normalize carries a forward-axis flag (RegisterC): streamable pipelines keep |
+//                      |                  |       |                | encounter order for forward steps (sf-reverse-001) while reverse axes still sort        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -1232,9 +1235,13 @@ internal sealed class IrLowerer
                     currentReg = mapResultReg;
                 }
 
-                // Path expression results must be in document order.
+                // Path expression results must be in document order. Non-axis steps
+                // (function calls such as fn:reverse) are marked forward (RegisterC=1)
+                // so a streamable pipeline keeps their encounter order instead of
+                // re-sorting them (sf-reverse-001); the reverse-axis steps inside the
+                // callee's own paths still sort via their per-step Normalize.
                 int normReg = AllocRegister();
-                Emit(IrOpCode.Normalize, (ushort)normReg, (ushort)currentReg);
+                Emit(IrOpCode.Normalize, (ushort)normReg, (ushort)currentReg, (ushort)1);
                 FreeRegister(currentReg);
                 currentReg = normReg;
             }
@@ -1311,20 +1318,31 @@ internal sealed class IrLowerer
             PatchInstruction(mapInstrIdx, IrOpCode.PathStepMap, (ushort)mapResultReg, (ushort)contextReg, hasLhs ? (ushort)1 : (ushort)0, blockEntry);
             PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterBlock);
 
-            // Path expression results must be in document order.
+            // Path expression results must be in document order. Forward-axis steps mark
+            // the instruction (RegisterC=1) so a streamable xsl:source-document pipeline
+            // can keep encounter order (fn:reverse results survive; sf-reverse-001);
+            // reverse axes (ancestor/...) always sort+dedup (climbing-operand tests).
             int normReg = AllocRegister();
-            Emit(IrOpCode.Normalize, (ushort)normReg, (ushort)mapResultReg);
+            Emit(IrOpCode.Normalize, (ushort)normReg, (ushort)mapResultReg, IsReverseAxis(node.Axis) ? (ushort)0 : (ushort)1);
             FreeRegister(mapResultReg);
             return normReg;
         }
 
         int resultReg = LowerStepCore(node, contextReg, hasLhs);
-        // Path expression results must be in document order.
+        // Path expression results must be in document order (see note above).
         int normReg2 = AllocRegister();
-        Emit(IrOpCode.Normalize, (ushort)normReg2, (ushort)resultReg);
+        Emit(IrOpCode.Normalize, (ushort)normReg2, (ushort)resultReg, IsReverseAxis(node.Axis) ? (ushort)0 : (ushort)1);
         FreeRegister(resultReg);
         return normReg2;
     }
+
+    /// <summary>
+    /// Whether the axis is a reverse axis (yields nodes in reverse document order
+    /// when evaluated in a single streamed pass): ancestor, ancestor-or-self,
+    /// preceding, and preceding-sibling.
+    /// </summary>
+    private static bool IsReverseAxis(XdmAxis axis)
+        => axis is XdmAxis.Ancestor or XdmAxis.AncestorOrSelf or XdmAxis.Preceding or XdmAxis.PrecedingSibling;
 
     /// <summary>
     /// Emits axis + name test for a step (no predicates).

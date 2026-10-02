@@ -344,6 +344,18 @@
 //                      |                  |       |                | element(*,T) matches anonymous simple-type annotations; anyURI schema values keep       |
 //                      |                  |       |                | their lexical form (validation-1401, import-schema-052/055, type-0302)                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.161 | 01-10-2026     | Normalize opcode passes through unsorted/dedup-free inside streamable source-document  |
+//                      |                  |       |                | pipelines (EvaluationContext.InStreamedPipeline); sf-reverse-001                        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.162 | 01-10-2026     | Normalize passthrough narrowed to forward-axis steps (RegisterC=1, set by the lowerer):  |
+//                      |                  |       |                | reverse-axis steps sort+dedup again, fixing climbing-operand regressions (sx-if-030,    |
+//                      |                  |       |                | si-for-each-012, sf-head-030, ...) while sf-reverse-001 stays fixed                     |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.163 | 01-10-2026     | Streamed passthrough also bails to full normalize when the step sequence mixes          |
+//                      |                  |       |                | document-rooted and parentless nodes (si-fork-118, sf-insert-before-141); only           |
+//                      |                  |       |                | MaterializedSequence inputs are scanned — enumerating lazy streams would consume them     |
+//                      |                  |       |                | (sf-avg-043, sf-deep-equal-043)                                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -1108,7 +1120,28 @@ internal static class VmEngine
 
                 case IrOpCode.Normalize:
                     {
-                        registers[instr.RegisterA] = NormalizeSequence(registers[instr.RegisterB]);
+                        // RegisterC: 1 = forward-axis path step. Inside a streamable
+                        // xsl:source-document pipeline the document-order sort/dedup is
+                        // suppressed for those steps only: sequences in encounter order
+                        // (e.g. fn:reverse results, sf-reverse-001) keep that order.
+                        // Reverse-axis steps (ancestor/...) are always sorted into
+                        // document order with duplicates removed — streamed climbing
+                        // paths deliver reverse document order otherwise (sx-if-030,
+                        // si-for-each-012). A forward step over a sequence that MIXES
+                        // document-rooted and parentless nodes is still normalized:
+                        // Saxon orders such path results with rooted nodes before
+                        // parentless ones (si-fork-118, sf-insert-before-141). Pure
+                        // streamed input (single-pass) is rooted by construction and
+                        // passes through untouched.
+                        var normalizeInput = registers[instr.RegisterB];
+                        if (context.InStreamedPipeline && instr.RegisterC == 1 && !MixesDetachedNodes(normalizeInput))
+                        {
+                            registers[instr.RegisterA] = normalizeInput;
+                        }
+                        else
+                        {
+                            registers[instr.RegisterA] = NormalizeSequence(normalizeInput);
+                        }
                         ip++;
                         break;
                     }
@@ -4675,6 +4708,37 @@ internal static class VmEngine
             var items = MaterializeSequence(value);
             if (items.Length == 1)
                 return IsNodeOrigin(items[0]);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Whether a node sequence mixes document-rooted and parentless (detached) nodes.
+    /// Only materialized sequences are inspected: enumerating any other (lazy,
+    /// forward-only) sequence kind here would consume a stream that the passthrough
+    /// is meant to keep live (sf-avg-043). Single-pass streamed sequences are rooted
+    /// by construction. Non-node items are ignored. Used by the Normalize opcode's
+    /// streamed-pipeline passthrough: mixed materialized sequences still need the
+    /// rooted-before-parentless ordering (si-fork-118, sf-insert-before-141).
+    /// </summary>
+    private static bool MixesDetachedNodes(XdmValue value)
+    {
+        if (value.IsUndefined || !value.IsSequence)
+            return false;
+        if (value.SequenceValue is not MaterializedSequence materialized)
+            return false;
+        bool sawRooted = false;
+        bool sawDetached = false;
+        foreach (var item in materialized.Items)
+        {
+            if (!item.IsNode)
+                continue;
+            if (item.NodeValue!.Document is not null)
+                sawRooted = true;
+            else
+                sawDetached = true;
+            if (sawRooted && sawDetached)
+                return true;
         }
         return false;
     }
