@@ -254,6 +254,9 @@
 //                      |                  |       |                | (type-functions-0503); deferred semantic XTSE3070 override type identity — mutual        |
 //                      |                  |       |                | subtyping incl. unordered union member sets (override-f-031, override-v-005)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.122 | 02-10-2026     | validation-0201: build/store ImportedOnlySchemaSet (xsl:import-schema winners only)      |
+//                      |                  |       |                | as the construction/result-validation component scope                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -342,6 +345,15 @@ internal sealed class Stylesheet
     /// </summary>
     internal XmlSchemaSet? CompiledSchemaSet =>
         ReferenceEquals(_rootStylesheet, this) ? _schemaState.CompiledSchemaSet : _rootStylesheet._schemaState.CompiledSchemaSet;
+
+    /// <summary>
+    /// The compiled schema set containing only the stylesheet's own xsl:import-schema
+    /// declarations (no host/environment schemas). This is the component scope used for
+    /// validation of constructed and result trees (XSLT 3.0 §11.9); null when the
+    /// stylesheet declares no schemas (construction validation then sees builtins only).
+    /// </summary>
+    internal XmlSchemaSet? ImportedOnlySchemaSet =>
+        ReferenceEquals(_rootStylesheet, this) ? _schemaState.ImportedOnlySchemaSet : _rootStylesheet._schemaState.ImportedOnlySchemaSet;
 
     /// <summary>
     /// Empty dictionary used when no external static parameters are supplied.
@@ -2002,7 +2014,8 @@ internal sealed class Stylesheet
         // merged schema set once, at the root.
         if (_isRootStylesheet && _schemaState is { SchemaAware: true })
         {
-            _schemaState.CompiledSchemaSet = SchemaSetBuilder.Build(_schemaState);
+            _schemaState.CompiledSchemaSet = SchemaSetBuilder.Build(_schemaState, out var importedOnlySet);
+            _schemaState.ImportedOnlySchemaSet = importedOnlySet;
             if (_schemaState.CompiledSchemaSet is { } compiledSet)
                 ValidateFunctionConstructorCollisions(compiledSet);
             // XTSE3070 type-identity mismatches deferred during override validation are

@@ -68,6 +68,9 @@
 //                      | Charles Korthout | 1.35  | 01-10-2026     | indent=yes adds no whitespace inside mixed-content elements (any non-whitespace text   |
 //                      |                  |       |                | child disables indentation); html/xhtml/raw paths — validation-0202                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.36  | 02-10-2026     | Port of the Saxon 9.x HTMLIndenter for method=xhtml indent=yes (3-space levels,        |
+//                      |                  |       |                | inline/formatted-tag adjacency rules, newline folding in text) — validation-0201       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -989,6 +992,10 @@ internal static class ResultTreeSerializer
         }
         bool doctypeWritten = !doctypeNeeded;
 
+        // Saxon 9.x-style indentation state (3-space levels with inline/formatted-tag
+        // adjacency rules). Null when indentation is disabled.
+        HtmlIndentState? indentState = props.Indent ? new HtmlIndentState() : null;
+
         var initialBindings = new Dictionary<string, string> { ["xml"] = "http://www.w3.org/XML/1998/namespace" };
         if (rootDocument != null)
         {
@@ -999,13 +1006,13 @@ internal static class ResultTreeSerializer
                     WriteDoctype(writer, doctypeRoot, props);
                     doctypeWritten = true;
                 }
-                WriteXhtmlNode(writer, child, props, 0, new Dictionary<string, string>(initialBindings));
+                WriteXhtmlNode(writer, child, props, 0, new Dictionary<string, string>(initialBindings), indentState);
             }
         }
         else if (isDocumentMode && rootElement != null)
         {
             WriteDoctype(writer, doctypeRoot, props);
-            WriteXhtmlNode(writer, rootElement, props, 0, new Dictionary<string, string>(initialBindings));
+            WriteXhtmlNode(writer, rootElement, props, 0, new Dictionary<string, string>(initialBindings), indentState);
         }
         else
         {
@@ -1023,7 +1030,7 @@ internal static class ResultTreeSerializer
                 }
                 if (useSeparator && wroteItem)
                     writer.Write(separator);
-                WriteXhtmlNode(writer, node, props, 0, new Dictionary<string, string>(initialBindings));
+                WriteXhtmlNode(writer, node, props, 0, new Dictionary<string, string>(initialBindings), indentState);
                 wroteItem = true;
             }
             foreach (var item in items.Where(i => !i.IsNode && !i.IsUndefined))
@@ -2422,7 +2429,196 @@ internal static class ResultTreeSerializer
     // XHTML serialization
     // ---------------------------------------------------------------------------------------------
 
-    private static void WriteXhtmlNode(TextWriter writer, IXdmNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
+    // Indentation state for method="xhtml", indent="yes" (validation-0201): a faithful
+    // port of the Saxon 9.x HTMLIndenter event logic. Indentation is three spaces per
+    // level; inline elements (a, span, br, ...) never receive adjacent whitespace;
+    // formatted elements (pre, script, style, textarea, xmp) emit their text without
+    // line splitting; an end tag is indented only when the element did not end on the
+    // same line; and text nodes are folded at embedded newlines, with the spaces after
+    // a newline absorbed into the emitted indentation. The amount and placement of
+    // indentation whitespace is implementation-defined under the serialization spec;
+    // matching Saxon's algorithm keeps the assert-serialization golden files
+    // (schvalid001.out) byte-comparable.
+    private const int HtmlInlineTagFlag = 1;
+    private const int HtmlFormattedTagFlag = 2;
+    private const int HtmlSuppressedTagFlag = 4;
+
+    private static readonly HashSet<string> XhtmlInlineTags = new(StringComparer.Ordinal)
+    {
+        "tt", "i", "b", "u", "s", "strike", "big", "small", "em", "strong", "dfn", "code",
+        "samp", "kbd", "var", "cite", "abbr", "acronym", "a", "img", "applet", "object",
+        "font", "basefont", "br", "script", "map", "q", "sub", "sup", "span", "bdo",
+        "iframe", "input", "select", "textarea", "label", "button", "ins", "del",
+    };
+
+    private static readonly HashSet<string> XhtmlFormattedTags = new(StringComparer.Ordinal)
+    {
+        "pre", "script", "style", "textarea", "xmp",
+    };
+
+    /// <summary>
+    /// Mutable indentation state threaded through the xhtml writers; null when
+    /// indent="no" (the writers then emit content exactly as the current tree provides).
+    /// </summary>
+    private sealed class HtmlIndentState
+    {
+        public int Level;
+        public bool SameLine;
+        public bool InFormattedTag;
+        public bool AfterInline;
+        public bool AfterFormatted = true; // suppresses indentation before the first tag
+        public int SuppressedDepth = -1;   // level at which suppress-indentation took effect
+        public int[] PropertyStack = new int[32];
+
+        /// <summary>Writes a newline plus the current level's indentation spaces.</summary>
+        public void WriteIndent(TextWriter writer)
+        {
+            writer.Write('\n');
+            for (var i = 0; i < Level * 3; i++)
+                writer.Write(' ');
+            SameLine = false;
+        }
+    }
+
+    /// <summary>
+    /// Classifies an element for xhtml indentation (Saxon 9.x XHTMLNameClassifier):
+    /// inline/formatted membership applies only to elements in the XHTML namespace.
+    /// </summary>
+    private static int ClassifyXhtmlTag(XName name)
+    {
+        if (name.NamespaceName != "http://www.w3.org/1999/xhtml")
+            return 0;
+        var flags = 0;
+        if (XhtmlInlineTags.Contains(name.LocalName))
+            flags |= HtmlInlineTagFlag;
+        if (XhtmlFormattedTags.Contains(name.LocalName))
+            flags |= HtmlFormattedTagFlag;
+        return flags;
+    }
+
+    /// <summary>
+    /// Applies the Saxon 9.x HTMLIndenter start-element logic before the start tag is
+    /// written: decides whether indentation whitespace precedes the element.
+    /// </summary>
+    private static int BeginXhtmlStartTag(TextWriter writer, XName name, Stylesheet.OutputProperties props, HtmlIndentState state)
+    {
+        var withinSuppressed = state.SuppressedDepth >= 0;
+        var tagProps = ClassifyXhtmlTag(name)
+            | (withinSuppressed ? HtmlSuppressedTagFlag : 0)
+            | (IsSuppressIndentationElement(name, props) ? HtmlSuppressedTagFlag : 0);
+        var inlineTag = (tagProps & HtmlInlineTagFlag) != 0;
+        state.InFormattedTag |= (tagProps & HtmlFormattedTagFlag) != 0;
+        if (!inlineTag && !state.InFormattedTag && !state.AfterInline && !state.AfterFormatted
+            && (tagProps & HtmlSuppressedTagFlag) == 0)
+        {
+            state.WriteIndent(writer);
+        }
+        return tagProps;
+    }
+
+    /// <summary>
+    /// Saxon 9.x HTMLIndenter start-element tail: records the element's classification,
+    /// raises the level, and resets the per-line flags.
+    /// </summary>
+    private static void PushXhtmlElement(int tagProps, HtmlIndentState state)
+    {
+        if (state.Level >= state.PropertyStack.Length)
+            Array.Resize(ref state.PropertyStack, state.Level * 2);
+        state.PropertyStack[state.Level] = tagProps;
+        state.Level++;
+        state.SameLine = true;
+        state.AfterInline = false;
+        state.AfterFormatted = false;
+        if (state.SuppressedDepth < 0 && (tagProps & HtmlSuppressedTagFlag) != 0)
+            state.SuppressedDepth = state.Level;
+    }
+
+    /// <summary>
+    /// Saxon 9.x HTMLIndenter end-element step, executed before the end tag is written:
+    /// indents it only when the element did not end on the same line.
+    /// </summary>
+    private static void BeginXhtmlEndTag(TextWriter writer, int tagProps, HtmlIndentState state)
+    {
+        state.Level--;
+        var thisInline = (tagProps & HtmlInlineTagFlag) != 0;
+        var thisFormatted = (tagProps & HtmlFormattedTagFlag) != 0;
+        var thisSuppressed = (tagProps & HtmlSuppressedTagFlag) != 0;
+        if (!thisInline && !thisFormatted && !state.AfterInline && !state.SameLine
+            && !state.AfterFormatted && !state.InFormattedTag && !thisSuppressed)
+        {
+            state.WriteIndent(writer);
+            state.AfterInline = false;
+            state.AfterFormatted = false;
+        }
+        else
+        {
+            state.AfterInline = thisInline;
+            state.AfterFormatted = thisFormatted;
+        }
+    }
+
+    /// <summary>Saxon 9.x HTMLIndenter end-element tail, executed after the end tag is written.</summary>
+    private static void FinishXhtmlEndTag(int tagProps, HtmlIndentState state)
+    {
+        var thisFormatted = (tagProps & HtmlFormattedTagFlag) != 0;
+        state.InFormattedTag = state.InFormattedTag && !thisFormatted;
+        state.SameLine = false;
+        if (state.SuppressedDepth == state.Level + 1)
+            state.SuppressedDepth = -1;
+    }
+
+    /// <summary>
+    /// Empty elements run the indenter's start/end event pair back to back; the start tag
+    /// was just written, so the end-tag indent can never fire (SameLine is true) and only
+    /// the flag transitions apply.
+    /// </summary>
+    private static void FinishXhtmlEmptyElement(int tagProps, HtmlIndentState state)
+    {
+        PushXhtmlElement(tagProps, state);
+        using (var discard = TextWriter.Null)
+            BeginXhtmlEndTag(discard, tagProps, state);
+        FinishXhtmlEndTag(tagProps, state);
+    }
+
+    /// <summary>
+    /// Writes a text node for the xhtml method under indentation: inside formatted or
+    /// suppressed elements the text is emitted verbatim; otherwise it is folded at
+    /// embedded newlines (and at spaces beyond an 80-column line), emitting indentation
+    /// in place of each fold and absorbing the spaces that follow a newline — exactly the
+    /// Saxon 9.x HTMLIndenter characters() behavior.
+    /// </summary>
+    private static void WriteXhtmlText(TextWriter writer, XText text, Stylesheet.OutputProperties props, HtmlIndentState? indentState)
+    {
+        var applyCharacterMap = text.Annotation<CdataSplitAnnotation>() == null;
+        if (indentState is null || indentState.InFormattedTag || indentState.SuppressedDepth >= 0)
+        {
+            WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: applyCharacterMap, xhtmlMode: true);
+            if (indentState is not null)
+                indentState.AfterInline = false;
+            return;
+        }
+
+        var value = text.Value;
+        var lastNl = 0;
+        for (var i = 0; i < value.Length; i++)
+        {
+            if (value[i] == '\n' || (i - lastNl > 80 && value[i] == ' '))
+            {
+                indentState.SameLine = false;
+                if (i > lastNl)
+                    WriteXmlEscaped(writer, value[lastNl..i], props, applyCharacterMap: applyCharacterMap, xhtmlMode: true);
+                indentState.WriteIndent(writer);
+                lastNl = i + 1;
+                while (lastNl < value.Length && value[lastNl] == ' ')
+                    lastNl++;
+            }
+        }
+        if (lastNl < value.Length)
+            WriteXmlEscaped(writer, value[lastNl..], props, applyCharacterMap: applyCharacterMap, xhtmlMode: true);
+        indentState.AfterInline = false;
+    }
+
+    private static void WriteXhtmlNode(TextWriter writer, IXdmNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings, HtmlIndentState? indentState)
     {
         if (node is not XDocumentNode xdn)
         {
@@ -2435,23 +2631,25 @@ internal static class ResultTreeSerializer
         {
             case XDocument doc:
                 foreach (var child in doc.Nodes())
-                    WriteXhtmlNode(writer, XDocumentNode.Wrap(child), props, depth, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlNode(writer, XDocumentNode.Wrap(child), props, depth, new Dictionary<string, string>(inScopeBindings), indentState);
                 break;
             case XElement elem when elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "":
                 foreach (var child in elem.Nodes())
-                    WriteXhtmlNode(writer, XDocumentNode.Wrap(child), props, depth, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlNode(writer, XDocumentNode.Wrap(child), props, depth, new Dictionary<string, string>(inScopeBindings), indentState);
                 break;
             case XElement elem:
-                WriteXhtmlElement(writer, elem, props, depth, inScopeBindings);
+                WriteXhtmlElement(writer, elem, props, depth, inScopeBindings, indentState);
                 break;
             case XCData cdata:
                 WriteCdataText(writer, cdata.Value);
                 break;
             case XRawText raw:
                 writer.Write(MapCharacters(raw.Value, props));
+                if (indentState is not null)
+                    indentState.AfterInline = false;
                 break;
             case XText text:
-                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
+                WriteXhtmlText(writer, text, props, indentState);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -2468,22 +2666,24 @@ internal static class ResultTreeSerializer
         }
     }
 
-    private static void WriteXhtmlNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
+    private static void WriteXhtmlNode(TextWriter writer, XNode node, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings, HtmlIndentState? indentState)
     {
         switch (node)
         {
             case XElement elem when elem.Name.LocalName == "__xdm_doc__" && elem.Name.NamespaceName == "":
                 foreach (var child in elem.Nodes())
-                    WriteXhtmlNode(writer, child, props, depth, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlNode(writer, child, props, depth, new Dictionary<string, string>(inScopeBindings), indentState);
                 break;
             case XElement elem:
-                WriteXhtmlElement(writer, elem, props, depth, inScopeBindings);
+                WriteXhtmlElement(writer, elem, props, depth, inScopeBindings, indentState);
                 break;
             case XRawText raw:
                 writer.Write(MapCharacters(raw.Value, props));
+                if (indentState is not null)
+                    indentState.AfterInline = false;
                 break;
             case XText text:
-                WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
+                WriteXhtmlText(writer, text, props, indentState);
                 break;
             case XComment comment:
                 writer.Write("<!--");
@@ -2500,7 +2700,7 @@ internal static class ResultTreeSerializer
         }
     }
 
-    private static void WriteXhtmlElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings)
+    private static void WriteXhtmlElement(TextWriter writer, XElement element, Stylesheet.OutputProperties props, int depth, Dictionary<string, string> inScopeBindings, HtmlIndentState? indentState)
     {
         var localName = Xml11NameCodec.DecodeName(element.Name.LocalName);
         var nsUri = element.Name.NamespaceName;
@@ -2510,6 +2710,9 @@ internal static class ResultTreeSerializer
         // XHTML method treats script/style content as PCDATA, so it is escaped.
         var isRawContent = false;
         var wrapCdata = IsCdataSectionElement(element.Name, props);
+
+        // validation-0201: Saxon 9.x HTMLIndenter start-element step (indent decision).
+        var tagProps = indentState is not null ? BeginXhtmlStartTag(writer, element.Name, props, indentState) : 0;
 
         // Determine effective namespace bindings for this element.
         var targetBindings = element.Annotation<NamespaceInheritanceContext>()?.Bindings ?? ComputeBindingsFromAttributes(element);
@@ -2604,6 +2807,8 @@ internal static class ResultTreeSerializer
         if (isVoid || (isEmpty && isKnownVoid))
         {
             writer.Write(" />");
+            if (indentState is not null)
+                FinishXhtmlEmptyElement(tagProps, indentState);
             return;
         }
 
@@ -2613,10 +2818,15 @@ internal static class ResultTreeSerializer
             writer.Write("</");
             writer.Write(localName);
             writer.Write('>');
+            if (indentState is not null)
+                FinishXhtmlEmptyElement(tagProps, indentState);
             return;
         }
 
         writer.Write('>');
+
+        if (indentState is not null)
+            PushXhtmlElement(tagProps, indentState);
 
         if (isRawContent)
         {
@@ -2625,9 +2835,9 @@ internal static class ResultTreeSerializer
                 if (child is XText text)
                     writer.Write(MapCharacters(text.Value, props));
                 else if (child is XElement childElem)
-                    WriteXhtmlElement(writer, childElem, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlElement(writer, childElem, props, depth + 1, new Dictionary<string, string>(inScopeBindings), indentState);
                 else
-                    WriteXhtmlNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings), indentState);
             }
         }
         else if (wrapCdata)
@@ -2647,37 +2857,26 @@ internal static class ResultTreeSerializer
                     // Unrepresentable characters are emitted as ordinary text and escaped
                     // as numeric character references by WriteXmlEscaped. Such split-out text
                     // nodes must not be altered by character maps.
-                    WriteXmlEscaped(writer, text.Value, props, applyCharacterMap: text.Annotation<CdataSplitAnnotation>() == null, xhtmlMode: true);
+                    WriteXhtmlNode(writer, text, props, depth + 1, new Dictionary<string, string>(inScopeBindings), indentState);
                 }
                 else if (child is XElement childElem)
                 {
-                    WriteXhtmlElement(writer, childElem, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlElement(writer, childElem, props, depth + 1, new Dictionary<string, string>(inScopeBindings), indentState);
                 }
                 else
                 {
-                    WriteXhtmlNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
+                    WriteXhtmlNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings), indentState);
                 }
             }
         }
         else
         {
-            bool hasElementChildren = element.Elements().Any()
-                && !element.Nodes().OfType<XText>().Any(t => !string.IsNullOrWhiteSpace(t.Value));
             foreach (var child in element.Nodes())
-            {
-                if (props.Indent && hasElementChildren && child is XElement && !IsSuppressIndentationElement((child as XElement)!.Name, props))
-                {
-                    writer.WriteLine();
-                    writer.Write(new string(' ', (depth + 1) * 2));
-                }
-                WriteXhtmlNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings));
-            }
-            if (props.Indent && hasElementChildren && !IsSuppressIndentationElement(element.Name, props))
-            {
-                writer.WriteLine();
-                writer.Write(new string(' ', depth * 2));
-            }
+                WriteXhtmlNode(writer, child, props, depth + 1, new Dictionary<string, string>(inScopeBindings), indentState);
         }
+
+        if (indentState is not null)
+            BeginXhtmlEndTag(writer, tagProps, indentState);
 
         writer.Write("</");
         if (!string.IsNullOrEmpty(elemPrefix))
@@ -2687,6 +2886,9 @@ internal static class ResultTreeSerializer
         }
         writer.Write(localName);
         writer.Write('>');
+
+        if (indentState is not null)
+            FinishXhtmlEndTag(tagProps, indentState);
     }
 
     private static void WriteXmlEscaped(TextWriter writer, string value, Stylesheet.OutputProperties props, bool isAttribute = false, bool applyCharacterMap = true, bool xhtmlMode = false)
