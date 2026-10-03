@@ -17,6 +17,7 @@
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Xunit;
@@ -184,9 +185,16 @@ public sealed class CollectionLoaderHookTests
             return new[] { setup.FileA };
         };
 
-        NodeItems(Evaluate("collection('rel-coll')", ctx));
+        // Deliberately independent of base-URI merging: this test asserts only the
+        // URI form the hook receives, and the member load must behave the same on
+        // Windows (rooted C:\ paths) and Linux (/tmp paths).
+        ctx.DocumentLoader = _ => XDocumentProvider.ParseXml(System.IO.File.ReadAllText(setup.FileA));
+
+        var nodes = NodeItems(Evaluate("collection('rel-coll')", ctx));
 
         Assert.Equal("http://example.org/base/rel-coll", seen);
+        Assert.Single(nodes);
+        Assert.Equal("a", RootLocalName(nodes[0]));
     }
 
     [Fact]
