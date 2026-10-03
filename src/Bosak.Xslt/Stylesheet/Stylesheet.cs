@@ -259,6 +259,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.123 | 02-10-2026     | PC-1 W4: deliberate analyzer XTSE3155 (shallow-descent arity) propagates past the         |
 //                      |                  |       |                | fail-open wrapper, not just XTSE3430 (su-shallow-descent-901)                           |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.124 | 03-10-2026     | REQ-119: XTSE0730 — a streamable="yes" attribute-set may only reference attribute sets    |
+//                      |                  |       |                | that also specify streamable="yes" (error-0730a); XTSE3120 — xsl:break/next-iteration    |
+//                      |                  |       |                | tail-position check is now load-time static validation (error-3120a)                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.125 | 03-10-2026     | REQ-119 sweep gate: xsl:fallback is exempt from XTSE3120 following-sibling checks      |
+//                      |                  |       |                | (§8.4 allows it anywhere; iterate-016/017/018/030/031)                                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -356,6 +364,13 @@ internal sealed class Stylesheet
     /// </summary>
     internal XmlSchemaSet? ImportedOnlySchemaSet =>
         ReferenceEquals(_rootStylesheet, this) ? _schemaState.ImportedOnlySchemaSet : _rootStylesheet._schemaState.ImportedOnlySchemaSet;
+
+    /// <summary>
+    /// Whether the stylesheet was compiled by a schema-aware host (REQ-097). Mirrored
+    /// onto the transform's <see cref="EvaluationContext.IsSchemaAware"/> so functions
+    /// defined conditionally on schema-awareness (fn:json-to-xml validate:=true()) see it.
+    /// </summary>
+    internal bool IsSchemaAwareCompilation => _schemaState is { SchemaAware: true };
 
     /// <summary>
     /// Empty dictionary used when no external static parameters are supplied.
@@ -1991,6 +2006,12 @@ internal sealed class Stylesheet
         if (_isRootStylesheet)
             ValidateAttributeSetCircularity();
 
+        // XTSE0730: a streamable="yes" attribute-set may only reference attribute sets
+        // that also specify streamable="yes". Checked at the root stylesheet so
+        // imports/includes are visible.
+        if (_isRootStylesheet)
+            ValidateAttributeSetStreamableConsistency();
+
         // XTSE3060: an xsl:override must not override a final component from a used package.
         if (_isRootStylesheet)
         {
@@ -2568,6 +2589,19 @@ internal sealed class Stylesheet
             var parent = onCompletion.Parent;
             if (parent == null || parent.Name.NamespaceName != XslNamespace || parent.Name.LocalName != "iterate")
                 throw new InvalidOperationException("XTSE0010: xsl:on-completion must be a child of xsl:iterate.");
+        }
+
+        // XTSE3120 (static): xsl:break / xsl:next-iteration must appear in a tail position
+        // of the sequence constructor forming the body of every xsl:iterate instruction.
+        // Validated at load time so all execution paths (result-tree, function-body and
+        // sequence-constructor iterate interpreters) report it (error-3120a).
+        foreach (var iterate in root.DescendantsAndSelf())
+        {
+            if (iterate.Name.NamespaceName != XslNamespace || iterate.Name.LocalName != "iterate")
+                continue;
+            if (!ShouldValidateElement(iterate))
+                continue;
+            ValidateIterateBreakPlacement(iterate);
         }
 
         foreach (var elem in root.DescendantsAndSelf())
@@ -4237,6 +4271,149 @@ internal sealed class Stylesheet
     }
 
     /// <summary>
+    /// Validates the lexical placement of <c>xsl:param</c>, <c>xsl:on-completion</c>,
+    /// <c>xsl:break</c>, and <c>xsl:next-iteration</c> descendants of an
+    /// <c>xsl:iterate</c> instruction, raising static errors when they are misplaced
+    /// (XTSE0010, XTSE3120). Tail position is a property of the whole path to the
+    /// iterate body: every ancestor between the enclosing instruction (e.g.
+    /// <c>xsl:if</c>) and the <c>xsl:iterate</c> element must itself be the last
+    /// instruction of its sequence constructor, with <c>xsl:choose</c> branches treated
+    /// as alternatives (only the <c>xsl:choose</c> itself must be in tail position).
+    /// </summary>
+    private static void ValidateIterateBreakPlacement(XElement instruction)
+    {
+        var xslNs = XslNamespace;
+        foreach (var descendant in instruction.Descendants())
+        {
+            if (descendant.Name.NamespaceName != xslNs)
+                continue;
+
+            // Instructions inside a nested xsl:iterate are validated by that nested instruction.
+            bool insideNestedIterate = descendant.Ancestors().TakeWhile(a => a != instruction).Any(a =>
+                a.Name.LocalName == "iterate" && a.Name.NamespaceName == xslNs);
+            if (insideNestedIterate)
+                continue;
+
+            var local = descendant.Name.LocalName;
+            if (local == "param" || local == "on-completion")
+            {
+                // xsl:param and xsl:on-completion must be direct children of xsl:iterate.
+                if (descendant.Parent != instruction)
+                    throw new InvalidOperationException("XTSE0010: xsl:param and xsl:on-completion must be direct children of xsl:iterate.");
+                continue;
+            }
+
+            if (local != "break" && local != "next-iteration")
+                continue;
+
+            var parent = descendant.Parent;
+            if (parent == null)
+                continue;
+
+            bool parentAllowed;
+            if (parent == instruction)
+            {
+                parentAllowed = true;
+            }
+            else if (parent.Name.NamespaceName == xslNs)
+            {
+                var parentLocal = parent.Name.LocalName;
+                if (parentLocal == "try")
+                {
+                    // Within xsl:try the instruction must precede any xsl:catch siblings.
+                    parentAllowed = !descendant.ElementsAfterSelf().Any(e =>
+                        !(e.Name.NamespaceName == xslNs && e.Name.LocalName == "catch") && !IsTailExemptFallback(e, xslNs));
+                }
+                else
+                {
+                    // xsl:if is a permitted position (XSLT 3.0 §8.4: xsl:break may appear as
+                    // the last instruction of xsl:if within the iterate body — si-iterate-013/094).
+                    parentAllowed = parentLocal == "when" || parentLocal == "otherwise"
+                        || parentLocal == "catch" || parentLocal == "if";
+                }
+            }
+            else
+            {
+                parentAllowed = false;
+            }
+
+            if (!parentAllowed)
+                throw new InvalidOperationException("XTSE3120: xsl:break and xsl:next-iteration must appear in the body of xsl:iterate.");
+
+            bool hasFollowingSibling;
+            if (parent == instruction)
+            {
+                // Direct children of xsl:iterate must be the last body instruction.
+                hasFollowingSibling = descendant.ElementsAfterSelf().Any(e =>
+                    e.Name.NamespaceName == xslNs
+                    && e.Name.LocalName != "on-completion"
+                    && e.Name.LocalName != "param"
+                    && e.Name.LocalName != "fallback");
+            }
+            else if (parent.Name.LocalName == "try" && parent.Name.NamespaceName == xslNs)
+            {
+                hasFollowingSibling = descendant.ElementsAfterSelf().Any(e =>
+                    !(e.Name.NamespaceName == xslNs && e.Name.LocalName == "catch") && !IsTailExemptFallback(e, xslNs));
+            }
+            else
+            {
+                hasFollowingSibling = descendant.ElementsAfterSelf().Any(e => !IsTailExemptFallback(e, xslNs));
+            }
+
+            // Tail position is a property of the whole path to the iterate body, not just
+            // of the immediate container: every ancestor between the enclosing instruction
+            // (e.g. xsl:if) and the xsl:iterate element must itself be the last instruction
+            // of its sequence constructor (XTSE3120, error-3120a). Branches of an
+            // xsl:choose are alternatives, so a break in any branch is in tail position
+            // as long as the xsl:choose itself is (iterate-013/094).
+            var chainAncestor = parent;
+            while (!hasFollowingSibling && chainAncestor != null && !ReferenceEquals(chainAncestor, instruction))
+            {
+                var chainParent = chainAncestor.Parent;
+                bool isChooseBranch = chainAncestor.Name.NamespaceName == xslNs
+                    && (chainAncestor.Name.LocalName == "when" || chainAncestor.Name.LocalName == "otherwise")
+                    && chainParent != null && chainParent.Name.NamespaceName == xslNs && chainParent.Name.LocalName == "choose";
+                if (!isChooseBranch)
+                {
+                    // Any element sibling counts as a following instruction — literal
+                    // result elements included (error-3120a's <x/> after the xsl:if);
+                    // only xsl:param / xsl:on-completion of the iterate itself are exempt.
+                    // xsl:fallback is exempt everywhere: XSLT 3.0 §8.4 allows it in any
+                    // position, and a 3.0 processor ignores it (iterate-016/017/018/030).
+                    if (chainParent == instruction)
+                    {
+                        hasFollowingSibling = chainAncestor.ElementsAfterSelf().Any(e =>
+                            !(e.Name.NamespaceName == xslNs
+                                && (e.Name.LocalName == "on-completion" || e.Name.LocalName == "param"))
+                            && !IsTailExemptFallback(e, xslNs));
+                    }
+                    else if (chainParent != null && chainParent.Name.LocalName == "try" && chainParent.Name.NamespaceName == xslNs)
+                    {
+                        hasFollowingSibling = chainAncestor.ElementsAfterSelf().Any(e =>
+                            !(e.Name.NamespaceName == xslNs && e.Name.LocalName == "catch") && !IsTailExemptFallback(e, xslNs));
+                    }
+                    else
+                    {
+                        hasFollowingSibling = chainAncestor.ElementsAfterSelf().Any(e => !IsTailExemptFallback(e, xslNs));
+                    }
+                }
+                chainAncestor = chainParent;
+            }
+
+            if (hasFollowingSibling)
+                throw new InvalidOperationException("XTSE3120: xsl:break and xsl:next-iteration must be the last instruction in their sequence constructor.");
+        }
+    }
+
+    /// <summary>
+    /// True for an <c>xsl:fallback</c> element: <c>xsl:fallback</c> is permitted in any
+    /// position within a sequence constructor and is ignored by an XSLT 3.0 processor,
+    /// so it never counts as a following instruction for XTSE3120 tail-position checks.
+    /// </summary>
+    private static bool IsTailExemptFallback(XElement element, string xslNs)
+        => element.Name.NamespaceName == xslNs && element.Name.LocalName == "fallback";
+
+    /// <summary>
     /// Detects direct or indirect circular references among <c>xsl:attribute-set</c>
     /// declarations via their <c>use-attribute-sets</c> attributes (XTSE0720).
     /// </summary>
@@ -4285,6 +4462,48 @@ internal sealed class Stylesheet
 
         foreach (var name in dependencies.Keys)
             Visit(name);
+    }
+
+    /// <summary>
+    /// XTSE0730: an <c>xsl:attribute-set</c> that specifies <c>streamable="yes"</c> may
+    /// only reference, via <c>use-attribute-sets</c>, attribute sets that also specify
+    /// <c>streamable="yes"</c>. Checked at the root stylesheet so imports/includes are
+    /// visible; unresolved references are left to XTSE0710.
+    /// </summary>
+    private void ValidateAttributeSetStreamableConsistency()
+    {
+        var allAttrSets = GetAllAttributeSets();
+        foreach (var (_, defs) in allAttrSets)
+        {
+            foreach (var def in defs)
+            {
+                if (!AttributeSetSpecifiesStreamableYes(def.Element))
+                    continue;
+                if (string.IsNullOrWhiteSpace(def.UseAttributeSets))
+                    continue;
+                foreach (var (refLocal, refNs, _) in ParseUseAttributeSetNames(def.Element, def.UseAttributeSets, "xsl:attribute-set/@use-attribute-sets"))
+                {
+                    if (!allAttrSets.TryGetValue((refLocal, refNs), out var refDefs))
+                        continue; // XTSE0710 reports the missing reference
+                    if (!refDefs.Any(rd => AttributeSetSpecifiesStreamableYes(rd.Element)))
+                        throw new InvalidOperationException(
+                            $"XTSE0730: The streamable attribute-set '{def.Element.Attribute("name")?.Value}' references attribute set '{refLocal}' which does not specify streamable='yes'.");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns true when an <c>xsl:attribute-set</c> element carries a literal
+    /// <c>streamable</c> attribute whose effective boolean value is true
+    /// (yes/true/1, case-insensitive).
+    /// </summary>
+    private static bool AttributeSetSpecifiesStreamableYes(XElement element)
+    {
+        var attr = element.Attribute("streamable")?.Value ?? element.Attribute("_streamable")?.Value;
+        if (attr == null)
+            return false;
+        return attr.Trim().ToLowerInvariant() is "yes" or "true" or "1";
     }
 
     /// <summary>

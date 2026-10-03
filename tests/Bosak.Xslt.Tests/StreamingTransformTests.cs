@@ -20,6 +20,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 02-10-2026     | PC-1 W7-2: descendant step merge with non-positional child predicates (si-for-each-801)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 03-10-2026     | REQ-119: accumulator fixture declares streamable="yes" (XTDE3362 on streamed reads)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Core.Xdm;
@@ -231,8 +233,8 @@ public class StreamingTransformTests
         // Phase B: accumulators over a streamed source are supported (push-style).
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-              <xsl:accumulator name="total" initial-value="0">
-                <xsl:accumulator-rule match="price" select="$value + number(.)"/>
+              <xsl:accumulator streamable="yes" name="total" initial-value="0">
+                <xsl:accumulator-rule match="price/text()" select="$value + number(.)"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="total"/>
               <xsl:template match="price"><p n="{accumulator-before('total')}"/></xsl:template>

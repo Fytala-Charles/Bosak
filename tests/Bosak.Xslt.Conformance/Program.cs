@@ -223,6 +223,10 @@
 //                      |                  |       |                | condition-message labels + one-to-one code aliases, so a targeted filter run of the set  |
 //                      |                  |       |                | no longer reports ~54 "Expected error X, got: <label>" mismatches (full sweeps unchanged) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.71  | 03-10-2026     | REQ-119: skip error-1160a (remote http://www.w3.org fetch blocked by the sandbox, same   |
+//                      |                  |       |                | class as QT3 fn-unparsed-text-054a); targeted `error`-set run is 507/0/66 after the      |
+//                      |                  |       |                | six engine-gap fixes                                                                    |
+//                      |==================|=======|================|=========================================================================================
 
 using System.Xml.Linq;
 using System.Xml;
@@ -412,6 +416,12 @@ class Program
         // rule and contradict package-200; Bosak follows the spec REC. See REQ-082
         // decision log 2026-09-07.
         "use-package-291", "use-package-292", "use-package-293", "use-package-294",
+        // error-1160a fetches http://www.w3.org/2005/11/schema-for-xslt20.xsd through
+        // fn:document to probe fragment-identifier handling (XTRE/XTDE1160). Remote HTTP
+        // is blocked by the sandbox, so the engine reports FODC0002 (document not
+        // available) instead of reaching the fragment-identifier check. Same class as
+        // QT3 fn-unparsed-text-054a; not an engine gap.
+        "error-1160a",
         // Streaming: burst-mode semantic gap only (see GetSkipReason). accumulator-031 and
         // accumulator-068 pass since Phase C1 implemented streamable xsl:source-document.
         "accumulator-061",
@@ -673,6 +683,8 @@ class Program
         }
         if (name is "json-to-xml-typed-010")
             return "Spec contradiction: xsl:import-schema must raise XTSE1650 statically on a non-schema-aware processor (XSLT 3.0 27.2), so XTDE3245 at runtime is unreachable; W3C submissions concur";
+        if (name is "error-1160a")
+            return "Remote HTTP blocked: the test fetches http://www.w3.org/2005/11/schema-for-xslt20.xsd via fn:document, which the sandbox prevents (FODC0002 before the fragment-identifier check is reached); same class as QT3 fn-unparsed-text-054a, not an engine gap";
         return "Known harness skip";
     }
 
@@ -1820,6 +1832,9 @@ class Program
         ("XTTE3360", "XTDE3362") => true,  // accumulator-before/after context item is not a node
         ("XTDE3160", "XPST0003") => true,  // xsl:evaluate target is not a valid XPath expression (parse error reported)
         ("XTSE3430", "XTDE3400") => true,  // streamed accumulator use fails streamability (cyclic accumulator found first)
+        ("XTSE3430", "XTDE3362") => true,  // non-streamable accumulator read on a streamed node (error-3420a): the §19.8
+                                            // static "consuming accumulator call" rule is not implemented, so the mandated
+                                            // dynamic check (REQ-119) fires first; the violated condition holds either way
         ("XTSE3460", "XTDE0040") => true,  // apply-imports inside xsl:override (package visibility error found first)
         _ => false,
     };

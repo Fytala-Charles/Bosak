@@ -378,6 +378,9 @@
 //                      | Charles Korthout | 5.124 | 01-10-2026     | IsValidRelativeUriReference rejects malformed percent-encodings ("%gg" → FORG0002;      |
 //                      |                  |       |                | CombinedErrorCodes FORG0002) while valid "%20" stays encoded (fn-resolve-uri-31)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.125 | 03-10-2026     | REQ-119: fn:json-to-xml validate:=true() raises FOJS0004 when the processor is not        |
+//                      |                  |       |                | schema-aware (no compiled schema set; error-3245a)                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -14307,6 +14310,13 @@ public static class FunctionLibrary
 
         if (options.Validate)
         {
+            // F+O 3.1 §17.5.2: requesting validation on a processor that is not
+            // schema-aware is FOJS0004 (error-3245a). Schema-aware hosts flag the
+            // evaluation context (XSLT basic mode leaves it false); the built-in
+            // schema-for-JSON below serves schema-aware processors.
+            if (!ctx.IsSchemaAware)
+                throw new InvalidOperationException("FOJS0004: The validate option requires a schema-aware processor");
+
             // Validate the generated XML representation against the W3C schema-for-JSON.
             // This populates PSVI annotations so that $node instance of element(j:map, j:mapType)
             // and typed-value access (e.g. data($n) instance of xs:double for j:number) work.

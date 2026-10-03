@@ -53,6 +53,8 @@
 //                      | Charles Korthout | 0.24  | 07-09-2026     | Seed env namespaces into the XQuery compiler; route/skip namespace-axis feature tests |
 //                      | Charles Korthout | 0.25  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.26  | 03-10-2026     | Run schema-aware (QT3 schemaImport admitted): json-to-xml validate uses built-in schema |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -112,6 +114,10 @@ internal sealed class TestExecutor
 
         var xqContext = routeXQuery ? new XQueryContext() : null;
         var ctx = xqContext?.EvaluationContext ?? new EvaluationContext();
+        // Bosak admits the QT3 schemaImport/schemaValidation features, so the harness
+        // runs schema-aware: fn:json-to-xml(validate:=true()) validates against the
+        // built-in schema-for-JSON instead of raising FOJS0004 (json-to-xml-016 et al).
+        ctx.IsSchemaAware = true;
         // XML 1.1 tests (xml-version dependency) enable XML 1.1 constructor semantics
         // (prefixed namespace undeclarations) in addition to line-ending normalization.
         ctx.Xml11Mode = xml11LineEndings;

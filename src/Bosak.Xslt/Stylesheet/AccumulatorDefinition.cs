@@ -25,6 +25,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 01-10-2026     | UniqueId/UniqueKey so same-named accumulators in different packages don't collide       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 03-10-2026     | REQ-119: Streamable flag from @streamable (XTDE3362: only streamable accumulators may   |
+//                      |                  |       |                | be read against a streamed document)                                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -67,16 +70,23 @@ internal sealed class AccumulatorDefinition
     /// <summary>The initial-value expression.</summary>
     public string InitialValue { get; }
 
+    /// <summary>
+    /// Whether the accumulator is declared <c>streamable="yes"</c>: only streamable
+    /// accumulators may be evaluated against a streamed document (XTDE3362).
+    /// </summary>
+    public bool Streamable { get; }
+
     /// <summary>The accumulator rules, in declaration order.</summary>
     public IReadOnlyList<AccumulatorRule> Rules { get; }
 
-    private AccumulatorDefinition(XElement element, string localName, string namespaceUri, string? asType, string initialValue, IReadOnlyList<AccumulatorRule> rules)
+    private AccumulatorDefinition(XElement element, string localName, string namespaceUri, string? asType, string initialValue, bool streamable, IReadOnlyList<AccumulatorRule> rules)
     {
         Element = element;
         LocalName = localName;
         NamespaceUri = namespaceUri;
         As = asType;
         InitialValue = initialValue;
+        Streamable = streamable;
         Rules = rules;
     }
 
@@ -108,7 +118,10 @@ internal sealed class AccumulatorDefinition
         if (rules.Count == 0)
             throw new InvalidOperationException($"XTSE0010: xsl:accumulator '{nameAttr}' must have at least one xsl:accumulator-rule.");
 
-        return new AccumulatorDefinition(element, localName, namespaceUri, asType, initialValue, rules);
+        var streamableAttr = element.Attribute("streamable")?.Value ?? element.Attribute("_streamable")?.Value;
+        var streamable = streamableAttr != null && streamableAttr.Trim().ToLowerInvariant() is "yes" or "true" or "1";
+
+        return new AccumulatorDefinition(element, localName, namespaceUri, asType, initialValue, streamable, rules);
     }
 
     private static (string LocalName, string NamespaceUri) ResolveAccumulatorName(string name, XElement element)
