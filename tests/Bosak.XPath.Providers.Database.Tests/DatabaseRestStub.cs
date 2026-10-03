@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 03 October 2026
-// PURPOSE              : Loopback HttpListener stub faking the BaseX REST surface for the loader tests
+// PURPOSE              : Loopback HttpListener stub faking the BaseX/eXist/MarkLogic REST surfaces for the loader tests
 // SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
 //
 // COPYRIGHT            : Fytala
@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 03-10-2026     | Slice 2: renamed to DatabaseRestStub; requests record the query string and Accept header |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Net;
@@ -21,12 +22,13 @@ using System.Text;
 namespace Bosak.XPath.Providers.Database.Tests;
 
 /// <summary>
-/// A loopback <see cref="HttpListener"/> stub that fakes the BaseX REST surface
-/// (<c>GET /rest/db/resource.xml</c> → XML document) on a dynamic port, so the loader tests
-/// run in CI without a real database. Requests are recorded; the canned response is
-/// configurable per test.
+/// A loopback <see cref="HttpListener"/> stub that fakes the database REST surfaces
+/// (BaseX <c>GET /rest/db/resource.xml</c>, eXist <c>GET /exist/rest/db/resource.xml</c>,
+/// MarkLogic <c>GET /v1/documents?uri=…</c>) on a dynamic port, so the loader tests run in
+/// CI without a real database. Requests are recorded; the canned response is configurable
+/// per test.
 /// </summary>
-internal sealed class BaseXRestStub : IDisposable
+internal sealed class DatabaseRestStub : IDisposable
 {
     /// <summary>
     /// A canned HTTP response served by the stub.
@@ -36,7 +38,7 @@ internal sealed class BaseXRestStub : IDisposable
     /// <summary>
     /// A request the stub received, recorded for assertions.
     /// </summary>
-    public sealed record Request(string Method, string Path, string? Authorization);
+    public sealed record Request(string Method, string Path, string Query, string? Accept, string? Authorization);
 
     private readonly HttpListener _listener;
     private readonly Task _loop;
@@ -46,7 +48,7 @@ internal sealed class BaseXRestStub : IDisposable
     /// <summary>
     /// Initializes a new stub listening on <c>http://127.0.0.1:&lt;dynamic-port&gt;/</c>.
     /// </summary>
-    public BaseXRestStub()
+    public DatabaseRestStub()
     {
         // HttpListener has no LocalEndpoint: probe a free loopback port with a throwaway
         // TcpListener, release it, and register the HttpListener prefix on that port.
@@ -150,6 +152,8 @@ internal sealed class BaseXRestStub : IDisposable
             request = new Request(
                 context.Request.HttpMethod,
                 context.Request.Url?.AbsolutePath ?? string.Empty,
+                context.Request.Url?.Query ?? string.Empty,
+                context.Request.Headers["Accept"],
                 context.Request.Headers["Authorization"]);
             _requests.Add(request);
         }

@@ -5,14 +5,23 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
-    <!-- REQ-120 Slice 1 spike: keep the package out of `dotnet pack` (and therefore
-         Trusted Publishing on the next tag) until Slice 2 promotes it to a shipped package. -->
+    <PackageId>Bosak.XPath.Providers.Database</PackageId>
+    <Description>Bosak: XML database REST document loaders — resolve basex://, exist://, and marklogic:// URIs through the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 engine's DocumentLoader hooks (BaseX / eXist / MarkLogic REST endpoints, in-memory and forward-only streaming loads).</Description>
+    <!-- REQ-120 Slice 2: package metadata is in place, but the package must NOT ship yet.
+         release.yml packs the whole solution (dotnet pack Bosak.sln) and pushes every nupkg
+         except *LanguageServer*, so flipping this to true without the package ID registered
+         on nuget.org would fail the next tag's Trusted Publishing run. Flip ONLY after the
+         owner reserves Bosak.XPath.Providers.Database on nuget.org. -->
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
     <ProjectReference Include="..\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.XPath.Providers.Database.Tests" />
   </ItemGroup>
 
 </Project>
