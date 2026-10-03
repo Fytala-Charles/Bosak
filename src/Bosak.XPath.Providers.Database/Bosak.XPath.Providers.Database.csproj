@@ -7,12 +7,12 @@
     <LangVersion>preview</LangVersion>
     <PackageId>Bosak.XPath.Providers.Database</PackageId>
     <Description>Bosak: XML database REST document loaders — resolve basex://, exist://, and marklogic:// URIs through the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 engine's DocumentLoader hooks (BaseX / eXist / MarkLogic REST endpoints, in-memory and forward-only streaming loads).</Description>
-    <!-- REQ-120 Slice 2: package metadata is in place, but the package must NOT ship yet.
-         release.yml packs the whole solution (dotnet pack Bosak.sln) and pushes every nupkg
-         except *LanguageServer*, so flipping this to true without the package ID registered
-         on nuget.org would fail the next tag's Trusted Publishing run. Flip ONLY after the
-         owner reserves Bosak.XPath.Providers.Database on nuget.org. -->
-    <IsPackable>false</IsPackable>
+    <!-- REQ-120: the owner registered Bosak.XPath.Providers.Database on nuget.org for Trusted
+         Publishing (2026-10-03), so the package ships with the next core tag. release.yml packs
+         the whole solution (dotnet pack Bosak.sln) and pushes every nupkg except LanguageServer
+         with skip-duplicate, making re-runs safe. Keep this true; flip back only if the
+         nuget.org registration is removed. -->
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
