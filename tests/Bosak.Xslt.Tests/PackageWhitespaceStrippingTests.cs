@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 05-09-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 03-10-2026     | [Collection("XSLT package registry")] — serializes the global package-registry mutations against the other two registry test classes |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -31,6 +32,10 @@ namespace Bosak.Xslt.Tests;
 /// the call. The same URI loaded under conflicting rules must yield distinct trees
 /// (W3C tests document-2401/document-2402/collection-006).
 /// </summary>
+// Serializes against StylesheetTests and SchemaAwareCompilationTests: all three mutate
+// the global XsltFunctionLibrary package registry (ClearPackages/RegisterPackage), which
+// races under xUnit's default cross-class parallelism.
+[Collection("XSLT package registry")]
 public class PackageWhitespaceStrippingTests
 {
     private const string PackageUri = "urn:test:package-ws";
