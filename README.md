@@ -236,7 +236,7 @@ Bosak is free and open source (Apache-2.0) — and stays that way. Core conforma
 | €25 / month | 💎 Professional | Everything above, plus a direct line for integration questions and early input on new features |
 | €100 / month | 🏢 Organization | Everything above, plus your logo and link in the Bosak README and release notes |
 
-Every contribution, however small, is genuinely appreciated.
+Every contribution, however small, is genuinely appreciated. Current sponsors are listed in [SPONSORS.md](SPONSORS.md) and acknowledged in release notes.
 
 ---
 
