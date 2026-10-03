@@ -12,12 +12,12 @@
 - Harness equivalence tables are acceptance-broadening only (FAIL→PASS); they can never flip a passing test. Baseline bit-identity sweeps after this will only see the error-set numbers change, and only under a targeted filter.
 - The 6 remaining `error`-set result mismatches are an engine-coverage backlog, not label issues — candidates for future analyzer/validator work if the set is ever promoted into the gate.
 **Next steps (agreed direction):**
-1. Parent decides PR/merge for `feat/xtse3430-error-label-cleanup` @ `1a234d2` (docs synced: FEATURE_REQUESTS REQ-117 decision log + tail, INTEGRATION 2026-10-02 (g), this entry).
+1. ~~Parent decides PR/merge for `feat/xtse3430-error-label-cleanup` @ `1a234d2`~~ — **done: PR #51 merged → main `6484e31`; released on `v0.12.2-beta` 2026-10-03** (docs synced: FEATURE_REQUESTS REQ-117 decision log + tail, INTEGRATION 2026-10-02 (h), this entry).
 2. Remaining schema-aware tail unchanged: **1** — type-functions-0401 only. The `error`-set engine-gap backlog (XTSE0730/3120/3155, XTDE3245/3362) is recorded above for whenever the set gets promoted into the gate.
 
 ---
 **Date:** 2026-10-02 (fortieth session, continued — release prep tail)
-**Commit:** **PR #50 merged → main `f4ed8a4`:** `v0.12.2-beta` pin bump (`src/Directory.Build.props` 0.12.1-beta → 0.12.2-beta) + release notes — the tag carries REQ-116 (PR #48) + REQ-117 (PR #49): schema-aware sweep **11,054/1/3,546** (conformance tail fully closed — only type-functions-0401 platform limit remains), basic **10,250/26/4,325**, QT3 **31,142/0/679**, unit **2,729/2,729** + LanguageServer 72/72. Owner tags after merge per the pinned-version rule.
+**Commit:** **PR #50 merged → main `f4ed8a4`; `v0.12.2-beta` published to nuget.org 2026-10-03** (tag on `6484e31`, all 9 packages `Created` via Trusted Publishing — the pin bump from below worked): carries REQ-116 (PR #48) + REQ-117 (PR #49) + the REQ-117 tail (PR #51). Final gates at tag time: schema-aware sweep **11,054/1/3,546** (conformance tail fully closed — only type-functions-0401 platform limit remains), basic **10,250/26/4,325**, QT3 **31,142/0/679**, unit **2,729/2,729** + LanguageServer 72/72.
 **Prior commit:** branch `fix/pc1-streaming-w1-w2` @ `7ae8998` — 8 commits on top of main `9e40a97` (REQ-116): `bf82a0c` (W1+W2), `c0b7914` (W2 regression fix), `0922fe4` (W3+W4), `6dea0a3` (W5+W6), `106c908` (W7), `7ae8998` (W7-1 harness regression fix). Merged via PR #49 → `f0f9f07`.
 
 **Date:** 2026-10-02 (fortieth session)
