@@ -5,6 +5,7 @@
 **What was built:**
 - Modified: `README.md` — Sponsorship section (+18 lines), SPONSORS.md link.
 - New: `SPONSORS.md` — per-tier sponsor handle tracking.
+- Docs: `FEATURE_REQUESTS.md` — REQ-118 XPath/XSLT 4.0 tracking (Accepted, post-1.0 target; no parity chase while the spec is pre-Recommendation).
 
 ---
 
