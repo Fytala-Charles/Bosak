@@ -9,10 +9,10 @@
 
 [![.NET 10](https://img.shields.io/badge/.NET-10-2F4F4F?logo=dotnet&logoColor=F0FFF0)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](license.md)
-[![Status](https://img.shields.io/badge/Status-Alpha-518D8F)]()
+[![Status](https://img.shields.io/badge/Status-Beta-518D8F)]()
 [![NuGet](https://img.shields.io/nuget/vpre/Bosak.XPath.Api?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Bosak.XPath.Api)
 [![CI](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml/badge.svg)](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml)
-[![XSLT 3.0 conformance](https://img.shields.io/badge/XSLT%203.0%20conformance-99.4%25-2F4F4F)](docs/ARCHITECTURE.md)
+[![XSLT 3.0 conformance](https://img.shields.io/badge/XSLT%203.0%20conformance-99.7%25-2F4F4F)](docs/ARCHITECTURE.md)
 
 </div>
 
@@ -283,11 +283,12 @@ The harness:
 | Metric | Value |
 |--------|-------|
 | **XPath/XQuery (QT3)** | 428 test sets, ~32,000 tests |
-| Pass Rate (XPath+XQuery) | **31,142 passed / 0 failed / 679 skipped** (97.87%) with strict error-code matching (2026-09-09) — **100%** of runnable tests pass |
-| **XSLT 3.0** | 224 test sets, 14,600 tests |
-| Pass Rate (XSLT) | **10,220 passed / 55 failed / 4,325 skipped** (99.4%, 2026-09-21, streaming Phases A–D live + si-fork residual batch + provider batch + use-when batch + su-filter/su-unclassified analyzer batch + si-iterate XTSE3120 batch + si-message assert-message batch + sx-MapExpr map-constructor batch + sx-treat/sx-instance-of braced-EQName batch + xml-to-json package-namespace batch; re-run 2026-09-22 with REQ-097 schema-aware seam — unchanged) — failures triaged: schema-gated XTSE1650 (~24), assorted documented singles; see REQ-086/REQ-087/REQ-088/REQ-089/REQ-090/REQ-091/REQ-092/REQ-093/REQ-094/REQ-095 decision logs |
+| Pass Rate (XPath+XQuery) | **31,142 passed / 0 failed / 679 skipped** (97.87%) with strict error-code matching (2026-10-02 re-run, bit-identical to the 2026-09-09 baseline) — **100%** of runnable tests pass |
+| **XSLT 3.0** | 224 test sets, 14,601 tests |
+| Pass Rate (XSLT, basic sweep) | **10,250 passed / 26 failed / 4,325 skipped** (99.7% of non-skipped, final gate 2026-10-03 — REQ-117 PC-1 streaming cluster closed, all 26 streaming failures FAIL→PASS, plus the REQ-117 tail: positional streamed group patterns → XTSE3430, error-set label equivalences; failure list bit-identical to the REQ-117 baseline) — the 26 failures are `xsl:import-schema`-gated (XTSE1650 without a schema-aware processor); see REQ-116/REQ-117 decision logs |
+| Pass Rate (XSLT, schema-aware sweep) | **11,054 passed / 1 failed / 3,546 skipped** (100.0% of non-skipped, final gate 2026-10-03) — the single failure is `type-functions-0401` (DateTimeOffset year < −1, documented platform limitation); the non-streaming + streaming conformance tail is fully closed |
 | unicode-90 set | **1,365 passed / 0 failed / 95 skipped** (skips are upstream test/data defects) |
-| Unsupported Features | Schema awareness (in progress), XQuery-only dependencies |
+| Unsupported Features | Complex-type schema awareness ships via the commercial **Bosak.Schema** add-on (Beta, `v0.2.0`); the free core raises XTSE1650 for `xsl:import-schema` unless the schema-aware seam is activated — see `COMMERCIAL.md`. XQuery-only dependencies |
 
 > **Strict error matching** — Both conformance harnesses now require the declared
 > `<error code="...">` to match the raised exception; previously any error satisfied an error
