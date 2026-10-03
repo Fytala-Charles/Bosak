@@ -384,6 +384,7 @@
 //                      | Charles Korthout | 5.126 | 03-10-2026     | REQ-120 Slice 3: CollectionLoader host hook consulted by ResolveCollection after         |
 //                      |                  |       |                | registered collections; LoadDocumentFragment provider-agnostic (IXdmNode axis ID lookup  |
 //                      |                  |       |                | + grounded fragment copy); member loading shared via LoadCollectionMembers               |
+//                      | Charles Korthout | 5.127 | 03-10-2026     | xsl:product-version fallback bumped to 0.12.3-beta (database backends release)           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
@@ -4932,7 +4933,7 @@ public static class FunctionLibrary
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
-            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.12.0-beta",
+            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.12.3-beta",
             "xsl:is-schema-aware" => "no",
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
