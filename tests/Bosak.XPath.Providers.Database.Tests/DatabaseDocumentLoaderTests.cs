@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 03-10-2026     | WaitForPortRelease: tolerate a faulted connect task (AggregateException on Linux CI)     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -189,7 +190,19 @@ public sealed class DatabaseDocumentLoaderTests : IDisposable
             {
                 using var client = new System.Net.Sockets.TcpClient();
                 var connect = client.ConnectAsync("127.0.0.1", port);
-                if (connect.Wait(TimeSpan.FromMilliseconds(200)) && client.Connected)
+                bool connected;
+                try
+                {
+                    // A faulted connect task (connection refused) proves the stub is gone.
+                    // Task.Wait rethrows it as AggregateException — the common case on Linux CI.
+                    connected = connect.Wait(TimeSpan.FromMilliseconds(200)) && client.Connected;
+                }
+                catch (AggregateException)
+                {
+                    return; // connection refused: the stub is gone
+                }
+
+                if (connected)
                 {
                     client.Close();
                     System.Threading.Thread.Sleep(50);
