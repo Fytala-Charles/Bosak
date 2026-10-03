@@ -37,7 +37,7 @@ Everything below lands before the repo and packages are called Beta:
 ### Beta → 1.0 (GA)
 
 - [x] `v0.12.1-beta` published to nuget.org 2026-10-02 (all 9 packages via Trusted Publishing OIDC; carries REQ-101…REQ-115 — schema-aware sweep 11,027/28/3,546, QT3 31,142/0/679). Package version is pinned in `src/Directory.Build.props` — bump the pin before tagging.
-- [x] `v0.12.2-beta` pin bumped + release notes 2026-10-02 (carries REQ-116 + REQ-117 — schema-aware sweep 11,054/1/3,546 with the conformance tail fully closed, basic 10,250/26/4,325, QT3 31,142/0/679). Tagging per the pinned-version rule above.
+- [x] `v0.12.2-beta` published to nuget.org 2026-10-03 (all 9 packages via Trusted Publishing OIDC; carries REQ-116 + REQ-117 + the REQ-117 tail PR #51 — schema-aware sweep 11,054/1/3,546 with the conformance tail fully closed, basic 10,250/26/4,325, QT3 31,142/0/679). Pin bumped before tagging per the pinned-version rule above.
 - [x] Strict XSLT sweep at 100% of runnable tests that are not proven upstream artifacts
 - [ ] API frozen; SemVer commitment begins
 - [ ] Version promoted from `0.9.x-preview` to `1.0.0`; public release notes
