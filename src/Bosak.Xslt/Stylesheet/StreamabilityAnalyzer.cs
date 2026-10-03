@@ -24,6 +24,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 02-10-2026     | Positional group-starting-with/group-ending-with over a streamed population: numeric-literal predicates ([1], [(2.5)]) are positional per XPath §2.4.3 but carried no UsesPosition/UsesLast flag, so they slipped past CheckPattern and silently collapsed to one group at runtime — now XTSE3430 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 03-10-2026     | REQ-119: XTSE3155 — an xsl:function with no xsl:param children may only declare         |
+//                      |                  |       |                | streamability="unclassified" (error-3155a)                                               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -410,6 +413,10 @@ internal static class StreamabilityAnalyzer
             _currentRule = null;
             // Parameter declarations and types.
             var paramEls = def.Element.Elements(XName.Get("param", Stylesheet.XslNamespace)).ToList();
+            // XTSE3155: an xsl:function with no xsl:param children may only declare
+            // streamability="unclassified" (error-3155a).
+            if (paramEls.Count == 0 && streamability != "unclassified")
+                throw new InvalidOperationException($"XTSE3155: Function '{def.LocalName}' has no parameters and therefore must not declare streamability '{streamability}'.");
             if (streamability == "shallow-descent")
             {
                 // The descent argument requires a parameter: arity zero is a static

@@ -490,6 +490,13 @@
 //                      |                  |       |                | skip VM call-site typed conversion for absorbing callees; ExecuteXsltFunction binds and   |
 //                      |                  |       |                | converts after materialization) — su-absorbing-202/203/301 pass                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.0   | 03-10-2026     | REQ-119: XTDE3362 — accumulator-before/after on a streamed document requires a          |
+//                      |                  |       |                | streamable="yes" accumulator (error-3362a/b); the XTSE3120 placement check moved to     |
+//                      |                  |       |                | load-time validation in Stylesheet (ValidateIterateBreakPlacement)                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.01  | 03-10-2026     | REQ-119 sweep gate: XTDE3362 gated on InStreamedPipeline — a harness-streamed source    |
+//                      |                  |       |                | under a grounded mode is not a streamed document (accumulator-033s/034/036/042/043)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -870,6 +877,10 @@ internal sealed class TransformEngine
         _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
         _context.BaseUri = stylesheet.BaseUri ?? string.Empty;
+        // REQ-119: schema-awareness is a property of the host processor, independent of
+        // whether any schema was actually imported (json-to-xml validate:=true() raises
+        // FOJS0004 on a non-schema-aware processor).
+        _context.IsSchemaAware = stylesheet.IsSchemaAwareCompilation;
         // Schema-aware stylesheets (REQ-097): fold the compiled xsl:import-schema set
         // into the evaluation context before FunctionLibrary.Populate registers
         // user-defined type constructors and kind tests from SchemaSet.
@@ -3450,6 +3461,16 @@ internal sealed class TransformEngine
         // First check for values attached per node: copy-accumulators copies, or a
         // streamed (burst-mode) source where values are pushed per record.
         var root = GetRootNode(node);
+
+        // XTDE3362: inside a streamed pipeline (streamable xsl:source-document) only
+        // accumulators declared streamable="yes" may be evaluated; a non-streamable
+        // accumulator read against a streamed node is a dynamic error (error-3362a/b).
+        // A harness-streamed source processed by a grounded mode is NOT a streamed
+        // document in this sense: the values are pushed per record and the read is
+        // legal (accumulator-033s/034/036/042/043, mode-1106*).
+        if (root is IStreamingDocument && scopedAcc != null && !scopedAcc.Streamable && _context.InStreamedPipeline)
+            throw new InvalidOperationException($"XTDE3362: accumulator '{name}' is not declared streamable and cannot be evaluated against a streamed document");
+
         StreamingAccumulatorDriver? streamingDriver = null;
         if (root is IStreamingDocument)
         {
@@ -21626,8 +21647,6 @@ internal sealed class TransformEngine
         var items = EnumerateItems(CompileXPath(select, instruction).Evaluate(_context)).ToList();
         var xslNs = Stylesheet.Stylesheet.XslNamespace;
 
-        ValidateIterateDescendants(instruction);
-
         // Validate ordering of xsl:param and xsl:on-completion, and detect xsl:param after body instructions.
         bool bodyStarted = false;
         foreach (var child in instruction.Elements())
@@ -21821,95 +21840,6 @@ internal sealed class TransformEngine
         else
         {
             CopyToResult(value);
-        }
-    }
-
-    /// <summary>
-    /// Validates the lexical placement of <c>xsl:param</c>, <c>xsl:on-completion</c>,
-    /// <c>xsl:break</c>, and <c>xsl:next-iteration</c> descendants of an
-    /// <c>xsl:iterate</c> instruction, raising static errors when they are misplaced.
-    /// </summary>
-    private void ValidateIterateDescendants(XElement instruction)
-    {
-        var xslNs = Stylesheet.Stylesheet.XslNamespace;
-        foreach (var descendant in instruction.Descendants())
-        {
-            if (descendant.Name.NamespaceName != xslNs)
-                continue;
-
-            // Instructions inside a nested xsl:iterate are validated by that nested instruction.
-            bool insideNestedIterate = descendant.Ancestors().TakeWhile(a => a != instruction).Any(a =>
-                a.Name.LocalName == "iterate" && a.Name.NamespaceName == xslNs);
-            if (insideNestedIterate)
-                continue;
-
-            var local = descendant.Name.LocalName;
-            if (local == "param" || local == "on-completion")
-            {
-                // xsl:param and xsl:on-completion must be direct children of xsl:iterate.
-                if (descendant.Parent != instruction)
-                    throw new InvalidOperationException("XTSE0010: xsl:param and xsl:on-completion must be direct children of xsl:iterate.");
-                continue;
-            }
-
-            if (local != "break" && local != "next-iteration")
-                continue;
-
-            var parent = descendant.Parent;
-            if (parent == null)
-                continue;
-
-            bool parentAllowed;
-            if (parent == instruction)
-            {
-                parentAllowed = true;
-            }
-            else if (parent.Name.NamespaceName == xslNs)
-            {
-                var parentLocal = parent.Name.LocalName;
-                if (parentLocal == "try")
-                {
-                    // Within xsl:try the instruction must precede any xsl:catch siblings.
-                    parentAllowed = !descendant.ElementsAfterSelf().Any(e =>
-                        !(e.Name.NamespaceName == xslNs && e.Name.LocalName == "catch"));
-                }
-                else
-                {
-                    // xsl:if is a permitted position (XSLT 3.0 §8.4: xsl:break may appear as
-                    // the last instruction of xsl:if within the iterate body — si-iterate-013/094).
-                    parentAllowed = parentLocal == "when" || parentLocal == "otherwise"
-                        || parentLocal == "catch" || parentLocal == "if";
-                }
-            }
-            else
-            {
-                parentAllowed = false;
-            }
-
-            if (!parentAllowed)
-                throw new InvalidOperationException("XTSE3120: xsl:break and xsl:next-iteration must appear in the body of xsl:iterate.");
-
-            bool hasFollowingSibling;
-            if (parent == instruction)
-            {
-                // Direct children of xsl:iterate must be the last body instruction.
-                hasFollowingSibling = descendant.ElementsAfterSelf().Any(e =>
-                    e.Name.NamespaceName == xslNs
-                    && e.Name.LocalName != "on-completion"
-                    && e.Name.LocalName != "param");
-            }
-            else if (parent.Name.LocalName == "try" && parent.Name.NamespaceName == xslNs)
-            {
-                hasFollowingSibling = descendant.ElementsAfterSelf().Any(e =>
-                    !(e.Name.NamespaceName == xslNs && e.Name.LocalName == "catch"));
-            }
-            else
-            {
-                hasFollowingSibling = descendant.ElementsAfterSelf().Any();
-            }
-
-            if (hasFollowingSibling)
-                throw new InvalidOperationException("XTSE3120: xsl:break and xsl:next-iteration must be the last instruction in their sequence constructor.");
         }
     }
 

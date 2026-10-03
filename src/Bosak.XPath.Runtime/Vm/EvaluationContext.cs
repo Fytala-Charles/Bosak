@@ -92,6 +92,9 @@
 //                      | Charles Korthout | 2.31  | 01-10-2026     | Backslash FODC0005 check moved to the fn:doc/fn:document/xsl:source-document entry       |
 //                      |                  |       |                | points: internal callers (collections, loaders) pass platform paths with backslashes     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.32  | 03-10-2026     | REQ-119: IsSchemaAware flag (set by schema-aware hosts) so fn:json-to-xml can raise    |
+//                      |                  |       |                | FOJS0004 for validate:=true() on a non-schema-aware processor                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -782,6 +785,14 @@ public sealed class EvaluationContext
         get => _schemaSet;
         set => _schemaSet = value;
     }
+
+    /// <summary>
+    /// Whether the host processor is schema-aware. Set by schema-aware hosts
+    /// (e.g. an <c>XsltCompiler</c> compiled with <c>SchemaAware = true</c>); functions
+    /// whose behavior is defined conditionally on schema-awareness consult this flag
+    /// (fn:json-to-xml validate:=true() raises FOJS0004 otherwise).
+    /// </summary>
+    public bool IsSchemaAware { get; set; }
 
     /// <summary>
     /// Looks up a global element declaration in the compiled schema set, if any.

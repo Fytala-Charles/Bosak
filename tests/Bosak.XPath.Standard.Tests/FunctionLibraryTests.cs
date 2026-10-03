@@ -100,6 +100,10 @@
 //                      | Charles Korthout | 2.43  | 01-10-2026     | resolve-uri percent-encoding tests: FORG0002 for "%gg"/"100%", valid "%20" stays       |
 //                      |                  |       |                | encoded (CombinedErrorCodes FORG0002, fn-resolve-uri-31)                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.44  | 03-10-2026     | REQ-119: json-to-xml validate=true on a non-schema-aware context raises FOJS0004        |
+//                      |                  |       |                | (error-3245a); the typed/FOJS0003 validate tests now run schema-aware via the new      |
+//                      |                  |       |                | EvaluateSchemaAware helper (IsSchemaAware flag)                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.IO;
 using System.Xml;
@@ -119,6 +123,16 @@ public class FunctionLibraryTests
     private static XdmValue Evaluate(string xpath)
     {
         var ctx = new EvaluationContext();
+        FunctionLibrary.Populate(ctx);
+        return XPath31Expression.Compile(xpath).Evaluate(ctx);
+    }
+
+    private static XdmValue EvaluateSchemaAware(string xpath)
+    {
+        // REQ-119: fn:json-to-xml validate:=true() is only defined on a schema-aware
+        // processor; the flag mirrors what a schema-aware host (XsltCompiler with
+        // SchemaAware = true) sets on the evaluation context.
+        var ctx = new EvaluationContext { IsSchemaAware = true };
         FunctionLibrary.Populate(ctx);
         return XPath31Expression.Compile(xpath).Evaluate(ctx);
     }
@@ -3536,10 +3550,10 @@ public class FunctionLibraryTests
     {
         // json-to-xml-016/017: validate:=true() now performs schema validation against the
         // built-in W3C schema-for-JSON and produces PSVI annotations.
-        var result = Evaluate("json-to-xml('[1]', map{'validate':true()})");
+        var result = EvaluateSchemaAware("json-to-xml('[1]', map{'validate':true()})");
         Assert.True(result.IsNode);
         Assert.Equal(XdmNodeKind.Document, result.NodeValue.NodeKind);
-        var numberData = Evaluate("data(json-to-xml('[1]', map{'validate':true()})/*/*[1])");
+        var numberData = EvaluateSchemaAware("data(json-to-xml('[1]', map{'validate':true()})/*/*[1])");
         Assert.Equal(1.0, numberData.DoubleValue);
     }
 
@@ -3549,8 +3563,18 @@ public class FunctionLibraryTests
         // validate:=true() with duplicate keys violates the schema-for-JSON unique-key
         // constraint (when duplicates are not explicitly retained), so it raises FOJS0003.
         var ex = Assert.Throws<InvalidOperationException>(
-            () => Evaluate("json-to-xml('{\"a\":1,\"a\":2}', map{'validate':true()})"));
+            () => EvaluateSchemaAware("json-to-xml('{\"a\":1,\"a\":2}', map{'validate':true()})"));
         Assert.Contains("FOJS0003", ex.Message);
+    }
+
+    [Fact]
+    public void JsonToXml_ValidateTrue_NonSchemaAware_RaisesFOJS0004()
+    {
+        // error-3245a / F+O 3.1 §17.5.2: validate:=true() on a processor that is not
+        // schema-aware is FOJS0004.
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Evaluate("json-to-xml('[1]', map{'validate':true()})"));
+        Assert.Contains("FOJS0004", ex.Message);
     }
 
     [Fact]

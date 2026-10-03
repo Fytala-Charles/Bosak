@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-09-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 03-10-2026     | REQ-119: accumulators read on a streamed document must declare streamable="yes"        |
+//                      |                  |       |                | (XTDE3362); all parity fixtures updated, plus a non-streamable negative test           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
 using Bosak.XPath.Providers.Xml;
@@ -61,7 +64,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="figNr" initial-value="0">
+              <xsl:accumulator streamable="yes" name="figNr" initial-value="0">
                 <xsl:accumulator-rule match="chap" select="0"/>
                 <xsl:accumulator-rule match="fig" select="$value + 1"/>
               </xsl:accumulator>
@@ -76,7 +79,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="total" initial-value="0" as="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+              <xsl:accumulator streamable="yes" name="total" initial-value="0" as="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xsl:accumulator-rule match="transaction" select="$value + number(@amount)"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="total"/>
@@ -90,10 +93,10 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="count" initial-value="0"><xsl:accumulator-rule match="transaction" select="$value + 1"/></xsl:accumulator>
-              <xsl:accumulator name="sum" initial-value="0"><xsl:accumulator-rule match="transaction" select="$value + number(@amount)"/></xsl:accumulator>
-              <xsl:accumulator name="min" initial-value="999999999999"><xsl:accumulator-rule match="transaction" select="if (number(@amount) &lt; $value) then number(@amount) else $value"/></xsl:accumulator>
-              <xsl:accumulator name="max" initial-value="-999999999999"><xsl:accumulator-rule match="transaction" select="if (number(@amount) &gt; $value) then number(@amount) else $value"/></xsl:accumulator>
+              <xsl:accumulator streamable="yes" name="count" initial-value="0"><xsl:accumulator-rule match="transaction" select="$value + 1"/></xsl:accumulator>
+              <xsl:accumulator streamable="yes" name="sum" initial-value="0"><xsl:accumulator-rule match="transaction" select="$value + number(@amount)"/></xsl:accumulator>
+              <xsl:accumulator streamable="yes" name="min" initial-value="999999999999"><xsl:accumulator-rule match="transaction" select="if (number(@amount) &lt; $value) then number(@amount) else $value"/></xsl:accumulator>
+              <xsl:accumulator streamable="yes" name="max" initial-value="-999999999999"><xsl:accumulator-rule match="transaction" select="if (number(@amount) &gt; $value) then number(@amount) else $value"/></xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="#all"/>
               <xsl:template match="/transactions"><xsl:variable name="done"><xsl:apply-templates/></xsl:variable><out
                 count="{accumulator-after('count')}" sum="{accumulator-after('sum')}"
@@ -107,7 +110,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="secNr" initial-value="()">
+              <xsl:accumulator streamable="yes" name="secNr" initial-value="()">
                 <xsl:accumulator-rule match="section" phase="start" select="0, head(($value, 0)[1]) + 1, tail(($value, ()))"/>
                 <xsl:accumulator-rule match="section" phase="end" select="tail(($value, ()))"/>
               </xsl:accumulator>
@@ -123,7 +126,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="item-cost" initial-value="0">
+              <xsl:accumulator streamable="yes" name="item-cost" initial-value="0">
                 <xsl:accumulator-rule match="cost/text()" select="$value + xs:integer(.)"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="item-cost"/>
@@ -138,7 +141,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="firstCost" initial-value="()">
+              <xsl:accumulator streamable="yes" name="firstCost" initial-value="()">
                 <xsl:accumulator-rule match="/order/item/cost/text()" select="string(.)"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="firstCost"/>
@@ -153,7 +156,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="seen" initial-value="'no'">
+              <xsl:accumulator streamable="yes" name="seen" initial-value="'no'">
                 <xsl:accumulator-rule match="/" phase="end" select="'yes'"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="seen"/>
@@ -167,7 +170,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="figNr" initial-value="0">
+              <xsl:accumulator streamable="yes" name="figNr" initial-value="0">
                 <xsl:accumulator-rule match="fig"><xsl:sequence select="$value + 1"/></xsl:accumulator-rule>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="figNr"/>
@@ -183,7 +186,7 @@ public class StreamingAccumulatorTests
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
               <xsl:param name="start" select="100"/>
-              <xsl:accumulator name="n" initial-value="$start">
+              <xsl:accumulator streamable="yes" name="n" initial-value="$start">
                 <xsl:accumulator-rule match="fig" select="$value + 1"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="n"/>
@@ -200,7 +203,7 @@ public class StreamingAccumulatorTests
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="a1" initial-value="0">
+              <xsl:accumulator streamable="yes" name="a1" initial-value="0">
                 <xsl:accumulator-rule match="item" select="$value + 1"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip"/>
@@ -213,12 +216,54 @@ public class StreamingAccumulatorTests
     }
 
     [Fact]
+    public void NonStreamableAccumulatorOnStreamedDocument_ThrowsXTDE3362()
+    {
+        // error-3362a: inside a streamable xsl:source-document, reading an accumulator
+        // that is not declared streamable="yes" against a streamed node is XTDE3362.
+        // (A harness-streamed source under a grounded mode is different: the read is
+        // legal there — accumulator-034 — because the document is not being streamed.)
+        const string xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:output method="xml" indent="no"/>
+              <xsl:accumulator name="a1" initial-value="0" streamable="no">
+                <xsl:accumulator-rule match="item" select="$value + 1"/>
+              </xsl:accumulator>
+              <xsl:template name="main">
+                <out>
+                  <xsl:source-document streamable="true" href="FILE.xml">
+                    <xsl:value-of select="accumulator-before('a1')"/>
+                  </xsl:source-document>
+                </out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+
+        var inputFile = Path.Combine(Path.GetTempPath(), $"bosak-3362-{Guid.NewGuid():N}.xml");
+        File.WriteAllText(inputFile, "<order><item/></order>");
+        try
+        {
+            var executable = new XsltCompiler().Compile(xsl.Replace("FILE.xml", Path.GetFileName(inputFile)),
+                new Uri(inputFile).AbsoluteUri);
+            var ex = Assert.ThrowsAny<Exception>(() =>
+                executable.TransformStreaming(new MemoryStream(Encoding.UTF8.GetBytes("<unused/>")),
+                    initialTemplate: "main"));
+            Assert.Contains("XTDE3362", ex.Message);
+        }
+        finally
+        {
+            // The streamed source-document may still hold the file open; the temp
+            // cleanup is best-effort.
+            try { File.Delete(inputFile); } catch (IOException) { }
+        }
+    }
+
+    [Fact]
     public void UnknownAccumulator_ThrowsXTDE3341()
     {
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="a1" initial-value="0">
+              <xsl:accumulator streamable="yes" name="a1" initial-value="0">
                 <xsl:accumulator-rule match="item" select="$value + 1"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="a1"/>
@@ -239,7 +284,7 @@ public class StreamingAccumulatorTests
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="a1" initial-value="0">
+              <xsl:accumulator streamable="yes" name="a1" initial-value="0">
                 <xsl:accumulator-rule match="item" select="$value + 1"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="deep-skip" use-accumulators="a1"/>
@@ -259,7 +304,7 @@ public class StreamingAccumulatorTests
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="a1" initial-value="0">
+              <xsl:accumulator streamable="yes" name="a1" initial-value="0">
                 <xsl:accumulator-rule match="item" select="$value + 1"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="a1"/>
@@ -277,10 +322,10 @@ public class StreamingAccumulatorTests
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="first" initial-value="0">
+              <xsl:accumulator streamable="yes" name="first" initial-value="0">
                 <xsl:accumulator-rule match="item" select="accumulator-before('second') + 1"/>
               </xsl:accumulator>
-              <xsl:accumulator name="second" initial-value="0">
+              <xsl:accumulator streamable="yes" name="second" initial-value="0">
                 <xsl:accumulator-rule match="item" select="$value + 1"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="#all"/>
@@ -300,10 +345,10 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="count" initial-value="0">
+              <xsl:accumulator streamable="yes" name="count" initial-value="0">
                 <xsl:accumulator-rule match="item" select="$value + 1"/>
               </xsl:accumulator>
-              <xsl:accumulator name="doubled" initial-value="0">
+              <xsl:accumulator streamable="yes" name="doubled" initial-value="0">
                 <xsl:accumulator-rule match="item" select="accumulator-before('count') * 2"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="#all"/>
@@ -318,7 +363,7 @@ public class StreamingAccumulatorTests
         => AssertParity("""
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="figNr" initial-value="0">
+              <xsl:accumulator streamable="yes" name="figNr" initial-value="0">
                 <xsl:accumulator-rule match="fig" select="$value + 1"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="figNr"/>
@@ -347,7 +392,7 @@ public class StreamingAccumulatorTests
         const string xsl = """
             <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema">
               <xsl:output method="xml" indent="no"/>
-              <xsl:accumulator name="total" initial-value="0" as="xs:integer">
+              <xsl:accumulator streamable="yes" name="total" initial-value="0" as="xs:integer">
                 <xsl:accumulator-rule match="value/text()" select="$value + xs:integer(.)"/>
               </xsl:accumulator>
               <xsl:mode on-no-match="shallow-skip" use-accumulators="total"/>

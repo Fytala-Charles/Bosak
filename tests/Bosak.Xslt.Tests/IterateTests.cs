@@ -15,6 +15,9 @@
 //                      | Charles Korthout | 0.2   | 21-09-2026     | xsl:break inside xsl:if (XSLT 3.0 §8.4): termination/select value, for-each and not-last negative cases |
 //                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W7-3: text-template children of xsl:iterate are executed (si-iterate-005)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 03-10-2026     | REQ-119: XTSE3120 is now raised statically at compile time; misplaced-break tests       |
+//                      |                  |       |                | assert on Compile, plus error-3120a tail-position-of-body coverage                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -162,8 +165,30 @@ public class IterateTests
 
         var source = XDocument.Parse("<BOOKLIST><BOOKS><ITEM><TITLE>A</TITLE></ITEM></BOOKS></BOOKLIST>");
         var compiler = new XsltCompiler();
-        var executable = compiler.Compile(xsl);
-        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(source)));
+        // REQ-119: XTSE3120 is a static error, raised at compile time.
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
+        Assert.StartsWith("XTSE3120", ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Break_IfContainerNotInTailPosition_Still_Throws()
+    {
+        // error-3120a: xsl:break inside an xsl:if that is followed by another body
+        // instruction (a literal result element) is not in a tail position of the
+        // xsl:iterate body.
+        var xsl = @"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+            <xsl:template name='main'>
+                <out>
+                    <xsl:iterate select='1 to 50'>
+                        <xsl:if test='. gt 30'><xsl:break/></xsl:if>
+                        <x/>
+                    </xsl:iterate>
+                </out>
+            </xsl:template>
+        </xsl:stylesheet>";
+
+        var compiler = new XsltCompiler();
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
         Assert.StartsWith("XTSE3120", ex.Message, StringComparison.Ordinal);
     }
 
@@ -183,10 +208,9 @@ public class IterateTests
             </xsl:template>
         </xsl:stylesheet>";
 
-        var source = XDocument.Parse("<BOOKLIST><BOOKS><ITEM><TITLE>A</TITLE></ITEM></BOOKS></BOOKLIST>");
         var compiler = new XsltCompiler();
-        var executable = compiler.Compile(xsl);
-        var ex = Assert.Throws<InvalidOperationException>(() => executable.TransformToString(new XDocumentNode(source)));
+        // REQ-119: XTSE3120 is a static error, raised at compile time.
+        var ex = Assert.Throws<InvalidOperationException>(() => compiler.Compile(xsl));
         Assert.StartsWith("XTSE3120", ex.Message, StringComparison.Ordinal);
     }
 

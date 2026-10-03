@@ -16,6 +16,9 @@
 //                      | Charles Korthout | 0.3   | 02-10-2026     | PC-1 W3+W4: map-entry key/value atomization, grounded-group current-group() in nested scopes, xsl:fork grounded delivery, shallow-descent arity, absorbing constructor-feed exception, next-match with-param transmission |
 //                      | Charles Korthout | 0.4   | 02-10-2026     | Positional group-starting-with/group-ending-with: numeric-literal predicates ([1]) raise XTSE3430 over a streamed population; non-positional keep compiling |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 03-10-2026     | REQ-119: XTSE3155 — a zero-parameter xsl:function may only declare streamability        |
+//                      |                  |       |                | "unclassified" (error-3155a)                                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.Xslt.Api;
 using Xunit;
@@ -323,4 +326,24 @@ public class StreamabilityAnalysisTests
     [Fact]
     public void NextMatchStreamedParamBoundToAtomicCalleeParam_Compiles()
         => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xsl:mode name="m" streamable="yes"/><xsl:template match="item" mode="m" priority="2"><xsl:next-match><xsl:with-param name="x" select="."/></xsl:next-match></xsl:template><xsl:template match="*" mode="m" priority="1"><xsl:param name="x" as="xs:string" select="'?'"/><xsl:copy><xsl:attribute name="name" select="$x"/></xsl:copy></xsl:template></xsl:stylesheet>""");
+
+    // ---------------- XTSE3155: zero-parameter functions ----------------
+
+    [Fact]
+    public void ZeroParamFunctionWithStreamability_ThrowsXtse3155()
+    {
+        // error-3155a: an xsl:function with no xsl:param children may only declare
+        // streamability="unclassified".
+        var ex = Assert.Throws<InvalidOperationException>(() => new XsltCompiler().Compile(
+            """<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f"><xsl:function name="f:x" streamability="absorbing"><xsl:sequence select="22"/></xsl:function><xsl:template name="main"><out>3</out></xsl:template></xsl:stylesheet>"""));
+        Assert.StartsWith("XTSE3155", ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void ZeroParamFunctionUnclassified_Compiles()
+        => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f"><xsl:function name="f:x" streamability="unclassified"><xsl:sequence select="22"/></xsl:function><xsl:template name="main"><out>3</out></xsl:template></xsl:stylesheet>""");
+
+    [Fact]
+    public void ParamFunctionWithStreamability_Compiles()
+        => AssertCompiles("""<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="urn:f"><xsl:function name="f:x" streamability="absorbing"><xsl:param name="n" as="node()*"/><xsl:sequence select="count($n)"/></xsl:function></xsl:stylesheet>""");
 }
