@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+    <!-- REQ-120 Slice 1 spike: keep the package out of `dotnet pack` (and therefore
+         Trusted Publishing on the next tag) until Slice 2 promotes it to a shipped package. -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
+    <ProjectReference Include="..\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
+  </ItemGroup>
+
+</Project>
