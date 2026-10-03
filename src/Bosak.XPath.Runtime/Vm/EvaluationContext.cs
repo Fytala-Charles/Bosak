@@ -95,6 +95,9 @@
 //                      | Charles Korthout | 2.32  | 03-10-2026     | REQ-119: IsSchemaAware flag (set by schema-aware hosts) so fn:json-to-xml can raise    |
 //                      |                  |       |                | FOJS0004 for validate:=true() on a non-schema-aware processor                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.33  | 03-10-2026     | REQ-120 Slice 3: additive CollectionLoader host hook (SemVer minor) returning member     |
+//                      |                  |       |                | document URIs for fn:collection / fn:uri-collection; RegisterTree contract documented    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -370,6 +373,40 @@ public sealed class EvaluationContext
     public Func<string, string?>? ResourceUriMapper { get; set; }
 
     /// <summary>
+    /// Optional host hook that resolves a collection URI to the member document URIs of the
+    /// collection (for example <c>basex://host/db/coll</c> → the document URIs listed by the
+    /// database's REST API). Consulted by fn:collection and fn:uri-collection when the
+    /// collection is neither a precomputed environment collection
+    /// (<see cref="CollectionValues"/>) nor a registered collection (<see cref="Collections"/>).
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The delegate receives the collection URI exactly as requested, absolutized against
+    /// <see cref="BaseUri"/> when relative; for <c>fn:collection()</c> with no argument it
+    /// receives the empty string (the default collection). Query and fragment components
+    /// (for example <c>?select=*.xml</c>) are passed through unstripped — interpreting them
+    /// is the hook's responsibility.
+    /// </para>
+    /// <para>
+    /// Return the member document URIs (or absolute file paths) in the collection's
+    /// document order; each member is then loaded through <see cref="LoadDocument"/>, so
+    /// document identity caching, the per-load-policy cache, and whitespace/strip-space
+    /// post-processing behave exactly as for documents loaded by fn:doc. Cross-tree document
+    /// order follows load order (the creation-sequence model): the order in which the member
+    /// URIs are returned is the order in which the documents enter the creation sequence, so
+    /// the hook controls the collection's document-order story. Return <c>null</c> to decline
+    /// the URI (falling through to the built-in directory collections and then FODC0002);
+    /// return an empty list for a collection that exists but contains no documents.
+    /// </para>
+    /// <para>
+    /// Member load failures surface with the same FODC0002/FODC0005 mapping as fn:doc.
+    /// The hook is additive: when unset, collection resolution is bit-identical to a host
+    /// that never sets it.
+    /// </para>
+    /// </remarks>
+    public Func<string, IReadOnlyList<string>?>? CollectionLoader { get; set; }
+
+    /// <summary>
     /// Collection URI resolver. Keys are absolute collection URIs (the empty string key
     /// designates the default collection); values are the absolute URIs or file paths of the
     /// documents in the collection. Used by fn:collection and fn:uri-collection.
@@ -491,6 +528,15 @@ public sealed class EvaluationContext
     /// <returns>The (cached) document node for the URI.</returns>
     /// <exception cref="InvalidOperationException">No document loader is configured, or the
     /// document cannot be loaded (reported with error code FODC0002 or FODC0005).</exception>
+    /// <remarks>
+    /// Documents backed by <c>XDocumentNode</c> are eagerly registered in the global
+    /// creation sequence in load order, so cross-tree document order follows load order.
+    /// Foreign node providers (any other <see cref="IXdmNode"/> implementation) keep their
+    /// own document-order story: they are cached and returned unchanged, and cross-tree
+    /// ordering then follows the provider's <see cref="IXdmNode.DocumentOrder"/> semantics
+    /// rather than the load sequence — providers that need creation-sequence ordering must
+    /// implement it themselves.
+    /// </remarks>
     public IXdmNode LoadDocument(string uri)
     {
         if (DocumentLoader is null)

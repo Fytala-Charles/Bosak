@@ -5,7 +5,7 @@
   <p>How XML database adapters plug into the Bosak provider seam, and what to build first</p>
 </div>
 
-> **Status:** Scoped (2026-10-03) · **REQ:** [`REQ-120`](./FEATURE_REQUESTS.md) · **Deciders:** Charles Korthout (Fytala) · **Basis:** seam audit of `main` @ `3cc4a7f` (published v0.12.2-beta surface)
+> **Status:** Scoped (2026-10-03) — Slices 1–3 landed (Slice 3: collection seam + foreign-provider friction, 2026-10-03) · **REQ:** [`REQ-120`](./FEATURE_REQUESTS.md) · **Deciders:** Charles Korthout (Fytala) · **Basis:** seam audit of `main` @ `3cc4a7f` (published v0.12.2-beta surface)
 
 ---
 

@@ -497,6 +497,9 @@
 //                      | Charles Korthout | 7.01  | 03-10-2026     | REQ-119 sweep gate: XTDE3362 gated on InStreamedPipeline — a harness-streamed source    |
 //                      |                  |       |                | under a grounded mode is not a streamed document (accumulator-033s/034/036/042/043)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.02  | 03-10-2026     | REQ-120 Slice 3: IsNodeAttached provider-agnostic for foreign IXdmNode providers;        |
+//                      |                  |       |                | foreign-provider whitespace-strip limitation documented on ApplyWhitespaceStripping      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -18443,6 +18446,15 @@ internal sealed class TransformEngine
     private void ApplyWhitespaceStripping(IXdmNode source)
         => ApplyWhitespaceStripping(source, GetPrincipalSpaceRules());
 
+    /// <summary>
+    /// Applies xsl:strip-space / xsl:preserve-space rules to a loaded document in place.
+    /// Only <see cref="XDocumentNode"/>-backed trees are stripped: stripping mutates the
+    /// tree, and the <see cref="IXdmNode"/> contract exposes no mutation API. Documents
+    /// from foreign providers pass through unchanged — hosts using foreign providers must
+    /// apply whitespace rules at load time (for example in their document loader or
+    /// <see cref="EvaluationContext.DocumentPostProcessor"/>), the same contract as the
+    /// per-record stripping of streamed documents.
+    /// </summary>
     private void ApplyWhitespaceStripping(IXdmNode source, List<SpaceHandlingRule> rules)
     {
         // XTRE0270 conflict recovery (later declaration wins) applies in XSLT 1.0
@@ -18700,17 +18712,27 @@ internal sealed class TransformEngine
     /// <summary>
     /// Determines whether <paramref name="node"/> is still attached to its containing tree.
     /// A whitespace text node removed by xsl:strip-space will report as detached.
+    /// Foreign providers (any non-<see cref="XDocumentNode"/> implementation) are handled
+    /// provider-agnostically: a document node, a node with a parent, or a parentless node
+    /// that still reports its containing document (a document's root element) counts as
+    /// attached; only a node reporting neither parent nor document is detached.
     /// </summary>
     private static bool IsNodeAttached(IXdmNode node)
     {
-        if (node is not XDocumentNode xn)
+        if (node is XDocumentNode xn)
+        {
+            if (xn.UnderlyingObject is XDocument)
+                return true;
+            if (xn.UnderlyingObject is XObject xo)
+                return xo.Parent != null || xo.Document != null;
             return true;
+        }
 
-        if (xn.UnderlyingObject is XDocument)
+        if (node.NodeKind == XdmNodeKind.Document)
             return true;
-        if (xn.UnderlyingObject is XObject xo)
-            return xo.Parent != null || xo.Document != null;
-        return true;
+        if (node.Parent is not null)
+            return true;
+        return node.Document is { NodeKind: XdmNodeKind.Document } document && !ReferenceEquals(document, node);
     }
 
     /// <summary>

@@ -20,6 +20,8 @@
 
 ## 0. Recent Changes
 
+- **2026-10-03 (f)** — **REQ-120 Slice 3: collection seam + foreign-provider friction — additive `EvaluationContext.CollectionLoader` + `Bosak.XPath.Providers.Database` collection listings.** **Engine (SemVer minor, frozen-surface-safe):** new public `EvaluationContext.CollectionLoader` hook (`Func<string, IReadOnlyList<string>?>`, full `///` contract on the member) consulted by `fn:collection`/`fn:uri-collection` after the registered/environment collections and before the directory fallback; it receives the collection URI before any `?select=`/fragment stripping (relative URIs absolutized against the static base URI; the default collection as the empty string), returns member document URIs that funnel through the existing `LoadDocument` path — preserving document identity caching, per-load-policy cache keys, FODC0002/FODC0005 mapping — with hook order as the creation-sequence document-order story; `null` declines (fall-through to FODC0002), an empty list is an empty collection; unset-hook behavior is bit-identical. Foreign-provider friction fixes: `FunctionLibrary.LoadDocumentFragment` is now provider-agnostic (reuses the pre-existing `IXdmNode`-axis ID lookup; fragments are grounded via the established `DeepCopyForeignNode`, never aliasing source data); `TransformEngine.IsNodeAttached` handles foreign providers (document/parent/document-claim) instead of blanket-attached; the `LoadDocument` `RegisterTree` skip and the XDocument-only `xsl:strip-space` path are documented on the members (both are mutability-bound — `IXdmNode` has no mutation API); `fn:copy-of` already had a provider-agnostic fallback (5.109) — verified unchanged. **Providers:** `DatabaseDocumentLoader.LoadCollection(uri, options)` + `DispatchCollection(fallback, options)` (consistent with the `Dispatch` idiom) list collections per scheme behind the registry — BaseX `GET /rest/{db/coll}` XML listing (nested directories in-response or via follow-up), eXist `GET /exist/rest/db/coll` (one follow-up per `subcollection`), MarkLogic `GET /v1/search?directory={dir}&view=uris&depth=Infinity` (`search:uri` entries; order not stable — documented) — and return members as `scheme://host[:port]/…` URIs (effective default port applied) so they resolve through the unchanged document-load path. URI-embedded credentials stay rejected; options-level Basic auth reuses the registry. 12 engine tests (incl. the tree's first in-memory foreign `IXdmNode` double) + 13 provider loopback-stub tests. Gates: Release build 0 errors (1 pre-existing `Bosak.Xslt.Conformance` CS8602, untouched file); `dotnet test Bosak.sln -c Release` all green; QT3 **31,142/0/679** preserved; basic sweep **10,250/26/4,325** and schema-aware sweep **11,054/1/3,546** bit-identical to the REQ-117 baselines (engine files touched — both sweeps mandatory). Usage: §2.2 "Database collections".
+
 - **2026-10-03 (e)** — **NuGet enablement: `Bosak.XPath.Providers.Database` ships.** `<IsPackable>` flipped `false → true` — the owner registered the ID on nuget.org for Trusted Publishing, so the package now publishes automatically with the next core tag via the existing `release.yml` (whole-solution pack, skip-duplicate makes re-runs safe). Pack pre-flight verified a fully-populated nuspec (version from the `Directory.Build.props` pin, deps `Bosak.XPath.Core` + `Bosak.XPath.Providers`, license/readme/icon/tags). No code change; first live publish happens at the next tag (real verification of the Trusted Publishing registration). Usage: §2.2 "Database document loaders".
 
 - **2026-10-03 (d)** — **REQ-120 Slice 2: `Bosak.XPath.Providers.Database` promoted from spike to general-purpose package — basex/exist/marklogic REST scheme registry.** The loader now dispatches three schemes via an internal registry (per-DB wire quirks — path prefix, MarkLogic's query-parameter document URI — stay behind the scheme entries, not in shared code): `basex://host[:port]/db/resource` → `http://host:port/rest/db/resource` (8984), `exist://host[:port]/db/resource` → `http://host:port/exist/rest/db/resource` (8080), `marklogic://host[:port]/db/resource` → `http://host:port/v1/documents?uri=%2Fdb%2Fresource` (8000, `Accept: application/xml` — MarkLogic takes the document URI as the `uri` query parameter, not the path; shape confirmed against the MarkLogic REST reference). Public API stays source-compatible: `Dispatch`/`DispatchStreaming`/`Load`/`LoadStreaming` unchanged, `Handles(uri)` now recognizes all three schemes, `DatabaseLoaderOptions` gains `Exist`/`MarkLogic` alongside `BaseX` on a new shared `DatabaseConnectionOptions` base (`EndpointBase`, `Username`, `Password` — EndpointBase overrides the whole `/rest` resp. `/exist/rest` base for basex/exist, the origin only for marklogic). **Streaming teardown (Slice 1 deferred item):** the response content stream is now wrapped in a `ResponseBoundStream` that disposes the `HttpResponseMessage` with the stream, so end-of-stream / failure release the response and connection deterministically (abandoned partially-read streams still rely on finalization — documented). Packaging: full nuspec-level metadata added, but `<IsPackable>false</IsPackable>` kept — `release.yml` packs the whole solution (`dotnet pack Bosak.sln`) and pushes every nupkg except `*LanguageServer*`, so the flip to `true` must wait for the owner reserving `Bosak.XPath.Providers.Database` on nuget.org. 21 new tests (18 scheme-registry + 3 teardown; stub renamed `DatabaseRestStub`, now records query string + Accept header). Zero engine files modified. Gates: Release build 0 errors (1 pre-existing `Bosak.Xslt.Conformance` warning, untouched file); unit all green incl. the 35 database-loader tests; QT3 **31,142/0/679** preserved. Usage: §2.2 "Database document loaders".
@@ -1874,6 +1876,58 @@ With both hooks installed, `fn:doc`/`fn:document`/`xsl:source-document` (both mo
   `Bosak.XPath.Providers.Database` on nuget.org for Trusted Publishing (2026-10-03), so the
   package ships automatically with the next core tag. `release.yml` packs the whole solution
   and pushes every nupkg except `*LanguageServer*` with skip-duplicate, so re-runs are safe.
+
+#### Database collections (REQ-120 Slice 3 — `fn:collection` over REST)
+
+Slice 3 adds an additive public hook on the frozen `EvaluationContext` and the
+corresponding listing support in the providers package, so
+`fn:collection("basex://host/db/coll")` resolves server-side:
+
+```csharp
+ctx.DocumentLoader = DatabaseDocumentLoader.Dispatch(XDocumentProvider.LoadFile, options);
+ctx.CollectionLoader = DatabaseDocumentLoader.DispatchCollection(_ => null, options);
+// fn:collection("basex://host/db/coll")     → member documents of the collection
+// fn:uri-collection("basex://host/db/coll") → their URIs, in listing order
+```
+
+- **Hook contract** — `EvaluationContext.CollectionLoader`
+  (`Func<string, IReadOnlyList<string>?>`, additive, SemVer minor) receives the collection
+  URI and returns the member document URIs (or absolute file paths), or `null` to decline
+  (the engine then falls through to its built-in directory collections and finally raises
+  FODC0002). It is consulted after registered/environment collections, sees the URI before
+  any `?select=`/fragment stripping, and receives the empty string for `fn:collection()`
+  with no argument. A host may set the delegate directly instead of using
+  `DispatchCollection`.
+- **Document order** — members are loaded in the order returned by the hook/listing, and
+  cross-tree document order follows that load order (the engine's creation-sequence model),
+  so the listing order IS the collection's document-order story. BaseX and eXist listings
+  are returned in the database's listing order; **MarkLogic's `view=uris` search results
+  have no stable order** — do not rely on MarkLogic collection order for document-order
+  semantics.
+- **Listing shapes** (per-DB wire quirks stay behind the scheme registry):
+  BaseX `GET /rest/{db/coll}` returns an XML listing of `rest:resource` members (nested
+  `rest:directory` content is read in-response; empty directories via a follow-up request);
+  eXist `GET /exist/rest/db/coll` returns `resource` members with one follow-up request per
+  `subcollection`; MarkLogic
+  `GET /v1/search?directory={dir}&view=uris&depth=Infinity` (`Accept: application/xml`)
+  returns one `search:uri` entry per matching document.
+- **Member URIs** — `DatabaseDocumentLoader.LoadCollection(uri, options)` (and the
+  `DispatchCollection` fallback form) return the members as `scheme://host[:port]/…` document
+  URIs on the collection's own authority (the scheme's default port is applied when the URI
+  carries none). Members are ordinary database document URIs: identity caching, the
+  FODC0002/FODC0005 error contract, and `xsl:strip-space` post-processing behave exactly as
+  for `fn:doc`.
+- **Error contract** — unreachable endpoints, HTTP error statuses, and timeouts surface as
+  `IOException`; a malformed listing payload as `XmlException`; unregistered schemes and
+  URI-embedded userinfo keep the Slice 1/2 `ArgumentException`/`UriFormatException` classes.
+  A declined collection URI surfaces as FODC0002 from the engine.
+- **Foreign node providers** — collection member fragments (`doc.xml#id`) now resolve for
+  any `IXdmNode` provider (located via the provider-agnostic axes, grounded in a fresh
+  LINQ-to-XML copy). Non-`XDocumentNode` documents keep their provider's own
+  `DocumentOrder` semantics (the engine's creation-sequence registration applies to
+  `XDocumentNode` only — documented on `LoadDocument`), and `xsl:strip-space` applies only
+  to `XDocumentNode`-backed trees (mutation-bound; foreign providers should strip at load
+  time in their loader or `DocumentPostProcessor`).
 
 ### 2.3 Reading Results
 

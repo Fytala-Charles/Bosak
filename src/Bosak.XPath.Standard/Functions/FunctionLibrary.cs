@@ -381,6 +381,10 @@
 //                      | Charles Korthout | 5.125 | 03-10-2026     | REQ-119: fn:json-to-xml validate:=true() raises FOJS0004 when the processor is not        |
 //                      |                  |       |                | schema-aware (no compiled schema set; error-3245a)                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.126 | 03-10-2026     | REQ-120 Slice 3: CollectionLoader host hook consulted by ResolveCollection after         |
+//                      |                  |       |                | registered collections; LoadDocumentFragment provider-agnostic (IXdmNode axis ID lookup  |
+//                      |                  |       |                | + grounded fragment copy); member loading shared via LoadCollectionMembers               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -8275,6 +8279,26 @@ public static class FunctionLibrary
                 return registered;
         }
 
+        // Host collection hook (REQ-120 Slice 3): consulted after the registered
+        // collections (environment and declared ones take precedence) and before the
+        // built-in directory fallback. The hook sees the URI before any ?select=/fragment
+        // stripping, so query semantics stay the hook's business; a relative URI is
+        // presented in its absolutized form.
+        if (ctx.CollectionLoader is { } collectionLoader)
+        {
+            string hookKey = key;
+            if (hookKey.Length > 0
+                && !Uri.IsWellFormedUriString(hookKey, UriKind.Absolute)
+                && !System.IO.Path.IsPathRooted(hookKey))
+            {
+                hookKey = ResolveUriAgainstBase(hookKey, ctx.BaseUri);
+            }
+
+            var members = collectionLoader(hookKey);
+            if (members is not null)
+                return LoadCollectionMembers(ctx, members, returnUris);
+        }
+
         if (!string.IsNullOrEmpty(uri))
         {
             // Absolute filesystem paths are valid collection arguments even though they are
@@ -8341,28 +8365,45 @@ public static class FunctionLibrary
             // fn:collection / fn:uri-collection then return the empty sequence
             // (collection-003's empty default collection). FODC0002/FODC0003 apply only
             // to collections that are not declared at all.
-            var items = new List<XdmValue>(docs.Count);
-            foreach (var doc in docs)
-            {
-                var (docPath, fragment) = SplitCollectionPathAndFragment(doc);
-                var node = ctx.LoadDocument(docPath);
-                string itemUri = node.DocumentUri;
-                if (fragment != null)
-                {
-                    node = LoadDocumentFragment(node, fragment, itemUri);
-                    itemUri += "#" + fragment;
-                }
-                if (returnUris)
-                    items.Add(XdmValue.FromString(itemUri, "anyURI"));
-                else
-                    items.Add(XdmValue.FromNode(node));
-            }
-            result = XdmValue.FromSequence(MaterializedSequence.FromList(items));
+            result = LoadCollectionMembers(ctx, docs, returnUris);
             return true;
         }
 
         result = XdmValue.Undefined;
         return false;
+    }
+
+    /// <summary>
+    /// Loads a collection's member documents in the order supplied, shared by declared
+    /// collections (<see cref="EvaluationContext.Collections"/>) and the host
+    /// <see cref="EvaluationContext.CollectionLoader"/> hook. Each member URI passes
+    /// through <see cref="EvaluationContext.LoadDocument"/>, so document identity caching,
+    /// the per-load-policy cache, and fragment resolution behave exactly as for fn:doc;
+    /// cross-tree document order follows the load (creation-sequence) order of the list.
+    /// </summary>
+    /// <param name="ctx">The active evaluation context.</param>
+    /// <param name="docs">The member document URIs (or absolute file paths), in collection order.</param>
+    /// <param name="returnUris">Whether to return the member URIs (fn:uri-collection) or the loaded nodes (fn:collection).</param>
+    /// <returns>The collection as an XDM sequence.</returns>
+    private static XdmValue LoadCollectionMembers(EvaluationContext ctx, IReadOnlyList<string> docs, bool returnUris)
+    {
+        var items = new List<XdmValue>(docs.Count);
+        foreach (var doc in docs)
+        {
+            var (docPath, fragment) = SplitCollectionPathAndFragment(doc);
+            var node = ctx.LoadDocument(docPath);
+            string itemUri = node.DocumentUri;
+            if (fragment != null)
+            {
+                node = LoadDocumentFragment(node, fragment, itemUri);
+                itemUri += "#" + fragment;
+            }
+            if (returnUris)
+                items.Add(XdmValue.FromString(itemUri, "anyURI"));
+            else
+                items.Add(XdmValue.FromNode(node));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
 
     /// <summary>
@@ -8404,20 +8445,35 @@ public static class FunctionLibrary
     /// <summary>
     /// Loads a sub-document node identified by an ID/fragment reference inside an already
     /// loaded document (e.g. <c>doc15.xml#frag2</c> from the W3C collection tests).
+    /// Works for any node provider: LINQ-to-XML documents take the fast path; foreign
+    /// providers are located through the provider-agnostic axes and grounded in a fresh
+    /// LINQ-to-XML fragment (never aliasing the source tree, mirroring the fn:copy-of
+    /// contract).
     /// </summary>
     private static IXdmNode LoadDocumentFragment(IXdmNode documentNode, string fragment, string documentUri)
     {
-        if (documentNode is not XDocumentNode xdn || xdn.UnderlyingObject is not System.Xml.Linq.XDocument doc)
-            throw new InvalidOperationException($"FODC0002: Cannot resolve fragment in collection item: {documentUri}#{fragment}");
+        if (documentNode is XDocumentNode xdn && xdn.UnderlyingObject is System.Xml.Linq.XDocument doc)
+        {
+            var element = FindElementById(doc, fragment);
+            if (element == null)
+                throw new InvalidOperationException($"FODC0002: Fragment not found in collection item: {documentUri}#{fragment}");
 
-        var element = FindElementById(doc, fragment);
-        if (element == null)
+            var fragmentDoc = new System.Xml.Linq.XDocument(new System.Xml.Linq.XElement(element));
+            var node = XDocumentNode.Wrap(fragmentDoc);
+            node.SetDocumentUri(documentUri + "#" + fragment);
+            return node;
+        }
+
+        var foreignElement = FindElementById(documentNode, fragment);
+        if (foreignElement is null)
             throw new InvalidOperationException($"FODC0002: Fragment not found in collection item: {documentUri}#{fragment}");
 
-        var fragmentDoc = new System.Xml.Linq.XDocument(new System.Xml.Linq.XElement(element));
-        var node = XDocumentNode.Wrap(fragmentDoc);
-        node.SetDocumentUri(documentUri + "#" + fragment);
-        return node;
+        var fragmentCopy = new System.Xml.Linq.XDocument();
+        if (DeepCopyForeignNode(foreignElement) is { } copied && copied.UnderlyingObject is System.Xml.Linq.XElement copiedElement)
+            fragmentCopy.Add(copiedElement);
+        var foreignNode = XDocumentNode.Wrap(fragmentCopy);
+        foreignNode.SetDocumentUri(documentUri + "#" + fragment);
+        return foreignNode;
     }
 
     /// <summary>

@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.1   | 03-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 03-10-2026     | Slice 2: basex/exist/marklogic scheme registry, streaming response teardown              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 03-10-2026     | Slice 3: collection listing (LoadCollection / DispatchCollection) — per-scheme listing   |
+//                      |                  |       |                | shapes behind the scheme registry; members returned as scheme:// URIs in listing order   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Net;
 using System.Net.Http.Headers;
@@ -234,7 +237,101 @@ public static class DatabaseDocumentLoader
         }
     }
 
-    private sealed record Connection(DatabaseScheme Scheme, Uri RestUri, AuthenticationHeaderValue? AuthHeader);
+    internal sealed record Connection(
+        DatabaseScheme Scheme,
+        Uri RestUri,
+        DatabaseConnectionOptions ConnectionOptions,
+        AuthenticationHeaderValue? AuthHeader);
+
+    /// <summary>
+    /// Lists the member documents of a database collection over the database's REST API
+    /// and returns them as database-scheme URIs (e.g. <c>basex://host/db/coll/a.xml</c>)
+    /// in the listing order reported by the database. The returned URIs are ordinary
+    /// database document URIs: they resolve through <see cref="Load(string, DatabaseLoaderOptions?)"/>
+    /// / <see cref="Dispatch"/>, so document identity caching and the FODC0002/FODC0005
+    /// error contract are unchanged.
+    /// </summary>
+    /// <param name="uri">The database collection URI (<c>basex://</c>, <c>exist://</c>, or <c>marklogic://</c>).</param>
+    /// <param name="options">Optional per-scheme connection options (endpoint base, credentials).</param>
+    /// <returns>The member document URIs in listing order.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="uri"/> is null or empty.</exception>
+    /// <exception cref="ArgumentException"><paramref name="uri"/> does not use a registered database scheme.</exception>
+    /// <exception cref="UriFormatException">The URI carries embedded credentials (userinfo), which are not supported.</exception>
+    /// <exception cref="IOException">The endpoint is unreachable, times out, or returns a non-success HTTP status.</exception>
+    /// <exception cref="XmlException">A listing response body is not well-formed XML.</exception>
+    /// <remarks>
+    /// <para>
+    /// Per-scheme listing shapes (kept behind the scheme registry, not in shared code):
+    /// </para>
+    /// <list type="bullet">
+    /// <item>BaseX: <c>GET /rest/{db/coll}</c> returns an XML listing of <c>rest:resource</c>
+    /// members; nested <c>rest:directory</c> listings are read from the same response when
+    /// nested, or via a follow-up request when empty.</item>
+    /// <item>eXist: <c>GET /exist/rest/db/coll</c> returns an XML listing of <c>resource</c>
+    /// members; each <c>subcollection</c> requires a follow-up request.</item>
+    /// <item>MarkLogic: <c>GET /v1/search?directory={dir}&amp;view=uris&amp;depth=Infinity</c>
+    /// returns only <c>&lt;search:uri&gt;</c> entries — one per matching document. The
+    /// search API does not guarantee a stable member order, so MarkLogic collection order
+    /// should not be relied on for document-order semantics.</item>
+    /// </list>
+    /// <para>
+    /// Ordering contract: members are returned in the database's listing order. When the
+    /// list feeds the engine's <c>EvaluationContext.CollectionLoader</c> hook, the engine
+    /// loads members in that order and cross-tree document order follows the load order
+    /// (creation-sequence model), so BaseX and eXist collection order is a meaningful
+    /// document-order story.
+    /// </para>
+    /// </remarks>
+    public static IReadOnlyList<string> LoadCollection(string uri, DatabaseLoaderOptions? options = null)
+    {
+        var connection = ResolveConnection(uri, options);
+        var parsed = new Uri(uri, UriKind.Absolute);
+        var members = connection.Scheme.ListCollection(new CollectionLister(connection), parsed);
+        var result = new List<string>(members.Count);
+        foreach (var member in members)
+            result.Add(RebuildSchemeUri(connection.Scheme, parsed, member));
+        return result;
+    }
+
+    /// <summary>
+    /// Creates a <c>CollectionLoader</c>-shaped delegate for the engine's
+    /// <c>EvaluationContext.CollectionLoader</c> hook (REQ-120 Slice 3): registered
+    /// database-scheme collection URIs are listed over their REST APIs and returned as
+    /// member document URIs; every other URI is delegated to <paramref name="fallback"/>
+    /// (return <c>null</c> there to decline, which the engine maps to FODC0002).
+    /// </summary>
+    /// <param name="fallback">The collection resolver for non-database URIs; return <c>null</c> to decline a URI.</param>
+    /// <param name="options">Optional per-scheme connection options (endpoint base, credentials).</param>
+    /// <returns>The scheme-dispatching collection-listing delegate.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="fallback"/> is null.</exception>
+    /// <example>
+    /// <code>
+    /// var options = new DatabaseLoaderOptions();
+    /// options.BaseX.Username = "admin";
+    /// options.BaseX.Password = "admin";
+    /// ctx.DocumentLoader = DatabaseDocumentLoader.Dispatch(XDocumentProvider.LoadFile, options);
+    /// ctx.CollectionLoader = DatabaseDocumentLoader.DispatchCollection(_ => null, options);
+    /// // fn:collection("basex://localhost/mydb/mycoll") now lists the collection server-side
+    /// // and returns its member documents in listing order.
+    /// </code>
+    /// </example>
+    public static Func<string, IReadOnlyList<string>?> DispatchCollection(Func<string, IReadOnlyList<string>?> fallback, DatabaseLoaderOptions? options = null)
+    {
+        ArgumentNullException.ThrowIfNull(fallback);
+        return uri => Handles(uri) ? LoadCollection(uri, options) : fallback(uri);
+    }
+
+    // Turns a database-absolute resource path from a listing (e.g. "/db/coll/a.xml") back
+    // into a scheme URI on the collection's own authority, so members funnel through the
+    // document-load path (identity cache, error mapping) with the effective default port.
+    // Entries that are already absolute URIs pass through unchanged.
+    private static string RebuildSchemeUri(DatabaseScheme scheme, Uri parsed, string member)
+    {
+        if (Uri.IsWellFormedUriString(member, UriKind.Absolute))
+            return member;
+        var port = parsed.Port > 0 ? parsed.Port : scheme.DefaultPort;
+        return new UriBuilder(scheme.Scheme, parsed.Host, port, member).Uri.AbsoluteUri;
+    }
 
     private static Connection ResolveConnection(string uri, DatabaseLoaderOptions? options)
     {
@@ -265,7 +362,7 @@ public static class DatabaseDocumentLoader
             auth = new AuthenticationHeaderValue("Basic", token);
         }
 
-        return new Connection(scheme, restUri, auth);
+        return new Connection(scheme, restUri, connection, auth);
     }
 
     private static HttpRequestMessage CreateRequest(Connection connection)
@@ -280,7 +377,7 @@ public static class DatabaseDocumentLoader
     // Sync-over-async with ConfigureAwait(false) — the established engine idiom (fn:unparsed-text).
     // HttpRequestException (DNS/connect/reset) and TaskCanceledException (timeout/cancellation)
     // are normalized to IOException so EvaluationContext.LoadDocument maps them to FODC0002.
-    private static HttpResponseMessage Send(HttpRequestMessage request, HttpCompletionOption completion, Connection connection)
+    internal static HttpResponseMessage Send(HttpRequestMessage request, HttpCompletionOption completion, Connection connection)
     {
         HttpResponseMessage response;
         try
