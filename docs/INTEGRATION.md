@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 2 October 2026
+> **Last updated:** 3 October 2026
 > **Bosak baseline:** 2,729 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
@@ -19,6 +19,8 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-10-03 (c)** — **REQ-120 Slice 1: database REST adapter spike — `Bosak.XPath.Providers.Database` + scheme-dispatching `DatabaseDocumentLoader`.** New spike package (10th source project, **not packed** — `IsPackable=false`; verified sufficient against `release.yml`, which packs the whole solution and pushes every nupkg except `*LanguageServer*`) and new test project `Bosak.XPath.Providers.Database.Tests` (14 tests on a loopback `HttpListener` BaseX REST stub — the tree's first in-memory `IXdmNode` consumer suite). API: `DatabaseDocumentLoader.Dispatch(fallback, options)` / `DispatchStreaming(fallback, options)` return `Func<string, IXdmNode>` ready for `EvaluationContext.DocumentLoader` / `StreamingDocumentLoader`; `basex://host[:port]/db/resource` → `http://host:port/rest/db/resource` (default port 8984; `DatabaseLoaderOptions.BaseX.EndpointBase` overrides the base, `Username`/`Password` add HTTP Basic auth — URI-embedded credentials are rejected). In-memory loads wrap via the public `XDocumentProvider.ParseXml` path with the basex URI as document URI; streaming loads read `ResponseHeadersRead` straight into `XmlStreamingProvider.Load` (bounded-memory record-at-a-time). Error contract: network/HTTP/timeout → `IOException`, malformed payload → `XmlException` — mapped to FODC0002 by `EvaluationContext.LoadDocument`; unsupported URI shapes → `ArgumentException`/`UriFormatException` (FODC0005 class). Zero engine files modified. Usage snippet: §2.2 "Database document loaders (spike)". Gates: Release build 0 errors (1 pre-existing `Bosak.Xslt.Conformance` warning in an untouched file); `dotnet test Bosak.sln -c Release` all green incl. the 14 new tests; QT3 **31,142/0/679** preserved. Full XSLT sweeps not required: zero engine files modified and the new package is referenced by no engine project. **Go for Slice 2** (scheme registry, packaging, full docs) per the REQ-120 decision log.
 
 - **2026-10-03 (b)** — **`error`-test-set engine gaps closed (REQ-119)** — the six genuine gaps from the REQ-117 label wave now raise the spec-mandated codes; targeted `error`-set run **507/7/65 → 513/0/66**, zero pass→fail. **(1) XTSE0730** — a `streamable="yes"` `xsl:attribute-set` may only reference attribute sets that also specify `streamable="yes"` (load-time check beside the XTSE0720 circularity check). **(2) XTSE3120** — `xsl:break`/`xsl:next-iteration` tail-position validation moved from one runtime iterate interpreter to load-time static validation covering all three runtime paths; tail position is verified along the whole ancestor chain to the iterate body (literal result elements count as following instructions; `xsl:choose` branches are alternatives; `xsl:fallback` is exempt everywhere per §8.4). **(3) XTSE3155** — an `xsl:function` with no `xsl:param` children may only declare `streamability="unclassified"`. **(4) FOJS0004** — `fn:json-to-xml` with `validate:=true()` now raises FOJS0004 on a non-schema-aware processor (F+O 3.1 §17.5.2); schema-awareness is a new `EvaluationContext.IsSchemaAware` flag set by `TransformEngine` from the compilation's `SchemaAware` state, so schema-aware hosts keep validating. **(5) XTDE3362** — `accumulator-before`/`accumulator-after` against a node in a document being processed in a streamed pipeline (streamable `xsl:source-document`) now raise XTDE3362 unless the accumulator is declared `streamable="yes"` (`AccumulatorDefinition.Streamable`); a harness-streamed source under a grounded mode is not affected — the read stays legal (accumulator-034 pattern). **Behavior changes for consumers:** stylesheets with misplaced `xsl:break`/`xsl:next-iteration` now fail at compile time (was: at transform time on some paths, or not at all); zero-parameter `xsl:function` declarations with any `streamability` other than `unclassified` now fail at compile time; `json-to-xml(…, map{'validate':true()})` requires a schema-aware compilation (`XsltCompiler.SchemaAware = true`) — in basic mode it raises FOJS0004 instead of silently validating; streaming accumulator fixtures must declare `streamable="yes"` (the catalog pattern all along). error-1160a is a documented environment-limited skip (remote HTTP fetch blocked, same class as QT3 `fn-unparsed-text-054a`). Gates: build 0/0; unit **2,758/2,758** across 9 solution assemblies (Xslt.Tests 742) + LanguageServer.Tests **72/72**; QT3 **31,142/0/679** preserved (the QT3 harness admits `schemaImport`/`schemaValidation` and now runs with `IsSchemaAware = true`, `TestExecutor` 0.26, so its `json-to-xml` validate tests keep validating against the built-in schema-for-JSON); basic sweep **10,250/26/4,325** and schema-aware sweep **11,054/1/3,546** bit-identical to the REQ-117 baselines. (Stylesheet 2.125, TransformEngine 7.01, StreamabilityAnalyzer 0.10, AccumulatorDefinition 0.9, EvaluationContext 2.32, FunctionLibrary 5.125, conformance Program.cs 3.71.)
 
@@ -1815,6 +1817,34 @@ ctx.WithNamespace("edi", "http://example.org/edi")
 
 var result = expr.Evaluate(ctx);
 ```
+
+#### Database document loaders (spike — REQ-120 Slice 1)
+
+The `Bosak.XPath.Providers.Database` project (in the repo, **not yet a shipped NuGet package** —
+`IsPackable=false` until Slice 2) contains a scheme-dispatching loader that resolves
+`basex://host[:port]/db/resource` URIs against a BaseX REST endpoint and delegates every other
+URI to a fallback loader:
+
+```csharp
+using Bosak.XPath.Providers.Database;
+using Bosak.XPath.Providers.Xml;
+
+var options = new DatabaseLoaderOptions();
+options.BaseX.Username = "admin";          // HTTP Basic auth; URI-embedded credentials are NOT supported
+options.BaseX.Password = "admin";
+// options.BaseX.EndpointBase = "https://example.org/basex/rest";  // optional, overrides http://host:port/rest
+
+ctx.DocumentLoader = DatabaseDocumentLoader.Dispatch(XDocumentProvider.LoadFile, options);
+// Forward-only streaming variant (bounded memory, record-at-a-time off the response stream):
+ctx.StreamingDocumentLoader = DatabaseDocumentLoader.DispatchStreaming(XDocumentProvider.LoadFile, options);
+```
+
+With both hooks installed, `fn:doc`/`fn:document`/`xsl:source-document` (both modes)/
+`xsl:merge-source`/`fn:transform` resolve database URIs unchanged. Error contract: unreachable
+endpoints, HTTP error statuses, and timeouts surface as `IOException`; malformed XML as
+`XmlException` — through `EvaluationContext.LoadDocument` both map to FODC0002 (unsupported URI
+shapes map to FODC0005 class). This is a spike surface; the scheme registry (`exist://`,
+`marklogic://`), packaging, and full docs land in Slice 2 per `docs/REQ-120-database-backends.md`.
 
 ### 2.3 Reading Results
 
