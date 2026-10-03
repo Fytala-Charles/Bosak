@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 03-10-2026     | WaitForPortRelease: tolerate a faulted connect task (AggregateException on Linux CI)     |
+//                      | Charles Korthout | 0.3   | 03-10-2026     | Slice 2: stub renamed to DatabaseRestStub (records query string and Accept header)       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Text;
@@ -31,7 +32,7 @@ namespace Bosak.XPath.Providers.Database.Tests;
 /// </summary>
 public sealed class DatabaseDocumentLoaderTests : IDisposable
 {
-    private readonly BaseXRestStub _stub = new();
+    private readonly DatabaseRestStub _stub = new();
 
     /// <inheritdoc />
     public void Dispose() => _stub.Dispose();
@@ -104,7 +105,7 @@ public sealed class DatabaseDocumentLoaderTests : IDisposable
     [Fact]
     public void Load_HttpErrorStatus_ThrowsIOException()
     {
-        _stub.Responder = _ => new BaseXRestStub.Response(404, "not found", "text/plain");
+        _stub.Responder = _ => new DatabaseRestStub.Response(404, "not found", "text/plain");
 
         var ex = Assert.Throws<IOException>(() => DatabaseDocumentLoader.Load(BaseXUri("/db/missing.xml")));
         Assert.Contains("404", ex.Message);
@@ -130,7 +131,7 @@ public sealed class DatabaseDocumentLoaderTests : IDisposable
     [Fact]
     public void Load_MalformedResponseBody_ThrowsXmlException()
     {
-        _stub.Responder = _ => new BaseXRestStub.Response(200, "this is not xml");
+        _stub.Responder = _ => new DatabaseRestStub.Response(200, "this is not xml");
 
         Assert.Throws<XmlException>(() => DatabaseDocumentLoader.Load(BaseXUri("/db/broken.xml")));
     }
