@@ -154,6 +154,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.93  | 21-09-2026     | use-when permitted on xsl:function/xsl:copy-of/xsl:copy (su-absorbing false XTSE0090)   |
 //                      | Charles Korthout | 0.94  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      | Charles Korthout | 0.95  | 03-10-2026     | [Collection("XSLT package registry")] — serializes the global package-registry mutations against SchemaAwareCompilationTests/PackageWhitespaceStrippingTests (XTSE3000 flakes) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -172,6 +173,11 @@ using Xunit;
 
 namespace Bosak.Xslt.Tests;
 
+// Serializes against SchemaAwareCompilationTests and PackageWhitespaceStrippingTests:
+// all three mutate the global XsltFunctionLibrary package registry
+// (ClearPackages/RegisterPackage), which races under xUnit's default cross-class
+// parallelism (XTSE3000 "package not found" flakes on otherwise-green runs).
+[Collection("XSLT package registry")]
 public class StylesheetTests
 {
     [Fact]

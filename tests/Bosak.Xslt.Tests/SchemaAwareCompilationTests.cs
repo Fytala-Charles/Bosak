@@ -19,6 +19,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 30-09-2026     | REQ-114/PB-3 C9: XTSE0020 default-validation version gate, XTSE0770 function-vs-type   |
 //                      |                  |       |                | constructor collision, shadowed host-set schema skip, semantic XTSE3070 union identity  |
+//                      | Charles Korthout | 0.5   | 03-10-2026     | [Collection("XSLT package registry")] — serializes the global package-registry mutations against the other two registry test classes |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -31,6 +32,10 @@ using Xunit;
 
 namespace Bosak.Xslt.Tests;
 
+// Serializes against StylesheetTests and PackageWhitespaceStrippingTests: all three
+// mutate the global XsltFunctionLibrary package registry (ClearPackages/RegisterPackage),
+// which races under xUnit's default cross-class parallelism.
+[Collection("XSLT package registry")]
 public class SchemaAwareCompilationTests
 {
     private const string SizeSchema = @"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='urn:test' xmlns:t='urn:test' elementFormDefault='qualified'>
