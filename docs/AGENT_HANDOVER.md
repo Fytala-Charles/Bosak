@@ -1,6 +1,14 @@
 # Handover — Bosak XPath/XSLT/XQuery Implementation
+**Date:** 2026-10-03 (forty-second session — docs-only: README Sponsorship section)
+**Commit:** main `a72c75f` (PR #55 `docs/readme-sponsorship-section` merged)
+**Current focus:** **GitHub Sponsors profile approved and live; README gains a Sponsorship section.** The Sponsors page (https://github.com/sponsors/Fytala-Charles) is public with four tiers (€3 ☕ Supporter / €10 🚀 Enthusiast / €25 💎 Professional / €100 🏢 Organization). `.github/FUNDING.yml` (`github: [Fytala-Charles]`) only surfaces a small sidebar button and can lag behind cache-wise, so the README now carries a Sponsorship section directly after Support: the sponsors link, the two funding goals (keep Bosak moving + youth-technology mission), the four-tier benefits table (honoring the €100 Organization tier's "logo and link in the Bosak README" promise), and an explicit note that core conformance work stays free and open (Apache-2.0), never paywalled. No code touched — docs-only, no build/test gate required.
+**What was built:**
+- Modified: `README.md` — Sponsorship section (+18 lines).
+
+---
+
 **Date:** 2026-10-03 (forty-first session, continued — repository hygiene: main-CI flake fixed, README refreshed, releases published)
-**Commit:** branch `fix/package-registry-test-serialization` — test-only; PR open.
+**Commit:** PR #53 merged → main `9d76cf5`; README-refresh PR #54 merged → main `3cc3d99`.
 **Current focus:** **Main CI failed twice in a row (PR #51 and PR #52 merges) with `StylesheetTests.UsePackage_PrivateFunction_IsNotVisible` throwing XTSE3000 "package 'urn:test:package-private' not found" while the same commits passed PR CI.** Root cause: `StylesheetTests`, `SchemaAwareCompilationTests`, and `PackageWhitespaceStrippingTests` all mutate the static `XsltFunctionLibrary` package registry (`ClearPackages`/`RegisterPackage`), and xUnit runs different test classes in parallel — an interleaved `ClearPackages` from a sibling class wipes the registration mid-test. Same race family as the two parallelism flakes documented since REQ-115 (`OverrideFunction_UnionSameMembersDifferentOrder_Compiles`, `PackageWhitespaceStrippingTests.Doc_Function_...`). Fix: all three classes join `[Collection("XSLT package registry")]` so they serialize against each other — no product-code change. `Xslt.Tests` 735/735 green (Release). Also this session: `v0.12.2-beta` published to nuget.org (all 9 packages Created via Trusted Publishing); Bosak.Schema tagged `v0.2.0`; README refreshed (Status Alpha→Beta, conformance 99.7%/schema-aware row); GitHub Releases created for v0.12.1-beta + v0.12.2-beta.
 **What was built:**
 - Modified: `tests/Bosak.Xslt.Tests/StylesheetTests.cs` (0.95), `tests/Bosak.Xslt.Tests/SchemaAwareCompilationTests.cs` (0.5), `tests/Bosak.Xslt.Tests/PackageWhitespaceStrippingTests.cs` (0.2) — collection attribute + change-history rows.
