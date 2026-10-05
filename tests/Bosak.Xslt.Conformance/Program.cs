@@ -232,6 +232,10 @@
 //                      |                  |       |                | si-fork-001..009/901/902, si-map-001..009) — basic mode must raise XTSE1650 statically    |
 //                      |                  |       |                | (XSLT 3.0 27.2); basic-mode only, so --schema-aware coverage is unchanged                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.73  | 05-10-2026     | Basic-sweep triage §6 (issue #90 maintainer rule): basic mode skips ANY test whose        |
+//                      |                  |       |                | environment declares a <schema> element (any role) — implicit schema-awareness dependency; |
+//                      |                  |       |                | coexists with named BasicOnlySkipTests (checked first); --schema-aware mode unchanged     |
+//                      |==================|=======|================|=========================================================================================
 
 using System.Xml.Linq;
 using System.Xml;
@@ -492,6 +496,16 @@ class Program
         "si-map-001", "si-map-002", "si-map-003", "si-map-004", "si-map-005",
         "si-map-006", "si-map-007", "si-map-008", "si-map-009",
     };
+
+    // Harness 3.73 (docs/BASIC_SWEEP_TRIAGE.md §6): skip reason for the implicit-
+    // dependency heuristic — any test whose environment declares a <schema> element
+    // (any role) is schema-aware by construction, per the w3c/xslt30-test maintainer
+    // (issue #90), even when the catalog entry omits the schema_aware dependency. This
+    // is a separate reason category from the named BasicOnlySkipTests entries, which
+    // carry per-group explanations; whichever check fires first wins (the named list
+    // is consulted before environments are resolved).
+    const string ImplicitEnvSchemaSkipReason =
+        "Implicit schema-awareness dependency: environment includes a <schema> element (w3c/xslt30-test maintainer confirmation, issue #90; see docs/BASIC_SWEEP_TRIAGE.md section 6)";
 
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -887,6 +901,19 @@ class Program
                 envToLoad = envElem;
             else
                 envToLoad = testCase.Element(ns + "environment");
+
+            // Harness 3.73 (docs/BASIC_SWEEP_TRIAGE.md §6): the w3c/xslt30-test maintainer
+            // confirmed on issue #90 that any test whose environment includes a <schema>
+            // element has an implicit dependency on schema-awareness, whether or not the
+            // catalog entry declares it (and hinted there are further unannotated cases
+            // beyond the named BasicOnlySkipTests). A basic processor cannot run such a
+            // test, so skip it here — before any environment loading. Schema-aware mode
+            // is untouched.
+            if (!_schemaAware && envToLoad?.Elements(ns + "schema").Any() == true)
+            {
+                Console.WriteLine($"  SKIP {name}: {ImplicitEnvSchemaSkipReason}");
+                return TestResult.Skip;
+            }
 
             var streamingSourceRequested = envToLoad?.Element(ns + "source")?.Attribute("streaming")?.Value is "true" or "yes";
             if (streamingSourceRequested && !StreamingAllowedTestSets.Contains(testSetName))

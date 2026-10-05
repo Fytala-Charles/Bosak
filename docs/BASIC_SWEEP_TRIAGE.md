@@ -86,4 +86,21 @@ Michael Kay (w3c/xslt30-test maintainer) replied on [issue #90](https://github.c
 This confirms the triage reading. Two consequences:
 
 1. **Our disposition stands** — skip-with-reason is exactly the harness-side application of the implicit-dependency rule.
-2. **Hardening candidate (pre-1.0):** make the basic-mode gate skip *any* test whose environment includes a `<schema>` element (any role), not just the named 26 — per the maintainer's "other tests" remark. This can only move passes to skips (zero pass→fail risk); the full-sweep record (10,250/0/4,351) would be refreshed by the confirmation sweep planned before tagging 1.0. Offered to prepare a catalog PR making the 26 dependencies explicit.
+2. **Hardening (IMPLEMENTED, harness 3.73, 2026-10-05):** the basic-mode gate now skips *any* test whose environment includes a `<schema>` element (any role: `stylesheet-import`, `source`, `source-reference`, `secondary`, …), not just the named 26 — per the maintainer's "other tests" remark. The rule is implemented in `RunTestCase` right after environment resolution (`tests/Bosak.Xslt.Conformance/Program.cs`): in basic mode only, a resolved environment (`<environment ref="…">` or inline) containing any catalog-namespace `<schema>` child short-circuits to `TestResult.Skip` with the new reason category `ImplicitEnvSchemaSkipReason` ("Implicit schema-awareness dependency: environment includes a `<schema>` element (w3c/xslt30-test maintainer confirmation, issue #90; see docs/BASIC_SWEEP_TRIAGE.md section 6)"). The named `BasicOnlySkipTests` list is kept as-is and consulted first (its entries keep their per-group reasons); `--schema-aware` mode does not run the heuristic at all.
+
+**Gate evidence (targeted re-runs, Release build of harness 3.73 on `docs/basic-sweep-triage`):** 34 basic-mode set runs covering every catalog test-set file whose environments declare `<schema>` elements (source-document, validation, import-schema, type-functions, as, match, streamable, strip-type-annotations, xpath-default-namespace, accumulator, strip-space, nodetest, treat-as, type-expr, merge, catalog, notation, type, sf-avg, si-apply-templates, si-copy, si-copy-of, si-document, si-element, si-LRE, si-result-document, sx-GeneralComp-eq/ge/gt/le/lt/ne, si-fork, si-map). Per-test diff 3.72 → 3.73:
+
+| Test-set | Mode | 3.72 | 3.73 | Moved tests |
+|----------|------|------|------|-------------|
+| import-schema | basic | 1 / 0 / 204 | 0 / 0 / 205 | import-schema-191 |
+| merge | basic | 110 / 0 / 3 | 105 / 0 / 8 | merge-049, merge-050, merge-052, merge-053, merge-054 |
+| type | basic | 65 / 0 / 48 | 64 / 0 / 49 | type-0303 |
+| xpath-default-namespace | basic | 22 / 0 / 4 | 20 / 0 / 6 | xpath-default-namespace-0501, xpath-default-namespace-0502 |
+| all other probed sets (incl. source-document 40/0/19, validation 6/0/61, si-fork 44/0/11, si-map 3/0/9) | basic | — | — | unchanged |
+| si-fork | schema-aware | 55 / 0 / 0 | 55 / 0 / 0 | unchanged (spot run) |
+| si-map | schema-aware | 12 / 0 / 0 | 12 / 0 / 0 | unchanged (spot run) |
+| source-document | schema-aware | 40 / 0 / 19 | 40 / 0 / 19 | unchanged (spot run) |
+
+These 9 tests are exactly the "other tests" the maintainer hinted at: previously passing in basic mode despite their environment's implicit schema-awareness dependency, they are now documented skips. **Zero pass→fail and zero new failures anywhere** — the only delta is pass→skip (9 tests); everything else is skip→skip. The remaining env-schema tests in the strm/si-* and sx-* sets already carried a `schema_aware` catalog dependency, so the feature gate had them skipped before the heuristic ever fires.
+
+Expected refreshed full basic sweep: **10,241 / 0 / 4,360** (was 10,250 / 0 / 4,351). The full-sweep record refresh remains the pre-1.0 confirmation step, now scheduled against harness 3.73. Offered to prepare a catalog PR making the 26 dependencies explicit.
