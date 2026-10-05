@@ -227,6 +227,15 @@
 //                      |                  |       |                | class as QT3 fn-unparsed-text-054a); targeted `error`-set run is 507/0/66 after the      |
 //                      |                  |       |                | six engine-gap fixes                                                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.72  | 05-10-2026     | Basic-sweep triage (docs/BASIC_SWEEP_TRIAGE.md): skip 26 schema-aware tests whose        |
+//                      |                  |       |                | catalog entries lack a schema_aware/schema-import dependency (stream/non-stream-107..109, |
+//                      |                  |       |                | si-fork-001..009/901/902, si-map-001..009) — basic mode must raise XTSE1650 statically    |
+//                      |                  |       |                | (XSLT 3.0 27.2); basic-mode only, so --schema-aware coverage is unchanged                |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.73  | 05-10-2026     | Basic-sweep triage §6 (issue #90 maintainer rule): basic mode skips ANY test whose        |
+//                      |                  |       |                | environment declares a <schema> element (any role) — implicit schema-awareness dependency; |
+//                      |                  |       |                | coexists with named BasicOnlySkipTests (checked first); --schema-aware mode unchanged     |
+//                      |==================|=======|================|=========================================================================================
 
 using System.Xml.Linq;
 using System.Xml;
@@ -468,6 +477,36 @@ class Program
         SkipTests.Add("unicode90-Lo-038");
     }
 
+    // Tests skipped only in basic (non-schema-aware) mode: their stylesheets contain
+    // xsl:import-schema but the catalog test-case declares no schema_aware/schema-import
+    // dependency, so the SkipFeatures gate above does not fire. XSLT 3.0 27.2 requires a
+    // static XTSE1650 on a basic processor, making every expected outcome (success or the
+    // test's own error code) unreachable — same class as json-to-xml-typed-010. All 26 pass
+    // or are legitimately skipped in --schema-aware mode; see docs/BASIC_SWEEP_TRIAGE.md.
+    static readonly HashSet<string> BasicOnlySkipTests = new(StringComparer.OrdinalIgnoreCase)
+    {
+        // source-document set: environment stream-B.xsl imports books.xsd
+        "stream-107", "stream-108", "stream-109",
+        "non-stream-107", "non-stream-108", "non-stream-109",
+        // strm/si-fork set: si-fork-A.xsl / si-fork-901.xsl / si-fork-902.xsl import loans.xsd
+        "si-fork-001", "si-fork-002", "si-fork-003", "si-fork-004", "si-fork-005",
+        "si-fork-006", "si-fork-007", "si-fork-008", "si-fork-009",
+        "si-fork-901", "si-fork-902",
+        // strm/si-map set: si-map-A.xsl imports loans.xsd
+        "si-map-001", "si-map-002", "si-map-003", "si-map-004", "si-map-005",
+        "si-map-006", "si-map-007", "si-map-008", "si-map-009",
+    };
+
+    // Harness 3.73 (docs/BASIC_SWEEP_TRIAGE.md §6): skip reason for the implicit-
+    // dependency heuristic — any test whose environment declares a <schema> element
+    // (any role) is schema-aware by construction, per the w3c/xslt30-test maintainer
+    // (issue #90), even when the catalog entry omits the schema_aware dependency. This
+    // is a separate reason category from the named BasicOnlySkipTests entries, which
+    // carry per-group explanations; whichever check fires first wins (the named list
+    // is consulted before environments are resolved).
+    const string ImplicitEnvSchemaSkipReason =
+        "Implicit schema-awareness dependency: environment includes a <schema> element (w3c/xslt30-test maintainer confirmation, issue #90; see docs/BASIC_SWEEP_TRIAGE.md section 6)";
+
     static readonly HashSet<string> SkipTestSets = new(StringComparer.OrdinalIgnoreCase)
     {
         // Error tests require full static XSLT validator — 385 tests
@@ -683,6 +722,14 @@ class Program
         }
         if (name is "json-to-xml-typed-010")
             return "Spec contradiction: xsl:import-schema must raise XTSE1650 statically on a non-schema-aware processor (XSLT 3.0 27.2), so XTDE3245 at runtime is unreachable; W3C submissions concur";
+        if (name is "stream-107" or "stream-108" or "stream-109" or "non-stream-107" or "non-stream-108" or "non-stream-109")
+            return "Schema-aware test without a catalog schema_aware dependency: environment stylesheet stream-B.xsl contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; in --schema-aware mode the set is skipped anyway (books.xsd uses XSD 1.1 assertions)";
+        if (BasicOnlySkipTests.Contains(name))
+        {
+            if (name is "si-fork-901" or "si-fork-902" or "si-map-007" or "si-map-009")
+                return "Schema-aware error test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 at compile time (XSLT 3.0 27.2) and the expected error is unreachable; passes in --schema-aware mode";
+            return "Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode";
+        }
         if (name is "error-1160a")
             return "Remote HTTP blocked: the test fetches http://www.w3.org/2005/11/schema-for-xslt20.xsd via fn:document, which the sandbox prevents (FODC0002 before the fragment-identifier check is reached); same class as QT3 fn-unparsed-text-054a, not an engine gap";
         return "Known harness skip";
@@ -733,7 +780,7 @@ class Program
         // XTSE3430 static streamability analysis is implemented (Phase C2): expected-error
         // cases below run for real — the analyzer must raise XTSE3430 at compile time.
 
-        if (SkipTests.Contains(name))
+        if (SkipTests.Contains(name) || (!_schemaAware && BasicOnlySkipTests.Contains(name)))
         {
             Console.WriteLine($"  SKIP {name}: {GetSkipReason(name)}");
             return TestResult.Skip;
@@ -854,6 +901,19 @@ class Program
                 envToLoad = envElem;
             else
                 envToLoad = testCase.Element(ns + "environment");
+
+            // Harness 3.73 (docs/BASIC_SWEEP_TRIAGE.md §6): the w3c/xslt30-test maintainer
+            // confirmed on issue #90 that any test whose environment includes a <schema>
+            // element has an implicit dependency on schema-awareness, whether or not the
+            // catalog entry declares it (and hinted there are further unannotated cases
+            // beyond the named BasicOnlySkipTests). A basic processor cannot run such a
+            // test, so skip it here — before any environment loading. Schema-aware mode
+            // is untouched.
+            if (!_schemaAware && envToLoad?.Elements(ns + "schema").Any() == true)
+            {
+                Console.WriteLine($"  SKIP {name}: {ImplicitEnvSchemaSkipReason}");
+                return TestResult.Skip;
+            }
 
             var streamingSourceRequested = envToLoad?.Element(ns + "source")?.Attribute("streaming")?.Value is "true" or "yes";
             if (streamingSourceRequested && !StreamingAllowedTestSets.Contains(testSetName))
