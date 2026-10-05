@@ -2581,7 +2581,7 @@ code . --goto src/extension.ts
 ```bash
 cd vscode-bosak
 npx vsce package
-# Produces: vscode-bosak-0.1.0.vsix
+# Produces: vscode-bosak-0.1.4.vsix
 ```
 
 Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**

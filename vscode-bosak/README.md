@@ -9,6 +9,9 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 - **Auto-completion** — XPath functions, axes, keywords, XSLT instructions, and XQuery keywords
 - **Hover** — function signatures and descriptions for XPath/XQuery functions
 - **Go to definition** — jump to user-defined XSLT functions, variables, parameters, and named templates; XQuery functions and variables
+- **Semantic highlighting** — function names, variables, namespace prefixes, keywords, and type names in XPath, XQuery, and XSLT
+- **Code actions** — quick fixes for common diagnostics (e.g. declaring a default element namespace)
+- **Code lens** — inline evaluation results for XPath/XQuery expressions, plus one-click "Run XSLT transformation" and "Run initial template" actions
 - **Document outline** — top-level XSLT declarations (templates, functions, variables, keys, output, imports) and XQuery declarations (modules, imports, functions, variables)
 - **Evaluate XPath** — run the current `.xpath` file and show the result
 - **Run XSLT Transformation** — run the current stylesheet against a selected source XML document
@@ -63,7 +66,7 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 2. **Install the VSIX in VS Code**
    - Open VS Code → Extensions view (`Ctrl+Shift+X`)
    - Click **⋯** (More Actions) → **Install from VSIX…**
-   - Select `vscode-bosak-0.1.0.vsix`
+   - Select `vscode-bosak-0.1.4.vsix`
 
 ### Option 3 — Custom server path
 
@@ -88,8 +91,9 @@ Create or open files with the following extensions:
 |----------|------------|
 | XPath | `.xpath` |
 | XSLT | `.xsl`, `.xslt` |
+| XQuery | `.xq`, `.xqy`, `.xquery` |
 
-The extension activates automatically when an XPath or XSLT file is opened.
+The extension activates automatically when an XPath, XSLT, or XQuery file is opened.
 
 ### Diagnostics
 
@@ -97,6 +101,7 @@ Errors appear in the **Problems** panel (`Ctrl+Shift+M`) as you type:
 
 - **XPath files** — parser errors when the expression is invalid
 - **XSLT files** — XML well-formedness errors, missing root element (`xsl:stylesheet` / `xsl:transform`), and invalid XPath in `select`, `test`, `match`, and `use-when` attributes
+- **XQuery files** — prolog and expression compile errors
 
 ### Completions
 
@@ -107,12 +112,15 @@ Press `Ctrl+Space` to trigger suggestions:
 
 ### Commands
 
-| Command | Context | Shortcut |
-|---------|---------|----------|
-| **Bosak: Evaluate XPath Expression** | Editor context menu (XPath files) | — |
-| **Bosak: Run XSLT Transformation** | Editor context menu (XSLT files) | — |
+| Command | Where | What it does |
+|---------|-------|--------------|
+| **Bosak: Evaluate XPath Expression** | Editor context menu (`.xpath` files) | Evaluates the current file and opens the result in a preview editor |
+| **Bosak: Run XSLT Transformation** | Editor context menu (`.xsl` / `.xslt` files) | Prompts for a source XML document, runs the stylesheet, and opens the result |
+| **Bosak: Run XQuery** | Editor context menu (`.xq` files) | Runs the current XQuery document and opens the result |
+| **Bosak: Evaluate XQuery Expression** | Command Palette (XQuery files) | Same as *Run XQuery* |
+| **Bosak: Run XSLT Initial Template** | Command Palette (XSLT files) | Runs the stylesheet via its initial template (chosen on the server) and opens the result |
 
-> These commands are placeholders and will be wired to the evaluation engine in a future release.
+Results are evaluated by the language server and shown in a preview editor; errors appear as VS Code notifications.
 
 ---
 
@@ -153,7 +161,7 @@ The extension could not locate `Bosak.LanguageServer.exe` (or `.dll`). Make sure
 
 ### No diagnostics showing
 
-1. Check that the file has the correct extension (`.xpath`, `.xsl`, `.xslt`).
+1. Check that the file has the correct extension (`.xpath`, `.xsl`, `.xslt`, `.xq`, `.xqy`, `.xquery`).
 2. Open **Output** → **Bosak XPath / XSLT** and look for connection errors.
 3. Enable `"bosak.trace.server": "verbose"` to inspect LSP messages.
 
