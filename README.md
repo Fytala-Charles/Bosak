@@ -208,6 +208,8 @@ flowchart TB
 | 4 | Streaming — `XmlReader`-backed `IXdmNode` | ✅ Phases A+B+C+D — burst-mode streaming input (`XmlStreamingProvider`, `TransformStreaming`, `TransformStreamingToString`) + push-style streaming accumulators + `streamable="yes"` (§19 analyzer + runtime posture); provider batch: per-node wrapper cache, pre-root comment/PI surfacing, `fn:copy-of` deep-copy guard; PC-1 streaming conformance cluster closed (REQ-117 — all 26 FAIL→PASS, schema-aware sweep 11,054/1, 2026-10-02) |
 | 5 | Database backends — XML database adapters | 🚧 **In Progress — Slice 2 done: basex/exist/marklogic REST scheme registry** (`Bosak.XPath.Providers.Database`, pack-pending nuget.org reservation); dossier `docs/REQ-120-database-backends.md` |
 
+**Path to 1.0 (GA):** the full release plan and the Beta → 1.0 exit checklist are tracked in [ROADMAP.md](ROADMAP.md). Current focus: triaging the 26 basic-sweep conformance residuals, then pairing the core 1.0 tag with the commercial Bosak.Schema 1.0 (see the Bosak.Schema roadmap).
+
 ---
 
 ## Support
