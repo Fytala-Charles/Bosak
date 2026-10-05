@@ -1,6 +1,6 @@
 # Bosak — Roadmap
 
-**Status:** Beta · **Last updated:** 2026-10-05 · **Conformance baseline:** XSLT 3.0 schema-aware sweep **11,054 / 1 / 3,546** (conformance tail fully closed; the 1 is a documented platform limit) · XSLT 3.0 basic sweep **10,250 / 26 / 4,325** at the 2026-10-03 baseline — the 26 are triaged 2026-10-05 as documented known limitations (catalog dependency gap, `docs/BASIC_SWEEP_TRIAGE.md`; expected 10,250 / 0 / 4,351 pending one confirmation full sweep) · QT3 (XPath 3.1 + XQuery 3.1) **31,142 / 0 / 679** (100% of runnable) · unit tests **2,729+ green** across 9 assemblies + LanguageServer 72/72
+**Status:** Beta · **Last updated:** 2026-10-05 · **Conformance baseline:** XSLT 3.0 schema-aware sweep **11,054 / 1 / 3,546** (conformance tail fully closed; the 1 is a documented platform limit) · XSLT 3.0 basic sweep **10,250 / 0 / 4,351 — 100.0% pass rate** (2026-10-05, harness 3.72 on `b1a7479`; the 26 former failures are triaged documented known limitations — upstream catalog dependency gap, `docs/BASIC_SWEEP_TRIAGE.md`, w3c/xslt30-test#90) · QT3 (XPath 3.1 + XQuery 3.1) **31,142 / 0 / 679** (100% of runnable) · unit tests **2,729+ green** across 9 assemblies + LanguageServer 72/72
 
 ---
 
@@ -39,7 +39,7 @@ Everything below lands before the repo and packages are called Beta:
 - [x] `v0.12.1-beta` published to nuget.org 2026-10-02 (all 9 packages via Trusted Publishing OIDC; carries REQ-101…REQ-115 — schema-aware sweep 11,027/28/3,546, QT3 31,142/0/679). Package version is pinned in `src/Directory.Build.props` — bump the pin before tagging.
 - [x] `v0.12.2-beta` published to nuget.org 2026-10-03 (all 9 packages via Trusted Publishing OIDC; carries REQ-116 + REQ-117 + the REQ-117 tail PR #51 — schema-aware sweep 11,054/1/3,546 with the conformance tail fully closed, basic 10,250/26/4,325, QT3 31,142/0/679). Pin bumped before tagging per the pinned-version rule above.
 - [x] `v0.12.3-beta` published to nuget.org 2026-10-03 (10 packages — first publish of `Bosak.XPath.Providers.Database`; carries REQ-118/119/120)
-- [x] Basic-sweep residuals (26) triaged 2026-10-05 — all 26 documented as known limitations (upstream catalog dependency gap; harness 3.72 basic-only skips) in `docs/BASIC_SWEEP_TRIAGE.md`; expected sweep 10,250/0/4,351 pending one confirmation full sweep
+- [x] Basic-sweep residuals (26) triaged 2026-10-05 — all 26 documented as known limitations (upstream catalog dependency gap; harness 3.72 basic-only skips) in `docs/BASIC_SWEEP_TRIAGE.md`; **confirmation full sweep on `b1a7479`: 10,250/0/4,351 — 100.0% pass rate**; reported upstream as w3c/xslt30-test#90
 - [ ] Core 1.0 tagged as a pair with the commercial Bosak.Schema 1.0 (see the Bosak.Schema roadmap)
 - [x] Strict XSLT sweep at 100% of runnable tests that are not proven upstream artifacts
 - [ ] API frozen; SemVer commitment begins

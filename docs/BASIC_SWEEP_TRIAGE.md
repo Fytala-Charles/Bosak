@@ -5,7 +5,7 @@
   <p>Root-cause analysis and 1.0 recommendation for the last basic-mode sweep failures</p>
 </div>
 
-> **Status:** Triaged (2026-10-05) — all 26 formally documented and skipped with reason in the harness (basic mode only) · **Basis:** main @ `4e66e92` (v0.12.3-beta) · **Baseline:** `.guard-tmp/work/slice3-basic-final.log` (2026-10-03) — Passed 10,250 / Failed 26 / Skipped 4,325 of 14,601
+> **Status:** Triaged + full-sweep confirmed (2026-10-05) — all 26 formally documented and skipped with reason in the harness (basic mode only); full basic sweep on the carrying commit: **10,250 / 0 / 4,351 — 100% pass rate, zero failures** · **Basis:** main @ `4e66e92` (v0.12.3-beta) · **Baseline:** `.guard-tmp/work/slice3-basic-final.log` (2026-10-03) — Passed 10,250 / Failed 26 / Skipped 4,325 of 14,601
 
 ---
 
@@ -65,12 +65,12 @@ The 26 tests were added to a new `BasicOnlySkipTests` set in `tests/Bosak.Xslt.C
 | si-fork | schema-aware | 55 / 0 / 0 | 55 / 0 / 0 (unchanged) |
 | si-map | schema-aware | 12 / 0 / 0 | 12 / 0 / 0 (unchanged) |
 
-Zero pass→fail regressions; the 26 failures moved to documented skips. Expected full-sweep basic result after 3.72: **10,250 / 0 / 4,351**.
+Zero pass→fail regressions; the 26 failures moved to documented skips. **Full basic sweep on the carrying commit (`docs/basic-sweep-triage` `b1a7479`, harness 3.72, 2026-10-05, `.guard-tmp/work/slice3-basic-final.log`): 10,250 / 0 / 4,351 — 100.0% pass rate, single chunk, no kills.** The pre-1.0 confirmation gate is met.
 
 ## 5. Recommendation for the 1.0 milestone
 
 1. **Accept the 26 as formally documented known limitations** (upstream catalog annotation gap; engine behavior is spec-mandated). No engine work is warranted — fixing these "in" basic mode would require violating XTSE1650.
-2. **Run one confirmation full basic sweep** (`.guard-tmp/work/resilient-sweep-slice3-basic.sh` pattern) on the commit that carries harness 3.72 to record the expected 10,250/0/4,351 before tagging 1.0. The full sweep was not re-run during this triage (hours-long); the gate above covers the three affected test sets in both modes.
+2. ~~Run one confirmation full basic sweep~~ — **done 2026-10-05**: 10,250/0/4,351 (100.0%, single chunk) on commit `b1a7479` (harness 3.72). Recorded before the 1.0 tag.
 3. **Optionally report the catalog gap upstream** (w3c/xslt30-test): add `schema_aware`/`schema-import` dependencies to these 26 test cases so other basic processors' harnesses skip them too.
 4. The **schema-aware tail's single failure** (`type-functions-0401`, FODT0001 for year −12) is already covered by the documented DateTime platform limit in AGENTS.md — no new action.
 5. No changes to AGENTS.md Known Limitations were needed: the 26 are harness/sweep bookkeeping, and the engine limits already documented (DateTime year < 1, decimal precision, remote HTTP/Cloudflare) were not implicated by any basic-sweep failure.
