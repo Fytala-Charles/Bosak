@@ -74,3 +74,16 @@ Zero pass→fail regressions; the 26 failures moved to documented skips. **Full 
 3. **Optionally report the catalog gap upstream** (w3c/xslt30-test): add `schema_aware`/`schema-import` dependencies to these 26 test cases so other basic processors' harnesses skip them too.
 4. The **schema-aware tail's single failure** (`type-functions-0401`, FODT0001 for year −12) is already covered by the documented DateTime platform limit in AGENTS.md — no new action.
 5. No changes to AGENTS.md Known Limitations were needed: the 26 are harness/sweep bookkeeping, and the engine limits already documented (DateTime year < 1, decimal precision, remote HTTP/Cloudflare) were not implicated by any basic-sweep failure.
+
+---
+
+## 6. Maintainer response (2026-10-05)
+
+Michael Kay (w3c/xslt30-test maintainer) replied on [issue #90](https://github.com/w3c/xslt30-test/issues/90):
+
+> *"I think you can assume that any test whose environment includes a schema element has an implicit dependency on schema-awareness. I've no problems with making the dependency explicit but I suspect that you may find that there are other tests where it isn't included explicitly."*
+
+This confirms the triage reading. Two consequences:
+
+1. **Our disposition stands** — skip-with-reason is exactly the harness-side application of the implicit-dependency rule.
+2. **Hardening candidate (pre-1.0):** make the basic-mode gate skip *any* test whose environment includes a `<schema>` element (any role), not just the named 26 — per the maintainer's "other tests" remark. This can only move passes to skips (zero pass→fail risk); the full-sweep record (10,250/0/4,351) would be refreshed by the confirmation sweep planned before tagging 1.0. Offered to prepare a catalog PR making the 26 dependencies explicit.
