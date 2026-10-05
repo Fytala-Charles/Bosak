@@ -77,7 +77,6 @@ last_test.txt
 # VS Code Extension
 vscode-bosak/node_modules/
 vscode-bosak/out/
-vscode-bosak/server/
 vscode-bosak/*.vsix
 
 # Local scratch/debug directories (never commit)
