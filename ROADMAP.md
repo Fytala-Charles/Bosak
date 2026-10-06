@@ -1,6 +1,6 @@
 # Bosak — Roadmap
 
-**Status:** Beta · **Last updated:** 2026-10-05 · **Conformance baseline:** XSLT 3.0 schema-aware sweep **11,054 / 1 / 3,546** (conformance tail fully closed; the 1 is a documented platform limit) · XSLT 3.0 basic sweep **10,250 / 0 / 4,351 — 100.0% pass rate** (2026-10-05, harness 3.72 on `b1a7479`; the 26 former failures are triaged documented known limitations — upstream catalog dependency gap, `docs/BASIC_SWEEP_TRIAGE.md`, w3c/xslt30-test#90) · QT3 (XPath 3.1 + XQuery 3.1) **31,142 / 0 / 679** (100% of runnable) · unit tests **2,729+ green** across 9 assemblies + LanguageServer 72/72
+**Status:** Beta · **Last updated:** 2026-10-06 · **Conformance baseline:** XSLT 3.0 schema-aware sweep **11,054 / 1 / 3,546** (conformance tail fully closed; the 1 is a documented platform limit) · XSLT 3.0 basic sweep **10,242 / 0 / 4,359 — 100.0% pass rate** (2026-10-06, harness 3.73 on main `929eea7`; the 26 former failures are triaged documented known limitations — upstream catalog dependency gap, `docs/BASIC_SWEEP_TRIAGE.md`, w3c/xslt30-test#90; earlier 3.72 record 10,250/0/4,351 on `b1a7479`) · QT3 (XPath 3.1 + XQuery 3.1) **31,142 / 0 / 679** (100% of runnable) · unit tests **2,729+ green** across 9 assemblies + LanguageServer 72/72
 
 ---
 
@@ -40,7 +40,9 @@ Everything below lands before the repo and packages are called Beta:
 - [x] `v0.12.2-beta` published to nuget.org 2026-10-03 (all 9 packages via Trusted Publishing OIDC; carries REQ-116 + REQ-117 + the REQ-117 tail PR #51 — schema-aware sweep 11,054/1/3,546 with the conformance tail fully closed, basic 10,250/26/4,325, QT3 31,142/0/679). Pin bumped before tagging per the pinned-version rule above.
 - [x] `v0.12.3-beta` published to nuget.org 2026-10-03 (10 packages — first publish of `Bosak.XPath.Providers.Database`; carries REQ-118/119/120)
 - [x] Basic-sweep residuals (26) triaged 2026-10-05 — all 26 documented as known limitations (upstream catalog dependency gap; harness 3.72 basic-only skips) in `docs/BASIC_SWEEP_TRIAGE.md`; **confirmation full sweep on `b1a7479`: 10,250/0/4,351 — 100.0% pass rate**; reported upstream as w3c/xslt30-test#90
+- [x] Full basic-sweep record refreshed on harness 3.73 (maintainer rule: any env with a `<schema>` element = implicit schema-awareness dependency) — **2026-10-06, main `929eea7`: 10,242/0/4,359, 100.0% pass rate, single chunk**; per-test delta vs the 3.72 record is exactly 8 pass→skip (merge-049/050/052/053/054, type-0303, xpath-default-namespace-0501/0502), zero pass→fail; `.guard-tmp/work/sweep373-basic-final.log`, baseline `.sweep-baselines/basic-after-373.txt`
 - [ ] Core 1.0 tagged as a pair with the commercial Bosak.Schema 1.0 (see the Bosak.Schema roadmap)
+- [ ] **Bosak.Schema go-live ceremony (owner-only, executed in the Bosak.Schema repo — 2026-10-06 check: all licensing engineering complete, 174/174 green, staging acceptance matrix closed):** Stripe KYC, production tenant + ADR-003 signing-key ceremony, Postmark dashboard webhook entry, production Turnstile keys — ordered runbook `docs/GO_LIVE_CHECKLIST.md` in the Bosak.Schema repo. **Zero core-repo work in this item; core 1.0 tags as the paired tag at the checklist's Phase 4.**
 - [x] Strict XSLT sweep at 100% of runnable tests that are not proven upstream artifacts
 - [ ] API frozen; SemVer commitment begins
 - [ ] Version promoted from `0.9.x-preview` to `1.0.0`; public release notes

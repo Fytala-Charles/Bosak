@@ -5,7 +5,7 @@
   <p>Root-cause analysis and 1.0 recommendation for the last basic-mode sweep failures</p>
 </div>
 
-> **Status:** Triaged + full-sweep confirmed (2026-10-05) — all 26 formally documented and skipped with reason in the harness (basic mode only); full basic sweep on the carrying commit: **10,250 / 0 / 4,351 — 100% pass rate, zero failures** · **Basis:** main @ `4e66e92` (v0.12.3-beta) · **Baseline:** `.guard-tmp/work/slice3-basic-final.log` (2026-10-03) — Passed 10,250 / Failed 26 / Skipped 4,325 of 14,601
+> **Status:** Triaged + full-sweep confirmed (2026-10-05, refreshed 2026-10-06) — all 26 formally documented and skipped with reason in the harness (basic mode only); full basic sweep on the carrying commit: **10,250 / 0 / 4,351 — 100% pass rate, zero failures** · refreshed record on harness 3.73 (main `929eea7`, merged PR #72): **10,242 / 0 / 4,359 — 100.0% pass rate** · **Basis:** main @ `4e66e92` (v0.12.3-beta) · **Baseline:** `.guard-tmp/work/slice3-basic-final.log` (2026-10-03) — Passed 10,250 / Failed 26 / Skipped 4,325 of 14,601 · **3.73 record:** `.guard-tmp/work/sweep373-basic-final.log` (2026-10-06) — Passed 10,242 / Failed 0 / Skipped 4,359 of 14,601
 
 ---
 
@@ -103,4 +103,6 @@ This confirms the triage reading. Two consequences:
 
 These 9 tests are exactly the "other tests" the maintainer hinted at: previously passing in basic mode despite their environment's implicit schema-awareness dependency, they are now documented skips. **Zero pass→fail and zero new failures anywhere** — the only delta is pass→skip (9 tests); everything else is skip→skip. The remaining env-schema tests in the strm/si-* and sx-* sets already carried a `schema_aware` catalog dependency, so the feature gate had them skipped before the heuristic ever fires.
 
-Expected refreshed full basic sweep: **10,241 / 0 / 4,360** (was 10,250 / 0 / 4,351). The full-sweep record refresh remains the pre-1.0 confirmation step, now scheduled against harness 3.73. Offered to prepare a catalog PR making the 26 dependencies explicit.
+~~Expected refreshed full basic sweep: **10,241 / 0 / 4,360** (was 10,250 / 0 / 4,351). The full-sweep record refresh remains the pre-1.0 confirmation step, now scheduled against harness 3.73.~~
+
+**Full-sweep record refresh DONE (2026-10-06, harness 3.73 on main `929eea7` = merged PR #72, single chunk, no kills, `.guard-tmp/work/sweep373-basic-final.log`): 10,242 / 0 / 4,359 — 100.0% pass rate.** Per-test diff vs the 3.72 full-sweep record (`.guard-tmp/work/slice3-basic-final.log`): exactly the 8 full-sweep-visible tests moved pass→skip — merge-049/050/052/053/054, type-0303, xpath-default-namespace-0501/0502; **zero pass→fail, zero new failures**; both fail lists empty. The count is one higher than the estimate above (10,242 vs 10,241) because import-schema-191 — the 9th pass→skip in the *targeted set runs* — never runs in full sweeps at all (no per-test line in either full-sweep log; catalog-level gating), so the full-sweep delta is 8, not 9. New baseline: `.sweep-baselines/basic-after-373.txt` (empty fail list). Offered to prepare a catalog PR making the 26 dependencies explicit.

@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 3 October 2026
+> **Last updated:** 6 October 2026
 > **Bosak baseline:** 2,729 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
@@ -19,6 +19,8 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-10-06** — **Full basic-sweep record refreshed on harness 3.73 — 10,242 / 0 / 4,359, 100.0% pass rate.** The 3.73 env-schema heuristic (any environment declaring a `<schema>` element is an implicit schema-awareness dependency, per the w3c/xslt30-test#90 maintainer reply) is now backed by a complete full-catalog run on main `929eea7` (merged PR #72): single chunk, no kills, `.guard-tmp/work/sweep373-basic-final.log`, baseline `.sweep-baselines/basic-after-373.txt` (empty fail list). Per-test diff vs the 3.72 record (10,250/0/4,351 on `b1a7479`): exactly 8 pass→skip moves — merge-049/050/052/053/054, type-0303, xpath-default-namespace-0501/0502 — **zero pass→fail, zero new failures** (import-schema-191, the 9th targeted-set-run delta, never runs in full sweeps at all). The pre-1.0 confirmation gate now stands on the 3.73 record. Detail: `docs/BASIC_SWEEP_TRIAGE.md` §6.
 
 - **2026-10-03 (h)** — **Release: `v0.12.3-beta` published to nuget.org** (workflow run 37158005610, green; all **10** packages `Created`, Trusted Publishing OIDC — no all-skipped re-pack, the pre-tag pin bump from (g) worked). **First publish of `Bosak.XPath.Providers.Database`** — the new ID's Trusted Publishing registration verified end-to-end. Carries REQ-118 (PR #60), REQ-119 (PR #61), REQ-120 database backends end-to-end (PR #62–68).
 
