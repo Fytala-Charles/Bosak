@@ -2,7 +2,7 @@
   "name": "vscode-bosak",
   "displayName": "Bosak XPath / XSLT",
   "description": "Language support for XPath 3.1 and XSLT 3.0 using the Bosak engine",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "publisher": "fytala",
   "icon": "assets/logo.png",
   "repository": {

@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 3 October 2026
+> **Last updated:** 6 October 2026
 > **Bosak baseline:** 2,729 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
@@ -19,6 +19,8 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-10-06 (a)** — **VS Code extension 0.1.5: TextMate grammar JSON-escape fix.** All three grammar files (`xpath`/`xquery`/`xslt` `.tmLanguage.json`) contained invalid strict-JSON escape sequences in their operator/attribute regexes (`"\-"`, `"\s"`, `"\""` forms — verified: none of the three parsed as strict JSON at 0.1.4). Corrected to the proper escaped forms (`"\\-"`, `"\\s"`, `"\\""`). Extension version **0.1.4 → 0.1.5**; `vscode-bosak/README.md` and §8.2 VSIX references synced. Gates: all three grammars now parse as strict JSON; `npm run compile` clean (tsc). No engine code touched.
 
 - **2026-10-03 (h)** — **Release: `v0.12.3-beta` published to nuget.org** (workflow run 37158005610, green; all **10** packages `Created`, Trusted Publishing OIDC — no all-skipped re-pack, the pre-tag pin bump from (g) worked). **First publish of `Bosak.XPath.Providers.Database`** — the new ID's Trusted Publishing registration verified end-to-end. Carries REQ-118 (PR #60), REQ-119 (PR #61), REQ-120 database backends end-to-end (PR #62–68).
 
@@ -2581,7 +2583,7 @@ code . --goto src/extension.ts
 ```bash
 cd vscode-bosak
 npx vsce package
-# Produces: vscode-bosak-0.1.4.vsix
+# Produces: vscode-bosak-0.1.5.vsix
 ```
 
 Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**

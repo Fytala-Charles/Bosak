@@ -66,7 +66,7 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 2. **Install the VSIX in VS Code**
    - Open VS Code → Extensions view (`Ctrl+Shift+X`)
    - Click **⋯** (More Actions) → **Install from VSIX…**
-   - Select `vscode-bosak-0.1.4.vsix`
+   - Select `vscode-bosak-0.1.5.vsix`
 
 ### Option 3 — Custom server path
 
