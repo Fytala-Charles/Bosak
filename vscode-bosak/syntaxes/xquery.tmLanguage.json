@@ -54,7 +54,7 @@
     },
     "operator": {
       "name": "keyword.operator.xquery",
-      "match": "\\b(or|and|div|idiv|mod|union|intersect|except|to|is|eq|ne|lt|le|gt|ge)\\b|!=|<=|>=|<<|>>|:=|\\|\\||[+\-*/|=<>!|]"
+      "match": "\\b(or|and|div|idiv|mod|union|intersect|except|to|is|eq|ne|lt|le|gt|ge)\\b|!=|<=|>=|<<|>>|:=|\\|\\||[+\\-*/|=<>!|]"
     },
     "constructor": {
       "name": "keyword.other.constructor.xquery",

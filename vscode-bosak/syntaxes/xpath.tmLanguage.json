@@ -53,7 +53,7 @@
     },
     "operator": {
       "name": "keyword.operator.xpath",
-      "match": "\\b(or|and|div|idiv|mod|union|intersect|except|to|is|eq|ne|lt|le|gt|ge)\\b|!=|<=|>=|<<|>>|[+\-*/|=<>!|]"
+      "match": "\\b(or|and|div|idiv|mod|union|intersect|except|to|is|eq|ne|lt|le|gt|ge)\\b|!=|<=|>=|<<|>>|[+\\-*/|=<>!|]"
     },
     "function": {
       "patterns": [
