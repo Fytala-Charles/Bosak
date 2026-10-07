@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 6 October 2026
+> **Last updated:** 7 October 2026
 > **Bosak baseline:** 2,729 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
@@ -19,6 +19,8 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-10-07** — **Release: `v0.13.0` published to nuget.org — the `-beta` postfix is stripped; this is the pre-1.0 soak release** (workflow run 37682060968, green 4m56s; all **10** packages `Created`, Trusted Publishing OIDC — the pre-tag pin bump from PR #76 worked, no all-skipped re-pack). Package identity is now un-postfixed (`Bosak.XPath.Api` 0.13.0 etc.); the nuget.org search index lags the flat container by minutes — verify via the flat-container URL, not search. Carries everything since 0.12.3-beta; the paired `v1.0.0` tags follow the soak readout.
 
 - **2026-10-06 (a)** — **VS Code extension 0.1.5: TextMate grammar JSON-escape fix.** All three grammar files (`xpath`/`xquery`/`xslt` `.tmLanguage.json`) contained invalid strict-JSON escape sequences in their operator/attribute regexes (`"\-"`, `"\s"`, `"\""` forms — verified: none of the three parsed as strict JSON at 0.1.4). Corrected to the proper escaped forms (`"\\-"`, `"\\s"`, `"\\""`). Extension version **0.1.4 → 0.1.5**; `vscode-bosak/README.md` and §8.2 VSIX references synced. Gates: all three grammars now parse as strict JSON; `npm run compile` clean (tsc). No engine code touched.
 
