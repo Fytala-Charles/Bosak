@@ -20,7 +20,11 @@
 
 ## 0. Recent Changes
 
-- **2026-10-06** — **Full basic-sweep record refreshed on harness 3.73 — 10,242 / 0 / 4,359, 100.0% pass rate.** The 3.73 env-schema heuristic (any environment declaring a `<schema>` element is an implicit schema-awareness dependency, per the w3c/xslt30-test#90 maintainer reply) is now backed by a complete full-catalog run on main `929eea7` (merged PR #72): single chunk, no kills, `.guard-tmp/work/sweep373-basic-final.log`, baseline `.sweep-baselines/basic-after-373.txt` (empty fail list). Per-test diff vs the 3.72 record (10,250/0/4,351 on `b1a7479`): exactly 8 pass→skip moves — merge-049/050/052/053/054, type-0303, xpath-default-namespace-0501/0502 — **zero pass→fail, zero new failures** (import-schema-191, the 9th targeted-set-run delta, never runs in full sweeps at all). The pre-1.0 confirmation gate now stands on the 3.73 record. Detail: `docs/BASIC_SWEEP_TRIAGE.md` §6.
+- **2026-10-06 (a)** — **VS Code extension 0.1.5: TextMate grammar JSON-escape fix.** All three grammar files (`xpath`/`xquery`/`xslt` `.tmLanguage.json`) contained invalid strict-JSON escape sequences in their operator/attribute regexes (`"\-"`, `"\s"`, `"\""` forms — verified: none of the three parsed as strict JSON at 0.1.4). Corrected to the proper escaped forms (`"\\-"`, `"\\s"`, `"\\""`). Extension version **0.1.4 → 0.1.5**; `vscode-bosak/README.md` and §8.2 VSIX references synced. Gates: all three grammars now parse as strict JSON; `npm run compile` clean (tsc). No engine code touched.
+
+- **2026-10-06 (b)** — **Full basic-sweep record refreshed on harness 3.73 — 10,242 / 0 / 4,359, 100.0% pass rate.** The 3.73 env-schema heuristic (any environment declaring a `<schema>` element is an implicit schema-awareness dependency, per the w3c/xslt30-test#90 maintainer reply) is now backed by a complete full-catalog run on main `929eea7` (merged PR #72): single chunk, no kills, `.guard-tmp/work/sweep373-basic-final.log`, baseline `.sweep-baselines/basic-after-373.txt` (empty fail list). Per-test diff vs the 3.72 record (10,250/0/4,351 on `b1a7479`): exactly 8 pass→skip moves — merge-049/050/052/053/054, type-0303, xpath-default-namespace-0501/0502 — **zero pass→fail, zero new failures** (import-schema-191, the 9th targeted-set-run delta, never runs in full sweeps at all). The pre-1.0 confirmation gate now stands on the 3.73 record. Detail: `docs/BASIC_SWEEP_TRIAGE.md` §6.
+
+- **2026-10-07** — **VS Code extension published to the marketplace: `fytala.vscode-bosak` 0.1.5 live.** The `fytala` publisher (created owner-side) received its first two publications: **0.1.4** (2026-10-05, refreshed language-server bundle — published owner-side) and **0.1.5** (2026-10-07, the TextMate grammar JSON-escape fix from PR #73 — published via `vsce publish`, verified live: `Version: 0.1.5, Last updated: October 7, 2026`; the gallery API lags ~5 min behind `vsce show`). Distribution: VS Code Marketplace is now the primary install path (`vscode-bosak/README.md` Option 1; VSIX/sideload remain for contributors). **PAT hygiene:** the marketplace PAT used for the publish exists in the 2026-10-07 session history — owner to rotate/revoke it (or rely on its expiry); a follow-up CI workflow + repo-secret PAT is the recommended steady state for future extension releases. No engine code touched.
 
 - **2026-10-03 (h)** — **Release: `v0.12.3-beta` published to nuget.org** (workflow run 37158005610, green; all **10** packages `Created`, Trusted Publishing OIDC — no all-skipped re-pack, the pre-tag pin bump from (g) worked). **First publish of `Bosak.XPath.Providers.Database`** — the new ID's Trusted Publishing registration verified end-to-end. Carries REQ-118 (PR #60), REQ-119 (PR #61), REQ-120 database backends end-to-end (PR #62–68).
 
@@ -2583,7 +2587,7 @@ code . --goto src/extension.ts
 ```bash
 cd vscode-bosak
 npx vsce package
-# Produces: vscode-bosak-0.1.4.vsix
+# Produces: vscode-bosak-0.1.5.vsix
 ```
 
 Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**

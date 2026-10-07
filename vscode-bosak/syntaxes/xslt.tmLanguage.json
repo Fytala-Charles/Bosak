@@ -31,7 +31,7 @@
       "patterns": [
         {
           "name": "meta.attribute.xpath.xslt",
-          "begin": "(select|test|match|xpath-default-namespace|default-collation|use-when|as|name|mode|priority|visibility|streamability|[(override|context-item|href|type|method|encoding|indent|omit-xml-declaration|standalone|doctype-public|doctype-system|media-type|normalization-form|use-character-maps|output-version|byte-order-mark|escape-uri-attributes|include-content-type|undeclare-prefixes)])\s*=\s*\"",
+          "begin": "(select|test|match|xpath-default-namespace|default-collation|use-when|as|name|mode|priority|visibility|streamability|(override|context-item|href|type|method|encoding|indent|omit-xml-declaration|standalone|doctype-public|doctype-system|media-type|normalization-form|use-character-maps|output-version|byte-order-mark|escape-uri-attributes|include-content-type|undeclare-prefixes)])\\s*=\\s*\\\"",
           "beginCaptures": {
             "1": { "name": "entity.other.attribute-name.local.xml" }
           },
