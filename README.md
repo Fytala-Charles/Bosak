@@ -260,7 +260,7 @@ npm run compile
 # 3. Open in VS Code and press F5 to launch the Extension Development Host
 ```
 
-See [`vscode-bosak/README.md`](./vscode-bosak/README.md) for full installation options (VSIX, custom server path, troubleshooting).
+The extension is published on the VS Code Marketplace as [**Bosak XPath / XSLT**](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) (`fytala.vscode-bosak`, 0.1.5, 2026-10-07). See [`vscode-bosak/README.md`](./vscode-bosak/README.md) for full installation options (Marketplace, VSIX, custom server path, troubleshooting).
 
 ---
 

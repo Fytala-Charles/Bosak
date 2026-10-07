@@ -31,7 +31,13 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
 ## Installation
 
-### Option 1 — Development / Sideload (recommended for contributors)
+### Option 1 — Install from the VS Code Marketplace (recommended for users)
+
+Search for **"Bosak XPath / XSLT"** in the Extensions view (`Ctrl+Shift+X`), or install directly from
+[marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak).
+Published versions: **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
+
+### Option 2 — Development / Sideload (recommended for contributors)
 
 1. **Build the language server**
    ```bash
@@ -53,7 +59,7 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 4. **Open in VS Code** and press `F5`  
    This opens a new **Extension Development Host** window with Bosak loaded.
 
-### Option 2 — Install from VSIX
+### Option 3 — Install from VSIX
 
 1. **Build the extension package**
    ```bash
@@ -68,7 +74,7 @@ Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
    - Click **⋯** (More Actions) → **Install from VSIX…**
    - Select `vscode-bosak-0.1.5.vsix`
 
-### Option 3 — Custom server path
+### Option 4 — Custom server path
 
 If the extension cannot find the language server automatically, set the path manually:
 
