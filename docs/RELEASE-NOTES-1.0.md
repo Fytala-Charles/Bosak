@@ -5,6 +5,13 @@
 > Fill in the tag date and the support-channel section before publishing. The package
 > version is **pinned in `src/Directory.Build.props`** — bump the pin to `1.0.0` before
 > tagging (the v0.12.1 lesson: the tag does not set the version).
+>
+> **Release strategy (owner decision 2026-10-07):** these notes publish in two steps —
+> first a **0.13.0 stable soak release** (same content, `-beta` postfix stripped, GA
+> framing and the two TODOs removed) to gather issues/discussions before the 1.0
+> commitment; then the 1.0.0 pair after the soak. The 0.13.0 notes must state that 0.x
+> breaking changes remain possible per SemVer and the within-major API commitment
+> formally begins at 1.0.0.
 
 ---
 
