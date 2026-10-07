@@ -386,6 +386,7 @@
 //                      |                  |       |                | + grounded fragment copy); member loading shared via LoadCollectionMembers               |
 //                      | Charles Korthout | 5.127 | 03-10-2026     | xsl:product-version fallback bumped to 0.12.3-beta (database backends release)           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.128 | 07-10-2026     | xsl:product-version fallback bumped to 0.13.0 (beta strip — 1.0 soak release)            |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4933,7 +4934,7 @@ public static class FunctionLibrary
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
-            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.12.3-beta",
+            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.13.0",
             "xsl:is-schema-aware" => "no",
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
