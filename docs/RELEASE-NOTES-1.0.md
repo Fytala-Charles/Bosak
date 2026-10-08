@@ -2,7 +2,8 @@
 
 > **Draft status:** prepared 2026-10-07 during the 1.0 close-out. Publish as the GitHub
 > Release body for tag `v1.0.0` (and mirror to the release-notes field on nuget.org).
-> Fill in the tag date and the support-channel section before publishing. The package
+> Fill in the tag date before publishing (the support-channel section is decided:
+> GitHub Discussions / Issues, see §Support). The package
 > version is **pinned in `src/Directory.Build.props`** — bump the pin to `1.0.0` before
 > tagging (the v0.12.1 lesson: the tag does not set the version).
 >
@@ -84,8 +85,11 @@ Beta line and is documented in `docs/FEATURE_REQUESTS.md`.)
 
 ## Support
 
-*TODO (owner, before tag): support channel per `COMMERCIAL.md` — community (Discussions /
-issues) vs paid-priority terms for Bosak.Schema licensees.*
+Community support — questions and usage help — lives in
+[GitHub Discussions](https://github.com/Fytala-Charles/Bosak/discussions); bugs go to
+[GitHub Issues](https://github.com/Fytala-Charles/Bosak/issues). Commercial licensees with a
+Bosak.Schema support contract get direct engineering access and priority triage on top of
+those open channels — see `COMMERCIAL.md` for the terms.
 
 ## After 1.0
 
