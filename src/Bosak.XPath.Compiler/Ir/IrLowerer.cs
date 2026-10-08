@@ -108,6 +108,8 @@
 //                      |                  |       |                | no position()/last() anywhere) — //node()[name()=$v] now evaluates as one descendant     |
 //                      |                  |       |                | pass instead of interleaving two single-pass root pumps                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.47  | 08-10-2026     | REQ-118 4.0-S3a: LowerOtherwise — '??' jumps to RHS only when LHS is empty (guarded)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -511,6 +513,8 @@ internal sealed class IrLowerer
             return LowerOr(node, targetReg);
         if (node.Operator == BinaryOperator.SimpleMap)
             return LowerSimpleMap(node, targetReg);
+        if (node.Operator == BinaryOperator.Otherwise)
+            return LowerOtherwise(node, targetReg);
 
         int leftReg = LowerNode(node.Left);
         int rightReg = LowerNode(node.Right);
@@ -589,6 +593,31 @@ internal sealed class IrLowerer
         // End
         PatchJump(jumpToEnd, CurrentInstructionIndex);
 
+        return resultReg;
+    }
+
+    // A ?? B returns A unless A is the empty sequence, otherwise B. The RHS is only
+    // evaluated when the LHS is empty, which gives the XPath 4.0 §2.6.5 guarding rule
+    // for free: the RHS can never raise a dynamic error when the LHS is non-empty.
+    private int LowerOtherwise(BinaryExpressionNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+
+        // Evaluate left into the result register
+        int leftReg = LowerNode(node.Left, resultReg);
+        if (leftReg != resultReg)
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)leftReg);
+
+        // Non-empty: done; empty: evaluate the right operand into the result register
+        int jumpToRhs = EmitJumpPlaceholder(IrOpCode.JumpIfEmpty, (ushort)resultReg);
+        int jumpToEnd = EmitJumpPlaceholder(IrOpCode.Jump);
+
+        PatchJump(jumpToRhs, CurrentInstructionIndex);
+        int rightReg = LowerNode(node.Right, resultReg);
+        if (rightReg != resultReg)
+            Emit(IrOpCode.Move, (ushort)resultReg, (ushort)rightReg);
+
+        PatchJump(jumpToEnd, CurrentInstructionIndex);
         return resultReg;
     }
 

@@ -32,6 +32,8 @@
 //                      | Charles Korthout | 0.12  | 08-10-2026     | REQ-118 4.0-S0: static XPST0017 for XPath 4.0-only functions in 3.1 mode;               |
 //                      |                  |       |                | compiled compatibility stamped onto the EvaluationContext before Populate               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13  | 08-10-2026     | REQ-118 4.0-S3a: Compatibility >= XPath40 opts the parser into the 4.0 grammar          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
@@ -83,7 +85,7 @@ public sealed class XPath31Expression
             throw new XPathParseException("Empty expression is not a valid XPath expression", 0);
 
         // 1. Lex + Parse -> AST
-        var ast = XPathParser.Parse(expression, xml11LineEndings: options.Xml11LineEndings, schemaAware: options.SchemaSet is not null);
+        var ast = XPathParser.Parse(expression, xml11LineEndings: options.Xml11LineEndings, schemaAware: options.SchemaSet is not null, xpath40: options.Compatibility >= XPathCompatibility.XPath40);
 
         // 2. Resolve function-call namespaces using the supplied static context and
         // report static errors for functions that have been removed from the spec.
