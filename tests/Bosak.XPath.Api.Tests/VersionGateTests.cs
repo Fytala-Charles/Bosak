@@ -30,6 +30,8 @@
 //                      | Charles Korthout | 0.7   | 08-10-2026     | REQ-118 4.0-S5: higher-order fn:some/every/index-where/partition/take-while/drop-      |
 //                      |                  |       |                | while/while-do/do-until/partial-apply/transitive-closure XPST0017 gate (3.1 mode)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 08-10-2026     | fn:identity XPST0017 gate row (4.0-S5 follow-up)                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -117,6 +119,7 @@ public class VersionGateTests
     [InlineData("fn:do-until(1, fn:identity#1, fn:boolean#1)")]
     [InlineData("fn:partial-apply(fn:concat#2, map{})")]
     [InlineData("fn:transitive-closure((), fn:identity#1)")]
+    [InlineData("fn:identity((1, 2))")]
     public void Compile_HigherOrderFunctions_DefaultOptions_ThrowXpst0017(string expression)
     {
         var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));

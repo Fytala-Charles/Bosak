@@ -407,6 +407,9 @@
 //                      |                  |       |                | drop-while/while-do/do-until/partial-apply/transitive-closure (IsXPath40Only) +          |
 //                      |                  |       |                | callable-arity/predicate-boolean/eager-bound-coercion helpers + keyword signatures       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.132 | 08-10-2026     | REQ-118 4.0-S5 follow-up: register fn:identity#1 (IsXPath40Only) — referenced by          |
+//                      |                  |       |                | map:build/array:build keyword defaults but previously unregistered                        |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -3181,6 +3184,14 @@ public static class FunctionLibrary
             },
 
             // ----- XPath 4.0 higher-order functions (REQ-118 slice 4.0-S5) ------
+            [(Namespaces.Fn, "identity", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "identity", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Identity_1
+            },
             [(Namespaces.Fn, "some", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "some", Arity = 1,
@@ -4789,6 +4800,12 @@ public static class FunctionLibrary
     /// <summary>F+O 4.0 §2.5.16 fn:some#1 — default predicate fn:boolean#1.</summary>
     private static XdmValue Some_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => Some_2(ctx, new XdmValue[] { args[0], DefaultBooleanPredicate(ctx) });
+
+    /// <summary>F+O 4.0 fn:identity#1 — returns the argument unchanged. Registered
+    /// because <c>map:build</c>/<c>array:build</c> keyword defaults reference
+    /// <c>fn:identity#1</c> (REQ-118 4.0-S5 follow-up).</summary>
+    private static XdmValue Identity_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0];
 
     /// <summary>
     /// F+O 4.0 §2.5.16 fn:some — true if <c>$predicate($item, $pos)</c> is true for at

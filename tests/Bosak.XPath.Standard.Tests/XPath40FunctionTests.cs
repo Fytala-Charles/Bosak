@@ -24,6 +24,8 @@
 //                      | Charles Korthout | 0.4   | 08-10-2026     | Part 4 (REQ-118 4.0-S5): fn:some/every/index-where/partition/take-while/drop-while/     |
 //                      |                  |       |                | while-do/do-until/partial-apply/transitive-closure + keyword-argument composition       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 08-10-2026     | 4.0-S5 follow-up: fn:identity + keyword-default resolution test                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -2003,5 +2005,23 @@ public class XPath40FunctionTests
     {
         Assert.Equal("1.2", Eval40(
             "(fn:partial-apply(function := fn:round#2, arguments := map{2: 1}))(1.23456)").ToString());
+    }
+
+    // fn:identity (4.0-S5 follow-up — registered because map:build/array:build
+    // keyword defaults reference fn:identity#1)
+
+    [Fact]
+    public void Identity_ReturnsArgumentUnchanged()
+    {
+        Assert.Equal(["1", "2"], Seq40("fn:identity((1, 2))"));
+        Assert.Equal("a", Eval40("fn:identity('a')").ToString());
+    }
+
+    [Fact]
+    public void KeywordArguments_UnfilledKeyword_ResolvesIdentityDefault()
+    {
+        // The keyword expansion path resolves unfilled keywords through the signature
+        // default snippets (here fn:identity#1 for map:build's $key).
+        Assert.Equal("a", Eval40("map:get(map:build(input := ('a', 'b'), value := fn:string#1), 'a')").ToString());
     }
 }
