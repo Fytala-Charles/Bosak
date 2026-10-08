@@ -181,7 +181,7 @@ byte-identical:
 | **4.0-S3** | `??`, keyword args, string templates, binary literals | §3 gate decision |
 | **4.0-S4** | `->` / `=!>`, focus functions, `for member`/`for key` | S3 |
 | **4.0-S5** | Tier-1 HOF functions (`fn:some`/`every`/`partition`/…) — landed 2026-10-08 on `feature/req118-40-s5`: all nine functions of the §2 higher-order list except `fn:scan`, which stays deferred (post-June-2026 churn). Signatures + error codes verified against the live F&O 4.0 WG Review Draft and qt4tests edge cases; 3.1 mode raises XPST0017 | S1 |
-| **4.0-S6** | Enums + choice item types; structural records + `but with` | S3–S4 |
+| **4.0-S6** | Enums + choice item types; structural records + `but with` — S6a (enums §3.2.6 + choice item types §3.2.5, in-order alternative coercion §3.4.2 rule 02) landed 2026-10-08 on `feature/req118-40-s6a`: semantics verified against the live XPath 4.0 WG Review Draft; no XDM changes (string-based type-text branches in the parser + VmEngine); 3.1 mode rejects both with XPST0003. S6b (structural records + `but with`) remains | S3–S4 |
 | **4.0-S7** | XSLT 4.0 easy surfaces (`xsl:note`, `xsl:if then/else`, `separator`, `xsl:map`/`map-entry` upgrades) | §3 gate decision |
 | **4.0-S8** | `xsl:array` construction; `xsl:switch`; pattern system | S6, S7 |
 

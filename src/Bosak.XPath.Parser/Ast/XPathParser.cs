@@ -139,6 +139,8 @@
 //                      | Charles Korthout | 1.65  | 08-10-2026     | REQ-118 4.0-S4: '->' pipeline (PipelineExpr), '=!>' mapping arrow desugar, 'fn' focus  |
 //                      |                  |       |                | functions, 'for member'/'for key value' bindings (XPath 4.0, XPST0003 in 3.1)           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.66  | 08-10-2026     | REQ-118 4.0-S6a: enum types + choice item types in ItemType positions (XPST0003 in 3.1)|
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -4269,6 +4271,43 @@ internal sealed class XPathParser
         if (Match(TokenKind.LParen))
         {
             var inner = ParseSequenceType();
+
+            // XPath 4.0 §3.2.5 ChoiceItemType: "(ItemType ++ "|")". Alternatives are
+            // collected verbatim and re-serialized as (alt1|alt2|...) for the runtime
+            // type matcher; a singleton parenthesized type keeps the existing path.
+            if (Current.Kind == TokenKind.VBar)
+            {
+                if (!_xpath40)
+                    throw new XPathParseException("XPST0003: A choice item type ('|' alternatives in parentheses) requires XPath 4.0.", Current.Start);
+                var alternatives = new List<(string? Prefix, string Local, OccurrenceIndicator Occurrence)> { inner };
+                while (Match(TokenKind.VBar))
+                    alternatives.Add(ParseSequenceType());
+                Expect(TokenKind.RParen);
+                var sb = new System.Text.StringBuilder("(");
+                for (int i = 0; i < alternatives.Count; i++)
+                {
+                    if (i > 0) sb.Append('|');
+                    var alt = alternatives[i];
+                    sb.Append(alt.Prefix is null ? alt.Local : $"{alt.Prefix}:{alt.Local}");
+                    sb.Append(alt.Occurrence switch
+                    {
+                        OccurrenceIndicator.ZeroOrOne => "?",
+                        OccurrenceIndicator.ZeroOrMore => "*",
+                        OccurrenceIndicator.OneOrMore => "+",
+                        _ => ""
+                    });
+                }
+                sb.Append(')');
+                OccurrenceIndicator choiceOccurrence = OccurrenceIndicator.One;
+                if (Match(TokenKind.Question))
+                    choiceOccurrence = OccurrenceIndicator.ZeroOrOne;
+                else if (Match(TokenKind.Star))
+                    choiceOccurrence = OccurrenceIndicator.ZeroOrMore;
+                else if (Match(TokenKind.Plus))
+                    choiceOccurrence = OccurrenceIndicator.OneOrMore;
+                return (null, sb.ToString(), choiceOccurrence);
+            }
+
             Expect(TokenKind.RParen);
             var innerText = (inner.Prefix is null ? inner.Local : $"{inner.Prefix}:{inner.Local}")
                 + inner.Occurrence switch
@@ -4310,8 +4349,28 @@ internal sealed class XPathParser
 
     private (string? Prefix, string Local, OccurrenceIndicator Occurrence) ParseSingleType()
     {
+        // XPath 4.0 §3.2.5: a choice item type (all-generalized-atomic) or an enumeration
+        // type may appear as the target of 'cast'/'castable as' (e.g.
+        // "cast @when as (xs:date | xs:dateTime)"). Parse via the full sequence-type
+        // production so enum(...) and parenthesized choices flow through; non-atomic
+        // targets are rejected at runtime (XQST0052/XPST0051) as before.
+        if (_xpath40 && Current.Kind == TokenKind.LParen)
+        {
+            var choice = ParseSequenceType();
+            var choiceLocal = choice.Local;
+            // A singleton choice designates the inner type itself (XPath 4.0 §3.2.5);
+            // unwrap it so the runtime cast sees a plain type name.
+            if (choiceLocal.Length > 1 && choiceLocal[0] == '(' && choiceLocal[^1] == ')' && !choiceLocal.Contains('|'))
+                choiceLocal = choiceLocal[1..^1];
+            if (Match(TokenKind.Question))
+                return (choice.Prefix, choiceLocal, OccurrenceIndicator.ZeroOrOne);
+            if (choice.Occurrence is OccurrenceIndicator.ZeroOrMore or OccurrenceIndicator.OneOrMore)
+                throw new XPathParseException("XPST0003: '*' and '+' are not allowed as occurrence indicators in 'cast' or 'castable as' expressions.", Current.Start);
+            return (choice.Prefix, choiceLocal, choice.Occurrence);
+        }
+
         var (prefix, local, hasParens) = ParseTypeNameAndParens();
-        if (hasParens)
+        if (hasParens && !_xpath40)
             throw new XPathParseException("XPST0003: Type tests with parentheses are not allowed in 'cast' or 'castable as' expressions.", Current.Start);
 
         if (Match(TokenKind.Question))
@@ -4435,6 +4494,16 @@ internal sealed class XPathParser
             } while (parenDepth > 0 && Current.Kind != TokenKind.Eof);
             local = sb.ToString();
 
+            // XPath 4.0 §3.2.6 EnumerationType: enum("red", "green", ...). 'enum' is
+            // contextual — this branch only fires for a type-position Name 'enum'
+            // followed by '('; calls to a function named enum(...) never reach here.
+            if (baseLocal.Equals("enum", StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(prefix))
+            {
+                if (!_xpath40)
+                    throw new XPathParseException("XPST0003: An enumeration type ('enum(...)') requires XPath 4.0.", Current.Start);
+                ValidateEnumTypeLiterals(local);
+            }
+
             // "document" is neither a kind test nor a type name: document() and document(*)
             // in a SequenceType are syntax errors (K2-NodeTest-12/13).
             if (baseLocal == "document" && string.IsNullOrEmpty(prefix))
@@ -4474,6 +4543,92 @@ internal sealed class XPathParser
         }
 
         return (prefix, annotations.Length > 0 ? annotations + " " + local : local, hasParens);
+    }
+
+    // Validates the inner text of an EnumerationType (enum("a", "b", ...)): a non-empty
+    // comma-separated list of string literals (quote-aware: literals may contain commas,
+    // parentheses and doubled quotes). The runtime matcher re-parses the same text.
+    private static void ValidateEnumTypeLiterals(string enumText)
+    {
+        int open = enumText.IndexOf('(', StringComparison.Ordinal);
+        if (open < 0 || !enumText.EndsWith(")", StringComparison.Ordinal))
+            throw new XPathParseException("XPST0003: An enumeration type must have the form enum(\"value\", ...).", 0);
+        string inner = enumText[(open + 1)..^1];
+        int pos = 0;
+        int count = 0;
+        while (true)
+        {
+            while (pos < inner.Length && char.IsWhiteSpace(inner[pos])) pos++;
+            if (pos >= inner.Length)
+                break;
+            if (inner[pos] is not ('\'' or '"'))
+                throw new XPathParseException("XPST0003: Enumeration values must be string literals.", 0);
+            char quote = inner[pos++];
+            bool closed = false;
+            while (pos < inner.Length)
+            {
+                if (inner[pos] == quote)
+                {
+                    if (pos + 1 < inner.Length && inner[pos + 1] == quote) { pos += 2; continue; }
+                    pos++; closed = true; break;
+                }
+                pos++;
+            }
+            if (!closed)
+                throw new XPathParseException("XPST0003: Unterminated string literal in enumeration type.", 0);
+            count++;
+            while (pos < inner.Length && char.IsWhiteSpace(inner[pos])) pos++;
+            if (pos >= inner.Length)
+                break;
+            if (inner[pos] != ',')
+                throw new XPathParseException("XPST0003: Enumeration values must be separated by commas.", 0);
+            pos++;
+        }
+        if (count == 0)
+            throw new XPathParseException("XPST0003: An enumeration type must list at least one value.", 0);
+    }
+
+    // Parses the member values out of a validated EnumerationType text, unescaping doubled
+    // quotes. Returns null when the text is not a well-formed enumeration type.
+    internal static string[]? TryParseEnumTypeMembers(string enumText)
+    {
+        string trimmed = enumText.Trim();
+        if (!trimmed.StartsWith("enum(", StringComparison.OrdinalIgnoreCase) || !trimmed.EndsWith(')'))
+            return null;
+        string inner = trimmed[5..^1];
+        var members = new List<string>();
+        int pos = 0;
+        while (true)
+        {
+            while (pos < inner.Length && char.IsWhiteSpace(inner[pos])) pos++;
+            if (pos >= inner.Length)
+                break;
+            if (inner[pos] is not ('\'' or '"'))
+                return null;
+            char quote = inner[pos++];
+            var sb = new System.Text.StringBuilder();
+            bool closed = false;
+            while (pos < inner.Length)
+            {
+                if (inner[pos] == quote)
+                {
+                    if (pos + 1 < inner.Length && inner[pos + 1] == quote) { sb.Append(quote); pos += 2; continue; }
+                    pos++; closed = true; break;
+                }
+                sb.Append(inner[pos]);
+                pos++;
+            }
+            if (!closed)
+                return null;
+            members.Add(sb.ToString());
+            while (pos < inner.Length && char.IsWhiteSpace(inner[pos])) pos++;
+            if (pos >= inner.Length)
+                break;
+            if (inner[pos] != ',')
+                return null;
+            pos++;
+        }
+        return members.Count > 0 ? members.ToArray() : null;
     }
 
     // Captures the verbatim source text of annotation assertions
