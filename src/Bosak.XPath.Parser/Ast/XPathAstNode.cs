@@ -59,6 +59,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.20  | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode; ForBindingKind (member/key value) on QuantifiedBinding|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.21  | 08-10-2026     | REQ-118 4.0-S6b: BinaryOperator.ButWith for the XPath 4.0 'but with' operator         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -727,6 +729,9 @@ internal enum BinaryOperator
     /// <summary>The <c>??</c> otherwise operator (XPath 4.0 §4.17): returns the first
     /// operand unless it is the empty sequence, in which case it returns the second.</summary>
     Otherwise,
+    /// <summary>The <c>but with</c> record update operator (XPath 4.0 §4.15.4): returns
+    /// the left-hand record with the entries of the right-hand map merged in (use-last).</summary>
+    ButWith,
     /// <summary>The <c>!</c> simple map operator.</summary>
     SimpleMap,
     /// <summary>The range operator (lowered from <see cref="To"/>).</summary>

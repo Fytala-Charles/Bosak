@@ -116,6 +116,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.49  | 08-10-2026     | REQ-118 4.0-S4: LowerPipeline + IrOpCode.Pipeline; ForBindingKind/entry-value fields on QuantifiedLoopInfo
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.50  | 08-10-2026     | REQ-118 4.0-S6b: BinaryOperator.ButWith lowers to IrOpCode.ButWith                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -560,6 +562,7 @@ internal sealed class IrLowerer
             BinaryOperator.Union => IrOpCode.Concatenate,
             BinaryOperator.Intersect => IrOpCode.Intersect,
             BinaryOperator.Except => IrOpCode.Except,
+            BinaryOperator.ButWith => IrOpCode.ButWith,
             _ => throw new NotSupportedException($"Binary operator {node.Operator} is not supported by the IR lowerer.")
         };
 

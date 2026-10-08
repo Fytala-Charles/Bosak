@@ -365,6 +365,9 @@
 //                      | Charles Korthout | 2.166 | 08-10-2026     | REQ-118 4.0-S6a: enum types + choice item types (§3.2.5/§3.2.6) in ValueMatchesType, |
 //                      |                  |       |                | InstanceOf, TryCast (cast/castable), and node-kind conversion targets                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.167 | 08-10-2026     | REQ-118 4.0-S6b: structural record types (§3.2.10) — record annotations on XdmMap,   |
+//                      |                  |       |                | instance-of/coercion (§3.4.2 rule 10)/cast (§4.19.2.7), record lookup checks, 'but with'|
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -862,6 +865,16 @@ internal static class VmEngine
                         }
                         registers[instr.RegisterA] = NormalizeSequence(
                             XdmValue.FromSequence(MaterializedSequence.FromList(result)));
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.ButWith:
+                    {
+                        // XPath 4.0 §4.15.4: merge the RHS map into the LHS record
+                        // (use-last) and re-validate against the record annotation.
+                        registers[instr.RegisterA] = ButWith(
+                            registers[instr.RegisterB], registers[instr.RegisterC], context);
                         ip++;
                         break;
                     }
@@ -3055,7 +3068,11 @@ internal static class VmEngine
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
-                        var value = AtomizeForCast(registers[instr.RegisterB]);
+                        // XPath 4.0 §4.19.2.7: a record-type target takes a map operand,
+                        // which must not be atomized (maps otherwise raise FOTY0013).
+                        var value = IsRecordTypeText(typeName)
+                            ? registers[instr.RegisterB]
+                            : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
                         bool isEmpty = !SequenceHasAnyItem(value);
                         if (isEmpty)
@@ -3085,7 +3102,10 @@ internal static class VmEngine
                     {
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
-                        var value = AtomizeForCast(registers[instr.RegisterB]);
+                        // Record-type targets take a map operand (see the Cast case).
+                        var value = IsRecordTypeText(typeName)
+                            ? registers[instr.RegisterB]
+                            : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
                         bool isEmpty = !SequenceHasAnyItem(value);
                         bool castable;
@@ -4556,6 +4576,8 @@ internal static class VmEngine
                 throw new InvalidOperationException("XPTY0004");
             var key = AtomizeMapKey(args[0]);
             var map = funcValue.MapValue;
+            // XPath 4.0 §4.15.3: a record called as a function field-checks its key.
+            CheckRecordLookupKey(map, key);
             if (map.TryGetValue(key, out var value))
                 return value;
             return XdmValue.FromSequence(XdmSequence.Empty);
@@ -7817,6 +7839,80 @@ internal static class VmEngine
         OutOfRange,
     }
 
+    // XPath 4.0 §4.19.2.7: casting to a record type. record(*) is an assertion that the
+    // input already is a record (XPTY0004 otherwise). A typed record type reads the input
+    // as a map (XPTY0004 when it is not a map): a present field value is kept when it
+    // matches the field type, otherwise cast to it (a failed value cast is FORG0001); an
+    // absent field becomes () with XPTY0004 when the field type requires a value; surplus
+    // keys are DISCARDED (unlike coercion, §3.4.2 rule 10, which rejects them).
+    private static bool TryCastToRecord(XdmValue value, string recordText, EvaluationContext? context, out XdmValue result, out CastFailureKind failureKind)
+    {
+        failureKind = CastFailureKind.NotPermitted;
+        result = value;
+
+        // The empty sequence casts to the empty sequence (handled here because this
+        // branch runs before the general atomization/emptiness frame).
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var items = MaterializeSequence(value);
+            if (items.Length == 0)
+            {
+                result = XdmValue.Undefined;
+                return true;
+            }
+            if (items.Length > 1)
+                return false; // XPTY0004: more than one input item
+            value = items[0];
+        }
+        if (value.IsUndefined)
+        {
+            result = XdmValue.Undefined;
+            return true;
+        }
+
+        var target = TryGetRecordType(recordText);
+        if (target is null)
+            return false;
+        if (!value.IsMap)
+            return false; // XPTY0004: the input is not a map
+        var map = value.MapValue;
+
+        if (target.IsAny)
+            return map.RecordType is not null; // assertion: the input must already be a record
+
+        var casted = new XdmMap();
+        foreach (var field in target.Fields)
+        {
+            if (map.TryGetValue(RecordFieldKey(field.Name), out var fieldValue))
+            {
+                if (ValueMatchesType(fieldValue, field.SequenceTypeText, context))
+                {
+                    casted.Add(RecordFieldKey(field.Name), fieldValue);
+                }
+                else if (TryCast(fieldValue, field.SequenceTypeText, context, out var castField, out _))
+                {
+                    casted.Add(RecordFieldKey(field.Name), castField);
+                }
+                else
+                {
+                    failureKind = CastFailureKind.Lexical; // FORG0001
+                    return false;
+                }
+            }
+            else if (field.AllowsEmpty)
+            {
+                casted.Add(RecordFieldKey(field.Name), XdmValue.Undefined);
+            }
+            else
+            {
+                failureKind = CastFailureKind.NotPermitted; // XPTY0004
+                return false;
+            }
+        }
+        result = XdmValue.FromMap(casted.WithRecordType(target));
+        return true;
+    }
+
     private static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result, out CastFailureKind failureKind)
     {
         failureKind = CastFailureKind.Lexical;
@@ -7825,12 +7921,13 @@ internal static class VmEngine
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
 
-        // XPath 4.0 §3.2.5/§3.2.6: enum and choice item types are structural type texts,
-        // not QNames — prefix resolution (and its XPST0081 errors) must not run on them.
+        // XPath 4.0 §3.2.5/§3.2.6/§3.2.10: enum, choice, and record type texts are
+        // structural, not QNames — prefix resolution (and its XPST0081 errors) must not
+        // run on them.
         var castTargetText = typeName.Trim();
         if (castTargetText.EndsWith('?') || castTargetText.EndsWith('*') || castTargetText.EndsWith('+'))
             castTargetText = castTargetText[..^1].TrimEnd();
-        bool isStructuralCastTarget = IsEnumOrChoiceTypeText(castTargetText);
+        bool isStructuralCastTarget = IsEnumOrChoiceTypeText(castTargetText) || IsRecordTypeText(castTargetText);
 
         var (resolvedNs, resolvedLocal) = isStructuralCastTarget
             ? default
@@ -7859,6 +7956,18 @@ internal static class VmEngine
                 // ResolveTypeQName already reports XPST0081 for undeclared prefixes,
                 // and the schema-type path below handles user-defined types.
             }
+        }
+
+        // XPath 4.0 §4.19.2.7 (casting to a record type): the input is a map — it must
+        // NOT be atomized (maps otherwise raise FOTY0013), so this branch runs before
+        // the atomization below. record(*) is an assertion that the input already is a
+        // record (XPTY0004 otherwise); a typed record type coerces per field — present
+        // values are kept when they match, otherwise cast to the field type (FORG0001 on
+        // failure); absent fields become () with XPTY0004 when the field type requires a
+        // value; surplus keys are DISCARDED (unlike coercion, §3.4.2 rule 10).
+        if (IsRecordTypeText(castTargetText))
+        {
+            return TryCastToRecord(value, castTargetText, context, out result, out failureKind);
         }
 
         // Atomize the operand: arrays are recursively flattened, nodes are atomized,
@@ -9459,6 +9568,17 @@ internal static class VmEngine
         if (itemTypeText.Length > 1 && itemTypeText[^1] is '?' or '*' or '+')
             itemTypeText = itemTypeText[..^1].TrimEnd();
         if (TryGetEnumMembers(itemTypeText) is not null || TryGetChoiceAlternatives(itemTypeText, out _))
+        {
+            if (!value.IsSequence)
+                return ValueMatchesType(value, itemTypeText, context);
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (!ValueMatchesType(item, itemTypeText, context))
+                    return false;
+            return true;
+        }
+        // XPath 4.0 §3.2.10: record types are structural texts matched per item, like
+        // enum/choice texts above (the QName resolution below does not apply to them).
+        if (IsRecordTypeText(itemTypeText))
         {
             if (!value.IsSequence)
                 return ValueMatchesType(value, itemTypeText, context);
@@ -11296,6 +11416,14 @@ internal static class VmEngine
                 && value.Kind == XdmValueKind.String && !IsUntypedAtomicValue(value)
                 && enumMembers.Contains(AtomizedString(value), StringComparer.Ordinal);
         }
+        // XPath 4.0 §3.2.10: record types match structurally — a plain map never matches,
+        // an annotated record matches record(*) and, for a typed record type, matches when
+        // its shape is exactly the declared fields with matching values.
+        if (IsRecordTypeText(rawText))
+        {
+            var recordTarget = TryGetRecordType(rawText);
+            return recordTarget is not null && RecordValueMatchesType(value, recordTarget, context);
+        }
 
         // Unwrap redundant outer parentheses: (function(xs:integer) as xs:integer) is the
         // same type as function(xs:integer) as xs:integer (hof-013).
@@ -11857,6 +11985,159 @@ internal static class VmEngine
         => TryGetEnumMembers(typeText) is not null || TryGetChoiceAlternatives(typeText, out _);
 
     /// <summary>
+    /// Returns true when the sequence-type text denotes an XPath 4.0 structural record
+    /// type (§3.2.10): <c>record(*)</c> or <c>record(field, ...)</c>. Such texts are
+    /// structural, not QNames, so they bypass QName-based type resolution everywhere
+    /// enum/choice texts do.
+    /// </summary>
+    private static bool IsRecordTypeText(string typeText)
+    {
+        var trimmed = typeText.Trim();
+        if (trimmed.Equals("record(*)", StringComparison.Ordinal)) return true;
+        return XPathParser.TryParseRecordTypeFields(trimmed) is not null;
+    }
+
+    /// <summary>
+    /// Parses a record-type text into its annotation form (fields in declaration order
+    /// plus the verbatim text). Returns <see cref="XdmRecordType.Any"/> for
+    /// <c>record(*)</c>; <see langword="null"/> when the text is not a well-formed
+    /// record type (the parser-side validator guarantees well-formedness for compiled
+    /// expressions; duplicates were rejected with XPST0021 at parse time).
+    /// </summary>
+    private static XdmRecordType? TryGetRecordType(string typeText)
+    {
+        var trimmed = typeText.Trim();
+        if (trimmed.Equals("record(*)", StringComparison.Ordinal)) return XdmRecordType.Any;
+        var fields = XPathParser.TryParseRecordTypeFields(trimmed);
+        return fields is null ? null : new XdmRecordType(fields, trimmed);
+    }
+
+    /// <summary>The map key for a record field: a string atomic value equal to the field name.</summary>
+    private static XdmValue RecordFieldKey(string fieldName) => XdmValue.FromString(fieldName);
+
+    /// <summary>
+    /// XPath 4.0 §3.2.10 structural matching: a value matches a record type only when it
+    /// is a map carrying a record annotation (plain maps never match), and for a typed
+    /// record type the entry count equals the field count and every declared field is
+    /// present with a value matching its declared type. Field values are matched
+    /// recursively, which gives the spec's covariant field-type subtyping.
+    /// </summary>
+    private static bool RecordValueMatchesType(XdmValue value, XdmRecordType target, EvaluationContext? context)
+    {
+        if (value.IsUndefined || value.IsSequence || !value.IsMap) return false;
+        var map = value.MapValue;
+        if (map.RecordType is null) return false;
+        if (target.IsAny) return true;
+        if (map.Count != target.Fields.Count) return false;
+        foreach (var field in target.Fields)
+        {
+            if (!map.TryGetValue(RecordFieldKey(field.Name), out var fieldValue)) return false;
+            if (!ValueMatchesType(fieldValue, field.SequenceTypeText, context)) return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// XPath 4.0 §3.4.2 rule 10 (record coercion): builds a new map annotated with the
+    /// target record type. A surplus key is a type error (XPTY0004); a missing field
+    /// becomes an entry with the empty sequence (XPTY0004 when the field type does not
+    /// allow empty); a present value is converted recursively to the field type. Entries
+    /// are stored in field-declaration order. For <c>record(*)</c> the map must already
+    /// carry a record annotation, otherwise a plain map has no coercion rule (XPTY0004).
+    /// </summary>
+    private static XdmMap CoerceMapToRecord(XdmMap map, XdmRecordType target, string targetText, EvaluationContext? context)
+    {
+        if (target.IsAny)
+        {
+            if (map.RecordType is null)
+                throw new InvalidOperationException($"XPTY0004: Cannot convert a plain map to {targetText}: the target type is record(*), which requires an existing record annotation.");
+            return map;
+        }
+        // Surplus keys can never become fields of the record: reject them up front.
+        foreach (var key in map.Keys)
+        {
+            if (key.Kind != XdmValueKind.String || !target.HasField(AtomizedString(key)))
+            {
+                string keyName = key.Kind == XdmValueKind.String ? AtomizedString(key) : key.ToString();
+                throw new InvalidOperationException($"XPTY0004: The map contains an entry '{keyName}' that is not a declared field of the record type {target.TypeText}.");
+            }
+        }
+        var result = new XdmMap();
+        foreach (var field in target.Fields)
+        {
+            XdmValue fieldValue;
+            if (map.TryGetValue(RecordFieldKey(field.Name), out var present))
+            {
+                fieldValue = ApplyFunctionConversion(present, field.SequenceTypeText, context);
+            }
+            else if (field.AllowsEmpty)
+            {
+                fieldValue = XdmValue.Undefined;
+            }
+            else
+            {
+                throw new InvalidOperationException($"XPTY0004: The required field '{field.Name}' is absent and its declared type {field.SequenceTypeText} does not allow an empty sequence.");
+            }
+            result.Add(RecordFieldKey(field.Name), fieldValue);
+        }
+        return result.WithRecordType(target);
+    }
+
+    /// <summary>
+    /// XPath 4.0 §4.15.4: <c>$A but with $B</c> is equivalent to
+    /// <c>let $temp as R := map:merge(($A, $B), {{'duplicates':'use-last'}}) return $temp</c>,
+    /// where R is the record annotation of A. The left operand must be a record (a map
+    /// with a record annotation — a plain map has no annotation to name R); the right
+    /// operand must be a map. Unknown fields and values that cannot be coerced to their
+    /// field types raise XPTY0004 through the record coercion of the merged map.
+    /// </summary>
+    internal static XdmValue ButWith(XdmValue left, XdmValue right, EvaluationContext context)
+    {
+        var lhsItem = SingleMapOperand(left, "left", "record");
+        var annotation = lhsItem.MapValue.RecordType
+            ?? throw new InvalidOperationException("XPTY0004: The left operand of 'but with' must be a record (a map with a record annotation); got a plain map.");
+        var rhsItem = SingleMapOperand(right, "right", "map");
+        XdmMap merged = lhsItem.MapValue;
+        foreach (var entry in rhsItem.MapValue.Entries)
+            merged = merged.WithAdded(entry.Key, entry.Value);
+        return XdmValue.FromMap(CoerceMapToRecord(merged, annotation, annotation.TypeText, context));
+    }
+
+    /// <summary>Unwraps a singleton map operand for <c>but with</c>, raising XPTY0004 otherwise.</summary>
+    private static XdmValue SingleMapOperand(XdmValue value, string side, string requirement)
+    {
+        if (value.IsUndefined)
+            throw new InvalidOperationException($"XPTY0004: The {side} operand of 'but with' must be a {requirement}; got the empty sequence.");
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var items = MaterializeSequence(value);
+            if (items.Length == 1)
+                value = items[0];
+        }
+        if (value.IsSequence || !value.IsMap)
+            throw new InvalidOperationException($"XPTY0004: The {side} operand of 'but with' must be a {requirement}.");
+        return value;
+    }
+
+    /// <summary>
+    /// XPath 4.0 §4.15.3: the lookup operator and record-as-function calls raise XPTY0004
+    /// for a key that is not a declared field of the record's annotation; plain maps keep
+    /// returning the empty sequence. Wildcard lookup (<c>?*</c>) does not pass a key and
+    /// is unaffected.
+    /// </summary>
+    private static void CheckRecordLookupKey(XdmMap map, XdmValue key)
+    {
+        var annotation = map.RecordType;
+        if (annotation is null || annotation.IsAny)
+            return;
+        if (key.Kind != XdmValueKind.String && !IsUntypedAtomicValue(key))
+            return;
+        string name = AtomizedString(key);
+        if (!annotation.HasField(name))
+            throw new InvalidOperationException($"XPTY0004: The key '{name}' is not a declared field of the record type {annotation.TypeText}.");
+    }
+
+    /// <summary>
     /// Whether a choice alternative can never be the target of a cast (XPath 4.0 §19.3
     /// permits only atomic cast targets): node kind tests, function/map/array types, and
     /// item(). Such alternatives contribute a match check but no coercion attempt.
@@ -12303,6 +12584,55 @@ internal static class VmEngine
     /// <exception cref="InvalidOperationException">No function conversion rule applies (XPTY0004).</exception>
     public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
     {
+        // XPath 4.0 §3.4.2 rule 10 (record coercion): a record type text is structural
+        // and is not a legal QName conversion target, so it is handled before the
+        // syntactic parse of the target below. The occurrence indicator applies to the
+        // record item itself: each item of the input is coerced individually.
+        var recordTargetText = targetType.Trim();
+        bool recordAllowsEmpty = false;
+        bool recordAllowsMultiple = false;
+        if (recordTargetText.Length > 1 && recordTargetText[^1] is '?' or '*' or '+')
+        {
+            recordAllowsEmpty = recordTargetText[^1] is '?' or '*';
+            recordAllowsMultiple = recordTargetText[^1] is '*' or '+';
+            var recordBaseText = recordTargetText[..^1].TrimEnd();
+            if (IsRecordTypeText(recordBaseText))
+            {
+                var recordTarget = TryGetRecordType(recordBaseText)!;
+                if (value.IsUndefined)
+                {
+                    if (recordAllowsEmpty)
+                        return XdmValue.Undefined;
+                    throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
+                }
+                var recordItems = new List<XdmValue>();
+                if (value.IsSequence && value.SequenceValue is not null)
+                {
+                    foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                        recordItems.Add(item);
+                }
+                else
+                {
+                    recordItems.Add(value);
+                }
+                if (recordItems.Count > 1 && !recordAllowsMultiple)
+                    throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
+                var coercedRecords = new List<XdmValue>(recordItems.Count);
+                foreach (var item in recordItems)
+                {
+                    if (!item.IsMap)
+                        throw new InvalidOperationException($"XPTY0004: Cannot convert {item.Kind} to {targetType}: record coercion requires a map.");
+                    coercedRecords.Add(XdmValue.FromMap(CoerceMapToRecord(item.MapValue, recordTarget, targetType, context)));
+                }
+                return coercedRecords.Count == 1 ? coercedRecords[0]
+                    : XdmValue.FromSequence(MaterializedSequence.FromList(coercedRecords));
+            }
+        }
+        else if (IsRecordTypeText(recordTargetText))
+        {
+            return ApplyFunctionConversion(value, recordTargetText + "?", context);
+        }
+
         // The syntactic parse of the target sequence type depends only on the type string,
         // so it is cached per distinct name (call sites repeat the same handful of type
         // names per call); schema-dependent validation and the value-dependent conversion
@@ -13737,6 +14067,9 @@ internal static class VmEngine
         if (container.Kind == XdmValueKind.Map)
         {
             var vkey = AtomizeMapKey(key);
+            // XPath 4.0 §4.15.3: an undeclared field on a record is XPTY0004; plain
+            // maps keep returning the empty sequence for unknown keys.
+            CheckRecordLookupKey(container.MapValue, vkey);
             if (container.MapValue.TryGetValue(vkey, out var value))
                 AppendLookupResult(results, value);
             return;

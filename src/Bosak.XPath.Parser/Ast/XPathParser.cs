@@ -140,6 +140,7 @@
 //                      |                  |       |                | functions, 'for member'/'for key value' bindings (XPath 4.0, XPST0003 in 3.1)           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.66  | 08-10-2026     | REQ-118 4.0-S6a: enum types + choice item types in ItemType positions (XPST0003 in 3.1)|
+//                      | Charles Korthout | 1.67  | 08-10-2026     | REQ-118 4.0-S6b: record types in ItemType positions + 'but with' operator (XPST0003 in 3.1)|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1363,24 +1364,45 @@ internal sealed class XPathParser
         return left;
     }
 
-    // IntersectExceptExpr ::= InstanceofExpr (("intersect" | "except") InstanceofExpr)*
+    // IntersectExceptExpr ::= ButWithExpr (("intersect" | "except") ButWithExpr)*
     private XPathAstNode ParseIntersectExceptExpr()
     {
         int start = Current.Start;
-        var left = ParseInstanceofExpr();
+        var left = ParseButWithExpr();
         while (true)
         {
             if (Match(TokenKind.KeywordIntersect))
             {
-                var right = ParseInstanceofExpr();
+                var right = ParseButWithExpr();
                 left = WithSpan(new BinaryExpressionNode(left, BinaryOperator.Intersect, right), start, End);
             }
             else if (Match(TokenKind.KeywordExcept))
             {
-                var right = ParseInstanceofExpr();
+                var right = ParseButWithExpr();
                 left = WithSpan(new BinaryExpressionNode(left, BinaryOperator.Except, right), start, End);
             }
             else break;
+        }
+        return left;
+    }
+
+    // ButWithExpr ::= InstanceofExpr ("but" "with" InstanceofExpr)*
+    // XPath 4.0 §4.15.4: '$A but with $B' returns a record like $A with the entries of
+    // $B merged in (use-last); 'but'/'with' are contextual keywords. Left-associative,
+    // sitting directly under IntersectExceptExpr in the grammar chain.
+    private XPathAstNode ParseButWithExpr()
+    {
+        int start = Current.Start;
+        var left = ParseInstanceofExpr();
+        while (Current.Kind == TokenKind.Name && GetString(Current) == "but"
+            && Peek(1).Kind == TokenKind.Name && GetString(Peek(1)) == "with")
+        {
+            if (!_xpath40)
+                throw new XPathParseException("XPST0003: The 'but with' operator requires XPath 4.0.", Current.Start);
+            Advance(); // 'but'
+            Advance(); // 'with'
+            var right = ParseInstanceofExpr();
+            left = WithSpan(new BinaryExpressionNode(left, BinaryOperator.ButWith, right), start, End);
         }
         return left;
     }
@@ -4504,6 +4526,17 @@ internal sealed class XPathParser
                 ValidateEnumTypeLiterals(local);
             }
 
+            // XPath 4.0 §3.2.10 RecordType: record(*) or record(field, ...). Like enum,
+            // 'record' is contextual here — this branch only fires for a type-position
+            // Name 'record' followed by '('. The field list is parsed from the verbatim
+            // text so the runtime can attach/validate record annotations on maps.
+            if (baseLocal.Equals("record", StringComparison.Ordinal) && string.IsNullOrEmpty(prefix))
+            {
+                if (!_xpath40)
+                    throw new XPathParseException("XPST0003: A record type ('record(...)') requires XPath 4.0.", Current.Start);
+                ValidateRecordTypeFields(local);
+            }
+
             // "document" is neither a kind test nor a type name: document() and document(*)
             // in a SequenceType are syntax errors (K2-NodeTest-12/13).
             if (baseLocal == "document" && string.IsNullOrEmpty(prefix))
@@ -4629,6 +4662,169 @@ internal sealed class XPathParser
             pos++;
         }
         return members.Count > 0 ? members.ToArray() : null;
+    }
+
+    // Validates the inner text of a RecordType (record(...)): 'record(*)', the empty
+    // record 'record()', or a comma-separated list of FieldDeclarations
+    // (FieldName ('as' SequenceType)?, with an optional trailing comma). Field names may
+    // be NCNames or string literals; duplicate field names are XPST0021. The runtime
+    // re-parses the same text via TryParseRecordTypeFields.
+    private static void ValidateRecordTypeFields(string recordText)
+    {
+        var trimmed = recordText.Trim();
+        bool wellFormed = trimmed.Equals("record(*)", StringComparison.Ordinal)
+            || TryParseRecordTypeFields(recordText) is not null;
+        if (!wellFormed)
+            throw new XPathParseException("XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).", 0);
+    }
+
+    // Parses the field declarations out of a RecordType text into the Core XDM
+    // representation. Returns null when the text is not a well-formed record type;
+    // throws XPST0021 on duplicate field names (the declaration is well-formed but
+    // illegal). Quote- and paren-aware: field names may be string literals containing
+    // commas or parentheses, and field types may contain parenthesized or nested types.
+    internal static XdmRecordField[]? TryParseRecordTypeFields(string recordText)
+    {
+        string trimmed = recordText.Trim();
+        if (!trimmed.StartsWith("record(", StringComparison.Ordinal) || !trimmed.EndsWith(')'))
+            return null;
+        string inner = trimmed[7..^1];
+        var fields = new List<XdmRecordField>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        int pos = 0;
+        SkipWhite(inner, ref pos);
+        // 'record()' (the grammar's zero-repetition form) declares the empty record;
+        // 'record(*)' is the wildcard and is not a field list.
+        if (pos >= inner.Length)
+            return fields.ToArray();
+        if (inner[pos] == '*')
+            return null;
+        while (true)
+        {
+            SkipWhite(inner, ref pos);
+            if (pos >= inner.Length)
+                return null;
+            string name;
+            if (inner[pos] is '\'' or '"')
+            {
+                if (!TryReadFieldNameLiteral(inner, ref pos, out name))
+                    return null;
+            }
+            else
+            {
+                int nameStart = pos;
+                while (pos < inner.Length && !char.IsWhiteSpace(inner[pos]) && inner[pos] != ',')
+                    pos++;
+                name = inner[nameStart..pos];
+                if (!IsFieldNameNcName(name))
+                    return null;
+            }
+            if (!seen.Add(name))
+                throw new XPathParseException($"XPST0021: The record type declares the field '{name}' more than once.", 0);
+
+            SkipWhite(inner, ref pos);
+            string typeText = "item()*";
+            bool allowsEmpty = true;
+            if (pos < inner.Length
+                && inner[pos] == 'a' && pos + 1 < inner.Length && inner[pos + 1] == 's'
+                && (pos + 2 >= inner.Length || char.IsWhiteSpace(inner[pos + 2])))
+            {
+                pos += 2;
+                SkipWhite(inner, ref pos);
+                int typeStart = pos;
+                int depth = 0;
+                while (pos < inner.Length)
+                {
+                    char c = inner[pos];
+                    if (c is '\'' or '"')
+                    {
+                        if (!SkipFieldTypeLiteral(inner, ref pos))
+                            return null;
+                        continue;
+                    }
+                    if (c == '(') depth++;
+                    else if (c == ')') { if (depth == 0) return null; depth--; }
+                    else if (c == ',' && depth == 0) break;
+                    pos++;
+                }
+                if (depth != 0)
+                    return null;
+                typeText = inner[typeStart..pos].Trim();
+                if (typeText.Length == 0)
+                    return null;
+                allowsEmpty = typeText[^1] is '?' or '*'
+                    || typeText.Equals("empty-sequence()", StringComparison.Ordinal);
+            }
+            fields.Add(new XdmRecordField(name, typeText, allowsEmpty));
+
+            SkipWhite(inner, ref pos);
+            if (pos >= inner.Length)
+                break;
+            if (inner[pos] != ',')
+                return null;
+            pos++;
+            // The grammar allows a trailing comma: record(a, b,).
+            SkipWhite(inner, ref pos);
+            if (pos >= inner.Length)
+                break;
+        }
+        return fields.ToArray();
+    }
+
+    private static void SkipWhite(string text, ref int pos)
+    {
+        while (pos < text.Length && char.IsWhiteSpace(text[pos])) pos++;
+    }
+
+    // Reads a string-literal field name ("..." or '...'), unescaping doubled quotes.
+    private static bool TryReadFieldNameLiteral(string text, ref int pos, out string value)
+    {
+        value = string.Empty;
+        char quote = text[pos++];
+        var sb = new StringBuilder();
+        while (pos < text.Length)
+        {
+            if (text[pos] == quote)
+            {
+                if (pos + 1 < text.Length && text[pos + 1] == quote) { sb.Append(quote); pos += 2; continue; }
+                pos++;
+                value = sb.ToString();
+                return true;
+            }
+            sb.Append(text[pos]);
+            pos++;
+        }
+        return false;
+    }
+
+    // Skips a string literal inside a field type (literals may contain commas or parens).
+    private static bool SkipFieldTypeLiteral(string text, ref int pos)
+    {
+        char quote = text[pos++];
+        while (pos < text.Length)
+        {
+            if (text[pos] == quote)
+            {
+                if (pos + 1 < text.Length && text[pos + 1] == quote) { pos += 2; continue; }
+                pos++;
+                return true;
+            }
+            pos++;
+        }
+        return false;
+    }
+
+    // A field name written as an NCName: letter or '_' start, then letters, digits,
+    // '.', '-' or '_'. (A pragmatic NCName check; the lexer validated NCNames in the
+    // source, this re-validates the concatenated verbatim text.)
+    private static bool IsFieldNameNcName(string name)
+    {
+        if (name.Length == 0 || !(char.IsLetter(name[0]) || name[0] == '_'))
+            return false;
+        foreach (char c in name)
+            if (!(char.IsLetterOrDigit(c) || c is '.' or '-' or '_'))
+                return false;
+        return true;
     }
 
     // Captures the verbatim source text of annotation assertions
