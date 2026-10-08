@@ -98,6 +98,9 @@
 //                      | Charles Korthout | 2.33  | 03-10-2026     | REQ-120 Slice 3: additive CollectionLoader host hook (SemVer minor) returning member     |
 //                      |                  |       |                | document URIs for fn:collection / fn:uri-collection; RegisterTree contract documented    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.34  | 08-10-2026     | REQ-118: internal IsXPath40 flag (4.0-S0 gate) stamped by the Api layer so               |
+//                      |                  |       |                | FunctionLibrary.Populate can hide XPath 4.0-only functions from 3.1 contexts             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -296,6 +299,19 @@ public sealed class EvaluationContext
     /// functions.
     /// </summary>
     public bool IsStaticEvaluation { get; set; }
+
+    /// <summary>
+    /// When true, the host compilation targeted XPath 4.0 and the standard function
+    /// table may expose XPath 4.0-only functions. The Api layer
+    /// (<c>XPath31Expression</c>) stamps this from
+    /// <c>CompileOptions.Compatibility</c> before populating the context; XSLT and
+    /// XQuery hosts leave it <c>false</c>, keeping their 3.1 behavior unchanged.
+    /// The Runtime layer cannot reference the Api enum
+    /// (<c>XPathCompatibility</c>) due to project layering, so
+    /// the version knowledge crosses the layer boundary as this flag (REQ-118
+    /// version gate, slice 4.0-S0).
+    /// </summary>
+    internal bool IsXPath40 { get; set; }
 
     /// <summary>
     /// When true, the evaluation is being performed by the XSLT processor and

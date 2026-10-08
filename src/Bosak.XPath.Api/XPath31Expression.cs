@@ -29,6 +29,9 @@
 //                      | Charles Korthout | 0.11  | 24-09-2026     | REQ-104: CompileOptions.SchemaSet threaded to the parser (schemaAware) and the         |
 //                      |                  |       |                | static name-test validator (declaration-aware XPST0008)                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 08-10-2026     | REQ-118 4.0-S0: static XPST0017 for XPath 4.0-only functions in 3.1 mode;               |
+//                      |                  |       |                | compiled compatibility stamped onto the EvaluationContext before Populate               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
@@ -51,14 +54,16 @@ public sealed class XPath31Expression
     private readonly string? _defaultElementNamespace;
     private readonly string? _definingElementDefaultNamespace;
     private readonly string? _baseUri;
+    private readonly XPathCompatibility _compatibility;
 
-    private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null, string? definingElementDefaultNamespace = null, string? baseUri = null)
+    private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null, string? definingElementDefaultNamespace = null, string? baseUri = null, XPathCompatibility compatibility = XPathCompatibility.XPath31)
     {
         _module = module;
         _namespaces = namespaces;
         _defaultElementNamespace = defaultElementNamespace;
         _definingElementDefaultNamespace = definingElementDefaultNamespace;
         _baseUri = baseUri;
+        _compatibility = compatibility;
     }
 
     /// <summary>
@@ -104,7 +109,7 @@ public sealed class XPath31Expression
         var lowerer = new IrLowerer();
         var module = lowerer.Lower(optimized);
 
-        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace, options.DefiningElementDefaultNamespace, options.BaseUri);
+        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace, options.DefiningElementDefaultNamespace, options.BaseUri, options.Compatibility);
     }
 
     private const string DefaultFunctionNamespace = "http://www.w3.org/2005/xpath-functions";
@@ -136,6 +141,34 @@ public sealed class XPath31Expression
 
         if (!string.IsNullOrEmpty(nsUri) && RemovedFunctions.Contains((nsUri, localName)))
             throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName} has been removed");
+    }
+
+    // REQ-118 version gate (4.0-S0): XPath 4.0-only functions are rejected at compile
+    // time in 3.1 mode with XPST0017, mirroring the removed-function check above. The
+    // RemovedFunctions behavior above stays byte-identical; this is a separate check.
+    // When the caller supplied no namespace context, prefixed names may not have
+    // resolved to a URI; the predefined fn/map/array/math prefixes then fall back to
+    // their canonical URIs (matching EvaluationContext's predefined bindings) so the
+    // gate still applies to them.
+    private static void ThrowIfXPath40OnlyFunction(string? nsUri, string localName, string? prefix, CompileOptions options)
+    {
+        if (options.Compatibility >= XPathCompatibility.XPath40)
+            return;
+        if (string.IsNullOrEmpty(nsUri))
+        {
+            nsUri = prefix switch
+            {
+                "fn" => DefaultFunctionNamespace,
+                "map" => "http://www.w3.org/2005/xpath-functions/map",
+                "array" => "http://www.w3.org/2005/xpath-functions/array",
+                "math" => "http://www.w3.org/2005/xpath-functions/math",
+                _ => null,
+            };
+        }
+        if (!string.IsNullOrEmpty(nsUri)
+            && FunctionLibrary.XPath40OnlyFunctionNames.Contains((nsUri, localName)))
+            throw new InvalidOperationException(
+                $"XPST0017: Function {{{nsUri}}}{localName} is defined in XPath 4.0 and is not available when targeting XPath {(int)options.Compatibility}; set CompileOptions.Compatibility to XPathCompatibility.XPath40.");
     }
 
     private static XPathAstNode ResolveFunctionNamespaces(XPathAstNode node, CompileOptions options)
@@ -189,6 +222,7 @@ public sealed class XPath31Expression
             NamespaceUri = nsUri
         };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
+        ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
         return resolved;
     }
 
@@ -199,6 +233,7 @@ public sealed class XPath31Expression
             : node.NamespaceUri;
         var resolved = node with { NamespaceUri = nsUri };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
+        ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
         return resolved;
     }
 
@@ -209,6 +244,7 @@ public sealed class XPath31Expression
     {
         var ctx = new EvaluationContext()
             .WithFocus(XdmValue.FromNode(contextItem), 1, 1);
+        ctx.IsXPath40 = _compatibility >= XPathCompatibility.XPath40;
 
         FunctionLibrary.Populate(ctx);
         return Evaluate(ctx);
@@ -220,6 +256,9 @@ public sealed class XPath31Expression
     public XdmValue Evaluate(EvaluationContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
+        // REQ-118 version gate: stamp the compiled compatibility onto the context so
+        // FunctionLibrary.Populate installs (or hides) XPath 4.0-only functions.
+        context.IsXPath40 = _compatibility >= XPathCompatibility.XPath40;
         if (!context.SkipStandardFunctionPopulation)
             FunctionLibrary.Populate(context);
 

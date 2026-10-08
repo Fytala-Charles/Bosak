@@ -9,7 +9,7 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 7 October 2026
+> **Last updated:** 8 October 2026
 > **Bosak baseline:** 2,729 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
@@ -19,6 +19,8 @@
 ---
 
 ## 0. Recent Changes
+
+- **2026-10-08** — **XPath 4.0 version gate + first function batch (REQ-118 slices 4.0-S0/S1 part 1, branch `feature/req118-40-gate-s1`).** **Consumers on the 3.1 default: nothing changes** — default `CompileOptions.Compatibility` stays `XPathCompatibility.XPath31`, behavior is bit-identical, and QT3 **31,142/0/679** is preserved. **4.0 opt-in:** `XPath31Expression.Compile(expr, new CompileOptions { Compatibility = XPathCompatibility.XPath40 })`. In 3.1 mode, XPath 4.0-only functions raise **XPST0017 at compile time** (call form and named-function-ref form) and are absent from 3.1 `fn:function-lookup`/dynamic-dispatch tables; in 4.0 mode they compile and evaluate normally. First batch (F&O 4.0, spec-verified): `fn:replicate`, `fn:slice`, `fn:items-at`, `fn:foot`, `fn:trunk`, `fn:insert-separator`, `fn:char` (full WHATWG HTML5 named-character-reference table), `fn:characters`. New public surface (additive/frozen-surface-safe): enum member `XPathCompatibility.XPath40`, `FunctionSignature.IsXPath40Only`, `FunctionLibrary.XPath40OnlyFunctionNames`; runtime version knowledge crosses the layer boundary as an internal `EvaluationContext.IsXPath40` flag (Runtime cannot reference the Api enum), stamped by `XPath31Expression.Evaluate` before `FunctionLibrary.Populate`. XSLT and XQuery hosts are unaffected (they never set the flag — 3.1 tables). Gates: Release build 0/0; unit all green incl. 16 new `VersionGateTests` (Api.Tests) + 50 new `XPath40FunctionTests` (Standard.Tests); QT3 **31,142/0/679**; XSLT basic sweep unchanged (zero XSLT-project files touched — smoke only). Usage: §2.1 (`CompileOptions.Compatibility`). (XPathCompatibility 0.2, XPathFunction 0.52, EvaluationContext 2.34, FunctionLibrary 5.116, Html5CharacterReferences generated, XPath31Expression 0.12.)
 
 - **2026-10-07** — **Release: `v0.13.0` published to nuget.org — the `-beta` postfix is stripped; this is the pre-1.0 soak release** (workflow run 37682060968, green 4m56s; all **10** packages `Created`, Trusted Publishing OIDC — the pre-tag pin bump from PR #76 worked, no all-skipped re-pack). Package identity is now un-postfixed (`Bosak.XPath.Api` 0.13.0 etc.); the nuget.org search index lags the flat container by minutes — verify via the flat-container URL, not search. Carries everything since 0.12.3-beta; the paired `v1.0.0` tags follow the soak readout.
 
@@ -1805,6 +1807,14 @@ var result2 = expr2.Evaluate(
         .WithVariable("minPrice",  XdmValue.FromDecimal(100.00m))
         .WithVariable("taxRate",   XdmValue.FromDecimal(0.21m))
         .WithVariable("amount",    XdmValue.FromDecimal(500.00m)));
+```
+
+**XPath 4.0 opt-in (REQ-118).** The default target is XPath 3.1 and is unchanged. Compiling with `Compatibility = XPathCompatibility.XPath40` additionally enables the XPath 4.0 surfaces as they land — currently the 4.0-only F&O functions (`fn:replicate`, `fn:slice`, `fn:items-at`, `fn:foot`, `fn:trunk`, `fn:insert-separator`, `fn:char`, `fn:characters`); grammar features land in later slices. In 3.1 mode a call to a 4.0-only function fails at compile time with **XPST0017**, and 3.1 evaluation contexts do not expose them through `fn:function-lookup` or dynamic dispatch:
+
+```csharp
+var expr40 = XPath31Expression.Compile(
+    "fn:slice($in, 2, 4)",
+    new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
 ```
 
 ### 2.2 Evaluation Context

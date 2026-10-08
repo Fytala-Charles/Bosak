@@ -91,6 +91,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.115 | 28-09-2026     | xsl:product-version fallback bumped to 0.12.0-beta (schema seam release)               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.116 | 08-10-2026     | REQ-118 4.0-S0/S1: XPath40OnlyFunctionNames set + 3.1 template filtering; first        |
+//                      |                  |       |                | 4.0-only function batch (replicate, slice, items-at, foot, trunk, insert-separator,    |
+//                      |                  |       |                | char, characters); Html5CharacterReferences table for fn:char                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -415,6 +419,15 @@ namespace Bosak.XPath.Standard.Functions;
 public static class FunctionLibrary
 {
     private static readonly FrozenDictionary<(string ns, string name, int arity), FunctionSignature> StandardFunctions;
+
+    /// <summary>
+    /// The (namespace URI, local name) pairs of all standard functions that are defined
+    /// by XPath/XQuery 4.0 and marked <see cref="FunctionSignature.IsXPath40Only"/>.
+    /// The Api layer consults this set during compilation to raise XPST0017 for 4.0-only
+    /// functions in 3.1 mode (REQ-118 version gate, slice 4.0-S0). Built once from the
+    /// <c>StandardFunctions</c> table, so it always reflects the registered signatures.
+    /// </summary>
+    public static FrozenSet<(string NamespaceUri, string LocalName)> XPath40OnlyFunctionNames { get; }
 
     static FunctionLibrary()
     {
@@ -741,6 +754,26 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.String,
                 ReturnTypeName = "xs:string",
                 Implementation = CodepointsToString
+            },
+
+            // ----- XPath 4.0 string functions (REQ-118 slice 4.0-S1) -----------
+            // IsXPath40Only: invisible to 3.1 compilations (XPST0017) and filtered
+            // from 3.1 standard function tables.
+            [(Namespaces.Fn, "char", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "char", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = Char_1
+            },
+            [(Namespaces.Fn, "characters", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "characters", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Characters_1
             },
 
             // ----- fn:parse-xml -----------------------------------------------
@@ -1145,6 +1178,108 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Double, XdmValueKind.Double],
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = Subsequence_3
+            },
+
+            // ----- XPath 4.0 sequence functions (REQ-118 slice 4.0-S1) ---------
+            // All entries are IsXPath40Only: invisible to 3.1 compilations (XPST0017)
+            // and filtered from 3.1 standard function tables.
+            [(Namespaces.Fn, "replicate", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "replicate",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Replicate
+            },
+
+            // ----- fn:slice ---------------------------------------------------
+            [(Namespaces.Fn, "slice", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "slice",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => Slice(ctx, args[0], 0, 0, 0)
+            },
+            [(Namespaces.Fn, "slice", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "slice",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => Slice(ctx, args[0], SliceIntegerArg(args[1]), 0, 0)
+            },
+            [(Namespaces.Fn, "slice", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "slice",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Integer, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => Slice(ctx, args[0], SliceIntegerArg(args[1]), SliceIntegerArg(args[2]), 0)
+            },
+            [(Namespaces.Fn, "slice", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "slice",
+                Arity = 4,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Integer, XdmValueKind.Integer, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => Slice(ctx, args[0], SliceIntegerArg(args[1]), SliceIntegerArg(args[2]), SliceIntegerArg(args[3]))
+            },
+
+            // ----- fn:items-at ------------------------------------------------
+            [(Namespaces.Fn, "items-at", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "items-at",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = ItemsAt
+            },
+
+            // ----- fn:foot / fn:trunk ------------------------------------------
+            [(Namespaces.Fn, "foot", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "foot",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                IsXPath40Only = true,
+                Implementation = Foot
+            },
+            [(Namespaces.Fn, "trunk", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "trunk",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Trunk
+            },
+
+            // ----- fn:insert-separator -----------------------------------------
+            [(Namespaces.Fn, "insert-separator", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "insert-separator",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = InsertSeparator
             },
 
             // ----- fn:distinct-values -----------------------------------------
@@ -3391,6 +3526,11 @@ public static class FunctionLibrary
         }
 
         StandardFunctions = functions.ToFrozenDictionary();
+
+        XPath40OnlyFunctionNames = StandardFunctions
+            .Where(kvp => kvp.Value.IsXPath40Only)
+            .Select(kvp => (kvp.Value.NamespaceUri, kvp.Value.LocalName))
+            .ToFrozenSet();
     }
 
     /// <summary>
@@ -3415,17 +3555,29 @@ public static class FunctionLibrary
     // functions. Cloned into each EvaluationContext by Populate — a single dictionary
     // copy per evaluation instead of hundreds of individual registrations.
     private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplate =
-        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: false));
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: false, includeXPath40Only: false));
 
     private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplateStaticEval =
-        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: true));
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: true, includeXPath40Only: false));
 
-    private static Dictionary<(string, string, int), FunctionSignature> BuildStandardTemplate(bool excludeXsltDynamicFunctions)
+    // XPath 4.0 evaluation contexts additionally install the IsXPath40Only functions.
+    private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplate40 =
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: false, includeXPath40Only: true));
+
+    private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplateStaticEval40 =
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: true, includeXPath40Only: true));
+
+    private static Dictionary<(string, string, int), FunctionSignature> BuildStandardTemplate(bool excludeXsltDynamicFunctions, bool includeXPath40Only)
     {
         var template = new Dictionary<(string, string, int), FunctionSignature>(StandardFunctions.Count);
         foreach (var kvp in StandardFunctions)
         {
             var sig = kvp.Value;
+            // XPath 4.0-only functions are hidden from 3.1 contexts (REQ-118 version
+            // gate): the Api layer already rejects them at compile time, and hiding
+            // them here keeps fn:function-lookup and dynamic dispatch 3.1-clean.
+            if (!includeXPath40Only && sig.IsXPath40Only)
+                continue;
             // document() is an XSLT-defined function (XSLT 1.0 heritage), not part of the
             // XPath/XQuery function library: pure XPath/XQuery calls must raise XPST0017
             // (K2-NodeTest-10). XSLT contexts register it via PopulateXsltDocumentFunction.
@@ -3440,10 +3592,20 @@ public static class FunctionLibrary
         return template;
     }
 
+    /// <summary>
+    /// Populates the evaluation context with all standard functions. The installed
+    /// table depends on <see cref="EvaluationContext.IsXPath40"/>: 3.1 contexts (the
+    /// default, including all XSLT and XQuery hosts) omit XPath 4.0-only functions so
+    /// that <c>fn:function-lookup</c> and dynamic dispatch cannot see them; 4.0 contexts
+    /// install the full table.
+    /// </summary>
+    /// <param name="context">The evaluation context to populate.</param>
     public static void Populate(EvaluationContext context)
     {
-        context.InstallStandardFunctionTable(
-            context.IsStaticEvaluation ? s_standardTemplateStaticEval.Value : s_standardTemplate.Value);
+        var template = context.IsStaticEvaluation
+            ? context.IsXPath40 ? s_standardTemplateStaticEval40 : s_standardTemplateStaticEval
+            : context.IsXPath40 ? s_standardTemplate40 : s_standardTemplate;
+        context.InstallStandardFunctionTable(template.Value);
 
         // Register constructor functions for simple types declared in imported schemas.
         // XSD-derived simple types (e.g. hat:hatsize) are available as Q{uri}local#1
@@ -9535,6 +9697,232 @@ public static class FunctionLibrary
             pos++;
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    // ------------------------------------------------------------------
+    // XPath 4.0 sequence functions (REQ-118 slice 4.0-S1)
+    // ------------------------------------------------------------------
+
+    private static XdmValue Replicate(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        long count = RequireInteger(args[1], ctx.BackwardsCompatible);
+        if (count < 0)
+            throw new InvalidOperationException("XPTY0004");
+        var items = AsSequence(args[0]).ToList();
+        if (items.Count == 0 || count == 0)
+            return XdmValue.Undefined;
+        var result = new List<XdmValue>(items.Count);
+        for (long i = 0; i < count; i++)
+            result.AddRange(items);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// Optional integer argument of <c>fn:slice</c>: the empty sequence selects the
+    /// <c>(:default-on-empty:) := 0</c> default; any other value must be a single
+    /// xs:integer (XPTY0004 otherwise).
+    /// </summary>
+    private static long SliceIntegerArg(XdmValue value)
+    {
+        if (value.IsUndefined)
+            return 0;
+        var atomized = value.IsNode ? AtomizeValue(value) : value;
+        if (atomized.IsSequence)
+        {
+            bool any = false;
+            foreach (var unused in XdmSequence.FromSource(atomized.SequenceValue!))
+            {
+                any = true;
+                break;
+            }
+            if (!any)
+                return 0;
+            throw new InvalidOperationException("XPTY0004");
+        }
+        if (atomized.Kind == XdmValueKind.Integer)
+            return atomized.IntegerValue;
+        if (IsUntypedAtomic(atomized)
+            && long.TryParse(atomized.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
+            return parsed;
+        throw new InvalidOperationException("XPTY0004");
+    }
+
+    private static XdmValue Slice(EvaluationContext ctx, XdmValue input, long start, long end, long step)
+    {
+        var items = AsSequence(input).ToList();
+        int n = items.Count;
+        if (n == 0)
+            return XdmValue.Undefined;
+
+        // F+O 4.0 §2.1.12 rules; zero means "omitted" (the default-on-empty default),
+        // negative values count back from the end of the sequence.
+        decimal S = start == 0 ? (step < 0 ? n : 1)
+            : start < 0 ? (decimal)n + start + 1
+            : start;
+        decimal E = end == 0 ? (step < 0 ? 1 : n)
+            : end < 0 ? (decimal)n + end + 1
+            : end;
+        decimal k = step == 0 ? (E >= S ? 1 : -1) : step;
+        decimal kAbs = k < 0 ? -k : k;
+
+        var result = new List<XdmValue>();
+        if (k > 0)
+        {
+            // $input[position() ge $S and position() le $E and (position() - $S) mod $STEP eq 0]
+            decimal p = S < 1 ? S + Math.Ceiling((1 - S) / kAbs) * kAbs : S;
+            for (; p <= E && p <= n; p += kAbs)
+            {
+                if (p >= 1)
+                    result.Add(items[(int)p - 1]);
+            }
+        }
+        else
+        {
+            // Negative step: equivalent to reverse($input) => slice(-$S, -$E, -$STEP);
+            // positions p with p le $S, p ge $E, ($S - p) mod (-$STEP) eq 0, high to low.
+            decimal first = S > n ? S - Math.Ceiling((S - n) / kAbs) * kAbs : S;
+            for (decimal p = first; p >= E && p >= 1; p -= kAbs)
+            {
+                if (p <= n)
+                    result.Add(items[(int)p - 1]);
+            }
+        }
+        return result.Count == 0 ? XdmValue.Undefined : XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue ItemsAt(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var positions = new List<long>();
+        foreach (var at in AsSequence(args[1]))
+        {
+            var atomized = AtomizeValue(at);
+            if (atomized.IsUndefined)
+                continue;
+            if (atomized.Kind == XdmValueKind.Integer)
+            {
+                positions.Add(atomized.IntegerValue);
+            }
+            else if (atomized.Kind == XdmValueKind.Decimal)
+            {
+                decimal d = atomized.DecimalValue;
+                if (d != decimal.Truncate(d))
+                    throw new InvalidOperationException("XPTY0004");
+                // Integral values beyond long range can never match a position.
+                if (d >= long.MinValue && d <= long.MaxValue)
+                    positions.Add((long)d);
+            }
+            else
+            {
+                throw new InvalidOperationException("XPTY0004");
+            }
+        }
+        if (positions.Count == 0)
+            return XdmValue.Undefined;
+        var input = AsSequence(args[0]).ToList();
+        if (input.Count == 0)
+            return XdmValue.Undefined;
+        var result = new List<XdmValue>(positions.Count);
+        foreach (long p in positions)
+        {
+            if (p >= 1 && p <= input.Count)
+                result.Add(input[(int)p - 1]);
+        }
+        return result.Count == 0 ? XdmValue.Undefined : XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue Foot(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var seq = args[0];
+        if (!seq.IsSequence)
+            return seq.IsUndefined ? XdmValue.Undefined : seq;
+        XdmValue last = XdmValue.Undefined;
+        foreach (var item in XdmSequence.FromSource(seq.SequenceValue!))
+            last = item;
+        return last;
+    }
+
+    private static XdmValue Trunk(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = AsSequence(args[0]).ToList();
+        if (items.Count <= 1)
+            return XdmValue.Undefined;
+        items.RemoveAt(items.Count - 1);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    private static XdmValue InsertSeparator(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var input = AsSequence(args[0]).ToList();
+        if (input.Count == 0)
+            return XdmValue.Undefined;
+        if (input.Count < 2)
+            return args[0];
+        var separator = AsSequence(args[1]).ToList();
+        if (separator.Count == 0)
+            return XdmValue.FromSequence(MaterializedSequence.FromList(input));
+        var result = new List<XdmValue>(input.Count + (input.Count - 1) * separator.Count);
+        for (int i = 0; i < input.Count; i++)
+        {
+            if (i > 0)
+                result.AddRange(separator);
+            result.Add(input[i]);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue Char_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var atomized = AtomizeSingleton(args[0]);
+        if (atomized.IsUndefined)
+            throw new InvalidOperationException("XPTY0004");
+        if (atomized.Kind == XdmValueKind.Integer)
+        {
+            long cp = atomized.IntegerValue;
+            // xs:positiveInteger: zero and negatives are a type error.
+            if (cp <= 0)
+                throw new InvalidOperationException("XPTY0004");
+            // XML 1.1 Char production (Bosak is an XML 1.1-capable implementation),
+            // matching fn:codepoints-to-string validity.
+            if (cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF) || cp == 0xFFFE || cp == 0xFFFF)
+                throw new InvalidOperationException("FOCH0005");
+            return XdmValue.FromString(char.ConvertFromUtf32((int)cp));
+        }
+        if (atomized.Kind == XdmValueKind.String || IsUntypedAtomic(atomized))
+        {
+            string name = atomized.ToString();
+            switch (name)
+            {
+                case @"\n": return XdmValue.FromString("\n");
+                case @"\r": return XdmValue.FromString("\r");
+                case @"\t": return XdmValue.FromString("\t");
+                case @"\b": return XdmValue.FromString("\b");
+                case @"\f": return XdmValue.FromString("\f");
+            }
+            if (Html5CharacterReferences.TryGet(name, out var characters))
+                return XdmValue.FromString(characters);
+            throw new InvalidOperationException("FOCH0005");
+        }
+        throw new InvalidOperationException("XPTY0004");
+    }
+
+    private static XdmValue Characters_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var atomized = AtomizeSingleton(args[0]);
+        if (atomized.IsUndefined)
+            return XdmValue.Undefined;
+        string s;
+        if (atomized.Kind == XdmValueKind.String)
+            s = atomized.StringValue;
+        else if (IsUntypedAtomic(atomized))
+            s = atomized.ToString();
+        else
+            throw new InvalidOperationException("XPTY0004");
+        if (s.Length == 0)
+            return XdmValue.Undefined;
+        var values = new List<XdmValue>(s.Length);
+        foreach (Rune rune in s.EnumerateRunes())
+            values.Add(XdmValue.FromString(rune.ToString()));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(values));
     }
 
     private static XdmValue DistinctValues_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
