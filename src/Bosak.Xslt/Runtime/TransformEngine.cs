@@ -504,6 +504,9 @@
 //                      |                  |       |                | (result-document and raw-sequence paths); xsl:map @select/@duplicates (string +          |
 //                      |                  |       |                | function-item forms) via a shared merge; supported version is now 4.0                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.04  | 08-10-2026     | REQ-118 4.0-S8: xsl:array / xsl:array-member (BuildArrayFromInstruction, nested member    |
+//                      |                  |       |                | wrapping) and xsl:switch (single-atomic selector coercion, general-comparison branch     |
+//                      |                  |       |                | matching, @select on when/otherwise) in both template and function-body evaluators       |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -4833,6 +4836,184 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
+    /// Builds an <see cref="XdmArray"/> from an <c>xsl:array</c> instruction (XSLT 4.0 §21.1.2).
+    /// With a <c>for-each</c> attribute, that expression is evaluated and one member is
+    /// appended per focus item, each member being the whole sequence obtained by evaluating
+    /// <c>@select</c> (or the sequence-constructor content) with the focus set to that item.
+    /// Without <c>for-each</c>: with <c>@select</c>, one singleton member is appended per
+    /// item of the selected sequence; with sequence-constructor content, each item produced
+    /// by an ordinary child node becomes a singleton member, while an <c>xsl:array-member</c>
+    /// child contributes exactly one member holding its entire sequence.
+    /// </summary>
+    private XdmValue BuildArrayFromInstruction(XElement arrayInstruction, XdmValue contextItem)
+    {
+        var selectAttr = arrayInstruction.Attribute("select")?.Value;
+        var forEachAttr = arrayInstruction.Attribute("for-each")?.Value;
+        var array = new XdmArray();
+
+        if (!string.IsNullOrEmpty(forEachAttr))
+        {
+            var focusItems = EnumerateItems(CompileXPath(forEachAttr, arrayInstruction).Evaluate(_context)).ToList();
+            var savedFocus = _context.ContextItem;
+            var savedPosition = _context.ContextPosition;
+            var savedSize = _context.ContextSize;
+            var savedCurrent = _context.CurrentItem;
+            try
+            {
+                for (int i = 0; i < focusItems.Count; i++)
+                {
+                    var feSnapshot = _context.SnapshotVariables();
+                    try
+                    {
+                        _context.WithFocus(focusItems[i], i + 1, focusItems.Count);
+                        _context.WithCurrentItem(focusItems[i]);
+                        array.Add(EvaluateArrayMemberSource(arrayInstruction, contextItem));
+                    }
+                    finally
+                    {
+                        _context.RestoreVariables(feSnapshot);
+                    }
+                }
+            }
+            finally
+            {
+                _context.WithFocus(savedFocus, savedPosition, savedSize);
+                _context.WithCurrentItem(savedCurrent);
+            }
+            return XdmValue.FromArray(array);
+        }
+
+        if (!string.IsNullOrEmpty(selectAttr))
+        {
+            foreach (var item in EnumerateItems(CompileXPath(selectAttr, arrayInstruction).Evaluate(_context)))
+                array.Add(item);
+            return XdmValue.FromArray(array);
+        }
+
+        // Sequence-constructor content. Nested xsl:array-member instructions produce one
+        // sequence-valued member each; every other node contributes one member per item.
+        foreach (var childNode in arrayInstruction.Nodes())
+        {
+            if (childNode is XElement childEl && childEl.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                && childEl.Name.LocalName == "array-member")
+            {
+                array.Add(EvaluateArrayMemberSequence(childEl, contextItem));
+                continue;
+            }
+
+            var tempItems = new List<XdmValue>();
+            ProcessFunctionBodyNode(childNode, tempItems, contextItem);
+            foreach (var item in tempItems)
+                array.Add(item);
+        }
+        return XdmValue.FromArray(array);
+    }
+
+    /// <summary>
+    /// Evaluates the member source of an <c>xsl:array</c> carrying a <c>for-each</c>
+    /// attribute: the <c>@select</c> expression or the sequence-constructor content.
+    /// The whole resulting sequence becomes a single array member.
+    /// </summary>
+    private XdmValue EvaluateArrayMemberSource(XElement arrayInstruction, XdmValue contextItem)
+    {
+        var selectAttr = arrayInstruction.Attribute("select")?.Value;
+        if (!string.IsNullOrEmpty(selectAttr))
+            return CompileXPath(selectAttr, arrayInstruction).Evaluate(_context);
+
+        var items = new List<XdmValue>();
+        foreach (var childNode in arrayInstruction.Nodes())
+            ProcessFunctionBodyNode(childNode, items, contextItem);
+        return MaterializeItemList(items);
+    }
+
+    /// <summary>
+    /// Evaluates one <c>xsl:array-member</c> instruction to the sequence that forms a
+    /// single array member: the <c>@select</c> expression or the sequence-constructor
+    /// content, returned as one (possibly multi-item) <see cref="XdmValue"/>.
+    /// </summary>
+    private XdmValue EvaluateArrayMemberSequence(XElement memberInstruction, XdmValue contextItem)
+    {
+        var selectAttr = memberInstruction.Attribute("select")?.Value;
+        if (!string.IsNullOrEmpty(selectAttr))
+            return CompileXPath(selectAttr, memberInstruction).Evaluate(_context);
+
+        var items = EvaluateSequenceConstructorToItems(memberInstruction, contextItem);
+        return MaterializeItemList(items);
+    }
+
+    /// <summary>
+    /// Atomizes a single item for <c>xsl:switch</c> comparison: nodes become untypedAtomic
+    /// strings; function items, maps and arrays cannot be coerced and raise <c>XPTY0004</c>.
+    /// </summary>
+    private static XdmValue AtomizeSwitchItem(XdmValue item)
+    {
+        if (item.IsNode)
+            return XdmValue.FromString(item.NodeValue.StringValue, "untypedAtomic");
+        if (item.IsFunction || item.IsMap || item.IsArray)
+            throw new InvalidOperationException("XPTY0004: xsl:switch selector and test values must be atomic items");
+        return item;
+    }
+
+    /// <summary>
+    /// Finds the branch of an <c>xsl:switch</c> instruction that matches the selector,
+    /// or <see langword="null"/> when no <c>xsl:when</c> matches and there is no
+    /// <c>xsl:otherwise</c>. The selector is coerced to a single atomic item (a type
+    /// error otherwise); each <c>xsl:when</c> test is coerced to a sequence of atomic
+    /// items and compared with the selector using XPath general-comparison (<c>=</c>)
+    /// semantics under <see cref="EvaluationContext.DefaultCollation"/>.
+    /// </summary>
+    private XElement? FindMatchingSwitchBranch(XElement switchInstruction)
+    {
+        var selectAttr = switchInstruction.Attribute("select")?.Value;
+        if (string.IsNullOrEmpty(selectAttr))
+            throw new InvalidOperationException("XTSE0010: xsl:switch requires a select attribute");
+
+        var selectorItems = EnumerateItems(CompileXPath(selectAttr, switchInstruction).Evaluate(_context)).ToList();
+        if (selectorItems.Count != 1)
+            throw new InvalidOperationException("XPTY0004: xsl:switch select must evaluate to a single atomic item");
+        var selector = AtomizeSwitchItem(selectorItems[0]);
+
+        var xslNs = Stylesheet.Stylesheet.XslNamespace;
+        bool selectorIsNaN = selector.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(selector.DoubleValue);
+        foreach (var when in switchInstruction.Elements(XName.Get("when", xslNs)))
+        {
+            var testAttr = when.Attribute("test")?.Value;
+            if (string.IsNullOrEmpty(testAttr))
+                continue;
+            var testValue = CompileXPath(testAttr, when).Evaluate(_context);
+            foreach (var rawTestItem in EnumerateItems(testValue))
+            {
+                var testItem = AtomizeSwitchItem(rawTestItem);
+                // XPath '=' semantics: NaN is not equal to anything, including itself.
+                bool testIsNaN = testItem.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(testItem.DoubleValue);
+                if (selectorIsNaN || testIsNaN)
+                    continue;
+                if (AtomicValuesEqual(selector, testItem, _context.DefaultCollation))
+                    return when;
+            }
+        }
+
+        return switchInstruction.Element(XName.Get("otherwise", xslNs));
+    }
+
+    /// <summary>
+    /// Evaluates the body of a matched <c>xsl:switch</c> branch (an <c>xsl:when</c> or
+    /// <c>xsl:otherwise</c>): the <c>@select</c> expression when present, else the
+    /// sequence-constructor content, into <paramref name="results"/>.
+    /// </summary>
+    private void EvaluateSwitchBranchContent(XElement branch, List<XdmValue> results, XdmValue contextItem)
+    {
+        var branchSelect = branch.Attribute("select")?.Value;
+        if (!string.IsNullOrEmpty(branchSelect))
+        {
+            FlattenToList(CompileXPath(branchSelect, branch).Evaluate(_context), results);
+            return;
+        }
+        foreach (var childNode in branch.Nodes())
+            ProcessFunctionBodyNode(childNode, results, contextItem);
+    }
+
+    /// <summary>
     /// Evaluates a single instruction inside an xsl:function body and appends
     /// the produced items to <paramref name="results"/>.
     /// </summary>
@@ -5018,6 +5199,19 @@ internal sealed class TransformEngine
                                     ProcessFunctionBodyNode(childNode, results, contextItem);
                             });
                         }
+                        break;
+                    }
+                case "switch":
+                    {
+                        // XSLT 4.0 §8.3: the select expression is coerced to a single atomic
+                        // item; branches are matched with general-comparison (=) semantics
+                        // under the default collation in scope for the xsl:switch.
+                        WithDefaultCollation(instruction, () =>
+                        {
+                            var branch = FindMatchingSwitchBranch(instruction);
+                            if (branch != null)
+                                EvaluateSwitchBranchContent(branch, results, contextItem);
+                        });
                         break;
                     }
                 case "for-each":
@@ -5687,6 +5881,19 @@ internal sealed class TransformEngine
                 case "map-entry":
                     {
                         results.Add(BuildMapEntry(instruction, contextItem));
+                        break;
+                    }
+                case "array":
+                    {
+                        results.Add(BuildArrayFromInstruction(instruction, contextItem));
+                        break;
+                    }
+                case "array-member":
+                    {
+                        // A standalone xsl:array-member contributes one sequence-valued
+                        // item (Bosak has no JNode wrapper; XdmArray members hold
+                        // sequences natively).
+                        results.Add(EvaluateArrayMemberSequence(instruction, contextItem));
                         break;
                     }
                 case "iterate":
@@ -8188,6 +8395,41 @@ internal sealed class TransformEngine
                     break;
                 }
 
+            case "switch":
+                {
+                    // XSLT 4.0 §8.3: the select expression is coerced to a single atomic
+                    // item; branches are matched with general-comparison (=) semantics
+                    // under the default collation in scope for the xsl:switch.
+                    WithDefaultCollation(instruction, () =>
+                    {
+                        var branch = FindMatchingSwitchBranch(instruction);
+                        if (branch == null)
+                            return;
+                        var branchSelect = branch.Attribute("select")?.Value;
+                        if (!string.IsNullOrEmpty(branchSelect))
+                        {
+                            CopyToResult(CompileXPath(branchSelect, branch).Evaluate(_context));
+                            return;
+                        }
+                        foreach (var childNode in branch.Nodes())
+                        {
+                            switch (childNode)
+                            {
+                                case XText text:
+                                    ProcessSequenceText(text, branch);
+                                    break;
+                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                    ExecuteXsltInstruction(elem, contextItem);
+                                    break;
+                                case XElement elem:
+                                    CopyLiteralElement(elem);
+                                    break;
+                            }
+                        }
+                    });
+                    break;
+                }
+
             case "variable":
                 {
                     var varName = instruction.Attribute("name")?.Value;
@@ -8918,6 +9160,48 @@ internal sealed class TransformEngine
                             throw new XsltRuntimeException("SENR0001",
                                 "Cannot serialize a map using this output method.", XdmValue.Undefined);
                         throw new InvalidOperationException("XTDE0450: A map cannot appear as a child of an element or document node");
+                    }
+                    break;
+                }
+
+            case "array":
+                {
+                    var arrayValue = BuildArrayFromInstruction(instruction, contextItem);
+                    if (_sequenceAccumulator != null)
+                    {
+                        _sequenceAccumulator.Add(arrayValue);
+                    }
+                    else if (TryCollectRawResultItem(arrayValue))
+                    {
+                        // Collected as a raw top-level JSON item.
+                    }
+                    else
+                    {
+                        if (IsPrincipalTopLevel)
+                            throw new XsltRuntimeException("SENR0001",
+                                "Cannot serialize an array using this output method.", XdmValue.Undefined);
+                        throw new InvalidOperationException("XTDE0450: An array cannot appear as a child of an element or document node");
+                    }
+                    break;
+                }
+
+            case "array-member":
+                {
+                    var memberValue = EvaluateArrayMemberSequence(instruction, contextItem);
+                    if (_sequenceAccumulator != null)
+                    {
+                        _sequenceAccumulator.Add(memberValue);
+                    }
+                    else if (TryCollectRawResultItem(memberValue))
+                    {
+                        // Collected as a raw top-level JSON item.
+                    }
+                    else
+                    {
+                        if (IsPrincipalTopLevel)
+                            throw new XsltRuntimeException("SENR0001",
+                                "Cannot serialize an array member using this output method.", XdmValue.Undefined);
+                        throw new InvalidOperationException("XTDE0450: An array member cannot appear as a child of an element or document node");
                     }
                     break;
                 }
