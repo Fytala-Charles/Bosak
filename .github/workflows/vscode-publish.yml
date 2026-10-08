@@ -1,0 +1,68 @@
+name: VS Code extension publish
+
+# Publishes the vscode-bosak extension to the VS Code Marketplace.
+#
+# Trigger: push a tag `vscode-v*` after bumping `version` in
+# vscode-bosak/package.json (the version is NOT derived from the tag — same
+# pinned-version rule as the NuGet pin in src/Directory.Build.props), or run
+# manually via workflow_dispatch.
+#
+# PREREQUISITE (owner, once): create a Marketplace PAT (Azure DevOps, scope
+# Marketplace > Acquire + Manage, org fytala) and store it as the repo secret
+# VSCE_PAT. Until the secret exists, the publish step fails — packaging still
+# runs, so the workflow can be validated end-to-end by downloading the artifact.
+
+on:
+  push:
+    tags: ['vscode-v*']
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 (language-server bundle)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # The server/ directory is gitignored; CI rebuilds it exactly like the
+      # manual release flow (framework-dependent, win-x64 apphost mirroring
+      # the local packaging used for 0.1.4/0.1.5).
+      - name: Publish language server & stage into extension
+        run: |
+          dotnet publish src/Bosak.LanguageServer -c Release -o .guard-tmp/vscode-server
+          rm -rf vscode-bosak/server
+          cp -r .guard-tmp/vscode-server vscode-bosak/server
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: vscode-bosak/package-lock.json
+
+      - name: Install & compile
+        working-directory: vscode-bosak
+        run: |
+          npm ci
+          npm run compile
+
+      - name: Package VSIX
+        working-directory: vscode-bosak
+        run: npx --yes @vscode/vsce package --out vscode-bosak.vsix
+
+      - name: Upload VSIX artifact (always available, even before the secret exists)
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode-bosak-vsix
+          path: vscode-bosak/vscode-bosak.vsix
+
+      - name: Publish to marketplace
+        working-directory: vscode-bosak
+        run: npx --yes @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
