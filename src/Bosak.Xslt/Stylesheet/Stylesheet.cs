@@ -267,6 +267,12 @@
 //                      | Charles Korthout | 2.125 | 03-10-2026     | REQ-119 sweep gate: xsl:fallback is exempt from XTSE3120 following-sibling checks      |
 //                      |                  |       |                | (§8.4 allows it anywhere; iterate-016/017/018/030/031)                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.126 | 08-10-2026     | REQ-118 4.0-S7: xsl:note stripped at load; xsl:if @then+content XTSE0010; xsl:map       |
+//                      |                  |       |                | @select+content XTSE3185; @separator/@select/@duplicates accepted at all versions.      |
+//                      |                  |       |                | Supported-version ceiling STAYS 3.0: version="4.0" stylesheets remain forwards-          |
+//                      |                  |       |                | compatible (frozen W3C forwards-* tests pin this; §3.8.2/§3.8.3 make the surface          |
+//                      |                  |       |                | version-independent anyway)                                                              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2579,6 +2585,12 @@ internal sealed class Stylesheet
 
     private void ValidateInstructionTree(XElement root)
     {
+        // XSLT 4.0 §3.11.2 (xsl:note): xsl:note elements are discarded at an early stage
+        // of processing, without performing any validation of their attributes or content.
+        // They may appear anywhere except as the outermost element of the stylesheet.
+        foreach (var note in root.Descendants(XName.Get("note", XslNamespace)).ToList())
+            note.Remove();
+
         // XTSE0010: xsl:on-completion must be a direct child of xsl:iterate. This pre-pass
         // runs before the per-element walk so that a misplaced xsl:on-completion reports
         // the structural error even when an earlier element carries its own attribute error.
@@ -3680,6 +3692,31 @@ internal sealed class Stylesheet
                 if (localName == "if" && elem.Attribute("test") == null && elem.Attribute("_test") == null)
                     throw new InvalidOperationException("XTSE0010: xsl:if requires a test attribute.");
 
+                // XSLT 4.0 §8.1: an xsl:if element with a then attribute must have no
+                // children; the then attribute and the sequence constructor are mutually
+                // exclusive.
+                if (localName == "if" && (elem.Attribute("then") != null || elem.Attribute("_then") != null))
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XElement || (node is XText t && !string.IsNullOrWhiteSpace(t.Value)))
+                            throw new InvalidOperationException("XTSE0010: xsl:if with a then attribute must have no children.");
+                    }
+                }
+
+                // XSLT 4.0 §21.1.1: an xsl:map element with a select attribute must have no
+                // sequence-constructor content (xsl:fallback children are permitted).
+                if (localName == "map" && (elem.Attribute("select") != null || elem.Attribute("_select") != null))
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XElement ce && ce.Name.NamespaceName == XslNamespace && ce.Name.LocalName == "fallback")
+                            continue;
+                        if (node is XElement || (node is XText t2 && !string.IsNullOrWhiteSpace(t2.Value)))
+                            throw new InvalidOperationException("XTSE3185: xsl:map must not have both a select attribute and sequence-constructor content.");
+                    }
+                }
+
                 // xsl:call-template requires a name attribute.
                 if (localName == "call-template" && elem.Attribute("name") == null && elem.Attribute("_name") == null)
                     throw new InvalidOperationException("XTSE0010: xsl:call-template requires a name attribute.");
@@ -3755,7 +3792,7 @@ internal sealed class Stylesheet
                 else if (localName == "apply-templates")
                 {
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
-                        "select", "mode"),
+                        "select", "mode", "separator"),
                         IsForwardsCompatibleElement(elem));
                 }
                 else if (localName == "apply-imports")
@@ -9219,7 +9256,11 @@ internal sealed class Stylesheet
     /// <summary>
     /// Whether the stylesheet is in forwards-compatible mode (declared version greater
     /// than the implementation supports). In this mode unknown attributes on XSLT
-    /// elements are ignored rather than rejected.
+    /// elements are ignored rather than rejected. The ceiling stays 3.0 deliberately:
+    /// the frozen W3C catalog exercises forward compatibility with version="4.0"/"3.3"
+    /// stylesheets, and XSLT 4.0 §3.8.2/§3.8.3 specifies that 4.0 features produce the
+    /// same results at any effective version — so the supported surface is decoupled
+    /// from the recognized version value (REQ-118 4.0-S7).
     /// </summary>
     public bool IsForwardsCompatible =>
         !string.IsNullOrEmpty(Version) &&
@@ -9255,12 +9296,15 @@ internal sealed class Stylesheet
     }
 
     /// <summary>
-    /// Determines whether the given element is in XSLT forwards-compatible mode.
+    /// Determines whether the given element is in XSLT forwards-compatible mode
+    /// (effective version greater than the supported version 3.0; see
+    /// <see cref="IsForwardsCompatible"/> for why the ceiling is deliberately not 4.0).
     /// </summary>
     public bool IsForwardsCompatibleElement(XElement element) => GetEffectiveVersion(element) > 3.0;
 
     /// <summary>
-    /// The set of known XSLT 3.0 element names. Used during static validation to
+    /// The set of known XSLT element names (XSLT 3.0 plus the XSLT 4.0
+    /// <c>xsl:note</c> declaration). Used during static validation to
     /// distinguish unknown XSLT elements (whose descendants may be skipped in
     /// forwards-compatible mode) from recognized ones.
     /// </summary>
@@ -9270,7 +9314,7 @@ internal sealed class Stylesheet
         "output", "namespace-alias", "attribute-set", "decimal-format", "key", "mode",
         "accumulator", "accumulator-rule", "variable", "param", "with-param", "template", "function",
         "global-context-item", "context-item", "use-package", "package", "expose", "accept", "override",
-        "import-schema",
+        "import-schema", "note",
         "apply-templates", "apply-imports", "call-template", "next-match",
         "value-of", "text", "element", "attribute", "namespace", "copy", "copy-of",
         "comment", "processing-instruction", "document", "result-document",

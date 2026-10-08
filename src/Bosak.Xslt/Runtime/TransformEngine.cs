@@ -500,6 +500,10 @@
 //                      | Charles Korthout | 7.02  | 03-10-2026     | REQ-120 Slice 3: IsNodeAttached provider-agnostic for foreign IXdmNode providers;        |
 //                      |                  |       |                | foreign-provider whitespace-strip limitation documented on ApplyWhitespaceStripping      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.03  | 08-10-2026     | REQ-118 4.0-S7: xsl:if @then/@else; @separator on xsl:for-each/xsl:apply-templates      |
+//                      |                  |       |                | (result-document and raw-sequence paths); xsl:map @select/@duplicates (string +          |
+//                      |                  |       |                | function-item forms) via a shared merge; supported version is now 4.0                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -2622,6 +2626,28 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
+    /// Inserts the XSLT 4.0 <c>separator</c> text node between the results of successive
+    /// items of an <c>xsl:for-each</c> or <c>xsl:apply-templates</c> instruction. In a
+    /// raw-sequence context (e.g. the content of <c>xsl:variable</c> or a function body)
+    /// the separator string is appended to the sequence accumulator so adjacent items do
+    /// not coalesce; otherwise a text node is appended to the current container, where it
+    /// merges with adjacent text under the complex-content rules. A zero-length separator
+    /// still occupies a slot (it breaks runs of adjacent atomic values).
+    /// </summary>
+    private void InsertSequenceSeparator(string separator)
+    {
+        if (_sequenceAccumulator != null)
+        {
+            _sequenceAccumulator.Add(XdmValue.FromString(separator));
+        }
+        else
+        {
+            _lastAddedWasAtomic = false;
+            AddTextNode(separator, allowZeroLength: true);
+        }
+    }
+
+    /// <summary>
     /// Returns whether the <c>disable-output-escaping</c> attribute on the given
     /// instruction evaluates to a positive value. AVTs are evaluated in the current
     /// context. The value is assumed to have been validated statically.
@@ -3918,7 +3944,20 @@ internal sealed class TransformEngine
                     {
                         var test = child.Attribute("test")?.Value;
                         if (!string.IsNullOrEmpty(test) && CompileXPath(test, child).Evaluate(ctx).GetEffectiveBooleanValue())
-                            items.Add(EvaluateAccumulatorRuleBody(child, ctx));
+                        {
+                            // XSLT 4.0 §8.1: optional then attribute holds the expression
+                            // evaluated in place of the content.
+                            var accThen = child.Attribute("then")?.Value;
+                            items.Add(accThen != null
+                                ? CompileXPath(accThen, child).Evaluate(ctx)
+                                : EvaluateAccumulatorRuleBody(child, ctx));
+                        }
+                        else if (!string.IsNullOrEmpty(test))
+                        {
+                            var accElse = child.Attribute("else")?.Value;
+                            if (accElse != null)
+                                items.Add(CompileXPath(accElse, child).Evaluate(ctx));
+                        }
                         break;
                     }
                 case "choose":
@@ -4698,15 +4737,51 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
-    /// Builds a map from an <c>xsl:map</c> instruction by evaluating its
-    /// sequence-constructor content and merging the resulting map entries.
-    /// Duplicate keys raise <c>XTDE3365</c>.
+    /// Builds a map from an <c>xsl:map</c> instruction. XSLT 4.0 §21.1.1: with a
+    /// <c>select</c> attribute the input sequence is coerced to <c>map(*)*</c> and merged
+    /// as if by <c>map:merge</c>; the optional <c>duplicates</c> attribute supplies the
+    /// duplicate-key strategy (one of the strings <c>use-first</c>, <c>use-last</c>,
+    /// <c>use-any</c>, <c>combine</c>, <c>reject</c>, or an arity-2 combining function)
+    /// and defaults to <c>fn($a, $b) {{ error(XTDE3365) }}</c>. Without <c>select</c> the
+    /// sequence-constructor content is evaluated and its map entries merged under the
+    /// same strategy. Non-map items raise <c>XTTE3375</c>; duplicate keys with the
+    /// default strategy raise <c>XTDE3365</c>.
     /// </summary>
     private XdmValue BuildMapFromInstruction(XElement mapInstruction, XdmValue contextItem)
     {
+        var selectAttr = mapInstruction.Attribute("select")?.Value;
+
         var entries = new List<XdmValue>();
-        foreach (var child in mapInstruction.Elements())
-            EvaluateFunctionBodyInstruction(child, entries, contextItem);
+        if (!string.IsNullOrEmpty(selectAttr))
+        {
+            entries.Add(CompileXPath(selectAttr, mapInstruction).Evaluate(_context));
+        }
+        else
+        {
+            foreach (var child in mapInstruction.Elements())
+                EvaluateFunctionBodyInstruction(child, entries, contextItem);
+        }
+
+        // Resolve the duplicates strategy: default is XTDE3365 on the first duplicate.
+        string duplicatesMode = "default";
+        XdmValue duplicatesCombiner = XdmValue.Undefined;
+        var duplicatesAttr = mapInstruction.Attribute("duplicates")?.Value;
+        if (!string.IsNullOrEmpty(duplicatesAttr))
+        {
+            var duplicatesValue = CompileXPath(duplicatesAttr, mapInstruction).Evaluate(_context);
+            if (duplicatesValue.IsFunction)
+            {
+                duplicatesMode = "function";
+                duplicatesCombiner = duplicatesValue;
+            }
+            else
+            {
+                var strategy = AtomizeMapKey(duplicatesValue).ToString();
+                if (strategy is not ("use-first" or "use-last" or "use-any" or "combine" or "reject"))
+                    throw new InvalidOperationException($"FOJS0005: Invalid value for the duplicates option of xsl:map: '{strategy}'");
+                duplicatesMode = strategy;
+            }
+        }
 
         var map = new XdmMap();
         foreach (var item in entries)
@@ -4720,9 +4795,36 @@ internal sealed class TransformEngine
 
                 foreach (var kvp in entryMap.Entries)
                 {
-                    if (map.ContainsKey(kvp.Key))
-                        throw new InvalidOperationException("XTDE3365: Duplicate key in xsl:map");
-                    map.Add(kvp.Key, kvp.Value);
+                    if (!map.TryGetValue(kvp.Key, out var existing))
+                    {
+                        map.Add(kvp.Key, kvp.Value);
+                        continue;
+                    }
+                    switch (duplicatesMode)
+                    {
+                        case "use-first":
+                        case "use-any": // implementation-defined choice; we keep the first
+                            break;
+                        case "use-last":
+                            map.Add(kvp.Key, kvp.Value);
+                            break;
+                        case "combine":
+                        {
+                            var combined = new List<XdmValue>();
+                            combined.AddRange(EnumerateItems(existing));
+                            combined.AddRange(EnumerateItems(kvp.Value));
+                            map.Add(kvp.Key, XdmValue.FromSequence(MaterializedSequence.FromList(combined)));
+                            break;
+                        }
+                        case "reject":
+                            throw new InvalidOperationException("FOJS0003: xsl:map found duplicate keys and the duplicates option is 'reject'");
+                        case "function":
+                            map.Add(kvp.Key, VmEngine.InvokeFunctionItem(duplicatesCombiner, _context,
+                                new[] { existing, kvp.Value }));
+                            break;
+                        default: // "default": XTDE3365, the XSLT-specified fallback
+                            throw new InvalidOperationException("XTDE3365: Duplicate key in xsl:map");
+                    }
                 }
             }
         }
@@ -4861,12 +4963,25 @@ internal sealed class TransformEngine
                         if (!string.IsNullOrEmpty(test))
                         {
                             var compiled = CompileXPath(test, instruction);
+                            // XSLT 4.0 §8.1: optional then/else attributes hold expressions
+                            // evaluated in place of the sequence constructor.
+                            var thenAttr = instruction.Attribute("then")?.Value;
+                            var elseAttr = instruction.Attribute("else")?.Value;
                             WithDefaultCollation(instruction, () =>
                             {
                                 if (compiled.Evaluate(_context).GetEffectiveBooleanValue())
                                 {
+                                    if (thenAttr != null)
+                                    {
+                                        FlattenToList(CompileXPath(thenAttr, instruction).Evaluate(_context), results);
+                                        return;
+                                    }
                                     foreach (var child in instruction.Elements())
                                         EvaluateFunctionBodyInstruction(child, results, contextItem);
+                                }
+                                else if (elseAttr != null)
+                                {
+                                    FlattenToList(CompileXPath(elseAttr, instruction).Evaluate(_context), results);
                                 }
                             });
                         }
@@ -4923,11 +5038,18 @@ internal sealed class TransformEngine
                                 feItems = SortItems(feItems, sortElements);
                             }
 
+                            // XSLT 4.0 §7.1.1: @separator (an AVT) is inserted between the
+                            // results of successive items as a string item in the raw sequence.
+                            var feSepAttr = instruction.Attribute("separator");
+                            string? feSepValue = feSepAttr != null ? EvaluateAvt(feSepAttr.Value, instruction) : null;
+
                             var savedFocus = _context.ContextItem;
                             var savedCurrent = _context.CurrentItem;
                             int pos = 1;
                             foreach (var item in feItems)
                             {
+                                if (feSepValue != null && pos > 1)
+                                    results.Add(XdmValue.FromString(feSepValue));
                                 _context.WithFocus(item, pos, feItems.Count);
                                 _context.WithCurrentItem(item);
                                 var feSnapshot = _context.SnapshotVariables();
@@ -5076,7 +5198,7 @@ internal sealed class TransformEngine
                             _modeStack.Clear();
                             try
                             {
-                                ApplyTemplates(contextItem, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams);
+                                ApplyTemplates(contextItem, mode, select, sortElements.Count > 0 ? sortElements : null, tunnelParams, withParams, instruction);
                             }
                             finally
                             {
@@ -5948,6 +6070,11 @@ internal sealed class TransformEngine
         // Resolve mode aliases
         var resolvedMode = ResolveMode(mode);
         _modeStack.Push(resolvedMode);
+        // XSLT 4.0 §6.7: @separator on xsl:apply-templates (an AVT) is inserted as a
+        // text node between the results of successive items. Evaluated in the
+        // instruction's context, before the focus changes.
+        var atSeparatorAttr = instruction?.Attribute("separator");
+        string? atSeparatorValue = atSeparatorAttr != null ? EvaluateAvt(atSeparatorAttr.Value, instruction!) : null;
         try
         {
             // Determine the sequence to process
@@ -5996,6 +6123,8 @@ internal sealed class TransformEngine
                 int streamPos = 1;
                 foreach (var item in singlePass)
                 {
+                    if (atSeparatorValue != null && streamPos > 1)
+                        InsertSequenceSeparator(atSeparatorValue);
                     ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, streamPos, -1);
                     streamPos++;
                 }
@@ -6026,6 +6155,8 @@ internal sealed class TransformEngine
             int last = itemList.Count;
             foreach (var item in itemList)
             {
+                if (atSeparatorValue != null && pos > 1)
+                    InsertSequenceSeparator(atSeparatorValue);
                 ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
                 pos++;
             }
@@ -6064,6 +6195,11 @@ internal sealed class TransformEngine
         var resolvedMode = ResolveMode(mode);
 
         _modeStack.Push(resolvedMode);
+        // XSLT 4.0 §6.7: @separator on xsl:apply-templates (an AVT) is inserted as a
+        // text node between the results of successive items. Evaluated in the
+        // instruction's context, before the focus changes.
+        var atSeparatorAttr2 = instruction?.Attribute("separator");
+        string? atSeparatorValue2 = atSeparatorAttr2 != null ? EvaluateAvt(atSeparatorAttr2.Value, instruction!) : null;
         try
         {
             // Determine the sequence to process
@@ -6107,6 +6243,8 @@ internal sealed class TransformEngine
                 int streamPos = 1;
                 foreach (var item in singlePass)
                 {
+                    if (atSeparatorValue2 != null && streamPos > 1)
+                        InsertSequenceSeparator(atSeparatorValue2);
                     ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, streamPos, -1);
                     streamPos++;
                 }
@@ -6137,6 +6275,8 @@ internal sealed class TransformEngine
             int last = itemList.Count;
             foreach (var item in itemList)
             {
+                if (atSeparatorValue2 != null && pos > 1)
+                    InsertSequenceSeparator(atSeparatorValue2);
                 ProcessApplyTemplatesItem(item, resolvedMode, callParams, incomingTunnelParams, pos, last);
                 pos++;
             }
@@ -7749,6 +7889,12 @@ internal sealed class TransformEngine
                     var result = compiled.Evaluate(_context);
                     var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
 
+                    // XSLT 4.0 §7.1.1: @separator (an AVT) is inserted as a text node
+                    // between the results of successive items. Evaluated in the
+                    // instruction's context, before the focus changes.
+                    var separatorAttr = instruction.Attribute("separator");
+                    string? separatorValue = separatorAttr != null ? EvaluateAvt(separatorAttr.Value, instruction) : null;
+
                     var savedFocus = _context.ContextItem;
                     var savedCurrent = _context.CurrentItem;
                     var savedTemplateRule = _currentTemplateRule;
@@ -7765,6 +7911,8 @@ internal sealed class TransformEngine
                         int pos = 1;
                         foreach (var item in EnumerateItems(result))
                         {
+                            if (separatorValue != null && pos > 1)
+                                InsertSequenceSeparator(separatorValue);
                             _context.WithFocus(item, pos, -1);
                             _context.WithCurrentItem(item);
                             ExecuteForEachBody(instruction, item);
@@ -7782,6 +7930,8 @@ internal sealed class TransformEngine
                         int pos = 1;
                         foreach (var item in items)
                         {
+                            if (separatorValue != null && pos > 1)
+                                InsertSequenceSeparator(separatorValue);
                             _context.WithFocus(item, pos, items.Count);
                             _context.WithCurrentItem(item);
                             ExecuteForEachBody(instruction, item);
@@ -7935,11 +8085,20 @@ internal sealed class TransformEngine
                     if (!string.IsNullOrEmpty(test))
                     {
                         var compiled = CompileXPath(test, instruction);
+                        // XSLT 4.0 §8.1: optional then/else attributes hold expressions
+                        // evaluated in place of the sequence constructor.
+                        var thenAttr = instruction.Attribute("then")?.Value;
+                        var elseAttr = instruction.Attribute("else")?.Value;
                         WithDefaultCollation(instruction, () =>
                         {
                             var result = compiled.Evaluate(_context);
                             if (result.GetEffectiveBooleanValue())
                             {
+                                if (thenAttr != null)
+                                {
+                                    CopyToResult(CompileXPath(thenAttr, instruction).Evaluate(_context));
+                                    return;
+                                }
                                 foreach (var childNode in instruction.Nodes())
                                 {
                                     switch (childNode)
@@ -7955,6 +8114,10 @@ internal sealed class TransformEngine
                                             break;
                                     }
                                 }
+                            }
+                            else if (elseAttr != null)
+                            {
+                                CopyToResult(CompileXPath(elseAttr, instruction).Evaluate(_context));
                             }
                         });
                     }
@@ -17430,6 +17593,11 @@ internal sealed class TransformEngine
                             feItems = SortItems(feItems, sortElements);
                         }
 
+                        // XSLT 4.0 §7.1.1: @separator (an AVT) is inserted between the
+                        // results of successive items as a text item.
+                        var scSepAttr = instruction.Attribute("separator");
+                        string? scSepValue = scSepAttr != null ? EvaluateAvt(scSepAttr.Value, instruction) : null;
+
                         var savedItem = _context.ContextItem;
                         var savedCurrent = _context.CurrentItem;
                         var savedPosition = _context.ContextPosition;
@@ -17438,6 +17606,8 @@ internal sealed class TransformEngine
                         {
                             for (int i = 0; i < feItems.Count; i++)
                             {
+                                if (scSepValue != null && i > 0)
+                                    items.Add(XdmValue.FromNode(XDocumentNode.Wrap(new XText(scSepValue))));
                                 _context.WithFocus(feItems[i], i + 1, feItems.Count);
                                 _context.WithCurrentItem(feItems[i]);
                                 CollectSimpleContentItems(instruction, feItems[i], items);
@@ -17462,7 +17632,21 @@ internal sealed class TransformEngine
                         {
                             if (compiled.Evaluate(_context).GetEffectiveBooleanValue())
                             {
+                                // XSLT 4.0 §8.1: optional then attribute holds the
+                                // expression evaluated in place of the content.
+                                var scThen = instruction.Attribute("then")?.Value;
+                                if (scThen != null)
+                                {
+                                    items.Add(CompileXPath(scThen, instruction).Evaluate(_context));
+                                    return;
+                                }
                                 CollectSimpleContentItems(instruction, contextItem, items);
+                            }
+                            else
+                            {
+                                var scElse = instruction.Attribute("else")?.Value;
+                                if (scElse != null)
+                                    items.Add(CompileXPath(scElse, instruction).Evaluate(_context));
                             }
                         });
                     }
@@ -19345,7 +19529,8 @@ internal sealed class TransformEngine
 
     /// <summary>
     /// Determines whether the given element is in XSLT forwards-compatible mode
-    /// (effective version greater than 3.0).
+    /// (effective version greater than 3.0 — the ceiling is deliberately not 4.0;
+    /// see Stylesheet.IsForwardsCompatible for the REQ-118 4.0-S7 rationale).
     /// </summary>
     private bool IsForwardsCompatible(XElement instruction)
     {
