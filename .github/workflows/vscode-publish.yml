@@ -9,7 +9,7 @@ name: VS Code extension publish
 #
 # PREREQUISITE (owner, once): create a Marketplace PAT (Azure DevOps, scope
 # Marketplace > Acquire + Manage, org fytala) and store it as the repo secret
-# VSCE_PAT. Until the secret exists, the publish step fails — packaging still
+# VCSE_PAT. Until the secret exists, the publish step fails — packaging still
 # runs, so the workflow can be validated end-to-end by downloading the artifact.
 
 on:
@@ -64,5 +64,9 @@ jobs:
           path: vscode-bosak/vscode-bosak.vsix
 
       - name: Publish to marketplace
+        # NOTE: the repo secret is named VCSE_PAT (owner-created 2026-10-08;
+        # letters transposed from the usual vsce acronym) — do not "fix" the
+        # name here without recreating the secret, or this step silently
+        # publishes nothing (-p with an empty value).
         working-directory: vscode-bosak
-        run: npx --yes @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
+        run: npx --yes @vscode/vsce publish -p ${{ secrets.VCSE_PAT }}
