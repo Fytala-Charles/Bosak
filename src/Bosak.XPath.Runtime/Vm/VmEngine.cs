@@ -362,6 +362,9 @@
 //                      | Charles Korthout | 2.165 | 08-10-2026     | REQ-118 4.0-S5: ConvertArgToKind made public (fn:partial-apply coerces bound values  |
 //                      |                  |       |                | against the base function's parameter types eagerly, fn-partial-apply-13)              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.166 | 08-10-2026     | REQ-118 4.0-S6a: enum types + choice item types (§3.2.5/§3.2.6) in ValueMatchesType, |
+//                      |                  |       |                | InstanceOf, TryCast (cast/castable), and node-kind conversion targets                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -7822,7 +7825,16 @@ internal static class VmEngine
         if (normalized.EndsWith('?') || normalized.EndsWith('*') || normalized.EndsWith('+'))
             normalized = normalized[..^1].TrimEnd();
 
-        var (resolvedNs, resolvedLocal) = ResolveTypeQName(typeName, context);
+        // XPath 4.0 §3.2.5/§3.2.6: enum and choice item types are structural type texts,
+        // not QNames — prefix resolution (and its XPST0081 errors) must not run on them.
+        var castTargetText = typeName.Trim();
+        if (castTargetText.EndsWith('?') || castTargetText.EndsWith('*') || castTargetText.EndsWith('+'))
+            castTargetText = castTargetText[..^1].TrimEnd();
+        bool isStructuralCastTarget = IsEnumOrChoiceTypeText(castTargetText);
+
+        var (resolvedNs, resolvedLocal) = isStructuralCastTarget
+            ? default
+            : ResolveTypeQName(typeName, context);
 
         // A prefixed type name resolves via the in-scope namespaces (constructor-local
         // declarations included). If the prefix is bound to the XML Schema namespace,
@@ -7902,6 +7914,76 @@ internal static class VmEngine
                 }
                 value = first;
             }
+        }
+
+        // XPath 4.0 §3.2.6: casting to an enumeration type. The atomized value is read
+        // as a string (non-string atoms, xs:anyURI, and xs:untypedAtomic per §3.4.2
+        // rule 05 are cast to xs:string first) and must equal a member by codepoints;
+        // the result is a plain xs:string (enum types are structural, instances are
+        // not re-annotated). A non-member is a lexical failure (FORG0001).
+        if (TryGetEnumMembers(castTargetText) is { } enumMembers)
+        {
+            string memberText;
+            if (value.Kind == XdmValueKind.String)
+            {
+                memberText = AtomizedString(value);
+            }
+            else if (!TryCast(value, "xs:string", context, out var asString, out _))
+            {
+                failureKind = CastFailureKind.Lexical;
+                return false;
+            }
+            else
+            {
+                memberText = AtomizedString(asString);
+            }
+            if (enumMembers.Contains(memberText, StringComparer.Ordinal))
+            {
+                result = XdmValue.FromString(memberText);
+                return true;
+            }
+            failureKind = CastFailureKind.Lexical;
+            return false;
+        }
+
+        // XPath 4.0 §3.2.5 (with §3.4.2 rule 02 / F&O §23.3.7): casting to a choice
+        // item type tries each alternative in declaration order — a value already
+        // matching an alternative is returned unchanged, otherwise the first
+        // successful cast to an atomic alternative wins; when every alternative
+        // fails the cast fails lexically (FORG0001).
+        if (TryGetChoiceAlternatives(castTargetText, out var choiceAlternatives))
+        {
+            foreach (var alternative in choiceAlternatives)
+            {
+                bool matched;
+                try
+                {
+                    matched = ValueMatchesType(value, alternative, context);
+                }
+                catch (InvalidOperationException)
+                {
+                    matched = false;
+                }
+                if (matched)
+                {
+                    result = value;
+                    return true;
+                }
+                if (IsNonAtomicCastAlternative(alternative))
+                    continue;
+                try
+                {
+                    if (TryCast(value, alternative, context, out var coerced, out _))
+                    {
+                        result = coerced;
+                        return true;
+                    }
+                }
+                catch (InvalidOperationException) { }
+                catch (OverflowException) { }
+            }
+            failureKind = CastFailureKind.Lexical;
+            return false;
         }
 
         // Schema-imported simple types (not built-in xs:*): unions, lists, and atomic
@@ -9367,6 +9449,24 @@ internal static class VmEngine
 
         if (count == 0)
             return true;
+
+        // XPath 4.0 §3.2.5/§3.2.6: choice item types and enumeration types are structural
+        // type texts, not QNames: the QName resolution below does not apply, and the type
+        // is matched per item (enum: an xs:string instance whose value is a member;
+        // choice: any alternative matches). The occurrence indicator was consumed by
+        // the caller, but strip a residual suffix defensively before the shape tests.
+        var itemTypeText = typeName.Trim();
+        if (itemTypeText.Length > 1 && itemTypeText[^1] is '?' or '*' or '+')
+            itemTypeText = itemTypeText[..^1].TrimEnd();
+        if (TryGetEnumMembers(itemTypeText) is not null || TryGetChoiceAlternatives(itemTypeText, out _))
+        {
+            if (!value.IsSequence)
+                return ValueMatchesType(value, itemTypeText, context);
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (!ValueMatchesType(item, itemTypeText, context))
+                    return false;
+            return true;
+        }
 
         string effective;
         if (typeName.StartsWith("xs:", StringComparison.OrdinalIgnoreCase))
@@ -11172,6 +11272,31 @@ internal static class VmEngine
     {
         if (string.IsNullOrEmpty(typeName)) return true;
 
+        // XPath 4.0 §3.2.5/§3.2.6: choice item types and enumeration types are matched
+        // structurally, before QName resolution and case-folding. Enum members compare
+        // with codepoint (ordinal) equality against the string datum of any xs:string
+        // instance; a choice matches when any alternative matches. Sequence values were
+        // handled above the single-item path by the caller's per-item recursion.
+        var rawText = typeName.Trim();
+        if (rawText.Length > 1 && rawText[^1] is '?' or '*' or '+')
+            rawText = rawText[..^1].TrimEnd();
+        if (TryGetChoiceAlternatives(rawText, out var choiceAlternatives))
+        {
+            if (value.IsUndefined) return false;
+            foreach (var alternative in choiceAlternatives)
+                if (ValueMatchesType(value, alternative, context))
+                    return true;
+            return false;
+        }
+        if (TryGetEnumMembers(rawText) is { } enumMembers)
+        {
+            // xs:untypedAtomic is not an instance of xs:string, so it never matches an
+            // enumeration type (the cast/coercion paths convert it first, §3.4.2 rule 05).
+            return !value.IsUndefined && !value.IsSequence
+                && value.Kind == XdmValueKind.String && !IsUntypedAtomicValue(value)
+                && enumMembers.Contains(AtomizedString(value), StringComparer.Ordinal);
+        }
+
         // Unwrap redundant outer parentheses: (function(xs:integer) as xs:integer) is the
         // same type as function(xs:integer) as xs:integer (hof-013).
         var unwrapped = typeName.Trim();
@@ -11693,6 +11818,60 @@ internal static class VmEngine
     }
 
     /// <summary>
+    /// Splits a choice item type (XPath 4.0 §3.2.5) into its alternative item type texts.
+    /// Returns false when the text contains no top-level '|' (it is not a choice). The
+    /// split is parenthesis-respecting, so '|' inside enum members or kind tests does
+    /// not divide alternatives.
+    /// </summary>
+    private static bool TryGetChoiceAlternatives(string typeText, out string[] alternatives)
+    {
+        alternatives = [];
+        var trimmed = typeText.Trim();
+        // Redundant outer parentheses do not change the type: unwrap before scanning so
+        // both "(a|b)" and "a|b" are recognised (the matcher unwraps later anyway).
+        while (trimmed.Length > 1 && trimmed[0] == '(' && FindMatchingParen(trimmed, 0) == trimmed.Length - 1)
+            trimmed = trimmed[1..^1].Trim();
+        if (trimmed.IndexOf('|') < 0)
+            return false;
+        var parts = SplitTopLevel(trimmed, '|');
+        if (parts.Length < 2 || parts.Any(p => p.Length == 0))
+            return false;
+        alternatives = parts;
+        return true;
+    }
+
+    /// <summary>
+    /// Parses an enumeration type text (XPath 4.0 §3.2.6, <c>enum("a", "b", ...)</c>) into
+    /// its member values. Returns null when the text is not a well-formed enumeration type.
+    /// The parser-side validator (<see cref="Parser.XPathParser.TryParseEnumTypeMembers"/>)
+    /// guarantees well-formedness for expressions that compiled successfully.
+    /// </summary>
+    private static string[]? TryGetEnumMembers(string typeText)
+        => XPathParser.TryParseEnumTypeMembers(typeText);
+
+    /// <summary>
+    /// Returns true when the sequence-type text denotes an XPath 4.0 enumeration type or
+    /// choice item type, either of which bypasses QName-based type resolution.
+    /// </summary>
+    private static bool IsEnumOrChoiceTypeText(string typeText)
+        => TryGetEnumMembers(typeText) is not null || TryGetChoiceAlternatives(typeText, out _);
+
+    /// <summary>
+    /// Whether a choice alternative can never be the target of a cast (XPath 4.0 §19.3
+    /// permits only atomic cast targets): node kind tests, function/map/array types, and
+    /// item(). Such alternatives contribute a match check but no coercion attempt.
+    /// </summary>
+    private static bool IsNonAtomicCastAlternative(string alternative)
+    {
+        var t = alternative.Trim();
+        if (t.Length > 0 && "?+*".Contains(t[^1]))
+            t = t[..^1].TrimEnd();
+        while (t.Length > 1 && t[0] == '(' && FindMatchingParen(t, 0) == t.Length - 1)
+            t = t[1..^1].Trim();
+        return IsNodeKindTestType(t) || IsFunctionFamilyType(t) || t is "item" or "item()";
+    }
+
+    /// <summary>
     /// Extracts the declared parameter and return types from an inline function item.
     /// </summary>
     private static bool TryGetInlineFunctionSignature(XdmValue value, out string[] paramTypes, out string returnType)
@@ -12144,6 +12323,11 @@ internal static class VmEngine
         if (!value.IsSequence && IsUntypedAtomicValue(value) && IsNamespaceSensitiveTargetType(type, context))
             throw new InvalidOperationException($"XPTY0117: Cannot cast xs:untypedAtomic to namespace-sensitive type {targetType}");
 
+        // XPath 4.0 §3.4.2 rule 02: a choice item type coerces per alternative in
+        // declaration order (not "any match wins"), so the whole-value and per-item
+        // pass-through shortcuts below must not short-circuit the in-order scan.
+        bool isChoiceConversionTarget = TryGetChoiceAlternatives(type, out _);
+
         // XPath 3.1 function conversion: node values must be atomized when the target
         // type is not a node kind test, even if the node's typed value could be cast to
         // the target atomic type (qischema040). Only short-circuit when the value already
@@ -12160,7 +12344,7 @@ internal static class VmEngine
                 }
             }
         }
-        if ((!valueContainsNode || IsNodeKindTestType(type)) && ValueMatchesType(value, targetType, context))
+        if ((!valueContainsNode || IsNodeKindTestType(type)) && !isChoiceConversionTarget && ValueMatchesType(value, targetType, context))
             return value;
 
         var items = new List<XdmValue>();
@@ -12211,7 +12395,10 @@ internal static class VmEngine
             // matches the target type; node kind tests and item() accept nodes as-is
             // (qischema040).
             bool nodeNeedsAtomization = item.IsNode && !IsNodeKindTestType(type);
-            if (!nodeNeedsAtomization && ValueMatchesType(item, type, context))
+            // For choice targets, atomic items take the in-order alternative scan in
+            // ConvertAtomizedItem; node items may still pass through on a matching
+            // node-kind alternative (unchanged in both paths).
+            if (!nodeNeedsAtomization && (!isChoiceConversionTarget || item.IsNode) && ValueMatchesType(item, type, context))
             {
                 converted.Add(item);
                 continue;
@@ -12266,9 +12453,48 @@ internal static class VmEngine
         XdmValue atomic, string type, string targetType, bool isFunctionTest, bool bcNumeric,
         EvaluationContext? context, List<XdmValue> converted)
     {
-        if (ValueMatchesType(atomic, type, context))
+        // XPath 4.0 §3.4.2 rule 02: a choice item type is handled by the in-order
+        // alternative scan below, not by the any-match fast path.
+        if (!TryGetChoiceAlternatives(type, out var choiceAlternatives) && ValueMatchesType(atomic, type, context))
         {
             converted.Add(atomic);
+        }
+        else if (choiceAlternatives is { Length: > 0 })
+        {
+            // Each alternative is tried in declaration order: a matching alternative
+            // passes the value through unchanged, otherwise the first successful cast
+            // to an atomic alternative wins (the spec's fn:char example: an integer
+            // argument to (xs:string|xs:positiveInteger) becomes the string).
+            foreach (var alternative in choiceAlternatives)
+            {
+                bool matched;
+                try
+                {
+                    matched = ValueMatchesType(atomic, alternative, context);
+                }
+                catch (InvalidOperationException)
+                {
+                    matched = false;
+                }
+                if (matched)
+                {
+                    converted.Add(atomic);
+                    return;
+                }
+                if (IsNonAtomicCastAlternative(alternative))
+                    continue;
+                try
+                {
+                    if (TryCast(atomic, alternative, context, out var coerced, out _))
+                    {
+                        converted.Add(coerced);
+                        return;
+                    }
+                }
+                catch (InvalidOperationException) { }
+                catch (OverflowException) { }
+            }
+            throw new InvalidOperationException($"XPTY0004: Cannot convert value to type {targetType}");
         }
         else if (isFunctionTest && atomic.IsFunction && FunctionItemCoercibleTo(atomic, type))
         {
@@ -12636,6 +12862,11 @@ internal static class VmEngine
             t = t[..^1].TrimEnd();
         while (t.Length > 1 && t[0] == '(' && FindMatchingParen(t, 0) == t.Length - 1)
             t = t[1..^1].Trim();
+
+        // XPath 4.0 §3.2.5: a choice is a node kind test when every alternative is one
+        // (e.g. (element(a)|element(b))): node arguments then pass through unchanged.
+        if (TryGetChoiceAlternatives(t, out var choiceAlts))
+            return choiceAlts.All(IsNodeKindTestType);
 
         return t is "item" or "item()" or "node" or "node()" or "element" or "element()"
             or "attribute" or "attribute()" or "document-node" or "document-node()"
