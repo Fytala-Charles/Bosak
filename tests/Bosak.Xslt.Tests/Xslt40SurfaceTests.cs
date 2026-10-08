@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 08-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 08-10-2026     | Post-review correction: version ceiling stays 3.0 — 4.0 forwards-compat test rewritten,  |
+//                      |                  |       |                | 3.0 unknown-instruction XTSE0010 test added (21 W3C forwards-* sweep failures drove this) |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -586,16 +589,34 @@ public class Xslt40SurfaceTests
     // ------------------------------------------------------------------
 
     [Fact]
-    public void Version_4_0_IsFullySupported_UnknownInstructionErrors()
+    public void Version_4_0_RemainsForwardsCompatible_UnknownInstructionIgnored()
     {
-        // With 4.0 as the supported version, a 4.0 stylesheet is no longer
-        // forwards-compatible: an unknown XSLT instruction is XTSE0010 again
-        // (but note xsl:note itself is never an error).
+        // The supported-version ceiling stays 3.0 (see Stylesheet.IsForwardsCompatible):
+        // a version="4.0" stylesheet is processed in forwards-compatible mode, exactly
+        // like the W3C catalog's forwards-* tests expect — an unknown XSLT instruction
+        // is ignored (its xsl:fallback evaluated), not XTSE0010. The 4.0 surfaces
+        // themselves work at any effective version (XSLT 4.0 §3.8.2/§3.8.3).
+        var result = RunTransform("""
+            <xsl:template match='/'>
+                <out>
+                    <xsl:switch-new-invented>
+                        <xsl:fallback>fb</xsl:fallback>
+                    </xsl:switch-new-invented>
+                </out>
+            </xsl:template>
+            """, version: "4.0");
+        Assert.Contains("fb", result);
+    }
+
+    [Fact]
+    public void Version_3_0_UnknownInstruction_StillErrors()
+    {
+        // At the supported version there is no forward-compatibility safety net.
         var ex = CompileError("""
             <xsl:template match='/'>
                 <xsl:switch-new-invented/>
             </xsl:template>
-            """, version: "4.0");
+            """, version: "3.0");
         Assert.Contains("XTSE0010", ex.Message);
     }
 

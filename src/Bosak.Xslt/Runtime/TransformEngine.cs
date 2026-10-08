@@ -19529,12 +19529,12 @@ internal sealed class TransformEngine
 
     /// <summary>
     /// Determines whether the given element is in XSLT forwards-compatible mode
-    /// (effective version greater than 3.0).
+    /// (effective version greater than 3.0 — the ceiling is deliberately not 4.0;
+    /// see Stylesheet.IsForwardsCompatible for the REQ-118 4.0-S7 rationale).
     /// </summary>
     private bool IsForwardsCompatible(XElement instruction)
     {
-        // The supported XSLT version is 4.0; greater versions are forwards-compatible.
-        return GetEffectiveVersion(instruction) > 4.0;
+        return GetEffectiveVersion(instruction) > 3.0;
     }
 
     /// <summary>

@@ -267,9 +267,11 @@
 //                      | Charles Korthout | 2.125 | 03-10-2026     | REQ-119 sweep gate: xsl:fallback is exempt from XTSE3120 following-sibling checks      |
 //                      |                  |       |                | (§8.4 allows it anywhere; iterate-016/017/018/030/031)                                  |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 2.126 | 08-10-2026     | REQ-118 4.0-S7: supported XSLT version is now 4.0 (forwards compatibility starts       |
-//                      |                  |       |                | above 4.0); xsl:note stripped at load; xsl:if @then+content XTSE0010; xsl:map          |
-//                      |                  |       |                | @select+content XTSE3185; @separator/@select/@duplicates accepted at all versions      |
+//                      | Charles Korthout | 2.126 | 08-10-2026     | REQ-118 4.0-S7: xsl:note stripped at load; xsl:if @then+content XTSE0010; xsl:map       |
+//                      |                  |       |                | @select+content XTSE3185; @separator/@select/@duplicates accepted at all versions.      |
+//                      |                  |       |                | Supported-version ceiling STAYS 3.0: version="4.0" stylesheets remain forwards-          |
+//                      |                  |       |                | compatible (frozen W3C forwards-* tests pin this; §3.8.2/§3.8.3 make the surface          |
+//                      |                  |       |                | version-independent anyway)                                                              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -9253,13 +9255,17 @@ internal sealed class Stylesheet
 
     /// <summary>
     /// Whether the stylesheet is in forwards-compatible mode (declared version greater
-    /// than the implementation supports, which is 4.0). In this mode unknown attributes
-    /// on XSLT elements are ignored rather than rejected.
+    /// than the implementation supports). In this mode unknown attributes on XSLT
+    /// elements are ignored rather than rejected. The ceiling stays 3.0 deliberately:
+    /// the frozen W3C catalog exercises forward compatibility with version="4.0"/"3.3"
+    /// stylesheets, and XSLT 4.0 §3.8.2/§3.8.3 specifies that 4.0 features produce the
+    /// same results at any effective version — so the supported surface is decoupled
+    /// from the recognized version value (REQ-118 4.0-S7).
     /// </summary>
     public bool IsForwardsCompatible =>
         !string.IsNullOrEmpty(Version) &&
         decimal.TryParse(Version, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var v) &&
-        v > 4.0m;
+        v > 3.0m;
 
     /// <summary>
     /// Returns the effective XSLT version for the given element, walking ancestors for
@@ -9291,9 +9297,10 @@ internal sealed class Stylesheet
 
     /// <summary>
     /// Determines whether the given element is in XSLT forwards-compatible mode
-    /// (effective version greater than the supported version 4.0).
+    /// (effective version greater than the supported version 3.0; see
+    /// <see cref="IsForwardsCompatible"/> for why the ceiling is deliberately not 4.0).
     /// </summary>
-    public bool IsForwardsCompatibleElement(XElement element) => GetEffectiveVersion(element) > 4.0;
+    public bool IsForwardsCompatibleElement(XElement element) => GetEffectiveVersion(element) > 3.0;
 
     /// <summary>
     /// The set of known XSLT element names (XSLT 3.0 plus the XSLT 4.0
