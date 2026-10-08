@@ -39,6 +39,8 @@
 //                      | Charles Korthout | 1.6   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      | Charles Korthout | 1.7   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 08-10-2026     | REQ-118 4.0-S3a: '??' Otherwise token; 4.0 hex/binary literals + digit underscores     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -52,6 +54,7 @@ internal ref struct XPathLexer
 {
     private readonly ReadOnlySpan<char> _source;
     private readonly bool _allowConstructors;
+    private readonly bool _xpath40;
     private int _position;
 
     /// <summary>
@@ -60,10 +63,13 @@ internal ref struct XPathLexer
     /// <param name="source">The XPath or XQuery source text to tokenize.</param>
     /// <param name="allowConstructors">When true, XQuery direct element/comment/PI and string
     /// constructors are scanned as single <see cref="TokenKind.Constructor"/> tokens.</param>
-    public XPathLexer(ReadOnlySpan<char> source, bool allowConstructors = false)
+    /// <param name="xpath40">When true, XPath 4.0 lexical extensions are enabled: hexadecimal
+    /// (<c>0x...</c>) and binary (<c>0b...</c>) integer literals and underscore digit separators.</param>
+    public XPathLexer(ReadOnlySpan<char> source, bool allowConstructors = false, bool xpath40 = false)
     {
         _source = source;
         _allowConstructors = allowConstructors;
+        _xpath40 = xpath40;
         _position = 0;
     }
 
@@ -293,18 +299,52 @@ internal ref struct XPathLexer
         bool hasDot = false;
         bool hasExponent = false;
 
-        // Integer part
-        while (_position < _source.Length && char.IsDigit(_source[_position]))
+        // XPath 4.0: hexadecimal (0x...) and binary (0b...) integer literals.
+        if (_xpath40 && _source[_position] == '0' && _position + 1 < _source.Length &&
+            (_source[_position + 1] == 'x' || _source[_position + 1] == 'b'))
+        {
+            bool hex = _source[_position + 1] == 'x';
+            _position += 2;
+            int digits = 0;
+            while (_position < _source.Length)
+            {
+                char d = _source[_position];
+                bool ok = hex ? (d is >= '0' and <= '9' or >= 'a' and <= 'f' or >= 'A' and <= 'F')
+                              : (d is '0' or '1');
+                if (ok || (d == '_' && digits > 0))
+                {
+                    if (ok) digits++;
+                    _position++;
+                    continue;
+                }
+                break;
+            }
+            // A trailing underscore (or missing digits) is not part of the literal;
+            // backing off leaves a name-start character which the caller reports
+            // as an invalid token (XPST0003), matching the Digits grammar.
+            while (_position > start + 2 && _source[_position - 1] == '_')
+                _position--;
+            if (digits == 0)
+                return new Token(TokenKind.Invalid, start, _position - start);
+            return new Token(TokenKind.IntegerLiteral, start, _position - start);
+        }
+
+        // Integer part (underscore separators allowed in XPath 4.0)
+        while (_position < _source.Length && (char.IsDigit(_source[_position]) || (_xpath40 && _source[_position] == '_')))
         {
             _position++;
         }
+        // A trailing underscore is not part of the literal (Digits grammar);
+        // the name-follow check below reports it as an invalid token (XPST0003).
+        while (_position > start + 1 && _source[_position - 1] == '_')
+            _position--;
 
         // Decimal point
         if (_position < _source.Length && _source[_position] == '.')
         {
             _position++;
 
-            while (_position < _source.Length && char.IsDigit(_source[_position]))
+            while (_position < _source.Length && (char.IsDigit(_source[_position]) || (_xpath40 && _source[_position] == '_')))
             {
                 _position++;
             }
@@ -325,7 +365,7 @@ internal ref struct XPathLexer
                 _position++;
 
             bool hasExpDigits = false;
-            while (_position < _source.Length && char.IsDigit(_source[_position]))
+            while (_position < _source.Length && (char.IsDigit(_source[_position]) || (_xpath40 && _source[_position] == '_')))
             {
                 hasExpDigits = true;
                 _position++;
@@ -504,6 +544,13 @@ internal ref struct XPathLexer
             case '@':
                 return new Token(TokenKind.At, start, 1);
             case '?':
+                if (_position < _source.Length && _source[_position] == '?')
+                {
+                    // Longest-token rule: '??' is the XPath 4.0 otherwise operator.
+                    // The parser rejects it with XPST0003 in 3.1 mode.
+                    _position++;
+                    return new Token(TokenKind.Otherwise, start, 2);
+                }
                 return new Token(TokenKind.Question, start, 1);
             case '#':
                 return new Token(TokenKind.Hash, start, 1);

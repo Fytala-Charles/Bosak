@@ -20,6 +20,8 @@
 //                      | Charles Korthout | 0.4   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 08-10-2026     | REQ-118 4.0-S3a: Otherwise token kind for the XPath 4.0 '??' operator                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Parser.Lexer;
 
@@ -106,6 +108,9 @@ internal enum TokenKind : short
     Arrow,
     /// <summary>The <c>||</c> string concatenation operator (XPath 3.0+).</summary>
     StringConcat,
+    /// <summary>The <c>??</c> otherwise operator (XPath 4.0). In XPath 3.1 mode the
+    /// parser rejects this token with XPST0003.</summary>
+    Otherwise,
 
     // ---- General comparisons -----------------------------------------
     /// <summary>The <c>=</c> general comparison.</summary>

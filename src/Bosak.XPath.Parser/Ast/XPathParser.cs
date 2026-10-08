@@ -129,6 +129,9 @@
 //                      | Charles Korthout | 1.62  | 30-09-2026     | REQ-114/PB-3 C9: ParseDocumentNodeContent surfaces the inner element() type name so   |
 //                      |                  |       |                | document-node(element(E,T)) keeps T in the NodeTest (validation-1401)                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.63  | 08-10-2026     | REQ-118 4.0-S3a: xpath40 parse option — '??' otherwise operator (OtherwiseExpr between  |
+//                      |                  |       |                | ComparisonExpr and StringConcatExpr) and 0x/0b/underscore numeric literals              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -155,6 +158,10 @@ internal sealed class XPathParser
     // tests parse without the no-schema-awareness XPST0008; declaration existence is
     // validated against the compiled schema set at compile time (XPST0008 when absent).
     private bool _schemaAware;
+    // XPath 4.0 grammar features (REQ-118): the '??' otherwise operator and
+    // hexadecimal/binary/underscore numeric literals. False = XPath 3.1 (default):
+    // an Otherwise token is rejected with XPST0003.
+    private bool _xpath40;
     private int _position;
     // > 0 while parsing a map-constructor key: '*:local' name tests are no longer
     // greedy — the entry ':' must follow the local name (map{* :b}, MapConstructor-020).
@@ -211,17 +218,19 @@ internal sealed class XPathParser
     /// <param name="schemaAware">When true, schema-aware kind tests
     /// (<c>schema-element()</c>/<c>schema-attribute()</c>) are permitted; when false (the
     /// default) an unprefixed name argument raises XPST0008 (no schema awareness).</param>
+    /// <param name="xpath40">When true, enables XPath 4.0 grammar extensions: the <c>??</c>
+    /// otherwise operator and hexadecimal/binary integer literals with underscore separators.</param>
     /// <returns>The root of the parsed AST.</returns>
     /// <exception cref="XPathParseException">The expression is not syntactically valid.</exception>
-    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true, bool schemaAware = false)
+    public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true, bool schemaAware = false, bool xpath40 = false)
     {
-        var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
+        var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor, xpath40: xpath40);
         var tokens = new List<Token>();
         Token tok;
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
             tokens.Add(tok);
 
-        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip, _schemaAware = schemaAware };
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip, _schemaAware = schemaAware, _xpath40 = xpath40 };
         return parser.ParseExpression();
     }
 
@@ -235,17 +244,18 @@ internal sealed class XPathParser
     /// <param name="xml11LineEndings">When true, string literals get XML 1.1 line-ending normalization.</param>
     /// <param name="boundarySpaceStrip">When true (the default), whitespace-only text at the
     /// boundaries of direct element constructor content is stripped; false preserves it.</param>
+    /// <param name="xpath40">When true, enables XPath 4.0 grammar extensions (see <see cref="Parse"/>).</param>
     /// <returns>The root of the parsed AST.</returns>
     /// <exception cref="XPathParseException">The expression is not syntactically valid, or input remains after the ExprSingle.</exception>
-    public static XPathAstNode ParseExprSingle(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true)
+    public static XPathAstNode ParseExprSingle(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true, bool xpath40 = false)
     {
-        var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor);
+        var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor, xpath40: xpath40);
         var tokens = new List<Token>();
         Token tok;
         while ((tok = lexer.NextToken()).Kind != TokenKind.Eof)
             tokens.Add(tok);
 
-        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip };
+        var parser = new XPathParser(tokens.ToArray(), xpath, allowFullFlwor) { _xml11LineEndings = xml11LineEndings, _boundarySpaceStrip = boundarySpaceStrip, _xpath40 = xpath40 };
         var result = parser.ParseExprSingle();
         if (!parser.IsAtEnd)
             throw new XPathParseException($"XPST0003: Unexpected token {parser.Current.Kind} after the expression.", parser.Current.Start);
@@ -1082,11 +1092,11 @@ internal sealed class XPathParser
         return left;
     }
 
-    // ComparisonExpr ::= StringConcatExpr (ComparisonOp StringConcatExpr)?
+    // ComparisonExpr ::= OtherwiseExpr (ComparisonOp OtherwiseExpr)?
     private XPathAstNode ParseComparisonExpr()
     {
         int start = Current.Start;
-        var left = ParseStringConcatExpr();
+        var left = ParseOtherwiseExpr();
         BinaryOperator? op = Current.Kind switch
         {
             TokenKind.Equal => BinaryOperator.Equal,
@@ -1109,8 +1119,26 @@ internal sealed class XPathParser
         if (op.HasValue)
         {
             Advance();
-            var right = ParseStringConcatExpr();
+            var right = ParseOtherwiseExpr();
             left = WithSpan(new BinaryExpressionNode(left, op.Value, right), start, End);
+        }
+        return left;
+    }
+
+    // OtherwiseExpr ::= StringConcatExpr ("??" StringConcatExpr)*   [XPath 4.0]
+    // Binds more tightly than comparisons (=, eq, ...) but less tightly than
+    // string concatenation (||) and arithmetic (XPath 4.0 §4.17).
+    private XPathAstNode ParseOtherwiseExpr()
+    {
+        int start = Current.Start;
+        var left = ParseStringConcatExpr();
+        while (Current.Kind == TokenKind.Otherwise)
+        {
+            if (!_xpath40)
+                throw new XPathParseException("The '??' (otherwise) operator requires XPath 4.0; it is not allowed in XPath 3.1", Current.Start);
+            Advance();
+            var right = ParseStringConcatExpr();
+            left = WithSpan(new BinaryExpressionNode(left, BinaryOperator.Otherwise, right), start, End);
         }
         return left;
     }
@@ -1994,6 +2022,36 @@ internal sealed class XPathParser
         return expr;
     }
 
+    // Converts an IntegerLiteral token's text to a literal AST node. Handles the
+    // XPath 4.0 forms: hexadecimal (0x...), binary (0b...), and underscore separators.
+    private static XPathAstNode IntegerLiteralFromText(string str)
+    {
+        if (str.StartsWith("0x", StringComparison.Ordinal) || str.StartsWith("0b", StringComparison.Ordinal))
+        {
+            int numberBase = str[1] == 'x' ? 16 : 2;
+            System.Numerics.BigInteger value = 0;
+            foreach (char d in str.AsSpan(2))
+            {
+                if (d == '_') continue;
+                int digit = d <= '9' ? d - '0' : (char.ToLowerInvariant(d) - 'a' + 10);
+                value = value * numberBase + digit;
+            }
+            if (value <= long.MaxValue)
+                return new IntegerLiteralNode((long)value);
+            // Beyond long: still xs:integer — tag the decimal fallback (see change 1.56).
+            return new DecimalLiteralNode((decimal)value, IsIntegerLiteral: true);
+        }
+
+        var cleaned = str.Replace("_", "", StringComparison.Ordinal);
+        if (long.TryParse(cleaned, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i))
+            return new IntegerLiteralNode(i);
+        if (decimal.TryParse(cleaned, NumberStyles.Float, CultureInfo.InvariantCulture, out var dec))
+            // An integer literal beyond the long range is still an xs:integer
+            // (cbcl-numeric-multiply-026) — tag it so it is not typed xs:decimal.
+            return new DecimalLiteralNode(dec, IsIntegerLiteral: true);
+        return new DoubleLiteralNode(double.Parse(cleaned, CultureInfo.InvariantCulture));
+    }
+
     private XPathAstNode ParseLookupKey()
     {
         int start = Current.Start;
@@ -2001,14 +2059,7 @@ internal sealed class XPathParser
             return WithSpan(new StringLiteralNode("*"), start, End);
         if (Current.Kind == TokenKind.IntegerLiteral)
         {
-            var str = GetString(Current);
-            XPathAstNode node;
-            if (long.TryParse(str, out var val))
-                node = new IntegerLiteralNode(val);
-            else if (decimal.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out var decVal))
-                node = new DecimalLiteralNode(decVal, IsIntegerLiteral: true);
-            else
-                node = new DoubleLiteralNode(double.Parse(str, CultureInfo.InvariantCulture));
+            var node = IntegerLiteralFromText(GetString(Current));
             Advance();
             return WithSpan(node, start, End);
         }
@@ -2058,21 +2109,13 @@ internal sealed class XPathParser
                 return WithSpan(new StringLiteralNode(s), start, End);
 
             case TokenKind.IntegerLiteral:
-                var strI = GetString(Current);
-                XPathAstNode nodeI;
-                if (long.TryParse(strI, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i))
-                    nodeI = new IntegerLiteralNode(i);
-                else if (decimal.TryParse(strI, NumberStyles.Float, CultureInfo.InvariantCulture, out var decI))
-                    // An integer literal beyond the long range is still an xs:integer
-                    // (cbcl-numeric-multiply-026) — tag it so it is not typed xs:decimal.
-                    nodeI = new DecimalLiteralNode(decI, IsIntegerLiteral: true);
-                else
-                    nodeI = new DoubleLiteralNode(double.Parse(strI, CultureInfo.InvariantCulture));
+                var nodeI = IntegerLiteralFromText(GetString(Current));
                 Advance();
                 return WithSpan(nodeI, start, End);
 
             case TokenKind.DecimalLiteral:
-                var strD = GetString(Current);
+                // XPath 4.0 allows underscore separators; they carry no value.
+                var strD = GetString(Current).Replace("_", "", StringComparison.Ordinal);
                 XPathAstNode nodeD;
                 if (decimal.TryParse(strD, NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
                     nodeD = new DecimalLiteralNode(d);
@@ -2082,7 +2125,7 @@ internal sealed class XPathParser
                 return WithSpan(nodeD, start, End);
 
             case TokenKind.DoubleLiteral:
-                var f = double.Parse(GetString(Current), CultureInfo.InvariantCulture);
+                var f = double.Parse(GetString(Current).Replace("_", "", StringComparison.Ordinal), CultureInfo.InvariantCulture);
                 Advance();
                 return WithSpan(new DoubleLiteralNode(f), start, End);
 

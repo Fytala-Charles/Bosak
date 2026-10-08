@@ -52,6 +52,8 @@
 //                      | Charles Korthout | 1.16  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 1.17  | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.18  | 08-10-2026     | REQ-118 4.0-S3a: BinaryOperator.Otherwise for the XPath 4.0 '??' operator              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -674,6 +676,9 @@ internal enum BinaryOperator
     Except,
     /// <summary>The <c>||</c> string concatenation operator.</summary>
     StringConcat,
+    /// <summary>The <c>??</c> otherwise operator (XPath 4.0 §4.17): returns the first
+    /// operand unless it is the empty sequence, in which case it returns the second.</summary>
+    Otherwise,
     /// <summary>The <c>!</c> simple map operator.</summary>
     SimpleMap,
     /// <summary>The range operator (lowered from <see cref="To"/>).</summary>
