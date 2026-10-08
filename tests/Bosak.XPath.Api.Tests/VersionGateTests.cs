@@ -27,6 +27,9 @@
 //                      | Charles Korthout | 0.6   | 08-10-2026     | REQ-118 4.0-S4: pipeline '->' (§4.20), mapping arrow '=!>' (§4.22.2), focus functions    |
 //                      |                  |       |                | (§4.6.6.1), 'for member'/'for key value' (§4.14.1) — semantics + 3.1 XPST0003 gates    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 08-10-2026     | REQ-118 4.0-S5: higher-order fn:some/every/index-where/partition/take-while/drop-      |
+//                      |                  |       |                | while/while-do/do-until/partial-apply/transitive-closure XPST0017 gate (3.1 mode)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -96,6 +99,27 @@ public class VersionGateTests
     public void Compile_SliceInDefaultMode_ThrowsXpst0017()
     {
         var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:slice((1, 2, 3), 1)"));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S5: higher-order functions are 4.0-only
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("fn:some((1, 2), fn:boolean#1)")]
+    [InlineData("fn:every((1, 2), fn:boolean#1)")]
+    [InlineData("fn:index-where((1, 2), fn:boolean#1)")]
+    [InlineData("fn:partition((1, 2), fn:boolean#2)")]
+    [InlineData("fn:take-while((1, 2), fn:boolean#1)")]
+    [InlineData("fn:drop-while((1, 2), fn:boolean#1)")]
+    [InlineData("fn:while-do(1, fn:boolean#1, fn:identity#1)")]
+    [InlineData("fn:do-until(1, fn:identity#1, fn:boolean#1)")]
+    [InlineData("fn:partial-apply(fn:concat#2, map{})")]
+    [InlineData("fn:transitive-closure((), fn:identity#1)")]
+    public void Compile_HigherOrderFunctions_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
         Assert.Contains("XPST0017", ex.Message);
     }
 
