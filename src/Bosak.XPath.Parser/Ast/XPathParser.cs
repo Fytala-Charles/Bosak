@@ -132,6 +132,10 @@
 //                      | Charles Korthout | 1.63  | 08-10-2026     | REQ-118 4.0-S3a: xpath40 parse option — '??' otherwise operator (OtherwiseExpr between  |
 //                      |                  |       |                | ComparisonExpr and StringConcatExpr) and 0x/0b/underscore numeric literals              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.64  | 08-10-2026     | REQ-118 4.0-S3b: keyword arguments in ParseArgumentList (4.0-only, XPST0003 in 3.1,   |
+//                      |                  |       |                | positional-after-keyword XPST0003, dynamic-call rejection XPST0017) and XPath 4.0      |
+//                      |                  |       |                | string templates (ParseStringTemplate + interpolation scanning)                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1339,8 +1343,8 @@ internal sealed class XPathParser
             var name = GetString(Current);
             var (prefix, local, _) = SplitQName(name);
             Advance();
-            var args = ParseArgumentList();
-            return WithSpan(new FunctionCallNode(local, args, prefix), start, End);
+            var (args, keywords) = ParseArgumentList();
+            return WithSpan(new FunctionCallNode(local, args, prefix, KeywordArguments: keywords), start, End);
         }
         if (Current.Kind == TokenKind.Dollar)
         {
@@ -1348,7 +1352,8 @@ internal sealed class XPathParser
             Advance();
             var nameTok = ExpectName();
             var (prefix, local, _) = SplitQName(GetString(nameTok));
-            var args = ParseArgumentList();
+            var (args, keywords) = ParseArgumentList();
+            ThrowIfKeywordsOnDynamicCall(keywords, start);
             return WithSpan(new DynamicFunctionCallNode(new VariableReferenceNode(local, prefix), args), start, End);
         }
         if (Current.Kind == TokenKind.LParen)
@@ -1357,16 +1362,26 @@ internal sealed class XPathParser
             Advance();
             var expr = ParseExpr();
             Expect(TokenKind.RParen);
-            var args = ParseArgumentList();
+            var (args, keywords) = ParseArgumentList();
+            ThrowIfKeywordsOnDynamicCall(keywords, start);
             return WithSpan(new DynamicFunctionCallNode(expr, args), start, End);
         }
         if (Current.Kind == TokenKind.KeywordFunction)
         {
             var inlineFunc = ParseInlineFunction(start);
-            var args = ParseArgumentList();
+            var (args, keywords) = ParseArgumentList();
+            ThrowIfKeywordsOnDynamicCall(keywords, start);
             return WithSpan(new DynamicFunctionCallNode(inlineFunc, args), start, End);
         }
         throw new XPathParseException("Expected function name, variable reference, or parenthesized expression after =>", Current.Start);
+    }
+
+    // Keyword arguments require the static signature of a named function; a dynamic
+    // function call has none, so it is a static error (XPST0017, XPath 4.0 §4.6.1).
+    private static void ThrowIfKeywordsOnDynamicCall(List<KeywordArgumentNode>? keywords, int position)
+    {
+        if (keywords is not null)
+            throw new XPathParseException("XPST0017: Keyword arguments can only be used in calls of statically-known functions.", position);
     }
 
     // UnaryExpr ::= ("+" | "-")* ValueExpr
@@ -2001,7 +2016,8 @@ internal sealed class XPathParser
             else if (Current.Kind == TokenKind.LParen)
             {
                 // Dynamic function call: $f(1,2) or (fn:abs#1)(3) or function-lookup(...)(...)
-                var args = ParseArgumentList();
+                var (args, keywords) = ParseArgumentList();
+                ThrowIfKeywordsOnDynamicCall(keywords, start);
                 expr = WithSpan(new DynamicFunctionCallNode(expr, args), start, End);
             }
             else if (Current.Kind == TokenKind.Question)
@@ -2107,6 +2123,9 @@ internal sealed class XPathParser
                 var s = Unquote(GetString(Current));
                 Advance();
                 return WithSpan(new StringLiteralNode(s), start, End);
+
+            case TokenKind.StringTemplate:
+                return ParseStringTemplate(start);
 
             case TokenKind.IntegerLiteral:
                 var nodeI = IntegerLiteralFromText(GetString(Current));
@@ -2367,8 +2386,8 @@ internal sealed class XPathParser
         if (string.IsNullOrEmpty(nsUri))
             ThrowIfReservedFunctionName(prefix, local, start);
         Advance();
-        var args = ParseArgumentList();
-        return WithSpan(new FunctionCallNode(local, args, prefix, nsUri), start, End);
+        var (args, keywords) = ParseArgumentList();
+        return WithSpan(new FunctionCallNode(local, args, prefix, nsUri, keywords), start, End);
     }
 
     private NamedFunctionRefNode ParseNamedFunctionRef(int start)
@@ -2406,32 +2425,59 @@ internal sealed class XPathParser
             throw new XPathParseException($"XPST0003: '{localName}' is a reserved function name and cannot be used in a function call or named function reference", position);
     }
 
-    private List<XPathAstNode> ParseArgumentList()
+    // ArgumentList ::= "(" ((PositionalArguments ("," KeywordArguments)?) | KeywordArguments)? ")"
+    // (XPath 4.0 §4.6.1; positional arguments may be followed by keyword arguments,
+    // never the other way around). Keyword arguments are an XPath 4.0 feature: in
+    // XPath 3.1 mode a 'name := expr' argument start is rejected with XPST0003.
+    private (List<XPathAstNode> Positional, List<KeywordArgumentNode>? Keywords) ParseArgumentList()
     {
         Expect(TokenKind.LParen);
         var args = new List<XPathAstNode>();
+        List<KeywordArgumentNode>? keywords = null;
         if (!Match(TokenKind.RParen))
         {
+            bool keywordMode = false;
             do
             {
-                // A bare '?' is an argument placeholder only when it cannot start a
-                // UnaryLookup, i.e. when the next token ends the argument (',' or ')').
-                // Otherwise ('?1', '?name', '?(') it is a lookup on the context item.
-                if (Current.Kind == TokenKind.Question
-                    && (Peek(1).Kind == TokenKind.Comma || Peek(1).Kind == TokenKind.RParen))
+                if (IsKeywordArgumentStart())
                 {
-                    Advance();
-                    args.Add(new ArgumentPlaceholderNode());
+                    if (!_xpath40)
+                        throw new XPathParseException("XPST0003: Keyword arguments ('name := value') are an XPath 4.0 feature and are not available in XPath 3.1.", Current.Start);
+                    keywordMode = true;
+                    var nameTok = Current;
+                    Advance(); // the keyword name
+                    Advance(); // ':='
+                    var value = ParseExprSingle();
+                    (keywords ??= new List<KeywordArgumentNode>()).Add(new KeywordArgumentNode(GetString(nameTok), value));
                 }
                 else
                 {
-                    args.Add(ParseExprSingle());
+                    if (keywordMode)
+                        throw new XPathParseException("XPST0003: Positional arguments must not follow keyword arguments in a function call.", Current.Start);
+                    // A bare '?' is an argument placeholder only when it cannot start a
+                    // UnaryLookup, i.e. when the next token ends the argument (',' or ')').
+                    // Otherwise ('?1', '?name', '?(') it is a lookup on the context item.
+                    if (Current.Kind == TokenKind.Question
+                        && (Peek(1).Kind == TokenKind.Comma || Peek(1).Kind == TokenKind.RParen))
+                    {
+                        Advance();
+                        args.Add(new ArgumentPlaceholderNode());
+                    }
+                    else
+                    {
+                        args.Add(ParseExprSingle());
+                    }
                 }
             } while (Match(TokenKind.Comma));
             Expect(TokenKind.RParen);
         }
-        return args;
+        return (args, keywords);
     }
+
+    // A keyword argument starts with an EQName (possibly a keyword-token name such as
+    // 'then') immediately followed by ':='.
+    private bool IsKeywordArgumentStart()
+        => (Current.Kind == TokenKind.Name || IsKeywordName(Current.Kind)) && Peek(1).Kind == TokenKind.Assign;
 
     // ------------------------------------------------------------------
     // XPath 3.1 constructors
@@ -2598,6 +2644,221 @@ internal sealed class XPathParser
             text.Append(c);
             pos++;
         }
+    }
+
+    // ------------------------------------------------------------------
+    // XPath 4.0 string templates
+    // ------------------------------------------------------------------
+
+    // The lexer emitted the whole template as one raw StringTemplate token; build the
+    // AST by re-scanning the raw source text. Fixed parts become StringLiteralNode parts
+    // ('{{' '}}' and '``' escapes unescaped; a lone '}' is XPST0003), interpolations
+    // become expression parts. Per XPath 4.0 §4.10.2 an empty, whitespace-only, or
+    // comment-only interpolation is equivalent to an omitted one.
+    private XPathAstNode ParseStringTemplate(int start)
+    {
+        int pos = Current.Start + 1; // past the opening backtick
+        int end = Current.Start + Current.Length - 1; // at the closing backtick
+        var parts = new List<XPathAstNode>();
+        var text = new StringBuilder();
+        void FlushText()
+        {
+            if (text.Length > 0)
+            {
+                parts.Add(new StringLiteralNode(text.ToString()));
+                text.Clear();
+            }
+        }
+        while (pos < end)
+        {
+            char c = _source[pos];
+            if (c == '`')
+            {
+                // Escaped backtick: a lone backtick would have ended the token (longest token).
+                text.Append('`');
+                pos += 2;
+                continue;
+            }
+            if (c == '{')
+            {
+                if (pos + 1 < end && _source[pos + 1] == '{')
+                {
+                    text.Append('{');
+                    pos += 2;
+                    continue;
+                }
+                FlushText();
+                parts.Add(ScanTemplateInterpolation(ref pos, end, start));
+                continue;
+            }
+            if (c == '}')
+            {
+                if (pos + 1 < end && _source[pos + 1] == '}')
+                {
+                    text.Append('}');
+                    pos += 2;
+                    continue;
+                }
+                throw new XPathParseException("XPST0003: A '}' in a string template must be written as '}}'.", pos);
+            }
+            text.Append(c);
+            pos++;
+        }
+        FlushText();
+        Advance();
+        return WithSpan(new StringTemplateNode(parts), start, End);
+    }
+
+    // Scans one string-template interpolation body (pos is at the '{' that opens it,
+    // which must be a single '{': '{{' is always an escaped brace) and returns the
+    // parsed expression. The interpolation ends at the '}' that closes brace depth
+    // zero; strings, comments, and nested string templates are skipped.
+    private XPathAstNode ScanTemplateInterpolation(ref int pos, int limit, int templateStart)
+    {
+        int exprStart = ++pos;
+        int depth = 1;
+        while (pos < limit)
+        {
+            char c = _source[pos];
+            if (c == '\'' || c == '"')
+            {
+                char q = c;
+                pos++;
+                while (pos < limit)
+                {
+                    if (_source[pos] == q)
+                    {
+                        if (pos + 1 < limit && _source[pos + 1] == q)
+                        {
+                            pos += 2;
+                            continue;
+                        }
+                        pos++;
+                        break;
+                    }
+                    pos++;
+                }
+                continue;
+            }
+            if (c == '(' && pos + 1 < limit && _source[pos + 1] == ':')
+            {
+                SkipConstructorComment(ref pos);
+                continue;
+            }
+            if (c == '`')
+            {
+                // A nested string template inside the interpolation expression.
+                pos = SkipStringTemplateSpan(pos + 1, limit);
+                if (pos < 0)
+                    throw ConstructorError("unterminated string template in interpolation", templateStart);
+                continue;
+            }
+            if (c == '{')
+            {
+                depth++;
+            }
+            else if (c == '}')
+            {
+                depth--;
+                if (depth == 0)
+                {
+                    var inner = _source[exprStart..pos];
+                    pos++;
+                    // An empty or comment-only interpolation contributes nothing.
+                    if (string.IsNullOrWhiteSpace(StripXQueryComments(inner)))
+                        return new SequenceExpressionNode(Array.Empty<XPathAstNode>());
+                    return Parse(inner, _allowFullFlwor, xpath40: true);
+                }
+            }
+            pos++;
+        }
+        throw ConstructorError("unterminated interpolation in string template", templateStart);
+    }
+
+    // Skips a nested string-template span (pos is just past its opening backtick),
+    // interpolation-aware. Returns the position just past the closing backtick or -1
+    // when unterminated.
+    private int SkipStringTemplateSpan(int pos, int limit)
+    {
+        while (pos < limit)
+        {
+            char c = _source[pos];
+            if (c == '`')
+            {
+                if (pos + 1 < limit && _source[pos + 1] == '`')
+                {
+                    pos += 2; // escaped backtick
+                    continue;
+                }
+                return pos + 1;
+            }
+            if (c == '{')
+            {
+                if (pos + 1 < limit && _source[pos + 1] == '{')
+                {
+                    pos += 2; // escaped brace
+                    continue;
+                }
+                // Skip the interpolation body with the same scanning rules.
+                int depth = 1;
+                pos++;
+                while (pos < limit)
+                {
+                    char ic = _source[pos];
+                    if (ic == '\'' || ic == '"')
+                    {
+                        char q = ic;
+                        pos++;
+                        while (pos < limit)
+                        {
+                            if (_source[pos] == q)
+                            {
+                                if (pos + 1 < limit && _source[pos + 1] == q)
+                                {
+                                    pos += 2;
+                                    continue;
+                                }
+                                pos++;
+                                break;
+                            }
+                            pos++;
+                        }
+                        continue;
+                    }
+                    if (ic == '(' && pos + 1 < limit && _source[pos + 1] == ':')
+                    {
+                        SkipConstructorComment(ref pos);
+                        continue;
+                    }
+                    if (ic == '`')
+                    {
+                        pos = SkipStringTemplateSpan(pos + 1, limit);
+                        if (pos < 0)
+                            return -1;
+                        continue;
+                    }
+                    if (ic == '{') depth++;
+                    else if (ic == '}')
+                    {
+                        depth--;
+                        if (depth == 0)
+                        {
+                            pos++;
+                            break;
+                        }
+                    }
+                    pos++;
+                }
+                continue;
+            }
+            if (c == '}' && pos + 1 < limit && _source[pos + 1] == '}')
+            {
+                pos += 2; // escaped brace
+                continue;
+            }
+            pos++;
+        }
+        return -1;
     }
 
     // Scans one string-constructor interpolation body (pos is at the '`' of "`{") and

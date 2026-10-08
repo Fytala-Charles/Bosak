@@ -75,6 +75,9 @@
 //                      | Charles Korthout | 3.12  | 02-10-2026     | PC-1 W7-4: non-positional simple-step predicates self-evaluate on streamed nodes       |
 //                      |                  |       |                | (IStreamingNode) instead of re-enumerating the consumed child axis from the parent     |
 //                      |                  |       |                | (si-group-054/056 streamed group-starting-with)                                        |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.13  | 08-10-2026     | REQ-118 4.0-S3b: StringTemplateNode rejected in patterns like other non-pattern forms    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -708,7 +711,7 @@ internal sealed class PatternCompiler
             // Conservative: any exotic form (FLWOR, constructors, switch/typeswitch,
             // validate, string constructors, ...) blocks self-evaluation.
             _ => node is FlworClauseNode or FlworExpressionNode or SwitchExpressionNode or TypeswitchExpressionNode
-                or ValidateExpressionNode or StringConstructorNode or DirectElementConstructorNode
+                or ValidateExpressionNode or StringConstructorNode or StringTemplateNode or DirectElementConstructorNode
                 or ComputedElementConstructorNode or ComputedAttributeConstructorNode
                 or ComputedDocumentConstructorNode or ComputedTextConstructorNode or ComputedCommentConstructorNode
                 or ComputedPIConstructorNode or ComputedNamespaceConstructorNode or DirectCommentNode

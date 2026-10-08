@@ -22,6 +22,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 08-10-2026     | REQ-118 4.0-S3a: Otherwise token kind for the XPath 4.0 '??' operator                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 08-10-2026     | REQ-118 4.0-S3b: StringTemplate token kind for XPath 4.0 string templates (`...`)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Parser.Lexer;
 
@@ -52,6 +54,10 @@ internal enum TokenKind : short
     Star,
     /// <summary>A whole XQuery direct element constructor (&lt;name ...&gt;...&lt;/name&gt;), emitted as one token when the lexer is in constructor mode.</summary>
     Constructor,
+    /// <summary>A whole XPath 4.0 string template (<c>`...{expr}...`</c>), emitted as one raw token
+    /// when the lexer runs in XPath 4.0 mode; the parser re-scans the text into fixed and
+    /// interpolated parts. Never produced in XPath 3.1 mode, where a backtick is invalid.</summary>
+    StringTemplate,
 
     // ---- Grouping / punctuation --------------------------------------
     /// <summary>The <c>(</c> token.</summary>

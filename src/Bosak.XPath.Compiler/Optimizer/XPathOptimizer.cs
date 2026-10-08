@@ -46,6 +46,8 @@
 //                      | Charles Korthout | 1.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 1.11  | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.12  | 08-10-2026     | REQ-118 4.0-S3b: reference-transparent traversal for StringTemplateNode                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -127,6 +129,7 @@ internal sealed class XPathOptimizer
             DynamicFunctionCallNode dyn => OptimizeDynamicFunctionCall(dyn, ref changed),
             FlworExpressionNode flwor => OptimizeFlwor(flwor, ref changed),
             StringConstructorNode n => OptimizeStringConstructor(n, ref changed),
+            StringTemplateNode n => OptimizeStringTemplate(n, ref changed),
             ValidateExpressionNode n => OptimizeValidate(n, ref changed),
             _ => node
         };
@@ -134,18 +137,29 @@ internal sealed class XPathOptimizer
 
     private XPathAstNode OptimizeStringConstructor(StringConstructorNode node, ref bool changed)
     {
-        var parts = new List<XPathAstNode>(node.Parts.Count);
+        var parts = OptimizeParts(node.Parts, ref changed);
+        return parts is null ? node : node with { Parts = parts };
+    }
+
+    private XPathAstNode OptimizeStringTemplate(StringTemplateNode node, ref bool changed)
+    {
+        var parts = OptimizeParts(node.Parts, ref changed);
+        return parts is null ? node : node with { Parts = parts };
+    }
+
+    // Optimizes literal/interpolation parts shared by string constructors and string
+    // templates. Returns the new part list, or null when nothing changed.
+    private List<XPathAstNode>? OptimizeParts(IReadOnlyList<XPathAstNode> nodeParts, ref bool changed)
+    {
+        var parts = new List<XPathAstNode>(nodeParts.Count);
         bool anyChanged = false;
-        foreach (var part in node.Parts)
+        foreach (var part in nodeParts)
         {
             var optPart = OptimizeNode(part, ref changed);
             parts.Add(optPart);
             if (optPart != part) anyChanged = true;
         }
-        if (!anyChanged)
-            return node;
-        changed = true;
-        return node with { Parts = parts };
+        return anyChanged ? parts : null;
     }
 
     private XPathAstNode OptimizeValidate(ValidateExpressionNode node, ref bool changed)

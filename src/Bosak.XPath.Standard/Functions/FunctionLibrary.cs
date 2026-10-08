@@ -399,7 +399,10 @@
 //                      | Charles Korthout | 5.129 | 08-10-2026     | REQ-118 slice 4.0-S2: map:build/entries/filter/items, array:build/empty/items/slice,    |
 //                      |                  |       |                | fn:parse-uri/build-uri/decode-from-uri, fn:seconds/duration-to-seconds/build-dateTime/   |
 //                      |                  |       |                | unix-dateTime/days-in-month (all XPath 4.0 only, with §1.8 arity coercion helper)        |
-// ===========================================================================================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.130 | 08-10-2026     | REQ-118 4.0-S3b: keyword-argument signature table (KeywordSignatureInfo) +                |
+//                      |                  |       |                | fn:substring/fn:subsequence accept an empty-sequence $length in 4.0 mode (to end)        |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -4234,6 +4237,67 @@ public static class FunctionLibrary
         => StandardFunctions.TryGetValue((namespaceUri, localName, arity), out signature!);
 
     // ------------------------------------------------------------------
+    // Keyword argument support (XPath 4.0 §4.6.1)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// The keyword-argument signature of a standard function: the declared parameter names
+    /// (in declaration order, required then optional) and, per parameter, the XPath source
+    /// snippet of its declared default value or null when the parameter is required.
+    /// Defaults follow the F&amp;O 4.0 signatures (e.g. <c>fn:sort</c>'s
+    /// <c>$collation := fn:default-collation()</c>).
+    /// </summary>
+    /// <param name="ParameterNames">The declared parameter names (no-namespace NCNames).</param>
+    /// <param name="ParameterDefaults">The default-value snippet per parameter, or null for a required parameter.</param>
+    public sealed record KeywordSignatureInfo(IReadOnlyList<string> ParameterNames, IReadOnlyList<string?> ParameterDefaults);
+
+    /// <summary>
+    /// Keyword signatures for the subset of standard functions whose F&amp;O 4.0 signatures
+    /// declare named parameters. The Api layer uses this to expand <c>name := expr</c> keyword
+    /// arguments into a positional call of the fully-populated arity. Populating this table
+    /// for the remaining standard functions is a known follow-up (REQ-118).
+    /// </summary>
+    private static readonly FrozenDictionary<(string Ns, string Local), KeywordSignatureInfo> KeywordSignatures = BuildKeywordSignatures();
+
+    private static FrozenDictionary<(string Ns, string Local), KeywordSignatureInfo> BuildKeywordSignatures()
+    {
+        var table = new Dictionary<(string Ns, string Local), KeywordSignatureInfo>
+        {
+            [(Namespaces.Fn, "lang")] = new(["language", "node"], [null, "."]),
+            [(Namespaces.Fn, "sort")] = new(["input", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
+            [(Namespaces.Fn, "sort-by")] = new(["input", "keys"], [null, null]),
+            [(Namespaces.Fn, "subsequence")] = new(["input", "start", "length"], [null, null, "()"]),
+            [(Namespaces.Fn, "substring")] = new(["value", "start", "length"], [null, null, "()"]),
+            [(Namespaces.Fn, "string-join")] = new(["values", "separator"], [null, "''"]),
+            [(Namespaces.Fn, "replace")] = new(["value", "pattern", "replacement", "flags"], [null, null, "''", "''"]),
+            [(Namespaces.Fn, "matches")] = new(["value", "pattern", "flags"], [null, null, "''"]),
+            [(Namespaces.Fn, "contains")] = new(["value", "substring", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "starts-with")] = new(["value", "substring", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "ends-with")] = new(["value", "substring", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "index-of")] = new(["input", "target", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "serialize")] = new(["input", "options"], [null, "map{}"]),
+            [(Namespaces.Fn, "slice")] = new(["input", "start", "end", "step"], [null, "0", "0", "0"]),
+            [(Namespaces.Fn, "parse-uri")] = new(["uri", "options"], [null, "map{}"]),
+            [(Namespaces.Fn, "hash")] = new(["value", "algorithm", "options"], [null, "'MD5'", "map{}"]),
+            [(Namespaces.Map, "merge")] = new(["maps", "options"], [null, "map{}"]),
+            [(Namespaces.Map, "build")] = new(["input", "key", "value", "options"], [null, "fn:identity#1", "fn:identity#1", "map{}"]),
+            [(Namespaces.Array, "sort")] = new(["array", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
+            [(Namespaces.Array, "slice")] = new(["array", "start", "end", "step"], [null, "0", "0", "0"]),
+        };
+        return table.ToFrozenDictionary();
+    }
+
+    /// <summary>
+    /// Attempts to resolve the keyword-argument signature of a standard function.
+    /// </summary>
+    /// <param name="namespaceUri">The function's namespace URI.</param>
+    /// <param name="localName">The function's local name.</param>
+    /// <param name="signature">The keyword signature when found.</param>
+    /// <returns><c>true</c> when the function declares keyword-argument parameters.</returns>
+    public static bool TryGetKeywordSignature(string namespaceUri, string localName, out KeywordSignatureInfo signature)
+        => KeywordSignatures.TryGetValue((namespaceUri, localName), out signature!);
+
+    // ------------------------------------------------------------------
     // Implementations
     // ------------------------------------------------------------------
 
@@ -5465,6 +5529,12 @@ public static class FunctionLibrary
     {
         string s = AtomizedString(args[0]);
         double startD = ToDoubleValue(args[1]);
+        // XPath 4.0 (F&O §5.4.7): an empty-sequence $length means "to the end of the string".
+        if (ctx.IsXPath40 && IsEmptySequence(args[2]))
+        {
+            if (double.IsNaN(startD)) return XdmValue.FromString(string.Empty);
+            return XdmValue.FromString(SubstringByCodepoints(s, RoundForSubstring(startD), int.MaxValue));
+        }
         double lenD = ToDoubleValue(args[2]);
         if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.FromString(string.Empty);
         int start = RoundForSubstring(startD);
@@ -10214,7 +10284,10 @@ public static class FunctionLibrary
     private static XdmValue Subsequence_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         double startD = ctx.BackwardsCompatible ? ToDoubleValue(args[1]) : ToDoubleValueStrict(args[1]);
-        double lenD = ctx.BackwardsCompatible ? ToDoubleValue(args[2]) : ToDoubleValueStrict(args[2]);
+        // XPath 4.0 (F&O §2.1.13): an empty-sequence $length means "to the end of the input".
+        double lenD = ctx.IsXPath40 && IsEmptySequence(args[2])
+            ? double.PositiveInfinity
+            : ctx.BackwardsCompatible ? ToDoubleValue(args[2]) : ToDoubleValueStrict(args[2]);
         if (double.IsNaN(startD) || double.IsNaN(lenD)) return XdmValue.Undefined;
         double startRounded = Math.Floor(startD + 0.5);
         double lenRounded = Math.Floor(lenD + 0.5);

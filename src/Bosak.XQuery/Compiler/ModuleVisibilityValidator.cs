@@ -23,6 +23,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 22-08-2026     | Traversal for ValidateExpressionNode |
 //                      | Charles Korthout | 0.7   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      | Charles Korthout | 0.8   | 08-10-2026     | REQ-118 4.0-S3b: traversal for StringTemplateNode parts (4.0 string templates)           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -487,6 +488,10 @@ internal static class ModuleVisibilityValidator
                     break;
                 case StringConstructorNode sc:
                     foreach (var p in sc.Parts)
+                        Walk(p);
+                    break;
+                case StringTemplateNode st:
+                    foreach (var p in st.Parts)
                         Walk(p);
                     break;
                 case LookupNode lookup:
