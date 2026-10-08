@@ -14,6 +14,10 @@
 //                      | Charles Korthout | 0.1   | 08-10-2026     | Creation: 3.1 rejection (XPST0017), 4.0 opt-in, function-lookup visibility               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 08-10-2026     | Part 2 batch gate assertions (fn:highest, fn:hash)                                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 08-10-2026     | Part 3 (REQ-118 4.0-S2) gate assertions (map:build, array:slice, fn:parse-uri,         |
+//                      |                  |       |                | fn:unix-dateTime)                                                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -93,6 +97,37 @@ public class VersionGateTests
     {
         Assert.True(Eval("fn:function-lookup(xs:QName('fn:highest'), 3)").IsUndefined);
         Assert.True(Eval("fn:function-lookup(xs:QName('fn:hash'), 2)").IsUndefined);
+    }
+
+    [Fact]
+    public void Compile_Part3Functions_DefaultOptions_ThrowXpst0017()
+    {
+        Assert.Contains("XPST0017",
+            Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("map:build((1, 2), function($x){$x})")).Message);
+        Assert.Contains("XPST0017",
+            Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("array:slice([1, 2], 1)")).Message);
+        Assert.Contains("XPST0017",
+            Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:parse-uri('http://example.com/')")).Message);
+        Assert.Contains("XPST0017",
+            Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:unix-dateTime(0)")).Message);
+    }
+
+    [Fact]
+    public void FunctionLookup_Part3FunctionIn31Mode_ReturnsEmpty()
+    {
+        Assert.True(Eval("fn:function-lookup(xs:QName('map:build'), 2)").IsUndefined);
+        Assert.True(Eval("fn:function-lookup(xs:QName('array:slice'), 2)").IsUndefined);
+        Assert.True(Eval("fn:function-lookup(xs:QName('fn:parse-uri'), 1)").IsUndefined);
+        Assert.True(Eval("fn:function-lookup(xs:QName('fn:unix-dateTime'), 1)").IsUndefined);
+    }
+
+    [Fact]
+    public void Evaluate_Part3Functions_XPath40Mode_Work()
+    {
+        Assert.Equal("2", Eval40("map:size(map:build((1, 2), function($x){$x mod 2}))").ToString());
+        Assert.Equal("2", Eval40("array:size(array:slice([1, 2, 3], 2))").ToString());
+        Assert.Equal("http", Eval40("fn:parse-uri('http://example.com/')?scheme").ToString());
+        Assert.Equal("1970-01-01T00:00:00Z", Eval40("fn:unix-dateTime()").ToString());
     }
 
     [Fact]

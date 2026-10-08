@@ -16,6 +16,11 @@
 //                      | Charles Korthout | 0.2   | 08-10-2026     | Part 2: subsequence family, duplicate-values, all-equal/different, highest/lowest,      |
 //                      |                  |       |                | sort-by/sort-with, graphemes, pad-string, trim-space, index-of-substring,               |
 //                      |                  |       |                | substring-before/after-last, hash                                                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 08-10-2026     | Part 3 (REQ-118 4.0-S2): map:build/entries/filter/items, array:build/empty/items/slice, |
+//                      |                  |       |                | fn:parse-uri/build-uri/decode-from-uri, fn:seconds/duration-to-seconds/build-dateTime/  |
+//                      |                  |       |                | unix-dateTime/days-in-month                                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -937,5 +942,559 @@ public class XPath40FunctionTests
     public void Hash_NonStringBinaryInput_RaisesXpty0004()
     {
         Assert.Contains("XPTY0004", Error40("fn:hash(123)").Message);
+    }
+
+    // ------------------------------------------------------------------
+    // map:build (F+O 4.0 §14.3)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void MapBuild_SpecExample_GroupsByKey()
+    {
+        Assert.Equal("3,6,9", Eval40(
+            "string-join(map:get(map:build(1 to 10, function($i){$i mod 3}), 0), ',')").ToString());
+        Assert.Equal("1,4,7,10", Eval40(
+            "string-join(map:get(map:build(1 to 10, function($i){$i mod 3}), 1), ',')").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_DefaultKeyAndValue_IsIdentity()
+    {
+        Assert.Equal("a", Eval40("map:get(map:build(('a', 'b')), 'a')").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_ArityOneCallback_ReceivesExtraPositionArgDropped()
+    {
+        // F+O 4.0 §1.8: arity-n function accepted where arity-m (m >= n) is declared.
+        Assert.Equal("1,3", Eval40(
+            "string-join(map:get(map:build((1, 2, 3), function($x){$x mod 2}), 1), ',')").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_ValueFunction_ReceivesPosition()
+    {
+        Assert.Equal("1,9", Eval40(
+            "string-join(map:get(map:build((1, 2, 3), function($x){$x mod 2}, function($x, $p){$x * $p}), 1), ',')").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_KeyYieldsMultipleKeys_EachBecomesEntry()
+    {
+        Assert.Equal("6", Eval40(
+            "map:size(map:build((1, 2, 3), function($x){($x, $x + 10)}))").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_KeyYieldsEmptySequence_NoEntry()
+    {
+        Assert.Equal("0", Eval40("map:size(map:build((1, 2, 3), function($x){()}))").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_DuplicatesCombine_ConcatenatesValues()
+    {
+        Assert.Equal("1,3", Eval40(
+            "string-join(map:get(map:build((1, 2, 3, 4), function($i){$i mod 2}, function($i){$i}), 1), ',')").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_DuplicatesUseLast_KeepsLastValue()
+    {
+        Assert.Equal("3", Eval40(
+            "map:get(map:build((1, 2, 3, 4), function($i){$i mod 2}, function($i){$i}, map{'duplicates':'use-last'}), 1)").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_DuplicatesReject_RaisesFojs0003()
+    {
+        Assert.Contains("FOJS0003", Error40(
+            "map:build((1, 3), function($i){$i mod 2}, function($i){$i}, map{'duplicates':'reject'})").Message);
+    }
+
+    [Fact]
+    public void MapBuild_DuplicatesCombinerFunction_AppliesCombiner()
+    {
+        Assert.Equal("6", Eval40(
+            "map:get(map:build((1, 2, 3, 4), function($i){$i mod 2}, function($i){$i}, " +
+            "map{'duplicates':function($a, $b){$a + $b}}), 0)").ToString());
+    }
+
+    [Fact]
+    public void MapBuild_InvalidDuplicatesOption_RaisesFojs0005()
+    {
+        Assert.Contains("FOJS0005", Error40(
+            "map:build((1, 2), function($i){$i}, function($i){$i}, map{'duplicates':'nonsense'})").Message);
+    }
+
+    // ------------------------------------------------------------------
+    // map:entries (F+O 4.0 §14.2.2)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void MapEntries_ReturnsSingleEntryMapsInOrder()
+    {
+        Assert.Equal("2", Eval40("map:entries(map{'a':1, 'b':2})?2?b").ToString());
+        Assert.Equal("3", Eval40("array:size(map:entries(map{'a':1, 'b':2, 'c':3}))").ToString());
+        Assert.Equal("0", Eval40("array:size(map:entries(map{}))").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // map:filter (F+O 4.0 §14.2.3)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void MapFilter_KeepsMatchingEntriesWithPosition()
+    {
+        Assert.Equal("3", Eval40(
+            "map:filter(map{'a':1, 'b':2, 'c':3}, function($k, $v, $p){$v mod 2 eq 1})?c").ToString());
+        Assert.True(Eval40(
+            "map:filter(map{'a':1, 'b':2, 'c':3}, function($k, $v, $p){$v mod 2 eq 1})?b").IsUndefined);
+    }
+
+    [Fact]
+    public void MapFilter_EmptyPredicateResultMeansFalse()
+    {
+        Assert.True(Eval40(
+            "map:filter(map{'a':1}, function($k, $v, $p){()})?a").IsUndefined);
+    }
+
+    // ------------------------------------------------------------------
+    // map:items (F+O 4.0 §14.4.6)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void MapItems_ReturnsValuesInEntryOrder()
+    {
+        Assert.Equal("x,y", Eval40(
+            "string-join(map:items(map{'a':'x', 'b':'y'}), ',')").ToString());
+        Assert.Equal("2", Eval40("count(map:items(map{'a':1, 'b':(2, 3)}))").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // array:build (F+O 4.0 §16.2)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ArrayBuild_DefaultAction_IsIdentityPerItem()
+    {
+        Assert.Equal("3", Eval40("array:size(array:build((1, 2, 3)))").ToString());
+    }
+
+    [Fact]
+    public void ArrayBuild_ActionReceivesItemAndPosition()
+    {
+        Assert.Equal("6", Eval40("array:get(array:build((1, 2, 3), function($x, $p){$x + $p}), 3)").ToString());
+    }
+
+    [Fact]
+    public void ArrayBuild_ResultSequenceBecomesSingleMember()
+    {
+        Assert.Equal("2", Eval40("count(array:get(array:build(1 to 3, function($x){($x, $x)}), 1))").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // array:empty (F+O 4.0 §16.3.4)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ArrayEmpty_OnlyZeroMemberArrayIsEmpty()
+    {
+        Assert.Equal("true", Eval40("array:empty([])").ToString());
+        Assert.Equal("false", Eval40("array:empty([[]])").ToString());
+        Assert.Equal("false", Eval40("array:empty([()])").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // array:items (F+O 4.0 §16.3.5)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ArrayItems_ConcatenatesMembersNonRecursively()
+    {
+        Assert.Equal("1,2,3,4", Eval40(
+            "string-join(array:items([(1, 2), (3, 4)]), ',')").ToString());
+        // Nested arrays are members, not flattened: items() yields the array itself.
+        Assert.Equal("3", Eval40("count(array:items([(1, 2), [3, 4]]))").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // array:slice (F+O 4.0 §16.5.2)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ArraySlice_StartEndStep()
+    {
+        Assert.Equal("2,3,4", Eval40("string-join(array:slice([1, 2, 3, 4, 5], 2, 4)?*, ',')").ToString());
+        Assert.Equal("1,3,5", Eval40("string-join(array:slice([1, 2, 3, 4, 5, 6], (), (), 2)?*, ',')").ToString());
+        Assert.Equal("4,5", Eval40("string-join(array:slice([1, 2, 3, 4, 5], -2, -1)?*, ',')").ToString());
+        Assert.Equal("5,4,3,2,1", Eval40("string-join(array:slice([1, 2, 3, 4, 5], (), (), -1)?*, ',')").ToString());
+    }
+
+    [Fact]
+    public void ArraySlice_OutOfBoundsYieldsEmptyArrayNoError()
+    {
+        Assert.Equal("0", Eval40("array:size(array:slice([1, 2, 3], 10, 20))").ToString());
+        Assert.Equal("0", Eval40("array:size(array:slice([], 1, 3))").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // fn:decode-from-uri (F+O 4.0 §7.1)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void DecodeFromUri_SpecExamples()
+    {
+        Assert.Equal("http://example.com/", Eval40("fn:decode-from-uri('http://example.com/')").ToString());
+        Assert.Equal("~bébé?a=b+c", Eval40("fn:decode-from-uri('~b%C3%A9b%C3%A9?a=b+c')").ToString());
+        Assert.Equal("~bébé?a=b c", Eval40(
+            "fn:decode-from-uri(translate('~b%C3%A9b%C3%A9?a=b+c', '+', ' '))").ToString());
+    }
+
+    [Fact]
+    public void DecodeFromUri_InvalidEscapesAndInvalidUtf8_BecomeReplacementChar()
+    {
+        Assert.Equal("�-�-�A-�💡", Eval40("fn:decode-from-uri('%00-%XX-%F0%9F%92%41-%F0%F0%9F%92%A1')").ToString());
+        Assert.Equal("�!", Eval40("fn:decode-from-uri('%1X!')").ToString());
+    }
+
+    [Fact]
+    public void DecodeFromUri_EmptySequence_ReturnsZeroLengthString()
+    {
+        Assert.Equal("", Eval40("fn:decode-from-uri(())").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // fn:parse-uri (F+O 4.0 §7.6.2)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void ParseUri_HierarchicalHttp_AllFields()
+    {
+        Assert.Equal("http|user@example.com:8080|user|example.com|8080|/p|q=1|frag",
+            Eval40("let $m := fn:parse-uri('http://user@example.com:8080/p?q=1#frag') " +
+                   "return string-join(($m?scheme, $m?authority, $m?userinfo, $m?host, $m?port, $m?path, $m?query, $m?fragment), '|')").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_AbsoluteOnlyWithoutFragment()
+    {
+        Assert.Equal("true", Eval40("fn:parse-uri('http://www.ietf.org/rfc/rfc2396.txt')?absolute").ToString());
+        Assert.True(Eval40("fn:parse-uri('http://h/p#f')?absolute").IsUndefined);
+    }
+
+    [Fact]
+    public void ParseUri_PortIsInteger()
+    {
+        Assert.Equal("true", Eval40(
+            "fn:parse-uri('https://example.com:8080/path')?port instance of xs:integer").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_FileScheme_SegmentsAndFilepath()
+    {
+        Assert.Equal("c:/path/to/file", Eval40("fn:parse-uri('file:///c:/path/to/file')?filepath").ToString());
+        Assert.Equal("|c:|path|to|file", Eval40(
+            "string-join(fn:parse-uri('file:///c:/path/to/file')?path-segments, '|')").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_DriveLetterAcqiresFileScheme()
+    {
+        Assert.Equal("file", Eval40(@"fn:parse-uri('c:\path\to\file')?scheme").ToString());
+        Assert.Equal("c:/path/to/file", Eval40(@"fn:parse-uri('c:\path\to\file')?filepath").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_FragmentOnlyOrQueryOnly_PathIsEmpty()
+    {
+        Assert.Equal("0|testing", Eval40(
+            "string-join((count(fn:parse-uri('#testing')?path), fn:parse-uri('#testing')?fragment), '|')").ToString());
+        Assert.True(Eval40("fn:parse-uri('#testing')?hierarchical").IsUndefined);
+        Assert.Equal("0|q=1", Eval40(
+            "string-join((count(fn:parse-uri('?q=1')?path), fn:parse-uri('?q=1')?query), '|')").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_Ipv6Host_FormDecodedQueryParameters()
+    {
+        Assert.Equal("[2001:db8::7]", Eval40(
+            "fn:parse-uri('ldap://[2001:db8::7]/c=GB?objectClass?one')?host").ToString());
+        // A token without '=' has key "" and the whole token as value.
+        Assert.Equal("objectClass?one", Eval40(
+            "fn:parse-uri('ldap://[2001:db8::7]/c=GB?objectClass?one')?query-parameters?''").ToString());
+        Assert.Equal("\"hello world\"", Eval40(
+            "fn:parse-uri('https://example.com:8080/path?s=%22hello world%22&sort=relevance')?query-parameters?s").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_QueryParametersAccumulateDuplicateKeys()
+    {
+        Assert.Equal("1,2", Eval40(
+            "string-join(fn:parse-uri('http://h/?a=1&a=2&b=3')?query-parameters?a, ',')").ToString());
+        // Plus decodes to space in query parameters only (Issue 2811).
+        Assert.Equal("b c", Eval40("fn:parse-uri('http://h/?a=b+c')?query-parameters?a").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_UserInfoPasswordDiscardedUnlessDeprecatedAllowed()
+    {
+        Assert.True(Eval40("fn:parse-uri('http://user:pw@host/path')?userinfo").IsUndefined);
+        Assert.Equal("user:pw", Eval40(
+            "fn:parse-uri('http://user:pw@host/path', map{'allow-deprecated-features':true()})?userinfo").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_OmitDefaultPorts()
+    {
+        Assert.True(Eval40("fn:parse-uri('http://h:80/', map{'omit-default-ports':true()})?port").IsUndefined);
+        Assert.Equal("8080", Eval40("fn:parse-uri('http://h:8080/', map{'omit-default-ports':true()})?port").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_NonHierarchicalScheme_HasNoAuthority()
+    {
+        Assert.Equal("mailto|false|0", Eval40(
+            "string-join((fn:parse-uri('mailto:user@example.com')?scheme, " +
+            "fn:parse-uri('mailto:user@example.com')?hierarchical, " +
+            "count(fn:parse-uri('mailto:user@example.com')?absolute)), '|')").ToString());
+    }
+
+    [Fact]
+    public void ParseUri_UnmatchedBracketInAuthority_RaisesFour0001()
+    {
+        Assert.Contains("FOUR0001", Error40("fn:parse-uri('http://[2001:db8::7/path')").Message);
+    }
+
+    [Fact]
+    public void ParseUri_EmptySequence_ReturnsEmpty()
+    {
+        Assert.True(Eval40("fn:parse-uri(())").IsUndefined);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:build-uri (F+O 4.0 §7.6.3)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void BuildUri_SpecExample()
+    {
+        Assert.Equal("https://qt4cg.org/specifications/index.html", Eval40(
+            "fn:build-uri(map{'scheme':'https', 'host':'qt4cg.org', 'port':(), 'path':'/specifications/index.html'})").ToString());
+    }
+
+    [Fact]
+    public void BuildUri_ParseRoundTrip_ReencodesDelimiters()
+    {
+        Assert.Equal("http://example.com:8080/p?s=\"hello%20world\"#frag", Eval40(
+            "fn:build-uri(fn:parse-uri('http://example.com:8080/p?s=%22hello world%22#frag'))").ToString());
+        Assert.Equal("https://u@h/p%20x?q=a%20b#c%20d", Eval40(
+            "fn:build-uri(fn:parse-uri('https://u@h/p x?q=a b#c d'))").ToString());
+    }
+
+    [Fact]
+    public void BuildUri_PathSegmentsEscapedOnlyWhenHierarchical()
+    {
+        // Segments are joined verbatim (a leading "" segment supplies the leading slash,
+        // exactly as produced by fn:parse-uri).
+        Assert.Equal("http://h/a%20b/c%2Fd", Eval40(
+            "fn:build-uri(map{'scheme':'http', 'host':'h', 'path-segments':('', 'a b', 'c/d')})").ToString());
+        Assert.Equal("mailto:a b/c/d", Eval40(
+            "fn:build-uri(map{'scheme':'mailto', 'hierarchical':false(), 'path-segments':('a b', 'c/d')})").ToString());
+    }
+
+    [Fact]
+    public void BuildUri_QueryParameters_EscapeAndEmptyKey()
+    {
+        Assert.Equal("http://h/?a=1&a=2&b=x%20y", Eval40(
+            "fn:build-uri(map{'scheme':'http', 'host':'h', 'path':'/', " +
+            "'query-parameters':map{'a':('1','2'), 'b':'x y'}})").ToString());
+        Assert.Equal("http://h?v", Eval40(
+            "fn:build-uri(map{'scheme':'http', 'host':'h', 'query-parameters':map{'':'v'}})").ToString());
+        // A plus is escaped because parse-uri form-decodes query parameters.
+        Assert.Equal("http://h?a=b%2Bc", Eval40(
+            "fn:build-uri(map{'scheme':'http', 'host':'h', 'query-parameters':map{'a':'b+c'}})").ToString());
+    }
+
+    [Fact]
+    public void BuildUri_NonHierarchicalScheme_UsesColonDelimiter()
+    {
+        Assert.Equal("mailto:user@example.com", Eval40(
+            "fn:build-uri(map{'scheme':'mailto', 'path':'user@example.com'})").ToString());
+        Assert.Equal("urn:example:animal:ferret:nose", Eval40(
+            "fn:build-uri(map{'scheme':'urn', 'path':'example:animal:ferret:nose'})").ToString());
+    }
+
+    [Fact]
+    public void BuildUri_OmitDefaultPortsOption()
+    {
+        Assert.Equal("http://h", Eval40(
+            "fn:build-uri(map{'scheme':'http', 'host':'h', 'port':'80'}, map{'omit-default-ports':true()})").ToString());
+        Assert.Equal("http://h:8080", Eval40(
+            "fn:build-uri(map{'scheme':'http', 'host':'h', 'port':'8080'}, map{'omit-default-ports':true()})").ToString());
+    }
+
+    [Fact]
+    public void BuildUri_UncPathOption_DoubleSlashPrefix()
+    {
+        Assert.Equal("file://///server/share", Eval40(
+            "fn:build-uri(map{'scheme':'file', 'path-segments':('', 'server', 'share')}, map{'unc-path':true()})").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // fn:seconds / fn:duration-to-seconds (F+O 4.0 §8.4)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Seconds_SpecExamples()
+    {
+        Assert.Equal("PT1S", Eval40("fn:seconds(1)").ToString());
+        Assert.Equal("PT0.001S", Eval40("fn:seconds(0.001)").ToString());
+        Assert.Equal("PT1M", Eval40("fn:seconds(60)").ToString());
+        Assert.Equal("P1D", Eval40("fn:seconds(86400)").ToString());
+        Assert.Equal("-PT1H30M", Eval40("fn:seconds(-5400)").ToString());
+    }
+
+    [Fact]
+    public void Seconds_EmptySequence_ReturnsEmpty()
+    {
+        Assert.True(Eval40("fn:seconds(())").IsUndefined);
+    }
+
+    [Fact]
+    public void DurationToSeconds_SpecExamples()
+    {
+        Assert.Equal("90", Eval40("fn:duration-to-seconds(xs:dayTimeDuration('PT1M30S'))").ToString());
+        Assert.Equal("86400.5", Eval40("fn:duration-to-seconds(xs:dayTimeDuration('P1DT0.5S'))").ToString());
+        Assert.Equal("-5400", Eval40("fn:duration-to-seconds(xs:dayTimeDuration('-PT1H30M'))").ToString());
+    }
+
+    [Fact]
+    public void SecondsAndDurationToSeconds_AreInverses()
+    {
+        Assert.Equal("1234.5", Eval40(
+            "fn:duration-to-seconds(fn:seconds(1234.5))").ToString());
+        // Unix-timestamp idiom from the spec notes.
+        Assert.Equal("1706702400", Eval40(
+            "fn:duration-to-seconds(xs:dateTime('2024-01-31T12:00:00Z') - xs:dateTime('1970-01-01T00:00:00Z'))").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // fn:build-dateTime (F+O 4.0 §9.4.2)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void BuildDateTime_SpecDateTimeStampExample()
+    {
+        Assert.Equal("1999-05-31T13:20:00-05:00", Eval40(
+            "fn:build-dateTime(map{'year':1999, 'month':5, 'day':31, 'hours':13, 'minutes':20, " +
+            "'seconds':0, 'timezone':xs:dayTimeDuration('-PT5H')})").ToString());
+    }
+
+    [Fact]
+    public void BuildDateTime_AllSevenComponentsWithoutTimezone_IsDateTime()
+    {
+        Assert.Equal("true", Eval40(
+            "fn:build-dateTime(map{'year':1999, 'month':5, 'day':31, 'hours':13, 'minutes':20, 'seconds':0}) " +
+            "instance of xs:dateTime").ToString());
+    }
+
+    [Fact]
+    public void BuildDateTime_TimeWithFractionalSeconds()
+    {
+        Assert.Equal("13:30:04.25", Eval40(
+            "fn:build-dateTime(map{'hours':13, 'minutes':30, 'seconds':4.25})").ToString());
+    }
+
+    [Fact]
+    public void BuildDateTime_OtherGregorianTypes()
+    {
+        Assert.Equal("2000-02-29", Eval40(
+            "fn:build-dateTime(map{'year':2000, 'month':2, 'day':29})").ToString());
+        Assert.Equal("--02-29", Eval40(
+            "fn:build-dateTime(map{'day':29, 'month':2})").ToString());
+        Assert.Equal("2026-04", Eval40(
+            "fn:build-dateTime(map{'year':2026, 'month':4})").ToString());
+    }
+
+    [Fact]
+    public void BuildDateTime_CoercesNumericComponentTypes()
+    {
+        Assert.Equal("1999-05-31T13:20:00", Eval40(
+            "fn:build-dateTime(map{'year':xs:double(1999), 'month':5, 'day':31, " +
+            "'hours':13, 'minutes':20, 'seconds':0})").ToString());
+    }
+
+    [Fact]
+    public void BuildDateTime_InvalidFieldSet_RaisesFodt0005()
+    {
+        Assert.Contains("FODT0005", Error40(
+            "fn:build-dateTime(map{'year':2000, 'hours':1})").Message);
+    }
+
+    [Fact]
+    public void BuildDateTime_TimezoneOutOfRange_RaisesFodt0003()
+    {
+        Assert.Contains("FODT0003", Error40(
+            "fn:build-dateTime(map{'year':2000, 'month':1, 'timezone':xs:dayTimeDuration('-PT15H')})").Message);
+    }
+
+    [Fact]
+    public void BuildDateTime_OutOfRangeComponent_RaisesForg0001()
+    {
+        Assert.Contains("FORG0001", Error40(
+            "fn:build-dateTime(map{'year':2001, 'month':2, 'day':29})").Message);
+        Assert.Contains("FORG0001", Error40(
+            "fn:build-dateTime(map{'hours':1, 'minutes':2, 'seconds':61})").Message);
+    }
+
+    [Fact]
+    public void BuildDateTime_EmptySequence_ReturnsEmpty()
+    {
+        Assert.True(Eval40("fn:build-dateTime(())").IsUndefined);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:unix-dateTime (F+O 4.0 §9.4.3)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void UnixDateTime_SpecExamples()
+    {
+        Assert.Equal("1970-01-01T00:00:00Z", Eval40("fn:unix-dateTime()").ToString());
+        Assert.Equal("1970-01-01T00:00:00.001Z", Eval40("fn:unix-dateTime(1)").ToString());
+        Assert.Equal("1970-01-02T00:00:00Z", Eval40("fn:unix-dateTime(86400000)").ToString());
+    }
+
+    [Fact]
+    public void UnixDateTime_LargeTimestamp()
+    {
+        Assert.Equal("2024-01-31T12:00:00Z", Eval40("fn:unix-dateTime(1706702400000)").ToString());
+    }
+
+    [Fact]
+    public void UnixDateTime_NegativeValue_RaisesFoca0002()
+    {
+        Assert.Contains("FOCA0002", Error40("fn:unix-dateTime(-1)").Message);
+    }
+
+    // ------------------------------------------------------------------
+    // fn:days-in-month (F+O 4.0 §9.6.11)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void DaysInMonth_SpecExamples()
+    {
+        Assert.Equal("29", Eval40("fn:days-in-month(xs:date('2024-02-10'))").ToString());
+        Assert.Equal("28", Eval40("fn:days-in-month(xs:date('1900-02-10'))").ToString());
+        Assert.Equal("29", Eval40("fn:days-in-month(xs:dateTime('2000-02-29T12:00:00Z'))").ToString());
+        Assert.Equal("30", Eval40("fn:days-in-month(xs:gYearMonth('2026-04'))").ToString());
+        Assert.True(Eval40("fn:days-in-month(())").IsUndefined);
+    }
+
+    [Fact]
+    public void DaysInMonth_ProlepticGregorianYearZeroIsLeap()
+    {
+        Assert.Equal("29", Eval40("fn:days-in-month(xs:gYearMonth('0000-02'))").ToString());
     }
 }
