@@ -32,6 +32,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12  | 08-10-2026     | REQ-118 4.0-S7: xsl:map with @select analyzes the select operand; content ignored
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13  | 08-10-2026     | REQ-118 4.0-S8: xsl:array (@for-each/@select + constructor), xsl:array-member and     |
+//                      |                  |       |                | xsl:switch streamability cases                                                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -1286,6 +1289,41 @@ internal static class StreamabilityAnalyzer
                         throw Error("xsl:map-entry must not contain nodes from a streamed document.");
                     if (key.Consumes + value.Consumes > 1)
                         throw Error("xsl:map-entry has more than one consuming use of a streamed value.");
+                    return;
+                }
+
+                case "array":
+                {
+                    // XSLT 4.0 §21.1.2: with @for-each that expression supplies the focus
+                    // items and @select (or the content) is the per-item member surface;
+                    // with only @select the content is ignored (static error otherwise).
+                    if (el.Attribute("for-each") != null)
+                    {
+                        AnalyzeSurface(el, "for-each", env);
+                        if (el.Attribute("select") != null)
+                            AnalyzeSurface(el, "select", env);
+                        else
+                            WalkConstructor(el, env);
+                        return;
+                    }
+                    if (el.Attribute("select") != null)
+                    {
+                        AnalyzeSurface(el, "select", env);
+                        return;
+                    }
+                    WalkConstructor(el, env);
+                    return;
+                }
+
+                case "array-member":
+                case "switch":
+                {
+                    // xsl:array-member (@select or content) and xsl:switch (@select plus
+                    // when/otherwise branches) are ordinary expression surfaces plus a
+                    // sequence constructor.
+                    if (el.Attribute("select") != null)
+                        AnalyzeSurface(el, "select", env);
+                    WalkConstructor(el, env);
                     return;
                 }
 

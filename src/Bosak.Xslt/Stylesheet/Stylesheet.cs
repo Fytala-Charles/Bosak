@@ -273,6 +273,10 @@
 //                      |                  |       |                | compatible (frozen W3C forwards-* tests pin this; §3.8.2/§3.8.3 make the surface          |
 //                      |                  |       |                | version-independent anyway)                                                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.127 | 08-10-2026     | REQ-118 4.0-S8: xsl:array / xsl:array-member / xsl:switch known at every version; static  |
+//                      |                  |       |                | checks: array/array-member @select+content XTSE3185, switch shape XTSE0010, when/        |
+//                      |                  |       |                | otherwise @select+content XTSE3185 only under xsl:switch                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -3714,6 +3718,70 @@ internal sealed class Stylesheet
                             continue;
                         if (node is XElement || (node is XText t2 && !string.IsNullOrWhiteSpace(t2.Value)))
                             throw new InvalidOperationException("XTSE3185: xsl:map must not have both a select attribute and sequence-constructor content.");
+                    }
+                }
+
+                // XSLT 4.0 §21.1.2: an xsl:array element with a select attribute must have no
+                // sequence-constructor content (xsl:fallback children are permitted); the same
+                // applies to xsl:array-member.
+                if (localName is "array" or "array-member" && (elem.Attribute("select") != null || elem.Attribute("_select") != null))
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XElement ce && ce.Name.NamespaceName == XslNamespace && ce.Name.LocalName == "fallback")
+                            continue;
+                        if (node is XElement || (node is XText t3 && !string.IsNullOrWhiteSpace(t3.Value)))
+                            throw new InvalidOperationException($"XTSE3185: xsl:{localName} must not have both a select attribute and sequence-constructor content.");
+                    }
+                }
+
+                // XSLT 4.0 §8.3: xsl:switch requires a select attribute and its content must be
+                // (xsl:when+, xsl:otherwise?, xsl:fallback*).
+                if (localName == "switch")
+                {
+                    if (elem.Attribute("select") == null && elem.Attribute("_select") == null)
+                        throw new InvalidOperationException("XTSE0010: xsl:switch requires a select attribute.");
+                    bool seenOtherwise = false;
+                    bool seenWhen = false;
+                    foreach (var child in elem.Elements())
+                    {
+                        if (child.Name.NamespaceName != XslNamespace)
+                            throw new InvalidOperationException("XTSE0010: xsl:switch may only contain xsl:when, xsl:otherwise, and xsl:fallback children.");
+                        switch (child.Name.LocalName)
+                        {
+                            case "when":
+                                if (seenOtherwise)
+                                    throw new InvalidOperationException("XTSE0010: xsl:when must precede xsl:otherwise in xsl:switch.");
+                                seenWhen = true;
+                                break;
+                            case "otherwise":
+                                if (seenOtherwise)
+                                    throw new InvalidOperationException("XTSE0010: xsl:switch allows at most one xsl:otherwise.");
+                                seenOtherwise = true;
+                                break;
+                            case "fallback":
+                                break;
+                            default:
+                                throw new InvalidOperationException($"XTSE0010: xsl:{child.Name.LocalName} is not permitted as a child of xsl:switch.");
+                        }
+                    }
+                    if (!seenWhen)
+                        throw new InvalidOperationException("XTSE0010: xsl:switch requires at least one xsl:when child.");
+                }
+
+                // XSLT 4.0 §8.2/§8.3: in xsl:choose, xsl:when and xsl:otherwise keep their 3.0
+                // content-only form; the new select attribute form applies only under xsl:switch,
+                // where select and sequence-constructor content are mutually exclusive.
+                if (localName is "when" or "otherwise" &&
+                    (elem.Attribute("select") != null || elem.Attribute("_select") != null) &&
+                    elem.Parent is XElement parentEl && parentEl.Name.NamespaceName == XslNamespace && parentEl.Name.LocalName == "switch")
+                {
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XElement ce && ce.Name.NamespaceName == XslNamespace && ce.Name.LocalName == "fallback")
+                            continue;
+                        if (node is XElement || (node is XText t4 && !string.IsNullOrWhiteSpace(t4.Value)))
+                            throw new InvalidOperationException($"XTSE3185: xsl:{localName} under xsl:switch must not have both a select attribute and sequence-constructor content.");
                     }
                 }
 
@@ -9322,7 +9390,7 @@ internal sealed class Stylesheet
         "fallback", "message", "number", "sequence", "perform-sort",
         "analyze-string", "matching-substring", "non-matching-substring",
         "merge", "merge-source", "merge-key", "merge-action",
-        "map", "map-entry", "array",
+        "map", "map-entry", "array", "array-member", "switch",
         "try", "catch", "evaluate", "source-document",
         "iterate", "break", "next-iteration", "on-completion",
         "where-populated", "on-empty", "on-non-empty", "assert",
