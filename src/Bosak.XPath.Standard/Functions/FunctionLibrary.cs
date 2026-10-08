@@ -403,6 +403,13 @@
 //                      | Charles Korthout | 5.130 | 08-10-2026     | REQ-118 4.0-S3b: keyword-argument signature table (KeywordSignatureInfo) +                |
 //                      |                  |       |                | fn:substring/fn:subsequence accept an empty-sequence $length in 4.0 mode (to end)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.131 | 08-10-2026     | REQ-118 slice 4.0-S5: higher-order fn:some/every/index-where/partition/take-while/      |
+//                      |                  |       |                | drop-while/while-do/do-until/partial-apply/transitive-closure (IsXPath40Only) +          |
+//                      |                  |       |                | callable-arity/predicate-boolean/eager-bound-coercion helpers + keyword signatures       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.132 | 08-10-2026     | REQ-118 4.0-S5 follow-up: register fn:identity#1 (IsXPath40Only) — referenced by          |
+//                      |                  |       |                | map:build/array:build keyword defaults but previously unregistered                        |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -3175,6 +3182,112 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = DecodeFromUri
             },
+
+            // ----- XPath 4.0 higher-order functions (REQ-118 slice 4.0-S5) ------
+            [(Namespaces.Fn, "identity", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "identity", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Identity_1
+            },
+            [(Namespaces.Fn, "some", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "some", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = Some_1
+            },
+            [(Namespaces.Fn, "some", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "some", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = Some_2
+            },
+            [(Namespaces.Fn, "every", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "every", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = Every_1
+            },
+            [(Namespaces.Fn, "every", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "every", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = Every_2
+            },
+            [(Namespaces.Fn, "index-where", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "index-where", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = IndexWhere_2
+            },
+            [(Namespaces.Fn, "partition", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "partition", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Partition_2
+            },
+            [(Namespaces.Fn, "take-while", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "take-while", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = TakeWhile_2
+            },
+            [(Namespaces.Fn, "drop-while", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "drop-while", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = DropWhile_2
+            },
+            [(Namespaces.Fn, "while-do", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "while-do", Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = WhileDo_3
+            },
+            [(Namespaces.Fn, "do-until", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "do-until", Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = DoUntil_3
+            },
+            [(Namespaces.Fn, "partial-apply", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "partial-apply", Arity = 2,
+                ParameterTypes = [XdmValueKind.Function, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Function,
+                IsXPath40Only = true,
+                Implementation = PartialApply_2
+            },
+            [(Namespaces.Fn, "transitive-closure", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "transitive-closure", Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = TransitiveClosure_2
+            },
             // ----- xs:* constructor functions ---------------------------------
             [(Namespaces.Xs, "string", 1)] = new()
             {
@@ -4283,6 +4396,16 @@ public static class FunctionLibrary
             [(Namespaces.Map, "build")] = new(["input", "key", "value", "options"], [null, "fn:identity#1", "fn:identity#1", "map{}"]),
             [(Namespaces.Array, "sort")] = new(["array", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
             [(Namespaces.Array, "slice")] = new(["array", "start", "end", "step"], [null, "0", "0", "0"]),
+            [(Namespaces.Fn, "some")] = new(["input", "predicate"], [null, "fn:boolean#1"]),
+            [(Namespaces.Fn, "every")] = new(["input", "predicate"], [null, "fn:boolean#1"]),
+            [(Namespaces.Fn, "index-where")] = new(["input", "predicate"], [null, null]),
+            [(Namespaces.Fn, "partition")] = new(["input", "split-when"], [null, null]),
+            [(Namespaces.Fn, "take-while")] = new(["input", "predicate"], [null, null]),
+            [(Namespaces.Fn, "drop-while")] = new(["input", "predicate"], [null, null]),
+            [(Namespaces.Fn, "while-do")] = new(["input", "predicate", "action"], [null, null, null]),
+            [(Namespaces.Fn, "do-until")] = new(["input", "action", "predicate"], [null, null, null]),
+            [(Namespaces.Fn, "partial-apply")] = new(["function", "arguments"], [null, null]),
+            [(Namespaces.Fn, "transitive-closure")] = new(["node", "step"], [null, null]),
         };
         return table.ToFrozenDictionary();
     }
@@ -4600,6 +4723,433 @@ public static class FunctionLibrary
         if (arity >= 0 && arity < args.Length)
             Array.Resize(ref args, arity);
         return VmEngine.InvokeFunctionItem(func, ctx, args);
+    }
+
+    // ------------------------------------------------------------------
+    // XPath 4.0 higher-order functions (REQ-118 slice 4.0-S5)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Validates that a callback argument is invocable (function item, map, or array) and
+    /// returns it. The F+O 4.0 callbacks are declared with kind-level <c>function(*)</c>
+    /// parameters: an empty sequence or a non-invocable value raises XPTY0004 here
+    /// (drop-while-018, take-while-901).
+    /// </summary>
+    private static XdmValue RequireCallable(XdmValue value, string fnName, string paramName)
+    {
+        if (value.IsFunction || value.IsMap || value.IsArray)
+            return value;
+        throw new InvalidOperationException(
+            $"XPTY0004: {fnName}: ${paramName} must be a function item, map, or array.");
+    }
+
+    /// <summary>
+    /// Effective arity of an invocable value under F+O 4.0 §1.8 arity coercion: maps and
+    /// arrays behave as arity-1 functions (qt4tests take-while-006 supplies a map as the
+    /// predicate), so their callbacks receive the item argument only.
+    /// </summary>
+    private static int CallableArity(XdmValue func)
+    {
+        if (func.IsMap || func.IsArray) return 1;
+        return GetFunctionArity(func);
+    }
+
+    /// <summary>
+    /// Invokes an XPath 4.0 callback with §1.8 arity coercion: extra arguments are
+    /// discarded when the function's arity is smaller (so arity-1 and arity-0 functions
+    /// such as <c>true#0</c> are valid predicates); an arity larger than the supplied
+    /// argument count is left to the dynamic-call machinery, which raises XPTY0004
+    /// (some-6, take-while-902).
+    /// </summary>
+    private static XdmValue InvokeCallable(XdmValue func, EvaluationContext ctx, XdmValue[] args)
+    {
+        int arity = CallableArity(func);
+        if (arity >= 0 && arity < args.Length)
+            Array.Resize(ref args, arity);
+        return VmEngine.InvokeFunctionItem(func, ctx, args);
+    }
+
+    /// <summary>
+    /// Converts a predicate callback result to <c>xs:boolean</c> per the declared
+    /// <c>fn(...) as xs:boolean?</c> return type: the empty sequence means false
+    /// (Issue 1171/PR 1182); any value not castable to <c>xs:boolean</c> raises a type
+    /// error (some-5/every-5: an integer result is XPTY0004, not an effective-boolean
+    /// conversion — the same rule as fn:filter).
+    /// </summary>
+    private static bool PredicateBoolean(XdmValue result, EvaluationContext ctx, string fnName)
+    {
+        var converted = VmEngine.ApplyFunctionConversion(result, "xs:boolean?", ctx);
+        return !IsEmptySequence(converted) && converted.BooleanValue;
+    }
+
+    /// <summary>
+    /// Materializes the <c>fn:boolean#1</c> function item used as the
+    /// <c>(:default-on-empty:)</c> predicate of fn:some/fn:every when the predicate
+    /// argument is an empty sequence (some-empty/every-empty).
+    /// </summary>
+    private static XdmValue DefaultBooleanPredicate(EvaluationContext ctx)
+    {
+        if (!ctx.TryResolveFunction(Namespaces.Fn, "boolean", 1, out var sig))
+            throw new InvalidOperationException("XPST0017: fn:partial predicate fn:boolean#1 is not available.");
+        return XdmValue.FromFunction(new NamedFunctionItem(sig.NamespaceUri, sig.LocalName, sig.Arity)
+        {
+            DefiningContext = ctx
+        });
+    }
+
+    /// <summary>F+O 4.0 §2.5.16 fn:some#1 — default predicate fn:boolean#1.</summary>
+    private static XdmValue Some_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Some_2(ctx, new XdmValue[] { args[0], DefaultBooleanPredicate(ctx) });
+
+    /// <summary>F+O 4.0 fn:identity#1 — returns the argument unchanged. Registered
+    /// because <c>map:build</c>/<c>array:build</c> keyword defaults reference
+    /// <c>fn:identity#1</c> (REQ-118 4.0-S5 follow-up).</summary>
+    private static XdmValue Identity_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => args[0];
+
+    /// <summary>
+    /// F+O 4.0 §2.5.16 fn:some — true if <c>$predicate($item, $pos)</c> is true for at
+    /// least one item; the predicate may return the empty sequence (meaning false) and
+    /// may be of arity less than two (extra arguments are ignored).
+    /// </summary>
+    private static XdmValue Some_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var predicate = IsEmptySequence(args[1])
+            ? DefaultBooleanPredicate(ctx)
+            : RequireCallable(args[1], "fn:some", "predicate");
+        long pos = 0;
+        foreach (var item in AsSequence(args[0]))
+        {
+            pos++;
+            var decision = InvokeCallable(predicate, ctx, [item, XdmValue.FromInteger(pos)]);
+            if (PredicateBoolean(decision, ctx, "fn:some"))
+                return XdmValue.FromBoolean(true);
+        }
+        return XdmValue.FromBoolean(false);
+    }
+
+    /// <summary>F+O 4.0 §2.5.4 fn:every#1 — default predicate fn:boolean#1.</summary>
+    private static XdmValue Every_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Every_2(ctx, new XdmValue[] { args[0], DefaultBooleanPredicate(ctx) });
+
+    /// <summary>
+    /// F+O 4.0 §2.5.4 fn:every — true when the input is empty or
+    /// <c>$predicate($item, $pos)</c> is true for every item; the predicate may return
+    /// the empty sequence (meaning false).
+    /// </summary>
+    private static XdmValue Every_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var predicate = IsEmptySequence(args[1])
+            ? DefaultBooleanPredicate(ctx)
+            : RequireCallable(args[1], "fn:every", "predicate");
+        long pos = 0;
+        foreach (var item in AsSequence(args[0]))
+        {
+            pos++;
+            var decision = InvokeCallable(predicate, ctx, [item, XdmValue.FromInteger(pos)]);
+            if (!PredicateBoolean(decision, ctx, "fn:every"))
+                return XdmValue.FromBoolean(false);
+        }
+        return XdmValue.FromBoolean(true);
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.11 fn:index-where — the 1-based positions of the items for which
+    /// <c>$predicate($item, $pos)</c> returns true, in ascending order; a predicate
+    /// result of () counts as false. There is no default predicate (index-where-100
+    /// with an empty predicate is XPTY0004).
+    /// </summary>
+    private static XdmValue IndexWhere_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var predicate = RequireCallable(args[1], "fn:index-where", "predicate");
+        long pos = 0;
+        var result = new List<XdmValue>();
+        foreach (var item in AsSequence(args[0]))
+        {
+            pos++;
+            var decision = InvokeCallable(predicate, ctx, [item, XdmValue.FromInteger(pos)]);
+            if (PredicateBoolean(decision, ctx, "fn:index-where"))
+                result.Add(XdmValue.FromInteger(pos));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.14 fn:partition — groups the input into non-empty arrays, starting a
+    /// new partition whenever <c>$split-when($partition, $item, $pos)</c> returns true.
+    /// The callback's first argument is the current partition as an item()* value; the
+    /// arity coercion rules allow arity-2 (partition, item) and arity-1 (partition only)
+    /// callbacks (partition-016/022).
+    /// </summary>
+    private static XdmValue Partition_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var splitWhen = RequireCallable(args[1], "fn:partition", "split-when");
+        var partitions = new List<XdmValue>();
+        var current = new List<XdmValue>();
+        long pos = 0;
+        foreach (var item in AsSequence(args[0]))
+        {
+            pos++;
+            if (current.Count > 0)
+            {
+                var partitionValue = XdmValue.FromSequence(MaterializedSequence.FromList(current));
+                var decision = InvokeCallable(splitWhen, ctx, [partitionValue, item, XdmValue.FromInteger(pos)]);
+                if (PredicateBoolean(decision, ctx, "fn:partition"))
+                {
+                    partitions.Add(XdmValue.FromArray(new XdmArray(current)));
+                    current = [];
+                }
+            }
+            current.Add(item);
+        }
+        if (current.Count > 0)
+            partitions.Add(XdmValue.FromArray(new XdmArray(current)));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(partitions));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.21 fn:take-while — the items preceding the first one for which
+    /// <c>$predicate($item, $pos)</c> returns false or (). A map may act as the
+    /// predicate (take-while-006): its arity-1 function coercion looks each item up.
+    /// </summary>
+    private static XdmValue TakeWhile_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var predicate = RequireCallable(args[1], "fn:take-while", "predicate");
+        long pos = 0;
+        var result = new List<XdmValue>();
+        foreach (var item in AsSequence(args[0]))
+        {
+            pos++;
+            var decision = InvokeCallable(predicate, ctx, [item, XdmValue.FromInteger(pos)]);
+            if (!PredicateBoolean(decision, ctx, "fn:take-while"))
+                break;
+            result.Add(item);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.3 fn:drop-while — the items from the first one for which
+    /// <c>$predicate($item, $pos)</c> returns false or () onwards; the empty sequence
+    /// when every item satisfies the predicate. For any input and predicate,
+    /// (take-while(...), drop-while(...)) is the input.
+    /// </summary>
+    private static XdmValue DropWhile_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var predicate = RequireCallable(args[1], "fn:drop-while", "predicate");
+        long pos = 0;
+        bool dropping = true;
+        var result = new List<XdmValue>();
+        foreach (var item in AsSequence(args[0]))
+        {
+            if (dropping)
+            {
+                pos++;
+                var decision = InvokeCallable(predicate, ctx, [item, XdmValue.FromInteger(pos)]);
+                if (PredicateBoolean(decision, ctx, "fn:drop-while"))
+                    continue;
+                dropping = false;
+            }
+            result.Add(item);
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.23 fn:while-do — evaluates <c>$predicate($input, $pos)</c> and, while
+    /// it returns true, replaces $input with <c>$action($input, $pos)</c>, incrementing
+    /// $pos (from 1) after each action. The action is never evaluated when the predicate
+    /// is initially false (while-do-001), so its errors do not escape.
+    /// </summary>
+    private static XdmValue WhileDo_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var input = args[0];
+        var predicate = RequireCallable(args[1], "fn:while-do", "predicate");
+        var action = RequireCallable(args[2], "fn:while-do", "action");
+        long pos = 1;
+        while (true)
+        {
+            var decision = InvokeCallable(predicate, ctx, [input, XdmValue.FromInteger(pos)]);
+            if (!PredicateBoolean(decision, ctx, "fn:while-do"))
+                return input;
+            input = InvokeCallable(action, ctx, [input, XdmValue.FromInteger(pos)]);
+            pos++;
+        }
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.2 fn:do-until — replaces $input with <c>$action($input, $pos)</c> and
+    /// repeats while <c>$predicate($input, $pos)</c> (evaluated on the new value, with
+    /// the same $pos) returns false or (). $pos starts at 1 and increments per iteration.
+    /// </summary>
+    private static XdmValue DoUntil_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var input = args[0];
+        var action = RequireCallable(args[1], "fn:do-until", "action");
+        var predicate = RequireCallable(args[2], "fn:do-until", "predicate");
+        long pos = 1;
+        while (true)
+        {
+            input = InvokeCallable(action, ctx, [input, XdmValue.FromInteger(pos)]);
+            var decision = InvokeCallable(predicate, ctx, [input, XdmValue.FromInteger(pos)]);
+            if (PredicateBoolean(decision, ctx, "fn:do-until"))
+                return input;
+            pos++;
+        }
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.13 fn:partial-apply — binds values to selected arguments of a
+    /// function item, returning a new function whose arity is the number of unbound
+    /// positions. The $arguments map keys are 1-based positions: keys greater than the
+    /// function's arity are ignored (fn-partial-apply-09); every key must convert to
+    /// <c>xs:positiveInteger</c> (fn-partial-apply-12). Bound values are coerced
+    /// against the corresponding parameter types eagerly (fn-partial-apply-13), and
+    /// binding every argument yields a zero-arity function.
+    /// </summary>
+    private static XdmValue PartialApply_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var func = args[0];
+        if (!func.IsFunction && !func.IsMap && !func.IsArray)
+            throw new InvalidOperationException(
+                "XPTY0004: fn:partial-apply: $function must be a function item, map, or array.");
+        var bindings = args[1].MapValue;
+        if (bindings.Count == 0)
+            return func;
+
+        int arity = CallableArity(func);
+        var fixedArgs = new XdmValue?[arity];
+        foreach (var kvp in bindings.Entries)
+        {
+            // The declared key type is xs:positiveInteger: xs:string keys and other
+            // non-integer atomics raise XPTY0004 (fn-partial-apply-12); zero and
+            // negative integers are out of range for the key type.
+            var key = VmEngine.ApplyFunctionConversion(kvp.Key, "xs:integer", ctx);
+            long index = key.IntegerValue;
+            if (index < 1)
+                throw new InvalidOperationException(
+                    "XPTY0004: fn:partial-apply: $arguments keys must be positive integers.");
+            if (index > arity)
+                continue;
+            fixedArgs[index - 1] = CoerceBoundValue(func, (int)index - 1, kvp.Value, ctx);
+        }
+
+        FunctionItem baseItem = func.IsFunction
+            ? (FunctionItem)func.FunctionValue
+            // Maps and arrays are invocable but are not FunctionItems; wrap them in a
+            // delegate so the curried item has a FunctionItem base (fn-partial-apply-11).
+            : new DelegateFunctionItem(1, (callCtx, callArgs) => VmEngine.InvokeFunctionItem(func, callCtx, callArgs));
+        return XdmValue.FromFunction(new CurriedFunctionItem(baseItem, fixedArgs));
+    }
+
+    /// <summary>
+    /// Applies the XPath 4.0 function conversion rules to a fn:partial-apply bound
+    /// value against the base function's declared parameter type. Named functions use
+    /// their resolved signature (type name or kind level); inline functions use their
+    /// declared parameter sequence types. Other invocable values (maps, arrays,
+    /// delegates) declare no parameter types and pass the value through.
+    /// </summary>
+    private static XdmValue CoerceBoundValue(XdmValue func, int index, XdmValue value, EvaluationContext ctx)
+    {
+        if (!func.IsFunction)
+            return value;
+        switch (func.FunctionValue)
+        {
+            case NamedFunctionItem named:
+                {
+                    FunctionSignature? sig = null;
+                    if (ctx.TryResolveFunction(named.NamespaceUri, named.LocalName, named.ArityValue, out var resolved))
+                        sig = resolved;
+                    else if (named.CapturedSignature is FunctionSignature captured
+                        && captured.NamespaceUri == named.NamespaceUri
+                        && captured.LocalName == named.LocalName
+                        && captured.Arity == named.ArityValue)
+                        sig = captured;
+                    if (sig is null)
+                        return value;
+                    if (sig.ParameterTypeNames is not null && index < sig.ParameterTypeNames.Count
+                        && !string.IsNullOrEmpty(sig.ParameterTypeNames[index]))
+                        return VmEngine.ApplyFunctionConversion(value, sig.ParameterTypeNames[index]!, ctx);
+                    var expected = index < sig.ParameterTypes.Count ? sig.ParameterTypes[index] : XdmValueKind.Sequence;
+                    return expected is XdmValueKind.Undefined or XdmValueKind.Sequence or XdmValueKind.Node
+                        or XdmValueKind.Function or XdmValueKind.Map or XdmValueKind.Array or XdmValueKind.External
+                        ? value
+                        : VmEngine.ConvertArgToKind(value, expected);
+                }
+            case InlineFunctionItem inline when index < inline.ParameterTypes.Count
+                && !string.IsNullOrEmpty(inline.ParameterTypes[index]):
+                return VmEngine.ApplyFunctionConversion(value, inline.ParameterTypes[index]!, ctx);
+            default:
+                return value;
+        }
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.22 fn:transitive-closure — the nodes reachable from $node by
+    /// applying <c>$step</c> one or more times. The step result is treated as a set
+    /// (duplicates ignored, cycles terminate); the result is in document order with no
+    /// duplicates, and does not include $node unless it is reachable via $step. An empty
+    /// $node yields the empty sequence; a non-node $node or a non-node step result
+    /// raises XPTY0004 (trans-closure-903).
+    /// </summary>
+    private static XdmValue TransitiveClosure_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var start = args[0];
+        // The parameter is declared node()? — unwrap a singleton sequence wrapping the node.
+        if (start.IsSequence && start.SequenceValue is not null)
+        {
+            XdmValue single = default;
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(start.SequenceValue))
+            {
+                count++;
+                if (count == 1) single = item;
+                if (count > 1) break;
+            }
+            if (count == 0)
+                return XdmValue.Undefined;
+            if (count > 1)
+                throw new InvalidOperationException("XPTY0004: fn:transitive-closure: $node must be a single node.");
+            start = single;
+        }
+        if (!start.IsNode)
+            throw new InvalidOperationException("XPTY0004: fn:transitive-closure: $node must be a node.");
+        var step = RequireCallable(args[1], "fn:transitive-closure", "step");
+
+        var found = new List<XdmValue>();
+        var frontier = new List<XdmValue> { start };
+        while (frontier.Count > 0)
+        {
+            var next = new List<XdmValue>();
+            foreach (var node in frontier)
+            {
+                var reached = InvokeCallable(step, ctx, [node]);
+                foreach (var candidate in AsSequence(reached))
+                {
+                    if (!candidate.IsNode)
+                        throw new InvalidOperationException(
+                            "XPTY0004: fn:transitive-closure: $step must return nodes.");
+                    if (ContainsSameNode(found, candidate) || ContainsSameNode(next, candidate))
+                        continue;
+                    next.Add(candidate);
+                }
+            }
+            found.AddRange(next);
+            frontier = next;
+        }
+        // The result is a set delivered in document order (like the union operator).
+        found.Sort(static (a, b) => a.NodeValue.DocumentOrder.CompareTo(b.NodeValue.DocumentOrder));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(found));
+    }
+
+    private static bool ContainsSameNode(List<XdmValue> nodes, XdmValue candidate)
+    {
+        foreach (var node in nodes)
+        {
+            if (node.NodeValue.IsSameNode(candidate.NodeValue))
+                return true;
+        }
+        return false;
     }
 
     private static XdmValue Sort_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
