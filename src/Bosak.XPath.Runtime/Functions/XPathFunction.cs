@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.51  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.52  | 08-10-2026     | REQ-118: added IsXPath40Only for the 4.0 version gate (4.0-S0)                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -116,4 +118,13 @@ public sealed class FunctionSignature
     /// overriding component (XSLT 3.0 §3.5.7.2).
     /// </summary>
     public bool IsHiddenFromFunctionLookup { get; init; }
+
+    /// <summary>
+    /// When true, the function is defined by XPath/XQuery 4.0 (F&amp;O 4.0) and is not
+    /// part of the XPath 3.1 function library. The Api layer statically rejects calls to
+    /// such functions with XPST0017 unless the compilation targets XPath 4.0, and the
+    /// standard function table omits them for 3.1 evaluation contexts. Defaults to
+    /// <c>false</c> (REQ-118 version gate, slice 4.0-S0).
+    /// </summary>
+    public bool IsXPath40Only { get; init; }
 }
