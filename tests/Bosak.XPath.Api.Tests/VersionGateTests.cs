@@ -24,6 +24,9 @@
 //                      | Charles Korthout | 0.5   | 08-10-2026     | REQ-118 4.0-S3b: keyword arguments (XPST0003 in 3.1, XPST0017 rules, defaults, arrow    |
 //                      |                  |       |                | form) and string templates (escapes, interpolations, nesting)                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 08-10-2026     | REQ-118 4.0-S4: pipeline '->' (§4.20), mapping arrow '=!>' (§4.22.2), focus functions    |
+//                      |                  |       |                | (§4.6.6.1), 'for member'/'for key value' (§4.14.1) — semantics + 3.1 XPST0003 gates    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -44,6 +47,23 @@ public class VersionGateTests
     {
         var expr = XPath31Expression.Compile(xpath, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
         return expr.Evaluate(new EvaluationContext());
+    }
+
+    // Evaluates in 4.0 mode and stringifies every item of the result sequence.
+    private static List<string> Seq40(string xpath)
+    {
+        var result = Eval40(xpath);
+        var items = new List<string>();
+        if (result.IsSequence && result.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                items.Add(item.ToString());
+        }
+        else if (!result.IsUndefined)
+        {
+            items.Add(result.ToString());
+        }
+        return items;
     }
 
     // ------------------------------------------------------------------
@@ -598,5 +618,286 @@ public class VersionGateTests
     {
         Assert.Equal("a}{b", Eval40("`a{'}' || '{' }b`").ToString());
         Assert.Equal("x1", Eval40("`x{(: c :) 1}`").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S4: pipeline operator '->' (XPath 4.0 §4.20)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_PipelineArrow_31Mode_ThrowsXpst0003()
+    {
+        var ex1 = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("'a b c' -> tokenize(.)"));
+        Assert.Contains("XPST0003", ex1.Message);
+        var options = new CompileOptions { Compatibility = XPathCompatibility.XPath30 };
+        var ex2 = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("1 -> count(.)", options));
+        Assert.Contains("XPST0003", ex2.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_SpecExample_TokenizeCountConcat()
+    {
+        Assert.Equal("count=3", Eval40("'a b c' -> tokenize(.) -> count(.) -> concat('count=', .)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_SpecExample_SumOfPowers()
+    {
+        Assert.Equal("2046", Eval40("(1 to 10) ! math:pow(2, .) -> sum(.)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_SpecExample_ReduceWithIf()
+    {
+        Assert.Equal("a; b; c", Eval40("('a', 'b', 'c') -> (if (count(.) lt 10) then string-join(., '; ') else 'long')").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_SpecExample_MapReduceChain()
+    {
+        Assert.Equal("THE. CAT. SAT. ON. THE. MAT.",
+            Eval40("\"The cat sat on the mat\" => tokenize() =!> concat('.') =!> upper-case() => string-join(' ')").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_BindsWholeSequenceAsContextValue()
+    {
+        Assert.Equal("3", Eval40("(1, 2, 3) -> count(.)").ToString());
+        Assert.Equal("0", Eval40("() -> count(.)").ToString());
+        // A predicate on '.' applies to the whole bound sequence, not per item.
+        Assert.Equal("2", Eval40("(1, 2, 3) -> .[2]").ToString());
+        // (1, 2, 3) => avg() and (1, 2, 3) -> avg(.) both yield the whole-sequence average.
+        Assert.Equal("2", Eval40("(1, 2, 3) -> avg(.)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_SetsFixedFocusPositionOneSizeOne()
+    {
+        Assert.Equal("1 1", Eval40("(5, 6, 7) -> string-join((string(position()), string(last())), ' ')").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_LeftAssociativeAndPrecedence()
+    {
+        // '->' binds tighter than '+' (PipelineExpr is an operand of the additive level).
+        Assert.Equal("3", Eval40("(1, 2) -> count(.) + 1").ToString());
+        // Chained pipelines are left-associative.
+        Assert.Equal("count=3", Eval40("'a b c' -> tokenize(.) -> concat('count=', string(count(.)))").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_RhsMayUseAnyExpression()
+    {
+        Assert.Equal("9", Eval40("(1, 2, 3) -> (sum(.) + count(.))").ToString());
+        // The pipeline RHS is an ArrowExpr per the spec grammar; a FLWOR RHS needs parens.
+        Assert.Equal(["10", "20", "30"], Seq40("(1, 2, 3) -> (for $x in . return $x * 10)"));
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_LhsErrorPropagates()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("(1 div 0) -> count(.)"));
+        Assert.Contains("FOAR0001", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_FocusRestoredAfterEvaluation()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a/></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(root), 1, 1);
+        var expr = XPath31Expression.Compile("('x', 'y') -> count(.) || name(.)",
+            new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+        Assert.Equal("2root", expr.Evaluate(ctx).ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Pipeline_CastPrecedenceFromSpecGrammar()
+    {
+        // CastExpr ::= PipelineExpr ("cast" "as" CastTarget)? — the cast operand is a pipeline.
+        Assert.Equal("3", Eval40("(1, 2, 3) -> count(.) cast as xs:integer").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S4: mapping arrow '=!>' (XPath 4.0 §4.22.2)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_MappingArrow_31Mode_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("(1, 2, 3) =!> avg()"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_MappingArrow_AppliesFunctionPerItem()
+    {
+        // (1, 2, 3) =!> avg() ≡ (1, 2, 3) ! avg(.) — each item averaged with itself.
+        var result = Eval40("(1, 2, 3) =!> avg()");
+        Assert.True(result.IsSequence);
+        var items = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            items.Add(item.ToString());
+        Assert.Equal(["1", "2", "3"], items);
+    }
+
+    [Fact]
+    public void Evaluate_MappingArrow_WithArgumentsPrependsContextItem()
+    {
+        Assert.Equal("1! 2! 3!", Eval40("(1, 2, 3) =!> concat('!') => string-join(' ')").ToString());
+        Assert.Equal("aX bX", Eval40("('a', 'b') =!> concat('X') => string-join(' ')").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_MappingArrow_DynamicAndInlineFunctionTargets()
+    {
+        Assert.Equal("2 4", Eval40("(1, 2) =!> (function($x) { $x * 2 })() => string-join(' ')").ToString());
+        Assert.Equal(["2", "2.414213562373095", "2.732050807568877", "3", "3.23606797749979"],
+            Seq40("(1 to 5) =!> xs:double() =!> math:sqrt() =!> fn($a) { $a + 1 }()"));
+    }
+
+    [Fact]
+    public void Evaluate_MappingArrow_SingletonSourceSameAsSequenceArrow()
+    {
+        Assert.Equal(["ABC"], Seq40("'abc' =!> upper-case()"));
+        Assert.Equal("ABC", Eval40("'abc' => upper-case()").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S4: focus functions fn { E } / fn ( XPath 4.0 §4.6.6, §4.6.6.1)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_FocusFunction_31Mode_ThrowsXpst0003()
+    {
+        var ex1 = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("fn { . + 1 }"));
+        Assert.Contains("XPST0003", ex1.Message);
+        var ex2 = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("fn($a) { $a + 1 }"));
+        Assert.Contains("XPST0003", ex2.Message);
+        var ex3 = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("function { . + 1 }"));
+        Assert.Contains("XPST0003", ex3.Message);
+    }
+
+    [Fact]
+    public void Evaluate_FocusFunction_SpecExamples()
+    {
+        // fn:every is a separate F&O 4.0 addition (not yet implemented); the spec's
+        // focus-function example here uses fn:for-each instead.
+        Assert.Equal(["10", "20", "30"], Seq40("fn:for-each((1, 2, 3), fn { . * 10 })"));
+        Assert.Equal("4", Eval40("fn { . + 1 }(3)").ToString());
+        Assert.Equal("5", Eval40("function { . + 1 }(4)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_FocusFunction_BindsArgumentAsWholeContextValue()
+    {
+        // The argument is bound to the context value as a whole (position 1, size 1).
+        Assert.Equal("1 1 2", Eval40("fn { string-join((string(position()), string(last()), string(count(.))), ' ') }((9, 8))").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_FocusFunction_AfterMappingArrow()
+    {
+        Assert.Equal("\"a\" \"b\"", Eval40("'a b' => tokenize() =!> fn { concat('\"', ., '\"') }() => string-join(' ')").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_FocusFunction_WrongArityThrows()
+    {
+        Assert.Throws<InvalidOperationException>(() => Eval40("fn { . }(1, 2)"));
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S4: 'for member' (XPath 4.0 §4.14.1)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_ForMember_31Mode_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("for member $m in [1, 2] return $m"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_ForMember_IteratesMembers()
+    {
+        Assert.Equal(["2", "4", "6"], Seq40("for member $m in [1, 2, 3] return $m * 2"));
+        Assert.Equal("0", Eval40("count(for member $m in [] return $m)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole()
+    {
+        Assert.Equal(["2", "1"], Seq40("for member $m in [(1, 2), 3] return count($m)"));
+        Assert.Equal(["2", "1"], Seq40("for member $m in [[1, 2], [3]] return array:size($m)"));
+    }
+
+    [Fact]
+    public void Evaluate_ForMember_SequenceOfArraysCountsPositionsAcrossArrays()
+    {
+        Assert.Equal(["1", "2", "3", "4"], Seq40("for member $m in ([1, 2], [3, 4]) return $m"));
+        Assert.Equal(["1", "2", "3"], Seq40("for member $m at $p in ([5, 6], [7]) return $p"));
+    }
+
+    [Fact]
+    public void Evaluate_ForMember_SpecExample_ParseJson()
+    {
+        Assert.Equal(["3", "30"], Seq40(
+            "for member $map in parse-json('[{ \"x\": 1, \"y\": 2 }, { \"x\": 10, \"y\": 20 }]') return $map ! (?x + ?y)"));
+    }
+
+    [Fact]
+    public void Evaluate_ForMember_NonArrayItemThrowsXpty0141()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("for member $m in (1, 2) return $m"));
+        Assert.Contains("XPTY0141", ex.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S4: 'for key value' (XPath 4.0 §4.14.1)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_ForKeyValue_31Mode_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("for key $k value $v in map{'a': 1} return $v"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_ForKeyValue_IteratesEntries()
+    {
+        Assert.Equal(["x=1", "y=2"], Seq40("for key $k value $v in map{'x': 1, 'y': 2} return concat($k, '=', $v)"));
+        Assert.Equal(["a"], Seq40("for key $k in map{'a': 1} return $k"));
+        Assert.Equal(["1", "2"], Seq40("for value $v in map{'a': 1, 'b': 2} return $v"));
+    }
+
+    [Fact]
+    public void Evaluate_ForKeyValue_PositionalCountsAcrossMaps()
+    {
+        Assert.Equal(["1", "2", "3"], Seq40(
+            "for key $k value $v at $p in (map{'a': 1}, map{'b': 2, 'c': 3}) return $p"));
+    }
+
+    [Fact]
+    public void Compile_ForKeyValue_DuplicateKeyValueNames_ThrowsXqst0089()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => Eval40("for key $k value $k in map{'a': 1} return $k"));
+        Assert.Contains("XQST0089", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_ForKeyValue_NonMapItemThrowsXpty0141()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("for key $k in (map{}, 'x') return $k"));
+        Assert.Contains("XPTY0141", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_ForKeyValue_SpecExample_Template()
+    {
+        var result = Seq40("for key $key value $value in map{'x': 1, 'y': 2} return concat($key, '=', $value)");
+        Assert.Contains("x=1", result);
+        Assert.Contains("y=2", result);
     }
 }
