@@ -395,6 +395,10 @@
 //                      | Charles Korthout | 5.127 | 03-10-2026     | xsl:product-version fallback bumped to 0.12.3-beta (database backends release)           |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.128 | 07-10-2026     | xsl:product-version fallback bumped to 0.13.0 (beta strip — 1.0 soak release)            |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.129 | 08-10-2026     | REQ-118 slice 4.0-S2: map:build/entries/filter/items, array:build/empty/items/slice,    |
+//                      |                  |       |                | fn:parse-uri/build-uri/decode-from-uri, fn:seconds/duration-to-seconds/build-dateTime/   |
+//                      |                  |       |                | unix-dateTime/days-in-month (all XPath 4.0 only, with §1.8 arity coercion helper)        |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -1853,6 +1857,64 @@ public static class FunctionLibrary
                 Implementation = MapFind
             },
 
+            // ----- XPath 4.0 map additions (REQ-118 slice 4.0-S2) --------------
+            [(Namespaces.Map, "build", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "build", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = MapBuild
+            },
+            [(Namespaces.Map, "build", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "build", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = MapBuild
+            },
+            [(Namespaces.Map, "build", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "build", Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = MapBuild
+            },
+            [(Namespaces.Map, "build", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "build", Arity = 4,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function, XdmValueKind.Function, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = MapBuild
+            },
+            [(Namespaces.Map, "entries", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "entries", Arity = 1,
+                ParameterTypes = [XdmValueKind.Map],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = MapEntries
+            },
+            [(Namespaces.Map, "filter", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "filter", Arity = 2,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = MapFilter
+            },
+            [(Namespaces.Map, "items", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Map, LocalName = "items", Arity = 1,
+                ParameterTypes = [XdmValueKind.Map],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = MapItems
+            },
+
             // ----- array:size -------------------------------------------------
             [(Namespaces.Array, "size", 1)] = new()
             {
@@ -2025,6 +2087,72 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer, XdmValueKind.Undefined],
                 ReturnType = XdmValueKind.Array,
                 Implementation = ArrayInsertBefore
+            },
+
+            // ----- XPath 4.0 array additions (REQ-118 slice 4.0-S2) ------------
+            [(Namespaces.Array, "build", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "build", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = ArrayBuild
+            },
+            [(Namespaces.Array, "build", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "build", Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = ArrayBuild
+            },
+            [(Namespaces.Array, "empty", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "empty", Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = ArrayEmpty
+            },
+            [(Namespaces.Array, "items", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "items", Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = ArrayItems
+            },
+            [(Namespaces.Array, "slice", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "slice", Arity = 1,
+                ParameterTypes = [XdmValueKind.Array],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => ArraySlice(ctx, args[0], 0, 0, 0)
+            },
+            [(Namespaces.Array, "slice", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "slice", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => ArraySlice(ctx, args[0], SliceIntegerArg(args[1]), 0, 0)
+            },
+            [(Namespaces.Array, "slice", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "slice", Arity = 3,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => ArraySlice(ctx, args[0], SliceIntegerArg(args[1]), SliceIntegerArg(args[2]), 0)
+            },
+            [(Namespaces.Array, "slice", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "slice", Arity = 4,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Integer, XdmValueKind.Integer, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => ArraySlice(ctx, args[0], SliceIntegerArg(args[1]), SliceIntegerArg(args[2]), SliceIntegerArg(args[3]))
             },
 
             // ----- fn:abs -----------------------------------------------------
@@ -2699,6 +2827,59 @@ public static class FunctionLibrary
                 Implementation = SecondsFromDuration
             },
 
+            // ----- XPath 4.0 duration/date functions (REQ-118 slice 4.0-S2) ----
+            [(Namespaces.Fn, "seconds", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "seconds", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ParameterTypeNames = ["xs:decimal?"],
+                ReturnType = XdmValueKind.Duration,
+                IsXPath40Only = true,
+                Implementation = Seconds_1
+            },
+            [(Namespaces.Fn, "duration-to-seconds", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "duration-to-seconds", Arity = 1,
+                ParameterTypes = [XdmValueKind.Duration],
+                ParameterTypeNames = ["xs:dayTimeDuration?"],
+                ReturnType = XdmValueKind.Decimal,
+                IsXPath40Only = true,
+                Implementation = DurationToSeconds
+            },
+            [(Namespaces.Fn, "build-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "build-dateTime", Arity = 1,
+                ParameterTypes = [XdmValueKind.Map],
+                ParameterTypeNames = ["map(*)?"],
+                ReturnType = XdmValueKind.Undefined,
+                IsXPath40Only = true,
+                Implementation = BuildDateTime
+            },
+            [(Namespaces.Fn, "unix-dateTime", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unix-dateTime", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.DateTime,
+                IsXPath40Only = true,
+                Implementation = UnixDateTime
+            },
+            [(Namespaces.Fn, "unix-dateTime", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "unix-dateTime", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.DateTime,
+                IsXPath40Only = true,
+                Implementation = UnixDateTime
+            },
+            [(Namespaces.Fn, "days-in-month", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "days-in-month", Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Integer,
+                IsXPath40Only = true,
+                Implementation = DaysInMonth
+            },
+
             // ----- fn:deep-equal ----------------------------------------------
             [(Namespaces.Fn, "deep-equal", 2)] = new()
             {
@@ -2945,6 +3126,51 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
                 ReturnType = XdmValueKind.Uri,
                 Implementation = ResolveUri_2
+            },
+
+            // ----- XPath 4.0 URI functions (REQ-118 slice 4.0-S2) --------------
+            [(Namespaces.Fn, "parse-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-uri", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ParameterTypeNames = ["xs:string?"],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = ParseUri_1
+            },
+            [(Namespaces.Fn, "parse-uri", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-uri", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+                ParameterTypeNames = ["xs:string?", "map(*)?"],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = ParseUri_2
+            },
+            [(Namespaces.Fn, "build-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "build-uri", Arity = 1,
+                ParameterTypes = [XdmValueKind.Map],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = BuildUri_1
+            },
+            [(Namespaces.Fn, "build-uri", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "build-uri", Arity = 2,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Map],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = BuildUri_2
+            },
+            [(Namespaces.Fn, "decode-from-uri", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "decode-from-uri", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ParameterTypeNames = ["xs:string?"],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = DecodeFromUri
             },
             // ----- xs:* constructor functions ---------------------------------
             [(Namespaces.Xs, "string", 1)] = new()
@@ -4296,6 +4522,20 @@ public static class FunctionLibrary
             if (fi is DelegateFunctionItem del) return del.Arity;
         }
         return -1;
+    }
+
+    /// <summary>
+    /// Invokes an XPath 4.0 callback applying F+O 4.0 §1.8 arity coercion: when the
+    /// function's arity is smaller than the number of supplied arguments, the extra
+    /// arguments are discarded (so arity-1 fn:identity is a valid $key for map:build).
+    /// Functions of unknown arity are invoked with all arguments.
+    /// </summary>
+    private static XdmValue Invoke40(XdmValue func, EvaluationContext ctx, XdmValue[] args)
+    {
+        int arity = GetFunctionArity(func);
+        if (arity >= 0 && arity < args.Length)
+            Array.Resize(ref args, arity);
+        return VmEngine.InvokeFunctionItem(func, ctx, args);
     }
 
     private static XdmValue Sort_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -11854,6 +12094,133 @@ public static class FunctionLibrary
         // Atomic values and nodes are ignored.
     }
 
+    /// <summary>
+    /// F+O 4.0 §14.3: map:build — groups the items of $input by the keys produced by the
+    /// key function (default identity#1), associating each key with the value produced by
+    /// the value function (default identity#1). The $options 'duplicates' entry selects
+    /// the duplicate-key strategy (default "combine"); a function item is a combiner
+    /// fn(existing, new). Extra callback arguments are discarded for lower-arity
+    /// functions (F+O 4.0 §1.8 arity coercion).
+    /// </summary>
+    private static XdmValue MapBuild(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var input = AsSequence(args[0]).ToList();
+        var keyFn = args.Length > 1 ? args[1] : XdmValue.Undefined;
+        var valueFn = args.Length > 2 ? args[2] : XdmValue.Undefined;
+
+        string duplicates = "combine";
+        XdmValue combiner = XdmValue.Undefined;
+        if (args.Length > 3 && !IsEmptySequence(args[3]))
+        {
+            var opts = args[3];
+            if (!opts.IsMap)
+                throw new InvalidOperationException("XPTY0004: map:build options must be a single map");
+            if (opts.MapValue.TryGetValue(XdmValue.FromString("duplicates"), out var dupOpt))
+            {
+                if (dupOpt.IsFunction)
+                {
+                    combiner = dupOpt;
+                }
+                else
+                {
+                    duplicates = AtomizeValue(dupOpt).ToString();
+                    if (duplicates is not ("combine" or "reject" or "use-first" or "use-last" or "use-any"))
+                        throw new InvalidOperationException($"FOJS0005: Invalid value for the duplicates option of map:build: '{duplicates}'");
+                }
+            }
+        }
+
+        var result = new XdmMap();
+        long position = 0;
+        foreach (var item in input)
+        {
+            position++;
+            var posValue = XdmValue.FromInteger(position);
+            var keys = IsEmptySequence(keyFn) ? item : Invoke40(keyFn, ctx, [item, posValue]);
+            var newValue = IsEmptySequence(valueFn) ? item : Invoke40(valueFn, ctx, [item, posValue]);
+            foreach (var keyItem in AsSequence(keys))
+            {
+                var key = AtomizeMapKey(keyItem);
+                if (!result.TryGetValue(key, out var existing))
+                {
+                    result.Add(key, newValue);
+                    continue;
+                }
+                if (combiner is { IsUndefined: false })
+                {
+                    result.Add(key, Invoke40(combiner, ctx, [existing, newValue]));
+                    continue;
+                }
+                switch (duplicates)
+                {
+                    case "reject":
+                        throw new InvalidOperationException("FOJS0003: map:build found duplicate keys and the duplicates option is 'reject'");
+                    case "use-first":
+                    case "use-any": // implementation-defined choice; we keep the first
+                        break;
+                    case "use-last":
+                        result.Add(key, newValue);
+                        break;
+                    case "combine":
+                    {
+                        var combined = new List<XdmValue>();
+                        combined.AddRange(AsSequence(existing));
+                        combined.AddRange(AsSequence(newValue));
+                        result.Add(key, XdmValue.FromSequence(MaterializedSequence.FromList(combined)));
+                        break;
+                    }
+                    default:
+                        throw new InvalidOperationException($"FOJS0005: Invalid value for the duplicates option of map:build: '{duplicates}'");
+                }
+            }
+        }
+        return XdmValue.FromMap(result);
+    }
+
+    /// <summary>F+O 4.0 §14.2.2: map:entries — single-entry maps, one per entry, in entry order.</summary>
+    private static XdmValue MapEntries(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var result = new XdmArray();
+        foreach (var kvp in args[0].MapValue.Entries)
+        {
+            var single = new XdmMap();
+            single.Add(kvp.Key, kvp.Value);
+            result.Add(XdmValue.FromMap(single));
+        }
+        return XdmValue.FromArray(result);
+    }
+
+    /// <summary>
+    /// F+O 4.0 §14.2.3: map:filter — retains entries for which the predicate
+    /// fn(key, value, position) is true; an empty-sequence predicate result means false.
+    /// </summary>
+    private static XdmValue MapFilter(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var map = args[0].MapValue;
+        var predicate = args[1];
+        var result = new XdmMap();
+        long position = 0;
+        foreach (var kvp in map.Entries)
+        {
+            position++;
+            var decision = Invoke40(predicate, ctx, [kvp.Key, kvp.Value, XdmValue.FromInteger(position)]);
+            if (decision.GetEffectiveBooleanValue())
+                result.Add(kvp.Key, kvp.Value);
+        }
+        return XdmValue.FromMap(result);
+    }
+
+    /// <summary>F+O 4.0 §14.4.6: map:items — the values of the map in entry order (equivalent to $map?*).</summary>
+    private static XdmValue MapItems(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var values = new List<XdmValue>();
+        foreach (var kvp in args[0].MapValue.Entries)
+            values.Add(kvp.Value);
+        return values.Count == 0
+            ? XdmValue.Undefined
+            : XdmValue.FromSequence(MaterializedSequence.FromList(values));
+    }
+
     private static XdmValue ArrayAppend(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arr = args[0].ArrayValue;
@@ -12060,6 +12427,60 @@ public static class FunctionLibrary
         var result = new List<XdmValue>();
         FlattenValue(args[0], result);
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §16.2: array:build — applies the action function (default identity#1) to
+    /// each item of $input in turn; each result sequence becomes a single member.
+    /// </summary>
+    private static XdmValue ArrayBuild(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var input = AsSequence(args[0]).ToList();
+        var action = args.Length > 1 ? args[1] : XdmValue.Undefined;
+        var result = new XdmArray();
+        long position = 0;
+        foreach (var item in input)
+        {
+            position++;
+            var member = IsEmptySequence(action) ? item : Invoke40(action, ctx, [item, XdmValue.FromInteger(position)]);
+            result.Add(member);
+        }
+        return XdmValue.FromArray(result);
+    }
+
+    /// <summary>F+O 4.0 §16.3.4: array:empty — true only when the array has no members ([[]] is not empty).</summary>
+    private static XdmValue ArrayEmpty(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => XdmValue.FromBoolean(args[0].ArrayValue.Count == 0);
+
+    /// <summary>F+O 4.0 §16.3.5: array:items — the concatenation of the members, non-recursive.</summary>
+    private static XdmValue ArrayItems(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = new List<XdmValue>();
+        foreach (var member in args[0].ArrayValue.Values)
+            items.AddRange(AsSequence(member));
+        return items.Count == 0
+            ? XdmValue.Undefined
+            : XdmValue.FromSequence(MaterializedSequence.FromList(items));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §16.5.2: array:slice — selects members using the same position rules as
+    /// fn:slice (default-on-empty 0 for $start/$end/$step); no out-of-bounds errors.
+    /// Implemented by slicing the position sequence (1 to size) and picking members.
+    /// </summary>
+    private static XdmValue ArraySlice(EvaluationContext ctx, XdmValue arrayArg, long start, long end, long step)
+    {
+        var arr = arrayArg.ArrayValue;
+        var positions = new List<XdmValue>(arr.Count);
+        for (int i = 1; i <= arr.Count; i++)
+            positions.Add(XdmValue.FromInteger(i));
+        var sliced = arr.Count == 0
+            ? XdmValue.Undefined
+            : Slice(ctx, XdmValue.FromSequence(MaterializedSequence.FromList(positions)), start, end, step);
+        var result = new XdmArray();
+        foreach (var posValue in AsSequence(sliced))
+            result.Add(arr.Get((int)posValue.IntegerValue));
+        return XdmValue.FromArray(result);
     }
 
     private static void FlattenValue(XdmValue value, List<XdmValue> result)
@@ -14534,6 +14955,274 @@ public static class FunctionLibrary
     }
 
     // ------------------------------------------------------------------
+    // XPath 4.0 duration/date functions (REQ-118 slice 4.0-S2)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// F+O 4.0 §8.4.1: fn:seconds — constructs an xs:dayTimeDuration of the given number
+    /// of seconds. Equivalent to xs:dayTimeDuration('PT1S') × $value; the result is
+    /// FODT0002 when the magnitude exceeds the representable dayTimeDuration range.
+    /// </summary>
+    private static XdmValue Seconds_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = UnwrapSequenceOrUndefined(args[0]);
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+        var decimalValue = VmEngine.Cast(value, "decimal");
+        decimal seconds = decimalValue.DecimalValue;
+        // Implementation limit (F+O 4.0 §8.1.2): the day count must fit a long.
+        if (Math.Abs(seconds) > ((long.MaxValue - 1) * 86400m))
+            throw new InvalidOperationException("FODT0002: fn:seconds value is outside the supported dayTimeDuration range.");
+        return VmEngine.Cast(XdmValue.FromString(FormatDayTimeDurationFromSeconds(seconds)), "dayTimeDuration");
+    }
+
+    /// <summary>
+    /// F+O 4.0 §8.4.2: fn:duration-to-seconds — the total length of an xs:dayTimeDuration
+    /// in seconds, including any fractional part (the inverse of fn:seconds).
+    /// </summary>
+    private static XdmValue DurationToSeconds(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = UnwrapSequenceOrUndefined(args[0]);
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+        if (value.Kind != XdmValueKind.Duration)
+            value = VmEngine.Cast(value, "dayTimeDuration");
+        var (_, _, days, hours, minutes, seconds) = ParseDuration(value.ToString());
+        return XdmValue.FromDecimal(days * 86400m + hours * 3600m + minutes * 60m + seconds);
+    }
+
+    /// <summary>
+    /// Reads one component of the fn:build-dateTime record, coercing it to the declared
+    /// field type via the standard cast rules (numeric values are accepted for integral
+    /// fields; FORG0001/FOCA0002 on failure). Returns null when the field is absent or
+    /// the empty sequence.
+    /// </summary>
+    private static XdmValue? BuildDateTimeComponent(XdmMap map, string key, string targetType)
+    {
+        if (!map.TryGetValue(XdmValue.FromString(key), out var raw) || IsEmptySequence(raw))
+            return null;
+        return VmEngine.Cast(raw, targetType);
+    }
+
+    /// <summary>
+    /// Formats the seconds component (0-59 with optional fraction) of an XML Schema
+    /// date/time lexical form, e.g. 4.2678 becomes "04.2678".
+    /// </summary>
+    private static string BuildDateTimeSeconds(decimal seconds)
+    {
+        if (seconds < 0 || seconds >= 60)
+            throw new InvalidOperationException($"FORG0001: seconds component {seconds} is out of range for the target date/time datatype.");
+        int whole = (int)decimal.Truncate(seconds);
+        decimal fraction = seconds - whole;
+        if (fraction == 0)
+            return $"{whole:00}";
+        string fractionText = fraction.ToString("0.###########", CultureInfo.InvariantCulture);
+        return $"{whole:00}{fractionText[1..]}";
+    }
+
+    /// <summary>
+    /// Formats an extended year (supporting year 0 and negative years) for an XML
+    /// Schema date/time lexical form.
+    /// </summary>
+    private static string BuildDateTimeYear(long year)
+    {
+        if (year == 0)
+            return "0000";
+        if (year < 0)
+            return "-" + Math.Abs(year).ToString("D4", CultureInfo.InvariantCulture);
+        return year.ToString("D4", CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>
+    /// F+O 4.0 §9.4.2: fn:build-dateTime — constructs a Gregorian value from the
+    /// components of the supplied record: xs:dateTime (all seven components),
+    /// xs:dateTimeStamp (plus timezone), xs:date, xs:time, xs:gYear, xs:gYearMonth,
+    /// xs:gMonth, xs:gMonthDay, or xs:gDay. FODT0005 when the non-empty field set
+    /// matches no permitted combination; FODT0003 when the timezone is outside
+    /// -PT14H..PT14H or is not an integral number of minutes; FORG0001 when a
+    /// component is out of range.
+    /// </summary>
+    private static XdmValue BuildDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        if (!arg.IsMap)
+            throw new InvalidOperationException("XPTY0004: fn:build-dateTime argument must be a map");
+
+        var map = arg.MapValue;
+        var year = BuildDateTimeComponent(map, "year", "integer");
+        var month = BuildDateTimeComponent(map, "month", "integer");
+        var day = BuildDateTimeComponent(map, "day", "integer");
+        var hours = BuildDateTimeComponent(map, "hours", "integer");
+        var minutes = BuildDateTimeComponent(map, "minutes", "integer");
+        var seconds = BuildDateTimeComponent(map, "seconds", "decimal");
+        var timezone = BuildDateTimeComponent(map, "timezone", "dayTimeDuration");
+
+        bool hasY = year != null, hasMo = month != null, hasD = day != null,
+             hasH = hours != null, hasMi = minutes != null, hasS = seconds != null;
+
+        // The non-empty field set must match exactly one permitted combination
+        // (any extra non-empty field is FODT0005).
+        string typeName = (hasY, hasMo, hasD, hasH, hasMi, hasS) switch
+        {
+            (true, true, true, true, true, true) => timezone != null ? "dateTimeStamp" : "dateTime",
+            (true, true, true, false, false, false) => "date",
+            (true, true, false, false, false, false) => "gYearMonth",
+            (true, false, false, false, false, false) => "gYear",
+            (false, true, true, false, false, false) => "gMonthDay",
+            (false, true, false, false, false, false) => "gMonth",
+            (false, false, true, false, false, false) => "gDay",
+            (false, false, false, true, true, true) => "time",
+            _ => throw new InvalidOperationException(
+                "FODT0005: The supplied fields of fn:build-dateTime do not correspond to any Gregorian value.")
+        };
+
+        // Timezone: integral number of minutes in the range -840..+840 (FODT0003).
+        string timezoneLexical = "";
+        if (timezone != null)
+        {
+            var (_, _, tzDays, tzHours, tzMinutes, tzSeconds) = ParseDuration(timezone.ToString()!);
+            decimal tzTotalMinutes = tzDays * 1440m + tzHours * 60m + tzMinutes;
+            if (tzSeconds != 0 || tzTotalMinutes != decimal.Truncate(tzTotalMinutes)
+                || tzTotalMinutes < -840 || tzTotalMinutes > 840)
+                throw new InvalidOperationException("FODT0003: The timezone component of fn:build-dateTime is outside the range -PT14H to PT14H or is not an integral number of minutes.");
+            int totalMinutes = (int)tzTotalMinutes;
+            if (totalMinutes == 0)
+                timezoneLexical = "Z";
+            else
+                timezoneLexical = string.Concat(
+                    totalMinutes < 0 ? "-" : "+",
+                    Math.Abs(totalMinutes / 60).ToString("00", CultureInfo.InvariantCulture),
+                    ":",
+                    Math.Abs(totalMinutes % 60).ToString("00", CultureInfo.InvariantCulture));
+        }
+
+        string lexical;
+        switch (typeName)
+        {
+            case "dateTime":
+            case "dateTimeStamp":
+            {
+                long y = year!.Value.IntegerValue;
+                int mo = (int)month!.Value.IntegerValue, d = (int)day!.Value.IntegerValue;
+                int h = (int)hours!.Value.IntegerValue, mi = (int)minutes!.Value.IntegerValue;
+                if (h < 0 || h > 23 || mi < 0 || mi > 59)
+                    throw new InvalidOperationException($"FORG0001: hours/minutes component is out of range for xs:dateTime.");
+                lexical = $"{BuildDateTimeYear(y)}-{mo:00}-{d:00}T{h:00}:{mi:00}:{BuildDateTimeSeconds(seconds!.Value.DecimalValue)}{timezoneLexical}";
+                break;
+            }
+            case "date":
+            {
+                long y = year!.Value.IntegerValue;
+                int mo = (int)month!.Value.IntegerValue, d = (int)day!.Value.IntegerValue;
+                lexical = $"{BuildDateTimeYear(y)}-{mo:00}-{d:00}{timezoneLexical}";
+                break;
+            }
+            case "gYearMonth":
+                lexical = $"{BuildDateTimeYear(year!.Value.IntegerValue)}-{(int)month!.Value.IntegerValue:00}{timezoneLexical}";
+                break;
+            case "gYear":
+                lexical = $"{BuildDateTimeYear(year!.Value.IntegerValue)}{timezoneLexical}";
+                break;
+            case "gMonthDay":
+                lexical = $"--{(int)month!.Value.IntegerValue:00}-{(int)day!.Value.IntegerValue:00}{timezoneLexical}";
+                break;
+            case "gMonth":
+                lexical = $"--{(int)month!.Value.IntegerValue:00}{timezoneLexical}";
+                break;
+            case "gDay":
+                lexical = $"---{(int)day!.Value.IntegerValue:00}{timezoneLexical}";
+                break;
+            default: // time
+            {
+                int h = (int)hours!.Value.IntegerValue, mi = (int)minutes!.Value.IntegerValue;
+                if (h < 0 || h > 23 || mi < 0 || mi > 59)
+                    throw new InvalidOperationException("FORG0001: hours/minutes component is out of range for xs:time.");
+                lexical = $"{h:00}:{mi:00}:{BuildDateTimeSeconds(seconds!.Value.DecimalValue)}{timezoneLexical}";
+                break;
+            }
+        }
+
+        return VmEngine.Cast(XdmValue.FromString(lexical), typeName);
+    }
+
+    /// <summary>
+    /// F+O 4.0 §9.4.3: fn:unix-dateTime — the UTC xs:dateTimeStamp for the given Unix
+    /// time in milliseconds (default 0). Negative values are out of range for
+    /// xs:nonNegativeInteger (FOCA0002); results beyond the representable calendar
+    /// range raise FODT0001.
+    /// </summary>
+    private static XdmValue UnixDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        long milliseconds = 0;
+        if (args.Length > 0 && !IsEmptySequence(args[0]))
+        {
+            var value = UnwrapSequenceOrUndefined(args[0]);
+            if (value.Kind == XdmValueKind.Integer)
+                milliseconds = value.IntegerValue;
+            else
+                milliseconds = (long)VmEngine.Cast(value, "nonNegativeInteger").IntegerValue;
+            if (milliseconds < 0)
+                throw new InvalidOperationException($"FOCA0002: fn:unix-dateTime value {milliseconds} is out of range for xs:nonNegativeInteger.");
+        }
+        try
+        {
+            var epoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            var result = epoch.AddMilliseconds(milliseconds);
+            return XdmValue.FromDateTime(result, hasTimezone: true, schemaTypeName: "dateTimeStamp");
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            throw new InvalidOperationException("FODT0001: fn:unix-dateTime value is outside the representable date range.");
+        }
+    }
+
+    /// <summary>
+    /// F+O 4.0 §9.6.11: fn:days-in-month — 28, 29, 30, or 31 for the year and month of
+    /// the local value of an xs:dateTime, xs:date, or xs:gYearMonth. The proleptic
+    /// Gregorian leap-year rule applies to all years, including year 0 (1 BCE).
+    /// </summary>
+    private static XdmValue DaysInMonth(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = UnwrapSequenceOrUndefined(args[0]);
+        if (value.IsUndefined)
+            return XdmValue.Undefined;
+        long year;
+        int month;
+        if (value.Kind == XdmValueKind.DateTime)
+        {
+            var xdt = value.DateTimeXPathValue;
+            year = xdt.Year;
+            month = xdt.Month;
+        }
+        else if (value.Kind == XdmValueKind.Date)
+        {
+            var xdt = value.DateXPathValue;
+            year = xdt.Year;
+            month = xdt.Month;
+        }
+        else if (value.Kind == XdmValueKind.String)
+        {
+            // xs:gYearMonth values are string-kind annotated values in Bosak.
+            var m = Regex.Match(value.ToString().Trim(), @"^(-?)(\d{4,})-(\d{2})");
+            if (!m.Success)
+                throw new InvalidOperationException("XPTY0004: fn:days-in-month expects an xs:dateTime, xs:date, or xs:gYearMonth value.");
+            year = long.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture);
+            if (m.Groups[1].Value == "-")
+                year = -year;
+            month = int.Parse(m.Groups[3].Value, CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            throw new InvalidOperationException("XPTY0004: fn:days-in-month expects an xs:dateTime, xs:date, or xs:gYearMonth value.");
+        }
+        bool leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+        int[] days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        return XdmValue.FromInteger(days[month - 1]);
+    }
+
+    // ------------------------------------------------------------------
     // fn:deep-equal / fn:generate-id / fn:compare
     // ------------------------------------------------------------------
 
@@ -14984,6 +15673,545 @@ public static class FunctionLibrary
         int bytesWritten = rune.EncodeToUtf8(utf8);
         foreach (byte b in utf8[..bytesWritten])
             sb.Append($"%{b:X2}");
+    }
+
+    // ------------------------------------------------------------------
+    // XPath 4.0 URI functions (REQ-118 slice 4.0-S2)
+    // ------------------------------------------------------------------
+
+    private static readonly HashSet<string> KnownHierarchicalSchemes = new(StringComparer.OrdinalIgnoreCase)
+        { "http", "https", "ftp", "ssh", "file" };
+
+    private static readonly HashSet<string> KnownNonHierarchicalSchemes = new(StringComparer.OrdinalIgnoreCase)
+        { "mailto", "news", "urn", "tel", "data", "javascript" };
+
+    private static readonly Dictionary<string, string> DefaultPorts = new(StringComparer.OrdinalIgnoreCase)
+        { ["http"] = "80", ["https"] = "443", ["ftp"] = "21", ["ssh"] = "22" };
+
+    private static XdmValue DecodeFromUri(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var arg = args[0];
+        if (IsEmptySequence(arg))
+            return XdmValue.FromString("");
+        return XdmValue.FromString(DecodeFromUriCore(AtomizedString(arg)));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §7.1 core: percent-substrings become octets, other characters become their
+    /// UTF-8 octets; an incomplete/invalid escape ("%", "%X", "%AX", "%XA") consumes the
+    /// percent sign and up to two following characters and yields U+FFFD. The octets are
+    /// then decoded as UTF-8 with U+FFFD replacement for invalid sequences, and octets
+    /// representing characters that are not valid XML characters also yield U+FFFD.
+    /// Plus signs are NOT decoded (Issue 2811).
+    /// </summary>
+    private static string DecodeFromUriCore(string s)
+    {
+        var bytes = new List<byte>(s.Length);
+        Span<byte> utf8 = stackalloc byte[4];
+        for (int i = 0; i < s.Length; i++)
+        {
+            char c = s[i];
+            if (c == '%')
+            {
+                if (i + 2 < s.Length && IsHexDigit(s[i + 1]) && IsHexDigit(s[i + 2]))
+                {
+                    bytes.Add((byte)((HexValue(s[i + 1]) << 4) | HexValue(s[i + 2])));
+                    i += 2;
+                }
+                else
+                {
+                    // Invalid escape: replacement char for '%' plus up to two consumed chars.
+                    bytes.Add(0xEF); bytes.Add(0xBF); bytes.Add(0xBD);
+                    for (int consumed = 0; consumed < 2 && i + 1 < s.Length; consumed++)
+                        i++;
+                }
+            }
+            else
+            {
+                var rune = char.IsSurrogatePair(s, i)
+                    ? new Rune(c, s[++i])
+                    : char.IsSurrogate(c) ? Rune.ReplacementChar : new Rune(c);
+                int n = rune.EncodeToUtf8(utf8);
+                for (int j = 0; j < n; j++) bytes.Add(utf8[j]);
+            }
+        }
+
+        // .NET's UTF-8 decoder replaces each maximal invalid subsequence with U+FFFD,
+        // matching the F+O 4.0 replacement rules (xF0 9F 92 41 -> "�A" etc.).
+        string decoded = Encoding.UTF8.GetString(bytes.ToArray());
+        if (!decoded.Contains('\ufffd') && IsXmlCharString(decoded))
+            return decoded;
+        var sb = new StringBuilder(decoded.Length);
+        foreach (var rune in decoded.EnumerateRunes())
+            sb.Append(rune.Value == 0xFFFD || !IsValidXmlChar(rune.Value) ? "\ufffd" : rune.ToString());
+        return sb.ToString();
+    }
+
+    private static bool IsHexDigit(char c)
+        => c is (>= '0' and <= '9') or (>= 'a' and <= 'f') or (>= 'A' and <= 'F');
+
+    private static int HexValue(char c)
+        => c switch
+        {
+            >= '0' and <= '9' => c - '0',
+            >= 'a' and <= 'f' => c - 'a' + 10,
+            _ => c - 'A' + 10
+        };
+
+    private static bool IsValidXmlChar(int codePoint)
+        => codePoint is 0x9 or 0xA or 0xD
+            or (>= 0x20 and <= 0xD7FF)
+            or (>= 0xE000 and <= 0xFFFD)
+            or (>= 0x10000 and <= 0x10FFFF);
+
+    private static bool IsXmlCharString(string s)
+    {
+        foreach (var rune in s.EnumerateRunes())
+            if (!IsValidXmlChar(rune.Value))
+                return false;
+        return true;
+    }
+
+    private static XdmValue ParseUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ParseUri(ctx, args[0], XdmValue.Undefined);
+
+    private static XdmValue ParseUri_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ParseUri(ctx, args[0], args[1]);
+
+    private static bool UriBooleanOption(XdmMap options, string key)
+    {
+        if (!options.TryGetValue(XdmValue.FromString(key), out var value) || IsEmptySequence(value))
+            return false;
+        return AtomizeValue(value).GetEffectiveBooleanValue();
+    }
+
+    /// <summary>
+    /// F+O 4.0 §7.6.2: parses $value into the uri-structure-record map (14 entries;
+    /// absent components are the empty sequence). Implements the spec's ordered
+    /// transformation pipeline: backslash normalization, fragment/query stripping,
+    /// scheme/drive-letter detection, hierarchical classification, authority and
+    /// userinfo/host/port splitting (FOUR0001 on an unmatched '[' in the authority),
+    /// uri-decoded path-segments, form-decoded query-parameters, uri-decoded filepath.
+    /// </summary>
+    private static XdmValue ParseUri(EvaluationContext ctx, XdmValue arg, XdmValue optionsArg)
+    {
+        if (IsEmptySequence(arg))
+            return XdmValue.Undefined;
+
+        bool allowDeprecated = false, omitDefaultPorts = false, uncPath = false;
+        if (!IsEmptySequence(optionsArg))
+        {
+            if (!optionsArg.IsMap)
+                throw new InvalidOperationException("XPTY0004: fn:parse-uri options must be a single map");
+            var options = optionsArg.MapValue;
+            allowDeprecated = UriBooleanOption(options, "allow-deprecated-features");
+            omitDefaultPorts = UriBooleanOption(options, "omit-default-ports");
+            uncPath = UriBooleanOption(options, "unc-path");
+        }
+
+        string original = AtomizedString(arg);
+        string str = original.Replace('\\', '/');
+
+        string? fragment = null;
+        var m = Regex.Match(str, "^(.*?)#(.*)$");
+        if (m.Success)
+        {
+            str = m.Groups[1].Value;
+            fragment = m.Groups[2].Value;
+            if (fragment.Length == 0)
+                fragment = null;
+            else
+                fragment = DecodeFromUriCore(fragment);
+        }
+
+        string? query = null;
+        m = Regex.Match(str, "^(.*?)\\?(.*)$");
+        if (m.Success)
+        {
+            str = m.Groups[1].Value;
+            query = m.Groups[2].Value;
+            if (query.Length == 0)
+                query = null;
+        }
+
+        string? scheme = null;
+        m = Regex.Match(str, "^([a-zA-Z][A-Za-z0-9+\\-.]+):(.*)$");
+        if (m.Success)
+        {
+            scheme = m.Groups[1].Value;
+            str = m.Groups[2].Value;
+        }
+
+        // Drive letters and UNC paths acquire the file: scheme.
+        if (scheme is null or "file")
+        {
+            m = Regex.Match(str, "^/*([a-zA-Z][:|].*)$");
+            if (m.Success)
+            {
+                scheme = "file";
+                string drive = m.Groups[1].Value;
+                str = "/" + drive[0] + ":" + drive[2..];
+            }
+            else if (uncPath && str.StartsWith("//"))
+            {
+                scheme = "file";
+            }
+        }
+
+        // Hierarchical classification (spec leaves scheme knowledge implementation-defined).
+        bool? hierarchical = null;
+        if (scheme != null && KnownHierarchicalSchemes.Contains(scheme))
+            hierarchical = true;
+        else if (scheme != null && KnownNonHierarchicalSchemes.Contains(scheme))
+            hierarchical = false;
+        else if (str.Length > 0)
+            hierarchical = str.StartsWith('/');
+
+        // absolute: scheme present, no fragment, and the URI is not non-hierarchical.
+        XdmValue absolute = scheme != null && fragment == null && hierarchical != false
+            ? XdmValue.True
+            : XdmValue.Undefined;
+
+        string? authority = null, userinfo = null, host = null, port = null, filepath = null;
+        if (scheme == "file")
+        {
+            if (uncPath)
+            {
+                m = Regex.Match(str, "^/*(//[^/].*)$");
+                if (m.Success)
+                {
+                    filepath = m.Groups[1].Value;
+                    str = m.Groups[1].Value;
+                }
+            }
+            if (filepath == null)
+            {
+                if (Regex.IsMatch(str, "^//*[A-Za-z]:/"))
+                {
+                    str = "/" + str.TrimStart('/');
+                    filepath = str.TrimStart('/');
+                }
+                else
+                {
+                    str = "/" + str.TrimStart('/');
+                    filepath = str;
+                }
+            }
+        }
+        else if (hierarchical == true)
+        {
+            m = Regex.Match(str, "^//([^/]+)$");
+            if (m.Success)
+            {
+                authority = m.Groups[1].Value;
+                str = "";
+            }
+            else
+            {
+                m = Regex.Match(str, "^//([^/]*)(/.*)$");
+                if (m.Success)
+                {
+                    authority = m.Groups[1].Value;
+                    str = m.Groups[2].Value;
+                }
+            }
+        }
+
+        if (authority != null)
+        {
+            m = Regex.Match(authority, "^(([^@]*)@)(.*)(:([^:]*))?$");
+            if (m.Success)
+            {
+                userinfo = m.Groups[2].Value;
+                // A non-empty password in the userinfo is discarded unless deprecated
+                // features are allowed.
+                int colon = userinfo.IndexOf(':');
+                if (colon >= 0 && colon < userinfo.Length - 1 && !allowDeprecated)
+                    userinfo = null;
+            }
+
+            m = Regex.Match(authority, "^(([^@]*)@)?(\\[[^\\]]*\\])(:([^:]*))?$");
+            if (m.Success)
+            {
+                host = m.Groups[3].Value;
+                port = m.Groups[5].Value;
+            }
+            else if (Regex.IsMatch(authority, "^(([^@]*)@)?\\[.*$"))
+            {
+                throw new InvalidOperationException("FOUR0001: Invalid IPv6/IPvFuture authority in fn:parse-uri");
+            }
+            else
+            {
+                m = Regex.Match(authority, "^(([^@]*)@)?([^:]+)(:([^:]*))?$");
+                if (m.Success)
+                {
+                    host = m.Groups[3].Value;
+                    port = m.Groups[5].Value;
+                }
+            }
+        }
+
+        if (port != null)
+        {
+            if (port.Length == 0)
+            {
+                port = null;
+            }
+            else
+            {
+                if (omitDefaultPorts && scheme != null
+                    && DefaultPorts.TryGetValue(scheme, out var defaultPort) && port == defaultPort)
+                    port = null;
+            }
+        }
+
+        string? path = str.Length == 0 ? null : str;
+        if (scheme == null && filepath == null)
+            filepath = path;
+
+        List<XdmValue>? segments = null;
+        if (str.Length > 0)
+        {
+            segments = new List<XdmValue>();
+            foreach (var segment in str.Split('/'))
+                segments.Add(XdmValue.FromString(DecodeFromUriCore(segment)));
+        }
+
+        XdmMap? queryParameters = null;
+        if (query != null)
+        {
+            queryParameters = new XdmMap();
+            foreach (var token in query.Split('&'))
+            {
+                string key, value;
+                int eq = token.IndexOf('=');
+                if (eq >= 0)
+                {
+                    key = DecodeFromUriCore(token[..eq].Replace('+', ' '));
+                    value = DecodeFromUriCore(token[(eq + 1)..].Replace('+', ' '));
+                }
+                else
+                {
+                    key = "";
+                    value = DecodeFromUriCore(token.Replace('+', ' '));
+                }
+                var keyValue = XdmValue.FromString(key);
+                if (queryParameters.TryGetValue(keyValue, out var existing))
+                {
+                    var accumulated = new List<XdmValue>();
+                    accumulated.AddRange(AsSequence(existing));
+                    accumulated.Add(XdmValue.FromString(value));
+                    queryParameters.Add(keyValue, XdmValue.FromSequence(MaterializedSequence.FromList(accumulated)));
+                }
+                else
+                {
+                    queryParameters.Add(keyValue, XdmValue.FromString(value));
+                }
+            }
+        }
+
+        if (filepath != null)
+            filepath = DecodeFromUriCore(filepath);
+
+        var result = new XdmMap();
+        void Put(string key, XdmValue? value) => result.Add(XdmValue.FromString(key), value ?? XdmValue.Undefined);
+        Put("uri", XdmValue.FromString(original));
+        Put("scheme", scheme != null ? XdmValue.FromString(scheme) : null);
+        Put("absolute", absolute);
+        Put("hierarchical", hierarchical.HasValue ? XdmValue.FromBoolean(hierarchical.Value) : null);
+        Put("authority", authority != null ? XdmValue.FromString(authority) : null);
+        Put("userinfo", userinfo != null ? XdmValue.FromString(userinfo) : null);
+        Put("host", host != null ? XdmValue.FromString(host) : null);
+        // The record declares port as xs:integer; a non-numeric port is kept as its
+        // original string (the spec defines no error for that case).
+        Put("port", port != null && long.TryParse(port, NumberStyles.Integer, CultureInfo.InvariantCulture, out var portNumber)
+            ? XdmValue.FromInteger(portNumber)
+            : port != null ? XdmValue.FromString(port) : null);
+        Put("path", path != null ? XdmValue.FromString(path) : null);
+        Put("query", query != null ? XdmValue.FromString(query) : null);
+        Put("fragment", fragment != null ? XdmValue.FromString(fragment) : null);
+        Put("path-segments", segments != null ? XdmValue.FromSequence(MaterializedSequence.FromList(segments)) : null);
+        Put("filepath", filepath != null ? XdmValue.FromString(filepath) : null);
+        Put("query-parameters", queryParameters != null ? XdmValue.FromMap(queryParameters) : null);
+        return XdmValue.FromMap(result);
+    }
+
+    private static XdmValue BuildUri_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => BuildUri(ctx, args[0], XdmValue.Undefined);
+
+    private static XdmValue BuildUri_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => BuildUri(ctx, args[0], args[1]);
+
+    /// <summary>
+    /// Reads a uri-structure-record field: present when supplied with a non-empty value;
+    /// a zero-length string is also treated as absent, mirroring fn:parse-uri's
+    /// discarding of zero-length components.
+    /// </summary>
+    private static string? UriField(XdmMap parts, string key)
+    {
+        if (!parts.TryGetValue(XdmValue.FromString(key), out var value) || IsEmptySequence(value))
+            return null;
+        string s = AtomizeValue(value).ToString();
+        return s.Length == 0 ? null : s;
+    }
+
+    /// <summary>Escapes the characters of a set that F+O 4.0 §7.6.3 marks for
+    /// percent-escaping; all other characters pass through unchanged.</summary>
+    private static string UriEscapeSet(string s, string escapeSet)
+    {
+        var sb = new StringBuilder(s.Length);
+        foreach (var rune in s.EnumerateRunes())
+        {
+            if (rune.Value < 0x20 || escapeSet.Contains(rune.ToString(), StringComparison.Ordinal))
+                AppendPercentEncoded(sb, rune);
+            else
+                sb.Append(rune.ToString());
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// F+O 4.0 §7.6.3: fn:build-uri — serializes a uri-structure-record map back to a
+    /// URI string. Path segments are escaped unless the URI is non-hierarchical;
+    /// query-parameters values are form-escaped (plus becomes %2B); fragment escaping
+    /// excludes '/' and '?'. A userinfo password and default ports are dropped per
+    /// the allow-deprecated-features / omit-default-ports options.
+    /// </summary>
+    private static XdmValue BuildUri(EvaluationContext ctx, XdmValue partsArg, XdmValue optionsArg)
+    {
+        if (!partsArg.IsMap)
+            throw new InvalidOperationException("XPTY0004: fn:build-uri parts argument must be a map");
+        var parts = partsArg.MapValue;
+
+        bool allowDeprecated = false, omitDefaultPorts = false, uncPath = false;
+        if (!IsEmptySequence(optionsArg))
+        {
+            if (!optionsArg.IsMap)
+                throw new InvalidOperationException("XPTY0004: fn:build-uri options must be a single map");
+            var options = optionsArg.MapValue;
+            allowDeprecated = UriBooleanOption(options, "allow-deprecated-features");
+            omitDefaultPorts = UriBooleanOption(options, "omit-default-ports");
+            uncPath = UriBooleanOption(options, "unc-path");
+        }
+
+        string? scheme = UriField(parts, "scheme");
+        bool hierarchical;
+        if (parts.TryGetValue(XdmValue.FromString("hierarchical"), out var hierarchicalValue)
+            && !IsEmptySequence(hierarchicalValue))
+        {
+            var atomized = AtomizeValue(hierarchicalValue);
+            hierarchical = atomized.Kind == XdmValueKind.Boolean
+                ? atomized.BooleanValue
+                : bool.TryParse(atomized.ToString(), out var parsed) ? parsed : atomized.GetEffectiveBooleanValue();
+        }
+        else
+        {
+            hierarchical = !(scheme != null && KnownNonHierarchicalSchemes.Contains(scheme));
+        }
+
+        var userinfo = UriField(parts, "userinfo");
+        if (userinfo != null)
+        {
+            int colon = userinfo.IndexOf(':');
+            if (colon >= 0 && colon < userinfo.Length - 1 && !allowDeprecated)
+                userinfo = null;
+        }
+
+        var port = UriField(parts, "port");
+        if (omitDefaultPorts && port != null && scheme != null
+            && DefaultPorts.TryGetValue(scheme, out var defaultPort) && port == defaultPort)
+            port = null;
+
+        var sb = new StringBuilder();
+        if (scheme != null)
+        {
+            sb.Append(scheme);
+            if (KnownNonHierarchicalSchemes.Contains(scheme))
+                sb.Append(':');
+            else if (scheme.Equals("file", StringComparison.OrdinalIgnoreCase) && uncPath)
+                sb.Append(":////");
+            else
+                sb.Append("://");
+        }
+
+        var host = UriField(parts, "host");
+        if (userinfo != null || host != null || port != null)
+        {
+            if (userinfo != null)
+                sb.Append(userinfo).Append('@');
+            if (host != null)
+                sb.Append(host);
+            if (port != null)
+                sb.Append(':').Append(port);
+        }
+        else
+        {
+            var authority = UriField(parts, "authority");
+            if (authority != null)
+                sb.Append(authority);
+        }
+
+        string pathPart;
+        if (parts.TryGetValue(XdmValue.FromString("path-segments"), out var segmentsValue)
+            && !IsEmptySequence(segmentsValue))
+        {
+            var segBuilder = new StringBuilder();
+            bool firstSegment = true;
+            foreach (var segment in AsSequence(segmentsValue))
+            {
+                if (!firstSegment)
+                    segBuilder.Append('/');
+                firstSegment = false;
+                var segmentString = AtomizeValue(segment).ToString();
+                segBuilder.Append(hierarchical ? UriEscapeSet(segmentString, " %/?#[]") : segmentString);
+            }
+            pathPart = segBuilder.ToString();
+        }
+        else
+        {
+            pathPart = UriField(parts, "path") ?? "";
+        }
+        sb.Append(pathPart);
+
+        if (parts.TryGetValue(XdmValue.FromString("query-parameters"), out var qpValue)
+            && qpValue.IsMap && qpValue.MapValue.Count > 0)
+        {
+            var queryBuilder = new StringBuilder();
+            bool firstPair = true;
+            foreach (var kvp in qpValue.MapValue.Entries)
+            {
+                var key = AtomizeValue(kvp.Key).ToString();
+                var encodedKey = UriEscapeSet(key, " %=&#+[]");
+                foreach (var rawValue in AsSequence(kvp.Value))
+                {
+                    if (!firstPair)
+                        queryBuilder.Append('&');
+                    firstPair = false;
+                    var encodedValue = UriEscapeSet(AtomizeValue(rawValue).ToString(), " %=&#+[]");
+                    if (key.Length == 0)
+                    {
+                        queryBuilder.Append(encodedValue);
+                    }
+                    else
+                    {
+                        queryBuilder.Append(encodedKey).Append('=').Append(encodedValue);
+                    }
+                }
+            }
+            sb.Append('?').Append(queryBuilder);
+        }
+        else
+        {
+            var query = UriField(parts, "query");
+            if (query != null)
+                sb.Append('?').Append(query);
+        }
+
+        var fragment = UriField(parts, "fragment");
+        if (fragment != null)
+            sb.Append('#').Append(UriEscapeSet(fragment, " %#[]"));
+
+        return XdmValue.FromString(sb.ToString());
     }
 
     // ------------------------------------------------------------------
