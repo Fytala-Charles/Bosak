@@ -95,6 +95,10 @@
 //                      |                  |       |                | 4.0-only function batch (replicate, slice, items-at, foot, trunk, insert-separator,    |
 //                      |                  |       |                | char, characters); Html5CharacterReferences table for fn:char                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.117 | 08-10-2026     | REQ-118 4.0-S1 part 2: contains/starts/ends-with-subsequence, duplicate-values,         |
+//                      |                  |       |                | all-equal/all-different, highest/lowest, sort-by/sort-with, graphemes, pad-string,      |
+//                      |                  |       |                | trim-space, index-of-substring, substring-before/after-last, hash                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -399,6 +403,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -1280,6 +1285,342 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Sequence,
                 IsXPath40Only = true,
                 Implementation = InsertSeparator
+            },
+
+            // ----- XPath 4.0 subsequence functions (REQ-118 slice 4.0-S1 part 2) -
+            [(Namespaces.Fn, "contains-subsequence", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "contains-subsequence",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = ContainsSubsequence_2
+            },
+            [(Namespaces.Fn, "contains-subsequence", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "contains-subsequence",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = ContainsSubsequence_3
+            },
+            [(Namespaces.Fn, "starts-with-subsequence", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "starts-with-subsequence",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = StartsWithSubsequence_2
+            },
+            [(Namespaces.Fn, "starts-with-subsequence", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "starts-with-subsequence",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = StartsWithSubsequence_3
+            },
+            [(Namespaces.Fn, "ends-with-subsequence", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "ends-with-subsequence",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = EndsWithSubsequence_2
+            },
+            [(Namespaces.Fn, "ends-with-subsequence", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "ends-with-subsequence",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = EndsWithSubsequence_3
+            },
+
+            // ----- XPath 4.0 comparison/selection functions (REQ-118 4.0-S1 p2) --
+            [(Namespaces.Fn, "duplicate-values", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "duplicate-values",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = DuplicateValues_1
+            },
+            [(Namespaces.Fn, "duplicate-values", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "duplicate-values",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = DuplicateValues_2
+            },
+            [(Namespaces.Fn, "all-equal", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "all-equal",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = AllEqual_1
+            },
+            [(Namespaces.Fn, "all-equal", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "all-equal",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = AllEqual_2
+            },
+            [(Namespaces.Fn, "all-different", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "all-different",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = AllDifferent_1
+            },
+            [(Namespaces.Fn, "all-different", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "all-different",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = AllDifferent_2
+            },
+            [(Namespaces.Fn, "highest", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "highest",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Highest_1
+            },
+            [(Namespaces.Fn, "highest", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "highest",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Highest_2
+            },
+            [(Namespaces.Fn, "highest", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "highest",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Highest_3
+            },
+            [(Namespaces.Fn, "lowest", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "lowest",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Lowest_1
+            },
+            [(Namespaces.Fn, "lowest", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "lowest",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Lowest_2
+            },
+            [(Namespaces.Fn, "lowest", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "lowest",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Undefined, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Lowest_3
+            },
+            [(Namespaces.Fn, "sort-by", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "sort-by",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = SortBy_2
+            },
+            [(Namespaces.Fn, "sort-with", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "sort-with",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = SortWith_2
+            },
+
+            // ----- XPath 4.0 string functions (REQ-118 slice 4.0-S1 part 2) ------
+            [(Namespaces.Fn, "graphemes", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "graphemes",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = Graphemes_1
+            },
+            [(Namespaces.Fn, "pad-string", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "pad-string",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Integer],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = PadString_2
+            },
+            [(Namespaces.Fn, "pad-string", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "pad-string",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Integer, XdmValueKind.Map],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = PadString_3
+            },
+            [(Namespaces.Fn, "trim-space", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "trim-space",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = TrimSpace_1
+            },
+            [(Namespaces.Fn, "trim-space", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "trim-space",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Map],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = TrimSpace_2
+            },
+            [(Namespaces.Fn, "index-of-substring", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "index-of-substring",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = IndexOfSubstring_2
+            },
+            [(Namespaces.Fn, "substring-before-last", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "substring-before-last",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = SubstringBeforeLast_2
+            },
+            [(Namespaces.Fn, "substring-before-last", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "substring-before-last",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = SubstringBeforeLast_3
+            },
+            [(Namespaces.Fn, "substring-after-last", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "substring-after-last",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = SubstringAfterLast_2
+            },
+            [(Namespaces.Fn, "substring-after-last", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "substring-after-last",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = SubstringAfterLast_3
+            },
+            [(Namespaces.Fn, "hash", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "hash",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = Hash_1
+            },
+            [(Namespaces.Fn, "hash", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "hash",
+                Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = Hash_2
+            },
+            [(Namespaces.Fn, "hash", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "hash",
+                Arity = 3,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.String, XdmValueKind.Map],
+                ReturnType = XdmValueKind.String,
+                IsXPath40Only = true,
+                Implementation = Hash_3
             },
 
             // ----- fn:distinct-values -----------------------------------------
@@ -9868,6 +10209,818 @@ public static class FunctionLibrary
             result.Add(input[i]);
         }
         return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    // ------------------------------------------------------------------
+    // XPath 4.0 subsequence functions (REQ-118 slice 4.0-S1 part 2)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Optional $compare callback of the fn:*-subsequence functions: an absent or empty
+    /// argument selects fn:deep-equal#2; anything else must be a single arity-2 function
+    /// item (XPTY0004 otherwise). Returns <see cref="XdmValue.Undefined"/> for the default.
+    /// </summary>
+    private static XdmValue SubsequenceCompareCallback(ReadOnlySpan<XdmValue> args, int index)
+    {
+        if (args.Length <= index || IsEmptySequence(args[index]))
+            return XdmValue.Undefined;
+        var callback = SingleFunctionItem(args[index]);
+        if (!callback.IsFunction || GetFunctionArity(callback) != 2)
+            throw new InvalidOperationException("XPTY0004: the $compare argument must be a function item of arity 2");
+        return callback;
+    }
+
+    /// <summary>
+    /// Compares two items for a fn:*-subsequence match: either the supplied callback
+    /// (with the function conversion rules to xs:boolean; () counts as false) or
+    /// fn:deep-equal#2 with the context default collation.
+    /// </summary>
+    private static bool SubsequenceItemsEqual(XdmValue compare, XdmValue a, XdmValue b, EvaluationContext ctx)
+    {
+        if (compare.IsUndefined)
+            return DeepEqualValue(a, b, ctx.DefaultCollation, ctx.ImplicitTimezoneOffsetMinutes);
+        var result = VmEngine.InvokeFunctionItem(compare, ctx, new[] { a, b });
+        if (IsEmptySequence(result))
+            return false;
+        return VmEngine.ApplyFunctionConversion(result, "xs:boolean", ctx).BooleanValue;
+    }
+
+    private static XdmValue ContainsSubsequence_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ContainsSubsequence(args[0], args[1], XdmValue.Undefined, ctx);
+
+    private static XdmValue ContainsSubsequence_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ContainsSubsequence(args[0], args[1], SubsequenceCompareCallback(args, 2), ctx);
+
+    private static XdmValue ContainsSubsequence(XdmValue input, XdmValue subsequence, XdmValue compare, EvaluationContext ctx)
+    {
+        var inputItems = AsSequence(input).ToList();
+        var subItems = AsSequence(subsequence).ToList();
+        for (int i = 0; i <= inputItems.Count - subItems.Count; i++)
+        {
+            bool match = true;
+            for (int j = 0; j < subItems.Count; j++)
+            {
+                if (!SubsequenceItemsEqual(compare, inputItems[i + j], subItems[j], ctx))
+                {
+                    match = false;
+                    break;
+                }
+            }
+            if (match)
+                return XdmValue.FromBoolean(true);
+        }
+        return XdmValue.FromBoolean(false);
+    }
+
+    private static XdmValue StartsWithSubsequence_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => StartsWithSubsequence(args[0], args[1], XdmValue.Undefined, ctx);
+
+    private static XdmValue StartsWithSubsequence_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => StartsWithSubsequence(args[0], args[1], SubsequenceCompareCallback(args, 2), ctx);
+
+    private static XdmValue StartsWithSubsequence(XdmValue input, XdmValue subsequence, XdmValue compare, EvaluationContext ctx)
+    {
+        var inputItems = AsSequence(input).ToList();
+        var subItems = AsSequence(subsequence).ToList();
+        if (subItems.Count > inputItems.Count)
+            return XdmValue.FromBoolean(false);
+        for (int j = 0; j < subItems.Count; j++)
+        {
+            if (!SubsequenceItemsEqual(compare, inputItems[j], subItems[j], ctx))
+                return XdmValue.FromBoolean(false);
+        }
+        return XdmValue.FromBoolean(true);
+    }
+
+    private static XdmValue EndsWithSubsequence_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => EndsWithSubsequence(args[0], args[1], XdmValue.Undefined, ctx);
+
+    private static XdmValue EndsWithSubsequence_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => EndsWithSubsequence(args[0], args[1], SubsequenceCompareCallback(args, 2), ctx);
+
+    private static XdmValue EndsWithSubsequence(XdmValue input, XdmValue subsequence, XdmValue compare, EvaluationContext ctx)
+    {
+        var inputItems = AsSequence(input).ToList();
+        var subItems = AsSequence(subsequence).ToList();
+        int offset = inputItems.Count - subItems.Count;
+        if (offset < 0)
+            return XdmValue.FromBoolean(false);
+        for (int j = 0; j < subItems.Count; j++)
+        {
+            if (!SubsequenceItemsEqual(compare, inputItems[offset + j], subItems[j], ctx))
+                return XdmValue.FromBoolean(false);
+        }
+        return XdmValue.FromBoolean(true);
+    }
+
+    // ------------------------------------------------------------------
+    // XPath 4.0 comparison/selection functions (REQ-118 slice 4.0-S1 part 2)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Resolves an optional collation argument per F+O 4.0 §5.3.7: an absent or empty
+    /// argument selects the context default collation; the effective URI is validated.
+    /// </summary>
+    private static string EffectiveCollation(XdmValue collationArg, EvaluationContext ctx)
+    {
+        string collation = AtomizedString(collationArg);
+        if (collation.Length == 0)
+            collation = ctx.DefaultCollation;
+        ValidateCollation(collation);
+        return collation;
+    }
+
+    private static XdmValue DuplicateValues_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => DuplicateValues(args[0], ctx.DefaultCollation, ctx);
+
+    private static XdmValue DuplicateValues_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => DuplicateValues(args[0], EffectiveCollation(args[1], ctx), ctx);
+
+    private static XdmValue DuplicateValues(XdmValue values, string collation, EvaluationContext ctx)
+    {
+        var items = new List<XdmValue>();
+        foreach (var item in AsSequence(values))
+            items.Add(AtomizeValue(item));
+        // Returns those items that are contextually equal to exactly one earlier item,
+        // i.e. the second occurrence of each duplicate set, in order of second appearance
+        // (F+O 4.0 §2.2.6). Comparison rules match fn:distinct-values.
+        var result = new List<XdmValue>();
+        for (int i = 0; i < items.Count; i++)
+        {
+            int earlierMatches = 0;
+            for (int j = 0; j < i && earlierMatches <= 1; j++)
+            {
+                if (AtomicValuesEqual(items[i], items[j], collation, ctx.ImplicitTimezoneOffsetMinutes)
+                    || BothNaN(items[i], items[j]))
+                    earlierMatches++;
+            }
+            if (earlierMatches == 1)
+                result.Add(items[i]);
+        }
+        return result.Count == 0 ? XdmValue.Undefined : XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    private static XdmValue AllEqual_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => AllEqual(args[0], ctx.DefaultCollation, ctx);
+
+    private static XdmValue AllEqual_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => AllEqual(args[0], EffectiveCollation(args[1], ctx), ctx);
+
+    // fn:all-equal($values, $collation) is defined as count(fn:distinct-values($values, $collation)) le 1.
+    private static XdmValue AllEqual(XdmValue values, string collation, EvaluationContext ctx)
+        => XdmValue.FromBoolean(
+            Materialize(DistinctValuesImpl(values, collation, ctx.ImplicitTimezoneOffsetMinutes)).Count <= 1);
+
+    private static XdmValue AllDifferent_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => AllDifferent(args[0], ctx.DefaultCollation, ctx);
+
+    private static XdmValue AllDifferent_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => AllDifferent(args[0], EffectiveCollation(args[1], ctx), ctx);
+
+    // fn:all-different($values, $collation) is count(fn:distinct-values($values, $collation)) eq count($values).
+    private static XdmValue AllDifferent(XdmValue values, string collation, EvaluationContext ctx)
+    {
+        int itemCount = 0;
+        foreach (var unused in AsSequence(values))
+            itemCount++;
+        int distinctCount = Materialize(DistinctValuesImpl(values, collation, ctx.ImplicitTimezoneOffsetMinutes)).Count;
+        return XdmValue.FromBoolean(distinctCount == itemCount);
+    }
+
+    private static XdmValue Highest_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HighestLowest(args[0], XdmValue.Undefined, XdmValue.Undefined, highest: true, ctx);
+
+    private static XdmValue Highest_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HighestLowest(args[0], args[1], XdmValue.Undefined, highest: true, ctx);
+
+    private static XdmValue Highest_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HighestLowest(args[0], args[1], args[2], highest: true, ctx);
+
+    private static XdmValue Lowest_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HighestLowest(args[0], XdmValue.Undefined, XdmValue.Undefined, highest: false, ctx);
+
+    private static XdmValue Lowest_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HighestLowest(args[0], args[1], XdmValue.Undefined, highest: false, ctx);
+
+    private static XdmValue Lowest_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => HighestLowest(args[0], args[1], args[2], highest: false, ctx);
+
+    /// <summary>
+    /// Shared fn:highest/fn:lowest implementation (F+O 4.0 §2.5.10/§2.5.12): sorts the
+    /// input with the modified key (data(key($item)) with xs:untypedAtomic cast to
+    /// xs:double) and returns the input items contextually equal to the boundary item
+    /// (last for highest, first for lowest), retaining input order.
+    /// </summary>
+    private static XdmValue HighestLowest(XdmValue input, XdmValue collationArg, XdmValue keyArg, bool highest, EvaluationContext ctx)
+    {
+        var items = AsSequence(input).ToList();
+        if (items.Count == 0)
+            return XdmValue.Undefined;
+        string collation = EffectiveCollation(collationArg, ctx);
+        XdmValue keyFunc = XdmValue.Undefined;
+        if (!IsEmptySequence(keyArg))
+        {
+            keyFunc = SingleFunctionItem(keyArg);
+            if (!keyFunc.IsFunction || GetFunctionArity(keyFunc) != 1)
+                throw new InvalidOperationException("XPTY0004: the $key argument must be a function item of arity 1");
+        }
+        var keyed = new List<(XdmValue Key, XdmValue Item, int Index)>(items.Count);
+        for (int i = 0; i < items.Count; i++)
+        {
+            var raw = keyFunc.IsUndefined ? Data(items[i]) : VmEngine.InvokeFunctionItem(keyFunc, ctx, new[] { items[i] });
+            keyed.Add((HighestLowestModifiedKey(raw), items[i], i));
+        }
+        SortKeyed(keyed, collation);
+        var boundary = highest ? keyed[^1].Item : keyed[0].Item;
+        var result = new List<XdmValue>();
+        foreach (var item in items)
+        {
+            if (DeepEqualValue(item, boundary, collation, ctx.ImplicitTimezoneOffsetMinutes))
+                result.Add(item);
+        }
+        return result.Count == 0 ? XdmValue.Undefined : XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// Applies the fn:highest/fn:lowest modified-key rule: atomizes the key value with
+    /// fn:data and casts xs:untypedAtomic items to xs:double (FORG0001 when not castable),
+    /// matching fn:min/fn:max rather than fn:sort.
+    /// </summary>
+    private static XdmValue HighestLowestModifiedKey(XdmValue key)
+    {
+        var atomized = Data(key);
+        if (atomized.IsUndefined)
+            return atomized;
+        if (!atomized.IsSequence)
+            return ConvertUntypedKey(atomized);
+        var converted = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(atomized.SequenceValue!))
+            converted.Add(ConvertUntypedKey(item));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(converted));
+
+        static XdmValue ConvertUntypedKey(XdmValue item)
+        {
+            if (!IsUntypedAtomic(item))
+                return item;
+            try
+            {
+                return VmEngine.Cast(item, "double");
+            }
+            catch (InvalidOperationException)
+            {
+                throw new InvalidOperationException(
+                    $"FORG0001: xs:untypedAtomic value '{item}' is not castable to xs:double");
+            }
+        }
+    }
+
+    /// <summary>A fn:sort-by sort key definition (duck-typed fn:sort-key-record); a
+    /// <see cref="XdmValue.Undefined"/> KeyFunc selects fn:data#1 and an undefined-length
+    /// collation name selects the context default collation at comparison time.</summary>
+    private readonly record struct SortKeyDefinition(XdmValue KeyFunc, string? Collation, bool Descending);
+
+    private static XdmValue SortBy_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = AsSequence(args[0]).ToList();
+        if (items.Count == 0)
+            return XdmValue.Undefined;
+        var defs = new List<SortKeyDefinition>();
+        foreach (var key in AsSequence(args[1]))
+        {
+            if (!key.IsMap)
+                throw new InvalidOperationException("XPTY0004: fn:sort-by $keys items must be fn:sort-key-record maps");
+            defs.Add(ParseSortKeyDefinition(key.MapValue, ctx));
+        }
+        // Absent or empty $keys: a single definition with every field at its default.
+        if (defs.Count == 0)
+            defs.Add(new SortKeyDefinition(XdmValue.Undefined, null, false));
+
+        // Evaluate each item's keys once per definition before sorting: key functions must
+        // be deterministic, and re-invoking them per comparison would be user-observable.
+        var keys = new XdmValue[items.Count][];
+        for (int i = 0; i < items.Count; i++)
+        {
+            var perItem = new XdmValue[defs.Count];
+            for (int d = 0; d < defs.Count; d++)
+            {
+                var def = defs[d];
+                perItem[d] = def.KeyFunc.IsUndefined
+                    ? Data(items[i])
+                    : VmEngine.InvokeFunctionItem(def.KeyFunc, ctx, new[] { items[i] });
+            }
+            keys[i] = perItem;
+        }
+        var order = new int[items.Count];
+        for (int i = 0; i < order.Length; i++)
+            order[i] = i;
+        try
+        {
+            Array.Sort(order, (ia, ib) =>
+            {
+                for (int d = 0; d < defs.Count; d++)
+                {
+                    int cmp = CompareSortKeys(keys[ia][d], keys[ib][d], defs[d].Collation);
+                    if (cmp != 0)
+                        return defs[d].Descending ? -cmp : cmp;
+                }
+                return ia.CompareTo(ib);
+            });
+        }
+        catch (InvalidOperationException wrap) when (wrap.InnerException is not null
+            && wrap.Message.StartsWith("Failed to compare", StringComparison.Ordinal))
+        {
+            throw wrap.InnerException;
+        }
+        var result = new List<XdmValue>(items.Count);
+        foreach (int i in order)
+            result.Add(items[i]);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>
+    /// Reads one fn:sort-key-record from a map: key (function, default fn:data#1),
+    /// collation (default context default collation), order (default "ascending").
+    /// Record types are not yet implemented (REQ-118 later slices), so the record is
+    /// duck-typed on the map entries.
+    /// </summary>
+    private static SortKeyDefinition ParseSortKeyDefinition(XdmMap map, EvaluationContext ctx)
+    {
+        XdmValue keyFunc = XdmValue.Undefined;
+        if (map.TryGetValue(XdmValue.FromString("key"), out var keyEntry) && !IsEmptySequence(keyEntry))
+        {
+            keyFunc = SingleFunctionItem(keyEntry);
+            if (!keyFunc.IsFunction || GetFunctionArity(keyFunc) != 1)
+                throw new InvalidOperationException("XPTY0004: fn:sort-by 'key' field must be a function item of arity 1");
+        }
+        string? collation = null;
+        if (map.TryGetValue(XdmValue.FromString("collation"), out var collationEntry) && !IsEmptySequence(collationEntry))
+        {
+            collation = AtomizedString(collationEntry);
+            if (collation.Length == 0)
+                collation = null;
+            else
+                ValidateCollation(collation);
+        }
+        bool descending = false;
+        if (map.TryGetValue(XdmValue.FromString("order"), out var orderEntry) && !IsEmptySequence(orderEntry))
+        {
+            switch (AtomizedString(orderEntry))
+            {
+                case "ascending":
+                    break;
+                case "descending":
+                    descending = true;
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        "FORG0001: fn:sort-by 'order' field must be 'ascending' or 'descending'");
+            }
+        }
+        return new SortKeyDefinition(keyFunc, collation, descending);
+    }
+
+    private static XdmValue SortWith_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var items = AsSequence(args[0]).ToList();
+        if (items.Count == 0)
+            return XdmValue.Undefined;
+        var comparators = new List<XdmValue>();
+        foreach (var c in AsSequence(args[1]))
+        {
+            var comparator = SingleFunctionItem(c);
+            if (!comparator.IsFunction || GetFunctionArity(comparator) != 2)
+                throw new InvalidOperationException("XPTY0004: fn:sort-with comparators must be function items of arity 2");
+            comparators.Add(comparator);
+        }
+        if (comparators.Count == 0)
+            throw new InvalidOperationException("XPTY0004: fn:sort-with requires at least one comparator function");
+
+        var order = new int[items.Count];
+        for (int i = 0; i < order.Length; i++)
+            order[i] = i;
+        try
+        {
+            Array.Sort(order, (ia, ib) =>
+            {
+                foreach (var comparator in comparators)
+                {
+                    var r = VmEngine.InvokeFunctionItem(comparator, ctx, new[] { items[ia], items[ib] });
+                    if (IsEmptySequence(r))
+                        throw new InvalidOperationException("XPTY0004: fn:sort-with comparator returned the empty sequence");
+                    long cmp = VmEngine.ApplyFunctionConversion(r, "xs:integer", ctx).IntegerValue;
+                    if (cmp < 0)
+                        return -1;
+                    if (cmp > 0)
+                        return 1;
+                }
+                return ia.CompareTo(ib);
+            });
+        }
+        catch (InvalidOperationException wrap) when (wrap.InnerException is not null
+            && wrap.Message.StartsWith("Failed to compare", StringComparison.Ordinal))
+        {
+            throw wrap.InnerException;
+        }
+        var result = new List<XdmValue>(items.Count);
+        foreach (int i in order)
+            result.Add(items[i]);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    // ------------------------------------------------------------------
+    // XPath 4.0 string functions (REQ-118 slice 4.0-S1 part 2)
+    // ------------------------------------------------------------------
+
+    private static XdmValue Graphemes_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var atomized = AtomizeSingleton(args[0]);
+        if (atomized.IsUndefined)
+            return XdmValue.Undefined;
+        string s;
+        if (atomized.Kind == XdmValueKind.String)
+            s = atomized.StringValue;
+        else
+            throw new InvalidOperationException("XPTY0004");
+        var graphemes = new List<XdmValue>();
+        var cluster = new StringBuilder();
+        // Grapheme cluster class of the previous rune: 0 Other, 1 CR, 2 LF, 3 Control,
+        // 4 Extend, 5 SpacingMark, 6 ZWJ.
+        int prevClass = 0;
+        // Set when the current cluster ends with a ZWJ (+ Extend) run: the next base
+        // character is glued in (approximation of UAX #29 GB11 emoji ZWJ sequences and
+        // GB9c Indic conjuncts).
+        bool linkerGluePending = false;
+        foreach (Rune rune in s.EnumerateRunes())
+        {
+            int cls = GraphemeClusterClass(rune);
+            if (cluster.Length > 0)
+            {
+                bool noBreak = (prevClass == 1 && cls == 2) // GB3: CR x LF
+                    || cls is 4 or 5 or 6                   // GB9/GB9a: x (Extend | SpacingMark | ZWJ)
+                    || prevClass == 6                        // glue directly after ZWJ
+                    || (linkerGluePending && cls == 0);     // glue the base char closing a ZWJ run
+                if (prevClass is 1 or 2 or 3 || cls is 1 or 2 or 3) // GB4/GB5: break around controls
+                    noBreak = prevClass == 1 && cls == 2;
+                if (!noBreak)
+                {
+                    graphemes.Add(XdmValue.FromString(cluster.ToString()));
+                    cluster.Clear();
+                    linkerGluePending = false;
+                }
+            }
+            cluster.Append(rune);
+            prevClass = cls;
+            if (cls == 6)
+                linkerGluePending = true;
+            else if (cls is 0 or 1 or 2 or 3)
+                linkerGluePending = false;
+        }
+        if (cluster.Length > 0)
+            graphemes.Add(XdmValue.FromString(cluster.ToString()));
+        return graphemes.Count == 0 ? XdmValue.Undefined : XdmValue.FromSequence(MaterializedSequence.FromList(graphemes));
+    }
+
+    /// <summary>
+    /// Approximates the UAX #29 Grapheme_Cluster_Break class of a rune from its general
+    /// category: Control (Cc), Extend (Mn/Me), SpacingMark (Mc), ZWJ (U+200D), with CR
+    /// and LF special-cased. Hangul jamo (GB6-GB8), Prepend (GB9b), extended pictographic
+    /// detection, Indic conjunct break classes, and regional indicators (GB12/13) are not
+    /// distinguished; ZWJ sequences are handled by the linker-glue rule in fn:graphemes.
+    /// </summary>
+    private static int GraphemeClusterClass(Rune rune)
+    {
+        if (rune.Value == '\r')
+            return 1;
+        if (rune.Value == '\n')
+            return 2;
+        if (rune.Value == 0x200D)
+            return 6;
+        return Rune.GetUnicodeCategory(rune) switch
+        {
+            UnicodeCategory.Control => 3,
+            UnicodeCategory.NonSpacingMark => 4,
+            UnicodeCategory.EnclosingMark => 4,
+            UnicodeCategory.SpacingCombiningMark => 5,
+            _ => 0,
+        };
+    }
+
+    private static XdmValue PadString_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => PadString(args[0], args[1], XdmValue.Undefined, ctx);
+
+    private static XdmValue PadString_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => PadString(args[0], args[1], args[2], ctx);
+
+    private static XdmValue PadString(XdmValue value, XdmValue lengthArg, XdmValue optionsArg, EvaluationContext ctx)
+    {
+        var atomized = AtomizeSingleton(value);
+        string input = atomized.IsUndefined ? string.Empty : atomized.ToString();
+        long length = RequireInteger(lengthArg, ctx.BackwardsCompatible);
+        string padding = " ";
+        string side = "end";
+        if (!IsEmptySequence(optionsArg))
+        {
+            if (!optionsArg.IsMap)
+                throw new InvalidOperationException("XPTY0004: fn:pad-string options must be a single map");
+            var map = optionsArg.MapValue;
+            if (map.TryGetValue(XdmValue.FromString("padding"), out var paddingOpt) && !IsEmptySequence(paddingOpt))
+            {
+                padding = AtomizedString(paddingOpt);
+                if (padding.Length == 0)
+                    throw new InvalidOperationException("FORG0001: fn:pad-string padding option must not be the zero-length string");
+            }
+            if (map.TryGetValue(XdmValue.FromString("side"), out var sideOpt) && !IsEmptySequence(sideOpt))
+                side = AtomizedString(sideOpt);
+        }
+        long padCount = length - RuneCount(input);
+        // The function never truncates: an input of $length or more characters is returned unchanged.
+        if (padCount <= 0)
+            return XdmValue.FromString(input);
+        return side switch
+        {
+            "start" => XdmValue.FromString(PaddingRun(padding, padCount) + input),
+            "end" => XdmValue.FromString(input + PaddingRun(padding, padCount)),
+            "both" =>
+                // Each run is formed independently; an odd need puts the extra character at the end.
+                XdmValue.FromString(PaddingRun(padding, padCount / 2) + input + PaddingRun(padding, padCount - padCount / 2)),
+            _ => throw new InvalidOperationException(
+                $"FORG0001: fn:pad-string side option must be 'start', 'end', or 'both', got '{side}'"),
+        };
+    }
+
+    /// <summary>The first <paramref name="count"/> characters of the padding string repeated as often as necessary.</summary>
+    private static string PaddingRun(string padding, long count)
+    {
+        var sb = new StringBuilder();
+        long produced = 0;
+        while (produced < count)
+        {
+            foreach (Rune rune in padding.EnumerateRunes())
+            {
+                sb.Append(rune);
+                produced++;
+                if (produced >= count)
+                    break;
+            }
+        }
+        return sb.ToString();
+    }
+
+    private static long RuneCount(string s)
+    {
+        long count = 0;
+        foreach (Rune _ in s.EnumerateRunes())
+            count++;
+        return count;
+    }
+
+    private static XdmValue TrimSpace_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => TrimSpace(args[0], XdmValue.Undefined);
+
+    private static XdmValue TrimSpace_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => TrimSpace(args[0], args[1]);
+
+    private static XdmValue TrimSpace(XdmValue value, XdmValue optionsArg)
+    {
+        var atomized = AtomizeSingleton(value);
+        string input = atomized.IsUndefined ? string.Empty : atomized.ToString();
+        bool trimStart = true;
+        bool trimEnd = true;
+        if (!IsEmptySequence(optionsArg))
+        {
+            if (!optionsArg.IsMap)
+                throw new InvalidOperationException("XPTY0004: fn:trim-space options must be a single map");
+            var map = optionsArg.MapValue;
+            if (map.TryGetValue(XdmValue.FromString("side"), out var sideOpt) && !IsEmptySequence(sideOpt))
+            {
+                switch (AtomizedString(sideOpt))
+                {
+                    case "both":
+                        break;
+                    case "start":
+                        trimEnd = false;
+                        break;
+                    case "end":
+                        trimStart = false;
+                        break;
+                    default:
+                        throw new InvalidOperationException(
+                            "FORG0001: fn:trim-space side option must be 'start', 'end', or 'both'");
+                }
+            }
+        }
+        int start = 0;
+        int end = input.Length;
+        if (trimStart)
+            while (start < end && IsXmlWhitespace(input[start]))
+                start++;
+        if (trimEnd)
+            while (end > start && IsXmlWhitespace(input[end - 1]))
+                end--;
+        return XdmValue.FromString(input[start..end]);
+    }
+
+    // Whitespace per F+O 4.0 §5.4.11: U+0020, U+0009, U+000D, and U+000A only.
+    private static bool IsXmlWhitespace(char c) => c is ' ' or '\t' or '\r' or '\n';
+
+    private static XdmValue IndexOfSubstring_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string value = RequireString(args[0], ctx.BackwardsCompatible);
+        string substring = RequireStringRequired(args[1], ctx.BackwardsCompatible);
+        var result = new List<XdmValue>();
+        if (substring.Length == 0)
+        {
+            // A zero-length substring occurs at every position from 1 to string-length($value) + 1.
+            long pos = 1;
+            foreach (Rune _ in value.EnumerateRunes())
+                result.Add(XdmValue.FromInteger(pos++));
+            result.Add(XdmValue.FromInteger(pos));
+        }
+        else
+        {
+            // Overlapping occurrences are reported; positions are counted in Unicode code points.
+            int idx = value.IndexOf(substring, StringComparison.Ordinal);
+            while (idx >= 0)
+            {
+                result.Add(XdmValue.FromInteger(CodepointPosition(value, idx)));
+                // Advance one code point (two UTF-16 code units for supplementary characters).
+                int next = idx + (char.IsHighSurrogate(value[idx]) ? 2 : 1);
+                idx = value.IndexOf(substring, next, StringComparison.Ordinal);
+            }
+        }
+        return result.Count == 0 ? XdmValue.Undefined : XdmValue.FromSequence(MaterializedSequence.FromList(result));
+    }
+
+    /// <summary>1-based code point position of the rune starting at UTF-16 index <paramref name="charIndex"/>.</summary>
+    private static long CodepointPosition(string s, int charIndex)
+    {
+        long pos = 1;
+        foreach (Rune _ in s.AsSpan(0, charIndex).EnumerateRunes())
+            pos++;
+        return pos;
+    }
+
+    private static XdmValue SubstringBeforeLast_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => SubstringBeforeLast(args[0], args[1], ctx.DefaultCollation);
+
+    private static XdmValue SubstringBeforeLast_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string collation = ResolveCollationUri(AtomizedString(args[2]), ctx.BaseUri);
+        ValidateCollation(collation);
+        return SubstringBeforeLast(args[0], args[1], collation);
+    }
+
+    private static XdmValue SubstringBeforeLast(XdmValue valueArg, XdmValue substringArg, string collation)
+    {
+        string s = AtomizedString(valueArg);
+        string search = AtomizedString(substringArg);
+        int idx = LastOccurrenceStart(s, search, collation);
+        if (idx < 0)
+            return XdmValue.FromString(string.Empty);
+        return XdmValue.FromString(s[..idx]);
+    }
+
+    private static XdmValue SubstringAfterLast_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => SubstringAfterLast(args[0], args[1], ctx.DefaultCollation);
+
+    private static XdmValue SubstringAfterLast_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        string collation = ResolveCollationUri(AtomizedString(args[2]), ctx.BaseUri);
+        ValidateCollation(collation);
+        return SubstringAfterLast(args[0], args[1], collation);
+    }
+
+    private static XdmValue SubstringAfterLast(XdmValue valueArg, XdmValue substringArg, string collation)
+    {
+        string s = AtomizedString(valueArg);
+        string search = AtomizedString(substringArg);
+        if (TryParseUca(collation, out var uca))
+        {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
+            // A search of only ignorable collation units is treated as zero-length and
+            // occurs at the end of the value, so the result is the zero-length string.
+            if (uca.CompareInfo.Compare(search, string.Empty, uca.Options) == 0)
+                return XdmValue.FromString(string.Empty);
+            int ucaIdx = uca.CompareInfo.LastIndexOf(s, search, uca.Options);
+            if (ucaIdx < 0)
+                return XdmValue.FromString(string.Empty);
+            // Minimal match: the shortest prefix at the match position that equals the search.
+            int matchLen = 0;
+            for (int len = 1; len <= s.Length - ucaIdx; len++)
+            {
+                if (uca.CompareInfo.IsPrefix(s.AsSpan(ucaIdx, len), search, uca.Options))
+                {
+                    matchLen = len;
+                    break;
+                }
+            }
+            return XdmValue.FromString(s[(ucaIdx + matchLen)..]);
+        }
+        // A zero-length substring is regarded as occurring at the end of $value.
+        if (search.Length == 0)
+            return XdmValue.FromString(string.Empty);
+        int plainIdx = AsciiCaseInsensitiveLastIndexOf(s, search, collation);
+        if (plainIdx < 0)
+            return XdmValue.FromString(string.Empty);
+        return XdmValue.FromString(s[(plainIdx + search.Length)..]);
+    }
+
+    /// <summary>
+    /// Char index of the last occurrence of <paramref name="search"/> in <paramref name="s"/>,
+    /// or -1 when absent. A zero-length or collation-ignorable search string is treated
+    /// as occurring at the end of the value (F+O 4.0 §5.5.6 zero-length interpretation).
+    /// </summary>
+    private static int LastOccurrenceStart(string s, string search, string collation)
+    {
+        if (TryParseUca(collation, out var uca))
+        {
+            if (uca.Numeric)
+                throw new InvalidOperationException("FOCH0004: Numeric collation does not support substring matching");
+            if (uca.CompareInfo.Compare(search, string.Empty, uca.Options) == 0)
+                return s.Length;
+            return uca.CompareInfo.LastIndexOf(s, search, uca.Options);
+        }
+        return AsciiCaseInsensitiveLastIndexOf(s, search, collation);
+    }
+
+    /// <summary>Ordinal LastIndexOf, folded to ASCII lowercase when the collation is html-ascii-case-insensitive.</summary>
+    private static int AsciiCaseInsensitiveLastIndexOf(string s, string search, string collation)
+    {
+        if (search.Length == 0)
+            return s.Length;
+        if (collation != HtmlAsciiCaseInsensitiveCollation)
+            return s.LastIndexOf(search, GetStringComparison(collation));
+        for (int i = s.Length - search.Length; i >= 0; i--)
+        {
+            if (AsciiCaseInsensitiveMatchAt(s, i, search))
+                return i;
+        }
+        return -1;
+    }
+
+    private static XdmValue Hash_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Hash(args[0], XdmValue.Undefined, XdmValue.Undefined);
+
+    private static XdmValue Hash_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Hash(args[0], args[1], XdmValue.Undefined);
+
+    private static XdmValue Hash_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => Hash(args[0], args[1], args[2]);
+
+    private static XdmValue Hash(XdmValue value, XdmValue algorithmArg, XdmValue optionsArg)
+    {
+        if (!IsEmptySequence(optionsArg) && !optionsArg.IsMap)
+            throw new InvalidOperationException("XPTY0004: fn:hash options must be a single map");
+        var atomized = AtomizeSingleton(value);
+        if (atomized.IsUndefined)
+            return XdmValue.Undefined;
+        byte[] octets;
+        if (atomized.Kind == XdmValueKind.String)
+        {
+            switch (StringTypeFamily(atomized.SchemaTypeName))
+            {
+                case StringTypeFamilyKind.HexBinary:
+                    octets = Convert.FromHexString(atomized.StringValue);
+                    break;
+                case StringTypeFamilyKind.Base64Binary:
+                    octets = Convert.FromBase64String(atomized.StringValue);
+                    break;
+                case StringTypeFamilyKind.String:
+                    // xs:string input is hashed as its UTF-8 octet sequence.
+                    octets = Encoding.UTF8.GetBytes(atomized.StringValue);
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        $"XPTY0004: fn:hash requires xs:string, xs:hexBinary, or xs:base64Binary input, got xs:{atomized.SchemaTypeName}");
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException("XPTY0004: fn:hash requires xs:string, xs:hexBinary, or xs:base64Binary input");
+        }
+
+        string algorithm = "MD5";
+        if (!IsEmptySequence(algorithmArg))
+        {
+            // Effective algorithm: upper-case(normalize-space($algorithm)).
+            string raw = AtomizedString(algorithmArg);
+            algorithm = string.Join(" ", raw.Split([' ', '\t', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
+                .ToUpperInvariant();
+        }
+        byte[] digest = algorithm switch
+        {
+            "MD5" => MD5.HashData(octets),
+            "SHA-1" => SHA1.HashData(octets),
+            "SHA-256" => SHA256.HashData(octets),
+            "SHA-384" => SHA384.HashData(octets),
+            "SHA-512" => SHA512.HashData(octets),
+            // BLAKE3 and CRC-32 are required of conforming implementations but have no
+            // built-in .NET primitive; report them as unsupported (FOHA0001).
+            _ => throw new InvalidOperationException(
+                $"FOHA0001: Hash algorithm '{algorithm}' is not supported by this implementation"),
+        };
+        return XdmValue.FromString(Convert.ToHexString(digest), "hexBinary");
     }
 
     private static XdmValue Char_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

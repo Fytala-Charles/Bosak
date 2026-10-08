@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 08-10-2026     | Creation: 3.1 rejection (XPST0017), 4.0 opt-in, function-lookup visibility               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 08-10-2026     | Part 2 batch gate assertions (fn:highest, fn:hash)                                       |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -74,6 +75,24 @@ public class VersionGateTests
         var options = new CompileOptions { Compatibility = XPathCompatibility.XPath30 };
         var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:foot((1, 2))", options));
         Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Compile_Part2Functions_DefaultOptions_ThrowXpst0017()
+    {
+        Assert.Contains("XPST0017",
+            Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:highest((1, 2))")).Message);
+        Assert.Contains("XPST0017",
+            Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:hash('abc')")).Message);
+        Assert.Contains("XPST0017",
+            Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:sort-by((1, 2), ())")).Message);
+    }
+
+    [Fact]
+    public void FunctionLookup_Part2FunctionIn31Mode_ReturnsEmpty()
+    {
+        Assert.True(Eval("fn:function-lookup(xs:QName('fn:highest'), 3)").IsUndefined);
+        Assert.True(Eval("fn:function-lookup(xs:QName('fn:hash'), 2)").IsUndefined);
     }
 
     [Fact]
