@@ -356,6 +356,9 @@
 //                      |                  |       |                | MaterializedSequence inputs are scanned — enumerating lazy streams would consume them     |
 //                      |                  |       |                | (sf-avg-043, sf-deep-equal-043)                                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.164 | 08-10-2026     | REQ-118 4.0-S4: Pipeline opcode; 'for member'/'for key value' iteration in the For opcode (XPTY0141)
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -1012,6 +1015,24 @@ internal static class VmEngine
                         break;
                     }
 
+                case IrOpCode.Pipeline:
+                    {
+                        // XPath 4.0 '->' (§4.20): the source value is bound as a whole to the
+                        // context value (an inner fixed focus with position 1 and size 1) and
+                        // the right block is evaluated exactly once.
+                        var sourceValue = registers[instr.RegisterB];
+                        int rhsEntry = instr.Operand;
+                        var savedItem = context.ContextItem;
+                        var savedPos = context.ContextPosition;
+                        var savedSize = context.ContextSize;
+                        context.WithFocus(sourceValue, 1, 1);
+                        var (pipeResult, _) = ExecuteBlock(module, context, registers, rhsEntry);
+                        context.WithFocus(savedItem, savedPos, savedSize);
+                        registers[instr.RegisterA] = pipeResult;
+                        ip++;
+                        break;
+                    }
+
                 case IrOpCode.PathStepMap:
                     {
                         var sequence = registers[instr.RegisterB];
@@ -1170,6 +1191,41 @@ internal static class VmEngine
                         Save(bindLocal, bindNs);
                         if (info.PositionalVariableName is not null)
                             Save(info.PositionalVariableName, "");
+                        // XPath 4.0 §4.14.1: 'for member' iterates the members of each array
+                        // and 'for key value' the entries of each map in the binding collection.
+                        // The positional variable (if any) counts across the whole expansion.
+                        (string Local, string Ns)? entryValueKey = null;
+                        List<(XdmValue First, XdmValue? Second)>? expanded = null;
+                        if (info.BindingKind != ForBindingKind.Item)
+                        {
+                            expanded = new List<(XdmValue First, XdmValue? Second)>();
+                            foreach (var item in items)
+                            {
+                                if (info.BindingKind == ForBindingKind.Member)
+                                {
+                                    if (!item.IsArray)
+                                        throw new InvalidOperationException("XPTY0141: The binding collection of a 'for member' clause must contain only arrays.");
+                                    foreach (var member in item.ArrayValue.Values)
+                                        expanded.Add((member, null));
+                                }
+                                else
+                                {
+                                    if (!item.IsMap)
+                                        throw new InvalidOperationException("XPTY0141: The binding collection of a 'for key value' clause must contain only maps.");
+                                    foreach (var kvp in item.MapValue.Entries)
+                                    {
+                                        expanded.Add(info.BindingKind == ForBindingKind.EntryValueOnly
+                                            ? (kvp.Value, null)
+                                            : (kvp.Key, info.BindingKind == ForBindingKind.EntryKeyValue ? kvp.Value : null));
+                                    }
+                                }
+                            }
+                            if (info.EntryValueVariableName is not null)
+                            {
+                                entryValueKey = ResolveEntryValueVariableKey(info, context);
+                                Save(entryValueKey.Value.Local, entryValueKey.Value.Ns);
+                            }
+                        }
                         var scopedSaved = new List<(string Name, bool Had, XdmValue Value)>();
                         if (info.ScopedVariableNames is not null)
                         {
@@ -1207,17 +1263,8 @@ internal static class VmEngine
                             }
                         }
 
-                        foreach (var item in items)
+                        void Accumulate(XdmValue rhsResult)
                         {
-                            position++;
-                            // FLWOR for-expression does NOT change the focus;
-                            // it only binds the variable (and optional positional variable).
-                            context.WithVariable(bindLocal, item, bindNs);
-                            if (info.PositionalVariableName is not null)
-                                context.WithVariable(info.PositionalVariableName, XdmValue.FromInteger(position));
-                            var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
-                            RestoreScoped();
-
                             if (rhsResult.IsSequence && rhsResult.SequenceValue is not null)
                             {
                                 foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
@@ -1226,6 +1273,40 @@ internal static class VmEngine
                             else if (!rhsResult.IsUndefined)
                             {
                                 results.Add(rhsResult);
+                            }
+                        }
+
+                        if (expanded is not null)
+                        {
+                            foreach (var (first, second) in expanded)
+                            {
+                                position++;
+                                // FLWOR for-expression does NOT change the focus;
+                                // it only binds the variable (and optional positional variable).
+                                context.WithVariable(bindLocal, first, bindNs);
+                                var entryValue = second;
+                                if (entryValueKey is not null && entryValue.HasValue)
+                                    context.WithVariable(entryValueKey.Value.Local, entryValue.Value, entryValueKey.Value.Ns);
+                                if (info.PositionalVariableName is not null)
+                                    context.WithVariable(info.PositionalVariableName, XdmValue.FromInteger(position));
+                                var (memberRhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+                                RestoreScoped();
+                                Accumulate(memberRhsResult);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var item in items)
+                            {
+                                position++;
+                                // FLWOR for-expression does NOT change the focus;
+                                // it only binds the variable (and optional positional variable).
+                                context.WithVariable(bindLocal, item, bindNs);
+                                if (info.PositionalVariableName is not null)
+                                    context.WithVariable(info.PositionalVariableName, XdmValue.FromInteger(position));
+                                var (rhsResult, _) = ExecuteBlock(module, context, registers, info.RhsEntryPoint);
+                                RestoreScoped();
+                                Accumulate(rhsResult);
                             }
                         }
 
@@ -7504,6 +7585,19 @@ internal static class VmEngine
         if (info.VariableName.Contains(':'))
             return ResolveVariableName(info.VariableName, context);
         return (info.VariableName, "");
+    }
+
+    // Entry value variable of an XPath 4.0 'for key value' binding, resolved the
+    // same way as the primary loop variable.
+    private static (string Local, string Ns) ResolveEntryValueVariableKey(QuantifiedLoopInfo info, EvaluationContext context)
+    {
+        if (info.EntryValueVariableNamespaceUri is not null)
+            return (info.EntryValueVariableName!, info.EntryValueVariableNamespaceUri);
+        if (info.EntryValueVariablePrefix is not null)
+            return ResolveVariableName($"{info.EntryValueVariablePrefix}:{info.EntryValueVariableName}", context);
+        if (info.EntryValueVariableName!.Contains(':'))
+            return ResolveVariableName(info.EntryValueVariableName, context);
+        return (info.EntryValueVariableName, "");
     }
 
     /// <summary>

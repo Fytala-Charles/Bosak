@@ -78,6 +78,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.13  | 08-10-2026     | REQ-118 4.0-S3b: StringTemplateNode rejected in patterns like other non-pattern forms    |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.14  | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode ReadsPosition
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -684,6 +687,7 @@ internal sealed class PatternCompiler
                 || f.Arguments.Any(ReadsPosition),
             NamedFunctionRefNode rf => rf.LocalName is "position" or "last" && rf.Prefix is null or "" or "fn",
             ArrowExprNode a => ReadsPosition(a.Source) || ReadsPosition(a.Target),
+            PipelineExprNode p => ReadsPosition(p.Source) || ReadsPosition(p.Target),
             StepNode s => s.Predicates.Any(ReadsPosition),
             PathExprNode p => p.Steps.Any(ReadsPosition),
             PostfixPredicateNode pp => ReadsPosition(pp.Expression) || ReadsPosition(pp.Predicate),

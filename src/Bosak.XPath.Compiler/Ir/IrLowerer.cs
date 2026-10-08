@@ -113,6 +113,9 @@
 //                      | Charles Korthout | 1.48  | 08-10-2026     | REQ-118 4.0-S3b: StringTemplateNode lowers via the shared string-constructor parts     |
 //                      |                  |       |                | join (identical §4.10.2 / XQuery §3.11.2 expansion semantics)                            |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.49  | 08-10-2026     | REQ-118 4.0-S4: LowerPipeline + IrOpCode.Pipeline; ForBindingKind/entry-value fields on QuantifiedLoopInfo
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -130,7 +133,11 @@ namespace Bosak.XPath.Compiler.Ir;
 /// <param name="VariableNamespaceUri">The namespace URI of an EQName loop variable, or null.</param>
 /// <param name="AllowingEmpty">True when a for binding declares <c>allowing empty</c>.</param>
 /// <param name="ScopedVariableNames">The top-level let variable names in scope for the loop body, or null.</param>
-internal readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, bool AllowingEmpty = false, IReadOnlyList<string>? ScopedVariableNames = null);
+/// <param name="BindingKind">The iteration mode (XPath 4.0 <c>for member</c>/<c>for key value</c>).</param>
+/// <param name="EntryValueVariableName">The local name of the entry value variable, or null.</param>
+/// <param name="EntryValueVariablePrefix">The namespace prefix of the entry value variable, or null.</param>
+/// <param name="EntryValueVariableNamespaceUri">The namespace URI of an EQName entry value variable, or null.</param>
+internal readonly record struct QuantifiedLoopInfo(string VariableName, int RhsEntryPoint, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, bool AllowingEmpty = false, IReadOnlyList<string>? ScopedVariableNames = null, ForBindingKind BindingKind = ForBindingKind.Item, string? EntryValueVariableName = null, string? EntryValueVariablePrefix = null, string? EntryValueVariableNamespaceUri = null);
 
 /// <summary>
 /// Try/catch information stored in the literal pool for the TryCatch opcode: the try block
@@ -399,6 +406,7 @@ internal sealed class IrLowerer
             TreatNode n => LowerTreat(n, targetReg),
             ValidateExpressionNode n => LowerValidate(n, targetReg),
             ArrowExprNode n => LowerArrow(n, targetReg),
+            PipelineExprNode n => LowerPipeline(n, targetReg),
             NamedFunctionRefNode n => LowerNamedFunctionRef(n, targetReg),
             DirectElementConstructorNode n => LowerDirectElementConstructor(n, targetReg),
             DirectCommentNode n => LowerDirectComment(n, targetReg),
@@ -1216,6 +1224,7 @@ internal sealed class IrLowerer
                 || f.Arguments.Any(ReadsPosition),
             NamedFunctionRefNode rf => rf.LocalName is "position" or "last" && rf.Prefix is null or "" or "fn",
             ArrowExprNode a => ReadsPosition(a.Source) || ReadsPosition(a.Target),
+            PipelineExprNode p => ReadsPosition(p.Source) || ReadsPosition(p.Target),
             StepNode s => s.Predicates.Any(ReadsPosition),
             PathExprNode p => p.Steps.Any(ReadsPosition),
             PostfixPredicateNode pp => ReadsPosition(pp.Expression) || ReadsPosition(pp.Predicate),
@@ -1995,6 +2004,33 @@ internal sealed class IrLowerer
         }
     }
 
+    // E1 -> E2 (XPath 4.0 §4.20): evaluate E1, bind the result as a whole to the context
+    // value (fixed focus: position 1, size 1), evaluate E2 once, restore the focus.
+    // Mirrors LowerSimpleMap but the Pipeline opcode sets the focus to the whole sequence.
+    private int LowerPipeline(PipelineExprNode node, int? targetReg)
+    {
+        int resultReg = targetReg ?? AllocRegister();
+        int sourceReg = LowerNode(node.Source);
+
+        int pipelineInstrIdx = _instructions.Count;
+        Emit(IrOpCode.Pipeline, (ushort)resultReg, (ushort)sourceReg, 0, 0); // placeholder
+
+        int jumpInstrIdx = _instructions.Count;
+        Emit(IrOpCode.Jump, 0, 0, 0, 0); // placeholder
+
+        int rhsEntry = _instructions.Count;
+        int rhsReg = LowerNode(node.Target);
+        Emit(IrOpCode.Return, (ushort)rhsReg);
+        FreeRegister(rhsReg);
+        FreeRegister(sourceReg);
+
+        int afterRhs = _instructions.Count;
+        PatchInstruction(pipelineInstrIdx, IrOpCode.Pipeline, (ushort)resultReg, (ushort)sourceReg, 0, rhsEntry);
+        PatchInstruction(jumpInstrIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
+
+        return resultReg;
+    }
+
     private int PackArgumentsConsecutive(int[] argRegs)
     {
         bool consecutive = true;
@@ -2106,9 +2142,18 @@ internal sealed class IrLowerer
         if (binding.DeclaredType is not null)
         {
             // XQuery 'as SequenceType': each bound item must be an instance of the type.
+            // A 'for member' bound variable holds one whole member (possibly a multi-item
+            // sequence), so the declared type is enforced against the value as a whole.
             int varReg = LoadVariable(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
-            EmitEnforceTypeIfDeclared(binding, varReg, itemLevel: true);
+            EmitEnforceTypeIfDeclared(binding, varReg, itemLevel: binding.BindingKind == ForBindingKind.Item);
             FreeRegister(varReg);
+        }
+        if (binding.EntryValueDeclaredType is not null && binding.EntryValueVariableName is not null)
+        {
+            int valueVarReg = LoadVariable(new BoundVariable(binding.EntryValueVariableName, binding.EntryValueVariablePrefix, binding.EntryValueVariableNamespaceUri));
+            var valueBinding = binding with { DeclaredType = binding.EntryValueDeclaredType };
+            EmitEnforceTypeIfDeclared(valueBinding, valueVarReg, itemLevel: true);
+            FreeRegister(valueVarReg);
         }
         if (index == bindings.Count - 1)
         {
@@ -2123,7 +2168,7 @@ internal sealed class IrLowerer
         }
 
         int afterRhs = _instructions.Count;
-        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri, binding.AllowingEmpty, CollectTopLevelLetNames(returnExpr));
+        var info = new QuantifiedLoopInfo(binding.VariableName, rhsEntry, binding.PositionalVariableName, binding.VariablePrefix, binding.VariableNamespaceUri, binding.AllowingEmpty, CollectTopLevelLetNames(returnExpr), binding.BindingKind, binding.EntryValueVariableName, binding.EntryValueVariablePrefix, binding.EntryValueVariableNamespaceUri);
         int poolIdx = AddToLiteralPool(info);
         PatchInstruction(forIdx, IrOpCode.For, (ushort)resultReg, (ushort)seqReg, 0, poolIdx);
         PatchInstruction(jumpIdx, IrOpCode.Jump, 0, 0, 0, afterRhs);
@@ -2820,6 +2865,10 @@ internal sealed class IrLowerer
             case ArrowExprNode a:
                 CollectVariableReferencesCore(a.Source, result);
                 CollectVariableReferencesCore(a.Target, result);
+                return;
+            case PipelineExprNode p:
+                CollectVariableReferencesCore(p.Source, result);
+                CollectVariableReferencesCore(p.Target, result);
                 return;
             case LookupNode l:
                 CollectVariableReferencesCore(l.Expression, result);

@@ -30,6 +30,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 08-10-2026     | REQ-118 4.0-S3b: variable-reference traversal for StringTemplateNode parts               |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode variable-reference check
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -301,6 +304,10 @@ internal sealed class AccumulatorRule
             case ArrowExprNode arrow:
                 CheckVariableReferences(arrow.Source, scope);
                 CheckVariableReferences(arrow.Target, scope);
+                break;
+            case PipelineExprNode pipeline:
+                CheckVariableReferences(pipeline.Source, scope);
+                CheckVariableReferences(pipeline.Target, scope);
                 break;
 
             case LookupNode lookup:

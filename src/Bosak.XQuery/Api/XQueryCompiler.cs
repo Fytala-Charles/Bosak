@@ -59,6 +59,9 @@
 //                      | Charles Korthout | 3.3   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      | Charles Korthout | 3.4   | 21-09-2026     | API freeze stage C: internalized XQueryModuleSource record                              |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.5   | 08-10-2026     | REQ-118 4.0-S4: ResolveFunctionNamespaces for PipelineExprNode
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -500,6 +503,7 @@ public sealed class XQueryCompiler
             InstanceOfNode io => io with { Expression = ResolveFunctionNamespaces(io.Expression, context) },
             TreatNode treat => treat with { Expression = ResolveFunctionNamespaces(treat.Expression, context) },
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, context), Target = ResolveFunctionNamespaces(arrow.Target, context) },
+            PipelineExprNode pipeline => pipeline with { Source = ResolveFunctionNamespaces(pipeline.Source, context), Target = ResolveFunctionNamespaces(pipeline.Target, context) },
             TryCatchNode tc => tc with
             {
                 TryExpression = ResolveFunctionNamespaces(tc.TryExpression, context),

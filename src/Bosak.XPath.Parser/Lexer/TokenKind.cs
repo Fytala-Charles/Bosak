@@ -24,6 +24,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 08-10-2026     | REQ-118 4.0-S3b: StringTemplate token kind for XPath 4.0 string templates (`...`)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 08-10-2026     | REQ-118 4.0-S4: PipelineArrow (->) and MappingArrow (=!>) token kinds                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Parser.Lexer;
 
@@ -117,6 +119,12 @@ internal enum TokenKind : short
     /// <summary>The <c>??</c> otherwise operator (XPath 4.0). In XPath 3.1 mode the
     /// parser rejects this token with XPST0003.</summary>
     Otherwise,
+    /// <summary>The <c>-&gt;</c> pipeline operator (XPath 4.0). In XPath 3.1 mode the
+    /// parser rejects this token with XPST0003.</summary>
+    PipelineArrow,
+    /// <summary>The <c>=!&gt;</c> mapping arrow operator (XPath 4.0). In XPath 3.1 mode
+    /// the parser rejects this token with XPST0003.</summary>
+    MappingArrow,
 
     // ---- General comparisons -----------------------------------------
     /// <summary>The <c>=</c> general comparison.</summary>

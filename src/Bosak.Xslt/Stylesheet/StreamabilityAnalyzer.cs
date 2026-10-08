@@ -27,6 +27,9 @@
 //                      | Charles Korthout | 0.10  | 03-10-2026     | REQ-119: XTSE3155 — an xsl:function with no xsl:param children may only declare         |
 //                      |                  |       |                | streamability="unclassified" (error-3155a)                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode streamability cases
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -628,6 +631,7 @@ internal static class StreamabilityAnalyzer
             QuantifiedExpressionNode q => q.Bindings.Any(b => DeliversParamViaBang(b.Expression, name)) || DeliversParamViaBang(q.SatisfiesExpression, name),
             TryCatchNode t => DeliversParamViaBang(t.TryExpression, name),
             ArrowExprNode a => DeliversParamViaBang(a.Source, name),
+            PipelineExprNode p => DeliversParamViaBang(p.Source, name) || DeliversParamViaBang(p.Target, name),
             DynamicFunctionCallNode d => DeliversParamViaBang(d.Function, name) || d.Arguments.Any(x => DeliversParamViaBang(x, name)),
             MapConstructorNode m => m.Entries.Any(e => DeliversParamViaBang(e.Key, name) || DeliversParamViaBang(e.Value, name)),
             ArrayConstructorNode a => a.Items.Any(i => DeliversParamViaBang(i, name)),
@@ -673,6 +677,7 @@ internal static class StreamabilityAnalyzer
             LookupWildcardNode l => CountVarRefs(l.Expression, name),
             InlineFunctionNode i => 0, // body scope hides the outer param
             ArrowExprNode a => CountVarRefs(a.Source, name),
+            PipelineExprNode p => CountVarRefs(p.Source, name) + CountVarRefs(p.Target, name),
             DynamicFunctionCallNode d => CountVarRefs(d.Function, name) + d.Arguments.Sum(a => CountVarRefs(a, name)),
             TryCatchNode t => CountVarRefs(t.TryExpression, name),
             _ => 0,
@@ -2244,11 +2249,11 @@ internal static class StreamabilityAnalyzer
                 case InlineFunctionNode:
                     return Info.GroundedMotionless;
 
-                case ArrowExprNode arrow:
+                case PipelineExprNode pipeline:
                 {
-                    var source = Analyze(arrow.Source, env);
+                    var source = Analyze(pipeline.Source, env);
                     var extra = ExtraConsume(source);
-                    var target = Analyze(arrow.Target, env);
+                    var target = Analyze(pipeline.Target, env);
                     return new Info(Posture.Grounded, source.Consumes + target.Consumes + extra,
                         Motionless: source.Motionless && target.Motionless && extra == 0,
                         UsesLast: source.UsesLast || target.UsesLast,
@@ -3130,6 +3135,7 @@ internal static class StreamabilityAnalyzer
             LookupWildcardNode l => CountConsumingRefs(l.Expression, name),
             InlineFunctionNode => 0,
             ArrowExprNode a => CountConsumingRefs(a.Source, name),
+            PipelineExprNode p => CountConsumingRefs(p.Source, name) + CountConsumingRefs(p.Target, name),
             DynamicFunctionCallNode d => CountConsumingRefs(d.Function, name) + d.Arguments.Sum(a => CountConsumingRefs(a, name)),
             TryCatchNode t => CountConsumingRefs(t.TryExpression, name),
             _ => 0,

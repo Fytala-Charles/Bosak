@@ -43,6 +43,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 08-10-2026     | REQ-118 4.0-S3b: StringTemplate token scanning ({{ }} `` escapes, nested templates)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.10  | 08-10-2026     | REQ-118 4.0-S4: '->' pipeline and '=!>' mapping arrow token scanning                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -553,6 +555,13 @@ internal ref struct XPathLexer
             case '+':
                 return new Token(TokenKind.Plus, start, 1);
             case '-':
+                if (_position < _source.Length && _source[_position] == '>')
+                {
+                    // Longest-token rule: '->' is the XPath 4.0 pipeline operator.
+                    // The parser rejects it with XPST0003 in 3.1 mode.
+                    _position++;
+                    return new Token(TokenKind.PipelineArrow, start, 2);
+                }
                 return new Token(TokenKind.Minus, start, 1);
             case '*':
                 return new Token(TokenKind.Star, start, 1);
@@ -610,6 +619,13 @@ internal ref struct XPathLexer
                 {
                     _position++;
                     return new Token(TokenKind.Arrow, start, 2);
+                }
+                if (_position + 1 < _source.Length && _source[_position] == '!' && _source[_position + 1] == '>')
+                {
+                    // Longest-token rule: '=!>' is the XPath 4.0 mapping arrow.
+                    // The parser rejects it with XPST0003 in 3.1 mode.
+                    _position += 2;
+                    return new Token(TokenKind.MappingArrow, start, 3);
                 }
                 return new Token(TokenKind.Equal, start, 1);
 

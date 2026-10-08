@@ -25,6 +25,9 @@
 //                      | Charles Korthout | 0.7   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      | Charles Korthout | 0.8   | 08-10-2026     | REQ-118 4.0-S3b: traversal for StringTemplateNode parts (4.0 string templates)           |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode walk case
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Parser;
@@ -449,6 +452,10 @@ internal static class ModuleVisibilityValidator
                     break;
                 case TreatNode treat:
                     Walk(treat.Expression);
+                    break;
+                case PipelineExprNode pipeline:
+                    Walk(pipeline.Source);
+                    Walk(pipeline.Target);
                     break;
                 case ArrowExprNode arrow:
                     Walk(arrow.Source);
