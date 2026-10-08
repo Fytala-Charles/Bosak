@@ -32,6 +32,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 08-10-2026     | fn:identity XPST0017 gate row (4.0-S5 follow-up)                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 08-10-2026     | REQ-118 4.0-S6a: enum types (§3.2.6) + choice item types (§3.2.5): 3.1 XPST0003 gates,  |
+//                      |                  |       |                | instance-of, cast/castable, function-parameter coercion (in-order §3.4.2 rule 02)       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -926,5 +929,176 @@ public class VersionGateTests
         var result = Seq40("for key $key value $value in map{'x': 1, 'y': 2} return concat($key, '=', $value)");
         Assert.Contains("x=1", result);
         Assert.Contains("y=2", result);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S6a: enum types (XPath 4.0 §3.2.6)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_EnumType_31Mode_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("\"red\" instance of enum(\"red\")"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Compile_EnumType_EmptyMemberList_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => Eval40("() instance of enum()"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive()
+    {
+        Assert.Equal("true", Eval40("\"green\" instance of enum(\"red\", \"green\")").ToString());
+        Assert.Equal("false", Eval40("\"yellow\" instance of enum(\"red\", \"green\")").ToString());
+        Assert.Equal("false", Eval40("\"Red\" instance of enum(\"red\")").ToString());
+        // xs:untypedAtomic is not an instance of xs:string, so it never matches (§3.2.6):
+        Assert.Equal("false", Eval40("xs:untypedAtomic(\"red\") instance of enum(\"red\")").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Enum_InstanceOf_OccurrenceIndicatorsApply()
+    {
+        Assert.Equal("true", Eval40("() instance of enum(\"red\")?").ToString());
+        Assert.Equal("false", Eval40("() instance of enum(\"red\")").ToString());
+        Assert.Equal("true", Eval40("(\"a\", \"b\") instance of enum(\"a\", \"b\")*").ToString());
+        Assert.Equal("false", Eval40("(\"a\", \"c\") instance of enum(\"a\", \"b\")*").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Enum_Cast_MemberSucceedsAsPlainString()
+    {
+        Assert.Equal("green", Eval40("\"green\" cast as enum(\"red\", \"green\")").ToString());
+        // Instances are not re-annotated: the result is a plain xs:string.
+        Assert.Equal("true", Eval40("(\"green\" cast as enum(\"red\", \"green\")) instance of xs:string").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Enum_Cast_NonMemberFailsForg0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("\"yellow\" cast as enum(\"red\", \"green\")"));
+        Assert.Contains("FORG0001", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Enum_Castable_ReportsMembership()
+    {
+        Assert.Equal("true", Eval40("\"red\" castable as enum(\"red\", \"green\")").ToString());
+        Assert.Equal("false", Eval40("\"yellow\" castable as enum(\"red\", \"green\")").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Enum_Cast_NonStringAtomCoercedViaXsString()
+    {
+        // §3.4.2 rule 05: a non-string atom is cast to xs:string before membership is checked.
+        Assert.Equal("5", Eval40("5 cast as enum(\"5\", \"6\")").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S6a: choice item types (XPath 4.0 §3.2.5)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_ChoiceItemType_31Mode_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("5 instance of (xs:integer|xs:string)"));
+        Assert.Contains("XPST0003", ex.Message);
+        var castEx = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("5 cast as (xs:integer|xs:string)"));
+        Assert.Contains("XPST0003", castEx.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Choice_InstanceOf_AnyAlternativeMatches()
+    {
+        Assert.Equal("true", Eval40("5 instance of (xs:integer|xs:string)").ToString());
+        Assert.Equal("true", Eval40("\"x\" instance of (xs:integer|xs:string)").ToString());
+        Assert.Equal("false", Eval40("5.5 instance of (xs:integer|xs:string)").ToString());
+        Assert.Equal("true", Eval40("(5, \"x\") instance of (xs:integer|xs:string)*").ToString());
+        // Choices may mix function-family item types:
+        Assert.Equal("true", Eval40("map{} instance of (map(*)|array(*))").ToString());
+        Assert.Equal("true", Eval40("[1] instance of (map(*)|array(*))").ToString());
+        Assert.Equal("false", Eval40("5 instance of (map(*)|array(*))").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Choice_Cast_FirstCoercibleAlternativeWins()
+    {
+        Assert.Equal("true", Eval40("(\"2024-01-01\" cast as (xs:date|xs:dateTime)) instance of xs:date").ToString());
+        // Declaration order: an integer input coerces to the FIRST alternative xs:string
+        // (§3.4.2 rule 02 and the spec's fn:char example), even though it also matches
+        // xs:positiveInteger.
+        Assert.Equal("true", Eval40("(5 cast as (xs:string|xs:positiveInteger)) instance of xs:string").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Choice_Cast_NoAlternativeSucceedsForg0001()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("\"nope\" cast as (xs:date|xs:dateTime)"));
+        Assert.Contains("FORG0001", ex.Message);
+        Assert.Equal("false", Eval40("\"nope\" castable as (xs:date|xs:dateTime)").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S6a: function parameter/return coercion (§3.4.2 rule 02)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Evaluate_Enum_FunctionArgument_MatchingMemberPasses()
+    {
+        Assert.Equal("green", Eval40("function($x as enum(\"red\", \"green\")) {$x}(\"green\")").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Enum_FunctionArgument_NonMemberThrowsXpty0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Eval40("function($x as enum(\"red\", \"green\")) {$x}(\"yellow\")"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Enum_FunctionReturnType_Enforced()
+    {
+        Assert.Equal("ok", Eval40("function() as enum(\"ok\") {\"ok\"}()").ToString());
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("function() as enum(\"ok\") {\"nope\"}()"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Choice_FunctionArgument_InOrderCoercionYieldsString()
+    {
+        // The spec's fn:char semantics: an integer argument against
+        // (xs:string|xs:positiveInteger) arrives coerced to the string.
+        Assert.Equal("true", Eval40(
+            "function($x as (xs:string|xs:positiveInteger)) {$x instance of xs:string}(5)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Choice_FunctionArgument_MixedNodeAndAtomicAlternatives()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a>hi</a></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(root), 1, 1);
+        var expr = XPath31Expression.Compile(
+            "function($x as (element(a)|xs:string)) {$x instance of xs:string}(/root/a)",
+            new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+        // No node-kind alternative matches /root/a against the atomic branch semantics:
+        // the node is atomized and coerced to xs:string.
+        Assert.Equal("true", expr.Evaluate(ctx).ToString());
+    }
+
+    [Fact]
+    public void Evaluate_Choice_FunctionArgument_AllNodeKindAlternativesPassNodeThrough()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a/></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(root), 1, 1);
+        var expr = XPath31Expression.Compile(
+            "function($x as (element(a)|element(b))) {$x instance of element(a)}(/root/a)",
+            new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+        Assert.Equal("true", expr.Evaluate(ctx).ToString());
     }
 }
