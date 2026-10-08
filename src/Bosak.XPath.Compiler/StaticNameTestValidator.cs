@@ -21,6 +21,8 @@
 //                      |                  |       |                | validated against global declarations (XPST0008 when absent) instead of a blanket      |
 //                      |                  |       |                | no-schema-awareness XPST0008                                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 08-10-2026     | REQ-118 4.0-S3b: traversal for StringTemplateNode parts (4.0 string templates)           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using System.Xml.Schema;
@@ -206,6 +208,10 @@ internal static class StaticNameTestValidator
                 break;
             case StringConstructorNode sc:
                 foreach (var part in sc.Parts)
+                    ValidateNode(part, scope);
+                break;
+            case StringTemplateNode st:
+                foreach (var part in st.Parts)
                     ValidateNode(part, scope);
                 break;
             case LookupNode lookup:

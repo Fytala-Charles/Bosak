@@ -28,6 +28,8 @@
 //                      | Charles Korthout | 0.9   | 03-10-2026     | REQ-119: Streamable flag from @streamable (XTDE3362: only streamable accumulators may   |
 //                      |                  |       |                | be read against a streamed document)                                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.0   | 08-10-2026     | REQ-118 4.0-S3b: variable-reference traversal for StringTemplateNode parts               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -522,6 +524,11 @@ internal sealed class AccumulatorRule
 
             case StringConstructorNode str:
                 foreach (var part in str.Parts)
+                    CheckVariableReferences(part, scope);
+                break;
+
+            case StringTemplateNode strT:
+                foreach (var part in strT.Parts)
                     CheckVariableReferences(part, scope);
                 break;
 

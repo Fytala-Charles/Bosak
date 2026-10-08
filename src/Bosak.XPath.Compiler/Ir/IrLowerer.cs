@@ -110,6 +110,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.47  | 08-10-2026     | REQ-118 4.0-S3a: LowerOtherwise — '??' jumps to RHS only when LHS is empty (guarded)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.48  | 08-10-2026     | REQ-118 4.0-S3b: StringTemplateNode lowers via the shared string-constructor parts     |
+//                      |                  |       |                | join (identical §4.10.2 / XQuery §3.11.2 expansion semantics)                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -415,6 +418,7 @@ internal sealed class IrLowerer
             QuantifiedExpressionNode n => LowerQuantifiedExpression(n, targetReg),
             TryCatchNode n => LowerTryCatch(n, targetReg),
             StringConstructorNode n => LowerStringConstructor(n, targetReg),
+            StringTemplateNode n => LowerStringParts(n.Parts, targetReg),
             LetExpressionNode n => LowerLetExpression(n, targetReg),
             FlworExpressionNode n => LowerFlworExpression(n, targetReg),
             InlineFunctionNode n => LowerInlineFunction(n, targetReg),
@@ -1239,7 +1243,7 @@ internal sealed class IrLowerer
             // Conservative: any exotic form (FLWOR, constructors, switch/typeswitch,
             // validate, string constructors, ...) blocks the merge.
             _ => node is FlworClauseNode or FlworExpressionNode or SwitchExpressionNode or TypeswitchExpressionNode
-                or ValidateExpressionNode or StringConstructorNode or DirectElementConstructorNode
+                or ValidateExpressionNode or StringConstructorNode or StringTemplateNode or DirectElementConstructorNode
                 or ComputedElementConstructorNode or ComputedAttributeConstructorNode
                 or ComputedDocumentConstructorNode or ComputedTextConstructorNode or ComputedCommentConstructorNode
                 or ComputedPIConstructorNode or ComputedNamespaceConstructorNode or DirectCommentNode
@@ -2172,12 +2176,16 @@ internal sealed class IrLowerer
         return resultReg;
     }
 
-    // ``[ literal `{expr}` ... ]`` desugars to
+    // ``[ literal `{expr}` ... ]`` (XQuery string constructors) and `literal {expr} ...`
+    // (XPath 4.0 string templates) share one expansion:
     //   fn:string-join((literal, fn:string-join(fn:data(expr) ! fn:string(.), " "), ...), "")
-    // Per XQuery 3.1 §3.11.2: an interpolation's value is atomized (fn:data — maps raise
-    // FOTY0013), each atomic value is cast to xs:string and joined with a single space,
-    // and the parts concatenate without a separator.
+    // Per XQuery 3.1 §3.11.2 and XPath 4.0 §4.10.2: an interpolation's value is atomized
+    // (fn:data — maps raise FOTY0013), each atomic value is cast to xs:string and joined
+    // with a single space, and the parts concatenate without a separator.
     private int LowerStringConstructor(StringConstructorNode node, int? targetReg)
+        => LowerStringParts(node.Parts, targetReg);
+
+    private int LowerStringParts(IReadOnlyList<XPathAstNode> nodeParts, int? targetReg)
     {
         XPathAstNode JoinPart(XPathAstNode part) =>
             part is StringLiteralNode
@@ -2193,7 +2201,7 @@ internal sealed class IrLowerer
                     },
                     "fn");
 
-        var parts = node.Parts.Select(JoinPart).ToList();
+        var parts = nodeParts.Select(JoinPart).ToList();
         XPathAstNode desugared = parts.Count == 0
             ? new StringLiteralNode("")
             : new FunctionCallNode("string-join",
@@ -2895,8 +2903,11 @@ internal sealed class IrLowerer
                 if (n.PrefixExpression is not null) CollectVariableReferencesCore(n.PrefixExpression, result);
                 CollectVariableReferencesCore(n.UriExpression, result);
                 return;
-            case StringConstructorNode s:
-                foreach (var p in s.Parts) CollectVariableReferencesCore(p, result);
+            case StringConstructorNode sc:
+                foreach (var p in sc.Parts) CollectVariableReferencesCore(p, result);
+                return;
+            case StringTemplateNode st:
+                foreach (var p in st.Parts) CollectVariableReferencesCore(p, result);
                 return;
             case PostfixPredicateNode p:
                 CollectVariableReferencesCore(p.Expression, result);

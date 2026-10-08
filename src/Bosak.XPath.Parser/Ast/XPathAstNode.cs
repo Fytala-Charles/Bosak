@@ -54,6 +54,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.18  | 08-10-2026     | REQ-118 4.0-S3a: BinaryOperator.Otherwise for the XPath 4.0 '??' operator              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.19  | 08-10-2026     | REQ-118 4.0-S3b: KeywordArgumentNode + FunctionCallNode.KeywordArguments;              |
+//                      |                  |       |                | StringTemplateNode for XPath 4.0 string templates                                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -142,10 +145,18 @@ internal sealed record PredicateNode(XPathAstNode Expression) : XPathAstNode;
 
 /// <summary>A static function call: <c>fn:count($x)</c>.</summary>
 /// <param name="LocalName">The local name of the function.</param>
-/// <param name="Arguments">The argument expressions.</param>
+/// <param name="Arguments">The positional argument expressions.</param>
 /// <param name="Prefix">The namespace prefix of the function name, or null.</param>
 /// <param name="NamespaceUri">The namespace URI of an EQName function name, or null.</param>
-internal sealed record FunctionCallNode(string LocalName, IReadOnlyList<XPathAstNode> Arguments, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
+/// <param name="KeywordArguments">The XPath 4.0 keyword arguments (<c>name := expr</c>), or null
+/// when the call is purely positional. Resolved to positional arguments (using the function's
+/// declared parameter names and defaults) during namespace resolution, before optimization.</param>
+internal sealed record FunctionCallNode(string LocalName, IReadOnlyList<XPathAstNode> Arguments, string? Prefix = null, string? NamespaceUri = null, IReadOnlyList<KeywordArgumentNode>? KeywordArguments = null) : XPathAstNode;
+
+/// <summary>An XPath 4.0 keyword argument: <c>name := expr</c> in a function call (XPath 4.0 §4.6.1).</summary>
+/// <param name="Name">The raw EQName text of the keyword (possibly prefixed or a braced-URI name).</param>
+/// <param name="Value">The argument value expression.</param>
+internal sealed record KeywordArgumentNode(string Name, XPathAstNode Value) : XPathAstNode;
 
 /// <summary>Named function reference: <c>fn:abs#1</c></summary>
 /// <param name="LocalName">The local name of the function.</param>
@@ -578,6 +589,15 @@ internal sealed record MapEntryNode(XPathAstNode Key, XPathAstNode Value) : XPat
 /// </summary>
 /// <param name="Parts">The literal text runs and interpolation expressions.</param>
 internal sealed record StringConstructorNode(IReadOnlyList<XPathAstNode> Parts) : XPathAstNode;
+
+/// <summary>
+/// An XPath 4.0 string template: <c>`literal {expr} literal`</c> (XPath 4.0 §4.10.2). Parts are
+/// literal text runs (<see cref="StringLiteralNode"/>) and interpolation expressions; an
+/// interpolation contributes its atomized items cast to strings, joined with single spaces, and
+/// the parts concatenate without a separator — the same expansion as <see cref="StringConstructorNode"/>.
+/// </summary>
+/// <param name="Parts">The literal text runs and interpolation expressions.</param>
+internal sealed record StringTemplateNode(IReadOnlyList<XPathAstNode> Parts) : XPathAstNode;
 
 /// <summary>Array constructor: <c>[1, 2, 3]</c> or <c>array { $seq }</c></summary>
 /// <param name="Items">The member expressions (square constructor) or the single sequence

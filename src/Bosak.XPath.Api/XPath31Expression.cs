@@ -34,7 +34,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13  | 08-10-2026     | REQ-118 4.0-S3a: Compatibility >= XPath40 opts the parser into the 4.0 grammar          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14  | 08-10-2026     | REQ-118 4.0-S3b: keyword-argument expansion (XPST0017 rules, F&O defaults) in            |
+//                      |                  |       |                | ResolveFunctionCall; StringTemplateNode namespace traversal                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
+using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
 using Bosak.XPath.Core.Xdm;
@@ -195,13 +199,14 @@ public sealed class XPath31Expression
             CastableNode castable => castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options) },
             InstanceOfNode io => io with { Expression = ResolveFunctionNamespaces(io.Expression, options) },
             TreatNode treat => treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options) },
-            ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveFunctionNamespaces(arrow.Target, options) },
+            ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveArrowTarget(arrow.Target, options) },
             TryCatchNode tc => tc with
             {
                 TryExpression = ResolveFunctionNamespaces(tc.TryExpression, options),
                 Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, options) }).ToList()
             },
             StringConstructorNode sc => sc with { Parts = sc.Parts.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
+            StringTemplateNode st => st with { Parts = st.Parts.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, options), Key = ResolveFunctionNamespaces(lookup.Key, options) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, options) },
             InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, options) },
@@ -213,20 +218,155 @@ public sealed class XPath31Expression
         };
     }
 
-    private static FunctionCallNode ResolveFunctionCall(FunctionCallNode node, CompileOptions options)
+    // An arrow target that is a static function call receives the arrow source as its
+    // first positional argument at lowering time, so keyword expansion must treat the
+    // first declared parameter as already filled and must not include it in the
+    // rewritten argument list (the lowerer prepends the source).
+    private static XPathAstNode ResolveArrowTarget(XPathAstNode target, CompileOptions options)
+        => target is FunctionCallNode fc
+            ? ResolveFunctionCall(fc, options, arrowInsertsFirst: true)
+            : ResolveFunctionNamespaces(target, options);
+
+    private static FunctionCallNode ResolveFunctionCall(FunctionCallNode node, CompileOptions options, bool arrowInsertsFirst = false)
     {
         var nsUri = string.IsNullOrEmpty(node.NamespaceUri)
             ? ResolvePrefix(node.Prefix, options)
             : node.NamespaceUri;
+        var resolvedKeywords = node.KeywordArguments?
+            .Select(k => k with { Value = ResolveFunctionNamespaces(k.Value, options) })
+            .ToList();
         var resolved = node with
         {
             Arguments = node.Arguments.Select(a => ResolveFunctionNamespaces(a, options)).ToList(),
+            KeywordArguments = resolvedKeywords,
             NamespaceUri = nsUri
         };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
         ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
+        if (resolved.KeywordArguments is { Count: > 0 })
+            resolved = ExpandKeywordArguments(resolved, options, arrowInsertsFirst);
         return resolved;
     }
+
+    // XPath 4.0 §4.6.1 keyword-argument expansion: positional arguments fill the first
+    // parameters; each keyword (an EQName matched with the no-namespace rule: an
+    // unprefixed keyword has no namespace) must match a distinct, not yet filled
+    // parameter of the function's declared signature; unfilled optional parameters take
+    // their declared F&O default. Every mismatch is a static error XPST0017. The call is
+    // rewritten to a fully positional call of the fully-populated arity, which dispatches
+    // to the corresponding standard registration.
+    private static FunctionCallNode ExpandKeywordArguments(FunctionCallNode node, CompileOptions options, bool arrowInsertsFirst)
+    {
+        if (node.Arguments.Any(a => a is ArgumentPlaceholderNode))
+            throw new InvalidOperationException("XPST0017: Argument placeholders cannot be combined with keyword arguments.");
+
+        var nsUri = node.NamespaceUri;
+        if (string.IsNullOrEmpty(nsUri))
+        {
+            // Unresolved prefixes fall back to the canonical predefined bindings (same
+            // treatment as ThrowIfXPath40OnlyFunction).
+            nsUri = node.Prefix switch
+            {
+                "fn" => DefaultFunctionNamespace,
+                "map" => "http://www.w3.org/2005/xpath-functions/map",
+                "array" => "http://www.w3.org/2005/xpath-functions/array",
+                _ => null,
+            };
+        }
+        if (string.IsNullOrEmpty(nsUri) ||
+            !FunctionLibrary.TryGetKeywordSignature(nsUri, node.LocalName, out var sig))
+            throw new InvalidOperationException(
+                $"XPST0017: Function {node.LocalName} does not declare keyword parameters and cannot be called with keyword arguments.");
+
+        var names = sig.ParameterNames;
+        var defaults = sig.ParameterDefaults;
+        // With 'E => f(...)', the first parameter is filled by the arrow source at
+        // lowering time: it counts as positionally filled and stays out of the
+        // rewritten argument list.
+        int firstFillable = arrowInsertsFirst ? 1 : 0;
+        if (arrowInsertsFirst && names.Count == 0)
+            throw new InvalidOperationException($"XPST0017: Function {node.LocalName} does not declare keyword parameters and cannot be called with keyword arguments.");
+        if (node.Arguments.Count > names.Count - firstFillable)
+            throw new InvalidOperationException(
+                $"XPST0017: Too many positional arguments in call of {node.LocalName}: expected at most {names.Count - firstFillable}.");
+
+        var filled = new XPathAstNode[names.Count];
+        var used = new bool[names.Count];
+        for (int i = 0; i < firstFillable; i++)
+            used[i] = true;
+        for (int i = 0; i < node.Arguments.Count; i++)
+        {
+            filled[firstFillable + i] = node.Arguments[i];
+            used[firstFillable + i] = true;
+        }
+
+        foreach (var kw in node.KeywordArguments!)
+        {
+            var (kwPrefix, kwLocal, kwNs) = SplitKeywordName(kw.Name);
+            // No-namespace rule: an unprefixed keyword is in no namespace (it is NOT in
+            // the default function namespace).
+            string kwNamespace = kwNs ?? (string.IsNullOrEmpty(kwPrefix)
+                ? string.Empty
+                : (ResolvePrefix(kwPrefix, options) ?? string.Empty));
+            int match = -1;
+            for (int i = 0; i < names.Count; i++)
+            {
+                if (!used[i] && kwNamespace.Length == 0 && names[i] == kwLocal)
+                {
+                    match = i;
+                    break;
+                }
+            }
+            if (match < 0)
+            {
+                bool known = kwNamespace.Length == 0 && names.Any(n => n == kwLocal);
+                throw new InvalidOperationException(known
+                    ? $"XPST0017: Keyword argument '{kw.Name}' in call of {node.LocalName} matches a parameter that is already filled."
+                    : $"XPST0017: Unknown keyword argument '{kw.Name}' in call of {node.LocalName}.");
+            }
+            filled[match] = kw.Value;
+            used[match] = true;
+        }
+
+        for (int i = 0; i < names.Count; i++)
+        {
+            if (used[i])
+                continue;
+            if (defaults[i] is { } snippet)
+                filled[i] = ParseDefaultExpression(snippet);
+            else
+                throw new InvalidOperationException(
+                    $"XPST0017: Required parameter ${names[i]} is not supplied in call of {node.LocalName}.");
+        }
+
+        // The rewritten call carries every filled parameter except those supplied by
+        // the arrow source (the lowerer prepends it), in declaration order.
+        return node with
+        {
+            Arguments = filled.Skip(firstFillable).ToList(),
+            KeywordArguments = null
+        };
+    }
+
+    // Splits a keyword EQName into its parts (braced-URI, prefixed, or plain NCName).
+    private static (string? Prefix, string Local, string? NamespaceUri) SplitKeywordName(string name)
+    {
+        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
+        {
+            int closeBrace = name.IndexOf('}');
+            if (closeBrace >= 2)
+                return (null, name[(closeBrace + 1)..], name[2..closeBrace]);
+        }
+        int colon = name.IndexOf(':');
+        return colon < 0 ? (null, name, null) : (name[..colon], name[(colon + 1)..], null);
+    }
+
+    // F&O default-value snippets are parsed once and cached; the AST is immutable
+    // (Span is init-only), so the cached nodes can be shared across compilations.
+    private static readonly ConcurrentDictionary<string, XPathAstNode> DefaultExpressionCache = new();
+
+    private static XPathAstNode ParseDefaultExpression(string snippet)
+        => DefaultExpressionCache.GetOrAdd(snippet, s => XPathParser.ParseExprSingle(s, xpath40: true));
 
     private static NamedFunctionRefNode ResolveNamedFunctionRef(NamedFunctionRefNode node, CompileOptions options)
     {

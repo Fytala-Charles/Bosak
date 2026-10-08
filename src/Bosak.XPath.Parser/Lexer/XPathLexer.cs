@@ -41,6 +41,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 08-10-2026     | REQ-118 4.0-S3a: '??' Otherwise token; 4.0 hex/binary literals + digit underscores     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 08-10-2026     | REQ-118 4.0-S3b: StringTemplate token scanning ({{ }} `` escapes, nested templates)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -163,6 +165,21 @@ internal ref struct XPathLexer
                 return new Token(TokenKind.Constructor, start, end - start);
             }
             _position = start;
+        }
+
+        // ---- XPath 4.0 string templates --------------------------------------
+        // A lone backtick opens a string template; the whole span (fixed parts with
+        // {{ }} `` escapes and {...} interpolations, including nested templates) is
+        // one raw token for the parser to re-scan. In XPath 3.1 mode a backtick
+        // remains an invalid token (XPST0003), as before.
+        if (_xpath40 && c == '`')
+        {
+            int end = ScanStringTemplateEnd(start + 1);
+            if (end >= 0)
+            {
+                _position = end;
+                return new Token(TokenKind.StringTemplate, start, end - start);
+            }
         }
 
         // ---- Literals ------------------------------------------------
@@ -1164,6 +1181,120 @@ internal ref struct XPathLexer
                         return pos + 2;
                     return -1;
                 }
+                pos++;
+                continue;
+            }
+            pos++;
+        }
+        return -1;
+    }
+
+    // Scans the body of an XPath 4.0 string template starting just past the opening
+    // backtick. Fixed parts may contain '{{', '}}' and '``' escapes; a lone '{'
+    // opens an interpolation (closed by the matching '}'), a lone backtick ends the
+    // template. Returns the position just past the closing backtick or -1 when
+    // unterminated (including an unterminated interpolation).
+    private int ScanStringTemplateEnd(int pos)
+    {
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == '`')
+            {
+                // Longest token wins: '``' is an escaped backtick, a lone backtick ends
+                // the template.
+                if (pos + 1 < _source.Length && _source[pos + 1] == '`')
+                {
+                    pos += 2;
+                    continue;
+                }
+                return pos + 1;
+            }
+            if (c == '{')
+            {
+                if (pos + 1 < _source.Length && _source[pos + 1] == '{')
+                {
+                    pos += 2; // escaped '{'
+                    continue;
+                }
+                pos = ScanTemplateInterpolationEnd(pos + 1);
+                if (pos < 0)
+                    return -1;
+                continue;
+            }
+            if (c == '}' && pos + 1 < _source.Length && _source[pos + 1] == '}')
+            {
+                pos += 2; // escaped '}'
+                continue;
+            }
+            pos++;
+        }
+        return -1;
+    }
+
+    // Scans one string-template interpolation body starting just past the opening '{'.
+    // Strings, comments, and nested string templates are skipped; the interpolation
+    // ends at the '}' that closes brace depth zero. Returns the position just past
+    // that '}' or -1 when unterminated.
+    private int ScanTemplateInterpolationEnd(int pos)
+    {
+        int depth = 1;
+        while (pos < _source.Length)
+        {
+            char c = _source[pos];
+            if (c == '\'' || c == '"')
+            {
+                char q = c;
+                pos++;
+                while (pos < _source.Length)
+                {
+                    if (_source[pos] == q)
+                    {
+                        if (pos + 1 < _source.Length && _source[pos + 1] == q)
+                        {
+                            pos += 2;
+                            continue;
+                        }
+                        pos++;
+                        break;
+                    }
+                    pos++;
+                }
+                continue;
+            }
+            if (c == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':')
+            {
+                int commentDepth = 1;
+                pos += 2;
+                while (pos < _source.Length && commentDepth > 0)
+                {
+                    if (_source[pos] == '(' && pos + 1 < _source.Length && _source[pos + 1] == ':') { commentDepth++; pos += 2; }
+                    else if (_source[pos] == ':' && pos + 1 < _source.Length && _source[pos + 1] == ')') { commentDepth--; pos += 2; }
+                    else pos++;
+                }
+                continue;
+            }
+            if (c == '`')
+            {
+                // A nested string template inside the interpolation expression. The
+                // '``' escape cannot appear here (an interpolation is an Expr, where
+                // '``' is not a lexical unit), so a backtick always opens a template.
+                pos = ScanStringTemplateEnd(pos + 1);
+                if (pos < 0)
+                    return -1;
+                continue;
+            }
+            if (c == '{')
+            {
+                depth++;
+                pos++;
+                continue;
+            }
+            if (c == '}')
+            {
+                depth--;
+                if (depth == 0)
+                    return pos + 1;
                 pos++;
                 continue;
             }
