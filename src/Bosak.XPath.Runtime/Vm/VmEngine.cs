@@ -359,6 +359,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.164 | 08-10-2026     | REQ-118 4.0-S4: Pipeline opcode; 'for member'/'for key value' iteration in the For opcode (XPTY0141)
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.165 | 08-10-2026     | REQ-118 4.0-S5: ConvertArgToKind made public (fn:partial-apply coerces bound values  |
+//                      |                  |       |                | against the base function's parameter types eagerly, fn-partial-apply-13)              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -11956,7 +11959,18 @@ internal static class VmEngine
         return converted;
     }
 
-    private static XdmValue ConvertArgToKind(XdmValue arg, XdmValueKind expected)
+    /// <summary>
+    /// Applies kind-level function conversion to a single argument: node atomization,
+    /// untypedAtomic casting, numeric promotion, and URI promotion; anything else raises
+    /// XPTY0004 (higher-order-functions-064). Exposed for fn:partial-apply (REQ-118
+    /// 4.0-S5), which coerces bound argument values against the base function's
+    /// declared parameter kinds at bind time.
+    /// </summary>
+    /// <param name="arg">The argument value to convert.</param>
+    /// <param name="expected">The declared parameter kind.</param>
+    /// <returns>The converted value.</returns>
+    /// <exception cref="InvalidOperationException">No conversion rule applies (XPTY0004).</exception>
+    public static XdmValue ConvertArgToKind(XdmValue arg, XdmValueKind expected)
     {
         if (arg.Kind == expected || arg.IsUndefined)
             return arg;
