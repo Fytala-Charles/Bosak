@@ -45,6 +45,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.8   | 08-10-2026     | REQ-118 4.0-S4: Pipeline opcode for the XPath 4.0 '->' pipeline operator
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.9   | 08-10-2026     | REQ-118 4.0-S6b: ButWith opcode for the XPath 4.0 'but with' record update operator |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -162,6 +164,9 @@ internal enum IrOpCode : byte
     /// <summary>Evaluates the right block once with the left value as the whole context value
     /// (fixed focus position 1, size 1) — the XPath 4.0 <c>-&gt;</c> pipeline operator.</summary>
     Pipeline,
+    /// <summary>Merges the right-hand map into the left-hand record (use-last) and re-validates
+    /// the result against the record's annotation — the XPath 4.0 <c>but with</c> operator.</summary>
+    ButWith,
     /// <summary>Evaluates a predicated path step per context item.</summary>
     PathStepMap,
     /// <summary>Sorts nodes into document order and removes duplicates. RegisterC: 1 marks a forward-axis path step, whose sort/dedup is suppressed inside a streamable pipeline.</summary>

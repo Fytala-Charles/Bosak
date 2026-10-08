@@ -35,6 +35,9 @@
 //                      | Charles Korthout | 0.9   | 08-10-2026     | REQ-118 4.0-S6a: enum types (§3.2.6) + choice item types (§3.2.5): 3.1 XPST0003 gates,  |
 //                      |                  |       |                | instance-of, cast/castable, function-parameter coercion (in-order §3.4.2 rule 02)       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 08-10-2026     | REQ-118 4.0-S6b: structural record types (§3.2.10) + 'but with' (§4.15.4): 3.1        |
+//                      |                  |       |                | XPST0003 gates (record(...), cast targets, 'but with') + 4.0 semantics smoke           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -1100,5 +1103,31 @@ public class VersionGateTests
             "function($x as (element(a)|element(b))) {$x instance of element(a)}(/root/a)",
             new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
         Assert.Equal("true", expr.Evaluate(ctx).ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S6b: structural record types + 'but with' (§3.2.10, §4.15.4)
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("1 instance of record(a)")]
+    [InlineData("1 instance of record(*)")]
+    [InlineData("1 instance of record(a as xs:integer, b)")]
+    [InlineData("1 cast as record(a)")]
+    [InlineData("1 castable as record(*)")]
+    [InlineData("map{\"a\": 1} but with map{\"a\": 2}")]
+    public void Compile31_RecordTypesAndButWith_XPST0003(string xpath)
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile(xpath));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_RecordType_BasicSemanticsAvailableIn40()
+    {
+        // Cast creates an annotated record; instance-of and lookup work; 'but with'
+        // merges entries under the record's annotation.
+        Assert.Equal("true", Eval40("(map{\"a\": 1} cast as record(a)) instance of record(a)").ToString());
+        Assert.Equal("2", Eval40("((map{\"a\": 1} cast as record(a)) but with map{\"a\": 2})?a").ToString());
     }
 }

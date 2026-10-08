@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.4   | 15-07-2026     | Add replaces existing key object so the newest key (and its type annotation) survives  |
 //                      | Charles Korthout | 0.5   | 17-07-2026     | Persistent ImmutableDictionary backing for O(log n) map updates (op-same-key)         |
 //                      | Charles Korthout | 0.6   | 18-07-2026     | Preserve insertion order for Keys/Values/Entries; add WithAdded/WithRemoved helpers       |
+//                      | Charles Korthout | 0.7   | 08-10-2026     | Add RecordType annotation and WithRecordType for XPath 4.0 structural record types      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -75,6 +76,27 @@ public sealed class XdmMap
         _keyIndices = keyIndices;
     }
 
+    private XdmMap(ImmutableDictionary<XdmValue, XdmValue> entries, ImmutableList<XdmValue> keyOrder, ImmutableDictionary<XdmValue, int> keyIndices, XdmRecordType? recordType)
+    {
+        _entries = entries;
+        _keyOrder = keyOrder;
+        _keyIndices = keyIndices;
+        RecordType = recordType;
+    }
+
+    /// <summary>
+    /// Gets the record-type annotation of this map, or <see langword="null"/> when this is a plain map.
+    /// A record is a map whose structure is constrained by a record type (XPath 4.0 §3.2.10).
+    /// </summary>
+    public XdmRecordType? RecordType { get; }
+
+    /// <summary>
+    /// Returns a new map that shares the entries of this map but carries the given record-type
+    /// annotation. Pass <see langword="null"/> to strip the annotation, producing a plain map.
+    /// </summary>
+    /// <param name="recordType">The record-type annotation to attach, or <see langword="null"/> to clear it.</param>
+    public XdmMap WithRecordType(XdmRecordType? recordType) => new XdmMap(_entries, _keyOrder, _keyIndices, recordType);
+
     /// <summary>
     /// Adds or replaces a key-value pair. The stored key object is the supplied key, so
     /// the newest key (and its type annotation) survives, as required by op:same-key
@@ -126,7 +148,7 @@ public sealed class XdmMap
             var newEntries = _entries.Remove(key).Add(key, value);
             var newKeyOrder = _keyOrder.SetItem(index, key);
             var newKeyIndices = _keyIndices.Remove(key).Add(key, index);
-            return new XdmMap(newEntries, newKeyOrder, newKeyIndices);
+            return new XdmMap(newEntries, newKeyOrder, newKeyIndices, RecordType);
         }
         else if (_keyIndices.ContainsKey(key))
         {
@@ -134,7 +156,7 @@ public sealed class XdmMap
             var newEntries = _entries.Add(key, value);
             var newKeyOrder = _keyOrder.SetItem(index, key);
             var newKeyIndices = _keyIndices.Remove(key).Add(key, index);
-            return new XdmMap(newEntries, newKeyOrder, newKeyIndices);
+            return new XdmMap(newEntries, newKeyOrder, newKeyIndices, RecordType);
         }
         else
         {
@@ -142,7 +164,7 @@ public sealed class XdmMap
             var newEntries = _entries.Add(key, value);
             var newKeyOrder = _keyOrder.Add(key);
             var newKeyIndices = _keyIndices.Add(key, index);
-            return new XdmMap(newEntries, newKeyOrder, newKeyIndices);
+            return new XdmMap(newEntries, newKeyOrder, newKeyIndices, RecordType);
         }
     }
 
@@ -151,7 +173,7 @@ public sealed class XdmMap
     {
         if (!_entries.ContainsKey(key))
             return this;
-        return new XdmMap(_entries.Remove(key), _keyOrder, _keyIndices);
+        return new XdmMap(_entries.Remove(key), _keyOrder, _keyIndices, RecordType);
     }
 
     /// <summary>Attempts to retrieve the value for the given key.</summary>
