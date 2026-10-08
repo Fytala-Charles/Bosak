@@ -42,6 +42,9 @@
 //                      | Charles Korthout | 1.6   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 1.7   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.8   | 08-10-2026     | REQ-118 4.0-S4: Pipeline opcode for the XPath 4.0 '->' pipeline operator
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -156,6 +159,9 @@ internal enum IrOpCode : byte
     Except,
     /// <summary>Maps the left sequence through the right expression (the <c>!</c> operator).</summary>
     SimpleMap,
+    /// <summary>Evaluates the right block once with the left value as the whole context value
+    /// (fixed focus position 1, size 1) — the XPath 4.0 <c>-&gt;</c> pipeline operator.</summary>
+    Pipeline,
     /// <summary>Evaluates a predicated path step per context item.</summary>
     PathStepMap,
     /// <summary>Sorts nodes into document order and removes duplicates. RegisterC: 1 marks a forward-axis path step, whose sort/dedup is suppressed inside a streamable pipeline.</summary>

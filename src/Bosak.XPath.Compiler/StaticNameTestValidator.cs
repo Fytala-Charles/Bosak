@@ -23,6 +23,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 08-10-2026     | REQ-118 4.0-S3b: traversal for StringTemplateNode parts (4.0 string templates)           |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode validation
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
 using System.Xml.Schema;
@@ -200,6 +203,10 @@ internal static class StaticNameTestValidator
             case ArrowExprNode arrow:
                 ValidateNode(arrow.Source, scope);
                 ValidateNode(arrow.Target, scope);
+                break;
+            case PipelineExprNode pipeline:
+                ValidateNode(pipeline.Source, scope);
+                ValidateNode(pipeline.Target, scope);
                 break;
             case TryCatchNode tc:
                 ValidateNode(tc.TryExpression, scope);

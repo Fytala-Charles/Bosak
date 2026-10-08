@@ -136,6 +136,9 @@
 //                      |                  |       |                | positional-after-keyword XPST0003, dynamic-call rejection XPST0017) and XPath 4.0      |
 //                      |                  |       |                | string templates (ParseStringTemplate + interpolation scanning)                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.65  | 08-10-2026     | REQ-118 4.0-S4: '->' pipeline (PipelineExpr), '=!>' mapping arrow desugar, 'fn' focus  |
+//                      |                  |       |                | functions, 'for member'/'for key value' bindings (XPath 4.0, XPST0003 in 3.1)           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -390,6 +393,10 @@ internal sealed class XPathParser
             // Otherwise they are ordinary names (e.g., name tests) (K2-NameTest-78/79).
             TokenKind.KeywordFor when Peek(1).Kind == TokenKind.Dollar => ParseForExpr(),
             TokenKind.KeywordFor when _allowFullFlwor && IsWindowKeyword(Peek(1)) => ParseForExpr(),
+            // XPath 4.0 §4.14.1: 'for member' / 'for key value' bindings iterate arrays/maps.
+            TokenKind.KeywordFor when IsMemberEntryBindingStart(Peek(1)) && _xpath40 => ParseForExpr(),
+            TokenKind.KeywordFor when IsMemberEntryBindingStart(Peek(1)) =>
+                throw new XPathParseException("XPST0003: A 'for member' or 'for key value' binding requires XPath 4.0.", Current.Start),
             TokenKind.KeywordLet when Peek(1).Kind == TokenKind.Dollar => ParseLetExpr(),
             // 'some'/'every' are quantifier keywords only when not followed by '(' or '#'.
             // When they are, they are ordinary function names (xquery30keywords5).
@@ -779,10 +786,120 @@ internal sealed class XPathParser
         var bindings = new List<QuantifiedBinding>();
         do
         {
-            bindings.Add(ParseSimpleForBinding(allowPositional: true));
+            bindings.Add(ParseMemberEntryOrSimpleForBinding());
         } while (Match(TokenKind.Comma));
         return bindings;
     }
+
+    // ForBinding ::= ForItemBinding | ForMemberBinding | ForEntryBinding (XPath 4.0 §4.14.1).
+    private QuantifiedBinding ParseMemberEntryOrSimpleForBinding()
+    {
+        if (Current.Kind == TokenKind.Name)
+        {
+            if (GetString(Current) == "member")
+            {
+                if (!_xpath40)
+                    throw new XPathParseException("XPST0003: A 'for member' binding requires XPath 4.0.", Current.Start);
+                Advance();
+                return ParseMemberBinding();
+            }
+            if (GetString(Current) is "key" or "value")
+            {
+                if (!_xpath40)
+                    throw new XPathParseException("XPST0003: A 'for key value' binding requires XPath 4.0.", Current.Start);
+                return ParseEntryBinding();
+            }
+        }
+        return ParseSimpleForBinding(allowPositional: true);
+    }
+
+    // ForMemberBinding ::= "member" VarNameAndType PositionalVar? "in" ExprSingle
+    // ForEntryBinding  ::= (("key" VarNameAndType)? ("value" VarNameAndType)?) PositionalVar? "in" ExprSingle
+    // (at least one of key/value must be present — checked below).
+    private QuantifiedBinding ParseEntryBinding()
+    {
+        string? keyName = null, keyPrefix = null, keyNs = null;
+        FlworTypeDeclaration? keyDecl = null, valueDecl = null;
+        string? valueName = null, valuePrefix = null, valueNs = null;
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "key")
+        {
+            Advance();
+            (keyPrefix, keyName, keyNs, keyDecl) = ParseVarNameAndType();
+        }
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "value")
+        {
+            Advance();
+            (valuePrefix, valueName, valueNs, valueDecl) = ParseVarNameAndType();
+        }
+        if (keyName is null && valueName is null)
+            throw new XPathParseException("XPST0003: Expected 'value' after 'key' in a for entry binding.", Current.Start);
+        // XQST0089: key and value variables must have distinct names.
+        if (keyName is not null && valueName is not null
+            && keyName == valueName && (keyNs ?? keyPrefix ?? "") == (valueNs ?? valuePrefix ?? ""))
+            throw new XPathParseException($"XQST0089: The key and value variables of a for binding must have distinct names ('${keyName}').", Current.Start);
+
+        // VariableName holds the key variable (or the value variable when no key is
+        // declared); EntryValueVariableName holds the companion value variable.
+        bool both = keyName is not null && valueName is not null;
+        return ParseMemberEntryPositionalAndIn(keyName ?? valueName!, keyPrefix ?? valuePrefix, keyNs ?? valueNs,
+            keyName is null ? ForBindingKind.EntryValueOnly
+                : valueName is null ? ForBindingKind.EntryKeyOnly : ForBindingKind.EntryKeyValue,
+            both ? valueName : null, both ? valuePrefix : null, both ? valueNs : null)
+            with { DeclaredType = keyName is null ? valueDecl : keyDecl, EntryValueDeclaredType = both ? valueDecl : null };
+    }
+
+    // VarNameAndType ::= "$" EQName TypeDeclaration? — the declared type is XQuery-only,
+    // matching the ordinary for binding rule.
+    private (string? Prefix, string Local, string? Ns, FlworTypeDeclaration? DeclaredType) ParseVarNameAndType()
+    {
+        Expect(TokenKind.Dollar);
+        var nameTok = ExpectName();
+        var (prefix, local, ns) = SplitQName(GetString(nameTok));
+        if (Current.Kind != TokenKind.KeywordAs)
+            return (prefix, local, ns, null);
+        if (!_allowFullFlwor)
+            throw new XPathParseException("XPST0003: XPath does not allow a type declaration in a for binding.", Current.Start);
+        Advance();
+        var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+        return (prefix, local, ns, new FlworTypeDeclaration(typeLocal, typePrefix, occurrence));
+    }
+
+    // 'member' has already been consumed; parse VarNameAndType PositionalVar? "in" ExprSingle.
+    private QuantifiedBinding ParseMemberBinding()
+    {
+        var (prefix, local, ns, declaredType) = ParseVarNameAndType();
+        return ParseMemberEntryPositionalAndIn(local, prefix, ns, ForBindingKind.Member,
+            null, null, null) with { DeclaredType = declaredType };
+    }
+
+    // Shared tail of a member/entry binding: PositionalVar? "in" ExprSingle.
+    private QuantifiedBinding ParseMemberEntryPositionalAndIn(string local, string? prefix, string? ns,
+        ForBindingKind kind, string? entryValueName, string? entryValuePrefix, string? entryValueNs)
+    {
+        string? positionalVar = null;
+        if (Current.Kind == TokenKind.Name && GetString(Current) == "at")
+        {
+            Advance();
+            Expect(TokenKind.Dollar);
+            var posTok = ExpectName();
+            var (posPrefix, posLocal, posNs) = SplitQName(GetString(posTok));
+            // XQST0089: the positional variable must differ from all range variables.
+            if ((posLocal == local && (posNs ?? posPrefix ?? "") == (ns ?? prefix ?? ""))
+                || (entryValueName is not null && posLocal == entryValueName && (posNs ?? posPrefix ?? "") == (entryValueNs ?? entryValuePrefix ?? "")))
+                throw new XPathParseException($"XQST0089: The positional variable '${GetString(posTok)}' has the same name as a range variable.", posTok.Start);
+            positionalVar = posLocal;
+        }
+
+        Expect(TokenKind.KeywordIn);
+        var expr = ParseExprSingle();
+        return new QuantifiedBinding(local, expr, positionalVar, prefix, ns,
+            BindingKind: kind, EntryValueVariableName: entryValueName,
+            EntryValueVariablePrefix: entryValuePrefix,
+            EntryValueVariableNamespaceUri: entryValueNs);
+    }
+
+    private bool IsMemberEntryBindingStart(Token token)
+        => token.Kind == TokenKind.Name && (GetString(token) is "member" or "key" or "value");
 
     private IReadOnlyList<QuantifiedBinding> ParseLetClauseBindings()
     {
@@ -1308,11 +1425,13 @@ internal sealed class XPathParser
         return left;
     }
 
-    // CastExpr ::= ArrowExpr ("cast" "as" SingleType)?
+    // CastExpr ::= PipelineExpr ("cast" "as" SingleType)?
+    // PipelineExpr (XPath 4.0 §4.20) sits between the cast and the arrow level:
+    // PipelineExpr ::= (ArrowExpr ++ "->")
     private XPathAstNode ParseCastExpr()
     {
         int start = Current.Start;
-        var left = ParseArrowExpr();
+        var left = ParsePipelineExpr();
         if (Match(TokenKind.KeywordCast))
         {
             Expect(TokenKind.KeywordAs);
@@ -1322,24 +1441,73 @@ internal sealed class XPathParser
         return left;
     }
 
-    // ArrowExpr ::= UnaryExpr ("=>" ArrowFunctionSpecifier)*
+    // PipelineExpr ::= (ArrowExpr ++ "->")
+    // E1 -> E2 evaluates E1 and binds the result as a whole to the context value
+    // (an inner fixed focus with position 1 and size 1) before evaluating E2 once.
+    private XPathAstNode ParsePipelineExpr()
+    {
+        int start = Current.Start;
+        var left = ParseArrowExpr();
+        while (Current.Kind == TokenKind.PipelineArrow)
+        {
+            if (!_xpath40)
+                throw new XPathParseException("XPST0003: The pipeline operator '->' requires XPath 4.0.", Current.Start);
+            Advance();
+            var target = ParseArrowExpr();
+            left = WithSpan(new PipelineExprNode(left, target), start, End);
+        }
+        return left;
+    }
+
+    // ArrowExpr ::= UnaryExpr (("=>" | "=!>") ArrowFunctionSpecifier)*
+    // The XPath 4.0 mapping arrow '=!>' applies the target function to each item of
+    // the source: U =!> F(A, B) ≡ U ! F(., A, B) (XPath 4.0 §4.22.2), desugared here.
     private XPathAstNode ParseArrowExpr()
     {
         int start = Current.Start;
         var left = ParseUnaryExpr();
-        while (Match(TokenKind.Arrow))
+        while (Current.Kind is TokenKind.Arrow or TokenKind.MappingArrow)
         {
+            bool mapping = Current.Kind == TokenKind.MappingArrow;
+            if (mapping && !_xpath40)
+                throw new XPathParseException("XPST0003: The mapping arrow operator '=!>' requires XPath 4.0.", Current.Start);
+            Advance();
             var target = ParseArrowTarget();
-            left = WithSpan(new ArrowExprNode(left, target), start, End);
+            left = mapping
+                ? WithSpan(new BinaryExpressionNode(left, BinaryOperator.SimpleMap, PrependContextItemArgument(target)), start, End)
+                : WithSpan(new ArrowExprNode(left, target), start, End);
         }
         return left;
     }
+
+    // U =!> F(A, B, ...) is equivalent to U ! F(., A, B, ...): the context item is
+    // inserted as the first positional argument of the target call.
+    private static XPathAstNode PrependContextItemArgument(XPathAstNode target) => target switch
+    {
+        FunctionCallNode call => call with
+        {
+            Arguments = new List<XPathAstNode> { new ContextItemNode() }.Concat(call.Arguments).ToList()
+        },
+        DynamicFunctionCallNode call => call with
+        {
+            Arguments = new List<XPathAstNode> { new ContextItemNode() }.Concat(call.Arguments).ToList()
+        },
+        _ => target,
+    };
 
     private XPathAstNode ParseArrowTarget()
     {
         int start = Current.Start;
         if (Current.Kind == TokenKind.Name)
         {
+            // XPath 4.0: 'fn' introduces an inline function: $x => fn($a) { $a + 1 }()
+            if (_xpath40 && GetString(Current) == "fn" && Peek(1).Kind is TokenKind.LParen or TokenKind.LBrace)
+            {
+                var inlineFunc = ParseInlineFunction(start);
+                var (fnArgs, fnKeywords) = ParseArgumentList();
+                ThrowIfKeywordsOnDynamicCall(fnKeywords, start);
+                return WithSpan(new DynamicFunctionCallNode(inlineFunc, fnArgs), start, End);
+            }
             var name = GetString(Current);
             var (prefix, local, _) = SplitQName(name);
             Advance();
@@ -1549,8 +1717,11 @@ internal sealed class XPathParser
         // Exclude keyword primary-expr starters (map {, array {, array [, function () when followed by their opener)
         bool isPrimaryExprKeyword = (Current.Kind == TokenKind.KeywordMap && Peek(1).Kind == TokenKind.LBrace)
             || (Current.Kind == TokenKind.KeywordArray && (Peek(1).Kind == TokenKind.LBrace || Peek(1).Kind == TokenKind.LBracket))
-            || (Current.Kind == TokenKind.KeywordFunction && Peek(1).Kind == TokenKind.LParen);
-        if (((Current.Kind == TokenKind.Name || (IsKeywordName(Current.Kind) && !isPrimaryExprKeyword)) && Peek(1).Kind != TokenKind.LParen && Peek(1).Kind != TokenKind.Hash) || Current.Kind == TokenKind.Star)
+            || (Current.Kind == TokenKind.KeywordFunction && Peek(1).Kind is TokenKind.LParen or TokenKind.LBrace);
+        // XPath 4.0: 'fn {' / 'fn (' starts an inline function, never a name test.
+        bool isFnInlineFunction = _xpath40 && Current.Kind == TokenKind.Name && GetString(Current) == "fn"
+            && Peek(1).Kind is TokenKind.LBrace or TokenKind.LParen;
+        if (!isFnInlineFunction && ((Current.Kind == TokenKind.Name || (IsKeywordName(Current.Kind) && !isPrimaryExprKeyword)) && Peek(1).Kind != TokenKind.LParen && Peek(1).Kind != TokenKind.Hash) || Current.Kind == TokenKind.Star)
         {
             return ParseAxisStep(start);
         }
@@ -2196,6 +2367,14 @@ internal sealed class XPathParser
                     Expect(TokenKind.RBrace);
                     return orderedBody;
                 }
+                // XPath 4.0 §4.6.6: 'fn' is a synonym for the 'function' keyword in an
+                // inline function expression (fn($a) { ... } or the focus form fn { ... }).
+                if (name == "fn" && Peek(1).Kind is TokenKind.LBrace or TokenKind.LParen)
+                {
+                    if (!_xpath40)
+                        throw new XPathParseException("XPST0003: The 'fn' inline function keyword requires XPath 4.0.", start);
+                    return ParseInlineFunction(start);
+                }
                 var (prefix, local, _) = SplitQName(name);
                 if (Peek(1).Kind == TokenKind.LParen)
                     return ParseFunctionCall(start);
@@ -2483,9 +2662,36 @@ internal sealed class XPathParser
     // XPath 3.1 constructors
     // ------------------------------------------------------------------
 
+    // InlineFunctionExpr ::= ("function" | "fn") FunctionSignature? FunctionBody (XPath 4.0 §4.6.6).
+    // The keyword is already known to be 'function' (keyword token) or 'fn' (contextual
+    // name, XPath 4.0). A signature omitted before '{' is a focus function (§4.6.6.1):
+    // fn { EXPR } ≡ function($Z as item()*) { $Z -> EXPR } with a fixed focus (Z, 1, 1).
     private InlineFunctionNode ParseInlineFunction(int start)
     {
-        Expect(TokenKind.KeywordFunction);
+        if (Current.Kind == TokenKind.KeywordFunction)
+            Advance();
+        else if (Current.Kind == TokenKind.Name && GetString(Current) == "fn")
+            Advance();
+        else
+            Expect(TokenKind.KeywordFunction);
+
+        if (Current.Kind == TokenKind.LBrace)
+        {
+            if (!_xpath40)
+                throw new XPathParseException("XPST0003: A focus function (an inline function without a parameter list) requires XPath 4.0.", Current.Start);
+            const string focusNs = "urn:bosak:internal:focus-function";
+            var focusParam = new ParamNode($"Q{{{focusNs}}}Z", null);
+            Advance();
+            // EnclosedExpr ::= "{" Expr? "}" — an empty body evaluates to the empty sequence.
+            XPathAstNode focusBody = Current.Kind == TokenKind.RBrace
+                ? new SequenceExpressionNode(Array.Empty<XPathAstNode>())
+                : ParseExpr();
+            Expect(TokenKind.RBrace);
+            var argRef = WithSpan(new VariableReferenceNode("Z", null, focusNs), start, End);
+            var pipeline = WithSpan(new PipelineExprNode(argRef, focusBody), start, End);
+            return WithSpan(new InlineFunctionNode(new List<ParamNode> { focusParam }, pipeline), start, End);
+        }
+
         Expect(TokenKind.LParen);
         var parameters = new List<ParamNode>();
         if (!Match(TokenKind.RParen))

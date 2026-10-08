@@ -57,6 +57,8 @@
 //                      | Charles Korthout | 1.19  | 08-10-2026     | REQ-118 4.0-S3b: KeywordArgumentNode + FunctionCallNode.KeywordArguments;              |
 //                      |                  |       |                | StringTemplateNode for XPath 4.0 string templates                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode; ForBindingKind (member/key value) on QuantifiedBinding|
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -470,7 +472,27 @@ internal sealed record ComputedNamespaceConstructorNode(
 /// <param name="VariableNamespaceUri">The namespace URI of an EQName bound variable, or null.</param>
 /// <param name="DeclaredType">The optional <c>as SequenceType</c> declaration of the binding.</param>
 /// <param name="AllowingEmpty">True when a for binding declares <c>allowing empty</c>.</param>
-internal sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false);
+/// <param name="BindingKind">The iteration mode of the binding (XPath 4.0 <c>for member</c>/<c>for key value</c>).</param>
+/// <param name="EntryValueVariableName">The local name of the value variable of an entry binding, or null.</param>
+/// <param name="EntryValueVariablePrefix">The namespace prefix of the value variable, or null.</param>
+/// <param name="EntryValueVariableNamespaceUri">The namespace URI of an EQName value variable, or null.</param>
+/// <param name="EntryValueDeclaredType">The declared type of the entry value variable, or null.</param>
+internal sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false, ForBindingKind BindingKind = ForBindingKind.Item, string? EntryValueVariableName = null, string? EntryValueVariablePrefix = null, string? EntryValueVariableNamespaceUri = null, FlworTypeDeclaration? EntryValueDeclaredType = null);
+
+/// <summary>The iteration mode of a for binding (XPath 4.0 §4.14.1).</summary>
+internal enum ForBindingKind
+{
+    /// <summary>Ordinary item iteration (XPath 3.1).</summary>
+    Item,
+    /// <summary><c>for member</c>: iterate the members of each array in the binding collection.</summary>
+    Member,
+    /// <summary><c>for key $k value $v</c>: iterate the entries of each map, binding both variables.</summary>
+    EntryKeyValue,
+    /// <summary><c>for key $k</c>: iterate the entries of each map, binding only the key variable.</summary>
+    EntryKeyOnly,
+    /// <summary><c>for value $v</c>: iterate the entries of each map, binding only the value variable.</summary>
+    EntryValueOnly,
+}
 
 // ------------------------------------------------------------------
 // Binary / Unary expressions
@@ -523,6 +545,12 @@ internal sealed record TreatNode(XPathAstNode Expression, string TypeName, strin
 /// <param name="Source">The input expression, passed as the first argument to the target.</param>
 /// <param name="Target">The function or inline function applied to the source value.</param>
 internal sealed record ArrowExprNode(XPathAstNode Source, XPathAstNode Target) : XPathAstNode;
+
+/// <summary>Pipeline expression (XPath 4.0): <c>E1 -&gt; E2</c> evaluates E1 and binds the
+/// result as a whole to the context value (position 1, size 1) before evaluating E2.</summary>
+/// <param name="Source">The expression whose value becomes the context value of the target.</param>
+/// <param name="Target">Any expression, evaluated once with the source value as focus.</param>
+internal sealed record PipelineExprNode(XPathAstNode Source, XPathAstNode Target) : XPathAstNode;
 
 /// <summary>Try/catch expression: <c>try { A } catch CodePatternList { B } (catch CodePatternList { C })*</c></summary>
 /// <param name="TryExpression">The guarded expression.</param>

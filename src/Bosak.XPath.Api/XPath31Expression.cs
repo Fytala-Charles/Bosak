@@ -37,6 +37,9 @@
 //                      | Charles Korthout | 0.14  | 08-10-2026     | REQ-118 4.0-S3b: keyword-argument expansion (XPST0017 rules, F&O defaults) in            |
 //                      |                  |       |                | ResolveFunctionCall; StringTemplateNode namespace traversal                             |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15  | 08-10-2026     | REQ-118 4.0-S4: ResolveFunctionNamespaces for PipelineExprNode
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -200,6 +203,7 @@ public sealed class XPath31Expression
             InstanceOfNode io => io with { Expression = ResolveFunctionNamespaces(io.Expression, options) },
             TreatNode treat => treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options) },
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveArrowTarget(arrow.Target, options) },
+            PipelineExprNode pipeline => pipeline with { Source = ResolveFunctionNamespaces(pipeline.Source, options), Target = ResolveFunctionNamespaces(pipeline.Target, options) },
             TryCatchNode tc => tc with
             {
                 TryExpression = ResolveFunctionNamespaces(tc.TryExpression, options),

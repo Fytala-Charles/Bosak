@@ -48,6 +48,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.12  | 08-10-2026     | REQ-118 4.0-S3b: reference-transparent traversal for StringTemplateNode                |
 //                      |==================|=======|================|=========================================================================================
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.13  | 08-10-2026     | REQ-118 4.0-S4: OptimizePipeline for PipelineExprNode ('->')
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Core.Xdm;
@@ -105,6 +108,7 @@ internal sealed class XPathOptimizer
             ForExpressionNode forExpr => OptimizeFor(forExpr, ref changed),
             QuantifiedExpressionNode quant => OptimizeQuantified(quant, ref changed),
             ArrowExprNode arrow => OptimizeArrow(arrow, ref changed),
+            PipelineExprNode pipeline => OptimizePipeline(pipeline, ref changed),
             LookupNode lookup => OptimizeLookup(lookup, ref changed),
             LookupWildcardNode lookup => OptimizeLookupWildcard(lookup, ref changed),
             CastNode cast => OptimizeCast(cast, ref changed),
@@ -677,6 +681,20 @@ internal sealed class XPathOptimizer
     // ------------------------------------------------------------------
 
     private XPathAstNode OptimizeArrow(ArrowExprNode node, ref bool changed)
+    {
+        var source = OptimizeNode(node.Source, ref changed);
+        var target = OptimizeNode(node.Target, ref changed);
+
+        if (source != node.Source || target != node.Target)
+        {
+            changed = true;
+            return node with { Source = source, Target = target };
+        }
+
+        return node;
+    }
+
+    private XPathAstNode OptimizePipeline(PipelineExprNode node, ref bool changed)
     {
         var source = OptimizeNode(node.Source, ref changed);
         var target = OptimizeNode(node.Target, ref changed);
