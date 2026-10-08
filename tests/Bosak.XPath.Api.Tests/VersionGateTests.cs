@@ -21,6 +21,9 @@
 //                      | Charles Korthout | 0.4   | 08-10-2026     | REQ-118 4.0-S3a: '??' otherwise operator (3.1 rejection, semantics, precedence,        |
 //                      |                  |       |                | guarding, focus) and 4.0 binary/hex/underscore numeric literals                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 08-10-2026     | REQ-118 4.0-S3b: keyword arguments (XPST0003 in 3.1, XPST0017 rules, defaults, arrow    |
+//                      |                  |       |                | form) and string templates (escapes, interpolations, nesting)                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -396,5 +399,204 @@ public class VersionGateTests
         Assert.Contains("XPST0003", ex2.Message);
         var ex3 = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("1_000"));
         Assert.Contains("XPST0003", ex3.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S3b: keyword arguments (XPath 4.0 §4.6.1)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_KeywordArgs_31Mode_ThrowsXpst0003()
+    {
+        var ex1 = Assert.Throws<XPathParseException>(
+            () => XPath31Expression.Compile("fn:substring(value := 'abcdef', start := 2, length := 3)"));
+        Assert.Contains("XPST0003", ex1.Message);
+        var ex2 = Assert.Throws<XPathParseException>(
+            () => XPath31Expression.Compile("sort((3, 1, 2), key := fn:data#1)"));
+        Assert.Contains("XPST0003", ex2.Message);
+    }
+
+    [Fact]
+    public void Compile_PositionalAfterKeyword_XPath40Mode_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(
+            () => Eval40("fn:substring(value := 'abcdef', 2)"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_KeywordArgs_FullyKeyworded_Works()
+    {
+        Assert.Equal("bcd", Eval40("fn:substring(value := 'abcdef', start := 2, length := 3)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_KeywordArgs_MixedWithPositionals_Works()
+    {
+        Assert.Equal("bcd", Eval40("fn:substring('abcdef', start := 2, length := 3)").ToString());
+        Assert.Equal("bcd", Eval40("fn:substring('abcdef', 2, length := 3)").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_KeywordArgs_OmittedParamTakesDeclaredDefault()
+    {
+        // F&O 4.0: $length := () means "to the end" for fn:substring and fn:subsequence.
+        Assert.Equal("bcdef", Eval40("fn:substring(value := 'abcdef', start := 2)").ToString());
+        Assert.Equal("3 4", Eval40("fn:string-join(fn:subsequence(input := (1, 2, 3, 4), start := 3), ' ')").ToString());
+        // fn:string-join: $separator := ""
+        Assert.Equal("123", Eval40("fn:string-join(values := (1, 2, 3))").ToString());
+        // fn:contains: $collation := fn:default-collation()
+        Assert.Equal("false", Eval40("fn:contains(value := 'abc', substring := 'B')").ToString());
+        Assert.Equal("true", Eval40(
+            "fn:contains(value := 'abc', substring := 'B', collation := 'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive')").ToString());
+        // fn:hash: $algorithm := "MD5"
+        Assert.Equal("900150983CD24FB0D6963F7D28E17F72", Eval40("fn:hash(value := 'abc')").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_KeywordArgs_SortWithKeyFunction_Works()
+    {
+        Assert.Equal("1 2 3", Eval40("fn:string-join(fn:sort((3, 1, 2), key := fn:data#1), ' ')").ToString());
+        Assert.Equal("1 2 3 4", Eval40("fn:string-join((4, 3, 2, 1) => fn:sort(key := fn:data#1), ' ')").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_KeywordArgs_MapMerge_Works()
+    {
+        Assert.Equal("12", Eval40(
+            "fn:string-join(map:merge((map{'a': 1}, map{'a': 2}), options := map{'duplicates': 'combine'})?a)").ToString());
+        Assert.Equal("1", Eval40(
+            "((map{'a': 1}) => map:merge(options := map{'duplicates': 'use-last'}))?a").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_KeywordArgs_SliceAndParseUri_Work()
+    {
+        Assert.Equal("a b c d", Eval40("fn:string-join(fn:slice(input := ('a', 'b', 'c', 'd'), start := 0, step := 1), ' ')").ToString());
+        Assert.Equal("http", Eval40("fn:parse-uri(uri := 'http://example.com/')?scheme").ToString());
+    }
+
+    [Fact]
+    public void Compile_DuplicateKeyword_XPath40Mode_ThrowsXpst0017()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => XPath31Expression.Compile("fn:sort((1), key := fn:data#1, key := fn:data#1)",
+                new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Compile_UnknownKeyword_XPath40Mode_ThrowsXpst0017()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => XPath31Expression.Compile("fn:substring(input := 'x', bogus := 1)",
+                new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Compile_KeywordMatchingPositionalParam_XPath40Mode_ThrowsXpst0017()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => XPath31Expression.Compile("fn:substring('abcdef', 2, start := 3)",
+                new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Compile_UnmatchedRequiredParam_XPath40Mode_ThrowsXpst0017()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => XPath31Expression.Compile("fn:substring(start := 2)",
+                new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Compile_KeywordOnFunctionWithoutKeywordSignature_XPath40Mode_ThrowsXpst0017()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => XPath31Expression.Compile("fn:count(input := 1)",
+                new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Compile_KeywordsOnDynamicCall_XPath40Mode_ThrowsXpst0017()
+    {
+        var ex = Assert.Throws<XPathParseException>(
+            () => XPath31Expression.Compile("(fn:substring#2)(input := 'x', start := 1)",
+                new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-118 4.0-S3b: string templates (XPath 4.0 §4.10.2)
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compile_StringTemplate_31Mode_ThrowsXpst0003()
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile("`abc`"));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_FixedOnly_Works()
+    {
+        Assert.Equal("hello", Eval40("`hello`").ToString());
+        Assert.Equal("", Eval40("``").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_Interpolation_Works()
+    {
+        Assert.Equal("Pi is 3.1416", Eval40("`Pi is {round(math:pi(), 4)}`").ToString());
+        Assert.Equal("values: 1 3 5", Eval40("`values: {(1, 3, 5)}`").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_EmptyInterpolation_ContributesNothing()
+    {
+        Assert.Equal("ab", Eval40("`a{}b`").ToString());
+        Assert.Equal("ab", Eval40("`a{   }b`").ToString());
+        Assert.Equal("ab", Eval40("`a{(: a comment :) }b`").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_Escapes_Work()
+    {
+        Assert.Equal("a{b}c", Eval40("`a{{b}}c`").ToString());
+        Assert.Equal("x`y", Eval40("`x``y`").ToString());
+        Assert.Equal("{literal} ` here", Eval40("`{{literal}} `` here`").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_BothQuoteKindsNeedNoEscaping()
+    {
+        Assert.Equal("He said: \"I didn't.\"", Eval40("`He said: \"I didn't.\"`").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_NestedTemplateInInterpolation_Works()
+    {
+        Assert.Equal("inner 2", Eval40("`{`inner {1 + 1}`}`").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_NodeInterpolationIsAtomized()
+    {
+        var doc = System.Xml.Linq.XDocument.Parse("<root><a>5</a></root>");
+        var root = new Bosak.XPath.Providers.Xml.XDocumentNode(doc.Root!);
+        var ctx = new EvaluationContext().WithFocus(XdmValue.FromNode(root), 1, 1);
+        var expr = XPath31Expression.Compile("`val={/root/a}`", new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+        Assert.Equal("val=5", expr.Evaluate(ctx).ToString());
+    }
+
+    [Fact]
+    public void Evaluate_StringTemplate_StringsAndCommentsInsideInterpolation_Work()
+    {
+        Assert.Equal("a}{b", Eval40("`a{'}' || '{' }b`").ToString());
+        Assert.Equal("x1", Eval40("`x{(: c :) 1}`").ToString());
     }
 }
