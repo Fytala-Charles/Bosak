@@ -30,6 +30,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode streamability cases
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 08-10-2026     | REQ-118 4.0-S7: xsl:map with @select analyzes the select operand; content ignored
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System;
@@ -1245,6 +1247,14 @@ internal static class StreamabilityAnalyzer
 
                 case "map":
                 {
+                    // XSLT 4.0 §21.1.1: with @select the sequence constructor is ignored
+                    // (content other than xsl:fallback is a static error); the select
+                    // operand is the only surface to analyze.
+                    if (el.Attribute("select") != null)
+                    {
+                        AnalyzeSurface(el, "select", env);
+                        return;
+                    }
                     // §19.8.4.24: the content is a sequence constructor producing maps; it may
                     // contain any instructions (e.g. xsl:for-each yielding map-entries,
                     // si-where-populated-013/014). Streamed nodes inside entries are rejected
