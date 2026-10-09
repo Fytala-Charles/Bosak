@@ -396,6 +396,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.128 | 07-10-2026     | xsl:product-version fallback bumped to 0.13.0 (beta strip — 1.0 soak release)            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.130 | 09-10-2026     | xsl:product-version fallback bumped to 1.0.0 (GA pin bump)                               |
+//                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.129 | 08-10-2026     | REQ-118 slice 4.0-S2: map:build/entries/filter/items, array:build/empty/items/slice,    |
 //                      |                  |       |                | fn:parse-uri/build-uri/decode-from-uri, fn:seconds/duration-to-seconds/build-dateTime/   |
 //                      |                  |       |                | unix-dateTime/days-in-month (all XPath 4.0 only, with §1.8 arity coercion helper)        |
@@ -6297,7 +6299,7 @@ public static class FunctionLibrary
             "xsl:vendor" => "Bosak",
             "xsl:vendor-url" => "https://github.com/Fytala-Charles/Bosak",
             "xsl:product-name" => "Bosak XPath",
-            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.13.0",
+            "xsl:product-version" => typeof(FunctionLibrary).Assembly.GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "1.0.0",
             "xsl:is-schema-aware" => "no",
             "xsl:supports-serialization" => "yes",
             "xsl:supports-backwards-compatibility" => "yes",
