@@ -368,6 +368,10 @@
 //                      | Charles Korthout | 2.167 | 08-10-2026     | REQ-118 4.0-S6b: structural record types (§3.2.10) — record annotations on XdmMap,   |
 //                      |                  |       |                | instance-of/coercion (§3.4.2 rule 10)/cast (§4.19.2.7), record lookup checks, 'but with'|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.168 | 09-10-2026     | REQ-123 fn:op support: extracted EvaluateRange/Union/Intersect/ExceptNodeSequences   |
+//                      |                  |       |                | + EvaluateNodeComparison from the opcode dispatch; public ApplyBinaryOperator (F&O    |
+//                      |                  |       |                | 4.0 §18.4) reuses them for all 31 fn:op operators                                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -766,108 +770,19 @@ internal static class VmEngine
                     break;
 
                 case IrOpCode.Range:
-                    {
-                        var left = registers[instr.RegisterB];
-                        var right = registers[instr.RegisterC];
-
-                        // XPath 1.0 backwards compatibility: the operands of "to" are
-                        // converted to integers by taking the first item of a sequence.
-                        if (context.BackwardsCompatible)
-                        {
-                            left = FirstItemOrUndefined(left);
-                            right = FirstItemOrUndefined(right);
-                        }
-
-                        if (left.IsUndefined || IsEmptySeq(left) || right.IsUndefined || IsEmptySeq(right))
-                        {
-                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
-                            ip++;
-                            break;
-                        }
-                        if (context.BackwardsCompatible)
-                        {
-                            long from = ToInteger(left);
-                            long to = ToInteger(right);
-                            if (from > to)
-                            {
-                                registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
-                                ip++;
-                                break;
-                            }
-                            registers[instr.RegisterA] = XdmValue.FromSequence(
-                                XdmSequence.FromSource(new IntegerRangeSequence(from, to)));
-                            ip++;
-                            break;
-                        }
-
-                        if (!TryGetRangeOperand(left, out var fromDecimal) || !TryGetRangeOperand(right, out var toDecimal))
-                            throw new InvalidOperationException("XPTY0004: The operands of 'to' must be xs:integer");
-
-                        if (fromDecimal > toDecimal)
-                        {
-                            registers[instr.RegisterA] = XdmValue.FromSequence(XdmSequence.Empty);
-                            ip++;
-                            break;
-                        }
-                        if (fromDecimal >= long.MinValue && fromDecimal <= long.MaxValue
-                            && toDecimal >= long.MinValue && toDecimal <= long.MaxValue)
-                        {
-                            registers[instr.RegisterA] = XdmValue.FromSequence(
-                                XdmSequence.FromSource(new IntegerRangeSequence((long)fromDecimal, (long)toDecimal)));
-                        }
-                        else
-                        {
-                            registers[instr.RegisterA] = XdmValue.FromSequence(
-                                XdmSequence.FromSource(new DecimalRangeSequence(fromDecimal, toDecimal)));
-                        }
-                        ip++;
-                        break;
-                    }
+                    registers[instr.RegisterA] = EvaluateRange(registers[instr.RegisterB], registers[instr.RegisterC], context);
+                    ip++;
+                    break;
 
                 case IrOpCode.Concatenate:
-                    {
-                        var left = MaterializeSequence(registers[instr.RegisterB]);
-                        var right = MaterializeSequence(registers[instr.RegisterC]);
-                        RequireNodeSequence(left);
-                        RequireNodeSequence(right);
-                        var combined = new List<XdmValue>(left.Length + right.Length);
-                        combined.AddRange(left);
-                        combined.AddRange(right);
-                        registers[instr.RegisterA] = NormalizeSequence(
-                            XdmValue.FromSequence(MaterializedSequence.FromList(combined)));
-                        ip++;
-                        break;
-                    }
+                    registers[instr.RegisterA] = UnionNodeSequences(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    ip++;
+                    break;
 
                 case IrOpCode.Intersect:
-                    {
-                        var left = MaterializeSequence(registers[instr.RegisterB]);
-                        var right = MaterializeSequence(registers[instr.RegisterC]);
-                        RequireNodeSequence(left);
-                        RequireNodeSequence(right);
-                        var rightNodes = new List<IXdmNode>();
-                        foreach (var item in right)
-                            if (item.IsNode)
-                                rightNodes.Add(item.NodeValue);
-
-                        var result = new List<XdmValue>();
-                        foreach (var item in left)
-                        {
-                            if (!item.IsNode) continue;
-                            foreach (var rn in rightNodes)
-                            {
-                                if (rn.IsSameNode(item.NodeValue))
-                                {
-                                    result.Add(item);
-                                    break;
-                                }
-                            }
-                        }
-                        registers[instr.RegisterA] = NormalizeSequence(
-                            XdmValue.FromSequence(MaterializedSequence.FromList(result)));
-                        ip++;
-                        break;
-                    }
+                    registers[instr.RegisterA] = IntersectNodeSequences(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    ip++;
+                    break;
 
                 case IrOpCode.ButWith:
                     {
@@ -880,37 +795,9 @@ internal static class VmEngine
                     }
 
                 case IrOpCode.Except:
-                    {
-                        var left = MaterializeSequence(registers[instr.RegisterB]);
-                        var right = MaterializeSequence(registers[instr.RegisterC]);
-                        RequireNodeSequence(left);
-                        RequireNodeSequence(right);
-                        var rightNodes = new List<IXdmNode>();
-                        foreach (var item in right)
-                            if (item.IsNode)
-                                rightNodes.Add(item.NodeValue);
-
-                        var result = new List<XdmValue>();
-                        foreach (var item in left)
-                        {
-                            if (!item.IsNode) continue;
-                            bool inRight = false;
-                            foreach (var rn in rightNodes)
-                            {
-                                if (rn.IsSameNode(item.NodeValue))
-                                {
-                                    inRight = true;
-                                    break;
-                                }
-                            }
-                            if (!inRight)
-                                result.Add(item);
-                        }
-                        registers[instr.RegisterA] = NormalizeSequence(
-                            XdmValue.FromSequence(MaterializedSequence.FromList(result)));
-                        ip++;
-                        break;
-                    }
+                    registers[instr.RegisterA] = ExceptNodeSequences(registers[instr.RegisterB], registers[instr.RegisterC]);
+                    ip++;
+                    break;
 
                 case IrOpCode.SimpleMap:
                     {
@@ -2792,50 +2679,19 @@ internal static class VmEngine
                     }
 
                 case IrOpCode.IsSameNode:
-                    {
-                        var left = UnwrapSingleton(registers[instr.RegisterB]);
-                        var right = UnwrapSingleton(registers[instr.RegisterC]);
-                        // Empty sequence operand -> empty sequence result
-                        if (left.IsUndefined || right.IsUndefined)
-                        {
-                            registers[instr.RegisterA] = XdmValue.Undefined;
-                        }
-                        else if (!left.IsNode || !right.IsNode)
-                        {
-                            throw new InvalidOperationException("XPTY0004: Node comparison operator 'is' requires single node operands.");
-                        }
-                        else
-                        {
-                            bool result = left.NodeValue.IsSameNode(right.NodeValue);
-                            registers[instr.RegisterA] = XdmValue.FromBoolean(result);
-                        }
-                        ip++;
-                        break;
-                    }
+                    registers[instr.RegisterA] = EvaluateNodeComparison(NodeComparison.Is, registers[instr.RegisterB], registers[instr.RegisterC]);
+                    ip++;
+                    break;
 
                 case IrOpCode.PrecedesNode:
+                    registers[instr.RegisterA] = EvaluateNodeComparison(NodeComparison.Precedes, registers[instr.RegisterB], registers[instr.RegisterC]);
+                    ip++;
+                    break;
+
                 case IrOpCode.FollowsNode:
-                    {
-                        var left = UnwrapSingleton(registers[instr.RegisterB]);
-                        var right = UnwrapSingleton(registers[instr.RegisterC]);
-                        if (left.IsUndefined || right.IsUndefined)
-                        {
-                            registers[instr.RegisterA] = XdmValue.Undefined;
-                        }
-                        else if (!left.IsNode || !right.IsNode)
-                        {
-                            throw new InvalidOperationException("XPTY0004: Node comparison operators '<<' and '>>' require single node operands.");
-                        }
-                        else
-                        {
-                            bool result = instr.OpCode == IrOpCode.PrecedesNode
-                                ? left.NodeValue.DocumentOrder < right.NodeValue.DocumentOrder
-                                : left.NodeValue.DocumentOrder > right.NodeValue.DocumentOrder;
-                            registers[instr.RegisterA] = XdmValue.FromBoolean(result);
-                        }
-                        ip++;
-                        break;
-                    }
+                    registers[instr.RegisterA] = EvaluateNodeComparison(NodeComparison.Follows, registers[instr.RegisterB], registers[instr.RegisterC]);
+                    ip++;
+                    break;
 
                 // ------------------------------------------------------------------
                 // Arithmetic
@@ -5685,6 +5541,277 @@ internal static class VmEngine
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Node-comparison variants shared by the <c>is</c>/<c>&lt;&lt;</c>/<c>&gt;&gt;</c> opcodes
+    /// (via <see cref="EvaluateNodeComparison"/>) and the XPath 4.0 fn:op keyword forms
+    /// <c>is-not</c>, <c>precedes</c>, <c>follows</c>, <c>precedes-or-is</c>, <c>follows-or-is</c>.
+    /// </summary>
+    internal enum NodeComparison
+    {
+        Is,
+        IsNot,
+        Precedes,
+        Follows,
+        PrecedesOrIs,
+        FollowsOrIs,
+    }
+
+    /// <summary>
+    /// Evaluates a node comparison over two operands. An empty operand yields the empty
+    /// sequence; a non-node operand is XPTY0004. Document order decides precedes/follows,
+    /// with identity accepted by the *-or-is variants.
+    /// </summary>
+    private static XdmValue EvaluateNodeComparison(NodeComparison comparison, XdmValue leftValue, XdmValue rightValue)
+    {
+        var left = UnwrapSingleton(leftValue);
+        var right = UnwrapSingleton(rightValue);
+        // Empty sequence operand -> empty sequence result
+        if (left.IsUndefined || right.IsUndefined)
+            return XdmValue.Undefined;
+        if (!left.IsNode || !right.IsNode)
+        {
+            throw comparison is NodeComparison.Is or NodeComparison.IsNot
+                ? new InvalidOperationException("XPTY0004: Node comparison operator 'is' requires single node operands.")
+                : new InvalidOperationException("XPTY0004: Node comparison operators '<<' and '>>' require single node operands.");
+        }
+
+        bool same = left.NodeValue.IsSameNode(right.NodeValue);
+        bool result = comparison switch
+        {
+            NodeComparison.Is => same,
+            NodeComparison.IsNot => !same,
+            NodeComparison.Precedes => !same && left.NodeValue.DocumentOrder < right.NodeValue.DocumentOrder,
+            NodeComparison.Follows => !same && left.NodeValue.DocumentOrder > right.NodeValue.DocumentOrder,
+            NodeComparison.PrecedesOrIs => same || left.NodeValue.DocumentOrder < right.NodeValue.DocumentOrder,
+            NodeComparison.FollowsOrIs => same || left.NodeValue.DocumentOrder > right.NodeValue.DocumentOrder,
+            _ => throw new InvalidOperationException($"XPTY0004: Unsupported node comparison {comparison}."),
+        };
+        return XdmValue.FromBoolean(result);
+    }
+
+    /// <summary>
+    /// Union (<c>|</c>) of two node sequences: both operands must be node sequences (XPTY0004
+    /// otherwise); the result is duplicate-free in document order.
+    /// </summary>
+    private static XdmValue UnionNodeSequences(XdmValue leftValue, XdmValue rightValue)
+    {
+        var left = MaterializeSequence(leftValue);
+        var right = MaterializeSequence(rightValue);
+        RequireNodeSequence(left);
+        RequireNodeSequence(right);
+        var combined = new List<XdmValue>(left.Length + right.Length);
+        combined.AddRange(left);
+        combined.AddRange(right);
+        return NormalizeSequence(XdmValue.FromSequence(MaterializedSequence.FromList(combined)));
+    }
+
+    /// <summary>Intersection of two node sequences, in document order (see <see cref="UnionNodeSequences"/>).</summary>
+    private static XdmValue IntersectNodeSequences(XdmValue leftValue, XdmValue rightValue)
+    {
+        var left = MaterializeSequence(leftValue);
+        var right = MaterializeSequence(rightValue);
+        RequireNodeSequence(left);
+        RequireNodeSequence(right);
+        var rightNodes = new List<IXdmNode>();
+        foreach (var item in right)
+            if (item.IsNode)
+                rightNodes.Add(item.NodeValue);
+
+        var result = new List<XdmValue>();
+        foreach (var item in left)
+        {
+            if (!item.IsNode) continue;
+            foreach (var rn in rightNodes)
+            {
+                if (rn.IsSameNode(item.NodeValue))
+                {
+                    result.Add(item);
+                    break;
+                }
+            }
+        }
+        return NormalizeSequence(XdmValue.FromSequence(MaterializedSequence.FromList(result)));
+    }
+
+    /// <summary>Set difference of two node sequences, in document order (see <see cref="UnionNodeSequences"/>).</summary>
+    private static XdmValue ExceptNodeSequences(XdmValue leftValue, XdmValue rightValue)
+    {
+        var left = MaterializeSequence(leftValue);
+        var right = MaterializeSequence(rightValue);
+        RequireNodeSequence(left);
+        RequireNodeSequence(right);
+        var rightNodes = new List<IXdmNode>();
+        foreach (var item in right)
+            if (item.IsNode)
+                rightNodes.Add(item.NodeValue);
+
+        var result = new List<XdmValue>();
+        foreach (var item in left)
+        {
+            if (!item.IsNode) continue;
+            bool inRight = false;
+            foreach (var rn in rightNodes)
+            {
+                if (rn.IsSameNode(item.NodeValue))
+                {
+                    inRight = true;
+                    break;
+                }
+            }
+            if (!inRight)
+                result.Add(item);
+        }
+        return NormalizeSequence(XdmValue.FromSequence(MaterializedSequence.FromList(result)));
+    }
+
+    /// <summary>Range (<c>to</c>) operator: both operands must be xs:integer (XPTY0004 otherwise).</summary>
+    private static XdmValue EvaluateRange(XdmValue leftValue, XdmValue rightValue, EvaluationContext context)
+    {
+        var left = leftValue;
+        var right = rightValue;
+
+        // XPath 1.0 backwards compatibility: the operands of "to" are
+        // converted to integers by taking the first item of a sequence.
+        if (context.BackwardsCompatible)
+        {
+            left = FirstItemOrUndefined(left);
+            right = FirstItemOrUndefined(right);
+        }
+
+        if (left.IsUndefined || IsEmptySeq(left) || right.IsUndefined || IsEmptySeq(right))
+            return XdmValue.FromSequence(XdmSequence.Empty);
+        if (context.BackwardsCompatible)
+        {
+            long from = ToInteger(left);
+            long to = ToInteger(right);
+            if (from > to)
+                return XdmValue.FromSequence(XdmSequence.Empty);
+            return XdmValue.FromSequence(XdmSequence.FromSource(new IntegerRangeSequence(from, to)));
+        }
+
+        if (!TryGetRangeOperand(left, out var fromDecimal) || !TryGetRangeOperand(right, out var toDecimal))
+            throw new InvalidOperationException("XPTY0004: The operands of 'to' must be xs:integer");
+
+        if (fromDecimal > toDecimal)
+            return XdmValue.FromSequence(XdmSequence.Empty);
+        if (fromDecimal >= long.MinValue && fromDecimal <= long.MaxValue
+            && toDecimal >= long.MinValue && toDecimal <= long.MaxValue)
+        {
+            return XdmValue.FromSequence(
+                XdmSequence.FromSource(new IntegerRangeSequence((long)fromDecimal, (long)toDecimal)));
+        }
+        return XdmValue.FromSequence(
+            XdmSequence.FromSource(new DecimalRangeSequence(fromDecimal, toDecimal)));
+    }
+
+    /// <summary>
+    /// Applies one of the 31 binary operators exposed by XPath 4.0 fn:op (F&O 4.0 §18.4) to
+    /// two operand sequences. This is the single semantics source for the operator: the
+    /// opcode dispatch above and the fn:op function item both route through here.
+    /// </summary>
+    /// <param name="operatorName">The operator name as accepted by fn:op (e.g. <c>"+"</c>, <c>"eq"</c>, <c>"union"</c>).</param>
+    /// <param name="left">The left operand (<c>$x</c> in <c>$x ⊙ $y</c>).</param>
+    /// <param name="right">The right operand (<c>$y</c> in <c>$x ⊙ $y</c>).</param>
+    /// <param name="context">The evaluation context (collation, implicit timezone, backwards-compat mode).</param>
+    /// <returns>The operator result; operators with empty-sequence propagation return the empty sequence.</returns>
+    /// <exception cref="InvalidOperationException">XPTY0004: the operator name is not one of the 31 supported operators.</exception>
+    public static XdmValue ApplyBinaryOperator(string operatorName, XdmValue left, XdmValue right, EvaluationContext context)
+    {
+        switch (operatorName)
+        {
+            case ",": // sequence concatenation: fn($x, $y) { $x, $y }
+                if (IsEmptySequence(left))
+                    return right;
+                if (IsEmptySequence(right))
+                    return left;
+                var concatLeft = MaterializeSequence(left);
+                var concatRight = MaterializeSequence(right);
+                var concatenated = new List<XdmValue>(concatLeft.Length + concatRight.Length);
+                concatenated.AddRange(concatLeft);
+                concatenated.AddRange(concatRight);
+                return XdmValue.FromSequence(MaterializedSequence.FromList(concatenated));
+
+            case "and":
+                return XdmValue.FromBoolean(left.GetEffectiveBooleanValue() && right.GetEffectiveBooleanValue());
+            case "or":
+                return XdmValue.FromBoolean(left.GetEffectiveBooleanValue() || right.GetEffectiveBooleanValue());
+            case "otherwise": // XPath 4.0 §4.17: LHS unless empty, then RHS
+                return IsEmptySequence(left) ? right : left;
+
+            case "+":
+                return Add(left, right, context);
+            case "-":
+                return Subtract(left, right, context);
+            case "*":
+                return Multiply(left, right, context);
+            case "div":
+                return Divide(left, right, context);
+            case "idiv":
+                return IntegerDivide(left, right, context);
+            case "mod":
+                return Modulo(left, right, context);
+
+            case "=":
+                return CompareGeneral(IrOpCode.GeneralEqual, left, right, context);
+            case "<":
+                return CompareGeneral(IrOpCode.GeneralLessThan, left, right, context);
+            case "<=":
+                return CompareGeneral(IrOpCode.GeneralLessThanOrEqual, left, right, context);
+            case ">":
+                return CompareGeneral(IrOpCode.GeneralGreaterThan, left, right, context);
+            case ">=":
+                return CompareGeneral(IrOpCode.GeneralGreaterThanOrEqual, left, right, context);
+            case "!=":
+                return CompareGeneral(IrOpCode.GeneralNotEqual, left, right, context);
+
+            case "eq":
+                return Compare(IrOpCode.ValueEqual, left, right, context);
+            case "lt":
+                return Compare(IrOpCode.ValueLessThan, left, right, context);
+            case "le":
+                return Compare(IrOpCode.ValueLessThanOrEqual, left, right, context);
+            case "gt":
+                return Compare(IrOpCode.ValueGreaterThan, left, right, context);
+            case "ge":
+                return Compare(IrOpCode.ValueGreaterThanOrEqual, left, right, context);
+            case "ne":
+                return Compare(IrOpCode.ValueNotEqual, left, right, context);
+
+            case "is":
+                return EvaluateNodeComparison(NodeComparison.Is, left, right);
+            case "is-not":
+                return EvaluateNodeComparison(NodeComparison.IsNot, left, right);
+            case "<<":
+            case "precedes":
+                return EvaluateNodeComparison(NodeComparison.Precedes, left, right);
+            case ">>":
+            case "follows":
+                return EvaluateNodeComparison(NodeComparison.Follows, left, right);
+            case "precedes-or-is":
+                return EvaluateNodeComparison(NodeComparison.PrecedesOrIs, left, right);
+            case "follows-or-is":
+                return EvaluateNodeComparison(NodeComparison.FollowsOrIs, left, right);
+
+            case "||":
+                return XdmValue.FromString(AtomizedStringValue(left) + AtomizedStringValue(right));
+
+            case "|":
+            case "union":
+                return UnionNodeSequences(left, right);
+            case "intersect":
+                return IntersectNodeSequences(left, right);
+            case "except":
+                return ExceptNodeSequences(left, right);
+
+            case "to":
+                return EvaluateRange(left, right, context);
+
+            default:
+                throw new InvalidOperationException(
+                    $"XPTY0004: fn:op: '{operatorName}' is not one of the supported binary operators.");
+        }
     }
 
     private static XdmValue Add(XdmValue left, XdmValue right, EvaluationContext context)

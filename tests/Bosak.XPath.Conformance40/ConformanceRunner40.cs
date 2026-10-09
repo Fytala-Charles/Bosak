@@ -23,6 +23,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 09-10-2026     | GatedSets seeded from the third baseline sweep: 201 test-sets at 100% green (P>0, F=0)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 09-10-2026     | fn:op slice: scan KnownGaps removed (all six pass at XPath40Experimental); fn-op and     |
+//                      |                  |       |                | fn-scan promoted into GatedSets                                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -68,19 +71,12 @@ internal sealed class ConformanceRunner40
     /// <summary>
     /// Known XPath 4.0 conformance gaps: admitted tests that fail on engine features not
     /// yet implemented. Each entry names the missing feature; these are the work items
-    /// for closing 4.0 conformance. Seeded from the 2026-10-09 baseline sweep.
+    /// for closing 4.0 conformance. Seeded from the 2026-10-09 baseline sweep; the
+    /// fn:op-blocked fn:scan entries were removed again by the fn:op slice (all six
+    /// now pass at the XPath40Experimental level).
     /// </summary>
     private static readonly Dictionary<string, string> KnownGaps = new(StringComparer.Ordinal)
     {
-        // fn/scan.xml — fn:scan itself passes at the XPath40Experimental level, but these
-        // six tests exercise it through fn:op (the XPath 4.0 operator-function accessor,
-        // F&O 4.0 §2.7), which Bosak does not implement yet.
-        ["scan-001"] = "Missing feature: fn:op operator functions (F&O 4.0 §2.7)",
-        ["scan-002"] = "Missing feature: fn:op operator functions (F&O 4.0 §2.7)",
-        ["scan-005"] = "Missing feature: fn:op operator functions (F&O 4.0 §2.7)",
-        ["scan-007"] = "Missing feature: fn:op operator functions (F&O 4.0 §2.7)",
-        ["scan-008"] = "Missing feature: fn:op operator functions (F&O 4.0 §2.7)",
-        ["scan-009"] = "Missing feature: fn:op operator functions (F&O 4.0 §2.7)",
     };
 
     public ConformanceRunner40(string suitePath, string? setFilter = null, string? testFilter = null)
@@ -112,12 +108,14 @@ internal sealed class ConformanceRunner40
         "fn-codepoint-equal",
         "fn-collection",
         "fn-count",
+        "fn-contains-subsequence",
         "fn-current-date",
         "fn-current-dateTime",
         "fn-current-time",
         "fn-data",
         "fn-dateTime",
         "fn-day-from-date",
+        "fn-do-until",
         "fn-default-collation",
         "fn-default-language",
         "fn-element-with-id",
@@ -153,6 +151,7 @@ internal sealed class ConformanceRunner40
         "fn-namespace-uri-from-QName",
         "fn-not",
         "fn-one-or-more",
+        "fn-op",
         "fn-parse-ietf-date",
         "fn-partition",
         "fn-position",
@@ -168,6 +167,7 @@ internal sealed class ConformanceRunner40
         "fn-starts-with",
         "fn-static-base-uri",
         "fn-string-to-codepoints",
+        "fn-take-while",
         "fn-tail",
         "fn-timezone-from-date",
         "fn-timezone-from-time",

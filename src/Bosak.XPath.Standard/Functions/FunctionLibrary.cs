@@ -415,6 +415,9 @@
 //                      | Charles Korthout | 5.132 | 08-10-2026     | REQ-118 4.0-S5 follow-up: register fn:identity#1 (IsXPath40Only) — referenced by          |
 //                      |                  |       |                | map:build/array:build keyword defaults but previously unregistered                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.133 | 09-10-2026     | REQ-123 fn:op (F&O 4.0 §18.4, frozen level): returns a DelegateFunctionItem arity 2     |
+//                      |                  |       |                | whose implementation routes through VmEngine.ApplyBinaryOperator (all 31 operators)     |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -3305,6 +3308,16 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = TransitiveClosure_2
             },
+            // fn:op (F&O 4.0 §18.4, New in 4.0 Issue 83/PR 173, October 2022 — frozen level):
+            // returns fn($x, $y) { $x ⊙ $y } for the 31 supported binary operators.
+            [(Namespaces.Fn, "op", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "op", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Function,
+                IsXPath40Only = true,
+                Implementation = Op_1
+            },
             // ----- REQ-123 experimental tier (4.0-Exp S1): not-yet-stabilized draft
             // additions, hidden from the frozen XPath40 level; exposed only when the
             // compatibility level is XPath40Experimental (EvaluationContext flag).
@@ -4461,6 +4474,7 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "partial-apply")] = new(["function", "arguments"], [null, null]),
             [(Namespaces.Fn, "transitive-closure")] = new(["node", "step"], [null, null]),
             [(Namespaces.Fn, "scan")] = new(["input", "init", "action"], [null, null, null]),
+            [(Namespaces.Fn, "op")] = new(["operator"], [null]),
         };
         return table.ToFrozenDictionary();
     }
@@ -4683,6 +4697,8 @@ public static class FunctionLibrary
             return XdmValue.FromInteger(curried.Arity);
         if (funcValue is CoercedFunctionItem coerced)
             return XdmValue.FromInteger(coerced.ParamTypes.Count);
+        if (funcValue is DelegateFunctionItem del)
+            return XdmValue.FromInteger(del.Arity);
         return XdmValue.Undefined;
     }
 
@@ -4961,6 +4977,38 @@ public static class FunctionLibrary
             partitions.Add(XdmValue.FromArray(new XdmArray(current)));
         return XdmValue.FromSequence(MaterializedSequence.FromList(partitions));
     }
+
+    /// <summary>
+    /// F+O 4.0 §18.4 fn:op — returns the function represented by
+    /// <c>fn($x, $y) { $x ⊙ $y }</c>, where ⊙ is the supplied binary operator. The
+    /// operator name is validated eagerly (XPTY0004 for anything outside the 31
+    /// supported operators of F&O 4.0 §18.4); the returned arity-2 function routes
+    /// each invocation through <see cref="VmEngine.ApplyBinaryOperator"/> so its
+    /// semantics are bit-identical to the infix operator (collation, implicit
+    /// timezone, and empty-sequence propagation included).
+    /// </summary>
+    private static XdmValue Op_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var opName = AtomizedString(args[0]);
+        // Validate eagerly: op('!') must raise XPTY0004 at the fn:op call itself,
+        // not at the first invocation of the returned function (qt4tests fn-op-003).
+        if (!IsSupportedOpName(opName))
+            throw new InvalidOperationException(
+                $"XPTY0004: fn:op: '{opName}' is not one of the supported binary operators.");
+        return XdmValue.FromFunction(new DelegateFunctionItem(2, (callCtx, callArgs) =>
+            VmEngine.ApplyBinaryOperator(opName, callArgs[0], callArgs[1], callCtx)));
+    }
+
+    private static bool IsSupportedOpName(string opName) => opName switch
+    {
+        "," or "and" or "or" or "+" or "-" or "*" or "div" or "idiv" or "mod"
+            or "=" or "<" or "<=" or ">" or ">=" or "!="
+            or "eq" or "lt" or "le" or "gt" or "ge" or "ne"
+            or "<<" or ">>" or "precedes" or "follows" or "precedes-or-is" or "follows-or-is"
+            or "is" or "is-not" or "||" or "|" or "union" or "except" or "intersect" or "to"
+            or "otherwise" => true,
+        _ => false,
+    };
 
     /// <summary>
     /// F+O 4.0 §2.5.15 fn:scan — the prefix scan (cumulative fold) of <c>$input</c>:
