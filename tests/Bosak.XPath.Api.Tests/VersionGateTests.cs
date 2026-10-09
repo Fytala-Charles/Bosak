@@ -41,6 +41,9 @@
 //                      | Charles Korthout | 0.11  | 09-10-2026     | REQ-123 4.0-Exp S1: fn:scan is experimental-only — XPST0017 at 3.1 AND frozen        |
 //                      |                  |       |                | XPath40 (call + named-function-ref forms), works at XPath40Experimental               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 09-10-2026     | REQ-123 fn:op slice: frozen-level gate rows (XPST0017 at 3.1, works at frozen        |
+//                      |                  |       |                | XPath40 — NOT experimental)                                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -179,6 +182,29 @@ public class VersionGateTests
     {
         Assert.Equal("15",
             Eval40Exp("fn:foot(fn:scan(1 to 5, 0, function($a, $b, $p) { $a + $b })?*)").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 fn:op slice: frozen-level 4.0 function — XPST0017 at 3.1,
+    // available at the frozen XPath40 level (NOT experimental)
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("fn:op('+')(2, 2)")]
+    [InlineData("fn:op#1")]
+    public void Compile_Frozen40Functions_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Op_FrozenXPath40_Works()
+    {
+        var expr = XPath31Expression.Compile(
+            "fn:op('+')(2, 2)",
+            new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+        Assert.Equal("4", expr.Evaluate(new EvaluationContext()).ToString());
     }
 
     [Fact]
