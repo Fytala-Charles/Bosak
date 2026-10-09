@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 08-10-2026     | REQ-118: added XPath40 (4.0-S0 version gate)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 09-10-2026     | REQ-123: added XPath40Experimental (1.1.0 track — 4.0-Exp S1 level plumbing)             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Api;
 
@@ -22,10 +24,21 @@ namespace Bosak.XPath.Api;
 /// Specifies the XPath language version compatibility for compilation.
 /// The default (<see cref="XPath31"/>) is unchanged from previous releases;
 /// <see cref="XPath40"/> opts in to XPath 4.0 features (REQ-118 version gate,
-/// dossier docs/REQ-118-xpath-xslt-40.md).
+/// dossier docs/REQ-118-xpath-xslt-40.md); <see cref="XPath40Experimental"/>
+/// additionally opts in to not-yet-stabilized 4.0 draft additions (REQ-123).
 /// </summary>
 public enum XPathCompatibility
 {
+    /// <summary>
+    /// XPath 4.0, experimental tier (opt-in, 1.1.0). Everything in
+    /// <see cref="XPath40"/> plus 4.0 draft additions that are NOT yet
+    /// stabilized — post-June-2026 spec sections carrying churn risk
+    /// (REQ-123). Experimental-only functions raise XPST0017 at both
+    /// <see cref="XPath31"/> and <see cref="XPath40"/>; semantics may
+    /// change as the draft moves.
+    /// </summary>
+    XPath40Experimental = 50,
+
     /// <summary>
     /// XPath 4.0 (opt-in). Allows the constructs of XPath 3.1 plus the XPath 4.0
     /// surfaces as they land: 4.0-only F&amp;O functions (slice 4.0-S1: fn:replicate,

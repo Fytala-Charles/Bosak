@@ -99,6 +99,9 @@
 //                      |                  |       |                | all-equal/all-different, highest/lowest, sort-by/sort-with, graphemes, pad-string,      |
 //                      |                  |       |                | trim-space, index-of-substring, substring-before/after-last, hash                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.118 | 09-10-2026     | REQ-123 4.0-Exp S1: fn:scan (F&O 4.0 §2.5.15) as first IsXPath40ExperimentalOnly        |
+//                      |                  |       |                | function; experimental templates + Populate switch + XPath40ExperimentalOnlyFunctionNames |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -449,6 +452,18 @@ public static class FunctionLibrary
     /// <c>StandardFunctions</c> table, so it always reflects the registered signatures.
     /// </summary>
     public static FrozenSet<(string NamespaceUri, string LocalName)> XPath40OnlyFunctionNames { get; }
+
+    /// <summary>
+    /// The (namespace URI, local name) pairs of all standard functions that are marked
+    /// <see cref="FunctionSignature.IsXPath40ExperimentalOnly"/>: additions to the XPath 4.0
+    /// draft that are not yet stabilized and therefore hidden from the frozen
+    /// <see cref="XPathCompatibility.XPath40"/> level as well as from 3.1. The Api layer
+    /// consults this set during compilation to raise XPST0017 outside
+    /// <see cref="XPathCompatibility.XPath40Experimental"/> mode (REQ-123, slice 4.0-Exp S1).
+    /// Built once from the <c>StandardFunctions</c> table, so it always reflects the
+    /// registered signatures.
+    /// </summary>
+    public static FrozenSet<(string NamespaceUri, string LocalName)> XPath40ExperimentalOnlyFunctionNames { get; }
 
     static FunctionLibrary()
     {
@@ -3290,6 +3305,17 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = TransitiveClosure_2
             },
+            // ----- REQ-123 experimental tier (4.0-Exp S1): not-yet-stabilized draft
+            // additions, hidden from the frozen XPath40 level; exposed only when the
+            // compatibility level is XPath40Experimental (EvaluationContext flag).
+            [(Namespaces.Fn, "scan", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "scan", Arity = 3,
+                ParameterTypes = [XdmValueKind.Sequence, XdmValueKind.Sequence, XdmValueKind.Function],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40ExperimentalOnly = true,
+                Implementation = Scan_3
+            },
             // ----- xs:* constructor functions ---------------------------------
             [(Namespaces.Xs, "string", 1)] = new()
             {
@@ -4216,6 +4242,11 @@ public static class FunctionLibrary
             .Where(kvp => kvp.Value.IsXPath40Only)
             .Select(kvp => (kvp.Value.NamespaceUri, kvp.Value.LocalName))
             .ToFrozenSet();
+
+        XPath40ExperimentalOnlyFunctionNames = StandardFunctions
+            .Where(kvp => kvp.Value.IsXPath40ExperimentalOnly)
+            .Select(kvp => (kvp.Value.NamespaceUri, kvp.Value.LocalName))
+            .ToFrozenSet();
     }
 
     /// <summary>
@@ -4252,7 +4283,15 @@ public static class FunctionLibrary
     private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplateStaticEval40 =
         new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: true, includeXPath40Only: true));
 
-    private static Dictionary<(string, string, int), FunctionSignature> BuildStandardTemplate(bool excludeXsltDynamicFunctions, bool includeXPath40Only)
+    // REQ-123 (4.0-Exp S1): the experimental level installs the frozen XPath 4.0
+    // table plus the IsXPath40ExperimentalOnly additions.
+    private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplate40Exp =
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: false, includeXPath40Only: true, includeXPath40Experimental: true));
+
+    private static readonly Lazy<Dictionary<(string, string, int), FunctionSignature>> s_standardTemplateStaticEval40Exp =
+        new(() => BuildStandardTemplate(excludeXsltDynamicFunctions: true, includeXPath40Only: true, includeXPath40Experimental: true));
+
+    private static Dictionary<(string, string, int), FunctionSignature> BuildStandardTemplate(bool excludeXsltDynamicFunctions, bool includeXPath40Only, bool includeXPath40Experimental = false)
     {
         var template = new Dictionary<(string, string, int), FunctionSignature>(StandardFunctions.Count);
         foreach (var kvp in StandardFunctions)
@@ -4262,6 +4301,10 @@ public static class FunctionLibrary
             // gate): the Api layer already rejects them at compile time, and hiding
             // them here keeps fn:function-lookup and dynamic dispatch 3.1-clean.
             if (!includeXPath40Only && sig.IsXPath40Only)
+                continue;
+            // Experimental draft additions (REQ-123) are hidden from both 3.1 and the
+            // frozen XPath40 level; only XPath40Experimental contexts install them.
+            if (!includeXPath40Experimental && sig.IsXPath40ExperimentalOnly)
                 continue;
             // document() is an XSLT-defined function (XSLT 1.0 heritage), not part of the
             // XPath/XQuery function library: pure XPath/XQuery calls must raise XPST0017
@@ -4279,17 +4322,26 @@ public static class FunctionLibrary
 
     /// <summary>
     /// Populates the evaluation context with all standard functions. The installed
-    /// table depends on <see cref="EvaluationContext.IsXPath40"/>: 3.1 contexts (the
-    /// default, including all XSLT and XQuery hosts) omit XPath 4.0-only functions so
-    /// that <c>fn:function-lookup</c> and dynamic dispatch cannot see them; 4.0 contexts
-    /// install the full table.
+    /// table depends on <see cref="EvaluationContext.IsXPath40"/> and
+    /// <see cref="EvaluationContext.IsXPath40Experimental"/>: 3.1 contexts (the default,
+    /// including all XSLT and XQuery hosts) omit XPath 4.0-only functions so that
+    /// <c>fn:function-lookup</c> and dynamic dispatch cannot see them; frozen 4.0 contexts
+    /// install the full XPath 4.0 table; experimental 4.0 contexts (REQ-123) additionally
+    /// install the not-yet-stabilized <see cref="FunctionSignature.IsXPath40ExperimentalOnly"/>
+    /// additions.
     /// </summary>
     /// <param name="context">The evaluation context to populate.</param>
     public static void Populate(EvaluationContext context)
     {
-        var template = context.IsStaticEvaluation
-            ? context.IsXPath40 ? s_standardTemplateStaticEval40 : s_standardTemplateStaticEval
-            : context.IsXPath40 ? s_standardTemplate40 : s_standardTemplate;
+        var template = (context.IsStaticEvaluation, context.IsXPath40, context.IsXPath40Experimental) switch
+        {
+            (true, _, true) => s_standardTemplateStaticEval40Exp,
+            (true, true, false) => s_standardTemplateStaticEval40,
+            (true, false, false) => s_standardTemplateStaticEval,
+            (false, _, true) => s_standardTemplate40Exp,
+            (false, true, false) => s_standardTemplate40,
+            (false, false, false) => s_standardTemplate,
+        };
         context.InstallStandardFunctionTable(template.Value);
 
         // Register constructor functions for simple types declared in imported schemas.
@@ -4408,6 +4460,7 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "do-until")] = new(["input", "action", "predicate"], [null, null, null]),
             [(Namespaces.Fn, "partial-apply")] = new(["function", "arguments"], [null, null]),
             [(Namespaces.Fn, "transitive-closure")] = new(["node", "step"], [null, null]),
+            [(Namespaces.Fn, "scan")] = new(["input", "init", "action"], [null, null, null]),
         };
         return table.ToFrozenDictionary();
     }
@@ -4907,6 +4960,29 @@ public static class FunctionLibrary
         if (current.Count > 0)
             partitions.Add(XdmValue.FromArray(new XdmArray(current)));
         return XdmValue.FromSequence(MaterializedSequence.FromList(partitions));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §2.5.15 fn:scan — the prefix scan (cumulative fold) of <c>$input</c>:
+    /// a sequence of single-member arrays, the first holding <c>$init</c> and each
+    /// subsequent one holding <c>$action($acc, $item, $pos)</c> for the corresponding
+    /// input item. Empty input yields the single array <c>[$init]</c>. Marked
+    /// <see cref="FunctionSignature.IsXPath40ExperimentalOnly"/> (REQ-123, 4.0-Exp S1):
+    /// exposed only at the XPath40Experimental compatibility level.
+    /// </summary>
+    private static XdmValue Scan_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var action = RequireCallable(args[2], "fn:scan", "action");
+        var results = new List<XdmValue> { XdmValue.FromArray(new XdmArray(new[] { args[1] })) };
+        var acc = args[1];
+        long pos = 0;
+        foreach (var item in AsSequence(args[0]))
+        {
+            pos++;
+            acc = InvokeCallable(action, ctx, [acc, item, XdmValue.FromInteger(pos)]);
+            results.Add(XdmValue.FromArray(new XdmArray(new[] { acc })));
+        }
+        return XdmValue.FromSequence(MaterializedSequence.FromList(results));
     }
 
     /// <summary>
