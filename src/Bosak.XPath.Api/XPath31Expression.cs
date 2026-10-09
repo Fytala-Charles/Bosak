@@ -40,6 +40,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.15  | 08-10-2026     | REQ-118 4.0-S4: ResolveFunctionNamespaces for PipelineExprNode
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.16  | 09-10-2026     | REQ-123 4.0-Exp S1: stamp IsXPath40Experimental; static XPST0017 for                        |
+//                      |                  |       |                | IsXPath40ExperimentalOnly functions (call + named-function-ref forms)                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -180,6 +183,32 @@ public sealed class XPath31Expression
                 $"XPST0017: Function {{{nsUri}}}{localName} is defined in XPath 4.0 and is not available when targeting XPath {(int)options.Compatibility}; set CompileOptions.Compatibility to XPathCompatibility.XPath40.");
     }
 
+    // REQ-123 experimental tier (4.0-Exp S1): functions marked IsXPath40ExperimentalOnly
+    // are rejected at compile time unless the compilation targets XPath40Experimental.
+    // They are NOT IsXPath40Only, so the frozen-level check above does not see them;
+    // this is a separate check mirroring ThrowIfXPath40OnlyFunction, with the same
+    // canonical-URI fallback for unresolved predefined prefixes.
+    private static void ThrowIfXPath40ExperimentalOnlyFunction(string? nsUri, string localName, string? prefix, CompileOptions options)
+    {
+        if (options.Compatibility >= XPathCompatibility.XPath40Experimental)
+            return;
+        if (string.IsNullOrEmpty(nsUri))
+        {
+            nsUri = prefix switch
+            {
+                "fn" => DefaultFunctionNamespace,
+                "map" => "http://www.w3.org/2005/xpath-functions/map",
+                "array" => "http://www.w3.org/2005/xpath-functions/array",
+                "math" => "http://www.w3.org/2005/xpath-functions/math",
+                _ => null,
+            };
+        }
+        if (!string.IsNullOrEmpty(nsUri)
+            && FunctionLibrary.XPath40ExperimentalOnlyFunctionNames.Contains((nsUri, localName)))
+            throw new InvalidOperationException(
+                $"XPST0017: Function {{{nsUri}}}{localName} is a not-yet-stabilized XPath 4.0 addition and is not available when targeting XPath {(int)options.Compatibility}; set CompileOptions.Compatibility to XPathCompatibility.XPath40Experimental.");
+    }
+
     private static XPathAstNode ResolveFunctionNamespaces(XPathAstNode node, CompileOptions options)
     {
         return node switch
@@ -247,6 +276,7 @@ public sealed class XPath31Expression
         };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
         ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
+        ThrowIfXPath40ExperimentalOnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
         if (resolved.KeywordArguments is { Count: > 0 })
             resolved = ExpandKeywordArguments(resolved, options, arrowInsertsFirst);
         return resolved;
@@ -380,6 +410,7 @@ public sealed class XPath31Expression
         var resolved = node with { NamespaceUri = nsUri };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
         ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
+        ThrowIfXPath40ExperimentalOnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
         return resolved;
     }
 
@@ -391,6 +422,7 @@ public sealed class XPath31Expression
         var ctx = new EvaluationContext()
             .WithFocus(XdmValue.FromNode(contextItem), 1, 1);
         ctx.IsXPath40 = _compatibility >= XPathCompatibility.XPath40;
+        ctx.IsXPath40Experimental = _compatibility >= XPathCompatibility.XPath40Experimental;
 
         FunctionLibrary.Populate(ctx);
         return Evaluate(ctx);
@@ -403,8 +435,10 @@ public sealed class XPath31Expression
     {
         ArgumentNullException.ThrowIfNull(context);
         // REQ-118 version gate: stamp the compiled compatibility onto the context so
-        // FunctionLibrary.Populate installs (or hides) XPath 4.0-only functions.
+        // FunctionLibrary.Populate installs (or hides) XPath 4.0-only functions; the
+        // experimental tier (REQ-123) is additive over the frozen 4.0 level.
         context.IsXPath40 = _compatibility >= XPathCompatibility.XPath40;
+        context.IsXPath40Experimental = _compatibility >= XPathCompatibility.XPath40Experimental;
         if (!context.SkipStandardFunctionPopulation)
             FunctionLibrary.Populate(context);
 

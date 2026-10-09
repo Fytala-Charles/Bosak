@@ -26,6 +26,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 08-10-2026     | 4.0-S5 follow-up: fn:identity + keyword-default resolution test                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 09-10-2026     | REQ-123 4.0-Exp S1: fn:scan (F&O 4.0 §2.5.15) semantics at the XPath40Experimental       |
+//                      |                  |       |                | level — running sum, sequence accumulator, $pos, arity-2 callback, tail idiom, empty   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -56,6 +59,26 @@ public class XPath40FunctionTests
 
     private static InvalidOperationException Error40(string xpath)
         => Assert.Throws<InvalidOperationException>(() => Eval40(xpath));
+
+    // REQ-123 (4.0-Exp S1): the experimental level evaluates through the same
+    // pipeline with Compatibility = XPath40Experimental.
+    private static XdmValue Eval40Exp(string xpath)
+    {
+        var expr = XPath31Expression.Compile(xpath, new CompileOptions { Compatibility = XPathCompatibility.XPath40Experimental });
+        return expr.Evaluate(new EvaluationContext());
+    }
+
+    private static string[] Seq40Exp(string xpath)
+    {
+        var result = Eval40Exp(xpath);
+        if (result.IsUndefined)
+            return [];
+        Assert.True(result.IsSequence);
+        var list = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!))
+            list.Add(item.ToString());
+        return list.ToArray();
+    }
 
     // ------------------------------------------------------------------
     // fn:replicate (F+O 4.0 §2.1.10)
@@ -2023,5 +2046,79 @@ public class XPath40FunctionTests
         // The keyword expansion path resolves unfilled keywords through the signature
         // default snippets (here fn:identity#1 for map:build's $key).
         Assert.Equal("a", Eval40("map:get(map:build(input := ('a', 'b'), value := fn:string#1), 'a')").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // fn:scan (F+O 4.0 §2.5.15) — REQ-123 4.0-Exp S1, experimental level only.
+    // Each result array is single-member, so `?*` flattens the prefix scan into
+    // the accumulated values.
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Scan_RunningSum_YieldsNPlusOneAccumulations()
+    {
+        Assert.Equal(["0", "1", "3", "6", "10", "15"], Seq40Exp(
+            "(fn:scan(1 to 5, 0, function($acc, $item, $pos) { $acc + $item }))?*"));
+    }
+
+    [Fact]
+    public void Scan_EmptyInput_YieldsSingleArrayHoldingInit()
+    {
+        Assert.Equal(["0"], Seq40Exp(
+            "(fn:scan((), 0, function($acc, $item, $pos) { $acc + $item }))?*"));
+        Assert.Equal([], Seq40Exp(
+            "(fn:scan((), (), function($acc, $item, $pos) { $acc, $item }))?*"));
+    }
+
+    [Fact]
+    public void Scan_PositionArgument_IsOneBasedInputPosition()
+    {
+        Assert.Equal(["0", "1", "3", "6"], Seq40Exp(
+            "(fn:scan(1 to 3, 0, function($acc, $item, $pos) { $acc + $pos }))?*"));
+    }
+
+    [Fact]
+    public void Scan_Arity2Callback_TruncatesPositionArgument()
+    {
+        // F+O 4.0 §1.8: an arity-2 callback legally receives only ($acc, $item).
+        Assert.Equal(["0", "1", "3", "6"], Seq40Exp(
+            "(fn:scan(1 to 3, 0, function($acc, $item) { $acc + $item }))?*"));
+    }
+
+    [Fact]
+    public void Scan_SequenceAccumulator_MembersHoldSequences()
+    {
+        // Prepend accumulator: every scan array is single-member and that member
+        // holds the accumulator SEQUENCE, so [n]?1 reaches the n-th prefix and
+        // sequence accumulators compare against [( ... )] literals.
+        Assert.Equal("1", Eval40Exp(
+            "array:size((fn:scan(1 to 3, (), function($acc, $item, $pos) { $item, $acc }))[1])").ToString());
+        Assert.Equal("true", Eval40Exp(
+            "empty((fn:scan(1 to 3, (), function($acc, $item, $pos) { $item, $acc }))[1]?1)").ToString());
+        Assert.Equal("true", Eval40Exp(
+            "deep-equal((fn:scan(1 to 3, (), function($acc, $item, $pos) { $item, $acc }))[3], [(2, 1)])").ToString());
+        Assert.Equal("true", Eval40Exp(
+            "deep-equal((fn:scan(1 to 3, (), function($acc, $item, $pos) { $item, $acc }))[4], [(3, 2, 1)])").ToString());
+    }
+
+    [Fact]
+    public void Scan_TailIdiom_DropsInitMember()
+    {
+        Assert.Equal(["1", "3", "6"], Seq40Exp(
+            "(fn:tail(fn:scan(1 to 3, 0, function($acc, $item, $pos) { $acc + $item })))?*"));
+    }
+
+    [Fact]
+    public void Scan_StringAccumulator_BuildsPath()
+    {
+        Assert.Equal(["", "/a", "/a/b", "/a/b/c"], Seq40Exp(
+            "(fn:scan(('a', 'b', 'c'), '', function($acc, $item, $pos) { $acc || '/' || $item }))?*"));
+    }
+
+    [Fact]
+    public void Scan_KeywordArguments_Compose()
+    {
+        Assert.Equal(["0", "1", "3", "6"], Seq40Exp(
+            "(fn:scan(input := 1 to 3, init := 0, action := function($a, $b) { $a + $b }))?*"));
     }
 }

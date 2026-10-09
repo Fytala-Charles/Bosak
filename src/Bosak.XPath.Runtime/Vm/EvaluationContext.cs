@@ -101,6 +101,9 @@
 //                      | Charles Korthout | 2.34  | 08-10-2026     | REQ-118: internal IsXPath40 flag (4.0-S0 gate) stamped by the Api layer so               |
 //                      |                  |       |                | FunctionLibrary.Populate can hide XPath 4.0-only functions from 3.1 contexts             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.35  | 09-10-2026     | REQ-123: internal IsXPath40Experimental flag (4.0-Exp S1) — exposes                       |
+//                      |                  |       |                | IsXPath40ExperimentalOnly functions at the experimental compatibility level              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -312,6 +315,16 @@ public sealed class EvaluationContext
     /// version gate, slice 4.0-S0).
     /// </summary>
     internal bool IsXPath40 { get; set; }
+
+    /// <summary>
+    /// When true, the standard function table may additionally expose
+    /// not-yet-stabilized XPath 4.0 draft additions (functions marked
+    /// <c>FunctionSignature.IsXPath40ExperimentalOnly</c>). Stamped by the Api layer
+    /// from <c>CompileOptions.Compatibility &gt;= XPathCompatibility.XPath40Experimental</c>;
+    /// XSLT and XQuery hosts leave it <c>false</c>. Implies <see cref="IsXPath40"/>
+    /// (REQ-123, 4.0-Exp S1).
+    /// </summary>
+    internal bool IsXPath40Experimental { get; set; }
 
     /// <summary>
     /// When true, the evaluation is being performed by the XSLT processor and

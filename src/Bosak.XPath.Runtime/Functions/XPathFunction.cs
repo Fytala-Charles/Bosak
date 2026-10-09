@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.52  | 08-10-2026     | REQ-118: added IsXPath40Only for the 4.0 version gate (4.0-S0)                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.53  | 09-10-2026     | REQ-123: added IsXPath40ExperimentalOnly (4.0-Exp S1 level plumbing)                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -127,4 +129,15 @@ public sealed class FunctionSignature
     /// <c>false</c> (REQ-118 version gate, slice 4.0-S0).
     /// </summary>
     public bool IsXPath40Only { get; init; }
+
+    /// <summary>
+    /// When true, the function is a not-yet-stabilized XPath/XQuery 4.0 draft addition
+    /// (post-June-2026 spec sections carrying churn risk). It is invisible at
+    /// <see cref="Bosak.XPath.Api.XPathCompatibility.XPath31"/> and
+    /// <see cref="Bosak.XPath.Api.XPathCompatibility.XPath40"/> (XPST0017 at compile time;
+    /// omitted from the standard function table) and only becomes available at
+    /// <see cref="Bosak.XPath.Api.XPathCompatibility.XPath40Experimental"/>. Defaults to
+    /// <c>false</c> (REQ-123, 4.0-Exp S1).
+    /// </summary>
+    public bool IsXPath40ExperimentalOnly { get; init; }
 }

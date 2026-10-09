@@ -38,6 +38,9 @@
 //                      | Charles Korthout | 0.10  | 08-10-2026     | REQ-118 4.0-S6b: structural record types (§3.2.10) + 'but with' (§4.15.4): 3.1        |
 //                      |                  |       |                | XPST0003 gates (record(...), cast targets, 'but with') + 4.0 semantics smoke           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 09-10-2026     | REQ-123 4.0-Exp S1: fn:scan is experimental-only — XPST0017 at 3.1 AND frozen        |
+//                      |                  |       |                | XPath40 (call + named-function-ref forms), works at XPath40Experimental               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -138,6 +141,61 @@ public class VersionGateTests
         var options = new CompileOptions { Compatibility = XPathCompatibility.XPath30 };
         var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile("fn:foot((1, 2))", options));
         Assert.Contains("XPST0017", ex.Message);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 4.0-Exp S1: experimental-only functions are rejected at 3.1
+    // AND at the frozen XPath40 level; opt-in via XPath40Experimental
+    // ------------------------------------------------------------------
+
+    private static XdmValue Eval40Exp(string xpath)
+    {
+        var expr = XPath31Expression.Compile(xpath, new CompileOptions { Compatibility = XPathCompatibility.XPath40Experimental });
+        return expr.Evaluate(new EvaluationContext());
+    }
+
+    [Theory]
+    [InlineData("fn:scan((1, 2), 0, function($a, $b, $p) { $a + $b })")]
+    [InlineData("fn:scan#3")]
+    public void Compile_ExperimentalFunctions_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("fn:scan((1, 2), 0, function($a, $b, $p) { $a + $b })")]
+    [InlineData("fn:scan#3")]
+    public void Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017(string expression)
+    {
+        var options = new CompileOptions { Compatibility = XPathCompatibility.XPath40 };
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression, options));
+        Assert.Contains("XPST0017", ex.Message);
+        Assert.Contains("XPath40Experimental", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_Scan_XPath40Experimental_Works()
+    {
+        Assert.Equal("15",
+            Eval40Exp("fn:foot(fn:scan(1 to 5, 0, function($a, $b, $p) { $a + $b })?*)").ToString());
+    }
+
+    [Fact]
+    public void FunctionLookup_ScanIn31AndFrozen40_ReturnsEmpty()
+    {
+        Assert.True(Eval("fn:function-lookup(xs:QName('fn:scan'), 3)").IsUndefined);
+        var frozen40 = XPath31Expression.Compile(
+            "fn:function-lookup(xs:QName('fn:scan'), 3)",
+            new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+        Assert.True(frozen40.Evaluate(new EvaluationContext()).IsUndefined);
+    }
+
+    [Fact]
+    public void FunctionLookup_ScanInXPath40Experimental_ReturnsFunction()
+    {
+        var result = Eval40Exp("fn:function-lookup(xs:QName('fn:scan'), 3)");
+        Assert.True(result.IsFunction);
     }
 
     [Fact]
