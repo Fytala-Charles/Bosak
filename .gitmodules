@@ -1,3 +1,6 @@
 [submodule "tests/qt3tests"]
 	path = tests/qt3tests
 	url = https://github.com/w3c/qt3tests.git
+[submodule "tests/qt4tests"]
+	path = tests/qt4tests
+	url = https://github.com/qt4cg/qt4tests
