@@ -197,9 +197,11 @@ gathering window; 4.0-S1 scheduling is an owner call after that soak reads out.
    catalog is `version="4.0"` with per-test `spec="XP40 XQ40"` dependency flags.
 3. **`fn:parse-html`** — adopt an HTML5 parser dependency (e.g. AngleSharp) or skip
    permanently?
-4. **Naming** — does the public API keep `XPath31Expression` with a version parameter,
-   or grow a neutral `XPathExpression` facade? (API-freeze interplay: the freeze lifts
-   the *surface*, not naming evolution in a new major.)
+4. **Naming** — RESOLVED 2026-10-09 (v1.0.0): the API gains a neutral
+   `XPathExpression` facade (`Bosak.XPath.Api`, identical surface: `Compile` x2,
+   `Evaluate` x2, `EvaluateNodes`) delegating to `XPath31Expression`, which stays
+   fully supported. Additive only — no rename, no freeze impact; the "should
+   `XPath31Expression` become obsolete" question is deferred to a future 2.0.
 5. **Pattern-priority Appendix-J change** — confirm it stays gated to 4.0 mode and
    never affects the 3.1 conformance gates.
 

@@ -29,7 +29,8 @@ A high-performance .NET implementation of **XPath 3.1** (with forward-compatibil
 ```mermaid
 flowchart TB
     subgraph API["📢 Public API"]
-        EXP["XPath31Expression"]
+        EXP["XPathExpression (v1.0.0)"]
+        EXP31["XPath31Expression"]
         COMP["XPathCompiler"]
         ECTX["EvaluationContext"]
     end

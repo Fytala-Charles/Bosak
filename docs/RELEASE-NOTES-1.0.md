@@ -1,18 +1,15 @@
-# Bosak 1.0.0 — Release Notes (DRAFT)
+# Bosak 1.0.0 — Release Notes
 
-> **Draft status:** prepared 2026-10-07 during the 1.0 close-out. Publish as the GitHub
-> Release body for tag `v1.0.0` (and mirror to the release-notes field on nuget.org).
-> Fill in the tag date before publishing (the support-channel section is decided:
-> GitHub Discussions / Issues, see §Support). The package
-> version is **pinned in `src/Directory.Build.props`** — bump the pin to `1.0.0` before
-> tagging (the v0.12.1 lesson: the tag does not set the version).
+> **Published 2026-10-09** as the GitHub Release body for tag `v1.0.0`
+> (mirrored to the release-notes field on nuget.org).
+> The package version is pinned in `src/Directory.Build.props` (the v0.12.1
+> lesson: the tag does not set the version) — bumped to `1.0.0` before tagging.
 >
-> **Release strategy (owner decision 2026-10-07):** these notes publish in two steps —
-> first a **0.13.0 stable soak release** (same content, `-beta` postfix stripped, GA
-> framing and the two TODOs removed) to gather issues/discussions before the 1.0
-> commitment; then the 1.0.0 pair after the soak. The 0.13.0 notes must state that 0.x
-> breaking changes remain possible per SemVer and the within-major API commitment
-> formally begins at 1.0.0.
+> **Release strategy (owner decision 2026-10-07, amended 2026-10-09):** a
+> **0.13.0 stable soak release** (2026-10-07) gathered issues/discussions first;
+> the owner shortened the planned ~2-week soak window on 2026-10-09 and the 1.0.0
+> pair tags now. 0.x breaking changes were possible per SemVer; the within-major
+> API commitment **formally begins at 1.0.0**.
 
 ---
 
@@ -31,7 +28,7 @@ add-on **Bosak.Schema 1.0** tags alongside as a paired release.
 | QT3 (XPath 3.1 + XQuery 3.1, strict error codes) | **31,142 passed / 0 failed / 679 skipped** | 100% of runnable tests |
 | W3C XSLT 3.0, basic processor sweep | **10,242 passed / 0 failed / 4,359 skipped** | **100.0% pass rate** (harness 3.73, 2026-10-06) |
 | W3C XSLT 3.0, schema-aware sweep | **11,054 passed / 1 failed / 3,546 skipped** | the single failure is a documented platform limit (`type-functions-0401`, DateTime year < 1) |
-| Unit tests | **2,758 green** across 9 assemblies + LanguageServer 72/72 | |
+| Unit tests | **3,320 green** across 10 assemblies + LanguageServer 72/72 | |
 
 The 26 formerly-failing basic-sweep tests are triaged documented known limitations —
 an upstream catalog annotation gap (no `schema_aware` dependency), reported as
@@ -42,6 +39,15 @@ reason in the harness (`docs/BASIC_SWEEP_TRIAGE.md`).
 
 - **Complete XPath 3.1** — forward-compatible parser, three collations (codepoint,
   HTML ASCII case-insensitive, UCA), full `fn:*`/`math:*`/`map:*`/`array:*`/JSON library.
+- **XPath 4.0 (opt-in, draft)** — the complete first adoption wave behind the
+  default-3.1 gate: `CompileOptions.Compatibility = XPathCompatibility.XPath40` opts in
+  to 4.0-only F&O functions, keyword arguments, string templates, the `??`/`->`/`=!>`
+  operators, focus functions, enums/choice/record item types, `for member`/`for key
+  value` bindings, and the XSLT 4.0 surfaces (`xsl:note`, `xsl:if` then/else,
+  separators, `xsl:map` select/duplicates, `xsl:array`, `xsl:switch`) — XPath 3.1
+  behavior is bit-identical with the gate off (QT3 31,142/0/679 preserved exactly).
+- **Version-neutral API facade** — new `Bosak.XPath.Api.XPathExpression` entry point
+  with a surface identical to `XPath31Expression`; both fully supported.
 - **Complete XSLT 3.0** — packages (`xsl:package`/`use-package`/`override`), accumulators,
   keys, modes, `xsl:evaluate`, `fn:transform()`, strict static and dynamic error codes.
 - **XQuery 3.1** — full core FLWOR, direct/computed constructors, `switch`/`typeswitch`,
@@ -93,6 +99,8 @@ those open channels — see `COMMERCIAL.md` for the terms.
 
 ## After 1.0
 
-XPath/XSLT 4.0 adoption per REQ-118 (stabilized features only, post-1.0), EXSLT
+XPath/XSLT 4.0 adoption per REQ-118 continues — the stabilized wave shipped in 1.0
+behind the gate; a **'4.0 Experimental' compatibility level** (owner-scoped for 1.1.0)
+will expose the latest draft additions for testing ahead of stabilization. EXSLT
 compatibility library (REQ-121, in progress), streaming residual backlog (REQ-087),
 performance wave 2.
