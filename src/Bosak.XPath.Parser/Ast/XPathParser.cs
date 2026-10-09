@@ -144,6 +144,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.68  | 09-10-2026     | REQ-123 parse-csv: bare {…} map constructor (XPath 4.0 "map"? "{" … "}", PR2778;          |
 //                      |                  |       |                | XPST0003 in 3.1) as a PrimaryExpr sibling of the 'map {' keyword form                    |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 1.69  | 09-10-2026     | REQ-123 element-to-map slice: PR2688 string-literal lookup step E/"key" (unquoted key,   |
+//                      |                  |       |                | LookupKey NodeTest) only in NON-first step position — a first-position string literal    |
+//                      |                  |       |                | remains a primary expression so function arguments like parse-xml('<a/>') keep working   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1652,19 +1656,19 @@ internal sealed class XPathParser
     // RelativePathExpr ::= StepExpr (("/" | "//") StepExpr)*
     private List<XPathAstNode> ParseRelativePathExpr()
     {
-        var steps = new List<XPathAstNode> { ParseStepExpr() };
+        var steps = new List<XPathAstNode> { ParseStepExpr(firstStep: true) };
         while (true)
         {
             if (Match(TokenKind.Slash))
             {
                 ThrowIfConstructorLessThan();
-                steps.Add(ParseStepExpr());
+                steps.Add(ParseStepExpr(firstStep: false));
             }
             else if (Match(TokenKind.SlashSlash))
             {
                 ThrowIfConstructorLessThan();
                 steps.Add(new StepNode(XdmAxis.DescendantOrSelf, new NodeTest(NameTestKind.KindTest, "node"), Array.Empty<XPathAstNode>()));
-                steps.Add(ParseStepExpr());
+                steps.Add(ParseStepExpr(firstStep: false));
             }
             else break;
         }
@@ -1672,7 +1676,7 @@ internal sealed class XPathParser
     }
 
     // StepExpr ::= PostfixExpr | AxisStep
-    private XPathAstNode ParseStepExpr()
+    private XPathAstNode ParseStepExpr(bool firstStep)
     {
         int start = Current.Start;
 
@@ -1753,6 +1757,18 @@ internal sealed class XPathParser
         if (!isFnInlineFunction && ((Current.Kind == TokenKind.Name || (IsKeywordName(Current.Kind) && !isPrimaryExprKeyword)) && Peek(1).Kind != TokenKind.LParen && Peek(1).Kind != TokenKind.Hash) || Current.Kind == TokenKind.Star)
         {
             return ParseAxisStep(start);
+        }
+
+        // XPath 4.0: a string literal in step position after "/" or "//" is a map key
+        // lookup step ($m/"key" ≡ $m?"key"; $m//"key" also descends through nested
+        // maps and arrays). It never applies to the first step of a path, where a
+        // string literal remains a primary expression (parse-xml('<a/>') arguments).
+        if (!firstStep && _xpath40 && Current.Kind == TokenKind.StringLiteral)
+        {
+            string key = Unquote(GetString(Current));
+            Advance();
+            var preds = ParsePredicateList();
+            return WithSpan(new StepNode(XdmAxis.Child, new NodeTest(NameTestKind.LookupKey, key), preds), start, End);
         }
 
         // Otherwise, it's a postfix expression (primary + predicates/args/lookup)

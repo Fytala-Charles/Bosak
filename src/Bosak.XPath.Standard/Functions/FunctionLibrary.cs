@@ -420,6 +420,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.134 | 09-10-2026     | REQ-123 parse-csv slice: fn:parse-csv/fn:csv-to-xml/fn:csv-doc (F&O 4.0 §17.5, frozen   |
 //                      |                  |       |                | level) — engine wrappers delegating to Functions/Csv.cs (parser, record, XML builder)  |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 5.135 | 09-10-2026     | REQ-123 element-to-map slice: fn:element-to-map/fn:map-to-element/fn:element-to-map-plan  |
+//                      |                  |       |                | (F&O 4.0 §17.6, frozen level) + minimal fn:jvalue — wrappers delegating to               |
+//                      |                  |       |                | Functions/ElementMap.cs (layouts, PR2688 inference, plan validation, element builder)    |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3372,6 +3376,58 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = CsvDoc_2
             },
+            // fn:element-to-map / fn:map-to-element / fn:element-to-map-plan (F&O 4.0
+            // §17.6, New in 4.0 Issues 2778/2803/PRs 2675/2688/2797/2903 — frozen level):
+            // XML elements and maps as two representations of the same data, with layout
+            // inference, plan-driven conversion and PR2688 untyped-value type inference.
+            [(Namespaces.Fn, "element-to-map", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "element-to-map", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = ElementToMap_1
+            },
+            [(Namespaces.Fn, "element-to-map", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "element-to-map", Arity = 2,
+                ParameterTypes = [XdmValueKind.Node, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = ElementToMap_2
+            },
+            [(Namespaces.Fn, "map-to-element", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "map-to-element", Arity = 1,
+                ParameterTypes = [XdmValueKind.Map],
+                ReturnType = XdmValueKind.Node,
+                IsXPath40Only = true,
+                Implementation = MapToElement_1
+            },
+            [(Namespaces.Fn, "map-to-element", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "map-to-element", Arity = 2,
+                ParameterTypes = [XdmValueKind.Map, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Node,
+                IsXPath40Only = true,
+                Implementation = MapToElement_2
+            },
+            [(Namespaces.Fn, "element-to-map-plan", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "element-to-map-plan", Arity = 1,
+                ParameterTypes = [XdmValueKind.Node],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = ElementToMapPlan_1
+            },
+            [(Namespaces.Fn, "jvalue", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "jvalue", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = JValue_1
+            },
             // ----- REQ-123 experimental tier (4.0-Exp S1): not-yet-stabilized draft
             // additions, hidden from the frozen XPath40 level; exposed only when the
             // compatibility level is XPath40Experimental (EvaluationContext flag).
@@ -4532,6 +4588,10 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "parse-csv")] = new(["value", "options"], [null, "{}"]),
             [(Namespaces.Fn, "csv-to-xml")] = new(["value", "options"], [null, "{}"]),
             [(Namespaces.Fn, "csv-doc")] = new(["source", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "element-to-map")] = new(["input", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "map-to-element")] = new(["input", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "element-to-map-plan")] = new(["input"], [null]),
+            [(Namespaces.Fn, "jvalue")] = new(["input"], [null]),
         };
         return table.ToFrozenDictionary();
     }
@@ -5128,6 +5188,43 @@ public static class FunctionLibrary
         var options = Csv.ParseOptions(optionsArg);
         return Csv.BuildRecord(Csv.Analyze(AtomizedString(text), options));
     }
+
+    /// <summary>
+    /// F+O 4.0 §17.6 fn:element-to-map — converts an element (or the element child of a
+    /// document node) to its map representation; () in → () out, a non-node or multi-item
+    /// input is XPTY0004.
+    /// </summary>
+    private static XdmValue ElementToMap_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ElementMap.ElementToMap(args[0], ElementMap.ParseOptions(XdmValue.Undefined));
+
+    /// <summary>F+O 4.0 §17.6 fn:element-to-map with an options map.</summary>
+    private static XdmValue ElementToMap_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ElementMap.ElementToMap(args[0], ElementMap.ParseOptions(args[1]));
+
+    /// <summary>
+    /// F+O 4.0 §17.6 fn:map-to-element — converts a single-entry map to a parentless
+    /// element; () in → () out, a non-map input is XPTY0004, a malformed map is FOJS0009.
+    /// </summary>
+    private static XdmValue MapToElement_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ElementMap.MapToElement(args[0], ElementMap.ParseOptions(XdmValue.Undefined), ctx);
+
+    /// <summary>F+O 4.0 §17.6 fn:map-to-element with an options map.</summary>
+    private static XdmValue MapToElement_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ElementMap.MapToElement(args[0], ElementMap.ParseOptions(args[1]), ctx);
+
+    /// <summary>
+    /// F+O 4.0 §17.6 fn:element-to-map-plan — infers the merged conversion plan (layout /
+    /// child / type per element name, type per attribute name) of one or more input trees.
+    /// </summary>
+    private static XdmValue ElementToMapPlan_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ElementMap.ElementToMapPlan(args[0]);
+
+    /// <summary>
+    /// F+O 4.0 fn:jvalue — converts an item to a JSON value (nodes atomize to
+    /// untypedAtomic, maps and arrays convert recursively, atomics pass through).
+    /// </summary>
+    private static XdmValue JValue_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ElementMap.JValue(args[0]);
 
     /// <summary>
     /// F+O 4.0 §2.5.15 fn:scan — the prefix scan (cumulative fold) of <c>$input</c>:

@@ -371,6 +371,12 @@
 //                      | Charles Korthout | 2.168 | 09-10-2026     | REQ-123 fn:op support: extracted EvaluateRange/Union/Intersect/ExceptNodeSequences   |
 //                      |                  |       |                | + EvaluateNodeComparison from the opcode dispatch; public ApplyBinaryOperator (F&O    |
 //                      |                  |       |                | 4.0 §18.4) reuses them for all 31 fn:op operators                                     |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 2.169 | 09-10-2026     | REQ-123 element-to-map slice: XPath 4.0 map/array path navigation — MapAxis/            |
+//                      |                  |       |                | CollectMapClosure/MayContainMaps (materialized sequences only — lazy/streamed inputs    |
+//                      |                  |       |                | stay single-enumeration, ReverseAxisInsideRecord), FlattenItems/AddFlattened, LookupKey |
+//                      |                  |       |                | opcode case, map-preserving NameTest/KindTest/NamespaceTest branches (E/"key",          |
+//                      |                  |       |                | E//"key", E//QName)                                                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
@@ -2312,6 +2318,41 @@ internal static class VmEngine
                     {
                         string name = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
+
+                        // XPath 4.0: a name test applied to map/array items performs a key
+                        // lookup ($m//b, element-to-map-550+); nodes in a mixed sequence
+                        // keep their name-test semantics, arrays and atomics yield nothing.
+                        if (MayContainMaps(input))
+                        {
+                            var selected = new List<XdmValue>();
+                            var nodePredicate = BuildNameTestPredicate(name, context);
+                            foreach (var item in FlattenItems(input))
+                            {
+                                if (item.IsMap)
+                                {
+                                    var map = item.MapValue;
+                                    if (name == "*")
+                                    {
+                                        foreach (var k in map.Keys)
+                                            if (map.TryGetValue(k, out var all))
+                                                AddFlattened(selected, all);
+                                    }
+                                    else if (map.TryGetValue(XdmValue.FromString(name), out var v))
+                                    {
+                                        AddFlattened(selected, v);
+                                    }
+                                }
+                                else if (item.IsNode && nodePredicate(item.NodeValue))
+                                {
+                                    selected.Add(item);
+                                }
+                            }
+                            registers[instr.RegisterA] = selected.Count == 0
+                                ? XdmValue.Undefined
+                                : XdmValue.FromSequence(MaterializedSequence.FromList(selected));
+                            ip++;
+                            break;
+                        }
                         XdmValue filtered;
 
                         // Wildcard: match any name (kind test already restricted node kind).
@@ -2330,21 +2371,29 @@ internal static class VmEngine
                         }
                         else
                         {
-                            // A prefixed name also matches on its local part; the split is
-                            // hoisted out of the per-node predicate (was one string[] per node).
-                            int colonIndex = name.IndexOf(':');
-                            string? colonLocalName = colonIndex >= 0 ? name[(colonIndex + 1)..] : null;
-                            filtered = FilterNodesLazy(input, n =>
-                            {
-                                if (n.LocalName != name && !(colonLocalName is not null && n.LocalName == colonLocalName))
-                                    return false;
-                                // Unprefixed attribute names always match no namespace
-                                if (n.NodeKind == XdmNodeKind.Attribute && colonIndex < 0)
-                                    return n.NamespaceUri == "";
-                                return true;
-                            });
+                            var predicate = BuildNameTestPredicate(name, context);
+                            filtered = FilterNodesLazy(input, predicate);
                         }
                         registers[instr.RegisterA] = filtered;
+                        ip++;
+                        break;
+                    }
+
+                // XPath 4.0 string-literal lookup step (E/"key"): on a map input yields the
+                // value of the matching entry (arrays and other items yield nothing).
+                case IrOpCode.LookupKey:
+                    {
+                        string key = (string)literalPool[instr.Operand]!;
+                        var input = registers[instr.RegisterB];
+                        var selected = new List<XdmValue>();
+                        foreach (var item in FlattenItems(input))
+                        {
+                            if (item.IsMap && item.MapValue.TryGetValue(XdmValue.FromString(key), out var v))
+                                AddFlattened(selected, v);
+                        }
+                        registers[instr.RegisterA] = selected.Count == 0
+                            ? XdmValue.Undefined
+                            : XdmValue.FromSequence(MaterializedSequence.FromList(selected));
                         ip++;
                         break;
                     }
@@ -2353,6 +2402,46 @@ internal static class VmEngine
                     {
                         string kindName = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
+                        // XPath 4.0: node() over map/array items is the identity; other
+                        // kinds keep only matching nodes (element-to-map-550+).
+                        if (MayContainMaps(input))
+                        {
+                            if (kindName == "node")
+                            {
+                                registers[instr.RegisterA] = input;
+                            }
+                            else if (kindName == "element")
+                            {
+                                // XPath 4.0 map navigation: an element kind test preserves
+                                // map/array items so the following name test performs the
+                                // key lookup ($m//id, element-to-map-559+); nodes must match.
+                                var kept = new List<XdmValue>();
+                                foreach (var item in FlattenItems(input))
+                                {
+                                    if (item.IsMap || item.IsArray)
+                                        kept.Add(item);
+                                    else if (item.IsNode && MatchesKindTest(item.NodeValue, kindName, context))
+                                        kept.Add(item);
+                                }
+                                registers[instr.RegisterA] = kept.Count == 0
+                                    ? XdmValue.Undefined
+                                    : XdmValue.FromSequence(MaterializedSequence.FromList(kept));
+                            }
+                            else
+                            {
+                                var kept = new List<XdmValue>();
+                                foreach (var item in FlattenItems(input))
+                                {
+                                    if (item.IsNode && MatchesKindTest(item.NodeValue, kindName, context))
+                                        kept.Add(item);
+                                }
+                                registers[instr.RegisterA] = kept.Count == 0
+                                    ? XdmValue.Undefined
+                                    : XdmValue.FromSequence(MaterializedSequence.FromList(kept));
+                            }
+                            ip++;
+                            break;
+                        }
                         var filtered = FilterNodesLazy(input, n => MatchesKindTest(n, kindName, context));
                         registers[instr.RegisterA] = filtered;
                         ip++;
@@ -2396,6 +2485,14 @@ internal static class VmEngine
                     {
                         string prefix = (string)literalPool[instr.Operand]!;
                         var input = registers[instr.RegisterB];
+                        // XPath 4.0: namespace filtering does not apply to map/array items
+                        // (the key lookup of the following name test sees them unchanged).
+                        if (MayContainMaps(input))
+                        {
+                            registers[instr.RegisterA] = input;
+                            ip++;
+                            break;
+                        }
                         XdmValue filtered;
                         if (prefix == "Q{}")
                         {
@@ -4002,6 +4099,117 @@ internal static class VmEngine
     /// Whether the input is the result of a preceding path step (LHS of <c>/</c>).
     /// Atomic input from an LHS raises XPTY0019; atomic ambient context input raises XPTY0020.
     /// </param>
+    /// <summary>
+    /// The node-matching predicate of a <see cref="IrOpCode.NameTest"/> for a plain
+    /// (non-wildcard) name: match on the full name or, for prefixed forms, on the local
+    /// part, with unprefixed attribute names matching no namespace.
+    /// </summary>
+    private static Func<IXdmNode, bool> BuildNameTestPredicate(string name, EvaluationContext context)
+    {
+        int colonIndex = name.IndexOf(':');
+        string? colonLocalName = colonIndex >= 0 ? name[(colonIndex + 1)..] : null;
+        return n =>
+        {
+            if (n.LocalName != name && !(colonLocalName is not null && n.LocalName == colonLocalName))
+                return false;
+            // Unprefixed attribute names always match no namespace
+            if (n.NodeKind == XdmNodeKind.Attribute && colonIndex < 0)
+                return n.NamespaceUri == "";
+            return true;
+        };
+    }
+
+    /// <summary>
+    /// XPath 4.0 map/array path navigation (element-to-map-550+): axes applied to a map
+    /// or array value walk the value structure instead of raising a type error.
+    /// Descendant(-or-self) yields the input itself plus every map/array transitively
+    /// reachable through its values (so a following key test finds keys at any depth,
+    /// including on the context map itself); child of a map yields the map itself (the
+    /// following name/lookup test performs the key lookup) and child of an array yields
+    /// its members; self yields the input.
+    /// </summary>
+    private static XdmValue MapAxis(XdmValue input, XdmAxis axis)
+    {
+        switch (axis)
+        {
+            case XdmAxis.DescendantOrSelf:
+            case XdmAxis.Descendant:
+                {
+                    var acc = new List<XdmValue>();
+                    CollectMapClosure(input, acc);
+                    return XdmValue.FromSequence(MaterializedSequence.FromList(acc));
+                }
+            case XdmAxis.Child:
+                if (input.IsMap)
+                    return input;
+                return XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>(input.ArrayValue.Values)));
+            case XdmAxis.Self:
+                return input;
+            default:
+                throw new InvalidOperationException(
+                    $"Axis {axis} requires a node or sequence of nodes, but got {input.Kind}.");
+        }
+    }
+
+    /// <summary>Appends the input itself plus every nested map/array, recursively.</summary>
+    private static void CollectMapClosure(XdmValue value, List<XdmValue> acc)
+    {
+        if (value.IsMap)
+        {
+            acc.Add(value);
+            foreach (var key in value.MapValue.Keys)
+            {
+                if (value.MapValue.TryGetValue(key, out var member))
+                    CollectMapClosure(member, acc);
+            }
+        }
+        else if (value.IsArray)
+        {
+            acc.Add(value);
+            foreach (var member in value.ArrayValue.Values)
+                CollectMapClosure(member, acc);
+        }
+    }
+
+    /// <summary>
+    /// Whether the value contains any map or array item. Only materialized sequences
+    /// are scanned: single-pass (streamed) sequences are forward-only and lazy
+    /// (enumerable) sequences must stay single-enumeration — materializing them here
+    /// would consume the stream a path step is about to read lazily
+    /// (StreamingXPathTests.ReverseAxisInsideRecord).
+    /// </summary>
+    private static bool MayContainMaps(XdmValue value)
+        => value.IsMap || value.IsArray
+        || (value.IsSequence && value.SequenceValue is MaterializedSequence materialized
+            && materialized.Items.Any(i => i.IsMap || i.IsArray));
+
+    /// <summary>Iterates the items of a value (singletons yield themselves).</summary>
+    private static IEnumerable<XdmValue> FlattenItems(XdmValue value)
+    {
+        if (value.IsSequence)
+        {
+            foreach (var item in MaterializeSequenceView(value))
+                yield return item;
+        }
+        else if (!value.IsUndefined)
+        {
+            yield return value;
+        }
+    }
+
+    private static void AddFlattened(List<XdmValue> acc, XdmValue value)
+    {
+        if (value.IsSequence)
+        {
+            foreach (var item in MaterializeSequenceView(value))
+                acc.Add(item);
+        }
+        else if (!value.IsUndefined)
+        {
+            acc.Add(value);
+        }
+    }
+
     private static XdmValue ApplyAxis(XdmValue input, XdmAxis axis, bool hasLhs)
     {
         if (input.IsUndefined)
@@ -4019,6 +4227,10 @@ internal static class VmEngine
 
         if (input.IsNode)
             return XdmValue.FromSequence(input.NodeValue.Axis(axis));
+
+        // XPath 4.0: axes over a map/array value navigate the value structure.
+        if (input.IsMap || input.IsArray)
+            return MapAxis(input, axis);
 
         if (input.IsSequence)
         {
@@ -4038,6 +4250,30 @@ internal static class VmEngine
             }
 
             var items = MaterializeSequenceView(input);
+
+            // XPath 4.0: a sequence mixing maps/arrays with nodes navigates each item
+            // according to its kind (element-to-map-550+).
+            if (items.Any(i => i.IsMap || i.IsArray))
+            {
+                var mixed = new List<XdmValue>();
+                foreach (var item in items)
+                {
+                    if (item.IsNode)
+                    {
+                        foreach (var node in item.NodeValue.Axis(axis))
+                            mixed.Add(node);
+                    }
+                    else if (item.IsMap || item.IsArray)
+                    {
+                        AddFlattened(mixed, MapAxis(item, axis));
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("XPTY0019: A path step requires nodes, but the step input contains an atomic value.");
+                    }
+                }
+                return XdmValue.FromSequence(MaterializedSequence.FromList(mixed));
+            }
             var result = new List<XdmValue>();
             int startIndex = 0;
 
