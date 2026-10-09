@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -50,6 +50,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Providers.Database", "src\Bosak.XPath.Providers.Database\Bosak.XPath.Providers.Database.csproj", "{5E7A1B2C-3D4E-4F50-A1B2-C3D4E5F60718}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Providers.Database.Tests", "tests\Bosak.XPath.Providers.Database.Tests\Bosak.XPath.Providers.Database.Tests.csproj", "{6F8B2C3D-4E5F-4061-B2C3-D4E5F6071829}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bosak.XPath.Conformance40", "tests\Bosak.XPath.Conformance40\Bosak.XPath.Conformance40.csproj", "{EBBD5667-DE7E-4A41-9D87-8002F6899C53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -325,6 +327,18 @@ Global
 		{6F8B2C3D-4E5F-4061-B2C3-D4E5F6071829}.Release|x64.Build.0 = Release|Any CPU
 		{6F8B2C3D-4E5F-4061-B2C3-D4E5F6071829}.Release|x86.ActiveCfg = Release|Any CPU
 		{6F8B2C3D-4E5F-4061-B2C3-D4E5F6071829}.Release|x86.Build.0 = Release|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Debug|x64.Build.0 = Debug|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Debug|x86.Build.0 = Debug|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Release|x64.ActiveCfg = Release|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Release|x64.Build.0 = Release|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Release|x86.ActiveCfg = Release|Any CPU
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -344,5 +358,6 @@ Global
 		{0363B4C9-B6D3-435B-A5D9-674BD93A6496} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{5E7A1B2C-3D4E-4F50-A1B2-C3D4E5F60718} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{6F8B2C3D-4E5F-4061-B2C3-D4E5F6071829} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{EBBD5667-DE7E-4A41-9D87-8002F6899C53} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

@@ -192,9 +192,14 @@ gathering window; 4.0-S1 scheduling is an owner call after that soak reads out.
 ## 5. Open owner decisions
 
 1. **Version gate shape** — §3 Option A vs B (recommend A).
-2. **qt4tests adoption** — wire the 4.0 catalog as the S1+ conformance gate (new
-   harness project `Bosak.XPath.Conformance40`?) or hand-port selected sets. The
-   catalog is `version="4.0"` with per-test `spec="XP40 XQ40"` dependency flags.
+2. **qt4tests adoption** — RESOLVED 2026-10-09 (REQ-123 slice 4.0-Exp S2): the 4.0
+   catalog is wired as a new harness project `tests/Bosak.XPath.Conformance40`
+   (shared sources linked from `Bosak.XPath.Conformance`; qt4tests pinned as a git
+   submodule @ 68910080; frozen-`XPath40` execution with transparent
+   `XPath40Experimental` retry; per-test watchdog; GatedSets model — only 100%-green
+   sets gate, baseline 25,774/5,933 exploratory/15,278 skipped). The catalog is
+   `version="4.0"` with per-test `spec="XP40 XQ40"` dependency flags; the skip-
+   dependency mechanism keyed on spec flags is `DependencyFilter40`.
 3. **`fn:parse-html`** — adopt an HTML5 parser dependency (e.g. AngleSharp) or skip
    permanently?
 4. **Naming** — RESOLVED 2026-10-09 (v1.0.0): the API gains a neutral

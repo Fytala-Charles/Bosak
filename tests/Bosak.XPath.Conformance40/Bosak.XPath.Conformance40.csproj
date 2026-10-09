@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
+    <ProjectReference Include="..\..\src\Bosak.Xslt\Bosak.Xslt.csproj" />
+  </ItemGroup>
+
+  <!-- Shared harness machinery linked from the QT3 conformance project (single source of
+       truth for test-case parsing, environments, result comparison and reporting). -->
+  <ItemGroup>
+    <Compile Include="..\Bosak.XPath.Conformance\TestCase.cs" Link="Shared\TestCase.cs" />
+    <Compile Include="..\Bosak.XPath.Conformance\TestEnvironment.cs" Link="Shared\TestEnvironment.cs" />
+    <Compile Include="..\Bosak.XPath.Conformance\ResultComparer.cs" Link="Shared\ResultComparer.cs" />
+    <Compile Include="..\Bosak.XPath.Conformance\TestReport.cs" Link="Shared\TestReport.cs" />
+    <Compile Include="..\Bosak.XPath.Conformance\TestOutcome.cs" Link="Shared\TestOutcome.cs" />
+  </ItemGroup>
+
+</Project>
