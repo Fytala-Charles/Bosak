@@ -20,6 +20,10 @@
 //                      | Charles Korthout | 0.6   | 27-07-2026     | Parse <module> catalog entries (uri, location, resolved file path)                       |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 18-08-2026     | Load <test file="..."> query text from referenced file                                   |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.8   | 09-10-2026     | DecodeEntitiesInTestExpressions flag + DecodeEntities: predefined entities in CDATA      |
+//                      |                  |       |                | test expressions are decoded before compiling (map-to-element-014/021, expanded-QName-  |
+//                      |                  |       |                | 004-XQ ground truth); applied by the qt4 harness only, QT3 literal CDATA is untouched    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -50,6 +54,19 @@ internal sealed class TestCase
         Modules = modules;
     }
 
+    /// <summary>
+    /// When true (the qt4 harness), the five predefined XML entities written literally
+    /// inside CDATA test expressions are decoded before evaluation. The qt4tests suite
+    /// relies on this convention (map-to-element-014/021, expanded-QName-004-XQ); the
+    /// qt3 corpus does not, so the default is false.
+    /// </summary>
+    public static bool DecodeEntitiesInTestExpressions { get; set; }
+
+    /// <summary>Decodes the predefined XML entities in expression text.</summary>
+    public static string DecodeEntities(string text)
+        => text.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"")
+               .Replace("&apos;", "'").Replace("&amp;", "&");
+
     private static string ReadTestExpression(XElement? testElement, string baseDirectory)
     {
         if (testElement is null)
@@ -62,7 +79,8 @@ internal sealed class TestCase
             return File.Exists(resolvedPath) ? File.ReadAllText(resolvedPath) : "";
         }
 
-        return (string?)testElement ?? "";
+        string expression = (string?)testElement ?? "";
+        return DecodeEntitiesInTestExpressions ? DecodeEntities(expression) : expression;
     }
 
     public static TestCase FromElement(XElement element, XNamespace ns, IEnumerable<Dependency> inheritedDependencies, string baseDirectory)

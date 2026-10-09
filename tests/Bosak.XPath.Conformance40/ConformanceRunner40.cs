@@ -28,6 +28,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 09-10-2026     | parse-csv slice: ResultComparer.AssertCompatibility set to XPath40 (asserts may use      |
 //                      |                  |       |                | fn:char and string templates); parse-csv/csv-to-xml/csv-doc promoted into GatedSets      |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.7   | 09-10-2026     | element-to-map slice: TestCase.DecodeEntitiesInTestExpressions enabled; fn-element-to-  |
+//                      |                  |       |                | map/fn-map-to-element/fn-element-to-map-plan promoted into GatedSets                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -91,6 +94,10 @@ internal sealed class ConformanceRunner40
         // Assert expressions may use XPath 4.0-only functions (fn:char) and string
         // templates (REQ-123 parse-csv slice); the QT3 harness keeps the 3.1 default.
         ResultComparer.AssertCompatibility = XPathCompatibility.XPath40;
+        // qt4tests write predefined XML entities literally inside CDATA test/assert
+        // expressions and expect them decoded (map-to-element-014/021,
+        // expanded-QName-004-XQ); the QT3 corpus reads test strings literally.
+        TestCase.DecodeEntitiesInTestExpressions = true;
     }
 
     /// <summary>
@@ -127,6 +134,8 @@ internal sealed class ConformanceRunner40
         "fn-do-until",
         "fn-default-collation",
         "fn-default-language",
+        "fn-element-to-map",
+        "fn-element-to-map-plan",
         "fn-element-with-id",
         "fn-empty",
         "fn-encode-for-uri",
@@ -210,6 +219,7 @@ internal sealed class ConformanceRunner40
         "map-find",
         "map-remove",
         "map-size",
+        "map-to-element",
         "array-append",
         "array-build",
         "array-flatten",

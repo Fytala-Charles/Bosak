@@ -46,6 +46,8 @@
 //                      | Charles Korthout | 1.8   | 08-10-2026     | REQ-118 4.0-S4: Pipeline opcode for the XPath 4.0 '->' pipeline operator
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.9   | 08-10-2026     | REQ-118 4.0-S6b: ButWith opcode for the XPath 4.0 'but with' record update operator |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 1.10  | 09-10-2026     | REQ-123 element-to-map slice: LookupKey opcode for the PR2688 string-literal lookup step |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -217,6 +219,12 @@ internal enum IrOpCode : byte
     SchemaElementTest,
     /// <summary>The <c>schema-attribute()</c> kind test (rejected without schema awareness).</summary>
     SchemaAttributeTest,
+    /// <summary>
+    /// XPath 4.0 map key lookup step (<c>E/"key"</c>): on a map input yields the value
+    /// of the entry whose key equals the literal; on a sequence input applies per item;
+    /// non-map items yield nothing. Array items are skipped (lookups do not drill in).
+    /// </summary>
+    LookupKey,
 
     // ---- Predicates / Filtering ---------------------------------------
     /// <summary>Applies a predicate block to a sequence.</summary>

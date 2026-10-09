@@ -117,6 +117,9 @@
 //                      | Charles Korthout | 1.49  | 08-10-2026     | REQ-118 4.0-S4: LowerPipeline + IrOpCode.Pipeline; ForBindingKind/entry-value fields on QuantifiedLoopInfo
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.50  | 08-10-2026     | REQ-118 4.0-S6b: BinaryOperator.ButWith lowers to IrOpCode.ButWith                       |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 1.51  | 09-10-2026     | REQ-123 element-to-map slice: LowerStepCore LookupKey early-return (key in literal pool,  |
+//                      |                  |       |                | replaces namespace/name test pair)                                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -1490,6 +1493,16 @@ internal sealed class IrLowerer
         int afterTestReg = axisReg;
         if (node.NodeTest.Kind != NameTestKind.AnyName)
         {
+            // XPath 4.0 string-literal lookup step (E/"key"): the lookup opcode replaces
+            // the namespace+name test pair; it is a key lookup, not a node-name match.
+            if (node.NodeTest.Kind == NameTestKind.LookupKey)
+            {
+                afterTestReg = AllocRegister();
+                int keyPoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "");
+                Emit(IrOpCode.LookupKey, (ushort)afterTestReg, (ushort)axisReg, operand: keyPoolIdx);
+                FreeRegister(axisReg);
+                return afterTestReg;
+            }
             afterTestReg = AllocRegister();
             int namePoolIdx = -1;
 

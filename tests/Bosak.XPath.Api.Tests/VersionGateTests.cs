@@ -46,6 +46,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13  | 09-10-2026     | REQ-123 parse-csv slice: frozen-level gate rows for fn:parse-csv/fn:csv-to-xml/       |
 //                      |                  |       |                | fn:csv-doc (XPST0017 at 3.1, works at frozen XPath40 — NOT experimental)                |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.14  | 09-10-2026     | REQ-123 element-to-map slice: frozen-level gate rows for fn:element-to-map/fn:map-to-   |
+//                      |                  |       |                | element/fn:element-to-map-plan/fn:jvalue (XPST0017 at 3.1, works at frozen XPath40)    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -1241,5 +1244,34 @@ public class VersionGateTests
         // merges entries under the record's annotation.
         Assert.Equal("true", Eval40("(map{\"a\": 1} cast as record(a)) instance of record(a)").ToString());
         Assert.Equal("2", Eval40("((map{\"a\": 1} cast as record(a)) but with map{\"a\": 2})?a").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 element-to-map slice: frozen-level 4.0 §17.6 functions —
+    // XPST0017 at 3.1, available at the frozen XPath40 level (NOT experimental)
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("fn:element-to-map(parse-xml('<a/>')/a)")]
+    [InlineData("fn:element-to-map#2")]
+    [InlineData("fn:map-to-element(map{'a': '1'})")]
+    [InlineData("fn:map-to-element#2")]
+    [InlineData("fn:element-to-map-plan(parse-xml('<a/>')/a)")]
+    [InlineData("fn:element-to-map-plan#1")]
+    [InlineData("fn:jvalue(1)")]
+    [InlineData("fn:jvalue#1")]
+    public void Compile_ElementMapFunctions_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_ElementToMap_FrozenXPath40_Works()
+    {
+        Assert.Equal("x",
+            Eval40("fn:element-to-map(parse-xml('<a>x</a>')/a)?a").ToString());
+        Assert.Equal("7",
+            Eval40("""fn:element-to-map(parse-xml('<a id="7">x</a>')/a)?a?'@id'""").ToString());
     }
 }

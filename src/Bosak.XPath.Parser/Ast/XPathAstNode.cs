@@ -60,6 +60,9 @@
 //                      | Charles Korthout | 1.20  | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode; ForBindingKind (member/key value) on QuantifiedBinding|
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.21  | 08-10-2026     | REQ-118 4.0-S6b: BinaryOperator.ButWith for the XPath 4.0 'but with' operator         |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 1.22  | 09-10-2026     | REQ-123 element-to-map slice: NameTestKind.LookupKey for the PR2688 string-literal     |
+//                      |                  |       |                | lookup step (E/"key")                                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -773,7 +776,11 @@ internal enum NameTestKind
     /// <summary>A full name with the namespace URI already resolved (EQName or <c>xml</c> prefix forms).</summary>
     QName,
     /// <summary>A kind test: <c>node()</c>, <c>text()</c>, <c>element()</c>, etc.</summary>
-    KindTest
+    KindTest,
+    /// <summary>XPath 4.0: a string literal in step position is a map key lookup
+    /// (<c>E/"key"</c> behaves like <c>E?"key"</c>; <c>E//"key"</c> additionally
+    /// descends through nested maps and arrays).</summary>
+    LookupKey
 }
 
 /// <summary>A predicate applied to a postfix expression: <c>E[P]</c>.</summary>

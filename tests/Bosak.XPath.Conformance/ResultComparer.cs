@@ -61,6 +61,11 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.0   | 09-10-2026     | AssertCompatibility static (default XPath31): the qt4 harness sets XPath40 so asserts    |
 //                      |                  |       |                | may use 4.0-only functions (char) and string templates (REQ-123 parse-csv slice)         |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 3.1   | 09-10-2026     | Recursive entity decoding under the DecodeEntitiesInTestExpressions flag: string-      |
+//                      |                  |       |                | valued asserts (assert/assert-eq/assert-deep-eq/assert-type/assert-count/assert-string-  |
+//                      |                  |       |                | value/serialization-matches) are expanded a second time; assert-xml/assert-serialization |
+//                      |                  |       |                | stay single-expanded (REQ-123 element-to-map slice)                                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -162,6 +167,17 @@ internal static class ResultComparer
         IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters)
     {
         var name = assertion.Name.LocalName;
+
+        // String-valued assertions of the qt4 suite follow the recursive entity
+        // convention: catalog content is entity-expanded once by XML parsing and a
+        // second time here (e.g. &amp;amp; -> &amp; -> &), matching the test-expression
+        // expansion in TestCase (map-to-element-014 vs fn-iri-to-uri-18A ground truth).
+        // assert-xml/assert-serialization stay single-expanded (they are XML documents).
+        if (TestCase.DecodeEntitiesInTestExpressions &&
+            name is "assert" or "assert-eq" or "assert-deep-eq" or "assert-type" or "assert-count" or "assert-string-value" or "serialization-matches")
+        {
+            assertion = new XElement(assertion.Name, assertion.Attributes(), TestCase.DecodeEntities(assertion.Value));
+        }
 
         return name switch
         {
