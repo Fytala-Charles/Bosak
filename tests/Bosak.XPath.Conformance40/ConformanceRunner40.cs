@@ -26,9 +26,13 @@
 //                      | Charles Korthout | 0.5   | 09-10-2026     | fn:op slice: scan KnownGaps removed (all six pass at XPath40Experimental); fn-op and     |
 //                      |                  |       |                | fn-scan promoted into GatedSets                                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 09-10-2026     | parse-csv slice: ResultComparer.AssertCompatibility set to XPath40 (asserts may use      |
+//                      |                  |       |                | fn:char and string templates); parse-csv/csv-to-xml/csv-doc promoted into GatedSets      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
+using Bosak.XPath.Api;
 
 namespace Bosak.XPath.Conformance;
 
@@ -84,6 +88,9 @@ internal sealed class ConformanceRunner40
         _suitePath = suitePath;
         _setFilter = setFilter;
         _testFilter = testFilter;
+        // Assert expressions may use XPath 4.0-only functions (fn:char) and string
+        // templates (REQ-123 parse-csv slice); the QT3 harness keeps the 3.1 default.
+        ResultComparer.AssertCompatibility = XPathCompatibility.XPath40;
     }
 
     /// <summary>
@@ -109,6 +116,8 @@ internal sealed class ConformanceRunner40
         "fn-collection",
         "fn-count",
         "fn-contains-subsequence",
+        "fn-csv-doc",
+        "fn-csv-to-xml",
         "fn-current-date",
         "fn-current-dateTime",
         "fn-current-time",
@@ -152,6 +161,7 @@ internal sealed class ConformanceRunner40
         "fn-not",
         "fn-one-or-more",
         "fn-op",
+        "fn-parse-csv",
         "fn-parse-ietf-date",
         "fn-partition",
         "fn-position",
