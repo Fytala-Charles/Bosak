@@ -59,6 +59,9 @@
 //                      | Charles Korthout | 2.9   | 16-09-2026     | CompareAssertEmpty peeks one item for lazy (unknown-length) sequences instead of         |
 //                      |                  |       |                | failing them outright (REQ-085 wave 5: node tests are lazy-filtered now)                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.0   | 09-10-2026     | AssertCompatibility static (default XPath31): the qt4 harness sets XPath40 so asserts    |
+//                      |                  |       |                | may use 4.0-only functions (char) and string templates (REQ-123 parse-csv slice)         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -76,6 +79,19 @@ namespace Bosak.XPath.Conformance;
 internal static class ResultComparer
 {
     private static readonly XNamespace Ns = "http://www.w3.org/2010/09/qt-fots-catalog";
+
+    /// <summary>
+    /// Compatibility level used to compile <c>assert-*</c> expression assertions.
+    /// The QT3 harness leaves this at <see cref="XPathCompatibility.XPath31"/>; the qt4
+    /// harness sets <see cref="XPathCompatibility.XPath40"/> so assertions may use 4.0
+    /// functions (fn:char) and string templates.
+    /// </summary>
+    public static XPathCompatibility AssertCompatibility { get; set; } = XPathCompatibility.XPath31;
+
+    private static CompileOptions AssertCompileOptions => new() { Compatibility = AssertCompatibility };
+
+    private static XPath31Expression CompileAssert(string expression)
+        => XPath31Expression.Compile(expression, AssertCompileOptions);
 
     public static TestOutcome Compare(XElement resultElement, XdmValue actual, Exception? caughtException, string baseDirectory,
         IReadOnlyDictionary<(string NamespaceUri, string LocalName), string>? outputParameters = null)
@@ -192,7 +208,7 @@ internal static class ResultComparer
         try
         {
             var ctx = NewAssertContext();
-            var expected = XPath31Expression.Compile(expectedExpr).Evaluate(ctx);
+            var expected = CompileAssert(expectedExpr).Evaluate(ctx);
             // assert-eq compares values: a singleton sequence is equivalent to its single item
             // (e.g. fn:node-name() returning a sequence of one QName vs the expected QName).
             if (ValuesEqual(UnwrapSingleton(actual), UnwrapSingleton(expected)))
@@ -376,7 +392,7 @@ internal static class ResultComparer
         if (outputParameters is not null)
             ctx.StaticOutputParameters = outputParameters;
         ctx.WithVariable("bosak_ser_result", actual);
-        return XPath31Expression.Compile("fn:serialize($bosak_ser_result)").Evaluate(ctx).ToString();
+        return CompileAssert("fn:serialize($bosak_ser_result)").Evaluate(ctx).ToString();
     }
 
     private static TestOutcome CompareSerializationError(string expectedCode, XdmValue actual, Exception? caughtException,
@@ -682,7 +698,7 @@ internal static class ResultComparer
         {
             var ctx = NewAssertContext();
             ctx.WithVariable("result", item);
-            var result = XPath31Expression.Compile($"$result instance of {fullType}").Evaluate(ctx);
+            var result = CompileAssert($"$result instance of {fullType}").Evaluate(ctx);
             return result.BooleanValue;
         }
         catch
@@ -755,7 +771,7 @@ internal static class ResultComparer
             // (absolute paths such as /result/impl in prod/ModuleImport).
             if (!actual.IsUndefined)
                 ctx = ctx.WithFocus(actual, 1, 1);
-            var result = XPath31Expression.Compile(assertExpr).Evaluate(ctx);
+            var result = CompileAssert(assertExpr).Evaluate(ctx);
             // FOTS assert expressions are truthy: the effective boolean value decides.
             if (EffectiveBooleanValue(result))
                 return new TestOutcome(TestOutcomeKind.Passed, null);
@@ -804,7 +820,7 @@ internal static class ResultComparer
         try
         {
             var ctx = NewAssertContext();
-            var expectedValue = XPath31Expression.Compile(expectedExpr).Evaluate(ctx);
+            var expectedValue = CompileAssert(expectedExpr).Evaluate(ctx);
             var expectedItems = MaterializeValue(expectedValue);
             var actualItems = MaterializeValue(actual);
 
@@ -837,7 +853,7 @@ internal static class ResultComparer
         try
         {
             var ctx = NewAssertContext();
-            var expectedItems = MaterializeValue(XPath31Expression.Compile(expectedExpr).Evaluate(ctx));
+            var expectedItems = MaterializeValue(CompileAssert(expectedExpr).Evaluate(ctx));
             var actualItems = MaterializeValue(actual);
 
             if (expectedItems.Count != actualItems.Count)

@@ -44,6 +44,9 @@
 //                      | Charles Korthout | 0.12  | 09-10-2026     | REQ-123 fn:op slice: frozen-level gate rows (XPST0017 at 3.1, works at frozen        |
 //                      |                  |       |                | XPath40 — NOT experimental)                                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13  | 09-10-2026     | REQ-123 parse-csv slice: frozen-level gate rows for fn:parse-csv/fn:csv-to-xml/       |
+//                      |                  |       |                | fn:csv-doc (XPST0017 at 3.1, works at frozen XPath40 — NOT experimental)                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -205,6 +208,31 @@ public class VersionGateTests
             "fn:op('+')(2, 2)",
             new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
         Assert.Equal("4", expr.Evaluate(new EvaluationContext()).ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 parse-csv slice: frozen-level 4.0 CSV functions — XPST0017
+    // at 3.1, available at the frozen XPath40 level (NOT experimental)
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("fn:parse-csv('a,b')")]
+    [InlineData("fn:parse-csv#2")]
+    [InlineData("fn:csv-to-xml('a,b')")]
+    [InlineData("fn:csv-doc('a.csv')")]
+    public void Compile_CsvFunctions_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_ParseCsv_FrozenXPath40_Works()
+    {
+        var expr = XPath31Expression.Compile(
+            "fn:parse-csv('a,b')?rows[1]?2",
+            new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+        Assert.Equal("b", expr.Evaluate(new EvaluationContext()).ToString());
     }
 
     [Fact]

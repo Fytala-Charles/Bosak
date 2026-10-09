@@ -418,6 +418,9 @@
 //                      | Charles Korthout | 5.133 | 09-10-2026     | REQ-123 fn:op (F&O 4.0 §18.4, frozen level): returns a DelegateFunctionItem arity 2     |
 //                      |                  |       |                | whose implementation routes through VmEngine.ApplyBinaryOperator (all 31 operators)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.134 | 09-10-2026     | REQ-123 parse-csv slice: fn:parse-csv/fn:csv-to-xml/fn:csv-doc (F&O 4.0 §17.5, frozen   |
+//                      |                  |       |                | level) — engine wrappers delegating to Functions/Csv.cs (parser, record, XML builder)  |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -3318,6 +3321,57 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = Op_1
             },
+            // fn:parse-csv / fn:csv-to-xml / fn:csv-doc (F&O 4.0 §17.5, New in 4.0
+            // Issues 413/1052/PRs 533/719/834/1066, March 2024 — frozen level): CSV parsing
+            // to a parsed-csv-structure-record, an XML document, or from a resource URI.
+            [(Namespaces.Fn, "parse-csv", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-csv", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = ParseCsv_1
+            },
+            [(Namespaces.Fn, "parse-csv", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-csv", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = ParseCsv_2
+            },
+            [(Namespaces.Fn, "csv-to-xml", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "csv-to-xml", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Node,
+                IsXPath40Only = true,
+                Implementation = CsvToXml_1
+            },
+            [(Namespaces.Fn, "csv-to-xml", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "csv-to-xml", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Node,
+                IsXPath40Only = true,
+                Implementation = CsvToXml_2
+            },
+            [(Namespaces.Fn, "csv-doc", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "csv-doc", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = CsvDoc_1
+            },
+            [(Namespaces.Fn, "csv-doc", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "csv-doc", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Map],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = CsvDoc_2
+            },
             // ----- REQ-123 experimental tier (4.0-Exp S1): not-yet-stabilized draft
             // additions, hidden from the frozen XPath40 level; exposed only when the
             // compatibility level is XPath40Experimental (EvaluationContext flag).
@@ -4475,6 +4529,9 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "transitive-closure")] = new(["node", "step"], [null, null]),
             [(Namespaces.Fn, "scan")] = new(["input", "init", "action"], [null, null, null]),
             [(Namespaces.Fn, "op")] = new(["operator"], [null]),
+            [(Namespaces.Fn, "parse-csv")] = new(["value", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "csv-to-xml")] = new(["value", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "csv-doc")] = new(["source", "options"], [null, "{}"]),
         };
         return table.ToFrozenDictionary();
     }
@@ -5009,6 +5066,68 @@ public static class FunctionLibrary
             or "otherwise" => true,
         _ => false,
     };
+
+    /// <summary>
+    /// F+O 4.0 §17.5.7 fn:parse-csv — parses CSV data into a
+    /// parsed-csv-structure-record (columns / column-index / rows / get).
+    /// </summary>
+    private static XdmValue ParseCsv_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ParseCsv(args[0], XdmValue.Undefined);
+
+    /// <summary>F+O 4.0 §17.5.7 fn:parse-csv with an options map.</summary>
+    private static XdmValue ParseCsv_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => ParseCsv(args[0], args[1]);
+
+    private static XdmValue ParseCsv(XdmValue arg, XdmValue optionsArg)
+    {
+        if (IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        var options = Csv.ParseOptions(optionsArg);
+        return Csv.BuildRecord(Csv.Analyze(AtomizedString(arg), options));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §17.5.10 fn:csv-to-xml — the XML representation (§17.5.9) of the CSV
+    /// parse: a fn:csv document with optional columns and per-row field elements.
+    /// </summary>
+    private static XdmValue CsvToXml_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => CsvToXml(args[0], XdmValue.Undefined);
+
+    /// <summary>F+O 4.0 §17.5.10 fn:csv-to-xml with an options map.</summary>
+    private static XdmValue CsvToXml_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => CsvToXml(args[0], args[1]);
+
+    private static XdmValue CsvToXml(XdmValue arg, XdmValue optionsArg)
+    {
+        if (IsEmptySequence(arg))
+            return XdmValue.Undefined;
+        var options = Csv.ParseOptions(optionsArg);
+        var doc = Csv.BuildXml(Csv.Analyze(AtomizedString(arg), options));
+        return XdmValue.FromNode(XDocumentNode.Wrap(doc));
+    }
+
+    /// <summary>
+    /// F+O 4.0 §17.5.8 fn:csv-doc — defined as
+    /// <c>fn:parse-csv(fn:unparsed-text($source), $options)</c>; the unparsed-text
+    /// machinery supplies FOUT1170/FOUT1190/FOUT1200 resource and encoding errors.
+    /// </summary>
+    private static XdmValue CsvDoc_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => CsvDoc(args[0], XdmValue.Undefined, ctx);
+
+    /// <summary>F+O 4.0 §17.5.8 fn:csv-doc with an options map.</summary>
+    private static XdmValue CsvDoc_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => CsvDoc(args[0], args[1], ctx);
+
+    private static XdmValue CsvDoc(XdmValue hrefArg, XdmValue optionsArg, EvaluationContext ctx)
+    {
+        if (hrefArg.IsUndefined || IsEmptySequence(hrefArg))
+            return XdmValue.Undefined;
+        var text = UnparsedText(RequireString(PromoteUriToString(hrefArg)), null, ctx);
+        if (IsEmptySequence(text))
+            return XdmValue.Undefined;
+        var options = Csv.ParseOptions(optionsArg);
+        return Csv.BuildRecord(Csv.Analyze(AtomizedString(text), options));
+    }
 
     /// <summary>
     /// F+O 4.0 §2.5.15 fn:scan — the prefix scan (cumulative fold) of <c>$input</c>:
@@ -10094,6 +10213,12 @@ public static class FunctionLibrary
 
     private static string DecodeBytes(byte[] bytes, string? encoding)
     {
+        // An invalid byte order mark (FF FF — no such BOM exists for any encoding) is
+        // FOUT1200 "resource cannot be decoded", not the inferred-encoding FOUT1190
+        // path (fn-csv-doc-bom-005, F+O PR2013).
+        if (bytes.Length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFF)
+            throw new InvalidOperationException("FOUT1200: Invalid byte order mark in resource.");
+
         var bomLength = GetBomLength(bytes);
         var enc = DetectEncodingFromBytes(bytes);
 

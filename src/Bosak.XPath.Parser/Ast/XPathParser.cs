@@ -142,6 +142,9 @@
 //                      | Charles Korthout | 1.66  | 08-10-2026     | REQ-118 4.0-S6a: enum types + choice item types in ItemType positions (XPST0003 in 3.1)|
 //                      | Charles Korthout | 1.67  | 08-10-2026     | REQ-118 4.0-S6b: record types in ItemType positions + 'but with' operator (XPST0003 in 3.1)|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.68  | 09-10-2026     | REQ-123 parse-csv: bare {…} map constructor (XPath 4.0 "map"? "{" … "}", PR2778;          |
+//                      |                  |       |                | XPST0003 in 3.1) as a PrimaryExpr sibling of the 'map {' keyword form                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -470,7 +473,9 @@ internal sealed class XPathParser
         {
             if (Current.Kind == TokenKind.KeywordFor)
             {
-                if (!_allowFullFlwor)
+                // XPath 3.1 allows a single for/let clause (LetExpr020a); XPath 4.0
+                // permits consecutive for/let clauses like XQuery (csv-doc-008).
+                if (!_allowFullFlwor && !_xpath40)
                     throw new XPathParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
                 if (IsWindowKeyword(Peek(1)))
                     clauses.Add(ParseWindowClause());
@@ -479,7 +484,7 @@ internal sealed class XPathParser
             }
             else if (Current.Kind == TokenKind.KeywordLet)
             {
-                if (!_allowFullFlwor)
+                if (!_allowFullFlwor && !_xpath40)
                     throw new XPathParseException("XPST0003: XPath does not allow multiple for/let clauses in a FLWOR expression.", Current.Start);
                 clauses.Add(new LetClauseNode(ParseLetClauseBindings()));
             }
@@ -2425,6 +2430,13 @@ internal sealed class XPathParser
             case TokenKind.KeywordArray:
                 return ParseCurlyArrayConstructor(start);
 
+            case TokenKind.LBrace:
+                // XPath 4.0 (PR2778): the "map" keyword is optional — a bare {…} is a
+                // map constructor. In 3.1 mode '{' remains invalid in primary position.
+                if (!_xpath40)
+                    throw new XPathParseException("XPST0003: Unexpected '{' in primary expression", start);
+                return ParseBracedMapConstructor(start);
+
             case TokenKind.LBracket:
                 return ParseSquareArrayConstructor(start);
 
@@ -3817,6 +3829,13 @@ internal sealed class XPathParser
     private MapConstructorNode ParseMapConstructor(int start)
     {
         Expect(TokenKind.KeywordMap);
+        return ParseBracedMapConstructor(start);
+    }
+
+    // The braced body of a map constructor, shared by the 'map {' keyword form and the
+    // XPath 4.0 bare '{…}' form (PR2778).
+    private MapConstructorNode ParseBracedMapConstructor(int start)
+    {
         Expect(TokenKind.LBrace);
         var entries = new List<MapEntryNode>();
         if (!Match(TokenKind.RBrace))
