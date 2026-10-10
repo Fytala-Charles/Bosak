@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice B)                                                               |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | B-F1: authorization runs before the document cache; B-F2: concrete-route (purpose) pair  |
+//                      | Charles Korthout | 0.3   | 10-10-2026     | B-F3: deferred document-cache approval receipts with digest-validated ServedFromCache    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -52,6 +53,13 @@ namespace Bosak.XPath.Runtime.Resources;
 /// <see cref="ControlledResourceReceipt.ConcreteRoute"/> naming the underlying operation
 /// (Document, TextResource, JsonResource or Collection). Both routes must be supported; a
 /// refusal names the governing route.</para>
+/// <para><b>Digest-validated document cache.</b> Document-route approvals consulted through
+/// the cache path (<see cref="AcquireBytesForCacheServe"/> /
+/// <see cref="RecordCacheServeApproval"/>) defer the approval receipt until the caller has
+/// decided whether the approved bytes match its cached entry (SHA-256 and effective URI).
+/// A match serves the cached node and marks the receipt
+/// <see cref="ControlledResourceReceipt.ServedFromCache"/>; a mismatch parses the fresh bytes
+/// and replaces the entry. Receipt and consumed content therefore always agree.</para>
 /// <para><b>XML safety.</b> Approved XML bytes are parsed with DTD processing prohibited and
 /// no external resolver, so the DTD/entity policy and limits apply to every XML acquisition
 /// path, not only the principal stylesheet.</para>
@@ -179,6 +187,63 @@ public sealed class ControlledResourcePolicy
     }
 
     /// <summary>
+    /// Document-cache acquisition path (REQ-125 consumer review B-F3): runs the full policy
+    /// decision — unsupported-route check plus authority consult, refusal receipts included —
+    /// and returns the approved bytes with their evidence, but DEFERS the approval receipt
+    /// to <see cref="RecordCacheServeApproval"/>. The caller decides, by digest comparison
+    /// against its cache, whether the bytes are served from cache or parsed fresh, and records
+    /// the approval only then, so the receipt truthfully describes the content actually
+    /// consumed (see <see cref="ControlledResourceReceipt.ServedFromCache"/>).
+    /// </summary>
+    /// <param name="requestedUri">The resolved (absolute) requested URI.</param>
+    /// <param name="route">The route (purpose) of the acquisition.</param>
+    /// <param name="concreteRoute">The concrete operation behind <paramref name="route"/>; null when none.</param>
+    /// <param name="effectiveUri">Receives the credential-stripped effective URI.</param>
+    /// <param name="byteCount">Receives the approved byte count.</param>
+    /// <param name="sha256">Receives the lowercase hex SHA-256 of the approved bytes.</param>
+    /// <returns>The approved, authoritative bytes.</returns>
+    internal byte[] AcquireBytesForCacheServe(
+        string requestedUri,
+        ControlledResourceRoute route,
+        ControlledResourceRoute? concreteRoute,
+        out string effectiveUri,
+        out long byteCount,
+        out string sha256)
+    {
+        var approval = Authorize(requestedUri, route, concreteRoute);
+        if (approval.Bytes is not { } bytes)
+            throw Refusal(route, concreteRoute, requestedUri, approval.EffectiveUri, "approval did not supply resource bytes");
+        effectiveUri = RedactCredentials(approval.EffectiveUri ?? requestedUri);
+        byteCount = bytes.Length;
+        sha256 = ToSha256Hex(bytes);
+        return bytes;
+    }
+
+    /// <summary>
+    /// Records the deferred approval receipt for a document-cache acquisition performed via
+    /// <see cref="AcquireBytesForCacheServe"/>. <paramref name="servedFromCache"/> is <c>true</c>
+    /// only when the caller served a cached node whose stored digest and effective URI match
+    /// the approved bytes exactly.
+    /// </summary>
+    /// <param name="requestedUri">The resolved (absolute) requested URI.</param>
+    /// <param name="route">The route (purpose) of the acquisition.</param>
+    /// <param name="concreteRoute">The concrete operation behind <paramref name="route"/>; null when none.</param>
+    /// <param name="effectiveUri">The credential-stripped effective URI.</param>
+    /// <param name="byteCount">The approved byte count.</param>
+    /// <param name="sha256">The lowercase hex SHA-256 of the approved bytes.</param>
+    /// <param name="servedFromCache">Whether the approved content was served from the digest-validated cache.</param>
+    internal void RecordCacheServeApproval(
+        string requestedUri,
+        ControlledResourceRoute route,
+        ControlledResourceRoute? concreteRoute,
+        string effectiveUri,
+        long byteCount,
+        string sha256,
+        bool servedFromCache)
+        => Record(route, concreteRoute, requestedUri, effectiveUri, ControlledResourceReceiptOutcome.Approved,
+            byteCount, sha256, message: null, servedFromCache: servedFromCache);
+
+    /// <summary>
     /// Acquires the approved member URIs of a collection, recording a receipt. Every member is
     /// authorized separately (tagged <see cref="ControlledResourceRoute.Collection"/>) before it
     /// is loaded. Engine-facing: throws with code XV0004/XV0005 on refusal; the caller must not
@@ -274,7 +339,8 @@ public sealed class ControlledResourcePolicy
         ControlledResourceReceiptOutcome outcome,
         long? byteCount = null,
         string? sha256 = null,
-        string? message = null)
+        string? message = null,
+        bool servedFromCache = false)
     {
         var receipt = new ControlledResourceReceipt(
             route,
@@ -284,7 +350,8 @@ public sealed class ControlledResourcePolicy
             concreteRoute,
             byteCount,
             sha256,
-            message);
+            message,
+            servedFromCache);
         lock (_receiptLock)
             _receipts.Add(receipt);
     }

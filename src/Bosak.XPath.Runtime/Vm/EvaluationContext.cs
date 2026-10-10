@@ -111,6 +111,8 @@
 //                      |                  |       |                | no disk/network fallback, DTD-prohibited parse, per-route purpose tagging)               |
 //                      | Charles Korthout | 2.38  | 10-10-2026     | B-F1: policy decision runs before the document cache; cache key carries policy identity  |
 //                      |                  |       |                | + route; B-F2: static-phase loads request StaticEvaluation purpose with concrete route   |
+//                      | Charles Korthout | 2.39  | 10-10-2026     | B-F3: controlled cache entries store content SHA-256 + effective URI; hits are digest-    |
+//                      |                  |       |                | validated and receipts carry ServedFromCache; changed bytes/effective URI refresh        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -244,13 +246,42 @@ public sealed class EvaluationContext
     // Legacy (no controlled policy) entries are keyed by (URI, load policy) exactly as
     // before REQ-125: the policy slot lets an XSLT host keep a distinct stripped tree per
     // distinct xsl:strip-space / xsl:preserve-space rule set (XSLT 3.0 §2.13.4), and the
-    // two trailing slots are (null, Document) constants.
+    // two trailing slots are (null, Document) constants. Legacy entries never carry digest
+    // evidence (null slots) — the legacy path never consults it.
     // Controlled-profile entries add the effective policy identity (the ControlledResourcePolicy
     // instance, which owns its authority) and the purpose route: cached content must never
     // bypass the requested route's authority decision or unsupported-route check (consumer
     // review B-F1), and content approved for one route or authority is never served to a
-    // different route or authority.
-    private readonly Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), IXdmNode> _documentCache;
+    // different route or authority. Each controlled entry also stores the SHA-256 of the
+    // bytes its node was parsed from and the effective URI they were acquired under: a cache
+    // hit is served only when the newly approved bytes digest-match the entry (and the
+    // effective URI agrees), otherwise the fresh bytes are parsed and the entry replaced —
+    // so the acquisition receipt always describes the content actually returned
+    // (consumer review B-F3).
+    private readonly Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), DocumentCacheEntry> _documentCache;
+
+    /// <summary>
+    /// One document-cache entry: the parsed node plus, for controlled-profile entries, the
+    /// provenance evidence (SHA-256 of the bytes the node was parsed from, and the effective
+    /// URI they were acquired under). Legacy entries leave both null.
+    /// </summary>
+    private sealed class DocumentCacheEntry
+    {
+        public DocumentCacheEntry(IXdmNode node, string? sha256, string? effectiveUri)
+        {
+            Node = node;
+            Sha256 = sha256;
+            EffectiveUri = effectiveUri;
+        }
+
+        public IXdmNode Node { get; }
+
+        /// <summary>SHA-256 of the bytes <see cref="Node"/> was parsed from; null for legacy entries.</summary>
+        public string? Sha256 { get; }
+
+        /// <summary>Effective URI the bytes were acquired under; null for legacy entries.</summary>
+        public string? EffectiveUri { get; }
+    }
 
     // XML Schema set for schema-aware kind tests and typed values.
     private XmlSchemaSet? _schemaSet;
@@ -295,7 +326,7 @@ public sealed class EvaluationContext
             ["err"] = "http://www.w3.org/2005/xqt-errors"
         };
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
-        _documentCache = new Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), IXdmNode>();
+        _documentCache = new Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), DocumentCacheEntry>();
         _namedDecimalFormats = new Dictionary<(string, string), DecimalFormat>();
     }
 
@@ -609,6 +640,18 @@ public sealed class EvaluationContext
     /// <see cref="ControlledResourceRoute.StaticEvaluation"/> with the requested route preserved
     /// as the concrete route.</param>
     /// <returns>The (cached) document node for the URI.</returns>
+    /// <remarks>
+    /// Under a controlled policy, cache hits are digest-validated (REQ-125 consumer review B-F3):
+    /// each controlled cache entry remembers the SHA-256 of the bytes its node was parsed from
+    /// and the effective URI they were acquired under. A repeated load is served from the cache
+    /// — preserving document identity — only while the newly approved bytes digest-match the
+    /// entry and the effective URI agrees; the approval receipt is then marked
+    /// <see cref="ControlledResourceReceipt.ServedFromCache"/>. When the authority approves
+    /// different bytes or a different effective URI for the same key, the fresh bytes are parsed
+    /// into a new node that replaces the entry, so the receipt always describes the content
+    /// actually returned. The no-policy path is unchanged: the cache serves the URI's tree
+    /// regardless of content changes.
+    /// </remarks>
     /// <exception cref="InvalidOperationException">No document loader is configured, the document
     /// cannot be loaded (FODC0002/FODC0005), or — under a controlled policy — the authority refused
     /// the acquisition (XV0004/XV0005). A refusal never triggers a disk/network fallback.</exception>
@@ -635,7 +678,7 @@ public sealed class EvaluationContext
             if (_documentCache.TryGetValue((uri, DocumentLoadPolicy, null, ControlledResourceRoute.Document), out var cached))
             {
                 DocumentLoaded?.Invoke(uri);
-                return cached;
+                return cached.Node;
             }
 
             // A resource mapper may redirect published (e.g. http:) URIs to local files;
@@ -678,10 +721,15 @@ public sealed class EvaluationContext
     /// on cache misses cannot enforce the per-route contract (consumer review B-F1). The cache
     /// key carries the effective policy identity (the policy instance, which owns its authority)
     /// and the purpose route, so content approved under one policy or route is never served to
-    /// another; on a cache hit the approval receipt still records the authoritative byte count
-    /// and SHA-256. During static evaluation (<see cref="IsStaticEvaluation"/>) the governing
+    /// another. During static evaluation (<see cref="IsStaticEvaluation"/>) the governing
     /// purpose route is <see cref="ControlledResourceRoute.StaticEvaluation"/> and the requested
     /// route is preserved as the concrete route on the request and receipt (consumer review B-F2).
+    /// <para>Cache hits are digest-validated (consumer review B-F3): each controlled entry stores
+    /// the SHA-256 of the bytes its node was parsed from and the effective URI they were acquired
+    /// under. The approval receipt is deferred until after the comparison — a matching entry is
+    /// served unchanged (document identity preserved) with <see cref="ControlledResourceReceipt.ServedFromCache"/>
+    /// set, while changed bytes or a changed effective URI are parsed into a fresh node that
+    /// replaces the entry. The receipt therefore always describes the content actually returned.</para>
     /// </remarks>
     private IXdmNode LoadDocumentControlled(string uri, ControlledResourceRoute route, ControlledResourcePolicy policy)
     {
@@ -691,17 +739,26 @@ public sealed class EvaluationContext
         var (purpose, concrete) = ControlledRouteFor(route);
 
         // Authorization first — never served from cache without the route's own decision.
-        var bytes = policy.AcquireBytes(uri, purpose, concrete, out var effectiveUri);
+        // The approval receipt is deferred: it is recorded only once the cache comparison
+        // below has decided whether the cached node or the fresh bytes are consumed (B-F3).
+        var bytes = policy.AcquireBytesForCacheServe(uri, purpose, concrete, out var effectiveUri, out var byteCount, out var sha256);
 
         var key = (uri, (object?)DocumentLoadPolicy, (object?)policy, purpose);
-        if (_documentCache.TryGetValue(key, out var cachedControlled))
+        if (_documentCache.TryGetValue(key, out var entry)
+            && entry.Sha256 is not null
+            && entry.Sha256 == sha256
+            && string.Equals(entry.EffectiveUri, effectiveUri, StringComparison.Ordinal))
         {
+            // Digest-validated hit: the cached node was parsed from exactly these bytes under
+            // this effective URI — receipt and content agree.
+            policy.RecordCacheServeApproval(uri, purpose, concrete, effectiveUri, byteCount, sha256, servedFromCache: true);
             DocumentLoaded?.Invoke(uri);
-            return cachedControlled;
+            return entry.Node;
         }
 
+        policy.RecordCacheServeApproval(uri, purpose, concrete, effectiveUri, byteCount, sha256, servedFromCache: false);
         var node = Bosak.XPath.Providers.Xml.XDocumentProvider.LoadControlled(bytes, effectiveUri);
-        return CacheLoadedDocument(key, uri, node);
+        return CacheLoadedDocument(key, uri, node, sha256, effectiveUri);
     }
 
     /// <summary>
@@ -722,10 +779,14 @@ public sealed class EvaluationContext
     /// <param name="key">The cache key (URI, load policy, controlled policy, route) to store the node under.</param>
     /// <param name="uri">The originally requested URI (after absolutization), for the DocumentLoaded callback.</param>
     /// <param name="node">The freshly loaded document node.</param>
+    /// <param name="sha256">The SHA-256 of the bytes <paramref name="node"/> was parsed from; null on the legacy path.</param>
+    /// <param name="effectiveUri">The effective URI the bytes were acquired under; null on the legacy path.</param>
     private IXdmNode CacheLoadedDocument(
         (string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route) key,
         string uri,
-        IXdmNode node)
+        IXdmNode node,
+        string? sha256 = null,
+        string? effectiveUri = null)
     {
         if (DocumentPostProcessor != null)
             node = DocumentPostProcessor(node);
@@ -738,7 +799,7 @@ public sealed class EvaluationContext
             else if (xdn.UnderlyingObject is System.Xml.Linq.XElement xelem)
                 XDocumentNode.RegisterTree(xelem);
         }
-        _documentCache[key] = node;
+        _documentCache[key] = new DocumentCacheEntry(node, sha256, effectiveUri);
         DocumentLoaded?.Invoke(uri);
         return node;
     }
@@ -761,7 +822,7 @@ public sealed class EvaluationContext
     {
         if (!string.IsNullOrEmpty(uri))
         {
-            _documentCache[(uri, null, null, ControlledResourceRoute.Document)] = node;
+            _documentCache[(uri, null, null, ControlledResourceRoute.Document)] = new DocumentCacheEntry(node, null, null);
             DocumentLoaded?.Invoke(uri);
         }
     }
