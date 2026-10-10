@@ -109,6 +109,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.37  | 10-10-2026     | REQ-125 Slice B: ResourcePolicy + controlled LoadDocument (authority-approved bytes,     |
 //                      |                  |       |                | no disk/network fallback, DTD-prohibited parse, per-route purpose tagging)               |
+//                      | Charles Korthout | 2.38  | 10-10-2026     | B-F1: policy decision runs before the document cache; cache key carries policy identity  |
+//                      |                  |       |                | + route; B-F2: static-phase loads request StaticEvaluation purpose with concrete route   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -238,10 +240,17 @@ public sealed class EvaluationContext
     // exact-arity lookup miss resolves variadic candidates without a full table scan.
     private readonly Dictionary<(string, string), int> _variadicMinArity = new();
 
-    // Document cache for fn:doc / fn:collection identity, keyed by (URI, load policy).
-    // The policy slot lets an XSLT host keep a distinct stripped tree per distinct
-    // xsl:strip-space / xsl:preserve-space rule set (XSLT 3.0 §2.13.4).
-    private readonly Dictionary<(string Uri, object? Policy), IXdmNode> _documentCache;
+    // Document cache for fn:doc / fn:collection identity.
+    // Legacy (no controlled policy) entries are keyed by (URI, load policy) exactly as
+    // before REQ-125: the policy slot lets an XSLT host keep a distinct stripped tree per
+    // distinct xsl:strip-space / xsl:preserve-space rule set (XSLT 3.0 §2.13.4), and the
+    // two trailing slots are (null, Document) constants.
+    // Controlled-profile entries add the effective policy identity (the ControlledResourcePolicy
+    // instance, which owns its authority) and the purpose route: cached content must never
+    // bypass the requested route's authority decision or unsupported-route check (consumer
+    // review B-F1), and content approved for one route or authority is never served to a
+    // different route or authority.
+    private readonly Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), IXdmNode> _documentCache;
 
     // XML Schema set for schema-aware kind tests and typed values.
     private XmlSchemaSet? _schemaSet;
@@ -286,7 +295,7 @@ public sealed class EvaluationContext
             ["err"] = "http://www.w3.org/2005/xqt-errors"
         };
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
-        _documentCache = new Dictionary<(string Uri, object? Policy), IXdmNode>();
+        _documentCache = new Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), IXdmNode>();
         _namedDecimalFormats = new Dictionary<(string, string), DecimalFormat>();
     }
 
@@ -593,7 +602,12 @@ public sealed class EvaluationContext
     /// </summary>
     /// <param name="uri">The document URI; relative URIs are resolved against <see cref="BaseUri"/>.</param>
     /// <param name="route">The acquisition route (purpose) the load is performed for; recorded on
-    /// the policy receipts when a controlled policy is attached.</param>
+    /// the policy receipts when a controlled policy is attached. Under a controlled policy the
+    /// route's decision (authority approval or unsupported-route refusal) runs on every call,
+    /// before any cached content is served, and the cache is scoped to the policy identity and
+    /// route; during static evaluation (<see cref="IsStaticEvaluation"/>) the governing route is
+    /// <see cref="ControlledResourceRoute.StaticEvaluation"/> with the requested route preserved
+    /// as the concrete route.</param>
     /// <returns>The (cached) document node for the URI.</returns>
     /// <exception cref="InvalidOperationException">No document loader is configured, the document
     /// cannot be loaded (FODC0002/FODC0005), or — under a controlled policy — the authority refused
@@ -618,7 +632,7 @@ public sealed class EvaluationContext
                 uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;
             }
 
-            if (_documentCache.TryGetValue((uri, DocumentLoadPolicy), out var cached))
+            if (_documentCache.TryGetValue((uri, DocumentLoadPolicy, null, ControlledResourceRoute.Document), out var cached))
             {
                 DocumentLoaded?.Invoke(uri);
                 return cached;
@@ -650,7 +664,7 @@ public sealed class EvaluationContext
             throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
         }
 
-        return CacheLoadedDocument(uri, node);
+        return CacheLoadedDocument((uri, DocumentLoadPolicy, null, ControlledResourceRoute.Document), uri, node);
     }
 
     /// <summary>
@@ -658,27 +672,60 @@ public sealed class EvaluationContext
     /// the legacy mapper/loader — and therefore any disk/network fallback — is never consulted,
     /// and the approved bytes are parsed with DTD processing prohibited.
     /// </summary>
+    /// <remarks>
+    /// The policy decision (unsupported-route check plus authority consult, with its receipt)
+    /// runs on every call, BEFORE the document cache is consulted: a control that executes only
+    /// on cache misses cannot enforce the per-route contract (consumer review B-F1). The cache
+    /// key carries the effective policy identity (the policy instance, which owns its authority)
+    /// and the purpose route, so content approved under one policy or route is never served to
+    /// another; on a cache hit the approval receipt still records the authoritative byte count
+    /// and SHA-256. During static evaluation (<see cref="IsStaticEvaluation"/>) the governing
+    /// purpose route is <see cref="ControlledResourceRoute.StaticEvaluation"/> and the requested
+    /// route is preserved as the concrete route on the request and receipt (consumer review B-F2).
+    /// </remarks>
     private IXdmNode LoadDocumentControlled(string uri, ControlledResourceRoute route, ControlledResourcePolicy policy)
     {
         if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(BaseUri))
             uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;
 
-        if (_documentCache.TryGetValue((uri, DocumentLoadPolicy), out var cachedControlled))
+        var (purpose, concrete) = ControlledRouteFor(route);
+
+        // Authorization first — never served from cache without the route's own decision.
+        var bytes = policy.AcquireBytes(uri, purpose, concrete, out var effectiveUri);
+
+        var key = (uri, (object?)DocumentLoadPolicy, (object?)policy, purpose);
+        if (_documentCache.TryGetValue(key, out var cachedControlled))
         {
             DocumentLoaded?.Invoke(uri);
             return cachedControlled;
         }
 
-        var bytes = policy.AcquireBytes(uri, route, out var effectiveUri);
         var node = Bosak.XPath.Providers.Xml.XDocumentProvider.LoadControlled(bytes, effectiveUri);
-        return CacheLoadedDocument(uri, node);
+        return CacheLoadedDocument(key, uri, node);
     }
+
+    /// <summary>
+    /// Maps a requested acquisition route to the route pair the controlled policy decides on:
+    /// during static evaluation the governing purpose route is
+    /// <see cref="ControlledResourceRoute.StaticEvaluation"/> and the requested route is kept
+    /// as the concrete operation; otherwise the requested route decides, with no concrete route.
+    /// </summary>
+    internal (ControlledResourceRoute Purpose, ControlledResourceRoute? Concrete) ControlledRouteFor(ControlledResourceRoute route)
+        => IsStaticEvaluation && route != ControlledResourceRoute.StaticEvaluation
+            ? (ControlledResourceRoute.StaticEvaluation, (ControlledResourceRoute?)route)
+            : (route, null);
 
     /// <summary>
     /// Shared post-load tail: whitespace/strip-space post-processing, eager creation-sequence
     /// registration for XDocument-backed trees, document caching and the DocumentLoaded callback.
     /// </summary>
-    private IXdmNode CacheLoadedDocument(string uri, IXdmNode node)
+    /// <param name="key">The cache key (URI, load policy, controlled policy, route) to store the node under.</param>
+    /// <param name="uri">The originally requested URI (after absolutization), for the DocumentLoaded callback.</param>
+    /// <param name="node">The freshly loaded document node.</param>
+    private IXdmNode CacheLoadedDocument(
+        (string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route) key,
+        string uri,
+        IXdmNode node)
     {
         if (DocumentPostProcessor != null)
             node = DocumentPostProcessor(node);
@@ -691,7 +738,7 @@ public sealed class EvaluationContext
             else if (xdn.UnderlyingObject is System.Xml.Linq.XElement xelem)
                 XDocumentNode.RegisterTree(xelem);
         }
-        _documentCache[(uri, DocumentLoadPolicy)] = node;
+        _documentCache[key] = node;
         DocumentLoaded?.Invoke(uri);
         return node;
     }
@@ -714,7 +761,7 @@ public sealed class EvaluationContext
     {
         if (!string.IsNullOrEmpty(uri))
         {
-            _documentCache[(uri, null)] = node;
+            _documentCache[(uri, null, null, ControlledResourceRoute.Document)] = node;
             DocumentLoaded?.Invoke(uri);
         }
     }

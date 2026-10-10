@@ -12,6 +12,8 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice B)                                                               |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | [Collection("XSLT package registry")] — the package-route test mutates the global        |
+//                      |                  |       |                | package registry; serialized against the other registry test classes (XTSE3000 CI flake) |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -32,6 +34,13 @@ namespace Bosak.Xslt.Tests.Validation;
 /// (use-when) evaluation — with denial producing no disk/network fallback, and receipts
 /// describing the exact effective inputs.
 /// </summary>
+// Serializes against StylesheetTests, SchemaAwareCompilationTests and
+// PackageWhitespaceStrippingTests: the package-route tests mutate the global
+// XsltFunctionLibrary package registry (ClearPackages/RegisterPackage), which races under
+// xUnit's default cross-class parallelism — a parallel ClearPackages between this class's
+// RegisterPackage and Compile surfaced on CI as XTSE3000 "package not found" instead of
+// the expected XV0004 refusal (PR #144).
+[Collection("XSLT package registry")]
 public class ControlledResourceRouteTests
 {
     private static readonly Encoding Utf8 = new UTF8Encoding(false);
@@ -604,6 +613,60 @@ public class ControlledResourceRouteTests
             Assert.Contains("Package", ex.Message);
             var receipt = Assert.Single(policy.Receipts);
             Assert.Equal(ControlledResourceRoute.Package, receipt.Route);
+        }
+        finally
+        {
+            Api.XsltFunctionLibrary.ClearPackages();
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void UsePackage_WarmApprovalThenDenyAll_SecondCompileRefusesXv0004()
+    {
+        // Deterministic in-process reproduction of the CI ordering flake (PR #144): the
+        // FIRST compile acquires the package under an approving authority; a SECOND compile
+        // of the same package URI under a deny-all policy must still consult the authority
+        // and refuse with XV0004. Package acquisition is per-compile (no warm parse/compile
+        // cache may shortcut the policy), so the denial can never be bypassed by earlier
+        // approved state — in this test or across parallel tests sharing the registry.
+        var path = Path.Combine(Path.GetTempPath(), $"bosak-req125-{Guid.NewGuid():N}.xsl");
+        File.WriteAllText(path, """
+            <xsl:package name="urn:test:pkg-warm" package-version="1.0" version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:variable name="v" select="1" visibility="public"/>
+            </xsl:package>
+            """, Utf8);
+        Api.XsltFunctionLibrary.ClearPackages();
+        Api.XsltFunctionLibrary.RegisterPackage("urn:test:pkg-warm", "1.0", new Uri(path).AbsoluteUri);
+        try
+        {
+            const string xsl = """
+                <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                  <xsl:use-package name="urn:test:pkg-warm" package-version="1.0"/>
+                  <xsl:template match="/"><out/></xsl:template>
+                </xsl:stylesheet>
+                """;
+
+            var packageBytes = File.ReadAllBytes(path);
+            var approving = new StubAuthority { Handler = _ => ControlledResourceResponse.Approve(packageBytes) };
+            var approvePolicy = new ControlledResourcePolicy(approving);
+            var firstCompiler = new XsltCompiler { ResourcePolicy = approvePolicy };
+            firstCompiler.Compile(xsl, "file:///policy-test/main.xsl");
+            Assert.Contains(approving.Requests, r => r.Route == ControlledResourceRoute.Package);
+            var approvalReceipt = Assert.Single(approvePolicy.Receipts);
+            Assert.Equal(ControlledResourceReceiptOutcome.Approved, approvalReceipt.Outcome);
+
+            var denying = new StubAuthority { Handler = _ => ControlledResourceResponse.Deny("not approved") };
+            var denyPolicy = new ControlledResourcePolicy(denying);
+            var secondCompiler = new XsltCompiler { ResourcePolicy = denyPolicy };
+            var ex = Assert.Throws<InvalidOperationException>(() => secondCompiler.Compile(xsl, "file:///policy-test/main.xsl"));
+
+            Assert.StartsWith("XV0004", ex.Message);
+            Assert.Contains("Package", ex.Message);
+            var refusalReceipt = Assert.Single(denyPolicy.Receipts);
+            Assert.Equal(ControlledResourceRoute.Package, refusalReceipt.Route);
+            Assert.Equal(ControlledResourceReceiptOutcome.Denied, refusalReceipt.Outcome);
         }
         finally
         {
