@@ -511,6 +511,11 @@
 //                      | Charles Korthout | 7.04  | 08-10-2026     | REQ-118 4.0-S8: xsl:array / xsl:array-member (BuildArrayFromInstruction, nested member    |
 //                      |                  |       |                | wrapping) and xsl:switch (single-atomic selector coercion, general-comparison branch     |
 //                      |                  |       |                | matching, @select on when/otherwise) in both template and function-body evaluators       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.06  | 10-10-2026     | REQ-125 Slice B: xsl:source-document (streamed and non-streamed) under a controlled       |
+//                      |                  |       |                | policy: authority-approved bytes via XmlStreamingProvider/LoadControlled with DTDs        |
+//                      |                  |       |                | prohibited; no StreamingDocumentLoader hook or file fallback when a policy is attached    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -523,6 +528,7 @@ using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
+using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Bosak.XPath.Providers.Streaming;
@@ -8675,31 +8681,71 @@ internal sealed class TransformEngine
                             // fn:doc's rooted-path rule).
                             if (documentHref.Contains('\\') && !File.Exists(documentHref))
                                 throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
-                            try
+                            if (_context.ResourcePolicy is { } streamPolicy)
                             {
-                                var resolvedUri = ResolveStreamingHref(documentHref);
-                                docNode = _context.StreamingDocumentLoader?.Invoke(resolvedUri)
-                                    ?? LoadStreamingDocument(resolvedUri);
+                                // Controlled profile (REQ-125 Slice B): the authority supplies
+                                // authoritative bytes; the host StreamingDocumentLoader hook and
+                                // the file fallback are never consulted. DTD processing is
+                                // prohibited for the approved bytes.
+                                var requestUri = documentHref;
+                                if (!Uri.IsWellFormedUriString(requestUri, UriKind.Absolute) && !string.IsNullOrEmpty(_context.BaseUri))
+                                    requestUri = new Uri(new Uri(_context.BaseUri), requestUri).AbsoluteUri;
+                                var bytes = streamPolicy.AcquireBytes(requestUri, ControlledResourceRoute.SourceDocumentStreaming, out var effectiveUri);
+                                var controlledSettings = new XmlReaderSettings
+                                {
+                                    DtdProcessing = DtdProcessing.Prohibit,
+                                    XmlResolver = null,
+                                    IgnoreWhitespace = false,
+                                };
+                                try
+                                {
+                                    docNode = XmlStreamingProvider.Load(
+                                        new MemoryStream(bytes, writable: false),
+                                        new StreamingLoadOptions
+                                        {
+                                            BaseUri = effectiveUri,
+                                            DocumentUri = effectiveUri,
+                                            RetainRecords = true,
+                                            ReaderSettings = controlledSettings,
+                                        });
+                                }
+                                catch (XmlException)
+                                {
+                                    throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                                }
+                                catch (IOException)
+                                {
+                                    throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                                }
                             }
-                            catch (FileNotFoundException)
+                            else
                             {
-                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
-                            }
-                            catch (DirectoryNotFoundException)
-                            {
-                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
-                            }
-                            catch (UriFormatException)
-                            {
-                                throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
-                            }
-                            catch (IOException)
-                            {
-                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
-                            }
-                            catch (XmlException)
-                            {
-                                throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                                try
+                                {
+                                    var resolvedUri = ResolveStreamingHref(documentHref);
+                                    docNode = _context.StreamingDocumentLoader?.Invoke(resolvedUri)
+                                        ?? LoadStreamingDocument(resolvedUri);
+                                }
+                                catch (FileNotFoundException)
+                                {
+                                    throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                                }
+                                catch (DirectoryNotFoundException)
+                                {
+                                    throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                                }
+                                catch (UriFormatException)
+                                {
+                                    throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
+                                }
+                                catch (IOException)
+                                {
+                                    throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                                }
+                                catch (XmlException)
+                                {
+                                    throw new InvalidOperationException($"FODC0002: Document not available: {documentHref}");
+                                }
                             }
                             AttachStreamingHooks(docNode);
                         }
@@ -8710,7 +8756,7 @@ internal sealed class TransformEngine
                             // file (FODC0002).
                             if (documentHref.Contains('\\'))
                                 throw new InvalidOperationException($"FODC0005: Invalid document URI: {documentHref}");
-                            docNode = _context.LoadDocument(documentHref);
+                            docNode = _context.LoadDocument(documentHref, ControlledResourceRoute.SourceDocument);
                         }
                         _context.RegisterDocument(documentHref, docNode);
 

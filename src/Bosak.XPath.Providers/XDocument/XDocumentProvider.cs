@@ -56,6 +56,8 @@
 //                      | Charles Korthout | 0.23  | 24-09-2026     | REQ-105 (PA-3): validated documents get schema-normalized simple-typed values          |
 //                      |                  |       |                | (whiteSpace facet, XDM 3.3.2; match-136..141)                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.24  | 10-10-2026     | REQ-125 Slice B: LoadControlled parses host-approved bytes with DTD/entities prohibited  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -744,6 +746,40 @@ public static class XDocumentProvider
             ? filePath
             : Path.GetFullPath(filePath);
         node.SetDocumentUri(new Uri(absolutePath).AbsoluteUri);
+        return node;
+    }
+
+    /// <summary>
+    /// Loads XML from host-approved bytes under the controlled resource profile (REQ-125 Slice B).
+    /// DTD processing is prohibited and no external resolver is consulted, so the DTD/entity
+    /// policy applies to the approved content exactly as it does to a controlled disk load;
+    /// the approved bytes are authoritative and are never re-resolved against their URI.
+    /// Whitespace handling, document-order registration and the document URI follow
+    /// <see cref="LoadFile(string, string?)"/>.
+    /// </summary>
+    /// <param name="bytes">The approved XML bytes.</param>
+    /// <param name="baseUri">The effective URI the bytes correspond to (used as base and document URI).</param>
+    /// <returns>The loaded document node.</returns>
+    public static IXdmNode LoadControlled(byte[] bytes, string? baseUri)
+    {
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Prohibit,
+            XmlResolver = null,
+            IgnoreWhitespace = false,
+        };
+        XDocument document;
+        using (var stream = new MemoryStream(bytes, writable: false))
+        using (var reader = XmlReader.Create(stream, settings, baseUri ?? string.Empty))
+        {
+            document = XDocument.Load(reader, LoadOptions.SetBaseUri | LoadOptions.PreserveWhitespace);
+        }
+        StripDocumentLevelWhitespace(document);
+        var map = ComputeDocumentOrder(document);
+        XDocumentNode.RegisterOrderMap(document, map);
+        var node = XDocumentNode.Wrap(document);
+        if (!string.IsNullOrEmpty(baseUri))
+            node.SetDocumentUri(baseUri);
         return node;
     }
 
