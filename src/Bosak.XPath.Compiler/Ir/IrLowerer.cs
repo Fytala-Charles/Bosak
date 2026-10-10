@@ -6,6 +6,7 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
+//                      |                  |       |                | constant                                                                               |
 // SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -120,6 +121,9 @@
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 1.51  | 09-10-2026     | REQ-123 element-to-map slice: LowerStepCore LookupKey early-return (key in literal pool,  |
 //                      |                  |       |                | replaces namespace/name test pair)                                                     |
+//                      | Charles Korthout | 1.52  | 10-10-2026     | REQ-123 compare-tail slice: QNameLiteralNode lowered to fn:QName(ns, lexical)          |
+//                      |                  |       |                | constant                                                                               |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -392,6 +396,11 @@ internal sealed class IrLowerer
             DecimalLiteralNode n => LowerDecimalLiteral(n, targetReg),
             DoubleLiteralNode n => LowerDoubleLiteral(n, targetReg),
             StringLiteralNode n => LowerStringLiteral(n, targetReg),
+            QNameLiteralNode n => LowerNode(new FunctionCallNode("QName", new XPathAstNode[]
+            {
+                new StringLiteralNode(n.NamespaceUri ?? string.Empty),
+                new StringLiteralNode(string.IsNullOrEmpty(n.Prefix) ? n.LocalName : $"{n.Prefix}:{n.LocalName}")
+            }), targetReg),
             VariableReferenceNode n => LowerVariable(n, targetReg),
             ContextItemNode => LowerContextItem(targetReg),
             ParenthesizedExprNode n => LowerNode(n.Expression, targetReg),

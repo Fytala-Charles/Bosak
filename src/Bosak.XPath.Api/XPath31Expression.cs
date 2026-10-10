@@ -6,6 +6,7 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
+//                      |                  |       |                | fallback, XPST0081) in the namespace resolution pass                                   |
 // SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -45,6 +46,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.17  | 10-10-2026     | REQ-123: version gates made arity-aware (xs:T#0 focus constructors, PR661, share        |
 //                      |                  |       |                | names with 3.1 arity-1 constructors)                                                    |
+//                      | Charles Korthout | 0.18  | 10-10-2026     | REQ-123 compare-tail slice: QName literal prefix resolution (xml/fn/map/array/math     |
+//                      |                  |       |                | fallback, XPST0081) in the namespace resolution pass                                   |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
@@ -253,6 +257,7 @@ public sealed class XPath31Expression
                 Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, options) }).ToList()
             },
             StringConstructorNode sc => sc with { Parts = sc.Parts.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
+            QNameLiteralNode qn => ResolveQNameLiteral(qn, options),
             StringTemplateNode st => st with { Parts = st.Parts.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, options), Key = ResolveFunctionNamespaces(lookup.Key, options) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, options) },
@@ -263,6 +268,34 @@ public sealed class XPath31Expression
             DynamicFunctionCallNode dfc => dfc with { Function = ResolveFunctionNamespaces(dfc.Function, options), Arguments = dfc.Arguments.Select(a => ResolveFunctionNamespaces(a, options)).ToList() },
             _ => node
         };
+    }
+
+    // Resolves a QName literal's lexical prefix against the static context. The braced
+    // form (#Q{uri}local) is already resolved by the parser; #local needs no resolution.
+    // A prefixed form resolves against the supplied namespaces with fallback to the
+    // canonical predefined bindings (xml/fn/map/array/math, matching EvaluationContext);
+    // an unresolvable prefix is the static error XPST0081 (Literals-40-924).
+    private static QNameLiteralNode ResolveQNameLiteral(QNameLiteralNode node, CompileOptions options)
+    {
+        if (node.NamespaceUri is not null || string.IsNullOrEmpty(node.Prefix))
+            return node;
+
+        string? nsUri = null;
+        if (options.Namespaces is not null && options.Namespaces.TryGetValue(node.Prefix, out var bound))
+            nsUri = bound;
+        else
+            nsUri = node.Prefix switch
+            {
+                "xml" => "http://www.w3.org/XML/1998/namespace",
+                "fn" => DefaultFunctionNamespace,
+                "map" => "http://www.w3.org/2005/xpath-functions/map",
+                "array" => "http://www.w3.org/2005/xpath-functions/array",
+                "math" => "http://www.w3.org/2005/xpath-functions/math",
+                _ => null,
+            };
+        if (nsUri is null)
+            throw new InvalidOperationException($"XPST0081: No namespace declaration for prefix '{node.Prefix}' in QName literal.");
+        return node with { NamespaceUri = nsUri };
     }
 
     // An arrow target that is a static function call receives the arrow source as its

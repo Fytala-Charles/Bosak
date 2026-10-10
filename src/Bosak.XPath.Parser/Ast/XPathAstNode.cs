@@ -63,6 +63,8 @@
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 1.22  | 09-10-2026     | REQ-123 element-to-map slice: NameTestKind.LookupKey for the PR2688 string-literal     |
 //                      |                  |       |                | lookup step (E/"key")                                                                  |
+//                      | Charles Korthout | 1.23  | 10-10-2026     | REQ-123 compare-tail slice: QNameLiteralNode for # QName literals (PR1976/PR2227)      |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -109,6 +111,13 @@ internal sealed record DoubleLiteralNode(double Value) : XPathAstNode;
 /// <summary>A string literal: <c>'abc'</c>.</summary>
 /// <param name="Value">The literal content with the delimiting quotes removed and escapes resolved.</param>
 internal sealed record StringLiteralNode(string Value) : XPathAstNode;
+
+/// <summary>An XPath 4.0 QName literal: <c>#local</c>, <c>#prefix:local</c>, or <c>#Q{uri}local</c> (PR1976/PR2227).</summary>
+/// <param name="LocalName">The local name of the QName.</param>
+/// <param name="Prefix">The lexical prefix of the QName (retained in the value), or null.</param>
+/// <param name="NamespaceUri">The namespace URI of the QName; null when a prefixed lexical form
+/// still needs static-context resolution (XPST0081 on failure), or the braced-URI form already supplied it.</param>
+internal sealed record QNameLiteralNode(string LocalName, string? Prefix = null, string? NamespaceUri = null) : XPathAstNode;
 
 /// <summary>A variable reference: <c>$name</c>, <c>$prefix:name</c>, or <c>$Q{uri}name</c>.</summary>
 /// <param name="LocalName">The local name of the variable.</param>

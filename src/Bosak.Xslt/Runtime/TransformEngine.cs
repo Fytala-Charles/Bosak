@@ -6,6 +6,7 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
+//                      |                  |       |                | comparison                                                                             |
 // SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -503,6 +504,9 @@
 //                      | Charles Korthout | 7.03  | 08-10-2026     | REQ-118 4.0-S7: xsl:if @then/@else; @separator on xsl:for-each/xsl:apply-templates      |
 //                      |                  |       |                | (result-document and raw-sequence paths); xsl:map @select/@duplicates (string +          |
 //                      |                  |       |                | function-item forms) via a shared merge; supported version is now 4.0                    |
+//                      | Charles Korthout | 7.05  | 10-10-2026     | REQ-123 compare-tail slice: unicode-case-insensitive collation in sort/group string    |
+//                      |                  |       |                | comparison                                                                             |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 7.04  | 08-10-2026     | REQ-118 4.0-S8: xsl:array / xsl:array-member (BuildArrayFromInstruction, nested member    |
 //                      |                  |       |                | wrapping) and xsl:switch (single-atomic selector coercion, general-comparison branch     |
@@ -3361,6 +3365,8 @@ internal sealed class TransformEngine
         if (uri == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
             return true;
         if (uri == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (uri == "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive")
             return true;
         if (uri == "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind")
             return true;
@@ -15090,6 +15096,8 @@ internal sealed class TransformEngine
             cmp = string.CompareOrdinal(a, b);
         else if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
             cmp = string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
+        else if (collation == "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive")
+            cmp = CultureInfo.InvariantCulture.CompareInfo.Compare(a, b, CompareOptions.IgnoreCase);
         else if (TryParseUcaCollation(collation, out var uca))
         {
             cmp = uca.CompareInfo.Compare(a, b, uca.Options);
@@ -15760,6 +15768,9 @@ internal sealed class TransformEngine
 
         if (TryParseUcaCollation(collation, out var uca))
             return uca.CompareInfo.Compare(a, b, uca.Options) == 0;
+
+        if (collation == "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive")
+            return CultureInfo.InvariantCulture.CompareInfo.Compare(a, b, CompareOptions.IgnoreCase) == 0;
 
         if (collation == HtmlAsciiCaseInsensitiveCollation || collation == CaseblindCollation)
             return string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
