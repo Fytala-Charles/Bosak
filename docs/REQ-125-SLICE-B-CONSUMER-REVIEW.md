@@ -54,3 +54,23 @@ Construct an approving authority and mark `ControlledResourceRoute.StaticEvaluat
 **Slice B is not yet accepted.** B-F1 and B-F2 affect the core host-authoritative route/purpose contract in AC-04/05. The green upstream tests establish useful baseline coverage but do not cover these cross-route/cache and phase restrictions.
 
 Bosak owns corrections, API semantics, engine tests and compatibility decisions through REQ-125. Braid will rerun these probes after delivery. Accepted Slice A and REQ-124 remain accepted; Braid's engine pin is unchanged. Production preview and Slice C/D acceptance remain separate.
+
+## 4. Correction Re-review: B-F1/B-F2 Closed; B-F3 Outstanding
+
+Reviewed fix **facbf373de0cd8c54b2a0ddbc9d730c21e83c78f** on 2026-10-10 using an isolated committed-source archive. Independently ran the three policy/route/review-finding suites: **67 passed / 0 failed / 0 skipped**. Source review confirms authorization before cache service and policy/purpose-aware cache keys; static requests now carry StaticEvaluation purpose plus a concrete operation, with both unsupported-route checks.
+
+The original probes now return SourceDocument refusal XV0005 and a StaticEvaluation RefusedUnsupported receipt. The static doc-available case may complete compilation because the denied availability check returns false; no static resource approval occurs. **B-F1 and B-F2 are verified closed.**
+
+### B-F3: Cache-hit receipts identify newly approved bytes, while the returned node contains old bytes
+
+Use one new policy and EvaluationContext with an authority whose approved content can change. Load `urn:review:changing` with bytes `<approved>OLD</approved>`. Change the authority response to `<changed/>`, then load the same URI under the same policy/route.
+
+**Observed:** the second call returns the identical cached node with string value `OLD`, but its Approved receipt SHA-256 identifies `<changed/>`, not the retained document. First digest: `7af55314edb57d23ea0ecb44ce645725c0434cc8d8ba6cec21dec39b788de943`. Second digest: `a6f97c6663c45f978a3d5ca749ec1a9aacaa11851902e08203ebe0cf36485f47`.
+
+`LoadDocumentControlled` calls `AcquireBytes` (which records approval of fresh bytes) before checking the cache, then discards those bytes on a cache hit. This closes authorization bypass but does not preserve AC-05's exact effective-input evidence. Effective-URI changes have the same unresolved evidence/identity risk. The probe does not demonstrate new filesystem IO or failure of route denial.
+
+**Required correction:** distinguish authorization evidence from the content actually served. Cache-hit consumption evidence must identify retained bytes and their effective URI. If new approved bytes/effective identity conflict with cached content, define an explicit deterministic policy: reject the conflict, start a fresh execution scope, or expose separate approved-versus-consumed receipts while preserving documented document identity. Do not silently present fresh approval bytes as the execution input. Braid can freeze authority envelopes per run, but that mitigation does not make the current general receipt guarantee correct.
+
+**Required regression evidence:** same-content repeat loads preserve document identity and matching receipts; changed bytes and changed effective URIs cannot yield misleading consumed-input evidence; denial remains enforced on cache hits; policy/route changes and nested calls retain the corrected semantics. Record the chosen contract in public API documentation.
+
+**Decision:** original blockers closed; Slice B acceptance remains pending B-F3 correction. Accepted Slice A and REQ-124 remain unchanged. No engine source edits or Braid dependency upgrade were made; broader unit/conformance gates were not independently rerun in this review.
