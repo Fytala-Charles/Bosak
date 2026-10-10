@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice B consumer-review corrections B-F1/B-F2)                         |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | B-F3: digest-validated controlled cache hits — fresh parses on byte/effective-URI change |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -484,5 +485,170 @@ public class ControlledResourceReviewFindingTests
         var receipt = Assert.Single(policy.Receipts, r => r.Route == ControlledResourceRoute.StaticEvaluation);
         Assert.Equal(ControlledResourceRoute.Document, receipt.ConcreteRoute);
         Assert.Equal(ControlledResourceReceiptOutcome.Approved, receipt.Outcome);
+    }
+
+    // ------------------------------------------------------------------
+    // B-F3: digest-validated controlled cache hits — receipts and content always agree
+    // ------------------------------------------------------------------
+
+    private const string OldApprovedBytes = "<approved>OLD</approved>";
+    private const string ChangedBytes = "<changed/>";
+
+    // Digests as published by the Bosak.Braid re-review (docs/REQ-125-SLICE-B-CONSUMER-REVIEW.md §4).
+    private const string OldApprovedDigest = "7af55314edb57d23ea0ecb44ce645725c0434cc8d8ba6cec21dec39b788de943";
+    private const string ChangedDigest = "a6f97c6663c45f978a3d5ca749ec1a9aacaa11851902e08203ebe0cf36485f47";
+
+    [Fact]
+    public void BF3_ChangingAuthorityContent_FreshNodeAndTruthfulReceipt()
+    {
+        // Verbatim reviewer probe: one policy, one context, an authority whose approved
+        // content changes between loads. The second load must return content matching the
+        // new digest — never the stale node with a fresh-bytes receipt.
+        var current = Utf8.GetBytes(OldApprovedBytes);
+        var authority = new StubAuthority { Handler = _ => ControlledResourceResponse.Approve(current) };
+        var policy = new ControlledResourcePolicy(authority);
+        var context = new EvaluationContext { ResourcePolicy = policy };
+
+        var first = context.LoadDocument("urn:review:changing", ControlledResourceRoute.Document);
+        Assert.Equal("OLD", first.StringValue);
+        var firstReceipt = Assert.Single(policy.Receipts);
+        Assert.False(firstReceipt.ServedFromCache);
+        Assert.Equal(OldApprovedDigest, firstReceipt.Sha256);
+        Assert.Equal(ControlledResourceReceiptOutcome.Approved, firstReceipt.Outcome);
+
+        current = Utf8.GetBytes(ChangedBytes);
+        var second = context.LoadDocument("urn:review:changing", ControlledResourceRoute.Document);
+        Assert.NotSame(first, second);
+        Assert.Equal(string.Empty, second.StringValue);
+        var secondReceipt = policy.Receipts[1];
+        Assert.False(secondReceipt.ServedFromCache);
+        Assert.Equal(ChangedDigest, secondReceipt.Sha256);
+
+        // A further unchanged load is a digest-validated hit: identity with the second node.
+        var third = context.LoadDocument("urn:review:changing", ControlledResourceRoute.Document);
+        Assert.Same(second, third);
+        var thirdReceipt = policy.Receipts[2];
+        Assert.True(thirdReceipt.ServedFromCache);
+        Assert.Equal(ChangedDigest, thirdReceipt.Sha256);
+    }
+
+    [Fact]
+    public void BF3_SameContentRepeatLoad_PreservesIdentityAndMarksReceiptCacheHit()
+    {
+        var docBytes = Utf8.GetBytes(DocBytesXml);
+        var authority = new StubAuthority { Handler = _ => ControlledResourceResponse.Approve(docBytes) };
+        var policy = new ControlledResourcePolicy(authority);
+        var context = new EvaluationContext { ResourcePolicy = policy };
+
+        var first = context.LoadDocument("urn:review:input", ControlledResourceRoute.Document);
+        var second = context.LoadDocument("urn:review:input", ControlledResourceRoute.Document);
+
+        Assert.Same(first, second);
+        Assert.Equal(2, policy.Receipts.Count);
+        Assert.False(policy.Receipts[0].ServedFromCache);
+        Assert.True(policy.Receipts[1].ServedFromCache);
+        Assert.Equal(policy.Receipts[0].Sha256, policy.Receipts[1].Sha256);
+        Assert.Equal(Sha256(docBytes), policy.Receipts[1].Sha256);
+    }
+
+    [Fact]
+    public void BF3_ChangedEffectiveUri_RefreshesNodeAndReceipt()
+    {
+        // The effective URI is part of a cache entry's identity: approving the same bytes
+        // under a different effective URI must not serve the stale node with a receipt that
+        // names the new URI.
+        var docBytes = Utf8.GetBytes(DocBytesXml);
+        var effective = "https://eff.example/a";
+        var authority = new StubAuthority
+        {
+            Handler = _ => ControlledResourceResponse.Approve(docBytes, effective),
+        };
+        var policy = new ControlledResourcePolicy(authority);
+        var context = new EvaluationContext { ResourcePolicy = policy };
+
+        var first = context.LoadDocument("urn:review:input", ControlledResourceRoute.Document);
+        Assert.Equal("https://eff.example/a", first.BaseUri);
+        var firstReceipt = Assert.Single(policy.Receipts);
+        Assert.False(firstReceipt.ServedFromCache);
+        Assert.Equal("https://eff.example/a", firstReceipt.EffectiveUri);
+
+        effective = "https://eff.example/b";
+        var second = context.LoadDocument("urn:review:input", ControlledResourceRoute.Document);
+        Assert.NotSame(first, second);
+        Assert.Equal("https://eff.example/b", second.BaseUri);
+        var secondReceipt = policy.Receipts[1];
+        Assert.False(secondReceipt.ServedFromCache);
+        Assert.Equal("https://eff.example/b", secondReceipt.EffectiveUri);
+        Assert.Equal(Sha256(docBytes), secondReceipt.Sha256);
+    }
+
+    [Fact]
+    public void BF3_DenialRemainsEnforcedOnWarmCache()
+    {
+        // The policy decision runs before the cache on every load: with a warm digest-valid
+        // entry under the SAME policy and route, switching the authority to deny must refuse
+        // XV0004 rather than serving cached content.
+        var docBytes = Utf8.GetBytes(DocBytesXml);
+        var approve = true;
+        var authority = new StubAuthority
+        {
+            Handler = _ => approve
+                ? ControlledResourceResponse.Approve(docBytes)
+                : ControlledResourceResponse.Deny("not approved"),
+        };
+        var policy = new ControlledResourcePolicy(authority);
+        var context = new EvaluationContext { ResourcePolicy = policy };
+
+        var first = context.LoadDocument("urn:review:input", ControlledResourceRoute.Document);
+        var second = context.LoadDocument("urn:review:input", ControlledResourceRoute.Document);
+        Assert.Same(first, second);
+        Assert.True(policy.Receipts[1].ServedFromCache);
+
+        approve = false;
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => context.LoadDocument("urn:review:input", ControlledResourceRoute.Document));
+        Assert.StartsWith("XV0004", ex.Message);
+        Assert.Equal(3, policy.Receipts.Count);
+        Assert.Equal(ControlledResourceReceiptOutcome.Denied, policy.Receipts[2].Outcome);
+    }
+
+    [Fact]
+    public void BF3_Stylesheet_DocCalledTwice_SecondServeMarkedCacheHit()
+    {
+        // End-to-end: two doc() calls for the same URI inside one transform share document
+        // identity, and the receipts distinguish the parse (ServedFromCache=false) from the
+        // digest-validated cache serve (ServedFromCache=true).
+        const string xsl = """
+            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+              <xsl:template match="/">
+                <out>
+                  <a><xsl:value-of select="doc('urn:review:input')/root/child"/></a>
+                  <b><xsl:value-of select="doc('urn:review:input')/root/child"/></b>
+                  <same><xsl:value-of select="count(doc('urn:review:input') | doc('urn:review:input'))"/></same>
+                </out>
+              </xsl:template>
+            </xsl:stylesheet>
+            """;
+        var docBytes = Utf8.GetBytes(DocBytesXml);
+        var authority = new StubAuthority { Handler = _ => ControlledResourceResponse.Approve(docBytes) };
+        var policy = new ControlledResourcePolicy(authority);
+
+        var result = Run(xsl, policy);
+
+        Assert.Contains("<a>DOC-OK</a>", result);
+        Assert.Contains("<b>DOC-OK</b>", result);
+        Assert.Contains("<same>1</same>", result);
+        // Four doc() acquisitions: the first parses (ServedFromCache=false), the three
+        // repeat loads are digest-validated cache serves (ServedFromCache=true) — and the
+        // union count of 1 confirms they share one document identity.
+        Assert.Equal(4, policy.Receipts.Count);
+        Assert.False(policy.Receipts[0].ServedFromCache);
+        Assert.All(policy.Receipts.Skip(1), r => Assert.True(r.ServedFromCache));
+        Assert.All(policy.Receipts, r =>
+        {
+            Assert.Equal(ControlledResourceRoute.Document, r.Route);
+            Assert.Equal(ControlledResourceReceiptOutcome.Approved, r.Outcome);
+            Assert.Equal(Sha256(docBytes), r.Sha256);
+        });
     }
 }

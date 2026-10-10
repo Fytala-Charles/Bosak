@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice B)                                                               |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | B-F2: additive ConcreteRoute — the concrete operation behind a phase/purpose route       |
+//                      | Charles Korthout | 0.3   | 10-10-2026     | B-F3: additive ServedFromCache — digest-validated controlled cache hits                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -51,6 +52,9 @@ public enum ControlledResourceReceiptOutcome
 /// <remarks>
 /// Receipts never carry credentials: both URIs are already redacted (userinfo stripped) by
 /// the policy before a receipt is created. Instances are immutable value-like objects.
+/// <para>For document-route acquisitions under a controlled policy, <see cref="ServedFromCache"/>
+/// distinguishes digest-validated cache hits (receipt and served content always agree) from
+/// fresh parses (REQ-125 consumer review B-F3).</para>
 /// </remarks>
 public sealed class ControlledResourceReceipt
 {
@@ -96,6 +100,38 @@ public sealed class ControlledResourceReceipt
         long? byteCount = null,
         string? sha256 = null,
         string? message = null)
+        : this(route, requestedUri, effectiveUri, outcome, concreteRoute, byteCount, sha256, message, servedFromCache: false)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new acquisition receipt that also records whether the approved content
+    /// was served from the controlled document cache (REQ-125 consumer review B-F3): a
+    /// <c>true</c> value certifies that the cached node was parsed from bytes whose SHA-256
+    /// is <paramref name="sha256"/> acquired under <paramref name="effectiveUri"/> — receipt
+    /// and served content always agree.
+    /// </summary>
+    /// <param name="route">The route (purpose) the acquisition was requested for.</param>
+    /// <param name="requestedUri">The credential-stripped requested URI.</param>
+    /// <param name="effectiveUri">The credential-stripped effective URI actually used; null when no acquisition occurred.</param>
+    /// <param name="outcome">The outcome of the acquisition attempt.</param>
+    /// <param name="concreteRoute">The concrete operation behind <paramref name="route"/>; null when
+    /// <paramref name="route"/> is already the concrete operation.</param>
+    /// <param name="byteCount">The number of acquired bytes for approved acquisitions; null otherwise.</param>
+    /// <param name="sha256">The lowercase hex SHA-256 of the acquired bytes for approved acquisitions; null otherwise.</param>
+    /// <param name="message">An optional human-readable detail (for example a denial reason or the refusal code).</param>
+    /// <param name="servedFromCache">Whether the approved content was served from the controlled
+    /// document cache (digest-validated); always <c>false</c> for non-document routes.</param>
+    public ControlledResourceReceipt(
+        ControlledResourceRoute route,
+        string requestedUri,
+        string? effectiveUri,
+        ControlledResourceReceiptOutcome outcome,
+        ControlledResourceRoute? concreteRoute,
+        long? byteCount,
+        string? sha256,
+        string? message,
+        bool servedFromCache)
     {
         Route = route;
         RequestedUri = requestedUri ?? throw new ArgumentNullException(nameof(requestedUri));
@@ -105,6 +141,7 @@ public sealed class ControlledResourceReceipt
         ByteCount = byteCount;
         Sha256 = sha256;
         Message = message;
+        ServedFromCache = servedFromCache;
     }
 
     /// <summary>Gets the route (purpose) the acquisition was requested for.</summary>
@@ -144,6 +181,19 @@ public sealed class ControlledResourceReceipt
 
     /// <summary>Gets whether the acquisition was approved and consumed by the engine.</summary>
     public bool IsApproved => Outcome == ControlledResourceReceiptOutcome.Approved;
+
+    /// <summary>
+    /// Gets whether the approved content was served from the controlled document cache.
+    /// Only document-route acquisitions under a <see cref="ControlledResourcePolicy"/> can
+    /// carry <c>true</c>, and only when the cached node's stored SHA-256 and effective URI
+    /// match the newly approved bytes exactly (digest-validated hit): the receipt's
+    /// <see cref="Sha256"/> and <see cref="EffectiveUri"/> then describe the very bytes the
+    /// returned node was parsed from. When the approved bytes or effective URI differ from
+    /// the cached entry, the engine parses the fresh bytes instead and this value is
+    /// <c>false</c> (additive, REQ-125 consumer review B-F3). Refusals never serve from
+    /// cache — the policy decision runs before the cache is consulted.
+    /// </summary>
+    public bool ServedFromCache { get; }
 
     /// <inheritdoc />
     public override string ToString()
