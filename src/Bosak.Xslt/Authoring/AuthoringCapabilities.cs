@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 acceptance F2: collections wrapped in Array.AsReadOnly over private storage      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -67,25 +68,21 @@ public static class AuthoringCapabilities
     /// </summary>
     public static bool SupportsQNameSlotReplacement => false;
 
+    private static readonly AuthoringFidelityMode[] FidelityModesBacking =
+        { AuthoringFidelityMode.LosslessByteExport };
+
     /// <summary>
     /// Gets the offered fidelity modes. Bosak authoring offers <see cref="AuthoringFidelityMode.LosslessByteExport"/>
     /// only: there is no re-serializing export path.
     /// </summary>
+    /// <remarks>
+    /// The collection is immutable: it is a read-only wrapper over privately retained storage, so
+    /// consumers cannot obtain or mutate the backing array, and concurrent reads are safe.
+    /// </remarks>
     public static IReadOnlyList<AuthoringFidelityMode> FidelityModes { get; } =
-        new[] { AuthoringFidelityMode.LosslessByteExport };
+        Array.AsReadOnly(FidelityModesBacking);
 
-    /// <summary>
-    /// Gets the canonical names of the encodings authoring accepts, matching
-    /// <see cref="AuthoringSource.TryCreate"/> detection exactly: a byte-order mark (UTF-8, UTF-16 LE/BE,
-    /// UTF-32 LE/BE), else the <c>encoding</c> pseudo-attribute of an XML declaration (any of the names
-    /// listed here), else UTF-8. Any other declared encoding name is refused with
-    /// <see cref="AuthoringFailureKind.UnsupportedEncoding"/>; invalid byte sequences are refused with
-    /// <see cref="AuthoringFailureKind.InvalidSourceBytes"/>. Detection notes: UTF-16 and UTF-32 are
-    /// recognized via BOM; without a BOM their declarations are not byte-detectable and the bytes are
-    /// treated as UTF-8 (which fails strict validation). US-ASCII input is validated strictly.
-    /// </summary>
-    public static IReadOnlyList<string> SupportedEncodings { get; } =
-        new[]
+    private static readonly string[] SupportedEncodingsBacking =
         {
             "UTF-8",
             "UTF-16LE",
@@ -97,17 +94,30 @@ public static class AuthoringCapabilities
         };
 
     /// <summary>
+    /// Gets the canonical names of the encodings authoring accepts, matching
+    /// <see cref="AuthoringSource.TryCreate"/> detection exactly: a byte-order mark (UTF-8, UTF-16 LE/BE,
+    /// UTF-32 LE/BE), else the <c>encoding</c> pseudo-attribute of an XML declaration (any of the names
+    /// listed here), else UTF-8. Any other declared encoding name is refused with
+    /// <see cref="AuthoringFailureKind.UnsupportedEncoding"/>; invalid byte sequences are refused with
+    /// <see cref="AuthoringFailureKind.InvalidSourceBytes"/>. Detection notes: UTF-16 and UTF-32 are
+    /// recognized via BOM; without a BOM their declarations are not byte-detectable and the bytes are
+    /// treated as UTF-8 (which fails strict validation). US-ASCII input is validated strictly.
+    /// </summary>
+    /// <remarks>
+    /// The collection is immutable: it is a read-only wrapper over privately retained storage, so
+    /// consumers cannot obtain or mutate the backing array, and concurrent reads are safe.
+    /// </remarks>
+    public static IReadOnlyList<string> SupportedEncodings { get; } =
+        Array.AsReadOnly(SupportedEncodingsBacking);
+
+    /// <summary>
     /// Gets the maximum number of modules (including the principal) one snapshot inspects. References
     /// beyond the bound are recorded as unresolved edges with a diagnostic. Matches
     /// <see cref="AuthoringInspectionOptions.MaxModuleCount"/>.
     /// </summary>
     public static int MaxModuleCount => 256;
 
-    /// <summary>
-    /// Gets the human-readable documented limits a consumer should surface in diagnostics or settings UI.
-    /// </summary>
-    public static IReadOnlyList<string> DocumentedLimits { get; } =
-        new[]
+    private static readonly string[] DocumentedLimitsBacking =
         {
             "Internal DTD subsets are refused: module parsing is strict XML 1.0 without DTD processing.",
             "XML 1.1 declarations are refused by inspection parsing; derived compilation resolves included modules through the Xml11Loader XML 1.1 compatibility path.",
@@ -117,6 +127,16 @@ public static class AuthoringCapabilities
             "Attribute editability is limited to Expression slots; Pattern, AVT and QName slots are inspectable but refuse edits.",
             "Snapshots and candidates are pure managed state: they hold no unmanaged resources, need no disposal, never mutate, and are safe to share across threads.",
         };
+
+    /// <summary>
+    /// Gets the human-readable documented limits a consumer should surface in diagnostics or settings UI.
+    /// </summary>
+    /// <remarks>
+    /// The collection is immutable: it is a read-only wrapper over privately retained storage, so
+    /// consumers cannot obtain or mutate the backing array, and concurrent reads are safe.
+    /// </remarks>
+    public static IReadOnlyList<string> DocumentedLimits { get; } =
+        Array.AsReadOnly(DocumentedLimitsBacking);
 
     /// <summary>
     /// Gets the version policy: XSLT 3.0 / XPath 3.1 is the delivered surface; XPath 4.0 grammar surfaces

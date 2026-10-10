@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 acceptance F2: collection immutability regression probes                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -92,5 +93,60 @@ public class AuthoringCapabilitiesTests
         };
 
         return encoding.GetPreamble().Concat(encoding.GetBytes(text)).ToArray();
+    }
+
+    // F2 regression: the descriptor collections resist consumer mutation (acceptance blocker).
+
+    [Fact]
+    public void Collections_MutableBackingArrays_AreNotObtainableByCast()
+    {
+        Assert.False(AuthoringCapabilities.FidelityModes is AuthoringFidelityMode[]);
+        Assert.Null(AuthoringCapabilities.FidelityModes as AuthoringFidelityMode[]);
+        Assert.False(AuthoringCapabilities.SupportedEncodings is string[]);
+        Assert.Null(AuthoringCapabilities.SupportedEncodings as string[]);
+        Assert.False(AuthoringCapabilities.DocumentedLimits is string[]);
+        Assert.Null(AuthoringCapabilities.DocumentedLimits as string[]);
+    }
+
+    [Fact]
+    public void Collections_RefuseMutationThroughMutableInterfaces_AndReadsStayUnchanged()
+    {
+        var encodings = (IList<string>)AuthoringCapabilities.SupportedEncodings;
+        Assert.True(encodings.IsReadOnly);
+        Assert.Throws<NotSupportedException>(() => encodings.Add("MUTATED"));
+        Assert.Throws<NotSupportedException>(() => encodings[0] = "MUTATED");
+        Assert.Throws<NotSupportedException>(() => encodings.RemoveAt(0));
+        Assert.Throws<NotSupportedException>(() => encodings.Clear());
+        Assert.Equal("UTF-8", AuthoringCapabilities.SupportedEncodings[0]);
+
+        var limits = (IList<string>)AuthoringCapabilities.DocumentedLimits;
+        Assert.True(limits.IsReadOnly);
+        Assert.Throws<NotSupportedException>(() => limits.Insert(0, "MUTATED"));
+        Assert.Equal(
+            "Internal DTD subsets are refused: module parsing is strict XML 1.0 without DTD processing.",
+            AuthoringCapabilities.DocumentedLimits[0]);
+
+        var fidelity = (IList<AuthoringFidelityMode>)AuthoringCapabilities.FidelityModes;
+        Assert.True(fidelity.IsReadOnly);
+        Assert.Throws<NotSupportedException>(() => fidelity[0] = AuthoringFidelityMode.LosslessByteExport);
+        Assert.Equal(AuthoringFidelityMode.LosslessByteExport, AuthoringCapabilities.FidelityModes[0]);
+    }
+
+    [Fact]
+    public void Collections_ConsumerCopies_DoNotAffectLaterReads()
+    {
+        var encodingsCopy = new List<string>(AuthoringCapabilities.SupportedEncodings);
+        encodingsCopy[0] = "MUTATED";
+        encodingsCopy.Clear();
+        Assert.Equal("UTF-8", AuthoringCapabilities.SupportedEncodings[0]);
+        Assert.Equal(7, AuthoringCapabilities.SupportedEncodings.Count);
+
+        var limitsCopy = new List<string>(AuthoringCapabilities.DocumentedLimits) { "MUTATED" };
+        Assert.DoesNotContain("MUTATED", AuthoringCapabilities.DocumentedLimits);
+
+        // Repeated reads are consistent in values and order.
+        Assert.Equal(AuthoringCapabilities.SupportedEncodings, AuthoringCapabilities.SupportedEncodings);
+        Assert.Equal(AuthoringCapabilities.DocumentedLimits, AuthoringCapabilities.DocumentedLimits);
+        Assert.Equal(AuthoringCapabilities.FidelityModes, AuthoringCapabilities.FidelityModes);
     }
 }
