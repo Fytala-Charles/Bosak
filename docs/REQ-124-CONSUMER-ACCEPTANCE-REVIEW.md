@@ -5,7 +5,7 @@
   <p>Bosak.Braid findings, expected corrections and closure evidence</p>
 </div>
 
-> **Review date:** 2026-10-10. **Requester/reviewer:** Bosak.Braid. **Implementation owner:** Bosak maintainers. **Disposition:** acceptance recommended after findings F1 and F2 are resolved and verified. This review does not change the requirement status or approve a release.
+> **Review date:** 2026-10-10. **Requester/reviewer:** Bosak.Braid. **Implementation owner:** Bosak maintainers. **Disposition:** accepted after verification; F1/F2 closed. REQ-124 is Implemented. See section 9 for final evidence. This acceptance does not publish a release.
 
 ## 1. Scope and Reviewed Revisions
 
@@ -23,13 +23,13 @@ Slice C adds AuthoringCapabilities, a public-API consumer sample executed as an 
 
 No full Bosak solution/conformance rerun or released-package verification was performed in this review. The upstream Slice C handover reports Xslt.Tests 874/874, full-solution success and XSLT smoke 162/0/26; those are maintainer-reported gates, separate from the independently rerun 62 authoring tests.
 
-## 2. Acceptance Recommendation
+## 2. Initial Acceptance Recommendation (Superseded by Section 9)
 
 Keep the current Implemented (pending owner acceptance) disposition pending correction of F1 and F2. Both are engine-owned contract issues within REQ-124, rather than new Braid feature requests. Record the response, fix commits and regression evidence against this request before final owner acceptance.
 
 After correction and verification, REQ-124 can be accepted as Implemented for its agreed bounded surface: source-preserving inspection, contextual Expression replacement, isolated candidates, public capability/lifecycle documentation and compatible delivery inside Bosak.Xslt. Braid's graph construction, ordered history, preview/provenance, validated export, commercial activation and desktop acceptance are separate consumer work and must not keep the engine requirement open.
 
-## 3. F1 — Candidate Compilation Bypasses the Supplied Resolver
+## 3. F1 — Candidate Compilation Bypasses the Supplied Resolver (Closed)
 
 **Priority:** acceptance blocker. **Contract:** dossier sections 7 and 9, AC-08/AC-10 and AC-12 regression policy.
 
@@ -68,7 +68,7 @@ Resolver authority and resource freezing are separate concerns: this finding req
 
 Use engine-owned temporary fixtures with cleanup for disk-alternative tests. Cover include and import resolution across the suite. Existing bridge tests can supply reusable patterns; add coverage that directly invokes candidate.Compile rather than only inspection's optional compilation.
 
-## 4. F2 — Capability Lists Expose Mutable Global Arrays
+## 4. F2 — Capability Lists Expose Mutable Global Arrays (Closed)
 
 **Priority:** acceptance blocker for the advertised read-only descriptor. **Contract:** dossier section 10 / AC-11 and Slice C's side-effect-free, read-only capability documentation.
 
@@ -141,13 +141,13 @@ No mutable compiler internals, friend access, reflection-based consumer workarou
 
 ## 7. Closure Checklist
 
-- [ ] Bosak records its response to F1 and F2 in the REQ-124 dossier/registry.
-- [ ] F1 corrected; direct candidate compilation uses the supplied resolver with no denial bypass.
-- [ ] F2 corrected; all three descriptor lists resist consumer mutation.
-- [ ] Targeted new regressions and all authoring tests pass.
-- [ ] Bosak runs its applicable full build/unit/conformance gates and records exact commands, revisions and outcomes, including skips or environmental exceptions.
-- [ ] Documentation/sample/lifecycle claims match the corrected behavior; mark registry acceptance criteria with their evidence.
-- [ ] Owner accepts the agreed engine scope and removes the pending-owner-acceptance qualification.
+- [x] Bosak records its response to F1 and F2 in the REQ-124 dossier/registry.
+- [x] F1 corrected; direct candidate compilation uses the supplied resolver with no denial bypass.
+- [x] F2 corrected; all three descriptor lists resist consumer mutation.
+- [x] Targeted new regressions and all authoring tests pass.
+- [x] Bosak runs its applicable full build/unit/conformance gates and records exact commands, revisions and outcomes, including skips or environmental exceptions.
+- [x] Documentation/sample/lifecycle claims match the corrected behavior; mark registry acceptance criteria with their evidence.
+- [x] Owner accepts the agreed engine scope and removes the pending-owner-acceptance qualification.
 - [ ] Braid separately reviews/pins the corrected delivery and reruns its consumer suite; record this adoption without claiming a full P1 product release.
 
 Owner acceptance and Braid adoption can be recorded separately. Remaining Braid functionality is not an additional engine closure criterion.
@@ -158,4 +158,30 @@ Owner acceptance and Braid adoption can be recorded separately. Remaining Braid 
 - [Bosak feature request registry](FEATURE_REQUESTS.md)
 - [Bosak integration guide](INTEGRATION.md)
 
+## 9. Final Re-Review and Acceptance — 2026-10-10
+
+REQ-124 is accepted as Implemented on the owner's instruction after verification. Both findings are closed:
+
+- **F1:** candidate Compile now uses the shared AuthoringModuleUriResolverBridge for an explicitly supplied resolver, preserving deliberate default-filesystem behavior and refusing fallback after denial. All six targeted resolver/isolation regressions pass, including valid disk alternatives, in-memory imports/includes, nested relative resolution and unchanged snapshot bytes.
+- **F2:** all three capability lists are read-only wrappers over privately retained backing arrays. All three new immutability regressions pass; public casts and IList mutation cannot corrupt global advertising, and consumer copies are isolated.
+
+| Revision | Verified relationship |
+|----------|-----------------------|
+| Initially tested fix | cb98af1ff05a37a59e7b1fe051b024d3436e1cf2 |
+| Merged implementation | b5eb1b17249fe458095af2dc53445d459f30db11 |
+| Main reviewed at acceptance | 5720f873c8f9e5ec0b3182186bf336d2b5e58a03 |
+
+The checkout moved from the fix branch to merged main during verification. A git diff of src and tests between the tested fix and accepted main returned no changes. Acceptance therefore applies to the merged fixes; the later main commit contains documentation handover updates.
+
+Independent verification commands:
+
+~~~powershell
+dotnet test Bosak.sln -c Release --no-restore
+dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --no-build --no-restore --filter 'FullyQualifiedName~Authoring'
+dotnet run --project tests/Bosak.Xslt.Conformance -c Release --no-restore -- tests/xslt30-test/catalog.xml mode
+~~~
+
+Results: **3,709 unit tests passed, 0 failed, 0 skipped** (Xslt.Tests 883); **71 authoring tests passed**; **XSLT mode smoke 162 passed, 0 failed, 26 skipped**. Release compilation performed by these commands succeeded. Existing ElementMap CS8629 and AuthoringInspectionTests xUnit2031 warnings remain. Full QT3, qt4 and full XSLT catalog sweeps were not independently rerun during this acceptance; maintainers' existing broader regression records remain separate evidence.
+
+The accepted scope is the agreed additive inspection/contextual Expression edit/candidate/capability/lifecycle surface in Bosak.Xslt. Structural edits, unrestricted visual coverage, browser, optimization, billing and Braid UI/session workflows are outside this engine request. Acceptance does not publish a NuGet release or establish Braid compatibility with an untested new pin. Braid remains on 16f0ee9; reviewed dependency adoption and its consumer suite are the remaining separate checklist item.
 *Last updated: 2026-10-10*

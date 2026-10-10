@@ -5,7 +5,7 @@
   <p>Bosak.Braid consumer requirements and observable delivery gates</p>
 </div>
 
-> **Status:** Slices A+B+C landed 2026-10-10 (source-aware inspection + contextual expression replacement + supported adoption: `AuthoringCapabilities` descriptor, AC-11 consumer sample-as-test, lifecycle remarks, regression evidence). **REQ-124 is Implemented, pending owner acceptance.** **Submitted:** 2026-10-10. **Requester:** Bosak.Braid. **Implementation owner:** Bosak maintainers.
+> **Status:** Slices A+B+C landed 2026-10-10 (source-aware inspection + contextual expression replacement + supported adoption: `AuthoringCapabilities` descriptor, AC-11 consumer sample-as-test, lifecycle remarks, regression evidence). **REQ-124 is Implemented; owner acceptance verified 2026-10-10 after F1/F2 corrections.** **Submitted:** 2026-10-10. **Requester:** Bosak.Braid. **Implementation owner:** Bosak maintainers.
 
 ## 1. Purpose and Implementation Readiness
 
@@ -188,6 +188,8 @@ Delivery model: retained-envelope + splice architecture — the original bytes a
 - No engine source/API changes, imported proprietary test fixtures or acceptance-status changes are made by this dossier. Example fragments above describe consumer behavior; Bosak should author/license its own engine fixtures or obtain explicit fixture reuse approval.
 
 ## 15. Consumer Reviews
+
+- **Final consumer acceptance (2026-10-10):** Accepted 2026-10-10 on the owner's instruction after Bosak.Braid re-review. F1 and F2 are closed. Tested fix cb98af1ff05a37a59e7b1fe051b024d3436e1cf2 matches merged main src/tests at 5720f873c8f9e5ec0b3182186bf336d2b5e58a03 (implementation b5eb1b17249fe458095af2dc53445d459f30db11). Independent gates: full Release unit suite 3,709 passed / 0 failed / 0 skipped; authoring subset 71/71; XSLT mode smoke 162 passed / 0 failed / 26 skipped. Acceptance covers the agreed engine surface, not a product/package release. Braid dependency adoption remains separate. See [final review section 9](REQ-124-CONSUMER-ACCEPTANCE-REVIEW.md#9-final-re-review-and-acceptance--2026-10-10).
 
 - **2026-10-10 — Bosak.Braid acceptance review of Slices A/B/C**, reviewed main 8e29289 / Slice C cdf379d. [Review, expected changes and regression gates](REQ-124-CONSUMER-ACCEPTANCE-REVIEW.md): F1 covers AuthoringEditCandidate.Compile, which is outside the earlier inspection resolver bridge correction; F2 covers mutable backing arrays in all three capability lists. Independently rerun authoring tests: 62/62. Final owner acceptance is recommended after corrections and verification; no engine code or requirement status changed by this review.
   - **Bosak response — both findings fixed same day (2026-10-10):**
