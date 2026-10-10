@@ -125,6 +125,8 @@
 //                      |                  |       |                | constant                                                                               |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.53   | 10-10-2026     | REQ-123 JNode cluster: LookupIndex/LookupComputed step lowering
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -1509,6 +1511,26 @@ internal sealed class IrLowerer
                 afterTestReg = AllocRegister();
                 int keyPoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "");
                 Emit(IrOpCode.LookupKey, (ushort)afterTestReg, (ushort)axisReg, operand: keyPoolIdx);
+                FreeRegister(axisReg);
+                return afterTestReg;
+            }
+            // XPath 4.0 integer lookup step (E/2): selects the child JNode keyed 2.
+            if (node.NodeTest.Kind == NameTestKind.LookupIndex)
+            {
+                afterTestReg = AllocRegister();
+                int indexPoolIdx = AddToLiteralPool(node.NodeTest.Name ?? "");
+                Emit(IrOpCode.LookupIndex, (ushort)afterTestReg, (ushort)axisReg, operand: indexPoolIdx);
+                FreeRegister(axisReg);
+                return afterTestReg;
+            }
+            // XPath 4.0 braced key selector (E/child::{K}, PR2667): the key expression
+            // is evaluated against the step context, then the child JNode whose key
+            // equals it is selected.
+            if (node.NodeTest.Kind == NameTestKind.LookupComputed)
+            {
+                afterTestReg = AllocRegister();
+                int keyReg = LowerNode(node.NodeTest.LookupExpression!, contextReg);
+                Emit(IrOpCode.LookupComputed, (ushort)afterTestReg, (ushort)axisReg, (ushort)keyReg);
                 FreeRegister(axisReg);
                 return afterTestReg;
             }

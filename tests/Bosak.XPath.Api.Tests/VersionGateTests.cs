@@ -61,6 +61,8 @@
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 0.18  | 10-10-2026     | REQ-123 compare-tail slice: fn:collation-available XPST0017 at 3.1 + frozen-XPath40      |
 //                      |                  |       |                | works; # QName literals XPST0003 at 3.1 + frozen-XPath40 works                            |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.19  | 10-10-2026     | REQ-123 JNode cluster: fn:jtree/fn:jkey/fn:jvalue XPST0017 at 3.1 + frozen-XPath40 works  |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -1433,5 +1435,26 @@ public class VersionGateTests
         Assert.Equal(new List<string> { "http://www.example.com", "ex", "a" },
             Seq40("#Q{http://www.example.com}ex:a ! (fn:namespace-uri-from-QName(.), fn:prefix-from-QName(.), fn:local-name-from-QName(.))"));
         Assert.Equal("true", Eval40("#xml:space eq xs:QName('xml:space')").ToString());
+    }
+
+    [Theory]
+    [InlineData("fn:jtree([1,2,3])")]
+    [InlineData("fn:jkey(fn:jtree(1))")]
+    [InlineData("fn:jvalue(fn:jtree(1))")]
+    [InlineData("fn:jtree#1")]
+    [InlineData("fn:jkey#1")]
+    [InlineData("fn:jvalue#1")]
+    public void Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_JNodeFunctions_FrozenXPath40_Work()
+    {
+        Assert.Equal("1", Seq40("fn:jtree([22]) / * => fn:jkey()")[0]);
+        Assert.Equal("22", Seq40("fn:jtree([22]) / * => fn:jvalue()")[0]);
+        Assert.Equal("1", Seq40("fn:jtree({'a':1}) / a => fn:jvalue()")[0]);
     }
 }

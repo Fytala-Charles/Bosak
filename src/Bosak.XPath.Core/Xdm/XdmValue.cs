@@ -57,6 +57,9 @@
 //                      | Charles Korthout | 2.10  | 29-09-2026     | REQ-109: annotated FromDate/FromTime overloads taking XPathDateTime (extended-year      |
 //                      |                  |       |                | PSVI date/time values outside the DateTimeOffset year range)                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 10-10-2026     | REQ-123 JNode cluster: FromJNode/IsJNode/JNodeValue accessors; EBV true and (jnode)
+//                      | Charles Korthout |       |                | ToString arms for JNode
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -188,6 +191,11 @@ public readonly struct XdmValue
     public static XdmValue FromExternal(object externalObject)
         => new(XdmValueKind.External, reference: externalObject);
 
+    /// <summary>Creates a JNode value (XPath 4.0).</summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static XdmValue FromJNode(XdmJNode jnode)
+        => new(XdmValueKind.JNode, reference: jnode);
+
     /// <summary>Creates an xs:dateTime value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDateTime(DateTimeOffset value)
@@ -302,6 +310,8 @@ public readonly struct XdmValue
     public bool IsMap => _kind == XdmValueKind.Map;
     /// <summary>Returns whether this value is an array.</summary>
     public bool IsArray => _kind == XdmValueKind.Array;
+    /// <summary>Returns whether this value is a JNode (XPath 4.0).</summary>
+    public bool IsJNode => _kind == XdmValueKind.JNode;
 
     /// <summary>Gets the boolean payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Boolean"/>.</summary>
     public bool BooleanValue
@@ -435,6 +445,17 @@ public readonly struct XdmValue
         }
     }
 
+    /// <summary>Gets the JNode payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.JNode"/>.</summary>
+    public XdmJNode JNodeValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.JNode)
+                ThrowInvalidAccess(nameof(JNodeValue));
+            return (XdmJNode)_reference!;
+        }
+    }
+
     /// <summary>Gets the dateTime payload as a <see cref="DateTimeOffset"/>; throws for extended years outside its range.</summary>
     public DateTimeOffset DateTimeValue
     {
@@ -562,6 +583,8 @@ public readonly struct XdmValue
             XdmValueKind.Function or XdmValueKind.Map or XdmValueKind.Array =>
                 throw new InvalidOperationException(
                     "FORG0006: The effective boolean value is not defined for maps, arrays, and function items"),
+            // XPath 4.0 §17.7: a JNode has an effective boolean value of true.
+            XdmValueKind.JNode => true,
             _ => false
         };
     }
@@ -655,6 +678,7 @@ public readonly struct XdmValue
             XdmValueKind.Function => "(function)",
             XdmValueKind.Map => "(map)",
             XdmValueKind.Array => "(array)",
+            XdmValueKind.JNode => "(jnode)",
             XdmValueKind.DateTime => FormatDateTimeBySchemaType(DateTimeXPathValue, _schemaTypeName),
             XdmValueKind.Date => FormatXPathDateTime(DateXPathValue, false),
             XdmValueKind.Time => FormatXPathTime(TimeXPathValue),

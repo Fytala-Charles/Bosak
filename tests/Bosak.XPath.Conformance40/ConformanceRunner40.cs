@@ -42,6 +42,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 10-10-2026     | sort-with slice: fn-sort-with + array-sort-with promoted into GatedSets (215 sets);     |
 //                      |                  |       |                | DependencyFilter40 marks typedData unsupported (no PSVI-typed source nodes)               |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 10-10-2026     | REQ-123 JNode slice: fn-jtree/fn-jkey/fn-jvalue promoted into GatedSets (221 sets);       |
+//                      |                  |       |                | XdmValueKind.JNode + navigation rework (F&O 4.0 §17.7)                                    |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -173,6 +176,9 @@ internal sealed class ConformanceRunner40
         "fn-in-scope-prefixes",
         "fn-iri-to-uri",
         "fn-items-at",
+        "fn-jkey",
+        "fn-jtree",
+        "fn-jvalue",
         "fn-lang",
         "fn-last",
         "fn-local-name-from-QName",

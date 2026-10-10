@@ -66,6 +66,9 @@
 //                      | Charles Korthout | 1.23  | 10-10-2026     | REQ-123 compare-tail slice: QNameLiteralNode for # QName literals (PR1976/PR2227)      |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.24   | 10-10-2026     | REQ-123 JNode cluster: NameTestKind.LookupIndex/LookupComputed;
+//                      | Charles Korthout |        |                | NodeTest.LookupExpression
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -667,13 +670,16 @@ internal sealed record ArrayConstructorNode(IReadOnlyList<XPathAstNode> Items, b
 /// <param name="KindTestTypeName">The schema type name of a kind test (e.g. <c>element(name, type)</c>), or null.</param>
 /// <param name="KindTestInnerName">The inner test name of a <c>document-node()</c> kind test
 /// (<c>element</c> or <c>schema-element</c>), or null.</param>
+/// <param name="LookupExpression">The key expression of a <c>LookupComputed</c> step
+/// (<c>E/child::{K}</c>), or null.</param>
 internal sealed record NodeTest(
     NameTestKind Kind,
     string? Name = null,
     string? NamespaceUri = null,
     string? KindTestArgument = null,
     string? KindTestTypeName = null,
-    string? KindTestInnerName = null);
+    string? KindTestInnerName = null,
+    XPathAstNode? LookupExpression = null);
 
 // ------------------------------------------------------------------
 // Enums
@@ -789,7 +795,13 @@ internal enum NameTestKind
     /// <summary>XPath 4.0: a string literal in step position is a map key lookup
     /// (<c>E/"key"</c> behaves like <c>E?"key"</c>; <c>E//"key"</c> additionally
     /// descends through nested maps and arrays).</summary>
-    LookupKey
+    LookupKey,
+    /// <summary>XPath 4.0: an integer literal in step position selects the child JNode
+    /// whose key equals that integer (array position or integer map key).</summary>
+    LookupIndex,
+    /// <summary>XPath 4.0 (PR2667): a braced key selector in a step
+    /// (<c>E/child::{K}</c>) selects the child JNode whose key equals the evaluated key.</summary>
+    LookupComputed
 }
 
 /// <summary>A predicate applied to a postfix expression: <c>E[P]</c>.</summary>

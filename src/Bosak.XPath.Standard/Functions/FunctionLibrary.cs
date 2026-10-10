@@ -443,6 +443,13 @@
 //                      |                  |       |                | ordering (PR2256)                                                                      |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.138   | 10-10-2026     | REQ-123 JNode cluster: fn:jtree/fn:jkey#0+#1/fn:jvalue#0+#1 registrations and JNode
+//                      | Charles Korthout |         |                | semantics (JValue_1 reworked; ElementMap.JValue stays internal), fn:string/fn:data
+//                      | Charles Korthout |         |                | jvalue extraction, deep-equal JNode arm
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.139   | 10-10-2026     | REQ-123 JNode cluster: AtomizeValue recurses into the jvalue (string-join over     |
+//                      | Charles Korthout |         |                | navigation results) — fixes ElementMap map-navigation regression tests            |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -3493,6 +3500,38 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = ElementToMapPlan_1
             },
+            [(Namespaces.Fn, "jtree", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "jtree", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.JNode,
+                IsXPath40Only = true,
+                Implementation = JTree_1
+            },
+            [(Namespaces.Fn, "jkey", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "jkey", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Undefined,
+                IsXPath40Only = true,
+                Implementation = JKey_0
+            },
+            [(Namespaces.Fn, "jkey", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "jkey", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Undefined,
+                IsXPath40Only = true,
+                Implementation = JKey_1
+            },
+            [(Namespaces.Fn, "jvalue", 0)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "jvalue", Arity = 0,
+                ParameterTypes = [],
+                ReturnType = XdmValueKind.Sequence,
+                IsXPath40Only = true,
+                Implementation = JValue_0
+            },
             [(Namespaces.Fn, "jvalue", 1)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "jvalue", Arity = 1,
@@ -4695,6 +4734,8 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "element-to-map")] = new(["input", "options"], [null, "{}"]),
             [(Namespaces.Fn, "map-to-element")] = new(["input", "options"], [null, "{}"]),
             [(Namespaces.Fn, "element-to-map-plan")] = new(["input"], [null]),
+            [(Namespaces.Fn, "jtree")] = new(["input"], [null]),
+            [(Namespaces.Fn, "jkey")] = new(["input"], [null]),
             [(Namespaces.Fn, "jvalue")] = new(["input"], [null]),
         };
         return table.ToFrozenDictionary();
@@ -4727,6 +4768,9 @@ public static class FunctionLibrary
     private static XdmValue String_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var arg = args[0];
+        // XPath 4.0 §17.7: atomic-required contexts extract the jvalue of a JNode.
+        while (arg.IsJNode)
+            arg = arg.JNodeValue.Value;
         if (arg.IsUndefined)
             return XdmValue.FromString(string.Empty);
         if (arg.IsFunction || arg.IsArray || arg.IsMap)
@@ -4748,6 +4792,8 @@ public static class FunctionLibrary
             // XPath 1.0 backwards compatibility uses the string value of the first item.
             if (count > 1 && !ctx.BackwardsCompatible)
                 throw new InvalidOperationException("XPTY0004");
+            while (first.IsJNode)
+                first = first.JNodeValue.Value;
             return XdmValue.FromString(first.ToString());
         }
         return XdmValue.FromString(arg.ToString());
@@ -5389,11 +5435,117 @@ public static class FunctionLibrary
         => ElementMap.ElementToMapPlan(args[0]);
 
     /// <summary>
-    /// F+O 4.0 fn:jvalue — converts an item to a JSON value (nodes atomize to
-    /// untypedAtomic, maps and arrays convert recursively, atomics pass through).
+    /// F&amp;O 4.0 §17.7 fn:jtree — wraps the input value in a root JNode (no key, no
+    /// parent). A single item is wrapped as-is; a sequence is wrapped whole (its
+    /// children are the items, keyed by position); an empty sequence yields a root
+    /// JNode whose jvalue is the empty sequence (PR2840). Wrapping a JNode wraps it
+    /// a second time.
+    /// </summary>
+    private static XdmValue JTree_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var input = args[0];
+        XdmValue value;
+        if (input.IsUndefined)
+        {
+            value = XdmValue.Undefined;
+        }
+        else if (input.IsSequence)
+        {
+            var items = new List<XdmValue>();
+            foreach (var item in XdmSequence.FromSource(input.SequenceValue!))
+                items.Add(item);
+            value = items.Count switch
+            {
+                0 => XdmValue.Undefined,
+                1 => items[0],
+                _ => XdmValue.FromSequence(Bosak.XPath.Core.Xdm.MaterializedSequence.FromList(items)),
+            };
+        }
+        else
+        {
+            value = input;
+        }
+        return XdmValue.FromJNode(new XdmJNode(value));
+    }
+
+    /// <summary>F&amp;O 4.0 §17.7 fn:jkey#0 — the entry key of the context-item JNode.</summary>
+    private static XdmValue JKey_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:jkey() requires a context item");
+        return JKey(item);
+    }
+
+    /// <summary>
+    /// F&amp;O 4.0 §17.7 fn:jkey#1 — the key by which the input JNode was reached from
+    /// its parent: the entry key for a map entry, the 1-based position for an array
+    /// member or sequence item, or the empty sequence for a root JNode (or empty input).
+    /// </summary>
+    private static XdmValue JKey_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => JKey(args[0]);
+
+    private static XdmValue JKey(XdmValue input)
+    {
+        var jnode = OptionalJNodeArgument(input, "fn:jkey");
+        return jnode is null ? XdmValue.Undefined : jnode.Key;
+    }
+
+    /// <summary>F&amp;O 4.0 §17.7 fn:jvalue#0 — the wrapped value of the context-item JNode.</summary>
+    private static XdmValue JValue_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException("XPDY0002: fn:jvalue() requires a context item");
+        return JValue(item);
+    }
+
+    /// <summary>
+    /// F&amp;O 4.0 §17.7 fn:jvalue#1 — the value wrapped by the input JNode, as-is
+    /// (not recursive). Empty input yields the empty sequence; non-JNode input is
+    /// XPTY0004. Note: this is the §17.7 JNode accessor, NOT the element-to-map
+    /// converter (that one remains internal to ElementMap).
     /// </summary>
     private static XdmValue JValue_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ElementMap.JValue(args[0]);
+        => JValue(args[0]);
+
+    private static XdmValue JValue(XdmValue input)
+    {
+        var jnode = OptionalJNodeArgument(input, "fn:jvalue");
+        return jnode is null ? XdmValue.Undefined : jnode.Value;
+    }
+
+    /// <summary>
+    /// Validates a <c>jnode()?</c> function argument per F&amp;O 4.0 §17.7: the empty
+    /// sequence yields null (the function returns ()); a single JNode is unwrapped;
+    /// multiple items or a non-JNode item raise XPTY0004.
+    /// </summary>
+    private static XdmJNode? OptionalJNodeArgument(XdmValue arg, string functionName)
+    {
+        if (arg.IsUndefined)
+            return null;
+        if (!arg.IsSequence)
+        {
+            if (!arg.IsJNode)
+                throw new InvalidOperationException(
+                    $"XPTY0004: {functionName}: the input must be a JNode");
+            return arg.JNodeValue;
+        }
+        XdmJNode? result = null;
+        var seen = false;
+        foreach (var item in XdmSequence.FromSource(arg.SequenceValue!))
+        {
+            if (seen)
+                throw new InvalidOperationException(
+                    $"XPTY0004: {functionName}: the input must contain at most one item");
+            seen = true;
+            if (!item.IsJNode)
+                throw new InvalidOperationException(
+                    $"XPTY0004: {functionName}: the input must be a JNode");
+            result = item.JNodeValue;
+        }
+        return result;
+    }
 
     /// <summary>
     /// F+O 4.0 §2.5.15 fn:scan — the prefix scan (cumulative fold) of <c>$input</c>:
@@ -14171,6 +14323,10 @@ public static class FunctionLibrary
             return node.TypedValue;
         }
 
+        // F&O 4.0 §17.7: atomizing a JNode atomizes its jvalue.
+        if (value.IsJNode)
+            return AtomizeValue(value.JNodeValue!.Value);
+
         if (value.IsSequence)
         {
             foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
@@ -15995,6 +16151,10 @@ public static class FunctionLibrary
         if (value.IsUndefined)
             return XdmValue.Undefined;
 
+        // XPath 4.0 §17.7: fn:data extracts the jvalue of a JNode.
+        if (value.IsJNode)
+            return Data(value.JNodeValue.Value);
+
         if (value.IsFunction)
             throw new InvalidOperationException("FOTY0013");
 
@@ -16865,6 +17025,9 @@ public static class FunctionLibrary
             XdmValueKind.Sequence => DeepEqual(a, b, collation, implicitTimezoneOffsetMinutes).BooleanValue,
             XdmValueKind.Map => DeepEqualMap(a.MapValue, b.MapValue, collation, implicitTimezoneOffsetMinutes),
             XdmValueKind.Array => DeepEqualArray(a.ArrayValue, b.ArrayValue, collation, implicitTimezoneOffsetMinutes),
+            // XPath 4.0 §17.7: JNodes compare by their wrapped value (fn:deep-equal does
+            // not auto-extract, but two JNodes wrapping deep-equal values are deep-equal).
+            XdmValueKind.JNode => DeepEqualItem(a.JNodeValue.Value, b.JNodeValue.Value, collation, implicitTimezoneOffsetMinutes),
             _ => false
         };
     }
