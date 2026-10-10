@@ -35,6 +35,9 @@
 //                      | Charles Korthout | 0.8   | 10-10-2026     | fn:atomic-equal slice: fn-atomic-equal promoted into GatedSets; fn-while-do promoted    |
 //                      |                  |       |                | (last failure fixed incidentally by earlier engine work — verified 30/0/0)              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 10-10-2026     | focus-constructors slice: misc-FocusConstructors promoted into GatedSets (213 sets)     |
+//                      |                  |       |                | after arity-0 xs:* constructor support (PR661) + assert-type unsignedLong annotation     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -319,6 +322,7 @@ internal sealed class ConformanceRunner40
         "prod-StringTemplate",
         "prod-TreatExpr",
         "misc-AppendixA4",
+        "misc-FocusConstructors",
         "misc-Surrogates",
         "misc-UCACollation",
         "misc-XMLEdition",

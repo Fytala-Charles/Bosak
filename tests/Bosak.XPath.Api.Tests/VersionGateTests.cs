@@ -53,6 +53,8 @@
 //                      | Charles Korthout | 0.15  | 10-10-2026     | REQ-123 fn:atomic-equal slice: frozen-level gate rows for fn:atomic-equal (XPST0017 at   |
 //                      |                  |       |                | 3.1, works at frozen XPath40 — NOT experimental)                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.16  | 10-10-2026     | REQ-123 focus-constructors slice: arity-0 xs:* constructors (PR661) XPST0017 at 3.1 +   |
+//                      |                  |       |                | arity-1 regression rows (arity-aware gate) + frozen XPath40 works                         |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -1299,5 +1301,47 @@ public class VersionGateTests
         Assert.Equal("false", Eval40("fn:atomic-equal(1.1, 1.1e0)").ToString());
         Assert.Equal("true",
             Eval40("fn:atomic-equal(xs:hexBinary('ff'), xs:base64Binary(xs:hexBinary('ff')))").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 focus-constructors slice: the arity-0 form of every built-in
+    // xs:* constructor (spec PR661) is 4.0-only — XPST0017 at 3.1, available
+    // at the frozen XPath40 level (NOT experimental). The arity-1 forms must
+    // stay 3.1-legal (the version gate is arity-aware).
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("xs:integer()")]
+    [InlineData("xs:string()")]
+    [InlineData("xs:date()")]
+    [InlineData("xs:unsignedLong()")]
+    [InlineData("xs:QName()")]
+    [InlineData("xs:integer#0")]
+    [InlineData("xs:date#0")]
+    public void Compile_FocusConstructors_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+        Assert.Contains("XPath40", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("xs:integer('42')")]
+    [InlineData("xs:date('2026-10-10')")]
+    [InlineData("xs:unsignedLong('42')")]
+    [InlineData("xs:string(42)")]
+    [InlineData("xs:integer#1")]
+    public void Compile_ArityOneConstructors_DefaultOptions_StillWork(string expression)
+    {
+        var expr = XPath31Expression.Compile(expression);
+        Assert.NotNull(expr);
+    }
+
+    [Fact]
+    public void Evaluate_FocusConstructors_FrozenXPath40_Works()
+    {
+        Assert.Equal(new List<string> { "42" }, Seq40("'42' ! xs:integer()"));
+        Assert.Equal(new List<string> { "2026-10-10" }, Seq40("xs:date('2026-10-10') ! xs:string()"));
+        Assert.Equal(new List<string> { "true" }, Seq40("true() ! xs:boolean()"));
     }
 }
