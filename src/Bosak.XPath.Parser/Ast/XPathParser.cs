@@ -148,6 +148,10 @@
 //                      | Charles Korthout | 1.69  | 09-10-2026     | REQ-123 element-to-map slice: PR2688 string-literal lookup step E/"key" (unquoted key,   |
 //                      |                  |       |                | LookupKey NodeTest) only in NON-first step position — a first-position string literal    |
 //                      |                  |       |                | remains a primary expression so function arguments like parse-xml('<a/>') keep working   |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 1.70  | 10-10-2026     | REQ-123 fn:atomic-equal slice (4.0 parser companions): '=>' arrow targets accept the      |
+//                      |                  |       |                | quantifier keywords as function names ($s => every()); if expressions accept EnclosedExpr |
+//                      |                  |       |                | ("{" Expr "}") branches in place of then/else, with 'else' omittable for a braced then   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -1013,6 +1017,8 @@ internal sealed class XPathParser
     }
 
     // IfExpr ::= "if" "(" Expr ")" "then" ExprSingle "else" ExprSingle
+    // XPath 4.0 additionally allows EnclosedExpr ("{" Expr "}") in place of the
+    // "then"/"else" keyword + ExprSingle branches (atomic-equal-021 brace mode).
     private XPathAstNode ParseIfExpr()
     {
         int start = Current.Start;
@@ -1020,11 +1026,43 @@ internal sealed class XPathParser
         Expect(TokenKind.LParen);
         var cond = ParseExpr();
         Expect(TokenKind.RParen);
-        Expect(TokenKind.KeywordThen);
-        var thenBranch = ParseExprSingle();
-        Expect(TokenKind.KeywordElse);
-        var elseBranch = ParseExprSingle();
+        bool thenBraced = Current.Kind == TokenKind.LBrace && _xpath40;
+        var thenBranch = thenBraced
+            ? ParseEnclosedBranch()
+            : ParseThenBranch();
+        // XPath 4.0: the "else" branch may be omitted when the "then" branch is
+        // braced — a false condition yields the empty sequence (atomic-equal-021).
+        XPathAstNode elseBranch;
+        if (Current.Kind == TokenKind.KeywordElse)
+        {
+            Advance();
+            elseBranch = Current.Kind == TokenKind.LBrace
+                ? ParseEnclosedBranch()
+                : ParseExprSingle();
+        }
+        else if (thenBraced)
+        {
+            elseBranch = new SequenceExpressionNode(Array.Empty<XPathAstNode>());
+        }
+        else
+        {
+            throw new XPathParseException("XPST0003: Expected 'else' in if expression.", Current.Start);
+        }
         return WithSpan(new IfExpressionNode(cond, thenBranch, elseBranch), start, End);
+
+        XPathAstNode ParseThenBranch()
+        {
+            Expect(TokenKind.KeywordThen);
+            return ParseExprSingle();
+        }
+
+        XPathAstNode ParseEnclosedBranch()
+        {
+            Expect(TokenKind.LBrace);
+            var expr = ParseExpr();
+            Expect(TokenKind.RBrace);
+            return expr;
+        }
     }
 
     // TryExpr ::= TryClause CatchClause+
@@ -1566,6 +1604,17 @@ internal sealed class XPathParser
             var (args, keywords) = ParseArgumentList();
             ThrowIfKeywordsOnDynamicCall(keywords, start);
             return WithSpan(new DynamicFunctionCallNode(expr, args), start, End);
+        }
+        if (Current.Kind is TokenKind.KeywordEvery or TokenKind.KeywordSome
+            && Peek(1).Kind == TokenKind.LParen)
+        {
+            // XPath 4.0: the quantifier keywords double as function names
+            // (fn:every / fn:some), so $seq => every() is a legal arrow target
+            // (atomic-equal-010).
+            var name = GetString(Current);
+            Advance();
+            var (args, keywords) = ParseArgumentList();
+            return WithSpan(new FunctionCallNode(name, args, Prefix: null, KeywordArguments: keywords), start, End);
         }
         if (Current.Kind == TokenKind.KeywordFunction)
         {

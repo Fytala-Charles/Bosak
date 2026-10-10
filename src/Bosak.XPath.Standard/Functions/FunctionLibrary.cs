@@ -424,6 +424,9 @@
 //                      | Charles Korthout | 5.135 | 09-10-2026     | REQ-123 element-to-map slice: fn:element-to-map/fn:map-to-element/fn:element-to-map-plan  |
 //                      |                  |       |                | (F&O 4.0 §17.6, frozen level) + minimal fn:jvalue — wrappers delegating to               |
 //                      |                  |       |                | Functions/ElementMap.cs (layouts, PR2688 inference, plan validation, element builder)    |
+//                      |                  |       |                |                                                                                          |
+//                      | Charles Korthout | 5.136 | 10-10-2026     | REQ-123 fn:atomic-equal slice: fn:atomic-equal (F&O 4.0 §2.2.1, frozen level) —         |
+//                      |                  |       |                | map-key equality via XdmValueEqualityComparer + PR2168 hex/base64 mutual comparison     |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -3325,6 +3328,21 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = Op_1
             },
+            // fn:atomic-equal (F&O 4.0 §2.2.1, New in 4.0 Issue 221/PR 319, February 2023 —
+            // frozen level): map-key equality exposed as a function — codepoint strings,
+            // exact-magnitude numerics (NaN=NaN, +0=-0), same-type date/times with the
+            // timezone-presence rule, QName by {namespace URI, local name}, durations by
+            // normalized totals, and (PR 2168) hexBinary/base64Binary mutually comparable.
+            [(Namespaces.Fn, "atomic-equal", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "atomic-equal", Arity = 2,
+                ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Undefined],
+                ParameterTypeNames = ["xs:anyAtomicType", "xs:anyAtomicType"],
+                ReturnType = XdmValueKind.Boolean,
+                ReturnTypeName = "xs:boolean",
+                IsXPath40Only = true,
+                Implementation = AtomicEqual_2
+            },
             // fn:parse-csv / fn:csv-to-xml / fn:csv-doc (F&O 4.0 §17.5, New in 4.0
             // Issues 413/1052/PRs 533/719/834/1066, March 2024 — frozen level): CSV parsing
             // to a parsed-csv-structure-record, an XML document, or from a resource URI.
@@ -4585,6 +4603,7 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "transitive-closure")] = new(["node", "step"], [null, null]),
             [(Namespaces.Fn, "scan")] = new(["input", "init", "action"], [null, null, null]),
             [(Namespaces.Fn, "op")] = new(["operator"], [null]),
+            [(Namespaces.Fn, "atomic-equal")] = new(["value1", "value2"], [null, null]),
             [(Namespaces.Fn, "parse-csv")] = new(["value", "options"], [null, "{}"]),
             [(Namespaces.Fn, "csv-to-xml")] = new(["value", "options"], [null, "{}"]),
             [(Namespaces.Fn, "csv-doc")] = new(["source", "options"], [null, "{}"]),
@@ -5126,6 +5145,71 @@ public static class FunctionLibrary
             or "otherwise" => true,
         _ => false,
     };
+
+    /// <summary>
+    /// F+O 4.0 §2.2.1 fn:atomic-equal — the map-key equality rule (op:same-key in 3.1)
+    /// exposed as a function: string-family values compare by codepoint (never by
+    /// collation), numerics by exact mathematical magnitude (NaN equals NaN, +0 equals
+    /// -0, and 1.1 is NOT equal to 1.1e0 because no rounding is applied), date/time
+    /// values only when timezone presence matches (the implicit timezone is never
+    /// used), QNames by namespace URI + local name, durations by normalized totals.
+    /// The engine's map-key comparer is the single semantics source; the one 4.0
+    /// addition on top of 3.1 map keys is PR 2168: xs:hexBinary and xs:base64Binary
+    /// are mutually comparable by decoded octets (atomic-equal-021a).
+    /// </summary>
+    private static XdmValue AtomicEqual_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
+            return XdmValue.Undefined;
+        var a = SingleItem(args[0]);
+        var b = SingleItem(args[1]);
+        if (IsBinaryTypedString(a) && IsBinaryTypedString(b))
+        {
+            byte[] aBytes = DecodeBinaryOctets(a);
+            byte[] bBytes = DecodeBinaryOctets(b);
+            return XdmValue.FromBoolean(((ReadOnlySpan<byte>)aBytes).SequenceEqual(bBytes));
+        }
+        return XdmValue.FromBoolean(XdmValueEqualityComparer.Instance.Equals(a, b));
+    }
+
+    /// <summary>
+    /// True when the value is an xs:hexBinary or xs:base64Binary atomic, which this
+    /// engine stores as a string-kind value carrying the binary schema-type annotation.
+    /// </summary>
+    private static bool IsBinaryTypedString(XdmValue value)
+        => value.Kind == XdmValueKind.String
+           && (value.SchemaTypeName?.Equals("hexBinary", StringComparison.OrdinalIgnoreCase) == true
+               || value.SchemaTypeName?.Equals("base64Binary", StringComparison.OrdinalIgnoreCase) == true);
+
+    private static byte[] DecodeBinaryOctets(XdmValue value)
+    {
+        bool isHex = value.SchemaTypeName!.Equals("hexBinary", StringComparison.OrdinalIgnoreCase);
+        try
+        {
+            return isHex ? Convert.FromHexString(value.StringValue) : Convert.FromBase64String(value.StringValue);
+        }
+        catch (FormatException)
+        {
+            // Constructor/cast validated the lexical form, so this is unreachable in
+            // practice; fall back to treating the lexical text as UTF-8 octets so the
+            // comparison stays total (fn:atomic-equal never raises).
+            return System.Text.Encoding.UTF8.GetBytes(value.StringValue);
+        }
+    }
+
+    /// <summary>
+    /// Returns the single item of an argument that the signature machinery has already
+    /// cardinality-checked (xs:anyAtomicType = exactly one item); sequences of exactly
+    /// one item are unwrapped.
+    /// </summary>
+    private static XdmValue SingleItem(XdmValue value)
+    {
+        if (!value.IsSequence)
+            return value;
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            return item;
+        return XdmValue.Undefined;
+    }
 
     /// <summary>
     /// F+O 4.0 §17.5.7 fn:parse-csv — parses CSV data into a

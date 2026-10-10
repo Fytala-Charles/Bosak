@@ -31,6 +31,9 @@
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 0.7   | 09-10-2026     | element-to-map slice: TestCase.DecodeEntitiesInTestExpressions enabled; fn-element-to-  |
 //                      |                  |       |                | map/fn-map-to-element/fn-element-to-map-plan promoted into GatedSets                      |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.8   | 10-10-2026     | fn:atomic-equal slice: fn-atomic-equal promoted into GatedSets; fn-while-do promoted    |
+//                      |                  |       |                | (last failure fixed incidentally by earlier engine work — verified 30/0/0)              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -115,6 +118,7 @@ internal sealed class ConformanceRunner40
         "fn-adjust-date-to-timezone",
         "fn-adjust-dateTime-to-timezone",
         "fn-adjust-time-to-timezone",
+        "fn-atomic-equal",
         "fn-available-environment-variables",
         "fn-boolean",
         "fn-ceiling",
@@ -198,6 +202,7 @@ internal sealed class ConformanceRunner40
         "fn-unordered",
         "fn-upper-case",
         "fn-uri-collection",
+        "fn-while-do",
         "fn-year-from-date",
         "fn-zero-or-one",
         "math-acos",

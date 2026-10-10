@@ -49,6 +49,9 @@
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 0.14  | 09-10-2026     | REQ-123 element-to-map slice: frozen-level gate rows for fn:element-to-map/fn:map-to-   |
 //                      |                  |       |                | element/fn:element-to-map-plan/fn:jvalue (XPST0017 at 3.1, works at frozen XPath40)    |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.15  | 10-10-2026     | REQ-123 fn:atomic-equal slice: frozen-level gate rows for fn:atomic-equal (XPST0017 at   |
+//                      |                  |       |                | 3.1, works at frozen XPath40 — NOT experimental)                                          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -1273,5 +1276,28 @@ public class VersionGateTests
             Eval40("fn:element-to-map(parse-xml('<a>x</a>')/a)?a").ToString());
         Assert.Equal("7",
             Eval40("""fn:element-to-map(parse-xml('<a id="7">x</a>')/a)?a?'@id'""").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 fn:atomic-equal slice: frozen-level 4.0 §2.2.1 function —
+    // XPST0017 at 3.1, available at the frozen XPath40 level (NOT experimental)
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("fn:atomic-equal('a', 'a')")]
+    [InlineData("fn:atomic-equal#2")]
+    public void Compile_AtomicEqual_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_AtomicEqual_FrozenXPath40_Works()
+    {
+        Assert.Equal("true", Eval40("fn:atomic-equal(xs:double('NaN'), xs:float('NaN'))").ToString());
+        Assert.Equal("false", Eval40("fn:atomic-equal(1.1, 1.1e0)").ToString());
+        Assert.Equal("true",
+            Eval40("fn:atomic-equal(xs:hexBinary('ff'), xs:base64Binary(xs:hexBinary('ff')))").ToString());
     }
 }
