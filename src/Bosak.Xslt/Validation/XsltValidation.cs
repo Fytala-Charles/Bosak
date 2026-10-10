@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice A)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 review F1/F3: documented the structural-check coverage, the use-when literal     |
+//                      |                  |       |                | exclusion subset and the exclusions of the declared checked set                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.Xslt.Authoring;
@@ -41,15 +44,44 @@ namespace Bosak.Xslt.Validation;
 /// </para>
 /// <para>
 /// What is checked — the declared coverage — is fixed per engine build and listed on
-/// <see cref="XsltValidationResult.DeclaredCoverage"/>: expression slots, pattern slots, AVT slots
-/// and static variable scoping. Constructs whose analysis is deferred (schema imports, packages)
-/// are reported explicitly on <see cref="XsltValidationResult.UnsupportedCoverage"/> and downgrade
-/// an otherwise clean result to <see cref="XsltValidationOutcome.UnsupportedCoverage"/>; they are
-/// never silently skipped. Known limits of the checked set: expressions inside subtrees excluded by
-/// a literal <c>use-when="false()'"</c> are not analyzed (mirroring XSLT removal semantics); QName
-/// slots (for example <c>xsl:call-template/@name</c>) are classified but not resolved against their
-/// declarations; variable references inside match patterns are not scope-checked; schema-aware
-/// expression checks require schema support that validation does not acquire.
+/// <see cref="XsltValidationResult.DeclaredCoverage"/>:
+/// </para>
+/// <list type="bullet">
+/// <item>
+/// <description>every expression, match-pattern and attribute-value-template slot in all resolved
+/// modules, compiled through the public XPath compiler in the slot's real static context
+/// (in-scope namespaces, default element namespace, base URI, effective XPath version);</description>
+/// </item>
+/// <item>
+/// <description>static variable scoping against the declarations visible at each slot
+/// (declaration-order parameter scoping; <c>use-when</c> slots see only static globals);</description>
+/// </item>
+/// <item>
+/// <description>a structural/static XSLT pass mirrored from the engine compiler's static
+/// validation: unknown XSLT instructions (XTSE0010, with the forwards-compatible and top-level
+/// vendor-extension tolerance rules), top-level declaration placement, must-be-empty element
+/// content (XTSE0260), static variable/parameter placement (XTSE0090), required attributes
+/// (for example <c>xsl:if/@test</c>, <c>xsl:use-package/@name</c>), misplaced
+/// <c>xsl:on-completion</c>, and XSLT-namespaced attribute rules (XTSE0090/XTSE0805).</description>
+/// </item>
+/// </list>
+/// <para>
+/// Static exclusion (<c>use-when</c>) is decided before the excluded element's own attributes
+/// and descendants are analyzed (XSLT 3.0 §3.13). Only the literal forms <c>true</c>,
+/// <c>true()</c>, <c>false</c> and <c>false()</c> are evaluated; a <c>use-when</c> attribute
+/// outside that subset makes the affected checks partial and is reported explicitly on
+/// <see cref="XsltValidationResult.UnsupportedCoverage"/> — an undetermined exclusion never
+/// becomes a complete pass, and a malformed exclusion expression is a diagnostic like any other
+/// failed slot.
+/// </para>
+/// <para>
+/// Known limits of the checked set — exclusions, always reported rather than silently passed
+/// when they affect the outcome: schema imports and packages downgrade to
+/// <see cref="XsltValidationOutcome.UnsupportedCoverage"/>; non-literal <c>use-when</c>
+/// evaluation degrades the same way. Remaining plain exclusions: QName slots (for example
+/// <c>xsl:call-template/@name</c>) are classified but not resolved against their declarations;
+/// variable references inside match patterns are not scope-checked; schema-aware expression
+/// checks require schema support that validation does not acquire.
 /// </para>
 /// </remarks>
 public static class XsltValidation

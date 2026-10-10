@@ -81,6 +81,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.14  | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode ReadsPosition
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.15  | 10-10-2026     | REQ-125 review F2: Compile accepts in-scope namespace bindings; ParseQName resolves   |
+//                      |                  |       |                | prefixed QNames against them (XPST0081 when unbound); runtime prefix-resolved paths   |
+//                      |                  |       |                | keep the historical drop-prefix behavior because bindings are never supplied there    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -114,6 +118,7 @@ internal sealed class PatternCompiler
 
     private readonly EvaluationContext? _validationContext;
     private string? _defaultElementNamespace;
+    private IReadOnlyDictionary<string, string>? _namespaces;
     private ModeTyped? _typedMode;
 
     /// <summary>
@@ -141,9 +146,14 @@ internal sealed class PatternCompiler
         // stylesheets; REQ-100 evaluates the declaration against the same set at
         // match time. Without a schema set the parse is unchanged (XPST0008).
         var schemaSet = _validationContext?.SchemaSet;
-        if (string.IsNullOrEmpty(_defaultElementNamespace) && schemaSet is null)
+        if (_namespaces is null && string.IsNullOrEmpty(_defaultElementNamespace) && schemaSet is null)
             return XPath31Expression.Compile(expression);
-        var options = new CompileOptions { DefaultElementNamespace = _defaultElementNamespace, SchemaSet = schemaSet };
+        var options = new CompileOptions
+        {
+            DefaultElementNamespace = _defaultElementNamespace,
+            SchemaSet = schemaSet,
+            Namespaces = _namespaces,
+        };
         return XPath31Expression.Compile(expression, options);
     }
 
@@ -877,11 +887,23 @@ internal sealed class PatternCompiler
     /// is interpreted as <c>schema-element(QName)</c> per XSLT 3.0 §5.5.3. Null compiles
     /// the default (untyped) semantics.
     /// </param>
-    public PatternPredicate Compile(string pattern, string? defaultElementNamespace = null, ModeTyped? typedMode = null)
+    /// <param name="namespaces">
+    /// Optional in-scope namespace bindings used to resolve <c>prefix:local</c> QNames that
+    /// appear verbatim in the pattern text. Runtime callers pass prefix-resolved
+    /// (<c>Q{{uri}}local</c>) patterns and leave this null; static validation passes the
+    /// slot's real bindings so undeclared prefixes are rejected (XPST0081).
+    /// </param>
+    public PatternPredicate Compile(
+        string pattern,
+        string? defaultElementNamespace = null,
+        ModeTyped? typedMode = null,
+        IReadOnlyDictionary<string, string>? namespaces = null)
     {
         _defaultElementNamespace = defaultElementNamespace;
         var savedTypedMode = _typedMode;
+        var savedNamespaces = _namespaces;
         _typedMode = typedMode;
+        _namespaces = namespaces;
         try
         {
             var trimmed = StripXPathComments(pattern).Trim();
@@ -914,6 +936,7 @@ internal sealed class PatternCompiler
         finally
         {
             _typedMode = savedTypedMode;
+            _namespaces = savedNamespaces;
         }
     }
 
@@ -2737,7 +2760,7 @@ internal sealed class PatternCompiler
                 step = step[2..].Trim();
             if (!IsPlainQNameStep(step))
                 continue;
-            var (ns, local) = ParseQName(step);
+            var (ns, local) = ParseQName(step, null);
             result.Add((string.IsNullOrEmpty(ns) ? (defaultElementNamespace ?? "") : ns, local));
         }
         return result;
@@ -3639,12 +3662,19 @@ internal sealed class PatternCompiler
         return text[(open + 1)..close].Trim();
     }
 
+    private (string NamespaceUri, string LocalName) ParseQName(string name) => ParseQName(name, _namespaces);
+
     /// <summary>
     /// Parses a qualified name into (namespaceUri, localName).
     /// Supports prefix:local and Q{uri}local syntax.
     /// The empty URI form Q{}local is permitted and means "no namespace".
+    /// When in-scope namespace bindings are supplied (static validation), a prefixed name is
+    /// resolved against them and an unbound prefix is a static error (XPST0081); without
+    /// bindings the historical contract applies — runtime callers pass prefix-resolved
+    /// patterns, so a surviving prefix yields the empty namespace URI.
     /// </summary>
-    private static (string NamespaceUri, string LocalName) ParseQName(string name)
+    private static (string NamespaceUri, string LocalName) ParseQName(
+        string name, IReadOnlyDictionary<string, string>? namespaces)
     {
         if (name.StartsWith("Q{"))
         {
@@ -3660,7 +3690,19 @@ internal sealed class PatternCompiler
         int colon = name.IndexOf(':');
         if (colon > 0)
         {
+            var prefix = name[..colon];
             var local = name[(colon + 1)..];
+            if (namespaces is not null)
+            {
+                if (!namespaces.TryGetValue(prefix, out var resolved))
+                {
+                    throw new InvalidOperationException(
+                        $"XPST0081: No namespace declaration for prefix '{prefix}' in pattern QName '{name}'.");
+                }
+
+                return (resolved, local);
+            }
+
             return (string.Empty, local);
         }
 

@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice A)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 review F1: pinned declared coverage extended with StructuralChecks               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -135,6 +137,7 @@ public class XsltValidationTests
                 XsltValidationCoverage.PatternSlots,
                 XsltValidationCoverage.AvtSlots,
                 XsltValidationCoverage.StaticVariableScope,
+                XsltValidationCoverage.StructuralChecks,
             },
             result.DeclaredCoverage);
     }
