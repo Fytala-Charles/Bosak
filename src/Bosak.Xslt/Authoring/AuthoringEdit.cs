@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle, staleness and sharing remarks                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -92,6 +93,11 @@ public enum AuthoringEditFailureKind
 /// range the failure relates to where available; <see cref="RequiresParentChange"/> additionally
 /// fills <see cref="ExpandedRange"/> with the owning element's full start-tag range.
 /// </summary>
+/// <remarks>
+/// A failure is immutable, short-lived reporting data: it holds no unmanaged resources, needs no
+/// disposal and is safe to share across threads. It carries no snapshot references and stays
+/// meaningful after the snapshot that produced it is discarded.
+/// </remarks>
 public sealed class AuthoringEditFailure
 {
     internal AuthoringEditFailure(AuthoringEditFailureKind kind, string message, SourceRange? range = null, SourceRange? expandedRange = null)
@@ -125,6 +131,12 @@ public sealed class AuthoringEditFailure
 /// The outcome of <see cref="AuthoringSnapshot.ProposeExpressionEdit"/>: exactly one of
 /// <see cref="Candidate"/> or <see cref="Failure"/> is non-null. Instances are immutable.
 /// </summary>
+/// <remarks>
+/// The result is a short-lived carrier: adopt the candidate or inspect the failure, then discard it.
+/// Both payloads are immutable, hold no unmanaged resources, need no disposal and are safe to share
+/// across threads. A candidate is valid only against the snapshot it was derived from; submitting
+/// the same proposal to a later revision produces an independent result against that revision.
+/// </remarks>
 public sealed class AuthoringEditResult
 {
     private AuthoringEditResult(AuthoringEditCandidate? candidate, AuthoringEditFailure? failure)
@@ -166,6 +178,12 @@ public sealed class AuthoringEditResult
 /// (in the input snapshot's identity space), the attribute name, and the old versus new value
 /// ranges and raw literals.
 /// </summary>
+/// <remarks>
+/// The owning node id is in the input snapshot's identity space: it is valid only within that
+/// snapshot. The old range is in the input module's source; the new range is in the candidate's
+/// emitted source. The marker is immutable, holds no unmanaged resources, needs no disposal and is
+/// safe to share across threads.
+/// </remarks>
 public sealed class AuthoringChangedSlot
 {
     internal AuthoringChangedSlot(

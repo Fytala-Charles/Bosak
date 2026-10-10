@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks on the inspection result                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -45,6 +46,13 @@ public sealed class AuthoringInspectionOptions
 /// throws for bad source; it classifies. (Programmer misuse — null arguments, relative base URIs —
 /// still throws <see cref="ArgumentException"/>.)
 /// </summary>
+/// <remarks>
+/// The result is a short-lived carrier: keep the <see cref="Snapshot"/> (or the
+/// <see cref="AuthoringFailure"/>) as long as needed and discard the result. On success the snapshot
+/// is immutable, holds no unmanaged resources, needs no disposal and is safe to share across threads;
+/// its node identities are snapshot-scoped and must not be reused against later inspections or
+/// candidates.
+/// </remarks>
 public sealed class AuthoringInspectionResult
 {
     private AuthoringInspectionResult(AuthoringSnapshot? snapshot, AuthoringFailure? failure)
