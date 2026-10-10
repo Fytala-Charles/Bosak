@@ -467,7 +467,13 @@ src/
     Instructions/        XSLT instruction compiler (apply-templates, for-each, value-of, etc.)
     Runtime/             Transform engine, result-tree builder, built-in template rules
     Api/                 XsltCompiler, XsltExecutable, public surface
+    Authoring/           Source-preserving authoring API (REQ-124): retained-byte envelopes,
+                         inspection snapshots, source maps, expression-slot contexts
 ```
+
+### Source-Preserving Authoring API (REQ-124)
+
+`Bosak.Xslt.Authoring` (landed Slice A, 2026-10-10) is the additive seam for the Bosak.Braid visual designer. It follows a **retained-envelope + splice** architecture: `AuthoringSource` keeps the original module bytes, detected encoding, and base URI; the parsed `XDocument` is derived working state from which compilation is derived; and untouched source is never re-serialized — `AuthoringSnapshot.ExportOriginal` returns the exact original bytes. `XsltAuthoring.Inspect` classifies failures (structure / encoding / resolver — never throws for bad source) or returns an opaque snapshot with ordered per-module descriptors: QName'd element trees with full source extents, attribute slot classification (Expression / Pattern / AVT / QName / Plain), entity-spelling-preserving raw literals, line/column-primary coordinates with derived byte offsets, opaque expression-slot contexts (namespaces, xpath-default-namespace, base URI, version), and controlled module resolution (unresolved edges, cycles, duplicate-URI reuse). See `docs/REQ-124-source-preserving-xslt-authoring.md`.
 
 ### XSLT Implementation Phases
 
