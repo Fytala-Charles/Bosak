@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: edit proposals (resolver/options retention, node lookup, entry point)   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -41,7 +42,9 @@ public sealed class AuthoringSnapshot
         Dictionary<Uri, AuthoringSource> sourcesByUri,
         Dictionary<XObject, int> nodeIds,
         bool isCompilable,
-        IReadOnlyList<string> compilationDiagnostics)
+        IReadOnlyList<string> compilationDiagnostics,
+        IAuthoringModuleResolver moduleResolver,
+        AuthoringInspectionOptions inspectionOptions)
     {
         _modules = modules;
         _modulesByUri = modulesByUri;
@@ -49,7 +52,15 @@ public sealed class AuthoringSnapshot
         _nodeIds = nodeIds;
         IsCompilable = isCompilable;
         CompilationDiagnostics = compilationDiagnostics;
+        ModuleResolver = moduleResolver;
+        InspectionOptions = inspectionOptions;
     }
+
+    /// <summary>Gets the effective module resolver of this snapshot's inspection.</summary>
+    internal IAuthoringModuleResolver ModuleResolver { get; }
+
+    /// <summary>Gets the inspection options this snapshot was produced with.</summary>
+    internal AuthoringInspectionOptions InspectionOptions { get; }
 
     /// <summary>Gets all successfully inspected modules. The principal is always first.</summary>
     public IReadOnlyList<AuthoringModuleDescriptor> Modules => _modules;
@@ -108,5 +119,45 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(node);
         return _nodeIds.TryGetValue(node, out id);
+    }
+
+    /// <summary>
+    /// Proposes a replacement of one owned expression attribute slot's value. The proposal is
+    /// validated against this snapshot (never against any candidate derived from it), the edit is
+    /// compiled in the slot's real static context, and on acceptance an isolated, source-preserving
+    /// candidate is returned. The input snapshot is never mutated; a proposal built against an old
+    /// revision still resolves against this snapshot.
+    /// </summary>
+    /// <param name="proposal">The caller-built edit proposal.</param>
+    /// <returns>The classified outcome: a candidate on success, a refusal otherwise.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="proposal"/> is null.</exception>
+    public AuthoringEditResult ProposeExpressionEdit(AuthoringEditProposal proposal)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return ExpressionEditPipeline.Run(this, proposal);
+    }
+
+    internal AuthoringSource SourceFor(Uri moduleUri)
+    {
+        if (!_sourcesByUri.TryGetValue(moduleUri, out var source))
+        {
+            throw new KeyNotFoundException($"The URI '{moduleUri}' does not identify a module of this snapshot.");
+        }
+
+        return source;
+    }
+
+    internal AuthoringNodeDescriptor? FindNodeById(int id)
+    {
+        foreach (var module in _modules)
+        {
+            var found = module.Root.FindDescendant(node => node.Id == id);
+            if (found is not null)
+            {
+                return found;
+            }
+        }
+
+        return null;
     }
 }

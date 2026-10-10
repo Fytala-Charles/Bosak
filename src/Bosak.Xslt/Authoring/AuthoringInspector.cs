@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: retain effective resolver/options on the snapshot for re-inspection     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -214,7 +215,9 @@ public sealed class AuthoringInspector
             sourcesByUri,
             nodeIds,
             isCompilable,
-            compilationDiagnostics);
+            compilationDiagnostics,
+            resolver,
+            options);
         return AuthoringInspectionResult.SuccessResult(snapshot);
     }
 
