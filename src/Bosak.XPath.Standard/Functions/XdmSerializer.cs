@@ -23,6 +23,9 @@
 //                      | Charles Korthout | 0.6   | 07-08-2026     | XML/XHTML: escape NEL (#x85), LS (#x2028) and C1 controls (#x7F-#x9F) as character references in text and attribute content (K2-Serialization-5/6/9/10) |
 //                      | Charles Korthout | 0.7   | 09-09-2026     | Multi-char character-map key raises SEPM0017 (was SEPM0016)                              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-123 JNode cluster: serialization replaces JNode by its jvalue (central item
+//                      | Charles Korthout |       |                | unwrap and adaptive recursion arm)
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -155,7 +158,13 @@ internal static class XdmSerializer
     /// <summary>Serializes <paramref name="input"/> with explicit parameters.</summary>
     public static string Serialize(XdmValue input, SerializationParameters parameters)
     {
+        // XPath 4.0 §17.7: serialization replaces a JNode by its jvalue.
         var items = ToItemList(input);
+        for (int i = 0; i < items.Count; i++)
+        {
+            while (items[i].IsJNode)
+                items[i] = items[i].JNodeValue.Value;
+        }
         return parameters.Method switch
         {
             "json" => SerializeJsonMethod(items, parameters),
@@ -2007,6 +2016,14 @@ internal static class XdmSerializer
             var writer = new NodeWriter(nodeParams);
             writer.WriteNode(node, 0, suppressIndent: false);
             sb.Append(writer.ToString());
+            return;
+        }
+
+        if (value.IsJNode)
+        {
+            // XPath 4.0 §17.7: a JNode (e.g. nested inside a map value) serializes
+            // as its jvalue.
+            WriteAdaptiveValue(value.JNodeValue.Value, sb, p);
             return;
         }
 

@@ -386,6 +386,11 @@
 //                      | Charles Korthout | 2.171 | 10-10-2026     | REQ-123 compare-tail slice: unicode-case-insensitive collation accepted in order-by    |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.172   | 10-10-2026     | REQ-123 JNode cluster: XdmValueKind.JNode navigation model - JNodeAxis/JChildren axes
+//                      | Charles Korthout |         |                | yielding keyed JNodes, implicit fn:jtree wrap of raw maps/arrays, LookupKey
+//                      | Charles Korthout |         |                | select-by-key rework, LookupIndex/LookupComputed opcodes, jnode() type tests,
+//                      | Charles Korthout |         |                | Atomize/call-site jvalue extraction, 4.0 path-step context checks
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -549,7 +554,14 @@ internal static class VmEngine
                         for (int i = 0; i < argCount && i < sig.ParameterTypes.Count; i++)
                         {
                             if (sig.ParameterTypes[i] is XdmValueKind.Map or XdmValueKind.Array or XdmValueKind.Function)
+                            {
+                                // XPath 4.0 §17.7: a JNode argument coerces to a
+                                // map/array/function-typed parameter by extracting its
+                                // jvalue (fn-jtree-012/013: jtree({...}) => map:size()).
+                                if (args[i].IsJNode)
+                                    args[i] = args[i].JNodeValue.Value;
                                 args[i] = UnwrapSingletonItem(args[i], sig.ParameterTypes[i]);
+                            }
                         }
 
                         // Apply XPath 3.1 function conversion rules when the function signature
@@ -842,11 +854,13 @@ internal static class VmEngine
 
                         // XPath path steps require every context item to be a node (XPTY0019).
                         // SimpleMap with ! allows non-node items, so only enforce in path mode.
+                        // XPath 4.0: JNodes (and raw maps/arrays, implicitly wrapped) are
+                        // valid path-step context items too.
                         if (enforceNodeResult)
                         {
                             foreach (var item in items)
                             {
-                                if (!item.IsNode)
+                                if (!IsPathStepContextItem(item, context))
                                     throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
                             }
                         }
@@ -916,16 +930,17 @@ internal static class VmEngine
 
                         // Non-last path steps must produce nodes only (XPTY0019, mode 2);
                         // the last step merely must not mix nodes and non-nodes (XPTY0018,
-                        // mode 1). `!` (mode 0) performs no result check.
+                        // mode 1). `!` (mode 0) performs no result check. XPath 4.0:
+                        // JNodes count as nodes in both checks.
                         if (pathResultMode == 2)
                         {
-                            if (results.Any(r => !r.IsNode))
+                            if (results.Any(r => !r.IsNode && !r.IsJNode))
                                 throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
                         }
                         else if (enforceNodeResult)
                         {
-                            bool hasNode = results.Any(r => r.IsNode);
-                            bool hasNonNode = results.Any(r => !r.IsNode);
+                            bool hasNode = results.Any(r => r.IsNode || r.IsJNode);
+                            bool hasNonNode = results.Any(r => !r.IsNode && !r.IsJNode);
                             if (hasNode && hasNonNode)
                                 throw new InvalidOperationException("XPTY0018: result of a path expression step contains both nodes and non-nodes");
                         }
@@ -1026,8 +1041,9 @@ internal static class VmEngine
                         {
                             // A step whose input comes from a preceding path step raises
                             // XPTY0019 for atomic items; a standalone/first step applied to
-                            // the ambient context item raises XPTY0020.
-                            if (!items[i].IsNode)
+                            // the ambient context item raises XPTY0020. XPath 4.0: JNodes
+                            // and raw maps/arrays (implicitly wrapped) are valid context.
+                            if (!IsPathStepContextItem(items[i], context))
                             {
                                 if (hasLhs)
                                     throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
@@ -2331,13 +2347,20 @@ internal static class VmEngine
                         // XPath 4.0: a name test applied to map/array items performs a key
                         // lookup ($m//b, element-to-map-550+); nodes in a mixed sequence
                         // keep their name-test semantics, arrays and atomics yield nothing.
+                        // JNodes (the XPath 4.0 §17.7 navigation product) match the test
+                        // against their entry key; the wildcard passes them through.
                         if (MayContainMaps(input))
                         {
                             var selected = new List<XdmValue>();
                             var nodePredicate = BuildNameTestPredicate(name, context);
                             foreach (var item in FlattenItems(input))
                             {
-                                if (item.IsMap)
+                                if (item.IsJNode)
+                                {
+                                    if (name == "*" || JNodeKeyMatchesName(item.JNodeValue.Key, name, context))
+                                        selected.Add(item);
+                                }
+                                else if (item.IsMap)
                                 {
                                     var map = item.MapValue;
                                     if (name == "*")
@@ -2388,8 +2411,11 @@ internal static class VmEngine
                         break;
                     }
 
-                // XPath 4.0 string-literal lookup step (E/"key"): on a map input yields the
-                // value of the matching entry (arrays and other items yield nothing).
+                // XPath 4.0 string-literal lookup step (E/"key"): selects the items whose
+                // JNode entry key equals the literal ($m/"key" is the child entry keyed
+                // "key"). The child axis has already produced the entry JNodes; raw map
+                // items (defensive: a map reaching the opcode without an axis wrap) are
+                // looked up directly and wrapped with an implicit root parent.
                 case IrOpCode.LookupKey:
                     {
                         string key = (string)literalPool[instr.Operand]!;
@@ -2397,8 +2423,121 @@ internal static class VmEngine
                         var selected = new List<XdmValue>();
                         foreach (var item in FlattenItems(input))
                         {
-                            if (item.IsMap && item.MapValue.TryGetValue(XdmValue.FromString(key), out var v))
-                                AddFlattened(selected, v);
+                            if (item.IsJNode)
+                            {
+                                var entryKey = item.JNodeValue.Key;
+                                if (entryKey.Kind == XdmValueKind.String && entryKey.StringValue == key)
+                                    selected.Add(item);
+                            }
+                            else if (item.IsMap)
+                            {
+                                var map = item.MapValue;
+                                var lookupKey = XdmValue.FromString(key);
+                                foreach (var entry in map.Entries)
+                                {
+                                    if (XdmValueEqualityComparer.Instance.Equals(entry.Key, lookupKey))
+                                    {
+                                        selected.Add(XdmValue.FromJNode(
+                                            new XdmJNode(entry.Value, entry.Key, new XdmJNode(item))));
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        registers[instr.RegisterA] = selected.Count == 0
+                            ? XdmValue.Undefined
+                            : XdmValue.FromSequence(MaterializedSequence.FromList(selected));
+                        ip++;
+                        break;
+                    }
+
+                // XPath 4.0 integer lookup step (E/2): selects the child JNode whose key
+                // equals the integer — an array position or an integer map key.
+                case IrOpCode.LookupIndex:
+                    {
+                        long index = long.Parse((string)literalPool[instr.Operand]!, CultureInfo.InvariantCulture);
+                        var input = registers[instr.RegisterB];
+                        var selected = new List<XdmValue>();
+                        foreach (var item in FlattenItems(input))
+                        {
+                            if (item.IsJNode)
+                            {
+                                var entryKey = item.JNodeValue.Key;
+                                if (entryKey.Kind == XdmValueKind.Integer && entryKey.IntegerValue == index)
+                                    selected.Add(item);
+                            }
+                            else if (item.IsMap)
+                            {
+                                var map = item.MapValue;
+                                var intKey = XdmValue.FromInteger(index);
+                                foreach (var entry in map.Entries)
+                                {
+                                    if (XdmValueEqualityComparer.Instance.Equals(entry.Key, intKey))
+                                    {
+                                        selected.Add(XdmValue.FromJNode(
+                                            new XdmJNode(entry.Value, entry.Key, new XdmJNode(item))));
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (item.IsArray)
+                            {
+                                var members = item.ArrayValue;
+                                if (index >= 1 && index <= members.Count)
+                                {
+                                    selected.Add(XdmValue.FromJNode(new XdmJNode(
+                                        members.Values.ElementAt((int)index - 1),
+                                        XdmValue.FromInteger(index),
+                                        new XdmJNode(item))));
+                                }
+                            }
+                        }
+                        registers[instr.RegisterA] = selected.Count == 0
+                            ? XdmValue.Undefined
+                            : XdmValue.FromSequence(MaterializedSequence.FromList(selected));
+                        ip++;
+                        break;
+                    }
+
+                // XPath 4.0 braced key selector (E/child::{K}, PR2667): selects the child
+                // JNode whose key equals the evaluated key expression.
+                case IrOpCode.LookupComputed:
+                    {
+                        var input = registers[instr.RegisterB];
+                        var keyValue = Atomize(registers[instr.RegisterC]);
+                        var selected = new List<XdmValue>();
+                        foreach (var item in FlattenItems(input))
+                        {
+                            if (item.IsJNode)
+                            {
+                                if (XdmValueEqualityComparer.Instance.Equals(item.JNodeValue.Key, keyValue))
+                                    selected.Add(item);
+                            }
+                            else if (item.IsMap)
+                            {
+                                var map = item.MapValue;
+                                foreach (var entry in map.Entries)
+                                {
+                                    if (XdmValueEqualityComparer.Instance.Equals(entry.Key, keyValue))
+                                    {
+                                        selected.Add(XdmValue.FromJNode(
+                                            new XdmJNode(entry.Value, entry.Key, new XdmJNode(item))));
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (item.IsArray && keyValue.Kind == XdmValueKind.Integer)
+                            {
+                                var members = item.ArrayValue;
+                                long index = keyValue.IntegerValue;
+                                if (index >= 1 && index <= members.Count)
+                                {
+                                    selected.Add(XdmValue.FromJNode(new XdmJNode(
+                                        members.Values.ElementAt((int)index - 1),
+                                        XdmValue.FromInteger(index),
+                                        new XdmJNode(item))));
+                                }
+                            }
                         }
                         registers[instr.RegisterA] = selected.Count == 0
                             ? XdmValue.Undefined
@@ -2422,12 +2561,12 @@ internal static class VmEngine
                             else if (kindName == "element")
                             {
                                 // XPath 4.0 map navigation: an element kind test preserves
-                                // map/array items so the following name test performs the
-                                // key lookup ($m//id, element-to-map-559+); nodes must match.
+                                // map/array/JNode items so the following name test performs
+                                // the key lookup ($m//id, element-to-map-559+); nodes must match.
                                 var kept = new List<XdmValue>();
                                 foreach (var item in FlattenItems(input))
                                 {
-                                    if (item.IsMap || item.IsArray)
+                                    if (item.IsMap || item.IsArray || item.IsJNode)
                                         kept.Add(item);
                                     else if (item.IsNode && MatchesKindTest(item.NodeValue, kindName, context))
                                         kept.Add(item);
@@ -3475,6 +3614,9 @@ internal static class VmEngine
                 case IrOpCode.LookupWildcard:
                     {
                         var container = registers[instr.RegisterB];
+                        // XPath 4.0 §17.7: the LHS of '?' extracts the jvalue of a JNode.
+                        if (container.IsJNode)
+                            container = container.JNodeValue.Value;
                         var result = new List<XdmValue>();
 
                         void AddFlattened(XdmValue v)
@@ -4129,54 +4271,136 @@ internal static class VmEngine
     }
 
     /// <summary>
-    /// XPath 4.0 map/array path navigation (element-to-map-550+): axes applied to a map
-    /// or array value walk the value structure instead of raising a type error.
-    /// Descendant(-or-self) yields the input itself plus every map/array transitively
-    /// reachable through its values (so a following key test finds keys at any depth,
-    /// including on the context map itself); child of a map yields the map itself (the
-    /// following name/lookup test performs the key lookup) and child of an array yields
-    /// its members; self yields the input.
+    /// Matches a JNode entry key against a name test (XPath 4.0 §17.7): a string key
+    /// matches the lexical name; a QName key matches a prefixed name whose prefix
+    /// resolves to the key's namespace (XPST0081 for an unbound prefix); position
+    /// (integer) keys and a keyless root never match a name test.
+    /// </summary>
+    private static bool JNodeKeyMatchesName(XdmValue key, string name, EvaluationContext context)
+    {
+        if (key.IsUndefined)
+            return false;
+        if (key.Kind == XdmValueKind.String)
+            return key.StringValue == name;
+        if (key.Kind == XdmValueKind.QName)
+        {
+            var qn = key.QNameValue;
+            int colon = name.IndexOf(':');
+            if (colon <= 0 || colon == name.Length - 1)
+                return false;
+            var prefix = name.Substring(0, colon);
+            var local = name[(colon + 1)..];
+            // The '*:local' form comes from a prefixed step whose NamespaceTest is a
+            // no-op on JNode items (identity pass-through), so only the local part
+            // can be matched.
+            if (prefix == "*")
+                return qn.LocalName == local;
+            if (!context.TryResolveNamespace(prefix, out var ns))
+                throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+            return qn.NamespaceUri == ns && qn.LocalName == local;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// XPath 4.0 §17.7: axes over a map/array value navigate the value structure.
+    /// The value is implicitly wrapped as by fn:jtree and the axis yields JNodes
+    /// (keyed wrappers): child of a map yields one JNode per entry (keyed by the
+    /// entry key), child of an array yields one JNode per member (keyed by 1-based
+    /// position), self yields the (wrapped) input, parent/ancestor walk the J-parent
+    /// chain, and descendant(-or-self) yields the JNode plus all reachable JNodes.
     /// </summary>
     private static XdmValue MapAxis(XdmValue input, XdmAxis axis)
+        => JNodeAxis(new XdmJNode(input), axis);
+
+    /// <summary>Applies an XDM axis to a JNode, yielding JNode values.</summary>
+    private static XdmValue JNodeAxis(XdmJNode jn, XdmAxis axis)
     {
         switch (axis)
         {
-            case XdmAxis.DescendantOrSelf:
-            case XdmAxis.Descendant:
+            case XdmAxis.Self:
+                return XdmValue.FromJNode(jn);
+            case XdmAxis.Child:
+                {
+                    var children = JChildren(jn);
+                    return children.Count == 0
+                        ? XdmValue.Undefined
+                        : XdmValue.FromSequence(MaterializedSequence.FromList(children));
+                }
+            case XdmAxis.Parent:
+                return jn.Parent is { } parent
+                    ? XdmValue.FromJNode(parent)
+                    : XdmValue.Undefined;
+            case XdmAxis.Ancestor:
+            case XdmAxis.AncestorOrSelf:
                 {
                     var acc = new List<XdmValue>();
-                    CollectMapClosure(input, acc);
-                    return XdmValue.FromSequence(MaterializedSequence.FromList(acc));
+                    if (axis == XdmAxis.AncestorOrSelf)
+                        acc.Add(XdmValue.FromJNode(jn));
+                    for (var current = jn.Parent; current is not null; current = current.Parent)
+                        acc.Add(XdmValue.FromJNode(current));
+                    return acc.Count == 0
+                        ? XdmValue.Undefined
+                        : XdmValue.FromSequence(MaterializedSequence.FromList(acc));
                 }
-            case XdmAxis.Child:
-                if (input.IsMap)
-                    return input;
-                return XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>(input.ArrayValue.Values)));
-            case XdmAxis.Self:
-                return input;
+            case XdmAxis.Descendant:
+            case XdmAxis.DescendantOrSelf:
+                {
+                    var acc = new List<XdmValue>();
+                    if (axis == XdmAxis.DescendantOrSelf)
+                        acc.Add(XdmValue.FromJNode(jn));
+                    AddJNodeDescendants(jn, acc);
+                    return acc.Count == 0
+                        ? XdmValue.Undefined
+                        : XdmValue.FromSequence(MaterializedSequence.FromList(acc));
+                }
+            case XdmAxis.Attribute:
+            case XdmAxis.Namespace:
+                // JNodes have no attributes/namespaces: the axis is empty rather than
+                // an error (mirrors the empty-children rule for atomic values).
+                return XdmValue.Undefined;
             default:
                 throw new InvalidOperationException(
-                    $"Axis {axis} requires a node or sequence of nodes, but got {input.Kind}.");
+                    $"Axis {axis} is not defined for JNode values.");
         }
     }
 
-    /// <summary>Appends the input itself plus every nested map/array, recursively.</summary>
-    private static void CollectMapClosure(XdmValue value, List<XdmValue> acc)
+    /// <summary>
+    /// The j-children accessor (F&amp;O 4.0 §17.7): a map yields one JNode per entry
+    /// keyed by the entry key; an array yields one JNode per member keyed by 1-based
+    /// position; a sequence yields one JNode per item keyed by position; any other
+    /// value has no children.
+    /// </summary>
+    private static List<XdmValue> JChildren(XdmJNode jn)
     {
+        var children = new List<XdmValue>();
+        var value = jn.Value;
         if (value.IsMap)
         {
-            acc.Add(value);
-            foreach (var key in value.MapValue.Keys)
-            {
-                if (value.MapValue.TryGetValue(key, out var member))
-                    CollectMapClosure(member, acc);
-            }
+            foreach (var entry in value.MapValue.Entries)
+                children.Add(XdmValue.FromJNode(new XdmJNode(entry.Value, entry.Key, jn)));
         }
         else if (value.IsArray)
         {
-            acc.Add(value);
+            long position = 0;
             foreach (var member in value.ArrayValue.Values)
-                CollectMapClosure(member, acc);
+                children.Add(XdmValue.FromJNode(new XdmJNode(member, XdmValue.FromInteger(++position), jn)));
+        }
+        else if (value.IsSequence && value.SequenceValue is not null)
+        {
+            long position = 0;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                children.Add(XdmValue.FromJNode(new XdmJNode(item, XdmValue.FromInteger(++position), jn)));
+        }
+        return children;
+    }
+
+    private static void AddJNodeDescendants(XdmJNode jn, List<XdmValue> acc)
+    {
+        foreach (var child in JChildren(jn))
+        {
+            acc.Add(child);
+            AddJNodeDescendants(child.JNodeValue, acc);
         }
     }
 
@@ -4188,9 +4412,9 @@ internal static class VmEngine
     /// (StreamingXPathTests.ReverseAxisInsideRecord).
     /// </summary>
     private static bool MayContainMaps(XdmValue value)
-        => value.IsMap || value.IsArray
+        => value.IsMap || value.IsArray || value.IsJNode
         || (value.IsSequence && value.SequenceValue is MaterializedSequence materialized
-            && materialized.Items.Any(i => i.IsMap || i.IsArray));
+            && materialized.Items.Any(i => i.IsMap || i.IsArray || i.IsJNode));
 
     /// <summary>Iterates the items of a value (singletons yield themselves).</summary>
     private static IEnumerable<XdmValue> FlattenItems(XdmValue value)
@@ -4237,6 +4461,11 @@ internal static class VmEngine
         if (input.IsNode)
             return XdmValue.FromSequence(input.NodeValue.Axis(axis));
 
+        // XPath 4.0 §17.7: a JNode navigates its tree; a raw map/array context item
+        // is implicitly wrapped as by fn:jtree. Both yield JNode values.
+        if (input.IsJNode)
+            return JNodeAxis(input.JNodeValue, axis);
+
         // XPath 4.0: axes over a map/array value navigate the value structure.
         if (input.IsMap || input.IsArray)
             return MapAxis(input, axis);
@@ -4260,9 +4489,9 @@ internal static class VmEngine
 
             var items = MaterializeSequenceView(input);
 
-            // XPath 4.0: a sequence mixing maps/arrays with nodes navigates each item
-            // according to its kind (element-to-map-550+).
-            if (items.Any(i => i.IsMap || i.IsArray))
+            // XPath 4.0: a sequence mixing maps/arrays/JNodes with nodes navigates each
+            // item according to its kind (element-to-map-550+).
+            if (items.Any(i => i.IsMap || i.IsArray || i.IsJNode))
             {
                 var mixed = new List<XdmValue>();
                 foreach (var item in items)
@@ -4271,6 +4500,10 @@ internal static class VmEngine
                     {
                         foreach (var node in item.NodeValue.Axis(axis))
                             mixed.Add(node);
+                    }
+                    else if (item.IsJNode)
+                    {
+                        AddFlattened(mixed, JNodeAxis(item.JNodeValue, axis));
                     }
                     else if (item.IsMap || item.IsArray)
                     {
@@ -4742,6 +4975,13 @@ internal static class VmEngine
                 "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with " + members.Count + " items");
         }
 
+        if (value.IsJNode)
+        {
+            // XPath 4.0 §17.7: atomic-required contexts extract the jvalue before
+            // atomizing (fn-jtree-010/011/021/026 coercion).
+            return Atomize(value.JNodeValue.Value);
+        }
+
         if (value.IsSequence)
         {
             var items = MaterializeSequence(value);
@@ -4767,6 +5007,12 @@ internal static class VmEngine
     {
         if (value.IsUndefined)
             return XdmValue.Undefined;
+
+        if (value.IsJNode)
+        {
+            // XPath 4.0 §17.7: atomic-required contexts (casts included) extract the jvalue.
+            return AtomizeForCast(value.JNodeValue.Value);
+        }
 
         if (value.IsFunction || value.IsMap)
             throw new InvalidOperationException("FOTY0013: Cannot atomize a function item (including maps)");
@@ -4816,6 +5062,14 @@ internal static class VmEngine
             return items[0];
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
+
+    private static bool IsMapArrayFunctionConversionTarget(string type)
+        => type.StartsWith("map(", StringComparison.OrdinalIgnoreCase)
+            || type.StartsWith("array(", StringComparison.OrdinalIgnoreCase)
+            || type.StartsWith("function(", StringComparison.OrdinalIgnoreCase)
+            || type.Equals("map", StringComparison.OrdinalIgnoreCase)
+            || type.Equals("array", StringComparison.OrdinalIgnoreCase)
+            || type.Equals("function", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Returns true if the exception represents a type error that must be raised by
@@ -5293,7 +5547,7 @@ internal static class VmEngine
         foreach (var item in XdmSequence.FromSource(input))
         {
             pos++;
-            if (enforceNodeResult && !item.IsNode)
+            if (enforceNodeResult && !IsPathStepContextItem(item, context))
                 throw new InvalidOperationException("XPTY0019: An axis step requires a node as context item.");
 
             context.WithFocus(item, pos, -1);
@@ -5304,17 +5558,17 @@ internal static class VmEngine
             {
                 foreach (var r in XdmSequence.FromSource(rhsResult.SequenceValue))
                 {
-                    if (pathResultMode == 2 && !r.IsNode)
+                    if (pathResultMode == 2 && !r.IsNode && !r.IsJNode)
                         throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
-                    if (r.IsNode) hasNode = true; else hasNonNode = true;
+                    if (r.IsNode || r.IsJNode) hasNode = true; else hasNonNode = true;
                     yield return r;
                 }
             }
             else if (!rhsResult.IsUndefined)
             {
-                if (pathResultMode == 2 && !rhsResult.IsNode)
+                if (pathResultMode == 2 && !rhsResult.IsNode && !rhsResult.IsJNode)
                     throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
-                if (rhsResult.IsNode) hasNode = true; else hasNonNode = true;
+                if (rhsResult.IsNode || rhsResult.IsJNode) hasNode = true; else hasNonNode = true;
                 yield return rhsResult;
             }
         }
@@ -5327,12 +5581,22 @@ internal static class VmEngine
         context.WithFocus(savedItem, savedPos, savedSize);
     }
 
+    /// <summary>
+    /// XPath 4.0 §4.7.5/§17.7: nodes, JNodes, and (at the 4.0 level) raw maps/arrays
+    /// are valid path-step context items — raw maps/arrays are implicitly wrapped as
+    /// by fn:jtree. Anything else raises XPTY0019/XPTY0020.
+    /// </summary>
+    private static bool IsPathStepContextItem(XdmValue item, EvaluationContext context)
+        => item.IsNode || item.IsJNode
+            || (context.IsXPath40 && (item.IsMap || item.IsArray));
+
     /// <summary>Lazily enforces the all-nodes result contract of a non-final path step.</summary>
     private static IEnumerable<XdmValue> RequireNodesLazy(IXdmSequence source)
     {
         foreach (var item in XdmSequence.FromSource(source))
         {
-            if (!item.IsNode)
+            // XPath 4.0: JNodes are path-step results like nodes.
+            if (!item.IsNode && !item.IsJNode)
                 throw new InvalidOperationException("XPTY0019: result of a path expression step other than the last step contains a non-node item");
             yield return item;
         }
@@ -10569,6 +10833,7 @@ internal static class VmEngine
             or "function" or "function(*)" or "function()"
             or "map" or "map(*)" or "map()"
             or "array" or "array(*)" or "array()"
+            or "jnode" or "jnode()" or "jnode(*)" or "jnode(())"
             or "schema-element" or "schema-element()"
             or "schema-attribute" or "schema-attribute()")
         {
@@ -10580,7 +10845,85 @@ internal static class VmEngine
             || name.StartsWith("document-node(", StringComparison.Ordinal)
             || name.StartsWith("schema-element(", StringComparison.Ordinal)
             || name.StartsWith("schema-attribute(", StringComparison.Ordinal)
-            || name.StartsWith("processing-instruction(", StringComparison.Ordinal);
+            || name.StartsWith("processing-instruction(", StringComparison.Ordinal)
+            || name.StartsWith("jnode(", StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Matches a JNode's entry key against a jnode() type-test key specifier
+    /// (XPath 4.0 §17.7): '*' or '' matches any key, '()' matches a keyless root,
+    /// a quoted string literal or bare NCName matches a string key, an integer
+    /// literal matches a position key, and a '#' QName literal matches a QName key.
+    /// Comparison uses map-key (atomic-equal family) semantics.
+    /// </summary>
+    private static bool JNodeKeyMatches(XdmJNode jnode, string keySpec, EvaluationContext? context)
+    {
+        if (keySpec.Length == 0 || keySpec == "*")
+            return true;
+        if (keySpec == "()")
+            return jnode.Key.IsUndefined;
+
+        XdmValue expected = keySpec[0] switch
+        {
+            '"' or '\'' => XdmValue.FromString(UnquoteKeyLiteral(keySpec)),
+            '#' => ParseJNodeQNameKeyLiteral(keySpec, context),
+            _ when long.TryParse(keySpec, NumberStyles.Integer, CultureInfo.InvariantCulture, out var pos)
+                => XdmValue.FromInteger(pos),
+            _ when IsKeySpecifierNcName(keySpec) => XdmValue.FromString(keySpec),
+            _ => throw new InvalidOperationException(
+                $"XPST0003: Invalid jnode() key specifier '{keySpec}'"),
+        };
+        return XdmValueEqualityComparer.Instance.Equals(jnode.Key, expected);
+    }
+
+    /// <summary>
+    /// Removes the enclosing quotes of a string key literal in a jnode() type test,
+    /// unescaping the doubled enclosing delimiter.
+    /// </summary>
+    private static string UnquoteKeyLiteral(string literal)
+    {
+        if (literal.Length < 2 || literal[0] != literal[^1])
+            throw new InvalidOperationException($"XPST0003: Malformed string key literal '{literal}'");
+        char quote = literal[0];
+        return literal.Substring(1, literal.Length - 2).Replace(new string(quote, 2), quote.ToString());
+    }
+
+    /// <summary>Returns whether the key specifier is a bare NCName (matched as a string key).</summary>
+    private static bool IsKeySpecifierNcName(string spec)
+    {
+        if (spec.Length == 0 || !char.IsLetter(spec[0]))
+            return false;
+        foreach (char c in spec)
+        {
+            if (!char.IsLetterOrDigit(c) && c is not ('.' or '-' or '_'))
+                return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Parses a '#' QName key literal (#Q{uri}local or #prefix:local) for a jnode()
+    /// type test; the prefix form resolves against the static context (XPST0081).
+    /// </summary>
+    private static XdmValue ParseJNodeQNameKeyLiteral(string literal, EvaluationContext? context)
+    {
+        string body = literal.Substring(1);
+        if (body.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            int close = body.IndexOf('}');
+            if (close < 2 || close == body.Length - 1)
+                throw new InvalidOperationException($"XPST0003: Invalid '#' QName literal '{literal}'");
+            return XdmValue.FromQName(new XsQName(body[(close + 1)..], body.Substring(2, close - 2)));
+        }
+        int colon = body.IndexOf(':');
+        if (colon <= 0 || colon == body.Length - 1)
+            throw new InvalidOperationException($"XPST0003: Invalid '#' QName literal '{literal}'");
+        string prefix = body.Substring(0, colon);
+        string local = body[(colon + 1)..];
+        // TryResolveNamespace handles the predefined 'xml' prefix itself.
+        if (context is null || !context.TryResolveNamespace(prefix, out var ns))
+            throw new InvalidOperationException($"XPST0081: Prefix '{prefix}' is not declared.");
+        return XdmValue.FromQName(new XsQName(local, ns));
     }
 
     private static bool IsKnownAtomicTypeName(string name)
@@ -12437,6 +12780,29 @@ internal static class VmEngine
             return true;
         }
 
+        // XPath 4.0 §17.7: jnode type tests. jnode() / jnode(*) match any JNode;
+        // jnode(()) matches a root (keyless) JNode; jnode(K) matches the entry key
+        // against the key specifier K ('*', '()', a string literal, an NCName treated
+        // as a string key, an integer literal, or a '#' QName literal) using atomic-equal
+        // semantics; jnode(K, T) additionally matches the jvalue against sequence type T.
+        // Split from the case-preserved string so nested Q{uri} types survive intact.
+        if (normalized.StartsWith("jnode(") && normalized.EndsWith(')'))
+        {
+            if (!value.IsJNode) return false;
+            var casePreservedJnode = GetCasePreservedTypeName(typeName);
+            var jnodeInner = casePreservedJnode.Substring(6, casePreservedJnode.Length - 7).Trim();
+            if (string.IsNullOrEmpty(jnodeInner) || jnodeInner == "*")
+                return true;
+            var jnodeParts = SplitTopLevel(jnodeInner, ',');
+            if (jnodeParts.Length > 2)
+                throw new InvalidOperationException(
+                    "XPST0003: A jnode type test takes at most two arguments, e.g. jnode(*, item()*)");
+            if (!JNodeKeyMatches(value.JNodeValue, jnodeParts[0].Trim(), context)) return false;
+            if (jnodeParts.Length == 2)
+                return ValueMatchesType(value.JNodeValue.Value, jnodeParts[1].Trim(), context);
+            return true;
+        }
+
         if (normalized is "map(*)" or "map")
             return value.IsMap;
 
@@ -13293,6 +13659,11 @@ internal static class VmEngine
         // below still run per call.
         var (type, allowsEmpty, allowsMultiple, isFunctionTest) =
             s_conversionTargets.GetOrAdd(targetType, static t => ParseConversionTarget(t));
+
+        // XPath 4.0 §17.7: a JNode coerces to a map/array/function-typed parameter by
+        // extracting its jvalue, then the standard conversion rules apply to that value.
+        if (value.IsJNode && IsMapArrayFunctionConversionTarget(type))
+            return ApplyFunctionConversion(value.JNodeValue.Value, targetType, context);
 
         // A declared type that is not a legal sequence-type item type is XPST0051
         // (XPath 3.1 §2.5.5.2), reported before any conversion attempt: the pseudo-name
@@ -14699,6 +15070,12 @@ internal static class VmEngine
     {
         if (container.IsUndefined)
             return;
+        // XPath 4.0 §17.7: the LHS of '?' extracts the jvalue of a JNode.
+        if (container.IsJNode)
+        {
+            LookupInto(container.JNodeValue.Value, key, results);
+            return;
+        }
         if (container.IsSequence && container.SequenceValue is not null)
         {
             foreach (var item in XdmSequence.FromSource(container.SequenceValue))

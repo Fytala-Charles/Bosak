@@ -16,6 +16,9 @@
 //                      | Charles Korthout | 0.2   | 09-10-2026     | InferType numeric subtype promotion: a value mix of integers and decimals infers        |
 //                      |                  |       |                | xs:decimal, any exponent form infers xs:double (element-to-map-552/553 ground truth)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-123 JNode cluster: JValue renamed to element-to-map internal converter (fn:jvalue
+//                      | Charles Korthout |       |                | is now the F+O 4.0 section 17.7 JNode accessor in FunctionLibrary)
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -1615,12 +1618,14 @@ internal static class ElementMap
     internal static string LexicalOf(XdmValue v) => v.IsNode ? v.NodeValue.StringValue : v.ToString();
 
     // =====================================================================================
-    // fn:jvalue (minimal: used by the element-to-map qt4tests asserts)
+    // element-to-map internal JSON-value converter (NOT the F&O 4.0 §17.7 fn:jvalue —
+    // that one is the JNode accessor in FunctionLibrary)
     // =====================================================================================
 
     /// <summary>
     /// Converts an item to a JSON value: nodes atomize to untypedAtomic, maps and arrays
-    /// convert recursively, atomic values pass through unchanged.
+    /// convert recursively, atomic values pass through unchanged. Internal to the
+    /// element-to-map pipeline.
     /// </summary>
     internal static XdmValue JValue(XdmValue input)
     {

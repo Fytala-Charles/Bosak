@@ -49,6 +49,8 @@
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 1.10  | 09-10-2026     | REQ-123 element-to-map slice: LookupKey opcode for the PR2688 string-literal lookup step |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11   | 10-10-2026     | REQ-123 JNode cluster: LookupIndex/LookupComputed opcodes
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
@@ -225,6 +227,16 @@ internal enum IrOpCode : byte
     /// non-map items yield nothing. Array items are skipped (lookups do not drill in).
     /// </summary>
     LookupKey,
+    /// <summary>
+    /// XPath 4.0 integer lookup step (<c>E/2</c>): selects the child JNode whose key
+    /// equals the integer (array position or integer map key).
+    /// </summary>
+    LookupIndex,
+    /// <summary>
+    /// XPath 4.0 braced key selector step (<c>E/child::{K}</c>, PR2667): selects the
+    /// child JNode whose key equals the evaluated key expression (register C).
+    /// </summary>
+    LookupComputed,
 
     // ---- Predicates / Filtering ---------------------------------------
     /// <summary>Applies a predicate block to a sequence.</summary>

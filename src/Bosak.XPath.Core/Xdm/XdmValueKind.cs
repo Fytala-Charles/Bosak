@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 19-05-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-123 JNode cluster: XdmValueKind.JNode appended after External
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -67,5 +69,9 @@ public enum XdmValueKind : byte
 
     // External opaque .NET object
     /// <summary>An opaque external .NET object.</summary>
-    External
+    External,
+
+    // XPath 4.0 JNode
+    /// <summary>An XPath 4.0 JNode (wrapper around a map/array/item carrying its entry key and parent).</summary>
+    JNode
 }

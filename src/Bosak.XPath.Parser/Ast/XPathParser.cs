@@ -160,6 +160,9 @@
 //                      |                  |       |                | allowPrefixedBracedLocal for Q{uri}prefix:local                                        |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.73   | 10-10-2026     | REQ-123 JNode cluster: integer-literal lookup step (E/2) and braced key selector
+//                      | Charles Korthout |        |                | child::{K} (PR2667) in step position
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1827,6 +1830,17 @@ internal sealed class XPathParser
             return WithSpan(new StepNode(XdmAxis.Child, new NodeTest(NameTestKind.LookupKey, key), preds), start, End);
         }
 
+        // XPath 4.0: an integer literal in step position after "/" or "//" selects the
+        // child JNode whose key equals that integer ([4,5,6]/2 is the member JNode keyed 2;
+        // {1:'a'}/1 is the entry JNode with integer key 1).
+        if (!firstStep && _xpath40 && Current.Kind == TokenKind.IntegerLiteral)
+        {
+            string index = GetString(Current);
+            Advance();
+            var preds = ParsePredicateList();
+            return WithSpan(new StepNode(XdmAxis.Child, new NodeTest(NameTestKind.LookupIndex, index), preds), start, End);
+        }
+
         // Otherwise, it's a postfix expression (primary + predicates/args/lookup)
         return ParsePostfixExpr();
     }
@@ -1897,6 +1911,19 @@ internal sealed class XPathParser
     private NodeTest ParseNodeTest()
     {
         int start = Current.Start;
+
+        // XPath 4.0 (PR2667): a braced key selector — child::{K} — selects the child
+        // JNode whose key equals the evaluated key expression (arrays: position or any
+        // atomic key; maps: matching atomic key).
+        if (Current.Kind == TokenKind.LBrace)
+        {
+            if (!_xpath40)
+                throw new XPathParseException("XPST0003: A braced key selector in a step requires XPath 4.0.", start);
+            Advance();
+            var keyExpr = ParseExpr();
+            Expect(TokenKind.RBrace);
+            return new NodeTest(NameTestKind.LookupComputed, LookupExpression: keyExpr);
+        }
 
         // Wildcard: *
         if (Match(TokenKind.Star))
