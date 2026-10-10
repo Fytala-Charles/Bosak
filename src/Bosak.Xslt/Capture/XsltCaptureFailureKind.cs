@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice C)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: TimeLimitExceeded/XV0011, OperationLimitExceeded/XV0012, Cancelled/    |
+//                      |                  |       |                | XV0013 (appended; existing members unchanged)                                            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Capture;
@@ -65,4 +68,25 @@ public enum XsltCaptureFailureKind
     /// one is available, otherwise <c>XV0009</c> (uncoded engine failure).
     /// </summary>
     TransformFailure,
+
+    /// <summary>
+    /// The wall-clock budget (<see cref="XsltCaptureOptions.TimeLimit"/>) was exceeded at an engine
+    /// checkpoint. Outputs captured before the checkpoint are retained. Code: <c>XV0011</c>.
+    /// </summary>
+    TimeLimitExceeded,
+
+    /// <summary>
+    /// The engine-operation budget (<see cref="XsltCaptureOptions.MaxEngineOperations"/>) was exhausted.
+    /// Outputs captured before the checkpoint are retained; the abort point is deterministic for a
+    /// given stylesheet, input and budget. Code: <c>XV0012</c>.
+    /// </summary>
+    OperationLimitExceeded,
+
+    /// <summary>
+    /// The run was terminated by the host-supplied cancellation token
+    /// (<see cref="XsltCaptureOptions.CancellationToken"/>) at an engine checkpoint. Outputs captured
+    /// before the checkpoint are retained; the outcome is
+    /// <see cref="XsltCaptureOutcome.Cancelled"/>. Code: <c>XV0013</c>.
+    /// </summary>
+    Cancelled,
 }

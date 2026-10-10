@@ -13,9 +13,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice C)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: ExecutionGate checkpoints (observer/principal/message seams) +         |
+//                      |                  |       |                | Cancelled/TimeLimitExceeded/OperationLimitExceeded classification (XV0011-XV0013)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime;
 using Bosak.Xslt.Api;
 using Bosak.Xslt.Runtime;
 
@@ -35,8 +39,12 @@ internal sealed class XsltCaptureSession
     internal const string AggregateLimitCode = "XV0008";
     internal const string UncodedFailureCode = "XV0009";
     internal const string MessageLimitCode = "XV0010";
+    internal const string TimeLimitCode = "XV0011";
+    internal const string OperationLimitCode = "XV0012";
+    internal const string CancelledCode = "XV0013";
 
     private readonly XsltCaptureOptions _options;
+    private readonly ExecutionGate? _gate;
     private readonly List<XsltCapturedOutput> _secondary = new();
     private readonly List<XsltCaptureFailure> _failures = new();
     private readonly List<string> _messages = new();
@@ -45,10 +53,11 @@ internal sealed class XsltCaptureSession
     private bool _messageLimitRecorded;
     private Exception? _outputLevelFailure;
 
-    internal XsltCaptureSession(XsltCaptureOptions options, IXsltMessageListener? hostListener)
+    internal XsltCaptureSession(XsltCaptureOptions options, IXsltMessageListener? hostListener, ExecutionGate? gate)
     {
         _options = options;
         _hostListener = hostListener;
+        _gate = gate;
         MessageListener = new CaptureMessageListener(this);
     }
 
@@ -63,6 +72,7 @@ internal sealed class XsltCaptureSession
     // the configured bounds, and tells the engine not to retain the XDM value.
     internal bool ObserveResultDocument(string resolvedUri, XdmValue value, Stylesheet.OutputProperties props)
     {
+        _gate?.Checkpoint();
         if (_options.MaxSecondaryOutputCount is { } maxCount && _secondary.Count >= maxCount)
         {
             RecordFailure(new XsltCaptureFailure(
@@ -101,6 +111,7 @@ internal sealed class XsltCaptureSession
     // already over.
     internal void CapturePrincipal(XdmValue result, Stylesheet.OutputProperties effectiveProps)
     {
+        _gate?.Checkpoint();
         var identity = PrincipalIdentity;
         byte[] bytes;
         try
@@ -164,6 +175,12 @@ internal sealed class XsltCaptureSession
             // Recorded at the breach point; nothing more to classify. (A stylesheet-level xsl:catch
             // can swallow the exception after recording — the failure entry survives either way.)
         }
+        else if (failure is ExecutionInterruptException interrupt)
+        {
+            // Cooperative termination (cancellation token, wall-clock or operation budget): classified
+            // here; never reported as an engine error.
+            RecordFailure(ClassifyInterrupt(interrupt));
+        }
         else if (failure is not null && !ReferenceEquals(failure, _outputLevelFailure))
         {
             RecordFailure(ClassifyTransformFailure(failure, resolvedUri: null));
@@ -180,9 +197,25 @@ internal sealed class XsltCaptureSession
 
     private XsltCaptureOutcome DecideOutcome(Exception? failure)
     {
+        if (failure is ExecutionInterruptException { Kind: ExecutionGateInterruptKind.Cancelled })
+            return XsltCaptureOutcome.Cancelled;
         if (failure is null)
             return _failures.Count == 0 ? XsltCaptureOutcome.Success : XsltCaptureOutcome.Partial;
         return _principal is null && _secondary.Count == 0 ? XsltCaptureOutcome.Failed : XsltCaptureOutcome.Partial;
+    }
+
+    // Maps a gate interrupt to the classified failure taxonomy: cancellation (XV0013) is
+    // additionally reflected in the Cancelled outcome by DecideOutcome; the two limit kinds
+    // (XV0011/XV0012) follow the partial-failure model.
+    private static XsltCaptureFailure ClassifyInterrupt(ExecutionInterruptException interrupt)
+    {
+        var (kind, code) = interrupt.Kind switch
+        {
+            ExecutionGateInterruptKind.Cancelled => (XsltCaptureFailureKind.Cancelled, CancelledCode),
+            ExecutionGateInterruptKind.TimeLimitExceeded => (XsltCaptureFailureKind.TimeLimitExceeded, TimeLimitCode),
+            _ => (XsltCaptureFailureKind.OperationLimitExceeded, OperationLimitCode),
+        };
+        return new XsltCaptureFailure(kind, code, resolvedUri: null, interrupt.Message);
     }
 
     private void RecordFailure(XsltCaptureFailure failure) => _failures.Add(failure);
@@ -228,6 +261,7 @@ internal sealed class XsltCaptureSession
     // with the message listener configured at compile time.
     private void OnMessage(string message)
     {
+        _gate?.Checkpoint();
         if (_options.MaxMessages is { } max && _messages.Count >= max)
         {
             if (!_messageLimitRecorded)

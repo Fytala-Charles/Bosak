@@ -519,6 +519,9 @@
 //                      | Charles Korthout | 7.07  | 10-10-2026     | REQ-125 Slice C: ResultDocumentCaptureObserver hook — per-output observer over captured   |
 //                      |                  |       |                | result documents (return false = engine does not retain); default null = bit-identical  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.08  | 10-10-2026     | REQ-125 Slice D: ExecutionGate checkpoints — instruction dispatch, call-template and     |
+//                      |                  |       |                | apply-templates entries; gate inherited from the evaluation context (null = no-op)      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -530,6 +533,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Runtime.Vm;
@@ -610,6 +614,15 @@ internal sealed class TransformEngine
     // being serialized to the file system.
     private bool _captureResultDocuments;
     private readonly Dictionary<string, (XdmValue Value, Stylesheet.OutputProperties Props)> _capturedResultDocuments = new();
+
+    // REQ-125 Slice D: cooperative execution gate (host cancellation token, wall-clock
+    // deadline, engine-operation budget) inherited from the evaluation context. Observed at
+    // instruction-dispatch and template-invocation checkpoints; null means no controls and
+    // adds a single branch per checkpoint.
+    private readonly ExecutionGate? _executionGate;
+
+    // Cooperative execution-control checkpoint (REQ-125 Slice D). No-op when no gate is attached.
+    private void CheckpointExecution() => _executionGate?.Checkpoint();
 
     /// <summary>
     /// The secondary result documents captured during the last transformation when
@@ -908,6 +921,10 @@ internal sealed class TransformEngine
         _stylesheet = stylesheet;
         _context = context ?? new EvaluationContext();
         _context.IsXsltMode = true;
+        // REQ-125 Slice D: inherit the controlled run's execution gate (cancellation token,
+        // wall-clock deadline, operation budget) from the evaluation context. Nested
+        // fn:transform calls inherit the same gate instance, sharing the remaining budget.
+        _executionGate = _context.ExecutionGate;
         _messageListener = messageListener;
         _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
@@ -6415,6 +6432,7 @@ internal sealed class TransformEngine
     /// <param name="instruction">The xsl:apply-templates instruction element, used for the XPath static context.</param>
     public void ApplyTemplates(XdmValue contextItem, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, XElement? instruction = null)
     {
+        CheckpointExecution();
         if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
         {
             _applyTemplatesDepth--;
@@ -7117,6 +7135,7 @@ internal sealed class TransformEngine
     /// <param name="incomingTunnelParams">Tunnel parameters visible to the called template.</param>
     public void CallTemplate(string name, XdmValue contextItem, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
+        CheckpointExecution();
         if (++_callTemplateDepth > MaxCallTemplateDepth)
         {
             _callTemplateDepth--;
@@ -7433,6 +7452,7 @@ internal sealed class TransformEngine
 
     private void ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
     {
+        CheckpointExecution();
         _currentInstruction = instruction;
         var node = contextItem.IsNode ? contextItem.NodeValue : null;
 

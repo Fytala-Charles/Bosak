@@ -48,6 +48,9 @@
 //                      | Charles Korthout | 1.16  | 10-10-2026     | REQ-125 Slice C: CaptureTransform — IO-free captured output contract over the         |
 //                      |                  |       |                | result-document capture machinery (identities, bytes, bounds, classified failures)    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.17  | 10-10-2026     | REQ-125 Slice D: CaptureTransform builds/stamps the ExecutionGate (token, TimeLimit,  |
+//                      |                  |       |                | MaxEngineOperations), pre-run cancellation check, gate cleared in finally             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -55,6 +58,7 @@ using System.Threading;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Capture;
 
@@ -224,13 +228,13 @@ public sealed class XsltExecutable
     /// result. No output definition is written to the file system or the network.
     /// </summary>
     /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
-    /// <param name="options">Optional capture controls (base output URI, entry point, bounds). <see langword="null"/> captures every output with no bounds.</param>
+    /// <param name="options">Optional capture controls (base output URI, entry point, bounds, cancellation and execution limits). <see langword="null"/> captures every output with no bounds.</param>
     /// <returns>
     /// The immutable capture result; never <see langword="null"/>. Expected error conditions —
     /// engine/spec errors raised by the stylesheet, duplicate output URIs (XTDE1490), configured
-    /// bound breaches and message overflow — are classified on the result (see
-    /// <see cref="XsltCaptureResult.Outcome"/> and <see cref="XsltCaptureResult.Failures"/>), never
-    /// thrown.
+    /// bound breaches, message overflow, cancellation and execution-limit exhaustion — are classified
+    /// on the result (see <see cref="XsltCaptureResult.Outcome"/> and
+    /// <see cref="XsltCaptureResult.Failures"/>), never thrown.
     /// </returns>
     /// <remarks>
     /// <para>
@@ -249,25 +253,65 @@ public sealed class XsltExecutable
     /// retained and the breach is a classified failure.
     /// </para>
     /// <para>
+    /// Cancellation and limits (REQ-125 Slice D): the run and its nested <c>fn:transform</c> calls
+    /// share one execution gate built from <see cref="XsltCaptureOptions.CancellationToken"/>,
+    /// <see cref="XsltCaptureOptions.TimeLimit"/> and
+    /// <see cref="XsltCaptureOptions.MaxEngineOperations"/>. Checkpoints fire at every XSLT
+    /// instruction dispatch, template invocation, secondary result-document production,
+    /// <c>xsl:message</c> emission and output serialization. Cancellation classifies as
+    /// <see cref="XsltCaptureOutcome.Cancelled"/>; the two limits classify as <c>XV0011</c>/<c>XV0012</c>
+    /// failures on a partial/failed outcome. The gate is stamped on the run's evaluation context for
+    /// the duration of the run and cleared afterwards, and nested transforms inherit the same gate
+    /// instance — so the remaining budget and deadline are shared across nesting, and sequential or
+    /// concurrent runs never observe another run's controls (a gate is only ever used from its own
+    /// transformation thread). A stylesheet <c>xsl:try</c>/<c>xsl:catch</c> can swallow the internal
+    /// termination signal; the recorded cancellation/limit failure still downgrades the outcome.
+    /// </para>
+    /// <para>
     /// Coverage and exclusions: capture covers the principal output and all secondary outputs,
     /// including raw (<c>method="json"</c>, <c>method="adaptive"</c>, <c>build-tree="no"</c>)
     /// outputs. There is no initial-match-selection or raw-result delivery variant on this entry
     /// point; <c>xsl:message</c> texts travel the separate bounded channel
-    /// <see cref="XsltCaptureResult.Messages"/>; cancellation is reserved for Slice D. When this
-    /// method is not used, the existing <c>Transform</c>/<c>TransformToString</c> family is unchanged
-    /// — including its current disk behavior for secondary result documents.
+    /// <see cref="XsltCaptureResult.Messages"/>. A single XPath expression between checkpoints (for
+    /// example a long loop inside one <c>select</c> attribute) is not interrupted mid-evaluation;
+    /// the wall-clock and operation limits are cooperative, deterministic bounds — Braid's process
+    /// termination remains the hard wall-clock control. When this method is not used, the existing
+    /// <c>Transform</c>/<c>TransformToString</c> family is unchanged — including its current disk
+    /// behavior for secondary result documents.
     /// </para>
     /// </remarks>
     public XsltCaptureResult CaptureTransform(IXdmNode? source, XsltCaptureOptions? options = null)
     {
         options ??= new XsltCaptureOptions();
-        var session = new XsltCaptureSession(options, _messageListener);
+        var context = options.Context ?? new EvaluationContext();
+
+        // REQ-125 Slice D: one execution gate per controlled run. A gate already on the context
+        // (a nested controlled run) is inherited — its remaining budget and deadline are shared —
+        // and the options' controls apply only when no gate is present yet.
+        var gate = context.ExecutionGate;
+        var stamped = false;
+        if (gate is null &&
+            (options.CancellationToken.HasValue || options.TimeLimit.HasValue || options.MaxEngineOperations.HasValue))
+        {
+            gate = ExecutionGate.Create(
+                options.CancellationToken ?? default,
+                options.TimeLimit,
+                options.MaxEngineOperations);
+            context.ExecutionGate = gate;
+            stamped = true;
+        }
+
+        var session = new XsltCaptureSession(options, _messageListener, gate);
         Exception? failure = null;
         try
         {
+            // A token triggered before the run starts cancels immediately, before any output is
+            // produced and before the transformation thread starts.
+            gate?.Checkpoint();
+
             RunWithStack<object?>(() =>
             {
-                var engine = new Runtime.TransformEngine(_stylesheet, options.Context, session.MessageListener, _treatRecoverableAmbiguousMatchAsError);
+                var engine = new Runtime.TransformEngine(_stylesheet, context, session.MessageListener, _treatRecoverableAmbiguousMatchAsError);
                 engine.ResultDocumentCaptureObserver = session.ObserveResultDocument;
                 var result = engine.Transform(source, options.InitialTemplate, options.InitialMode,
                     rawResult: false, baseOutputUri: options.BaseOutputUri, captureResultDocuments: true);
@@ -286,6 +330,11 @@ public sealed class XsltExecutable
         catch (Exception ex)
         {
             failure = ex;
+        }
+        finally
+        {
+            if (stamped)
+                context.ExecutionGate = null;
         }
 
         return session.BuildResult(failure);

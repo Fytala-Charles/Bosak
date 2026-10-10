@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice C)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: XV0011/XV0012/XV0013 documented                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Capture;
@@ -20,16 +22,18 @@ namespace Bosak.Xslt.Capture;
 /// <summary>
 /// One immutable, classified failure of a captured transformation. Failures carry a stable code — the
 /// spec code when the underlying condition is a spec error (for example <c>XTDE1490</c>), otherwise a
-/// Bosak <c>XV</c> code (<c>XV0006</c>–<c>XV0010</c>) — the resolved identity of the output the failure
+/// Bosak <c>XV</c> code (<c>XV0006</c>–<c>XV0013</c>) — the resolved identity of the output the failure
 /// relates to when one exists, and a human-readable message. The capture API reports these conditions
 /// as data; it never throws for them.
 /// </summary>
 /// <remarks>
 /// <c>XV</c> codes are Bosak-specific, not spec codes. <c>XV0006</c> marks a secondary-output count
 /// bound breach, <c>XV0007</c> a per-output byte bound breach, <c>XV0008</c> an aggregate byte bound
-/// breach, <c>XV0009</c> a transform failure that carried no spec code, and <c>XV0010</c> a message
-/// bound breach. Instances are immutable value-like records: they hold no unmanaged resources, need no
-/// disposal and are safe to share across threads.
+/// breach, <c>XV0009</c> a transform failure that carried no spec code, <c>XV0010</c> a message bound
+/// breach, <c>XV0011</c> a wall-clock limit breach, <c>XV0012</c> an engine-operation budget breach
+/// and <c>XV0013</c> host cancellation. Cancellation is additionally reflected in
+/// <see cref="XsltCaptureOutcome.Cancelled"/>. Instances are immutable value-like records: they hold
+/// no unmanaged resources, need no disposal and are safe to share across threads.
 /// </remarks>
 public sealed class XsltCaptureFailure
 {
