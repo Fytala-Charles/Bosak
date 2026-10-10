@@ -516,6 +516,9 @@
 //                      |                  |       |                | policy: authority-approved bytes via XmlStreamingProvider/LoadControlled with DTDs        |
 //                      |                  |       |                | prohibited; no StreamingDocumentLoader hook or file fallback when a policy is attached    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.07  | 10-10-2026     | REQ-125 Slice C: ResultDocumentCaptureObserver hook — per-output observer over captured   |
+//                      |                  |       |                | result documents (return false = engine does not retain); default null = bit-identical  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -614,6 +617,18 @@ internal sealed class TransformEngine
     /// resolved result-document URI.
     /// </summary>
     public IReadOnlyDictionary<string, (XdmValue Value, Stylesheet.OutputProperties Props)> CapturedResultDocuments => _capturedResultDocuments;
+
+    /// <summary>
+    /// REQ-125 Slice C: optional observer invoked once per completed secondary
+    /// <c>xsl:result-document</c> while <see cref="CapturedResultDocuments"/> capture is active.
+    /// The observer receives the resolved URI, the captured value and its effective output
+    /// properties; returning <see langword="false"/> tells the engine not to retain the value in
+    /// <see cref="CapturedResultDocuments"/> (the observer has taken ownership, typically by
+    /// serializing it immediately under a capture bound). <see langword="null"/> (the default)
+    /// keeps the fn:transform behavior bit-identical. Throwing from the observer aborts the
+    /// transformation with that exception.
+    /// </summary>
+    internal Func<string, XdmValue, Stylesheet.OutputProperties, bool>? ResultDocumentCaptureObserver { get; set; }
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -18836,7 +18851,8 @@ internal sealed class TransformEngine
                     capturedValue = XdmValue.FromNode(XDocumentNode.Wrap(capturedDoc));
                     FinalizeResultDocument(capturedDoc);
                 }
-                _capturedResultDocuments[resolvedHref] = (capturedValue, resultDocumentProps);
+                if (ResultDocumentCaptureObserver?.Invoke(resolvedHref, capturedValue, resultDocumentProps) != false)
+                    _capturedResultDocuments[resolvedHref] = (capturedValue, resultDocumentProps);
             }
             else if (rawItems != null)
             {

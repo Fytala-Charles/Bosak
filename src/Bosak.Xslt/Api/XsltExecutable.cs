@@ -45,6 +45,9 @@
 //                      | Charles Korthout | 1.15  | 23-09-2026     | REQ-103: RunWithStack rethrows via ExceptionDispatchInfo (original stack preserved;   |
 //                      |                  |       |                | `throw exception` reset it, hiding engine stacks from conformance diagnostics)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.16  | 10-10-2026     | REQ-125 Slice C: CaptureTransform — IO-free captured output contract over the         |
+//                      |                  |       |                | result-document capture machinery (identities, bytes, bounds, classified failures)    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -53,6 +56,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
+using Bosak.Xslt.Capture;
 
 namespace Bosak.Xslt.Api;
 
@@ -211,6 +215,80 @@ public sealed class XsltExecutable
             LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
             return result;
         }, DefaultTransformStackSize);
+    }
+
+    /// <summary>
+    /// Runs a transformation with output capture (REQ-125 Slice C): the principal output and every
+    /// secondary <c>xsl:result-document</c> output are serialized to bytes in memory — with their
+    /// resolved identities and effective output properties — and returned as a classified, immutable
+    /// result. No output definition is written to the file system or the network.
+    /// </summary>
+    /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
+    /// <param name="options">Optional capture controls (base output URI, entry point, bounds). <see langword="null"/> captures every output with no bounds.</param>
+    /// <returns>
+    /// The immutable capture result; never <see langword="null"/>. Expected error conditions —
+    /// engine/spec errors raised by the stylesheet, duplicate output URIs (XTDE1490), configured
+    /// bound breaches and message overflow — are classified on the result (see
+    /// <see cref="XsltCaptureResult.Outcome"/> and <see cref="XsltCaptureResult.Failures"/>), never
+    /// thrown.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// Identity: the principal output's resolved identity is the base output URI (from
+    /// <see cref="XsltCaptureOptions.BaseOutputUri"/>), even when the stylesheet never names it; when
+    /// no base output URI is supplied the identity is the empty string. Secondary identities are the
+    /// <c>xsl:result-document</c> hrefs resolved against that base.
+    /// </para>
+    /// <para>
+    /// Byte fidelity: each output's bytes are produced by the engine's serializer under its effective
+    /// output properties (method, encoding, byte-order mark and all other overrides, including
+    /// <c>xsl:result-document</c> attributes and named output definitions), matching the
+    /// <c>fn:transform</c> serialized-delivery contract. Bounds are enforced during production: a
+    /// secondary output is serialized as soon as its instruction completes, and the transformation is
+    /// terminated at the first output that breaches a configured bound; outputs completed earlier are
+    /// retained and the breach is a classified failure.
+    /// </para>
+    /// <para>
+    /// Coverage and exclusions: capture covers the principal output and all secondary outputs,
+    /// including raw (<c>method="json"</c>, <c>method="adaptive"</c>, <c>build-tree="no"</c>)
+    /// outputs. There is no initial-match-selection or raw-result delivery variant on this entry
+    /// point; <c>xsl:message</c> texts travel the separate bounded channel
+    /// <see cref="XsltCaptureResult.Messages"/>; cancellation is reserved for Slice D. When this
+    /// method is not used, the existing <c>Transform</c>/<c>TransformToString</c> family is unchanged
+    /// — including its current disk behavior for secondary result documents.
+    /// </para>
+    /// </remarks>
+    public XsltCaptureResult CaptureTransform(IXdmNode? source, XsltCaptureOptions? options = null)
+    {
+        options ??= new XsltCaptureOptions();
+        var session = new XsltCaptureSession(options, _messageListener);
+        Exception? failure = null;
+        try
+        {
+            RunWithStack<object?>(() =>
+            {
+                var engine = new Runtime.TransformEngine(_stylesheet, options.Context, session.MessageListener, _treatRecoverableAmbiguousMatchAsError);
+                engine.ResultDocumentCaptureObserver = session.ObserveResultDocument;
+                var result = engine.Transform(source, options.InitialTemplate, options.InitialMode,
+                    rawResult: false, baseOutputUri: options.BaseOutputUri, captureResultDocuments: true);
+                LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+
+                // A principal xsl:result-document (no href) supplies the effective output properties,
+                // overriding the stylesheet-level xsl:output defaults. Clone before stamping
+                // run-specific inference state so concurrent captures never share mutable state.
+                var principalProps = (engine.PrincipalResultDocumentProperties ?? OutputProperties).Clone();
+                principalProps.EffectiveVersion ??= _stylesheet.Version;
+                principalProps.ImplicitResultTree = engine.PrincipalResultDocumentProperties == null;
+                session.CapturePrincipal(result, principalProps);
+                return null;
+            }, DefaultTransformStackSize);
+        }
+        catch (Exception ex)
+        {
+            failure = ex;
+        }
+
+        return session.BuildResult(failure);
     }
 
     /// <summary>

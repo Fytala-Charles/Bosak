@@ -42,3 +42,13 @@ The validation walk deliberately disables ordinary stylesheet compilation and pr
 **Slice A is not yet accepted for Braid's complete-validation state.** Its malformed-expression detection and outcome taxonomy are useful, but the confirmed false passes and false rejection prevent adopting `Valid` as the promised guarantee. This does not reject the whole REQ-125 design or require Braid to patch engine internals.
 
 Bosak owns corrections, API guarantees and engine test delivery through REQ-125. Braid owns re-review, pinning, faithful outcome mapping and licensed/revision-safe session integration. Slices B/C/D and production preview remain pending independently of these Slice A findings.
+
+## 6. Correction Re-review and Slice A Acceptance
+
+**Reviewed 2026-10-10; F1–F4 closed.** Fix commit `5b0cf05839cd70abece3cf99fff243d1c77852a8`; reviewed Bosak HEAD `0ecf1da`. Original public-API probes now report: unknown instruction Invalid/XTSE0010, undeclared pattern prefix Invalid/XPST0081, excluded own malformed slot Valid, and forward parameter default Invalid/XPST0008. Positive basic and custom-function probes remain Valid; malformed unused XPath remains Invalid; schema imports remain UnsupportedCoverage.
+
+Independently ran the original 29 validation tests plus 38 finding-specific tests: **67 passed / 0 failed / 0 skipped**. Source review confirms the IO-free structural pass, namespace-aware pattern checks, exclusion before slot analysis, and declaration-order parameter defaults. Bosak reports full-unit/conformance evidence in the fix commit; this re-review did not rerun those wider gates.
+
+**Consumer decision: accept corrected Slice A within its declared coverage.** This supersedes the initial rejection in section 5. Valid means the engine's declared checks completed; deferred/unsupported coverage must remain visible in Braid and cannot authorize export as a fully validated stylesheet. Non-literal use-when and other documented gaps remain explicit. REQ-125 as a whole is not accepted by this decision. Slice B has been reported delivered but was not reviewed here; capture/limits and production preview remain separate gates.
+
+Braid's production pin remains unchanged. Next adoption must preserve the classified outcome, diagnostics, coverage gaps, retained resource identity and license/revision gates. No engine source changes, dependency upgrade, commit or push were performed during acceptance.
