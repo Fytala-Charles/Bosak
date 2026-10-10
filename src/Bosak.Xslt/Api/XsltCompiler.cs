@@ -21,12 +21,15 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 02-10-2026     | validation-0201: EnvironmentSchemaSet (role=secondary host schemas) — source-validation |
 //                      |                  |       |                | context only, never part of construction/result-validation scope                       |
+//                      | Charles Korthout | 0.9   | 10-10-2026     | REQ-125 Slice B: ResourcePolicy - controlled compile-time acquisition (include/import,   |
+//                      |                  |       |                | packages, import-schema, parameter documents, static evaluation); default null unchanged  |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Resources;
 
 namespace Bosak.Xslt.Api;
 
@@ -39,6 +42,18 @@ public sealed class XsltCompiler
     /// Optional URI resolver for xsl:import and xsl:include. Defaults to <see cref="FileSystemUriResolver"/>.
     /// </summary>
     public IXsltUriResolver? UriResolver { get; set; }
+
+    /// <summary>
+    /// Optional controlled resource policy (REQ-125 Slice B) covering compile-time
+    /// acquisition: <c>xsl:include</c>/<c>xsl:import</c> modules, <c>xsl:use-package</c>
+    /// packages, <c>xsl:import-schema</c> location hints, compile-time
+    /// <c>parameter-document</c> resources and resources referenced by static
+    /// (<c>use-when</c>) evaluation. When set, the policy's host authority supplies
+    /// authoritative bytes for every acquisition and no disk/network fallback is performed;
+    /// approved module bytes win over conflicting content on disk. When null (the default),
+    /// compilation resolves modules through <see cref="UriResolver"/> exactly as before.
+    /// </summary>
+    public ControlledResourcePolicy? ResourcePolicy { get; set; }
 
     /// <summary>
     /// Opt-in schema-aware compilation mode (XSLT 3.0 "schema-aware processor"). When
@@ -137,6 +152,7 @@ public sealed class XsltCompiler
             SchemaResolver = SchemaResolver,
             CompilerSchemaSet = SchemaSet,
             EnvironmentSchemaSet = EnvironmentSchemaSet,
+            ResourcePolicy = ResourcePolicy,
         };
         var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters, packageVersionResolutionStrategy: PackageVersionResolutionStrategy, schemaState: schemaState);
         return new XsltExecutable(stylesheet, MessageListener, TreatRecoverableAmbiguousMatchAsError);

@@ -18,10 +18,14 @@
 //                      | Charles Korthout | 0.3   | 02-10-2026     | EnvironmentSchemaSet: host "secondary" schemas (source-validation only, never part of   |
 //                      |                  |       |                | the stylesheet's in-scope definitions for construction/result validation)               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 10-10-2026     | REQ-125 Slice B: ResourcePolicy threaded through the import tree for controlled          |
+//                      |                  |       |                | compile-time acquisition (modules, packages, schema locations, static evaluation)        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
 using System.Xml.Schema;
+using Bosak.XPath.Runtime.Resources;
 
 namespace Bosak.Xslt.Stylesheet;
 
@@ -62,6 +66,14 @@ internal sealed class SchemaImportState
 
     /// <summary>All import-schema declarations collected across the import tree, in collection order.</summary>
     public List<Declaration> Declarations { get; } = new();
+
+    /// <summary>
+    /// Optional controlled resource policy (REQ-125 Slice B) governing every compile-time
+    /// acquisition in this import tree: module include/import, package loading, schema
+    /// location hints, parameter documents and static (use-when) evaluation. Threaded
+    /// unchanged from the root module to every child module.
+    /// </summary>
+    public ControlledResourcePolicy? ResourcePolicy { get; init; }
 
     /// <summary>The merged, compiled schema set; built once by the root module after all modules are loaded.</summary>
     public XmlSchemaSet? CompiledSchemaSet { get; set; }

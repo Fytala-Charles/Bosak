@@ -450,6 +450,10 @@
 //                      | Charles Korthout | 5.139   | 10-10-2026     | REQ-123 JNode cluster: AtomizeValue recurses into the jvalue (string-join over     |
 //                      | Charles Korthout |         |                | navigation results) — fixes ElementMap map-navigation regression tests            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.140   | 10-10-2026     | REQ-125 Slice B: controlled policy on unparsed-text(-available/-lines), json-doc and  |
+//                      | Charles Korthout |         |                | collection/uri-collection: authority-approved bytes, no disk/HTTP fallback, no directory |
+//                      | Charles Korthout |         |                | enumeration; collection members re-authorized per member; availability probes IO-free     |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -468,6 +472,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Functions;
+using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.XPath.Standard.Functions;
@@ -10403,6 +10408,22 @@ public static class FunctionLibrary
                 return registered;
         }
 
+        // Controlled profile (REQ-125 Slice B): the authority resolves the collection and
+        // approves every member before it is loaded. The host CollectionLoader hook and the
+        // built-in directory enumeration are bypassed — a refusal never falls back to them.
+        if (ctx.ResourcePolicy is { } collectionPolicy)
+        {
+            string policyKey = key;
+            if (policyKey.Length > 0
+                && !Uri.IsWellFormedUriString(policyKey, UriKind.Absolute)
+                && !System.IO.Path.IsPathRooted(policyKey))
+            {
+                policyKey = ResolveUriAgainstBase(policyKey, ctx.BaseUri);
+            }
+            var approvedMembers = collectionPolicy.AcquireCollectionMembers(policyKey, out _);
+            return LoadCollectionMembers(ctx, approvedMembers, returnUris);
+        }
+
         // Host collection hook (REQ-120 Slice 3): consulted after the registered
         // collections (environment and declared ones take precedence) and before the
         // built-in directory fallback. The hook sees the URI before any ?select=/fragment
@@ -10504,6 +10525,8 @@ public static class FunctionLibrary
     /// through <see cref="EvaluationContext.LoadDocument"/>, so document identity caching,
     /// the per-load-policy cache, and fragment resolution behave exactly as for fn:doc;
     /// cross-tree document order follows the load (creation-sequence) order of the list.
+    /// Under a controlled resource policy every member load is authorized (tagged
+    /// <see cref="ControlledResourceRoute.Collection"/>) before it happens.
     /// </summary>
     /// <param name="ctx">The active evaluation context.</param>
     /// <param name="docs">The member document URIs (or absolute file paths), in collection order.</param>
@@ -10515,7 +10538,7 @@ public static class FunctionLibrary
         foreach (var doc in docs)
         {
             var (docPath, fragment) = SplitCollectionPathAndFragment(doc);
-            var node = ctx.LoadDocument(docPath);
+            var node = ctx.LoadDocument(docPath, ControlledResourceRoute.Collection);
             string itemUri = node.DocumentUri;
             if (fragment != null)
             {
@@ -10686,30 +10709,40 @@ public static class FunctionLibrary
                 throw new InvalidOperationException("FOUT1170");
             }
 
-            var path = ctx.ResourceUriMapper?.Invoke(resolved) ?? resolved;
-
             string content;
-            if (File.Exists(path))
+            if (ctx.ResourcePolicy is { } policy)
             {
-                content = DecodeBytes(File.ReadAllBytes(path), encoding);
-            }
-            else if (Uri.TryCreate(path, UriKind.Absolute, out var uri) &&
-                     (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
-            {
-                if (string.IsNullOrEmpty(encoding))
-                {
-                    // Let HttpClient honor the response's Content-Type charset.
-                    content = _httpClient.GetStringAsync(uri).GetAwaiter().GetResult();
-                }
-                else
-                {
-                    var bytes = _httpClient.GetByteArrayAsync(uri).GetAwaiter().GetResult();
-                    content = DecodeBytes(bytes, encoding);
-                }
+                // Controlled profile: the authority supplies authoritative bytes; the
+                // resource mapper, filesystem and HTTP paths are never consulted.
+                var bytes = policy.AcquireBytes(resolved, ControlledResourceRoute.TextResource, out _);
+                content = DecodeBytes(bytes, encoding);
             }
             else
             {
-                throw new InvalidOperationException("FOUT1170");
+                var path = ctx.ResourceUriMapper?.Invoke(resolved) ?? resolved;
+
+                if (File.Exists(path))
+                {
+                    content = DecodeBytes(File.ReadAllBytes(path), encoding);
+                }
+                else if (Uri.TryCreate(path, UriKind.Absolute, out var uri) &&
+                         (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+                {
+                    if (string.IsNullOrEmpty(encoding))
+                    {
+                        // Let HttpClient honor the response's Content-Type charset.
+                        content = _httpClient.GetStringAsync(uri).GetAwaiter().GetResult();
+                    }
+                    else
+                    {
+                        var bytes = _httpClient.GetByteArrayAsync(uri).GetAwaiter().GetResult();
+                        content = DecodeBytes(bytes, encoding);
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("FOUT1170");
+                }
             }
 
             ValidateXmlCharacters(content);
@@ -10880,6 +10913,23 @@ public static class FunctionLibrary
                 !string.IsNullOrEmpty(resolvedUri.Fragment))
             {
                 return XdmValue.False;
+            }
+
+            if (ctx.ResourcePolicy is { } policy)
+            {
+                // Controlled profile: availability is decided by the authority alone —
+                // no filesystem probe and no HTTP HEAD request are performed.
+                try
+                {
+                    var bytes = policy.AcquireBytes(resolved, ControlledResourceRoute.TextResource, out _);
+                    var decoded = DecodeBytes(bytes, encoding);
+                    ValidateXmlCharacters(decoded);
+                    return XdmValue.True;
+                }
+                catch
+                {
+                    return XdmValue.False;
+                }
             }
 
             var path = ctx.ResourceUriMapper?.Invoke(resolved) ?? resolved;
@@ -19333,71 +19383,81 @@ public static class FunctionLibrary
         string resolvedUri = ResolveUriAgainstBase(uri, ctx.BaseUri);
 
         string json;
-        var mappedPath = ctx.ResourceUriMapper?.Invoke(uri) ?? ctx.ResourceUriMapper?.Invoke(resolvedUri);
-        if (mappedPath is not null)
+        if (ctx.ResourcePolicy is { } jsonPolicy)
         {
-            // The suite maps this (typically http:) URI to a local JSON resource file.
-            try
-            {
-                json = DecodeJsonBytes(File.ReadAllBytes(mappedPath));
-            }
-            catch (InvalidOperationException)
-            {
-                throw;
-            }
-            catch
-            {
-                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
-            }
-        }
-        else if (Uri.TryCreate(resolvedUri, UriKind.Absolute, out var resolvedUriObj) && resolvedUriObj.IsFile && File.Exists(resolvedUriObj.LocalPath))
-        {
-            // Local JSON file: read as bytes and decode strictly (fn:json-doc inherits the
-            // fn:unparsed-text decoding rules, so undecodable content is FOUT1190/FOUT1200,
-            // not silently replaced U+FFFD characters). Reading bytes also avoids routing
-            // JSON resources through the XML document loader (ctx.DocumentLoader).
-            try
-            {
-                json = DecodeJsonBytes(File.ReadAllBytes(resolvedUriObj.LocalPath));
-            }
-            catch (InvalidOperationException)
-            {
-                throw;
-            }
-            catch
-            {
-                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
-            }
-        }
-        else if (ctx.DocumentLoader is not null)
-        {
-            try
-            {
-                var node = ctx.DocumentLoader(resolvedUri);
-                json = node.StringValue;
-            }
-            catch (InvalidOperationException)
-            {
-                throw;
-            }
-            catch
-            {
-                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
-            }
+            // Controlled profile: the authority supplies authoritative bytes; the mapper,
+            // filesystem, document-loader and raw-path fallbacks are never consulted.
+            var jsonBytes = jsonPolicy.AcquireBytes(resolvedUri, ControlledResourceRoute.JsonResource, out _);
+            json = DecodeJsonBytes(jsonBytes);
         }
         else
         {
-            try
+            var mappedPath = ctx.ResourceUriMapper?.Invoke(uri) ?? ctx.ResourceUriMapper?.Invoke(resolvedUri);
+            if (mappedPath is not null)
             {
-                json = DecodeJsonBytes(File.ReadAllBytes(resolvedUri));
+                // The suite maps this (typically http:) URI to a local JSON resource file.
+                try
+                {
+                    json = DecodeJsonBytes(File.ReadAllBytes(mappedPath));
+                }
+                catch (InvalidOperationException)
+                {
+                    throw;
+                }
+                catch
+                {
+                    throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+                }
             }
-            catch (InvalidOperationException)
+            else if (Uri.TryCreate(resolvedUri, UriKind.Absolute, out var resolvedUriObj) && resolvedUriObj.IsFile && File.Exists(resolvedUriObj.LocalPath))
             {
-                throw;
+                // Local JSON file: read as bytes and decode strictly (fn:json-doc inherits the
+                // fn:unparsed-text decoding rules, so undecodable content is FOUT1190/FOUT1200,
+                // not silently replaced U+FFFD characters). Reading bytes also avoids routing
+                // JSON resources through the XML document loader (ctx.DocumentLoader).
+                try
+                {
+                    json = DecodeJsonBytes(File.ReadAllBytes(resolvedUriObj.LocalPath));
+                }
+                catch (InvalidOperationException)
+                {
+                    throw;
+                }
+                catch
+                {
+                    throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+                }
             }
-            catch
+            else if (ctx.DocumentLoader is not null)
             {
-                throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+                try
+                {
+                    var node = ctx.DocumentLoader(resolvedUri);
+                    json = node.StringValue;
+                }
+                catch (InvalidOperationException)
+                {
+                    throw;
+                }
+                catch
+                {
+                    throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+                }
+            }
+            else
+            {
+                try
+                {
+                    json = DecodeJsonBytes(File.ReadAllBytes(resolvedUri));
+                }
+                catch (InvalidOperationException)
+                {
+                    throw;
+                }
+                catch
+                {
+                    throw new InvalidOperationException($"FOUT1170: Cannot load JSON document {uri}");
+                }
             }
         }
 

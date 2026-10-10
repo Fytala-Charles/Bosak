@@ -107,9 +107,13 @@
 //                      | Charles Korthout | 2.36  | 16-10-2026     | REQ-123 PR1131: TryGetDirectVariable for lexical let scoping (SaveVariables must not   |
 //                      |                  |       |                | trigger lazy global resolution — K2-FunctionProlog-15)                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.37  | 10-10-2026     | REQ-125 Slice B: ResourcePolicy + controlled LoadDocument (authority-approved bytes,     |
+//                      |                  |       |                | no disk/network fallback, DTD-prohibited parse, per-route purpose tagging)               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
+using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Providers.Xml;
 using System.IO;
 using System.Xml;
@@ -383,6 +387,17 @@ public sealed class EvaluationContext
     internal string[]? RegexGroups { get; set; }
 
     /// <summary>
+    /// Optional controlled resource policy (REQ-125 Slice B). When set, every document load
+    /// through <see cref="LoadDocument(string, ControlledResourceRoute)"/> is authorized by the
+    /// policy's host authority: approved bytes are parsed with DTD processing prohibited and
+    /// no disk/network fallback is performed on denial, abstention or callback errors. When
+    /// null (the default), behavior is unchanged. Nested evaluation contexts (fn:transform,
+    /// xsl:evaluate, streaming pipelines) inherit the same policy instance so receipts and
+    /// refusals stay authoritative across nesting.
+    /// </summary>
+    public ControlledResourcePolicy? ResourcePolicy { get; set; }
+
+    /// <summary>
     /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.
     /// </summary>
     public Func<string, IXdmNode>? DocumentLoader { get; set; }
@@ -570,7 +585,24 @@ public sealed class EvaluationContext
     /// implement it themselves.
     /// </remarks>
     public IXdmNode LoadDocument(string uri)
+        => LoadDocument(uri, ControlledResourceRoute.Document);
+
+    /// <summary>
+    /// Loads a document by URI for the supplied acquisition route, using the cache and —
+    /// unless a <see cref="ResourcePolicy"/> is attached — <see cref="DocumentLoader"/>.
+    /// </summary>
+    /// <param name="uri">The document URI; relative URIs are resolved against <see cref="BaseUri"/>.</param>
+    /// <param name="route">The acquisition route (purpose) the load is performed for; recorded on
+    /// the policy receipts when a controlled policy is attached.</param>
+    /// <returns>The (cached) document node for the URI.</returns>
+    /// <exception cref="InvalidOperationException">No document loader is configured, the document
+    /// cannot be loaded (FODC0002/FODC0005), or — under a controlled policy — the authority refused
+    /// the acquisition (XV0004/XV0005). A refusal never triggers a disk/network fallback.</exception>
+    public IXdmNode LoadDocument(string uri, ControlledResourceRoute route)
     {
+        if (ResourcePolicy is { } policy)
+            return LoadDocumentControlled(uri, route, policy);
+
         if (DocumentLoader is null)
             throw new InvalidOperationException($"No document loader configured. Cannot load document: {uri}");
 
@@ -618,6 +650,36 @@ public sealed class EvaluationContext
             throw new InvalidOperationException($"FODC0002: Document not available: {uri}");
         }
 
+        return CacheLoadedDocument(uri, node);
+    }
+
+    /// <summary>
+    /// Controlled-profile load: the policy's authority supplies authoritative bytes (or refuses);
+    /// the legacy mapper/loader — and therefore any disk/network fallback — is never consulted,
+    /// and the approved bytes are parsed with DTD processing prohibited.
+    /// </summary>
+    private IXdmNode LoadDocumentControlled(string uri, ControlledResourceRoute route, ControlledResourcePolicy policy)
+    {
+        if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute) && !string.IsNullOrEmpty(BaseUri))
+            uri = new Uri(new Uri(BaseUri), uri).AbsoluteUri;
+
+        if (_documentCache.TryGetValue((uri, DocumentLoadPolicy), out var cachedControlled))
+        {
+            DocumentLoaded?.Invoke(uri);
+            return cachedControlled;
+        }
+
+        var bytes = policy.AcquireBytes(uri, route, out var effectiveUri);
+        var node = Bosak.XPath.Providers.Xml.XDocumentProvider.LoadControlled(bytes, effectiveUri);
+        return CacheLoadedDocument(uri, node);
+    }
+
+    /// <summary>
+    /// Shared post-load tail: whitespace/strip-space post-processing, eager creation-sequence
+    /// registration for XDocument-backed trees, document caching and the DocumentLoaded callback.
+    /// </summary>
+    private IXdmNode CacheLoadedDocument(string uri, IXdmNode node)
+    {
         if (DocumentPostProcessor != null)
             node = DocumentPostProcessor(node);
         // Eagerly assign the creation sequence so cross-tree document order follows

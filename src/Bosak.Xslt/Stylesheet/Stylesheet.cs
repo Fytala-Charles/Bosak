@@ -280,6 +280,10 @@
 //                      | Charles Korthout | 2.128 | 10-10-2026     | REQ-123 compare-tail slice: unicode-case-insensitive collation recognized in static    |
 //                      |                  |       |                | collation check                                                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.129 | 10-10-2026     | REQ-125 Slice B: ResolveModuleDocument - controlled compile-time acquisition (include/  |
+//                      |                  |       |                | import, packages, parameter documents) with DTD-prohibited parse; use-when contexts      |
+//                      |                  |       |                | inherit the policy                                                                       |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -293,6 +297,7 @@ using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Api;
 using Bosak.Xslt.Patterns;
@@ -414,6 +419,11 @@ internal sealed class Stylesheet
     private EvaluationContext CreateUseWhenContext(XElement elem, string? explicitBaseUri = null)
     {
         var ctx = new EvaluationContext();
+
+        // Static evaluation inherits the controlled resource policy (REQ-125 Slice B):
+        // resources referenced by use-when/static expressions are authorized acquisitions
+        // like everything else, never silent disk fallbacks.
+        ctx.ResourcePolicy = _schemaState.ResourcePolicy;
 
         // The static base URI for use-when is the base URI of the element's
         // containing stylesheet module, taking xml:base into account.
@@ -1890,7 +1900,7 @@ internal sealed class Stylesheet
             var paramDocAttr = oe.Attribute("parameter-document")?.Value;
             if (!string.IsNullOrEmpty(paramDocAttr))
             {
-                var paramDoc = _resolver.Resolve(paramDocAttr, _baseUri);
+                var paramDoc = ResolveModuleDocument(paramDocAttr, _baseUri, ControlledResourceRoute.Document);
                 var paramProps = OutputProperties.FromSerializationParameters(paramDoc);
                 var merged = paramProps.Clone();
                 OutputProperties.Merge(merged, props);
@@ -5993,7 +6003,7 @@ internal sealed class Stylesheet
 
         try
         {
-            var doc = _resolver.Resolve(href, elementBaseUri);
+            var doc = ResolveModuleDocument(href, elementBaseUri, ControlledResourceRoute.ModuleImport);
             var (moduleDoc, moduleBaseUri) = ExtractModuleDocument(doc, href, resolvedUri);
             var root = moduleDoc.Root;
             // XTSE0165: an xsl:import target that is an xsl:package document is not a
@@ -6031,7 +6041,7 @@ internal sealed class Stylesheet
 
         try
         {
-            var doc = _resolver.Resolve(href, elementBaseUri);
+            var doc = ResolveModuleDocument(href, elementBaseUri, ControlledResourceRoute.ModuleInclude);
             var (moduleDoc, moduleBaseUri) = ExtractModuleDocument(doc, href, resolvedUri);
             var root = moduleDoc.Root;
             // use-when on the root element of an included module excludes the whole module.
@@ -6063,9 +6073,10 @@ internal sealed class Stylesheet
 
         try
         {
-            // Load the package document using the stylesheet resolver. The registry stores
-            // an absolute URI (typically file://), so no base URI resolution is needed.
-            var doc = _resolver.Resolve(location, null);
+            // Load the package document using the module-resolution helper (controlled
+            // policy-aware). The registry stores an absolute URI (typically file://), so
+            // no base URI resolution is needed.
+            var doc = ResolveModuleDocument(location, null, ControlledResourceRoute.Package);
             var root = doc.Root;
             if (root == null)
                 throw new InvalidOperationException($"XTSE0165: Package '{name}' has no root element.");
@@ -7594,6 +7605,35 @@ internal sealed class Stylesheet
         var baseUriObj = new Uri(baseUri);
         var resolved = new Uri(baseUriObj, href);
         return resolved.AbsoluteUri;
+    }
+
+    /// <summary>
+    /// Resolves a compile-time module/resource reference. Under a controlled resource
+    /// policy (REQ-125 Slice B) the policy's host authority supplies authoritative bytes
+    /// (or refuses with XV0004/XV0005); the legacy <see cref="IXsltUriResolver"/> — and
+    /// with it any disk fallback — is never consulted, and the approved bytes are parsed
+    /// with DTD processing prohibited. Without a policy this is exactly
+    /// <see cref="IXsltUriResolver.Resolve"/>.
+    /// </summary>
+    /// <param name="href">The reference to resolve.</param>
+    /// <param name="baseUri">The base URI of the referencing module, or null.</param>
+    /// <param name="route">The acquisition route (module include/import, package, document).</param>
+    private XDocument ResolveModuleDocument(string href, string? baseUri, ControlledResourceRoute route)
+    {
+        if (_schemaState.ResourcePolicy is not { } policy)
+            return _resolver.Resolve(href, baseUri);
+
+        var absolute = ResolveAbsoluteUri(href, baseUri);
+        var bytes = policy.AcquireBytes(absolute, route, out var effectiveUri);
+        var settings = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Prohibit,
+            XmlResolver = null,
+            IgnoreWhitespace = false,
+        };
+        using var stream = new MemoryStream(bytes, writable: false);
+        using var reader = XmlReader.Create(stream, settings, effectiveUri);
+        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
     }
 
     /// <summary>

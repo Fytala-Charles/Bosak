@@ -45,6 +45,10 @@
 //                      | Charles Korthout | 0.18  | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      | Charles Korthout | 0.19  | 09-09-2026     | Perf: construct via the shared XDocumentNode wrapper cache                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.20  | 10-10-2026     | REQ-125 Slice B: fn:transform inherits the caller's controlled resource policy into the  |
+//                      |                  |       |                | nested transform context and compile; stylesheet-location/package acquisitions consult    |
+//                      |                  |       |                | the authority (Transform/Package routes) with no file fallback                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -53,6 +57,7 @@ using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
+using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Bosak.Xslt.Runtime;
@@ -722,6 +727,10 @@ public static class XsltFunctionLibrary
 
         var transformContext = new EvaluationContext();
         transformContext.IsXsltMode = true;
+        // Nested contexts inherit the controlled resource policy (REQ-125 Slice B): every
+        // acquisition inside the nested transform — fn:doc, unparsed-text, further nested
+        // fn:transform calls — is authorized by the same authority, with no disk fallback.
+        transformContext.ResourcePolicy = ctx.ResourcePolicy;
         XdmExecutableSource executableSource = LoadExecutable(options, ctx, staticParameters);
 
         // The static base URI inside the nested stylesheet is the stylesheet's own base URI.
@@ -818,6 +827,9 @@ public static class XsltFunctionLibrary
         var compiler = new XsltCompiler();
         if (staticParameters != null)
             compiler.StaticParameters = staticParameters;
+        // The nested compile inherits the controlled policy so the nested stylesheet's own
+        // xsl:include/xsl:import/xsl:import-schema acquisitions are authorized too.
+        compiler.ResourcePolicy = ctx.ResourcePolicy;
 
         if (packageName != null)
         {
@@ -826,7 +838,7 @@ public static class XsltFunctionLibrary
             if (location == null)
                 throw new InvalidOperationException(
                     $"FOXT0001: Package '{packageName}' with version '{versionRange}' is not available.");
-            return CompileFromLocation(compiler, location, packageName);
+            return CompileFromLocation(compiler, location, packageName, policy: ctx.ResourcePolicy, route: ControlledResourceRoute.Package);
         }
 
         // The stylesheet-base-uri option supplies the static base URI of the principal
@@ -896,7 +908,8 @@ public static class XsltFunctionLibrary
         // The static base URI of the stylesheet is the original (published) URI, not the
         // mapped local file path, unless the stylesheet-base-uri option overrides it.
         string baseUri = stylesheetBaseUri ?? originalUri;
-        return CompileFromLocation(compiler, mappedUri, baseUri, displayName: originalUri, sourceBaseUri: baseUri);
+        return CompileFromLocation(compiler, mappedUri, baseUri, displayName: originalUri, sourceBaseUri: baseUri,
+            policy: ctx.ResourcePolicy, route: ControlledResourceRoute.Transform);
     }
 
     private static XdmExecutableSource CompileFromLocation(
@@ -904,25 +917,41 @@ public static class XsltFunctionLibrary
         string resolvedUri,
         string baseUri,
         string? displayName = null,
-        string? sourceBaseUri = null)
+        string? sourceBaseUri = null,
+        Bosak.XPath.Runtime.Resources.ControlledResourcePolicy? policy = null,
+        Bosak.XPath.Runtime.Resources.ControlledResourceRoute route = Bosak.XPath.Runtime.Resources.ControlledResourceRoute.Transform)
     {
-        string resolvedPath = resolvedUri;
-        if (Uri.IsWellFormedUriString(resolvedUri, UriKind.Absolute) && new Uri(resolvedUri).IsFile)
-            resolvedPath = new Uri(resolvedUri).LocalPath;
-
         string stylesheetText;
-        try
+        if (policy is not null)
         {
-            stylesheetText = File.ReadAllText(resolvedPath);
+            // Controlled profile (REQ-125 Slice B): the authority supplies the stylesheet
+            // bytes; the file read is never performed and no fallback resolution happens.
+            var bytes = policy.AcquireBytes(resolvedUri, route, out _);
+            using (var byteStream = new MemoryStream(bytes, writable: false))
+            using (var reader = new StreamReader(byteStream, detectEncodingFromByteOrderMarks: true))
+            {
+                stylesheetText = reader.ReadToEnd();
+            }
         }
-        catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
+        else
         {
-            // The stylesheet module cannot be retrieved: FOXT0002 (transform-001).
-            throw new InvalidOperationException($"FOXT0002: Failed to retrieve stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException($"FOXT0001: Failed to load stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
+            string resolvedPath = resolvedUri;
+            if (Uri.IsWellFormedUriString(resolvedUri, UriKind.Absolute) && new Uri(resolvedUri).IsFile)
+                resolvedPath = new Uri(resolvedUri).LocalPath;
+
+            try
+            {
+                stylesheetText = File.ReadAllText(resolvedPath);
+            }
+            catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
+            {
+                // The stylesheet module cannot be retrieved: FOXT0002 (transform-001).
+                throw new InvalidOperationException($"FOXT0002: Failed to retrieve stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"FOXT0001: Failed to load stylesheet '{displayName ?? resolvedUri}': {ex.Message}");
+            }
         }
 
         XDocument stylesheetDoc;

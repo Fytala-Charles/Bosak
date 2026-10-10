@@ -46,11 +46,18 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 02-10-2026     | validation-0201 role split: CompilerSchemaSet joins both scopes, EnvironmentSchemaSet |
 //                      |                  |       |                | compile-time only; imported-only set re-loads fresh XmlSchema instances per winner       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 10-10-2026     | REQ-125 Slice B: controlled schema acquisition - location hints and nested xs:import/     |
+//                      |                  |       |                | include/redefine resolve through the policy authority; set XmlResolver switched to        |
+//                      |                  |       |                | ControlledSchemaResolver (covers by-URI re-adds); controlled parses prohibit DTDs         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Linq;
+using Bosak.XPath.Runtime.Resources;
 
 namespace Bosak.Xslt.Stylesheet;
 
@@ -78,7 +85,14 @@ internal static class SchemaSetBuilder
         if (winners.Count == 0 && state.CompilerSchemaSet is null && state.EnvironmentSchemaSet is null)
             return null;
 
-        var set = new XmlSchemaSet { XmlResolver = new XmlUrlResolver() };
+        // Controlled profile (REQ-125 Slice B): every schema-document read — location hints,
+        // by-URI set adds, and nested xs:import/include/redefine resolution at Compile —
+        // goes through the policy authority instead of the XmlUrlResolver.
+        var documentResolver = state.ResourcePolicy is { } policy
+            ? (XmlResolver)new ControlledSchemaResolver(policy)
+            : new XmlUrlResolver();
+
+        var set = new XmlSchemaSet { XmlResolver = documentResolver };
         var addedDocuments = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         // Imported-only set: filled in parallel with the winner loop below. It is the
         // construction-validation component scope (XSLT 3.0 §11.9): host-supplied
@@ -107,13 +121,13 @@ internal static class SchemaSetBuilder
                     // a schema object added to (and compiled by) one XmlSchemaSet must not
                     // be shared with another — the second set's Compile silently loses its
                     // declarations (import-schema-081/185b/186/187/202).
-                    importedOnly ??= NewSet();
+                    importedOnly ??= NewSet(documentResolver);
                     importedOnly.Add(LoadSchema(state, decl)!);
                 }
                 else
                 {
                     AddTolerant(set, schema, addedDocuments);
-                    AddTolerant(importedOnly ??= NewSet(), LoadSchema(state, decl)!, importedOnlyDocuments);
+                    AddTolerant(importedOnly ??= NewSet(documentResolver), LoadSchema(state, decl)!, importedOnlyDocuments);
                 }
             }
 
@@ -144,7 +158,7 @@ internal static class SchemaSetBuilder
                     if (existing.SourceUri is { Length: > 0 } uri && IsShadowedHostUri(uri, shadowedHostUris))
                         continue;
                     AddTolerant(set, existing, addedDocuments);
-                    AddTolerant(importedOnly ??= NewSet(), existing, importedOnlyDocuments);
+                    AddTolerant(importedOnly ??= NewSet(documentResolver), existing, importedOnlyDocuments);
                 }
             }
 
@@ -177,7 +191,7 @@ internal static class SchemaSetBuilder
             // validate against its synthesized declarations) or a stylesheet-import host set.
             if (winners.Count > 0 || state.CompilerSchemaSet is not null)
             {
-                importedOnly ??= NewSet();
+                importedOnly ??= NewSet(documentResolver);
                 AddXmlNamespaceSchema(importedOnly);
                 importedOnly.Compile();
                 importedOnlySet = importedOnly;
@@ -219,7 +233,8 @@ internal static class SchemaSetBuilder
         return combined;
     }
 
-    private static XmlSchemaSet NewSet() => new() { XmlResolver = new XmlUrlResolver() };
+    private static XmlSchemaSet NewSet(XmlResolver? documentResolver = null)
+        => new() { XmlResolver = documentResolver ?? new XmlUrlResolver() };
 
     /// <summary>
     /// The predefined XML namespace (<c>http://www.w3.org/XML/1998/namespace</c>) is implicitly
@@ -362,7 +377,7 @@ internal static class SchemaSetBuilder
 
         if (decl.InlineSchema is { } inline)
         {
-            schema = ReadSchema(inline.ToString(SaveOptions.DisableFormatting), decl.BaseUri);
+            schema = ReadSchema(inline.ToString(SaveOptions.DisableFormatting), decl.BaseUri, controlled: state.ResourcePolicy is not null);
             // xsl:import-schema without @namespace takes the inline schema's target namespace
             // (the spec example, import-schema-179); with @namespace they must match, and an
             // inline schema has no fallback — XTSE0215 (import-schema-154).
@@ -372,48 +387,74 @@ internal static class SchemaSetBuilder
             return schema;
         }
 
-        if (state.SchemaResolver is { } resolver)
+        if (state.ResourcePolicy is { } schemaPolicy)
         {
-            using var stream = resolver(ns, decl.Locations);
-            if (stream is not null)
-            {
-                var candidate = ReadSchema(stream, baseUri: null);
-                // The resolver was asked for namespace ns; a document with a different target
-                // namespace is not a schema for that namespace (import-schema-201).
-                if ((candidate.TargetNamespace ?? string.Empty) == ns)
-                    schema = candidate;
-                else
-                    sawMismatch = true;
-            }
-        }
-
-        if (schema is null)
-        {
+            // Controlled profile (REQ-125 Slice B): every location hint is an authority
+            // acquisition. A denial or abstention refuses the compilation (XV0004/XV0005);
+            // the legacy resolver, filesystem and HTTP paths are never consulted, and no
+            // alternate resolution is attempted after a refusal.
             foreach (var location in decl.Locations)
             {
                 var absolute = ResolveLocation(location, decl.BaseUri);
                 if (absolute is null)
                     continue;
-                try
+                var bytes = schemaPolicy.AcquireBytes(absolute, ControlledResourceRoute.Schema, out var effectiveUri);
+                var candidate = ReadSchema(new MemoryStream(bytes, writable: false), effectiveUri, controlled: true);
+                // A schema-location is a hint: a document whose target namespace does not
+                // match the declared namespace simply yields nothing (import-schema-186).
+                if ((candidate.TargetNamespace ?? string.Empty) == ns)
                 {
-                    using var stream = OpenLocation(absolute);
-                    var candidate = ReadSchema(stream, absolute);
-                    // A schema-location is a hint: a document whose target namespace does not
-                    // match the declared namespace simply yields nothing (import-schema-186).
+                    schema = candidate;
+                    break;
+                }
+                sawMismatch = true;
+            }
+        }
+        else
+        {
+            if (state.SchemaResolver is { } resolver)
+            {
+                using var stream = resolver(ns, decl.Locations);
+                if (stream is not null)
+                {
+                    var candidate = ReadSchema(stream, baseUri: null);
+                    // The resolver was asked for namespace ns; a document with a different target
+                    // namespace is not a schema for that namespace (import-schema-201).
                     if ((candidate.TargetNamespace ?? string.Empty) == ns)
-                    {
                         schema = candidate;
-                        break;
+                    else
+                        sawMismatch = true;
+                }
+            }
+
+            if (schema is null)
+            {
+                foreach (var location in decl.Locations)
+                {
+                    var absolute = ResolveLocation(location, decl.BaseUri);
+                    if (absolute is null)
+                        continue;
+                    try
+                    {
+                        using var stream = OpenLocation(absolute);
+                        var candidate = ReadSchema(stream, absolute);
+                        // A schema-location is a hint: a document whose target namespace does not
+                        // match the declared namespace simply yields nothing (import-schema-186).
+                        if ((candidate.TargetNamespace ?? string.Empty) == ns)
+                        {
+                            schema = candidate;
+                            break;
+                        }
+                        sawMismatch = true;
                     }
-                    sawMismatch = true;
-                }
-                catch (System.IO.IOException)
-                {
-                    // Try the next location hint.
-                }
-                catch (System.Net.Http.HttpRequestException)
-                {
-                    // Try the next location hint.
+                    catch (System.IO.IOException)
+                    {
+                        // Try the next location hint.
+                    }
+                    catch (System.Net.Http.HttpRequestException)
+                    {
+                        // Try the next location hint.
+                    }
                 }
             }
         }
@@ -466,16 +507,16 @@ internal static class SchemaSetBuilder
         return new MemoryStream(bytes, writable: false);
     }
 
-    private static XmlSchema ReadSchema(string xml, string? baseUri)
+    private static XmlSchema ReadSchema(string xml, string? baseUri, bool controlled = false)
     {
         using var stringReader = new StringReader(xml);
-        using var reader = XmlReader.Create(stringReader, ReaderSettings(), baseUri is null ? null : new XmlParserContext(null, null, null, XmlSpace.None) { BaseURI = baseUri });
+        using var reader = XmlReader.Create(stringReader, ReaderSettings(controlled), baseUri is null ? null : new XmlParserContext(null, null, null, XmlSpace.None) { BaseURI = baseUri });
         return ReadSchema(reader);
     }
 
-    private static XmlSchema ReadSchema(Stream stream, string? baseUri)
+    private static XmlSchema ReadSchema(Stream stream, string? baseUri, bool controlled = false)
     {
-        using var reader = XmlReader.Create(stream, ReaderSettings(), baseUri is null ? null : new XmlParserContext(null, null, null, XmlSpace.None) { BaseURI = baseUri });
+        using var reader = XmlReader.Create(stream, ReaderSettings(controlled), baseUri is null ? null : new XmlParserContext(null, null, null, XmlSpace.None) { BaseURI = baseUri });
         return ReadSchema(reader);
     }
 
@@ -496,10 +537,12 @@ internal static class SchemaSetBuilder
         }
     }
 
-    private static XmlReaderSettings ReaderSettings() => new()
+    private static XmlReaderSettings ReaderSettings(bool controlled = false) => new()
     {
+        // Controlled profile: no resolver at all, so approved schema bytes cannot pull in
+        // external DTDs or entities during the parse.
         DtdProcessing = DtdProcessing.Ignore,
-        XmlResolver = new XmlUrlResolver(),
+        XmlResolver = controlled ? null : new XmlUrlResolver(),
     };
 
     /// <summary>
