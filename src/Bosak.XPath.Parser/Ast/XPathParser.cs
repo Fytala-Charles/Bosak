@@ -162,6 +162,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.73   | 10-10-2026     | REQ-123 JNode cluster: integer-literal lookup step (E/2) and braced key selector
 //                      | Charles Korthout |        |                | child::{K} (PR2667) in step position
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 1.74  | 10-10-2026     | REQ-123 destructuring let (PR1131): let $(...)/$[...]/${...} bindings with per-variable |
+//                      |                  |       |                | and whole-pattern type declarations (XPST0003 in 3.1); 'as' allowed in simple let      |
+//                      |                  |       |                | bindings at XPath 4.0                                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -447,7 +451,9 @@ internal sealed class XPathParser
     // ForClause ::= "for" ForBinding ("," ForBinding)*
     // ForBinding ::= "$" VarName ("at" "$" VarName)? "in" ExprSingle
     // LetClause ::= "let" LetBinding ("," LetBinding)*
-    // LetBinding ::= "$" VarName ":="" ExprSingle
+    // LetBinding ::= "$" VarName (TypeDeclaration)? ":=" ExprSingle        (XPath 3.1 / XQuery)
+    //              | "$" DestructuringPattern (TypeDeclaration)? ":=" ExprSingle   (XPath 4.0, PR1131)
+    // DestructuringPattern ::= ("(" | "[" | "{") "$" VarName (TypeDeclaration)? ("," ...)* (")" | "]" | "}")
     // WhereClause ::= "where" ExprSingle
     // CountClause ::= "count" "$" VarName
     // OrderByClause ::= "order by" OrderSpec ("," OrderSpec)*
@@ -991,14 +997,26 @@ internal sealed class XPathParser
     private QuantifiedBinding ParseSimpleLetBinding()
     {
         Expect(TokenKind.Dollar);
+
+        // XPath 4.0 destructuring (PR1131): 'let $(...)' (sequence), 'let $[...]' (array),
+        // 'let ${...}' (map). In 3.1 a '$' not followed by a variable name is always a
+        // syntax error; name the destructuring forms explicitly in the rejection path.
+        if (Current.Kind is TokenKind.LParen or TokenKind.LBracket or TokenKind.LBrace)
+        {
+            if (!_xpath40)
+                throw new XPathParseException("XPST0003: A destructuring let binding ('$(...)', '$[...]', or '${...}') requires XPath 4.0.", Current.Start);
+            return ParseDestructuringLetBinding();
+        }
+
         var nameTok = ExpectName();
         var (prefix, local, ns) = SplitQName(GetString(nameTok));
 
-        // XQuery TypeDeclaration ("as SequenceType"); XPath 3.1 does not allow it.
+        // XQuery TypeDeclaration ("as SequenceType"); XPath 3.1 does not allow it, but
+        // XPath 4.0 adopts it with coercion semantics (PR1131, prod-LetClause letexprwith-*).
         FlworTypeDeclaration? declaredType = null;
         if (Current.Kind == TokenKind.KeywordAs)
         {
-            if (!_allowFullFlwor)
+            if (!_allowFullFlwor && !_xpath40)
                 throw new XPathParseException("XPST0003: XPath does not allow a type declaration in a let binding.", Current.Start);
             Advance();
             var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
@@ -1008,6 +1026,69 @@ internal sealed class XPathParser
         Expect(TokenKind.Assign);  // := 
         var expr = ParseExprSingle();
         return new QuantifiedBinding(local, expr, null, prefix, ns, declaredType);
+    }
+
+    // DestructuringBinding ::=
+    //   "$" ( "(" | "[" | "{" ) DestructuringVariable ("," DestructuringVariable)* (")" | "]" | "}")
+    //   ("as" SequenceType)? ":=" ExprSingle
+    // DestructuringVariable ::= "$" VarName ("as" SequenceType)?
+    private QuantifiedBinding ParseDestructuringLetBinding()
+    {
+        var kind = Current.Kind switch
+        {
+            TokenKind.LParen => LetDestructuringKind.Sequence,
+            TokenKind.LBracket => LetDestructuringKind.Array,
+            _ => LetDestructuringKind.Map,
+        };
+        var closing = Current.Kind switch
+        {
+            TokenKind.LParen => TokenKind.RParen,
+            TokenKind.LBracket => TokenKind.RBracket,
+            _ => TokenKind.RBrace,
+        };
+        Advance();
+
+        var variables = new List<DestructuringVariable>();
+        if (Current.Kind != closing)
+        {
+            do
+            {
+                Expect(TokenKind.Dollar);
+                var varTok = ExpectName();
+                var (varPrefix, varLocal, varNs) = SplitQName(GetString(varTok));
+                FlworTypeDeclaration? varType = null;
+                if (Current.Kind == TokenKind.KeywordAs)
+                {
+                    Advance();
+                    var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+                    varType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
+                }
+                variables.Add(new DestructuringVariable(varLocal, varPrefix, varNs, varType));
+            } while (Match(TokenKind.Comma));
+        }
+        Expect(closing);
+        if (variables.Count == 0)
+            throw new XPathParseException("XPST0003: A destructuring let binding must declare at least one variable.", Current.Start);
+
+        // Optional whole-pattern type declaration applies to the bound value as a whole
+        // (let-seq-006/008, let-arr-006/008, let-map-006/008).
+        FlworTypeDeclaration? declaredType = null;
+        if (Current.Kind == TokenKind.KeywordAs)
+        {
+            Advance();
+            var (typePrefix, typeLocal, occurrence) = ParseSequenceType();
+            declaredType = new FlworTypeDeclaration(typeLocal, typePrefix, occurrence);
+        }
+
+        Expect(TokenKind.Assign);  // :=
+        var expr = ParseExprSingle();
+        return new QuantifiedBinding(
+            variables[0].VariableName, expr,
+            VariablePrefix: variables[0].VariablePrefix,
+            VariableNamespaceUri: variables[0].VariableNamespaceUri,
+            DeclaredType: declaredType,
+            Destructuring: kind,
+            DestructuringVariables: variables);
     }
 
     // QuantifiedExpr ::= ("some" | "every") SimpleForBinding ("satisfies" ExprSingle)+

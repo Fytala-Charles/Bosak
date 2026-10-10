@@ -50,6 +50,9 @@
 //                      | Charles Korthout | 1.10  | 09-10-2026     | REQ-123 element-to-map slice: LookupKey opcode for the PR2688 string-literal lookup step |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11   | 10-10-2026     | REQ-123 JNode cluster: LookupIndex/LookupComputed opcodes
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 1.12  | 10-10-2026     | REQ-123 destructuring let: Destructure opcode for XPath 4.0 let $(...)/$[...]/${...};
+//                      |                  |       |                | SaveVariables/RestoreVariables opcodes for lexical let scoping (XPST0008)
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
@@ -127,6 +130,11 @@ internal enum IrOpCode : byte
     LoadVariable,
     /// <summary>Stores a value into a variable.</summary>
     StoreVariable,
+    /// <summary>Saves the current values of the given variables (literal-pool key list) so a
+    /// let body can shadow them lexically; paired with <see cref="RestoreVariables"/>.</summary>
+    SaveVariables,
+    /// <summary>Restores the variable values captured by the matching <see cref="SaveVariables"/>.</summary>
+    RestoreVariables,
 
     // ---- Literals ----------------------------------------------------
     /// <summary>Loads a string literal from the literal pool.</summary>
@@ -430,5 +438,8 @@ internal enum IrOpCode : byte
 
     // ---- Error -------------------------------------------------------
     /// <summary>Raises a dynamic error (code in the literal pool).</summary>
-    Error
+    Error,
+    /// <summary>Destructures one XPath 4.0 <c>let $(...)/$[...]/${...}</c> binding into its
+    /// variables (binding info in the literal pool; RHS in RegisterA).</summary>
+    Destructure
 }

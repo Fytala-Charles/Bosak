@@ -63,6 +63,10 @@
 //                      |                  |       |                | works; # QName literals XPST0003 at 3.1 + frozen-XPath40 works                            |
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 0.19  | 10-10-2026     | REQ-123 JNode cluster: fn:jtree/fn:jkey/fn:jvalue XPST0017 at 3.1 + frozen-XPath40 works  |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 0.20  | 16-10-2026     | REQ-123 PR1131: destructuring let (seq rest/array FOAY0001/map record fields, typed-let |
+//                      |                  |       |                | coercion + xs:short downcast) and lexical let scoping (inner shadow, trailing XPST0008)   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -1456,5 +1460,103 @@ public class VersionGateTests
         Assert.Equal("1", Seq40("fn:jtree([22]) / * => fn:jkey()")[0]);
         Assert.Equal("22", Seq40("fn:jtree([22]) / * => fn:jvalue()")[0]);
         Assert.Equal("1", Seq40("fn:jtree({'a':1}) / a => fn:jvalue()")[0]);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 PR1131: XPath 4.0 destructuring let bindings and typed lets
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("let $($x, $y) := (1, 2) return $x")]
+    [InlineData("let $[$x, $y] := [1, 2] return $x")]
+    [InlineData("let ${$x, $y} := {'x': 1} return $x")]
+    [InlineData("let $v as xs:double := 42 return $v")]
+    public void Compile_DestructuringLet_DefaultOptions_ThrowXpst0003(string expression)
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_DestructuringSequence_FrozenXPath40_Works()
+    {
+        // The LAST variable binds all remaining items as a sequence (let-seq-002/009).
+        Assert.Equal(new List<string> { "1", "2-3" },
+            Seq40("let $($x, $y) := (1, 2, 3) return ($x, string-join($y, '-'))"));
+        Assert.Equal("1-2-3", Eval40("let $($x) := 1 to 3 return string-join($x, '-')").ToString());
+        // Surplus variables bind the empty sequence (let-seq-003).
+        Assert.Equal("0", Eval40("let $($x, $y, $z) := (1, 2) return count($z)").ToString());
+        // The whole-pattern type coerces the whole value; an array RHS atomizes to members.
+        Assert.Equal("7", Eval40("let $($x, $y) as xs:integer* := [3, 4] return $x + $y").ToString());
+    }
+
+    [Fact]
+    public void Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Eval40("let $($x, $y) as xs:integer+ := (1, 'two') return $x"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_DestructuringArray_FrozenXPath40_Works()
+    {
+        // Strictly positional: surplus members are discarded (let-arr-002).
+        Assert.Equal("2", Eval40("let $[$a, $b] := [1, 2, 3] return $b").ToString());
+        // Surplus variables raise FOAY0001 (let-arr-003).
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("let $[$a, $b, $c] := [1, 2] return $c"));
+        Assert.Contains("FOAY0001", ex.Message);
+        // The whole-pattern type must be an array type (let-arr-019).
+        var ex2 = Assert.Throws<InvalidOperationException>(() => Eval40("let $[$a] as xs:integer := [1] return $a"));
+        Assert.Contains("XPTY0004", ex2.Message);
+    }
+
+    [Fact]
+    public void Evaluate_DestructuringMap_FrozenXPath40_Works()
+    {
+        // The variable local name is the map key; a missing key binds the empty sequence.
+        Assert.Equal("0", Eval40("let ${$x, $y} := {'x': 1} return count($y)").ToString());
+        // map(K,V) whole-pattern types coerce the entries.
+        Assert.Equal("1", Eval40("let ${$x} as map(xs:string, xs:integer) := {'x': 1} return $x").ToString());
+        // A record-typed pattern rejects variables that are not declared fields (let-map-025).
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Eval40("let ${$z} as record(a as xs:integer) := {'a': 1} return $z"));
+        Assert.Contains("XPTY0004", ex.Message);
+        // The RHS must be a single map even when the type allows empty (let-map-019).
+        var ex2 = Assert.Throws<InvalidOperationException>(() =>
+            Eval40("let ${$x} as map(*)? := ({'x': 1}, {'y': 2}) return $x"));
+        Assert.Contains("XPTY0004", ex2.Message);
+    }
+
+    [Fact]
+    public void Evaluate_TypedLet_FrozenXPath40_Coerces()
+    {
+        // XPath 4.0 §3.4.2 coercion in variable bindings (letexprwith-*).
+        Assert.Equal("true", Eval40("let $v as xs:double := 42 return $v instance of xs:double").ToString());
+        // §3.4.2 relabeling (PR 254): an integral datum within the target value space
+        // changes its annotation — 5.0 and 42 both become xs:short.
+        Assert.Equal("true", Eval40("let $v as xs:short := 42 return $v instance of xs:short").ToString());
+        Assert.Equal("true", Eval40("let $v as xs:positiveInteger := 3 return $v instance of xs:positiveInteger").ToString());
+        // Relabeling is not casting: a non-integral datum or an out-of-range datum is
+        // not within the target's value space and stays a coercion failure.
+        var exFraction = Assert.Throws<InvalidOperationException>(() => Eval40("let $v as xs:integer := 2.5 return $v"));
+        Assert.Contains("XPTY0004", exFraction.Message);
+        var exRange = Assert.Throws<InvalidOperationException>(() => Eval40("let $v as xs:short := 40000 return $v"));
+        Assert.Contains("XPTY0004", exRange.Message);
+        // A failed coercion is still XPTY0004.
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("let $v as xs:decimal := 'cat' return $v"));
+        Assert.Contains("XPTY0004", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_LetBinding_LexicalScope()
+    {
+        // An inner let shadows an outer binding only within its own body; after the
+        // inner let's body the outer binding is visible again.
+        Assert.Equal(new List<string> { "2", "1" },
+            Seq40("let $x := 1 return ((let $x := 2 return $x), $x)"));
+        // 'let ... return ExprSingle' — the trailing $x is outside the let's scope.
+        var ex = Assert.Throws<InvalidOperationException>(() => Eval40("let $x := 1 return 2, $x"));
+        Assert.Contains("XPST0008", ex.Message);
     }
 }

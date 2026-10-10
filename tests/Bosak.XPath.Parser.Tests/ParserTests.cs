@@ -24,6 +24,9 @@
 //                      | Charles Korthout | 0.9   | 23-08-2026     | Added keyword-as-unprefixed-function-name regression tests                             |
 //                      | Charles Korthout | 0.10  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 16-10-2026     | REQ-123 PR1131: destructuring let AST shape tests (seq/array/map kinds, whole/variable  |
+//                      |                  |       |                | types) + 3.1 XPST0003 gates and empty-pattern rejection                                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -774,5 +777,87 @@ public class ParserTests
         // A simple for clause is represented directly as a ForExpressionNode.
         var node = XPathParser.Parse("for $x in 1 to 3 return $x", allowFullFlwor: true);
         Assert.IsType<ForExpressionNode>(node);
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 PR1131: XPath 4.0 destructuring let bindings
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void LetDestructuringSequence_ParsesVariablesAndWholeType()
+    {
+        var node = XPathParser.Parse("let $($x, $y as xs:integer, $z) as xs:double* := (1, 2, 3) return $x", xpath40: true);
+        var let = Assert.IsType<LetExpressionNode>(node);
+        var binding = Assert.Single(let.Bindings);
+        Assert.Equal(LetDestructuringKind.Sequence, binding.Destructuring);
+        Assert.Equal(3, binding.DestructuringVariables?.Count);
+        Assert.Equal("x", binding.VariableName);
+        Assert.Collection(binding.DestructuringVariables!,
+            v => { Assert.Equal("x", v.VariableName); Assert.Null(v.DeclaredType); },
+            v =>
+            {
+                Assert.Equal("y", v.VariableName);
+                Assert.NotNull(v.DeclaredType);
+                Assert.Equal("integer", v.DeclaredType!.TypeName);
+                Assert.Equal("xs", v.DeclaredType.Prefix);
+                Assert.Equal(OccurrenceIndicator.One, v.DeclaredType.Occurrence);
+            },
+            v => { Assert.Equal("z", v.VariableName); Assert.Null(v.DeclaredType); });
+        Assert.NotNull(binding.DeclaredType);
+        Assert.Equal("double", binding.DeclaredType!.TypeName);
+        Assert.Equal(OccurrenceIndicator.ZeroOrMore, binding.DeclaredType.Occurrence);
+    }
+
+    [Fact]
+    public void LetDestructuringArray_ParsesBracketKind()
+    {
+        var node = XPathParser.Parse("let $[$first, $second] := [1, 2] return $first", xpath40: true);
+        var let = Assert.IsType<LetExpressionNode>(node);
+        var binding = Assert.Single(let.Bindings);
+        Assert.Equal(LetDestructuringKind.Array, binding.Destructuring);
+        Assert.Null(binding.DeclaredType);
+        Assert.Collection(binding.DestructuringVariables!,
+            v => Assert.Equal("first", v.VariableName),
+            v => Assert.Equal("second", v.VariableName));
+    }
+
+    [Fact]
+    public void LetDestructuringMap_ParsesBraceKindAndWholeType()
+    {
+        var node = XPathParser.Parse("let ${$a, $ns:b as xs:string} as map(*) := map { 'a': 1 } return $a", xpath40: true);
+        var let = Assert.IsType<LetExpressionNode>(node);
+        var binding = Assert.Single(let.Bindings);
+        Assert.Equal(LetDestructuringKind.Map, binding.Destructuring);
+        Assert.Equal("map(*)", binding.DeclaredType!.TypeName);
+        Assert.Equal(OccurrenceIndicator.One, binding.DeclaredType.Occurrence);
+        Assert.Collection(binding.DestructuringVariables!,
+            v => { Assert.Equal("a", v.VariableName); Assert.Null(v.VariablePrefix); },
+            v =>
+            {
+                Assert.Equal("b", v.VariableName);
+                Assert.Equal("ns", v.VariablePrefix);
+                Assert.NotNull(v.DeclaredType);
+                Assert.Equal("string", v.DeclaredType!.TypeName);
+            });    }
+
+    [Theory]
+    [InlineData("let $(x) := (1) return $x")]
+    [InlineData("let $[x] := [1] return $x")]
+    [InlineData("let ${x} := map {'x': 1} return $x")]
+    [InlineData("let $v as xs:double := 42 return $v")]
+    public void LetDestructuring_XPath31_ThrowsXpst0003(string expression)
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPathParser.Parse(expression));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("let $() := (1) return 1")]
+    [InlineData("let $[] := [1] return 1")]
+    [InlineData("let ${} := map { 'x': 1 } return 1")]
+    public void LetDestructuring_EmptyPattern_ThrowsXpst0003(string expression)
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPathParser.Parse(expression, xpath40: true));
+        Assert.Contains("XPST0003", ex.Message);
     }
 }
