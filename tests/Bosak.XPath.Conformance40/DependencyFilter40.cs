@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 09-10-2026     | Creation (REQ-123 4.0-Exp S2): XP40+ spec tokens; 4.0 features Bosak lacks are skipped;   |
 //                      |                  |       |                | no XQuery routing — XQ-only tests skip (XQuery 4.0 mode does not exist yet)              |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-123 sort-with slice: typedData declared unsupported (no PSVI-typed source nodes)     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -45,6 +46,7 @@ internal sealed class DependencyFilter40
         "binary",                            // EXPath-style binary data model not implemented
         "fn-format-integer-CLDR",            // CLDR numbering systems not implemented
         "non_unicode_codepoint_collation",   // non-Unicode codepoint collations not supported
+        "typedData",                         // harness does not build schema-validated (PSVI-typed) source nodes
     };
 
     // XPath spec tokens satisfiable at the 4.0 compatibility level (a superset of 3.1,
