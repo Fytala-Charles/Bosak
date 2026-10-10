@@ -8,6 +8,12 @@
 > adopts *stabilized* 4.0 features early as a differentiator, but does not chase the
 > moving pre-standard spec. This dossier is the concrete plan that REQ-118's registry
 > entry points at; each scheduled slice gets its own sub-REQ.
+>
+> **Reference companion (2026-10-10):** the per-feature catalog of every landed, deferred
+> and rejected 4.x syntax decision — intents, 1.x–3.x supersession history, language-alignment
+> drift warnings, and performance notes — lives at
+> [`docs/xpath40-catalog/README.md`](xpath40-catalog/README.md) (REQ-126). This dossier
+> remains the plan/stability-tier record; the catalog is the feature-level reference.
 
 ---
 
