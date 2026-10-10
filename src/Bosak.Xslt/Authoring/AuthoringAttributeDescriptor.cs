@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -43,6 +44,11 @@ public enum AuthoringAttributeSlotKind
 /// <summary>
 /// An immutable description of one attribute occurrence, exactly as written in the retained source.
 /// </summary>
+/// <remarks>
+/// A descriptor is valid for the lifetime of its <see cref="AuthoringSnapshot"/> and must not be used
+/// against any other snapshot or revision. Instances are immutable, hold no unmanaged resources and
+/// need no disposal; they are safe to share across threads.
+/// </remarks>
 public sealed class AuthoringAttributeDescriptor
 {
     internal AuthoringAttributeDescriptor(

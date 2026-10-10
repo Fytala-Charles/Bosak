@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -40,6 +41,10 @@ public enum AuthoringFailureKind
 /// An immutable, classified description of why an authoring operation did not succeed for one module.
 /// Inspection never throws for bad source; it reports instances of this type instead.
 /// </summary>
+/// <remarks>
+/// Instances are immutable value-like records: they hold no unmanaged resources, need no disposal,
+/// and are safe to share across threads and to retain for as long as the failure is relevant.
+/// </remarks>
 public sealed class AuthoringFailure
 {
     /// <summary>Initializes a new authoring failure.</summary>

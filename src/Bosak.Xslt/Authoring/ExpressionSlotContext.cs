@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -47,6 +48,10 @@ public sealed record AuthoringNamespaceBinding(string Prefix, string Uri);
 /// default XPath namespace, resolved base URI and effective XSLT version — so a consumer can edit an
 /// expression in its true context instead of as a naked XPath string. Instances are immutable.
 /// </summary>
+/// <remarks>
+/// A context is valid for the lifetime of the <see cref="AuthoringSnapshot"/> that produced it. It
+/// holds no unmanaged resources, needs no disposal and is safe to share across threads.
+/// </remarks>
 public sealed class ExpressionSlotContext
 {
     internal ExpressionSlotContext(

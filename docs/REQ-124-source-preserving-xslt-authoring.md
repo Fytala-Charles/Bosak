@@ -5,7 +5,7 @@
   <p>Bosak.Braid consumer requirements and observable delivery gates</p>
 </div>
 
-> **Status:** Slices A+B landed 2026-10-10 (source-aware inspection + contextual expression replacement); Slice C (supported adoption: packaging/sample/docs polish, AC-11) next. **Submitted:** 2026-10-10. **Requester:** Bosak.Braid. **Implementation owner:** Bosak maintainers.
+> **Status:** Slices A+B+C landed 2026-10-10 (source-aware inspection + contextual expression replacement + supported adoption: `AuthoringCapabilities` descriptor, AC-11 consumer sample-as-test, lifecycle remarks, regression evidence). **REQ-124 is Implemented, pending owner acceptance.** **Submitted:** 2026-10-10. **Requester:** Bosak.Braid. **Implementation owner:** Bosak maintainers.
 
 ## 1. Purpose and Implementation Readiness
 
@@ -152,7 +152,7 @@ Additional move/reorder tests are mandatory only before those capabilities are a
 |-------|-------------|-------------------|
 | A: source-aware inspection | Supported source input, pre-preprocessing retention, read-only handle/descriptors, ranges, opaque blocks and failure taxonomy | Real import, graph projection and unchanged export |
 | B: first candidate edit | Contextual expression replacement, candidate isolation/correspondence and source-preserving emission | First graph edit with edited semantic/fidelity fixtures |
-| C: supported adoption | Public packaging/sample/docs, capability/version/lifecycle agreement and regression evidence | Pin dependency and integrate P1 import/edit/export |
+| Slice C: supported adoption | Public packaging/sample/docs, capability/version/lifecycle agreement and regression evidence — **delivered 2026-10-10** (`AuthoringCapabilities`, AC-11 sample-as-test, `<remarks>` lifecycle contract, gates green) | Pin dependency and integrate P1 import/edit/export |
 | Later expansion | Additional safe edits, full module editing, richer analysis and measured performance | Broader vocabulary and later phases |
 
 Do not deliver a placeholder model that bypasses Bosak interpretation just to unblock the UI. A smaller supported read-only seam is useful; a misleading lossless claim is not. Slice order/scheduling is a proposal for Bosak acceptance, not an assigned implementation plan.
@@ -169,6 +169,7 @@ No fixed latency/maximum-file-size engine promise is requested yet. Braid curren
 |---------------------|----------------|
 | Accepted slice scope | **Slice A first** (source-aware inspection), then Slice B (expression replacement); §12 order accepted as the implementation plan |
 | Public package strategy (Slices A/B) | **Additive `Bosak.Xslt.Authoring` namespace inside the existing `Bosak.Xslt` package** — no new package/packaging work until Slice C |
+| Packaging/release decision (Slice C) | **Keep shipping inside the existing `Bosak.Xslt` package** (it already publishes; zero packaging churn); a future package split is driven by consumer demand, not anticipated — **delivered 2026-10-10** |
 | Source input/resolver provenance | Immutable engine-owned source envelope: original bytes + detected encoding (BOM, else XML-declaration charset, else UTF-8) + absolute base URI; caller-supplied module resolver for include/import provenance; unsupported encodings refused explicitly |
 | Coordinate conventions | **Line/column (1-based, UTF-16 code units, matching `IXmlLineInfo`) as the primary contract; byte offsets derived deterministically through the retained source** (AC-09 fixtures: CRLF, astral/surrogate pairs, entity spelling, multiline attributes) |
 | Structural-vs-semantic outcome policy | Distinct outcome kinds: structure failure, semantic diagnostics, fidelity capability, capability absence — never conflated; inspection does not require compilability |
