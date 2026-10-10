@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice C)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: CancellationToken, TimeLimit and MaxEngineOperations (cooperative       |
+//                      |                  |       |                | execution controls; engine-checkpoint semantics documented per option)                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Runtime.Vm;
@@ -33,6 +36,15 @@ namespace Bosak.Xslt.Capture;
 /// was hit are retained on the result; the bound breach itself is reported as a classified failure
 /// entry (never as an exception escaping this API). See
 /// <see cref="XsltCaptureFailureKind"/> for the taxonomy.
+/// </para>
+/// <para>
+/// Execution control (REQ-125 Slice D): <see cref="CancellationToken"/>, <see cref="TimeLimit"/> and
+/// <see cref="MaxEngineOperations"/> terminate a runaway transformation cooperatively at engine
+/// checkpoints and are classified as <see cref="XsltCaptureOutcome.Cancelled"/> (token) or as
+/// <c>TimeLimitExceeded</c>/<c>OperationLimitExceeded</c> failures (codes <c>XV0011</c>/<c>XV0012</c>).
+/// A run and its nested <c>fn:transform</c> calls share one gate: nested transforms inherit the
+/// remaining budget, deadline and token. Cancellation and limits never surface as exceptions through
+/// the capture API.
 /// </para>
 /// <para>
 /// Message capture (see <see cref="MaxMessages"/>) is a separate, bounded channel:
@@ -145,4 +157,60 @@ public sealed class XsltCaptureOptions
     }
 
     private int? _maxMessages;
+
+    /// <summary>
+    /// Gets or sets the cooperative cancellation token for the captured transformation. The token
+    /// is observed at engine checkpoints (see <see cref="TimeLimit"/> for the checkpoint
+    /// definition); triggering it terminates the run with the classified
+    /// <see cref="XsltCaptureOutcome.Cancelled"/> outcome, retaining outputs captured before the
+    /// checkpoint observed the trigger. <see langword="null"/> (the default) disables cancellation.
+    /// Cancellation never surfaces as <see cref="OperationCanceledException"/> through this API.
+    /// </summary>
+    public CancellationToken? CancellationToken { get; set; }
+
+    /// <summary>
+    /// Gets or sets the wall-clock budget for the captured transformation. The budget starts when
+    /// the run starts and is checked at engine checkpoints; exceeding it terminates the run with a
+    /// classified failure (code <c>XV0011</c>), retaining outputs captured before the checkpoint.
+    /// <see langword="null"/> (the default) applies no time limit. This is a cooperative bound, not
+    /// a hard preemption; Braid's process termination remains the hard wall-clock control.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">The value is negative or zero.</exception>
+    public TimeSpan? TimeLimit
+    {
+        get => _timeLimit;
+        set
+        {
+            if (value.HasValue && value.Value <= TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(TimeLimit), value, "The time limit must be positive.");
+            _timeLimit = value;
+        }
+    }
+
+    private TimeSpan? _timeLimit;
+
+    /// <summary>
+    /// Gets or sets the engine-operation budget for the captured transformation. One engine
+    /// operation is one checkpoint firing: an XSLT instruction dispatch, a template invocation
+    /// (xsl:call-template / xsl:apply-templates), a secondary result-document production, an
+    /// <c>xsl:message</c> emission, or an output serialization. The budget counts these operations
+    /// exactly, so for a given stylesheet and input the abort point is deterministic; a single
+    /// XPath expression between checkpoints (for example a long loop inside one <c>select</c>
+    /// attribute) is not interrupted mid-evaluation. Exceeding the budget terminates the run with
+    /// a classified failure (code <c>XV0012</c>). <see langword="null"/> (the default) applies no
+    /// operation budget.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">The value is negative.</exception>
+    public long? MaxEngineOperations
+    {
+        get => _maxEngineOperations;
+        set
+        {
+            if (value is < 0)
+                throw new ArgumentOutOfRangeException(nameof(MaxEngineOperations), value, "The engine-operation budget must not be negative.");
+            _maxEngineOperations = value;
+        }
+    }
+
+    private long? _maxEngineOperations;
 }

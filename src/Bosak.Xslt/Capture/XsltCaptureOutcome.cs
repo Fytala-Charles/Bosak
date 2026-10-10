@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice C)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: Cancelled is now triggerable via XsltCaptureOptions.CancellationToken   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Capture;
@@ -20,8 +22,7 @@ namespace Bosak.Xslt.Capture;
 /// <summary>
 /// The distinct outcome of one captured transformation. Every outcome is reported as data; the capture
 /// API never throws for expected error conditions (engine errors, spec errors raised by the stylesheet,
-/// bound breaches, collisions). The taxonomy is shaped for the full REQ-125 controlled profile:
-/// cancellation is reserved for Slice D and cannot be produced by this build.
+/// bound breaches, collisions, cancellation or limit exhaustion).
 /// </summary>
 public enum XsltCaptureOutcome
 {
@@ -48,9 +49,12 @@ public enum XsltCaptureOutcome
     Failed,
 
     /// <summary>
-    /// Reserved for REQ-125 Slice D (execution control): the transformation was cancelled through the
-    /// cooperative cancellation contract. No build up to and including Slice C can produce this
-    /// outcome; it exists so consumers can code against the final taxonomy now.
+    /// The run was terminated by the host-supplied cancellation token (REQ-125 Slice D) at an engine
+    /// checkpoint. Outputs completed before the checkpoint are retained on the result as diagnostics
+    /// together with a <see cref="XsltCaptureFailureKind.Cancelled"/> failure entry; a run that never
+    /// observes the token cannot produce this outcome. Wall-clock and operation-budget limits are
+    /// classified as failures (<c>XV0011</c>/<c>XV0012</c>) on a <see cref="Partial"/> or
+    /// <see cref="Failed"/> outcome instead.
     /// </summary>
     Cancelled,
 }

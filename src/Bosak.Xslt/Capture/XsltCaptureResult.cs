@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice C)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: Cancelled outcome + checkpoint/coverage remarks                         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Capture;
@@ -30,8 +32,10 @@ namespace Bosak.Xslt.Capture;
 /// and every produced output was captured with no failure entries. Any classified failure downgrades
 /// the outcome — <see cref="XsltCaptureOutcome.Partial"/> when at least one output was captured (or,
 /// for a message bound breach, the transformation completed), <see cref="XsltCaptureOutcome.Failed"/>
-/// when the transformation failed before any output was captured. A partial result is diagnostic
-/// evidence, never a successful run.
+/// when the transformation failed before any output was captured. Host cancellation produces the
+/// distinct <see cref="XsltCaptureOutcome.Cancelled"/> outcome (outputs completed before the
+/// observing checkpoint are retained). A partial or cancelled result is diagnostic evidence, never a
+/// successful run.
 /// </para>
 /// <para>
 /// Coverage: capture covers the principal output and every secondary
@@ -39,8 +43,9 @@ namespace Bosak.Xslt.Capture;
 /// (<c>method="json"</c>, <c>method="adaptive"</c>, <c>build-tree="no"</c>) outputs. Exclusions:
 /// the capture entry point does not accept an initial match selection or a raw-result delivery
 /// format (the existing <c>Transform</c> family remains the surface for those); messages are a
-/// separate bounded channel and are never part of output bytes; cancellation
-/// (<see cref="XsltCaptureOutcome.Cancelled"/>) is reserved for Slice D.
+/// separate bounded channel and are never part of output bytes; cancellation and execution limits
+/// are cooperative and observed at engine checkpoints — a single XPath expression between
+/// checkpoints is not interrupted mid-evaluation (see <see cref="XsltCaptureOptions.MaxEngineOperations"/>).
 /// </para>
 /// <para>
 /// Capture performs no filesystem or network writes for any output. The result is pure managed state:

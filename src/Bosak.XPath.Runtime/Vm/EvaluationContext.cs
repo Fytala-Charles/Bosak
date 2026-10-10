@@ -114,6 +114,8 @@
 //                      | Charles Korthout | 2.39  | 10-10-2026     | B-F3: controlled cache entries store content SHA-256 + effective URI; hits are digest-    |
 //                      |                  |       |                | validated and receipts carry ServedFromCache; changed bytes/effective URI refresh        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.40  | 10-10-2026     | REQ-125 Slice D: internal ExecutionGate (token/deadline/operation-budget checkpoints)     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -436,6 +438,17 @@ public sealed class EvaluationContext
     /// refusals stay authoritative across nesting.
     /// </summary>
     public ControlledResourcePolicy? ResourcePolicy { get; set; }
+
+    /// <summary>
+    /// Optional execution gate (REQ-125 Slice D): cooperative cancellation token, wall-clock
+    /// deadline and engine-operation budget for one controlled run. When set, engine checkpoint
+    /// seams observe it and terminate the run with a classified interrupt when a control trips.
+    /// When null (the default), no checkpoint overhead exists. Nested evaluation contexts
+    /// (fn:transform) inherit the same gate instance so nested calls share the remaining budget
+    /// and deadline; a gate is stamped for the duration of one run only and cleared afterwards,
+    /// so sequential reuse of a context never leaks state between runs.
+    /// </summary>
+    internal ExecutionGate? ExecutionGate { get; set; }
 
     /// <summary>
     /// Custom document loader. If null, fn:doc will throw unless the API layer provides one.

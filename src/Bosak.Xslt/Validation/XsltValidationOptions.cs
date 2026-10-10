@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice A)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: CancellationToken — cooperative, element-boundary checkpoints,         |
+//                      |                  |       |                | classified Cancelled outcome                                                             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -36,4 +39,15 @@ public sealed class XsltValidationOptions
     /// them.
     /// </summary>
     public XPathCompatibility? CompatibilityOverride { get; set; }
+
+    /// <summary>
+    /// Gets or sets the cooperative cancellation token for the validation walk. The token is
+    /// observed at element boundaries of every walked module; triggering it stops the walk and
+    /// returns a result with <see cref="XsltValidationOutcome.Cancelled"/>, retaining the
+    /// diagnostics collected before the boundary that observed the trigger. <see langword="null"/>
+    /// (the default) disables cancellation. Cancellation never surfaces as
+    /// <see cref="OperationCanceledException"/> through the validation API, and the validated
+    /// snapshot and module envelopes remain unchanged.
+    /// </summary>
+    public CancellationToken? CancellationToken { get; set; }
 }

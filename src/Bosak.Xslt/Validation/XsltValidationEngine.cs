@@ -18,6 +18,9 @@
 //                      |                  |       |                | (literal subset; non-literal degrades to UnsupportedCoverage), declaration-order         |
 //                      |                  |       |                | parameter scoping, pattern slots compiled with the slot's namespace bindings             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-125 Slice D: cooperative cancellation — element-boundary checkpoints, classified    |
+//                      |                  |       |                | Cancelled result with retained diagnostics plus an XV0013 cancellation diagnostic        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -47,6 +50,7 @@ internal sealed class XsltValidationEngine
     internal const string SourceFailureCode = "XV0001";
     internal const string RefusalCode = "XV0002";
     internal const string UncodedEngineCode = "XV0003";
+    internal const string CancelledCode = "XV0013";
 
     private static readonly Regex ErrorCodePattern = new(
         @"\b(XPST|XQST|XPTY|XTSE|XTDE|XTTE|XTRE|XTMM|XTMO|FOER)[0-9]{4}\b",
@@ -55,6 +59,7 @@ internal sealed class XsltValidationEngine
     private static readonly XNamespace XsltNs = AttributeSlotClassifier.XsltNamespace;
 
     private readonly XsltValidationOptions _options;
+    private readonly CancellationToken? _cancellationToken;
     private readonly List<XsltValidationDiagnostic> _diagnostics = new();
     private readonly List<XsltValidationCoverageGap> _gaps = new();
     private readonly HashSet<string> _recordedGaps = new(StringComparer.Ordinal);
@@ -67,6 +72,19 @@ internal sealed class XsltValidationEngine
     public XsltValidationEngine(XsltValidationOptions? options)
     {
         _options = options ?? new XsltValidationOptions();
+        _cancellationToken = _options.CancellationToken;
+    }
+
+    // REQ-125 Slice D: cooperative cancellation observed at element boundaries. Throwing stops
+    // the recursive walk; Validate catches and returns the classified Cancelled outcome.
+    private void ThrowIfCancellationRequested()
+    {
+        if (_cancellationToken is { } token && token.IsCancellationRequested)
+            throw new ValidationWalkCancelledException();
+    }
+
+    private sealed class ValidationWalkCancelledException : Exception
+    {
     }
 
     /// <summary>
@@ -92,7 +110,25 @@ internal sealed class XsltValidationEngine
         foreach (var module in snapshot.Modules)
         {
             ReportEdgeDiagnostics(module);
-            WalkModule(snapshot, module);
+            try
+            {
+                WalkModule(snapshot, module);
+            }
+            catch (ValidationWalkCancelledException)
+            {
+                // REQ-125 Slice D: host cancellation at an element boundary. The walk stops
+                // where it is; diagnostics collected so far are retained and the cancellation
+                // itself is recorded as a diagnostic — never a silent pass, never a throw.
+                _diagnostics.Add(new XsltValidationDiagnostic(
+                    CancelledCode,
+                    module.ModuleUri,
+                    "Validation was cancelled by the host-supplied cancellation token at an element boundary.",
+                    range: null));
+                return new XsltValidationResult(
+                    XsltValidationOutcome.Cancelled,
+                    Array.AsReadOnly(_diagnostics.ToArray()),
+                    Array.AsReadOnly(_gaps.ToArray()));
+            }
         }
 
         var outcome = DecideOutcome();
@@ -331,6 +367,7 @@ internal sealed class XsltValidationEngine
 
     private void VisitElement(ModuleWalkState state, AuthoringNodeDescriptor node, VariableScope scope)
     {
+        ThrowIfCancellationRequested();
         var elementName = node.ElementName;
         if (elementName is null)
         {

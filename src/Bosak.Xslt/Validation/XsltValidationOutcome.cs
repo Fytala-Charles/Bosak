@@ -16,14 +16,16 @@
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 review F1: StructuralChecks coverage kind (unknown instructions and the safe      |
 //                      |                  |       |                | static XSLT error subset are part of the declared checked coverage)                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-125 Slice D: Cancelled is now triggerable via XsltValidationOptions.CancellationToken |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Validation;
 
 /// <summary>
 /// The distinct outcome of one static validation run. Every outcome is reported as data; validation
-/// never throws for bad source. The taxonomy is shaped for the full REQ-125 controlled profile:
-/// cancellation is reserved for Slice D and cannot be produced by this build.
+/// never throws for bad source. Cancellation is cooperative (REQ-125 Slice D): it is observed at
+/// element boundaries when a host supplies a cancellation token.
 /// </summary>
 public enum XsltValidationOutcome
 {
@@ -66,9 +68,10 @@ public enum XsltValidationOutcome
     Refused,
 
     /// <summary>
-    /// Reserved for REQ-125 Slice D (execution control): validation was cancelled through the
-    /// cooperative cancellation contract. No build up to and including Slice A can produce this
-    /// outcome; it exists so consumers can code against the final taxonomy now.
+    /// The validation walk was stopped by the host-supplied cancellation token (REQ-125 Slice D),
+    /// observed at an element boundary. The diagnostics collected before the boundary are retained,
+    /// and a <c>XV0013</c> diagnostic records the cancellation, so a cancelled run is never a silent
+    /// pass. A run without a cancellation token cannot produce this outcome.
     /// </summary>
     Cancelled,
 }
