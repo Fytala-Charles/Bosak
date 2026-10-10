@@ -163,6 +163,22 @@ Before implementation, record the accepted slice scope, supported encodings, sou
 
 No fixed latency/maximum-file-size engine promise is requested yet. Braid currently caps review at 8 MiB; choose a shared fixture corpus and measure parse/map/candidate memory and latency before setting engine targets. WebAssembly compatibility and export optimization are separate future requests if they need engine changes.
 
+## 13.1 Bosak Decisions (recorded 2026-10-10, owner-ratified)
+
+| Open question (§13) | Bosak decision |
+|---------------------|----------------|
+| Accepted slice scope | **Slice A first** (source-aware inspection), then Slice B (expression replacement); §12 order accepted as the implementation plan |
+| Public package strategy (Slices A/B) | **Additive `Bosak.Xslt.Authoring` namespace inside the existing `Bosak.Xslt` package** — no new package/packaging work until Slice C |
+| Source input/resolver provenance | Immutable engine-owned source envelope: original bytes + detected encoding (BOM, else XML-declaration charset, else UTF-8) + absolute base URI; caller-supplied module resolver for include/import provenance; unsupported encodings refused explicitly |
+| Coordinate conventions | **Line/column (1-based, UTF-16 code units, matching `IXmlLineInfo`) as the primary contract; byte offsets derived deterministically through the retained source** (AC-09 fixtures: CRLF, astral/surrogate pairs, entity spelling, multiline attributes) |
+| Structural-vs-semantic outcome policy | Distinct outcome kinds: structure failure, semantic diagnostics, fidelity capability, capability absence — never conflated; inspection does not require compilability |
+| Fidelity modes | Lossless (original-byte envelope + splice-only emission) is the only mode in Slices A/B; any regenerated/formatting mode is a later explicit opt-in |
+| First edit capability (Slice B) | Expression replacement in an owned attribute slot only; edits requiring parent namespace/start-tag changes are refused with expanded affected ranges per §5 |
+| Snapshot/node lifetime | Snapshot-scoped node identities; engine owns handle validity and candidate isolation (§7); full reparse acceptable, no incremental promise |
+| Release/test owner | Bosak maintainers; engine-owned contract tests for every AC row; existing compile/conformance gates are regression requirements per AC-12 |
+
+Delivery model: retained-envelope + splice architecture — the original bytes are the only emission source for untouched regions; the parsed model is derived working state. This satisfies use-when/shadow-attribute/literal-result-root retention (AC-02) structurally rather than by special-casing.
+
 ## 14. Provenance and Related Records
 
 - [Bosak registry](FEATURE_REQUESTS.md): authoritative REQ-124 status, acceptance and delivery tracking.
