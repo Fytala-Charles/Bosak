@@ -4642,6 +4642,9 @@ Bosak owns acceptance, design, implementation, engine tests and supported releas
 
 ### REQ-125: Complete Static Validation and Controlled Preview for Bosak.Braid
 
+**Braid Slice A consumer review (2026-10-10): corrections required before acceptance.** Independent validation suite: 29/29 passed. Public-API probes found unknown XSLT instructions and undeclared pattern prefixes accepted as Valid, excluded-element own slots checked before use-when elision, and forward parameter defaults accepted. See [consumer review and expected regression evidence](REQ-125-SLICE-A-CONSUMER-REVIEW.md). Bosak owns corrections under this request; REQ-124 remains accepted. No engine code changed in the review.
+
+
 **Requesting Application:** Bosak.Braid  
 **Submitted:** 2026-10-10  
 **Status:** In Progress — Slice A (static validation) and Slice B (controlled resource policy) landed 2026-10-10; Slices C (output capture) and D (limits/cancellation) pending.  
