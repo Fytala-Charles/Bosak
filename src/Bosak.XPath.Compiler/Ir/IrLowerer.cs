@@ -126,6 +126,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.53   | 10-10-2026     | REQ-123 JNode cluster: LookupIndex/LookupComputed step lowering
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 1.54  | 10-10-2026     | REQ-123 destructuring let: Destructure opcode lowering (PR1131); destructured variable
+//                      |                  |       |                | names join let-scoping helpers (CollectTopLevelLetNames / FLWOR bound variables)
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -211,6 +214,33 @@ internal readonly record struct GroupByInfo(
 /// <param name="Occurrence">The occurrence indicator of the declared type.</param>
 /// <param name="ErrorCode">The error code raised when the value is not an instance of the declared type.</param>
 internal readonly record struct EnforceTypeInfo(string TypeName, OccurrenceIndicator Occurrence, string ErrorCode);
+
+/// <summary>
+/// Destructuring binding information stored in the literal pool for the Destructure
+/// opcode (XPath 4.0 destructuring let, PR1131). The right-hand value is read from the
+/// instruction's RegisterA; each variable is extracted positionally (sequence/array) or
+/// by name (map) and stored into the variable scope, in declaration order.
+/// </summary>
+/// <param name="Kind">The destructuring mode: sequence, array, or map.</param>
+/// <param name="WholeTypeName">The composed type text of the whole-pattern <c>as SequenceType</c> declaration (QName or record text), or null when absent.</param>
+/// <param name="WholeOccurrence">The occurrence indicator of the whole-pattern type declaration.</param>
+/// <param name="Variables">The destructured variables in declaration order.</param>
+internal readonly record struct DestructuringInfo(
+    LetDestructuringKind Kind,
+    string? WholeTypeName,
+    OccurrenceIndicator WholeOccurrence,
+    DestructuredVariableInfo[] Variables);
+
+/// <summary>One destructured variable of a <see cref="DestructuringInfo"/>.</summary>
+/// <param name="VariableKey">The literal-pool variable key, in the same form StoreVariable uses ((local, uri) tuple, "prefix:local", or bare local name).</param>
+/// <param name="LocalName">The variable's local name (the map key for map destructuring).</param>
+/// <param name="DeclaredTypeName">The composed type text of the variable's <c>as SequenceType</c> declaration, or null when absent.</param>
+/// <param name="Occurrence">The occurrence indicator of the variable's declared type.</param>
+internal readonly record struct DestructuredVariableInfo(
+    object VariableKey,
+    string LocalName,
+    string? DeclaredTypeName,
+    OccurrenceIndicator Occurrence);
 
 /// <summary>
 /// Attribute metadata for the ConstructElement opcode; the attribute's value parts are a
@@ -2230,7 +2260,17 @@ internal sealed class IrLowerer
         while (node is LetExpressionNode letExpr)
         {
             foreach (var binding in letExpr.Bindings)
-                (names ??= new List<string>()).Add(binding.VariableName);
+            {
+                if (binding.DestructuringVariables is { } destructured)
+                {
+                    foreach (var v in destructured)
+                        (names ??= new List<string>()).Add(v.VariableName);
+                }
+                else
+                {
+                    (names ??= new List<string>()).Add(binding.VariableName);
+                }
+            }
             node = letExpr.Body;
         }
         return names?.ToArray();
@@ -2357,20 +2397,46 @@ internal sealed class IrLowerer
     {
         int resultReg = targetReg ?? AllocRegister();
 
+        // Lexical scoping: capture the current values of every bound variable before
+        // the first store and restore them after the body, so the bindings do not leak
+        // past the let expression (a trailing reference is XPST0008 — K-LetExprWithout-1,
+        // let-seq-019/arr-022/map-023). The Save/Restore pair brackets the inline body
+        // within one instruction region, so it nests correctly inside sub-blocks.
+        var scopedKeys = new List<object>();
         foreach (var binding in node.Bindings)
         {
+            if (binding.DestructuringVariables is { } destructured)
+            {
+                foreach (var v in destructured)
+                    scopedKeys.Add(VariableKeyOf(v.VariableName, v.VariablePrefix, v.VariableNamespaceUri));
+            }
+            else
+            {
+                scopedKeys.Add(VariableKeyOf(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+            }
+        }
+        Emit(IrOpCode.SaveVariables, 0, 0, 0, AddToLiteralPool(scopedKeys));
+
+        foreach (var binding in node.Bindings)
+        {
+            if (binding.Destructuring is { } kind)
+            {
+                // XPath 4.0 destructuring let (PR1131): evaluate the RHS once, then the
+                // Destructure opcode extracts and stores every variable (with the
+                // whole-pattern and per-variable type coercions applied at runtime).
+                int rhsReg = LowerNode(binding.Expression);
+                int infoIdx = AddToLiteralPool(BuildDestructuringInfo(binding, kind));
+                Emit(IrOpCode.Destructure, (ushort)rhsReg, 0, 0, infoIdx);
+                FreeRegister(rhsReg);
+                continue;
+            }
             int exprReg = LowerNode(binding.Expression);
             // XQuery 'as SequenceType': the bound value must match the declared type.
             EmitEnforceTypeIfDeclared(binding, exprReg, itemLevel: false);
             // Store under the same key form used by variable references:
             // resolved (local, uri) tuple for Q{uri} names, "prefix:local" for
             // prefixed names (resolved at runtime), or the bare local name.
-            int varPoolIdx = binding.VariableNamespaceUri is not null
-                ? AddToLiteralPool((binding.VariableName, binding.VariableNamespaceUri))
-                : binding.VariablePrefix is not null
-                    ? AddToLiteralPool($"{binding.VariablePrefix}:{binding.VariableName}")
-                    : AddToLiteralPool(binding.VariableName);
-            Emit(IrOpCode.StoreVariable, 0, (ushort)exprReg, 0, varPoolIdx);
+            Emit(IrOpCode.StoreVariable, 0, (ushort)exprReg, 0, AddToLiteralPool(VariableKeyOf(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri)));
             FreeRegister(exprReg);
         }
 
@@ -2378,8 +2444,20 @@ internal sealed class IrLowerer
         if (bodyReg != resultReg)
             Emit(IrOpCode.Move, (ushort)resultReg, (ushort)bodyReg);
 
+        Emit(IrOpCode.RestoreVariables, 0, 0, 0, 0);
+
         return resultReg;
     }
+
+    // The literal-pool variable key for a bound variable: resolved (local, uri) tuple
+    // for Q{uri} names, "prefix:local" for prefixed names (resolved at runtime), or
+    // the bare local name.
+    private static object VariableKeyOf(string name, string? prefix, string? namespaceUri)
+        => namespaceUri is not null
+            ? (name, namespaceUri)
+            : prefix is not null
+                ? $"{prefix}:{name}"
+                : name;
 
     private void EmitEnforceTypeIfDeclared(QuantifiedBinding binding, int valueReg, bool itemLevel)
     {
@@ -2399,6 +2477,41 @@ internal sealed class IrLowerer
         var info = new EnforceTypeInfo(typeName, occurrence, "XPTY0004");
         int poolIdx = AddToLiteralPool(info);
         Emit(IrOpCode.EnforceType, (ushort)valueReg, 0, 0, poolIdx);
+    }
+
+    // Builds the literal-pool info for a destructuring let binding (PR1131). Type texts
+    // are composed the same way EmitEnforceTypeIfDeclared composes them; record-type
+    // texts (record(...)) flow through verbatim with a null Prefix.
+    private DestructuringInfo BuildDestructuringInfo(QuantifiedBinding binding, LetDestructuringKind kind)
+    {
+        var wholeType = binding.DeclaredType is null
+            ? (string?)null
+            : binding.DeclaredType.Prefix is null
+                ? binding.DeclaredType.TypeName
+                : $"{binding.DeclaredType.Prefix}:{binding.DeclaredType.TypeName}";
+        var variables = new DestructuredVariableInfo[binding.DestructuringVariables!.Count];
+        for (int i = 0; i < variables.Length; i++)
+        {
+            var v = binding.DestructuringVariables[i];
+            variables[i] = new DestructuredVariableInfo(
+                VariableKeyOf(v.VariableName, v.VariablePrefix, v.VariableNamespaceUri),
+                v.VariableName,
+                v.DeclaredType is null
+                    ? null
+                    : v.DeclaredType.Prefix is null
+                        ? v.DeclaredType.TypeName
+                        : $"{v.DeclaredType.Prefix}:{v.DeclaredType.TypeName}",
+                v.DeclaredType?.Occurrence ?? OccurrenceIndicator.One);
+        }
+        return new DestructuringInfo(kind, wholeType, binding.DeclaredType?.Occurrence ?? OccurrenceIndicator.One, variables);
+    }
+
+    // Emits a destructuring let binding into the tuple-builder path (shared by
+    // LowerLetExpression): the RHS register is read by the Destructure opcode.
+    private void LowerDestructuringBinding(QuantifiedBinding binding, int exprReg)
+    {
+        int infoIdx = AddToLiteralPool(BuildDestructuringInfo(binding, binding.Destructuring!.Value));
+        Emit(IrOpCode.Destructure, (ushort)exprReg, 0, 0, infoIdx);
     }
 
     // ------------------------------------------------------------------
@@ -2717,9 +2830,18 @@ internal sealed class IrLowerer
                 foreach (var binding in letClause.Bindings)
                 {
                     int exprReg = LowerNode(binding.Expression);
-                    StoreVariable(binding, exprReg);
+                    if (binding.Destructuring is not null)
+                    {
+                        LowerDestructuringBinding(binding, exprReg);
+                        foreach (var v in binding.DestructuringVariables!)
+                            addedVars.Add(new BoundVariable(v.VariableName, v.VariablePrefix, v.VariableNamespaceUri));
+                    }
+                    else
+                    {
+                        StoreVariable(binding, exprReg);
+                        addedVars.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+                    }
                     FreeRegister(exprReg);
-                    addedVars.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
                 }
             }
             else
@@ -3066,7 +3188,17 @@ internal sealed class IrLowerer
             else if (clause is LetClauseNode letClause)
             {
                 foreach (var b in letClause.Bindings)
-                    result.Add(new BoundVariable(b.VariableName, b.VariablePrefix, b.VariableNamespaceUri));
+                {
+                    if (b.DestructuringVariables is { } destructured)
+                    {
+                        foreach (var v in destructured)
+                            result.Add(new BoundVariable(v.VariableName, v.VariablePrefix, v.VariableNamespaceUri));
+                    }
+                    else
+                    {
+                        result.Add(new BoundVariable(b.VariableName, b.VariablePrefix, b.VariableNamespaceUri));
+                    }
+                }
             }
             else if (clause is CountClauseNode countClause)
             {
@@ -3185,16 +3317,35 @@ internal sealed class IrLowerer
             foreach (var binding in letClause.Bindings)
             {
                 int exprReg = LowerNode(binding.Expression);
-                // XQuery 'as SequenceType': the bound value must match the declared type.
-                EmitEnforceTypeIfDeclared(binding, exprReg, itemLevel: false);
-                StoreVariable(binding, exprReg);
+                if (binding.Destructuring is not null)
+                {
+                    // XPath 4.0 destructuring let (PR1131): one opcode extracts and
+                    // stores every destructured variable.
+                    LowerDestructuringBinding(binding, exprReg);
+                }
+                else
+                {
+                    // XQuery 'as SequenceType': the bound value must match the declared type.
+                    EmitEnforceTypeIfDeclared(binding, exprReg, itemLevel: false);
+                    StoreVariable(binding, exprReg);
+                }
                 FreeRegister(exprReg);
-                boundVariables.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+                if (binding.DestructuringVariables is { } destructured)
+                {
+                    foreach (var v in destructured)
+                        boundVariables.Add(new BoundVariable(v.VariableName, v.VariablePrefix, v.VariableNamespaceUri));
+                }
+                else
+                {
+                    boundVariables.Add(new BoundVariable(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
+                }
             }
             LowerFlworTupleBuilder(restClauses, orderByClause, resultReg, boundVariables, countCounters, insideRhs);
-            foreach (var _ in letClause.Bindings)
+            foreach (var binding in letClause.Bindings)
             {
-                boundVariables.RemoveAt(boundVariables.Count - 1);
+                int count = binding.DestructuringVariables?.Count ?? 1;
+                for (int i = 0; i < count; i++)
+                    boundVariables.RemoveAt(boundVariables.Count - 1);
             }
         }
         else if (clause is WhereClauseNode whereClause)
@@ -3409,9 +3560,18 @@ internal sealed class IrLowerer
                 foreach (var binding in letClause.Bindings)
                 {
                     int exprReg = LowerNode(binding.Expression);
-                    StoreVariable(binding, exprReg);
+                    if (binding.Destructuring is not null)
+                    {
+                        LowerDestructuringBinding(binding, exprReg);
+                        foreach (var v in binding.DestructuringVariables!)
+                            scopedNames.Add(v.VariableName);
+                    }
+                    else
+                    {
+                        StoreVariable(binding, exprReg);
+                        scopedNames.Add(binding.VariableName);
+                    }
                     FreeRegister(exprReg);
-                    scopedNames.Add(binding.VariableName);
                 }
             }
         }
@@ -3451,11 +3611,7 @@ internal sealed class IrLowerer
 
     private void StoreVariable(QuantifiedBinding binding, int exprReg)
     {
-        int varPoolIdx = binding.VariableNamespaceUri is not null
-            ? AddToLiteralPool((binding.VariableName, binding.VariableNamespaceUri))
-            : binding.VariablePrefix is not null
-                ? AddToLiteralPool($"{binding.VariablePrefix}:{binding.VariableName}")
-                : AddToLiteralPool(binding.VariableName);
+        int varPoolIdx = AddToLiteralPool(VariableKeyOf(binding.VariableName, binding.VariablePrefix, binding.VariableNamespaceUri));
         Emit(IrOpCode.StoreVariable, 0, (ushort)exprReg, 0, varPoolIdx);
     }
 

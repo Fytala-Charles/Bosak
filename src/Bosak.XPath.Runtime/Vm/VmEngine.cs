@@ -390,6 +390,14 @@
 //                      | Charles Korthout |         |                | yielding keyed JNodes, implicit fn:jtree wrap of raw maps/arrays, LookupKey
 //                      | Charles Korthout |         |                | select-by-key rework, LookupIndex/LookupComputed opcodes, jnode() type tests,
 //                      | Charles Korthout |         |                | Atomize/call-site jvalue extraction, 4.0 path-step context checks
+//                      |------------------|---------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 2.173  | 10-10-2026     | REQ-123 destructuring let: Destructure opcode (PR1131 let $(...)/$[...]/${...});
+//                      |                  |         |                | EnforceType applies XPath 4.0 §3.4.2 coercion (incl. records) when IsXPath40
+//                      |------------------|---------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 2.174  | 16-10-2026     | REQ-123 PR1131: SaveVariables/RestoreVariables lexical let scoping + §3.4.2
+//                      |                  |         |                | numeric relabeling to derived integer types (PR 254 datum-in-value-space rule);
+//                      |                  |         |                | SaveVariables captures direct bindings only (via TryGetDirectVariable) so in-flight
+//                      |                  |         |                | lazy globals are not flagged circular (K2-FunctionProlog-15)
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
@@ -446,6 +454,9 @@ internal static class VmEngine
     {
         var instructions = module.Instructions;
         var literalPool = module.LiteralPool;
+        // Lexical let-scoping stack (SaveVariables/RestoreVariables); frame-local so a
+        // region that exits with an exception cannot leak markers into its caller.
+        List<List<((string Local, string Ns) Key, bool Had, XdmValue Value)>>? variableScopes = null;
         int ip = startIp;
         while (ip < instructions.Length)
         {
@@ -696,6 +707,47 @@ internal static class VmEngine
                             (localName, nsUri) = ResolveVariableName(varName, context);
                         }
                         context.WithVariable(localName, registers[instr.RegisterB], nsUri);
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.SaveVariables:
+                    {
+                        // Lexical let scoping: capture the current values of the bound
+                        // variables so RestoreVariables can undo the let's bindings when
+                        // the body completes. The stack is local to this ExecuteBlock
+                        // frame: Save/Restore pairs are always emitted within one
+                        // instruction region, so an exception abandoning a region cannot
+                        // leave stale markers behind. Only DIRECT bindings are captured:
+                        // probing lazy globals here would re-enter the lazy resolver for
+                        // an in-flight global of the same name and falsely report a
+                        // circular dependency (K2-FunctionProlog-15).
+                        var keys = (List<object>)literalPool[instr.Operand]!;
+                        var saved = new List<((string Local, string Ns) Key, bool Had, XdmValue Value)>(keys.Count);
+                        foreach (var keyLiteral in keys)
+                        {
+                            var (local, ns) = keyLiteral is ValueTuple<string, string> resolvedKey
+                                ? resolvedKey
+                                : ResolveVariableName((string)keyLiteral, context);
+                            bool had = context.TryGetDirectVariable(local, out var oldValue, ns);
+                            saved.Add(((local, ns), had, oldValue));
+                        }
+                        (variableScopes ??= new List<List<((string Local, string Ns) Key, bool Had, XdmValue Value)>>()).Add(saved);
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.RestoreVariables:
+                    {
+                        var saved = variableScopes![variableScopes.Count - 1];
+                        variableScopes.RemoveAt(variableScopes.Count - 1);
+                        foreach (var (key, had, value) in saved)
+                        {
+                            if (had)
+                                context.WithVariable(key.Local, value, key.Ns);
+                            else
+                                context.RemoveVariable(key.Local, key.Ns);
+                        }
                         ip++;
                         break;
                     }
@@ -1556,17 +1608,155 @@ internal static class VmEngine
 
                 case IrOpCode.EnforceType:
                     {
-                        // XQuery 'as SequenceType' enforcement for variable bindings: the
-                        // value is atomized (unless the target is a node-kind test) and then
-                        // instance-checked — no casts or promotions (XQuery 3.1 §4.16/§4.10).
                         var enforceInfo = (EnforceTypeInfo)literalPool[instr.Operand]!;
                         var value = registers[instr.RegisterA];
+                        if (context.IsXPath40)
+                        {
+                            // XPath 4.0 (PR1131): a type declaration on a let/for binding
+                            // coerces the bound value with the function-conversion rules
+                            // (§3.4.2) instead of a plain instance check: numeric promotion
+                            // ('let $v as xs:double := 42'), untypedAtomic casting, and
+                            // record coercion all succeed (prod-LetClause letexprwith-26,
+                            // K2-LetExprWithout-7a, let-map-027). The coerced value is bound.
+                            string targetType = enforceInfo.TypeName + enforceInfo.Occurrence switch
+                            {
+                                OccurrenceIndicator.ZeroOrOne => "?",
+                                OccurrenceIndicator.ZeroOrMore => "*",
+                                OccurrenceIndicator.OneOrMore => "+",
+                                _ => "",
+                            };
+                            registers[instr.RegisterA] = ApplyFunctionConversion(value, targetType, context);
+                            ip++;
+                            break;
+                        }
+                        // XQuery 3.1 'as SequenceType' enforcement for variable bindings: the
+                        // value is atomized (unless the target is a node-kind test) and then
+                        // instance-checked — no casts or promotions (XQuery 3.1 §4.16/§4.10).
                         if (!IsNodeKindTest(enforceInfo.TypeName))
                             value = AtomizeItems(value);
                         if (!InstanceOf(value, enforceInfo.TypeName, enforceInfo.Occurrence, context.DefaultElementNamespace, context))
                         {
                             throw new InvalidOperationException(
                                 $"{enforceInfo.ErrorCode}: Value does not match the declared type '{enforceInfo.TypeName}'.");
+                        }
+                        ip++;
+                        break;
+                    }
+
+                case IrOpCode.Destructure:
+                    {
+                        // XPath 4.0 destructuring let (PR1131): decompose the RHS (RegisterA)
+                        // into the pattern variables and store each into the variable scope,
+                        // in declaration order (a repeated variable name binds the last
+                        // extracted value, matching sequential let semantics).
+                        var info = (DestructuringInfo)literalPool[instr.Operand]!;
+                        var boundValue = registers[instr.RegisterA];
+                        switch (info.Kind)
+                        {
+                            case LetDestructuringKind.Sequence:
+                            {
+                                // The optional whole-pattern type coerces the whole value
+                                // (let-seq-007/008/017). Variables bind positionally, except
+                                // the LAST variable, which binds all remaining items as a
+                                // sequence (let-seq-002/009); earlier surplus items are
+                                // discarded and surplus variables bind the empty sequence
+                                // (let-seq-003).
+                                var source = info.WholeTypeName is null
+                                    ? boundValue
+                                    : ApplyFunctionConversion(boundValue, WholeTypeText(info), context);
+                                var items = source.IsUndefined
+                                    ? Array.Empty<XdmValue>()
+                                    : source.IsSequence && source.SequenceValue is not null
+                                        ? MaterializeSequence(source)
+                                        : new[] { source };
+                                int last = info.Variables.Length - 1;
+                                for (int i = 0; i < info.Variables.Length; i++)
+                                {
+                                    XdmValue item;
+                                    if (i < last)
+                                    {
+                                        item = i < items.Length ? items[i] : XdmValue.Undefined;
+                                    }
+                                    else if (i >= items.Length)
+                                    {
+                                        item = XdmValue.Undefined;
+                                    }
+                                    else if (i == items.Length - 1)
+                                    {
+                                        item = items[i];
+                                    }
+                                    else
+                                    {
+                                        item = XdmValue.FromSequence(MaterializedSequence.FromList(new List<XdmValue>(items[i..])));
+                                    }
+                                    StoreDestructuredVariable(info.Variables[i], item, context);
+                                }
+                                break;
+                            }
+                            case LetDestructuringKind.Array:
+                            {
+                                // The bound value must be a single array (let-arr-020/021);
+                                // surplus members are discarded, surplus variables raise
+                                // FOAY0001 (let-arr-003/015a).
+                                var array = SingleArrayItem(boundValue);
+                                if (info.WholeTypeName is not null)
+                                    array = CoerceDestructuredArray(array, info, context);
+                                for (int i = 0; i < info.Variables.Length; i++)
+                                {
+                                    if (i >= array.Count)
+                                        throw new InvalidOperationException(
+                                            $"FOAY0001: Array index {i + 1} is out of bounds (array size {array.Count}).");
+                                    StoreDestructuredVariable(info.Variables[i], array.Get(i + 1), context);
+                                }
+                                break;
+                            }
+                            default: // LetDestructuringKind.Map
+                            {
+                                // The bound value must be a single map (let-map-019/021);
+                                // each variable extracts the entry whose key equals its name,
+                                // missing keys bind the empty sequence (let-map-003/016).
+                                var map = SingleMapItem(boundValue);
+                                XdmRecordType? recordType = null;
+                                if (info.WholeTypeName is not null)
+                                {
+                                    var typeText = info.WholeTypeName.Trim();
+                                    if (IsRecordTypeText(typeText))
+                                    {
+                                        recordType = TryGetRecordType(typeText)!;
+                                        map = CoerceMapToRecord(map, recordType, typeText, context);
+                                    }
+                                    else if (typeText is "map(*)" or "map")
+                                    {
+                                        // Wildcard: no entry checks.
+                                    }
+                                    else if (typeText.StartsWith("map(", StringComparison.Ordinal))
+                                    {
+                                        map = CoerceDestructuredMap(map, typeText, context);
+                                    }
+                                    else
+                                    {
+                                        throw new InvalidOperationException(
+                                            $"XPTY0004: The declared type '{info.WholeTypeName}' of a map destructuring binding is not a map or record type.");
+                                    }
+                                }
+                                foreach (var variable in info.Variables)
+                                {
+                                    // A record-typed pattern (other than record(*)) exposes
+                                    // only its declared fields: any other variable name is a
+                                    // type error (let-map-025).
+                                    if (recordType is not null && !recordType.IsAny
+                                        && !recordType.HasField(variable.LocalName))
+                                    {
+                                        throw new InvalidOperationException(
+                                            $"XPTY0004: The variable '${variable.LocalName}' is not a declared field of the record type {info.WholeTypeName}.");
+                                    }
+                                    var entry = map.TryGetValue(RecordFieldKey(variable.LocalName), out var entryValue)
+                                        ? entryValue
+                                        : XdmValue.Undefined;
+                                    StoreDestructuredVariable(variable, entry, context);
+                                }
+                                break;
+                            }
                         }
                         ip++;
                         break;
@@ -13057,6 +13247,140 @@ internal static class VmEngine
         return true;
     }
 
+    /// <summary>The whole-pattern declared type text of a destructuring binding, including
+    /// its occurrence indicator.</summary>
+    private static string WholeTypeText(in DestructuringInfo info)
+        => info.WholeTypeName! + info.WholeOccurrence switch
+        {
+            OccurrenceIndicator.ZeroOrOne => "?",
+            OccurrenceIndicator.ZeroOrMore => "*",
+            OccurrenceIndicator.OneOrMore => "+",
+            _ => "",
+        };
+
+    /// <summary>
+    /// Stores one destructured variable: the per-variable declared type (when present)
+    /// coerces the extracted value with the function-conversion rules (PR1131), then the
+    /// value is bound under the same key form StoreVariable uses.
+    /// </summary>
+    private static void StoreDestructuredVariable(in DestructuredVariableInfo variable, XdmValue value, EvaluationContext context)
+    {
+        if (variable.DeclaredTypeName is not null)
+        {
+            string targetType = variable.DeclaredTypeName + variable.Occurrence switch
+            {
+                OccurrenceIndicator.ZeroOrOne => "?",
+                OccurrenceIndicator.ZeroOrMore => "*",
+                OccurrenceIndicator.OneOrMore => "+",
+                _ => "",
+            };
+            value = ApplyFunctionConversion(value, targetType, context);
+        }
+        if (variable.VariableKey is ValueTuple<string, string> resolved)
+        {
+            context.WithVariable(resolved.Item1, value, resolved.Item2);
+        }
+        else
+        {
+            var (localName, nsUri) = ResolveVariableName((string)variable.VariableKey, context);
+            context.WithVariable(localName, value, nsUri);
+        }
+    }
+
+    /// <summary>The single array a <c>let $[...]</c> binding decomposes: exactly one item,
+    /// which must be an array, else XPTY0004 (let-arr-020/021).</summary>
+    private static XdmArray SingleArrayItem(XdmValue value)
+    {
+        var item = SingleContainerItem(value, "array");
+        if (!item.IsArray)
+            throw new InvalidOperationException($"XPTY0004: An array destructuring binding requires a single array, got {item.Kind}.");
+        return item.ArrayValue;
+    }
+
+    /// <summary>The single map a <c>let ${...}</c> binding decomposes: exactly one item,
+    /// which must be a map, else XPTY0004 (let-map-019/021).</summary>
+    private static XdmMap SingleMapItem(XdmValue value)
+    {
+        var item = SingleContainerItem(value, "map");
+        if (!item.IsMap)
+            throw new InvalidOperationException($"XPTY0004: A map destructuring binding requires a single map, got {item.Kind}.");
+        return item.MapValue;
+    }
+
+    private static XdmValue SingleContainerItem(XdmValue value, string kind)
+    {
+        if (value.IsUndefined)
+            throw new InvalidOperationException($"XPTY0004: A {kind} destructuring binding requires a single {kind}; got the empty sequence.");
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            var items = MaterializeSequence(value);
+            if (items.Length != 1)
+                throw new InvalidOperationException($"XPTY0004: A {kind} destructuring binding requires a single {kind}; got {items.Length} items.");
+            return items[0];
+        }
+        return value;
+    }
+
+    /// <summary>
+    /// Whole-pattern type coercion of an array destructuring: the declared type must be
+    /// an array type (a non-array type such as <c>xs:integer*</c> is XPTY0004,
+    /// let-arr-019); each member is coerced to the declared member type and the array is
+    /// rebuilt so the extracted variables carry the coerced members (let-arr-006/007).
+    /// </summary>
+    private static XdmArray CoerceDestructuredArray(XdmArray array, in DestructuringInfo info, EvaluationContext context)
+    {
+        var typeText = info.WholeTypeName!.Trim();
+        if (typeText is "array(*)" or "array")
+            return array;
+        if (!typeText.StartsWith("array(", StringComparison.Ordinal) || !typeText.EndsWith(')'))
+            throw new InvalidOperationException(
+                $"XPTY0004: The declared type '{info.WholeTypeName}' of an array destructuring binding is not an array type.");
+        var memberTypeText = typeText[6..^1].Trim();
+        if (memberTypeText == "*")
+            return array;
+        if (memberTypeText.Length == 0)
+        {
+            if (array.Count != 0)
+                throw new InvalidOperationException(
+                    $"XPTY0004: The array has {array.Count} members but the declared type is the empty array type 'array()'.");
+            return array;
+        }
+        var members = new XdmValue[array.Count];
+        for (int i = 0; i < members.Length; i++)
+            members[i] = ApplyFunctionConversion(array.Get(i + 1), memberTypeText, context);
+        return new XdmArray(members);
+    }
+
+    /// <summary>
+    /// Whole-pattern type coercion of a map destructuring against <c>map(K, V)</c>: every
+    /// key must match K and every value is coerced to V, producing a new map so the
+    /// extracted variables carry the coerced values (let-map-006/007/008).
+    /// </summary>
+    private static XdmMap CoerceDestructuredMap(XdmMap map, string typeText, EvaluationContext context)
+    {
+        var inner = typeText.Substring(4, typeText.Length - 5).Trim();
+        if (inner.Length == 0 || inner == "*")
+            return map;
+        var parts = SplitTopLevel(inner, ',');
+        if (parts.Length != 2)
+            throw new InvalidOperationException(
+                "XPST0003: A map type test takes either zero or two arguments, e.g. map(xs:string, xs:integer)");
+        string keyType = parts[0].Trim();
+        string valueType = parts[1].Trim();
+        if (keyType.Length > 0 && keyType[^1] is '?' or '*' or '+')
+            throw new InvalidOperationException(
+                "XPST0003: The key type of a map type test must be an item type without an occurrence indicator");
+        var result = new XdmMap();
+        foreach (var entry in map.Entries)
+        {
+            if (!ValueMatchesType(entry.Key, keyType, context))
+                throw new InvalidOperationException(
+                    $"XPTY0004: The map key {entry.Key} does not match the declared key type '{keyType}' of the map destructuring binding.");
+            result = result.WithAdded(entry.Key, ApplyFunctionConversion(entry.Value, valueType, context));
+        }
+        return result;
+    }
+
     /// <summary>
     /// XPath 4.0 §3.4.2 rule 10 (record coercion): builds a new map annotated with the
     /// target record type. A surplus key is a type error (XPTY0004); a missing field
@@ -13919,6 +14243,17 @@ internal static class VmEngine
         {
             converted.Add(promoted);
         }
+        else if (context?.IsXPath40 == true && TryRelabelToDerivedNumeric(atomic, type, out var relabeled))
+        {
+            // XPath 4.0 §3.4.2 relabeling (PR 254, Issue 117 — letexprwith-30): when the
+            // target R is derived from a primitive type P, a value J that is an instance
+            // of P (but not of R) is relabeled as an instance of R when its datum lies
+            // within R's value space — the annotation changes, the datum does not. So 42
+            // relabels to xs:short, but 2.5 does NOT (its datum is not an integer) and
+            // -5 does NOT relabel to xs:unsignedShort. Gated on IsXPath40 so 3.1
+            // conversion keeps rejecting downcasts.
+            converted.Add(relabeled);
+        }
         else if (IsUserDefinedSchemaType(type, context, out _) && TryCast(atomic, type, context, out var schemaCasted))
         {
             // Derived schema simple types (e.g. hat:hatsize) accept values that can be
@@ -14003,6 +14338,66 @@ internal static class VmEngine
             || t.Equals("float", StringComparison.OrdinalIgnoreCase)
             || t.Equals("decimal", StringComparison.OrdinalIgnoreCase)
             || t.Equals("integer", StringComparison.OrdinalIgnoreCase);
+    }
+
+    // The built-in types derived from xs:decimal (all integer types); the relabeling
+    // target set of XPath 4.0 §3.4.2 (PR 254). There are no built-in types derived
+    // from xs:float or xs:double, so numeric relabeling covers this family only.
+    private static bool IsDerivedIntegerTypeName(string normalized)
+        => normalized is "int" or "long" or "short" or "byte"
+            or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
+            or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger";
+
+    /// <summary>
+    /// Attempts XPath 4.0 §3.4.2 relabeling of a numeric item to a built-in integer-derived
+    /// type: succeeds when the datum lies within the target's value space (an integral value
+    /// inside the type's range). The datum is preserved — only the type annotation changes
+    /// (42 becomes an xs:short; 2.5 stays a decimal and fails; −5 cannot become an
+    /// xs:unsignedShort). Relabeling to xs:integer itself is covered by the earlier
+    /// instance-of/member-type check, so this helper handles only the properly derived types.
+    /// </summary>
+    private static bool TryRelabelToDerivedNumeric(XdmValue value, string type, out XdmValue result)
+    {
+        result = value;
+        var t = type.StartsWith("xs:", StringComparison.OrdinalIgnoreCase) ? type[3..] : type;
+        t = t.ToLowerInvariant();
+        if (!IsDerivedIntegerTypeName(t))
+            return false;
+        switch (value.Kind)
+        {
+            case XdmValueKind.Integer:
+                if (!IsIntegerInRange(value.IntegerValue, t))
+                    return false;
+                result = XdmValue.FromInteger(value.IntegerValue, t);
+                return true;
+            case XdmValueKind.Decimal:
+            {
+                decimal d = value.DecimalValue;
+                // The datum must be within the value space of the target: an integral
+                // number inside the type's range (2.5 is not an xs:integer datum).
+                if (d != decimal.Truncate(d))
+                    return false;
+                if (d >= long.MinValue && d <= long.MaxValue)
+                {
+                    long l = (long)d;
+                    if (!IsIntegerInRange(l, t))
+                        return false;
+                    result = XdmValue.FromInteger(l, t);
+                    return true;
+                }
+                // Integral decimals beyond long range: only xs:unsignedLong's value
+                // space (and the xs:integer family beyond long, which this helper
+                // excludes) could hold them.
+                if (t == "unsignedlong" && d >= 0m && d <= 18446744073709551615m)
+                {
+                    result = XdmValue.FromDecimal(d, t);
+                    return true;
+                }
+                return false;
+            }
+            default:
+                return false;
+        }
     }
 
     /// <summary>

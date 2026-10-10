@@ -68,6 +68,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.24   | 10-10-2026     | REQ-123 JNode cluster: NameTestKind.LookupIndex/LookupComputed;
 //                      | Charles Korthout |        |                | NodeTest.LookupExpression
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 1.25  | 10-10-2026     | REQ-123 destructuring let: LetDestructuringKind + DestructuringVariable on              |
+//                      |                  |       |                | QuantifiedBinding (XPath 4.0 let $(...)/$[...]/${...} bindings)                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -481,20 +484,46 @@ internal sealed record ComputedNamespaceConstructorNode(
     XPathAstNode UriExpression) : XPathAstNode;
 
 /// <summary>One variable binding of a for, let, some, or every clause:
-/// <c>$var (as SequenceType)? (allowing empty)? (at $pos)? in|:= expr</c>.</summary>
+/// <c>$var (as SequenceType)? (allowing empty)? (at $pos)? in|:= expr</c>.
+/// An XPath 4.0 destructuring let binding (<c>let $(...)/$[...]/${...} := expr</c>) fills
+/// <c>Destructuring</c> and <c>DestructuringVariables</c>; its variable name/prefix/URI
+/// then mirror the first declared variable and <c>DeclaredType</c> carries the optional
+/// whole-pattern type declaration.</summary>
 /// <param name="VariableName">The local name of the bound variable.</param>
 /// <param name="Expression">The expression whose value is bound to the variable.</param>
 /// <param name="PositionalVariableName">The positional variable of a for binding (<c>at $pos</c>), or null.</param>
 /// <param name="VariablePrefix">The namespace prefix of the bound variable, or null.</param>
 /// <param name="VariableNamespaceUri">The namespace URI of an EQName bound variable, or null.</param>
-/// <param name="DeclaredType">The optional <c>as SequenceType</c> declaration of the binding.</param>
+/// <param name="DeclaredType">The optional <c>as SequenceType</c> declaration of the binding (the whole-pattern type for a destructuring binding).</param>
 /// <param name="AllowingEmpty">True when a for binding declares <c>allowing empty</c>.</param>
 /// <param name="BindingKind">The iteration mode of the binding (XPath 4.0 <c>for member</c>/<c>for key value</c>).</param>
 /// <param name="EntryValueVariableName">The local name of the value variable of an entry binding, or null.</param>
 /// <param name="EntryValueVariablePrefix">The namespace prefix of the value variable, or null.</param>
 /// <param name="EntryValueVariableNamespaceUri">The namespace URI of an EQName value variable, or null.</param>
 /// <param name="EntryValueDeclaredType">The declared type of the entry value variable, or null.</param>
-internal sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false, ForBindingKind BindingKind = ForBindingKind.Item, string? EntryValueVariableName = null, string? EntryValueVariablePrefix = null, string? EntryValueVariableNamespaceUri = null, FlworTypeDeclaration? EntryValueDeclaredType = null);
+/// <param name="Destructuring">The destructuring mode of an XPath 4.0 let binding, or null for an ordinary binding.</param>
+/// <param name="DestructuringVariables">The destructured variables of an XPath 4.0 let binding, or null for an ordinary binding.</param>
+internal sealed record QuantifiedBinding(string VariableName, XPathAstNode Expression, string? PositionalVariableName = null, string? VariablePrefix = null, string? VariableNamespaceUri = null, FlworTypeDeclaration? DeclaredType = null, bool AllowingEmpty = false, ForBindingKind BindingKind = ForBindingKind.Item, string? EntryValueVariableName = null, string? EntryValueVariablePrefix = null, string? EntryValueVariableNamespaceUri = null, FlworTypeDeclaration? EntryValueDeclaredType = null, LetDestructuringKind? Destructuring = null, IReadOnlyList<DestructuringVariable>? DestructuringVariables = null);
+
+/// <summary>One variable of an XPath 4.0 destructuring let binding (PR1131):
+/// <c>$var (as SequenceType)?</c> inside <c>$(...)</c>, <c>$[...]</c>, or <c>${...}</c>.</summary>
+/// <param name="VariableName">The local name of the bound variable.</param>
+/// <param name="VariablePrefix">The namespace prefix of the bound variable, or null.</param>
+/// <param name="VariableNamespaceUri">The namespace URI of an EQName bound variable, or null.</param>
+/// <param name="DeclaredType">The optional <c>as SequenceType</c> declaration of this variable, or null.</param>
+internal sealed record DestructuringVariable(string VariableName, string? VariablePrefix, string? VariableNamespaceUri, FlworTypeDeclaration? DeclaredType);
+
+/// <summary>The destructuring mode of an XPath 4.0 let binding (PR1131): which container
+/// shape the right-hand value is decomposed by.</summary>
+internal enum LetDestructuringKind
+{
+    /// <summary><c>let $(...)</c>: positional item extraction from the bound sequence; surplus items are discarded and surplus variables bind the empty sequence.</summary>
+    Sequence,
+    /// <summary><c>let $[...]</c>: positional member extraction from the bound array; surplus members are discarded, surplus variables raise FOAY0001.</summary>
+    Array,
+    /// <summary><c>let ${...}</c>: extraction of the map entries whose keys equal the variable names; missing keys bind the empty sequence.</summary>
+    Map,
+}
 
 /// <summary>The iteration mode of a for binding (XPath 4.0 §4.14.1).</summary>
 internal enum ForBindingKind

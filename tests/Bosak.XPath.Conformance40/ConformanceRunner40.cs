@@ -45,6 +45,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 10-10-2026     | REQ-123 JNode slice: fn-jtree/fn-jkey/fn-jvalue promoted into GatedSets (221 sets);       |
 //                      |                  |       |                | XdmValueKind.JNode + navigation rework (F&O 4.0 §17.7)                                    |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 0.12  | 16-10-2026     | REQ-123 PR1131 destructuring-let slice: prod-LetClause + fn-compare promoted into        |
+//                      |                  |       |                | GatedSets (223 sets); Destructure/SaveVariables/RestoreVariables opcodes, 4.0 §3.4.2     |
+//                      |                  |       |                | typed-let coercion incl. numeric downcasting, lexical let scoping                        |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -136,6 +140,7 @@ internal sealed class ConformanceRunner40
         "fn-codepoint-equal",
         "fn-collation-available",
         "fn-collation-key",
+        "fn-compare",
         "fn-collection",
         "fn-count",
         "fn-contains-subsequence",
@@ -329,6 +334,7 @@ internal sealed class ConformanceRunner40
         "prod-IfExpr",
         "prod-KeywordArguments",
         "prod-LambdaExpr",
+        "prod-LetClause",
         "prod-NameTest",
         "prod-OrExpr",
         "prod-ParenthesizedExpr",

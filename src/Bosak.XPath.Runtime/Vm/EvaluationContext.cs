@@ -104,6 +104,9 @@
 //                      | Charles Korthout | 2.35  | 09-10-2026     | REQ-123: internal IsXPath40Experimental flag (4.0-Exp S1) — exposes                       |
 //                      |                  |       |                | IsXPath40ExperimentalOnly functions at the experimental compatibility level              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.36  | 16-10-2026     | REQ-123 PR1131: TryGetDirectVariable for lexical let scoping (SaveVariables must not   |
+//                      |                  |       |                | trigger lazy global resolution — K2-FunctionProlog-15)                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -772,6 +775,21 @@ public sealed class EvaluationContext
                 _context._evaluatedLazyGlobals[kv.Key] = kv.Value;
         }
     }
+
+    /// <summary>
+    /// Attempts to resolve a variable from the direct binding dictionary only, without
+    /// consulting the evaluated lazy-global cache or the <see cref="LazyVariableResolver"/>.
+    /// The VM's lexical let scoping (SaveVariables/RestoreVariables) uses this so capturing
+    /// a variable's current binding never triggers lazy global evaluation: an in-flight
+    /// global with the same name would otherwise be reported as a circular dependency
+    /// (K2-FunctionProlog-15).
+    /// </summary>
+    /// <param name="localName">The variable's local name.</param>
+    /// <param name="value">The directly bound value when found.</param>
+    /// <param name="namespaceUri">The variable's namespace URI (empty for no namespace).</param>
+    /// <returns><c>true</c> when the variable has a direct binding.</returns>
+    internal bool TryGetDirectVariable(string localName, out XdmValue value, string namespaceUri = "")
+        => _variables.TryGetValue((localName, namespaceUri), out value);
 
     /// <summary>Removes a variable binding, if present.</summary>
     /// <param name="localName">The variable's local name.</param>
