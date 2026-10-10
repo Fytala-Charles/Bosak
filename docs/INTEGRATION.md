@@ -2680,3 +2680,5 @@ Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
 - Check `docs/FEATURE_REQUESTS.md` for the feature request registry.
 - XPath failures: capture the expression, input XML, and expected vs. actual result.
 - XSLT failures: capture the stylesheet fragment, source XML, and expected output.
+
+**REQ-124 final consumer acceptance — 2026-10-10:** Accepted 2026-10-10 on the owner's instruction after Bosak.Braid re-review. F1 and F2 are closed. Tested fix cb98af1ff05a37a59e7b1fe051b024d3436e1cf2 matches merged main src/tests at 5720f873c8f9e5ec0b3182186bf336d2b5e58a03 (implementation b5eb1b17249fe458095af2dc53445d459f30db11). Independent gates: full Release unit suite 3,709 passed / 0 failed / 0 skipped; authoring subset 71/71; XSLT mode smoke 162 passed / 0 failed / 26 skipped. Acceptance covers the agreed engine surface, not a product/package release. Braid dependency adoption remains separate. See [acceptance review](REQ-124-CONSUMER-ACCEPTANCE-REVIEW.md).
