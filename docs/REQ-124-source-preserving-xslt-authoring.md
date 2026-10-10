@@ -186,4 +186,12 @@ Delivery model: retained-envelope + splice architecture — the original bytes a
 - Braid baseline 0b5c7fb contains docs/ARCHITECTURE.md, ADR-002, ADR-003, P1-FIRST-SLICE.md and hand-written basic-template/opaque-iterate fixtures. Braid's repository is private; local sibling checkout paths are review conveniences, not required package references. These baseline commits have not been pushed by this session, so GitHub commit links are not used as delivery evidence.
 - No engine source/API changes, imported proprietary test fixtures or acceptance-status changes are made by this dossier. Example fragments above describe consumer behavior; Bosak should author/license its own engine fixtures or obtain explicit fixture reuse approval.
 
+## 15. Consumer Reviews
+
+- **2026-10-10 — Bosak.Braid Slice A review** (`Braid/docs/REQ-124-SLICE-A-REVIEW.md`, reviewed against main `6c651b8` / implementation `7f2338f`). Four findings; Bosak response:
+  - *Line-ending-sensitive AC-02/AC-03 assertions* — already resolved on main: the Slice B fixture hardening (2026-10-10) converted hand-verified byte-offset fixtures to LF-pinned `string.Join("\n", …)` construction, making expectations independent of `core.autocrlf` checkout style while keeping LF and CRLF coverage. Verified: no further work.
+  - *Caller-owned bytes alias the source envelope* — **defect, fixed same day**: `AuthoringSource.TryCreate` now takes a defensive copy of the input array (documented on the parameter); any `AuthoringSource` is immutable after construction regardless of how its bytes were obtained. Regression tests: `AuthoringReviewFindingTests` F3(a–c).
+  - *Optional compilation bypassed the inspection resolver* — **defect, fixed same day**: derived compilation now resolves include/import through the same `IAuthoringModuleResolver` inspection used (internal `IXsltUriResolver` bridge, `Xml11Loader` parity, `FileSystemUriResolver` failure contract); the default file-system resolver path is byte-identical to before. Regression tests: F4(a–b) + default-path parity.
+  - Adoption conditions (§3 of the review) are consumer-side precautions; the engine contract is unchanged by them. Braid may proceed with the read-only inspection adapter once these fixes are in its pinned revision.
+
 *Last updated: 2026-10-10*

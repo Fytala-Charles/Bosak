@@ -13,11 +13,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: retain effective resolver/options on the snapshot for re-inspection     |
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-124 review finding 4: compile-time resolution bridged through the inspection resolver|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
 using System.Xml.Linq;
+using Bosak.XPath.Providers.Xml;
 using Bosak.Xslt.Api;
 
 namespace Bosak.Xslt.Authoring;
@@ -198,9 +200,18 @@ public sealed class AuthoringInspector
         var compilationDiagnostics = Array.Empty<string>();
         if (options.AttemptCompilation)
         {
+            // Derived compilation must resolve include/import through the SAME caller-controlled
+            // resolver inspection used — never implicitly through the file system (REQ-124 review
+            // finding 4). The default file-system resolver keeps the compiler's default behavior.
+            var compiler = new XsltCompiler();
+            if (resolver is not FileSystemAuthoringModuleResolver)
+            {
+                compiler.UriResolver = new AuthoringModuleUriResolverBridge(resolver);
+            }
+
             try
             {
-                _ = new XsltCompiler().Compile(principalState.Document, principal.BaseUri.AbsoluteUri);
+                _ = compiler.Compile(principalState.Document, principal.BaseUri.AbsoluteUri);
                 isCompilable = true;
             }
             catch (Exception ex)
@@ -399,6 +410,90 @@ public sealed class AuthoringInspector
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Bridges the caller-controlled <see cref="IAuthoringModuleResolver"/> into the compiler's
+    /// <see cref="IXsltUriResolver"/> contract so derived compilation resolves include/import through
+    /// the same controlled scope inspection used — never implicitly through the file system. Failure
+    /// behavior mirrors <see cref="FileSystemUriResolver"/> (thrown exceptions, never null), and
+    /// resolved modules are parsed with the same load options and XML 1.1 idiom.
+    /// </summary>
+    private sealed class AuthoringModuleUriResolverBridge : IXsltUriResolver
+    {
+        private readonly IAuthoringModuleResolver _moduleResolver;
+
+        public AuthoringModuleUriResolverBridge(IAuthoringModuleResolver moduleResolver)
+        {
+            _moduleResolver = moduleResolver;
+        }
+
+        public XDocument Resolve(string href, string? baseUri)
+        {
+            var absoluteUri = ResolveAbsoluteUri(href, baseUri);
+            if (!Uri.TryCreate(absoluteUri, UriKind.Absolute, out var uri))
+            {
+                throw new InvalidOperationException($"Cannot resolve stylesheet URI: {href}");
+            }
+
+            Uri referencingUri;
+            try
+            {
+                referencingUri = baseUri is not null && Uri.TryCreate(baseUri, UriKind.Absolute, out var baseRef)
+                    ? baseRef
+                    : uri;
+            }
+            catch (UriFormatException)
+            {
+                referencingUri = uri;
+            }
+
+            AuthoringSource? moduleSource;
+            try
+            {
+                moduleSource = _moduleResolver.ResolveModule(uri, referencingUri);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    $"The module resolver threw while resolving '{uri.AbsoluteUri}': {ex.Message}", ex);
+            }
+
+            if (moduleSource is null)
+            {
+                throw new FileNotFoundException(
+                    $"Stylesheet module not resolvable through the inspection module resolver: {uri.AbsoluteUri}",
+                    uri.IsFile ? uri.LocalPath : uri.AbsoluteUri);
+            }
+
+            return Xml11Loader.Parse(
+                moduleSource.Text,
+                LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri,
+                moduleSource.BaseUri.AbsoluteUri);
+        }
+
+        private static string ResolveAbsoluteUri(string href, string? baseUri)
+        {
+            if (string.IsNullOrEmpty(baseUri))
+            {
+                // No base URI: href must be absolute or interpreted as a local path.
+                if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
+                {
+                    return href;
+                }
+
+                return Path.GetFullPath(href);
+            }
+
+            if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
+            {
+                return href;
+            }
+
+            var baseUriObj = new Uri(baseUri);
+            var resolved = new Uri(baseUriObj, href);
+            return resolved.AbsoluteUri;
+        }
     }
 
     private sealed class ModuleState

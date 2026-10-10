@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: strict-decode and copy helpers for emitted candidate bytes              |
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-124 review finding 3: defensive copy of caller-owned bytes at TryCreate              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -22,7 +23,9 @@ namespace Bosak.Xslt.Authoring;
 
 /// <summary>
 /// An immutable, engine-owned envelope around one original module. The original bytes are the only
-/// emission source for untouched regions; the decoded text is derived working state. Encoding detection
+/// emission source for untouched regions; the decoded text is derived working state. Caller-provided
+/// byte arrays are defensively copied at creation, so mutating or reusing a caller's array never
+/// affects a retained envelope. Encoding detection
 /// order: a byte-order mark (UTF-8 / UTF-16 LE / UTF-16 BE / UTF-32 LE / UTF-32 BE), else the
 /// <c>encoding</c> pseudo-attribute of an XML declaration in the first ~256 bytes, else UTF-8.
 /// Supported encodings: the four UTF variants, ISO-8859-1, US-ASCII and UTF-8. Any other encoding name
@@ -84,7 +87,9 @@ public sealed class AuthoringSource
     /// <summary>
     /// Attempts to create a retained-source envelope from original module bytes.
     /// </summary>
-    /// <param name="bytes">The exact original module bytes, including any byte-order mark.</param>
+    /// <param name="bytes">The exact original module bytes, including any byte-order mark. A defensive
+    /// copy is taken: the caller may reuse or mutate the array immediately after this call without
+    /// affecting the created envelope.</param>
     /// <param name="baseUri">The absolute base URI of the module; used for include/import resolution and xml:base chains.</param>
     /// <param name="source">The created envelope, or <see langword="null"/> on failure.</param>
     /// <param name="failure">The classified failure, or <see langword="null"/> on success.</param>
@@ -103,7 +108,12 @@ public sealed class AuthoringSource
         source = null;
         failure = null;
 
-        if (!TryDetectEncoding(bytes, baseUri, out var encoding, out var byteOffsetBias, out var detectFailure))
+        // Retain a defensive copy up-front: the envelope is immutable, so caller-owned arrays must
+        // never alias it (REQ-124 review finding 3). All detection and validation below runs on the
+        // retained copy.
+        var retained = bytes.ToArray();
+
+        if (!TryDetectEncoding(retained, baseUri, out var encoding, out var byteOffsetBias, out var detectFailure))
         {
             failure = detectFailure;
             return false;
@@ -112,7 +122,7 @@ public sealed class AuthoringSource
         // Validate strictly up-front so failures surface here — as data — rather than from Text.
         try
         {
-            _ = DecodeStrict(bytes, encoding, byteOffsetBias);
+            _ = DecodeStrict(retained, encoding, byteOffsetBias);
         }
         catch (Exception ex) when (ex is DecoderFallbackException or ArgumentException or InvalidDataException)
         {
@@ -123,7 +133,7 @@ public sealed class AuthoringSource
             return false;
         }
 
-        source = new AuthoringSource(bytes, encoding, baseUri, byteOffsetBias);
+        source = new AuthoringSource(retained, encoding, baseUri, byteOffsetBias);
         return true;
     }
 
