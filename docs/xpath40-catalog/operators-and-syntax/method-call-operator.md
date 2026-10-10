@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog entry: method-call operator">
+  <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog entry: method-call operator">
   <br><br>
   <h1>Method-Call Operator <code>=?&gt;</code></h1>
   <p>Catalog entry — Operators &amp; syntax · Deferred</p>

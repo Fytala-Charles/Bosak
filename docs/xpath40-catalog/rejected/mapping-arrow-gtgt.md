@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog entry: mapping arrow =&gt;&gt;">
+  <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog entry: mapping arrow =&gt;&gt;">
   <br><br>
   <h1>Mapping Arrow <code>=&gt;&gt;</code> (Original Spelling)</h1>
   <p>Catalog entry — Rejected / Superseded</p>

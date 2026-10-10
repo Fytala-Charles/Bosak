@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog entry: fn:scan">
+  <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog entry: fn:scan">
   <br><br>
   <h1><code>fn:scan</code></h1>
   <p>Catalog entry — Functions · Experimental</p>
