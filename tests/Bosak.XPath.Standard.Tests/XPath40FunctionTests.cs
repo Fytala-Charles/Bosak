@@ -33,9 +33,14 @@
 //                      |                  |       |                | binary/QName/duration-tuple/g*-UTC), array:sort-with, fn:is-NaN, fn:atomic-type-        |
 //                      |                  |       |                | annotation record (variety/matches/constructor, kind-inferred type names)               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 10-10-2026     | REQ-123 compare-tail cluster: unicode-case-insensitive collation (compare/collation-key/ |
+//                      |                  |       |                | substring fns), keyword rows (collation-key/contains-token/node-name), fn:collation-    |
+//                      |                  |       |                | available, # QName literals (PR1976/PR2227, XPST0154), min/max QName ordering (PR2256)  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Parser;
 using Bosak.XPath.Runtime.Vm;
 using Xunit;
 
@@ -2259,5 +2264,127 @@ public class XPath40FunctionTests
         Assert.Equal("true", Eval40("fn:atomic-type-annotation('x')?name = xs:QName('xs:string')").ToString());
         Assert.Equal("true", Eval40("fn:atomic-type-annotation(xs:date('2022-02-22'))?name = xs:QName('xs:date')").ToString());
         Assert.Equal("true", Eval40("fn:atomic-type-annotation(42)?primitive-type()?name = xs:QName('xs:decimal')").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 compare-tail cluster
+    // ------------------------------------------------------------------
+
+    private const string UnicodeCaseInsensitive = "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive";
+
+    [Fact]
+    public void UnicodeCaseInsensitiveCollation_Compare()
+    {
+        Assert.Equal("-1", Eval40($"fn:compare(\"a\", \"B\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("1", Eval40($"fn:compare(\"b\", \"A\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("0", Eval40($"fn:compare(\"ä\", \"Ä\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("-1", Eval40($"fn:compare(\"bää\", \"BÄÄB\", \"{UnicodeCaseInsensitive}\")").ToString());
+    }
+
+    [Fact]
+    public void UnicodeCaseInsensitiveCollation_CollationKey()
+    {
+        Assert.Equal("true", Eval40($"fn:collation-key(\"ALPHA\", \"{UnicodeCaseInsensitive}\") eq fn:collation-key(\"alpha\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("true", Eval40($"fn:collation-key(\"KÜCHE\", \"{UnicodeCaseInsensitive}\") eq fn:collation-key(\"Küche\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("true", Eval40($"fn:collation-key(\"ΣΔΛ\", \"{UnicodeCaseInsensitive}\") eq fn:collation-key(\"σδλ\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("true", Eval40($"fn:collation-key(\"ALPHA\", \"{UnicodeCaseInsensitive}\") lt fn:collation-key(\"alphabet\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("true", Eval40($"fn:collation-key(\"dünn\", \"{UnicodeCaseInsensitive}\") lt fn:collation-key(\"DÜNNER\", \"{UnicodeCaseInsensitive}\")").ToString());
+    }
+
+    [Fact]
+    public void UnicodeCaseInsensitiveCollation_SubstringFunctions()
+    {
+        Assert.Equal("true", Eval40($"fn:contains(\"aÄb\", \"ä\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("true", Eval40($"fn:starts-with(\"Äbc\", \"ä\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("true", Eval40($"fn:ends-with(\"abÄ\", \"ä\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("a", Eval40($"fn:substring-before(\"aXbXc\", \"X\", \"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("2", Eval40($"fn:string(fn:index-of((\"a\", \"Ä\"), \"ä\", \"{UnicodeCaseInsensitive}\"))").ToString());
+    }
+
+    [Fact]
+    public void UnicodeCaseInsensitiveCollation_RecognizedEverywhere()
+    {
+        // No FOCH0002: the URI is a recognized collation across the engine —
+        // value comparison, fn:sort, collation-key, and substring functions.
+        var ex = Record.Exception(() => Eval40($"fn:sort(('b', 'A', 'ä', 'Ä'), \"{UnicodeCaseInsensitive}\")"));
+        Assert.Null(ex);
+        Assert.Equal("0", Eval40($"fn:compare('ä', 'Ä', '{UnicodeCaseInsensitive}')").ToString());
+    }
+
+    [Fact]
+    public void KeywordArguments_CollationKeyAndContainsToken()
+    {
+        Assert.Equal("false", Eval40("fn:collation-key(\"abc\", collation:=()) eq fn:collation-key(\"123\", ())").ToString());
+        Assert.Equal("true", Eval40("fn:collation-key(\"abc\", ()) eq fn:collation-key(\"abc\", collation:=())").ToString());
+        Assert.Equal("true", Eval40("fn:collation-key(\"abc\", collation:=(\"a\",\"b\",\"c\")[year-from-date(fn:current-date())]) eq fn:collation-key(\"abc\", collation:=())").ToString());
+        Assert.Equal("true", Eval40("fn:contains-token(\" abc \", \"abc\", collation:=())").ToString());
+        Assert.Equal("true", Eval40("fn:contains-token(\" abc \", \"abc\", collation:=\"xyz\"[fn:current-date() lt xs:date('1999-01-01')])").ToString());
+    }
+
+    [Fact]
+    public void KeywordArguments_NodeName()
+    {
+        Assert.Equal("true", Eval40("fn:node-name(node := parse-xml('<doc xmlns=\"http://example.ns/\"><a/></doc>')//*:a) eq fn:QName('http://example.ns/', 'a')").ToString());
+        Assert.Contains("XPST0017", Error40("fn:node-name(input := parse-xml('<doc/>'))").Message);
+    }
+
+    [Fact]
+    public void CollationAvailable_ReportsRecognizedCollations()
+    {
+        Assert.Equal("true", Eval40("fn:collation-available(fn:default-collation())").ToString());
+        Assert.Equal("true", Eval40("fn:collation-available(\"http://www.w3.org/2005/xpath-functions/collation/codepoint\")").ToString());
+        Assert.Equal("true", Eval40($"fn:collation-available(\"{UnicodeCaseInsensitive}\")").ToString());
+        Assert.Equal("true", Eval40("fn:collation-available(\"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")").ToString());
+        Assert.Equal("true", Eval40("fn:collation-available(\"http://www.w3.org/2013/collation/UCA?lang=en;strength=primary\")").ToString());
+        Assert.Equal("false", Eval40("fn:collation-available(\"ftp://not-a-collation/\")").ToString());
+        Assert.Equal("true", Eval40("fn:collation-available(\"http://www.w3.org/\") eq fn:collation-available(xs:anyURI(\"http://www.w3.org/\"))").ToString());
+        Assert.Contains("XPTY0004", Error40("fn:collation-available(123)").Message);
+    }
+
+    [Fact]
+    public void QNameLiterals_AllForms()
+    {
+        Assert.Equal("true", Eval40("#local eq fn:QName(\"\", \"local\")").ToString());
+        Assert.Equal("true", Eval40("#fn:null eq fn:QName(\"http://www.w3.org/2005/xpath-functions\", \"null\")").ToString());
+        Assert.Equal("true", Eval40("#Q{}local eq fn:QName(\"\", \"local\")").ToString());
+        Assert.Equal("true", Eval40("#Q{http://www.example.com/ns}local eq fn:QName(\"http://www.example.com/ns\", \"local\")").ToString());
+        Assert.Equal("http://www.w3.org/XML/1998/namespace", Eval40("fn:string(#xml:space ! fn:namespace-uri-from-QName(.))").ToString());
+        Assert.Equal("xml", Eval40("fn:string(#xml:space ! fn:prefix-from-QName(.))").ToString());
+        // Whitespace and comments after '#' are permitted (PR1982).
+        Assert.Equal("http://www.example.com/ns", Eval40("fn:string(# Q{http://www.example.com/ns}local ! fn:namespace-uri-from-QName(.))").ToString());
+        Assert.Equal("http://www.example.com/ns", Eval40("fn:string(#(:improbably:)Q{http://www.example.com/ns}local ! fn:namespace-uri-from-QName(.))").ToString());
+    }
+
+    [Fact]
+    public void QNameLiterals_BracedFormRetainsLexicalPrefix()
+    {
+        Assert.Equal(new[] { "http://www.example.com", "ex", "a" },
+            Seq40("#Q{http://www.example.com}ex:a ! (fn:namespace-uri-from-QName(.), fn:prefix-from-QName(.), fn:local-name-from-QName(.))"));
+        Assert.Equal("0", Eval40("fn:compare(#Q{http://example.com/}p:alpha, #Q{http://example.com/}q:alpha)").ToString());
+    }
+
+    [Fact]
+    public void QNameLiterals_StaticErrors()
+    {
+        Assert.Contains("XPST0154", Assert.Throws<XPathParseException>(() => Eval40("#Q{}ex:a")).Message);
+        Assert.Contains("XPST0081", Error40("#my:local ! fn:local-name-from-QName(.)").Message);
+    }
+
+    [Fact]
+    public void QNameLiterals_InMapConstructorAndFunctionLookup()
+    {
+        Assert.Equal("true", Eval40("{ #xml:space : #fn:null }(xs:QName(\"xml:space\")) eq xs:QName(\"fn:null\")").ToString());
+        Assert.Equal("3", Eval40("fn:function-lookup(#Q{http://www.w3.org/2005/xpath-functions}fn:abs, 1)(-3)").ToString());
+    }
+
+    [Fact]
+    public void MinMax_QNameOrdering_OnlyIn40()
+    {
+        Assert.Equal("true", Eval40("fn:min((#xml:space, #xml:id, #fn:min)) eq #fn:min").ToString());
+        Assert.Equal("true", Eval40("fn:max((#xml:space, #xml:id, #fn:min)) eq #xml:space").ToString());
+        // 3.1: xs:QName is not orderable (FORG0006).
+        var expr31 = XPath31Expression.Compile("fn:min((xs:QName('xml:space'), xs:QName('fn:null')))",
+            new CompileOptions { Compatibility = XPathCompatibility.XPath31 });
+        Assert.Contains("FORG0006", Assert.Throws<InvalidOperationException>(() => expr31.Evaluate(new EvaluationContext())).Message);
     }
 }

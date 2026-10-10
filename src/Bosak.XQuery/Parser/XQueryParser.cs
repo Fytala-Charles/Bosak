@@ -6,6 +6,7 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
+//                      |                  |       |                | default collation                                                                      |
 // SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -54,6 +55,9 @@
 //                      | Charles Korthout | 1.13  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      | Charles Korthout | 1.14  | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
 //                      | Charles Korthout | 1.15  | 21-09-2026     | API freeze stage C: internalized XQueryParser and XQueryParseResult                     |
+//                      | Charles Korthout | 1.16  | 10-10-2026     | REQ-123 compare-tail slice: unicode-case-insensitive collation recognized in prolog    |
+//                      |                  |       |                | default collation                                                                      |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1151,6 +1155,8 @@ internal sealed class XQueryParser
         if (collation == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
             return true;
         if (collation == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (collation == "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive")
             return true;
         if (collation == "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind")
             return true;

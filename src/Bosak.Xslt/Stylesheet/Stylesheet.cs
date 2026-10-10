@@ -6,6 +6,7 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
+//                      |                  |       |                | collation check                                                                        |
 // SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -276,6 +277,9 @@
 //                      | Charles Korthout | 2.127 | 08-10-2026     | REQ-118 4.0-S8: xsl:array / xsl:array-member / xsl:switch known at every version; static  |
 //                      |                  |       |                | checks: array/array-member @select+content XTSE3185, switch shape XTSE0010, when/        |
 //                      |                  |       |                | otherwise @select+content XTSE3185 only under xsl:switch                                 |
+//                      | Charles Korthout | 2.128 | 10-10-2026     | REQ-123 compare-tail slice: unicode-case-insensitive collation recognized in static    |
+//                      |                  |       |                | collation check                                                                        |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -5225,6 +5229,8 @@ internal sealed class Stylesheet
         if (resolved == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
             return true;
         if (resolved == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (resolved == "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive")
             return true;
         if (resolved.StartsWith("http://www.w3.org/2013/collation/UCA", StringComparison.Ordinal))
             return true;

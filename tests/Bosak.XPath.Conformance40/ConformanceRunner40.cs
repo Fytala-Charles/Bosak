@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 10-10-2026     | focus-constructors slice: misc-FocusConstructors promoted into GatedSets (213 sets)     |
 //                      |                  |       |                | after arity-0 xs:* constructor support (PR661) + assert-type unsignedLong annotation     |
+//                      | Charles Korthout | 0.10  | 10-10-2026     | REQ-123 compare-tail slice: fn-collation-key, fn-contains-token and fn-collation-available promoted into GatedSets|
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10  | 10-10-2026     | sort-with slice: fn-sort-with + array-sort-with promoted into GatedSets (215 sets);     |
 //                      |                  |       |                | DependencyFilter40 marks typedData unsupported (no PSVI-typed source nodes)               |
@@ -129,9 +131,12 @@ internal sealed class ConformanceRunner40
         "fn-ceiling",
         "fn-characters",
         "fn-codepoint-equal",
+        "fn-collation-available",
+        "fn-collation-key",
         "fn-collection",
         "fn-count",
         "fn-contains-subsequence",
+        "fn-contains-token",
         "fn-csv-doc",
         "fn-csv-to-xml",
         "fn-current-date",

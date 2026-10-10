@@ -110,6 +110,8 @@
 //                      |                  |       |                | validation before empty-input shortcut, array:sort-with#2, fn:atomic-type-annotation#1   |
 //                      |                  |       |                | (type-annotation record: name/is-simple/base-type()/primitive-type()), keyword rows for  |
 //                      |                  |       |                | compare/sort-with/atomic-type-annotation                                                   |
+//                      |                  |       |                | collation-key/contains-token/node-name, fn:collation-available, min/max QName          |
+//                      |                  |       |                | ordering (PR2256)                                                                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -436,6 +438,10 @@
 //                      |                  |       |                |                                                                                          |
 //                      | Charles Korthout | 5.136 | 10-10-2026     | REQ-123 fn:atomic-equal slice: fn:atomic-equal (F&O 4.0 §2.2.1, frozen level) —         |
 //                      |                  |       |                | map-key equality via XdmValueEqualityComparer + PR2168 hex/base64 mutual comparison     |
+//                      | Charles Korthout | 5.137 | 10-10-2026     | REQ-123 compare-tail slice: unicode-case-insensitive collation (PR1945), keyword rows  |
+//                      |                  |       |                | collation-key/contains-token/node-name, fn:collation-available, min/max QName          |
+//                      |                  |       |                | ordering (PR2256)                                                                      |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -1049,6 +1055,18 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String, XdmValueKind.String],
                 ReturnType = XdmValueKind.String,
                 Implementation = CollationKey_2
+            },
+
+            // ----- fn:collation-available (XPath 4.0) --------------------------
+            [(Namespaces.Fn, "collation-available", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "collation-available",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = CollationAvailable_1
             },
 
             // ----- fn:normalize-space -----------------------------------------
@@ -4635,6 +4653,11 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "sort-with")] = new(["input", "comparators"], [null, null]),
             [(Namespaces.Fn, "atomic-type-annotation")] = new(["value"], [null]),
             [(Namespaces.Fn, "compare")] = new(["comparand1", "comparand2", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "collation-key")] = new(["value", "collation"], [null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "contains-token")] = new(["value", "token", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "node-name")] = new(["node"], [null]),
+            [(Namespaces.Fn, "min")] = new(["values", "collation"], [null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "max")] = new(["values", "collation"], [null, "fn:default-collation()"]),
             [(Namespaces.Fn, "subsequence")] = new(["input", "start", "length"], [null, null, "()"]),
             [(Namespaces.Fn, "substring")] = new(["value", "start", "length"], [null, null, "()"]),
             [(Namespaces.Fn, "string-join")] = new(["values", "separator"], [null, "''"]),
@@ -7998,7 +8021,10 @@ public static class FunctionLibrary
         => ContainsToken(args[0], AtomizedString(args[1]), ctx.DefaultCollation);
 
     private static XdmValue ContainsToken_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => ContainsToken(args[0], AtomizedString(args[1]), AtomizedString(args[2]));
+        // XPath 4.0 (PR197): an empty $collation selects the default collation;
+        // 3.1 raises XPTY0004 on the empty sequence.
+        => ContainsToken(args[0], AtomizedString(args[1]),
+            ctx.IsXPath40 && IsEmptySequence(args[2]) ? ctx.DefaultCollation : AtomizedString(args[2]));
 
     private static XdmValue ContainsToken(XdmValue input, string token, string collation)
     {
@@ -8050,12 +8076,44 @@ public static class FunctionLibrary
         => CollationKey(RequireString(PromoteUriToString(args[0])), string.Empty);
 
     private static XdmValue CollationKey_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => CollationKey(RequireString(PromoteUriToString(args[0])), RequireString(PromoteUriToString(args[1])));
+        => CollationKey(RequireString(PromoteUriToString(args[0])),
+            // XPath 4.0 (PR197): an empty $collation selects the default collation;
+            // 3.1 requires a string and raises XPTY0004 on the empty sequence.
+            ctx.IsXPath40 && IsEmptySequence(args[1]) ? string.Empty : RequireString(PromoteUriToString(args[1])));
 
     // xs:anyURI promotes to xs:string under the function conversion rules (collation-key-006);
     // other non-string atomic types are rejected by RequireString (collation-key-901).
     private static XdmValue PromoteUriToString(XdmValue value)
         => value.Kind == XdmValueKind.Uri ? XdmValue.FromString(value.StringValue) : value;
+
+    // fn:collation-available (XPath 4.0): reports whether the implementation can
+    // service a collation URI. The URI is resolved against the base URI; xs:anyURI
+    // promotes like any string; other atomic types raise XPTY0004.
+    private static XdmValue CollationAvailable_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (IsEmptySequence(args[0]))
+            throw new InvalidOperationException("XPTY0004: collation-available() requires a singleton string argument");
+        var item = AtomizeSingleton(args[0]);
+        if (item.Kind is not (XdmValueKind.String or XdmValueKind.Uri))
+            throw new InvalidOperationException("XPTY0004: collation-available() argument must be a string");
+        string collation = ResolveCollationUri(item.StringValue, ctx.BaseUri);
+        return XdmValue.FromBoolean(IsAvailableCollation(collation));
+    }
+
+    private static bool IsAvailableCollation(string collation)
+    {
+        if (string.IsNullOrEmpty(collation))
+            return true;
+        if (collation == CodepointCollation)
+            return true;
+        if (collation == HtmlAsciiCaseInsensitiveCollation)
+            return true;
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return true;
+        if (collation == CaseblindCollation)
+            return true;
+        return TryParseUca(collation, out _);
+    }
 
     private static XdmValue CollationKey(string value, string collation)
     {
@@ -8064,6 +8122,11 @@ public static class FunctionLibrary
             return XdmValue.FromString(value);
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return XdmValue.FromString(ToAsciiLower(value));
+        if (collation == UnicodeCaseInsensitiveCollation)
+        {
+            var sortKey = UnicodeCaseInsensitiveCompareInfo.GetSortKey(value, CompareOptions.IgnoreCase);
+            return XdmValue.FromString(Convert.ToHexString(sortKey.KeyData));
+        }
         if (TryParseUca(collation, out var uca))
         {
             // caseFirst=upper requests uppercase to sort before lowercase. .NET's default
@@ -8153,6 +8216,27 @@ public static class FunctionLibrary
         return -1;
     }
 
+    private static bool UnicodeCaseInsensitiveStartsWith(string s, string search)
+        => UnicodeCaseInsensitiveCompareInfo.IsPrefix(s, search, CompareOptions.IgnoreCase);
+
+    private static bool UnicodeCaseInsensitiveEndsWith(string s, string search)
+        => UnicodeCaseInsensitiveCompareInfo.IsSuffix(s, search, CompareOptions.IgnoreCase);
+
+    private sealed class UnicodeCaseInsensitiveStringComparer : IEqualityComparer<string>
+    {
+        public static readonly UnicodeCaseInsensitiveStringComparer Instance = new();
+
+        public bool Equals(string? x, string? y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (x is null || y is null) return false;
+            return UnicodeCaseInsensitiveCompareInfo.Compare(x, y, CompareOptions.IgnoreCase) == 0;
+        }
+
+        public int GetHashCode(string obj)
+            => UnicodeCaseInsensitiveCompareInfo.GetSortKey(obj, CompareOptions.IgnoreCase).GetHashCode();
+    }
+
     private sealed class AsciiCaseInsensitiveComparer : IEqualityComparer<string>
     {
         public static readonly AsciiCaseInsensitiveComparer Instance = new();
@@ -8171,8 +8255,14 @@ public static class FunctionLibrary
 
     private const string CodepointCollation = "http://www.w3.org/2005/xpath-functions/collation/codepoint";
     private const string HtmlAsciiCaseInsensitiveCollation = "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive";
+    private const string UnicodeCaseInsensitiveCollation = "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive";
     private const string CaseblindCollation = "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind";
     private const string UcaCollationPrefix = "http://www.w3.org/2013/collation/UCA";
+
+    // The Unicode case-insensitive collation (PR1945) is approximated with an
+    // invariant-culture, case-ignoring comparison — Unicode simple case folding,
+    // in the same spirit as the grapheme-cluster handling.
+    private static readonly CompareInfo UnicodeCaseInsensitiveCompareInfo = CultureInfo.InvariantCulture.CompareInfo;
 
     private static string ResolveCollationUri(string collation, string? baseUri)
     {
@@ -8196,6 +8286,8 @@ public static class FunctionLibrary
             return;
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return;
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return;
         if (collation == CaseblindCollation)
             return;
         if (TryParseUca(collation, out _))
@@ -8214,6 +8306,8 @@ public static class FunctionLibrary
     {
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return AsciiCaseInsensitiveComparer.Instance;
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return UnicodeCaseInsensitiveStringComparer.Instance;
         if (collation == CaseblindCollation)
             return StringComparer.OrdinalIgnoreCase;
         return StringComparer.Ordinal;
@@ -8225,7 +8319,7 @@ public static class FunctionLibrary
     /// </summary>
     /// <param name="s1">The first string.</param>
     /// <param name="s2">The second string.</param>
-    /// <param name="collation">The collation URI (codepoint, HTML ASCII case-insensitive, or UCA).</param>
+    /// <param name="collation">The collation URI (codepoint, HTML ASCII case-insensitive, Unicode case-insensitive, or UCA).</param>
     /// <returns>A negative value, zero, or a positive value as <paramref name="s1"/> sorts
     /// before, equal to, or after <paramref name="s2"/>.</returns>
     public static int CompareStrings(string s1, string s2, string collation)
@@ -8234,6 +8328,8 @@ public static class FunctionLibrary
             return CompareUca(s1, s2, uca);
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return string.Compare(ToAsciiLower(s1), ToAsciiLower(s2), StringComparison.Ordinal);
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return UnicodeCaseInsensitiveCompareInfo.Compare(s1, s2, CompareOptions.IgnoreCase);
         var comparison = GetStringComparison(collation);
         if (comparison == StringComparison.Ordinal)
             return CompareCodepoints(s1, s2);
@@ -8499,6 +8595,8 @@ public static class FunctionLibrary
         }
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return AsciiCaseInsensitiveContains(s, search);
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return UnicodeCaseInsensitiveCompareInfo.IndexOf(s, search, CompareOptions.IgnoreCase) >= 0;
         return s.Contains(search, GetStringComparison(collation));
     }
 
@@ -8521,6 +8619,8 @@ public static class FunctionLibrary
         }
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return AsciiCaseInsensitiveStartsWith(s, search);
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return UnicodeCaseInsensitiveStartsWith(s, search);
         return s.StartsWith(search, GetStringComparison(collation));
     }
 
@@ -8556,6 +8656,8 @@ public static class FunctionLibrary
         }
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return AsciiCaseInsensitiveEndsWith(s, search);
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return UnicodeCaseInsensitiveEndsWith(s, search);
         return s.EndsWith(search, GetStringComparison(collation));
     }
 
@@ -8569,6 +8671,8 @@ public static class FunctionLibrary
         }
         if (collation == HtmlAsciiCaseInsensitiveCollation)
             return AsciiCaseInsensitiveIndexOf(s, search);
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return UnicodeCaseInsensitiveCompareInfo.IndexOf(s, search, CompareOptions.IgnoreCase);
         return s.IndexOf(search, GetStringComparison(collation));
     }
 
@@ -12565,6 +12669,8 @@ public static class FunctionLibrary
     {
         if (search.Length == 0)
             return s.Length;
+        if (collation == UnicodeCaseInsensitiveCollation)
+            return UnicodeCaseInsensitiveCompareInfo.LastIndexOf(s, search, CompareOptions.IgnoreCase);
         if (collation != HtmlAsciiCaseInsensitiveCollation)
             return s.LastIndexOf(search, GetStringComparison(collation));
         for (int i = s.Length - search.Length; i >= 0; i--)
@@ -13122,32 +13228,36 @@ public static class FunctionLibrary
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
-        return MinMax(items, true, ctx.DefaultCollation);
+        return MinMax(items, true, ctx.DefaultCollation, ctx.IsXPath40);
     }
 
     private static XdmValue Min_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
-        string collation = AtomizedString(args[1]);
+        // XPath 4.0 (PR197): an empty $collation selects the default collation;
+        // 3.1 raises XPTY0004 on the empty sequence.
+        string collation = ctx.IsXPath40 && IsEmptySequence(args[1]) ? ctx.DefaultCollation : AtomizedString(args[1]);
         ValidateCollation(collation);
-        return MinMax(items, true, collation);
+        return MinMax(items, true, collation, ctx.IsXPath40);
     }
 
     private static XdmValue Max_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
-        return MinMax(items, false, ctx.DefaultCollation);
+        return MinMax(items, false, ctx.DefaultCollation, ctx.IsXPath40);
     }
 
     private static XdmValue Max_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         var items = Materialize(args[0]);
         if (items.Count == 0) return XdmValue.Undefined;
-        string collation = AtomizedString(args[1]);
+        // XPath 4.0 (PR197): an empty $collation selects the default collation;
+        // 3.1 raises XPTY0004 on the empty sequence.
+        string collation = ctx.IsXPath40 && IsEmptySequence(args[1]) ? ctx.DefaultCollation : AtomizedString(args[1]);
         ValidateCollation(collation);
-        return MinMax(items, false, collation);
+        return MinMax(items, false, collation, ctx.IsXPath40);
     }
 
     private static XdmValue StringJoin_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -14334,7 +14444,7 @@ public static class FunctionLibrary
     private static double SumTermToDouble(XdmValue a)
         => IsUntypedAtomic(a) ? CastUntypedAtomicToDouble(a.StringValue) : ToDoubleValue(a);
 
-    private static XdmValue MinMax(List<XdmValue> items, bool min, string collation)
+    private static XdmValue MinMax(List<XdmValue> items, bool min, string collation, bool isXPath40 = false)
     {
         var atomized = items.Select(AtomizeValue).ToList();
 
@@ -14359,6 +14469,24 @@ public static class FunctionLibrary
         // Booleans mixed with any other type are not comparable (cbcl-min-003).
         if (atomized.Any(a => a.Kind == XdmValueKind.Boolean))
             throw new InvalidOperationException("FORG0006: fn:min/fn:max arguments must not mix xs:boolean with other types");
+
+        // XPath 4.0 (PR2256): xs:QName is orderable — compared by namespace URI, then
+        // local name, both in codepoint order (fn-min-42/fn-max-42). In 3.1 QNames
+        // fall through to the FORG0006 path below.
+        if (isXPath40 && atomized.All(a => a.Kind == XdmValueKind.QName))
+        {
+            var result = atomized[0];
+            for (int i = 1; i < atomized.Count; i++)
+            {
+                var q = atomized[i].QNameValue;
+                var r = result.QNameValue;
+                int cmp = string.CompareOrdinal(q.NamespaceUri, r.NamespaceUri);
+                if (cmp == 0) cmp = string.CompareOrdinal(q.LocalName, r.LocalName);
+                if (min ? cmp < 0 : cmp > 0)
+                    result = atomized[i];
+            }
+            return result;
+        }
 
         // Date/time family: each kind is orderable only within itself (dates, times,
         // dateTimes, and durations within one orderable subtype); any mix is FORG0006

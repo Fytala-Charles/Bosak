@@ -383,6 +383,8 @@
 //                      |                  |       |                | expansion, QName {uri,local}, same-subtype durations, same-subtype date/times),          |
 //                      |                  |       |                | CompareBinaryValuesLoose/DecodeBinaryOctets, DurationSubtype + GetDurationSubtype/      |
 //                      |                  |       |                | GetDateTimeSubtype/NormalizeDuration made public                                        |
+//                      | Charles Korthout | 2.171 | 10-10-2026     | REQ-123 compare-tail slice: unicode-case-insensitive collation accepted in order-by    |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
@@ -15323,6 +15325,8 @@ internal static class VmEngine
         if (collation == "http://www.w3.org/2005/xpath-functions/collation/codepoint")
             return true;
         if (collation == "http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive")
+            return true;
+        if (collation == "http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive")
             return true;
         if (collation == "http://www.w3.org/2010/09/qt-fots-catalog/collation/caseblind")
             return true;

@@ -6,6 +6,7 @@
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
+//                      |                  |       |                | allowPrefixedBracedLocal for Q{uri}prefix:local                                        |
 // SPDX-License-Identifier: Apache-2.0
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
@@ -155,6 +156,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.71  | 10-10-2026     | REQ-123 sort-with slice: '?' lookup accepts a variable reference as key ($map?$key,       |
 //                      |                  |       |                | spec PR2962) alongside literals, NCNames, and parenthesized keys                           |
+//                      | Charles Korthout | 1.72  | 10-10-2026     | REQ-123 compare-tail slice: # QName literals (PR1976/PR2227, XPST0154); SplitQName     |
+//                      |                  |       |                | allowPrefixedBracedLocal for Q{uri}prefix:local                                        |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -2431,6 +2435,17 @@ internal sealed class XPathParser
                 var (vp, vl, vns) = SplitQName(GetString(varTok));
                 return WithSpan(new VariableReferenceNode(vl, vp, vns), start, End);
 
+            case TokenKind.Hash:
+                // XPath 4.0 QName literal: #local, #prefix:local, or #Q{uri}local
+                // (PR1976/PR2227). Whitespace and comments after '#' are permitted
+                // (Literals-40-925/926: the lexer skips them before the next token).
+                if (!_xpath40)
+                    throw new XPathParseException("XPST0003: QName literals (#) require XPath 4.0.", start);
+                Advance();
+                if (Current.Kind != TokenKind.Name && !IsKeywordName(Current.Kind))
+                    throw new XPathParseException($"XPST0003: Expected a QName after '#' but found {Current.Kind}", Current.Start);
+                return ParseQNameLiteral(start);
+
             case TokenKind.LParen:
                 Advance();
                 if (Match(TokenKind.RParen))
@@ -2700,6 +2715,21 @@ internal sealed class XPathParser
             arity = int.MaxValue;
         }
         return WithSpan(new NamedFunctionRefNode(local, arity, prefix, nsUri), start, End);
+    }
+
+    // XPath 4.0 QName literal (PR1976/PR2227): the name token is Q{uri}local,
+    // Q{uri}prefix:local, prefix:local, or plain local. The lexical prefix (when
+    // present) is retained in the QName value; a prefixed lexical form keeps a null
+    // NamespaceUri so the API compile pass resolves it against the static context
+    // (XPST0081 when unresolvable).
+    private XPathAstNode ParseQNameLiteral(int start)
+    {
+        var nameTok = ExpectName();
+        var (prefix, local, ns) = SplitQName(GetString(nameTok), allowPrefixedBracedLocal: true);
+        // Braced form with a prefix but an empty namespace URI is a static error (eqname-914).
+        if (ns is not null && ns.Length == 0 && !string.IsNullOrEmpty(prefix))
+            throw new XPathParseException("XPST0154: A QName literal with a prefix must not have an empty namespace URI.", start);
+        return WithSpan(new QNameLiteralNode(local, prefix, ns), start, End);
     }
 
     private static void ThrowIfRemovedFunction(string? nsUri, string localName, int position)
@@ -4000,6 +4030,11 @@ internal sealed class XPathParser
     // ------------------------------------------------------------------
 
     private static (string? Prefix, string Local, string? NamespaceUri) SplitQName(string qname)
+        => SplitQName(qname, allowPrefixedBracedLocal: false);
+
+    // allowPrefixedBracedLocal: QName literals (PR2227) permit Q{uri}prefix:local, retaining
+    // the prefix in the value; every other EQName position requires a plain local name.
+    private static (string? Prefix, string Local, string? NamespaceUri) SplitQName(string qname, bool allowPrefixedBracedLocal)
     {
         // Braced URI literal: Q{uri}localname
         // The empty URI form Q{}local is permitted and means "no namespace".
@@ -4024,9 +4059,19 @@ internal sealed class XPathParser
                     throw new XPathParseException($"XQST0070: The namespace URI '{nsUri}' is reserved and must not be used in an EQName.", 0);
                 string rest = qname[(closeBrace + 1)..];
                 // A braced URI literal is followed by a single NCName only: a colon
-                // after '}' is a syntax error (eqname-901/904).
+                // after '}' is a syntax error (eqname-901/904). QName literals relax
+                // this and retain the lexical prefix (PR2227, eqname-042).
                 if (rest.Contains(':'))
-                    throw new XPathParseException($"XPST0003: A braced URI literal must be followed by a local name only, not '{qname}'.", 0);
+                {
+                    if (!allowPrefixedBracedLocal)
+                        throw new XPathParseException($"XPST0003: A braced URI literal must be followed by a local name only, not '{qname}'.", 0);
+                    int bracedColon = rest.IndexOf(':');
+                    string bracedLocal = rest[(bracedColon + 1)..];
+                    if (bracedLocal.Contains(':'))
+                        throw new XPathParseException($"XPST0003: Invalid QName literal '{qname}'.", 0);
+                    // The lexical prefix is retained in the QName value (eqname-042).
+                    return (rest[..bracedColon], bracedLocal, nsUri);
+                }
                 return (null, rest, nsUri);
             }
         }

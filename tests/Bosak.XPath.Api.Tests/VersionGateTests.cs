@@ -58,6 +58,9 @@
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
 //                      | Charles Korthout | 0.17  | 10-10-2026     | REQ-123 sort-with slice: frozen-level gate rows for fn:sort-with/array:sort-with/         |
 //                      |                  |       |                | fn:atomic-type-annotation/fn:is-NaN + fn:compare 3.1 regression rows (arity-2/3 strings)  |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.18  | 10-10-2026     | REQ-123 compare-tail slice: fn:collation-available XPST0017 at 3.1 + frozen-XPath40      |
+//                      |                  |       |                | works; # QName literals XPST0003 at 3.1 + frozen-XPath40 works                            |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -1388,5 +1391,47 @@ public class VersionGateTests
         Assert.Equal(new List<string> { "1", "2" }, Seq40("array:sort-with([2, 1], fn:compare#2)?*"));
         Assert.Equal("true", Eval40("fn:is-NaN(0 div 0e0)").ToString());
         Assert.Equal("true", Eval40("fn:atomic-type-annotation(1)?name = xs:QName('xs:integer')").ToString());
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 compare-tail cluster: collation-available is 4.0-only
+    // (frozen level); # QName literals are 4.0-only syntax (XPST0003 in 3.1)
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("fn:collation-available('http://www.w3.org/2005/xpath-functions/collation/codepoint')")]
+    [InlineData("fn:collation-available#1")]
+    public void Compile_CollationAvailable_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+        Assert.Contains("XPath40", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_CollationAvailable_FrozenXPath40_Works()
+    {
+        Assert.Equal("true", Eval40("fn:collation-available(fn:default-collation())").ToString());
+        Assert.Equal("true", Eval40("fn:collation-available('http://www.w3.org/2005/xpath-functions/collation/unicode-case-insensitive')").ToString());
+        Assert.Equal("false", Eval40("fn:collation-available('ftp://not-a-collation/')").ToString());
+    }
+
+    [Theory]
+    [InlineData("#local")]
+    [InlineData("#fn:null")]
+    [InlineData("#xml:space")]
+    [InlineData("#Q{http://www.example.com}ex:a")]
+    public void Compile_QNameLiterals_DefaultOptions_ThrowXpst0003(string expression)
+    {
+        var ex = Assert.Throws<XPathParseException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0003", ex.Message);
+    }
+
+    [Fact]
+    public void Evaluate_QNameLiterals_FrozenXPath40_Works()
+    {
+        Assert.Equal(new List<string> { "http://www.example.com", "ex", "a" },
+            Seq40("#Q{http://www.example.com}ex:a ! (fn:namespace-uri-from-QName(.), fn:prefix-from-QName(.), fn:local-name-from-QName(.))"));
+        Assert.Equal("true", Eval40("#xml:space eq xs:QName('xml:space')").ToString());
     }
 }
