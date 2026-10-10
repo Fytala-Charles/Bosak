@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle, staleness and sharing remarks                                |
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-124 acceptance F1: candidate compilation routed through the snapshot's resolver      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -278,11 +279,29 @@ public sealed class AuthoringEditCandidate
     /// bytes with the module's own encoding. Compilation is derived state; this method does not
     /// mutate the candidate.
     /// </summary>
+    /// <remarks>
+    /// Resource policy: include/import resolution during this compilation is routed through the
+    /// same <see cref="IAuthoringModuleResolver"/> the candidate's snapshot was inspected with —
+    /// never implicitly through the file system. When the snapshot was created with the engine's
+    /// default file-system resolver, that deliberate default applies unchanged. There is no retry
+    /// and no silent fallback: if the module resolver refuses, returns <see langword="null"/> or
+    /// fails, compilation fails with the corresponding exception (for example
+    /// <see cref="FileNotFoundException"/> for an unresolvable module). Success or failure leaves
+    /// the input and candidate envelopes, source ranges and node correspondence untouched; the
+    /// candidate stays immutable and safe to share across threads.
+    /// </remarks>
     /// <returns>An executable transform of the emitted source.</returns>
+    /// <exception cref="Exception">Compilation fails, including module resolution refused by the snapshot's module resolver.</exception>
     public XsltExecutable Compile()
     {
         var source = Snapshot.SourceFor(Snapshot.PrincipalModule.ModuleUri);
         var text = source.StrictDecode(source.EmittedBytes(EmittedSource));
-        return new XsltCompiler().Compile(text, Snapshot.PrincipalModule.ModuleUri.AbsoluteUri);
+        var compiler = new XsltCompiler();
+        if (Snapshot.ModuleResolver is not FileSystemAuthoringModuleResolver)
+        {
+            compiler.UriResolver = new AuthoringModuleUriResolverBridge(Snapshot.ModuleResolver);
+        }
+
+        return compiler.Compile(text, Snapshot.PrincipalModule.ModuleUri.AbsoluteUri);
     }
 }
