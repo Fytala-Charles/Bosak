@@ -4602,6 +4602,7 @@ EXSLT ([exslt.org](https://exslt.org)) is the de-facto extension vocabulary of t
 **Submitted:** 2026-10-10
 **Status:** Pending
 **Owner:** Bosak maintainers; implementation/release unassigned.
+**Dossier:** [REQ-124 source-preserving XSLT authoring](REQ-124-source-preserving-xslt-authoring.md). Defines consumer workflow, fidelity/context/range contracts, isolated edits, failure taxonomy, module policy, AC-01 through AC-12 and proposed delivery slices. Status remains Pending.
 
 #### Problem Statement
 
@@ -4625,10 +4626,11 @@ Provide a supported authoring boundary exposing source-backed snapshots, ordered
 
 #### Compatibility and Ownership
 
-Bosak owns acceptance, design, implementation, engine tests and supported release. Braid owns sessions, UI, adapters, persistence, consumer fidelity tests and licensing. This Pending request is not approval to change engine code. Consumer design: [Braid architecture](https://github.com/Fytala-Charles/Bosak.Braid/blob/main/docs/ARCHITECTURE.md), [ADR-002](https://github.com/Fytala-Charles/Bosak.Braid/blob/main/docs/ADR-002-source-preserving-authoring-boundary.md); these links refer to design documents currently awaiting a Braid commit/push.
+Bosak owns acceptance, design, implementation, engine tests and supported release. Braid owns sessions, UI, adapters, persistence, consumer fidelity tests and licensing. This Pending request is not approval to change engine code. The local dossier is self-contained for Bosak review. Consumer architecture/ADR/fixtures are recorded against Braid commit 0b5c7fb; those commits are local and not yet pushed. Refer to the dossier for precise preservation and delivery gates rather than relying on inaccessible GitHub main links.
 
 #### Decision Log
 
 | Date | Decision |
 |------|----------|
 | 2026-10-10 | Registered consumer request; Pending Bosak review. No engine implementation performed. |
+| 2026-10-10 | Added detailed consumer dossier and staged acceptance matrix; status remains Pending, API design stays Bosak-owned. |
