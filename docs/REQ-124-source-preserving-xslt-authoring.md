@@ -5,7 +5,7 @@
   <p>Bosak.Braid consumer requirements and observable delivery gates</p>
 </div>
 
-> **Status:** Pending Bosak acceptance/design. **Submitted:** 2026-10-10. **Requester:** Bosak.Braid. **Implementation owner:** Bosak maintainers. No engine implementation is authorized by this dossier.
+> **Status:** Slices A+B landed 2026-10-10 (source-aware inspection + contextual expression replacement); Slice C (supported adoption: packaging/sample/docs polish, AC-11) next. **Submitted:** 2026-10-10. **Requester:** Bosak.Braid. **Implementation owner:** Bosak maintainers.
 
 ## 1. Purpose and Implementation Readiness
 
@@ -173,7 +173,7 @@ No fixed latency/maximum-file-size engine promise is requested yet. Braid curren
 | Coordinate conventions | **Line/column (1-based, UTF-16 code units, matching `IXmlLineInfo`) as the primary contract; byte offsets derived deterministically through the retained source** (AC-09 fixtures: CRLF, astral/surrogate pairs, entity spelling, multiline attributes) |
 | Structural-vs-semantic outcome policy | Distinct outcome kinds: structure failure, semantic diagnostics, fidelity capability, capability absence — never conflated; inspection does not require compilability |
 | Fidelity modes | Lossless (original-byte envelope + splice-only emission) is the only mode in Slices A/B; any regenerated/formatting mode is a later explicit opt-in |
-| First edit capability (Slice B) | Expression replacement in an owned attribute slot only; edits requiring parent namespace/start-tag changes are refused with expanded affected ranges per §5 |
+| First edit capability (Slice B) | Expression replacement in an owned attribute slot only; edits requiring parent namespace/start-tag changes are refused with expanded affected ranges per §5 — **delivered 2026-10-10** (`ProposeExpressionEdit`, `AuthoringEditCandidate`) |
 | Snapshot/node lifetime | Snapshot-scoped node identities; engine owns handle validity and candidate isolation (§7); full reparse acceptable, no incremental promise |
 | Release/test owner | Bosak maintainers; engine-owned contract tests for every AC row; existing compile/conformance gates are regression requirements per AC-12 |
 

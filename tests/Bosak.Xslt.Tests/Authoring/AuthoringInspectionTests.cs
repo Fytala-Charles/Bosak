@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | Pin AC-02/AC-03 fixtures to explicit LF (byte-exact expectations vs checkout line endings)|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -147,16 +148,21 @@ public class AuthoringInspectionTests
     // derived document still compiles.
     // ---------------------------------------------------------------------------------------------
 
-    private const string Ac02Stylesheet = """
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:template match="/">
-    <xsl:if test="true()">
-      <branch use-when="false()"><junk:kept junk:attr="ok" xmlns:junk="urn:junk"/></branch>
-      <xsl:element _name="{'item'}"><xsl:value-of _select="42"/></xsl:element>
-    </xsl:if>
-  </xsl:template>
-</xsl:stylesheet>
-""";
+    // Joined with explicit LF: the byte-offset expectations below are exact, so the fixture must not
+    // depend on the working-tree checkout line-ending style.
+    private static readonly string[] Ac02Lines =
+    {
+        "<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">",
+        "  <xsl:template match=\"/\">",
+        "    <xsl:if test=\"true()\">",
+        "      <branch use-when=\"false()\"><junk:kept junk:attr=\"ok\" xmlns:junk=\"urn:junk\"/></branch>",
+        "      <xsl:element _name=\"{'item'}\"><xsl:value-of _select=\"42\"/></xsl:element>",
+        "    </xsl:if>",
+        "  </xsl:template>",
+        "</xsl:stylesheet>",
+    };
+
+    private static string Ac02Stylesheet => string.Join("\n", Ac02Lines);
 
     [Fact]
     public void Ac02_UseWhenFalseBranch_AndShadowAttributes_Retained_AndCompilable()
@@ -213,18 +219,21 @@ public class AuthoringInspectionTests
     // xsl:iterate keeps its exact full source extent.
     // ---------------------------------------------------------------------------------------------
 
-    private const string Ac03Stylesheet = """
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="urn:default" xpath-default-namespace="urn:xpd" xml:base="sub/">
-  <xsl:template match="/input">
-    <xsl:result-document href="out.xml" format='f&quot;1'>
-      <xsl:element name="wrap"><xsl:value-of select="/input/name"/></xsl:element>
-    </xsl:result-document>
-    <xsl:iterate select="item">
-      <xsl:value-of select="."/>
-    </xsl:iterate>
-  </xsl:template>
-</xsl:stylesheet>
-""";
+    private static readonly string[] Ac03Lines =
+    {
+        "<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns=\"urn:default\" xpath-default-namespace=\"urn:xpd\" xml:base=\"sub/\">",
+        "  <xsl:template match=\"/input\">",
+        "    <xsl:result-document href=\"out.xml\" format='f&quot;1'>",
+        "      <xsl:element name=\"wrap\"><xsl:value-of select=\"/input/name\"/></xsl:element>",
+        "    </xsl:result-document>",
+        "    <xsl:iterate select=\"item\">",
+        "      <xsl:value-of select=\".\"/>",
+        "    </xsl:iterate>",
+        "  </xsl:template>",
+        "</xsl:stylesheet>",
+    };
+
+    private static string Ac03Stylesheet => string.Join("\n", Ac03Lines);
 
     [Fact]
     public void Ac03_IterateRange_CoversStartTagThroughEndTagExactly()

@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: strict-decode and copy helpers for emitted candidate bytes              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -66,6 +67,19 @@ public sealed class AuthoringSource
 
     /// <summary>Gets the coordinate map over the decoded text for this module.</summary>
     internal SourceCoordinateMap CoordinateMap => _coordinateMap.Value;
+
+    /// <summary>
+    /// Copies emitted candidate bytes into an independent array so a candidate is not aliased to
+    /// shared buffers.
+    /// </summary>
+    internal byte[] EmittedBytes(ReadOnlyMemory<byte> emitted) => emitted.ToArray();
+
+    /// <summary>
+    /// Decodes bytes with this module's detected encoding under strict fallback: invalid byte
+    /// sequences raise <see cref="DecoderFallbackException"/> instead of being replaced. The byte
+    /// offset bias (byte-order mark) of this envelope is honored.
+    /// </summary>
+    internal string StrictDecode(byte[] bytes) => DecodeStrict(bytes, Encoding, ByteOffsetBias);
 
     /// <summary>
     /// Attempts to create a retained-source envelope from original module bytes.
