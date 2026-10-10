@@ -4642,6 +4642,9 @@ Bosak owns acceptance, design, implementation, engine tests and supported releas
 
 ### REQ-125: Complete Static Validation and Controlled Preview for Bosak.Braid
 
+**Braid Slice B consumer review (2026-10-10): corrections required.** Tested committed ba5a30f in isolation from active Slice C work: 53 policy/route tests passed. Independent probes found B-F1 (document cache bypasses unsupported/denied route checks) and B-F2 (static evaluation approvals use Document route, bypassing StaticEvaluation restrictions). See [review and regression requirements](REQ-125-SLICE-B-CONSUMER-REVIEW.md). Slice A acceptance remains unchanged; no engine implementation edits were made by the consumer.
+
+
 **Braid correction re-review (2026-10-10): F1–F4 closed; corrected Slice A accepted within declared coverage.** Fix 5b0cf05839cd70abece3cf99fff243d1c77852a8; original consumer probes now agree with expected outcomes; 67 validation/finding tests independently passed. See [review section 6](REQ-125-SLICE-A-CONSUMER-REVIEW.md). Whole-request acceptance and Braid dependency adoption remain separate; Slice B was not reviewed in this step.
 
 
