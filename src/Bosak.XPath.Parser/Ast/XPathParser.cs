@@ -153,6 +153,9 @@
 //                      |                  |       |                | quantifier keywords as function names ($s => every()); if expressions accept EnclosedExpr |
 //                      |                  |       |                | ("{" Expr "}") branches in place of then/else, with 'else' omittable for a braced then   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.71  | 10-10-2026     | REQ-123 sort-with slice: '?' lookup accepts a variable reference as key ($map?$key,       |
+//                      |                  |       |                | spec PR2962) alongside literals, NCNames, and parenthesized keys                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -2368,6 +2371,15 @@ internal sealed class XPathParser
             var expr = ParseExpr();
             Expect(TokenKind.RParen);
             return WithSpan(new ParenthesizedExprNode(expr), start, End);
+        }
+        if (Current.Kind == TokenKind.Dollar)
+        {
+            // XPath 4.0 (PR2962): a variable reference is a legal lookup key
+            // ($map?$key) alongside literals, NCNames, and parenthesized keys.
+            Advance();
+            var varTok = ExpectName();
+            var (vp, vl, vns) = SplitQName(GetString(varTok));
+            return WithSpan(new VariableReferenceNode(vl, vp, vns), start, End);
         }
         throw new XPathParseException("Expected lookup key", Current.Start);
     }

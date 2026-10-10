@@ -29,6 +29,10 @@
 //                      | Charles Korthout | 0.6   | 09-10-2026     | REQ-123 4.0-Exp S1: fn:scan (F&O 4.0 §2.5.15) semantics at the XPath40Experimental       |
 //                      |                  |       |                | level — running sum, sequence accumulator, $pos, arity-2 callback, tail idiom, empty   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 10-10-2026     | REQ-123 sort-with cluster: fn:compare PR909 semantics (exact cross-numeric, NaN order,  |
+//                      |                  |       |                | binary/QName/duration-tuple/g*-UTC), array:sort-with, fn:is-NaN, fn:atomic-type-        |
+//                      |                  |       |                | annotation record (variety/matches/constructor, kind-inferred type names)               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -2120,5 +2124,140 @@ public class XPath40FunctionTests
     {
         Assert.Equal(["0", "1", "3", "6"], Seq40Exp(
             "(fn:scan(input := 1 to 3, init := 0, action := function($a, $b) { $a + $b }))?*"));
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 sort-with cluster (frozen XPath40): fn:compare PR909 semantics,
+    // array:sort-with, fn:is-NaN, fn:atomic-type-annotation record
+    // ------------------------------------------------------------------
+
+    [Fact]
+    public void Compare40_CrossNumericExact_DoubleVsDecimal()
+    {
+        // (double)3.1 > (decimal)3.1 exactly, (float)3.1 < (decimal)3.1.
+        Assert.Equal("1", Eval40("fn:compare(3.1e0, 3.1)").ToString());
+        Assert.Equal("-1", Eval40("fn:compare(xs:float('3.1'), 3.1)").ToString());
+        Assert.Equal("0", Eval40("fn:compare(2e0, 2)").ToString());
+    }
+
+    [Fact]
+    public void Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself()
+    {
+        Assert.Equal("-1", Eval40("fn:compare(number('NaN'), xs:double('-INF'))").ToString());
+        Assert.Equal("0", Eval40("fn:compare(xs:double('NaN'), xs:float('NaN'))").ToString());
+        Assert.Equal("-1", Eval40("fn:compare(xs:double('-INF'), 42)").ToString());
+        Assert.Equal("-1", Eval40("fn:compare(42, xs:double('INF'))").ToString());
+    }
+
+    [Fact]
+    public void Compare40_BooleansAndBinariesAndQName()
+    {
+        Assert.Equal("-1", Eval40("fn:compare(false(), true())").ToString());
+        Assert.Equal("0", Eval40("fn:compare(xs:hexBinary('0AFF'), xs:base64Binary('Cv8='))").ToString());
+        Assert.Equal("-1", Eval40("fn:compare(xs:QName('alpha'), xs:QName('beta'))").ToString());
+    }
+
+    [Fact]
+    public void Compare40_DurationTupleOrdering()
+    {
+        // PR909: (months, days, seconds) component tuple, no cross-unit normalization.
+        Assert.Equal("1", Eval40("fn:compare(xs:duration('P2Y'), xs:duration('P1000D'))").ToString());
+        Assert.Equal("0", Eval40("fn:compare(xs:duration('PT1H'), xs:duration('PT60M0.00S'))").ToString());
+        Assert.Equal("0", Eval40("fn:compare(xs:duration('P1Y'), xs:yearMonthDuration('P12M'))").ToString());
+        Assert.Equal("-1", Eval40("fn:compare(xs:duration('P1Y1MT1H1M'), xs:duration('P1Y1MT1H1M1S'))").ToString());
+    }
+
+    [Fact]
+    public void Compare40_GTypesCompareByUtcInstant()
+    {
+        Assert.Equal("1", Eval40("fn:compare(xs:gYear('2005+02:00'), xs:gYear('2005+03:00'))").ToString());
+        Assert.Equal("-1", Eval40("fn:compare(xs:gMonthDay('--02-29+03:00'), xs:gMonthDay('--02-29+02:00'))").ToString());
+        Assert.Equal("-1", Eval40("fn:compare(xs:gDay('---29+03:00'), xs:gDay('---29+02:00'))").ToString());
+    }
+
+    [Fact]
+    public void Compare40_MixedIncomparable_RaisesXpty0004()
+    {
+        Assert.Contains("XPTY0004", Error40("fn:compare(1, 'fred')").Message);
+    }
+
+    [Fact]
+    public void Compare40_KeywordFormAndEmptyCollation()
+    {
+        Assert.Equal("-1", Eval40("fn:compare(comparand1 := 'a', comparand2 := 'b')").ToString());
+        // 3-arg form with () collation falls back to the default collation.
+        Assert.Equal("-1", Eval40("fn:compare('a', 'b', ())").ToString());
+    }
+
+    [Fact]
+    public void SortWith_ValidatesComparatorsBeforeEmptyInputShortcut()
+    {
+        Assert.Contains("XPTY0004", Error40("fn:sort-with((), ())").Message);
+    }
+
+    [Fact]
+    public void SortWith_TypeThenValueComparatorChain()
+    {
+        Assert.Equal(["29", "42", "x", "y"], Seq40(
+            "fn:sort-with((42, 'x', 29, 'y'), (function($a, $b) { fn:compare(fn:atomic-type-annotation($a)?primitive-type()?name => fn:string(), fn:atomic-type-annotation($b)?primitive-type()?name => fn:string()) }, fn:compare#2))"));
+    }
+
+    [Fact]
+    public void ArraySortWith_SortsMembers()
+    {
+        Assert.Equal(["1", "2", "3"], Seq40("array:sort-with([3, 1, 2], fn:compare#2)?*"));
+    }
+
+    [Fact]
+    public void IsNan_DetectsDoubleAndFloatNaN()
+    {
+        Assert.Equal("true", Eval40("fn:is-NaN(fn:number('NaN'))").ToString());
+        Assert.Equal("true", Eval40("fn:is-NaN(xs:float('NaN'))").ToString());
+        Assert.Equal("false", Eval40("fn:is-NaN(23)").ToString());
+        Assert.Equal("false", Eval40("fn:is-NaN('xyz')").ToString());
+        Assert.Equal("true", Eval40("fn:is-NaN([fn:number('NaN')])").ToString());
+    }
+
+    [Fact]
+    public void IsNan_EmptyMultiMapFunction_Raise()
+    {
+        Assert.Contains("XPTY0004", Error40("fn:is-NaN(())").Message);
+        Assert.Contains("XPTY0004", Error40("fn:is-NaN((1, 2))").Message);
+        Assert.Contains("FOTY0013", Error40("fn:is-NaN(map { 1: 2 })").Message);
+        Assert.Contains("FOTY0013", Error40("fn:is-NaN(true#0)").Message);
+    }
+
+    [Fact]
+    public void AtomicTypeAnnotation_PrimitiveBoolean_RecordShape()
+    {
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(true())?name = xs:QName('xs:boolean')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(true())?is-simple").ToString());
+        Assert.Equal("atomic", Eval40("fn:atomic-type-annotation(true())?variety").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(true())?base-type()?name = xs:QName('xs:anyAtomicType')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(true())?primitive-type()?name = xs:QName('xs:boolean')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(true())?matches(false())").ToString());
+        Assert.Equal("false", Eval40("fn:atomic-type-annotation(true())?matches(0)").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(true())?constructor(1)").ToString());
+        Assert.Equal("false", Eval40("fn:atomic-type-annotation(true())?constructor('false')").ToString());
+    }
+
+    [Fact]
+    public void AtomicTypeAnnotation_DerivedDayTimeDuration_HierarchyAndMatches()
+    {
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(xs:dayTimeDuration('PT1H'))?name = xs:QName('xs:dayTimeDuration')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(xs:dayTimeDuration('PT1H'))?base-type()?name = xs:QName('xs:duration')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(xs:dayTimeDuration('PT1H'))?primitive-type()?name = xs:QName('xs:duration')").ToString());
+        Assert.Equal("false", Eval40("fn:atomic-type-annotation(xs:dayTimeDuration('PT1H'))?matches(xs:duration('PT0S'))").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(xs:dayTimeDuration('PT1H'))?matches(xs:dayTimeDuration('PT2H'))").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(xs:dayTimeDuration('PT1H'))?constructor('PT0S') => fn:seconds-from-duration() = 0").ToString());
+    }
+
+    [Fact]
+    public void AtomicTypeAnnotation_KindInferredTypeNames_ForUnannotatedLiterals()
+    {
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(42)?name = xs:QName('xs:integer')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation('x')?name = xs:QName('xs:string')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(xs:date('2022-02-22'))?name = xs:QName('xs:date')").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(42)?primitive-type()?name = xs:QName('xs:decimal')").ToString());
     }
 }

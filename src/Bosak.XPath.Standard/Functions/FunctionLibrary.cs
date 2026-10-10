@@ -105,6 +105,12 @@
 //                      | Charles Korthout | 5.137 | 10-10-2026     | REQ-123: XPath 4.0 focus constructors (PR661) — arity-0 forms of all built-in xs:*       |
 //                      |                  |       |                | constructors take the context item (XsFocusCtor); IsXPath40Only, 3.1-hidden              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.138 | 10-10-2026     | REQ-123 sort-with slice: fn:compare PR909 (anyAtomicType comparands, 4.0-only semantics  |
+//                      |                  |       |                | via VmEngine.CompareAtomic, 3.1 string-only path kept), fn:sort-with comparator          |
+//                      |                  |       |                | validation before empty-input shortcut, array:sort-with#2, fn:atomic-type-annotation#1   |
+//                      |                  |       |                | (type-annotation record: name/is-simple/base-type()/primitive-type()), keyword rows for  |
+//                      |                  |       |                | compare/sort-with/atomic-type-annotation                                                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -1537,6 +1543,26 @@ public static class FunctionLibrary
                 IsXPath40Only = true,
                 Implementation = SortWith_2
             },
+            [(Namespaces.Fn, "atomic-type-annotation", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "atomic-type-annotation",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Map,
+                IsXPath40Only = true,
+                Implementation = AtomicTypeAnnotation_1
+            },
+            [(Namespaces.Fn, "is-NaN", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn,
+                LocalName = "is-NaN",
+                Arity = 1,
+                ParameterTypes = [XdmValueKind.Undefined],
+                ReturnType = XdmValueKind.Boolean,
+                IsXPath40Only = true,
+                Implementation = IsNaN_1
+            },
 
             // ----- XPath 4.0 string functions (REQ-118 slice 4.0-S1 part 2) ------
             [(Namespaces.Fn, "graphemes", 1)] = new()
@@ -2116,6 +2142,14 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.Array, XdmValueKind.Undefined, XdmValueKind.Function],
                 ReturnType = XdmValueKind.Array,
                 Implementation = ArraySort_3
+            },
+            [(Namespaces.Array, "sort-with", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "sort-with", Arity = 2,
+                ParameterTypes = [XdmValueKind.Array, XdmValueKind.Sequence],
+                ReturnType = XdmValueKind.Array,
+                IsXPath40Only = true,
+                Implementation = ArraySortWith_2
             },
             [(Namespaces.Array, "flatten", 1)] = new()
             {
@@ -4598,6 +4632,9 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "lang")] = new(["language", "node"], [null, "."]),
             [(Namespaces.Fn, "sort")] = new(["input", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
             [(Namespaces.Fn, "sort-by")] = new(["input", "keys"], [null, null]),
+            [(Namespaces.Fn, "sort-with")] = new(["input", "comparators"], [null, null]),
+            [(Namespaces.Fn, "atomic-type-annotation")] = new(["value"], [null]),
+            [(Namespaces.Fn, "compare")] = new(["comparand1", "comparand2", "collation"], [null, null, "fn:default-collation()"]),
             [(Namespaces.Fn, "subsequence")] = new(["input", "start", "length"], [null, null, "()"]),
             [(Namespaces.Fn, "substring")] = new(["value", "start", "length"], [null, null, "()"]),
             [(Namespaces.Fn, "string-join")] = new(["values", "separator"], [null, "''"]),
@@ -4614,6 +4651,7 @@ public static class FunctionLibrary
             [(Namespaces.Map, "merge")] = new(["maps", "options"], [null, "map{}"]),
             [(Namespaces.Map, "build")] = new(["input", "key", "value", "options"], [null, "fn:identity#1", "fn:identity#1", "map{}"]),
             [(Namespaces.Array, "sort")] = new(["array", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
+            [(Namespaces.Array, "sort-with")] = new(["array", "comparators"], [null, null]),
             [(Namespaces.Array, "slice")] = new(["array", "start", "end", "step"], [null, "0", "0", "0"]),
             [(Namespaces.Fn, "some")] = new(["input", "predicate"], [null, "fn:boolean#1"]),
             [(Namespaces.Fn, "every")] = new(["input", "predicate"], [null, "fn:boolean#1"]),
@@ -11915,20 +11953,37 @@ public static class FunctionLibrary
 
     private static XdmValue SortWith_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
+        // The comparators are validated BEFORE the empty-input shortcut: the spec
+        // requires at least one comparator even when $input is empty (sort-with-001).
+        var comparators = CollectSortWithComparators(args[1]);
         var items = AsSequence(args[0]).ToList();
         if (items.Count == 0)
             return XdmValue.Undefined;
+        return XdmValue.FromSequence(MaterializedSequence.FromList(SortWithComparators(items, comparators, ctx)));
+    }
+
+    // Shared comparator validation for fn:sort-with and array:sort-with: every
+    // comparator must be a function item of arity 2, and at least one is required
+    // (an empty comparator sequence is XPTY0004 even for empty input).
+    private static List<XdmValue> CollectSortWithComparators(XdmValue comparatorsArg)
+    {
         var comparators = new List<XdmValue>();
-        foreach (var c in AsSequence(args[1]))
+        foreach (var c in AsSequence(comparatorsArg))
         {
             var comparator = SingleFunctionItem(c);
             if (!comparator.IsFunction || GetFunctionArity(comparator) != 2)
-                throw new InvalidOperationException("XPTY0004: fn:sort-with comparators must be function items of arity 2");
+                throw new InvalidOperationException("XPTY0004: sort-with comparators must be function items of arity 2");
             comparators.Add(comparator);
         }
         if (comparators.Count == 0)
-            throw new InvalidOperationException("XPTY0004: fn:sort-with requires at least one comparator function");
+            throw new InvalidOperationException("XPTY0004: sort-with requires at least one comparator function");
+        return comparators;
+    }
 
+    // Stable comparator merge over a materialized item list: each comparator is
+    // consulted in turn until one orders the pair; equal pairs keep input order.
+    private static List<XdmValue> SortWithComparators(List<XdmValue> items, List<XdmValue> comparators, EvaluationContext ctx)
+    {
         var order = new int[items.Count];
         for (int i = 0; i < order.Length; i++)
             order[i] = i;
@@ -11940,7 +11995,7 @@ public static class FunctionLibrary
                 {
                     var r = VmEngine.InvokeFunctionItem(comparator, ctx, new[] { items[ia], items[ib] });
                     if (IsEmptySequence(r))
-                        throw new InvalidOperationException("XPTY0004: fn:sort-with comparator returned the empty sequence");
+                        throw new InvalidOperationException("XPTY0004: sort-with comparator returned the empty sequence");
                     long cmp = VmEngine.ApplyFunctionConversion(r, "xs:integer", ctx).IntegerValue;
                     if (cmp < 0)
                         return -1;
@@ -11958,7 +12013,234 @@ public static class FunctionLibrary
         var result = new List<XdmValue>(items.Count);
         foreach (int i in order)
             result.Add(items[i]);
-        return XdmValue.FromSequence(MaterializedSequence.FromList(result));
+        return result;
+    }
+
+    // ------------------------------------------------------------------
+    // fn:atomic-type-annotation (F&O 4.0) — type annotation record
+    // ------------------------------------------------------------------
+
+    // F&O 4.0 fn:atomic-type-annotation: describes the type annotation of an atomic
+    // value as a record map — name (xs:QName), is-simple (xs:boolean), base-type()
+    // and primitive-type() as zero-argument functions returning the same record
+    // shape for the type's base resp. primitive type. Exercised by qt4tests
+    // fn/atomic-type-annotation.xml and fn:sort-with-024 (primitive-type()?name).
+    private static XdmValue AtomicTypeAnnotation_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = AtomizeSingleton(args[0]);
+        return TypeAnnotationMap(AtomicTypeName(EffectiveAtomicTypeName(value)));
+    }
+
+    // XDM assigns every atomic value a type annotation, but values produced without
+    // schema validation (literals, constructor results) carry no explicit annotation
+    // here; the natural built-in type is then inferred from the XDM value kind.
+    private static string? EffectiveAtomicTypeName(XdmValue value) =>
+        !string.IsNullOrEmpty(value.SchemaTypeName) ? value.SchemaTypeName : value.Kind switch
+        {
+            XdmValueKind.String => "string",
+            XdmValueKind.Integer => "integer",
+            XdmValueKind.Decimal => "decimal",
+            XdmValueKind.Double => "double",
+            XdmValueKind.Float => "float",
+            XdmValueKind.Boolean => "boolean",
+            XdmValueKind.Date => "date",
+            XdmValueKind.Time => "time",
+            XdmValueKind.DateTime => "datetime",
+            XdmValueKind.Duration => VmEngine.GetDurationSubtype(value) switch
+            {
+                VmEngine.DurationSubtype.YearMonthDuration => "yearmonthduration",
+                VmEngine.DurationSubtype.DayTimeDuration => "daytimeduration",
+                _ => "duration",
+            },
+            XdmValueKind.QName => "qname",
+            XdmValueKind.Uri => "anyuri",
+            _ => null,
+        };
+
+    // fn:is-NaN($value as xs:anyAtomicType) as xs:boolean: true iff the atomized
+    // single value is an xs:double or xs:float NaN. Arrays are atomized to their
+    // members; maps and function items raise FOTY0013; the empty sequence or more
+    // than one item raise XPTY0004.
+    private static XdmValue IsNaN_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var value = args[0];
+        if (value.IsFunction || value.IsMap)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a function item or map");
+        var items = Materialize(value);
+        if (items.Count != 1)
+            throw new InvalidOperationException("XPTY0004: fn:is-NaN requires a single atomic value");
+        var item = AtomizeValue(items[0]);
+        if (item.IsUndefined || item.IsFunction || item.IsMap || item.IsArray)
+            throw new InvalidOperationException("XPTY0004: fn:is-NaN requires a single atomic value");
+        var nan = item.Kind is XdmValueKind.Double or XdmValueKind.Float && double.IsNaN(item.DoubleValue);
+        return XdmValue.FromBoolean(nan, "boolean");
+    }
+
+    // Normalizes a SchemaTypeName annotation (stored lowercase, no prefix) to the
+    // canonical XSD type local name; unannotated values are xs:untypedAtomic.
+    private static string AtomicTypeName(string? schemaTypeName) => schemaTypeName?.ToLowerInvariant() switch
+    {
+        null or "" or "untypedatomic" => "untypedAtomic",
+        "string" => "string",
+        "normalizedstring" => "normalizedString",
+        "token" => "token",
+        "language" => "language",
+        "nmtoken" => "NMTOKEN",
+        "name" => "Name",
+        "ncname" => "NCName",
+        "id" => "ID",
+        "idref" => "IDREF",
+        "entity" => "ENTITY",
+        "integer" => "integer",
+        "nonpositiveinteger" => "nonPositiveInteger",
+        "negativeinteger" => "negativeInteger",
+        "long" => "long",
+        "int" => "int",
+        "short" => "short",
+        "byte" => "byte",
+        "nonnegativeinteger" => "nonNegativeInteger",
+        "positiveinteger" => "positiveInteger",
+        "unsignedlong" => "unsignedLong",
+        "unsignedint" => "unsignedInt",
+        "unsignedshort" => "unsignedShort",
+        "unsignedbyte" => "unsignedByte",
+        "decimal" => "decimal",
+        "float" => "float",
+        "double" => "double",
+        "boolean" => "boolean",
+        "duration" => "duration",
+        "yearmonthduration" => "yearMonthDuration",
+        "daytimeduration" => "dayTimeDuration",
+        "datetime" => "dateTime",
+        "datetimestamp" => "dateTimeStamp",
+        "date" => "date",
+        "time" => "time",
+        "gyear" => "gYear",
+        "gyearmonth" => "gYearMonth",
+        "gmonth" => "gMonth",
+        "gmonthday" => "gMonthDay",
+        "gday" => "gDay",
+        "qname" => "QName",
+        "notation" => "NOTATION",
+        "anyuri" => "anyURI",
+        "hexbinary" => "hexBinary",
+        "base64binary" => "base64Binary",
+        _ => schemaTypeName!, // user-defined annotation: keep as-is
+    };
+
+    // XSD built-in atomic type hierarchy: type -> (base type, primitive type).
+    // The primitive of every numeric subtype is xs:decimal (via xs:integer); the
+    // g* types, QName/NOTATION, anyURI, and the binaries are their own primitives.
+    private static (string Base, string Primitive) AtomicTypeHierarchy(string type) => type switch
+    {
+        "string" => ("anyAtomicType", "string"),
+        "normalizedString" => ("string", "string"),
+        "token" => ("normalizedString", "string"),
+        "language" or "NMTOKEN" or "Name" => ("token", "string"),
+        "NCName" => ("Name", "string"),
+        "ID" or "IDREF" or "ENTITY" => ("NCName", "string"),
+        "decimal" => ("anyAtomicType", "decimal"),
+        "integer" => ("decimal", "decimal"),
+        "nonPositiveInteger" => ("integer", "decimal"),
+        "negativeInteger" => ("nonPositiveInteger", "decimal"),
+        "long" => ("integer", "decimal"),
+        "int" => ("long", "decimal"),
+        "short" => ("int", "decimal"),
+        "byte" => ("short", "decimal"),
+        "nonNegativeInteger" => ("integer", "decimal"),
+        "positiveInteger" => ("nonNegativeInteger", "decimal"),
+        "unsignedLong" => ("nonNegativeInteger", "decimal"),
+        "unsignedInt" => ("unsignedLong", "decimal"),
+        "unsignedShort" => ("unsignedInt", "decimal"),
+        "unsignedByte" => ("unsignedShort", "decimal"),
+        "float" => ("anyAtomicType", "float"),
+        "double" => ("anyAtomicType", "double"),
+        "boolean" => ("anyAtomicType", "boolean"),
+        "duration" => ("anyAtomicType", "duration"),
+        "yearMonthDuration" or "dayTimeDuration" => ("duration", "duration"),
+        "dateTime" => ("anyAtomicType", "dateTime"),
+        "dateTimeStamp" => ("dateTime", "dateTime"),
+        "date" => ("anyAtomicType", "date"),
+        "time" => ("anyAtomicType", "time"),
+        "gYear" => ("anyAtomicType", "gYear"),
+        "gYearMonth" => ("anyAtomicType", "gYearMonth"),
+        "gMonth" => ("anyAtomicType", "gMonth"),
+        "gMonthDay" => ("anyAtomicType", "gMonthDay"),
+        "gDay" => ("anyAtomicType", "gDay"),
+        "QName" => ("anyAtomicType", "QName"),
+        "NOTATION" => ("anyAtomicType", "NOTATION"),
+        "anyURI" => ("anyAtomicType", "anyURI"),
+        "hexBinary" => ("anyAtomicType", "hexBinary"),
+        "base64Binary" => ("anyAtomicType", "base64Binary"),
+        "untypedAtomic" => ("anyAtomicType", "untypedAtomic"),
+        _ => ("anyAtomicType", "anyAtomicType"),
+    };
+
+    private static XdmValue TypeAnnotationMap(string type)
+    {
+        var (baseType, primitive) = AtomicTypeHierarchy(type);
+        var map = new XdmMap();
+        map.Add(XdmValue.FromString("name"),
+            XdmValue.FromQName(new XsQName(type, Namespaces.Xs, "xs")));
+        map.Add(XdmValue.FromString("is-simple"), XdmValue.FromBoolean(true, "boolean"));
+        map.Add(XdmValue.FromString("variety"), XdmValue.FromString("atomic", "string"));
+        // base-type()/primitive-type() are zero-argument functions returning the
+        // same record shape for the hierarchy parents (base of xs:anyAtomicType
+        // is itself, closing the chain).
+        map.Add(XdmValue.FromString("base-type"),
+            XdmValue.FromFunction(new DelegateFunctionItem(0, (callCtx, callArgs) =>
+                TypeAnnotationMap(baseType))));
+        map.Add(XdmValue.FromString("primitive-type"),
+            XdmValue.FromFunction(new DelegateFunctionItem(0, (callCtx, callArgs) =>
+                TypeAnnotationMap(primitive))));
+        // matches($value) is true iff the atomized value is an instance of this
+        // type (or a derived type), per the XPath 4.0 record specification.
+        map.Add(XdmValue.FromString("matches"),
+            XdmValue.FromFunction(new DelegateFunctionItem(1, (callCtx, callArgs) =>
+            {
+                var arg = callArgs.Length > 0 ? callArgs[0] : XdmValue.Undefined;
+                XdmValue single;
+                try
+                {
+                    single = AtomizeSingleton(arg);
+                }
+                catch (InvalidOperationException)
+                {
+                    return XdmValue.FromBoolean(false, "boolean");
+                }
+                return XdmValue.FromBoolean(
+                    !single.IsUndefined && TypeMatches(type, single), "boolean");
+            })));
+        // constructor($value) casts the supplied value to this type, mirroring the
+        // xs:* constructor functions (VmEngine.Cast).
+        map.Add(XdmValue.FromString("constructor"),
+            XdmValue.FromFunction(new DelegateFunctionItem(1, (callCtx, callArgs) =>
+            {
+                var arg = callArgs.Length > 0 ? callArgs[0] : XdmValue.Undefined;
+                var single = AtomizeSingleton(arg);
+                if (single.IsUndefined)
+                    throw new InvalidOperationException("XPTY0004: The constructor member function requires a single value.");
+                return VmEngine.Cast(single, type);
+            })));
+        return XdmValue.FromMap(map);
+    }
+
+    // Instance-of check walking the AtomicTypeHierarchy chain upward: a value
+    // matches when its own (explicit or kind-inferred) type is the target type
+    // or derives from it — so 42 matches xs:decimal but not xs:boolean, a
+    // dayTimeDuration value matches xs:duration (its base), and a plain duration
+    // value does not match xs:dayTimeDuration.
+    private static bool TypeMatches(string targetType, XdmValue value)
+    {
+        var current = AtomicTypeName(EffectiveAtomicTypeName(value));
+        while (current is not null)
+        {
+            if (current == targetType) return true;
+            var (baseType, _) = AtomicTypeHierarchy(current);
+            if (baseType == current) break;
+            current = baseType;
+        }
+        return false;
     }
 
     // ------------------------------------------------------------------
@@ -13471,6 +13753,17 @@ public static class FunctionLibrary
 
     private static XdmValue ArraySort_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => ArraySort(ctx, args[0].ArrayValue, args[1], args[2]);
+
+    // F&O 4.0 array:sort-with — stable sort of the array members with a non-empty
+    // sequence of arity-2 comparators (same comparator machinery as fn:sort-with).
+    private static XdmValue ArraySortWith_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var comparators = CollectSortWithComparators(args[1]);
+        var items = new List<XdmValue>();
+        foreach (var item in args[0].ArrayValue.Values)
+            items.Add(item);
+        return XdmValue.FromArray(new XdmArray(SortWithComparators(items, comparators, ctx)));
+    }
 
     private static XdmValue ArraySort(EvaluationContext ctx, XdmArray arr, XdmValue? collation, XdmValue? keyFunc)
     {
@@ -16682,6 +16975,15 @@ public static class FunctionLibrary
     {
         if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
             return XdmValue.Undefined;
+        if (ctx.IsXPath40)
+        {
+            // XPath 4.0 (PR909): xs:anyAtomicType? comparands with cross-type rules —
+            // exact numeric comparison, mutual binary comparison, booleans, QNames,
+            // same-subtype durations and date/times.
+            var a = AtomizeSingleton(args[0]);
+            var b = AtomizeSingleton(args[1]);
+            return XdmValue.FromInteger(VmEngine.CompareAtomic(a, b, ctx));
+        }
         string s1 = RequireString(args[0]);
         string s2 = RequireString(args[1]);
         return Compare(s1, s2, ctx.DefaultCollation);
@@ -16691,11 +16993,24 @@ public static class FunctionLibrary
     {
         if (IsEmptySequence(args[0]) || IsEmptySequence(args[1]))
             return XdmValue.Undefined;
+        if (ctx.IsXPath40)
+        {
+            // XPath 4.0 (PR909): xs:anyAtomicType? comparands; an empty $collation
+            // selects the default collation (compare-402/403/404).
+            string collation = IsEmptySequence(args[2]) ? ctx.DefaultCollation : AtomizedString(args[2]);
+            ValidateCollation(collation);
+            var a = AtomizeSingleton(args[0]);
+            var b = AtomizeSingleton(args[1]);
+            var effectiveCtx = string.Equals(collation, ctx.DefaultCollation, StringComparison.Ordinal)
+                ? ctx
+                : ctx.WithDefaultCollation(collation);
+            return XdmValue.FromInteger(VmEngine.CompareAtomic(a, b, effectiveCtx));
+        }
         string s1 = RequireString(args[0]);
         string s2 = RequireString(args[1]);
-        string collation = AtomizedString(args[2]);
-        ValidateCollation(collation);
-        return Compare(s1, s2, collation);
+        string collation31 = AtomizedString(args[2]);
+        ValidateCollation(collation31);
+        return Compare(s1, s2, collation31);
     }
 
     private static XdmValue Compare(string s1, string s2, string collation = "")

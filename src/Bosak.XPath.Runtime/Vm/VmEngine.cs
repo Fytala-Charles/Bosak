@@ -378,11 +378,18 @@
 //                      |                  |       |                | opcode case, map-preserving NameTest/KindTest/NamespaceTest branches (E/"key",          |
 //                      |                  |       |                | E//"key", E//QName)                                                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.170 | 10-10-2026     | REQ-123 sort-with slice: public CompareAtomic 3-way comparator (fn:compare PR909 —     |
+//                      |                  |       |                | collation strings, mutual binary octets, booleans, exact cross-numeric via BigInteger    |
+//                      |                  |       |                | expansion, QName {uri,local}, same-subtype durations, same-subtype date/times),          |
+//                      |                  |       |                | CompareBinaryValuesLoose/DecodeBinaryOctets, DurationSubtype + GetDurationSubtype/      |
+//                      |                  |       |                | GetDateTimeSubtype/NormalizeDuration made public                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -6420,7 +6427,20 @@ internal static class VmEngine
         return (long)Math.Floor(value + 0.5m);
     }
 
-    private enum DurationSubtype { YearMonthDuration, DayTimeDuration, Duration }
+    /// <summary>
+    /// The dynamic subtype of an <c>xs:duration</c> value, decided by its schema
+    /// annotation (or its components when unannotated). Plain <c>xs:duration</c>
+    /// is unordered; the year-month and day-time subtypes are orderable.
+    /// </summary>
+    public enum DurationSubtype
+    {
+        /// <summary>An <c>xs:yearMonthDuration</c> value (orderable by total months).</summary>
+        YearMonthDuration,
+        /// <summary>An <c>xs:dayTimeDuration</c> value (orderable by total seconds).</summary>
+        DayTimeDuration,
+        /// <summary>A plain <c>xs:duration</c> value (not orderable).</summary>
+        Duration,
+    }
 
     private static DurationSubtype GetDurationSubtype(string s)
     {
@@ -6433,7 +6453,14 @@ internal static class VmEngine
         return DurationSubtype.Duration;
     }
 
-    private static DurationSubtype GetDurationSubtype(XdmValue value)
+    /// <summary>
+    /// Returns the dynamic duration subtype of a value: <see cref="DurationSubtype.YearMonthDuration"/>,
+    /// <see cref="DurationSubtype.DayTimeDuration"/>, or the unordered plain
+    /// <see cref="DurationSubtype.Duration"/>, decided by the schema annotation first.
+    /// </summary>
+    /// <param name="value">The duration value to classify.</param>
+    /// <returns>The duration subtype.</returns>
+    public static DurationSubtype GetDurationSubtype(XdmValue value)
     {
         var schemaType = value.SchemaTypeName;
         if (schemaType is not null)
@@ -6446,7 +6473,14 @@ internal static class VmEngine
         return GetDurationSubtype(value.DurationValue);
     }
 
-    private static string? GetDateTimeSubtype(XdmValue value)
+    /// <summary>
+    /// Returns the date/time subtype name (<c>dateTime</c>, <c>date</c>, <c>time</c>,
+    /// <c>gYear</c>, <c>gYearMonth</c>, <c>gMonth</c>, <c>gMonthDay</c>, <c>gDay</c>)
+    /// of a value, or <c>null</c> when the value is not a date/time value.
+    /// </summary>
+    /// <param name="value">The value to classify.</param>
+    /// <returns>The subtype name, or <c>null</c>.</returns>
+    public static string? GetDateTimeSubtype(XdmValue value)
     {
         return value.Kind switch
         {
@@ -6610,7 +6644,13 @@ internal static class VmEngine
         return (new XPathDateTime(year, month, day, 0, 0, 0, 0, tz, hasTz), hasTz);
     }
 
-    private static (long TotalMonths, decimal TotalSeconds) NormalizeDuration(string s)
+    /// <summary>
+    /// Normalizes a duration lexical form to its total months and total seconds,
+    /// the canonical ordering components for duration values.
+    /// </summary>
+    /// <param name="s">The duration lexical form.</param>
+    /// <returns>The total months and total seconds.</returns>
+    public static (long TotalMonths, decimal TotalSeconds) NormalizeDuration(string s)
     {
         var m = DurationPartsRegex.Match(s);
         if (!m.Success) return (0, 0);
@@ -6633,6 +6673,38 @@ internal static class VmEngine
         }
 
         return (totalMonths, totalSeconds);
+    }
+
+    /// <summary>
+    /// Splits a duration lexical form into its un-normalized component tuple
+    /// (total months, days, time-in-seconds) for XPath 4.0 fn:compare ordering.
+    /// </summary>
+    /// <param name="s">The duration lexical form.</param>
+    /// <returns>The (months, days, seconds) component tuple.</returns>
+    private static (long Months, long Days, decimal Seconds) DurationComponents(string s)
+    {
+        var m = DurationPartsRegex.Match(s);
+        if (!m.Success) return (0, 0, 0);
+        bool negative = m.Groups["sign"].Value == "-";
+
+        long years = m.Groups["Y"].Success ? long.Parse(m.Groups["Y"].Value.TrimEnd('Y'), CultureInfo.InvariantCulture) : 0;
+        long months = m.Groups["M"].Success ? long.Parse(m.Groups["M"].Value.TrimEnd('M'), CultureInfo.InvariantCulture) : 0;
+        long days = m.Groups["D"].Success ? long.Parse(m.Groups["D"].Value.TrimEnd('D'), CultureInfo.InvariantCulture) : 0;
+        long hours = m.Groups["H"].Success ? long.Parse(m.Groups["H"].Value.TrimEnd('H'), CultureInfo.InvariantCulture) : 0;
+        long minutes = m.Groups["Tm"].Success ? long.Parse(m.Groups["Tm"].Value.TrimEnd('M'), CultureInfo.InvariantCulture) : 0;
+        decimal seconds = m.Groups["S"].Success ? decimal.Parse(m.Groups["S"].Value.TrimEnd('S'), CultureInfo.InvariantCulture) : 0;
+
+        long totalMonths = years * 12 + months;
+        decimal totalSeconds = hours * 3600m + minutes * 60m + seconds;
+
+        if (negative)
+        {
+            totalMonths = -totalMonths;
+            days = -days;
+            totalSeconds = -totalSeconds;
+        }
+
+        return (totalMonths, days, totalSeconds);
     }
 
     private static XdmValue AddDurations(XdmValue left, XdmValue right)
@@ -7596,6 +7668,223 @@ internal static class VmEngine
         byte[] lBytes = isHex ? Convert.FromHexString(left.StringValue) : Convert.FromBase64String(left.StringValue);
         byte[] rBytes = isHex ? Convert.FromHexString(right.StringValue) : Convert.FromBase64String(right.StringValue);
         return ((ReadOnlySpan<byte>)lBytes).SequenceCompareTo(rBytes);
+    }
+
+    /// <summary>
+    /// Three-way comparison for XPath 4.0 <c>fn:compare</c> (spec PR909): compares two
+    /// single atomic values of any comparable combination and returns -1, 0, or 1.
+    /// Strings (including <c>xs:untypedAtomic</c>) compare by collation; binary values
+    /// (hexBinary/base64Binary annotations) compare by decoded octets, mutually
+    /// comparable across the two binary types; booleans order false &lt; true; any mix
+    /// of numeric types compares by exact mathematical value (NaN &lt; -INF &lt; finite
+    /// &lt; +INF, NaN equal NaN, +0 equal -0); date/time values of the same subtype
+    /// compare on the timeline (indeterminate falls back to the lexical form, mirroring
+    /// the eq/ne fallback); durations order within the same subtype; QNames order by
+    /// {namespace URI, local name}. Any other combination raises XPTY0004.
+    /// </summary>
+    /// <param name="left">The left-hand atomic value.</param>
+    /// <param name="right">The right-hand atomic value.</param>
+    /// <param name="context">The evaluation context (collation, implicit timezone).</param>
+    /// <returns>A negative value, zero, or a positive value.</returns>
+    /// <exception cref="InvalidOperationException">XPTY0004 when the values are not comparable.</exception>
+    public static int CompareAtomic(XdmValue left, XdmValue right, EvaluationContext context)
+    {
+        // Detect date/time subtypes first: g*-family values are String-kind but
+        // compare on the timeline (PR2256), not as strings.
+        string? leftDateSub = GetDateTimeSubtype(left);
+        string? rightDateSub = GetDateTimeSubtype(right);
+
+        if (left.Kind == XdmValueKind.String && right.Kind == XdmValueKind.String
+            && leftDateSub is null && rightDateSub is null)
+        {
+            bool leftBinary = IsBinaryTypedString(left);
+            bool rightBinary = IsBinaryTypedString(right);
+            if (leftBinary || rightBinary)
+            {
+                if (!leftBinary || !rightBinary)
+                    throw new InvalidOperationException("XPTY0004: A binary value can only be compared with another binary value.");
+                return CompareBinaryValuesLoose(left, right);
+            }
+            int strCmp = CompareStrings(left.ToString(), right.ToString(), context.DefaultCollation, context);
+            return strCmp < 0 ? -1 : strCmp > 0 ? 1 : 0;
+        }
+
+        if (left.Kind == XdmValueKind.Boolean && right.Kind == XdmValueKind.Boolean)
+            return left.BooleanValue.CompareTo(right.BooleanValue);
+
+        if (IsNumericKind(left.Kind) && IsNumericKind(right.Kind))
+            return CompareNumericExact(left, right);
+
+        if (left.Kind == XdmValueKind.QName && right.Kind == XdmValueKind.QName)
+        {
+            int nsCmp = string.CompareOrdinal(left.QNameValue.NamespaceUri, right.QNameValue.NamespaceUri);
+            if (nsCmp != 0)
+                return nsCmp < 0 ? -1 : 1;
+            int localCmp = string.CompareOrdinal(left.QNameValue.LocalName, right.QNameValue.LocalName);
+            return localCmp < 0 ? -1 : localCmp > 0 ? 1 : 0;
+        }
+
+        if (left.Kind == XdmValueKind.Duration && right.Kind == XdmValueKind.Duration)
+        {
+            // XPath 4.0 fn:compare (PR909): all duration subtypes are mutually
+            // comparable by the component tuple (months, days, seconds), without
+            // normalizing across units — P2Y > P1000D, PT1H == PT60M0.00S,
+            // P1Y == P12M (compare-duration-01..09, duration vs yearMonthDuration).
+            var (lMonths, lDays, lSeconds) = DurationComponents(left.DurationValue);
+            var (rMonths, rDays, rSeconds) = DurationComponents(right.DurationValue);
+            int c = lMonths.CompareTo(rMonths);
+            if (c == 0) c = lDays.CompareTo(rDays);
+            if (c == 0) c = lSeconds.CompareTo(rSeconds);
+            return c < 0 ? -1 : c > 0 ? 1 : 0;
+        }
+
+        if (leftDateSub is not null || rightDateSub is not null)
+        {
+            if (leftDateSub is null || rightDateSub is null || leftDateSub != rightDateSub)
+                throw new InvalidOperationException("XPTY0004: Values of different date/time subtypes cannot be compared.");
+            var cmp = CompareDateTimeValues(left, right, leftDateSub, context.ImplicitTimezoneOffsetMinutes);
+            if (cmp.HasValue)
+                return cmp.Value < 0 ? -1 : cmp.Value > 0 ? 1 : 0;
+            // Indeterminate (e.g. g* values with mixed timezone presence): fall back
+            // to the lexical form, mirroring the eq/ne fallback in CompareCore.
+            int lexCmp = string.CompareOrdinal(left.ToString(), right.ToString());
+            return lexCmp < 0 ? -1 : lexCmp > 0 ? 1 : 0;
+        }
+
+        throw new InvalidOperationException(
+            $"XPTY0004: Values of type {left.Kind} and {right.Kind} cannot be compared.");
+    }
+
+    private static bool IsNumericKind(XdmValueKind kind)
+        => kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
+
+    // Binary comparison for XPath 4.0 fn:compare (PR909): unlike the 3.1 same-type
+    // rule, hexBinary and base64Binary are mutually comparable; each side decodes per
+    // its own SchemaTypeName annotation (compare-binary-07/08/09).
+    private static int CompareBinaryValuesLoose(XdmValue left, XdmValue right)
+    {
+        byte[] lBytes = DecodeBinaryOctets(left);
+        byte[] rBytes = DecodeBinaryOctets(right);
+        return ((ReadOnlySpan<byte>)lBytes).SequenceCompareTo(rBytes);
+    }
+
+    private static byte[] DecodeBinaryOctets(XdmValue value)
+        => value.SchemaTypeName!.Equals("hexBinary", StringComparison.OrdinalIgnoreCase)
+            ? Convert.FromHexString(value.StringValue)
+            : Convert.FromBase64String(value.StringValue);
+
+    // Exact three-way comparison of two numeric values of any mix of integer, decimal,
+    // float, and double (XPath 4.0 fn:compare, PR909): NaN < -INF < finite < +INF,
+    // NaN equals NaN, +0 equals -0, and finite values compare by exact mathematical
+    // value — (double)3.1 > (decimal)3.1 while (float)3.1 < (decimal)3.1. Each value
+    // is expanded exactly to a (sign, significand, decimal-exponent) triple using
+    // BigInteger arithmetic, so no rounding ever occurs.
+    private static int CompareNumericExact(XdmValue left, XdmValue right)
+    {
+        var l = ExactDecimalForm(left);
+        var r = ExactDecimalForm(right);
+        // NaN sorts below everything (including -INF); NaN equals NaN.
+        if (l.Kind != ExactNumericKind.Finite || r.Kind != ExactNumericKind.Finite)
+        {
+            if (l.Kind == ExactNumericKind.NaN || r.Kind == ExactNumericKind.NaN)
+            {
+                if (l.Kind == ExactNumericKind.NaN && r.Kind == ExactNumericKind.NaN) return 0;
+                return l.Kind == ExactNumericKind.NaN ? -1 : 1;
+            }
+            // Infinities: -INF < finite < +INF.
+            if (l.Kind == ExactNumericKind.NegativeInfinity) return r.Kind == ExactNumericKind.NegativeInfinity ? 0 : -1;
+            if (r.Kind == ExactNumericKind.NegativeInfinity) return 1;
+            return l.Kind == ExactNumericKind.PositiveInfinity ? (r.Kind == ExactNumericKind.PositiveInfinity ? 0 : 1) : -1;
+        }
+        if (l.Sign != r.Sign)
+            return l.Sign.CompareTo(r.Sign);
+        if (l.Significand.IsZero)
+            return 0; // both zero (+0 == -0)
+        int mag = CompareExactMagnitude(l, r);
+        return l.Sign > 0 ? mag : -mag;
+    }
+
+    private enum ExactNumericKind { Finite, NaN, NegativeInfinity, PositiveInfinity }
+
+    private readonly record struct ExactDecimalFormData(int Sign, BigInteger Significand, int Exponent, ExactNumericKind Kind);
+
+    private static ExactDecimalFormData ExactDecimalForm(XdmValue value)
+    {
+        switch (value.Kind)
+        {
+            case XdmValueKind.Integer:
+            {
+                long i = value.IntegerValue;
+                return new ExactDecimalFormData(i < 0 ? -1 : 1, new BigInteger(i < 0 ? -i : i), 0, ExactNumericKind.Finite);
+            }
+            case XdmValueKind.Decimal:
+            {
+                decimal d = value.DecimalValue;
+                if (d == 0) return new ExactDecimalFormData(0, BigInteger.Zero, 0, ExactNumericKind.Finite);
+                int[] bits = decimal.GetBits(d);
+                var mantissa = new BigInteger((uint)bits[0]) | (new BigInteger((uint)bits[1]) << 32) | (new BigInteger((uint)bits[2]) << 64);
+                int scale = (bits[3] >> 16) & 0xFF;
+                int sign = (bits[3] >> 31) != 0 ? -1 : 1;
+                return StripTrailingZeros(new ExactDecimalFormData(sign, mantissa, -scale, ExactNumericKind.Finite));
+            }
+            case XdmValueKind.Double:
+            case XdmValueKind.Float:
+            {
+                // float widens to double exactly, so both go through the binary path.
+                double d = value.DoubleValue;
+                if (double.IsNaN(d)) return new ExactDecimalFormData(0, BigInteger.Zero, 0, ExactNumericKind.NaN);
+                if (double.IsNegativeInfinity(d)) return new ExactDecimalFormData(0, BigInteger.Zero, 0, ExactNumericKind.NegativeInfinity);
+                if (double.IsPositiveInfinity(d)) return new ExactDecimalFormData(0, BigInteger.Zero, 0, ExactNumericKind.PositiveInfinity);
+                long bits = BitConverter.DoubleToInt64Bits(d);
+                int sign = bits < 0 ? -1 : 1;
+                int exponentBits = (int)((bits >> 52) & 0x7FF);
+                long mantissaBits = bits & 0xFFFFFFFFFFFFF;
+                if (exponentBits == 0 && mantissaBits == 0)
+                    return new ExactDecimalFormData(0, BigInteger.Zero, 0, ExactNumericKind.Finite); // ±0
+                int e; BigInteger m;
+                if (exponentBits == 0)
+                {
+                    m = mantissaBits; e = -1074; // subnormal
+                }
+                else
+                {
+                    m = mantissaBits | (1L << 52); e = exponentBits - 1075;
+                }
+                // m * 2^e, expanded exactly into a decimal (significand, exponent) pair:
+                // e >= 0 → integer significand; e < 0 → multiply by 5^|e|, drop 10^|e|.
+                if (e >= 0)
+                    return StripTrailingZeros(new ExactDecimalFormData(sign, m << e, 0, ExactNumericKind.Finite));
+                return StripTrailingZeros(new ExactDecimalFormData(sign, m * BigInteger.Pow(new BigInteger(5), -e), e, ExactNumericKind.Finite));
+            }
+            default:
+                throw new InvalidOperationException("XPTY0004: Not a numeric value.");
+        }
+    }
+
+    // Canonicalizes a finite (sign, significand, exponent) triple so the significand
+    // carries no trailing decimal zeros — required for exact cross-type equality
+    // (2e0 vs 2 both become (1, 2, 0)).
+    private static ExactDecimalFormData StripTrailingZeros(ExactDecimalFormData form)
+    {
+        var significand = form.Significand;
+        int exponent = form.Exponent;
+        while (!significand.IsZero)
+        {
+            var (quotient, remainder) = BigInteger.DivRem(significand, new BigInteger(10));
+            if (!remainder.IsZero) break;
+            significand = quotient;
+            exponent++;
+        }
+        return form with { Significand = significand, Exponent = exponent };
+    }
+
+    // Compares magnitudes of two finite exact forms by aligning decimal exponents.
+    private static int CompareExactMagnitude(ExactDecimalFormData left, ExactDecimalFormData right)
+    {
+        int minExponent = Math.Min(left.Exponent, right.Exponent);
+        var l = left.Significand * BigInteger.Pow(new BigInteger(10), left.Exponent - minExponent);
+        var r = right.Significand * BigInteger.Pow(new BigInteger(10), right.Exponent - minExponent);
+        return l.CompareTo(r);
     }
 
     private static XdmValue CompareGeneral(IrOpCode op, XdmValue left, XdmValue right, EvaluationContext context)

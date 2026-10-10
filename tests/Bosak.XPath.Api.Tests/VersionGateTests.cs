@@ -55,6 +55,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.16  | 10-10-2026     | REQ-123 focus-constructors slice: arity-0 xs:* constructors (PR661) XPST0017 at 3.1 +   |
 //                      |                  |       |                | arity-1 regression rows (arity-aware gate) + frozen XPath40 works                         |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------|
+//                      | Charles Korthout | 0.17  | 10-10-2026     | REQ-123 sort-with slice: frozen-level gate rows for fn:sort-with/array:sort-with/         |
+//                      |                  |       |                | fn:atomic-type-annotation/fn:is-NaN + fn:compare 3.1 regression rows (arity-2/3 strings)  |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Parser;
@@ -1343,5 +1346,47 @@ public class VersionGateTests
         Assert.Equal(new List<string> { "42" }, Seq40("'42' ! xs:integer()"));
         Assert.Equal(new List<string> { "2026-10-10" }, Seq40("xs:date('2026-10-10') ! xs:string()"));
         Assert.Equal(new List<string> { "true" }, Seq40("true() ! xs:boolean()"));
+    }
+
+    // ------------------------------------------------------------------
+    // REQ-123 sort-with cluster: sort-with family, atomic-type-annotation,
+    // is-NaN are 4.0-only (frozen level); fn:compare stays 3.1-compatible
+    // ------------------------------------------------------------------
+
+    [Theory]
+    [InlineData("fn:sort-with((1, 2), fn:compare#2)")]
+    [InlineData("fn:sort-with#2")]
+    [InlineData("array:sort-with([1, 2], fn:compare#2)")]
+    [InlineData("fn:atomic-type-annotation(1)")]
+    [InlineData("fn:atomic-type-annotation#1")]
+    [InlineData("fn:is-NaN(1)")]
+    [InlineData("fn:is-NaN#1")]
+    public void Compile_SortWithCluster_DefaultOptions_ThrowXpst0017(string expression)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => XPath31Expression.Compile(expression));
+        Assert.Contains("XPST0017", ex.Message);
+        Assert.Contains("XPath40", ex.Message);
+    }
+
+    [Theory]
+    [InlineData("fn:compare('a', 'b')")]
+    [InlineData("fn:compare('a', 'b', 'http://www.w3.org/2005/xpath-functions/collation/codepoint')")]
+    [InlineData("fn:compare#2")]
+    [InlineData("fn:compare#3")]
+    [InlineData("fn:sort((3, 1, 2))")]
+    [InlineData("array:sort([3, 1, 2])")]
+    public void Compile_SortWithCluster_3Point1Functions_StillWork(string expression)
+    {
+        var expr = XPath31Expression.Compile(expression);
+        Assert.NotNull(expr);
+    }
+
+    [Fact]
+    public void Evaluate_SortWithCluster_FrozenXPath40_Works()
+    {
+        Assert.Equal(new List<string> { "1", "2", "3" }, Seq40("fn:sort-with((3, 1, 2), fn:compare#2)"));
+        Assert.Equal(new List<string> { "1", "2" }, Seq40("array:sort-with([2, 1], fn:compare#2)?*"));
+        Assert.Equal("true", Eval40("fn:is-NaN(0 div 0e0)").ToString());
+        Assert.Equal("true", Eval40("fn:atomic-type-annotation(1)?name = xs:QName('xs:integer')").ToString());
     }
 }

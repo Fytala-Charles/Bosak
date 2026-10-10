@@ -38,6 +38,8 @@
 //                      | Charles Korthout | 0.9   | 10-10-2026     | focus-constructors slice: misc-FocusConstructors promoted into GatedSets (213 sets)     |
 //                      |                  |       |                | after arity-0 xs:* constructor support (PR661) + assert-type unsignedLong annotation     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10  | 10-10-2026     | sort-with slice: fn-sort-with + array-sort-with promoted into GatedSets (215 sets);     |
+//                      |                  |       |                | DependencyFilter40 marks typedData unsupported (no PSVI-typed source nodes)               |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -190,6 +192,7 @@ internal sealed class ConformanceRunner40
         "fn-seconds-from-duration",
         "fn-seconds-from-time",
         "fn-sort",
+        "fn-sort-with",
         "fn-starts-with",
         "fn-static-base-uri",
         "fn-string-to-codepoints",
@@ -241,6 +244,7 @@ internal sealed class ConformanceRunner40
         "array-size",
         "array-slice",
         "array-sort",
+        "array-sort-with",
         "array-tail",
         "xs-anyAtomicType",
         "xs-anySimpleType",
