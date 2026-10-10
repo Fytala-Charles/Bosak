@@ -12,6 +12,9 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice A: grow the vocabulary (evaluate/@xpath, for-each-group grouping attrs,    |
+//                      |                  |       |                | merge-source for-each attrs, xsl:number AVTs) so validation covers all XPath-bearing     |
+//                      |                  |       |                | attributes of the XSLT 3.0 instruction set                                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -53,6 +56,9 @@ internal static class AttributeSlotClassifier
         [("result-document", "output-version")] = AuthoringAttributeSlotKind.Avt,
         [("number", "format")] = AuthoringAttributeSlotKind.Avt,
         [("number", "lang")] = AuthoringAttributeSlotKind.Avt,
+        [("number", "ordinal")] = AuthoringAttributeSlotKind.Avt,
+        [("number", "grouping-separator")] = AuthoringAttributeSlotKind.Avt,
+        [("number", "grouping-size")] = AuthoringAttributeSlotKind.Avt,
         [("sort", "lang")] = AuthoringAttributeSlotKind.Avt,
         [("message", "select")] = AuthoringAttributeSlotKind.Expression,
         [("call-template", "name")] = AuthoringAttributeSlotKind.QName,
@@ -67,6 +73,12 @@ internal static class AttributeSlotClassifier
         [("decimal-format", "name")] = AuthoringAttributeSlotKind.QName,
         [("output", "name")] = AuthoringAttributeSlotKind.QName,
         [("character-map", "name")] = AuthoringAttributeSlotKind.QName,
+        [("evaluate", "xpath")] = AuthoringAttributeSlotKind.Expression,
+        [("for-each-group", "group-adjacent")] = AuthoringAttributeSlotKind.Expression,
+        [("for-each-group", "group-starting-with")] = AuthoringAttributeSlotKind.Pattern,
+        [("for-each-group", "group-ending-with")] = AuthoringAttributeSlotKind.Pattern,
+        [("merge-source", "for-each-item")] = AuthoringAttributeSlotKind.Expression,
+        [("merge-source", "for-each-source")] = AuthoringAttributeSlotKind.Expression,
         [("import-schema", "namespace")] = AuthoringAttributeSlotKind.Plain,
         [("include", "href")] = AuthoringAttributeSlotKind.Plain,
         [("import", "href")] = AuthoringAttributeSlotKind.Plain,
