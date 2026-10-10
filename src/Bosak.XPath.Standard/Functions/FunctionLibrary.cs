@@ -102,6 +102,9 @@
 //                      | Charles Korthout | 5.118 | 09-10-2026     | REQ-123 4.0-Exp S1: fn:scan (F&O 4.0 §2.5.15) as first IsXPath40ExperimentalOnly        |
 //                      |                  |       |                | function; experimental templates + Populate switch + XPath40ExperimentalOnlyFunctionNames |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.137 | 10-10-2026     | REQ-123: XPath 4.0 focus constructors (PR661) — arity-0 forms of all built-in xs:*       |
+//                      |                  |       |                | constructors take the context item (XsFocusCtor); IsXPath40Only, 3.1-hidden              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -4374,6 +4377,27 @@ public static class FunctionLibrary
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Undefined, concatArity).ToArray(),
                 ReturnType = XdmValueKind.String,
                 Implementation = ConcatN
+            };
+        }
+
+        // XPath 4.0 focus constructors (qt4tests misc-FocusConstructors, spec PR661):
+        // every built-in xs:* constructor gains an arity-0 form that takes the context
+        // item as its implicit cast argument. Marked IsXPath40Only so 3.1 templates hide
+        // them; the Api compile-time gate is arity-aware, keeping the arity-1 forms
+        // 3.1-legal.
+        foreach (var kvp in functions.Where(kv => kv.Key.Item1 == Namespaces.Xs && kv.Key.Item3 == 1).ToList())
+        {
+            var one = kvp.Value;
+            functions[(Namespaces.Xs, one.LocalName, 0)] = new()
+            {
+                NamespaceUri = Namespaces.Xs,
+                LocalName = one.LocalName,
+                Arity = 0,
+                ParameterTypes = [],
+                ReturnType = one.ReturnType,
+                ReturnTypeName = one.ReturnTypeName,
+                IsXPath40Only = true,
+                Implementation = (ctx, args) => XsFocusCtor(ctx, one.LocalName)
             };
         }
 
@@ -9090,6 +9114,21 @@ public static class FunctionLibrary
     // ------------------------------------------------------------------
     // xs:* constructor functions
     // ------------------------------------------------------------------
+
+    // XPath 4.0 focus constructors (PR661): the arity-0 form of an xs:* constructor
+    // takes the context item as the implicit cast source. XPDY0002 when there is no
+    // context item; FOTY0013 (map/function item), FORG0001 (lexical) and XPTY0004
+    // (wrong source type) are raised by the cast itself. QName delegates to the
+    // namespace-aware arity-1 constructor.
+    private static XdmValue XsFocusCtor(EvaluationContext ctx, string typeName)
+    {
+        var item = ctx.ContextItem;
+        if (item.IsUndefined)
+            throw new InvalidOperationException($"XPDY0002: xs:{typeName}() called with no context item.");
+        if (typeName == "QName")
+            return XsQNameConstructor(ctx, new[] { item });
+        return VmEngine.Cast(item, typeName);
+    }
 
     private static XdmValue XsString(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => VmEngine.Cast(args[0], "string");

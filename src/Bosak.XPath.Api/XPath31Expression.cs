@@ -43,6 +43,9 @@
 //                      | Charles Korthout | 0.16  | 09-10-2026     | REQ-123 4.0-Exp S1: stamp IsXPath40Experimental; static XPST0017 for                        |
 //                      |                  |       |                | IsXPath40ExperimentalOnly functions (call + named-function-ref forms)                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.17  | 10-10-2026     | REQ-123: version gates made arity-aware (xs:T#0 focus constructors, PR661, share        |
+//                      |                  |       |                | names with 3.1 arity-1 constructors)                                                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -162,7 +165,7 @@ public sealed class XPath31Expression
     // resolved to a URI; the predefined fn/map/array/math prefixes then fall back to
     // their canonical URIs (matching EvaluationContext's predefined bindings) so the
     // gate still applies to them.
-    private static void ThrowIfXPath40OnlyFunction(string? nsUri, string localName, string? prefix, CompileOptions options)
+    private static void ThrowIfXPath40OnlyFunction(string? nsUri, string localName, int arity, string? prefix, CompileOptions options)
     {
         if (options.Compatibility >= XPathCompatibility.XPath40)
             return;
@@ -174,11 +177,17 @@ public sealed class XPath31Expression
                 "map" => "http://www.w3.org/2005/xpath-functions/map",
                 "array" => "http://www.w3.org/2005/xpath-functions/array",
                 "math" => "http://www.w3.org/2005/xpath-functions/math",
+                "xs" => "http://www.w3.org/2001/XMLSchema",
                 _ => null,
             };
         }
+        // Arity-aware: the 4.0 focus constructors (xs:T#0, PR661) share their name with
+        // the 3.1 arity-1 constructors, so the name set is only a pre-filter; the actual
+        // decision comes from the resolved signature's IsXPath40Only flag.
         if (!string.IsNullOrEmpty(nsUri)
-            && FunctionLibrary.XPath40OnlyFunctionNames.Contains((nsUri, localName)))
+            && FunctionLibrary.XPath40OnlyFunctionNames.Contains((nsUri, localName))
+            && FunctionLibrary.TryGetFunction(nsUri, localName, arity, out var gated)
+            && gated.IsXPath40Only)
             throw new InvalidOperationException(
                 $"XPST0017: Function {{{nsUri}}}{localName} is defined in XPath 4.0 and is not available when targeting XPath {(int)options.Compatibility}; set CompileOptions.Compatibility to XPathCompatibility.XPath40.");
     }
@@ -188,7 +197,7 @@ public sealed class XPath31Expression
     // They are NOT IsXPath40Only, so the frozen-level check above does not see them;
     // this is a separate check mirroring ThrowIfXPath40OnlyFunction, with the same
     // canonical-URI fallback for unresolved predefined prefixes.
-    private static void ThrowIfXPath40ExperimentalOnlyFunction(string? nsUri, string localName, string? prefix, CompileOptions options)
+    private static void ThrowIfXPath40ExperimentalOnlyFunction(string? nsUri, string localName, int arity, string? prefix, CompileOptions options)
     {
         if (options.Compatibility >= XPathCompatibility.XPath40Experimental)
             return;
@@ -200,11 +209,16 @@ public sealed class XPath31Expression
                 "map" => "http://www.w3.org/2005/xpath-functions/map",
                 "array" => "http://www.w3.org/2005/xpath-functions/array",
                 "math" => "http://www.w3.org/2005/xpath-functions/math",
+                "xs" => "http://www.w3.org/2001/XMLSchema",
                 _ => null,
             };
         }
+        // Arity-aware for the same reason as ThrowIfXPath40OnlyFunction (xs:T#0 focus
+        // constructors share names with 3.1 arity-1 constructors).
         if (!string.IsNullOrEmpty(nsUri)
-            && FunctionLibrary.XPath40ExperimentalOnlyFunctionNames.Contains((nsUri, localName)))
+            && FunctionLibrary.XPath40ExperimentalOnlyFunctionNames.Contains((nsUri, localName))
+            && FunctionLibrary.TryGetFunction(nsUri, localName, arity, out var gated)
+            && gated.IsXPath40ExperimentalOnly)
             throw new InvalidOperationException(
                 $"XPST0017: Function {{{nsUri}}}{localName} is a not-yet-stabilized XPath 4.0 addition and is not available when targeting XPath {(int)options.Compatibility}; set CompileOptions.Compatibility to XPathCompatibility.XPath40Experimental.");
     }
@@ -275,8 +289,8 @@ public sealed class XPath31Expression
             NamespaceUri = nsUri
         };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
-        ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
-        ThrowIfXPath40ExperimentalOnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
+        ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Arguments.Count, resolved.Prefix, options);
+        ThrowIfXPath40ExperimentalOnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Arguments.Count, resolved.Prefix, options);
         if (resolved.KeywordArguments is { Count: > 0 })
             resolved = ExpandKeywordArguments(resolved, options, arrowInsertsFirst);
         return resolved;
@@ -409,8 +423,8 @@ public sealed class XPath31Expression
             : node.NamespaceUri;
         var resolved = node with { NamespaceUri = nsUri };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
-        ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
-        ThrowIfXPath40ExperimentalOnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Prefix, options);
+        ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Arity, resolved.Prefix, options);
+        ThrowIfXPath40ExperimentalOnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Arity, resolved.Prefix, options);
         return resolved;
     }
 

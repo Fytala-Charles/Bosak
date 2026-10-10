@@ -67,6 +67,9 @@
 //                      |                  |       |                | value/serialization-matches) are expanded a second time; assert-xml/assert-serialization |
 //                      |                  |       |                | stay single-expanded (REQ-123 element-to-map slice)                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.2   | 10-10-2026     | assert-type xs:unsignedLong accepts decimal-backed values carrying the annotation        |
+//                      |                  |       |                | (values above long.MaxValue; REQ-123 focus-constructors slice)                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -736,8 +739,13 @@ internal static class ResultComparer
         return normalized switch
         {
             "string" => item.Kind == XdmValueKind.String,
+            // xs:unsignedLong values above long.MaxValue are decimal-backed (long is the
+            // engine's integer representation) but carry the xs:unsignedLong annotation.
+            "unsignedlong" => item.Kind == XdmValueKind.Integer
+                || (item.Kind == XdmValueKind.Decimal
+                    && string.Equals(item.SchemaTypeName, "unsignedlong", StringComparison.OrdinalIgnoreCase)),
             "integer" or "int" or "long" or "short" or "byte"
-                or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
+                or "unsignedshort" or "unsignedint" or "unsignedbyte"
                 or "positiveinteger" or "negativeinteger" or "nonpositiveinteger" or "nonnegativeinteger"
                 => item.Kind == XdmValueKind.Integer,
             // xs:integer is a subtype of xs:decimal, so integer values match xs:decimal
