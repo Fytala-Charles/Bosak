@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice A)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 review F1: StructuralChecks coverage kind (unknown instructions and the safe      |
+//                      |                  |       |                | static XSLT error subset are part of the declared checked coverage)                      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Validation;
@@ -27,13 +30,17 @@ public enum XsltValidationOutcome
     /// <summary>
     /// Every applicable static check of the declared supported coverage completed without
     /// diagnostics: all expression, pattern and AVT slots in all resolved modules compiled in their
-    /// real static context, and no construct with explicitly deferred coverage is present.
+    /// real static context, the structural/static XSLT checks passed, and no construct with
+    /// explicitly deferred coverage is present. Exclusions of the declared coverage (for example
+    /// QName slot resolution against declarations) are documented on
+    /// <see cref="XsltValidation"/>; constructs outside the checks entirely are either plain data
+    /// or reported through <see cref="XsltValidationResult.UnsupportedCoverage"/>.
     /// </summary>
     Valid,
 
     /// <summary>
-    /// All modules are structurally well-formed, but at least one XPath expression, match pattern or
-    /// attribute value template failed static analysis. See the diagnostics.
+    /// All modules are structurally well-formed, but at least one XPath expression, match pattern,
+    /// attribute value template or structural/static XSLT check failed. See the diagnostics.
     /// </summary>
     Invalid,
 
@@ -102,7 +109,19 @@ public enum XsltValidationCoverage
     /// scope at the slot: local <c>xsl:variable</c>/<c>xsl:param</c> declarations, template,
     /// function and iterate parameters, and global declarations across all resolved modules.
     /// Undeclared references are reported (XPST0008); <c>use-when</c> slots see only static
-    /// globals, per the XSLT static context rules.
+    /// globals, per the XSLT static context rules. Parameter defaults use declaration-order scope:
+    /// a default may reference only parameters declared before it and globals.
     /// </summary>
     StaticVariableScope,
+
+    /// <summary>
+    /// The structural/static XSLT surface is checked without executing anything: unknown XSLT
+    /// instructions (XTSE0010, with the forwards-compatible and top-level vendor-extension
+    /// tolerance rules), top-level placement of declarations, must-be-empty element content
+    /// (XTSE0260), static variable/parameter placement (XTSE0090), required attributes such as
+    /// <c>xsl:if/@test</c>, and XSLT-namespaced attribute rules (XTSE0090/XTSE0805). The checked
+    /// set is the safe, IO-free subset mirrored from the engine compiler; no expression is
+    /// evaluated beyond the supported <c>use-when</c> literal subset and no resource is acquired.
+    /// </summary>
+    StructuralChecks,
 }

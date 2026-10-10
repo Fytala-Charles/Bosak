@@ -13,8 +13,14 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice A)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 review findings F1-F4: structural/static XSLT pass (unknown instructions,        |
+//                      |                  |       |                | XTSE0010/0090/0260/0805 cluster), use-when exclusion decided before slot checks          |
+//                      |                  |       |                | (literal subset; non-literal degrades to UnsupportedCoverage), declaration-order         |
+//                      |                  |       |                | parameter scoping, pattern slots compiled with the slot's namespace bindings             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
@@ -22,6 +28,7 @@ using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Bosak.Xslt.Authoring;
 using Bosak.Xslt.Patterns;
+using XsltStylesheet = Bosak.Xslt.Stylesheet.Stylesheet;
 
 namespace Bosak.Xslt.Validation;
 
@@ -135,6 +142,23 @@ internal sealed class XsltValidationEngine
                 if (child.Kind != AuthoringNodeKind.Element || !IsXslt(child, "variable") && !IsXslt(child, "param"))
                 {
                     continue;
+                }
+
+                // XSLT 3.0 §3.13: a declaration excluded by a supported-literal use-when is
+                // removed from the stylesheet, so it declares nothing; a non-literal use-when
+                // cannot be evaluated here, which makes every check that depends on the
+                // declaration's presence partial.
+                if (FindUseWhenAttribute(child) is { } useWhen)
+                {
+                    if (ClassifyUseWhen(useWhen) == UseWhenExclusion.Excluded)
+                    {
+                        continue;
+                    }
+
+                    if (ClassifyUseWhen(useWhen) == UseWhenExclusion.Undetermined)
+                    {
+                        ReportUseWhenEvaluationGap(module.ModuleUri);
+                    }
                 }
 
                 if (TryReadQNameName(child, out var ns, out var local))
@@ -313,11 +337,48 @@ internal sealed class XsltValidationEngine
             return;
         }
 
-        ReportCoverageGapIfDeferred(state, elementName);
+        // XSLT 3.0 §3.13 exclusion is decided BEFORE anything else about the element is
+        // analyzed: when the supported literal subset excludes the element, its own attribute
+        // slots and its whole subtree are not part of the stylesheet and must not be checked
+        // (an excluded xsl:sequence may carry an unparseable select). The use-when expression
+        // itself is always checked first, so a malformed exclusion still fails.
+        var useWhenAttribute = FindUseWhenAttribute(node);
+        if (useWhenAttribute is not null)
+        {
+            var useWhenContext = useWhenAttribute.SlotContext;
+            var useWhenCompiled = true;
+            if (useWhenContext is not null)
+            {
+                useWhenCompiled = CheckExpressionSlot(state, useWhenAttribute, useWhenContext, scope, isUseWhen: true);
+            }
 
-        // Slots on this element's start tag.
+            if (!useWhenCompiled || ClassifyUseWhen(useWhenAttribute) == UseWhenExclusion.Excluded)
+            {
+                // Unparseable exclusion (already reported) or literal exclusion: the element
+                // cannot be reasoned about / is removed from the stylesheet.
+                return;
+            }
+
+            if (ClassifyUseWhen(useWhenAttribute) == UseWhenExclusion.Undetermined)
+            {
+                // The exclusion effect cannot be evaluated by the supported subset: the element
+                // may or may not exist, so its checks are partial. That must never surface as a
+                // complete pass: record the deferred evaluation as a coverage gap.
+                ReportUseWhenEvaluationGap(state.Module.ModuleUri);
+            }
+        }
+
+        ReportCoverageGapIfDeferred(state, elementName);
+        CheckElementStructure(state, node);
+
+        // Slots on this element's start tag (the use-when slot, when present, was checked above).
         foreach (var attribute in node.Attributes)
         {
+            if (ReferenceEquals(attribute, useWhenAttribute))
+            {
+                continue;
+            }
+
             var context = attribute.SlotContext;
             if (context is null)
             {
@@ -327,7 +388,7 @@ internal sealed class XsltValidationEngine
             switch (attribute.SlotKind)
             {
                 case AuthoringAttributeSlotKind.Expression:
-                    CheckExpressionSlot(state, attribute, context, scope, isUseWhen: attribute.LocalName == "use-when");
+                    CheckExpressionSlot(state, attribute, context, scope, isUseWhen: false);
                     break;
                 case AuthoringAttributeSlotKind.Pattern:
                     CheckPatternSlot(state, attribute, context);
@@ -338,16 +399,11 @@ internal sealed class XsltValidationEngine
             }
         }
 
-        // A literal use-when="false()" removes the subtree from the stylesheet (XSLT 3.0 §3.13);
-        // mirroring engine semantics, its descendant slots are not analyzed.
-        if (HasLiteralFalseUseWhen(node))
-        {
-            return;
-        }
-
-        // Child scope: template/function/iterate parameters are visible across the whole subtree;
-        // a function body sees only globals plus its own parameters (XTSE ...: outer locals are
-        // not in scope inside xsl:function).
+        // Child scope: a function body sees only globals plus its own parameters (outer locals
+        // are not in scope inside xsl:function). Template and iterate parameters are NOT
+        // predeclared here: a parameter default may reference only parameters declared before
+        // it (declaration-order scope), so each parameter enters scope through the sibling
+        // walk below, immediately after its own default has been checked.
         VariableScope childScope;
         if (IsXslt(node, "function"))
         {
@@ -360,17 +416,11 @@ internal sealed class XsltValidationEngine
         else
         {
             childScope = scope;
-            if (IsXslt(node, "template") || IsXslt(node, "iterate"))
-            {
-                foreach (var parameter in ParameterNames(node))
-                {
-                    childScope = childScope.Add(parameter.NamespaceUri, parameter.LocalName);
-                }
-            }
         }
 
         // Sibling scoping: xsl:variable/xsl:param declarations are in scope for FOLLOWING siblings
-        // (and their subtrees) only.
+        // (and their subtrees) only. A declaration excluded by a supported-literal use-when is
+        // removed from the stylesheet (XSLT 3.0 §3.13), so it enters no scope.
         var siblingScope = childScope;
         foreach (var child in node.Children)
         {
@@ -382,7 +432,7 @@ internal sealed class XsltValidationEngine
             VisitElement(state, child, siblingScope);
             if (IsXslt(child, "variable") || IsXslt(child, "param"))
             {
-                if (TryReadQNameName(child, out var ns, out var local))
+                if (!IsExcludedByLiteralUseWhen(child) && TryReadQNameName(child, out var ns, out var local))
                 {
                     siblingScope = siblingScope.Add(ns, local);
                 }
@@ -390,21 +440,75 @@ internal sealed class XsltValidationEngine
         }
     }
 
-    private static bool HasLiteralFalseUseWhen(AuthoringNodeDescriptor node)
+    /// <summary>Whether the element carries a <c>use-when</c> value in the supported literal subset that excludes it.</summary>
+    private static bool IsExcludedByLiteralUseWhen(AuthoringNodeDescriptor node)
+    {
+        return FindUseWhenAttribute(node) is { } useWhen &&
+            ClassifyUseWhen(useWhen) == UseWhenExclusion.Excluded;
+    }
+
+    /// <summary>
+    /// Finds the element's <c>use-when</c> attribute when it is classified as an expression slot.
+    /// </summary>
+    private static AuthoringAttributeDescriptor? FindUseWhenAttribute(AuthoringNodeDescriptor node)
     {
         foreach (var attribute in node.Attributes)
         {
             if (attribute.LocalName == "use-when" && attribute.SlotKind == AuthoringAttributeSlotKind.Expression)
             {
-                var value = attribute.ExpandedValue.Trim();
-                if (value == "false()" || value == "false")
-                {
-                    return true;
-                }
+                return attribute;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    /// <summary>The supported <c>use-when</c> evaluation subset and its three outcomes.</summary>
+    private enum UseWhenExclusion
+    {
+        /// <summary>A supported literal form that includes the element.</summary>
+        Included,
+
+        /// <summary>A supported literal form that excludes the element (and its subtree).</summary>
+        Excluded,
+
+        /// <summary>A form outside the supported literal subset; exclusion is undetermined.</summary>
+        Undetermined,
+    }
+
+    /// <summary>
+    /// Classifies a <c>use-when</c> value against the supported literal subset. Only the
+    /// literals <c>true</c>, <c>true()</c>, <c>false</c> and <c>false()</c> are evaluated;
+    /// anything else is undetermined rather than guessed, because evaluating arbitrary static
+    /// expressions would require uncontrolled static-expression IO.
+    /// </summary>
+    private static UseWhenExclusion ClassifyUseWhen(AuthoringAttributeDescriptor attribute)
+    {
+        var value = attribute.ExpandedValue.Trim();
+        return value switch
+        {
+            "false" or "false()" => UseWhenExclusion.Excluded,
+            "true" or "true()" => UseWhenExclusion.Included,
+            _ => UseWhenExclusion.Undetermined,
+        };
+    }
+
+    private void ReportUseWhenEvaluationGap(Uri moduleUri)
+    {
+        const string construct = "use-when";
+        var key = moduleUri.AbsoluteUri + "|" + construct;
+        if (!_recordedGaps.Add(key))
+        {
+            return;
+        }
+
+        _gaps.Add(new XsltValidationCoverageGap(
+            construct,
+            moduleUri,
+            "Non-literal use-when attributes are not statically evaluated by this validation " +
+            "build (evaluating them would require uncontrolled static-expression IO). Whether the " +
+            "affected elements and declarations are excluded from the stylesheet is undetermined, " +
+            "so the checks on them are partial rather than a complete pass."));
     }
 
     private static IEnumerable<StaticVariableName> ParameterNames(AuthoringNodeDescriptor node)
@@ -457,10 +561,279 @@ internal sealed class XsltValidationEngine
     }
 
     // ---------------------------------------------------------------------------------------------
+    // Structural / static XSLT checks (review finding F1)
+    //
+    // The walk deliberately disables ordinary stylesheet compilation, which historically also
+    // disabled the compiler's static structural validation: an unknown xsl:instruction inside a
+    // template reported XTSE0010 by the compiler validated as "Valid". This pass re-checks the
+    // safe, IO-free subset of the compiler's ValidateInstructionTree rules over the authoring
+    // descriptors: unknown XSLT instructions, top-level placement, must-be-empty content,
+    // misplaced/required attributes, static-declaration placement and XSLT-namespaced
+    // attributes. It performs no expression evaluation beyond the supported use-when literal
+    // subset and no resource acquisition. Rules are mirrored from Stylesheet.cs; element sets
+    // are shared with the compiler so the two cannot drift.
+    // ---------------------------------------------------------------------------------------------
+
+    private void CheckElementStructure(ModuleWalkState state, AuthoringNodeDescriptor node)
+    {
+        var elementName = node.ElementName;
+        if (elementName is null || !ShouldValidateStructure(node))
+        {
+            return;
+        }
+
+        var isXsltElement = elementName.NamespaceUri == AttributeSlotClassifier.XsltNamespace;
+        var localName = elementName.LocalName;
+
+        // xsl:note elements are discarded at an early stage of processing (XSLT 4.0 §3.11.2),
+        // without validation of their attributes or content.
+        if (isXsltElement && localName == "note")
+        {
+            return;
+        }
+
+        // XTSE0805 / XTSE0090: validate attributes in the XSLT namespace.
+        foreach (var attribute in node.Attributes)
+        {
+            if (attribute.NamespaceUri != AttributeSlotClassifier.XsltNamespace)
+            {
+                continue;
+            }
+
+            if (isXsltElement)
+            {
+                // XSLT-namespaced attributes are not permitted on XSLT elements.
+                ReportStructureDiagnostic(state, node, "XTSE0090",
+                    $"XTSE0090: Attributes in the XSLT namespace are not permitted on xsl:{localName}.");
+            }
+            else
+            {
+                // On literal result elements only the defined XSLT attributes are allowed.
+                var allowed = attribute.LocalName is "use-when" or "expand-text" or "type" or "validation"
+                    or "default-mode" or "default-collation" or "default-validation"
+                    or "exclude-result-prefixes" or "extension-element-prefixes"
+                    or "version" or "xpath-default-namespace" or "use-attribute-sets"
+                    or "inherit-namespaces";
+                if (!allowed && !IsForwardsCompatibleElement(node))
+                {
+                    ReportStructureDiagnostic(state, node, "XTSE0805",
+                        $"XTSE0805: The attribute xsl:{attribute.LocalName} is not permitted on a literal result element.");
+                }
+            }
+        }
+
+        if (!isXsltElement)
+        {
+            return;
+        }
+
+        // XTSE0260: XSLT elements that must be empty must not contain text nodes
+        // or element children; comments and processing instructions are allowed.
+        if (XsltStylesheet.EmptyXsltElementNames.Contains(localName))
+        {
+            foreach (var child in node.Children)
+            {
+                if (child.Kind is AuthoringNodeKind.Text or AuthoringNodeKind.Element)
+                {
+                    ReportStructureDiagnostic(state, node, "XTSE0260",
+                        $"XTSE0260: xsl:{localName} must be empty; it must not contain text or element children.");
+                    break;
+                }
+            }
+        }
+
+        // XTSE0090: static variables and parameters must be declared at the top level.
+        if (localName is "param" or "variable" && IsStaticDeclaration(node) && !IsTopLevelChild(node))
+        {
+            ReportStructureDiagnostic(state, node, "XTSE0090",
+                "XTSE0090: A static variable or parameter must be declared at the top level of the stylesheet.");
+        }
+
+        var parent = (node.BackingObject as XElement)?.Parent;
+        if (parent is not null)
+        {
+            var isTopLevel = parent.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace &&
+                parent.Name.LocalName is "stylesheet" or "transform" or "package";
+
+            // Unknown XSLT elements are normally a static error. They are ignored when the
+            // stylesheet is in forwards-compatible mode, or when they appear at the top level
+            // of an XSLT 3.0 stylesheet (where unrecognized elements are tolerated as vendor
+            // extensions). In earlier XSLT versions an unrecognized top-level element is an error.
+            if (!XsltStylesheet.KnownXsltElementNames.Contains(localName))
+            {
+                if (!IsForwardsCompatibleElement(node) &&
+                    !(isTopLevel && GetEffectiveVersion(node) >= 3.0))
+                {
+                    ReportStructureDiagnostic(state, node, "XTSE0010",
+                        $"XTSE0010: Unknown XSLT element xsl:{localName}.");
+                }
+            }
+            else if (isTopLevel)
+            {
+                if (!XsltStylesheet.AllowedTopLevelDeclarations.Contains(localName) && !IsForwardsCompatibleElement(node))
+                {
+                    ReportStructureDiagnostic(state, node, "XTSE0010",
+                        $"XTSE0010: xsl:{localName} is not permitted at the top level.");
+                }
+            }
+            else if (XsltStylesheet.TopLevelOnlyDeclarations.Contains(localName))
+            {
+                var insideUsePackage = parent.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace &&
+                    parent.Name.LocalName == "use-package";
+                var insideOverride = parent.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace &&
+                    parent.Name.LocalName == "override";
+                if (!insideUsePackage && !insideOverride)
+                {
+                    ReportStructureDiagnostic(state, node, "XTSE0010",
+                        $"XTSE0010: xsl:{localName} must appear at the top level.");
+                }
+            }
+
+            // xsl:use-package requires a name attribute (package resolution itself is a
+            // declared coverage gap, but the missing name is a plain structural error).
+            if (localName == "use-package" && !HasAttribute(node, "name") && !HasAttribute(node, "_name"))
+            {
+                ReportStructureDiagnostic(state, node, "XTSE0010",
+                    "XTSE0010: xsl:use-package requires a name attribute.");
+            }
+
+            // xsl:if requires a test attribute.
+            if (localName == "if" && !HasAttribute(node, "test") && !HasAttribute(node, "_test"))
+            {
+                ReportStructureDiagnostic(state, node, "XTSE0010", "XTSE0010: xsl:if requires a test attribute.");
+            }
+
+            // xsl:on-completion must be a direct child of xsl:iterate.
+            if (localName == "on-completion" &&
+                (parent.Name.NamespaceName != AttributeSlotClassifier.XsltNamespace || parent.Name.LocalName != "iterate"))
+            {
+                ReportStructureDiagnostic(state, node, "XTSE0010",
+                    "XTSE0010: xsl:on-completion must be a child of xsl:iterate.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Mirrors the compiler's ShouldValidateElement: returns false when the element is inside an
+    /// unknown XSLT element that is in forwards-compatible mode, unless the element is a
+    /// descendant of an <c>xsl:fallback</c> child of that unknown element. Elements inside a
+    /// discarded <c>xsl:note</c> subtree are not validated either (XSLT 4.0 §3.11.2). Descendants
+    /// of excluded subtrees never reach this check.
+    /// </summary>
+    private static bool ShouldValidateStructure(AuthoringNodeDescriptor node)
+    {
+        if (node.BackingObject is not XElement element)
+        {
+            return true;
+        }
+
+        var current = element.Parent;
+        while (current != null)
+        {
+            if (current.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace &&
+                current.Name.LocalName == "note")
+            {
+                return false;
+            }
+
+            if (current.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace &&
+                !XsltStylesheet.KnownXsltElementNames.Contains(current.Name.LocalName) &&
+                GetEffectiveVersion(current) > 3.0)
+            {
+                // Walk up from the element to the unknown ancestor to find the immediate child
+                // of the unknown ancestor on that path.
+                var childOnPath = element;
+                while (childOnPath.Parent != null && childOnPath.Parent != current)
+                {
+                    childOnPath = childOnPath.Parent;
+                }
+
+                return childOnPath.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace &&
+                    childOnPath.Name.LocalName == "fallback";
+            }
+
+            current = current.Parent;
+        }
+
+        return true;
+    }
+
+    private static bool IsTopLevelChild(AuthoringNodeDescriptor node)
+    {
+        var parent = (node.BackingObject as XElement)?.Parent;
+        return parent != null &&
+            parent.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace &&
+            parent.Name.LocalName is "transform" or "stylesheet" or "package";
+    }
+
+    private static bool HasAttribute(AuthoringNodeDescriptor node, string localName)
+    {
+        foreach (var attribute in node.Attributes)
+        {
+            if (attribute.LocalName == localName && attribute.NamespaceUri.Length == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// The effective XSLT version of an element, mirroring <c>Stylesheet.GetEffectiveVersion</c>:
+    /// the nearest <c>version</c> (XSLT elements) or <c>xsl:version</c> (literal result elements)
+    /// attribute on the element or an ancestor, falling back to 3.0.
+    /// </summary>
+    private static double GetEffectiveVersion(AuthoringNodeDescriptor node)
+        => node.BackingObject is XElement element ? GetEffectiveVersion(element) : 3.0;
+
+    private static double GetEffectiveVersion(XElement element)
+    {
+        foreach (var ancestor in element.AncestorsAndSelf())
+        {
+            XAttribute? versionAttr = null;
+            if (ancestor.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace)
+            {
+                versionAttr = ancestor.Attribute("version");
+            }
+
+            versionAttr ??= ancestor.Attribute(XNamespace.Get(AttributeSlotClassifier.XsltNamespace) + "version");
+            if (versionAttr != null)
+            {
+                if (double.TryParse(versionAttr.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var v))
+                {
+                    return v;
+                }
+
+                break;
+            }
+        }
+
+        return 3.0;
+    }
+
+    /// <summary>
+    /// Whether the element is in XSLT forwards-compatible mode (effective version greater than
+    /// the supported version 3.0), mirroring <c>Stylesheet.IsForwardsCompatibleElement</c>.
+    /// </summary>
+    private static bool IsForwardsCompatibleElement(AuthoringNodeDescriptor node) => GetEffectiveVersion(node) > 3.0;
+
+    private void ReportStructureDiagnostic(
+        ModuleWalkState state, AuthoringNodeDescriptor node, string code, string message)
+    {
+        _hasInvalid = true;
+        _diagnostics.Add(new XsltValidationDiagnostic(code, state.Module.ModuleUri, message, node.Range));
+    }
+
+    // ---------------------------------------------------------------------------------------------
     // Slot checks
     // ---------------------------------------------------------------------------------------------
 
-    private void CheckExpressionSlot(
+    /// <summary>
+    /// Compiles an expression slot in its static context. Returns whether compilation and free
+    /// variable analysis produced no diagnostic.
+    /// </summary>
+    private bool CheckExpressionSlot(
         ModuleWalkState state,
         AuthoringAttributeDescriptor attribute,
         ExpressionSlotContext context,
@@ -470,6 +843,7 @@ internal sealed class XsltValidationEngine
         var text = attribute.ExpandedValue;
         var positionsExact = attribute.RawLiteral == text;
         var compatibility = ResolveCompatibility(context);
+        var ok = true;
 
         try
         {
@@ -477,13 +851,19 @@ internal sealed class XsltValidationEngine
         }
         catch (Exception ex)
         {
+            ok = false;
             ReportCompileDiagnostic(state, attribute, text, segmentOffsetInValue: 0, ex, positionsExact);
         }
 
-        CheckFreeVariables(
+        if (!CheckFreeVariables(
             state, attribute, context, text, segmentOffsetInValue: 0, compatibility,
             isUseWhen ? VariableScope.Empty : scope,
-            isUseWhen ? _staticGlobals : null);
+            isUseWhen ? _staticGlobals : null))
+        {
+            ok = false;
+        }
+
+        return ok;
     }
 
     private void CheckPatternSlot(
@@ -499,7 +879,12 @@ internal sealed class XsltValidationEngine
 
         try
         {
-            _ = new PatternCompiler().Compile(text, context.XpathDefaultNamespace);
+            // Compile the pattern with the slot's real in-scope namespace bindings: pattern QNames
+            // and the prefix bindings of pattern predicates must resolve in the module-local
+            // static context, so an undeclared prefix is rejected (XPST0081) instead of being
+            // silently read as a no-namespace name.
+            _ = new PatternCompiler().Compile(
+                text, context.XpathDefaultNamespace, namespaces: BuildNamespaceMap(context));
         }
         catch (Exception ex)
         {
@@ -578,7 +963,11 @@ internal sealed class XsltValidationEngine
         }
     }
 
-    private void CheckFreeVariables(
+    /// <summary>
+    /// Matches the free variable references of one already-compiled expression against the
+    /// declarations in scope. Returns whether every reference resolved.
+    /// </summary>
+    private bool CheckFreeVariables(
         ModuleWalkState state,
         AuthoringAttributeDescriptor attribute,
         ExpressionSlotContext context,
@@ -597,9 +986,10 @@ internal sealed class XsltValidationEngine
         {
             // A parse failure here was already reported by the compile pass; variable analysis has
             // no tree to walk.
-            return;
+            return true;
         }
 
+        var ok = true;
         foreach (var reference in FreeVariableCollector.Collect(ast))
         {
             string? namespaceUri = reference.NamespaceUri;
@@ -615,6 +1005,7 @@ internal sealed class XsltValidationEngine
                     var resolved = ResolvePrefix(context, prefix);
                     if (resolved is null)
                     {
+                        ok = false;
                         _hasInvalid = true;
                         _diagnostics.Add(new XsltValidationDiagnostic(
                             "XPST0081",
@@ -633,6 +1024,7 @@ internal sealed class XsltValidationEngine
                 : scope.Contains(namespaceUri, reference.LocalName);
             if (!declared)
             {
+                ok = false;
                 _hasInvalid = true;
                 _diagnostics.Add(new XsltValidationDiagnostic(
                     "XPST0008",
@@ -641,6 +1033,8 @@ internal sealed class XsltValidationEngine
                     RangeForValuePosition(state.Map, attribute, segmentOffsetInValue, text.Length, positionsExact: false)));
             }
         }
+
+        return ok;
     }
 
     private static bool ContainsName(IReadOnlyList<StaticVariableName> names, string namespaceUri, string localName)
@@ -695,6 +1089,22 @@ internal sealed class XsltValidationEngine
     private static CompileOptions BuildCompileOptions(
         ExpressionSlotContext context, XPathCompatibility compatibility, bool isAvt)
     {
+        return new CompileOptions
+        {
+            Namespaces = BuildNamespaceMap(context),
+            DefaultElementNamespace = context.XpathDefaultNamespace,
+            BaseUri = context.BaseUri.AbsoluteUri,
+            Compatibility = compatibility,
+            BackwardsCompatible = isAvt && context.EffectiveVersion.StartsWith("1", StringComparison.Ordinal),
+        };
+    }
+
+    /// <summary>
+    /// The slot's in-scope prefix bindings as a map, nearest declaration winning (the binding
+    /// list is outermost first, so later entries overwrite earlier ones).
+    /// </summary>
+    private static Dictionary<string, string> BuildNamespaceMap(ExpressionSlotContext context)
+    {
         var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var binding in context.InScopeNamespaces)
         {
@@ -704,14 +1114,7 @@ internal sealed class XsltValidationEngine
             }
         }
 
-        return new CompileOptions
-        {
-            Namespaces = namespaces,
-            DefaultElementNamespace = context.XpathDefaultNamespace,
-            BaseUri = context.BaseUri.AbsoluteUri,
-            Compatibility = compatibility,
-            BackwardsCompatible = isAvt && context.EffectiveVersion.StartsWith("1", StringComparison.Ordinal),
-        };
+        return namespaces;
     }
 
     private static string? ResolvePrefix(ExpressionSlotContext context, string prefix)

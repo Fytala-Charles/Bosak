@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice A)                                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 review F1: StructuralChecks added to the declared coverage                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Validation;
@@ -28,7 +30,7 @@ namespace Bosak.Xslt.Validation;
 /// <para>
 /// Outcome precedence (highest first): <see cref="XsltValidationOutcome.InvalidSource"/> (a module
 /// could not be decoded or parsed as XML at all), <see cref="XsltValidationOutcome.Invalid"/>
-/// (expression/pattern/AVT diagnostics), <see cref="XsltValidationOutcome.Refused"/> (a module
+/// (expression/pattern/AVT or structural diagnostics), <see cref="XsltValidationOutcome.Refused"/> (a module
 /// reference was refused), <see cref="XsltValidationOutcome.UnsupportedCoverage"/> (deferred
 /// constructs present, no diagnostics), <see cref="XsltValidationOutcome.Valid"/>.
 /// <see cref="XsltValidationOutcome.Cancelled"/> is reserved for REQ-125 Slice D and is never
@@ -49,6 +51,7 @@ public sealed class XsltValidationResult
         XsltValidationCoverage.PatternSlots,
         XsltValidationCoverage.AvtSlots,
         XsltValidationCoverage.StaticVariableScope,
+        XsltValidationCoverage.StructuralChecks,
     };
 
     private readonly IReadOnlyList<XsltValidationDiagnostic> _diagnostics;

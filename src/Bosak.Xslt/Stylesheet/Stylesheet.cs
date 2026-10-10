@@ -284,6 +284,10 @@
 //                      |                  |       |                | import, packages, parameter documents) with DTD-prohibited parse; use-when contexts      |
 //                      |                  |       |                | inherit the policy                                                                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.130 | 10-10-2026     | REQ-125 review F1: TopLevelOnlyDeclarations / AllowedTopLevelDeclarations /              |
+//                      |                  |       |                | EmptyXsltElementNames widened private -> internal (single source of truth for the        |
+//                      |                  |       |                | validation engine's structural pass); no behavioral change                               |
+//                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -5258,7 +5262,7 @@ internal sealed class Stylesheet
     /// XSLT declarations that are only permitted as top-level children of xsl:stylesheet
     /// or xsl:transform. If any of these appear deeper in the tree, it is a static error.
     /// </summary>
-    private static readonly HashSet<string> TopLevelOnlyDeclarations = new(StringComparer.Ordinal)
+    internal static readonly HashSet<string> TopLevelOnlyDeclarations = new(StringComparer.Ordinal)
     {
         "stylesheet", "transform", "package",
         "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
@@ -5272,7 +5276,7 @@ internal sealed class Stylesheet
     /// Any other XSLT element appearing at the top level is a static error (unless the stylesheet
     /// is in forwards-compatible mode or the element is an unrecognized vendor extension in XSLT 3.0).
     /// </summary>
-    private static readonly HashSet<string> AllowedTopLevelDeclarations = new(StringComparer.Ordinal)
+    internal static readonly HashSet<string> AllowedTopLevelDeclarations = new(StringComparer.Ordinal)
     {
         "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
         "attribute-set", "character-map", "decimal-format", "key", "mode", "accumulator", "param", "variable",
@@ -9448,7 +9452,7 @@ internal sealed class Stylesheet
     /// comments and processing instructions are permitted). xsl:import-schema is absent:
     /// it may carry an inline xs:schema child, which CollectImportSchema validates.
     /// </summary>
-    private static readonly HashSet<string> EmptyXsltElementNames = new(StringComparer.Ordinal)
+    internal static readonly HashSet<string> EmptyXsltElementNames = new(StringComparer.Ordinal)
     {
         "include", "import", "strip-space", "preserve-space", "output",
         "namespace-alias", "decimal-format", "output-character",
