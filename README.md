@@ -9,7 +9,7 @@
 
 [![.NET 10](https://img.shields.io/badge/.NET-10-2F4F4F?logo=dotnet&logoColor=F0FFF0)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](license.md)
-[![Status](https://img.shields.io/badge/Status-1.1.1-518D8F)]()
+[![Status](https://img.shields.io/badge/Status-1.1.2-518D8F)]()
 [![NuGet](https://img.shields.io/nuget/v/Bosak.XPath.Api?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Bosak.XPath.Api)
 [![CI](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml/badge.svg)](https://github.com/Fytala-Charles/Bosak/actions/workflows/ci.yml)
 [![XSLT 3.0 conformance](https://img.shields.io/badge/XSLT%203.0%20conformance-100.0%25-2F4F4F)](docs/ARCHITECTURE.md)
@@ -24,7 +24,7 @@ records the remaining catalog gaps and prioritized documentation work.
 
 The reference catalog now includes [product-map indexing](docs/xpath40-catalog/functions/product-map-index.md), [array import batches](docs/xpath40-catalog/functions/import-array-batches.md), and [order-export selection](docs/xpath40-catalog/functions/order-sequence-selection.md). These explain complete cases, 3.1 alternatives and verified edge contracts. There are 41 entries and 168 executable documentation checks; the audit records remaining coverage and the 1.1.1 map result-shape differences corrected in source 1.1.2.
 
-Source **1.1.2** corrects `map:entries` to return a sequence of single-entry maps and `map:items` to concatenate value items. See [the correction and migration guide](docs/REQ-118-MAP-RESULT-SHAPES.md). This patch is prepared in source and not yet published.
+**1.1.2 published 2026-10-11:** corrects `map:entries` to return a sequence of single-entry maps and `map:items` to concatenate value items. See [the correction and migration guide](docs/REQ-118-MAP-RESULT-SHAPES.md). All ten packages are published and verified; see [patch release notes](docs/RELEASE-NOTES-1.1.2.md).
 
 The catalog and audit also link primary specifications, draft history, and upstream
 tests; individual feature entries provide direct specification-section references.

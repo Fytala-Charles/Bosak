@@ -1,3 +1,13 @@
+# Bosak 1.1.2 publication: 2026-10-11
+
+**Release revision:** `3aebf76a24b28af7d40aa42e6eaf714b3a596838`, tag [v1.1.2](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2); PR #160 merged after CI success. User explicitly authorized publishing 1.1.2. [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38144723077) passed; all ten public package downloads verified version, internal dependencies, README/license and SHA-256 records (`.guard-tmp/release112-published/verification.json`). Public/source version is 1.1.2.
+**What shipped:** map:entries returns an ordinary sequence of single-entry maps, including empty results; map:items concatenates entry values and retains nested containers. Metadata, two prior unit expectations and catalog probes corrected. Migration removes map:entries ?* adapters and uses sequence predicates instead of array lookup. The correction dossier pins QT4CG source `a014e1b408baf5614a11401d3570a04498ab76be` and implementation `c6fd1cb6`.
+**Verification:** full solution 4,166/0/0; QT3 exactly 31,142/0/679; qt4 promoted sets 8,278/0/1,894 with zero gated failures. Targeted map-entries 16/0/1 and map-items 15/0/0 remain exploratory; no gate promotion or complete XSLT sweep claimed. Eight fresh-cache public-package checks passed for direct/dynamic entry sequences, empty results, concatenation, nested container retention and both XPath31 refusals. Release and merged-main CI passed.
+**Documentation:** README, architecture, integration, registry, catalog audit/entry and function inventory, correction dossier and patch notes synchronized. Earlier source-preparation sections below are historical. Local `.guard-tmp/` and `.sweep-baselines/` remain excluded.
+**Next:** continue equality/subsequence and higher-order catalog families, then supplementary signatures and parser/type/pattern coverage. REQ-126 remains In Progress (41 entries, 168 documentation checks, 35 unassigned registered names). Braid adoption remains in its separate session.
+
+---
+
 # REQ-118 map result-shape correction: 2026-10-11
 
 **Delivery revision:** `c6fd1cb6`, PR #160. **Base:** map/array/selection delivery `e6a1ee45` + handover `da556a9d`; prerequisite PR #159 is merged at `7b270bbf`. Fix branch `fix/map-result-shapes`. Source version is 1.1.2, prepared but unpublished; public packages remain 1.1.1.

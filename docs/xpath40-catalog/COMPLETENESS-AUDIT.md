@@ -287,7 +287,10 @@ boundary probes now agree with the portable baselines. Twenty-one new standard
 checks and two nested-stylesheet profile checks cover direct/dynamic calls,
 empty and nested values, order and default-mode isolation. The dossier records
 full regression and frozen gate evidence. Map upstream sets remain exploratory;
-no sets are promoted. Source 1.1.2 is prepared, not yet published. Counts remain
+no sets are promoted. Version 1.1.2 is published and its public artifacts verified. Counts remain
 41 entries, 168 documentation checks and 35 unassigned names; REQ-126 stays In Progress.
 
-**Map correction final verification (2026-10-11):** source 1.1.2 prepared; full solution 4,166/0/0, QT3 31,142/0/679, qt4 promoted sets 8,278/0/1,894 with zero gated failures. Targeted map-entries 16/0/1 and map-items 15/0/0 remain exploratory. See [the correction dossier](../REQ-118-MAP-RESULT-SHAPES.md) and [prepared patch notes](../RELEASE-NOTES-1.1.2.md).
+**Map correction final verification (2026-10-11):** 1.1.2 published and verified; full solution 4,166/0/0, QT3 31,142/0/679, qt4 promoted sets 8,278/0/1,894 with zero gated failures. Targeted map-entries 16/0/1 and map-items 15/0/0 remain exploratory. See [the correction dossier](../REQ-118-MAP-RESULT-SHAPES.md) and [patch release notes](../RELEASE-NOTES-1.1.2.md).
+
+**1.1.2 publication (2026-10-11):** [v1.1.2](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2) at `3aebf76a24b28af7d40aa42e6eaf714b3a596838`; all ten NuGet packages downloaded and verified, eight fresh-cache consumer checks passed. REQ-126 remains In Progress with 35 unassigned names.
+

@@ -55,7 +55,7 @@ Maps can be supplied as stylesheet parameters; see the [order-routing chapter](.
 
 ## 11. Consequences
 
-**Source 1.1.2 correction:** `map:entries` now returns a sequence of
+**Published 1.1.2 correction:** `map:entries` now returns a sequence of
 single-entry maps in entry order. Empty input returns the empty sequence; a
 multi-item value remains whole inside its single-entry map. `map:items`
 concatenates the item sequences associated with entries, omitting empty values
@@ -70,7 +70,7 @@ result with sequence predicates such as `[2]`. Item counts now reflect the
 concatenated values. Review code that relied on the old grouped cardinality;
 portable `map:for-each` alternatives remain valid. This is a correction of the
 supported 4.0 draft contracts; default XPath31 still rejects these new names.
-Version 1.1.2 is prepared in source and not yet published. See the
+Version 1.1.2 is published with the corrected contracts. See the
 [correction dossier](../../REQ-118-MAP-RESULT-SHAPES.md).
 
 `use-any` leaves the choice implementation-defined; Bosak currently retains the first value. It is unsuitable when the business requires a specific correction to win.

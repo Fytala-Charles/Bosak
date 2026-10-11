@@ -6,8 +6,11 @@
 
 ## Release scope
 
-Prepared **2026-10-11**, not yet published. Coordinated patch version 1.1.2
-targets the existing ten public .NET 10 libraries. No new public API is added.
+Published **2026-10-11** as [v1.1.2](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2) from commit
+`3aebf76a24b28af7d40aa42e6eaf714b3a596838`. The [Trusted Publishing workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38144723077)
+passed. All ten public .NET 10 libraries were downloaded and verified for version,
+internal dependencies, README and license. Eight fresh-cache public-package
+consumer checks passed. No new public API is added.
 
 `map:entries` returns a sequence of single-entry maps instead of the array
 returned by 1.1.1. Empty input returns an empty sequence. `map:items` concatenates
