@@ -9,7 +9,9 @@
 
 ## 1. Name and Classification
 
-**Destructuring `let` bindings** — **Frozen 4.0** (ships at the `XPath40` level; static XPST0003 at `XPath31`). Spec: XPath 4.0 §4.14 (FLWOR expressions), qt4cg PR 1131. Landed: REQ-123 destructuring-let cluster, [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129) (main `b8e4b9f`, 2026-10-10).
+**Destructuring `let` bindings** — **Frozen 4.0** (ships at the `XPath40` level; static XPST0003 at `XPath31`). Spec: XPath 4.0 §4.14 (FLWOR expressions), [QT4CG PR #1131](https://github.com/qt4cg/qtspecs/pull/1131). Landed: REQ-123 destructuring-let cluster, [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129) (main `b8e4b9f`, 2026-10-10).
+
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: let expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
 ## 2. Intent
 

@@ -8,6 +8,8 @@
 
 **Choice item types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6a; choice item type evidence in VersionGateTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
 
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: choice item types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
 ## 2. Intent
 
 Express the permitted alternatives in one item type.

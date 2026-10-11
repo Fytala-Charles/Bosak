@@ -1,3 +1,12 @@
+# REQ-126 external source references: 2026-10-11
+
+**Base audit commit:** `4b4c2a60`; continuing PR #155 on `docs/req126-completeness-audit`.
+**What changed:** catalog index and completeness audit now link official QT4CG 4.0 drafts, W3C 3.x baselines, specification history, and upstream test repositories. Every one of the 28 catalog entries has verified relevant section links; the audit's missing-function table links actual function sections. Direct QT4CG proposal/issue references are supplied for bindings, method calls, scan, and nominative records. Source policy distinguishes current navigation links from immutable adopted-revision evidence, and upstream tests from Bosak gate membership. Reviewing the accepted mapping-arrow source also corrected a lingering whole-sequence description in the rejected-spelling entry to per-item application, consistent with its existing verified example.
+**Scope:** external references improve discoverability; they do not close the audit's missing feature/signature and adopted-revision gaps. REQ-126 stays In Progress. No executable source or fixture changes.
+**Verification:** 19 primary specification/baseline/test/history pages fetched successfully; 138 source links and section anchors verified across index, audit, and entries. All 28 entries retain their 16 fields, index membership, local links, and valid fences. Catalog/audit HTML rendering passes. All five existing mapping-arrow catalog cases pass (0 failures/skips), confirming the corrected explanation. Other release tests/gates are not rerun for prose-only links.
+
+---
+
 # REQ-126 completeness audit: 2026-10-11
 
 **Base revision:** `9d3950f8ebc8bb0793c9317a91d3d412095cf6e8`; published engine baseline 1.1.0 at `6c2a867cbc7587922cb3973a7505746116caa54c`. Work is isolated on `docs/req126-completeness-audit`; Braid product work belongs to another session.

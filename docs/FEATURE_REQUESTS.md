@@ -4743,6 +4743,12 @@ this is not an arity/signature inventory. Prioritize existing-entry evidence
 repair and missing decision records, then sequence/HOF examples. The stale
 fn:scan gate claim is corrected without changing its experimental tier.
 
+The catalog index, audit, and all 28 entries now provide external primary-source
+links checked 2026-10-11: relevant QT4CG draft sections, W3C migration baselines,
+proposal/issue history, and upstream test repositories. Current navigation links
+are explicitly distinguished from the adopted draft revision still required for
+full provenance. The audit's missing-function table links verified function sections.
+
 - Three complete chapters: invoice mapping, XML-manual publishing, and order reconciliation; 13 named chapter checks.
 - 24 additional catalog entries: eight syntax/iteration conveniences, five function families, four type contracts, JNode navigation, and six XSLT instruction families.
 - All three worked-example READMEs now show complete normal/edge-case inputs and outputs inline, source-to-target mappings, validation and repair contracts, and every used XSLT element plus the main XPath constructs. The invoice audit clarifies unchanged ID spelling and source-price precision versus two-place display.

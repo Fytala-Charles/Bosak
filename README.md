@@ -20,6 +20,8 @@
 
 The [REQ-126 completeness audit](docs/xpath40-catalog/COMPLETENESS-AUDIT.md)
 records the remaining catalog gaps and prioritized documentation work.
+The catalog and audit also link primary specifications, draft history, and upstream
+tests; individual feature entries provide direct specification-section references.
 
 --- 
 ## About FYTALA

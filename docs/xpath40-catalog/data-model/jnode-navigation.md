@@ -8,6 +8,8 @@
 
 **JNode navigation** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 JNode cluster; JNodeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/JNodeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
 
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: JNode types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-jnode-types), [fn:jtree](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jtree), [fn:jkey](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jkey), [fn:jvalue](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jvalue), [XDM 4.0](https://qt4cg.org/specifications/xpath-datamodel-40/Overview.html). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
 ## 2. Intent
 
 Navigate JSON keys with path syntax, then unwrap the selected JNode for its value.
