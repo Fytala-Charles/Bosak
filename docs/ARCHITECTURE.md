@@ -727,3 +727,7 @@ and conformance gate membership are unchanged. Publishing comparisons retain
 mixed-content whitespace, while business XML comparisons ignore lexical namespace
 declaration placement. The HTML fixture comparison is limited to these authored
 pages, not a general HTML parser.
+
+## 1.1.0 release packaging
+
+All ten public library packages share version 1.1.0 through `src/Directory.Build.props`. Authoring, validation, and capture remain in Bosak.Xslt; controlled resource contracts remain in Bosak.XPath.Runtime. No new package boundary is introduced. See [release notes](RELEASE-NOTES-1.1.md) for the release scope and coverage restrictions.

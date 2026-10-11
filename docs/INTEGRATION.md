@@ -1841,13 +1841,13 @@ All Bosak source projects are now packable. After packing (`dotnet pack`), the f
 dotnet pack Bosak.sln --output ./nupkgs
 
 # Push to your private NuGet feed
-dotnet nuget push ./nupkgs/Bosak.Xslt.1.0.0.nupkg --source https://your-feed/nuget/v3/index.json
+dotnet nuget push ./nupkgs/Bosak.Xslt.1.1.0.nupkg --source https://your-feed/nuget/v3/index.json
 ```
 
 Then reference in your consuming project:
 ```xml
 <ItemGroup>
-  <PackageReference Include="Bosak.Xslt" Version="1.0.0" />
+  <PackageReference Include="Bosak.Xslt" Version="1.1.0" />
   <PackageReference Include="Bosak.XPath.Providers" Version="1.0.0" />
 </ItemGroup>
 ```
@@ -2758,3 +2758,7 @@ The [catalog example runner](xpath40-catalog/examples/README.md) supplies 81
 independent compatibility/result checks; its 4.0 and experimental cases require
 their declared levels. Transformation success alone does not approve partial
 business reports or pages containing editorial defects.
+
+## Bosak 1.1.0 package adoption
+
+The coordinated public packages use version 1.1.0. See [release notes](RELEASE-NOTES-1.1.md). Consumers should verify the built `AuthoringCapabilities.EngineVersion` and keep controlled-preview coverage/refusal handling and hard worker-process controls. Braid has accepted the source revision; published-package verification remains a distinct consumer check.
