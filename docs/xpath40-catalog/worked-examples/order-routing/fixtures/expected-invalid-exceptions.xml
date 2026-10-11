@@ -1,0 +1,5 @@
+<exceptions>
+  <order id="EMPTY" route="NORTH" missing-lines="true" unsupported-route="false" invalid-line-positions=""/>
+  <order id="ZERO" route="SOUTH" missing-lines="false" unsupported-route="false" invalid-line-positions="1"/>
+  <order id="UNKNOWN" route="EAST" missing-lines="false" unsupported-route="true" invalid-line-positions=""/>
+</exceptions>

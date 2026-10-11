@@ -1,0 +1,2 @@
+(: Higher-order selection; synthetic fulfillment data; mode 31; no external context. :)
+string-join(for $position in 1 to 3 return if ((2, 0, 3)[$position] le 0) then string($position) else (), ',')

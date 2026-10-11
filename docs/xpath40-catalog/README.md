@@ -110,7 +110,7 @@ prioritized completion plan against the published 1.1.0 engine. Its
 [function inventory](audit-function-inventory.json) distinguishes registered names
 from fully documented signatures; the catalog remains In Progress.
 
-28 entries now include practical cases or stable alternatives. The [81-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
+38 entries now include practical cases or stable alternatives. The [104-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
 
 ### Operators and syntax
 
@@ -175,8 +175,25 @@ from fully documented signatures; the catalog remains In Progress.
 |---|---|---|
 | [Mapping arrow =>>](rejected/mapping-arrow-gtgt.md) | Rejected / renamed | REQ-118 syntax audit |
 
+### Added routing families and disposition records
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [Higher-order selection](functions/higher-order-selection.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); named evidence and executable cases |
+| [Consecutive partitioning](functions/consecutive-partition.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); named evidence and executable cases |
+| [Sequence identity checks](functions/sequence-distinctness.md) | Frozen 4.0 | [#83](https://github.com/Fytala-Charles/Bosak/pull/83); named evidence and executable cases |
+| [Nominative record types](type-system/nominative-records.md) | Deferred | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
+| [Iteration across collection sequences](operators-and-syntax/sequence-collection-iteration.md) | Frozen 4.0 | [#87](https://github.com/Fytala-Charles/Bosak/pull/87); named evidence and executable cases |
+| [JNode model and template boundary](data-model/jnode-template-boundary.md) | Deferred remainder; partial Frozen 4.0 | [#116](https://github.com/Fytala-Charles/Bosak/pull/116); named evidence and executable cases |
+| [Never-adopted quantifier names](rejected/obsolete-quantifier-functions.md) | Rejected | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
+| [Directional scan names](rejected/directional-scan.md) | Rejected / superseded | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
+| [XPath switch expression](rejected/xpath-switch-expression.md) | Rejected in XPath | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
+| [Extensible map type proposal](rejected/extensible-map-types.md) | Rejected proposal; record alternatives shipped | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
+
+The [provenance ledger](PROVENANCE.md) supplies exact Bosak delivery revisions and named tests for the 28 baseline entries; historical immutable adopted-specification snapshots remain unavailable.
+
 ## 3. Benchmark provenance
 
 Measured performance claims in this catalog must cite `benchmarks/Bosak.Benchmarks` (BenchmarkDotNet) output and carry the git revision + measurement date. Qualitative cost classes (zero-cost desugar / constant overhead / hot-path relevant) need no citation but must be stated as expectations, not measurements. See field 14 contract in §1.1.
 
-*Last updated: 2026-10-11: three complete worked chapters; 28 catalog entries; 81 catalog checks plus 13 chapter checks. Remaining feature inventory is still in progress.*
+*Last updated: 2026-10-11: four complete worked chapters; 38 catalog entries; 104 catalog checks plus 19 chapter checks. Remaining feature inventory is still in progress.*

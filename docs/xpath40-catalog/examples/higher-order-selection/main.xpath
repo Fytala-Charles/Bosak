@@ -1,0 +1,2 @@
+(: Higher-order selection; synthetic fulfillment data; mode 40; no external context. :)
+string-join(index-where((2, 0, 3), function($quantity, $position) { $quantity le 0 }) ! string(.), ',')

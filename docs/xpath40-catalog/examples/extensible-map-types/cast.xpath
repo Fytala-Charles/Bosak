@@ -1,0 +1,2 @@
+(: Extensible map type proposal; synthetic fulfillment data; mode 40; no external context. :)
+map:size(map {'id':'R1','extra':'ignored'} cast as record(id as xs:string))

@@ -1,0 +1,2 @@
+(: Never-adopted quantifier names; synthetic fulfillment data; mode 40; no external context. :)
+fn:every((2,3), function($qty,$position) { $qty gt 0 })

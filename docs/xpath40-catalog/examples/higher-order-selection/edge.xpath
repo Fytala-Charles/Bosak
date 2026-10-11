@@ -1,0 +1,2 @@
+(: Higher-order selection; synthetic fulfillment data; mode 40; no external context. :)
+string(some((), function($item, $position) { true() })) || '/' || string(every((), function($item, $position) { false() }))

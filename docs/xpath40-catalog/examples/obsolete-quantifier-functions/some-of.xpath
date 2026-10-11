@@ -1,0 +1,2 @@
+(: Never-adopted quantifier names; synthetic fulfillment data; mode 40; no external context. :)
+fn:some-of((1,2))

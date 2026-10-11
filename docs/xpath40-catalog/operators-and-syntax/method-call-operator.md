@@ -13,6 +13,10 @@
 
 **External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: methods and method calls](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
+**Delivery provenance:** [PR #77](https://github.com/Fytala-Charles/Bosak/pull/77), [immutable mainline revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525) (2026-10-08). This is the adoption/disposition dossier delivery, not implementation of the refused shape.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
+
 ## 2. Intent
 
 Object-style method invocation on a value: the right-hand name is resolved against a method dictionary for the *type* of the left-hand value, so `$value =?> method(args)` dispatches to the method registered for that type rather than a plain in-scope function.
@@ -80,6 +84,8 @@ No implementation evidence for the deferred operator is claimed. Published
 stable alternatives are `method-call-alternative-main` and
 `method-call-alternative-edge` in `CatalogExampleTests`. These checks do not
 promote or implement method-call syntax.
+
+**Named implementation evidence:** [`Compile_MappingArrow_31Mode_ThrowsXpst0003`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_MappingArrow_AppliesFunctionPerItem`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_MappingArrow_WithArgumentsPrependsContextItem`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Decision record, not an engine delivery or a qt4 set promotion. Tests below pin the supported/refused alternatives. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 

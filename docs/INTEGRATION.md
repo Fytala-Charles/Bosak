@@ -2772,3 +2772,7 @@ aid lookup, while delivery records and adopted revisions establish Bosak's actua
 contract. Upstream test links do not imply promotion into the Bosak gates.
 
 The coordinated public packages use version 1.1.0, published 2026-10-11. See [release notes](RELEASE-NOTES-1.1.md). Consumers should verify the built `AuthoringCapabilities.EngineVersion` and keep controlled-preview coverage/refusal handling and hard worker-process controls. An isolated Braid checkout passes all 192 tests against the downloaded public packages with a fresh cache; its engine version matches release revision `6c2a867cbc7587922cb3973a7505746116caa54c`. Braid's production dependency remains source-pinned until a deliberate release-adoption change.
+
+## REQ-126 routing reference workflow (2026-10-11)
+
+The [order-routing chapter](xpath40-catalog/worked-examples/order-routing/README.md) demonstrates explicit `XPathCompatibility.XPath40` planning through `XPath31Expression`, then a required XDM map parameter supplied by `XsltCaptureOptions.Context.WithVariable` to portable XSLT 3.0. A version 4.0 declaration alone does not currently opt transformation-time expression compilation into XPath40. This example uses existing APIs; no engine layer or public API changed. The catalog now has 38 entries and 123 executable documentation checks; [provenance](xpath40-catalog/PROVENANCE.md) distinguishes immutable Bosak deliveries from unavailable historical specification snapshots.

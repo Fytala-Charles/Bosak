@@ -1,0 +1,2 @@
+(: Nominative record types; synthetic fulfillment data; mode 40; no external context. :)
+(map {'id':'R1'} cast as record(id as xs:string))?id

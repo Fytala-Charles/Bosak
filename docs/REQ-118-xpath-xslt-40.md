@@ -39,6 +39,15 @@ Recommendation and no formal at-risk markers** — the commitment recorded in RE
 
 ### 1.2 Stability tiers (from the change-history blocks)
 
+> **Current disposition reconciliation (2026-10-11):** the following stability
+> assessment is the original planning snapshot. S4 subsequently shipped iteration
+> over sequences of arrays/maps; REQ-123 adopted scan experimentally and JNode
+> navigation at the frozen level. The full model/template boundary stays separate.
+> Record casts discard surplus entries, while delivered record coercion rejects
+> them with XPTY0004. See the [current decision audit](xpath40-catalog/COMPLETENESS-AUDIT.md#deferred-and-rejected-decisions)
+> and [provenance ledger](xpath40-catalog/PROVENANCE.md) for deliveries and evidence.
+
+
 **Looks stable** (unchanged 1.5–3 years, each with a dedicated qt4tests set):
 - Operators: pipeline `->` (§4.20), mapping arrow `=!>` (§4.22.2 — *renamed from `=>>`*),
   otherwise `??` (§4.17), guarded-expression semantics (§2.6.5).

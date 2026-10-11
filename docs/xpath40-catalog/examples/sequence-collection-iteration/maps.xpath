@@ -1,0 +1,2 @@
+(: Iteration across collection sequences; synthetic fulfillment data; mode 40; no external context. :)
+string-join(sort(for key $sku value $qty in (map {'FILTER-A':2}, map {'BOLT-M8':5}) return $sku || '=' || $qty), ',')

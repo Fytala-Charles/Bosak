@@ -1,0 +1,2 @@
+(: XPath switch expression; synthetic fulfillment data; mode 31; no external context. :)
+if ('NORTH' = 'NORTH') then 'dispatch' else 'review'

@@ -10,6 +10,10 @@
 
 **External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: otherwise expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-otherwise), [guarded expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-guarded-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
+**Delivery provenance:** [PR #85](https://github.com/Fytala-Charles/Bosak/pull/85), [immutable mainline revision `5ca72268`](https://github.com/Fytala-Charles/Bosak/commit/5ca722686041fc701f8c25c00808eb8169a63053) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
+
 ## 2. Intent
 
 Select the fallback for empty-sequence input.
@@ -69,6 +73,8 @@ Expected class: a branch and empty-sequence observation. The fallback expression
 ## 15. Known Uses
 
 Executable example IDs: `otherwise-operator-main`, `otherwise-operator-edge`, `otherwise-operator-before` in `CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome`. Existing unit evidence: [primary tests](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Chapter-level evidence does not promote a qt4tests set into GatedSets; conformance status remains owned by the harness and delivery records.
+
+**Named implementation evidence:** [`Compile_Otherwise_Default31Mode_ThrowsXpst0003`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Compile_Otherwise_XPath30Mode_ThrowsXpst0003`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_Otherwise_EmptyLeftYieldsRight`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). No feature-specific qt4 set assignment recorded here; unit evidence is listed explicitly. This is not a claim of absent upstream tests. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 

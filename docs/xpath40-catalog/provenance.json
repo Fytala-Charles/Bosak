@@ -1,0 +1,536 @@
+{
+  "reviewDate": "2026-10-11",
+  "scope": "28 pre-existing catalog entries; immutable Bosak deliveries and named evidence, explicit historical specification gaps",
+  "entries": [
+    {
+      "entry": "operators-and-syntax/array-member-iteration.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_ForMember_31Mode_ThrowsXpst0003",
+        "Evaluate_ForMember_IteratesMembers",
+        "Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/destructuring-let.md",
+      "bosakPr": 129,
+      "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_DestructuringLet_DefaultOptions_ThrowXpst0003",
+        "Evaluate_DestructuringSequence_FrozenXPath40_Works",
+        "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/focus-functions.md",
+      "bosakPr": 110,
+      "bosakRevision": "2871c0d6ecb76c5099a4f682a71c5da49fb10ecf",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_FocusConstructors_DefaultOptions_ThrowXpst0017",
+        "Evaluate_FocusConstructors_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "xs-normalizedString",
+        "xs-numeric",
+        "xs-token"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-constructor-functions",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#constructor-functions-for-xsd-types"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/keyword-arguments.md",
+      "bosakPr": 86,
+      "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_KeywordArgs_31Mode_ThrowsXpst0003",
+        "Evaluate_KeywordArgs_FullyKeyworded_Works",
+        "Evaluate_KeywordArgs_MixedWithPositionals_Works"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-static-functions"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/map-entry-iteration.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_ForKeyValue_31Mode_ThrowsXpst0003",
+        "Evaluate_ForKeyValue_IteratesEntries",
+        "Evaluate_ForKeyValue_PositionalCountsAcrossMaps"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/mapping-arrow.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_MappingArrow_AppliesFunctionPerItem",
+        "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "bosakPr": 77,
+      "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_MappingArrow_AppliesFunctionPerItem",
+        "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/otherwise-operator.md",
+      "bosakPr": 85,
+      "bosakRevision": "5ca722686041fc701f8c25c00808eb8169a63053",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_Otherwise_Default31Mode_ThrowsXpst0003",
+        "Compile_Otherwise_XPath30Mode_ThrowsXpst0003",
+        "Evaluate_Otherwise_EmptyLeftYieldsRight"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-otherwise",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-guarded-expressions"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/pipeline-operator.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_PipelineArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_Pipeline_SpecExample_TokenizeCountConcat",
+        "Evaluate_Pipeline_SpecExample_SumOfPowers"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-pipeline-operator"
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/string-templates.md",
+      "bosakPr": 86,
+      "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_StringTemplate_31Mode_ThrowsXpst0003",
+        "Evaluate_StringTemplate_FixedOnly_Works",
+        "Evaluate_StringTemplate_Interpolation_Works"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-string-templates"
+      ]
+    },
+    {
+      "entry": "functions/atomic-equal.md",
+      "bosakPr": 108,
+      "bosakRevision": "cbf7f88ce8364334040a819f96967622992f24a2",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_AtomicEqual_DefaultOptions_ThrowXpst0017",
+        "Evaluate_AtomicEqual_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-atomic-equal"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-equal"
+      ]
+    },
+    {
+      "entry": "functions/csv-parsing.md",
+      "bosakPr": 104,
+      "bosakRevision": "e0024f5d1d00c410e65ebf04f4caf89e770eb8ec",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_CsvFunctions_DefaultOptions_ThrowXpst0017",
+        "Evaluate_ParseCsv_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-csv-doc",
+        "fn-csv-to-xml",
+        "fn-parse-csv"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-csv",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-doc",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-to-xml"
+      ]
+    },
+    {
+      "entry": "functions/element-to-map.md",
+      "bosakPr": 106,
+      "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Evaluate_ElementToMap_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-element-to-map",
+        "fn-element-to-map-plan"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map-plan"
+      ]
+    },
+    {
+      "entry": "functions/map-to-element.md",
+      "bosakPr": 106,
+      "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs",
+      "namedTests": [
+        "MapToElement_SingleEntryMap_BuildsElement",
+        "MapToElement_EmptySequence_ReturnsEmpty",
+        "MapToElement_NonMapInput_Xpty0004"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-to-element"
+      ]
+    },
+    {
+      "entry": "functions/sort-with.md",
+      "bosakPr": 112,
+      "bosakRevision": "89c90b4d5b6a216a4a37223e169d36e3a1a832bd",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_SortWithCluster_DefaultOptions_ThrowXpst0017",
+        "Compile_SortWithCluster_3Point1Functions_StillWork",
+        "Evaluate_SortWithCluster_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "array-sort-with",
+        "fn-sort-with"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-with",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-sort-with"
+      ]
+    },
+    {
+      "entry": "type-system/choice-types.md",
+      "bosakPr": 89,
+      "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_ChoiceItemType_31Mode_ThrowsXpst0003",
+        "Evaluate_Choice_InstanceOf_AnyAlternativeMatches",
+        "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types"
+      ]
+    },
+    {
+      "entry": "type-system/enum-types.md",
+      "bosakPr": 89,
+      "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_EnumType_31Mode_ThrowsXpst0003",
+        "Compile_EnumType_EmptyMemberList_ThrowsXpst0003",
+        "Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-enumeration-types"
+      ]
+    },
+    {
+      "entry": "type-system/structural-records.md",
+      "bosakPr": 90,
+      "bosakRevision": "ca6e9c27cf4c62953763f800bdef2610ff64789a",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+      "namedTests": [
+        "Coercion_BuildsAnnotatedRecord",
+        "Coercion_MissingFieldBecomesEmptyEntry",
+        "Coercion_SurplusKeys_XPTY0004"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-structural-record-types",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-with-expression"
+      ]
+    },
+    {
+      "entry": "type-system/typed-let-coercion.md",
+      "bosakPr": 129,
+      "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Evaluate_TypedLet_FrozenXPath40_Coerces"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules"
+      ]
+    },
+    {
+      "entry": "data-model/jnode-navigation.md",
+      "bosakPr": 116,
+      "bosakRevision": "345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017",
+        "Evaluate_JNodeFunctions_FrozenXPath40_Work"
+      ],
+      "namedPromotedSets": [
+        "fn-jkey",
+        "fn-jtree",
+        "fn-jvalue"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-jnode-types",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jtree",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jkey",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jvalue",
+        "https://qt4cg.org/specifications/xpath-datamodel-40/Overview.html"
+      ]
+    },
+    {
+      "entry": "xslt-instructions/instruction-separators.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "ForEach_Separator_BetweenItems",
+        "ForEach_Separator_WithSort",
+        "ForEach_Separator_EmptyAndSingleItem_NoSeparator"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#for-each-separator",
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#apply-templates-separator"
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-array.md",
+      "bosakPr": 92,
+      "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+      "namedTests": [
+        "Array_Select_OneSingletonMemberPerItem",
+        "Array_Select_TokenizedString",
+        "Array_ForEachSelect_MemberIsWholeSequence"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction"
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-if.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "If_ThenElse_TrueBranch",
+        "If_ThenElse_FalseBranch",
+        "If_ThenOnly_FalseIsEmpty"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-if"
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-map.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "Map_Select_MergesInputMaps",
+        "Map_Select_DuplicatesDefault_XTDE3365",
+        "Map_Select_DuplicatesUseFirst"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#id-xsl-map-and-entry"
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-note.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "Note_InTemplate_IsDiscarded",
+        "Note_AtTopLevel_IsDiscarded",
+        "Note_ContentIsNotValidated"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-note-elements"
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-switch.md",
+      "bosakPr": 92,
+      "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+      "namedTests": [
+        "Switch_LookupTable_SelectBranches",
+        "Switch_TestSequences_DaysInMonth",
+        "Switch_GeneralComparison_NumericPromotion"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch"
+      ]
+    },
+    {
+      "entry": "experimental/fn-scan.md",
+      "bosakPr": 98,
+      "bosakRevision": "bd18e42f33b5e69817f059f6429f4b08e639a5a3",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Evaluate_Scan_XPath40Experimental_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-scan"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-scan"
+      ]
+    },
+    {
+      "entry": "rejected/mapping-arrow-gtgt.md",
+      "bosakPr": 77,
+      "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_MappingArrow_AppliesFunctionPerItem",
+        "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+      ]
+    }
+  ]
+}

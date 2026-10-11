@@ -1,0 +1,6 @@
+<dispatch accepted="5" rejected="1">
+  <batch number="1" route="NORTH"><order id="R1" units="2"/><order id="R2" units="1"/></batch>
+  <batch number="2" route="NORTH"><order id="R3" units="3"/></batch>
+  <batch number="3" route="SOUTH"><order id="R4" units="1"/></batch>
+  <batch number="4" route="NORTH"><order id="R5" units="2"/></batch>
+</dispatch>

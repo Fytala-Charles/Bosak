@@ -7,6 +7,10 @@
 > templates with their context, output, and preconditions as well. The invoice
 > chapter is the first application of these conventions.
 >
+> The order-routing chapter adds an explicitly opted-in XPath40 planning expression,
+> passed to a portable XSLT 3.0 stylesheet; helper comments apply to the planning
+> expression as well.
+>
 > The EXSLT tier/migration rules, `src/` modules, `tests/cases/` layout,
 > attribution paths, training harnesses, and `tools/check-docs.ps1` below describe
 > **Bosak.Exslt**, not tools or directories in Bosak. Bosak's invoice fixtures live
@@ -14,7 +18,7 @@
 > `InvoiceReferenceGuideTests` in `tests/Bosak.Xslt.Tests/Documentation/`.
 > Bosak's local coding and documentation obligations are in [AGENTS.md](../AGENTS.md).
 >
-> The three worked chapters use portable XSLT 3.0 / XPath 3.1. Catalog instruction
+> The first three worked chapters use portable XSLT 3.0 / XPath 3.1. Catalog instruction
 > comparisons additionally include explicitly labeled version="4.0" draft examples
 > and version="3.0" baselines. That declared compatibility is intentional; the
 > Exslt-only version rule below is not a ban on documenting implemented 4.0 surfaces.

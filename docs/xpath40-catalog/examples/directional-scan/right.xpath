@@ -1,0 +1,2 @@
+(: Directional scan names; synthetic fulfillment data; mode experimental; no external context. :)
+fn:scan-right((1,2), 0, function($a,$b){$a+$b})
