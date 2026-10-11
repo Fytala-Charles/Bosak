@@ -1,0 +1,5 @@
+let $parts := parse-xml('<catalog><part id="KIT"><needs ref="MISSING"/><needs ref="MOTOR"/></part><part id="BOLT"/><part id="FRAME"><needs ref="BOLT"/></part><part id="MOTOR"><needs ref="BOLT"/></part></catalog>')/catalog/part
+let $start := $parts[@id eq 'KIT']
+let $step := function($part) { $parts[@id = $part/needs/@ref] }
+let $reachable := transitive-closure($start, $step)
+return concat('dependencies=', string-join($reachable/@id, ','), '; count=', count($reachable))

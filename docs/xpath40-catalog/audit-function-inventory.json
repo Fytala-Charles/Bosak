@@ -1,6 +1,6 @@
 {
   "auditDate": "2026-10-11",
-  "sourceRevision": "df6e1ddd9c6546ea093816e31f824482bcd4a81a",
+  "sourceRevision": "c011a9c97a47a2cb2265cd90a3062b11b35f581b",
   "enginePackageVersion": "1.1.2",
   "engineRevision": "3aebf76a24b28af7d40aa42e6eaf714b3a596838",
   "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
@@ -257,8 +257,8 @@
       "name": "fn:identity",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/configured-label-callbacks.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-identity"
     },
     {
@@ -377,8 +377,8 @@
       "name": "fn:partial-apply",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/configured-label-callbacks.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -481,8 +481,8 @@
       "name": "fn:transitive-closure",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/product-dependency-closure.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {

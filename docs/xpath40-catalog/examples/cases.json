@@ -1515,5 +1515,264 @@
     "mode": "40",
     "file": "bounded-retries/until-action-error.xpath",
     "error": "ATTEMPT"
+  },
+  {
+    "id": "product-dependency-closure-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/main.xpath",
+    "expected": "dependencies=BOLT,FRAME,MOTOR; count=3"
+  },
+  {
+    "id": "product-dependency-closure-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "product-dependency-closure/baseline.xpath",
+    "expected": "dependencies=BOLT,FRAME,MOTOR; count=3"
+  },
+  {
+    "id": "product-dependency-closure-cycle",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/cycle.xpath",
+    "expected": "dependencies=KIT,BOLT,FRAME,MOTOR; count=4"
+  },
+  {
+    "id": "product-dependency-closure-self-cycle",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/self-cycle.xpath",
+    "expected": "dependencies=KIT,BOLT,FRAME,MOTOR; count=4"
+  },
+  {
+    "id": "product-dependency-closure-duplicate-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/duplicate-edge.xpath",
+    "expected": "dependencies=BOLT,FRAME,MOTOR; count=3"
+  },
+  {
+    "id": "product-dependency-closure-leaf",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/leaf.xpath",
+    "expected": "dependencies=; count=0"
+  },
+  {
+    "id": "product-dependency-closure-missing-start",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/missing-start.xpath",
+    "expected": "dependencies=; count=0"
+  },
+  {
+    "id": "product-dependency-closure-include-start",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/include-start.xpath",
+    "expected": "KIT,BOLT,FRAME,MOTOR"
+  },
+  {
+    "id": "product-dependency-closure-node-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/node-identity.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "product-dependency-closure-non-node-start",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/non-node-start.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "product-dependency-closure-non-node-step",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/non-node-step.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "product-dependency-closure-multiple-starts",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/multiple-starts.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "product-dependency-closure-noncallable-step",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/noncallable-step.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "product-dependency-closure-dangling-reference",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-dependency-closure/dangling-reference.xpath",
+    "expected": "dependencies=BOLT,MOTOR; count=2"
+  },
+  {
+    "id": "product-dependency-closure-reference-validation",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "product-dependency-closure/reference-validation.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "configured-label-callbacks-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/main.xpath",
+    "expected": "arity=1; labels=SHIP: ADA | SHIP: GRACE"
+  },
+  {
+    "id": "configured-label-callbacks-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "configured-label-callbacks/baseline.xpath",
+    "expected": "arity=1; labels=SHIP: ADA | SHIP: GRACE"
+  },
+  {
+    "id": "configured-label-callbacks-preserve-case",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/preserve-case.xpath",
+    "expected": "arity=1; labels=SHIP: Ada | SHIP: Grace"
+  },
+  {
+    "id": "configured-label-callbacks-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/empty-input.xpath",
+    "expected": "arity=1; labels="
+  },
+  {
+    "id": "configured-label-callbacks-all-bound",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/all-bound.xpath",
+    "expected": "arity=0; label=SHIP: ADA"
+  },
+  {
+    "id": "configured-label-callbacks-empty-bindings",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/empty-bindings.xpath",
+    "expected": "arity=3; label=SHIP: ADA"
+  },
+  {
+    "id": "configured-label-callbacks-remaining-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/remaining-order.xpath",
+    "expected": "arity=2; label=PICK: Ada"
+  },
+  {
+    "id": "configured-label-callbacks-ignored-high-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/ignored-high-key.xpath",
+    "expected": "arity=1; labels=SHIP: ADA | SHIP: GRACE"
+  },
+  {
+    "id": "configured-label-callbacks-bound-sequence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/bound-sequence.xpath",
+    "expected": "FRAME+MOTOR"
+  },
+  {
+    "id": "configured-label-callbacks-callable-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/callable-map.xpath",
+    "expected": "ready"
+  },
+  {
+    "id": "configured-label-callbacks-callable-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/callable-array.xpath",
+    "expected": "express"
+  },
+  {
+    "id": "configured-label-callbacks-string-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/string-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "configured-label-callbacks-zero-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/zero-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "configured-label-callbacks-negative-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/negative-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "configured-label-callbacks-noncallable",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/noncallable.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "configured-label-callbacks-bound-type-error",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/bound-type-error.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "configured-label-callbacks-identity-labels",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/identity-labels.xpath",
+    "expected": "SHIP: ADA | SHIP: GRACE"
+  },
+  {
+    "id": "configured-label-callbacks-identity-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "configured-label-callbacks/identity-baseline.xpath",
+    "expected": "SHIP: ADA | SHIP: GRACE"
+  },
+  {
+    "id": "configured-label-callbacks-identity-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/identity-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "configured-label-callbacks-identity-node",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/identity-node.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "configured-label-callbacks-identity-sequence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/identity-sequence.xpath",
+    "expected": "FRAME,MOTOR"
+  },
+  {
+    "id": "configured-label-callbacks-identity-container",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "configured-label-callbacks/identity-container.xpath",
+    "expected": "true"
   }
 ]

@@ -1,0 +1,1 @@
+partial-apply(concat#2, map {-1: 'SHIP: '})

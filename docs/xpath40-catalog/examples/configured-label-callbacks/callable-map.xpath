@@ -1,0 +1,1 @@
+partial-apply(map {'ORD101': 'ready'}, map {1: 'ORD101'})()

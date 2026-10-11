@@ -1,0 +1,2 @@
+let $labels := ('SHIP: ADA', 'SHIP: GRACE')
+return string-join(for-each($labels, identity#1), ' | ')
