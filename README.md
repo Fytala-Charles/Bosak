@@ -16,7 +16,7 @@
 
 </div>
 
-**1.1.0 release:** supported authoring, controlled validation/preview, and executable reference chapters. See [release notes](docs/RELEASE-NOTES-1.1.md) for compatibility and coverage restrictions.
+**1.1.0 published 2026-10-11:** supported authoring, controlled validation/preview, and executable reference chapters. See [release notes](docs/RELEASE-NOTES-1.1.md) for compatibility and coverage restrictions.
 
 --- 
 ## About FYTALA

@@ -1,3 +1,13 @@
+# Bosak 1.1.0 published: 2026-10-11
+
+**Release revision:** `6c2a867cbc7587922cb3973a7505746116caa54c`, tag `v1.1.0`, [GitHub release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.0). Corrections #151, reference guide #152, and release preparation #153 are merged. Release implementation is `a9beb48`; the tagged merge is the immutable publication identity.
+**Publication:** merged-main CI [38118583678](https://github.com/Fytala-Charles/Bosak/actions/runs/38118583678) and Trusted Publishing [38118879264](https://github.com/Fytala-Charles/Bosak/actions/runs/38118879264) passed. NuGet reported Created for all ten packages. All ten public 1.1.0 downloads were fetched and their versions, internal dependencies, README/license contents, and SHA-256 hashes verified after propagation.
+**Consumer verification:** an isolated Braid checkout uses Bosak.Xslt 1.1.0 from the downloaded public artifacts and a fresh package cache; all 192 tests pass / 0 fail / 0 skip. Its public `AuthoringCapabilities.EngineVersion` reports `1.1.0+6c2a867cbc7587922cb3973a7505746116caa54c`. Braid's production source pin remains `0ff33163...`; this check proves package consumption without silently changing its source-based adoption contract. Logs: `.guard-tmp/release110-braid-published-*.log`; package/hash manifest: `.guard-tmp/release110-published/verification.json`; publishing log: `.guard-tmp/release110-publish-complete.log`.
+**Release gates:** local full solution 4,039/0/0; QT3 exactly 31,142/0/679; qt4 promoted sets 8,278/0/1,894. No new complete XSLT sweep is claimed. Existing warnings and documented coverage/platform limitations remain.
+**Next:** decide Braid's production release adoption (source pin to the tagged revision or a deliberate package migration), then resume the remaining REQ-126 inventory/traceability work or production preview adapter/worker work according to owner priority. No release work remains pending for Bosak 1.1.0.
+
+---
+
 # Bosak 1.1.0 release preparation: 2026-10-11
 
 **Base commit:** `d1f1f50895776cc8a716d0f89d81ffdefe3720a3` (main after merging #151 and #152). Release preparation is on `release/1.1.0`.
