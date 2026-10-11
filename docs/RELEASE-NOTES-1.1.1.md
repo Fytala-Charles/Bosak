@@ -6,8 +6,11 @@
 
 ## Release scope
 
-Prepared on **2026-10-11** as a coordinated patch release of the ten public
-NuGet libraries, targeting .NET 10. Publication is pending the release workflow.
+Published **2026-10-11** as [v1.1.1](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.1) from
+commit `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`. The [Trusted Publishing workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38139040259)
+passed. All ten public NuGet libraries target .NET 10; downloaded artifacts
+verify versioned internal dependencies, README and license. A fresh-cache
+consumer verified four runtime compatibility checks against public packages.
 
 Version 1.1.0 accepted version 4.0 stylesheets but compiled their runtime
 expressions as XPath 3.1. Calls such as `fn:partition` consequently failed with
