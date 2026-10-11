@@ -1,6 +1,6 @@
 # REQ-126 map/array and sequence-selection coverage: 2026-10-11
 
-**Base revision:** `09e678f30b0e655ed619c8d5440350984cd20b02`; branch `docs/req126-map-array-selection`. Published/source engine stays 1.1.1 (`d35cf1d4`); this delivery changes documentation and exact example fixtures only.
+**Delivery revision:** `e6a1ee45`; base `09e678f30b0e655ed619c8d5440350984cd20b02`; branch `docs/req126-map-array-selection`. Published/source engine stays 1.1.1 (`d35cf1d4`); this delivery changes documentation and exact example fixtures only.
 **What was built:** three 16-field entries: product-map indexing (15 checks), array import batches (11), order-export sequence selection (14). Every entry shows complete synthetic input expressions, exact outputs, a 3.1 comparison and edge contracts, delivery PR/revision, named tests and actual exact-name gate status. A new review pin records QT4CG F&O source `a014e1b408baf5614a11401d3570a04498ab76be`; historical adopted snapshots are still unavailable.
 **Coverage:** 41 entries, 144 manifest checks and four worked chapters with 24 checks: 168 documentation checks. Fourteen additional names are assigned: 82 assigned / 35 unassigned of 117. Mapping is not exhaustive signature/conformance coverage. Baseline provenance remains scoped to its original 28 entries.
 **Confirmed engine findings:** 1.1.1 `map:entries` returns an array of single-entry maps rather than the reviewed draft's sequence; `map:items` retains grouped sequence-valued entries rather than concatenating all items. Existing named unit tests already pin those shapes. New exact probes and 3.1 comparisons record both; the product-index main example explicitly uses Bosak's `?*` adapter. No engine fix or conformance promotion is included.
@@ -14413,4 +14413,5 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 2. Continue with adjacent medium clusters such as `copy-of` (14) or `date` (year < 1 limitations).
 
 ---
+
 
