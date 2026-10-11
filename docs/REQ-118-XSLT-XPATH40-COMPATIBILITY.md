@@ -18,6 +18,9 @@ backwards-compatible behavior. The default public XPath compiler remains XPath31
 This is a compatibility bug fix within Bosak's supported subset, not a claim of
 complete XSLT/XPath 4.0 conformance.
 
+Bosak implementation revision: `6156a2b`; the source correction is reviewed
+separately from its parent catalog documentation delivery (PR #156).
+
 | Boundary | Source behavior after this correction |
 |---|---|
 | Root `version="4.0"` | Frozen XPath40 for its expressions and inheriting descendants. |
