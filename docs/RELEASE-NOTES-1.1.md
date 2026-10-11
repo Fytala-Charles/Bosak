@@ -6,6 +6,11 @@
 
 ## Release scope
 
+Published **2026-10-11** as [v1.1.0](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.0)
+from commit `6c2a867cbc7587922cb3973a7505746116caa54c`.
+The [publishing workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38118879264)
+passed and created all ten NuGet packages.
+
 This minor release follows 1.0.0 and retains the default XPath 3.1 compatibility
 level. All ten public library packages use the coordinated version 1.1.0.
 The target framework remains .NET 10. The package version comes from
@@ -40,8 +45,9 @@ also does not imply business acceptance of partial documents.
 
 Bosak.Braid accepted the declared contract and adopted correction revision
 `0ff33163ba985bf8562722424db7e66c37e3566d` in its immutable dependency manifest.
-Verification against the published 1.1.0 packages is the next consumer check;
-production preview adapter/worker integration remains separate product work.
+Verification against the published 1.1.0 packages also passes in an isolated
+Braid checkout. Production release adoption and preview adapter/worker
+integration remain separate product work.
 
 ## Executable reference guide
 
@@ -90,4 +96,10 @@ historical evidence, not a newly executed complete sweep for 1.1.0.
 
 The consumer-loaded XSLT assembly reports `1.1.0+<revision>` as its informational
 version. Candidate-package testing does not change Braid's production source pin;
-an additional check against the published artifacts follows publication.
+the additional published-artifact check is recorded below.
+
+**Published-artifact verification:** all ten NuGet package downloads were verified
+after propagation. The isolated Braid consumer was restored using a fresh cache
+against these public artifacts and passed all **192 tests / 0 failures / 0 skips**.
+Its public `EngineVersion` returns
+`1.1.0+6c2a867cbc7587922cb3973a7505746116caa54c`, matching the release tag.

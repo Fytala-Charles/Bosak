@@ -2761,4 +2761,4 @@ business reports or pages containing editorial defects.
 
 ## Bosak 1.1.0 package adoption
 
-The coordinated public packages use version 1.1.0. See [release notes](RELEASE-NOTES-1.1.md). Consumers should verify the built `AuthoringCapabilities.EngineVersion` and keep controlled-preview coverage/refusal handling and hard worker-process controls. Braid has accepted the source revision; published-package verification remains a distinct consumer check.
+The coordinated public packages use version 1.1.0, published 2026-10-11. See [release notes](RELEASE-NOTES-1.1.md). Consumers should verify the built `AuthoringCapabilities.EngineVersion` and keep controlled-preview coverage/refusal handling and hard worker-process controls. An isolated Braid checkout passes all 192 tests against the downloaded public packages with a fresh cache; its engine version matches release revision `6c2a867cbc7587922cb3973a7505746116caa54c`. Braid's production dependency remains source-pinned until a deliberate release-adoption change.
