@@ -62,6 +62,26 @@ The project is named for **Jon Bosak**, who chaired the W3C working groups that 
 
 Unlike `System.Xml.XPath`, Bosak is built on the **W3C XQuery Data Model (XDM)** from day one. Expressions are compiled once to an intermediate representation (IR) and executed many times on a lightweight, register-based virtual machine. XSLT and XQuery reuse the same XPath engine for all expression evaluation.
 
+## Why and when to use XSLT
+
+XSLT turns structured XML into another document or data format using reusable transformation rules. XPath selects the information to process; XSLT templates describe how to reshape it. This is useful when the transformation must handle namespaces, repeated records, optional fields, or documents that mix text and markup.
+
+| Situation | Practical transformation |
+|---|---|
+| Business document exchange | Map a supplier's invoice into the XML structure expected by an ERP system, converting dates, grouping tax lines, and preserving document identifiers. |
+| Publishing and technical documentation | Turn an XML manual into HTML pages, preserving headings, inline emphasis, cross-references, and a generated table of contents. |
+| Reporting and reconciliation | Group order lines by customer or product, calculate totals, and produce a report plus a separate exception document for incomplete records. |
+| Maintaining document formats | Convert an older XML vocabulary into a newer one while retaining content that does not need to change. |
+| Data interchange | Extract XML records into JSON or text for another application, with explicit rules for missing values and repeated elements. |
+
+Choose XSLT when the rules follow the structure of the document and need to be reused across many inputs. Template matching suits publishing: a rule can render a paragraph wherever it appears while preserving its surrounding text. Explicit field selection suits integration: a rule can map an invoice line into a target schema. Stylesheets keep these rules together and make them independently testable with representative input and expected output. Outputting XSL-FO is also possible; producing a PDF from it requires a separate formatter.
+
+Bosak provides these transformations within a .NET application, with XPath and XQuery available on the same data model. See the [integration guide](docs/INTEGRATION.md) for the public APIs and supported behavior.
+
+### Catalogs as a reference guide
+
+The [XPath/XSLT feature catalog](docs/xpath40-catalog/README.md) is intended to grow into a book or reference guide: chapters that explain problems, practical solutions, and the reasons for choosing a feature. Entries should work both as a learning path and as a quick lookup during development. Examples will use realistic documents and tasks, with sample input, expected output, edge cases, and compatibility notes. Start with [supplier invoices to ERP XML](docs/xpath40-catalog/worked-examples/invoice-to-erp/README.md), a complete XSLT 3.0 mapping with fixtures, expected outputs, and executable checks. Its optional XPath 4.0 comparison illustrates migration without changing the mapping's requirements. Further chapters and feature coverage remain work in progress.
+
 ### Key Features
 
 - **XDM-First Architecture** — All inputs are adapted to `IXdmNode`; no proprietary DOM lock-in

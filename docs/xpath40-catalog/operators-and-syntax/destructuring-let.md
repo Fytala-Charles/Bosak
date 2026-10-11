@@ -86,6 +86,8 @@ Files: `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (1.74), `src/Bosak.XPath.Pars
 
 ## 13. Sample Code
 
+Start with [the invoice chapter's practical migration pair](../worked-examples/invoice-to-erp/README.md#where-xpath-40-can-improve-readability): unpack invoice ID and currency from a metadata map to build a display label. Both complete expressions are supplied, engine-verified, and produce `INV-2026-1042 / EUR`. The 4.0 form requires explicit opt-in. The probes below cover the individual binding shapes.
+
 ~~~xquery
 let $($x, $y) := (1, 2, 3) return ($x, $y)
   (: → (1, (2,3)) — last variable takes the rest :)
@@ -109,6 +111,8 @@ Cost class: **small constant overhead**. One `Destructure` opcode per binding gr
 
 ## 15. Known Uses
 
+Practical case: `InvoiceReferenceGuideTests.InvoiceLabel_MigrationPairMatchesAndRequiresOptIn` executes both published label expressions and verifies XPST0003 in the default mode. This is a chapter-level example, separate from qt4tests gate evidence.
+
 qt4tests `prod-LetClause` **137/0/52** (52 skips = XQuery-only dependencies) and `fn-compare` collateral — both promoted into the conformance gate (223 sets) at landing.
 
 ## 16. Related Features
@@ -117,4 +121,4 @@ qt4tests `prod-LetClause` **137/0/52** (52 skips = XQuery-only dependencies) and
 - Structural record types — own entry pending.
 - `fn:scan` — [experimental/fn-scan.md](../experimental/fn-scan.md) (same delivery wave, opposite tier).
 
-*Entry created 2026-10-10 (REQ-126 scaffold).*
+*Entry created 2026-10-10; updated 2026-10-11 with the verified invoice migration case (REQ-126).*

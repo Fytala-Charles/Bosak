@@ -1,0 +1,15 @@
+<erp:import xmlns:erp="urn:example:erp:import">
+  <erp:invoice id="INV-2026-1042" supplier="SUP-0042" currency="EUR" issue-date="2026-10-11" status="ready">
+    <erp:purchase-order>PO-8801</erp:purchase-order>
+    <erp:lines>
+      <erp:line id="1" sku="BRACKET-A" quantity="4" unit-price="25.00" net="100.00"/>
+      <erp:line id="2" sku="BOLT-M8" quantity="30" unit-price="2.00" net="60.00"/>
+      <erp:line id="3" sku="MANUAL-PRINT" quantity="1" unit-price="20.00" net="20.00"/>
+    </erp:lines>
+    <erp:tax-summary>
+      <erp:tax rate="0" net="20.00" amount="0.00"/>
+      <erp:tax rate="21" net="160.00" amount="33.60"/>
+    </erp:tax-summary>
+    <erp:totals accepted-lines="3" rejected-lines="0" net="180.00" tax="33.60" gross="213.60"/>
+  </erp:invoice>
+</erp:import>

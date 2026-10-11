@@ -1,0 +1,6 @@
+(: XPath 3.1: synthetic invoice metadata, no external context required. :)
+let $invoice := map { 'invoiceId': 'INV-2026-1042', 'currency': 'EUR' }
+return
+  let $invoiceId := $invoice?invoiceId,
+      $currency := $invoice?currency
+  return $invoiceId || ' / ' || $currency

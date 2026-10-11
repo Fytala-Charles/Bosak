@@ -1,3 +1,12 @@
+# Reference-guide invoice chapter — 2026-10-11
+
+**Base commit:** `3f525af` (published correction branch; PR #151 remains open). This chapter and the prior documentation direction are a separate delivery based on that revision.
+**What was built:** first complete REQ-126 chapter, supplier invoice XML to simplified ERP XML, with principal/exception expected documents, complete/incomplete fixtures, numeric tax grouping and rounding policy, optional fields, invalid-header/all-rejected cases, and a separately gated XPath 3.1/4.0 metadata-label migration pair. The test project copies and executes the exact published files through public APIs. Catalog guidance now distinguishes the book reading path from implementation reference details and links the chapter and publishing plan.
+**Verification:** Release solution build 0 errors; seven chapter checks pass; full solution 3,952 passed / 0 failed / 0 skipped across 10 projects. Documentation local links and XML/XSLT structural checks pass; README/catalog/chapter HTML renders with headings and tables. Existing engine source is unchanged, so no new conformance-harness run is required for this documentation/test-only slice. Logs: `.guard-tmp/invoice-chapter-*.log`.
+**Next:** publish this chapter through a separate PR; XML-manual-to-HTML chapter (mixed content, links, table of contents, broken-reference evidence) is planned next. Remaining REQ-126 feature entries/examples are pending; the catalog is not complete. No production preview changes or industry-standard compliance are implied by these fixtures.
+
+---
+
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-10-11 (REQ-125 consumer-review corrections C-F1/D-F1)

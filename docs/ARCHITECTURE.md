@@ -714,3 +714,7 @@ The published NuGet package will likely be a single `Bosak.XPath` assembly (prod
 </div>
 
 **REQ-125 delivery traceability (2026-10-11):** Bosak correction revision `0ff33163ba985bf8562722424db7e66c37e3566d` is accepted within the documented coverage and restricted byte-bounded profiles. Bosak.Braid adopted this exact immutable revision in commit `9423d41b52a5f3a3c1206df370c7998f7ad88886`. Its Release build passed with 0 errors, all **192 tests passed / 0 failed / 0 skipped** (including six public-contract checks), and the strict documentation gate passed. The bootstrap also rejects solution/manifest revision mismatches before checkout preparation. Both repositories have local commits; remote publication awaits explicit push authorization. Production preview adapter/worker integration remains separate product work.
+
+### Executable reference-guide examples (REQ-126)
+
+The [invoice chapter](xpath40-catalog/worked-examples/invoice-to-erp/README.md) uses the existing public compiler/capture pipeline without engine changes. `Bosak.Xslt.Tests` copies the published XML/XSLT/XPath assets into its test output and verifies those exact files through `InvoiceReferenceGuideTests`. Chapter evidence supplements feature/conformance evidence; it does not promote new 4.0 surfaces or claim completion of the catalog. A separate XPath compilation with `XPathCompatibility.XPath40` verifies the optional migration example.
