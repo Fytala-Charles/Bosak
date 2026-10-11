@@ -13,7 +13,7 @@ Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; engine delivery
 `eedcb321848ff7e9381c34fd72cb42db4994992f`. Exact fn-identity gate exists;
 no exact transitive-closure/partial-apply gate assignment is claimed.
 No engine/API/package/gate changes. REQ-126 remains In Progress.
-Validation: Release build passed; all 4,273 tests passed across ten assemblies with no failures/skips, including 251 catalog cases. Renderer verified 59 pages. Entry fields, primary/local links, inventory/provenance, named tests, three full XML blocks and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision will be recorded after commit.
+Validation: Release build passed; all 4,273 tests passed across ten assemblies with no failures/skips, including 251 catalog cases. Renderer verified 59 pages. Entry fields, primary/local links, inventory/provenance, named tests, three full XML blocks and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `5c5388d8`; [PR #165](https://github.com/Fytala-Charles/Bosak/pull/165). CI pending at handover.
 Next: scheduling/date-time and formatting reference families from the unassigned inventory.
 
 # Agent Handover — 2026-10-11: bounded retry state
