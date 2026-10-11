@@ -33,6 +33,8 @@ This is the correction's reviewed source, not a reconstructed historical adopted
 snapshot. Initial function delivery was [PR #84](https://github.com/Fytala-Charles/Bosak/pull/84),
 revision `f7f55b4e3a6e92da26ac607e34f46aede695cb19`.
 
+Correction implementation revision: `c6fd1cb6`, [PR #160](https://github.com/Fytala-Charles/Bosak/pull/160).
+
 ## Implementation and migration
 
 [FunctionLibrary](../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs)
