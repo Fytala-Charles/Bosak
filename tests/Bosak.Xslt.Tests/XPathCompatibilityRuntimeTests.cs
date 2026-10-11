@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-10-2026     | Creation: effective-version XPath40 regression coverage.                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2     | 11-10-2026     | Verify corrected map shapes through dynamic calls and nested profile restoration.        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -190,6 +192,20 @@ public class XPathCompatibilityRuntimeTests
             .Replace($"<xsl:{reference} href='module.xsl'/>", $"<xsl:{reference} href='module.xsl'/><xsl:output method='text'/>");
         if (succeeds) Assert.Equal("7", Run(stylesheet, compiler));
         else Assert.Contains("XPST0003", Assert.ThrowsAny<Exception>(() => Run(stylesheet, compiler)).Message);
+    }
+
+    /// <summary>Map results remain ordinary sequences after nested earlier-version calls.</summary>
+    /// <param name="name">The frozen map function local name.</param>
+    /// <param name="expectedCount">The corrected result cardinality.</param>
+    [Theory]
+    [InlineData("entries", 2)]
+    [InlineData("items", 3)]
+    public void MapResults_RestoreCallerProfile(string name, int expectedCount)
+    {
+        var declaration = $"<xsl:function name='f:earlier'><xsl:sequence version='3.0' select='empty(function-lookup(xs:QName(&quot;map:{name}&quot;), 1))'/></xsl:function>";
+        var body = $"<xsl:value-of select='f:earlier(), count(function-lookup(xs:QName(&quot;map:{name}&quot;), 1)(map{{&quot;a&quot;:(1,2),&quot;b&quot;:3}}))'/>";
+        Assert.Equal($"true {expectedCount}", Run(Wrap(body, declarations: declaration)));
+        Assert.Equal("true", Run(Wrap($"<xsl:value-of select='empty(function-lookup(xs:QName(&quot;map:{name}&quot;), 1))'/>", "3.0")));
     }
 
     private sealed class ModuleResolver(string text) : IXsltUriResolver

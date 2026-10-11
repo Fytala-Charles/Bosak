@@ -174,8 +174,7 @@ because its documentation is missing.
 | P2 | Expand syntax and changed-3.1 semantics | Literals, focus functions, guarded expressions, record updates, comparisons/collations, patterns, and supplementary forms. |
 | P3 | Reconcile acceptance and publish the complete reference | Zero unassigned adopted features/decisions, accurate index/tier links, verified examples, and explicit exceptions to conformance evidence rules. |
 
-**Recommended next step:** correct the confirmed map result-shape gaps in a
-separately gated engine slice. Continue the remaining equality/subsequence and
+**Recommended next documentation step:** continue the remaining equality/subsequence and
 higher-order families afterward, then supplementary signatures and parser/type/pattern forms.
 The baseline provenance repair, section-1.2 decision records and first sequence/HOF
 routing chapter are supplied below. Immutable historical specification snapshots
@@ -277,3 +276,18 @@ The current delivery changes documentation and fixtures only. No engine code,
 package version or gate membership changes. REQ-126 remains In Progress.
 
 **Delivery verification (2026-10-11):** Release build 0 warnings / 0 errors; full isolated solution **4,143/0/0**, targeted catalog **144/0/0**. All 41 entries/index links, 166 primary links/anchors, 28 baseline provenance records and 144 manifest files verified; 54 documentation pages rendered. Inline expressions/results and named tests match. Engine gates were not rerun for this documentation-only change.
+
+## Map contract correction (source 1.1.2): 2026-10-11
+
+The [REQ-118 engine correction](../REQ-118-MAP-RESULT-SHAPES.md) addresses both
+result-shape findings above. `map:entries` returns a sequence of single-entry
+maps; `map:items` concatenates value sequences while preserving nested containers.
+The product-index main expression no longer uses the Bosak-specific `?*` adapter;
+boundary probes now agree with the portable baselines. Twenty-one new standard
+checks and two nested-stylesheet profile checks cover direct/dynamic calls,
+empty and nested values, order and default-mode isolation. The dossier records
+full regression and frozen gate evidence. Map upstream sets remain exploratory;
+no sets are promoted. Source 1.1.2 is prepared, not yet published. Counts remain
+41 entries, 168 documentation checks and 35 unassigned names; REQ-126 stays In Progress.
+
+**Map correction final verification (2026-10-11):** source 1.1.2 prepared; full solution 4,166/0/0, QT3 31,142/0/679, qt4 promoted sets 8,278/0/1,894 with zero gated failures. Targeted map-entries 16/0/1 and map-items 15/0/0 remain exploratory. See [the correction dossier](../REQ-118-MAP-RESULT-SHAPES.md) and [prepared patch notes](../RELEASE-NOTES-1.1.2.md).

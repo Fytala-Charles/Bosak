@@ -828,7 +828,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "product-map-index/items-sequence-boundary.xpath",
-    "expected": "2"
+    "expected": "3"
   },
   {
     "id": "product-map-index-items-baseline",
@@ -1017,7 +1017,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "product-map-index/entries-boundary.xpath",
-    "expected": "true/1/2"
+    "expected": "false/2"
   },
   {
     "id": "product-map-index-entries-baseline",

@@ -113,6 +113,8 @@
 //                      |                  |       |                | collation-key/contains-token/node-name, fn:collation-available, min/max QName          |
 //                      |                  |       |                | ordering (PR2256)                                                                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.142   | 11-10-2026     | Return map:entries as a sequence; concatenate map:items values (REQ-118).                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -1994,7 +1996,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Map, LocalName = "entries", Arity = 1,
                 ParameterTypes = [XdmValueKind.Map],
-                ReturnType = XdmValueKind.Array,
+                ReturnType = XdmValueKind.Sequence,
                 IsXPath40Only = true,
                 Implementation = MapEntries
             },
@@ -13878,14 +13880,16 @@ public static class FunctionLibrary
     /// <summary>F+O 4.0 §14.2.2: map:entries — single-entry maps, one per entry, in entry order.</summary>
     private static XdmValue MapEntries(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var result = new XdmArray();
+        var result = new List<XdmValue>();
         foreach (var kvp in args[0].MapValue.Entries)
         {
             var single = new XdmMap();
             single.Add(kvp.Key, kvp.Value);
             result.Add(XdmValue.FromMap(single));
         }
-        return XdmValue.FromArray(result);
+        return result.Count == 0
+            ? XdmValue.Undefined
+            : XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     /// <summary>
@@ -13913,7 +13917,7 @@ public static class FunctionLibrary
     {
         var values = new List<XdmValue>();
         foreach (var kvp in args[0].MapValue.Entries)
-            values.Add(kvp.Value);
+            values.AddRange(AsSequence(kvp.Value));
         return values.Count == 0
             ? XdmValue.Undefined
             : XdmValue.FromSequence(MaterializedSequence.FromList(values));
