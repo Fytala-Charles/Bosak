@@ -13,7 +13,7 @@ Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; original engine
 #84 `f7f55b4e3a6e92da26ac607e34f46aede695cb19`. Exact fn-unix-dateTime gate
 exists; no exact gate assignment is claimed for the other four functions.
 No engine/API/package/gate changes. REQ-126 remains In Progress.
-Validation: Release build passed (0 errors, 12 existing warnings); all 4,309 tests passed across ten assemblies without failures/skips, including 287 catalog cases. Renderer verified 61 pages. Entry fields, primary/local links, inventory/provenance, named tests, four full XML inputs and inline expression/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision will be recorded after commit.
+Validation: Release build passed (0 errors, 12 existing warnings); all 4,309 tests passed across ten assemblies without failures/skips, including 287 catalog cases. Renderer verified 61 pages. Entry fields, primary/local links, inventory/provenance, named tests, four full XML inputs and inline expression/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `6709d3f2`; [PR #166](https://github.com/Fytala-Charles/Bosak/pull/166). CI pending at handover.
 Next: URI parsing/construction and encoding reference examples.
 
 # Agent Handover — 2026-10-11: dependency traversal and configured callbacks
