@@ -8,7 +8,7 @@
 
 Published Bosak 1.1.1 returns an array from `map:entries` and retains grouped
 sequence values from `map:items`. Both shapes differ from the reviewed draft.
-Source **1.1.2**, prepared but unpublished, corrects the supported contracts:
+Published [**1.1.2**](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2) corrects the supported contracts:
 
 | Call | Published 1.1.1 | Corrected source 1.1.2 |
 |---|---|---|
@@ -95,3 +95,5 @@ dependency). Targeted `map-items`: **15/0/0**. These sets remain exploratory; th
 skipped entries dependency prevents claiming every case passes. No conformance
 set is promoted in this correction. A complete XSLT sweep is not claimed.
 Braid adoption remains separate work.
+
+**Publication verified:** tag v1.1.2, release revision `3aebf76a24b28af7d40aa42e6eaf714b3a596838`; all ten public package downloads and eight fresh-cache consumer checks passed. [Publishing workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38144723077).

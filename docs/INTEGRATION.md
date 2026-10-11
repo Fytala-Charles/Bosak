@@ -2794,5 +2794,6 @@ retaining nested maps/arrays as items. Entry order and complete values inside
 single-entry maps are preserved. Replace 1.1.1's `map:entries($map)?*` adapter
 with a direct call, and array indexing of that result with sequence predicates.
 Default XPath31 refusal and dynamic lookup isolation remain enforced, including
-after nested stylesheet calls. No public API is added. Source 1.1.2 is prepared
-but unpublished; published 1.1.1 still has the documented prior shapes.
+after nested stylesheet calls. No public API is added. Published [1.1.2](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2) contains this correction; release revision
+`3aebf76a24b28af7d40aa42e6eaf714b3a596838`. All ten public artifacts and eight
+fresh-cache consumer checks are verified. Version 1.1.1 has the documented prior shapes.

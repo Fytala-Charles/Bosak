@@ -1,8 +1,8 @@
 {
   "auditDate": "2026-10-11",
-  "sourceRevision": "09e678f30b0e655ed619c8d5440350984cd20b02",
-  "enginePackageVersion": "1.1.1",
-  "engineRevision": "d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50",
+  "sourceRevision": "3aebf76a24b28af7d40aa42e6eaf714b3a596838",
+  "enginePackageVersion": "1.1.2",
+  "engineRevision": "3aebf76a24b28af7d40aa42e6eaf714b3a596838",
   "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
   "functionNames": [
     {
@@ -530,7 +530,7 @@
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
       "catalogEntry": "functions/product-map-index.md",
-      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in prepared source 1.1.2; not exhaustive signature coverage",
+      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in published 1.1.2; not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -546,7 +546,7 @@
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
       "catalogEntry": "functions/product-map-index.md",
-      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in prepared source 1.1.2; not exhaustive signature coverage",
+      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in published 1.1.2; not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -943,5 +943,5 @@
     }
   ],
   "reviewedSpecificationRevision": "a014e1b408baf5614a11401d3570a04498ab76be",
-  "sourceCorrectionVersion": "1.1.2 (prepared, unpublished)"
+  "sourceCorrectionVersion": "1.1.2 (published)"
 }
