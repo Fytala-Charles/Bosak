@@ -1,0 +1,2 @@
+(: Synthetic Destructuring let case; compatibility 40; no external context required. :)
+let ${$invoiceId, $currency} := map { 'invoiceId': 'INV-1042' } return count($currency)

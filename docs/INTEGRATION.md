@@ -2733,3 +2733,28 @@ Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
 **REQ-124 final consumer acceptance — 2026-10-10:** Accepted 2026-10-10 on the owner's instruction after Bosak.Braid re-review. F1 and F2 are closed. Tested fix cb98af1ff05a37a59e7b1fe051b024d3436e1cf2 matches merged main src/tests at 5720f873c8f9e5ec0b3182186bf336d2b5e58a03 (implementation b5eb1b17249fe458095af2dc53445d459f30db11). Independent gates: full Release unit suite 3,709 passed / 0 failed / 0 skipped; authoring subset 71/71; XSLT mode smoke 162 passed / 0 failed / 26 skipped. Acceptance covers the agreed engine surface, not a product/package release. Braid dependency adoption remains separate. See [acceptance review](REQ-124-CONSUMER-ACCEPTANCE-REVIEW.md).
 
 **REQ-125 delivery traceability (2026-10-11):** Bosak correction revision `0ff33163ba985bf8562722424db7e66c37e3566d` is accepted within the documented coverage and restricted byte-bounded profiles. Bosak.Braid adopted this exact immutable revision in commit `9423d41b52a5f3a3c1206df370c7998f7ad88886`. Its Release build passed with 0 errors, all **192 tests passed / 0 failed / 0 skipped** (including six public-contract checks), and the strict documentation gate passed. The bootstrap also rejects solution/manifest revision mismatches before checkout preparation. Both repositories have local commits; remote publication awaits explicit push authorization. Production preview adapter/worker integration remains separate product work.
+
+### Choosing XSLT and learning from the catalogs
+
+Use XSLT for reusable rules that reshape XML documents, such as invoice mapping, publishing XML manuals as HTML, or grouping order records into reports. See [why and when to use XSLT](../README.md#why-and-when-to-use-xslt). The [feature catalog](xpath40-catalog/README.md) is intended to grow into a book/reference guide with practical worked examples and compatibility notes; the initial 4.0 scaffold is still incomplete.
+
+The [invoice-to-ERP chapter](xpath40-catalog/worked-examples/invoice-to-erp/README.md) demonstrates public `XsltCompiler`/`CaptureTransform` usage against the exact published fixtures. It captures principal import and secondary exception documents in memory. Business rejection is represented in those documents even when transformation succeeds: consumers must hold `review-required` invoices and inspect the exception output. Seven named checks verify the mapping, edge cases, and the separately opted-in XPath 4.0 comparison. The [chapter reading path](xpath40-catalog/worked-examples/README.md) continues with the implemented XML-manual and reconciliation chapters.
+
+The example stylesheet documents its input/output contract, host responsibilities,
+rounding policy, helper edge cases, and template preconditions directly in XML
+comments. Its annotated source can be read independently of the chapter. The
+[XSLT style guide](XSLT_STYLE_GUIDE.md) identifies the adopted conventions and
+separates Bosak.Exslt-specific paths and tier rules from Bosak's fixture setup.
+
+The [manual publishing chapter](xpath40-catalog/worked-examples/manual-to-html/README.md)
+shows template modes, mixed-content preservation, stable anchors, and visible
+missing references. The [order reconciliation chapter](xpath40-catalog/worked-examples/order-reconciliation/README.md)
+shows explicit-document key lookups, nested grouping, outstanding/over-shipped
+units, and partial-data exception handling. Both remain XSLT 3.0 / XPath 3.1.
+All three chapter READMEs include full input and output documents for complete
+and incomplete cases, source-to-target mapping tables, validation contracts,
+and inventories explaining every XSLT element used and the main XPath constructs.
+The [catalog example runner](xpath40-catalog/examples/README.md) supplies 81
+independent compatibility/result checks; its 4.0 and experimental cases require
+their declared levels. Transformation success alone does not approve partial
+business reports or pages containing editorial defects.

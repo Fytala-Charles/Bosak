@@ -1,3 +1,40 @@
+# Detailed worked-example READMEs: 2026-10-11
+
+**Base commit:** `c9543c29dce2ab02b8f969e0fdb31170a167e00a`; continuing PR #152 on `docs/req126-invoice-reference-chapter`.
+**What changed:** all three chapter READMEs now include a reading path, complete normal/edge-case input and output documents (16 fixture documents), source-to-target field guides, validation/repair contracts, and an inventory of every XSLT element used plus the main XPath constructs. Invoice audit clarifies unchanged source ID spelling, single-valued-field assumptions, and source price precision versus two-place display. Manual documentation distinguishes the checked root-title cardinality from assumed section titles; reconciliation explains root identity refusals versus line rejection and shipment exception identity limitations. Reading-path guidance, README, integration, and REQ-126 are synchronized; no executable files changed.
+**Verification:** all 13 worked-example checks pass (0 failures/skips). Structural comparison confirms all 16 inline documents match published fixtures, preserving paragraph mixed content; complete XSLT inventories, local links, code fences, table structure, Markdown whitespace, and HTML rendering pass. The previous full solution result remains 4,039 passed / 0 failed / 0 skipped; this prose-only follow-up reran the affected chapter checks. Existing nullable/analyzer warnings remain in the test build.
+**Remaining:** publish this follow-up on PR #152. REQ-126 remains In Progress for the previously recorded wider inventory and traceability work.
+
+---
+
+# Worked chapters and catalog expansion: 2026-10-11
+
+**Base commit:** `3ae1aa6` (annotated invoice chapter). Expansion implementation/examples committed and published as `cee5b35` on PR #152; final documentation formatting is a follow-up. Continuing the same reference-guide branch.
+**What was built:** XML-manual-to-HTML and order reconciliation chapters with fully documented stylesheets, complete/incomplete inputs and expected outputs, and six checks; 24 new catalog entries, making 28 in total; 81 manifest-driven feature/edge/migration checks. New cases cover syntax, function families, types, JNodes, XSLT instructions, experimental scan, and stable/rejected alternatives. The invoice tests retain seven checks, so chapter coverage is 13 checks and combined documentation coverage is 94.
+**Verified so far:** Release solution build 0 errors; both new chapter fixture suites 6/6; catalog suite 81/81, including 24 earlier-version baselines and the stock-ledger fold comparison. Full solution passes: 4,039 passed / 0 failed / 0 skipped across 10 projects (XSLT 1,193); 94 documentation checks in total. README/catalog/chapter HTML rendering passes. Logs: `.guard-tmp/catalog-expansion-*.log`, `.guard-tmp/catalog-examples.log`, `.guard-tmp/other-worked-examples.log`. Local links, XML structure, XSLT headers, and all 16-field entries pass structural checks.
+**Findings corrected:** scan returns a sequence of single-member arrays without an outer array; mapping arrow applies once per item. Seed text and example results are corrected without engine changes. Negative/deferred examples claim no new syntax support. Version 4.0 instruction samples are labeled separately from portable 3.0 chapters.
+**Remaining:** REQ-126 stays In Progress for full shipped-function and deferred-shape inventory, precise per-delivery/spec/conformance traceability, and additional syntax forms. No engine source, conformance gate membership, Braid dependency, or production preview behavior changes in this step.
+
+---
+
+# Annotated invoice stylesheet — 2026-10-11
+
+**Base commit:** `da0c11c` (invoice chapter, PR #152).
+**What changed:** invoice stylesheet header now records author/date/purpose/license/change history, input/output and host contracts, and rounding policy. Each helper documents parameters, results, edge posture, and preconditions; each template documents context, output, and business invariants. The copied `docs/XSLT_STYLE_GUIDE.md` is retained with a Bosak applicability note and explicit separation of Exslt-only tooling, tiers, and fixture paths. README, chapter/catalog guidance, integration, and REQ-126 are synchronized.
+**Verification:** XML parsing and comparison against the base commit confirm the executable stylesheet tree is unchanged after removing comments and indentation. The exact published fixture remains exercised by the seven chapter checks. Full Release solution build/test passes: 3,952 passed / 0 failed / 0 skipped across 10 projects (XSLT 1,106). Local links, header markers, and README/chapter HTML rendering pass. Log: `.guard-tmp/invoice-comments-solution-tests.log`.
+**Next:** continue publication on PR #152; XML-manual publishing remains the next planned chapter. No new engine or API behavior is introduced.
+
+---
+
+# Reference-guide invoice chapter — 2026-10-11
+
+**Base commit:** `3f525af` (published correction branch; PR #151 remains open). This chapter and the prior documentation direction are a separate delivery based on that revision.
+**What was built:** first complete REQ-126 chapter, supplier invoice XML to simplified ERP XML, with principal/exception expected documents, complete/incomplete fixtures, numeric tax grouping and rounding policy, optional fields, invalid-header/all-rejected cases, and a separately gated XPath 3.1/4.0 metadata-label migration pair. The test project copies and executes the exact published files through public APIs. Catalog guidance now distinguishes the book reading path from implementation reference details and links the chapter and publishing plan.
+**Verification:** Release solution build 0 errors; seven chapter checks pass; full solution 3,952 passed / 0 failed / 0 skipped across 10 projects. Documentation local links and XML/XSLT structural checks pass; README/catalog/chapter HTML renders with headings and tables. Existing engine source is unchanged, so no new conformance-harness run is required for this documentation/test-only slice. Logs: `.guard-tmp/invoice-chapter-*.log`.
+**Next:** publish this chapter through a separate PR; XML-manual-to-HTML chapter (mixed content, links, table of contents, broken-reference evidence) is planned next. Remaining REQ-126 feature entries/examples are pending; the catalog is not complete. No production preview changes or industry-standard compliance are implied by these fixtures.
+
+---
+
 # Handover — Bosak XPath/XSLT/XQuery Implementation
 
 **Date:** 2026-10-11 (REQ-125 consumer-review corrections C-F1/D-F1)

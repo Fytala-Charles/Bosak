@@ -1,0 +1,2 @@
+(: Synthetic Map-to-element conversion case; compatibility 40; no external context required. :)
+string-length(string(fn:map-to-element(map { 'sku': '' })))

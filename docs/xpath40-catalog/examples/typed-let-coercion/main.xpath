@@ -1,0 +1,2 @@
+(: Synthetic Typed let coercion case; compatibility 40; no external context required. :)
+let $code as xs:short := 42 return $code instance of xs:short

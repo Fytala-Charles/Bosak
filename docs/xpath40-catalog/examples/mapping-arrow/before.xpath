@@ -1,0 +1,1 @@
+string-join((' FILTER-A ', ' BOLT-M8 ') ! normalize-space(.), ',')

@@ -61,7 +61,12 @@ None. Gate posture if attempted later: it would land at `XPath40Experimental` fi
 
 ## 13. Sample Code
 
-None — no syntax is committed. Do not cargo-cult `$x =?> f()` from draft-era blog posts; it does not parse in any Bosak compatibility level.
+No method-call syntax is committed. Do not cargo-cult `$x =?> f()` from
+draft-era blog posts. Use a verified stable alternative for a packing-plan array:
+[main.xpath](../examples/method-call-alternative/main.xpath) evaluates
+`array:size(['FILTER-A', 'BOLT-M8'])` to `2`; the
+[empty-array case](../examples/method-call-alternative/edge.xpath) returns `0`.
+Both run at `XPath31` and claim no support for `=?>`.
 
 ## 14. Performance Notes
 
@@ -69,7 +74,10 @@ Not applicable (not implemented). Design note for the future: type-dictionary di
 
 ## 15. Known Uses
 
-None. qt4tests has no gated dependence on this operator.
+No implementation evidence for the deferred operator is claimed. Published
+stable alternatives are `method-call-alternative-main` and
+`method-call-alternative-edge` in `CatalogExampleTests`. These checks do not
+promote or implement method-call syntax.
 
 ## 16. Related Features
 

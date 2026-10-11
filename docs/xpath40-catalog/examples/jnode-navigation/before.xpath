@@ -1,0 +1,1 @@
+let $order := map { 'shipping': map { 'city': 'Utrecht' } } return $order?shipping?city

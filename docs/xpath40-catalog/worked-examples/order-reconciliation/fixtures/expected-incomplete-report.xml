@@ -1,0 +1,1 @@
+<r:report xmlns:r="urn:example:reconciliation" status="review-required"><r:customer id="C1" name="North Workshop"><r:product sku="BOLT" name="M8 bolt" ordered="10" shipped="4" outstanding="6" over-shipped="0"/></r:customer></r:report>

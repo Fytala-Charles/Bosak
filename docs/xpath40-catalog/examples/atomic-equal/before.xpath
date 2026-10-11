@@ -1,0 +1,2 @@
+let $a := xs:double('NaN'), $b := xs:double('NaN')
+return if (not($a = $a) and not($b = $b)) then true() else $a eq $b

@@ -1,0 +1,5 @@
+(: XPath 4.0 opt-in: same metadata and result, map destructuring names its keys. :)
+let $invoice := map { 'invoiceId': 'INV-2026-1042', 'currency': 'EUR' }
+return
+  let ${$invoiceId, $currency} := $invoice
+  return $invoiceId || ' / ' || $currency

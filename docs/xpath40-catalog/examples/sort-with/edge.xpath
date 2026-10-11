@@ -1,0 +1,2 @@
+(: Synthetic Comparator-based sorting case; compatibility 40; no external context required. :)
+count(fn:sort-with((), function($a, $b) { 0 }))

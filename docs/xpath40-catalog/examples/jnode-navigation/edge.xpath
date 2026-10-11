@@ -1,0 +1,2 @@
+(: Synthetic JNode navigation case; compatibility 40; no external context required. :)
+count(fn:jtree(map { 'shipping': map {} })/"shipping"/"city")

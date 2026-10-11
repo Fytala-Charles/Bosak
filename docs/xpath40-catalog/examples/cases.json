@@ -1,0 +1,588 @@
+[
+  {
+    "id": "csv-parsing-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-parsing/main.xpath",
+    "expected": "FILTER,BLUE / 12"
+  },
+  {
+    "id": "csv-parsing-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-parsing/edge.xpath",
+    "expected": "FILTER,BLUE / 0"
+  },
+  {
+    "id": "element-to-map-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "element-to-map/main.xpath",
+    "expected": "FILTER-A"
+  },
+  {
+    "id": "element-to-map-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "element-to-map/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "map-to-element-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "map-to-element/main.xpath",
+    "expected": "FILTER-A"
+  },
+  {
+    "id": "map-to-element-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "map-to-element/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "atomic-equal-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "atomic-equal/main.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "atomic-equal-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "atomic-equal/edge.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "sort-with-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sort-with/main.xpath",
+    "expected": "5,2,1"
+  },
+  {
+    "id": "sort-with-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sort-with/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "enum-types-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "enum-types/main.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "enum-types-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "enum-types/edge.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "choice-types-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "choice-types/main.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "choice-types-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "choice-types/edge.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "structural-records-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "structural-records/main.xpath",
+    "expected": "EUR"
+  },
+  {
+    "id": "structural-records-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "structural-records/edge.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "typed-let-coercion-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "typed-let-coercion/main.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "typed-let-coercion-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "typed-let-coercion/edge.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "jnode-navigation-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-navigation/main.xpath",
+    "expected": "Utrecht"
+  },
+  {
+    "id": "jnode-navigation-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-navigation/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "otherwise-operator-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "otherwise-operator/main.xpath",
+    "expected": "No purchase order"
+  },
+  {
+    "id": "otherwise-operator-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "otherwise-operator/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "pipeline-operator-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "pipeline-operator/main.xpath",
+    "expected": "FILTER-A"
+  },
+  {
+    "id": "pipeline-operator-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "pipeline-operator/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "mapping-arrow-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "mapping-arrow/main.xpath",
+    "expected": "FILTER-A,BOLT-M8"
+  },
+  {
+    "id": "mapping-arrow-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "mapping-arrow/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "keyword-arguments-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "keyword-arguments/main.xpath",
+    "expected": "DHL"
+  },
+  {
+    "id": "keyword-arguments-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "keyword-arguments/edge.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "string-templates-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "string-templates/main.xpath",
+    "expected": "Invoice INV-1042 (EUR)"
+  },
+  {
+    "id": "string-templates-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "string-templates/edge.xpath",
+    "expected": "PO:"
+  },
+  {
+    "id": "array-member-iteration-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "array-member-iteration/main.xpath",
+    "expected": "2,1"
+  },
+  {
+    "id": "array-member-iteration-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "array-member-iteration/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "map-entry-iteration-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "map-entry-iteration/main.xpath",
+    "expected": "BOLT-M8=5,FILTER-A=2"
+  },
+  {
+    "id": "map-entry-iteration-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "map-entry-iteration/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-functions-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/main.xpath",
+    "expected": "12,5"
+  },
+  {
+    "id": "focus-functions-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/edge.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "destructuring-let-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "destructuring-let/main.xpath",
+    "expected": "INV-1042 / EUR"
+  },
+  {
+    "id": "destructuring-let-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "destructuring-let/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "fn-scan-main",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "fn-scan/main.xpath",
+    "expected": "100,120,85,95"
+  },
+  {
+    "id": "fn-scan-edge",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "fn-scan/edge.xpath",
+    "expected": "100"
+  },
+  {
+    "id": "method-call-alternative-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "method-call-alternative/main.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "method-call-alternative-edge",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "method-call-alternative/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "rejected-mapping-arrow-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "rejected-mapping-arrow/main.xpath",
+    "expected": "FILTER-A"
+  },
+  {
+    "id": "rejected-mapping-arrow-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "rejected-mapping-arrow/edge.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "xsl-note-main",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-note/transform.xsl",
+    "input": "xsl-note/main.xml",
+    "expected": "urgent"
+  },
+  {
+    "id": "xsl-note-edge",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-note/transform.xsl",
+    "input": "xsl-note/edge.xml",
+    "expected": ""
+  },
+  {
+    "id": "xsl-if-main",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-if/transform.xsl",
+    "input": "xsl-if/main.xml",
+    "expected": "expedite"
+  },
+  {
+    "id": "xsl-if-edge",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-if/transform.xsl",
+    "input": "xsl-if/edge.xml",
+    "expected": "normal"
+  },
+  {
+    "id": "instruction-separators-main",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "instruction-separators/transform.xsl",
+    "input": "instruction-separators/main.xml",
+    "expected": "FILTER-A, BOLT-M8"
+  },
+  {
+    "id": "instruction-separators-edge",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "instruction-separators/transform.xsl",
+    "input": "instruction-separators/edge.xml",
+    "expected": ""
+  },
+  {
+    "id": "xsl-map-main",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-map/transform.xsl",
+    "input": "xsl-map/main.xml",
+    "expected": "urgent"
+  },
+  {
+    "id": "xsl-map-edge",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-map/transform.xsl",
+    "input": "xsl-map/edge.xml",
+    "expected": "normal"
+  },
+  {
+    "id": "xsl-array-main",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-array/transform.xsl",
+    "input": "xsl-array/main.xml",
+    "expected": "2"
+  },
+  {
+    "id": "xsl-array-edge",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-array/transform.xsl",
+    "input": "xsl-array/edge.xml",
+    "expected": "0"
+  },
+  {
+    "id": "xsl-switch-main",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-switch/transform.xsl",
+    "input": "xsl-switch/main.xml",
+    "expected": "expedite"
+  },
+  {
+    "id": "xsl-switch-edge",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xsl-switch/transform.xsl",
+    "input": "xsl-switch/edge.xml",
+    "expected": "review"
+  },
+  {
+    "id": "csv-parsing-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "csv-parsing/before.xpath",
+    "expected": "FILTER,BLUE / 12"
+  },
+  {
+    "id": "element-to-map-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "element-to-map/before.xpath",
+    "expected": "FILTER-A"
+  },
+  {
+    "id": "map-to-element-before",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "map-to-element/before.xsl",
+    "input": "map-to-element/main.xml",
+    "expected": "FILTER-A"
+  },
+  {
+    "id": "atomic-equal-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "atomic-equal/before.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "sort-with-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sort-with/before.xpath",
+    "expected": "5,2,1"
+  },
+  {
+    "id": "enum-types-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "enum-types/before.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "choice-types-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "choice-types/before.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "structural-records-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "structural-records/before.xpath",
+    "expected": "EUR"
+  },
+  {
+    "id": "typed-let-coercion-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "typed-let-coercion/before.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "jnode-navigation-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "jnode-navigation/before.xpath",
+    "expected": "Utrecht"
+  },
+  {
+    "id": "otherwise-operator-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "otherwise-operator/before.xpath",
+    "expected": "No purchase order"
+  },
+  {
+    "id": "pipeline-operator-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "pipeline-operator/before.xpath",
+    "expected": "FILTER-A"
+  },
+  {
+    "id": "mapping-arrow-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "mapping-arrow/before.xpath",
+    "expected": "FILTER-A,BOLT-M8"
+  },
+  {
+    "id": "keyword-arguments-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "keyword-arguments/before.xpath",
+    "expected": "DHL"
+  },
+  {
+    "id": "string-templates-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "string-templates/before.xpath",
+    "expected": "Invoice INV-1042 (EUR)"
+  },
+  {
+    "id": "array-member-iteration-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "array-member-iteration/before.xpath",
+    "expected": "2,1"
+  },
+  {
+    "id": "map-entry-iteration-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "map-entry-iteration/before.xpath",
+    "expected": "BOLT-M8=5,FILTER-A=2"
+  },
+  {
+    "id": "focus-functions-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/before.xpath",
+    "expected": "12,5"
+  },
+  {
+    "id": "xsl-note-before",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xsl-note/before.xsl",
+    "input": "xsl-note/main.xml",
+    "expected": "urgent"
+  },
+  {
+    "id": "xsl-if-before",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xsl-if/before.xsl",
+    "input": "xsl-if/main.xml",
+    "expected": "expedite"
+  },
+  {
+    "id": "instruction-separators-before",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "instruction-separators/before.xsl",
+    "input": "instruction-separators/main.xml",
+    "expected": "FILTER-A, BOLT-M8"
+  },
+  {
+    "id": "xsl-map-before",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xsl-map/before.xsl",
+    "input": "xsl-map/main.xml",
+    "expected": "urgent"
+  },
+  {
+    "id": "xsl-array-before",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xsl-array/before.xsl",
+    "input": "xsl-array/main.xml",
+    "expected": "2"
+  },
+  {
+    "id": "xsl-switch-before",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xsl-switch/before.xsl",
+    "input": "xsl-switch/main.xml",
+    "expected": "expedite"
+  },
+  {
+    "id": "fn-scan-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "fn-scan/before.xpath",
+    "expected": "100,120,85,95"
+  }
+]

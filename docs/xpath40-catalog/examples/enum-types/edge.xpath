@@ -1,0 +1,2 @@
+(: Synthetic Enumeration types case; compatibility 40; no external context required. :)
+ 'Ready' instance of enum('ready', 'review-required')

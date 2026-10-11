@@ -1,0 +1,2 @@
+(: Synthetic Element-to-map conversion case; compatibility 40; no external context required. :)
+fn:element-to-map(parse-xml('<sku>FILTER-A</sku>')/sku)?sku

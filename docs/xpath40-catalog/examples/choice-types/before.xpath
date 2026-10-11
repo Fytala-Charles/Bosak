@@ -1,0 +1,1 @@
+let $id := 'PO-8801' return $id instance of xs:integer or $id instance of xs:string

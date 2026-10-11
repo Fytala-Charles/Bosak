@@ -58,12 +58,10 @@ None, deliberately. If a parser change ever accidentally accepts `=>>`, that is 
 ## 13. Sample Code
 
 ~~~xquery
-(1, 2, 3) =!>
-fn:count#1
-  (: → 3 — whole sequence, one call :)
+string-join((' FILTER-A ', ' BOLT-M8 ') =!> normalize-space(), ',')
+  (: → "FILTER-A,BOLT-M8" — one call per product code :)
 
-(1, 2, 3) =>>
-fn:count#1
+(' FILTER-A ') =>> normalize-space()
   (: → XPST0003 at every level — old spelling, never implemented :)
 ~~~
 
@@ -72,6 +70,11 @@ fn:count#1
 Not applicable.
 
 ## 15. Known Uses
+
+`rejected-mapping-arrow-main` and `rejected-mapping-arrow-edge` in
+`CatalogExampleTests` verify an accepted product-code normalization and rejection
+of the old spelling. See [the accepted mapping-arrow case](../operators-and-syntax/mapping-arrow.md)
+and [complete rejection file](../examples/rejected-mapping-arrow/edge.xpath).
 
 qt4tests pin only the accepted `=!>` spelling (part of the frozen gate's grammar slices). No test uses `=>>`.
 

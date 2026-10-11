@@ -1,0 +1,2 @@
+(: Synthetic Structural record types case; compatibility 40; no external context required. :)
+map { 'invoiceId': 'INV-1042', 'currency': 'EUR' } instance of record(invoiceId as xs:string, currency as xs:string)
