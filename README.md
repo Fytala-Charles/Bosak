@@ -80,6 +80,10 @@ Bosak provides these transformations within a .NET application, with XPath and X
 
 ### Catalogs as a reference guide
 
+The examples' stylesheets also serve as teaching material: file-level contracts,
+documented helpers, and template comments explain the decisions alongside the
+executable rules. See the [annotated invoice stylesheet](docs/xpath40-catalog/worked-examples/invoice-to-erp/invoice-to-erp.xsl).
+
 The [XPath/XSLT feature catalog](docs/xpath40-catalog/README.md) is intended to grow into a book or reference guide: chapters that explain problems, practical solutions, and the reasons for choosing a feature. Entries should work both as a learning path and as a quick lookup during development. Examples will use realistic documents and tasks, with sample input, expected output, edge cases, and compatibility notes. Start with [supplier invoices to ERP XML](docs/xpath40-catalog/worked-examples/invoice-to-erp/README.md), a complete XSLT 3.0 mapping with fixtures, expected outputs, and executable checks. Its optional XPath 4.0 comparison illustrates migration without changing the mapping's requirements. Further chapters and feature coverage remain work in progress.
 
 ### Key Features

@@ -1,3 +1,12 @@
+# Annotated invoice stylesheet — 2026-10-11
+
+**Base commit:** `da0c11c` (invoice chapter, PR #152).
+**What changed:** invoice stylesheet header now records author/date/purpose/license/change history, input/output and host contracts, and rounding policy. Each helper documents parameters, results, edge posture, and preconditions; each template documents context, output, and business invariants. The copied `docs/XSLT_STYLE_GUIDE.md` is retained with a Bosak applicability note and explicit separation of Exslt-only tooling, tiers, and fixture paths. README, chapter/catalog guidance, integration, and REQ-126 are synchronized.
+**Verification:** XML parsing and comparison against the base commit confirm the executable stylesheet tree is unchanged after removing comments and indentation. The exact published fixture remains exercised by the seven chapter checks. Full Release solution build/test passes: 3,952 passed / 0 failed / 0 skipped across 10 projects (XSLT 1,106). Local links, header markers, and README/chapter HTML rendering pass. Log: `.guard-tmp/invoice-comments-solution-tests.log`.
+**Next:** continue publication on PR #152; XML-manual publishing remains the next planned chapter. No new engine or API behavior is introduced.
+
+---
+
 # Reference-guide invoice chapter — 2026-10-11
 
 **Base commit:** `3f525af` (published correction branch; PR #151 remains open). This chapter and the prior documentation direction are a separate delivery based on that revision.

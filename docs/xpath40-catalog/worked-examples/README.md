@@ -27,4 +27,8 @@ The publishing chapter comes next. Its proposed fixtures include nested sections
 6. Include at least one meaningful edge case and executable evidence for every claimed result.
 7. Link back to relevant feature entries and forward to the next chapter.
 
+The executable files are part of the teaching material. XSLT files carry a
+standalone input/output contract, a change history, documented helper edge cases,
+and template preconditions. Follow the [applicable XSLT comment conventions](../../XSLT_STYLE_GUIDE.md).
+
 The invoice chapter is the first complete worked case. Existing feature-entry syntax snippets remain useful reference probes; converting the remaining entries into worked cases is still REQ-126 work. The book and catalog are not complete.

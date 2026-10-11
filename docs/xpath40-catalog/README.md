@@ -18,6 +18,13 @@ Examples must reflect real work. Use synthetic but plausible fixtures: supplier 
 
 A worked example must include representative input, a complete expression or stylesheet with its required context, expected output, the compatibility level, and at least one meaningful edge case. Declare simplifications, such as a reduced invoice vocabulary; a small fixture must not imply compliance with an industry standard. Pair new syntax with the earlier idiom where a migration comparison helps. Short syntax probes can supplement the worked example.
 
+Worked-example stylesheets must be understandable independently of the chapter:
+include a file contract and change history, helper purpose/parameter/return/edge
+blocks, and template context/output/precondition blocks. Explain business choices
+and non-obvious invariants rather than narrating each instruction. See the
+[XSLT style-guide applicability note](../XSLT_STYLE_GUIDE.md) and the annotated
+[invoice stylesheet](worked-examples/invoice-to-erp/invoice-to-erp.xsl).
+
 Keep reader-facing explanations before engine implementation details. Chapter introductions and cross-links will connect the individual entries into a learning path; the feature index remains available for quick lookup. Runnable examples must meet REQ-126's engine-verification requirement before their results are presented as verified.
 
 ## Start with a worked chapter

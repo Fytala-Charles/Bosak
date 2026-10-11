@@ -50,6 +50,14 @@ The [complete expected import](fixtures/expected-import.xml) also converts `11/1
 
 ## Walk through the transformation
 
+The stylesheet is also intended to be read on its own. Its file header records
+the input/output contracts, host responsibilities, calculation policy, license,
+and change history. Each helper documents its parameters, return value, and edge
+posture; each template documents its context, result, and preconditions. These
+comments explain decisions such as header rejection taking precedence over line
+checks and totals covering accepted lines only. They follow the applicable
+conventions in the [copied XSLT style guide](../../../XSLT_STYLE_GUIDE.md).
+
 ### 1. Select invoices and validate their headers
 
 The root template checks for the expected supplier batch, produces the exceptions document, then applies templates to invoices with valid headers. `f:header-errors` checks invoice ID, supplier ID, the currency allow-list, issue date, and presence of lines. `f:issue-date` converts the declared `DD/MM/YYYY` format only after confirming that the constructed ISO value is castable as `xs:date`. `31/02/2026` is rejected rather than silently normalized.

@@ -2739,3 +2739,9 @@ Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
 Use XSLT for reusable rules that reshape XML documents, such as invoice mapping, publishing XML manuals as HTML, or grouping order records into reports. See [why and when to use XSLT](../README.md#why-and-when-to-use-xslt). The [feature catalog](xpath40-catalog/README.md) is intended to grow into a book/reference guide with practical worked examples and compatibility notes; the initial 4.0 scaffold is still incomplete.
 
 The [invoice-to-ERP chapter](xpath40-catalog/worked-examples/invoice-to-erp/README.md) demonstrates public `XsltCompiler`/`CaptureTransform` usage against the exact published fixtures. It captures principal import and secondary exception documents in memory. Business rejection is represented in those documents even when transformation succeeds: consumers must hold `review-required` invoices and inspect the exception output. Seven named checks verify the mapping, edge cases, and the separately opted-in XPath 4.0 comparison. The [chapter plan](xpath40-catalog/worked-examples/README.md) schedules XML-manual publishing next.
+
+The example stylesheet documents its input/output contract, host responsibilities,
+rounding policy, helper edge cases, and template preconditions directly in XML
+comments. Its annotated source can be read independently of the chapter. The
+[XSLT style guide](XSLT_STYLE_GUIDE.md) identifies the adopted conventions and
+separates Bosak.Exslt-specific paths and tier rules from Bosak's fixture setup.
