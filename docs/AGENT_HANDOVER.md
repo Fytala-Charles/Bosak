@@ -12,7 +12,7 @@ Coverage: 44 entries, 214 feature plus 24 chapter checks (238 total), and
 `0a928bb81b81d0631cc681f86bba83259c0ed790`. Both exact sets fn-while-do and
 fn-do-until already belong to GatedSets. No engine/API/package/gate changes;
 source/public version remains 1.1.2. REQ-126 remains In Progress.
-Validation: Release build passed; all 4,236 tests passed across ten assemblies (no failures/skips), including 214 catalog cases. Renderer verified 57 pages; entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions verified. No engine conformance rerun for this documentation-only change. Delivery revision will be recorded after commit.
+Validation: Release build passed; all 4,236 tests passed across ten assemblies (no failures/skips), including 214 catalog cases. Renderer verified 57 pages; entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions verified. No engine conformance rerun for this documentation-only change. Delivery revision: `b00948e1`; [PR #164](https://github.com/Fytala-Charles/Bosak/pull/164). CI pending at handover.
 Next: dependency traversal and partial application references.
 
 # Agent Handover — 2026-10-11: ordered queue prefix
