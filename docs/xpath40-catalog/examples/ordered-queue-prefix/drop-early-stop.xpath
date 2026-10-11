@@ -1,0 +1,1 @@
+string-join(drop-while(('ORD101', 'ORD102', 'ORD103'), function($o, $p) { if ($p eq 1) then true() else if ($p eq 2) then false() else error(QName('urn:dispatch', 'LATE'), 'Must not evaluate later item') }), ',')

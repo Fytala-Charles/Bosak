@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 171 named checks. Each points to a complete
+The [case manifest](cases.json) contains 189 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -75,3 +75,5 @@ parse synthetic XML inline; the entry shows full normal/empty/unexpected-event
 input/output, the earlier-version report and every exact result/error.
 Missing IDs/codes are checked before acceptance, and an empty history cannot
 pass merely because all-equal and universal predicates are vacuously true.
+
+[Ordered queue prefix](../functions/ordered-queue-prefix.md) supplies take-while/drop-while with complete input/output, an XPath 3.1 comparison and 18 boundary/callback cases. Current coverage: 43 entries, 189 feature checks plus 24 chapter checks (213 total), and 88 assigned / 29 unassigned registered names. REQ-126 remains In Progress; source/public version remains 1.1.2. Remaining higher-order documentation starts with bounded while-do/do-until processing.

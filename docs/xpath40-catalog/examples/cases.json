@@ -1214,5 +1214,131 @@
     "mode": "40",
     "file": "shipment-event-sequences/nan-equality.xpath",
     "expected": "true"
+  },
+  {
+    "id": "ordered-queue-prefix-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/main.xpath",
+    "expected": "dispatch=ORD101,ORD102; retained=ORD103,ORD104"
+  },
+  {
+    "id": "ordered-queue-prefix-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "ordered-queue-prefix/baseline.xpath",
+    "expected": "dispatch=ORD101,ORD102; retained=ORD103,ORD104"
+  },
+  {
+    "id": "ordered-queue-prefix-filter-comparison",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "ordered-queue-prefix/filter-comparison.xpath",
+    "expected": "ORD101,ORD102,ORD104"
+  },
+  {
+    "id": "ordered-queue-prefix-all-ready",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/all-ready.xpath",
+    "expected": "dispatch=ORD101,ORD102,ORD103,ORD104; retained="
+  },
+  {
+    "id": "ordered-queue-prefix-first-held",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/first-held.xpath",
+    "expected": "dispatch=; retained=ORD101,ORD102,ORD103,ORD104"
+  },
+  {
+    "id": "ordered-queue-prefix-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/empty.xpath",
+    "expected": "dispatch=; retained="
+  },
+  {
+    "id": "ordered-queue-prefix-missing-status",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/missing-status.xpath",
+    "expected": "dispatch=ORD101,ORD102; retained=ORD103,ORD104"
+  },
+  {
+    "id": "ordered-queue-prefix-position-cap",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/position-cap.xpath",
+    "expected": "dispatch=ORD101; retained=ORD102,ORD103,ORD104"
+  },
+  {
+    "id": "ordered-queue-prefix-reconstruction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/reconstruction.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "ordered-queue-prefix-map-predicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/map-predicate.xpath",
+    "expected": "ready,ready"
+  },
+  {
+    "id": "ordered-queue-prefix-take-empty-decision",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/take-empty-decision.xpath",
+    "expected": ""
+  },
+  {
+    "id": "ordered-queue-prefix-take-nonboolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/take-nonboolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "ordered-queue-prefix-take-noncallable",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/take-noncallable.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "ordered-queue-prefix-take-early-stop",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/take-early-stop.xpath",
+    "expected": "ORD101"
+  },
+  {
+    "id": "ordered-queue-prefix-drop-empty-decision",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/drop-empty-decision.xpath",
+    "expected": "ORD101,ORD102"
+  },
+  {
+    "id": "ordered-queue-prefix-drop-nonboolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/drop-nonboolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "ordered-queue-prefix-drop-noncallable",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/drop-noncallable.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "ordered-queue-prefix-drop-early-stop",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "ordered-queue-prefix/drop-early-stop.xpath",
+    "expected": "ORD102,ORD103"
   }
 ]

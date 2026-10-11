@@ -1,0 +1,3 @@
+let $queue := parse-xml('<queue><order id="ORD101" status="ready"/><order id="ORD102" status="ready"/><order id="ORD103" status="hold"/><order id="ORD104" status="ready"/></queue>')/queue/order
+let $ready := function($order, $position) { string($order/@status) eq 'ready' }
+return deep-equal((take-while($queue, $ready), drop-while($queue, $ready)), $queue)

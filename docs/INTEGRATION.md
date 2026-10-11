@@ -2775,7 +2775,7 @@ The coordinated public packages use version 1.1.0, published 2026-10-11. See [re
 
 ## REQ-126 routing reference workflow (2026-10-11)
 
-The [order-routing chapter](xpath40-catalog/worked-examples/order-routing/README.md) demonstrates explicit `XPathCompatibility.XPath40` planning through `XPath31Expression`, then a required XDM map parameter supplied by `XsltCaptureOptions.Context.WithVariable` to portable XSLT 3.0. Published 1.1.0 does not propagate a version 4.0 declaration to transformation-time expression compilation; source 1.1.1 fixes this boundary. This example uses existing APIs; no engine layer or public API changed. The catalog now has 42 entries and 195 executable documentation checks; [provenance](xpath40-catalog/PROVENANCE.md) distinguishes immutable Bosak deliveries from unavailable historical specification snapshots.
+The [order-routing chapter](xpath40-catalog/worked-examples/order-routing/README.md) demonstrates explicit `XPathCompatibility.XPath40` planning through `XPath31Expression`, then a required XDM map parameter supplied by `XsltCaptureOptions.Context.WithVariable` to portable XSLT 3.0. Published 1.1.0 does not propagate a version 4.0 declaration to transformation-time expression compilation; source 1.1.1 fixes this boundary. This example uses existing APIs; no engine layer or public API changed. The catalog now has 43 entries and 213 executable documentation checks; [provenance](xpath40-catalog/PROVENANCE.md) distinguishes immutable Bosak deliveries from unavailable historical specification snapshots.
 
 ## Effective-version expression profiles (source 1.1.1)
 
@@ -2783,7 +2783,7 @@ The [compatibility correction](REQ-118-XSLT-XPATH40-COMPATIBILITY.md) selects fr
 
 ## Map/array and sequence-selection reference coverage
 
-The catalog now has 42 entries and 195 executable documentation checks; 86 of 117 registered names have family entries and 31 remain unassigned. New [map indexing](xpath40-catalog/functions/product-map-index.md), [array batching](xpath40-catalog/functions/import-array-batches.md) and [sequence selection](xpath40-catalog/functions/order-sequence-selection.md) entries include real cases, complete inputs/outputs, 3.1 comparisons and 40 added checks. The [audit](xpath40-catalog/COMPLETENESS-AUDIT.md) records two confirmed 1.1.1 map result-shape gaps, corrected by the separately gated source-1.1.2 REQ-118 slice. Documentation coverage does not imply complete draft conformance.
+The catalog now has 43 entries and 213 executable documentation checks; 88 of 117 registered names have family entries and 29 remain unassigned. New [map indexing](xpath40-catalog/functions/product-map-index.md), [array batching](xpath40-catalog/functions/import-array-batches.md) and [sequence selection](xpath40-catalog/functions/order-sequence-selection.md) entries include real cases, complete inputs/outputs, 3.1 comparisons and 40 added checks. The [audit](xpath40-catalog/COMPLETENESS-AUDIT.md) records two confirmed 1.1.1 map result-shape gaps, corrected by the separately gated source-1.1.2 REQ-118 slice. Documentation coverage does not imply complete draft conformance.
 
 ## Map result sequence correction (source 1.1.2)
 
@@ -2808,3 +2808,5 @@ event occurrence and uses explicit presence/count guards for identities and
 codes. Catalog coverage is 42 entries and 195 documentation checks; 86 of 117
 registered names are assigned, leaving 31. Published/source version remains
 1.1.2; this documentation delivery changes no engine, API or gate membership.
+
+[Ordered queue prefix](xpath40-catalog/functions/ordered-queue-prefix.md) supplies take-while/drop-while with complete input/output, an XPath 3.1 comparison and 18 boundary/callback cases. Current coverage: 43 entries, 189 feature checks plus 24 chapter checks (213 total), and 88 assigned / 29 unassigned registered names. REQ-126 remains In Progress; source/public version remains 1.1.2. Remaining higher-order documentation starts with bounded while-do/do-until processing.

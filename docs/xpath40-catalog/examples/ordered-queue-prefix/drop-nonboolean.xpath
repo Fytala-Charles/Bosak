@@ -1,0 +1,1 @@
+drop-while(('ORD101', 'ORD102'), function($o, $p) { 'ready' })
