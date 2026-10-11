@@ -1,6 +1,6 @@
 {
   "auditDate": "2026-10-11",
-  "sourceRevision": "aaf3c9e090da2efdacfbd214959c842a91223491",
+  "sourceRevision": "df6e1ddd9c6546ea093816e31f824482bcd4a81a",
   "enginePackageVersion": "1.1.2",
   "engineRevision": "3aebf76a24b28af7d40aa42e6eaf714b3a596838",
   "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
@@ -161,8 +161,8 @@
       "name": "fn:do-until",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/bounded-retries.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-do-until"
     },
     {
@@ -513,8 +513,8 @@
       "name": "fn:while-do",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/bounded-retries.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-while-do"
     },
     {

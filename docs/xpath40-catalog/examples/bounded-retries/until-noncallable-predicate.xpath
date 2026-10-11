@@ -1,0 +1,1 @@
+do-until(0, function($s, $p) { $s + 1 }, 42)

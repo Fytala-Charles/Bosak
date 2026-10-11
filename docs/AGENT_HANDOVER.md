@@ -1,3 +1,20 @@
+# Agent Handover — 2026-10-11: bounded retry state
+
+PR #163 merged after CI passed. Base revision: `df6e1ddd9c6546ea093816e31f824482bcd4a81a`.
+Added a complete while-do/do-until reference with full invoice-submission response
+inputs/reports, XPath 3.1 bounded-fold comparison, explicit attempt limits and
+25 executable normal/edge/error cases. The guide explains callback order, whole
+sequence state, zero-budget guarding and exception propagation. It simulates
+status checks; the host owns network acquisition, scheduling and idempotency.
+Coverage: 44 entries, 214 feature plus 24 chapter checks (238 total), and
+90 assigned / 27 unassigned registered names. Specification review pin:
+`a014e1b408baf5614a11401d3570a04498ab76be`; original engine delivery #88
+`0a928bb81b81d0631cc681f86bba83259c0ed790`. Both exact sets fn-while-do and
+fn-do-until already belong to GatedSets. No engine/API/package/gate changes;
+source/public version remains 1.1.2. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,236 tests passed across ten assemblies (no failures/skips), including 214 catalog cases. Renderer verified 57 pages; entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions verified. No engine conformance rerun for this documentation-only change. Delivery revision will be recorded after commit.
+Next: dependency traversal and partial application references.
+
 # Agent Handover — 2026-10-11: ordered queue prefix
 
 PR #162 merged after its CI passed. Base revision: `aaf3c9e090da2efdacfbd214959c842a91223491`.

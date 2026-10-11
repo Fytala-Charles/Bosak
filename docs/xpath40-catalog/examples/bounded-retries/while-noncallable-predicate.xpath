@@ -1,0 +1,1 @@
+while-do(0, 42, function($s, $p) { $s + 1 })

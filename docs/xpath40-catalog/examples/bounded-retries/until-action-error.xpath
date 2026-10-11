@@ -1,0 +1,1 @@
+do-until(0, function($s, $p) { error(QName('urn:retry', 'ATTEMPT'), 'ATTEMPT: Invalid response') }, true#0)

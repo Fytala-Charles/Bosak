@@ -1,0 +1,1 @@
+while-do(0, function($s, $p) { 'accepted' }, function($s, $p) { $s + 1 })

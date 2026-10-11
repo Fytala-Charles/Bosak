@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 189 named checks. Each points to a complete
+The [case manifest](cases.json) contains 214 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -76,4 +76,6 @@ input/output, the earlier-version report and every exact result/error.
 Missing IDs/codes are checked before acceptance, and an empty history cannot
 pass merely because all-equal and universal predicates are vacuously true.
 
-[Ordered queue prefix](../functions/ordered-queue-prefix.md) supplies take-while/drop-while with complete input/output, an XPath 3.1 comparison and 18 boundary/callback cases. Current coverage: 43 entries, 189 feature checks plus 24 chapter checks (213 total), and 88 assigned / 29 unassigned registered names. REQ-126 remains In Progress; source/public version remains 1.1.2. Remaining higher-order documentation starts with bounded while-do/do-until processing.
+[Ordered queue prefix](../functions/ordered-queue-prefix.md) supplies take-while/drop-while with complete input/output, an XPath 3.1 comparison and 18 boundary/callback cases. Current coverage: 44 entries, 214 feature checks plus 24 chapter checks (238 total), and 90 assigned / 27 unassigned registered names. REQ-126 remains In Progress; source/public version remains 1.1.2. Bounded loop processing is now supplied by the reference below; dependency traversal and partial application remain.
+
+[Bounded retry state](../functions/bounded-retries.md) documents while-do/do-until using invoice-submission response fixtures, complete input/output, a bounded XPath 3.1 fold, and 25 executable normal/edge/error cases. It explains precondition versus postcondition evaluation, explicit attempt limits, zero-budget guarding, and whole-state callback values. Current coverage is 44 entries and 238 documentation checks (214 feature plus 24 chapter checks); 90 of 117 registered names have entries, leaving 27. REQ-126 remains In Progress; source/public version stays 1.1.2. Next: dependency traversal and partial application.
