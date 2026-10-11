@@ -13,6 +13,8 @@ REQ-118 4.0-S1 part 2. Definitions reviewed **2026-10-11** against immutable
 [QT4CG function source `a014e1b4`](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml). This review pin does not recover
 the unavailable historical adopted specification snapshot.
 
+Reference example delivery: [`b75c0d26`](https://github.com/Fytala-Charles/Bosak/commit/b75c0d26), [PR #162](https://github.com/Fytala-Charles/Bosak/pull/162).
+
 ## 2. Intent
 
 Check that a shipment history belongs to one shipment, starts with the required
