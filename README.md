@@ -18,6 +18,9 @@
 
 **1.1.0 published 2026-10-11:** supported authoring, controlled validation/preview, and executable reference chapters. See [release notes](docs/RELEASE-NOTES-1.1.md) for compatibility and coverage restrictions.
 
+The [REQ-126 completeness audit](docs/xpath40-catalog/COMPLETENESS-AUDIT.md)
+records the remaining catalog gaps and prioritized documentation work.
+
 --- 
 ## About FYTALA
 

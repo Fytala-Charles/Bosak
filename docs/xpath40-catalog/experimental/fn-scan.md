@@ -103,7 +103,11 @@ Published examples: `fn-scan-main`, `fn-scan-edge`, `fn-scan-before` in
 `CatalogExampleTests`. The successful experimental cases also verify refusal at
 both lower compatibility levels. This is example evidence, separate from gate status.
 
-qt4tests set `fn-scan` (when promoted into the gate, this entry's Known Uses must be updated in the same PR — structural rule 3). Unit-level evidence only at landing.
+qt4tests set `fn-scan` is promoted into `GatedSets` in
+[ConformanceRunner40](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs).
+The 1.1.0 gate run records 11 experimental-level passes and zero gated failures.
+Gate membership does not move the function into the frozen compatibility tier;
+its successful examples still require `XPath40Experimental`.
 
 ## 16. Related Features
 

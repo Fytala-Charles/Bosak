@@ -1,3 +1,13 @@
+# REQ-126 completeness audit: 2026-10-11
+
+**Base revision:** `9d3950f8ebc8bb0793c9317a91d3d412095cf6e8`; published engine baseline 1.1.0 at `6c2a867cbc7587922cb3973a7505746116caa54c`. Work is isolated on `docs/req126-completeness-audit`; Braid product work belongs to another session.
+**What changed:** `docs/xpath40-catalog/COMPLETENESS-AUDIT.md` assesses AC-01 through AC-05, maps landed slices and deferred/rejected decisions, and prioritizes evidence repair, missing decision records, and sequence/HOF families. A JSON snapshot records all 117 registered 4.0-only namespace/local-name pairs from the published engine: 67 frozen fn/map/array names, 49 constructor names, and one experimental name; 55 have no dedicated family entry. These are name/family coverage assessments, not signature completeness or new conformance claims. The scan entry now accurately records its promoted test set while retaining its experimental tier.
+**Acceptance:** AC-05 is satisfied for current discoverability; AC-01 through AC-04 remain partial. The three worked chapters and existing 94 checks are supplied, but generic provenance, missing feature/decision entries, supplementary forms, changed-3.1 semantics, and precise harness evidence prevent closure. REQ-126 remains In Progress.
+**Verification:** all 117 inventory rows are unique and resolve their assigned entry links; 55 unassigned-name assessments are reproduced. All 28 entries retain 16 fields and index membership; all 81 manifest cases retain their files. Audit/catalog/scan links, Markdown whitespace, code fences, and rendered audit headings/tables pass. No executable files changed, so the already-passing release tests/gates are not rerun for this audit.
+**Next:** P1 evidence repair for existing entries and missing decision records; then a realistic sequence/HOF order-routing case. Do not implement deferred forms merely to fill a documentation gap. No engine files, examples, gate membership, or Braid dependency changes.
+
+---
+
 # Bosak 1.1.0 published: 2026-10-11
 
 **Release revision:** `6c2a867cbc7587922cb3973a7505746116caa54c`, tag `v1.1.0`, [GitHub release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.0). Corrections #151, reference guide #152, and release preparation #153 are merged. Release implementation is `a9beb48`; the tagged merge is the immutable publication identity.

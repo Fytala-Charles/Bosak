@@ -76,6 +76,11 @@ The 3.1 default is untouched by every tier: consumers on `XPath31` see zero chan
 
 ## 2. Index
 
+The [completeness audit](COMPLETENESS-AUDIT.md) records acceptance gaps and the
+prioritized completion plan against the published 1.1.0 engine. Its
+[function inventory](audit-function-inventory.json) distinguishes registered names
+from fully documented signatures; the catalog remains In Progress.
+
 28 entries now include practical cases or stable alternatives. The [81-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
 
 ### Operators and syntax
