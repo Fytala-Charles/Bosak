@@ -1025,5 +1025,194 @@
     "mode": "31",
     "file": "product-map-index/entries-baseline.xpath",
     "expected": "2"
+  },
+  {
+    "id": "shipment-event-sequences-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/main.xpath",
+    "expected": "shipment=SHIP-42;events=6;consistent=true;known=true;start=true;dispatch=true;end=true;ready=true"
+  },
+  {
+    "id": "shipment-event-sequences-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "shipment-event-sequences/baseline.xpath",
+    "expected": "shipment=SHIP-42;events=6;consistent=true;known=true;start=true;dispatch=true;end=true;ready=true"
+  },
+  {
+    "id": "shipment-event-sequences-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/edge.xpath",
+    "expected": "shipment=SHIP-42;events=0;consistent=false;known=true;start=false;dispatch=false;end=false;ready=false"
+  },
+  {
+    "id": "shipment-event-sequences-unexpected-event",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/unexpected-event.xpath",
+    "expected": "shipment=SHIP-42;events=6;consistent=true;known=false;start=true;dispatch=false;end=true;ready=false"
+  },
+  {
+    "id": "shipment-event-sequences-mixed-shipment",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/mixed-shipment.xpath",
+    "expected": "shipment=SHIP-42;events=6;consistent=false;known=true;start=true;dispatch=true;end=true;ready=false"
+  },
+  {
+    "id": "shipment-event-sequences-missing-shipment",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/missing-shipment.xpath",
+    "expected": "shipment=SHIP-42;events=6;consistent=false;known=true;start=true;dispatch=true;end=true;ready=false"
+  },
+  {
+    "id": "shipment-event-sequences-missing-event-code",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/missing-event-code.xpath",
+    "expected": "shipment=SHIP-42;events=6;consistent=true;known=false;start=true;dispatch=false;end=true;ready=false"
+  },
+  {
+    "id": "shipment-event-sequences-wrong-start",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/wrong-start.xpath",
+    "expected": "shipment=SHIP-42;events=6;consistent=true;known=true;start=false;dispatch=true;end=true;ready=false"
+  },
+  {
+    "id": "shipment-event-sequences-unfinished-history",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/unfinished-history.xpath",
+    "expected": "shipment=SHIP-42;events=5;consistent=true;known=true;start=true;dispatch=true;end=false;ready=false"
+  },
+  {
+    "id": "shipment-event-sequences-empty-requirement",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/empty-requirement.xpath",
+    "expected": "true/true/true/true"
+  },
+  {
+    "id": "shipment-event-sequences-noncontiguous",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/noncontiguous.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "shipment-event-sequences-noncontiguous-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "shipment-event-sequences/noncontiguous-baseline.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "shipment-event-sequences-long-pattern",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/long-pattern.xpath",
+    "expected": "false/false/false"
+  },
+  {
+    "id": "shipment-event-sequences-repeated-events",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/repeated-events.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "shipment-event-sequences-record-comparator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/record-comparator.xpath",
+    "expected": "false/true/true/true"
+  },
+  {
+    "id": "shipment-event-sequences-empty-comparator-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/empty-comparator-default.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "shipment-event-sequences-comparator-empty-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/comparator-empty-result.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "shipment-event-sequences-comparator-nonboolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/comparator-nonboolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "shipment-event-sequences-comparator-wrong-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/comparator-wrong-arity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "shipment-event-sequences-comparator-not-function",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/comparator-not-function.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "shipment-event-sequences-equal-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/equal-singleton.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "shipment-event-sequences-unequal-identities",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/unequal-identities.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "shipment-event-sequences-case-sensitive-identities",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/case-sensitive-identities.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "shipment-event-sequences-identity-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/identity-collation.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "shipment-event-sequences-identity-collation-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "shipment-event-sequences/identity-collation-baseline.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "shipment-event-sequences-numeric-equality",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/numeric-equality.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "shipment-event-sequences-nan-equality",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "shipment-event-sequences/nan-equality.xpath",
+    "expected": "true"
   }
 ]

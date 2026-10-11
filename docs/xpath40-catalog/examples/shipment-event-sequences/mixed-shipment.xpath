@@ -1,0 +1,16 @@
+(: Synthetic carrier history; document order is the agreed event order. :)
+let $history := parse-xml('<history shipment="SHIP-42"><event shipment="SHIP-42" code="CREATED"/><event shipment="SHIP-42" code="PICKED"/><event shipment="SHIP-42" code="PACKED"/><event shipment="SHIP-99" code="DISPATCHED"/><event shipment="SHIP-42" code="IN_TRANSIT"/><event shipment="SHIP-42" code="DELIVERED"/></history>')/history,
+    $events := $history/event,
+    $codes := $events/@code ! string(.),
+    $ids := $events/@shipment ! string(.),
+    $consistent := exists($events) and count($ids) eq count($events)
+                   and (all-equal($ids)) and $ids[1] eq string($history/@shipment),
+    $known := count($codes) eq count($events) and
+              (every $code in $codes satisfies $code = ('CREATED','PICKED','PACKED','DISPATCHED','IN_TRANSIT','DELIVERED')),
+    $start := starts-with-subsequence($codes,('CREATED','PICKED')),
+    $dispatch := contains-subsequence($codes,('PACKED','DISPATCHED')),
+    $end := ends-with-subsequence($codes,('DELIVERED'))
+return concat('shipment=', $history/@shipment, ';events=', count($events),
+              ';consistent=', $consistent, ';known=', $known, ';start=', $start,
+              ';dispatch=', $dispatch, ';end=', $end,
+              ';ready=', $consistent and $known and $start and $dispatch and $end)

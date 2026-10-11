@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 144 named checks. Each points to a complete
+The [case manifest](cases.json) contains 171 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -66,3 +66,12 @@ The map result-shape probes now verify corrected source-1.1.2 contracts:
 [entry](../functions/product-map-index.md) retains the published-1.1.1 differences
 and migration guidance. These checks verify the illustrated contracts, not
 complete draft conformance.
+
+## Shipment-event sequence checks
+
+[Shipment histories](../functions/shipment-event-sequences.md) add 27 checks for
+all-equal and contiguous subsequence/prefix/suffix contracts. Complete expressions
+parse synthetic XML inline; the entry shows full normal/empty/unexpected-event
+input/output, the earlier-version report and every exact result/error.
+Missing IDs/codes are checked before acceptance, and an empty history cannot
+pass merely because all-equal and universal predicates are vacuously true.
