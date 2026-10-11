@@ -15,6 +15,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: ExecutionGate checkpoints (observer/principal/message seams) +         |
 //                      |                  |       |                | Cancelled/TimeLimitExceeded/OperationLimitExceeded classification (XV0011-XV0013)        |
+//                      | Charles Korthout | 0.3   | 11-10-2026     | C-F1/D-F1: bounded serialization and terminal control observation.                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -45,6 +46,7 @@ internal sealed class XsltCaptureSession
 
     private readonly XsltCaptureOptions _options;
     private readonly ExecutionGate? _gate;
+    private readonly Action<long>? _observeProduction;
     private readonly List<XsltCapturedOutput> _secondary = new();
     private readonly List<XsltCaptureFailure> _failures = new();
     private readonly List<string> _messages = new();
@@ -53,11 +55,13 @@ internal sealed class XsltCaptureSession
     private bool _messageLimitRecorded;
     private Exception? _outputLevelFailure;
 
-    internal XsltCaptureSession(XsltCaptureOptions options, IXsltMessageListener? hostListener, ExecutionGate? gate)
+    internal XsltCaptureSession(XsltCaptureOptions options, IXsltMessageListener? hostListener, ExecutionGate? gate,
+        Action<long>? observeProduction = null)
     {
         _options = options;
         _hostListener = hostListener;
         _gate = gate;
+        _observeProduction = observeProduction;
         MessageListener = new CaptureMessageListener(this);
     }
 
@@ -86,8 +90,16 @@ internal sealed class XsltCaptureSession
         byte[] bytes;
         try
         {
-            bytes = Runtime.ResultTreeSerializer.SerializeToBytes(value, props);
+            _gate?.ObserveControls();
+            bytes = SerializeOutput(value, props, resolvedUri);
+            _gate?.ObserveControls();
         }
+        catch (ExecutionInterruptException ex)
+        {
+            RecordInterrupt(ex);
+            throw;
+        }
+        catch (XsltCaptureLimitException) { throw; }
         catch (Exception ex)
         {
             // A serialization failure (for example SESU0007 for an unsupported encoding) aborts the
@@ -97,9 +109,6 @@ internal sealed class XsltCaptureSession
             RecordFailure(ClassifyTransformFailure(ex, resolvedUri));
             throw;
         }
-
-        if (!AcceptBytes(bytes.Length, resolvedUri, isPrincipal: false))
-            throw new XsltCaptureLimitException(LastLimitKind(), resolvedUri);
 
         _secondary.Add(new XsltCapturedOutput(resolvedUri, isPrincipal: false, bytes, props));
         _totalBytes += bytes.Length;
@@ -116,16 +125,17 @@ internal sealed class XsltCaptureSession
         byte[] bytes;
         try
         {
-            bytes = Runtime.ResultTreeSerializer.SerializeToBytes(result, effectiveProps);
+            _gate?.ObserveControls();
+            bytes = SerializeOutput(result, effectiveProps, identity);
+            _gate?.ObserveControls();
         }
+        catch (ExecutionInterruptException) { throw; }
+        catch (XsltCaptureLimitException) { return; }
         catch (Exception ex)
         {
             RecordFailure(ClassifyTransformFailure(ex, identity));
             return;
         }
-
-        if (!AcceptBytes(bytes.Length, identity, isPrincipal: true))
-            return;
 
         _principal = new XsltCapturedOutput(identity, isPrincipal: true, bytes, effectiveProps);
         _totalBytes += bytes.Length;
@@ -133,37 +143,25 @@ internal sealed class XsltCaptureSession
 
     private XsltCapturedOutput? _principal;
 
-    private XsltCaptureFailureKind _lastLimitKind;
-
-    private XsltCaptureFailureKind LastLimitKind() => _lastLimitKind;
-
-    // Checks the per-output and aggregate byte bounds. On a breach the failure is recorded and false
-    // is returned; the offending bytes are never retained.
-    private bool AcceptBytes(long byteCount, string resolvedUri, bool isPrincipal)
+    private byte[] SerializeOutput(XdmValue value, Stylesheet.OutputProperties props, string identity)
     {
-        if (_options.MaxBytesPerOutput is { } perOutput && byteCount > perOutput)
+        try
         {
-            _lastLimitKind = XsltCaptureFailureKind.OutputSizeLimitExceeded;
-            RecordFailure(new XsltCaptureFailure(
-                XsltCaptureFailureKind.OutputSizeLimitExceeded,
-                PerOutputLimitCode,
-                resolvedUri,
-                $"Output '{resolvedUri}' serialized to {byteCount} bytes, exceeding the per-output bound ({perOutput}); the output was dropped."));
-            return false;
+            return ResultTreeSerializer.SerializeCaptureBytes(value, props,
+                _options.MaxBytesPerOutput,
+                _options.MaxTotalBytes is { } total ? total - _totalBytes : null,
+                _gate is null ? null : _gate.ObserveControls, _observeProduction);
         }
-
-        if (_options.MaxTotalBytes is { } total && _totalBytes + byteCount > total)
+        catch (SerializationByteLimitException ex)
         {
-            _lastLimitKind = XsltCaptureFailureKind.AggregateSizeLimitExceeded;
-            RecordFailure(new XsltCaptureFailure(
-                XsltCaptureFailureKind.AggregateSizeLimitExceeded,
-                AggregateLimitCode,
-                resolvedUri,
-                $"Capturing output '{resolvedUri}' ({byteCount} bytes) would raise the total captured bytes over the aggregate bound ({total}); the output was dropped."));
-            return false;
+            var perOutput = ex.PerOutput;
+            var kind = perOutput ? XsltCaptureFailureKind.OutputSizeLimitExceeded
+                : XsltCaptureFailureKind.AggregateSizeLimitExceeded;
+            RecordFailure(new XsltCaptureFailure(kind,
+                perOutput ? PerOutputLimitCode : AggregateLimitCode, identity,
+                $"Output '{identity}' exceeded its {(perOutput ? "per-output" : "remaining aggregate")} byte budget ({ex.Limit}) during production; serialization stopped and the output was dropped."));
+            throw new XsltCaptureLimitException(kind, identity);
         }
-
-        return true;
     }
 
     // Assembles the immutable public result. failure is the exception that ended the run, if any;
@@ -179,25 +177,36 @@ internal sealed class XsltCaptureSession
         {
             // Cooperative termination (cancellation token, wall-clock or operation budget): classified
             // here; never reported as an engine error.
-            RecordFailure(ClassifyInterrupt(interrupt));
+            RecordInterrupt(interrupt);
         }
         else if (failure is not null && !ReferenceEquals(failure, _outputLevelFailure))
         {
             RecordFailure(ClassifyTransformFailure(failure, resolvedUri: null));
         }
 
+        var secondary = Array.AsReadOnly(_secondary.ToArray());
+        var messages = Array.AsReadOnly(_messages.ToArray());
+        // Snapshot potentially large output/message collections before the final observation.
+        // Even a short run must observe controls immediately before choosing its public outcome.
+        try { _gate?.ObserveControls(); }
+        catch (ExecutionInterruptException ex)
+        {
+            RecordInterrupt(ex);
+            failure = ex;
+        }
         var outcome = DecideOutcome(failure);
         return new XsltCaptureResult(
             outcome,
             _principal,
-            Array.AsReadOnly(_secondary.ToArray()),
+            secondary,
             Array.AsReadOnly(_failures.ToArray()),
-            Array.AsReadOnly(_messages.ToArray()));
+            messages);
     }
 
     private XsltCaptureOutcome DecideOutcome(Exception? failure)
     {
-        if (failure is ExecutionInterruptException { Kind: ExecutionGateInterruptKind.Cancelled })
+        if (failure is ExecutionInterruptException { Kind: ExecutionGateInterruptKind.Cancelled }
+            || _failures.Any(f => f.Kind == XsltCaptureFailureKind.Cancelled))
             return XsltCaptureOutcome.Cancelled;
         if (failure is null)
             return _failures.Count == 0 ? XsltCaptureOutcome.Success : XsltCaptureOutcome.Partial;
@@ -220,6 +229,12 @@ internal sealed class XsltCaptureSession
 
     private void RecordFailure(XsltCaptureFailure failure) => _failures.Add(failure);
 
+    private void RecordInterrupt(ExecutionInterruptException interrupt)
+    {
+        var classified = ClassifyInterrupt(interrupt);
+        if (!_failures.Any(f => f.Code == classified.Code)) RecordFailure(classified);
+    }
+
     // Classifies an arbitrary engine exception: XsltRuntimeException carries its spec code; other
     // engine errors (XTDE1490, XTDE1500, XTMM9000, ...) carry a leading "CODE: message" token;
     // anything else is an uncoded engine failure. A transformation-scoped duplicate output URI
@@ -227,7 +242,12 @@ internal sealed class XsltCaptureSession
     private static XsltCaptureFailure ClassifyTransformFailure(Exception exception, string? resolvedUri)
     {
         var code = ExtractCode(exception);
-        var kind = code == "XTDE1490" ? XsltCaptureFailureKind.UriCollision : XsltCaptureFailureKind.TransformFailure;
+        var kind = code switch
+        {
+            "XTDE1490" => XsltCaptureFailureKind.UriCollision,
+            "XV0014" => XsltCaptureFailureKind.UnsupportedSerializationProfile,
+            _ => XsltCaptureFailureKind.TransformFailure,
+        };
         return new XsltCaptureFailure(kind, code, resolvedUri, exception.Message);
     }
 

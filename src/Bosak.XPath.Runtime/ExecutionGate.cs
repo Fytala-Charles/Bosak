@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 10 October 2026
-// PURPOSE              : Cooperative execution gate: cancellation token, wall-clock deadline and operation budget checkpoints.
+// PURPOSE              : Cooperative cancellation, wall-clock and operation-budget checkpoints.
 // SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
 //
 // COPYRIGHT            : Fytala
@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice D)                                                               |
+//                      | Charles Korthout | 0.2   | 11-10-2026     | D-F1: unconditional terminal control observation without spending operations.            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -69,7 +70,9 @@ internal sealed class ExecutionInterruptException : Exception
 /// (amortized batch), so cancellation and wall-clock latency are bounded by the work of at most
 /// 64 checkpoints. A single XPath expression evaluation between checkpoints (for example a long
 /// <c>for</c> loop inside one <c>select</c> attribute) is not interrupted mid-evaluation — it is
-/// observed at the next checkpoint.
+/// observed at the next batch or unconditional serialization/completion observation. Terminal
+/// observations never consume operations or reset the batch; bounded serialization also observes
+/// controls while forwarding encoding chunks.
 /// </para>
 /// <para>
 /// Fast path: when no controls are configured the gate is not created at all; call sites key off
@@ -125,11 +128,21 @@ internal sealed class ExecutionGate
 
         _remainingBudgetChecks = 64;
 
+        ObserveControls();
+    }
+
+    /// <summary>
+    /// Observes cancellation and the deadline unconditionally at serialization and completion
+    /// boundaries. This does not consume an engine operation or reset the hot-loop batch.
+    /// </summary>
+    internal void ObserveControls()
+    {
+
         if (_cancellationToken.IsCancellationRequested)
             throw new ExecutionInterruptException(ExecutionGateInterruptKind.Cancelled,
                 "The run was cancelled by the host-supplied cancellation token.");
 
-        if (_deadlineTick != 0 && Environment.TickCount64 > _deadlineTick)
+        if (_deadlineTick != 0 && Environment.TickCount64 >= _deadlineTick)
             throw new ExecutionInterruptException(ExecutionGateInterruptKind.TimeLimitExceeded,
                 "The wall-clock time limit was exceeded.");
     }

@@ -9,8 +9,8 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 10 October 2026
-> **Bosak baseline:** 3,903 unit tests passed / 0 failed / 0 skipped
+> **Last updated:** 11 October 2026
+> **Bosak baseline:** 3,945 unit tests passed / 0 failed / 0 skipped
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
 > **XSLT baseline:** `package` cluster **159 passed / 1 failed / 3 skipped**; `accept` cluster **50 passed / 0 failed / 0 skipped**; `expose` cluster **42 passed / 0 failed / 0 skipped**; `use-package` cluster **53 passed / 0 failed / 1 skipped**; `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; full W3C XSLT 3.0 strict sweep (last full run) **11,054 passed / 1 failed / 3,546 skipped** — 99.6% pass rate among runnable tests (the single failure is type-functions-0401, a documented platform limitation)
@@ -2053,6 +2053,33 @@ var result = expr.Evaluate(ctx);
 
 ## 3. XSLT Transforms
 
+### REQ-125 consumer-review corrections (2026-10-11)
+
+Braid independently verified C-F1/D-F1 closed and accepted the end-to-end contract within its declared coverage/restricted profiles on 2026-10-11 (review section 7). Verification: Release build 0 errors; full solution 3,945/0/0; combined consumer filter 76/0; QT3 31,142/0/679; qt4 gate-only 8,278/0/1,894 with zero gated failures.
+
+Byte-bounded capture streams text (including character maps), XML, HTML and XHTML. It refuses JSON/adaptive, text Unicode normalization, non-text character maps and non-XDocument markup provider fallbacks before serialization as `UnsupportedSerializationProfile` / `XV0014`. Unbounded capture keeps the established serializers for those profiles. Encoding/BOM bytes count against per-output and remaining aggregate budgets; fixed-size encoding lookahead is discarded on overflow. Result-tree construction, normalization and XPath working memory are outside these byte budgets; the host worker process remains the hard memory/wall-clock control.
+
+Cancellation/deadlines are observed unconditionally before and after serialization and before publishing the capture result; bounded encoding also observes controls between chunks. These observations neither consume engine operations nor reset the 64-checkpoint hot-loop batch. Cancellation is `Cancelled` / `XV0013`; deadline expiry is a non-success `XV0011` result, with earlier completed outputs retained.
+
+| Requested byte-bounded profile | Behavior |
+|---|---|
+| Text without Unicode normalization, including character maps | Incremental text traversal and encoding; no concatenated result string |
+| XML / HTML / XHTML with XDocument-backed nodes and no character maps | Incremental serialization and encoding; existing encoding/BOM and markup conventions preserved |
+| JSON / adaptive, text Unicode normalization, non-text character maps, markup provider fallbacks | Refused before serialization with `UnsupportedSerializationProfile` / `XV0014`; earlier completed outputs retained |
+| No per-output or aggregate byte limit | Established serializer behavior; unconditional terminal control checks still apply |
+
+A zero byte budget accepts genuinely empty output without a BOM. Any BOM is part of the budget. On a size breach, the unfinished output is dropped; previously completed outputs retain their identities and bytes. A cancellation observed after a completed output retains that output as evidence, while the overall result is `Cancelled`.
+
+To reproduce the accepted consumer checks, run the original public probes from [the review](REQ-125-END-TO-END-CONSUMER-REVIEW.md) and the upstream regression filter:
+
+```powershell
+dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter "FullyQualifiedName~ConsumerReviewCorrectionTests|FullyQualifiedName~XsltCaptureTests|FullyQualifiedName~SliceDExecutionControlTests"
+```
+
+`ConsumerReviewCorrectionTests` measures actual encoded-byte production for principal/secondary million-character outputs and aggregate-budget exhaustion. It also covers UTF-8/UTF-16/UTF-32/BOM boundaries, XML/HTML/XHTML fidelity, explicit refusals, short-run cancellation, cancellation/deadline expiry during final serialization and operation-budget invariance.
+
+
+
 ### 3.1 Compile a Stylesheet
 
 ```csharp
@@ -2471,8 +2498,8 @@ through `WithNamespace`.
 | `xsl:result-document` | ✅ Working | Secondary result documents with `format`, `href`, and serialization attributes; principal `xsl:result-document` captured for `TransformToString`; `current-output-uri()` reflects the active result-document URI and is empty outside any result document |
 | Static validation (`Bosak.Xslt.Validation`, REQ-125) | ✅ Working | `XsltValidation.Validate(...)` over authoring envelopes or bytes: every Expression/Pattern/AVT slot incl. never-executed templates + IO-free structural pass, real static context (scoping, prefixes, xpath-default-namespace, xml:base, version), use-when elision; outcomes Valid/Invalid/InvalidSource/UnsupportedCoverage/Refused/Cancelled — explicit gaps never a silent Valid; never throws for bad source |
 | Controlled resource policy (`Bosak.XPath.Runtime.Resources`, REQ-125) | ✅ Working | Opt-in `ControlledResourcePolicy` + host `IControlledResourceAuthority` over 14 acquisition routes; decision before cache service; digest-validated cache hits (`ServedFromCache` receipts); static-phase StaticEvaluation purpose route with ConcreteRoute; XV0004/XV0005 refusals; per-access SHA-256 provenance receipts; null policy = bit-identical |
-| Captured output (`Bosak.Xslt.Capture`, REQ-125) | ✅ Working | `XsltExecutable.CaptureTransform(...)`: principal + secondary identities and exact serialization bytes, no disk writes in capture mode; bounded production (count/bytes/messages); XTDE1490 collisions; classified partial failures; Success/Partial/Failed/Cancelled |
-| Execution limits + cancellation (REQ-125 Slice D) | ✅ Working | Opt-in `CancellationToken`/`TimeLimit`/`MaxEngineOperations` via internal `ExecutionGate` — cooperative checkpoints at instruction dispatch/template invocation/result-document/message seams; classified XV0011–XV0013, never thrown; nested `fn:transform` inherits the gate; sequential/concurrent isolation; default bit-identical |
+| Captured output (`Bosak.Xslt.Capture`, REQ-125) | ✅ Working | `XsltExecutable.CaptureTransform(...)`: principal + secondary identities and exact serialization bytes, no disk writes in capture mode; incremental byte production within the declared profile; unsupported profiles XV0014; count/message caps; XTDE1490 collisions; classified partial failures; Success/Partial/Failed/Cancelled |
+| Execution limits + cancellation (REQ-125 Slice D) | ✅ Working | Opt-in `CancellationToken`/`TimeLimit`/`MaxEngineOperations` via internal `ExecutionGate` — cooperative checkpoints at instruction dispatch/template invocation/result-document/message seams; unconditional serialization/completion observations; classified XV0011–XV0013, never thrown; nested `fn:transform` inherits the gate; sequential/concurrent isolation; default bit-identical |
 
 ---
 
@@ -2704,3 +2731,5 @@ Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
 - XSLT failures: capture the stylesheet fragment, source XML, and expected output.
 
 **REQ-124 final consumer acceptance — 2026-10-10:** Accepted 2026-10-10 on the owner's instruction after Bosak.Braid re-review. F1 and F2 are closed. Tested fix cb98af1ff05a37a59e7b1fe051b024d3436e1cf2 matches merged main src/tests at 5720f873c8f9e5ec0b3182186bf336d2b5e58a03 (implementation b5eb1b17249fe458095af2dc53445d459f30db11). Independent gates: full Release unit suite 3,709 passed / 0 failed / 0 skipped; authoring subset 71/71; XSLT mode smoke 162 passed / 0 failed / 26 skipped. Acceptance covers the agreed engine surface, not a product/package release. Braid dependency adoption remains separate. See [acceptance review](REQ-124-CONSUMER-ACCEPTANCE-REVIEW.md).
+
+**REQ-125 delivery traceability (2026-10-11):** Bosak correction revision `0ff33163ba985bf8562722424db7e66c37e3566d` is accepted within the documented coverage and restricted byte-bounded profiles. Bosak.Braid adopted this exact immutable revision in commit `9423d41b52a5f3a3c1206df370c7998f7ad88886`. Its Release build passed with 0 errors, all **192 tests passed / 0 failed / 0 skipped** (including six public-contract checks), and the strict documentation gate passed. The bootstrap also rejects solution/manifest revision mismatches before checkout preparation. Both repositories have local commits; remote publication awaits explicit push authorization. Production preview adapter/worker integration remains separate product work.

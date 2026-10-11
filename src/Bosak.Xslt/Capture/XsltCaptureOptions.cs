@@ -15,6 +15,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: CancellationToken, TimeLimit and MaxEngineOperations (cooperative       |
 //                      |                  |       |                | execution controls; engine-checkpoint semantics documented per option)                   |
+//                      | Charles Korthout | 0.3   | 11-10-2026     | C-F1/D-F1: byte-production profiles and terminal control semantics.                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -102,7 +103,12 @@ public sealed class XsltCaptureOptions
     /// Gets or sets the maximum capture bytes for any single output (principal or secondary). An output
     /// whose serialization exceeds the bound is dropped and the transformation is terminated; the breach
     /// is reported as a classified failure (code <c>XV0007</c>). <see langword="null"/> (the default)
-    /// applies no per-output bound. Zero drops every output.
+    /// applies no per-output bound. Zero allows only an output with no bytes (including no BOM).
+    /// Encoding stops during production on overflow; fixed-size encoding lookahead is discarded.
+    /// Byte-bounded capture supports text (including character maps), XML, HTML and XHTML;
+    /// JSON/adaptive, text Unicode normalization, non-text character maps and non-XDocument
+    /// markup fallbacks are refused as UnsupportedSerializationProfile/XV0014. These limits do
+    /// not bound result-tree construction, normalization or XPath working memory.
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">The value is negative.</exception>
     public long? MaxBytesPerOutput
@@ -160,7 +166,8 @@ public sealed class XsltCaptureOptions
 
     /// <summary>
     /// Gets or sets the cooperative cancellation token for the captured transformation. The token
-    /// is observed at engine checkpoints (see <see cref="TimeLimit"/> for the checkpoint
+    /// is observed at batched engine checkpoints and unconditionally at serialization/completion
+    /// boundaries (see <see cref="TimeLimit"/> for the checkpoint
     /// definition); triggering it terminates the run with the classified
     /// <see cref="XsltCaptureOutcome.Cancelled"/> outcome, retaining outputs captured before the
     /// checkpoint observed the trigger. <see langword="null"/> (the default) disables cancellation.
@@ -170,7 +177,8 @@ public sealed class XsltCaptureOptions
 
     /// <summary>
     /// Gets or sets the wall-clock budget for the captured transformation. The budget starts when
-    /// the run starts and is checked at engine checkpoints; exceeding it terminates the run with a
+    /// the run starts and is checked at batched engine checkpoints, serialization/completion
+    /// boundaries and between bounded encoding chunks; exceeding it terminates the run with a
     /// classified failure (code <c>XV0011</c>), retaining outputs captured before the checkpoint.
     /// <see langword="null"/> (the default) applies no time limit. This is a cooperative bound, not
     /// a hard preemption; Braid's process termination remains the hard wall-clock control.
