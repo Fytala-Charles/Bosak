@@ -11,7 +11,7 @@ Coverage: 49 entries, 315 feature plus 24 chapter checks (339 total), and
 Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; engine delivery
 #84 `f7f55b4e3a6e92da26ac607e34f46aede695cb19`. No exact GatedSets assignment
 is claimed for these three names. No engine/API/package/gate changes.
-REQ-126 remains In Progress. Validation: Release build passed (0 errors, 12 existing warnings); all 4,337 tests passed across ten assemblies without failures/skips, including 315 catalog cases. Renderer verified 62 pages. Entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision will be recorded after commit.
+REQ-126 remains In Progress. Validation: Release build passed (0 errors, 12 existing warnings); all 4,337 tests passed across ten assemblies without failures/skips, including 315 catalog cases. Renderer verified 62 pages. Entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `06974cae`; [PR #167](https://github.com/Fytala-Charles/Bosak/pull/167). CI pending at handover.
 Next: Unicode/text cleanup and substring reference examples.
 
 # Agent Handover — 2026-10-11: scheduling and date/time references
