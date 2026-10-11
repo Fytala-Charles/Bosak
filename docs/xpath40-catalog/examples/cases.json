@@ -745,5 +745,285 @@
     "mode": "40",
     "file": "extensible-map-types/coercion.xpath",
     "error": "XPTY0004"
+  },
+  {
+    "id": "product-map-index-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/main.xpath",
+    "expected": "FILTER-A=8"
+  },
+  {
+    "id": "product-map-index-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "product-map-index/baseline.xpath",
+    "expected": "FILTER-A=8"
+  },
+  {
+    "id": "product-map-index-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/edge.xpath",
+    "expected": "0/0/0"
+  },
+  {
+    "id": "product-map-index-combine",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/combine.xpath",
+    "expected": "12,8"
+  },
+  {
+    "id": "product-map-index-reject",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/reject.xpath",
+    "error": "FOJS0003"
+  },
+  {
+    "id": "product-map-index-invalid-policy",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/invalid-policy.xpath",
+    "error": "FOJS0005"
+  },
+  {
+    "id": "product-map-index-combiner",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/combiner.xpath",
+    "expected": "20"
+  },
+  {
+    "id": "product-map-index-multi-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/multi-key.xpath",
+    "expected": "2/FILTER-A"
+  },
+  {
+    "id": "product-map-index-empty-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/empty-key.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "product-map-index-positions",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/positions.xpath",
+    "expected": "1:FILTER-A|2:SEAL-B"
+  },
+  {
+    "id": "product-map-index-empty-predicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/empty-predicate.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "product-map-index-items-sequence-boundary",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/items-sequence-boundary.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "product-map-index-items-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "product-map-index/items-baseline.xpath",
+    "expected": "3"
+  },
+  {
+    "id": "import-array-batches-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/main.xpath",
+    "expected": "orders=2;lines=FILTER-A,SEAL-B,VALVE-C"
+  },
+  {
+    "id": "import-array-batches-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "import-array-batches/baseline.xpath",
+    "expected": "orders=2;lines=FILTER-A,SEAL-B,VALVE-C"
+  },
+  {
+    "id": "import-array-batches-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/edge.xpath",
+    "expected": "0/true/0"
+  },
+  {
+    "id": "import-array-batches-empty-member",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/empty-member.xpath",
+    "expected": "true/false/false/0"
+  },
+  {
+    "id": "import-array-batches-nested-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/nested-array.xpath",
+    "expected": "3/true"
+  },
+  {
+    "id": "import-array-batches-positions",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/positions.xpath",
+    "expected": "1:ORD-101|2:ORD-102"
+  },
+  {
+    "id": "import-array-batches-reverse",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/reverse.xpath",
+    "expected": "ORD-103,ORD-102,ORD-101"
+  },
+  {
+    "id": "import-array-batches-out-of-range",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/out-of-range.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "import-array-batches-negative-bounds",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/negative-bounds.xpath",
+    "expected": "ORD-102,ORD-103"
+  },
+  {
+    "id": "import-array-batches-step",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/step.xpath",
+    "expected": "ORD-101,ORD-103"
+  },
+  {
+    "id": "import-array-batches-incompatible-direction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-array-batches/incompatible-direction.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "order-sequence-selection-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/main.xpath",
+    "expected": "page=ORD-102,ORD-103,ORD-104;last=ORD-104;body=ORD-102,ORD-103;labels=ORD-102|ORD-103|ORD-104|ORD-102|ORD-103|ORD-104"
+  },
+  {
+    "id": "order-sequence-selection-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-sequence-selection/baseline.xpath",
+    "expected": "page=ORD-102,ORD-103,ORD-104;last=ORD-104;body=ORD-102,ORD-103;labels=ORD-102|ORD-103|ORD-104|ORD-102|ORD-103|ORD-104"
+  },
+  {
+    "id": "order-sequence-selection-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/edge.xpath",
+    "expected": "0/0/0/0/0/0"
+  },
+  {
+    "id": "order-sequence-selection-requested-positions",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/requested-positions.xpath",
+    "expected": "ORD-105,ORD-102,ORD-102"
+  },
+  {
+    "id": "order-sequence-selection-requested-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-sequence-selection/requested-baseline.xpath",
+    "expected": "ORD-105,ORD-102,ORD-102"
+  },
+  {
+    "id": "order-sequence-selection-negative-bounds",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/negative-bounds.xpath",
+    "expected": "ORD-104,ORD-105"
+  },
+  {
+    "id": "order-sequence-selection-reverse",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/reverse.xpath",
+    "expected": "ORD-105,ORD-104,ORD-103,ORD-102,ORD-101"
+  },
+  {
+    "id": "order-sequence-selection-automatic-direction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/automatic-direction.xpath",
+    "expected": "ORD-104,ORD-103,ORD-102"
+  },
+  {
+    "id": "order-sequence-selection-step",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/step.xpath",
+    "expected": "ORD-101,ORD-103,ORD-105"
+  },
+  {
+    "id": "order-sequence-selection-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/singleton.xpath",
+    "expected": "ORD-101/0/ORD-101"
+  },
+  {
+    "id": "order-sequence-selection-zero-repeat",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/zero-repeat.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "order-sequence-selection-negative-repeat",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/negative-repeat.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "order-sequence-selection-fractional-position",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/fractional-position.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "order-sequence-selection-separator-block",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-sequence-selection/separator-block.xpath",
+    "expected": "ORD-101|CHECK|ORD-102"
+  },
+  {
+    "id": "product-map-index-entries-boundary",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "product-map-index/entries-boundary.xpath",
+    "expected": "true/1/2"
+  },
+  {
+    "id": "product-map-index-entries-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "product-map-index/entries-baseline.xpath",
+    "expected": "2"
   }
 ]

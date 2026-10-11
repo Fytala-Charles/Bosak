@@ -1,0 +1,5 @@
+(: Export positions 2 through 4; repeat the label set for two packing stations. :)
+let $queue := ('ORD-101','ORD-102','ORD-103','ORD-104','ORD-105'),
+    $page := slice($queue, 2, 4),
+    $labels := replicate($page, 2)
+return concat('page=', string-join($page, ','), ';last=', foot($page), ';body=', string-join(trunk($page), ','), ';labels=', string-join(insert-separator($labels, '|'), ''))

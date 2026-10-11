@@ -10,8 +10,8 @@
 the catalog does not yet cover every landed feature or record every deferred and
 rejected decision. Existing entries also need more precise provenance and broader
 examples. This audit is dated 2026-10-11 against source revision
-`9d3950f8ebc8bb0793c9317a91d3d412095cf6e8`; published engine 1.1.0 is revision
-`6c2a867cbc7587922cb3973a7505746116caa54c`.
+`09e678f3` (1.1.1 publication documentation); published engine 1.1.1 is revision
+`d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`.
 
 The original audit baseline was 28 entries, 81 catalog cases, three worked chapters, and 13
 chapter checks. All entries have the 16 numbered fields. Field presence does not
@@ -67,10 +67,10 @@ specification revision or establish that Bosak implements the entire proposal.
 
 | Criterion | Assessment | Evidence and remaining work |
 |---|---|---|
-| AC-01: landed slices, tiers, spec and delivery links | Partial | S1/S2/S5 function families are largely absent. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
+| AC-01: landed slices, tiers, spec and delivery links | Partial | S1/S2/S5 family coverage remains partial; map/array and positional selection are now supplied. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. Further deferred grammar needs review. |
-| AC-03: verified examples and gate evidence | Partial | 128 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
-| AC-04: structure, retained entries, drift warnings | Partial | 38 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
+| AC-03: verified examples and gate evidence | Partial | 168 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
+| AC-04: structure, retained entries, drift warnings | Partial | 41 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
 ## Runtime function inventory
@@ -82,20 +82,19 @@ pairs, **not function signatures or arities**.
 
 | Registered category | Names | Catalog assessment |
 |---|---:|---|
-| Frozen `fn:*` | 58 | Eighteen frozen fn/array names together have an identifiable existing family entry; many functions remain without one. |
-| Frozen `map:*` | 4 | No dedicated map-function family entry. Map iteration syntax is a different feature. |
-| Frozen `array:*` | 5 | `array:sort-with` belongs to the existing sorting family; other registered array families need entries. |
+| Frozen `fn:*` | 58 | 23 frozen fn names have family entries; signature and semantic coverage remain partial. |
+| Frozen `map:*` | 4 | All four names map to the product-index family; entries/items result-shape gaps are explicit. Map iteration syntax is a different feature. |
+| Frozen `array:*` | 5 | All five names have family entries: four batch functions plus array:sort-with in the sorting family. |
 | Frozen zero-argument `xs:*` constructors | 49 | One constructor-family entry exists, with an integer example; this does not verify all constructor contracts. |
 | Experimental `fn:scan` | 1 | Entry and verified examples exist; gate status was stale. |
-| Total | 117 | 68 names map to an existing family entry; 49 have no dedicated family entry. A mapped name is not a completeness pass. |
+| Total | 117 | 82 names map to an existing family entry; 35 have no dedicated family entry. A mapped name is not a completeness pass. |
 
-Names mapped to existing non-constructor entries are `fn:atomic-equal`, the three
-CSV functions, `fn:element-to-map`/`fn:element-to-map-plan`, `fn:map-to-element`,
-`fn:sort-with`/`array:sort-with`, `fn:jtree`/`fn:jkey`/`fn:jvalue`, `fn:some`/`fn:every`/`fn:index-where`/`fn:partition`, `fn:all-different`/`fn:duplicate-values`, and experimental
-`fn:scan`. Some are only mentioned within a broader family, without their own
-worked form. The snapshot records a matching gate identifier only when that
-identifier actually occurs in the runner's GatedSets; null means no exact-name
-match was assigned, not proof that no other test set covers the function.
+Mapped non-constructor families now include scalar equality, CSV, element/map
+conversion, comparator sorting, JNode navigation, higher-order selection,
+partitioning, distinctness, product-map indexing, array batches, positional
+sequence selection and experimental scan. The snapshot records an exact matching
+gate identifier only when it occurs in GatedSets; null means no exact-name set
+is assigned, not proof that no broader set exercises the function.
 
 The snapshot does **not** inventory changed behavior/overloads of existing 3.1
 functions, parser grammar, type syntax, XSLT instructions, or resource routes.
@@ -104,19 +103,19 @@ and collations require an additional semantic/signature audit. The missing-name
 count is not a count of missing Markdown files: related functions can share a
 well-explained family entry.
 
-### Missing function families
+### Family coverage and remaining work
 
 | Family | Registered names without a dedicated family entry | Suggested realistic case |
 |---|---|---|
-| Sequence selection and repetition | [`fn:replicate`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-replicate), [`fn:slice`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-slice), [`fn:items-at`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-items-at), [`fn:foot`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-foot), [`fn:trunk`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trunk), [`fn:insert-separator`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-insert-separator) | Paginate an order export while retaining boundary records. |
+| Sequence selection and repetition — supplied in this delivery | [`fn:replicate`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-replicate), [`fn:slice`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-slice), [`fn:items-at`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-items-at), [`fn:foot`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-foot), [`fn:trunk`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trunk), [`fn:insert-separator`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-insert-separator) | Paginate an order export while retaining boundary records. |
 | Equality, duplicates, subsequences | [`fn:all-equal`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-all-equal), [`fn:contains-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-contains-subsequence), [`fn:starts-with-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-starts-with-subsequence), [`fn:ends-with-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-ends-with-subsequence) | Check shipment-event identifiers and required processing steps. |
 | Higher-order processing | [`fn:take-while`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-take-while), [`fn:drop-while`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-drop-while), [`fn:while-do`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-while-do), [`fn:do-until`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-do-until), [`fn:partial-apply`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-partial-apply), [`fn:transitive-closure`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-transitive-closure), [`fn:identity`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-identity) | Route invoice lines, bound retries, and follow product dependencies with cycles. |
 | Ranking, operators, type inspection | [`fn:highest`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-highest), [`fn:lowest`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-lowest), [`fn:sort-by`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-by), [`fn:op`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-op), [`fn:is-NaN`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-is-NaN), [`fn:atomic-type-annotation`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-type-annotation) | Prioritize work orders and describe imported measurements. |
 | Strings and Unicode | [`fn:char`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-char), [`fn:characters`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-characters), [`fn:graphemes`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-graphemes), [`fn:pad-string`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-pad-string), [`fn:trim-space`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trim-space), [`fn:index-of-substring`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-index-of-substring), [`fn:substring-before-last`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-before-last), [`fn:substring-after-last`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-after-last), [`fn:hash`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-hash) | Normalize supplier references without splitting Unicode graphemes. |
 | URI and collation | [`fn:parse-uri`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-uri), [`fn:build-uri`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-uri), [`fn:decode-from-uri`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-decode-from-uri), [`fn:collation-available`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-collation-available) | Construct and validate document-resource identifiers. |
 | Dates and durations | [`fn:seconds`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-seconds), [`fn:duration-to-seconds`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-duration-to-seconds), [`fn:build-dateTime`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-dateTime), [`fn:unix-dateTime`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-unix-dateTime), [`fn:days-in-month`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-days-in-month) | Convert timestamps and build a monthly dispatch calendar. |
-| Maps | [`map:build`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-build), [`map:entries`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-entries), [`map:filter`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-filter), [`map:items`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-items) | Index a product feed with an explicit duplicate-key policy. |
-| Arrays | [`array:build`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-build), [`array:empty`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-empty), [`array:items`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-items), [`array:slice`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-slice) | Preserve record boundaries when splitting import batches. |
+| Maps — supplied in this delivery | [`map:build`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-build), [`map:entries`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-entries), [`map:filter`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-filter), [`map:items`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-items) | Index a product feed with an explicit duplicate-key policy. |
+| Arrays — supplied in this delivery | [`array:build`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-build), [`array:empty`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-empty), [`array:items`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-items), [`array:slice`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-slice) | Preserve record boundaries when splitting import batches. |
 
 ## Landed syntax and cluster coverage
 
@@ -171,12 +170,13 @@ because its documentation is missing.
 | P1 | Repair evidence for the 28 existing entries | Exact adopted spec revision/section, delivery PR/revision, named tests, named conformance sets and actual gate status; retain explicit gaps. |
 | P1 | Add the missing decision records | Cover the moving/rejected matrix, with alternatives and refusal evidence; resolve historical deferrals superseded by shipped features. |
 | P2 | Add sequence and higher-order function chapters/entries | Real document cases, normal/edge inputs and results, complete code, earlier-version comparison where meaningful, exact compatibility refusals. |
-| P2 | Add map/array, Unicode, URI/date, operator/type families | Cover the remaining 49 unassigned registered names through coherent families, including signature-specific behavior. |
+| P2 | Add map/array, Unicode, URI/date, operator/type families | Cover the remaining 35 unassigned registered names through coherent families, including signature-specific behavior; 14 map/array/selection names are now assigned. |
 | P2 | Expand syntax and changed-3.1 semantics | Literals, focus functions, guarded expressions, record updates, comparisons/collations, patterns, and supplementary forms. |
 | P3 | Reconcile acceptance and publish the complete reference | Zero unassigned adopted features/decisions, accurate index/tier links, verified examples, and explicit exceptions to conformance evidence rules. |
 
-**Recommended next documentation step:** continue with sequence-selection and
-map/array families, then supplementary signatures and parser/type/pattern forms.
+**Recommended next step:** correct the confirmed map result-shape gaps in a
+separately gated engine slice. Continue the remaining equality/subsequence and
+higher-order families afterward, then supplementary signatures and parser/type/pattern forms.
 The baseline provenance repair, section-1.2 decision records and first sequence/HOF
 routing chapter are supplied below. Immutable historical specification snapshots
 remain an explicit gap. No engine work or conformance-set promotion is required
@@ -200,9 +200,9 @@ explicitly when reconciling AC-03.
 
 Audit findings are documentation coverage assessments, not new claims of engine
 conformance. The last published full solution/gate results remain in the
-[release notes](../RELEASE-NOTES-1.1.md); this audit does not rerun those engines.
+[patch release notes](../RELEASE-NOTES-1.1.1.md); this audit does not rerun those engines.
 
-## Progress after the baseline audit: 2026-10-11
+## Historical progress before the map/array/selection delivery: 2026-10-11
 
 PR #155 is merged at `17f9cc7c`. The follow-up supplies 38 entries, 104 manifest
 cases and four worked chapters with 24 chapter checks: 128 documentation checks.
@@ -236,9 +236,44 @@ resolves the runtime propagation gap discovered by routing. Effective-version
 evaluations restore their caller's profile. Static compilation, AVTs, dynamic
 evaluation and module boundaries are covered. The routing chapter now also has a
 self-contained stylesheet with five additional checks; the original two-stage
-workflow remains the published-1.1.0 alternative. Source version 1.1.1 is not yet
-published. The missing-name count remains 49 and REQ-126 remains In Progress.
+workflow remains the published-1.1.0 alternative. The correction is published in 1.1.1. At that delivery the missing-name count
+remained 49; the later map/array/selection delivery below reduces it to 35.
+REQ-126 remains In Progress.
 
 The correction records an immutable QT4CG specification source revision at
 delivery. This establishes its own reviewed source and does not fill historical
 snapshot gaps in the 28 baseline ledger rows.
+
+## Map/array and sequence-selection delivery: 2026-10-11
+
+Three new entries supply 40 exact manifest checks: [product-map indexing](functions/product-map-index.md)
+(15), [array import batches](functions/import-array-batches.md) (11), and
+[order-export selection](functions/order-sequence-selection.md) (14).
+The catalog now has **41 entries, 144 feature checks and 24 chapter checks
+(168 total)**. Fourteen names gain family assignments: **82 assigned / 35 unassigned
+of 117**. All 16 fields, named unit tests and actual exact-name gate membership
+are supplied. Historical adopted-specification snapshots remain unavailable;
+these entries record a new review pin instead:
+[QT4CG source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).
+
+### Confirmed engine follow-up: map result shapes
+
+In public/source 1.1.1, `map:entries` returns one array item containing single-entry
+maps; the reviewed draft specifies a sequence of single-entry maps. Its named
+existing unit test already expects array indexing. The new main example uses an
+explicit Bosak adapter (`?*`); `entries-boundary` and `entries-baseline` distinguish
+the shapes. `map:items` also preserves a grouped multi-item value: the new
+`items-sequence-boundary` counts two values while the draft-equivalent 3.1
+`map:for-each` baseline counts three items. Existing named unit evidence likewise
+expects the grouped result. See [the entry’s consequences](functions/product-map-index.md#11-consequences).
+
+Correct both contracts in a separate REQ-118 bug-fix slice, updating the existing
+tests and these probes deliberately. Include ordinary/dynamic calls, empty maps,
+multi-item and nested map/array values, entry order, default-3.1 refusal and
+caller-profile restoration; run full solution, frozen QT3 and qt4 gates before
+release. This catalog assignment is not a completeness/conformance pass.
+
+The current delivery changes documentation and fixtures only. No engine code,
+package version or gate membership changes. REQ-126 remains In Progress.
+
+**Delivery verification (2026-10-11):** Release build 0 warnings / 0 errors; full isolated solution **4,143/0/0**, targeted catalog **144/0/0**. All 41 entries/index links, 166 primary links/anchors, 28 baseline provenance records and 144 manifest files verified; 54 documentation pages rendered. Inline expressions/results and named tests match. Engine gates were not rerun for this documentation-only change.

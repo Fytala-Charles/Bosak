@@ -12,7 +12,7 @@
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 28 entries and three worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 41 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -29,7 +29,7 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 ## Start with a worked chapter
 
-[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 81 focused catalog cases and migration baselines.
+[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 144 focused catalog cases and migration baselines.
 
 ## External specifications and source documentation
 
@@ -106,7 +106,7 @@ The 3.1 default is untouched by every tier: consumers on `XPath31` see zero chan
 ## 2. Index
 
 The [completeness audit](COMPLETENESS-AUDIT.md) records acceptance gaps and the
-prioritized completion plan against the published 1.1.0 engine. Its
+prioritized completion plan against the published 1.1.1 engine. Its
 [function inventory](audit-function-inventory.json) distinguishes registered names
 from fully documented signatures; the catalog remains In Progress.
 
@@ -136,6 +136,20 @@ from fully documented signatures; the catalog remains In Progress.
 | [Map-to-element conversion](functions/map-to-element.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [Atomic equality](functions/atomic-equal.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [Comparator-based sorting](functions/sort-with.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+
+### Map/array and sequence-selection families
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [Product indexing with maps](functions/product-map-index.md) | Frozen 4.0; documented result-shape differences | [#84](https://github.com/Fytala-Charles/Bosak/pull/84); 15 exact examples and named unit tests |
+| [Import batches with arrays](functions/import-array-batches.md) | Frozen 4.0 | [#84](https://github.com/Fytala-Charles/Bosak/pull/84); 11 exact examples and named unit tests |
+| [Order-export sequence selection](functions/order-sequence-selection.md) | Frozen 4.0 | [#82](https://github.com/Fytala-Charles/Bosak/pull/82); 14 exact examples and named unit tests |
+
+These entries include complete synthetic inputs, exact output text, 3.1
+comparisons and edge contracts. The map entry explicitly distinguishes 1.1.1
+behavior from the pinned draft. Current coverage is **144 feature checks plus
+24 worked-chapter checks (168 total)**. See the [audit](COMPLETENESS-AUDIT.md)
+for the 35 remaining unassigned registered names and engine follow-up findings.
 
 ### Type system
 

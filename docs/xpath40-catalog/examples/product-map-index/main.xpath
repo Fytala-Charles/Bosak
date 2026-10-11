@@ -1,0 +1,6 @@
+﻿(: A supplier snapshot contains a later correction for FILTER-A. :)
+let $rows := (map{'sku':'FILTER-A','stock':12}, map{'sku':'SEAL-B','stock':0}, map{'sku':'FILTER-A','stock':8}),
+    $index := map:build($rows, function($row){$row?sku}, function($row){$row?stock}, map{'duplicates':'use-last'}),
+    $available := map:filter($index, function($sku,$stock,$position){$stock gt 0})
+return string-join(map:entries($available)?* ! (let $entry := . return let $sku := map:keys($entry)[1] return concat($sku, '=', $entry($sku))), '|')
+

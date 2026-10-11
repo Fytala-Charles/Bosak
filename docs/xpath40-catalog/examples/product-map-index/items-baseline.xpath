@@ -1,0 +1,1 @@
+count(map:for-each(map{'FILTER-A':(12,8),'SEAL-B':0}, function($k,$v){$v}))

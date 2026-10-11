@@ -1,0 +1,1 @@
+string-join(items-at(('ORD-101','ORD-102','ORD-103','ORD-104','ORD-105'), (5,2,2,0,9)), ',')
