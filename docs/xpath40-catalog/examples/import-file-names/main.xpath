@@ -1,0 +1,4 @@
+let $path := string(parse-xml('<file path="incoming/2026.10/invoice.batch.xml"/>')/file/@path)
+let $directory := substring-before-last($path, '/')
+let $name := substring-after-last($path, '/')
+return concat('directory=', $directory, '; file=', $name, '; stem=', substring-before-last($name, '.'), '; extension=', substring-after-last($name, '.'), '; dots=', string-join(index-of-substring($name, '.') ! string(.), ','))

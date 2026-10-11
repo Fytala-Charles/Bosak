@@ -1,0 +1,1 @@
+string-join((string-to-codepoints(substring(trim-space(char('nbsp') || 'Ada '), 1, 1))) ! string(.), ',')

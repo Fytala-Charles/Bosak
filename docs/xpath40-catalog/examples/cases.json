@@ -2222,5 +2222,250 @@
     "mode": "40",
     "file": "invoice-api-uris/build-nonmap.xpath",
     "error": "XPTY0004"
+  },
+  {
+    "id": "customer-text-cleanup-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/main.xpath",
+    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; graphemes=7; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
+  },
+  {
+    "id": "customer-text-cleanup-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "customer-text-cleanup/baseline.xpath",
+    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
+  },
+  {
+    "id": "customer-text-cleanup-preserve-interior",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/preserve-interior.xpath",
+    "expected": "[Ada  Lovelace]"
+  },
+  {
+    "id": "customer-text-cleanup-nbsp-preserved",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/nbsp-preserved.xpath",
+    "expected": "160"
+  },
+  {
+    "id": "customer-text-cleanup-trim-start",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/trim-start.xpath",
+    "expected": "[Ada  ]"
+  },
+  {
+    "id": "customer-text-cleanup-empty-trim",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/empty-trim.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "customer-text-cleanup-pad-both",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/pad-both.xpath",
+    "expected": "**Ada***"
+  },
+  {
+    "id": "customer-text-cleanup-never-truncate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/never-truncate.xpath",
+    "expected": "Lovelace"
+  },
+  {
+    "id": "customer-text-cleanup-empty-pad",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/empty-pad.xpath",
+    "expected": "..."
+  },
+  {
+    "id": "customer-text-cleanup-codepoint-split",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/codepoint-split.xpath",
+    "expected": "101,769"
+  },
+  {
+    "id": "customer-text-cleanup-combining-grapheme",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/combining-grapheme.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "customer-text-cleanup-emoji-zwj",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/emoji-zwj.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "customer-text-cleanup-empty-characters",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/empty-characters.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "customer-text-cleanup-empty-graphemes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/empty-graphemes.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "customer-text-cleanup-entity-name",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/entity-name.xpath",
+    "expected": "\u00e1"
+  },
+  {
+    "id": "customer-text-cleanup-multi-codepoint-entity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/multi-codepoint-entity.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "customer-text-cleanup-invalid-pad-side",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/invalid-pad-side.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "customer-text-cleanup-empty-padding",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/empty-padding.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "customer-text-cleanup-invalid-trim-side",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/invalid-trim-side.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "customer-text-cleanup-unknown-entity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/unknown-entity.xpath",
+    "error": "FOCH0005"
+  },
+  {
+    "id": "customer-text-cleanup-surrogate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/surrogate.xpath",
+    "error": "FOCH0005"
+  },
+  {
+    "id": "customer-text-cleanup-nonstring-characters",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "customer-text-cleanup/nonstring-characters.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "import-file-names-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/main.xpath",
+    "expected": "directory=incoming/2026.10; file=invoice.batch.xml; stem=invoice.batch; extension=xml; dots=8,14"
+  },
+  {
+    "id": "import-file-names-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "import-file-names/baseline.xpath",
+    "expected": "directory=incoming/2026.10; file=invoice.batch.xml; stem=invoice.batch; extension=xml; dots=8,14"
+  },
+  {
+    "id": "import-file-names-compound-extension",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/compound-extension.xpath",
+    "expected": "gz"
+  },
+  {
+    "id": "import-file-names-missing-delimiter",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/missing-delimiter.xpath",
+    "expected": "[]|[]"
+  },
+  {
+    "id": "import-file-names-empty-delimiter",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/empty-delimiter.xpath",
+    "expected": "[invoice]|[]"
+  },
+  {
+    "id": "import-file-names-overlapping",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/overlapping.xpath",
+    "expected": "before=a; after=[]; positions=1,2"
+  },
+  {
+    "id": "import-file-names-no-matches",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/no-matches.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "import-file-names-empty-search",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/empty-search.xpath",
+    "expected": "1,2,3,4"
+  },
+  {
+    "id": "import-file-names-empty-source",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/empty-source.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "import-file-names-empty-both",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/empty-both.xpath",
+    "expected": "[]|[]"
+  },
+  {
+    "id": "import-file-names-supplementary-position",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/supplementary-position.xpath",
+    "expected": "1,3"
+  },
+  {
+    "id": "import-file-names-explicit-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/explicit-collation.xpath",
+    "expected": "-c"
+  },
+  {
+    "id": "import-file-names-multi-item-source",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "import-file-names/multi-item-source.xpath",
+    "error": "XPTY0004"
   }
 ]

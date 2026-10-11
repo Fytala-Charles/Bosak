@@ -1,0 +1,1 @@
+concat('[', substring-before-last('invoice', '.'), ']|[', substring-after-last('invoice', '.'), ']')
