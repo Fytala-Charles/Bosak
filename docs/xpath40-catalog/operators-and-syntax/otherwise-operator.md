@@ -35,7 +35,7 @@ Use this form when solving the stated task and the consumer permits the declared
 ## 8. Structure
 
 ```xquery
-() ?? 'No purchase order' 
+() ?? 'No purchase order'
 ```
 
 This is the worked case's syntax, not a replacement for the full language grammar. Required namespaces and surrounding context are supplied in the linked complete files.

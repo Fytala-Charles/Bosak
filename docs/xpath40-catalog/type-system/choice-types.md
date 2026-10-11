@@ -35,7 +35,7 @@ Use this form when solving the stated task and the consumer permits the declared
 ## 8. Structure
 
 ```xquery
- 'PO-8801' instance of (xs:integer|xs:string) 
+ 'PO-8801' instance of (xs:integer|xs:string)
 ```
 
 This is the worked case's syntax, not a replacement for the full language grammar. Required namespaces and surrounding context are supplied in the linked complete files.
