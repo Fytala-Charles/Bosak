@@ -6,7 +6,7 @@ XPath 3.1 comparison and 18 executable edge/callback cases. Coverage is 43 entri
 189 feature checks plus 24 chapter checks (213 total); 88 assigned / 29 unassigned
 registered names. Immutable specification review pin: `a014e1b408baf5614a11401d3570a04498ab76be`.
 No engine, API, package version or gate membership changed; source/public remains 1.1.2.
-Validation: Release build succeeded (0 errors, 12 existing warnings); all 4,211 tests passed across ten assemblies, with no failures/skips. Catalog examples: 189/0/0; renderer: 56 pages. Entry fields, primary/local links, inventory, provenance, named tests and inline queue examples verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision will be recorded after commit.
+Validation: Release build succeeded (0 errors, 12 existing warnings); all 4,211 tests passed across ten assemblies, with no failures/skips. Catalog examples: 189/0/0; renderer: 56 pages. Entry fields, primary/local links, inventory, provenance, named tests and inline queue examples verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `57d4ee89`; [PR #163](https://github.com/Fytala-Charles/Bosak/pull/163). CI pending at handover.
 Next: bounded while-do/do-until reference, followed by dependency traversal/partial application.
 
 # REQ-126 shipment-event sequence checks: 2026-10-11
