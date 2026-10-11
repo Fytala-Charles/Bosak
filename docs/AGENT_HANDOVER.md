@@ -1,3 +1,12 @@
+# Bosak 1.1.1 publication: 2026-10-11
+
+**Release revision:** `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`, tag [v1.1.1](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.1); documentation prerequisite PR #156 and engine/release-note PR #157 merged. User authorized commit, push and publication. All ten libraries are published via [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38139040259); public downloads verify package versions, internal dependencies, README and license, with SHA-256 records in `.guard-tmp/release111-published/verification.json`.
+**Verification:** existing final source evidence remains full isolated solution 4,103/0/0, QT3 31,142/0/679, qt4 promoted sets 8,278/0/1,894 with zero gated failures; XSLT version/evaluate sets 110/0/4 and 41/0/16. PR CI passed on retry after one timer-based cancellation regression test finished before its 1 ms timer fired. Release workflow passed. Fresh-cache public-package smoke passes four checks: 4.0 partition and grammar, 3.0 baseline and frozen-function refusal. No complete XSLT sweep is newly claimed.
+**Documentation:** README, architecture, integration, registry, compatibility dossier and patch release notes record publication. Older handover sections below are historical. Source and public packages now agree on 1.1.1. Local verification artifacts and `.sweep-baselines/` remain excluded.
+**Next:** continue REQ-126 map/array and sequence-selection reference coverage, then supplementary signatures and syntax/type/pattern coverage. REQ-126 remains In Progress; 49 registered names remain unassigned and historical adopted-specification snapshot gaps remain explicit. Braid adoption stays in its separate session.
+
+---
+
 # XSLT effective-version XPath compatibility fix: 2026-10-11
 
 **Delivery revision:** `6156a2b`; base `8fdb220` (PR #156 documentation follow-up); fix branch `fix/xslt-xpath40-runtime`. Source version is **1.1.1**, prepared but unpublished. Published 1.1.0 and Braid adoption remain unchanged. This branch builds on PR #156 rather than merging that separate documentation PR as part of the engine fix.

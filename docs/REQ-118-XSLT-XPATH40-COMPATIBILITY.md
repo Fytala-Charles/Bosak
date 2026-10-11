@@ -11,7 +11,7 @@ The routing chapter exposed a runtime defect in published Bosak 1.1.0:
 `fn:partition` calls failed XPST0017. Validation and authoring already recognized
 4.0 expressions, while actual execution rejected them.
 
-The source correction targets **1.1.1**, not yet published. An expression owned
+The correction is published in [**1.1.1**](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.1). An expression owned
 by an element whose effective XSLT version is at least 4.0 now selects frozen
 `XPathCompatibility.XPath40`. Earlier versions keep XPath31 and existing 1.0
 backwards-compatible behavior. The default public XPath compiler remains XPath31.
