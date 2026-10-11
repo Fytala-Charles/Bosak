@@ -55,15 +55,29 @@ Maps can be supplied as stylesheet parameters; see the [order-routing chapter](.
 
 ## 11. Consequences
 
-**Verified 1.1.1 differences from the reviewed draft:** `map:entries` returns an **array** of single-entry maps, while the draft specifies a **sequence** of those maps. Therefore the main example explicitly uses `map:entries($available)?*`. The `entries-boundary` probe returns `true/1/2`; the portable `map:for-each` comparison counts two sequence items. This adaptation is Bosak-specific, not portable draft syntax.
+**Source 1.1.2 correction:** `map:entries` now returns a sequence of
+single-entry maps in entry order. Empty input returns the empty sequence; a
+multi-item value remains whole inside its single-entry map. `map:items`
+concatenates the item sequences associated with entries, omitting empty values
+and retaining nested maps/arrays as items rather than recursively flattening them.
+The `entries-boundary` result is `false/2`; `items-sequence-boundary` is `3`,
+matching the portable comparisons. No `?*` adapter is needed for `map:entries`.
 
-`map:items` retains a multi-item map value as a grouped sequence value: `count(map:items(map{'FILTER-A':(12,8),'SEAL-B':0}))` is **2**, whereas draft sequence concatenation and the portable `map:for-each` comparison produce **3**. Use `map:for-each($map, function($key,$value){$value})` when item cardinality matters. Scalar-valued examples do not expose this difference. These are recorded implementation gaps; this documentation step does not correct the engine.
+**Migration from published 1.1.1:** that version returned an array from
+`map:entries` and retained grouped sequence values from `map:items`. Replace
+`map:entries($map)?*` with `map:entries($map)`, and array indexing of the entry
+result with sequence predicates such as `[2]`. Item counts now reflect the
+concatenated values. Review code that relied on the old grouped cardinality;
+portable `map:for-each` alternatives remain valid. This is a correction of the
+supported 4.0 draft contracts; default XPath31 still rejects these new names.
+Version 1.1.2 is prepared in source and not yet published. See the
+[correction dossier](../../REQ-118-MAP-RESULT-SHAPES.md).
 
 `use-any` leaves the choice implementation-defined; Bosak currently retains the first value. It is unsuitable when the business requires a specific correction to win.
 
 ## 12. Implementation
 
-Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. Source/package version stays 1.1.1. This reference work changes no engine code.
+Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. The original reference delivery changed no engine code. The later result-shape correction targets source 1.1.2; see the linked correction dossier for its regressions and gates.
 
 ## 13. Sample Code
 
@@ -76,7 +90,7 @@ Input is declared inside each expression: reduced order/product records, no docu
 let $rows := (map{'sku':'FILTER-A','stock':12}, map{'sku':'SEAL-B','stock':0}, map{'sku':'FILTER-A','stock':8}),
     $index := map:build($rows, function($row){$row?sku}, function($row){$row?stock}, map{'duplicates':'use-last'}),
     $available := map:filter($index, function($sku,$stock,$position){$stock gt 0})
-return string-join(map:entries($available)?* ! (let $entry := . return let $sku := map:keys($entry)[1] return concat($sku, '=', $entry($sku))), '|')
+return string-join(map:entries($available) ! (let $entry := . return let $sku := map:keys($entry)[1] return concat($sku, '=', $entry($sku))), '|')
 ```
 
 Expected text:
@@ -123,9 +137,9 @@ Expected text:
 | [empty-key](../examples/product-map-index/empty-key.xpath) | 40 | `0` |
 | [positions](../examples/product-map-index/positions.xpath) | 40 | `1:FILTER-A&#124;2:SEAL-B` |
 | [empty-predicate](../examples/product-map-index/empty-predicate.xpath) | 40 | `0` |
-| [items-sequence-boundary](../examples/product-map-index/items-sequence-boundary.xpath) | 40 | `2` |
+| [items-sequence-boundary](../examples/product-map-index/items-sequence-boundary.xpath) | 40 | `3` |
 | [items-baseline](../examples/product-map-index/items-baseline.xpath) | 31 | `3` |
-| [entries-boundary](../examples/product-map-index/entries-boundary.xpath) | 40 | `true/1/2` |
+| [entries-boundary](../examples/product-map-index/entries-boundary.xpath) | 40 | `false/2` |
 | [entries-baseline](../examples/product-map-index/entries-baseline.xpath) | 31 | `2` |
 
 
@@ -137,7 +151,7 @@ Build/filter traverse input records or map entries and retain output maps. Dupli
 
 [`MapBuild_DuplicatesUseLast_KeepsLastValue`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [`MapBuild_DuplicatesReject_RaisesFojs0003`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [`MapBuild_DuplicatesCombinerFunction_AppliesCombiner`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [`MapEntries_ReturnsSingleEntryMapsInOrder`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [`MapFilter_EmptyPredicateResultMeansFalse`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [`MapItems_ReturnsValuesInEntryOrder`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs).
 
-No exact-name map-build, map-entries, map-filter or map-items set is in the current GatedSets. Named unit tests and manifest cases provide the evidence here; mapping the names does not establish conformance. See the [actual gate runner](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs). Existing 1.1.1 release gate counts are historical evidence; no engine gates are rerun for this documentation slice.
+No exact-name map-build, map-entries, map-filter or map-items set is in the current GatedSets. Named unit tests and manifest cases provide the evidence here; mapping the names does not establish conformance. See the [actual gate runner](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs). The original 1.1.1 release gate counts remain historical evidence. The subsequent source-1.1.2 correction reruns engine gates separately; see its dossier. No map test set is promoted by that correction.
 
 ## 16. Related Features
 

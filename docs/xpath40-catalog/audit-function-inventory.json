@@ -530,7 +530,7 @@
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
       "catalogEntry": "functions/product-map-index.md",
-      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage; confirmed 1.1.1 result-shape difference from reviewed draft",
+      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in prepared source 1.1.2; not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -546,7 +546,7 @@
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
       "catalogEntry": "functions/product-map-index.md",
-      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage; confirmed 1.1.1 result-shape difference from reviewed draft",
+      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in prepared source 1.1.2; not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -942,5 +942,6 @@
       "matchingGatedSet": null
     }
   ],
-  "reviewedSpecificationRevision": "a014e1b408baf5614a11401d3570a04498ab76be"
+  "reviewedSpecificationRevision": "a014e1b408baf5614a11401d3570a04498ab76be",
+  "sourceCorrectionVersion": "1.1.2 (prepared, unpublished)"
 }

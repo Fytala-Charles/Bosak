@@ -4785,3 +4785,14 @@ full provenance. The audit's missing-function table links verified function sect
 **REQ-126 map/array/selection delivery (2026-10-11):** The catalog now has 41 entries and 168 executable documentation checks; 82 of 117 registered names have family entries and 35 remain unassigned. New [map indexing](xpath40-catalog/functions/product-map-index.md), [array batching](xpath40-catalog/functions/import-array-batches.md) and [sequence selection](xpath40-catalog/functions/order-sequence-selection.md) entries include real cases, complete inputs/outputs, 3.1 comparisons and 40 added checks. The [audit](xpath40-catalog/COMPLETENESS-AUDIT.md) records two confirmed 1.1.1 map result-shape gaps for a separately gated REQ-118 correction. Documentation coverage does not imply complete draft conformance. REQ-126 remains In Progress.
 
 **Delivery verification (2026-10-11):** Release build 0 warnings / 0 errors; full isolated solution **4,143/0/0**, targeted catalog **144/0/0**. All 41 entries/index links, 166 primary links/anchors, 28 baseline provenance records and 144 manifest files verified; 54 documentation pages rendered. Inline expressions/results and named tests match. Engine gates were not rerun for this documentation-only change.
+
+**REQ-118 map contract correction (source 1.1.2, 2026-10-11):**
+[Correction dossier](REQ-118-MAP-RESULT-SHAPES.md) resolves both REQ-126 findings:
+map:entries returns a sequence of single-entry maps and map:items concatenates
+entry values. Twenty-one new standard regression checks and two nested XSLT
+profile checks cover direct/dynamic calls, empty/nested values, order and XPath31
+isolation. Existing unit expectations and catalog probes deliberately change.
+No public API or gate promotion. Source 1.1.2 is prepared, not published;
+REQ-126 remains In Progress with 35 unassigned names.
+
+**Map correction final verification (2026-10-11):** source 1.1.2 prepared; full solution 4,166/0/0, QT3 31,142/0/679, qt4 promoted sets 8,278/0/1,894 with zero gated failures. Targeted map-entries 16/0/1 and map-items 15/0/0 remain exploratory. See [the correction dossier](REQ-118-MAP-RESULT-SHAPES.md) and [prepared patch notes](RELEASE-NOTES-1.1.2.md).

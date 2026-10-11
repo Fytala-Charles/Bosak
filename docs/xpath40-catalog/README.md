@@ -141,13 +141,13 @@ from fully documented signatures; the catalog remains In Progress.
 
 | Feature | Tier | Delivery / evidence |
 |---|---|---|
-| [Product indexing with maps](functions/product-map-index.md) | Frozen 4.0; documented result-shape differences | [#84](https://github.com/Fytala-Charles/Bosak/pull/84); 15 exact examples and named unit tests |
+| [Product indexing with maps](functions/product-map-index.md) | Frozen 4.0; source-1.1.2 result-shape correction | [#84](https://github.com/Fytala-Charles/Bosak/pull/84); 15 exact examples and named unit tests |
 | [Import batches with arrays](functions/import-array-batches.md) | Frozen 4.0 | [#84](https://github.com/Fytala-Charles/Bosak/pull/84); 11 exact examples and named unit tests |
 | [Order-export sequence selection](functions/order-sequence-selection.md) | Frozen 4.0 | [#82](https://github.com/Fytala-Charles/Bosak/pull/82); 14 exact examples and named unit tests |
 
 These entries include complete synthetic inputs, exact output text, 3.1
-comparisons and edge contracts. The map entry explicitly distinguishes 1.1.1
-behavior from the pinned draft. Current coverage is **144 feature checks plus
+comparisons and edge contracts. The map entry distinguishes published 1.1.1 behavior from the corrected
+source-1.1.2 sequence contracts and the pinned draft. Current coverage is **144 feature checks plus
 24 worked-chapter checks (168 total)**. See the [audit](COMPLETENESS-AUDIT.md)
 for the 35 remaining unassigned registered names and engine follow-up findings.
 

@@ -742,4 +742,16 @@ The [compatibility correction](REQ-118-XSLT-XPATH40-COMPATIBILITY.md) selects fr
 
 ## Map/array and sequence-selection reference coverage
 
-The catalog now has 41 entries and 168 executable documentation checks; 82 of 117 registered names have family entries and 35 remain unassigned. New [map indexing](xpath40-catalog/functions/product-map-index.md), [array batching](xpath40-catalog/functions/import-array-batches.md) and [sequence selection](xpath40-catalog/functions/order-sequence-selection.md) entries include real cases, complete inputs/outputs, 3.1 comparisons and 40 added checks. The [audit](xpath40-catalog/COMPLETENESS-AUDIT.md) records two confirmed 1.1.1 map result-shape gaps for a separately gated REQ-118 correction. Documentation coverage does not imply complete draft conformance.
+The catalog now has 41 entries and 168 executable documentation checks; 82 of 117 registered names have family entries and 35 remain unassigned. New [map indexing](xpath40-catalog/functions/product-map-index.md), [array batching](xpath40-catalog/functions/import-array-batches.md) and [sequence selection](xpath40-catalog/functions/order-sequence-selection.md) entries include real cases, complete inputs/outputs, 3.1 comparisons and 40 added checks. The [audit](xpath40-catalog/COMPLETENESS-AUDIT.md) records two confirmed 1.1.1 map result-shape gaps, corrected by the separately gated source-1.1.2 REQ-118 slice. Documentation coverage does not imply complete draft conformance.
+
+## Map result sequence correction (source 1.1.2)
+
+[REQ-118 correction](REQ-118-MAP-RESULT-SHAPES.md): `map:entries` now returns a
+sequence of single-entry maps, including an empty sequence for an empty map.
+`map:items` concatenates entry value sequences, omitting empty values while
+retaining nested maps/arrays as items. Entry order and complete values inside
+single-entry maps are preserved. Replace 1.1.1's `map:entries($map)?*` adapter
+with a direct call, and array indexing of that result with sequence predicates.
+Default XPath31 refusal and dynamic lookup isolation remain enforced, including
+after nested stylesheet calls. No public API is added. Source 1.1.2 is prepared
+but unpublished; published 1.1.1 still has the documented prior shapes.

@@ -1,3 +1,13 @@
+# REQ-118 map result-shape correction: 2026-10-11
+
+**Base:** map/array/selection delivery `e6a1ee45` + handover `da556a9d`; prerequisite PR #159 is merged at `7b270bbf`. Fix branch `fix/map-result-shapes`. Source version is 1.1.2, prepared but unpublished; public packages remain 1.1.1.
+**What was built:** map:entries signature/result changes from Array to Sequence, preserving one single-entry map per entry and complete value sequences. map:items concatenates entry value sequences, skips empty values and retains nested maps/arrays as items. Existing two unit assertions and catalog main/boundary probes now assert corrected contracts. Twenty-one new standard checks plus two nested-XSLT checks cover direct/dynamic calls, empty/nested values, order, sequence equivalence and default XPath31 isolation/caller restoration. No API or gate promotion.
+**Source/evidence:** correction dossier pins QT4CG F&O source `a014e1b408baf5614a11401d3570a04498ab76be`; original delivery #84 `f7f55b4e`. Published 1.1.1 array/grouping behavior remains documented for migration; remove map:entries ?* adapters and replace array lookup of that result with sequence predicates. Source/header histories and canonical documentation synchronized.
+**Verification:** final incremental Release build 0 warnings / 0 errors (initial rebuild: 12 existing warnings). Full isolated solution 4,166/0/0 across ten assemblies (Standard 1,303; XSLT 1,299). New standard checks 21/0/0; catalog + nested-map checks 146/0/0. QT3 exactly 31,142/0/679; qt4 promoted sets 8,278/0/1,894, zero gated/exploratory failures, 11 experimental-level passes. Targeted map-entries 16/0/1 (unsupported dependency), map-items 15/0/0; both remain exploratory. 41 entries/index links, 166 primary links/anchors, 28 baseline provenance rows and 144 manifest files checked; 54 catalog pages plus correction/patch notes rendered. No complete XSLT sweep is claimed. Logs `.guard-tmp/map-shapes-*`; local artifacts remain excluded.
+**Next:** review/merge this focused correction; source 1.1.2 patch notes are prepared for release. Then continue equality/subsequence and higher-order catalog families; REQ-126 remains In Progress with 35 unassigned names. Braid adoption is separate.
+
+---
+
 # REQ-126 map/array and sequence-selection coverage: 2026-10-11
 
 **Delivery revision:** `e6a1ee45`; base `09e678f30b0e655ed619c8d5440350984cd20b02`; branch `docs/req126-map-array-selection`. Published/source engine stays 1.1.1 (`d35cf1d4`); this delivery changes documentation and exact example fixtures only.

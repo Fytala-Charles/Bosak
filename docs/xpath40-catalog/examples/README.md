@@ -61,6 +61,8 @@ Read [product indexing](../functions/product-map-index.md),
 [sequence selection](../functions/order-sequence-selection.md) for 40 additional
 checks. Their complete expressions declare all synthetic input inline.
 Comparisons at mode 31 explain exactly which behavior agrees and which differs.
-The map result-shape probes preserve observed 1.1.1 behavior: `map:entries`
-returns an array and `map:items` retains grouped multi-item values. They are
-implementation-gap evidence, not assertions of draft conformance.
+The map result-shape probes now verify corrected source-1.1.2 contracts:
+`map:entries` returns a sequence and `map:items` concatenates value items. The
+[entry](../functions/product-map-index.md) retains the published-1.1.1 differences
+and migration guidance. These checks verify the illustrated contracts, not
+complete draft conformance.
