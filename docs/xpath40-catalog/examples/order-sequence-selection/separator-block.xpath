@@ -1,0 +1,1 @@
+string-join(insert-separator(('ORD-101','ORD-102'), ('|','CHECK','|')), '')

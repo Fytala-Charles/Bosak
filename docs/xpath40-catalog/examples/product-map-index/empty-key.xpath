@@ -1,0 +1,1 @@
+map:size(map:build(map{'sku':''}, function($r){if ($r?sku ne '') then $r?sku else ()}))

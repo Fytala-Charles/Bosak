@@ -1,40 +1,40 @@
 {
   "auditDate": "2026-10-11",
-  "sourceRevision": "17f9cc7c8dad3f0ce382024ac2ab87c38c7178f0",
-  "enginePackageVersion": "1.1.0",
-  "engineRevision": "6c2a867cbc7587922cb3973a7505746116caa54c",
+  "sourceRevision": "09e678f30b0e655ed619c8d5440350984cd20b02",
+  "enginePackageVersion": "1.1.1",
+  "engineRevision": "d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50",
   "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
   "functionNames": [
     {
       "name": "array:build",
       "namespace": "http://www.w3.org/2005/xpath-functions/array",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "array-build"
     },
     {
       "name": "array:empty",
       "namespace": "http://www.w3.org/2005/xpath-functions/array",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
       "name": "array:items",
       "namespace": "http://www.w3.org/2005/xpath-functions/array",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "array-items"
     },
     {
       "name": "array:slice",
       "namespace": "http://www.w3.org/2005/xpath-functions/array",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "array-slice"
     },
     {
@@ -225,8 +225,8 @@
       "name": "fn:foot",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-foot"
     },
     {
@@ -281,8 +281,8 @@
       "name": "fn:insert-separator",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-insert-separator"
     },
     {
@@ -297,8 +297,8 @@
       "name": "fn:items-at",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-items-at"
     },
     {
@@ -393,8 +393,8 @@
       "name": "fn:replicate",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-replicate"
     },
     {
@@ -417,8 +417,8 @@
       "name": "fn:slice",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -497,8 +497,8 @@
       "name": "fn:trunk",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-trunk"
     },
     {
@@ -521,32 +521,32 @@
       "name": "map:build",
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
       "name": "map:entries",
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage; confirmed 1.1.1 result-shape difference from reviewed draft",
       "matchingGatedSet": null
     },
     {
       "name": "map:filter",
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
       "name": "map:items",
       "namespace": "http://www.w3.org/2005/xpath-functions/map",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage; confirmed 1.1.1 result-shape difference from reviewed draft",
       "matchingGatedSet": null
     },
     {
@@ -941,5 +941,6 @@
       "assessment": "Family entry exists; signatures/forms and evidence still need review",
       "matchingGatedSet": null
     }
-  ]
+  ],
+  "reviewedSpecificationRevision": "a014e1b408baf5614a11401d3570a04498ab76be"
 }

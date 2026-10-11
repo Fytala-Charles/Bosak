@@ -1,0 +1,1 @@
+array:empty(array:slice(['ORD-101','ORD-102'], 8, 10))

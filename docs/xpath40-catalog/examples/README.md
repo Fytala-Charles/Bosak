@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 104 named checks. Each points to a complete
+The [case manifest](cases.json) contains 144 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -23,7 +23,7 @@ uses public compiler/evaluation APIs and verifies the declared outcomes.
 | `40` | Explicit `XPathCompatibility.XPath40`; successful cases also verify refusal in the default mode. |
 | `experimental` | Explicit `XPathCompatibility.XPath40Experimental`; successful cases verify refusal at both lower modes. |
 | `xslt31` | Complete standard XSLT 3.0 baseline, paired with its declared XML input. |
-| `xslt40` | Complete version="4.0" stylesheet demonstrating a Bosak-supported draft instruction; embedded expressions use XPath 3.1. |
+| `xslt40` | Complete version="4.0" stylesheet demonstrating a Bosak-supported draft instruction; effective-version expressions use frozen XPath40 in 1.1.1; local earlier-version overrides retain XPath31. |
 
 XPath files declare their synthetic input inline and require no external variables,
 namespaces, or document focus. XSLT files declare their namespaces and use the
@@ -53,3 +53,14 @@ do not change GatedSets or imply standards-level compatibility for every draft
 surface. See the [catalog index](../README.md) for feature entries.
 
 The new sequence/HOF and decision examples complement the [order-routing chapter](../worked-examples/order-routing/README.md), which uses an XML document context and a host-supplied plan rather than the context-free manifest runner.
+
+## Indexing, batches and export selections
+
+Read [product indexing](../functions/product-map-index.md),
+[array batches](../functions/import-array-batches.md) and
+[sequence selection](../functions/order-sequence-selection.md) for 40 additional
+checks. Their complete expressions declare all synthetic input inline.
+Comparisons at mode 31 explain exactly which behavior agrees and which differs.
+The map result-shape probes preserve observed 1.1.1 behavior: `map:entries`
+returns an array and `map:items` retains grouped multi-item values. They are
+implementation-gap evidence, not assertions of draft conformance.

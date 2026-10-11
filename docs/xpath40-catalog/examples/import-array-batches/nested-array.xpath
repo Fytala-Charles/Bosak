@@ -1,0 +1,1 @@
+let $items := array:items([('FILTER-A','SEAL-B'), ['VALVE-C','HOSE-D']]) return concat(count($items), '/', $items[3] instance of array(*))

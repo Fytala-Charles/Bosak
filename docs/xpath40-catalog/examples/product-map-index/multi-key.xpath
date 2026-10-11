@@ -1,0 +1,1 @@
+let $m := map:build(map{'sku':'FILTER-A','alias':'SUP-42'}, function($r){($r?sku,$r?alias)}, function($r){$r?sku}) return concat(map:size($m), '/', $m('SUP-42'))

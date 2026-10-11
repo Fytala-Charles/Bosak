@@ -1,0 +1,1 @@
+map:size(map:filter(map{'FILTER-A':8}, function($k,$v){()}))

@@ -1,0 +1,1 @@
+concat(count(slice((),2,4)), '/', count(replicate((),2)), '/', count(foot(())), '/', count(trunk(())), '/', count(insert-separator((), '|')), '/', count(items-at((),1)))

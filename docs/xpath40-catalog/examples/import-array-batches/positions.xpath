@@ -1,0 +1,1 @@
+string-join(array:items(array:build(('ORD-101','ORD-102'), function($id,$position){concat($position, ':', $id)})), '|')

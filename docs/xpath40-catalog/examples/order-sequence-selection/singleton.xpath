@@ -1,0 +1,1 @@
+concat(foot('ORD-101'), '/', count(trunk('ORD-101')), '/', string-join(insert-separator('ORD-101', '|'), ''))

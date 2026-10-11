@@ -1,0 +1,4 @@
+let $orders := (map{'id':'ORD-101','lines':('FILTER-A','SEAL-B')}, map{'id':'ORD-102','lines':('VALVE-C')}, map{'id':'ORD-103','lines':('HOSE-D','CLIP-E')}),
+    $members := fold-left($orders, [], function($array,$order){array:append($array,$order?lines)}),
+    $batch := array:subarray($members, 1, 2)
+return concat('orders=', array:size($batch), ';lines=', string-join($batch?*, ','))
