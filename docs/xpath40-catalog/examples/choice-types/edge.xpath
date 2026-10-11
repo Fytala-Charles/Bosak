@@ -1,0 +1,2 @@
+(: Synthetic Choice item types case; compatibility 40; no external context required. :)
+ xs:decimal('12.5') instance of (xs:integer|xs:string)

@@ -1,0 +1,2 @@
+(: Synthetic Map entry iteration case; compatibility 40; no external context required. :)
+string-join(sort(for key $sku value $quantity in map { 'FILTER-A': 2, 'BOLT-M8': 5 } return $sku || '=' || $quantity), ',')

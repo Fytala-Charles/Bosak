@@ -1,0 +1,2 @@
+(: Synthetic Otherwise operator case; compatibility 40; no external context required. :)
+string-length('' ?? 'No purchase order')

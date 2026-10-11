@@ -86,6 +86,11 @@ Files: `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (1.74), `src/Bosak.XPath.Pars
 
 ## 13. Sample Code
 
+Additional executable catalog cases unpack invoice metadata and explicitly test
+a missing currency key: [main](../examples/destructuring-let/main.xpath) produces
+`INV-1042 / EUR`; [edge](../examples/destructuring-let/edge.xpath) returns missing
+currency cardinality `0`. These run at `XPath40` and verify default-mode refusal.
+
 Start with [the invoice chapter's practical migration pair](../worked-examples/invoice-to-erp/README.md#where-xpath-40-can-improve-readability): unpack invoice ID and currency from a metadata map to build a display label. Both complete expressions are supplied, engine-verified, and produce `INV-2026-1042 / EUR`. The 4.0 form requires explicit opt-in. The probes below cover the individual binding shapes.
 
 ~~~xquery

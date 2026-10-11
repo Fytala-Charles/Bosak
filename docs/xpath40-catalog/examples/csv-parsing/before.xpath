@@ -1,0 +1,2 @@
+(: 3.1 baseline delegates real CSV parsing to the host; this already parsed row is synthetic. :)
+let $row := ['FILTER,BLUE', '12'] return $row?1 || ' / ' || $row?2

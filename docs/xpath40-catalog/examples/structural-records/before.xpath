@@ -1,0 +1,2 @@
+let $invoice := map { 'invoiceId': 'INV-1042', 'currency': 'EUR' }
+return if (map:contains($invoice, 'invoiceId') and map:contains($invoice, 'currency')) then $invoice?currency else error()

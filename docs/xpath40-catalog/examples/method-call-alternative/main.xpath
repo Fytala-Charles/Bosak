@@ -1,0 +1,2 @@
+(: Synthetic Deferred method-call alternative case; compatibility 31; no external context required. :)
+array:size(['FILTER-A', 'BOLT-M8'])

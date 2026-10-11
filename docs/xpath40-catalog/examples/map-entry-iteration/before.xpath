@@ -1,0 +1,2 @@
+let $stock := map { 'FILTER-A': 2, 'BOLT-M8': 5 }
+return string-join(sort(for $sku in map:keys($stock) return $sku || '=' || $stock($sku)), ',')

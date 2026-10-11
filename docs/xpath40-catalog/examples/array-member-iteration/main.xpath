@@ -1,0 +1,2 @@
+(: Synthetic Array member iteration case; compatibility 40; no external context required. :)
+string-join((for member $parcel in [('FILTER-A','BOLT-M8'), 'MANUAL'] return string(count($parcel))), ',')

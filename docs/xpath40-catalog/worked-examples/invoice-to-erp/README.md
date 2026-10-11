@@ -141,4 +141,4 @@ Both return `INV-2026-1042 / EUR`. The latter must be compiled through `XPath31E
 
 Before adapting this to an ERP, define duplicate-ID handling, supported currencies and amount scales, discount/credit-note semantics, schema validation, and the required rounding policy. Add a fixture for each agreed rule and pin the expected output. The stylesheet should express that contract, and the host should enforce how rejected data is routed.
 
-Next planned chapter: publish an XML manual as HTML while preserving mixed content, links, and a table of contents. See the [chapter plan](../README.md) and [catalog index](../../README.md).
+Continue with [the XML-manual publishing chapter](../manual-to-html/README.md), which preserves mixed content, links, and a table of contents, then [order reconciliation](../order-reconciliation/README.md). See the [chapter plan](../README.md) and [catalog index](../../README.md).

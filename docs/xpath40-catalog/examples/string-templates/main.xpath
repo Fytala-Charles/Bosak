@@ -1,0 +1,2 @@
+(: Synthetic String templates case; compatibility 40; no external context required. :)
+let $id := 'INV-1042', $currency := 'EUR' return `Invoice {$id} ({$currency})`

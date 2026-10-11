@@ -1,0 +1,2 @@
+(: Synthetic JNode navigation case; compatibility 40; no external context required. :)
+fn:jvalue(fn:jtree(map { 'shipping': map { 'city': 'Utrecht' } })/"shipping"/"city")

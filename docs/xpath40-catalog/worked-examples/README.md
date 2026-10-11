@@ -12,10 +12,10 @@ Start with a business problem and follow the transformation from input to expect
 | Chapter | Status | What it teaches |
 |---|---|---|
 | [Supplier invoices to ERP XML](invoice-to-erp/README.md) | Implemented; executable fixtures and tests supplied | Namespaces, selection, templates, optional fields, decimal calculations, grouping, exception output; a separate 3.1/4.0 migration pair. |
-| XML manual to HTML | Planned | Mixed content, template modes, stable heading IDs, internal links, table of contents, and missing-link detection. |
-| Order reconciliation report | Planned | Customer/product grouping, lookup joins, missing reference data, and report/exception separation. |
+| [XML manual to HTML](manual-to-html/README.md) | Implemented; fixtures and three checks | Mixed content, template modes, stable heading IDs, internal links, table of contents, and missing-link detection. |
+| [Order reconciliation report](order-reconciliation/README.md) | Implemented; fixtures and three checks | Customer/product grouping, lookup joins, missing reference data, and report/exception separation. |
 
-The publishing chapter comes next. Its proposed fixtures include nested sections, inline emphasis, cross-references, and a broken reference. Its verification should inspect generated HTML structure and links, including text order around inline elements. It will establish the template-oriented counterpart to the invoice mapping chapter.
+The three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 81 focused checks, including earlier-version baselines and compatibility refusals.
 
 ## Worked-example contract
 
@@ -31,4 +31,4 @@ The executable files are part of the teaching material. XSLT files carry a
 standalone input/output contract, a change history, documented helper edge cases,
 and template preconditions. Follow the [applicable XSLT comment conventions](../../XSLT_STYLE_GUIDE.md).
 
-The invoice chapter is the first complete worked case. Existing feature-entry syntax snippets remain useful reference probes; converting the remaining entries into worked cases is still REQ-126 work. The book and catalog are not complete.
+All three planned chapters are supplied and executable. The catalog has practical cases for its 28 current entries, but the wider inventory of shipped functions and deferred decisions remains incomplete; REQ-126 stays in progress.

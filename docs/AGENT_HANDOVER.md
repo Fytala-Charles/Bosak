@@ -1,3 +1,13 @@
+# Worked chapters and catalog expansion: 2026-10-11
+
+**Base commit:** `3ae1aa6` (annotated invoice chapter, PR #152). Continuing the same reference-guide branch.
+**What was built:** XML-manual-to-HTML and order reconciliation chapters with fully documented stylesheets, complete/incomplete inputs and expected outputs, and six checks; 24 new catalog entries, making 28 in total; 81 manifest-driven feature/edge/migration checks. New cases cover syntax, function families, types, JNodes, XSLT instructions, experimental scan, and stable/rejected alternatives. The invoice tests retain seven checks, so chapter coverage is 13 checks and combined documentation coverage is 94.
+**Verified so far:** Release solution build 0 errors; both new chapter fixture suites 6/6; catalog suite 81/81, including 24 earlier-version baselines and the stock-ledger fold comparison. Full solution passes: 4,039 passed / 0 failed / 0 skipped across 10 projects (XSLT 1,193); 94 documentation checks in total. README/catalog/chapter HTML rendering passes. Logs: `.guard-tmp/catalog-expansion-*.log`, `.guard-tmp/catalog-examples.log`, `.guard-tmp/other-worked-examples.log`. Local links, XML structure, XSLT headers, and all 16-field entries pass structural checks.
+**Findings corrected:** scan returns a sequence of single-member arrays without an outer array; mapping arrow applies once per item. Seed text and example results are corrected without engine changes. Negative/deferred examples claim no new syntax support. Version 4.0 instruction samples are labeled separately from portable 3.0 chapters.
+**Remaining:** REQ-126 stays In Progress for full shipped-function and deferred-shape inventory, precise per-delivery/spec/conformance traceability, and additional syntax forms. No engine source, conformance gate membership, Braid dependency, or production preview behavior changes in this step.
+
+---
+
 # Annotated invoice stylesheet — 2026-10-11
 
 **Base commit:** `da0c11c` (invoice chapter, PR #152).

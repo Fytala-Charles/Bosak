@@ -1,0 +1,2 @@
+(: Synthetic Running stock balance case; compatibility experimental; no external context required. :)
+let $states := fn:scan((), 100, function($balance, $movement) { $balance + $movement }) return string-join($states ! string(array:get(., 1)), ',')

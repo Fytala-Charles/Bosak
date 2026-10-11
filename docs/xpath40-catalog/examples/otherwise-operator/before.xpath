@@ -1,0 +1,1 @@
+let $reference := () return if (exists($reference)) then $reference else 'No purchase order'

@@ -13,6 +13,11 @@
 > under `docs/xpath40-catalog/worked-examples/invoice-to-erp/` and are verified by
 > `InvoiceReferenceGuideTests` in `tests/Bosak.Xslt.Tests/Documentation/`.
 > Bosak's local coding and documentation obligations are in [AGENTS.md](../AGENTS.md).
+>
+> The three worked chapters use portable XSLT 3.0 / XPath 3.1. Catalog instruction
+> comparisons additionally include explicitly labeled version="4.0" draft examples
+> and version="3.0" baselines. That declared compatibility is intentional; the
+> Exslt-only version rule below is not a ban on documenting implemented 4.0 surfaces.
 
 > **Kind:** Working companion — Last updated: 2026-10-06
 > Rules for every stylesheet comment and test fixture in this repository.

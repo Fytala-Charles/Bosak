@@ -12,7 +12,7 @@
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The current four seed entries establish the structure; they do not yet constitute a complete guide.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 28 entries and three worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -29,7 +29,7 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 ## Start with a worked chapter
 
-[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. The [chapter plan](worked-examples/README.md) records XML-manual publishing as the next case.
+[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 81 focused catalog cases and migration baselines.
 
 ## 1. How to read this catalog
 
@@ -76,39 +76,73 @@ The 3.1 default is untouched by every tier: consumers on `XPath31` see zero chan
 
 ## 2. Index
 
-### Operators & syntax
-| Feature | File | Tier | Spec | Since | Supersedes |
-|---------|------|------|------|-------|------------|
-| Destructuring `let` | [operators-and-syntax/destructuring-let.md](operators-and-syntax/destructuring-let.md) | Frozen 4.0 | XPath 4.0 §4.14 | 1.1.0-dev (PR #129) | positional `$seq[1]` / `map:get` idioms |
+28 entries now include practical cases or stable alternatives. The [81-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
+
+### Operators and syntax
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [Destructuring let](operators-and-syntax/destructuring-let.md) | Frozen 4.0 | REQ-123 / PR #129 |
+| [Method-call operator](operators-and-syntax/method-call-operator.md) | Deferred | REQ-118 deferred surface |
+| [Otherwise operator](operators-and-syntax/otherwise-operator.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Pipeline operator](operators-and-syntax/pipeline-operator.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Mapping arrow](operators-and-syntax/mapping-arrow.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Keyword arguments](operators-and-syntax/keyword-arguments.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [String templates](operators-and-syntax/string-templates.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Array member iteration](operators-and-syntax/array-member-iteration.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Map entry iteration](operators-and-syntax/map-entry-iteration.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Focus-based constructors](operators-and-syntax/focus-functions.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 
 ### Functions
-*(to be distilled — fn:scan seeded below; fn:atomic-equal, fn:sort-with, CSV, element↔map, JNode accessors pending)*
 
-| Feature | File | Tier | Spec | Since | Supersedes |
-|---------|------|------|------|-------|------------|
-| `fn:scan` | [experimental/fn-scan.md](experimental/fn-scan.md) | Experimental | F&O 4.0 §2.5.15 | 1.1.0-dev (REQ-123 S1) | hand-threaded fold state |
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [CSV parsing](functions/csv-parsing.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Element-to-map conversion](functions/element-to-map.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Map-to-element conversion](functions/map-to-element.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Atomic equality](functions/atomic-equal.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Comparator-based sorting](functions/sort-with.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 
 ### Type system
-*(to be distilled — enums, choice item types, structural records, §3.4.2 coercion pending)*
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [Enumeration types](type-system/enum-types.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Choice item types](type-system/choice-types.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Structural record types](type-system/structural-records.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Typed let coercion](type-system/typed-let-coercion.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 
 ### Data model
-*(to be distilled — JNode pending)*
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [JNode navigation](data-model/jnode-navigation.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 
 ### XSLT instructions
-*(to be distilled — `xsl:note`, `xsl:if` then/else, `xsl:array`, `xsl:switch`, separators, `xsl:map` select/duplicates pending)*
 
-### Deferred
-| Feature | File | Spec | Reason |
-|---------|------|------|--------|
-| Method-call operator `=?>` | [operators-and-syntax/method-call-operator.md](operators-and-syntax/method-call-operator.md) | XPath 4.0 §4.22.3 | Semantics changed 2026-06-25 (Issue 2219); do not build yet |
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [xsl:note](xslt-instructions/xsl-note.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [xsl:if then/else](xslt-instructions/xsl-if.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Instruction separators](xslt-instructions/instruction-separators.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [xsl:map selection and duplicate policy](xslt-instructions/xsl-map.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [xsl:array and xsl:array-member](xslt-instructions/xsl-array.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [xsl:switch](xslt-instructions/xsl-switch.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
+
+### Experimental
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [fn:scan](experimental/fn-scan.md) | Experimental | REQ-123 S1 |
 
 ### Rejected / superseded
-| Feature | File | Disposition |
-|---------|------|-------------|
-| Mapping arrow `=>>` | [rejected/mapping-arrow-gtgt.md](rejected/mapping-arrow-gtgt.md) | Renamed to `=!>` before stabilization; Bosak never shipped the old shape |
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [Mapping arrow =>>](rejected/mapping-arrow-gtgt.md) | Rejected / renamed | REQ-118 syntax audit |
 
 ## 3. Benchmark provenance
 
 Measured performance claims in this catalog must cite `benchmarks/Bosak.Benchmarks` (BenchmarkDotNet) output and carry the git revision + measurement date. Qualitative cost classes (zero-cost desugar / constant overhead / hot-path relevant) need no citation but must be stated as expectations, not measurements. See field 14 contract in §1.1.
 
-*Last updated: 2026-10-11: first invoice chapter and seven executable checks supplied; book-style reading path and publishing chapter plan recorded. Feature coverage remains incomplete.*
+*Last updated: 2026-10-11: three complete worked chapters; 28 catalog entries; 81 catalog checks plus 13 chapter checks. Remaining feature inventory is still in progress.*

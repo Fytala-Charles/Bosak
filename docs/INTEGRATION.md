@@ -2745,3 +2745,13 @@ rounding policy, helper edge cases, and template preconditions directly in XML
 comments. Its annotated source can be read independently of the chapter. The
 [XSLT style guide](XSLT_STYLE_GUIDE.md) identifies the adopted conventions and
 separates Bosak.Exslt-specific paths and tier rules from Bosak's fixture setup.
+
+The [manual publishing chapter](xpath40-catalog/worked-examples/manual-to-html/README.md)
+shows template modes, mixed-content preservation, stable anchors, and visible
+missing references. The [order reconciliation chapter](xpath40-catalog/worked-examples/order-reconciliation/README.md)
+shows explicit-document key lookups, nested grouping, outstanding/over-shipped
+units, and partial-data exception handling. Both remain XSLT 3.0 / XPath 3.1.
+The [catalog example runner](xpath40-catalog/examples/README.md) supplies 81
+independent compatibility/result checks; its 4.0 and experimental cases require
+their declared levels. Transformation success alone does not approve partial
+business reports or pages containing editorial defects.

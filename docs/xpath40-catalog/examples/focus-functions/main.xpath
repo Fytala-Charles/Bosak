@@ -1,0 +1,2 @@
+(: Synthetic Focus-based constructors case; compatibility 40; no external context required. :)
+string-join(('12', '5') ! xs:integer() ! string(.), ',')

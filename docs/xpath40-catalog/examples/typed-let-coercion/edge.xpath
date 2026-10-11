@@ -1,0 +1,2 @@
+(: Synthetic Typed let coercion case; compatibility 40; no external context required. :)
+let $code as xs:integer := 2.5 return $code

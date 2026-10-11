@@ -1,0 +1,2 @@
+(: Synthetic Rejected mapping spelling case; compatibility 40; no external context required. :)
+(' FILTER-A ') =>> normalize-space()

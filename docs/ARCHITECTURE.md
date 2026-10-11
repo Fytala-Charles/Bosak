@@ -718,3 +718,12 @@ The published NuGet package will likely be a single `Bosak.XPath` assembly (prod
 ### Executable reference-guide examples (REQ-126)
 
 The [invoice chapter](xpath40-catalog/worked-examples/invoice-to-erp/README.md) uses the existing public compiler/capture pipeline without engine changes. `Bosak.Xslt.Tests` copies the published XML/XSLT/XPath assets into its test output and verifies those exact files through `InvoiceReferenceGuideTests`. Chapter evidence supplements feature/conformance evidence; it does not promote new 4.0 surfaces or claim completion of the catalog. A separate XPath compilation with `XPathCompatibility.XPath40` verifies the optional migration example.
+
+The publishing and reconciliation chapters use the same public pipeline through
+`WorkedExampleTests`. `CatalogExampleTests` executes 81 published cases and
+earlier-version baselines with explicit compatibility/result/error expectations.
+Fixtures are copied from the documentation tree into test output; engine source
+and conformance gate membership are unchanged. Publishing comparisons retain
+mixed-content whitespace, while business XML comparisons ignore lexical namespace
+declaration placement. The HTML fixture comparison is limited to these authored
+pages, not a general HTML parser.
