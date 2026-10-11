@@ -1340,5 +1340,180 @@
     "mode": "40",
     "file": "ordered-queue-prefix/drop-early-stop.xpath",
     "expected": "ORD102,ORD103"
+  },
+  {
+    "id": "bounded-retries-while-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-main.xpath",
+    "expected": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted"
+  },
+  {
+    "id": "bounded-retries-until-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-main.xpath",
+    "expected": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted"
+  },
+  {
+    "id": "bounded-retries-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "bounded-retries/baseline.xpath",
+    "expected": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted"
+  },
+  {
+    "id": "bounded-retries-while-exhausted",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-exhausted.xpath",
+    "expected": "status=pending; attempts=3; exhausted=true; trace=pending,pending,pending"
+  },
+  {
+    "id": "bounded-retries-while-one-attempt",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-one-attempt.xpath",
+    "expected": "status=pending; attempts=1; exhausted=true; trace=pending"
+  },
+  {
+    "id": "bounded-retries-while-zero-budget",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-zero-budget.xpath",
+    "expected": "status=pending; attempts=0; exhausted=true; trace="
+  },
+  {
+    "id": "bounded-retries-while-missing-status",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-missing-status.xpath",
+    "expected": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted"
+  },
+  {
+    "id": "bounded-retries-until-exhausted",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-exhausted.xpath",
+    "expected": "status=pending; attempts=3; exhausted=true; trace=pending,pending,pending"
+  },
+  {
+    "id": "bounded-retries-until-one-attempt",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-one-attempt.xpath",
+    "expected": "status=pending; attempts=1; exhausted=true; trace=pending"
+  },
+  {
+    "id": "bounded-retries-until-zero-budget",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-zero-budget.xpath",
+    "expected": "status=pending; attempts=0; exhausted=true; trace="
+  },
+  {
+    "id": "bounded-retries-until-missing-status",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-missing-status.xpath",
+    "expected": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted"
+  },
+  {
+    "id": "bounded-retries-while-initially-accepted",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-initially-accepted.xpath",
+    "expected": "status=accepted; attempts=0; exhausted=false; trace="
+  },
+  {
+    "id": "bounded-retries-until-initially-accepted",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-initially-accepted.xpath",
+    "expected": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted"
+  },
+  {
+    "id": "bounded-retries-while-empty-decision",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-empty-decision.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "bounded-retries-until-empty-decision",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-empty-decision.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "bounded-retries-until-empty-state",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-empty-state.xpath",
+    "expected": "1,2"
+  },
+  {
+    "id": "bounded-retries-while-sequence-state",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-sequence-state.xpath",
+    "expected": "1,2,3,4"
+  },
+  {
+    "id": "bounded-retries-while-nonboolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-nonboolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "bounded-retries-while-noncallable-action",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-noncallable-action.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "bounded-retries-while-noncallable-predicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-noncallable-predicate.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "bounded-retries-while-action-error",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/while-action-error.xpath",
+    "error": "ATTEMPT"
+  },
+  {
+    "id": "bounded-retries-until-nonboolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-nonboolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "bounded-retries-until-noncallable-action",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-noncallable-action.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "bounded-retries-until-noncallable-predicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-noncallable-predicate.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "bounded-retries-until-action-error",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "bounded-retries/until-action-error.xpath",
+    "error": "ATTEMPT"
   }
 ]

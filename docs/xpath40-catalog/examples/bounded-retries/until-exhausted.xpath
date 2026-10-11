@@ -1,0 +1,11 @@
+let $responses := parse-xml('<submission id="INV-2048"><response status="pending"/><response status="pending"/><response status="pending"/></submission>')/submission/response
+let $limit := 3
+let $initial := map {'attempts': 0, 'status': 'pending', 'trace': ()}
+let $advance := function($state, $position) {
+  let $status := string(($responses[$position]/@status, 'pending')[1])
+  return map {'attempts': $state?attempts + 1,
+              'status': $status,
+              'trace': ($state?trace, $status)}
+}
+let $final := if ($limit le 0) then $initial else do-until($initial, $advance, function($state, $position) { $state?status eq 'accepted' or $state?attempts ge $limit })
+return concat('status=', $final?status, '; attempts=', $final?attempts, '; exhausted=', $final?status ne 'accepted' and $final?attempts ge $limit, '; trace=', string-join($final?trace, ','))
