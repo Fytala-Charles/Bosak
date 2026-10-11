@@ -9,7 +9,9 @@
 
 ## 1. Name and Classification
 
-**Method-call operator `=?>`** — **Deferred** (deliberately not implemented). Spec: XPath 4.0 §4.22.3 (operator summary), qt4cg Issue 2219. Deferral recorded: REQ-118 dossier §1.2 "Still moving — do NOT build yet" (semantics changed 25 June 2026).
+**Method-call operator `=?>`** — **Deferred** (deliberately not implemented). Spec: XPath 4.0 §4.22.3 (operator summary), [QT4CG issue #2219](https://github.com/qt4cg/qtspecs/issues/2219). Deferral recorded: REQ-118 dossier §1.2 "Still moving — do NOT build yet" (semantics changed 25 June 2026).
+
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: methods and method calls](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
 ## 2. Intent
 

@@ -11,9 +11,16 @@
 
 **Mapping arrow, original spelling `=>>`** — **Rejected–Superseded**. Bosak never shipped this spelling; the engine implemented the renamed form directly. Disposition recorded: REQ-118 dossier §1.2 "Deliberately rejected / renamed (do not implement old shapes)".
 
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: accepted mapping-arrow syntax](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
 ## 2. Intent
 
-(Of the accepted feature this spelling belonged to.) Apply a function to a **whole sequence** as one call: `$seq =!> f()` ≡ `f($seq)`. Contrast the 3.1 simple map operator `!`, which applies per item: `$seq ! f()` ≡ `for $x in $seq return f($x)`.
+(Of the accepted feature this spelling belonged to.) Apply the function once per
+item, passing that item as its first argument: `$seq =!> f()` corresponds to
+`for $x in $seq return f($x)`. The ordinary arrow `$seq => f()` passes the whole
+sequence as one argument. The simple map operator `!` instead establishes each
+item as the context for its right-hand expression; argument passing and context
+binding are distinct mechanisms.
 
 ## 3. Also Known As
 
@@ -21,7 +28,12 @@
 
 ## 4. History / Supersedes
 
-The rename is the entire history: the operator entered the drafts as `=>>`, was renamed to `=!>` before the WG Review Draft threshold, and Bosak implemented only the final form (REQ-118 4.0-S4 grammar slice). No 1.x–3.x syntax is involved — both spellings are 4.x-native; what the feature itself supersedes is the per-item-only story of `!` (see the accepted feature's own entry when the Operators chapter is completed).
+The rejected spelling and its replacement are recorded in the REQ-118 audit;
+Bosak implements the accepted form in its S4 grammar slice. A 3.1 baseline uses
+`for $x in $seq return f($x)`. See the
+[accepted mapping-arrow entry](../operators-and-syntax/mapping-arrow.md) for the
+verified migration pair. The current specification link documents the accepted
+syntax; an exact historical rename revision remains part of the provenance work.
 
 ## 5. Motivation
 
@@ -29,7 +41,11 @@ Recorded for completeness: the superseded spelling exists in draft-era examples,
 
 ## 6. Language Alignment
 
-`=!>` has no direct prior-art relative; the nearest shapes are F#'s `|>` (pipeline, *different* feature — see `->`) and the rejected `=>>` sat visually halfway between pipeline and bit-shift operators in C-family languages, which was part of the rename motivation (ambiguity and typo-sensitivity in monospaced draft text).
+The accepted operator performs per-item function application, comparable in
+purpose to mapping a collection. XPath passes each item as the first function
+argument; it does not establish that item as the right-hand expression's context
+in the way `!` does. The historical reason for choosing the replacement spelling
+needs its own source; no visual resemblance to other operators establishes it.
 
 ## 7. Applicability
 
@@ -80,7 +96,7 @@ qt4tests pin only the accepted `=!>` spelling (part of the frozen gate's grammar
 
 ## 16. Related Features
 
-- `->` pipeline operator — the `=`-family sibling; own entry pending (Operators chapter).
+- [Pipeline operator](../operators-and-syntax/pipeline-operator.md) — whole-value function application, distinct from per-item mapping.
 - [method-call-operator.md](../operators-and-syntax/method-call-operator.md) — the third `=?>` member of the family, deferred for semantic (not naming) churn.
 - [fn-scan.md](../experimental/fn-scan.md) — the "consolidated before stabilization" sibling class (`scan-left`/`scan-right` → `fn:scan`); the same rule applies: old shapes do not parse.
 

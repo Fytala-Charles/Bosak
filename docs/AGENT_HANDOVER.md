@@ -1,3 +1,22 @@
+# REQ-126 external source references: 2026-10-11
+
+**Base audit commit:** `4b4c2a60`; continuing PR #155 on `docs/req126-completeness-audit`.
+**What changed:** catalog index and completeness audit now link official QT4CG 4.0 drafts, W3C 3.x baselines, specification history, and upstream test repositories. Every one of the 28 catalog entries has verified relevant section links; the audit's missing-function table links actual function sections. Direct QT4CG proposal/issue references are supplied for bindings, method calls, scan, and nominative records. Source policy distinguishes current navigation links from immutable adopted-revision evidence, and upstream tests from Bosak gate membership. Reviewing the accepted mapping-arrow source also corrected a lingering whole-sequence description in the rejected-spelling entry to per-item application, consistent with its existing verified example.
+**Scope:** external references improve discoverability; they do not close the audit's missing feature/signature and adopted-revision gaps. REQ-126 stays In Progress. No executable source or fixture changes.
+**Verification:** 19 primary specification/baseline/test/history pages fetched successfully; 138 source links and section anchors verified across index, audit, and entries. All 28 entries retain their 16 fields, index membership, local links, and valid fences. Catalog/audit HTML rendering passes. All five existing mapping-arrow catalog cases pass (0 failures/skips), confirming the corrected explanation. Other release tests/gates are not rerun for prose-only links.
+
+---
+
+# REQ-126 completeness audit: 2026-10-11
+
+**Base revision:** `9d3950f8ebc8bb0793c9317a91d3d412095cf6e8`; published engine baseline 1.1.0 at `6c2a867cbc7587922cb3973a7505746116caa54c`. Work is isolated on `docs/req126-completeness-audit`; Braid product work belongs to another session.
+**What changed:** `docs/xpath40-catalog/COMPLETENESS-AUDIT.md` assesses AC-01 through AC-05, maps landed slices and deferred/rejected decisions, and prioritizes evidence repair, missing decision records, and sequence/HOF families. A JSON snapshot records all 117 registered 4.0-only namespace/local-name pairs from the published engine: 67 frozen fn/map/array names, 49 constructor names, and one experimental name; 55 have no dedicated family entry. These are name/family coverage assessments, not signature completeness or new conformance claims. The scan entry now accurately records its promoted test set while retaining its experimental tier.
+**Acceptance:** AC-05 is satisfied for current discoverability; AC-01 through AC-04 remain partial. The three worked chapters and existing 94 checks are supplied, but generic provenance, missing feature/decision entries, supplementary forms, changed-3.1 semantics, and precise harness evidence prevent closure. REQ-126 remains In Progress.
+**Verification:** all 117 inventory rows are unique and resolve their assigned entry links; 55 unassigned-name assessments are reproduced. All 28 entries retain 16 fields and index membership; all 81 manifest cases retain their files. Audit/catalog/scan links, Markdown whitespace, code fences, and rendered audit headings/tables pass. No executable files changed, so the already-passing release tests/gates are not rerun for this audit.
+**Next:** P1 evidence repair for existing entries and missing decision records; then a realistic sequence/HOF order-routing case. Do not implement deferred forms merely to fill a documentation gap. No engine files, examples, gate membership, or Braid dependency changes.
+
+---
+
 # Bosak 1.1.0 published: 2026-10-11
 
 **Release revision:** `6c2a867cbc7587922cb3973a7505746116caa54c`, tag `v1.1.0`, [GitHub release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.0). Corrections #151, reference guide #152, and release preparation #153 are merged. Release implementation is `a9beb48`; the tagged merge is the immutable publication identity.

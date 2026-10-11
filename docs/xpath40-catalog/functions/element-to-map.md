@@ -8,6 +8,8 @@
 
 **Element-to-map conversion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
 
+**External specification references (current drafts; links checked 2026-10-11):** [fn:element-to-map](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map), [fn:element-to-map-plan](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map-plan). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
 ## 2. Intent
 
 Describe the conversion shape explicitly before passing data into a map-oriented pipeline.

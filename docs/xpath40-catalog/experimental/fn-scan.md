@@ -11,6 +11,10 @@
 
 **`fn:scan`** — **Experimental** (ships only at the `XPath40Experimental` level; static XPST0017 at both `XPath31` *and* frozen `XPath40`). Spec: F&O 4.0 §2.5.15, added by qt4cg Issue 2823 / PR 2824 (31 July 2026). Landed: REQ-123 S1 (1.1.0 track), level-plumbing slice 2026-10-09.
 
+**External specification references (current drafts; links checked 2026-10-11):** [F&O 4.0: fn:scan](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-scan). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
+Draft evolution: [QT4CG PR #2824](https://github.com/qt4cg/qtspecs/pull/2824) records the scan proposal referenced by the adoption dossier.
+
 ## 2. Intent
 
 Return every intermediate accumulator of a left fold as a **sequence of single-member arrays**: `fn:scan($input, $init, $action)` yields `[$init]`, then `[$action($acc, $item, $pos)]` for each input item — N input items produce N+1 arrays. There is no additional outer array.
@@ -103,7 +107,11 @@ Published examples: `fn-scan-main`, `fn-scan-edge`, `fn-scan-before` in
 `CatalogExampleTests`. The successful experimental cases also verify refusal at
 both lower compatibility levels. This is example evidence, separate from gate status.
 
-qt4tests set `fn-scan` (when promoted into the gate, this entry's Known Uses must be updated in the same PR — structural rule 3). Unit-level evidence only at landing.
+qt4tests set `fn-scan` is promoted into `GatedSets` in
+[ConformanceRunner40](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs).
+The 1.1.0 gate run records 11 experimental-level passes and zero gated failures.
+Gate membership does not move the function into the frozen compatibility tier;
+its successful examples still require `XPath40Experimental`.
 
 ## 16. Related Features
 

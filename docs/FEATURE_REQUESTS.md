@@ -4731,9 +4731,23 @@ The catalog is intended to grow into a book/reference guide with chapter introdu
 - [ ] AC-02: every rejected/deferred shape from the REQ-118 §1.2 audit has a graveyard entry recording the disposition and reason.
 - [ ] AC-03: every entry's Known Uses cite qt4tests gate sets; Sample Code expressions are engine-verified (runnable verbatim or pinned to a named test). Worked examples must address a realistic task with representative input, required context, expected output, compatibility level, and a meaningful edge case; declare simplified vocabularies.
 - [ ] AC-04: structural rules hold — index updated in same PR as any entry change; no entry ever deleted (moved to `rejected/` with disposition); drift warnings present wherever XPath semantics differ from the prior-art language.
-- [ ] AC-05: catalog README linked from REQ-118 dossier, INTEGRATION and README's 4.0 roadmap row; registry row and banner current.
+- [x] AC-05: catalog README linked from REQ-118 dossier, INTEGRATION and README's 4.0 roadmap row; registry row and banner current. Verified by the 2026-10-11 completeness audit.
 
 #### Verified example coverage (2026-10-11)
+
+The [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md) assesses AC-01
+through AC-04 as partial and AC-05 as met for current discoverability. Its
+[published-engine inventory](xpath40-catalog/audit-function-inventory.json)
+records 117 registered 4.0-only names, with 55 lacking a dedicated family entry;
+this is not an arity/signature inventory. Prioritize existing-entry evidence
+repair and missing decision records, then sequence/HOF examples. The stale
+fn:scan gate claim is corrected without changing its experimental tier.
+
+The catalog index, audit, and all 28 entries now provide external primary-source
+links checked 2026-10-11: relevant QT4CG draft sections, W3C migration baselines,
+proposal/issue history, and upstream test repositories. Current navigation links
+are explicitly distinguished from the adopted draft revision still required for
+full provenance. The audit's missing-function table links verified function sections.
 
 - Three complete chapters: invoice mapping, XML-manual publishing, and order reconciliation; 13 named chapter checks.
 - 24 additional catalog entries: eight syntax/iteration conveniences, five function families, four type contracts, JNode navigation, and six XSLT instruction families.

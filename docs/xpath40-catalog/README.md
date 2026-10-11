@@ -31,6 +31,35 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 [Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 81 focused catalog cases and migration baselines.
 
+## External specifications and source documentation
+
+These primary sources provide language definitions, migration baselines, draft
+history, and upstream tests. Links and section anchors were checked on
+2026-10-11. The 4.0 documents are evolving QT4CG drafts, not final W3C
+Recommendations. Current links are navigation references; they do not prove that
+Bosak adopted every feature or the latest semantics. Record the adopted draft
+revision/date and Bosak delivery revision alongside feature-specific references.
+When wording or numbering changes, retain historical disposition evidence and
+compare the current draft explicitly.
+
+| Area | Primary source | Use |
+|---|---|---|
+| XPath syntax and types | [XPath 4.0 draft](https://qt4cg.org/specifications/xquery-40/xpath-40.html) | Operators, bindings, grammar, coercion, and compatibility. |
+| Functions and operators | [F&O 4.0 draft](https://qt4cg.org/specifications/xpath-functions-40/Overview.html) | Signatures, arguments, results, errors, and function examples. |
+| Stylesheet language | [XSLT 4.0 draft](https://qt4cg.org/specifications/xslt-40/Overview.html), [changes since 3.0](https://qt4cg.org/specifications/xslt-40/Overview.html#changes-since-3.0), [incompatibilities](https://qt4cg.org/specifications/xslt-40/Overview.html#incompatibilities) | Instruction behavior and migration differences. |
+| Data model | [XDM 4.0 draft](https://qt4cg.org/specifications/xpath-datamodel-40/Overview.html) | Atomic items, nodes, maps, arrays, and JNodes. |
+| Serialization | [Serialization 4.0 draft](https://qt4cg.org/specifications/xslt-xquery-serialization-40/Overview.html) | Output methods, parameters, and serialization errors. |
+| Stable expression baseline | [XPath 3.1](https://www.w3.org/TR/xpath-31/), [F&O 3.1](https://www.w3.org/TR/xpath-functions-31/) | Earlier-version syntax and migration examples. |
+| Stable stylesheet/model/output baseline | [XSLT 3.0](https://www.w3.org/TR/xslt-30/), [XDM 3.1](https://www.w3.org/TR/xpath-datamodel-31/), [Serialization 3.1](https://www.w3.org/TR/xslt-xquery-serialization-31/) | Portable worked chapters and baseline contracts. |
+| Draft source and discussions | [QT4CG specification repository](https://github.com/qt4cg/qtspecs) | Source history, issues, pull requests, and adoption decisions. |
+| Upstream 4.0 tests | [qt4tests](https://github.com/qt4cg/qt4tests), [xslt40-test](https://github.com/qt4cg/xslt40-test) | XPath/XQuery versus XSLT evidence; distinguish upstream tests from Bosak gate membership. |
+| Upstream 3.x tests | [QT3](https://github.com/w3c/qt3tests), [xslt30-test](https://github.com/w3c/xslt30-test) | Regression baselines and XSLT 3.0 conformance evidence. |
+
+Specification links establish language meaning; Bosak source, named tests, and
+conformance runners establish implemented coverage. Deferred/rejected entries
+link current alternatives, while their historical disposition must cite the
+relevant issue/PR or archived draft when that evidence is supplied.
+
 ## 1. How to read this catalog
 
 Each feature is one file, written against the template below. Fields may not be omitted, but may be *empty by declaration* — see the field contracts.
@@ -75,6 +104,11 @@ The 3.1 default is untouched by every tier: consumers on `XPath31` see zero chan
 4. Entries are never deleted when a feature is rejected or superseded — the file moves to `rejected/` and the index records the disposition.
 
 ## 2. Index
+
+The [completeness audit](COMPLETENESS-AUDIT.md) records acceptance gaps and the
+prioritized completion plan against the published 1.1.0 engine. Its
+[function inventory](audit-function-inventory.json) distinguishes registered names
+from fully documented signatures; the catalog remains In Progress.
 
 28 entries now include practical cases or stable alternatives. The [81-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
 

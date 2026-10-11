@@ -8,6 +8,8 @@
 
 **Structural record types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6b; structural record evidence in RecordTypeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
 
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: structural record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-structural-record-types), [item coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules), [but with operator](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-with-expression). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
 ## 2. Intent
 
 Cast the agreed shape to an annotated record before using the record type contract.

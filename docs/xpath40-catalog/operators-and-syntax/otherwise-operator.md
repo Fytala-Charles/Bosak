@@ -8,6 +8,8 @@
 
 **Otherwise operator** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
 
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: otherwise expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-otherwise), [guarded expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-guarded-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
 ## 2. Intent
 
 Select the fallback for empty-sequence input.

@@ -8,6 +8,8 @@
 
 **xsl:map selection and duplicate policy** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
 
+**External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: xsl:map and xsl:map-entry](https://qt4cg.org/specifications/xslt-40/Overview.html#id-xsl-map-and-entry). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
 ## 2. Intent
 
 Declare duplicate-key policy while combining maps.
