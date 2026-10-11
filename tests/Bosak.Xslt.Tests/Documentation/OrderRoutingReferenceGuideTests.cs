@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-10-2026     | Creation: executable REQ-126 order-routing chapter evidence.                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 11-10-2026     | Verify standalone XSLT40 routing against identical fixtures and identity refusals.       |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -95,4 +96,46 @@ public class OrderRoutingReferenceGuideTests
         var failure = Assert.ThrowsAny<Exception>(() => Run(input));
         Assert.Contains("ROUTING-ID", failure.Message);
     }
+
+    private static XsltCaptureResult RunStandalone(string input)
+    {
+        var path = Path.Combine(Chapter, "order-routing-40.xsl");
+        return new XsltCompiler().Compile(File.ReadAllText(path), new Uri(path).AbsoluteUri)
+            .CaptureTransform(new XDocumentNode(XDocument.Load(Path.Combine(Chapter, "fixtures", input))),
+                new XsltCaptureOptions { BaseOutputUri = "https://example.invalid/order-routing/dispatch.xml" });
+    }
+
+    /// <summary>The self-contained 4.0 stylesheet matches both documents from the two-stage workflow.</summary>
+    /// <param name="input">The source fixture.</param>
+    /// <param name="principal">The expected dispatch document.</param>
+    /// <param name="exceptions">The expected repair document.</param>
+    [Theory]
+    [InlineData("orders.xml", "expected-dispatch.xml", "expected-exceptions.xml")]
+    [InlineData("invalid-orders.xml", "expected-invalid-dispatch.xml", "expected-invalid-exceptions.xml")]
+    [InlineData("empty-orders.xml", "expected-empty-dispatch.xml", "expected-empty-exceptions.xml")]
+    public void Standalone40_MatchesPublishedOutputs(string input, string principal, string exceptions)
+    {
+        var result = RunStandalone(input);
+        Assert.True(result.IsSuccess, string.Join("; ", result.Failures.Select(f => f.Message)));
+        Assert.NotNull(result.Principal);
+        Compare(principal, result.Principal);
+        var secondary = Assert.Single(result.SecondaryOutputs);
+        Assert.Equal("https://example.invalid/order-routing/exceptions.xml", secondary.ResolvedUri);
+        Compare(exceptions, secondary);
+    }
+
+    /// <summary>Identity refusals happen before standalone XSLT produces either output.</summary>
+    /// <param name="input">The ambiguous identity fixture.</param>
+    [Theory]
+    [InlineData("duplicate-orders.xml")]
+    [InlineData("missing-id-orders.xml")]
+    public void Standalone40_InvalidIdentityRefusesBothOutputs(string input)
+    {
+        var result = RunStandalone(input);
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Principal);
+        Assert.Empty(result.SecondaryOutputs);
+        Assert.Contains(result.Failures, failure => failure.Message.Contains("ROUTING-ID", StringComparison.Ordinal));
+    }
+
 }

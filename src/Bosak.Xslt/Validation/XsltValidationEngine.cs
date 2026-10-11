@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-125 Slice D: cooperative cancellation — element-boundary checkpoints, classified    |
 //                      |                  |       |                | Cancelled result with retained diagnostics plus an XV0013 cancellation diagnostic        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -921,7 +922,7 @@ internal sealed class XsltValidationEngine
             // static context, so an undeclared prefix is rejected (XPST0081) instead of being
             // silently read as a no-namespace name.
             _ = new PatternCompiler().Compile(
-                text, context.XpathDefaultNamespace, namespaces: BuildNamespaceMap(context));
+                text, context.XpathDefaultNamespace, namespaces: BuildNamespaceMap(context), compatibility: ResolveCompatibility(context));
         }
         catch (Exception ex)
         {
@@ -1118,9 +1119,7 @@ internal sealed class XsltValidationEngine
             return profile;
         }
 
-        return context.EffectiveVersion.StartsWith("4", StringComparison.Ordinal)
-            ? XPathCompatibility.XPath40
-            : XPathCompatibility.XPath31;
+        return Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion);
     }
 
     private static CompileOptions BuildCompileOptions(

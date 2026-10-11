@@ -85,6 +85,7 @@
 //                      |                  |       |                | prefixed QNames against them (XPST0081 when unbound); runtime prefix-resolved paths   |
 //                      |                  |       |                | keep the historical drop-prefix behavior because bindings are never supplied there    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.16  | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -136,8 +137,10 @@ internal sealed class PatternCompiler
         _validationContext = validationContext;
     }
 
+    private XPathCompatibility _compatibility = XPathCompatibility.XPath31;
+
     /// <summary>
-    /// Compiles an XPath expression with the current default element namespace.
+    /// Compiles an XPath expression with the current default element namespace and profile.
     /// </summary>
     private XPath31Expression CompilePatternXPath(string expression)
     {
@@ -146,10 +149,11 @@ internal sealed class PatternCompiler
         // stylesheets; REQ-100 evaluates the declaration against the same set at
         // match time. Without a schema set the parse is unchanged (XPST0008).
         var schemaSet = _validationContext?.SchemaSet;
-        if (_namespaces is null && string.IsNullOrEmpty(_defaultElementNamespace) && schemaSet is null)
+        if (_compatibility == XPathCompatibility.XPath31 && _namespaces is null && string.IsNullOrEmpty(_defaultElementNamespace) && schemaSet is null)
             return XPath31Expression.Compile(expression);
         var options = new CompileOptions
         {
+            Compatibility = _compatibility,
             DefaultElementNamespace = _defaultElementNamespace,
             SchemaSet = schemaSet,
             Namespaces = _namespaces,
@@ -656,7 +660,8 @@ internal sealed class PatternCompiler
         XPathAstNode ast;
         try
         {
-            ast = XPathParser.Parse(arg);
+            // This is a shape check; CompilePatternXPath enforces the owning profile.
+            ast = XPathParser.Parse(arg, xpath40: true);
         }
         catch (Exception)
         {
@@ -679,12 +684,12 @@ internal sealed class PatternCompiler
     /// candidate node. Such a predicate may be evaluated as
     /// <c>self::node()[pred]</c> on the candidate itself, which is the only option for
     /// streamed nodes whose parents cannot re-enumerate consumed child axes.</summary>
-    private static bool IsNonPositionalPredicateExpr(string predicateExpr)
+    private bool IsNonPositionalPredicateExpr(string predicateExpr)
     {
         XPathAstNode ast;
         try
         {
-            ast = XPathParser.Parse(predicateExpr);
+            ast = XPathParser.Parse(predicateExpr, xpath40: _compatibility >= XPathCompatibility.XPath40);
         }
         catch (Exception)
         {
@@ -893,13 +898,17 @@ internal sealed class PatternCompiler
     /// (<c>Q{{uri}}local</c>) patterns and leave this null; static validation passes the
     /// slot's real bindings so undeclared prefixes are rejected (XPST0081).
     /// </param>
+    /// <param name="compatibility">The owning expression profile; nested compilation inherits it.</param>
     public PatternPredicate Compile(
         string pattern,
         string? defaultElementNamespace = null,
         ModeTyped? typedMode = null,
-        IReadOnlyDictionary<string, string>? namespaces = null)
+        IReadOnlyDictionary<string, string>? namespaces = null,
+        XPathCompatibility? compatibility = null)
     {
         _defaultElementNamespace = defaultElementNamespace;
+        var savedCompatibility = _compatibility;
+        _compatibility = compatibility ?? _compatibility;
         var savedTypedMode = _typedMode;
         var savedNamespaces = _namespaces;
         _typedMode = typedMode;
@@ -935,6 +944,7 @@ internal sealed class PatternCompiler
         }
         finally
         {
+            _compatibility = savedCompatibility;
             _typedMode = savedTypedMode;
             _namespaces = savedNamespaces;
         }

@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 11-10-2026     | Align captured expression version profiles with runtime frozen-version selection.       |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -181,9 +182,7 @@ internal static class ExpressionEditPipeline
             Namespaces = namespaces,
             DefaultElementNamespace = context.XpathDefaultNamespace,
             BaseUri = context.BaseUri.AbsoluteUri,
-            Compatibility = context.EffectiveVersion.StartsWith("4", StringComparison.Ordinal)
-                ? XPathCompatibility.XPath40
-                : XPathCompatibility.XPath31,
+            Compatibility = Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion),
         };
 
         try

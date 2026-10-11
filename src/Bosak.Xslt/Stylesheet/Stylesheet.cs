@@ -289,6 +289,7 @@
 //                      |                  |       |                | validation engine's structural pass); no behavioral change                               |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.131 | 11-10-2026     | Apply effective-version XPath profiles to static expression compilation.                |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -529,7 +530,7 @@ internal sealed class Stylesheet
         if (string.IsNullOrEmpty(useWhen))
             return true;
 
-        var compiled = XPath31Expression.Compile(useWhen);
+        var compiled = XPath31Expression.Compile(useWhen, new CompileOptions { Compatibility = GetXPathCompatibility(elem) });
         var ctx = CreateUseWhenContext(elem, explicitBaseUri);
         var result = compiled.Evaluate(ctx);
         bool include = result.GetEffectiveBooleanValue();
@@ -629,7 +630,7 @@ internal sealed class Stylesheet
                 var expr = avt.Substring(i + 1, end - i - 1);
                 if (!string.IsNullOrEmpty(expr))
                 {
-                    var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap });
+                    var compiled = XPath31Expression.Compile(expr, new CompileOptions { Namespaces = nsMap, Compatibility = GetXPathCompatibility(element) });
                     var result = compiled.Evaluate(ctx);
                     sb.Append(AtomizedAvtString(result));
                 }
@@ -2402,7 +2403,7 @@ internal sealed class Stylesheet
     private XdmValue EvaluateStaticExpression(string expression, XElement elem)
     {
         var ctx = CreateUseWhenContext(elem);
-        var compiled = XPath31Expression.Compile(expression);
+        var compiled = XPath31Expression.Compile(expression, new CompileOptions { Compatibility = GetXPathCompatibility(elem) });
         return compiled.Evaluate(ctx);
     }
 
@@ -9412,6 +9413,19 @@ internal sealed class Stylesheet
             return sv;
         return 3.0;
     }
+
+    /// <summary>Selects the frozen XPath profile for the owning element's effective version.</summary>
+    internal XPathCompatibility GetXPathCompatibility(XElement element)
+    {
+        // xsl:output/@version is the serialization version, not an XSLT override.
+        var owner = element.Name == XName.Get("output", XslNamespace) ? element.Parent ?? Root : element;
+        return GetEffectiveVersion(owner) >= 4.0 ? XPathCompatibility.XPath40 : XPathCompatibility.XPath31;
+    }
+
+    /// <summary>Selects the frozen profile from a captured effective-version string.</summary>
+    internal static XPathCompatibility GetXPathCompatibility(string effectiveVersion)
+        => decimal.TryParse(effectiveVersion, NumberStyles.Number, CultureInfo.InvariantCulture, out var version)
+            && version >= 4.0m ? XPathCompatibility.XPath40 : XPathCompatibility.XPath31;
 
     /// <summary>
     /// Determines whether the given element is in XSLT forwards-compatible mode

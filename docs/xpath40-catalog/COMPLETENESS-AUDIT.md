@@ -69,7 +69,7 @@ specification revision or establish that Bosak implements the entire proposal.
 |---|---|---|
 | AC-01: landed slices, tiers, spec and delivery links | Partial | S1/S2/S5 function families are largely absent. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. Further deferred grammar needs review. |
-| AC-03: verified examples and gate evidence | Partial | 123 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
+| AC-03: verified examples and gate evidence | Partial | 128 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
 | AC-04: structure, retained entries, drift warnings | Partial | 38 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
@@ -205,7 +205,7 @@ conformance. The last published full solution/gate results remain in the
 ## Progress after the baseline audit: 2026-10-11
 
 PR #155 is merged at `17f9cc7c`. The follow-up supplies 38 entries, 104 manifest
-cases and four worked chapters with 19 chapter checks: 123 documentation checks.
+cases and four worked chapters with 24 chapter checks: 128 documentation checks.
 The [provenance ledger](PROVENANCE.md) records exact engine/dossier commits and
 named tests for all 28 baseline entries, while preserving the historical adopted
 specification snapshot gap. Three new function families cover six additional
@@ -227,3 +227,18 @@ implemented or certified by this documentation work.
 Next priorities are the remaining sequence-selection families, supplementary
 signatures and parser/type/pattern coverage. Future engine slices must record an
 immutable adopted specification revision at delivery time. REQ-126 stays In Progress.
+
+## Runtime compatibility correction (source 1.1.1, 2026-10-11)
+
+The [separately tested engine correction](../REQ-118-XSLT-XPATH40-COMPATIBILITY.md)
+resolves the runtime propagation gap discovered by routing. Effective-version
+4.0 expressions select frozen XPath40; older elements retain XPath31 and nested
+evaluations restore their caller's profile. Static compilation, AVTs, dynamic
+evaluation and module boundaries are covered. The routing chapter now also has a
+self-contained stylesheet with five additional checks; the original two-stage
+workflow remains the published-1.1.0 alternative. Source version 1.1.1 is not yet
+published. The missing-name count remains 49 and REQ-126 remains In Progress.
+
+The correction records an immutable QT4CG specification source revision at
+delivery. This establishes its own reviewed source and does not fill historical
+snapshot gaps in the 28 baseline ledger rows.

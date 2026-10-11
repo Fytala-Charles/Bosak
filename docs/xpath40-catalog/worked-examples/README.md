@@ -15,7 +15,7 @@ Start with a business problem and follow the transformation from input to expect
 | [XML manual to HTML](manual-to-html/README.md) | Implemented; fixtures and three checks | Mixed content, template modes, stable heading IDs, internal links, table of contents, and missing-link detection. |
 | [Order reconciliation report](order-reconciliation/README.md) | Implemented; fixtures and three checks | Customer/product grouping, lookup joins, missing reference data, and report/exception separation. |
 
-| [Order validation and routing](order-routing/README.md) | Implemented; complete fixtures and six checks | Explicit XPath40 planning, higher-order validation, consecutive batch arrays and XSLT 3.0 dispatch/repair outputs. |
+| [Order validation and routing](order-routing/README.md) | Implemented; complete fixtures and eleven checks | Standalone XSLT 4.0 routing in source 1.1.1; explicit XPath40 planning plus XSLT 3.0 remains the 1.1.0 alternative. |
 
 The first three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 104 focused checks, including earlier-version baselines and compatibility refusals.
 

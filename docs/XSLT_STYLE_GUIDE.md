@@ -8,7 +8,8 @@
 > chapter is the first application of these conventions.
 >
 > The order-routing chapter adds an explicitly opted-in XPath40 planning expression,
-> passed to a portable XSLT 3.0 stylesheet; helper comments apply to the planning
+> passed to a portable XSLT 3.0 stylesheet; source 1.1.1 also supplies a standalone
+> version="4.0" stylesheet using the same fixtures. Helper comments apply to the planning
 > expression as well.
 >
 > The EXSLT tier/migration rules, `src/` modules, `tests/cases/` layout,

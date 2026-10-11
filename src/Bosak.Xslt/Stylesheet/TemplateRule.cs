@@ -46,8 +46,10 @@
 //                      |                  |       |                | mean schema-element(QName); SchemaRewriteableQNames + HasSchemaDependentPattern       |
 //                      |                  |       |                | (XTTE3110) wiring; match-218/219/220/221/222/243/244                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.5   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 // ===========================================================================================================================================================
 
+using Bosak.XPath.Api;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -366,7 +368,9 @@ internal sealed class TemplateRule
     /// <summary>
     /// Compiles the match pattern into an executable predicate.
     /// </summary>
-    public void CompileMatch(Patterns.PatternCompiler compiler)
+    /// <param name="compiler">The reusable pattern compiler.</param>
+    /// <param name="compatibility">The expression profile of the declaring template.</param>
+    public void CompileMatch(Patterns.PatternCompiler compiler, XPathCompatibility compatibility = XPathCompatibility.XPath31)
     {
         if (!string.IsNullOrEmpty(Match))
         {
@@ -379,7 +383,7 @@ internal sealed class TemplateRule
                 // so the pattern compiler can match namespaced elements correctly.
                 var resolved = ResolveNamespacePrefixes(Match);
                 var defaultNs = GetXPathDefaultNamespace(Element);
-                CompiledMatch = compiler.Compile(resolved, defaultNs);
+                CompiledMatch = compiler.Compile(resolved, defaultNs, compatibility: compatibility);
                 // In a schema-aware stylesheet, also compile the strict/lax typed-mode
                 // variants in which a top-level QName branch means schema-element(QName)
                 // (XSLT 3.0 §5.5.3). Rules without rewriteable QName branches keep using
@@ -389,8 +393,8 @@ internal sealed class TemplateRule
                     SchemaRewriteableQNames = Patterns.PatternCompiler.GetSchemaRewriteableQNames(resolved, defaultNs);
                     if (SchemaRewriteableQNames.Count > 0)
                     {
-                        CompiledMatchStrict = compiler.Compile(resolved, defaultNs, ModeTyped.Strict);
-                        CompiledMatchLax = compiler.Compile(resolved, defaultNs, ModeTyped.Lax);
+                        CompiledMatchStrict = compiler.Compile(resolved, defaultNs, ModeTyped.Strict, compatibility: compatibility);
+                        CompiledMatchLax = compiler.Compile(resolved, defaultNs, ModeTyped.Lax, compatibility: compatibility);
                     }
                 }
             }

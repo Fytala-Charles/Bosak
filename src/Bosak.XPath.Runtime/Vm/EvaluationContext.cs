@@ -116,6 +116,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.40  | 10-10-2026     | REQ-125 Slice D: internal ExecutionGate (token/deadline/operation-budget checkpoints)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.41  | 11-10-2026     | Preserve and enforce frozen profile boundaries in mixed-version XSLT execution.        |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -356,8 +357,9 @@ public sealed class EvaluationContext
     /// When true, the host compilation targeted XPath 4.0 and the standard function
     /// table may expose XPath 4.0-only functions. The Api layer
     /// (<c>XPath31Expression</c>) stamps this from
-    /// <c>CompileOptions.Compatibility</c> before populating the context; XSLT and
-    /// XQuery hosts leave it <c>false</c>, keeping their 3.1 behavior unchanged.
+    /// <c>CompileOptions.Compatibility</c> before populating the context. XSLT
+    /// selects frozen 4.0 for expressions owned by effective-version 4.0 elements;
+    /// earlier XSLT elements and XQuery 3.1 retain their existing 3.1 profile.
     /// The Runtime layer cannot reference the Api enum
     /// (<c>XPathCompatibility</c>) due to project layering, so
     /// the version knowledge crosses the layer boundary as this flag (REQ-118
@@ -1251,20 +1253,25 @@ public sealed class EvaluationContext
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
     {
         if (_functions.TryGetValue((namespaceUri, localName, arity), out signature!))
-            return true;
+            return (!signature.IsXPath40Only || IsXPath40)
+                && (!signature.IsXPath40ExperimentalOnly || IsXPath40Experimental);
         // Variadic fallback via the (namespace, localName) index: a variadic signature
         // accepts any arity >= its minimum declared arity (e.g. fn:concat#99 resolves
         // against the variadic fn:concat registration).
         if (_variadicMinArity.TryGetValue((namespaceUri, localName), out var minVariadicArity))
         {
             if (arity >= minVariadicArity
-                && _functions.TryGetValue((namespaceUri, localName, minVariadicArity), out signature!))
+                && _functions.TryGetValue((namespaceUri, localName, minVariadicArity), out signature!)
+                && (!signature.IsXPath40Only || IsXPath40)
+                && (!signature.IsXPath40ExperimentalOnly || IsXPath40Experimental))
                 return true;
             // Rare: the minimum-arity variadic slot was explicitly unregistered — rescan
             // for another variadic registration of the same name.
             foreach (var ((ns, name, candidateArity), sig) in _functions)
             {
-                if (ns == namespaceUri && name == localName && sig.IsVariadic && arity >= candidateArity)
+                if (ns == namespaceUri && name == localName && sig.IsVariadic && arity >= candidateArity
+                    && (!sig.IsXPath40Only || IsXPath40)
+                    && (!sig.IsXPath40ExperimentalOnly || IsXPath40Experimental))
                 {
                     signature = sig;
                     return true;
