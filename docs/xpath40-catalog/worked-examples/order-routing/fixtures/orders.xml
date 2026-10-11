@@ -1,0 +1,8 @@
+<orders xmlns="urn:example:routing">
+  <order id="R1" route="NORTH"><line sku="FILTER-A" quantity="2"/></order>
+  <order id="R2" route="NORTH"><line sku="VALVE-B" quantity="1"/></order>
+  <order id="BAD1" route="NORTH"><line sku="FILTER-A" quantity="many"/><line sku="" quantity="2"/></order>
+  <order id="R3" route="NORTH"><line sku="GASKET-C" quantity="3"/></order>
+  <order id="R4" route="SOUTH"><line sku="FILTER-A" quantity="1"/></order>
+  <order id="R5" route="NORTH"><line sku="VALVE-B" quantity="2"/></order>
+</orders>

@@ -584,5 +584,166 @@
     "mode": "31",
     "file": "fn-scan/before.xpath",
     "expected": "100,120,85,95"
+  },
+  {
+    "id": "higher-order-selection-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "higher-order-selection/main.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "higher-order-selection-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "higher-order-selection/edge.xpath",
+    "expected": "false/true"
+  },
+  {
+    "id": "higher-order-selection-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "higher-order-selection/before.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "consecutive-partition-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "consecutive-partition/main.xpath",
+    "expected": "NORTH,NORTH|NORTH|SOUTH|NORTH"
+  },
+  {
+    "id": "consecutive-partition-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "consecutive-partition/edge.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "consecutive-partition-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "consecutive-partition/singleton.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "sequence-distinctness-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-distinctness/main.xpath",
+    "expected": "false/R1,R2"
+  },
+  {
+    "id": "sequence-distinctness-edge",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-distinctness/edge.xpath",
+    "expected": "true/0"
+  },
+  {
+    "id": "sequence-distinctness-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-distinctness/before.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "nominative-records-alternative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "nominative-records/alternative.xpath",
+    "expected": "R1"
+  },
+  {
+    "id": "sequence-collection-iteration-arrays",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-collection-iteration/arrays.xpath",
+    "expected": "2,1"
+  },
+  {
+    "id": "sequence-collection-iteration-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-collection-iteration/maps.xpath",
+    "expected": "BOLT-M8=5,FILTER-A=2"
+  },
+  {
+    "id": "sequence-collection-iteration-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-collection-iteration/invalid.xpath",
+    "error": "XPTY0141"
+  },
+  {
+    "id": "jnode-template-boundary-navigation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-template-boundary/navigation.xpath",
+    "expected": "R1"
+  },
+  {
+    "id": "obsolete-quantifier-functions-all",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "obsolete-quantifier-functions/all.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "obsolete-quantifier-functions-some-of",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "obsolete-quantifier-functions/some-of.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "obsolete-quantifier-functions-alternative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "obsolete-quantifier-functions/alternative.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "directional-scan-left",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "directional-scan/left.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "directional-scan-right",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "directional-scan/right.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "xpath-switch-expression-refusal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xpath-switch-expression/refusal.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "xpath-switch-expression-alternative",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "xpath-switch-expression/alternative.xpath",
+    "expected": "dispatch"
+  },
+  {
+    "id": "extensible-map-types-cast",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "extensible-map-types/cast.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "extensible-map-types-coercion",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "extensible-map-types/coercion.xpath",
+    "error": "XPTY0004"
   }
 ]

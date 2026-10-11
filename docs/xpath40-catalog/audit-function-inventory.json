@@ -1,6 +1,6 @@
 {
   "auditDate": "2026-10-11",
-  "sourceRevision": "9d3950f8ebc8bb0793c9317a91d3d412095cf6e8",
+  "sourceRevision": "17f9cc7c8dad3f0ce382024ac2ab87c38c7178f0",
   "enginePackageVersion": "1.1.0",
   "engineRevision": "6c2a867cbc7587922cb3973a7505746116caa54c",
   "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
@@ -49,8 +49,8 @@
       "name": "fn:all-different",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/sequence-distinctness.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
       "matchingGatedSet": null
     },
     {
@@ -177,8 +177,8 @@
       "name": "fn:duplicate-values",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/sequence-distinctness.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
       "matchingGatedSet": null
     },
     {
@@ -217,8 +217,8 @@
       "name": "fn:every",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
       "matchingGatedSet": null
     },
     {
@@ -273,8 +273,8 @@
       "name": "fn:index-where",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
       "matchingGatedSet": null
     },
     {
@@ -385,8 +385,8 @@
       "name": "fn:partition",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/consecutive-partition.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
       "matchingGatedSet": "fn-partition"
     },
     {
@@ -425,8 +425,8 @@
       "name": "fn:some",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
       "matchingGatedSet": null
     },
     {

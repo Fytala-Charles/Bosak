@@ -10,6 +10,10 @@
 
 **External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: array construction](https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
+**Delivery provenance:** [PR #92](https://github.com/Fytala-Charles/Bosak/pull/92), [immutable mainline revision `2a62ad4d`](https://github.com/Fytala-Charles/Bosak/commit/2a62ad4d9f72d2614887c260e8856de0a6617350) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
+
 ## 2. Intent
 
 Construct members in stylesheet content and consume the resulting array.
@@ -69,6 +73,8 @@ Expected class: array construction proportional to selected members. Sequence-va
 ## 15. Known Uses
 
 Executable example IDs: `xsl-array-main`, `xsl-array-edge`, `xsl-array-before` in `CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome`. Existing unit evidence: [primary tests](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs). Chapter-level evidence does not promote a qt4tests set into GatedSets; conformance status remains owned by the harness and delivery records.
+
+**Named implementation evidence:** [`Array_Select_OneSingletonMemberPerItem`](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs), [`Array_Select_TokenizedString`](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs), [`Array_ForEachSelect_MemberIsWholeSequence`](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs). Not a qt4 expression-set feature. XSLT evidence uses the named instruction tests below; no upstream XSLT gate promotion is claimed. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 

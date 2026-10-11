@@ -731,3 +731,7 @@ pages, not a general HTML parser.
 ## 1.1.0 release packaging
 
 All ten public library packages share version 1.1.0 through `src/Directory.Build.props`. Authoring, validation, and capture remain in Bosak.Xslt; controlled resource contracts remain in Bosak.XPath.Runtime. No new package boundary is introduced. See [release notes](RELEASE-NOTES-1.1.md) for the release scope and coverage restrictions.
+
+## REQ-126 routing reference workflow (2026-10-11)
+
+The [order-routing chapter](xpath40-catalog/worked-examples/order-routing/README.md) demonstrates explicit `XPathCompatibility.XPath40` planning through `XPath31Expression`, then a required XDM map parameter supplied by `XsltCaptureOptions.Context.WithVariable` to portable XSLT 3.0. A version 4.0 declaration alone does not currently opt transformation-time expression compilation into XPath40. This example uses existing APIs; no engine layer or public API changed. The catalog now has 38 entries and 123 executable documentation checks; [provenance](xpath40-catalog/PROVENANCE.md) distinguishes immutable Bosak deliveries from unavailable historical specification snapshots.

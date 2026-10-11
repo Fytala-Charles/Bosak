@@ -4715,7 +4715,7 @@ Provide additive public static-validation and controlled-execution contracts wit
 
 **Requesting Application:** *(internal — engine documentation)*  
 **Submitted:** 2026-10-10  
-**Status:** In Progress: three worked chapters; 28 entries (24 added beyond the four seeds); 81 feature checks and 13 chapter checks. Complete coverage of all shipped functions and deferred/rejected decisions remains pending.
+**Status:** In Progress: four worked chapters; 38 entries; 104 feature checks and 19 chapter checks. Complete coverage of all shipped functions and deferred/rejected decisions remains pending.
 **Owner:** Bosak maintainers (Charles Korthout).
 
 #### Problem Statement
@@ -4775,5 +4775,7 @@ full provenance. The audit's missing-function table links verified function sect
 | 2026-10-11 | Charles Korthout | Develop the catalog as a book/reference guide; begin with a verified invoice-mapping chapter and plan publishing next | Realistic worked cases teach the reasons for using features. Invoice fixtures, expected outputs, edge cases, and a 3.1/4.0 migration pair are supplied; full REQ-126 coverage remains pending. |
 | 2026-10-11 | Charles Korthout | Document the worked stylesheet itself using applicable Bosak.Exslt style-guide conventions | Readers opening the XSLT directly need its contract, helper edge cases, template roles, and business-policy rationale. The copied guide now distinguishes its original repository rules from Bosak applicability. |
 | 2026-10-11 | Charles Korthout | Add the publishing/reconciliation chapters and practical catalog examples | All three planned cases are supplied; 28 entries link real tasks, edge cases, compatibility checks, and earlier-version baselines. The remaining whole-engine feature inventory stays in progress. |
+
+**REQ-126 follow-up (2026-10-11):** [Provenance ledger](xpath40-catalog/PROVENANCE.md) supplies all 28 baseline delivery revisions and named tests. Ten added entries cover sequence/HOF families and missing dispositions; [routing](xpath40-catalog/worked-examples/order-routing/README.md) has full fixtures, host integration and six checks. 123 documentation checks pass; 49 registered names remain unassigned. Immutable historical adopted-specification snapshots and automatic XSLT runtime XPath40 propagation remain explicit gaps. No engine or Braid changes.
 
 **REQ-125 delivery traceability (2026-10-11):** Bosak correction revision `0ff33163ba985bf8562722424db7e66c37e3566d` is accepted within the documented coverage and restricted byte-bounded profiles. Bosak.Braid adopted this exact immutable revision in commit `9423d41b52a5f3a3c1206df370c7998f7ad88886`. Its Release build passed with 0 errors, all **192 tests passed / 0 failed / 0 skipped** (including six public-contract checks), and the strict documentation gate passed. The bootstrap also rejects solution/manifest revision mismatches before checkout preparation. Both repositories have local commits; remote publication awaits explicit push authorization. Production preview adapter/worker integration remains separate product work.

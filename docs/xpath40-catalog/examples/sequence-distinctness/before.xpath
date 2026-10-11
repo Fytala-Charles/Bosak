@@ -1,0 +1,2 @@
+(: Sequence identity checks; synthetic fulfillment data; mode 31; no external context. :)
+let $ids := ('R1','R2','R1') return count(distinct-values($ids)) eq count($ids)

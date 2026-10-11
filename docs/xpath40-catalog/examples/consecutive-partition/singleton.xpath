@@ -1,0 +1,2 @@
+(: Consecutive partitioning; synthetic fulfillment data; mode 40; no external context. :)
+array:size(partition('NORTH', function($current,$next,$position) { error() }))

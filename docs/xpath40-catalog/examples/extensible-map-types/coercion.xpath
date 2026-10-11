@@ -1,0 +1,2 @@
+(: Extensible map type proposal; synthetic fulfillment data; mode 40; no external context. :)
+function($order as record(id as xs:string)) { $order?id }(map {'id':'R1','extra':'refused'})

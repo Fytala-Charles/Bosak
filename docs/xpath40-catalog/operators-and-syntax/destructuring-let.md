@@ -13,6 +13,10 @@
 
 **External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: let expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
+**Delivery provenance:** [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129), [immutable mainline revision `b8e4b9f5`](https://github.com/Fytala-Charles/Bosak/commit/b8e4b9f510543c04d88a7c10ee2af28808a0fd5c) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
+
 ## 2. Intent
 
 Bind several variables at once by decomposing a sequence, an array, or a map on the right-hand side — `let $($x, $y) := (1, 2)` binds `$x` to `1` and `$y` to `2` in one clause, evaluating the right-hand side exactly once.
@@ -121,6 +125,8 @@ Cost class: **small constant overhead**. One `Destructure` opcode per binding gr
 Practical case: `InvoiceReferenceGuideTests.InvoiceLabel_MigrationPairMatchesAndRequiresOptIn` executes both published label expressions and verifies XPST0003 in the default mode. This is a chapter-level example, separate from qt4tests gate evidence.
 
 qt4tests `prod-LetClause` **137/0/52** (52 skips = XQuery-only dependencies) and `fn-compare` collateral — both promoted into the conformance gate (223 sets) at landing.
+
+**Named implementation evidence:** [`Compile_DestructuringLet_DefaultOptions_ThrowXpst0003`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_DestructuringSequence_FrozenXPath40_Works`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). No feature-specific qt4 set assignment recorded here; unit evidence is listed explicitly. This is not a claim of absent upstream tests. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 

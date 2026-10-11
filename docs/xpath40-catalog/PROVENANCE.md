@@ -1,0 +1,57 @@
+<div align="center">
+  <img src="../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog provenance">
+  <br><br><h1>Catalog Provenance Ledger</h1>
+  <p>Engine deliveries, named evidence and explicit specification history gaps</p>
+</div>
+
+This ledger covers the 28 entries present at the completeness-audit baseline.
+The [machine-readable ledger](provenance.json) records immutable Bosak revisions,
+delivery dates, named tests and assigned promoted sets. Every entry also carries
+this evidence in fields 1 and 15. Decision-dossier commits are distinguished from
+engine deliveries. Test references are evidence pointers, not new execution claims.
+
+The historical dossiers cite live drafts and section numbers, without recording
+the exact adopted QT4CG source revision for each slice. We cannot reconstruct an
+immutable adopted specification snapshot from a current URL. All 28 ledger rows
+therefore retain `adoptedSpecRevision: null`; AC-01 remains partial. New deliveries
+should record the exact specification source commit and affected sections before
+implementation, together with any intentional deviations.
+
+Current external links were checked on 2026-10-11. Draft dates differ by document
+(the reviewed F&O page is dated 10 October 2026); one date must not be assigned to
+all specifications. Moving navigation links are useful for reading, while an
+immutable source revision establishes adoption. A cached HTML hash would identify
+a review download, not establish which semantics were adopted historically.
+
+| Entry | Bosak delivery | Named evidence |
+|---|---|---|
+| [array-member-iteration](operators-and-syntax/array-member-iteration.md) | [#87](https://github.com/Fytala-Charles/Bosak/pull/87) / [`ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) | `Compile_ForMember_31Mode_ThrowsXpst0003`, `Evaluate_ForMember_IteratesMembers`, `Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole` |
+| [destructuring-let](operators-and-syntax/destructuring-let.md) | [#129](https://github.com/Fytala-Charles/Bosak/pull/129) / [`b8e4b9f5`](https://github.com/Fytala-Charles/Bosak/commit/b8e4b9f510543c04d88a7c10ee2af28808a0fd5c) | `Compile_DestructuringLet_DefaultOptions_ThrowXpst0003`, `Evaluate_DestructuringSequence_FrozenXPath40_Works`, `Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004` |
+| [focus-functions](operators-and-syntax/focus-functions.md) | [#110](https://github.com/Fytala-Charles/Bosak/pull/110) / [`2871c0d6`](https://github.com/Fytala-Charles/Bosak/commit/2871c0d6ecb76c5099a4f682a71c5da49fb10ecf) | `Compile_FocusConstructors_DefaultOptions_ThrowXpst0017`, `Evaluate_FocusConstructors_FrozenXPath40_Works` |
+| [keyword-arguments](operators-and-syntax/keyword-arguments.md) | [#86](https://github.com/Fytala-Charles/Bosak/pull/86) / [`498ae8d7`](https://github.com/Fytala-Charles/Bosak/commit/498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9) | `Compile_KeywordArgs_31Mode_ThrowsXpst0003`, `Evaluate_KeywordArgs_FullyKeyworded_Works`, `Evaluate_KeywordArgs_MixedWithPositionals_Works` |
+| [map-entry-iteration](operators-and-syntax/map-entry-iteration.md) | [#87](https://github.com/Fytala-Charles/Bosak/pull/87) / [`ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) | `Compile_ForKeyValue_31Mode_ThrowsXpst0003`, `Evaluate_ForKeyValue_IteratesEntries`, `Evaluate_ForKeyValue_PositionalCountsAcrossMaps` |
+| [mapping-arrow](operators-and-syntax/mapping-arrow.md) | [#87](https://github.com/Fytala-Charles/Bosak/pull/87) / [`ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) | `Compile_MappingArrow_31Mode_ThrowsXpst0003`, `Evaluate_MappingArrow_AppliesFunctionPerItem`, `Evaluate_MappingArrow_WithArgumentsPrependsContextItem` |
+| [method-call-operator](operators-and-syntax/method-call-operator.md) | [#77](https://github.com/Fytala-Charles/Bosak/pull/77) / [`27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525) | `Compile_MappingArrow_31Mode_ThrowsXpst0003`, `Evaluate_MappingArrow_AppliesFunctionPerItem`, `Evaluate_MappingArrow_WithArgumentsPrependsContextItem` |
+| [otherwise-operator](operators-and-syntax/otherwise-operator.md) | [#85](https://github.com/Fytala-Charles/Bosak/pull/85) / [`5ca72268`](https://github.com/Fytala-Charles/Bosak/commit/5ca722686041fc701f8c25c00808eb8169a63053) | `Compile_Otherwise_Default31Mode_ThrowsXpst0003`, `Compile_Otherwise_XPath30Mode_ThrowsXpst0003`, `Evaluate_Otherwise_EmptyLeftYieldsRight` |
+| [pipeline-operator](operators-and-syntax/pipeline-operator.md) | [#87](https://github.com/Fytala-Charles/Bosak/pull/87) / [`ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) | `Compile_PipelineArrow_31Mode_ThrowsXpst0003`, `Evaluate_Pipeline_SpecExample_TokenizeCountConcat`, `Evaluate_Pipeline_SpecExample_SumOfPowers` |
+| [string-templates](operators-and-syntax/string-templates.md) | [#86](https://github.com/Fytala-Charles/Bosak/pull/86) / [`498ae8d7`](https://github.com/Fytala-Charles/Bosak/commit/498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9) | `Compile_StringTemplate_31Mode_ThrowsXpst0003`, `Evaluate_StringTemplate_FixedOnly_Works`, `Evaluate_StringTemplate_Interpolation_Works` |
+| [atomic-equal](functions/atomic-equal.md) | [#108](https://github.com/Fytala-Charles/Bosak/pull/108) / [`cbf7f88c`](https://github.com/Fytala-Charles/Bosak/commit/cbf7f88ce8364334040a819f96967622992f24a2) | `Compile_AtomicEqual_DefaultOptions_ThrowXpst0017`, `Evaluate_AtomicEqual_FrozenXPath40_Works` |
+| [csv-parsing](functions/csv-parsing.md) | [#104](https://github.com/Fytala-Charles/Bosak/pull/104) / [`e0024f5d`](https://github.com/Fytala-Charles/Bosak/commit/e0024f5d1d00c410e65ebf04f4caf89e770eb8ec) | `Compile_CsvFunctions_DefaultOptions_ThrowXpst0017`, `Evaluate_ParseCsv_FrozenXPath40_Works` |
+| [element-to-map](functions/element-to-map.md) | [#106](https://github.com/Fytala-Charles/Bosak/pull/106) / [`1bb73147`](https://github.com/Fytala-Charles/Bosak/commit/1bb731474c6ba48dded66441183c676a0ebf9761) | `Evaluate_ElementToMap_FrozenXPath40_Works` |
+| [map-to-element](functions/map-to-element.md) | [#106](https://github.com/Fytala-Charles/Bosak/pull/106) / [`1bb73147`](https://github.com/Fytala-Charles/Bosak/commit/1bb731474c6ba48dded66441183c676a0ebf9761) | `MapToElement_SingleEntryMap_BuildsElement`, `MapToElement_EmptySequence_ReturnsEmpty`, `MapToElement_NonMapInput_Xpty0004` |
+| [sort-with](functions/sort-with.md) | [#112](https://github.com/Fytala-Charles/Bosak/pull/112) / [`89c90b4d`](https://github.com/Fytala-Charles/Bosak/commit/89c90b4d5b6a216a4a37223e169d36e3a1a832bd) | `Compile_SortWithCluster_DefaultOptions_ThrowXpst0017`, `Compile_SortWithCluster_3Point1Functions_StillWork`, `Evaluate_SortWithCluster_FrozenXPath40_Works` |
+| [choice-types](type-system/choice-types.md) | [#89](https://github.com/Fytala-Charles/Bosak/pull/89) / [`83d152ff`](https://github.com/Fytala-Charles/Bosak/commit/83d152ffdba55fe160f33366fa14ed2922fa2f9d) | `Compile_ChoiceItemType_31Mode_ThrowsXpst0003`, `Evaluate_Choice_InstanceOf_AnyAlternativeMatches`, `Evaluate_Choice_Cast_FirstCoercibleAlternativeWins` |
+| [enum-types](type-system/enum-types.md) | [#89](https://github.com/Fytala-Charles/Bosak/pull/89) / [`83d152ff`](https://github.com/Fytala-Charles/Bosak/commit/83d152ffdba55fe160f33366fa14ed2922fa2f9d) | `Compile_EnumType_31Mode_ThrowsXpst0003`, `Compile_EnumType_EmptyMemberList_ThrowsXpst0003`, `Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive` |
+| [structural-records](type-system/structural-records.md) | [#90](https://github.com/Fytala-Charles/Bosak/pull/90) / [`ca6e9c27`](https://github.com/Fytala-Charles/Bosak/commit/ca6e9c27cf4c62953763f800bdef2610ff64789a) | `Coercion_BuildsAnnotatedRecord`, `Coercion_MissingFieldBecomesEmptyEntry`, `Coercion_SurplusKeys_XPTY0004` |
+| [typed-let-coercion](type-system/typed-let-coercion.md) | [#129](https://github.com/Fytala-Charles/Bosak/pull/129) / [`b8e4b9f5`](https://github.com/Fytala-Charles/Bosak/commit/b8e4b9f510543c04d88a7c10ee2af28808a0fd5c) | `Evaluate_TypedLet_FrozenXPath40_Coerces` |
+| [jnode-navigation](data-model/jnode-navigation.md) | [#116](https://github.com/Fytala-Charles/Bosak/pull/116) / [`345ae58e`](https://github.com/Fytala-Charles/Bosak/commit/345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0) | `Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017`, `Evaluate_JNodeFunctions_FrozenXPath40_Work` |
+| [instruction-separators](xslt-instructions/instruction-separators.md) | [#91](https://github.com/Fytala-Charles/Bosak/pull/91) / [`c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) | `ForEach_Separator_BetweenItems`, `ForEach_Separator_WithSort`, `ForEach_Separator_EmptyAndSingleItem_NoSeparator` |
+| [xsl-array](xslt-instructions/xsl-array.md) | [#92](https://github.com/Fytala-Charles/Bosak/pull/92) / [`2a62ad4d`](https://github.com/Fytala-Charles/Bosak/commit/2a62ad4d9f72d2614887c260e8856de0a6617350) | `Array_Select_OneSingletonMemberPerItem`, `Array_Select_TokenizedString`, `Array_ForEachSelect_MemberIsWholeSequence` |
+| [xsl-if](xslt-instructions/xsl-if.md) | [#91](https://github.com/Fytala-Charles/Bosak/pull/91) / [`c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) | `If_ThenElse_TrueBranch`, `If_ThenElse_FalseBranch`, `If_ThenOnly_FalseIsEmpty` |
+| [xsl-map](xslt-instructions/xsl-map.md) | [#91](https://github.com/Fytala-Charles/Bosak/pull/91) / [`c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) | `Map_Select_MergesInputMaps`, `Map_Select_DuplicatesDefault_XTDE3365`, `Map_Select_DuplicatesUseFirst` |
+| [xsl-note](xslt-instructions/xsl-note.md) | [#91](https://github.com/Fytala-Charles/Bosak/pull/91) / [`c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) | `Note_InTemplate_IsDiscarded`, `Note_AtTopLevel_IsDiscarded`, `Note_ContentIsNotValidated` |
+| [xsl-switch](xslt-instructions/xsl-switch.md) | [#92](https://github.com/Fytala-Charles/Bosak/pull/92) / [`2a62ad4d`](https://github.com/Fytala-Charles/Bosak/commit/2a62ad4d9f72d2614887c260e8856de0a6617350) | `Switch_LookupTable_SelectBranches`, `Switch_TestSequences_DaysInMonth`, `Switch_GeneralComparison_NumericPromotion` |
+| [fn-scan](experimental/fn-scan.md) | [#98](https://github.com/Fytala-Charles/Bosak/pull/98) / [`bd18e42f`](https://github.com/Fytala-Charles/Bosak/commit/bd18e42f33b5e69817f059f6429f4b08e639a5a3) | `Evaluate_Scan_XPath40Experimental_Works` |
+| [mapping-arrow-gtgt](rejected/mapping-arrow-gtgt.md) | [#77](https://github.com/Fytala-Charles/Bosak/pull/77) / [`27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525) | `Compile_MappingArrow_31Mode_ThrowsXpst0003`, `Evaluate_MappingArrow_AppliesFunctionPerItem`, `Evaluate_MappingArrow_WithArgumentsPrependsContextItem` |
+
+For scope and outstanding feature coverage, see the [completeness audit](COMPLETENESS-AUDIT.md).

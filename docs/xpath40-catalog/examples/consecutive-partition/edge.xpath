@@ -1,0 +1,2 @@
+(: Consecutive partitioning; synthetic fulfillment data; mode 40; no external context. :)
+count(partition((), function($current,$next,$position) { true() }))

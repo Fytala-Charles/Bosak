@@ -10,6 +10,10 @@
 
 **External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: conditional processing with xsl:switch](https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
+**Delivery provenance:** [PR #92](https://github.com/Fytala-Charles/Bosak/pull/92), [immutable mainline revision `2a62ad4d`](https://github.com/Fytala-Charles/Bosak/commit/2a62ad4d9f72d2614887c260e8856de0a6617350) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
+
 ## 2. Intent
 
 Match a selector against branch test values.
@@ -69,6 +73,8 @@ Expected class: selector conversion followed by branch-value comparisons. The nu
 ## 15. Known Uses
 
 Executable example IDs: `xsl-switch-main`, `xsl-switch-edge`, `xsl-switch-before` in `CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome`. Existing unit evidence: [primary tests](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs). Chapter-level evidence does not promote a qt4tests set into GatedSets; conformance status remains owned by the harness and delivery records.
+
+**Named implementation evidence:** [`Switch_LookupTable_SelectBranches`](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs), [`Switch_TestSequences_DaysInMonth`](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs), [`Switch_GeneralComparison_NumericPromotion`](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs). Not a qt4 expression-set feature. XSLT evidence uses the named instruction tests below; no upstream XSLT gate promotion is claimed. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 

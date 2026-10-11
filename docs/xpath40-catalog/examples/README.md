@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 81 named checks. Each points to a complete
+The [case manifest](cases.json) contains 104 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -51,3 +51,5 @@ codes. Larger document cases live in the [worked chapters](../worked-examples/RE
 Both types of evidence complement engine unit/conformance tests; these examples
 do not change GatedSets or imply standards-level compatibility for every draft
 surface. See the [catalog index](../README.md) for feature entries.
+
+The new sequence/HOF and decision examples complement the [order-routing chapter](../worked-examples/order-routing/README.md), which uses an XML document context and a host-supplied plan rather than the context-free manifest runner.

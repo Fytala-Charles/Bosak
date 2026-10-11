@@ -1,0 +1,2 @@
+(: Sequence identity checks; synthetic fulfillment data; mode 40; no external context. :)
+string(all-different(('R1','R2','R1'))) || '/' || string-join(duplicate-values(('R1','R2','R1','R2')), ',')

@@ -10,6 +10,10 @@
 
 **External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: constructor functions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-constructor-functions), [F&O 4.0: XML Schema constructors](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#constructor-functions-for-xsd-types). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
 
+**Delivery provenance:** [PR #110](https://github.com/Fytala-Charles/Bosak/pull/110), [immutable mainline revision `2871c0d6`](https://github.com/Fytala-Charles/Bosak/commit/2871c0d6ecb76c5099a4f682a71c5da49fb10ecf) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
+
 ## 2. Intent
 
 Use the current item as the argument to a zero-arity constructor inside a simple map.
@@ -69,6 +73,8 @@ Expected class: per-item conversion. Invalid values still require error classifi
 ## 15. Known Uses
 
 Executable example IDs: `focus-functions-main`, `focus-functions-edge`, `focus-functions-before` in `CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome`. Existing unit evidence: [primary tests](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Chapter-level evidence does not promote a qt4tests set into GatedSets; conformance status remains owned by the harness and delivery records.
+
+**Named implementation evidence:** [`Compile_FocusConstructors_DefaultOptions_ThrowXpst0017`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_FocusConstructors_FrozenXPath40_Works`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Named promoted sets: `xs-normalizedString`, `xs-numeric`, `xs-token`. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 

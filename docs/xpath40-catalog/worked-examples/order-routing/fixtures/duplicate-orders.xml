@@ -1,0 +1,4 @@
+<orders xmlns="urn:example:routing">
+  <order id="R1" route="NORTH"><line sku="FILTER-A" quantity="1"/></order>
+  <order id="R1" route="SOUTH"><line sku="FILTER-A" quantity="1"/></order>
+</orders>

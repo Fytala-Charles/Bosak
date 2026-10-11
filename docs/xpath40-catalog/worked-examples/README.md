@@ -15,7 +15,9 @@ Start with a business problem and follow the transformation from input to expect
 | [XML manual to HTML](manual-to-html/README.md) | Implemented; fixtures and three checks | Mixed content, template modes, stable heading IDs, internal links, table of contents, and missing-link detection. |
 | [Order reconciliation report](order-reconciliation/README.md) | Implemented; fixtures and three checks | Customer/product grouping, lookup joins, missing reference data, and report/exception separation. |
 
-The three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 81 focused checks, including earlier-version baselines and compatibility refusals.
+| [Order validation and routing](order-routing/README.md) | Implemented; complete fixtures and six checks | Explicit XPath40 planning, higher-order validation, consecutive batch arrays and XSLT 3.0 dispatch/repair outputs. |
+
+The first three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 104 focused checks, including earlier-version baselines and compatibility refusals.
 
 ## Worked-example contract
 
@@ -31,4 +33,4 @@ The executable files are part of the teaching material. XSLT files carry a
 standalone input/output contract, a change history, documented helper edge cases,
 and template preconditions. Follow the [applicable XSLT comment conventions](../../XSLT_STYLE_GUIDE.md).
 
-All three planned chapters are supplied and executable. The catalog has practical cases for its 28 current entries, but the wider inventory of shipped functions and deferred decisions remains incomplete; REQ-126 stays in progress.
+The original three planned chapters and the new routing chapter are supplied and executable. The catalog has practical cases for its 38 current entries, but the wider inventory of shipped functions and deferred decisions remains incomplete; REQ-126 stays in progress.

@@ -15,6 +15,10 @@
 
 Draft evolution: [QT4CG PR #2824](https://github.com/qt4cg/qtspecs/pull/2824) records the scan proposal referenced by the adoption dossier.
 
+**Delivery provenance:** [PR #98](https://github.com/Fytala-Charles/Bosak/pull/98), [immutable mainline revision `bd18e42f`](https://github.com/Fytala-Charles/Bosak/commit/bd18e42f33b5e69817f059f6429f4b08e639a5a3) (2026-10-09). This identifies the engine delivery; later documentation examples do not redefine that delivery.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
+
 ## 2. Intent
 
 Return every intermediate accumulator of a left fold as a **sequence of single-member arrays**: `fn:scan($input, $init, $action)` yields `[$init]`, then `[$action($acc, $item, $pos)]` for each input item — N input items produce N+1 arrays. There is no additional outer array.
@@ -112,6 +116,8 @@ qt4tests set `fn-scan` is promoted into `GatedSets` in
 The 1.1.0 gate run records 11 experimental-level passes and zero gated failures.
 Gate membership does not move the function into the frozen compatibility tier;
 its successful examples still require `XPath40Experimental`.
+
+**Named implementation evidence:** [`Evaluate_Scan_XPath40Experimental_Works`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Named promoted sets: `fn-scan`. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 
