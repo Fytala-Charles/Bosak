@@ -1,0 +1,1 @@
+partial-apply(string-join#2, map {1: ('FRAME', 'MOTOR'), 2: '+'})()

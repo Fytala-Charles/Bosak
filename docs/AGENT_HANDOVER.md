@@ -1,3 +1,21 @@
+# Agent Handover — 2026-10-11: dependency traversal and configured callbacks
+
+PR #164 merged after its CI passed. Base `c011a9c97a47a2cb2265cd90a3062b11b35f581b`.
+Added two complete references: product-dependency-closure (15 cases) and
+configured-label-callbacks (22 cases), assigning transitive-closure, partial-apply
+and identity. Full XML inputs, exact reports, 3.1 comparisons, shared dependencies,
+cycles/start inclusion, original node identity/document order, unresolved-reference
+validation, binding order/arity/types and identity values are explicit.
+Coverage: 46 entries, 251 feature plus 24 chapter checks (275 total), and
+93 assigned / 24 unassigned registered names. Source/public stays 1.1.2.
+Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; engine delivery
+#88 `0a928bb81b81d0631cc681f86bba83259c0ed790`, identity follow-up
+`eedcb321848ff7e9381c34fd72cb42db4994992f`. Exact fn-identity gate exists;
+no exact transitive-closure/partial-apply gate assignment is claimed.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,273 tests passed across ten assemblies with no failures/skips, including 251 catalog cases. Renderer verified 59 pages. Entry fields, primary/local links, inventory/provenance, named tests, three full XML blocks and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `5c5388d8`; [PR #165](https://github.com/Fytala-Charles/Bosak/pull/165). CI pending at handover.
+Next: scheduling/date-time and formatting reference families from the unassigned inventory.
+
 # Agent Handover — 2026-10-11: bounded retry state
 
 PR #163 merged after CI passed. Base revision: `df6e1ddd9c6546ea093816e31f824482bcd4a81a`.

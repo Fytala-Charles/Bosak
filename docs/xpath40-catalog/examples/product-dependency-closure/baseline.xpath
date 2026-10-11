@@ -1,0 +1,5 @@
+let $parts := parse-xml('<catalog><part id="KIT"><needs ref="FRAME"/><needs ref="MOTOR"/></part><part id="BOLT"/><part id="FRAME"><needs ref="BOLT"/></part><part id="MOTOR"><needs ref="BOLT"/></part></catalog>')/catalog/part
+return let $start := $parts[@id eq 'KIT']
+return let $step := function($part) { $parts[@id = $part/needs/@ref] }
+return let $reachable := fold-left(1 to count($parts), $step($start) | (), function($seen, $round) { $seen | ($seen ! $step(.)) })
+return concat('dependencies=', string-join($reachable/@id, ','), '; count=', count($reachable))

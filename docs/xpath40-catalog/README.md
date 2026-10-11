@@ -12,7 +12,7 @@
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 44 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 46 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -29,7 +29,7 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 ## Start with a worked chapter
 
-[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 214 focused catalog cases and migration baselines.
+[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 251 focused catalog cases and migration baselines.
 
 ## External specifications and source documentation
 
@@ -147,9 +147,9 @@ from fully documented signatures; the catalog remains In Progress.
 
 These entries include complete synthetic inputs, exact output text, 3.1
 comparisons and edge contracts. The map entry distinguishes published 1.1.1 behavior from the corrected
-source-1.1.2 sequence contracts and the pinned draft. Current coverage is **214 feature checks plus
-24 worked-chapter checks (238 total)**. See the [audit](COMPLETENESS-AUDIT.md)
-for the 27 remaining unassigned registered names and engine follow-up findings.
+source-1.1.2 sequence contracts and the pinned draft. Current coverage is **251 feature checks plus
+24 worked-chapter checks (275 total)**. See the [audit](COMPLETENESS-AUDIT.md)
+for the 24 remaining unassigned registered names and engine follow-up findings.
 
 ### Shipment history and sequence contracts
 
@@ -208,6 +208,8 @@ XPath 3.1 comparison make the acceptance contract explicit.
 | [Consecutive partitioning](functions/consecutive-partition.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); named evidence and executable cases |
 | [Ordered queue prefix](functions/ordered-queue-prefix.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); 18 exact queue and callback examples |
 | [Bounded retry state](functions/bounded-retries.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); 25 exact state, budget and callback examples |
+| [Product dependency closure](functions/product-dependency-closure.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); 15 exact graph and validation examples |
+| [Configured label callbacks](functions/configured-label-callbacks.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); 22 exact binding and identity examples |
 | [Sequence identity checks](functions/sequence-distinctness.md) | Frozen 4.0 | [#83](https://github.com/Fytala-Charles/Bosak/pull/83); named evidence and executable cases |
 | [Nominative record types](type-system/nominative-records.md) | Deferred | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
 | [Iteration across collection sequences](operators-and-syntax/sequence-collection-iteration.md) | Frozen 4.0 | [#87](https://github.com/Fytala-Charles/Bosak/pull/87); named evidence and executable cases |
@@ -225,6 +227,8 @@ Measured performance claims in this catalog must cite `benchmarks/Bosak.Benchmar
 
 *Last updated: 2026-10-11: four complete worked chapters; 38 catalog entries; 104 catalog checks plus 24 chapter checks. Remaining feature inventory is still in progress.*
 
-[Ordered queue prefix](functions/ordered-queue-prefix.md) supplies take-while/drop-while with complete input/output, an XPath 3.1 comparison and 18 boundary/callback cases. Current coverage: 44 entries, 214 feature checks plus 24 chapter checks (238 total), and 90 assigned / 27 unassigned registered names. REQ-126 remains In Progress; source/public version remains 1.1.2. Bounded loop processing is now supplied by the reference below; dependency traversal and partial application remain.
+[Ordered queue prefix](functions/ordered-queue-prefix.md) supplies take-while/drop-while with complete input/output, an XPath 3.1 comparison and 18 boundary/callback cases. Current coverage: 46 entries, 251 feature checks plus 24 chapter checks (275 total), and 93 assigned / 24 unassigned registered names. REQ-126 remains In Progress; source/public version remains 1.1.2. Bounded loop processing is now supplied by the reference below; dependency traversal and partial application are now supplied below.
 
-[Bounded retry state](functions/bounded-retries.md) documents while-do/do-until using invoice-submission response fixtures, complete input/output, a bounded XPath 3.1 fold, and 25 executable normal/edge/error cases. It explains precondition versus postcondition evaluation, explicit attempt limits, zero-budget guarding, and whole-state callback values. Current coverage is 44 entries and 238 documentation checks (214 feature plus 24 chapter checks); 90 of 117 registered names have entries, leaving 27. REQ-126 remains In Progress; source/public version stays 1.1.2. Next: dependency traversal and partial application.
+[Bounded retry state](functions/bounded-retries.md) documents while-do/do-until using invoice-submission response fixtures, complete input/output, a bounded XPath 3.1 fold, and 25 executable normal/edge/error cases. It explains precondition versus postcondition evaluation, explicit attempt limits, zero-budget guarding, and whole-state callback values. Current coverage is 46 entries and 275 documentation checks (214 feature plus 24 chapter checks); 93 of 117 registered names have entries, leaving 24. REQ-126 remains In Progress; source/public version stays 1.1.2. Dependency traversal and partial application are supplied by this delivery.
+
+[Product dependency closure](functions/product-dependency-closure.md) and [configured label callbacks](functions/configured-label-callbacks.md) add two complete references for transitive-closure, partial-apply and identity, with full input/output, XPath 3.1 comparisons and 37 executable cases. Shared dependencies, cycles, node identity/document order, unresolved references, argument order and callback binding limits are explicit. Current coverage: 46 entries, 251 feature plus 24 chapter checks (275 total), and 93 assigned / 24 unassigned registered names. REQ-126 remains In Progress; source/public version stays 1.1.2.
