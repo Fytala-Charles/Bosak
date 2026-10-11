@@ -21,8 +21,8 @@ The three chapters cover business mapping, document publishing, and operational 
 
 1. State the user's problem and the output contract, including what a host must decide.
 2. Declare assumptions and simplifications; identify synthetic vocabularies and sample data.
-3. Supply complete input, code, expected output, required context, and compatibility level.
-4. Walk through the solution before discussing internal engine implementation.
+3. Supply complete input, code, expected output, required context, and compatibility level. Each chapter README shows full complete/edge-case input and output documents inline, with links to the executable fixtures.
+4. Walk through the solution before discussing internal engine implementation. Explain source-to-target fields, validation and rejection rules, and every XSLT element used; identify the XPath constructs that make the solution work.
 5. Explain choices and alternatives, including earlier-version idioms where useful.
 6. Include at least one meaningful edge case and executable evidence for every claimed result.
 7. Link back to relevant feature entries and forward to the next chapter.

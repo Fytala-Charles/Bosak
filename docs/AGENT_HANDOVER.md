@@ -1,3 +1,12 @@
+# Detailed worked-example READMEs: 2026-10-11
+
+**Base commit:** `c9543c29dce2ab02b8f969e0fdb31170a167e00a`; continuing PR #152 on `docs/req126-invoice-reference-chapter`.
+**What changed:** all three chapter READMEs now include a reading path, complete normal/edge-case input and output documents (16 fixture documents), source-to-target field guides, validation/repair contracts, and an inventory of every XSLT element used plus the main XPath constructs. Invoice audit clarifies unchanged source ID spelling, single-valued-field assumptions, and source price precision versus two-place display. Manual documentation distinguishes the checked root-title cardinality from assumed section titles; reconciliation explains root identity refusals versus line rejection and shipment exception identity limitations. Reading-path guidance, README, integration, and REQ-126 are synchronized; no executable files changed.
+**Verification:** all 13 worked-example checks pass (0 failures/skips). Structural comparison confirms all 16 inline documents match published fixtures, preserving paragraph mixed content; complete XSLT inventories, local links, code fences, table structure, Markdown whitespace, and HTML rendering pass. The previous full solution result remains 4,039 passed / 0 failed / 0 skipped; this prose-only follow-up reran the affected chapter checks. Existing nullable/analyzer warnings remain in the test build.
+**Remaining:** publish this follow-up on PR #152. REQ-126 remains In Progress for the previously recorded wider inventory and traceability work.
+
+---
+
 # Worked chapters and catalog expansion: 2026-10-11
 
 **Base commit:** `3ae1aa6` (annotated invoice chapter). Expansion implementation/examples committed and published as `cee5b35` on PR #152; final documentation formatting is a follow-up. Continuing the same reference-guide branch.

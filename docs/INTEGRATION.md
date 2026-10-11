@@ -2738,7 +2738,7 @@ Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
 
 Use XSLT for reusable rules that reshape XML documents, such as invoice mapping, publishing XML manuals as HTML, or grouping order records into reports. See [why and when to use XSLT](../README.md#why-and-when-to-use-xslt). The [feature catalog](xpath40-catalog/README.md) is intended to grow into a book/reference guide with practical worked examples and compatibility notes; the initial 4.0 scaffold is still incomplete.
 
-The [invoice-to-ERP chapter](xpath40-catalog/worked-examples/invoice-to-erp/README.md) demonstrates public `XsltCompiler`/`CaptureTransform` usage against the exact published fixtures. It captures principal import and secondary exception documents in memory. Business rejection is represented in those documents even when transformation succeeds: consumers must hold `review-required` invoices and inspect the exception output. Seven named checks verify the mapping, edge cases, and the separately opted-in XPath 4.0 comparison. The [chapter plan](xpath40-catalog/worked-examples/README.md) schedules XML-manual publishing next.
+The [invoice-to-ERP chapter](xpath40-catalog/worked-examples/invoice-to-erp/README.md) demonstrates public `XsltCompiler`/`CaptureTransform` usage against the exact published fixtures. It captures principal import and secondary exception documents in memory. Business rejection is represented in those documents even when transformation succeeds: consumers must hold `review-required` invoices and inspect the exception output. Seven named checks verify the mapping, edge cases, and the separately opted-in XPath 4.0 comparison. The [chapter reading path](xpath40-catalog/worked-examples/README.md) continues with the implemented XML-manual and reconciliation chapters.
 
 The example stylesheet documents its input/output contract, host responsibilities,
 rounding policy, helper edge cases, and template preconditions directly in XML
@@ -2751,6 +2751,9 @@ shows template modes, mixed-content preservation, stable anchors, and visible
 missing references. The [order reconciliation chapter](xpath40-catalog/worked-examples/order-reconciliation/README.md)
 shows explicit-document key lookups, nested grouping, outstanding/over-shipped
 units, and partial-data exception handling. Both remain XSLT 3.0 / XPath 3.1.
+All three chapter READMEs include full input and output documents for complete
+and incomplete cases, source-to-target mapping tables, validation contracts,
+and inventories explaining every XSLT element used and the main XPath constructs.
 The [catalog example runner](xpath40-catalog/examples/README.md) supplies 81
 independent compatibility/result checks; its 4.0 and experimental cases require
 their declared levels. Transformation success alone does not approve partial

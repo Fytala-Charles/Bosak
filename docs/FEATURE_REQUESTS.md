@@ -4735,6 +4735,7 @@ The catalog is intended to grow into a book/reference guide with chapter introdu
 
 - Three complete chapters: invoice mapping, XML-manual publishing, and order reconciliation; 13 named chapter checks.
 - 24 additional catalog entries: eight syntax/iteration conveniences, five function families, four type contracts, JNode navigation, and six XSLT instruction families.
+- All three worked-example READMEs now show complete normal/edge-case inputs and outputs inline, source-to-target mappings, validation and repair contracts, and every used XSLT element plus the main XPath constructs. The invoice audit clarifies unchanged ID spelling and source-price precision versus two-place display.
 - 81 manifest-driven feature checks, including 24 earlier-version baselines and a stock-ledger fold comparison. The four seed entries now link practical cases or stable alternatives.
 - Executable evidence corrects the scan wrapper description and mapping-arrow example; no new engine surface or qt4tests promotion is introduced.
 - AC-01/02/03 remain open for the full shipped-feature/deferred inventory, precise per-delivery/spec/conformance traceability, and supplementary forms beyond these examples.
