@@ -1,0 +1,4 @@
+let $request := parse-xml('<request endpoint="https://api.example.test:443/v1" invoice="INV/2048" query="Ada Lovelace + VAT"/>')/request
+return let $origin := replace(substring-before(string($request/@endpoint), '/v1'), ':443$', '')
+return let $uri := concat($origin, '/v1/invoices/', encode-for-uri(string($request/@invoice)), '?q=', encode-for-uri(string($request/@query)))
+return $uri

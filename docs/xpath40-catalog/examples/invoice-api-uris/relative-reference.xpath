@@ -1,0 +1,1 @@
+let $p := parse-uri('../invoices/INV2048?q=ready') return concat('scheme=', exists($p?scheme), '; path=', $p?path, '; query=', $p?query-parameters?q)
