@@ -477,7 +477,7 @@ src/
 
 ### Controlled Validation, Capture and Execution Controls (REQ-125)
 
-**Current status:** Implemented and accepted by Bosak.Braid on 2026-10-11 within the declared coverage and restricted byte-bounded profiles. The correction source is committed with this delivery; dependency adoption is a separate consumer step.
+**Current status:** Implemented and accepted by Bosak.Braid on 2026-10-11 within the declared coverage and restricted byte-bounded profiles. The correction source is committed and its immutable revision has been adopted and verified by Bosak.Braid; see delivery traceability below.
 
 
 All four REQ-125 slices landed 2026-10-10 (status Implemented, pending Bosak.Braid whole-request acceptance) — the supported public surface behind the designer's preview, composing with the REQ-124 authoring envelopes. Everything is **opt-in with a null-gated default: zero policy, no capture options, and no gate leaves every existing code path bit-identical.**
@@ -712,3 +712,5 @@ The published NuGet package will likely be a single `Bosak.XPath` assembly (prod
     <strong>© Fytala</strong> — Bosak XPath Engine Architecture
   </p>
 </div>
+
+**REQ-125 delivery traceability (2026-10-11):** Bosak correction revision `0ff33163ba985bf8562722424db7e66c37e3566d` is accepted within the documented coverage and restricted byte-bounded profiles. Bosak.Braid adopted this exact immutable revision in commit `9423d41b52a5f3a3c1206df370c7998f7ad88886`. Its Release build passed with 0 errors, all **192 tests passed / 0 failed / 0 skipped** (including six public-contract checks), and the strict documentation gate passed. The bootstrap also rejects solution/manifest revision mismatches before checkout preparation. Both repositories have local commits; remote publication awaits explicit push authorization. Production preview adapter/worker integration remains separate product work.
