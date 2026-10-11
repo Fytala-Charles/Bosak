@@ -50,6 +50,7 @@
 //                      |                  |       |                | fallback, XPST0081) in the namespace resolution pass                                   |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.19  | 11-10-2026     | Preserve and enforce frozen profile boundaries in mixed-version XSLT execution.        |
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -481,6 +482,11 @@ public sealed class XPath31Expression
     public XdmValue Evaluate(EvaluationContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
+        // XSLT keeps a shared registry across mixed-version instructions. Nested
+        // evaluations must restore the caller's profile before its VM resumes.
+        var restoreCompatibility = context.IsXsltMode && context.SkipStandardFunctionPopulation;
+        var savedXPath40 = context.IsXPath40;
+        var savedXPath40Experimental = context.IsXPath40Experimental;
         // REQ-118 version gate: stamp the compiled compatibility onto the context so
         // FunctionLibrary.Populate installs (or hides) XPath 4.0-only functions; the
         // experimental tier (REQ-123) is additive over the frozen 4.0 level.
@@ -526,6 +532,11 @@ public sealed class XPath31Expression
             context.DefaultElementNamespace = savedDefaultNs;
             context.DefiningElementDefaultNamespace = savedDefiningNs;
             context.BaseUri = savedBaseUri;
+            if (restoreCompatibility)
+            {
+                context.IsXPath40 = savedXPath40;
+                context.IsXPath40Experimental = savedXPath40Experimental;
+            }
         }
     }
 

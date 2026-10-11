@@ -522,6 +522,7 @@
 //                      | Charles Korthout | 7.08  | 10-10-2026     | REQ-125 Slice D: ExecutionGate checkpoints — instruction dispatch, call-template and     |
 //                      |                  |       |                | apply-templates entries; gate inherited from the evaluation context (null = no-op)      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.09  | 11-10-2026     | Apply effective-version XPath profiles to expression compilation.                       |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -947,7 +948,12 @@ internal sealed class TransformEngine
         // failing statically with XPST0008 (no schema awareness).
         if (_context.SchemaSet is { } inScopeSchemas)
             _schemaCompileOptions = new CompileOptions { SchemaSet = inScopeSchemas };
+        // Mixed-version modules share one registry. Install frozen signatures once;
+        // expression evaluation stamps the profile and resolution hides them in 3.x.
+        _context.IsXPath40 = true;
+        _context.IsXPath40Experimental = false;
         FunctionLibrary.Populate(_context);
+        _context.IsXPath40 = false;
         _context.CollationComparer = FunctionLibrary.CompareStrings;
         XsltFunctionLibrary.Populate(_context);
         // The engine keeps the standard function registry intact for its lifetime, so
@@ -1307,7 +1313,7 @@ internal sealed class TransformEngine
         var patternCompiler = new Patterns.PatternCompiler(_context);
         foreach (var rule in _allTemplateRules)
         {
-            rule.CompileMatch(patternCompiler);
+            rule.CompileMatch(patternCompiler, _stylesheet.GetXPathCompatibility(rule.Element));
             ValidateStrictModePatternDeclarations(rule);
         }
 
@@ -2564,7 +2570,7 @@ internal sealed class TransformEngine
         var patternCompiler = new Patterns.PatternCompiler(_context);
         foreach (var rule in _allTemplateRules)
         {
-            rule.CompileMatch(patternCompiler);
+            rule.CompileMatch(patternCompiler, _stylesheet.GetXPathCompatibility(rule.Element));
             ValidateStrictModePatternDeclarations(rule);
         }
 
@@ -2956,12 +2962,20 @@ internal sealed class TransformEngine
     /// Compiles an XPath expression that has no instruction-level static namespace context,
     /// carrying the stylesheet's compiled schema set when the transform is schema-aware
     /// (REQ-104) so schema-element()/schema-attribute() kind tests compile; equivalent to
-    /// <see cref="XPath31Expression.Compile(string)"/> when no schema set is in scope.
+    /// <see cref="XPath31Expression.Compile(string)"/> when no schema set is in scope
+    /// and the owning element selects the XPath31 profile.
     /// </summary>
-    private XPath31Expression CompileWithSchemaContext(string expression)
-        => _schemaCompileOptions is { } options
-            ? XPath31Expression.Compile(expression, options)
-            : XPath31Expression.Compile(expression);
+    private XPath31Expression CompileWithSchemaContext(string expression, XElement? instruction = null)
+    {
+        var compatibility = _stylesheet.GetXPathCompatibility(instruction ?? _stylesheet.Root);
+        if (_schemaCompileOptions is null && compatibility == XPathCompatibility.XPath31)
+            return XPath31Expression.Compile(expression);
+        return XPath31Expression.Compile(expression, new CompileOptions
+        {
+            Compatibility = compatibility,
+            SchemaSet = _schemaCompileOptions?.SchemaSet,
+        });
+    }
 
     private XPath31Expression CompileXPathUncached(string expression, XElement instruction)
     {
@@ -2974,6 +2988,7 @@ internal sealed class TransformEngine
         {
             var options = new CompileOptions
             {
+                Compatibility = _stylesheet.GetXPathCompatibility(instruction),
                 Namespaces = nsMap,
                 DefaultElementNamespace = defaultNs,
                 DefiningElementDefaultNamespace = definingNs,
@@ -2983,7 +2998,7 @@ internal sealed class TransformEngine
             };
             return XPath31Expression.Compile(expression, options);
         }
-        return CompileWithSchemaContext(expression);
+        return CompileWithSchemaContext(expression, instruction);
     }
 
     private static readonly HashSet<string> XPathAxisNames = new(StringComparer.Ordinal)
@@ -3828,7 +3843,7 @@ internal sealed class TransformEngine
         foreach (var rule in acc.Rules)
         {
             var defaultNs = GetXPathDefaultNamespace(rule.Element);
-            var match = patternCompiler.Compile(rule.Match, defaultNs ?? "");
+            var match = patternCompiler.Compile(rule.Match, defaultNs ?? "", compatibility: _stylesheet.GetXPathCompatibility(rule.Element));
             compiledRules.Add((rule, match));
         }
 
@@ -5265,7 +5280,7 @@ internal sealed class TransformEngine
                             throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute");
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = CompileWithSchemaContext(select);
+                            var compiled = CompileWithSchemaContext(select, instruction);
                             var feResult = compiled.Evaluate(_context);
                             var feItems = EnumerateItems(feResult).ToList();
 
@@ -5536,7 +5551,7 @@ internal sealed class TransformEngine
                             var select = instruction.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(select))
                             {
-                                var compiled = CompileWithSchemaContext(select);
+                                var compiled = CompileWithSchemaContext(select, instruction);
                                 var result = compiled.Evaluate(_context);
                                 FlattenToList(result, results);
                             }
@@ -5569,7 +5584,7 @@ internal sealed class TransformEngine
                                 var catchSelect = catchElem.Attribute("select")?.Value;
                                 if (!string.IsNullOrEmpty(catchSelect))
                                 {
-                                    var compiled = CompileWithSchemaContext(catchSelect);
+                                    var compiled = CompileWithSchemaContext(catchSelect, catchElem);
                                     var catchResult = compiled.Evaluate(_context);
                                     FlattenToList(catchResult, results);
                                 }
@@ -5600,7 +5615,7 @@ internal sealed class TransformEngine
                         var copySelect = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(copySelect))
                         {
-                            var compiled = CompileWithSchemaContext(copySelect);
+                            var compiled = CompileWithSchemaContext(copySelect, instruction);
                             var result = compiled.Evaluate(_context);
                             var fnCopyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
                                 ?? instruction.Attribute("_copy-namespaces")?.Value
@@ -5652,7 +5667,7 @@ internal sealed class TransformEngine
                         var copySelect = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(copySelect))
                         {
-                            var compiled = CompileWithSchemaContext(copySelect);
+                            var compiled = CompileWithSchemaContext(copySelect, instruction);
                             var result = compiled.Evaluate(_context);
                             if (result.IsNode && result.NodeValue != null)
                             {
@@ -5764,7 +5779,7 @@ internal sealed class TransformEngine
                         List<XdmValue> psItems;
                         if (!string.IsNullOrEmpty(psSelect))
                         {
-                            var compiled = CompileWithSchemaContext(psSelect);
+                            var compiled = CompileWithSchemaContext(psSelect, instruction);
                             var psResult = compiled.Evaluate(_context);
                             psItems = EnumerateItems(psResult).ToList();
                         }
@@ -6351,7 +6366,7 @@ internal sealed class TransformEngine
             else
             {
                 // Evaluate select expression
-                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select, instruction);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
                 if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
                 {
@@ -6472,7 +6487,7 @@ internal sealed class TransformEngine
             else
             {
                 // Evaluate select expression with the given context item as focus
-                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select, instruction);
                 var result = compiled.Evaluate(_context.WithFocus(contextItem, 1, 1));
                 if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
                 {
@@ -7325,6 +7340,7 @@ internal sealed class TransformEngine
 
         var compileOptions = new CompileOptions
         {
+            Compatibility = _stylesheet.GetXPathCompatibility(instruction),
             Namespaces = nsMap,
             DefaultElementNamespace = defaultNs,
             DefiningElementDefaultNamespace = instruction.GetDefaultNamespace().NamespaceName,
@@ -7376,6 +7392,8 @@ internal sealed class TransformEngine
         var savedCurrentItem = _context.CurrentItem;
         var savedDefaultCollation = _context.DefaultCollation;
         var savedSkipPopulation = _context.SkipStandardFunctionPopulation;
+        var savedXPath40 = _context.IsXPath40;
+        var savedXPath40Experimental = _context.IsXPath40Experimental;
         var savedSchemaSet = _context.SchemaSet;
         var savedMergeGroup = _currentMergeGroup;
         var savedMergeKey = _currentMergeKey;
@@ -7387,6 +7405,8 @@ internal sealed class TransformEngine
             // functions plus visible stylesheet functions. XSLT-defined functions such as
             // current() and key() are not available.
             _context.ClearFunctions();
+            _context.IsXPath40 = _stylesheet.GetXPathCompatibility(instruction) == XPathCompatibility.XPath40;
+            _context.IsXPath40Experimental = false;
             Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(_context);
             RemoveXsltContextFunctions(_context);
             RegisterVisibleXsltFunctions(_context);
@@ -7433,6 +7453,8 @@ internal sealed class TransformEngine
         {
             _context.DefaultCollation = savedDefaultCollation;
             _context.SkipStandardFunctionPopulation = savedSkipPopulation;
+            _context.IsXPath40 = savedXPath40;
+            _context.IsXPath40Experimental = savedXPath40Experimental;
             _context.SchemaSet = savedSchemaSet;
             _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
             _context.WithCurrentItem(savedCurrentItem);
@@ -8087,7 +8109,7 @@ internal sealed class TransformEngine
                             var oeSelect = onEmpty.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(oeSelect))
                             {
-                                var compiled = CompileWithSchemaContext(oeSelect);
+                                var compiled = CompileWithSchemaContext(oeSelect, onEmpty);
                                 var oeResult = compiled.Evaluate(_context);
                                 CopyToResult(oeResult, separateAtomicsWithSpace: true);
                             }
@@ -8524,7 +8546,7 @@ internal sealed class TransformEngine
                         XdmValue varValue;
                         if (!string.IsNullOrEmpty(varSelect))
                         {
-                            var compiled = CompileWithSchemaContext(varSelect);
+                            var compiled = CompileWithSchemaContext(varSelect, instruction);
                             varValue = compiled.Evaluate(_context);
                         }
                         else
@@ -9070,7 +9092,7 @@ internal sealed class TransformEngine
                         var select = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = CompileWithSchemaContext(select);
+                            var compiled = CompileWithSchemaContext(select, instruction);
                             var result = compiled.Evaluate(_context);
                             CopyToResult(result);
                         }
@@ -9119,7 +9141,7 @@ internal sealed class TransformEngine
                             var catchSelect = catchElem.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(catchSelect))
                             {
-                                var compiled = CompileWithSchemaContext(catchSelect);
+                                var compiled = CompileWithSchemaContext(catchSelect, catchElem);
                                 var catchResult = compiled.Evaluate(_context);
                                 CopyToResult(catchResult);
                             }
@@ -9189,7 +9211,7 @@ internal sealed class TransformEngine
                     List<XdmValue> psItems;
                     if (!string.IsNullOrEmpty(psSelect2))
                     {
-                        var compiled = CompileWithSchemaContext(psSelect2);
+                        var compiled = CompileWithSchemaContext(psSelect2, instruction);
                         var psResult = compiled.Evaluate(_context);
                         psItems = EnumerateItems(psResult).ToList();
                     }
@@ -10030,7 +10052,8 @@ internal sealed class TransformEngine
         var nsMap = contextElement != null ? GetInScopeNamespaces(contextElement) : null;
         var defaultNs = contextElement != null ? GetXPathDefaultNamespace(contextElement) : null;
         var definingNs = contextElement != null ? contextElement.GetDefaultNamespace().NamespaceName : null;
-        bool needsOptions = (nsMap != null && nsMap.Count > 1)
+        var compatibility = _stylesheet.GetXPathCompatibility(contextElement ?? _stylesheet.Root);
+        bool needsOptions = compatibility != XPathCompatibility.XPath31 || (nsMap != null && nsMap.Count > 1)
             || !string.IsNullOrEmpty(defaultNs)
             || !string.IsNullOrEmpty(definingNs)
             || !string.IsNullOrEmpty(avtBaseUri);
@@ -10066,6 +10089,7 @@ internal sealed class TransformEngine
                         {
                             var options = new CompileOptions
                             {
+                                Compatibility = compatibility,
                                 Namespaces = nsMap,
                                 DefaultElementNamespace = defaultNs,
                                 DefiningElementDefaultNamespace = definingNs,
@@ -10077,7 +10101,7 @@ internal sealed class TransformEngine
                         }
                         else
                         {
-                            compiled = CompileWithSchemaContext(expr);
+                            compiled = CompileWithSchemaContext(expr, contextElement);
                         }
                         var savedBackwardsCompatible = _context.BackwardsCompatible;
                         XdmValue result;
@@ -15444,7 +15468,7 @@ internal sealed class TransformEngine
         {
             var defaultNs = GetXPathDefaultNamespace(instruction);
             var patternCompiler = new Patterns.PatternCompiler();
-            var pattern = patternCompiler.Compile(groupStarting, defaultNs);
+            var pattern = patternCompiler.Compile(groupStarting, defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
             List<XdmValue>? currentItems = null;
             var savedOutputUri = _context.CurrentOutputUri;
             _context.CurrentOutputUri = null;
@@ -15478,7 +15502,7 @@ internal sealed class TransformEngine
         {
             var defaultNs = GetXPathDefaultNamespace(instruction);
             var patternCompiler = new Patterns.PatternCompiler();
-            var pattern = patternCompiler.Compile(groupEnding, defaultNs);
+            var pattern = patternCompiler.Compile(groupEnding, defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
             List<XdmValue>? currentItems = null;
             var savedOutputUri = _context.CurrentOutputUri;
             _context.CurrentOutputUri = null;
@@ -17067,7 +17091,7 @@ internal sealed class TransformEngine
                     var oeSelect = onEmpty.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(oeSelect))
                     {
-                        var compiled = CompileWithSchemaContext(oeSelect);
+                        var compiled = CompileWithSchemaContext(oeSelect, onEmpty);
                         var result = compiled.Evaluate(_context);
                         CopyToResult(result, separateAtomicsWithSpace: true);
                     }
@@ -17894,7 +17918,7 @@ internal sealed class TransformEngine
                     var seqSelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(seqSelect))
                     {
-                        var compiled = CompileWithSchemaContext(seqSelect);
+                        var compiled = CompileWithSchemaContext(seqSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         if (result.IsSequence && result.SequenceValue != null)
                         {
@@ -17918,7 +17942,7 @@ internal sealed class TransformEngine
                     var copySelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(copySelect))
                     {
-                        var compiled = CompileWithSchemaContext(copySelect);
+                        var compiled = CompileWithSchemaContext(copySelect, instruction);
                         var result = compiled.Evaluate(_context);
                         if (result.IsSequence && result.SequenceValue != null)
                         {
@@ -17949,7 +17973,7 @@ internal sealed class TransformEngine
                     var feSelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(feSelect))
                     {
-                        var compiled = CompileWithSchemaContext(feSelect);
+                        var compiled = CompileWithSchemaContext(feSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         var feItems = new List<XdmValue>();
                         if (result.IsSequence && result.SequenceValue != null)
@@ -18072,7 +18096,7 @@ internal sealed class TransformEngine
                         XdmValue varValue;
                         if (!string.IsNullOrEmpty(varSelect))
                         {
-                            var compiled = CompileWithSchemaContext(varSelect);
+                            var compiled = CompileWithSchemaContext(varSelect, instruction);
                             varValue = compiled.Evaluate(_context);
                         }
                         else
@@ -20017,7 +20041,7 @@ internal sealed class TransformEngine
         IXdmNode? targetNode = currentNode;
         if (!string.IsNullOrEmpty(selectAttr))
         {
-            var compiled = CompileWithSchemaContext(selectAttr);
+            var compiled = CompileWithSchemaContext(selectAttr, instruction);
             var result = compiled.Evaluate(_context);
 
             // XTTE1000: select must return at most one node
@@ -20042,7 +20066,7 @@ internal sealed class TransformEngine
 
         if (!string.IsNullOrEmpty(valueAttr))
         {
-            var compiled = CompileWithSchemaContext(valueAttr);
+            var compiled = CompileWithSchemaContext(valueAttr, instruction);
             var result = compiled.Evaluate(_context);
 
             // XSLT 1.0 backwards compatibility: xsl:number/@value uses only the first item.
@@ -20123,11 +20147,11 @@ internal sealed class TransformEngine
             var defaultNs = GetXPathDefaultNamespace(instruction);
             var countMatcher = string.IsNullOrEmpty(countPattern)
                 ? CreateDefaultCountMatcher(targetNode)
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction), defaultNs);
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
 
             var fromMatcher = string.IsNullOrEmpty(fromPattern)
                 ? null
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction), defaultNs);
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
 
             int[]? numbers = level switch
             {
@@ -21960,7 +21984,7 @@ internal sealed class TransformEngine
                 foreach (var rule in acc.Rules)
                 {
                     var defaultNs = GetXPathDefaultNamespace(rule.Element);
-                    rules.Add((rule, patternCompiler.Compile(rule.Match, defaultNs ?? "")));
+                    rules.Add((rule, patternCompiler.Compile(rule.Match, defaultNs ?? "", compatibility: engine._stylesheet.GetXPathCompatibility(rule.Element))));
                 }
                 var initialCtx = engine.CreateAccumulatorEvaluationContext(focusNode: docNode, value: null);
                 XdmValue current;

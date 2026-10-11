@@ -20,6 +20,8 @@
 
 The [REQ-126 completeness audit](docs/xpath40-catalog/COMPLETENESS-AUDIT.md)
 records the remaining catalog gaps and prioritized documentation work.
+Source **1.1.1** corrects effective-version XPath40 propagation in XSLT; it is not yet published. Verification: **4,103 tests passed**, unchanged QT3 gate and zero qt4 gated failures. The complete verification record is in [the compatibility dossier](docs/REQ-118-XSLT-XPATH40-COMPATIBILITY.md). The [routing chapter](docs/xpath40-catalog/worked-examples/order-routing/README.md) now includes a self-contained 4.0 stylesheet alongside the published-1.1.0 integration alternative.
+
 The catalog and audit also link primary specifications, draft history, and upstream
 tests; individual feature entries provide direct specification-section references.
 
@@ -321,7 +323,7 @@ dotnet test Bosak.sln
 
 Target framework: **.NET 10**.
 
-Current documentation follow-up verification (2026-10-11): **4,068 unit tests pass / 0 failures / 0 skipped**, including 123 catalog/chapter checks. No engine behavior changed.
+Documentation follow-up baseline before the compatibility fix (2026-10-11): **4,068 unit tests pass / 0 failures / 0 skipped**, including 123 catalog/chapter checks. No engine behavior changed.
 
 Release verification: **4,039 unit tests pass / 0 failures / 0 skipped** across the 10 assemblies in `Bosak.sln`, including 94 reference-guide/catalog checks. The separate Bosak.LanguageServer test project is outside this solution run.
 

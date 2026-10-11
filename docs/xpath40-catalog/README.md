@@ -196,4 +196,4 @@ The [provenance ledger](PROVENANCE.md) supplies exact Bosak delivery revisions a
 
 Measured performance claims in this catalog must cite `benchmarks/Bosak.Benchmarks` (BenchmarkDotNet) output and carry the git revision + measurement date. Qualitative cost classes (zero-cost desugar / constant overhead / hot-path relevant) need no citation but must be stated as expectations, not measurements. See field 14 contract in §1.1.
 
-*Last updated: 2026-10-11: four complete worked chapters; 38 catalog entries; 104 catalog checks plus 19 chapter checks. Remaining feature inventory is still in progress.*
+*Last updated: 2026-10-11: four complete worked chapters; 38 catalog entries; 104 catalog checks plus 24 chapter checks. Remaining feature inventory is still in progress.*

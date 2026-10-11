@@ -14,7 +14,54 @@ ERP schema, stock reservation system or shipping API. The capacity is two **orde
 not two lines or units. Production capacity, supported routes and quantities should
 be governed by the receiving application. The stylesheet reads no external resources.
 
-## Compatibility and running
+## Self-contained XSLT 4.0 variant (source 1.1.1)
+
+[order-routing-40.xsl](order-routing-40.xsl) performs validation and routing directly
+inside the stylesheet. It declares `version="4.0"`; the corrected runtime selects
+frozen XPath40 for its expressions. This requires the **1.1.1 source correction**;
+published 1.1.0 consumers should use the two-stage variant below until the fix is
+released. See the [compatibility correction](../../../REQ-118-XSLT-XPATH40-COMPATIBILITY.md).
+
+The host only compiles and captures:
+
+```csharp
+var source = new XDocumentNode(XDocument.Load(inputPath));
+var executable = new XsltCompiler().Compile(File.ReadAllText(stylesheetPath),
+    new Uri(Path.GetFullPath(stylesheetPath)).AbsoluteUri);
+var result = executable.CaptureTransform(source, new XsltCaptureOptions
+{
+    BaseOutputUri = "https://example.invalid/order-routing/dispatch.xml",
+});
+```
+
+Use the same fixtures and expected outputs shown below. This variant needs no
+external `plan` parameter. The host must still check `IsSuccess` before publishing.
+Missing/duplicate IDs produce an unsuccessful capture with ROUTING-ID before
+either output is constructed. The two-stage version raises that refusal during
+XPath planning instead. Successful results have the same source-order, capacity,
+route and repair contracts in both variants.
+
+`f:valid-line` and `f:valid-order` are stylesheet functions in this version. Their
+comments document argument types, guarded casts and the empty-line rule.
+`every` calls the line predicate; `partition` splits the accepted node sequence;
+`index-where` locates invalid lines. The two template loops serialize batch arrays
+and rejected orders directly. Five added tests compare both complete result trees
+for normal/all-invalid/empty input and ensure both identity refusals produce no
+outputs. The chapter now has **11 checks** across both integration variants.
+
+| Additional XSLT element | Role in the self-contained variant |
+|---|---|
+| `xsl:function` | Declare the typed line/order validation helpers. |
+| `xsl:sequence` | Return boolean helper results. |
+| `xsl:if` | Guard batch-wide identity refusal before constructing results. |
+| `xsl:message` | Terminate with the ROUTING-ID diagnostic. |
+
+The `xsl:param` elements in this variant supply helper arguments; the two-stage
+stylesheet uses a required global plan parameter instead. Other XSLT elements
+have the roles listed below. Earlier-version local overrides still restrict their
+expressions to XPath31, and stylesheet version never enables experimental scan.
+
+## Two-stage compatibility and running
 
 This chapter uses two explicit stages. [routing-plan-40.xpath](routing-plan-40.xpath)
 is compiled with `CompileOptions.Compatibility = XPathCompatibility.XPath40`.
@@ -22,11 +69,11 @@ Its result is an XDM map containing source nodes, accepted nodes, batch arrays a
 exception maps. [order-routing.xsl](order-routing.xsl) declares `version="3.0"`
 and receives that map as a required parameter. There are no experimental functions.
 
-**Bosak 1.1.0 runtime boundary:** a stylesheet's `version="4.0"` declaration does
+**Published Bosak 1.1.0 runtime boundary:** a stylesheet's `version="4.0"` declaration does
 not opt transformation-time XPath compilation into XPath40. Calling `partition`
-directly from such a stylesheet currently fails XPST0017. The public XPath API
+directly from such a stylesheet fails XPST0017 in that release. The source 1.1.1 correction resolves this boundary; the two-stage version remains a supported alternative. The public XPath API
 supports the explicit opt-in used here. This chapter demonstrates the supported
-two-stage integration; it does not claim that the runtime boundary is fixed.
+two-stage integration; its earlier-release behavior is retained for migration comparison.
 
 The complete host sequence is:
 
