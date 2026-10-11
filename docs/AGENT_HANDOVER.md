@@ -15,7 +15,7 @@ definitions unchanged versus a014e1b4. Inventory-wide review pin remains scoped
 as before. Initial engine deliveries #82/#83 and named tests are linked.
 Only exact fn-characters and fn-index-of-substring gate assignments are claimed.
 No engine/API/package/gate changes. REQ-126 remains In Progress.
-Validation: Release build passed; all 4,372 tests passed across ten assemblies without failures/skips, including 350 catalog cases. Renderer verified 64 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs including text content, and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision will be recorded after commit.
+Validation: Release build passed; all 4,372 tests passed across ten assemblies without failures/skips, including 350 catalog cases. Renderer verified 64 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs including text content, and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `bacc9ec3`; [PR #168](https://github.com/Fytala-Charles/Bosak/pull/168). CI pending at handover.
 Next: ranking/numeric diagnostics and remaining utility references.
 
 # Agent Handover — 2026-10-11: invoice API URI reference
