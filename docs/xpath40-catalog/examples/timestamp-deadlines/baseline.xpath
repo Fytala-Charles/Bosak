@@ -1,0 +1,7 @@
+let $receipt := parse-xml('<receipt epochMilliseconds="1706702400000" elapsedMilliseconds="1250" budgetSeconds="2.5"/>')/receipt
+return let $received := xs:dateTime('1970-01-01T00:00:00Z') + xs:dayTimeDuration('PT0.001S') * xs:integer($receipt/@epochMilliseconds)
+return let $elapsed := xs:dayTimeDuration('PT1S') * (xs:decimal($receipt/@elapsedMilliseconds) div 1000)
+return let $budget := xs:dayTimeDuration('PT1S') * xs:decimal($receipt/@budgetSeconds)
+return let $finished := $received + $elapsed
+return let $deadline := $received + $budget
+return concat('received=', $received, '; finished=', $finished, '; deadline=', $deadline, '; elapsedSeconds=', ($elapsed div xs:dayTimeDuration('PT1S')), '; remainingSeconds=', (($deadline - $finished) div xs:dayTimeDuration('PT1S')), '; withinBudget=', $finished le $deadline)

@@ -1,6 +1,6 @@
 {
   "auditDate": "2026-10-11",
-  "sourceRevision": "c011a9c97a47a2cb2265cd90a3062b11b35f581b",
+  "sourceRevision": "33299e74db763b0f11794c1d888a0f2ae6e8e20f",
   "enginePackageVersion": "1.1.2",
   "engineRevision": "3aebf76a24b28af7d40aa42e6eaf714b3a596838",
   "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
@@ -81,8 +81,8 @@
       "name": "fn:build-dateTime",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/month-end-cutoffs.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -145,8 +145,8 @@
       "name": "fn:days-in-month",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/month-end-cutoffs.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -185,8 +185,8 @@
       "name": "fn:duration-to-seconds",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -409,8 +409,8 @@
       "name": "fn:seconds",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -505,8 +505,8 @@
       "name": "fn:unix-dateTime",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-unix-dateTime"
     },
     {

@@ -1774,5 +1774,257 @@
     "mode": "40",
     "file": "configured-label-callbacks/identity-container.xpath",
     "expected": "true"
+  },
+  {
+    "id": "month-end-cutoffs-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/main.xpath",
+    "expected": "days=29; cutoff=2024-02-29T17:30:00+02:00; utc=2024-02-29T15:30:00Z"
+  },
+  {
+    "id": "month-end-cutoffs-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "month-end-cutoffs/baseline.xpath",
+    "expected": "days=29; cutoff=2024-02-29T17:30:00+02:00; utc=2024-02-29T15:30:00Z"
+  },
+  {
+    "id": "month-end-cutoffs-common-year",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/common-year.xpath",
+    "expected": "days=28; cutoff=2023-02-28T17:30:00+02:00; utc=2023-02-28T15:30:00Z"
+  },
+  {
+    "id": "month-end-cutoffs-thirty-day-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/thirty-day-month.xpath",
+    "expected": "days=30; cutoff=2024-04-30T17:30:00+02:00; utc=2024-04-30T15:30:00Z"
+  },
+  {
+    "id": "month-end-cutoffs-negative-offset",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/negative-offset.xpath",
+    "expected": "days=29; cutoff=2024-02-29T17:30:00-05:00; utc=2024-02-29T22:30:00Z"
+  },
+  {
+    "id": "month-end-cutoffs-century-common",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/century-common.xpath",
+    "expected": "28"
+  },
+  {
+    "id": "month-end-cutoffs-century-leap",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/century-leap.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "month-end-cutoffs-year-zero-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/year-zero-month.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "month-end-cutoffs-local-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/local-month.xpath",
+    "expected": "31"
+  },
+  {
+    "id": "month-end-cutoffs-empty-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/empty-month.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "month-end-cutoffs-empty-build",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/empty-build.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "month-end-cutoffs-fractional-time",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/fractional-time.xpath",
+    "expected": "13:30:04.25"
+  },
+  {
+    "id": "month-end-cutoffs-date-only",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/date-only.xpath",
+    "expected": "2024-02-29"
+  },
+  {
+    "id": "month-end-cutoffs-without-timezone",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/without-timezone.xpath",
+    "expected": "dateTime=true; stamp=false; timezone=false"
+  },
+  {
+    "id": "month-end-cutoffs-stamp-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/stamp-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "month-end-cutoffs-invalid-fields",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/invalid-fields.xpath",
+    "error": "FODT0005"
+  },
+  {
+    "id": "month-end-cutoffs-invalid-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/invalid-day.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "month-end-cutoffs-invalid-offset",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/invalid-offset.xpath",
+    "error": "FODT0003"
+  },
+  {
+    "id": "month-end-cutoffs-midnight-24",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "month-end-cutoffs/midnight-24.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "timestamp-deadlines-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/main.xpath",
+    "expected": "received=2024-01-31T12:00:00Z; finished=2024-01-31T12:00:01.25Z; deadline=2024-01-31T12:00:02.5Z; elapsedSeconds=1.25; remainingSeconds=1.25; withinBudget=true"
+  },
+  {
+    "id": "timestamp-deadlines-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "timestamp-deadlines/baseline.xpath",
+    "expected": "received=2024-01-31T12:00:00Z; finished=2024-01-31T12:00:01.25Z; deadline=2024-01-31T12:00:02.5Z; elapsedSeconds=1.25; remainingSeconds=1.25; withinBudget=true"
+  },
+  {
+    "id": "timestamp-deadlines-over-budget",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/over-budget.xpath",
+    "expected": "received=2024-01-31T12:00:00Z; finished=2024-01-31T12:00:03Z; deadline=2024-01-31T12:00:02.5Z; elapsedSeconds=3; remainingSeconds=-0.5; withinBudget=false"
+  },
+  {
+    "id": "timestamp-deadlines-exact-budget",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/exact-budget.xpath",
+    "expected": "received=2024-01-31T12:00:00Z; finished=2024-01-31T12:00:02.5Z; deadline=2024-01-31T12:00:02.5Z; elapsedSeconds=2.5; remainingSeconds=0; withinBudget=true"
+  },
+  {
+    "id": "timestamp-deadlines-epoch-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/epoch-default.xpath",
+    "expected": "1970-01-01T00:00:00Z"
+  },
+  {
+    "id": "timestamp-deadlines-epoch-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/epoch-empty.xpath",
+    "expected": "1970-01-01T00:00:00Z"
+  },
+  {
+    "id": "timestamp-deadlines-one-millisecond",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/one-millisecond.xpath",
+    "expected": "1970-01-01T00:00:00.001Z"
+  },
+  {
+    "id": "timestamp-deadlines-one-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/one-day.xpath",
+    "expected": "1970-01-02T00:00:00Z"
+  },
+  {
+    "id": "timestamp-deadlines-negative-duration",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/negative-duration.xpath",
+    "expected": "-PT1H30M"
+  },
+  {
+    "id": "timestamp-deadlines-fractional-duration",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/fractional-duration.xpath",
+    "expected": "PT0.001S"
+  },
+  {
+    "id": "timestamp-deadlines-zero-duration",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/zero-duration.xpath",
+    "expected": "PT0S"
+  },
+  {
+    "id": "timestamp-deadlines-empty-seconds",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/empty-seconds.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "timestamp-deadlines-empty-total",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/empty-total.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "timestamp-deadlines-total-versus-component",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/total-versus-component.xpath",
+    "expected": "total=90; component=30"
+  },
+  {
+    "id": "timestamp-deadlines-duration-roundtrip",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/duration-roundtrip.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "timestamp-deadlines-stamp-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/stamp-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "timestamp-deadlines-negative-epoch",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "timestamp-deadlines/negative-epoch.xpath",
+    "error": "FOCA0002"
   }
 ]

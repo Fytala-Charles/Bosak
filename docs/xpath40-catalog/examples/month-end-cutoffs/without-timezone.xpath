@@ -1,0 +1,1 @@
+let $v := build-dateTime(map {'year': 2024, 'month': 2, 'day': 29, 'hours': 17, 'minutes': 30, 'seconds': 0}) return concat('dateTime=', $v instance of xs:dateTime, '; stamp=', $v instance of xs:dateTimeStamp, '; timezone=', exists(timezone-from-dateTime($v)))
