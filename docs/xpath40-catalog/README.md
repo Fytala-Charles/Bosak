@@ -12,7 +12,7 @@
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 42 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 43 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -29,7 +29,7 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 ## Start with a worked chapter
 
-[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 171 focused catalog cases and migration baselines.
+[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 189 focused catalog cases and migration baselines.
 
 ## External specifications and source documentation
 
@@ -147,9 +147,9 @@ from fully documented signatures; the catalog remains In Progress.
 
 These entries include complete synthetic inputs, exact output text, 3.1
 comparisons and edge contracts. The map entry distinguishes published 1.1.1 behavior from the corrected
-source-1.1.2 sequence contracts and the pinned draft. Current coverage is **171 feature checks plus
-24 worked-chapter checks (195 total)**. See the [audit](COMPLETENESS-AUDIT.md)
-for the 31 remaining unassigned registered names and engine follow-up findings.
+source-1.1.2 sequence contracts and the pinned draft. Current coverage is **189 feature checks plus
+24 worked-chapter checks (213 total)**. See the [audit](COMPLETENESS-AUDIT.md)
+for the 29 remaining unassigned registered names and engine follow-up findings.
 
 ### Shipment history and sequence contracts
 
@@ -206,6 +206,7 @@ XPath 3.1 comparison make the acceptance contract explicit.
 |---|---|---|
 | [Higher-order selection](functions/higher-order-selection.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); named evidence and executable cases |
 | [Consecutive partitioning](functions/consecutive-partition.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); named evidence and executable cases |
+| [Ordered queue prefix](functions/ordered-queue-prefix.md) | Frozen 4.0 | [#88](https://github.com/Fytala-Charles/Bosak/pull/88); 18 exact queue and callback examples |
 | [Sequence identity checks](functions/sequence-distinctness.md) | Frozen 4.0 | [#83](https://github.com/Fytala-Charles/Bosak/pull/83); named evidence and executable cases |
 | [Nominative record types](type-system/nominative-records.md) | Deferred | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
 | [Iteration across collection sequences](operators-and-syntax/sequence-collection-iteration.md) | Frozen 4.0 | [#87](https://github.com/Fytala-Charles/Bosak/pull/87); named evidence and executable cases |
@@ -222,3 +223,5 @@ The [provenance ledger](PROVENANCE.md) supplies exact Bosak delivery revisions a
 Measured performance claims in this catalog must cite `benchmarks/Bosak.Benchmarks` (BenchmarkDotNet) output and carry the git revision + measurement date. Qualitative cost classes (zero-cost desugar / constant overhead / hot-path relevant) need no citation but must be stated as expectations, not measurements. See field 14 contract in §1.1.
 
 *Last updated: 2026-10-11: four complete worked chapters; 38 catalog entries; 104 catalog checks plus 24 chapter checks. Remaining feature inventory is still in progress.*
+
+[Ordered queue prefix](functions/ordered-queue-prefix.md) supplies take-while/drop-while with complete input/output, an XPath 3.1 comparison and 18 boundary/callback cases. Current coverage: 43 entries, 189 feature checks plus 24 chapter checks (213 total), and 88 assigned / 29 unassigned registered names. REQ-126 remains In Progress; source/public version remains 1.1.2. Remaining higher-order documentation starts with bounded while-do/do-until processing.

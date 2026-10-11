@@ -1,0 +1,5 @@
+let $queue := parse-xml('<queue><order id="ORD101" status="ready"/><order id="ORD102" status="ready"/><order id="ORD103"/><order id="ORD104" status="ready"/></queue>')/queue/order
+let $ready := function($order, $position) { string($order/@status) eq 'ready' }
+let $dispatch := take-while($queue, $ready)
+let $retained := drop-while($queue, $ready)
+return concat('dispatch=', string-join($dispatch/@id, ','), '; retained=', string-join($retained/@id, ','))

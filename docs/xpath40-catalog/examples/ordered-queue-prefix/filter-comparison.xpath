@@ -1,0 +1,2 @@
+let $queue := parse-xml('<queue><order id="ORD101" status="ready"/><order id="ORD102" status="ready"/><order id="ORD103" status="hold"/><order id="ORD104" status="ready"/></queue>')/queue/order
+return string-join($queue[@status eq 'ready']/@id, ',')
