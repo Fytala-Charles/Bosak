@@ -1,0 +1,1 @@
+contains-subsequence(('PACKED'),('PACKED'),'case-insensitive')

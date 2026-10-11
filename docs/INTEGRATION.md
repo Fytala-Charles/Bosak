@@ -2775,7 +2775,7 @@ The coordinated public packages use version 1.1.0, published 2026-10-11. See [re
 
 ## REQ-126 routing reference workflow (2026-10-11)
 
-The [order-routing chapter](xpath40-catalog/worked-examples/order-routing/README.md) demonstrates explicit `XPathCompatibility.XPath40` planning through `XPath31Expression`, then a required XDM map parameter supplied by `XsltCaptureOptions.Context.WithVariable` to portable XSLT 3.0. Published 1.1.0 does not propagate a version 4.0 declaration to transformation-time expression compilation; source 1.1.1 fixes this boundary. This example uses existing APIs; no engine layer or public API changed. The catalog now has 41 entries and 168 executable documentation checks; [provenance](xpath40-catalog/PROVENANCE.md) distinguishes immutable Bosak deliveries from unavailable historical specification snapshots.
+The [order-routing chapter](xpath40-catalog/worked-examples/order-routing/README.md) demonstrates explicit `XPathCompatibility.XPath40` planning through `XPath31Expression`, then a required XDM map parameter supplied by `XsltCaptureOptions.Context.WithVariable` to portable XSLT 3.0. Published 1.1.0 does not propagate a version 4.0 declaration to transformation-time expression compilation; source 1.1.1 fixes this boundary. This example uses existing APIs; no engine layer or public API changed. The catalog now has 42 entries and 195 executable documentation checks; [provenance](xpath40-catalog/PROVENANCE.md) distinguishes immutable Bosak deliveries from unavailable historical specification snapshots.
 
 ## Effective-version expression profiles (source 1.1.1)
 
@@ -2783,7 +2783,7 @@ The [compatibility correction](REQ-118-XSLT-XPATH40-COMPATIBILITY.md) selects fr
 
 ## Map/array and sequence-selection reference coverage
 
-The catalog now has 41 entries and 168 executable documentation checks; 82 of 117 registered names have family entries and 35 remain unassigned. New [map indexing](xpath40-catalog/functions/product-map-index.md), [array batching](xpath40-catalog/functions/import-array-batches.md) and [sequence selection](xpath40-catalog/functions/order-sequence-selection.md) entries include real cases, complete inputs/outputs, 3.1 comparisons and 40 added checks. The [audit](xpath40-catalog/COMPLETENESS-AUDIT.md) records two confirmed 1.1.1 map result-shape gaps, corrected by the separately gated source-1.1.2 REQ-118 slice. Documentation coverage does not imply complete draft conformance.
+The catalog now has 42 entries and 195 executable documentation checks; 86 of 117 registered names have family entries and 31 remain unassigned. New [map indexing](xpath40-catalog/functions/product-map-index.md), [array batching](xpath40-catalog/functions/import-array-batches.md) and [sequence selection](xpath40-catalog/functions/order-sequence-selection.md) entries include real cases, complete inputs/outputs, 3.1 comparisons and 40 added checks. The [audit](xpath40-catalog/COMPLETENESS-AUDIT.md) records two confirmed 1.1.1 map result-shape gaps, corrected by the separately gated source-1.1.2 REQ-118 slice. Documentation coverage does not imply complete draft conformance.
 
 ## Map result sequence correction (source 1.1.2)
 
@@ -2797,3 +2797,14 @@ Default XPath31 refusal and dynamic lookup isolation remain enforced, including
 after nested stylesheet calls. No public API is added. Published [1.1.2](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2) contains this correction; release revision
 `3aebf76a24b28af7d40aa42e6eaf714b3a596838`. All ten public artifacts and eight
 fresh-cache consumer checks are verified. Version 1.1.1 has the documented prior shapes.
+
+## Shipment-event sequence reference coverage
+
+[Shipment-event sequence checks](xpath40-catalog/functions/shipment-event-sequences.md)
+add a complete reference entry for all-equal and contiguous segment/prefix/suffix
+matching, with full XML histories, report outputs, XPath31 comparisons and
+27 normal/edge/comparator checks. The guide distinguishes adjacency from sparse
+event occurrence and uses explicit presence/count guards for identities and
+codes. Catalog coverage is 42 entries and 195 documentation checks; 86 of 117
+registered names are assigned, leaving 31. Published/source version remains
+1.1.2; this documentation delivery changes no engine, API or gate membership.

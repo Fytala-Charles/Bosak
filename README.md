@@ -22,9 +22,11 @@ The [REQ-126 completeness audit](docs/xpath40-catalog/COMPLETENESS-AUDIT.md)
 records the remaining catalog gaps and prioritized documentation work.
 **1.1.1 published 2026-10-11:** effective-version XPath40 propagation in XSLT is corrected across all ten public packages. See [patch release notes](docs/RELEASE-NOTES-1.1.1.md). Verification: **4,103 tests passed**, unchanged QT3 gate and zero qt4 gated failures. The complete verification record is in [the compatibility dossier](docs/REQ-118-XSLT-XPATH40-COMPATIBILITY.md). The [routing chapter](docs/xpath40-catalog/worked-examples/order-routing/README.md) now includes a self-contained 4.0 stylesheet alongside the published-1.1.0 integration alternative.
 
-The reference catalog now includes [product-map indexing](docs/xpath40-catalog/functions/product-map-index.md), [array import batches](docs/xpath40-catalog/functions/import-array-batches.md), and [order-export selection](docs/xpath40-catalog/functions/order-sequence-selection.md). These explain complete cases, 3.1 alternatives and verified edge contracts. There are 41 entries and 168 executable documentation checks; the audit records remaining coverage and the 1.1.1 map result-shape differences corrected in source 1.1.2.
+The reference catalog now includes [product-map indexing](docs/xpath40-catalog/functions/product-map-index.md), [array import batches](docs/xpath40-catalog/functions/import-array-batches.md), and [order-export selection](docs/xpath40-catalog/functions/order-sequence-selection.md). These explain complete cases, 3.1 alternatives and verified edge contracts. There are 42 entries and 195 executable documentation checks; the audit records remaining coverage and the 1.1.1 map result-shape differences corrected in source 1.1.2.
 
 **1.1.2 published 2026-10-11:** corrects `map:entries` to return a sequence of single-entry maps and `map:items` to concatenate value items. See [the correction and migration guide](docs/REQ-118-MAP-RESULT-SHAPES.md). All ten packages are published and verified; see [patch release notes](docs/RELEASE-NOTES-1.1.2.md).
+
+[Shipment-event sequence checks](docs/xpath40-catalog/functions/shipment-event-sequences.md) explain complete histories, adjacent processing rules and identity/presence guards, with exact reports and XPath 3.1 comparisons. The audit now assigns 86 of 117 registered names, leaving 31 for further coverage.
 
 The catalog and audit also link primary specifications, draft history, and upstream
 tests; individual feature entries provide direct specification-section references.

@@ -69,8 +69,8 @@ specification revision or establish that Bosak implements the entire proposal.
 |---|---|---|
 | AC-01: landed slices, tiers, spec and delivery links | Partial | S1/S2/S5 family coverage remains partial; map/array and positional selection are now supplied. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. Further deferred grammar needs review. |
-| AC-03: verified examples and gate evidence | Partial | 168 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
-| AC-04: structure, retained entries, drift warnings | Partial | 41 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
+| AC-03: verified examples and gate evidence | Partial | 195 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
+| AC-04: structure, retained entries, drift warnings | Partial | 42 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
 ## Runtime function inventory
@@ -82,12 +82,12 @@ pairs, **not function signatures or arities**.
 
 | Registered category | Names | Catalog assessment |
 |---|---:|---|
-| Frozen `fn:*` | 58 | 23 frozen fn names have family entries; signature and semantic coverage remain partial. |
+| Frozen `fn:*` | 58 | 27 frozen fn names have family entries; signature and semantic coverage remain partial. |
 | Frozen `map:*` | 4 | All four names map to the product-index family; entries/items result-shape gaps are explicit. Map iteration syntax is a different feature. |
 | Frozen `array:*` | 5 | All five names have family entries: four batch functions plus array:sort-with in the sorting family. |
 | Frozen zero-argument `xs:*` constructors | 49 | One constructor-family entry exists, with an integer example; this does not verify all constructor contracts. |
 | Experimental `fn:scan` | 1 | Entry and verified examples exist; gate status was stale. |
-| Total | 117 | 82 names map to an existing family entry; 35 have no dedicated family entry. A mapped name is not a completeness pass. |
+| Total | 117 | 86 names map to an existing family entry; 31 have no dedicated family entry. A mapped name is not a completeness pass. |
 
 Mapped non-constructor families now include scalar equality, CSV, element/map
 conversion, comparator sorting, JNode navigation, higher-order selection,
@@ -108,7 +108,7 @@ well-explained family entry.
 | Family | Registered names without a dedicated family entry | Suggested realistic case |
 |---|---|---|
 | Sequence selection and repetition — supplied in this delivery | [`fn:replicate`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-replicate), [`fn:slice`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-slice), [`fn:items-at`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-items-at), [`fn:foot`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-foot), [`fn:trunk`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trunk), [`fn:insert-separator`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-insert-separator) | Paginate an order export while retaining boundary records. |
-| Equality, duplicates, subsequences | [`fn:all-equal`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-all-equal), [`fn:contains-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-contains-subsequence), [`fn:starts-with-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-starts-with-subsequence), [`fn:ends-with-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-ends-with-subsequence) | Check shipment-event identifiers and required processing steps. |
+| Equality, duplicates, subsequences — supplied in this delivery | [`fn:all-equal`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-all-equal), [`fn:contains-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-contains-subsequence), [`fn:starts-with-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-starts-with-subsequence), [`fn:ends-with-subsequence`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-ends-with-subsequence) | Check shipment-event identifiers and required processing steps. |
 | Higher-order processing | [`fn:take-while`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-take-while), [`fn:drop-while`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-drop-while), [`fn:while-do`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-while-do), [`fn:do-until`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-do-until), [`fn:partial-apply`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-partial-apply), [`fn:transitive-closure`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-transitive-closure), [`fn:identity`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-identity) | Route invoice lines, bound retries, and follow product dependencies with cycles. |
 | Ranking, operators, type inspection | [`fn:highest`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-highest), [`fn:lowest`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-lowest), [`fn:sort-by`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-by), [`fn:op`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-op), [`fn:is-NaN`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-is-NaN), [`fn:atomic-type-annotation`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-type-annotation) | Prioritize work orders and describe imported measurements. |
 | Strings and Unicode | [`fn:char`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-char), [`fn:characters`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-characters), [`fn:graphemes`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-graphemes), [`fn:pad-string`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-pad-string), [`fn:trim-space`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trim-space), [`fn:index-of-substring`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-index-of-substring), [`fn:substring-before-last`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-before-last), [`fn:substring-after-last`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-after-last), [`fn:hash`](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-hash) | Normalize supplier references without splitting Unicode graphemes. |
@@ -170,12 +170,12 @@ because its documentation is missing.
 | P1 | Repair evidence for the 28 existing entries | Exact adopted spec revision/section, delivery PR/revision, named tests, named conformance sets and actual gate status; retain explicit gaps. |
 | P1 | Add the missing decision records | Cover the moving/rejected matrix, with alternatives and refusal evidence; resolve historical deferrals superseded by shipped features. |
 | P2 | Add sequence and higher-order function chapters/entries | Real document cases, normal/edge inputs and results, complete code, earlier-version comparison where meaningful, exact compatibility refusals. |
-| P2 | Add map/array, Unicode, URI/date, operator/type families | Cover the remaining 35 unassigned registered names through coherent families, including signature-specific behavior; 14 map/array/selection names are now assigned. |
+| P2 | Add map/array, Unicode, URI/date, operator/type families | Cover the remaining 31 unassigned registered names through coherent families, including signature-specific behavior; 14 map/array/selection names are now assigned. |
 | P2 | Expand syntax and changed-3.1 semantics | Literals, focus functions, guarded expressions, record updates, comparisons/collations, patterns, and supplementary forms. |
 | P3 | Reconcile acceptance and publish the complete reference | Zero unassigned adopted features/decisions, accurate index/tier links, verified examples, and explicit exceptions to conformance evidence rules. |
 
-**Recommended next documentation step:** continue the remaining equality/subsequence and
-higher-order families afterward, then supplementary signatures and parser/type/pattern forms.
+**Recommended next documentation step:** continue the remaining higher-order
+processing families, then supplementary signatures and parser/type/pattern forms.
 The baseline provenance repair, section-1.2 decision records and first sequence/HOF
 routing chapter are supplied below. Immutable historical specification snapshots
 remain an explicit gap. No engine work or conformance-set promotion is required
@@ -293,3 +293,25 @@ no sets are promoted. Version 1.1.2 is published and its public artifacts verifi
 **Map correction final verification (2026-10-11):** 1.1.2 published and verified; full solution 4,166/0/0, QT3 31,142/0/679, qt4 promoted sets 8,278/0/1,894 with zero gated failures. Targeted map-entries 16/0/1 and map-items 15/0/0 remain exploratory. See [the correction dossier](../REQ-118-MAP-RESULT-SHAPES.md) and [patch release notes](../RELEASE-NOTES-1.1.2.md).
 
 **1.1.2 publication (2026-10-11):** [v1.1.2](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2) at `3aebf76a24b28af7d40aa42e6eaf714b3a596838`; all ten NuGet packages downloaded and verified, eight fresh-cache consumer checks passed. REQ-126 remains In Progress with 35 unassigned names.
+
+## Shipment-event sequence delivery: 2026-10-11
+
+[The new family](functions/shipment-event-sequences.md) assigns fn:all-equal,
+fn:contains-subsequence, fn:starts-with-subsequence and fn:ends-with-subsequence.
+Coverage is now **42 entries, 171 feature checks and 24 worked-chapter checks
+(195 total)**; **86 assigned / 31 unassigned** of 117 registered names.
+The 27 added cases include full XML histories and reports, a XPath31 comparison,
+missing/mixed identities, missing/unknown codes, unfinished histories,
+noncontiguous/repeated events, empty input/requirements, callback forms/errors,
+collation and numeric/NaN equality contracts. All-equal alone is explicitly
+insufficient to validate an empty history or omitted identity fields.
+
+Delivery PR #83 and its immutable engine revision, named existing unit tests,
+the current exact gate assignment and a pinned review specification source are
+recorded. Only fn-contains-subsequence has an exact assigned GatedSets identifier;
+the other three functions retain separate unit/example evidence. Historical
+adopted snapshots remain unavailable. No new gate promotion or engine/package
+change is included. REQ-126 stays In Progress; higher-order processing remains
+the next family delivery.
+
+**Shipment delivery verification (2026-10-11):** full solution **4,193/0/0**, targeted catalog **171/0/0**; Release build 0 errors / 12 existing warnings. Verified 42 entry structures/index links, 170 primary links/anchors, 28 baseline provenance rows, 117 inventory names, 171 manifest files and all new inline sample/fixture results. Rendered 55 documentation pages; whitespace checks pass. No new engine gate run or promotion is claimed.

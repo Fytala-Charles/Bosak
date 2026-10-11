@@ -12,7 +12,7 @@
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 41 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 42 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -29,7 +29,7 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 ## Start with a worked chapter
 
-[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 144 focused catalog cases and migration baselines.
+[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 171 focused catalog cases and migration baselines.
 
 ## External specifications and source documentation
 
@@ -147,9 +147,20 @@ from fully documented signatures; the catalog remains In Progress.
 
 These entries include complete synthetic inputs, exact output text, 3.1
 comparisons and edge contracts. The map entry distinguishes published 1.1.1 behavior from the corrected
-source-1.1.2 sequence contracts and the pinned draft. Current coverage is **144 feature checks plus
-24 worked-chapter checks (168 total)**. See the [audit](COMPLETENESS-AUDIT.md)
-for the 35 remaining unassigned registered names and engine follow-up findings.
+source-1.1.2 sequence contracts and the pinned draft. Current coverage is **171 feature checks plus
+24 worked-chapter checks (195 total)**. See the [audit](COMPLETENESS-AUDIT.md)
+for the 31 remaining unassigned registered names and engine follow-up findings.
+
+### Shipment history and sequence contracts
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [Shipment-event sequence checks](functions/shipment-event-sequences.md) | Frozen 4.0 | [#83](https://github.com/Fytala-Charles/Bosak/pull/83); 27 exact examples, named tests and pinned specification source |
+
+This entry explains identity consistency, contiguous required steps and event
+boundaries with complete carrier-history inputs and report outputs. The empty
+history, missing identifiers/codes, unknown events, record comparators and
+XPath 3.1 comparison make the acceptance contract explicit.
 
 ### Type system
 

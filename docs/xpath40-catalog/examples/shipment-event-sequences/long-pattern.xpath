@@ -1,0 +1,1 @@
+concat(contains-subsequence(('PACKED'),('PACKED','DISPATCHED')), '/', starts-with-subsequence(('PACKED'),('PACKED','DISPATCHED')), '/', ends-with-subsequence(('PACKED'),('PACKED','DISPATCHED')))
