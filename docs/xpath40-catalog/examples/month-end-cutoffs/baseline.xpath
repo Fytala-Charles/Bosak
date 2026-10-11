@@ -1,0 +1,8 @@
+let $schedule := parse-xml('<schedule year="2024" month="2" hours="17" minutes="30" timezone="PT2H"/>')/schedule
+return let $year := xs:integer($schedule/@year)
+return let $month := xs:integer($schedule/@month)
+return let $first := xs:date(concat(format-integer($year, '0000'), '-', format-integer($month, '00'), '-01'))
+return let $last := $first + xs:yearMonthDuration('P1M') - xs:dayTimeDuration('P1D')
+return let $local := dateTime($last, xs:time(concat(format-integer(xs:integer($schedule/@hours), '00'), ':', format-integer(xs:integer($schedule/@minutes), '00'), ':00')))
+return let $cutoff := adjust-dateTime-to-timezone($local, xs:dayTimeDuration($schedule/@timezone))
+return concat('days=', day-from-date($last), '; cutoff=', $cutoff, '; utc=', adjust-dateTime-to-timezone($cutoff, xs:dayTimeDuration('PT0S')))

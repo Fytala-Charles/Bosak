@@ -1,0 +1,1 @@
+concat('total=', duration-to-seconds(xs:dayTimeDuration('PT1M30S')), '; component=', seconds-from-duration(xs:dayTimeDuration('PT1M30S')))

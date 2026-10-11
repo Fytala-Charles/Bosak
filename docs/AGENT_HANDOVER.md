@@ -1,3 +1,21 @@
+# Agent Handover — 2026-10-11: scheduling and date/time references
+
+PR #165 merged after CI passed. Base `33299e74db763b0f11794c1d888a0f2ae6e8e20f`.
+Added month-end-cutoffs (19 cases) and timestamp-deadlines (17 cases), assigning
+build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds.
+Full XML inputs and exact reports plus 3.1 comparisons explain leap rules,
+local versus UTC month, explicit offsets (no named-zone/DST inference), stamp
+subtypes, empty inputs, epoch milliseconds and signed/fractional durations.
+The report calculates deadlines; the host owns measurement and enforcement.
+Coverage: 48 entries, 287 feature plus 24 chapter checks (311 total), and
+98 assigned / 19 unassigned registered names. Source/public remains 1.1.2.
+Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; original engine
+#84 `f7f55b4e3a6e92da26ac607e34f46aede695cb19`. Exact fn-unix-dateTime gate
+exists; no exact gate assignment is claimed for the other four functions.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed (0 errors, 12 existing warnings); all 4,309 tests passed across ten assemblies without failures/skips, including 287 catalog cases. Renderer verified 61 pages. Entry fields, primary/local links, inventory/provenance, named tests, four full XML inputs and inline expression/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `6709d3f2`; [PR #166](https://github.com/Fytala-Charles/Bosak/pull/166). CI pending at handover.
+Next: URI parsing/construction and encoding reference examples.
+
 # Agent Handover — 2026-10-11: dependency traversal and configured callbacks
 
 PR #164 merged after its CI passed. Base `c011a9c97a47a2cb2265cd90a3062b11b35f581b`.
