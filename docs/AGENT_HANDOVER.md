@@ -1,3 +1,12 @@
+# Bosak 1.1.0 release preparation: 2026-10-11
+
+**Base commit:** `d1f1f50895776cc8a716d0f89d81ffdefe3720a3` (main after merging #151 and #152). Release preparation is on `release/1.1.0`.
+**What changed:** coordinated version 1.1.0 in `src/Directory.Build.props`; new release notes cover post-1.0 XPath adoption, REQ-124 authoring, REQ-125 accepted controlled validation/preview with explicit restrictions, and the executable reference guide. README, architecture, integration package examples, and registry are synchronized. REQ-126 remains In Progress.
+**Verified:** Release build 0 errors / 12 existing warnings; full solution 4,039 passed / 0 failed / 0 skipped; QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894, zero gated failures. All ten candidate packages have version 1.1.0, coherent internal dependencies, README, and license. An isolated clone of Braid, replacing only its engine-source dependency with Bosak.Xslt 1.1.0, passes all 192 tests. Consumer-loaded assembly informational version is `1.1.0+d1f1f50895776cc8a716d0f89d81ffdefe3720a3` before the release commit. Logs/artifacts are under `.guard-tmp/release110-*`; isolated Braid is `.guard-tmp/braid110-check`.
+**Next:** create/merge the release PR after CI, tag the merged revision, monitor Trusted Publishing for all ten packages, create GitHub release using `docs/RELEASE-NOTES-1.1.md`, and verify isolated Braid against published artifacts. Braid's production source manifest remains unchanged; changing its adoption mode is separate from this verification.
+
+---
+
 # Detailed worked-example READMEs: 2026-10-11
 
 **Base commit:** `c9543c29dce2ab02b8f969e0fdb31170a167e00a`; continuing PR #152 on `docs/req126-invoice-reference-chapter`.
