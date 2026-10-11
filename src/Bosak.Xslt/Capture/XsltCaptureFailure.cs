@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice C)                                                               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: XV0011/XV0012/XV0013 documented                                        |
+//                      | Charles Korthout | 0.3   | 11-10-2026     | C-F1: document explicit unsupported serialization profile code XV0014.                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -22,7 +23,7 @@ namespace Bosak.Xslt.Capture;
 /// <summary>
 /// One immutable, classified failure of a captured transformation. Failures carry a stable code — the
 /// spec code when the underlying condition is a spec error (for example <c>XTDE1490</c>), otherwise a
-/// Bosak <c>XV</c> code (<c>XV0006</c>–<c>XV0013</c>) — the resolved identity of the output the failure
+/// Bosak <c>XV</c> code (<c>XV0006</c>–<c>XV0014</c>) — the resolved identity of the output the failure
 /// relates to when one exists, and a human-readable message. The capture API reports these conditions
 /// as data; it never throws for them.
 /// </summary>

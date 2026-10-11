@@ -15,6 +15,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice D: TimeLimitExceeded/XV0011, OperationLimitExceeded/XV0012, Cancelled/    |
 //                      |                  |       |                | XV0013 (appended; existing members unchanged)                                            |
+//                      | Charles Korthout | 0.3   | 11-10-2026     | C-F1: explicit unsupported bounded serialization profile (XV0014).                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -89,4 +90,11 @@ public enum XsltCaptureFailureKind
     /// <see cref="XsltCaptureOutcome.Cancelled"/>. Code: <c>XV0013</c>.
     /// </summary>
     Cancelled,
+
+    /// <summary>
+    /// The requested byte-bounded serialization profile cannot be streamed faithfully. No
+    /// serialization is attempted for this output; prior outputs are retained. Code: <c>XV0014</c>.
+    /// Currently covers JSON/adaptive, text Unicode normalization, and XML provider fallbacks.
+    /// </summary>
+    UnsupportedSerializationProfile,
 }

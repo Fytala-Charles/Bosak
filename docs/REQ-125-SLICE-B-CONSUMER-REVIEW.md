@@ -74,3 +74,7 @@ Use one new policy and EvaluationContext with an authority whose approved conten
 **Required regression evidence:** same-content repeat loads preserve document identity and matching receipts; changed bytes and changed effective URIs cannot yield misleading consumed-input evidence; denial remains enforced on cache hits; policy/route changes and nested calls retain the corrected semantics. Record the chosen contract in public API documentation.
 
 **Decision:** original blockers closed; Slice B acceptance remains pending B-F3 correction. Accepted Slice A and REQ-124 remain unchanged. No engine source edits or Braid dependency upgrade were made; broader unit/conformance gates were not independently rerun in this review.
+
+## 5. B-F3 Closure and Slice B Acceptance (2026-10-11)
+
+Reviewed aac4387 at Bosak HEAD 697c01e. The original changed-content probe now returns refreshed approved content with matching digest/effective-URI evidence. B-F1/B-F2 remain closed; B-F3 is verified closed. Slice B is accepted for its documented controlled acquisition contract. Whole-request acceptance remains pending C-F1/D-F1 in the end-to-end review. Independently ran 261 targeted validation/resource/capture/limit tests, all passing; no full conformance rerun or production dependency upgrade was performed.

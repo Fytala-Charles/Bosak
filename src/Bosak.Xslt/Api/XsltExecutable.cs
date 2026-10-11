@@ -50,6 +50,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.17  | 10-10-2026     | REQ-125 Slice D: CaptureTransform builds/stamps the ExecutionGate (token, TimeLimit,  |
 //                      |                  |       |                | MaxEngineOperations), pre-run cancellation check, gate cleared in finally             |
+//                      | Charles Korthout | 1.18  | 11-10-2026     | C-F1/D-F1: document bounded profiles and unconditional terminal observations.            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -260,7 +261,10 @@ public sealed class XsltExecutable
     /// instruction dispatch, template invocation, secondary result-document production,
     /// <c>xsl:message</c> emission and output serialization. Cancellation classifies as
     /// <see cref="XsltCaptureOutcome.Cancelled"/>; the two limits classify as <c>XV0011</c>/<c>XV0012</c>
-    /// failures on a partial/failed outcome. The gate is stamped on the run's evaluation context for
+    /// failures on a partial/failed outcome. Cancellation/deadlines are observed unconditionally
+    /// before and after serialization and before result publication; bounded serialization also
+    /// observes controls between encoding chunks. These observations do not consume engine
+    /// operations or alter the 64-checkpoint hot-loop batch. The gate is stamped on the run's evaluation context for
     /// the duration of the run and cleared afterwards, and nested transforms inherit the same gate
     /// instance — so the remaining budget and deadline are shared across nesting, and sequential or
     /// concurrent runs never observe another run's controls (a gate is only ever used from its own
@@ -269,8 +273,14 @@ public sealed class XsltExecutable
     /// </para>
     /// <para>
     /// Coverage and exclusions: capture covers the principal output and all secondary outputs,
-    /// including raw (<c>method="json"</c>, <c>method="adaptive"</c>, <c>build-tree="no"</c>)
-    /// outputs. There is no initial-match-selection or raw-result delivery variant on this entry
+    /// including raw outputs when byte limits are absent. With byte limits, JSON/adaptive,
+    /// text Unicode normalization, non-text character maps and non-XDocument markup provider
+    /// fallbacks are refused as UnsupportedSerializationProfile/XV0014 before serialization.
+    /// Text (including character maps) and supported XML/HTML/XHTML profiles use incremental
+    /// encoding sinks; encoding/BOM bytes count against both budgets. The sink retains no more
+    /// than the permitted output bytes, with fixed-size encoding/markup lookahead. Result-tree
+    /// construction, normalization and XPath working memory are separate from serialization
+    /// budgets; capture is not an OS memory sandbox. There is no initial-match-selection or raw-result delivery variant on this entry
     /// point; <c>xsl:message</c> texts travel the separate bounded channel
     /// <see cref="XsltCaptureResult.Messages"/>. A single XPath expression between checkpoints (for
     /// example a long loop inside one <c>select</c> attribute) is not interrupted mid-evaluation;
