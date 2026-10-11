@@ -1,3 +1,19 @@
+# Agent Handover — 2026-10-11: invoice API URI reference
+
+PR #166 merged after CI passed. Base `d6156de534f01daa3aea66002e528aaab20ed46e`.
+Added invoice-api-uris: 28 executable cases assigning parse-uri, build-uri and
+decode-from-uri. Full XML input/report, scoped XPath 3.1 route construction,
+path-segment delimiters, form/generic decoding, repeated query values, malformed
+UTF-8/escapes, IPv6/port fields, component precedence and non-identical textual
+roundtrips are explained. Original text remains necessary for wire/signing rules.
+Coverage: 49 entries, 315 feature plus 24 chapter checks (339 total), and
+101 assigned / 16 unassigned registered names. Source/public remains 1.1.2.
+Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; engine delivery
+#84 `f7f55b4e3a6e92da26ac607e34f46aede695cb19`. No exact GatedSets assignment
+is claimed for these three names. No engine/API/package/gate changes.
+REQ-126 remains In Progress. Validation: Release build passed (0 errors, 12 existing warnings); all 4,337 tests passed across ten assemblies without failures/skips, including 315 catalog cases. Renderer verified 62 pages. Entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `06974cae`; [PR #167](https://github.com/Fytala-Charles/Bosak/pull/167). CI pending at handover.
+Next: Unicode/text cleanup and substring reference examples.
+
 # Agent Handover — 2026-10-11: scheduling and date/time references
 
 PR #165 merged after CI passed. Base `33299e74db763b0f11794c1d888a0f2ae6e8e20f`.

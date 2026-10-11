@@ -1,0 +1,5 @@
+let $request := parse-xml('<request endpoint="https://api.example.test:443/v1" invoice="INV/2048" query="Ada Lovelace + VAT"/>')/request
+let $base := parse-uri(string($request/@endpoint), map {'omit-default-ports': true()})
+let $uri := build-uri(map {'scheme': $base?scheme, 'host': $base?host, 'port': $base?port, 'path-segments': ('', 'v1', 'invoices', string($request/@invoice)), 'query-parameters': map {'q': string($request/@query)}})
+let $parsed := parse-uri($uri)
+return concat('uri=', $uri, '; invoice=', $parsed?path-segments[4], '; query=', $parsed?query-parameters?q)

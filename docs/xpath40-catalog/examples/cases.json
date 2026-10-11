@@ -2026,5 +2026,201 @@
     "mode": "40",
     "file": "timestamp-deadlines/negative-epoch.xpath",
     "error": "FOCA0002"
+  },
+  {
+    "id": "invoice-api-uris-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/main.xpath",
+    "expected": "uri=https://api.example.test/v1/invoices/INV%2F2048?q=Ada%20Lovelace%20%2B%20VAT; invoice=INV/2048; query=Ada Lovelace + VAT"
+  },
+  {
+    "id": "invoice-api-uris-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "invoice-api-uris/baseline.xpath",
+    "expected": "https://api.example.test/v1/invoices/INV%2F2048?q=Ada%20Lovelace%20%2B%20VAT"
+  },
+  {
+    "id": "invoice-api-uris-space-in-id",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/space-in-id.xpath",
+    "expected": "uri=https://api.example.test/v1/invoices/INV%202048?q=Ada%20Lovelace%20%2B%20VAT; invoice=INV 2048; query=Ada Lovelace + VAT"
+  },
+  {
+    "id": "invoice-api-uris-delimiter-in-id",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/delimiter-in-id.xpath",
+    "expected": "uri=https://api.example.test/v1/invoices/INV%3F2048%23A?q=Ada%20Lovelace%20%2B%20VAT; invoice=INV?2048#A; query=Ada Lovelace + VAT"
+  },
+  {
+    "id": "invoice-api-uris-duplicate-query",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/duplicate-query.xpath",
+    "expected": "ready,review"
+  },
+  {
+    "id": "invoice-api-uris-build-duplicate-query",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/build-duplicate-query.xpath",
+    "expected": "https://api.example.test/?tag=ready&tag=review"
+  },
+  {
+    "id": "invoice-api-uris-query-plus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/query-plus.xpath",
+    "expected": "Ada Lovelace"
+  },
+  {
+    "id": "invoice-api-uris-literal-plus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/literal-plus.xpath",
+    "expected": "Ada+Lovelace"
+  },
+  {
+    "id": "invoice-api-uris-decode-plus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/decode-plus.xpath",
+    "expected": "Ada+Lovelace"
+  },
+  {
+    "id": "invoice-api-uris-decode-form",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/decode-form.xpath",
+    "expected": "Ada Lovelace+"
+  },
+  {
+    "id": "invoice-api-uris-decode-utf8",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/decode-utf8.xpath",
+    "expected": "caf\u00e9"
+  },
+  {
+    "id": "invoice-api-uris-encode-decode",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/encode-decode.xpath",
+    "expected": "INV/2048 + VAT"
+  },
+  {
+    "id": "invoice-api-uris-malformed-escape",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/malformed-escape.xpath",
+    "expected": "\ufffd!"
+  },
+  {
+    "id": "invoice-api-uris-invalid-utf8",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/invalid-utf8.xpath",
+    "expected": "\ufffdA"
+  },
+  {
+    "id": "invoice-api-uris-decode-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/decode-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "invoice-api-uris-parse-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/parse-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "invoice-api-uris-default-port",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/default-port.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "invoice-api-uris-custom-port",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/custom-port.xpath",
+    "expected": "8443"
+  },
+  {
+    "id": "invoice-api-uris-port-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/port-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "invoice-api-uris-relative-reference",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/relative-reference.xpath",
+    "expected": "scheme=false; path=../invoices/INV2048; query=ready"
+  },
+  {
+    "id": "invoice-api-uris-fragment-only",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/fragment-only.xpath",
+    "expected": "pathCount=0; fragment=summary view"
+  },
+  {
+    "id": "invoice-api-uris-ipv6-host",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/ipv6-host.xpath",
+    "expected": "[2001:db8::7]"
+  },
+  {
+    "id": "invoice-api-uris-normalized-roundtrip",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/normalized-roundtrip.xpath",
+    "expected": "https://api.example.test/p%20x?q=Ada%20Lovelace#summary%20view"
+  },
+  {
+    "id": "invoice-api-uris-segment-precedence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/segment-precedence.xpath",
+    "expected": "https://api.example.test/invoices/INV%2F2048"
+  },
+  {
+    "id": "invoice-api-uris-query-precedence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/query-precedence.xpath",
+    "expected": "https://api.example.test?q=ready"
+  },
+  {
+    "id": "invoice-api-uris-nonhierarchical",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/nonhierarchical.xpath",
+    "expected": "mailto:accounts@example.test"
+  },
+  {
+    "id": "invoice-api-uris-unmatched-ipv6",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/unmatched-ipv6.xpath",
+    "error": "FOUR0001"
+  },
+  {
+    "id": "invoice-api-uris-build-nonmap",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "invoice-api-uris/build-nonmap.xpath",
+    "error": "XPTY0004"
   }
 ]

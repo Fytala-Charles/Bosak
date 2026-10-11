@@ -1,0 +1,1 @@
+let $p := parse-uri('#summary%20view') return concat('pathCount=', count($p?path), '; fragment=', $p?fragment)
