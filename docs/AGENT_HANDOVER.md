@@ -14,7 +14,7 @@ Validation: final Release build passed (12 existing warnings, zero errors); 6811
 
 Check the latest fix PR CI before merging. Confirm the native assertions with another XSLT 4.0 processor, then prepare upstream submission; the PR draft has not been sent. Do not change the original expectations or classify original failed receipts as passes. N01 and REQ-126 remain In Progress; subsequent queue families and previous catalog/provenance/metadata limits remain. No release/tag/package publication authorized in this step.
 
-Preserve scratch directories, ignored checkout/receipts and tracked original patch/evidence. Delivery commit/PR pending.
+Preserve scratch directories, ignored checkout/receipts and tracked original patch/evidence. Delivery: 7cee697575742d8d9a1ed2bd3ebd56e7c47c3b82, [Bosak PR #202](https://github.com/Fytala-Charles/Bosak/pull/202), pushed on fix/xslt-array-member-jnode. CI run 38295512515 pending; PR open. This subsequent documentation commit records delivery. PR #201 is merged at 8ef77e487ea6aa6ac214825788de54673a2216fd; native contribution remains local, unchanged at e72f1b0e.
 
 # First native upstream array/member batch — 2026-10-12
 
