@@ -1,0 +1,1 @@
+string-join(sort(('b', 'a'), 'urn:example:unknown-collation'), ',')

@@ -1,0 +1,1 @@
+let $a := array:sort([[2, 'i'], [1, 'e'], [2, 'g'], [1, 'f']]) return string-join(for $i in 1 to array:size($a) return concat($a($i)(1), ':', $a($i)(2)), ',')

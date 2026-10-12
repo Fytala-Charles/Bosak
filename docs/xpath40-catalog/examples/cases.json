@@ -3186,5 +3186,221 @@
     "mode": "40",
     "file": "batch-extrema/unknown-collation.xpath",
     "error": "FOCH0002"
+  },
+  {
+    "id": "warehouse-pick-sorting-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/main.xpath",
+    "expected": "sequence=C,D,B,A; members=C:3,D:4,B:1,A:2",
+    "baselineExpected": "sequence=C,D,B,A; members=C:3,D:4,B:1,A:2"
+  },
+  {
+    "id": "warehouse-pick-sorting-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "warehouse-pick-sorting/baseline.xpath",
+    "expected": "sequence=C,D,B,A; members=C:3,D:4,B:1,A:2"
+  },
+  {
+    "id": "warehouse-pick-sorting-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/empty.xpath",
+    "expected": "sequence=; members=",
+    "baselineExpected": "sequence=; members="
+  },
+  {
+    "id": "warehouse-pick-sorting-sort-by-equivalence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/sort-by-equivalence.xpath",
+    "expected": "sequence=C,D,B,A; members=C:3,D:4,B:1,A:2"
+  },
+  {
+    "id": "warehouse-pick-sorting-default-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/default-numeric.xpath",
+    "expected": "1,2,3",
+    "baselineExpected": "1,2,3"
+  },
+  {
+    "id": "warehouse-pick-sorting-empty-default-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/empty-default-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "warehouse-pick-sorting-nested-array-members",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/nested-array-members.xpath",
+    "expected": "1:e,1:f,2:g,2:i",
+    "baselineExpected": "1:e,1:f,2:g,2:i"
+  },
+  {
+    "id": "warehouse-pick-sorting-array-empty-default-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/array-empty-default-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "warehouse-pick-sorting-multi-item-members",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/multi-item-members.xpath",
+    "expected": "0/|2/x",
+    "baselineExpected": "0/|2/x"
+  },
+  {
+    "id": "warehouse-pick-sorting-stable-ties",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/stable-ties.xpath",
+    "expected": "first,second",
+    "baselineExpected": "first,second"
+  },
+  {
+    "id": "warehouse-pick-sorting-empty-key-sequence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/empty-key-sequence.xpath",
+    "expected": "A,B",
+    "baselineExpected": "A,B"
+  },
+  {
+    "id": "warehouse-pick-sorting-numeric-key-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/numeric-key-observed.xpath",
+    "expected": "double,decimal",
+    "baselineExpected": "double,decimal"
+  },
+  {
+    "id": "warehouse-pick-sorting-numeric-array-key-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/numeric-array-key-observed.xpath",
+    "expected": "double,decimal",
+    "baselineExpected": "double,decimal"
+  },
+  {
+    "id": "warehouse-pick-sorting-nan-forward-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/nan-forward-observed.xpath",
+    "expected": "1,NaN",
+    "baselineExpected": "1,NaN"
+  },
+  {
+    "id": "warehouse-pick-sorting-nan-reversed-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/nan-reversed-observed.xpath",
+    "expected": "NaN,1",
+    "baselineExpected": "NaN,1"
+  },
+  {
+    "id": "warehouse-pick-sorting-codepoint-labels",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/codepoint-labels.xpath",
+    "expected": "B,a",
+    "baselineExpected": "B,a"
+  },
+  {
+    "id": "warehouse-pick-sorting-ascii-labels",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/ascii-labels.xpath",
+    "expected": "a,B",
+    "baselineExpected": "a,B"
+  },
+  {
+    "id": "warehouse-pick-sorting-keyword-sequence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/keyword-sequence.xpath",
+    "expected": "1,2,3",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "warehouse-pick-sorting-keyword-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/keyword-array.xpath",
+    "expected": "1,2,3",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "warehouse-pick-sorting-empty-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/empty-array.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "warehouse-pick-sorting-singleton-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/singleton-array.xpath",
+    "expected": "1/2",
+    "baselineExpected": "1/2"
+  },
+  {
+    "id": "warehouse-pick-sorting-empty-invalid-collation-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/empty-invalid-collation-observed.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "warehouse-pick-sorting-incomparable-keys",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/incomparable-keys.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "warehouse-pick-sorting-non-callable-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/non-callable-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "warehouse-pick-sorting-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/unknown-collation.xpath",
+    "expected": "a,b",
+    "baselineExpected": "a,b"
+  },
+  {
+    "id": "warehouse-pick-sorting-invalid-bin",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/invalid-bin.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "warehouse-pick-sorting-qname-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/qname-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "warehouse-pick-sorting-explicit-data-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "warehouse-pick-sorting/explicit-data-key.xpath",
+    "expected": "1,2,3|1,2,3",
+    "baselineExpected": "1,2,3|1,2,3"
   }
 ]

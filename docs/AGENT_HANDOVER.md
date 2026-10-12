@@ -1,3 +1,17 @@
+# Agent Handover — 2026-10-12: warehouse pick sorting
+
+PR #172 merged after CI passed. Base 0597047aed99851d10445993e2e636f3aeb437f2.
+Added fn:sort/array:sort reference with full warehouse input/output, portable
+3.1 comparison, composite location keys, multi-item members and 28 cases.
+Coverage: 57 entries, 475 feature plus 24 chapter checks (499 total); all
+117 names remain assigned. Source baseline and named tests are linked.
+Exact fn-sort/array-sort gated membership is recorded, without full conformance
+claims. Legacy numeric promotion, input-dependent NaN order and missing empty-key defaults and unknown-collation acceptance remain observed limits. No engine/API/package/gate
+changes; source/public stays 1.1.2 and REQ-126 remains In Progress.
+Next: URI option contracts (allow-deprecated-features, unc-path) and component
+precedence; keep engine numeric/NaN and prior keyword/duration findings separate.
+Validation: Release build passed (one existing warning, zero errors); all 4,497 tests across ten assemblies passed without failures/skips, including 475 catalog cases. Renderer verified 71 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; pick order/payloads and numeric boundary independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: 81149db4; [PR #173](https://github.com/Fytala-Charles/Bosak/pull/173). CI pending at handover.
+
 # Agent Handover — 2026-10-12: batch extrema and component codes
 
 PR #171 merged after CI passed. Base 40a5ff9e47204699fb479400df80b1b3f0dd2f7d.

@@ -1,0 +1,1 @@
+let $a := array:sort([('first', 2), ('second', 2)], (), function($m) { $m[2] }) return string-join(for $i in 1 to array:size($a) return $a($i)[1], ',')

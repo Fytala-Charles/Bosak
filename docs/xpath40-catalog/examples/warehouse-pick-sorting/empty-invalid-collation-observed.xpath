@@ -1,0 +1,1 @@
+string(sort((), 'urn:example:unknown-collation'))
