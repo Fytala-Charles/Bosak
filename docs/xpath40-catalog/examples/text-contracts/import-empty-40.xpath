@@ -1,0 +1,1 @@
+let $doc := parse-xml('<import><customer/><file/></import>')/import let $clean := trim-space($doc/customer) let $filename := substring-after-last(string($doc/file),'/') return concat('label=[',pad-string($clean,24,map{'padding':'.'}),'];codepoints=',count(characters($clean)),';stem=',substring-before-last($filename,'.'),';extension=',substring-after-last($filename,'.'))

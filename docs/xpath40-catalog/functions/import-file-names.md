@@ -31,7 +31,7 @@ An import directory can contain dots and a file can have multiple suffixes. Spli
 
 Last-substring functions return the parts before or after the last match under the chosen collation. If no match exists, both return an empty string. With an empty delimiter, before-last returns the input and after-last returns empty. They accept an optional collation; the case uses the default codepoint collation.
 
-index-of-substring reports one-based codepoint positions, includes overlapping matches, and has no collation argument. An empty substring matches each boundary through length+1. Empty source input produces no positions. These are codepoint positions, not UTF-16 storage indices or grapheme-cluster indices.
+index-of-substring reports one-based codepoint positions, includes overlapping matches, and has no collation argument. An empty substring matches each boundary through length+1. Empty source with a nonempty needle produces no positions; an empty source and empty needle produce one boundary. These are codepoint positions, not UTF-16 storage indices or grapheme-cluster indices.
 
 ## 7. Applicability
 
@@ -56,6 +56,8 @@ Earlier separators and dots remain in the preceding parts. Overlapping delimiter
 ## 12. Implementation
 
 Use CompileOptions.Compatibility40 for the new calls and Compatibility31 for the comparison. Default 3.1 rejects new names. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact report/error markers and default-profile refusal for successful 4.0 cases. All inputs are inline.
+
+**Supplementary text-contract review (2026-10-12):** [Eight-family contract review](../TEXT-CONTRACT-REVIEW.md) and [detailed label/filename README](../examples/text-contracts/README.md) supply explicit keyword refusals at 3.1/4.0/experimental, positional defaults/empty/invalid cases and complete paired reports. Numeric substring/option tolerance and validation boundaries remain observed follow-ups; the review does not implement keywords or certify full Unicode/coercion conformance.
 
 ## 13. Sample Code
 

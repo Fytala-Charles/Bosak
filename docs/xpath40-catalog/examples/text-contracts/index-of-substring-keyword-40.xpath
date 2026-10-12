@@ -1,0 +1,1 @@
+index-of-substring(value := 'INV.42.XML', substring := '.')

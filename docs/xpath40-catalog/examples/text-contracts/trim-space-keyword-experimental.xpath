@@ -1,0 +1,1 @@
+trim-space(value := '  INV-42  ')

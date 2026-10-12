@@ -1,0 +1,1 @@
+string-join(index-of-substring(4242,'42') ! string(.),',')

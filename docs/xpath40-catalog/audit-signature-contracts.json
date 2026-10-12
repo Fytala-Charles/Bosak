@@ -935,13 +935,23 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-char-1"
       ],
       "behaviorCases": [
         "signature-contract-char-no-keyword-metadata",
         "signature-contract-char-positional"
+      ],
+      "textContractCases": [
+        "text-contract-char-keyword-31",
+        "text-contract-char-keyword-40",
+        "text-contract-char-keyword-experimental",
+        "text-contract-char-codepoint",
+        "text-contract-char-entity",
+        "text-contract-char-empty",
+        "text-contract-char-zero",
+        "text-contract-char-unknown"
       ]
     },
     {
@@ -995,11 +1005,19 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-characters-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "textContractCases": [
+        "text-contract-characters-keyword-31",
+        "text-contract-characters-keyword-40",
+        "text-contract-characters-keyword-experimental",
+        "text-contract-characters-codepoints",
+        "text-contract-characters-empty",
+        "text-contract-characters-number"
+      ]
     },
     {
       "name": "fn:collation-available",
@@ -2192,11 +2210,19 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-graphemes-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "textContractCases": [
+        "text-contract-graphemes-keyword-31",
+        "text-contract-graphemes-keyword-40",
+        "text-contract-graphemes-keyword-experimental",
+        "text-contract-graphemes-clusters",
+        "text-contract-graphemes-empty",
+        "text-contract-graphemes-number"
+      ]
     },
     {
       "name": "fn:hash",
@@ -2578,11 +2604,21 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-index-of-substring-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "textContractCases": [
+        "text-contract-index-of-substring-keyword-31",
+        "text-contract-index-of-substring-keyword-40",
+        "text-contract-index-of-substring-keyword-experimental",
+        "text-contract-index-overlap",
+        "text-contract-index-empty-needle",
+        "text-contract-index-empty-source",
+        "text-contract-index-both-empty",
+        "text-contract-index-number"
+      ]
     },
     {
       "name": "fn:index-where",
@@ -3411,12 +3447,32 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-pad-string-2",
         "signature-audit-fn-pad-string-3"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "textContractCases": [
+        "text-contract-pad-string-keyword-31",
+        "text-contract-pad-string-keyword-40",
+        "text-contract-pad-string-keyword-experimental",
+        "text-contract-pad-default",
+        "text-contract-pad-empty-options",
+        "text-contract-pad-map-defaults",
+        "text-contract-pad-both",
+        "text-contract-pad-start-repeat",
+        "text-contract-pad-no-truncation",
+        "text-contract-pad-empty-input",
+        "text-contract-pad-integer-input",
+        "text-contract-pad-invalid-options",
+        "text-contract-pad-empty-padding",
+        "text-contract-pad-invalid-side",
+        "text-contract-pad-invalid-side-not-needed",
+        "text-contract-pad-padding-number",
+        "text-contract-pad-length-string",
+        "text-contract-pad-unknown-option"
+      ]
     },
     {
       "name": "fn:parse-csv",
@@ -4540,12 +4596,24 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-substring-after-last-2",
         "signature-audit-fn-substring-after-last-3"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "textContractCases": [
+        "text-contract-substring-after-last-keyword-31",
+        "text-contract-substring-after-last-keyword-40",
+        "text-contract-substring-after-last-keyword-experimental",
+        "text-contract-after-default",
+        "text-contract-after-codepoint",
+        "text-contract-after-empty-collation",
+        "text-contract-after-unknown-collation",
+        "text-contract-after-empty-value",
+        "text-contract-after-empty-needle",
+        "text-contract-after-number"
+      ]
     },
     {
       "name": "fn:substring-before-last",
@@ -4630,12 +4698,24 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-substring-before-last-2",
         "signature-audit-fn-substring-before-last-3"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "textContractCases": [
+        "text-contract-substring-before-last-keyword-31",
+        "text-contract-substring-before-last-keyword-40",
+        "text-contract-substring-before-last-keyword-experimental",
+        "text-contract-before-default",
+        "text-contract-before-codepoint",
+        "text-contract-before-empty-collation",
+        "text-contract-before-unknown-collation",
+        "text-contract-before-empty-value",
+        "text-contract-before-empty-needle",
+        "text-contract-before-number"
+      ]
     },
     {
       "name": "fn:take-while",
@@ -4852,12 +4932,27 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Text family reviewed against pinned signature/options: keyword refusals at all three modes; representative positional/default/empty/invalid cases. Complete coercion/Unicode conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-trim-space-1",
         "signature-audit-fn-trim-space-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "textContractCases": [
+        "text-contract-trim-space-keyword-31",
+        "text-contract-trim-space-keyword-40",
+        "text-contract-trim-space-keyword-experimental",
+        "text-contract-trim-default",
+        "text-contract-trim-empty-options",
+        "text-contract-trim-start",
+        "text-contract-trim-end",
+        "text-contract-trim-empty-value",
+        "text-contract-trim-integer",
+        "text-contract-trim-invalid-options",
+        "text-contract-trim-invalid-side",
+        "text-contract-trim-map-source",
+        "text-contract-trim-unknown-option"
+      ]
     },
     {
       "name": "fn:trunk",
@@ -7509,5 +7604,8 @@
     }
   ],
   "addedChecks": 187,
-  "comparisonPolicy": "Default expression comparison normalizes only quoted string literals and empty-map spellings; no general semantic/type/option conformance inference."
+  "comparisonPolicy": "Default expression comparison normalizes only quoted string literals and empty-map spellings; no general semantic/type/option conformance inference.",
+  "behaviorReviewDate": "2026-10-12",
+  "textReviewSourceRevision": "f53dd8ff9ca055eef36e2cdd69c469653b0a1ae5",
+  "textReviewChecks": 83
 }

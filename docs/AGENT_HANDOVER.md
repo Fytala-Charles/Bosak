@@ -1,4 +1,24 @@
-# Signature contract matrix — 2026-10-12
+# Text/Unicode contract review — 2026-10-12
+
+Main baseline: `f53dd8ff9ca055eef36e2cdd69c469653b0a1ae5`; [PR #187](https://github.com/Fytala-Charles/Bosak/pull/187) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38233707437). Current branch: `docs/req126-text-contracts`.
+
+## Current state and what was built
+
+Added [text contract review](xpath40-catalog/TEXT-CONTRACT-REVIEW.md) and [detailed label/filename README](xpath40-catalog/examples/text-contracts/README.md), extending the raw signature matrix's eight family rows with exact case IDs. Pinned e7ee4ab8 signatures and option conventions distinguish declared input/types/defaults from observed behavior. Reviewed char, characters, graphemes, pad-string, trim-space, index-of-substring, substring-before-last and substring-after-last.
+
+83 new checks: 24 keyword/mode refusals (3.1 XPST0003 grammar, 4.0/experimental XPST0017 metadata), 55 positional/default/empty/invalid/option cases and four full normal/empty 3.1/4.0 import reports. Defaults and empty options/collations verified; numeric substring/padding-option tolerance, no-padding side validation and unqualified unknown-key handling remain explicit coercion/option follow-ups. Corrected filename entry: empty source plus empty needle has one boundary; nonempty needle has none. Approximate grapheme segmentation unchanged. Full portable baseline uses explicit nested-let returns.
+
+Eight of the 37 absent-keyword families now have targeted behavioral review; metadata remains absent and 29 families await this review. Canonical README/architecture/registry/integration/catalog/audits/queue and relevant entries synchronized. Catalog: **67 entries; 1,556 feature + 24 chapter checks = 1,580**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (zero warnings/errors); **5,578 tests / 0 failures / 0 skips**, ten assemblies, including all 1,556 catalog feature checks. Renderer verified 87 pages. Eight pinned contracts, exact keyword errors/case IDs, independent normal/empty reports and codepoint/boundary/padding results, local links and scoped inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with sequence selection/repetition: replicate, items-at, foot, trunk, insert-separator and slice. Compare pinned keywords/defaults/sequence types to source, then add realistic batch import/export positional/keyword/default/empty/invalid examples. Keep documentation-first scope; record unavailable/tolerated forms without silently implementing metadata. Other missing families, precise coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Prior keyword spelling, replace arity and two-let hash issues remain separate engine follow-ups. Historical adopted pins and AC-03 gate applicability unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+
+# Historical signature contract matrix — 2026-10-12
 
 Main baseline: `3a078fa4cb8b17233837670d41e0ef951da86cd1`; [PR #186](https://github.com/Fytala-Charles/Bosak/pull/186) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38231726134). Current branch: `docs/req126-signature-contract-audit`.
 
