@@ -1,0 +1,1 @@
+concat('sha256=', hash(value := 'abc', algorithm := 'SHA-256', options := map{}))

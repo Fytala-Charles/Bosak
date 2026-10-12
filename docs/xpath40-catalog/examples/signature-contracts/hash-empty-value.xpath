@@ -1,0 +1,1 @@
+count(hash((), 'SHA-256', map{}))

@@ -1,0 +1,1 @@
+count(element-to-map(element := parse-xml('<invoice id="42"/>')/*, options := map{}))

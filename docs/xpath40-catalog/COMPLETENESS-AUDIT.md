@@ -13,7 +13,7 @@ evidence remain partial; see the [close-out review](CLOSEOUT-REVIEW.md). The ori
 `09e678f3` (1.1.1 publication documentation); published engine 1.1.1 is revision
 `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`.
 
-Current review: **2026-10-12**, source baseline `b76be1776a5e3c86164772dcf91d682de218da1c`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
+Current review: **2026-10-12**, source baseline `3a078fa4cb8b17233837670d41e0ef951da86cd1`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
 
 The original audit baseline was 28 entries, 81 catalog cases, three worked chapters, and 13
 chapter checks. All entries have the 16 numbered fields. Field presence does not
@@ -71,7 +71,7 @@ specification revision or establish that Bosak implements the entire proposal.
 |---|---|---|
 | AC-01: landed slices, tiers, spec and delivery links | Partial | All registered names now have entries; supplementary signatures/options and changed existing functions remain partial. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. The wider disposition records are also supplied; source-to-disposition and lifecycle coverage still need systematic validation. |
-| AC-03: verified examples and gate evidence | Partial | 1,310 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. The original audit corrected fn:scan gate status. AC-03 literally asks for qt4tests sets for every entry; XSLT-only and refused/out-of-scope entries require applicable harness evidence and explicit absent-gate status. This does not waive the criterion. |
+| AC-03: verified examples and gate evidence | Partial | 1,497 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. The original audit corrected fn:scan gate status. AC-03 literally asks for qt4tests sets for every entry; XSLT-only and refused/out-of-scope entries require applicable harness evidence and explicit absent-gate status. This does not waive the criterion. |
 | AC-04: structure, retained entries, drift warnings | Partial | 67 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
@@ -389,3 +389,6 @@ Sorting review: retained functions still use the legacy shared comparer rather t
 
 
 **Focus-constructor audit — 2026-10-12:** [Typed supplier delivery import and all 49 names](operators-and-syntax/focus-functions.md) adds 508 executable checks, representative result types, lexical/source errors, missing context, empty/multiple input, default 3.1 refusal, experimental parity and portable 3.1 reports. List types and xs:error are explicit. Current coverage: 67 entries, 1,286 feature + 24 chapter checks = 1,310; four worked chapters; all 117 names assigned. Version remains 1.1.2, REQ-126 In Progress. This current snapshot supersedes earlier delivery counts. Next: D2, supplementary signatures/keywords/defaults/options.
+
+
+**Signature contract review — 2026-10-12:** [Metadata matrix and consumer boundaries](SIGNATURE-CONTRACT-AUDIT.md) supplies 68 new-name families plus 20 selected existing functions, 148 exact registration checks and 39 behavior cases (187 new checks). 37 families lack keyword metadata; four keyword-name differences and three default-expression differences are recorded. Replace arity/default and two-let hash keyword failures have reproducible cases. Hash extension options are implementation-defined; missing mandatory algorithms remain distinct. Catalog: 67 entries, 1,473 feature + 24 chapter checks = 1,497; version 1.1.2, REQ-126 In Progress. D2 remains partial. This snapshot supersedes earlier delivery counts; next review missing metadata/defaults/options family by family.

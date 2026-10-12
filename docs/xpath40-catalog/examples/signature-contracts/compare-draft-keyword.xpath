@@ -1,0 +1,1 @@
+compare(value1 := 'INV-42', value2 := 'INV-43')

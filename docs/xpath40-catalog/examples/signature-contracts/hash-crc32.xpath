@@ -1,0 +1,1 @@
+hash('abc', 'CRC-32', map{})
