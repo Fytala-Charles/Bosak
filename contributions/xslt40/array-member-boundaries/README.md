@@ -128,3 +128,8 @@ Do not apply the patch a second time to the existing contribution branch. The pa
 Review the six assertions with another XSLT 4.0 implementation when available and triage Bosak's missing mixed-result error separately. Then submit a small upstream test PR with honest pass/failure evidence. No established expected outcome is changed, so this is an addition rather than an expected-result correction. The local PR text includes a short Bosak/documentation link without implying complete 4.0 conformance.
 
 Queue N01 remains in progress; do not move it to upstream accepted. Source/public version stays 1.1.3 and REQ-126 remains In Progress. No Bosak engine/API/adapter changes or release in this batch.
+
+
+## Post-fix candidate review
+
+The [assertion review](ASSERTION_REVIEW.md) documents the expected-output derivations and engine correction. [Post-fix results](POST_FIX_RESULTS.json) record six exact passes against the unchanged native commit. Earlier outcomes above are preserved as the before-fix record. Source candidate 1.1.4 is unpublished; independent processor confirmation and upstream submission remain outstanding.
