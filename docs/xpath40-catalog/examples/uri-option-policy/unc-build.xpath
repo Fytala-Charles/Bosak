@@ -1,0 +1,1 @@
+build-uri(map {'scheme': 'file', 'path-segments': ('', 'server', 'share')}, map {'unc-path': true()})

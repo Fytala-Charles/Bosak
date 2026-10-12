@@ -1,0 +1,1 @@
+build-uri(map {'scheme': 'https', 'host': 'host', 'path': '/raw', 'path-segments': ()})

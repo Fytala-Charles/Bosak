@@ -1,4 +1,20 @@
-# Session close — 2026-10-12
+# URI option review — 2026-10-12
+
+Main baseline: `21c8a888e690f1b8d14e22e15c19111e5c158616`; PR #174 merged after CI passed. Current delivery branch: `docs/req126-uri-options`.
+
+## Current state and what was built
+
+Added [archive and partner URI policy](xpath40-catalog/functions/uri-option-policy.md), complete input/output, scoped XPath 3.1 comparison and 28 executable fixtures. Boolean option contracts, UNC interpretation/spelling and raw/structured component precedence are documented against pinned QT4CG source e7ee4ab8. Non-Boolean option truthiness and empty-query-map fallback are observed draft gaps. No engine/API/package changes or gate promotions.
+
+Catalog: **58 entries; 503 feature + 24 chapter checks = 527**. All 117 names remain assigned; name assignment does not certify options, grammar or conformance. Version **1.1.2**, REQ-126 **In Progress**. Validation: Release build passed (one existing warning, zero errors); **4,525 tests / 0 failures / 0 skips** across ten assemblies, 503 focused catalog cases, 72 pages rendered. Entry/index, primary/local links, provenance, all fixture code/results and eight named tests verified. Manual conformance gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Review wider grammar/disposition provenance in the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md), starting with computed XPath constructors and their classification against immutable draft/source evidence. Keep the next slice documentation-only unless engine work is separately requested. Existing comparison, extrema, sorting, Unicode, hash and provenance limits below remain open; add the two URI gaps above to follow-up reconciliation.
+
+Preserve untracked `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, pending PRs and resume suggestions are superseded by this block.
+
+# Historical session close — 2026-10-12
 
 Verified implementation baseline: `52183ca36fbea4e791f66dbfda4635c0b9c851c1` on `main`.
 [PR #173](https://github.com/Fytala-Charles/Bosak/pull/173) merged after

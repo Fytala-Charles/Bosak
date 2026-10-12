@@ -1,0 +1,4 @@
+let $r := parse-xml('<routes><archive server="files.example.test" folder="invoices" leaf="October 2026" value="//files.example.test/invoices/October%202026"/><partner host="api.example.test" value="https://demo:placeholder@api.example.test:443/legacy"/></routes>')/routes
+return let $archive := concat('//', $r/archive/@server, '/', $r/archive/@folder, '/', $r/archive/@leaf)
+return let $target := concat('https://', $r/partner/@host, '/v2/invoices/', encode-for-uri('INV/2048'), '?status=', encode-for-uri('ready now'))
+return concat('archive=', $archive, '; partner=', $target)
