@@ -1,0 +1,1 @@
+every $v in ('supplier A' ! xs:normalizedString()) satisfies $v instance of xs:normalizedString

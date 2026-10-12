@@ -1,0 +1,1 @@
+string-join(xs:nonPositiveInteger('-12') ! string(.), '|')

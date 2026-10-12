@@ -1,0 +1,1 @@
+string-join(xs:int('12') ! string(.), '|')

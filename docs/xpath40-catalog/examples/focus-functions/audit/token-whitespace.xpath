@@ -1,0 +1,1 @@
+string('  supplier   A  ' ! xs:token())

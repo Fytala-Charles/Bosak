@@ -1,4 +1,24 @@
-# Catalog close-out review — 2026-10-12
+# Focus-constructor audit — 2026-10-12
+
+Main baseline: `b76be1776a5e3c86164772dcf91d682de218da1c`; [PR #185](https://github.com/Fytala-Charles/Bosak/pull/185) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38229658392). Current branch: `docs/req126-focus-constructor-audit`.
+
+## Current state and what was built
+
+Expanded [focus constructors](xpath40-catalog/operators-and-syntax/focus-functions.md), with a [detailed delivery-import README](xpath40-catalog/examples/focus-functions/README.md) and [49-name audit inventory](xpath40-catalog/audit-focus-constructors.json). Verified current registrations against the live function-name sets and generated registration source. Pinned F&O constructor source e7ee4ab8 supplies atomic/list/union/default-argument contracts; it does not recover the historical adopted pin.
+
+508 new executable cases cover all names with representative values/types, lexical/source errors, missing context, empty mapping, multiple mapped items, explicit empty arguments, 3.1 alternatives/default refusal and experimental parity. Eight complete delivery-import reports demonstrate attribute atomization, canonical values, empty/reordered input and invalid quantity. Ten additional boundary cases cover bounds/timezone/QName/array/cardinality/normalization/wrong-source-type behavior. Lists and xs:error have explicit semantics. No engine/API/harness change, new gate promotion or release.
+
+Catalog: **67 entries; 1,286 feature + 24 chapter checks = 1,310**; four worked chapters; all 117 names assigned. D1 representative all-name audit supplied; exhaustive casting conformance unclaimed. Version **1.1.2**, REQ-126 **In Progress**. README/architecture/registry/integration/catalog/audits/close-out queue synchronized; earlier delivery snapshots retain original counts.
+
+Validation: Release solution build passed (one warning, zero errors); **5,308 tests / 0 failures / 0 skips**, ten assemblies, including all 1,286 catalog checks. Renderer verified 83 pages. Scoped inventory/provenance, pinned constructor sections, all scenario/mode coverage, local links and independent delivery report calculations passed. Existing misc-FocusConstructors gate reference corrected; manual engine gates were not rerun for this documentation/example slice.
+
+## Resume here
+
+Next: D2, reconcile the 68 non-constructor registrations against pinned signatures, keywords, defaults and options, plus changed existing 3.1 functions excluded from the name inventory. Build a source-to-contract coverage matrix and choose uncovered forms for realistic success/empty/invalid examples. Keep documentation-first scope; record engine limits. D3 grammar/type/pattern matrix and D4 provenance/drift/acceptance follow. Historical adopted-pin gaps and AC-03 blanket gate applicability remain unresolved. Do not close REQ-126 or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+
+# Historical catalog close-out review — 2026-10-12
 
 Main baseline: `fb2e20a2f05d29b7c5e66ba5d561a39804248e48`; [PR #184](https://github.com/Fytala-Charles/Bosak/pull/184) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38228857439). Current branch: `docs/req126-closeout-review`.
 

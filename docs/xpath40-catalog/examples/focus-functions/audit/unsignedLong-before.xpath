@@ -1,0 +1,1 @@
+string-join(xs:unsignedLong('12') ! string(.), '|')

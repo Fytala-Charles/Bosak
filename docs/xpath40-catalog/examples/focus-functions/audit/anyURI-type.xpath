@@ -1,0 +1,1 @@
+every $v in ('https://supplier.example/invoice/42' ! xs:anyURI()) satisfies $v instance of xs:anyURI

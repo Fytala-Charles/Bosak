@@ -1,0 +1,1 @@
+string-join(for $line in parse-xml('<deliveries/>')/deliveries/line return concat($line/@id, '|', $line/@quantity ! xs:integer(.), '|', $line/@price ! xs:decimal(.), '|', $line/@date ! xs:date(.), '|', $line/@active ! xs:boolean(.)), ';')

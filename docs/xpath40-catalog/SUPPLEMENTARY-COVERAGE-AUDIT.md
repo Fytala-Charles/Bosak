@@ -10,8 +10,7 @@ Historical audit baseline: `37457bfd` after PR #169. Published engine: **1.1.2**
 The accompanying [registration inventory](audit-registration-arities.json) records
 literal dictionary registrations for the 68 non-constructor names. Its arities
 are implementation metadata, not proof of full draft signatures or conformance.
-The 49 `xs:*` focus constructors remain a separate family requiring verification
-of generated registrations, focus conversion, missing focus and invalid values.
+The 49 `xs:*` focus constructors now have a [separate representative audit](operators-and-syntax/focus-functions.md) of generated registrations, focus conversion, types, missing focus and invalid values. Exhaustive casting conformance remains unclaimed.
 
 ## Sources and reproducible evidence
 
@@ -38,7 +37,7 @@ of generated registrations, focus conversion, missing focus and invalid values.
 | 1 | Changed existing functions | `fn:compare` already existed in 3.1 and is absent from the 4.0-only name inventory. Tests `Compare40_CrossNumericExact_DoubleVsDecimal`, `Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself`, `Compare40_BooleansAndBinariesAndQName`, `Compare40_MixedIncomparable_RaisesXpty0004` and `Compare40_KeywordFormAndEmptyCollation` establish implementation evidence. The [measurement reference](functions/measurement-comparison.md) now supplies 27 executable cases and a distinct 3.1 normalization policy. This is scoped coverage, not every atomic-family contract. Min/max, sorting and URI reviews are now supplied. Remaining atomic-family, collation and changed map/array overload contracts still require systematic verification. |
 | 2 | Arity, keyword and default contracts | For every registration, reconcile parameter names, sequence types, omitted arguments and keyword calls against the pinned draft. A registered arity alone cannot establish any of these. Add success, empty and invalid-argument examples for uncovered forms. |
 | 2 | Options | `hash#3` accepts an options map, but the implementation currently only validates its shape; named option behavior is not established. Hash examples cover algorithm/default/input cases, not a complete options contract. [URI option policy](functions/uri-option-policy.md) now documents `allow-deprecated-features`, `omit-default-ports` and `unc-path`, raw/structured component precedence and 28 fixtures. Non-Boolean option truthiness and empty-query-map fallback remain observed draft gaps; raw-authority bypass is draft-defined. Audit sorting records and JSON options separately. |
-| 2 | Constructors and types | One focus-constructor family entry does not verify all 49 names. Reconcile constructor-specific lexical/value constraints and error paths, then structural records, enum/choice coercion and function-signature conversion. |
+| 2 | Constructors and types | The 49-name representative audit is supplied, including lexical/type/context/error cases. Further lexical/value-space boundaries, structural records, enum/choice coercion and function-signature conversion remain. |
 | 3 | Grammar and patterns | Existing syntax entries do not constitute a grammar inventory. Reconcile REQ-118 S3/S4 and S7/S8 against parser/compiler tests: keyword calls, guarded/otherwise expressions, templates, collection iteration, arrows, focus functions, binary literals and type/map/array patterns. Record omitted productions and version-gate behavior explicitly. |
 | 3 | Drift and lifecycle | The 28-entry provenance ledger retains delivery evidence but lacks historical adopted draft pins. Keep that limitation. For each changed or superseded form, link an immutable current review and explain the difference; do not substitute a live page for historical adoption. |
 
@@ -74,7 +73,7 @@ coverage and lifecycle before closure. Deferred implementation remains separate.
 
 ## Next delivery and acceptance
 
-The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. The [batch extrema reference](functions/batch-extrema.md) supplies 29 cases and records numeric promotion/result-type and duration gaps. The [warehouse sorting reference](functions/warehouse-pick-sorting.md) now supplies 28 cases and records numeric/NaN/default-key/collation limits. The URI option review is supplied. Next audit all 49 focus constructors, followed by the signature and grammar inventories in the [close-out queue](CLOSEOUT-REVIEW.md). Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
+The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. The [batch extrema reference](functions/batch-extrema.md) supplies 29 cases and records numeric promotion/result-type and duration gaps. The [warehouse sorting reference](functions/warehouse-pick-sorting.md) now supplies 28 cases and records numeric/NaN/default-key/collation limits. The URI option review is supplied. The 49-name constructor audit is supplied. Next complete the signature and grammar inventories in the [close-out queue](CLOSEOUT-REVIEW.md). Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
 
 AC-01 through AC-04 remain partial. AC-05 remains met for the current scope.
 Closure requires reviewed contracts and disposition records, executable examples,
@@ -113,3 +112,6 @@ Historical warehouse sorting delivery (2026-10-12): coverage was 57 entries and 
 
 
 Catalog close-out review (2026-10-12): **67 entries, 778 feature + 24 chapter checks = 802**; four worked chapters and all 117 registered names assigned. REQ-126 remains In Progress, version 1.1.2. The [prioritized review](CLOSEOUT-REVIEW.md) identifies constructor/signature/grammar and acceptance work, with engine follow-ups tracked separately. Next: audit all 49 focus constructors.
+
+
+**Focus-constructor audit — 2026-10-12:** [Typed supplier delivery import and all 49 names](operators-and-syntax/focus-functions.md) adds 508 executable checks, representative result types, lexical/source errors, missing context, empty/multiple input, default 3.1 refusal, experimental parity and portable 3.1 reports. List types and xs:error are explicit. Current coverage: 67 entries, 1,286 feature + 24 chapter checks = 1,310; four worked chapters; all 117 names assigned. Version remains 1.1.2, REQ-126 In Progress. This current snapshot supersedes earlier delivery counts. Next: D2, supplementary signatures/keywords/defaults/options.

@@ -2102,7 +2102,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/decode-utf8.xpath",
-    "expected": "café"
+    "expected": "caf\u00e9"
   },
   {
     "id": "invoice-api-uris-encode-decode",
@@ -2116,14 +2116,14 @@
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/malformed-escape.xpath",
-    "expected": "�!"
+    "expected": "\ufffd!"
   },
   {
     "id": "invoice-api-uris-invalid-utf8",
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/invalid-utf8.xpath",
-    "expected": "�A"
+    "expected": "\ufffdA"
   },
   {
     "id": "invoice-api-uris-decode-empty",
@@ -2228,14 +2228,14 @@
     "kind": "xpath",
     "mode": "40",
     "file": "customer-text-cleanup/main.xpath",
-    "expected": "label=[José  🚚]; codepoints=8; graphemes=7; export=[José  🚚..]; separator=—"
+    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; graphemes=7; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
   },
   {
     "id": "customer-text-cleanup-baseline",
     "kind": "xpath",
     "mode": "31",
     "file": "customer-text-cleanup/baseline.xpath",
-    "expected": "label=[José  🚚]; codepoints=8; export=[José  🚚..]; separator=—"
+    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
   },
   {
     "id": "customer-text-cleanup-preserve-interior",
@@ -2326,7 +2326,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "customer-text-cleanup/entity-name.xpath",
-    "expected": "á"
+    "expected": "\u00e1"
   },
   {
     "id": "customer-text-cleanup-multi-codepoint-entity",
@@ -5665,5 +5665,3609 @@
     "file": "language-streaming-scope/report-stream40-reordered.xsl",
     "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00;INV-1044/EUR:0.00;",
     "input": "language-streaming-scope/reordered.xml"
+  },
+  {
+    "id": "focus-audit-ENTITIES-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITIES-valid.xpath",
+    "expected": "A|B"
+  },
+  {
+    "id": "focus-audit-ENTITIES-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/ENTITIES-valid.xpath",
+    "expected": "A|B",
+    "frozenExpected": "A|B"
+  },
+  {
+    "id": "focus-audit-ENTITIES-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ENTITIES-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-ENTITIES-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITIES-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-ENTITIES-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITIES-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-ENTITIES-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITIES-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-ENTITIES-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITIES-multiple.xpath",
+    "expected": "4"
+  },
+  {
+    "id": "focus-audit-ENTITIES-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ENTITIES-before.xpath",
+    "expected": "A|B"
+  },
+  {
+    "id": "focus-audit-ENTITIES-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITIES-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-ENTITY-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITY-valid.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-ENTITY-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/ENTITY-valid.xpath",
+    "expected": "PART_A",
+    "frozenExpected": "PART_A"
+  },
+  {
+    "id": "focus-audit-ENTITY-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ENTITY-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-ENTITY-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITY-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-ENTITY-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITY-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-ENTITY-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITY-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-ENTITY-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITY-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-ENTITY-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ENTITY-before.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-ENTITY-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ENTITY-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-ID-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ID-valid.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-ID-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/ID-valid.xpath",
+    "expected": "PART_A",
+    "frozenExpected": "PART_A"
+  },
+  {
+    "id": "focus-audit-ID-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ID-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-ID-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ID-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-ID-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ID-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-ID-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ID-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-ID-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ID-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-ID-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ID-before.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-ID-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/ID-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-IDREF-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREF-valid.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-IDREF-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/IDREF-valid.xpath",
+    "expected": "PART_A",
+    "frozenExpected": "PART_A"
+  },
+  {
+    "id": "focus-audit-IDREF-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/IDREF-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-IDREF-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREF-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-IDREF-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREF-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-IDREF-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREF-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-IDREF-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREF-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-IDREF-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/IDREF-before.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-IDREF-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREF-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-IDREFS-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREFS-valid.xpath",
+    "expected": "A|B"
+  },
+  {
+    "id": "focus-audit-IDREFS-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/IDREFS-valid.xpath",
+    "expected": "A|B",
+    "frozenExpected": "A|B"
+  },
+  {
+    "id": "focus-audit-IDREFS-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/IDREFS-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-IDREFS-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREFS-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-IDREFS-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREFS-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-IDREFS-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREFS-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-IDREFS-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREFS-multiple.xpath",
+    "expected": "4"
+  },
+  {
+    "id": "focus-audit-IDREFS-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/IDREFS-before.xpath",
+    "expected": "A|B"
+  },
+  {
+    "id": "focus-audit-IDREFS-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/IDREFS-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-NCName-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NCName-valid.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-NCName-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/NCName-valid.xpath",
+    "expected": "PART_A",
+    "frozenExpected": "PART_A"
+  },
+  {
+    "id": "focus-audit-NCName-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NCName-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-NCName-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NCName-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-NCName-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NCName-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-NCName-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NCName-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-NCName-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NCName-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-NCName-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NCName-before.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-NCName-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NCName-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKEN-valid.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/NMTOKEN-valid.xpath",
+    "expected": "PART_A",
+    "frozenExpected": "PART_A"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NMTOKEN-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKEN-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKEN-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKEN-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKEN-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NMTOKEN-before.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKEN-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKENS-valid.xpath",
+    "expected": "A|B"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/NMTOKENS-valid.xpath",
+    "expected": "A|B",
+    "frozenExpected": "A|B"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NMTOKENS-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKENS-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKENS-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKENS-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKENS-multiple.xpath",
+    "expected": "4"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NMTOKENS-before.xpath",
+    "expected": "A|B"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/NMTOKENS-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-Name-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/Name-valid.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-Name-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/Name-valid.xpath",
+    "expected": "PART_A",
+    "frozenExpected": "PART_A"
+  },
+  {
+    "id": "focus-audit-Name-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/Name-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-Name-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/Name-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-Name-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/Name-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-Name-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/Name-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-Name-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/Name-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-Name-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/Name-before.xpath",
+    "expected": "PART_A"
+  },
+  {
+    "id": "focus-audit-Name-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/Name-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-QName-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/QName-valid.xpath",
+    "expected": "xs:integer"
+  },
+  {
+    "id": "focus-audit-QName-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/QName-valid.xpath",
+    "expected": "xs:integer",
+    "frozenExpected": "xs:integer"
+  },
+  {
+    "id": "focus-audit-QName-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/QName-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-QName-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/QName-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-QName-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/QName-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-QName-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/QName-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-QName-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/QName-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-QName-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/QName-before.xpath",
+    "expected": "xs:integer"
+  },
+  {
+    "id": "focus-audit-QName-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/QName-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-anyURI-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/anyURI-valid.xpath",
+    "expected": "https://supplier.example/invoice/42"
+  },
+  {
+    "id": "focus-audit-anyURI-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/anyURI-valid.xpath",
+    "expected": "https://supplier.example/invoice/42",
+    "frozenExpected": "https://supplier.example/invoice/42"
+  },
+  {
+    "id": "focus-audit-anyURI-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/anyURI-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-anyURI-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/anyURI-invalid.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "focus-audit-anyURI-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/anyURI-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-anyURI-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/anyURI-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-anyURI-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/anyURI-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-anyURI-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/anyURI-before.xpath",
+    "expected": "https://supplier.example/invoice/42"
+  },
+  {
+    "id": "focus-audit-anyURI-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/anyURI-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-base64Binary-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/base64Binary-valid.xpath",
+    "expected": "QUI="
+  },
+  {
+    "id": "focus-audit-base64Binary-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/base64Binary-valid.xpath",
+    "expected": "QUI=",
+    "frozenExpected": "QUI="
+  },
+  {
+    "id": "focus-audit-base64Binary-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/base64Binary-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-base64Binary-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/base64Binary-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-base64Binary-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/base64Binary-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-base64Binary-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/base64Binary-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-base64Binary-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/base64Binary-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-base64Binary-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/base64Binary-before.xpath",
+    "expected": "QUI="
+  },
+  {
+    "id": "focus-audit-base64Binary-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/base64Binary-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-boolean-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/boolean-valid.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-boolean-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/boolean-valid.xpath",
+    "expected": "true",
+    "frozenExpected": "true"
+  },
+  {
+    "id": "focus-audit-boolean-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/boolean-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-boolean-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/boolean-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-boolean-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/boolean-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-boolean-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/boolean-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-boolean-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/boolean-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-boolean-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/boolean-before.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-boolean-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/boolean-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-byte-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/byte-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-byte-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/byte-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-byte-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/byte-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-byte-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/byte-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-byte-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/byte-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-byte-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/byte-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-byte-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/byte-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-byte-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/byte-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-byte-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/byte-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-date-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/date-valid.xpath",
+    "expected": "2026-10-12"
+  },
+  {
+    "id": "focus-audit-date-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/date-valid.xpath",
+    "expected": "2026-10-12",
+    "frozenExpected": "2026-10-12"
+  },
+  {
+    "id": "focus-audit-date-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/date-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-date-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/date-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-date-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/date-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-date-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/date-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-date-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/date-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-date-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/date-before.xpath",
+    "expected": "2026-10-12"
+  },
+  {
+    "id": "focus-audit-date-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/date-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-dateTime-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTime-valid.xpath",
+    "expected": "2026-10-12T09:30:00Z"
+  },
+  {
+    "id": "focus-audit-dateTime-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/dateTime-valid.xpath",
+    "expected": "2026-10-12T09:30:00Z",
+    "frozenExpected": "2026-10-12T09:30:00Z"
+  },
+  {
+    "id": "focus-audit-dateTime-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dateTime-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-dateTime-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTime-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-dateTime-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTime-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-dateTime-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTime-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-dateTime-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTime-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-dateTime-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dateTime-before.xpath",
+    "expected": "2026-10-12T09:30:00Z"
+  },
+  {
+    "id": "focus-audit-dateTime-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTime-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTimeStamp-valid.xpath",
+    "expected": "2026-10-12T09:30:00Z"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/dateTimeStamp-valid.xpath",
+    "expected": "2026-10-12T09:30:00Z",
+    "frozenExpected": "2026-10-12T09:30:00Z"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dateTimeStamp-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTimeStamp-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTimeStamp-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTimeStamp-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTimeStamp-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dateTimeStamp-before.xpath",
+    "expected": "2026-10-12T09:30:00Z"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dateTimeStamp-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dayTimeDuration-valid.xpath",
+    "expected": "P1DT2H"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/dayTimeDuration-valid.xpath",
+    "expected": "P1DT2H",
+    "frozenExpected": "P1DT2H"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dayTimeDuration-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dayTimeDuration-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dayTimeDuration-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dayTimeDuration-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dayTimeDuration-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dayTimeDuration-before.xpath",
+    "expected": "P1DT2H"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/dayTimeDuration-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-decimal-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/decimal-valid.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-decimal-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/decimal-valid.xpath",
+    "expected": "12.5",
+    "frozenExpected": "12.5"
+  },
+  {
+    "id": "focus-audit-decimal-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/decimal-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-decimal-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/decimal-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-decimal-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/decimal-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-decimal-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/decimal-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-decimal-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/decimal-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-decimal-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/decimal-before.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-decimal-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/decimal-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-double-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/double-valid.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-double-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/double-valid.xpath",
+    "expected": "12.5",
+    "frozenExpected": "12.5"
+  },
+  {
+    "id": "focus-audit-double-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/double-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-double-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/double-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-double-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/double-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-double-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/double-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-double-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/double-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-double-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/double-before.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-double-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/double-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-duration-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/duration-valid.xpath",
+    "expected": "P1DT2H"
+  },
+  {
+    "id": "focus-audit-duration-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/duration-valid.xpath",
+    "expected": "P1DT2H",
+    "frozenExpected": "P1DT2H"
+  },
+  {
+    "id": "focus-audit-duration-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/duration-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-duration-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/duration-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-duration-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/duration-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-duration-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/duration-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-duration-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/duration-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-duration-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/duration-before.xpath",
+    "expected": "P1DT2H"
+  },
+  {
+    "id": "focus-audit-duration-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/duration-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-error-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/error-valid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-error-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/error-valid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-error-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/error-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-error-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/error-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-error-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/error-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-error-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/error-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-error-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/error-multiple.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-error-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/error-before.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-error-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/error-type.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-float-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/float-valid.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-float-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/float-valid.xpath",
+    "expected": "12.5",
+    "frozenExpected": "12.5"
+  },
+  {
+    "id": "focus-audit-float-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/float-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-float-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/float-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-float-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/float-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-float-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/float-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-float-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/float-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-float-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/float-before.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-float-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/float-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-gDay-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gDay-valid.xpath",
+    "expected": "---12"
+  },
+  {
+    "id": "focus-audit-gDay-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/gDay-valid.xpath",
+    "expected": "---12",
+    "frozenExpected": "---12"
+  },
+  {
+    "id": "focus-audit-gDay-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gDay-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-gDay-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gDay-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-gDay-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gDay-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-gDay-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gDay-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gDay-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gDay-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-gDay-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gDay-before.xpath",
+    "expected": "---12"
+  },
+  {
+    "id": "focus-audit-gDay-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gDay-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-gMonth-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonth-valid.xpath",
+    "expected": "--10"
+  },
+  {
+    "id": "focus-audit-gMonth-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/gMonth-valid.xpath",
+    "expected": "--10",
+    "frozenExpected": "--10"
+  },
+  {
+    "id": "focus-audit-gMonth-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gMonth-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-gMonth-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonth-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-gMonth-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonth-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-gMonth-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonth-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gMonth-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonth-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-gMonth-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gMonth-before.xpath",
+    "expected": "--10"
+  },
+  {
+    "id": "focus-audit-gMonth-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonth-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-gMonthDay-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonthDay-valid.xpath",
+    "expected": "--10-12"
+  },
+  {
+    "id": "focus-audit-gMonthDay-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/gMonthDay-valid.xpath",
+    "expected": "--10-12",
+    "frozenExpected": "--10-12"
+  },
+  {
+    "id": "focus-audit-gMonthDay-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gMonthDay-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-gMonthDay-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonthDay-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-gMonthDay-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonthDay-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-gMonthDay-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonthDay-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gMonthDay-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonthDay-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-gMonthDay-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gMonthDay-before.xpath",
+    "expected": "--10-12"
+  },
+  {
+    "id": "focus-audit-gMonthDay-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gMonthDay-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-gYear-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYear-valid.xpath",
+    "expected": "2026"
+  },
+  {
+    "id": "focus-audit-gYear-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/gYear-valid.xpath",
+    "expected": "2026",
+    "frozenExpected": "2026"
+  },
+  {
+    "id": "focus-audit-gYear-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gYear-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-gYear-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYear-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-gYear-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYear-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-gYear-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYear-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gYear-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYear-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-gYear-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gYear-before.xpath",
+    "expected": "2026"
+  },
+  {
+    "id": "focus-audit-gYear-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYear-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-gYearMonth-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYearMonth-valid.xpath",
+    "expected": "2026-10"
+  },
+  {
+    "id": "focus-audit-gYearMonth-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/gYearMonth-valid.xpath",
+    "expected": "2026-10",
+    "frozenExpected": "2026-10"
+  },
+  {
+    "id": "focus-audit-gYearMonth-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gYearMonth-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-gYearMonth-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYearMonth-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-gYearMonth-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYearMonth-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-gYearMonth-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYearMonth-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gYearMonth-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYearMonth-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-gYearMonth-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gYearMonth-before.xpath",
+    "expected": "2026-10"
+  },
+  {
+    "id": "focus-audit-gYearMonth-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/gYearMonth-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-hexBinary-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/hexBinary-valid.xpath",
+    "expected": "4142"
+  },
+  {
+    "id": "focus-audit-hexBinary-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/hexBinary-valid.xpath",
+    "expected": "4142",
+    "frozenExpected": "4142"
+  },
+  {
+    "id": "focus-audit-hexBinary-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/hexBinary-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-hexBinary-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/hexBinary-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-hexBinary-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/hexBinary-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-hexBinary-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/hexBinary-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-hexBinary-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/hexBinary-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-hexBinary-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/hexBinary-before.xpath",
+    "expected": "4142"
+  },
+  {
+    "id": "focus-audit-hexBinary-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/hexBinary-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-int-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/int-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-int-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/int-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-int-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/int-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-int-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/int-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-int-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/int-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-int-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/int-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-int-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/int-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-int-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/int-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-int-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/int-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-integer-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/integer-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-integer-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/integer-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-integer-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/integer-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-integer-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/integer-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-integer-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/integer-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-integer-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/integer-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-integer-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/integer-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-integer-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/integer-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-integer-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/integer-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-language-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/language-valid.xpath",
+    "expected": "en-GB"
+  },
+  {
+    "id": "focus-audit-language-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/language-valid.xpath",
+    "expected": "en-GB",
+    "frozenExpected": "en-GB"
+  },
+  {
+    "id": "focus-audit-language-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/language-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-language-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/language-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-language-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/language-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-language-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/language-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-language-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/language-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-language-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/language-before.xpath",
+    "expected": "en-GB"
+  },
+  {
+    "id": "focus-audit-language-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/language-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-long-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/long-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-long-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/long-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-long-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/long-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-long-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/long-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-long-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/long-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-long-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/long-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-long-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/long-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-long-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/long-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-long-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/long-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-negativeInteger-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/negativeInteger-valid.xpath",
+    "expected": "-12"
+  },
+  {
+    "id": "focus-audit-negativeInteger-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/negativeInteger-valid.xpath",
+    "expected": "-12",
+    "frozenExpected": "-12"
+  },
+  {
+    "id": "focus-audit-negativeInteger-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/negativeInteger-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-negativeInteger-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/negativeInteger-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-negativeInteger-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/negativeInteger-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-negativeInteger-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/negativeInteger-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-negativeInteger-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/negativeInteger-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-negativeInteger-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/negativeInteger-before.xpath",
+    "expected": "-12"
+  },
+  {
+    "id": "focus-audit-negativeInteger-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/negativeInteger-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonNegativeInteger-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/nonNegativeInteger-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/nonNegativeInteger-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonNegativeInteger-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonNegativeInteger-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonNegativeInteger-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonNegativeInteger-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/nonNegativeInteger-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonNegativeInteger-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonPositiveInteger-valid.xpath",
+    "expected": "-12"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/nonPositiveInteger-valid.xpath",
+    "expected": "-12",
+    "frozenExpected": "-12"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/nonPositiveInteger-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonPositiveInteger-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonPositiveInteger-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonPositiveInteger-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonPositiveInteger-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/nonPositiveInteger-before.xpath",
+    "expected": "-12"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/nonPositiveInteger-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-normalizedString-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/normalizedString-valid.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-normalizedString-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/normalizedString-valid.xpath",
+    "expected": "supplier A",
+    "frozenExpected": "supplier A"
+  },
+  {
+    "id": "focus-audit-normalizedString-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/normalizedString-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-normalizedString-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/normalizedString-invalid.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "focus-audit-normalizedString-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/normalizedString-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-normalizedString-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/normalizedString-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-normalizedString-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/normalizedString-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-normalizedString-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/normalizedString-before.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-normalizedString-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/normalizedString-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-numeric-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/numeric-valid.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-numeric-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/numeric-valid.xpath",
+    "expected": "12.5",
+    "frozenExpected": "12.5"
+  },
+  {
+    "id": "focus-audit-numeric-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/numeric-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-numeric-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/numeric-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-numeric-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/numeric-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-numeric-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/numeric-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-numeric-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/numeric-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-numeric-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/numeric-before.xpath",
+    "expected": "12.5"
+  },
+  {
+    "id": "focus-audit-numeric-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/numeric-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-positiveInteger-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/positiveInteger-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-positiveInteger-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/positiveInteger-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-positiveInteger-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/positiveInteger-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-positiveInteger-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/positiveInteger-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-positiveInteger-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/positiveInteger-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-positiveInteger-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/positiveInteger-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-positiveInteger-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/positiveInteger-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-positiveInteger-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/positiveInteger-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-positiveInteger-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/positiveInteger-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-short-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/short-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-short-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/short-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-short-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/short-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-short-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/short-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-short-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/short-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-short-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/short-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-short-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/short-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-short-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/short-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-short-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/short-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-string-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/string-valid.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-string-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/string-valid.xpath",
+    "expected": "supplier A",
+    "frozenExpected": "supplier A"
+  },
+  {
+    "id": "focus-audit-string-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/string-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-string-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/string-invalid.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "focus-audit-string-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/string-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-string-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/string-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-string-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/string-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-string-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/string-before.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-string-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/string-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-time-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/time-valid.xpath",
+    "expected": "09:30:00Z"
+  },
+  {
+    "id": "focus-audit-time-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/time-valid.xpath",
+    "expected": "09:30:00Z",
+    "frozenExpected": "09:30:00Z"
+  },
+  {
+    "id": "focus-audit-time-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/time-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-time-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/time-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-time-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/time-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-time-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/time-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-time-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/time-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-time-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/time-before.xpath",
+    "expected": "09:30:00Z"
+  },
+  {
+    "id": "focus-audit-time-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/time-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-token-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/token-valid.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-token-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/token-valid.xpath",
+    "expected": "supplier A",
+    "frozenExpected": "supplier A"
+  },
+  {
+    "id": "focus-audit-token-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/token-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-token-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/token-invalid.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "focus-audit-token-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/token-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-token-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/token-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-token-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/token-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-token-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/token-before.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-token-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/token-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-unsignedByte-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedByte-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedByte-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/unsignedByte-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedByte-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedByte-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-unsignedByte-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedByte-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-unsignedByte-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedByte-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-unsignedByte-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedByte-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedByte-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedByte-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-unsignedByte-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedByte-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedByte-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedByte-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-unsignedInt-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedInt-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedInt-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/unsignedInt-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedInt-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedInt-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-unsignedInt-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedInt-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-unsignedInt-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedInt-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-unsignedInt-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedInt-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedInt-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedInt-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-unsignedInt-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedInt-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedInt-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedInt-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-unsignedLong-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedLong-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedLong-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/unsignedLong-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedLong-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedLong-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-unsignedLong-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedLong-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-unsignedLong-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedLong-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-unsignedLong-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedLong-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedLong-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedLong-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-unsignedLong-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedLong-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedLong-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedLong-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-unsignedShort-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedShort-valid.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedShort-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/unsignedShort-valid.xpath",
+    "expected": "12",
+    "frozenExpected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedShort-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedShort-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-unsignedShort-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedShort-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-unsignedShort-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedShort-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-unsignedShort-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedShort-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedShort-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedShort-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-unsignedShort-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedShort-before.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-unsignedShort-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsignedShort-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/untypedAtomic-valid.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/untypedAtomic-valid.xpath",
+    "expected": "supplier A",
+    "frozenExpected": "supplier A"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/untypedAtomic-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/untypedAtomic-invalid.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/untypedAtomic-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/untypedAtomic-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/untypedAtomic-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/untypedAtomic-before.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/untypedAtomic-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/yearMonthDuration-valid.xpath",
+    "expected": "P2M"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-valid-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "focus-functions/audit/yearMonthDuration-valid.xpath",
+    "expected": "P2M",
+    "frozenExpected": "P2M"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-valid-gate31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/yearMonthDuration-valid.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/yearMonthDuration-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/yearMonthDuration-missing.xpath",
+    "error": "XPDY0002"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/yearMonthDuration-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/yearMonthDuration-multiple.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-before",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/yearMonthDuration-before.xpath",
+    "expected": "P2M"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/yearMonthDuration-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "focus-audit-import-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/import-40.xpath",
+    "expected": "A|12|2.5|2026-10-12|true;B|5|4|2026-10-13|false"
+  },
+  {
+    "id": "focus-audit-import-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/import-31.xpath",
+    "expected": "A|12|2.5|2026-10-12|true;B|5|4|2026-10-13|false"
+  },
+  {
+    "id": "focus-audit-import-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/import-empty-40.xpath",
+    "expected": ""
+  },
+  {
+    "id": "focus-audit-import-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/import-empty-31.xpath",
+    "expected": ""
+  },
+  {
+    "id": "focus-audit-import-invalid-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/import-invalid-40.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-import-invalid-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/import-invalid-31.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-import-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/import-reordered-40.xpath",
+    "expected": "B|5|4|2026-10-13|false;A|12|2.5|2026-10-12|true"
+  },
+  {
+    "id": "focus-audit-import-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/import-reordered-31.xpath",
+    "expected": "B|5|4|2026-10-13|false;A|12|2.5|2026-10-12|true"
+  },
+  {
+    "id": "focus-audit-ENTITIES-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ENTITIES-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-ENTITY-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ENTITY-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-ID-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/ID-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-IDREF-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/IDREF-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-IDREFS-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/IDREFS-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-NCName-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NCName-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-NMTOKEN-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NMTOKEN-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-NMTOKENS-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/NMTOKENS-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-Name-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/Name-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-QName-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/QName-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-anyURI-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/anyURI-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-base64Binary-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/base64Binary-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-boolean-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/boolean-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-byte-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/byte-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-date-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/date-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-dateTime-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dateTime-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-dateTimeStamp-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dateTimeStamp-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-dayTimeDuration-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/dayTimeDuration-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-decimal-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/decimal-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-double-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/double-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-duration-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/duration-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-error-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/error-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-float-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/float-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gDay-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gDay-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gMonth-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gMonth-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gMonthDay-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gMonthDay-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gYear-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gYear-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-gYearMonth-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/gYearMonth-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-hexBinary-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/hexBinary-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-int-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/int-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-integer-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/integer-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-language-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/language-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-long-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/long-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-negativeInteger-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/negativeInteger-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-nonNegativeInteger-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/nonNegativeInteger-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-nonPositiveInteger-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/nonPositiveInteger-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-normalizedString-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/normalizedString-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-numeric-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/numeric-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-positiveInteger-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/positiveInteger-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-short-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/short-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-string-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/string-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-time-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/time-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-token-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/token-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedByte-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedByte-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedInt-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedInt-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedLong-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedLong-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-unsignedShort-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/unsignedShort-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-untypedAtomic-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/untypedAtomic-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-yearMonthDuration-argument-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/yearMonthDuration-argument-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "focus-audit-byte-overflow",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/byte-overflow.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-unsigned-negative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/unsigned-negative.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-positive-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/positive-zero.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-stamp-no-timezone",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/stamp-no-timezone.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-audit-qname-unbound",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/qname-unbound.xpath",
+    "error": "FONS0004"
+  },
+  {
+    "id": "focus-audit-array-many",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/array-many.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "focus-audit-array-single",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/array-single.xpath",
+    "expected": "12"
+  },
+  {
+    "id": "focus-audit-argument-many",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-functions/audit/argument-many.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "focus-audit-token-whitespace",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/token-whitespace.xpath",
+    "expected": "supplier A"
+  },
+  {
+    "id": "focus-audit-boolean-wrong-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-functions/audit/boolean-wrong-type.xpath",
+    "error": "XPTY0004"
   }
 ]

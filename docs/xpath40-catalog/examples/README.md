@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 778 named checks. Each points to a complete
+The [case manifest](cases.json) contains 1,286 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -125,3 +125,6 @@ For a changed existing function, `baselineError` verifies the default-3.1 compil
 **Language/streaming scope review — 2026-10-12:** [Existing APIs and separate 4.0 deltas](../deferred/language-streaming-scope.md) adds 28 cases through XQuery, XPath, ordinary XSLT and actual streaming APIs. Corrects stale XPath where exclusion and distinguishes REQ-087 Done from historical residual reports. Full XQuery/Streaming 4.0 remains unclaimed. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
 
 The harness also executes `kind: xquery` with XQueryCompiler/XQueryContext. For `kind: xslt`, modes `stream31`/`stream40` use TransformStreamingToString with a disposed file stream; other XSLT modes use capture. Explicit `frozenExpected` permits an experimental case to declare an existing frozen-4.0 outcome instead of asserting refusal. These metadata fields do not configure a new engine version.
+
+
+**Focus-constructor audit — 2026-10-12:** [Typed supplier delivery import and all 49 names](../operators-and-syntax/focus-functions.md) adds 508 executable checks, representative result types, lexical/source errors, missing context, empty/multiple input, default 3.1 refusal, experimental parity and portable 3.1 reports. List types and xs:error are explicit. Current coverage: 67 entries, 1,286 feature + 24 chapter checks = 1,310; four worked chapters; all 117 names assigned. Version remains 1.1.2, REQ-126 In Progress. This current snapshot supersedes earlier delivery counts. Next: D2, supplementary signatures/keywords/defaults/options.

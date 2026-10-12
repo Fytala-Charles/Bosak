@@ -1,0 +1,1 @@
+every $v in ('supplier A' ! xs:token()) satisfies $v instance of xs:token

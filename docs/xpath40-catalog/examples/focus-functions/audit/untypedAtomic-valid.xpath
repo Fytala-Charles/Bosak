@@ -1,0 +1,1 @@
+string-join(('supplier A' ! xs:untypedAtomic()) ! string(.), '|')

@@ -1,0 +1,1 @@
+every $v in ('4142' ! xs:hexBinary()) satisfies $v instance of xs:hexBinary

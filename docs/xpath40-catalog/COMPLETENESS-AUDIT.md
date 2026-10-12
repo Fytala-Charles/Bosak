@@ -13,7 +13,7 @@ evidence remain partial; see the [close-out review](CLOSEOUT-REVIEW.md). The ori
 `09e678f3` (1.1.1 publication documentation); published engine 1.1.1 is revision
 `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`.
 
-Current review: **2026-10-12**, source baseline `fb2e20a2f05d29b7c5e66ba5d561a39804248e48`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
+Current review: **2026-10-12**, source baseline `b76be1776a5e3c86164772dcf91d682de218da1c`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
 
 The original audit baseline was 28 entries, 81 catalog cases, three worked chapters, and 13
 chapter checks. All entries have the 16 numbered fields. Field presence does not
@@ -71,7 +71,7 @@ specification revision or establish that Bosak implements the entire proposal.
 |---|---|---|
 | AC-01: landed slices, tiers, spec and delivery links | Partial | All registered names now have entries; supplementary signatures/options and changed existing functions remain partial. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. The wider disposition records are also supplied; source-to-disposition and lifecycle coverage still need systematic validation. |
-| AC-03: verified examples and gate evidence | Partial | 802 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. The original audit corrected fn:scan gate status. AC-03 literally asks for qt4tests sets for every entry; XSLT-only and refused/out-of-scope entries require applicable harness evidence and explicit absent-gate status. This does not waive the criterion. |
+| AC-03: verified examples and gate evidence | Partial | 1,310 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. The original audit corrected fn:scan gate status. AC-03 literally asks for qt4tests sets for every entry; XSLT-only and refused/out-of-scope entries require applicable harness evidence and explicit absent-gate status. This does not waive the criterion. |
 | AC-04: structure, retained entries, drift warnings | Partial | 67 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
@@ -87,7 +87,7 @@ pairs, **not function signatures or arities**.
 | Frozen `fn:*` | 58 | 58 frozen fn names have family entries; signature and semantic coverage remain partial. |
 | Frozen `map:*` | 4 | All four names map to the product-index family; the entries/items result-shape correction shipped in 1.1.2. Supplementary contracts still need review. Map iteration syntax is a different feature. |
 | Frozen `array:*` | 5 | All five names have family entries: four batch functions plus array:sort-with in the sorting family. |
-| Frozen zero-argument `xs:*` constructors | 49 | One constructor-family entry exists, with an integer example; this does not verify all constructor contracts. |
+| Frozen zero-argument `xs:*` constructors | 49 | All 49 names now have representative lexical/type/context/error and 3.1/experimental checks, plus a typed delivery report. This is not exhaustive casting conformance. |
 | Experimental `fn:scan` | 1 | Entry and verified examples exist; gate status was stale. |
 | Total | 117 | 117 names map to an existing family entry; 0 have no dedicated family entry. A mapped name is not a completeness pass. |
 
@@ -173,7 +173,7 @@ The [close-out review](CLOSEOUT-REVIEW.md) defines the current queue and complet
 
 | Priority | Concrete delivery | Completion evidence |
 |---|---|---|
-| D1 | Audit all 49 focus constructors | Per-name registrations, valid/invalid lexical values, missing focus, empty/multiple focus and explicit mode outcomes. |
+| D1 — supplied | [All 49 focus constructors](operators-and-syntax/focus-functions.md) | 508 new checks and detailed delivery-import README; representative values/types, invalid sources, missing context, empty/multiple input and explicit modes. |
 | D2 | Complete signatures and changed existing functions | Reconcile 68 non-constructor registrations, keywords/defaults/options and changed 3.1 contracts against pinned sources; verify uncovered forms. |
 | D3 | Build grammar/type/pattern inventory | Map delivered productions and version gates to entries, parser/compiler tests and realistic fixtures. |
 | D4 | Reconcile provenance, drift and acceptance | Validate decision lifecycle, retain 28 unavailable historical adopted pins, and resolve the literal AC-03 gate requirement without invented evidence. |
@@ -386,3 +386,6 @@ Sorting review: retained functions still use the legacy shared comparer rather t
 **GNode/JNode scope review — 2026-10-12:** [Partial model and invoice navigation](data-model/jnode-template-boundary.md) replaces blanket exclusion with shipped JNode support and a deferred remainder. Eighteen added checks verify full invoice navigation/portable reports and broader node()/xnode()/identity gaps. Full generic-model and stylesheet built-in behavior remain uncertified. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 registered names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
 
 **Language/streaming scope review — 2026-10-12:** [Existing APIs and separate 4.0 deltas](deferred/language-streaming-scope.md) adds 28 cases through XQuery, XPath, ordinary XSLT and actual streaming APIs. Corrects stale XPath where exclusion and distinguishes REQ-087 Done from historical residual reports. Full XQuery/Streaming 4.0 remains unclaimed. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+
+**Focus-constructor audit — 2026-10-12:** [Typed supplier delivery import and all 49 names](operators-and-syntax/focus-functions.md) adds 508 executable checks, representative result types, lexical/source errors, missing context, empty/multiple input, default 3.1 refusal, experimental parity and portable 3.1 reports. List types and xs:error are explicit. Current coverage: 67 entries, 1,286 feature + 24 chapter checks = 1,310; four worked chapters; all 117 names assigned. Version remains 1.1.2, REQ-126 In Progress. This current snapshot supersedes earlier delivery counts. Next: D2, supplementary signatures/keywords/defaults/options.

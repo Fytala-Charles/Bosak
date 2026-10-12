@@ -24,11 +24,11 @@ Use the name and spelling in this entry and its executable files. Related functi
 
 ## 4. History / Supersedes
 
-In 3.1, call xs:integer(.) explicitly. Compare the [complete earlier-version baseline](../examples/focus-functions/before.xpath) with the [complete expression](../examples/focus-functions/main.xpath). Both yield `12,5` for this synthetic input. They demonstrate this task, not universal equivalence of the two mechanisms.
+In 3.1, call xs:integer(.) explicitly. Compare the [complete earlier-version baseline](../examples/focus-functions/before.xpath) with the [complete expression](../examples/focus-functions/main.xpath). Both yield `12,5` for this introductory input. The [delivery import](../examples/focus-functions/README.md) now supplies a complete business case and all 49 constructor names. They demonstrate this task, not universal equivalence of the two mechanisms.
 
 ## 5. Motivation
 
-An XML extract supplies quantity strings that need integer values. Use the current item as the argument to a zero-arity constructor inside a simple map. Keeping this task explicit makes it possible to choose the feature for a practical reason and verify what the receiving application will see.
+A supplier delivery extract supplies quantities, prices, promised dates and active flags as XML attributes. The receiving system requires typed values; the import report exposes canonical values before accepting the delivery. Use the current item as the argument to a zero-arity constructor inside a simple map. Keeping this task explicit makes it possible to choose the feature for a practical reason and verify what the receiving application will see.
 
 ## 6. Language Alignment
 
@@ -64,7 +64,38 @@ Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline u
 
 ## 13. Sample Code
 
-Input is synthetic and declared directly in the complete expression. The [complete expression](../examples/focus-functions/main.xpath) yields `12,5`. The [edge case](../examples/focus-functions/edge.xpath) yields `FORG0001 (expected error)`. No external resources or application variables are required. See the [example runner](../examples/README.md) for commands and host context.
+The introductory input is declared directly in the complete expression. The [complete expression](../examples/focus-functions/main.xpath) yields `12,5`. The [edge case](../examples/focus-functions/edge.xpath) yields `FORG0001 (expected error)`. No external resources or application variables are required. See the [example runner](../examples/README.md) for commands and host context.
+
+
+### Supplier delivery import and constructor audit
+
+The [detailed example README](../examples/focus-functions/README.md) explains full input/output, field responsibilities, failures and compatibility. It links every published file and the [49-name audit inventory](../audit-focus-constructors.json). The new audit adds **508 executable checks** (including representative types, context/error/cardinality cases, 3.1 alternatives and experimental outcomes); the original three checks remain.
+
+Input:
+
+```xml
+<deliveries><line id="A" quantity="12" price="2.50" date="2026-10-12" active="true"/><line id="B" quantity="5" price="4.00" date="2026-10-13" active="false"/></deliveries>
+```
+
+Complete [4.0 report](../examples/focus-functions/audit/import-40.xpath):
+
+```xquery
+string-join(for $line in parse-xml('<deliveries><line id="A" quantity="12" price="2.50" date="2026-10-12" active="true"/><line id="B" quantity="5" price="4.00" date="2026-10-13" active="false"/></deliveries>')/deliveries/line return concat($line/@id, '|', $line/@quantity ! xs:integer(), '|', $line/@price ! xs:decimal(), '|', $line/@date ! xs:date(), '|', $line/@active ! xs:boolean()), ';')
+```
+
+Output (id, quantity, price, promised date, active flag):
+
+```text
+A|12|2.5|2026-10-12|true;B|5|4|2026-10-13|false
+```
+
+The [3.1 report](../examples/focus-functions/audit/import-31.xpath) uses explicit `(.)` constructor arguments and produces identical output. Both empty-input reports return an empty string; reordered input retains document order. Quantity `twelve` refuses FORG0001 in both versions. These reports normalize values; they do not apply required-field, schema or business-total validation.
+
+Empty simple-map input means no call occurs. It differs from a missing context item (XPDY0002 for every zero-arity constructor), explicit empty argument (empty result for every one-argument constructor), and a multi-item argument (tested integer refusal XPTY0004). Mapping two lexical inputs invokes the constructor once per item: scalar types produce two values; ENTITIES/IDREFS/NMTOKENS produce four for two two-token inputs.
+
+All 48 inhabited types pass representative value/type checks. `xs:error` is registered but has no non-empty value space; its non-empty calls refuse FORG0001 and its explicit empty argument returns empty. This is not a missing constructor implementation. String-like types have no generic invalid lexical string; their invalid-input checks use a map and report FOTY0013. Additional numeric bounds, timezone, QName binding, array atomization and wrong-source-type cases are documented in the README. Testing one lexical sample per type does not establish exhaustive XML Schema casting conformance.
+
+**Pinned contract review:** [F&O source e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/xpath-functions.xml), sections `constructor-functions-for-xsd-types`, `constructor-functions-for-xsd-list-types`, `constructor-functions-for-xsd-union-types`, plus QName rules. Default argument is the context item; list/union contracts remain distinct. This current comparison does not recover the historically adopted pin. Source: [generated registrations and XsFocusCtor](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); coercion: [VM engine](../../../src/Bosak.XPath.Runtime/Vm/VmEngine.cs).
 
 ## 14. Performance Notes
 
@@ -72,12 +103,14 @@ Expected class: per-item conversion. Invalid values still require error classifi
 
 ## 15. Known Uses
 
-Executable example IDs: `focus-functions-main`, `focus-functions-edge`, `focus-functions-before` in `CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome`. Existing unit evidence: [primary tests](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Chapter-level evidence does not promote a qt4tests set into GatedSets; conformance status remains owned by the harness and delivery records.
+Executable example IDs: `focus-functions-main`, `focus-functions-edge`, `focus-functions-before` in `CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome`. Existing unit evidence: [primary tests](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). New IDs use `focus-audit-<name>-<scenario>`, with valid, invalid, missing, empty, multiple, before, type, experimental and gate31 variants; argument-empty cases cover all names. Business/boundary IDs are enumerated in the manifest. Chapter-level evidence does not promote a qt4tests set into GatedSets; conformance status remains owned by the harness and delivery records.
 
-**Named implementation evidence:** [`Compile_FocusConstructors_DefaultOptions_ThrowXpst0017`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_FocusConstructors_FrozenXPath40_Works`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Named promoted sets: `xs-normalizedString`, `xs-numeric`, `xs-token`. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
+**Named implementation evidence:** [`Compile_FocusConstructors_DefaultOptions_ThrowXpst0017`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_FocusConstructors_FrozenXPath40_Works`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Compile_ArityOneConstructors_DefaultOptions_StillWork`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Existing promoted sets include `misc-FocusConstructors`, `xs-normalizedString`, `xs-numeric`, `xs-token`, verified in [GatedSets](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs). These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 
 See the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
+
+*Expanded 2026-10-12: all-name focus constructor and typed delivery audit; no engine change.*
 
 *Created 2026-10-11: verified practical catalog example and earlier-version baseline.*

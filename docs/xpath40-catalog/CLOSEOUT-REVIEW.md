@@ -6,7 +6,7 @@
 
 ## Decision and evidence
 
-**REQ-126 remains In Progress; version remains 1.1.2.** Reviewed on 2026-10-12 against Bosak `fb2e20a2f05d29b7c5e66ba5d561a39804248e48` (merged PR #184). The catalog contains 67 entries, four worked chapters, 778 feature checks and 24 chapter checks: 802 executable documentation checks. The [name inventory](audit-function-inventory.json) assigns all 117 registered names; the [registration inventory](audit-registration-arities.json) scopes 68 non-constructor names. The remaining 49 names are focus constructors. These inventories do not prove all signatures, productions or conformance.
+**REQ-126 remains In Progress; version remains 1.1.2.** Reviewed on 2026-10-12 against Bosak `b76be1776a5e3c86164772dcf91d682de218da1c` (merged PR #185). The catalog contains 67 entries, four worked chapters, 1,286 feature checks and 24 chapter checks: 1,310 executable documentation checks. The [name inventory](audit-function-inventory.json) assigns all 117 registered names; the [registration inventory](audit-registration-arities.json) scopes 68 non-constructor names. The remaining 49 names are focus constructors. These inventories do not prove all signatures, productions or conformance.
 
 The [completeness audit](COMPLETENESS-AUDIT.md) and [supplementary audit](SUPPLEMENTARY-COVERAGE-AUDIT.md) retain historical deliveries. Reviewed section-1.2 and wider deferred/rejected decisions now have records. Name assignment, those records and the 1.1.2 map entries/items result-shape correction are completed milestones. Remaining work must not be described as missing records already supplied.
 
@@ -26,8 +26,8 @@ A current immutable review pin can describe today's comparison, but cannot recon
 
 | Order | Deliverable | Reviewable completion evidence |
 |---|---|---|
-| D1 — next | Expand [focus constructors](operators-and-syntax/focus-functions.md) across all 49 names | Enumerate generated registrations and pinned contracts; cover valid and invalid values, missing context, empty/multiple input and result types. Use a realistic typed import with complete input/output and explicit 3.1/4.0/experimental outcomes. Record observed limitations rather than fixing engine behavior in this slice. |
-| D2 | Signature, keyword, default and options matrix | Reconcile all 68 non-constructor registrations, plus changed existing 3.1 functions excluded from the name inventory. Link every reviewed overload to source and success/empty/invalid examples; identify uncovered contracts explicitly. |
+| D1 — supplied | Expand [focus constructors](operators-and-syntax/focus-functions.md) across all 49 names | 508 new checks cover all 49 names, representative values/types, errors/context/cardinality, explicit modes and full typed delivery-import input/output. Exhaustive casting remains unclaimed; no engine behavior changed. |
+| D2 — next | Signature, keyword, default and options matrix | Reconcile all 68 non-constructor registrations, plus changed existing 3.1 functions excluded from the name inventory. Link every reviewed overload to source and success/empty/invalid examples; identify uncovered contracts explicitly. |
 | D3 | Grammar/type/pattern matrix | Map REQ-118 S0–S8 and REQ-123 productions to parser/compiler tests, catalog entries and version gates. Include coercion/casts, focus syntax, record updates and XSLT patterns. Name absent productions rather than infer completeness from function counts. |
 | D4 | Acceptance reconciliation | Validate disposition lifecycle and feature-specific drift, retain unavailable historical pins, and record the agreed treatment of AC-03's blanket gate requirement. Close only when each criterion has reviewable evidence. |
 

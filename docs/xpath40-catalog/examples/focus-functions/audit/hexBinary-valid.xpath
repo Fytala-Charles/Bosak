@@ -1,0 +1,1 @@
+string-join(('4142' ! xs:hexBinary()) ! string(.), '|')
