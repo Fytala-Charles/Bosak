@@ -1,0 +1,1 @@
+serialize((map{'id':'INV-1042'}, map{'id':'INV-1043'}), map{'method':'json','json-lines':true()})
