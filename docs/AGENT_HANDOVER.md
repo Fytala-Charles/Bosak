@@ -11,7 +11,7 @@ fn-min/fn-max gated sets are claimed. No engine/API/package/gate changes;
 source/public stays 1.1.2 and REQ-126 remains In Progress.
 Next: changed fn:sort/array:sort contracts; numeric/duration engine follow-ups
 remain separate, alongside earlier keyword/type-validation findings.
-Validation: Release build passed (one existing warning, zero errors); all 4,469 tests across ten assemblies passed without failures/skips, including 447 catalog cases. Renderer verified 70 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; batch decimal range and QName endpoints independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision pending commit.
+Validation: Release build passed (one existing warning, zero errors); all 4,469 tests across ten assemblies passed without failures/skips, including 447 catalog cases. Renderer verified 70 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; batch decimal range and QName endpoints independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: dac2e4b9; [PR #172](https://github.com/Fytala-Charles/Bosak/pull/172). CI pending at handover.
 
 # Agent Handover — 2026-10-12: typed measurement comparison
 
