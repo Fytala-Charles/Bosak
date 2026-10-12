@@ -1,0 +1,1 @@
+string-join(min((xs:untypedAtomic('3'),xs:untypedAtomic('1'))) ! string(.),',')

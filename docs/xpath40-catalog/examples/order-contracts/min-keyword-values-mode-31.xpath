@@ -1,0 +1,1 @@
+string(min(values := (3,1,2)))

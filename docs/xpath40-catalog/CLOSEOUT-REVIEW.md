@@ -6,7 +6,7 @@
 
 ## Decision and evidence
 
-**REQ-126 remains In Progress; version remains 1.1.3.** Reviewed on 2026-10-12 against Bosak `21ca1497df93b6c2d7186406be7189ef28b32618` (merged PR #196). The catalog contains 67 entries, four worked chapters, 2,446 feature checks and 24 chapter checks: 2,470 executable documentation checks. The [name inventory](audit-function-inventory.json) assigns all 117 registered names; the [registration inventory](audit-registration-arities.json) scopes 68 non-constructor names. The remaining 49 names are focus constructors. These inventories do not prove all signatures, productions or conformance.
+**REQ-126 remains In Progress; version remains 1.1.3.** Reviewed on 2026-10-12 against Bosak `28144810a56370d3901ceca5ef35bb1759053b47` (merged PR #197). The catalog contains 67 entries, four worked chapters, 2,578 feature checks and 24 chapter checks: 2,602 executable documentation checks. The [name inventory](audit-function-inventory.json) assigns all 117 registered names; the [registration inventory](audit-registration-arities.json) scopes 68 non-constructor names. The remaining 49 names are focus constructors. These inventories do not prove all signatures, productions or conformance.
 
 The [completeness audit](COMPLETENESS-AUDIT.md) and [supplementary audit](SUPPLEMENTARY-COVERAGE-AUDIT.md) retain historical deliveries. Reviewed section-1.2 and wider deferred/rejected decisions now have records. Name assignment, those records and the 1.1.2 map entries/items result-shape correction are completed milestones. Remaining work must not be described as missing records already supplied.
 
@@ -24,7 +24,7 @@ A current immutable review pin can describe today's comparison, but cannot recon
 
 ## Documentation delivery queue
 
-Current next slice: fn:sort, array:sort, fn:min, fn:max and map:merge higher-order/default/conversion contracts. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
+Current next slice: fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token equality/collation contracts. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
 
 
 
@@ -43,6 +43,7 @@ The linked entries and [fixture manifest](examples/cases.json) contain reproduci
 
 | Priority | Existing evidence | Consumer impact and follow-up |
 |---|---|---|
+| E1 | [Ordering/default review](ORDER-DEFAULT-CONTRACT-REVIEW.md) | Empty keys/options, NaN sorting, unknown collation acceptance and malformed map input/option cardinality remain reproducible follow-ups. min/max do not define a key parameter. |
 | E1 | [URI option policy](functions/uri-option-policy.md) | Non-Boolean option truthiness and empty-query-map fallback can change resource identifiers. Verify pinned option types and component precedence before correcting them. Raw-authority bypass is draft-defined and is not included as a defect. |
 | E1 | [Signature contract audit](SIGNATURE-CONTRACT-AUDIT.md) | Three further keyword spelling differences, replace positional/reference #2 refusal versus keyword defaults, and tested two-let hash keyword failure need scoped engine review. Current examples reproduce behavior without diagnosing the cause. |
 | E1 | [Measurement comparison](functions/measurement-comparison.md) | Keyword spelling differs from the pinned draft; legacy binary validation needs review. Verify draft value1/value2 versus implemented comparand1/comparand2, including compatibility effects. |
@@ -81,3 +82,6 @@ Missing fn:apply-templates, named XSLT types, enclosing modes, computed XPath co
 
 
 **Complete baseline-name inventory — 2026-10-12:** [Existing 3.1 contract inventory](CHANGED-31-CONTRACT-INVENTORY.md) The complete 197-name fn/math/map/array baseline inventory is now supplied, with dated W3C 3.1 declarations, pinned F&O e7ee4ab8 declarations and fresh 3.1/4.0 evidence. Added 353 checks: 320 exact-arity lookups, 17 named-reference refusals, ten focused defaults/behavior checks and six complete stock reports. Thirteen families have positional arity declaration differences; seventeen draft arities are unavailable in the fresh standard context. Type/prose differences remain candidates for semantic review, not certified behavioral changes. Empty substring/subsequence lengths have distinct observed 3.1 and 4.0 results. Empty sort keys and map:merge options refuse XPTY0004. Catalog: 67 entries, 2,446 feature + 24 chapter checks = 2,470; four chapters, 117 assigned names. All 37 reviewed keyword families still lack metadata. REQ-126 stays In Progress, D2 partial; version 1.1.3, no engine/API/harness change or release. Next: fn:sort, array:sort, fn:min, fn:max and map:merge defaults/conversion contracts. Prose classification, D3/D4, historical adoption pins and AC-03 remain open.
+
+
+**Ordering/default review — 2026-10-12:** [Five-family review and supplier reports](ORDER-DEFAULT-CONTRACT-REVIEW.md) Targeted review of fn:sort, array:sort, fn:min, fn:max and map:merge adds 132 checks (126 focused, six complete supplier reports), preserving source declarations and exact 3.1/4.0/experimental keyword boundaries. min/max have no key callback parameter. Explicit empty sort keys and merge options, unknown sort collations, NaN ordering and malformed merge input/option cardinality remain engine follow-ups. Supplier rankings use numeric price plus stable ID and explicit duplicate combine; normal/reordered results match. Current catalog: 67 entries, 2,578 feature + 24 chapter checks = 2,602; four worked chapters, 117 assigned names. Version 1.1.3, REQ-126 In Progress, D2 partial. All 37 reviewed keyword families still lack metadata; no engine/API/harness change or release. Next: distinct-values, index-of, deep-equal, compare and contains-token equality/collation contracts. Earlier counts and queues are historical; normative prose impact, D3/D4, historical pins and AC-03 remain open.

@@ -65,6 +65,8 @@ Compile new functions with CompileOptions.Compatibility40; default 3.1 rejects t
 
 **Existing-function review:** The [complete baseline-name inventory](../CHANGED-31-CONTRACT-INVENTORY.md) records unavailable three-argument map/array getters and empty sort-key/map:merge-option boundaries. The [stock examples](../examples/changed31-contracts/README.md) show explicit portable fallback policy. This review does not implement draft defaults or close D2.
 
+**Existing-function default review (2026-10-12):** The [ordering/default review](../ORDER-DEFAULT-CONTRACT-REVIEW.md) and [detailed supplier README](../examples/order-contracts/README.md) add 132 checks across sort/array:sort/min/max/map:merge, explicit key/options and collation/NaN/cardinality boundaries, and six full 3.1/4.0 reports. Supplier price-plus-ID keys preserve business tie-breaking under source reordering. Use simple mapping to project sorted node IDs; a path restores document order. This is targeted evidence, not an engine fix or full D2 completion.
+
 ## 13. Sample Code
 
 Complete synthetic input:

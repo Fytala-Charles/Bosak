@@ -127,6 +127,8 @@ for keyword refusal. Error cases verify diagnostic markers. Observed-limit
 fixtures preserve current evidence rather than certifying conformance. No engine
 or gate membership changes are made by this delivery.
 
+**Existing-function default review (2026-10-12):** The [ordering/default review](../ORDER-DEFAULT-CONTRACT-REVIEW.md) and [detailed supplier README](../examples/order-contracts/README.md) add 132 checks across sort/array:sort/min/max/map:merge, explicit key/options and collation/NaN/cardinality boundaries, and six full 3.1/4.0 reports. Supplier price-plus-ID keys preserve business tie-breaking under source reordering. Use simple mapping to project sorted node IDs; a path restores document order. This is targeted evidence, not an engine fix or full D2 completion.
+
 ## 13. Sample Code
 
 Complete synthetic input:

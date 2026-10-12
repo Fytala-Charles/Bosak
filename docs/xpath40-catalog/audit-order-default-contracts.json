@@ -1,0 +1,1950 @@
+{
+  "reviewDate": "2026-10-12",
+  "sourceRevision": "28144810a56370d3901ceca5ef35bb1759053b47",
+  "baselineSource": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/function-catalog.xml",
+  "draftSource": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+  "draftSha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+  "scope": "Five existing-function targeted default/key/options reviews. Observed fixtures preserve gaps; no engine correction, complete coercion claim or gate promotion. Standard fresh contexts only.",
+  "functions": [
+    {
+      "name": "array:sort",
+      "baselineSection": "func-array-sort",
+      "draftSection": "func-array-sort",
+      "baselineSignatures": [
+        {
+          "returnType": "array(*)",
+          "parameters": [
+            {
+              "name": "array",
+              "type": "array(*)",
+              "usage": "inspection"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "array(*)"
+          },
+          "minArity": 1,
+          "maxArity": 1,
+          "variadic": false
+        },
+        {
+          "returnType": "array(*)",
+          "parameters": [
+            {
+              "name": "array",
+              "type": "array(*)",
+              "usage": "inspection"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "usage": "absorption"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "array(*)"
+          },
+          "minArity": 2,
+          "maxArity": 2,
+          "variadic": false
+        },
+        {
+          "returnType": "array(*)",
+          "parameters": [
+            {
+              "name": "array",
+              "type": "array(*)",
+              "usage": "inspection"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "usage": "absorption"
+            },
+            {
+              "name": "key",
+              "type": "function(item()*) as xs:anyAtomicType*",
+              "usage": "inspection"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "array(*)"
+          },
+          "minArity": 3,
+          "maxArity": 3,
+          "variadic": false
+        }
+      ],
+      "draftSignatures": [
+        {
+          "returnType": "array(*)",
+          "parameters": [
+            {
+              "name": "array",
+              "type": "array(*)",
+              "usage": "navigation"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "usage": "absorption",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            },
+            {
+              "name": "key",
+              "type": "(fn($member as item()*) as xs:anyAtomicType*)?",
+              "usage": "inspection",
+              "default": "fn:data#1",
+              "note": "default-on-empty"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "array(*)"
+          },
+          "minArity": 1,
+          "maxArity": 3,
+          "variadic": false
+        }
+      ],
+      "registeredSignatures": [
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions/array",
+          "name": "sort",
+          "arity": 1,
+          "parameterKinds": [
+            "Array"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Array",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "array",
+            "collation",
+            "key"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()",
+            "fn:data#1"
+          ]
+        },
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions/array",
+          "name": "sort",
+          "arity": 2,
+          "parameterKinds": [
+            "Array",
+            "Undefined"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Array",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "array",
+            "collation",
+            "key"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()",
+            "fn:data#1"
+          ]
+        },
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions/array",
+          "name": "sort",
+          "arity": 3,
+          "parameterKinds": [
+            "Array",
+            "Undefined",
+            "Function"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Array",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "array",
+            "collation",
+            "key"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()",
+            "fn:data#1"
+          ]
+        }
+      ],
+      "cases": [
+        "order-contract-array-sort-basic",
+        "order-contract-array-sort-empty",
+        "order-contract-array-sort-members",
+        "order-contract-array-sort-empty-collation",
+        "order-contract-array-sort-explicit-key",
+        "order-contract-array-sort-empty-key",
+        "order-contract-array-sort-bad-key",
+        "order-contract-array-sort-empty-bad-key",
+        "order-contract-array-sort-wrong-arity",
+        "order-contract-array-sort-bad-collation",
+        "order-contract-array-sort-multi-key",
+        "order-contract-array-sort-keyword",
+        "order-contract-array-sort-reference",
+        "order-contract-array-sort-bad-collation-two",
+        "order-contract-array-sort-empty-key-empty-input",
+        "order-contract-array-sort-bad-collation-strings",
+        "order-contract-report-normal-31",
+        "order-contract-report-normal-40",
+        "order-contract-report-empty-31",
+        "order-contract-report-empty-40",
+        "order-contract-report-reordered-31",
+        "order-contract-report-reordered-40",
+        "order-contract-array-sort-keyword-mode-31",
+        "order-contract-array-sort-keyword-mode-experimental"
+      ],
+      "optionDefinitionSource": null
+    },
+    {
+      "name": "fn:max",
+      "baselineSection": "func-max",
+      "draftSection": "func-max",
+      "baselineSignatures": [
+        {
+          "returnType": "xs:anyAtomicType?",
+          "parameters": [
+            {
+              "name": "arg",
+              "type": "xs:anyAtomicType*"
+            }
+          ],
+          "attributes": {
+            "name": "max",
+            "return-type": "xs:anyAtomicType?"
+          },
+          "minArity": 1,
+          "maxArity": 1,
+          "variadic": false
+        },
+        {
+          "returnType": "xs:anyAtomicType?",
+          "parameters": [
+            {
+              "name": "arg",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string"
+            }
+          ],
+          "attributes": {
+            "name": "max",
+            "return-type": "xs:anyAtomicType?"
+          },
+          "minArity": 2,
+          "maxArity": 2,
+          "variadic": false
+        }
+      ],
+      "draftSignatures": [
+        {
+          "returnType": "xs:anyAtomicType?",
+          "parameters": [
+            {
+              "name": "values",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            }
+          ],
+          "attributes": {
+            "name": "max",
+            "return-type": "xs:anyAtomicType?"
+          },
+          "minArity": 1,
+          "maxArity": 2,
+          "variadic": false
+        }
+      ],
+      "registeredSignatures": [
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions",
+          "name": "max",
+          "arity": 1,
+          "parameterKinds": [
+            "Sequence"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Undefined",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "values",
+            "collation"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()"
+          ]
+        },
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions",
+          "name": "max",
+          "arity": 2,
+          "parameterKinds": [
+            "Sequence",
+            "String"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Undefined",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "values",
+            "collation"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()"
+          ]
+        }
+      ],
+      "cases": [
+        "order-contract-max-basic",
+        "order-contract-max-empty",
+        "order-contract-max-empty-collation",
+        "order-contract-max-codepoint",
+        "order-contract-max-case-insensitive",
+        "order-contract-max-bad-collation",
+        "order-contract-max-mixed",
+        "order-contract-max-nan",
+        "order-contract-max-untyped",
+        "order-contract-max-array-atomization",
+        "order-contract-max-keyword",
+        "order-contract-max-lookup3",
+        "order-contract-max-keyword-values",
+        "order-contract-max-key-not-a-parameter",
+        "order-contract-max-reference2",
+        "order-contract-max-numeric-node",
+        "order-contract-max-invalid-untyped",
+        "order-contract-max-empty-bad-collation",
+        "order-contract-max-case-order",
+        "order-contract-max-codepoint-order",
+        "order-contract-max-decimal-result-type",
+        "order-contract-report-normal-31",
+        "order-contract-report-normal-40",
+        "order-contract-report-empty-31",
+        "order-contract-report-empty-40",
+        "order-contract-report-reordered-31",
+        "order-contract-report-reordered-40",
+        "order-contract-max-keyword-mode-31",
+        "order-contract-max-keyword-mode-experimental",
+        "order-contract-max-keyword-values-mode-31",
+        "order-contract-max-keyword-values-mode-experimental",
+        "order-contract-max-key-not-a-parameter-mode-31",
+        "order-contract-max-key-not-a-parameter-mode-experimental"
+      ],
+      "optionDefinitionSource": null
+    },
+    {
+      "name": "fn:min",
+      "baselineSection": "func-min",
+      "draftSection": "func-min",
+      "baselineSignatures": [
+        {
+          "returnType": "xs:anyAtomicType?",
+          "parameters": [
+            {
+              "name": "arg",
+              "type": "xs:anyAtomicType*"
+            }
+          ],
+          "attributes": {
+            "name": "min",
+            "return-type": "xs:anyAtomicType?"
+          },
+          "minArity": 1,
+          "maxArity": 1,
+          "variadic": false
+        },
+        {
+          "returnType": "xs:anyAtomicType?",
+          "parameters": [
+            {
+              "name": "arg",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string"
+            }
+          ],
+          "attributes": {
+            "name": "min",
+            "return-type": "xs:anyAtomicType?"
+          },
+          "minArity": 2,
+          "maxArity": 2,
+          "variadic": false
+        }
+      ],
+      "draftSignatures": [
+        {
+          "returnType": "xs:anyAtomicType?",
+          "parameters": [
+            {
+              "name": "values",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            }
+          ],
+          "attributes": {
+            "name": "min",
+            "return-type": "xs:anyAtomicType?"
+          },
+          "minArity": 1,
+          "maxArity": 2,
+          "variadic": false
+        }
+      ],
+      "registeredSignatures": [
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions",
+          "name": "min",
+          "arity": 1,
+          "parameterKinds": [
+            "Sequence"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Undefined",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "values",
+            "collation"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()"
+          ]
+        },
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions",
+          "name": "min",
+          "arity": 2,
+          "parameterKinds": [
+            "Sequence",
+            "String"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Undefined",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "values",
+            "collation"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()"
+          ]
+        }
+      ],
+      "cases": [
+        "order-contract-min-basic",
+        "order-contract-min-empty",
+        "order-contract-min-empty-collation",
+        "order-contract-min-codepoint",
+        "order-contract-min-case-insensitive",
+        "order-contract-min-bad-collation",
+        "order-contract-min-mixed",
+        "order-contract-min-nan",
+        "order-contract-min-untyped",
+        "order-contract-min-array-atomization",
+        "order-contract-min-keyword",
+        "order-contract-min-lookup3",
+        "order-contract-min-keyword-values",
+        "order-contract-min-key-not-a-parameter",
+        "order-contract-min-reference2",
+        "order-contract-min-numeric-node",
+        "order-contract-min-invalid-untyped",
+        "order-contract-min-empty-bad-collation",
+        "order-contract-min-case-order",
+        "order-contract-min-codepoint-order",
+        "order-contract-min-decimal-result-type",
+        "order-contract-report-normal-31",
+        "order-contract-report-normal-40",
+        "order-contract-report-empty-31",
+        "order-contract-report-empty-40",
+        "order-contract-report-reordered-31",
+        "order-contract-report-reordered-40",
+        "order-contract-min-keyword-mode-31",
+        "order-contract-min-keyword-mode-experimental",
+        "order-contract-min-keyword-values-mode-31",
+        "order-contract-min-keyword-values-mode-experimental",
+        "order-contract-min-key-not-a-parameter-mode-31",
+        "order-contract-min-key-not-a-parameter-mode-experimental"
+      ],
+      "optionDefinitionSource": null
+    },
+    {
+      "name": "fn:sort",
+      "baselineSection": "func-sort",
+      "draftSection": "func-sort",
+      "baselineSignatures": [
+        {
+          "returnType": "item()*",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "item()*",
+              "usage": "navigation"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "item()*"
+          },
+          "minArity": 1,
+          "maxArity": 1,
+          "variadic": false
+        },
+        {
+          "returnType": "item()*",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "item()*",
+              "usage": "navigation"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "usage": "absorption"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "item()*"
+          },
+          "minArity": 2,
+          "maxArity": 2,
+          "variadic": false
+        },
+        {
+          "returnType": "item()*",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "item()*",
+              "usage": "navigation"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "usage": "absorption"
+            },
+            {
+              "name": "key",
+              "type": "function(item()) as xs:anyAtomicType*",
+              "usage": "inspection"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "item()*"
+          },
+          "minArity": 3,
+          "maxArity": 3,
+          "variadic": false
+        }
+      ],
+      "draftSignatures": [
+        {
+          "returnType": "item()*",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "item()*",
+              "usage": "navigation"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "usage": "absorption",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            },
+            {
+              "name": "key",
+              "type": "(fn($item as item()) as xs:anyAtomicType*)?",
+              "usage": "inspection",
+              "default": "fn:data#1",
+              "note": "default-on-empty"
+            }
+          ],
+          "attributes": {
+            "name": "sort",
+            "return-type": "item()*"
+          },
+          "minArity": 1,
+          "maxArity": 3,
+          "variadic": false
+        }
+      ],
+      "registeredSignatures": [
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions",
+          "name": "sort",
+          "arity": 1,
+          "parameterKinds": [
+            "Sequence"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Sequence",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "input",
+            "collation",
+            "key"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()",
+            "fn:data#1"
+          ]
+        },
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions",
+          "name": "sort",
+          "arity": 2,
+          "parameterKinds": [
+            "Sequence",
+            "Undefined"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Sequence",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "input",
+            "collation",
+            "key"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()",
+            "fn:data#1"
+          ]
+        },
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions",
+          "name": "sort",
+          "arity": 3,
+          "parameterKinds": [
+            "Sequence",
+            "Undefined",
+            "Function"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Sequence",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "input",
+            "collation",
+            "key"
+          ],
+          "keywordDefaults": [
+            null,
+            "fn:default-collation()",
+            "fn:data#1"
+          ]
+        }
+      ],
+      "cases": [
+        "order-contract-sort-basic",
+        "order-contract-sort-empty",
+        "order-contract-sort-empty-collation",
+        "order-contract-sort-codepoint",
+        "order-contract-sort-case-insensitive",
+        "order-contract-sort-bad-collation",
+        "order-contract-sort-mixed",
+        "order-contract-sort-nan",
+        "order-contract-sort-untyped",
+        "order-contract-sort-array-atomization",
+        "order-contract-sort-empty-key",
+        "order-contract-sort-explicit-key",
+        "order-contract-sort-multi-key",
+        "order-contract-sort-bad-key",
+        "order-contract-sort-empty-bad-key",
+        "order-contract-sort-wrong-arity",
+        "order-contract-sort-keyword",
+        "order-contract-sort-lookup3",
+        "order-contract-sort-reference3",
+        "order-contract-sort-bad-collation-two",
+        "order-contract-sort-empty-key-empty-input",
+        "order-contract-sort-case-order",
+        "order-contract-sort-codepoint-order",
+        "order-contract-sort-bad-collation-strings",
+        "order-contract-sort-empty-key-results",
+        "order-contract-sort-two-argument-callback",
+        "order-contract-sort-stable-ties",
+        "order-contract-sort-nan-first",
+        "order-contract-sort-node-identity",
+        "order-contract-report-normal-31",
+        "order-contract-report-normal-40",
+        "order-contract-report-empty-31",
+        "order-contract-report-empty-40",
+        "order-contract-report-reordered-31",
+        "order-contract-report-reordered-40",
+        "order-contract-sort-keyword-mode-31",
+        "order-contract-sort-keyword-mode-experimental"
+      ],
+      "optionDefinitionSource": null
+    },
+    {
+      "name": "map:merge",
+      "baselineSection": "func-map-merge",
+      "draftSection": "func-map-merge",
+      "baselineSignatures": [
+        {
+          "returnType": "map(*)",
+          "parameters": [
+            {
+              "name": "maps",
+              "type": "map(*)*",
+              "usage": "inspection"
+            }
+          ],
+          "attributes": {
+            "name": "merge",
+            "return-type": "map(*)"
+          },
+          "minArity": 1,
+          "maxArity": 1,
+          "variadic": false
+        },
+        {
+          "returnType": "map(*)",
+          "parameters": [
+            {
+              "name": "maps",
+              "type": "map(*)*",
+              "usage": "inspection"
+            },
+            {
+              "name": "options",
+              "type": "map(*)",
+              "usage": "inspection"
+            }
+          ],
+          "attributes": {
+            "name": "merge",
+            "return-type": "map(*)"
+          },
+          "minArity": 2,
+          "maxArity": 2,
+          "variadic": false
+        }
+      ],
+      "draftSignatures": [
+        {
+          "returnType": "map(*)",
+          "parameters": [
+            {
+              "name": "maps",
+              "type": "map(*)*",
+              "usage": "inspection"
+            },
+            {
+              "name": "options",
+              "type": "map(*)?",
+              "usage": "inspection",
+              "default": "{}",
+              "note": "default-on-empty"
+            }
+          ],
+          "attributes": {
+            "name": "merge",
+            "return-type": "map(*)"
+          },
+          "minArity": 1,
+          "maxArity": 2,
+          "variadic": false
+        }
+      ],
+      "registeredSignatures": [
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions/map",
+          "name": "merge",
+          "arity": 1,
+          "parameterKinds": [
+            "Sequence"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Map",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "maps",
+            "options"
+          ],
+          "keywordDefaults": [
+            null,
+            "map{}"
+          ]
+        },
+        {
+          "ns": "http://www.w3.org/2005/xpath-functions/map",
+          "name": "merge",
+          "arity": 2,
+          "parameterKinds": [
+            "Sequence",
+            "Map"
+          ],
+          "parameterTypeNames": null,
+          "returnKind": "Map",
+          "returnTypeName": null,
+          "variadic": false,
+          "frozen": false,
+          "experimental": false,
+          "keywordNames": [
+            "maps",
+            "options"
+          ],
+          "keywordDefaults": [
+            null,
+            "map{}"
+          ]
+        }
+      ],
+      "cases": [
+        "order-contract-merge-basic",
+        "order-contract-merge-empty",
+        "order-contract-merge-empty-options",
+        "order-contract-merge-empty-input-options",
+        "order-contract-merge-use-first",
+        "order-contract-merge-use-last",
+        "order-contract-merge-combine",
+        "order-contract-merge-reject",
+        "order-contract-merge-bad-option",
+        "order-contract-merge-bad-option-type",
+        "order-contract-merge-unknown-option",
+        "order-contract-merge-bad-input",
+        "order-contract-merge-empty-value",
+        "order-contract-merge-keyword",
+        "order-contract-merge-reference",
+        "order-contract-merge-empty-map-options",
+        "order-contract-merge-reject-without-duplicate",
+        "order-contract-merge-combine-empty-values",
+        "order-contract-merge-option-many",
+        "order-contract-merge-option-empty",
+        "order-contract-merge-numeric-key",
+        "order-contract-report-normal-31",
+        "order-contract-report-normal-40",
+        "order-contract-report-empty-31",
+        "order-contract-report-empty-40",
+        "order-contract-report-reordered-31",
+        "order-contract-report-reordered-40",
+        "order-contract-merge-keyword-mode-31",
+        "order-contract-merge-keyword-mode-experimental"
+      ],
+      "optionDefinitionSource": {
+        "family": "map:build",
+        "section": "func-map-build",
+        "mergeDuplicateDefault": "use-first",
+        "assessment": "Pinned merge rules import map:build option values/meanings; this slice verifies the listed duplicates cases only."
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "order-contract-sort-basic",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-basic.xpath",
+      "expected": "1,2,3",
+      "baselineExpected": "1,2,3"
+    },
+    {
+      "id": "order-contract-sort-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-empty.xpath",
+      "expected": "",
+      "baselineExpected": ""
+    },
+    {
+      "id": "order-contract-sort-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-empty-collation.xpath",
+      "expected": "A,a,b",
+      "baselineExpected": "A,a,b"
+    },
+    {
+      "id": "order-contract-sort-codepoint",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-codepoint.xpath",
+      "expected": "A,a,b",
+      "baselineExpected": "A,a,b"
+    },
+    {
+      "id": "order-contract-sort-case-insensitive",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-case-insensitive.xpath",
+      "expected": "A,a,b",
+      "baselineExpected": "A,a,b"
+    },
+    {
+      "id": "order-contract-sort-bad-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-bad-collation.xpath",
+      "expected": "a",
+      "baselineExpected": "a"
+    },
+    {
+      "id": "order-contract-sort-mixed",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-mixed.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-sort-nan",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-nan.xpath",
+      "expected": "2,NaN,1",
+      "baselineExpected": "2,NaN,1"
+    },
+    {
+      "id": "order-contract-sort-untyped",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-untyped.xpath",
+      "expected": "1,3",
+      "baselineExpected": "1,3"
+    },
+    {
+      "id": "order-contract-sort-array-atomization",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-array-atomization.xpath",
+      "error": "FOTY0014",
+      "baselineError": "FOTY0014"
+    },
+    {
+      "id": "order-contract-sort-empty-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-empty-key.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-sort-explicit-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-explicit-key.xpath",
+      "expected": "3,2,1",
+      "baselineExpected": "3,2,1"
+    },
+    {
+      "id": "order-contract-sort-multi-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-multi-key.xpath",
+      "expected": "1,2,3",
+      "baselineExpected": "1,2,3"
+    },
+    {
+      "id": "order-contract-sort-bad-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-bad-key.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-sort-empty-bad-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-empty-bad-key.xpath",
+      "expected": "",
+      "baselineExpected": ""
+    },
+    {
+      "id": "order-contract-sort-wrong-arity",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-wrong-arity.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-sort-keyword",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-keyword.xpath",
+      "expected": "1,2,3",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-sort-lookup3",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-lookup3.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "order-contract-sort-reference3",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-reference3.xpath",
+      "expected": "3,2,1",
+      "baselineExpected": "3,2,1"
+    },
+    {
+      "id": "order-contract-min-basic",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-basic.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "order-contract-min-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-empty.xpath",
+      "expected": "",
+      "baselineExpected": ""
+    },
+    {
+      "id": "order-contract-min-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-empty-collation.xpath",
+      "expected": "A",
+      "baselineExpected": "A"
+    },
+    {
+      "id": "order-contract-min-codepoint",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-codepoint.xpath",
+      "expected": "A",
+      "baselineExpected": "A"
+    },
+    {
+      "id": "order-contract-min-case-insensitive",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-case-insensitive.xpath",
+      "expected": "A",
+      "baselineExpected": "A"
+    },
+    {
+      "id": "order-contract-min-bad-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-bad-collation.xpath",
+      "error": "FOCH0002",
+      "baselineError": "FOCH0002"
+    },
+    {
+      "id": "order-contract-min-mixed",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-mixed.xpath",
+      "error": "FORG0006",
+      "baselineError": "FORG0006"
+    },
+    {
+      "id": "order-contract-min-nan",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-nan.xpath",
+      "expected": "NaN",
+      "baselineExpected": "NaN"
+    },
+    {
+      "id": "order-contract-min-untyped",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-untyped.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "order-contract-min-array-atomization",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-array-atomization.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "order-contract-min-keyword",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-keyword.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-min-lookup3",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-lookup3.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "order-contract-max-basic",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-basic.xpath",
+      "expected": "3",
+      "baselineExpected": "3"
+    },
+    {
+      "id": "order-contract-max-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-empty.xpath",
+      "expected": "",
+      "baselineExpected": ""
+    },
+    {
+      "id": "order-contract-max-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-empty-collation.xpath",
+      "expected": "b",
+      "baselineExpected": "b"
+    },
+    {
+      "id": "order-contract-max-codepoint",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-codepoint.xpath",
+      "expected": "b",
+      "baselineExpected": "b"
+    },
+    {
+      "id": "order-contract-max-case-insensitive",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-case-insensitive.xpath",
+      "expected": "b",
+      "baselineExpected": "b"
+    },
+    {
+      "id": "order-contract-max-bad-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-bad-collation.xpath",
+      "error": "FOCH0002",
+      "baselineError": "FOCH0002"
+    },
+    {
+      "id": "order-contract-max-mixed",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-mixed.xpath",
+      "error": "FORG0006",
+      "baselineError": "FORG0006"
+    },
+    {
+      "id": "order-contract-max-nan",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-nan.xpath",
+      "expected": "NaN",
+      "baselineExpected": "NaN"
+    },
+    {
+      "id": "order-contract-max-untyped",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-untyped.xpath",
+      "expected": "3",
+      "baselineExpected": "3"
+    },
+    {
+      "id": "order-contract-max-array-atomization",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-array-atomization.xpath",
+      "expected": "3",
+      "baselineExpected": "3"
+    },
+    {
+      "id": "order-contract-max-keyword",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-keyword.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-lookup3",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-lookup3.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "order-contract-array-sort-basic",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-basic.xpath",
+      "expected": "[1]|[2]|[3]",
+      "baselineExpected": "[1]|[2]|[3]"
+    },
+    {
+      "id": "order-contract-array-sort-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-empty.xpath",
+      "expected": "",
+      "baselineExpected": ""
+    },
+    {
+      "id": "order-contract-array-sort-members",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-members.xpath",
+      "expected": "[]|[2]|[3,1]",
+      "baselineExpected": "[]|[2]|[3,1]"
+    },
+    {
+      "id": "order-contract-array-sort-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-empty-collation.xpath",
+      "expected": "[A]|[a]|[b]",
+      "baselineExpected": "[A]|[a]|[b]"
+    },
+    {
+      "id": "order-contract-array-sort-explicit-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-explicit-key.xpath",
+      "expected": "[3]|[2]|[1]",
+      "baselineExpected": "[3]|[2]|[1]"
+    },
+    {
+      "id": "order-contract-array-sort-empty-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-empty-key.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-array-sort-bad-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-bad-key.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-array-sort-empty-bad-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-empty-bad-key.xpath",
+      "expected": "",
+      "baselineExpected": ""
+    },
+    {
+      "id": "order-contract-array-sort-wrong-arity",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-wrong-arity.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-array-sort-bad-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-bad-collation.xpath",
+      "expected": "[a]",
+      "baselineExpected": "[a]"
+    },
+    {
+      "id": "order-contract-array-sort-multi-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-multi-key.xpath",
+      "expected": "[1]|[2]|[3]",
+      "baselineExpected": "[1]|[2]|[3]"
+    },
+    {
+      "id": "order-contract-array-sort-keyword",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-keyword.xpath",
+      "expected": "1,2,3",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-array-sort-reference",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-reference.xpath",
+      "expected": "3,2,1",
+      "baselineExpected": "3,2,1"
+    },
+    {
+      "id": "order-contract-merge-basic",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-basic.xpath",
+      "expected": "size=2;A=1;present=true",
+      "baselineExpected": "size=2;A=1;present=true"
+    },
+    {
+      "id": "order-contract-merge-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-empty.xpath",
+      "expected": "size=0;A=;present=false",
+      "baselineExpected": "size=0;A=;present=false"
+    },
+    {
+      "id": "order-contract-merge-empty-options",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-empty-options.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-merge-empty-input-options",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-empty-input-options.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-merge-use-first",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-use-first.xpath",
+      "expected": "size=1;A=1;present=true",
+      "baselineExpected": "size=1;A=1;present=true"
+    },
+    {
+      "id": "order-contract-merge-use-last",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-use-last.xpath",
+      "expected": "size=1;A=2;present=true",
+      "baselineExpected": "size=1;A=2;present=true"
+    },
+    {
+      "id": "order-contract-merge-combine",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-combine.xpath",
+      "expected": "size=1;A=1,2;present=true",
+      "baselineExpected": "size=1;A=1,2;present=true"
+    },
+    {
+      "id": "order-contract-merge-reject",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-reject.xpath",
+      "error": "FOJS0003",
+      "baselineError": "FOJS0003"
+    },
+    {
+      "id": "order-contract-merge-bad-option",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-bad-option.xpath",
+      "error": "FOJS0005",
+      "baselineError": "FOJS0005"
+    },
+    {
+      "id": "order-contract-merge-bad-option-type",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-bad-option-type.xpath",
+      "error": "FOJS0005",
+      "baselineError": "FOJS0005"
+    },
+    {
+      "id": "order-contract-merge-unknown-option",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-unknown-option.xpath",
+      "expected": "size=1;A=1;present=true",
+      "baselineExpected": "size=1;A=1;present=true"
+    },
+    {
+      "id": "order-contract-merge-bad-input",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-bad-input.xpath",
+      "expected": "size=1;A=1;present=true",
+      "baselineExpected": "size=1;A=1;present=true"
+    },
+    {
+      "id": "order-contract-merge-empty-value",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-empty-value.xpath",
+      "expected": "size=1;A=;present=true",
+      "baselineExpected": "size=1;A=;present=true"
+    },
+    {
+      "id": "order-contract-merge-keyword",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-keyword.xpath",
+      "expected": "1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-merge-reference",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-reference.xpath",
+      "expected": "2",
+      "baselineExpected": "2"
+    },
+    {
+      "id": "order-contract-min-keyword-values",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-keyword-values.xpath",
+      "expected": "1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-min-key-not-a-parameter",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-key-not-a-parameter.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-min-reference2",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-reference2.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "order-contract-min-numeric-node",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-numeric-node.xpath",
+      "expected": "7",
+      "baselineExpected": "7"
+    },
+    {
+      "id": "order-contract-min-invalid-untyped",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-invalid-untyped.xpath",
+      "error": "FORG0001",
+      "baselineError": "FORG0001"
+    },
+    {
+      "id": "order-contract-min-empty-bad-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-empty-bad-collation.xpath",
+      "expected": "()",
+      "baselineExpected": "()"
+    },
+    {
+      "id": "order-contract-max-keyword-values",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-keyword-values.xpath",
+      "expected": "3",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-key-not-a-parameter",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-key-not-a-parameter.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-reference2",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-reference2.xpath",
+      "expected": "3",
+      "baselineExpected": "3"
+    },
+    {
+      "id": "order-contract-max-numeric-node",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-numeric-node.xpath",
+      "expected": "10",
+      "baselineExpected": "10"
+    },
+    {
+      "id": "order-contract-max-invalid-untyped",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-invalid-untyped.xpath",
+      "error": "FORG0001",
+      "baselineError": "FORG0001"
+    },
+    {
+      "id": "order-contract-max-empty-bad-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-empty-bad-collation.xpath",
+      "expected": "()",
+      "baselineExpected": "()"
+    },
+    {
+      "id": "order-contract-sort-bad-collation-two",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-bad-collation-two.xpath",
+      "expected": "2",
+      "baselineExpected": "2"
+    },
+    {
+      "id": "order-contract-sort-empty-key-empty-input",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-empty-key-empty-input.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "order-contract-array-sort-bad-collation-two",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-bad-collation-two.xpath",
+      "expected": "2",
+      "baselineExpected": "2"
+    },
+    {
+      "id": "order-contract-array-sort-empty-key-empty-input",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-empty-key-empty-input.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "order-contract-sort-case-order",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-case-order.xpath",
+      "expected": "a,B",
+      "baselineExpected": "a,B"
+    },
+    {
+      "id": "order-contract-sort-codepoint-order",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-codepoint-order.xpath",
+      "expected": "B,a",
+      "baselineExpected": "B,a"
+    },
+    {
+      "id": "order-contract-min-case-order",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-case-order.xpath",
+      "expected": "a",
+      "baselineExpected": "a"
+    },
+    {
+      "id": "order-contract-min-codepoint-order",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-codepoint-order.xpath",
+      "expected": "B",
+      "baselineExpected": "B"
+    },
+    {
+      "id": "order-contract-max-case-order",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-case-order.xpath",
+      "expected": "B",
+      "baselineExpected": "B"
+    },
+    {
+      "id": "order-contract-max-codepoint-order",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-codepoint-order.xpath",
+      "expected": "a",
+      "baselineExpected": "a"
+    },
+    {
+      "id": "order-contract-sort-bad-collation-strings",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-bad-collation-strings.xpath",
+      "expected": "a,b",
+      "baselineExpected": "a,b"
+    },
+    {
+      "id": "order-contract-array-sort-bad-collation-strings",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/array-sort-bad-collation-strings.xpath",
+      "expected": "a,b",
+      "baselineExpected": "a,b"
+    },
+    {
+      "id": "order-contract-sort-empty-key-results",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-empty-key-results.xpath",
+      "expected": "B,A,C",
+      "baselineExpected": "B,A,C"
+    },
+    {
+      "id": "order-contract-sort-two-argument-callback",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-two-argument-callback.xpath",
+      "error": "XPTY0004",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "order-contract-min-decimal-result-type",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/min-decimal-result-type.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "order-contract-max-decimal-result-type",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/max-decimal-result-type.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "order-contract-sort-stable-ties",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-stable-ties.xpath",
+      "expected": "B,A,C",
+      "baselineExpected": "B,A,C"
+    },
+    {
+      "id": "order-contract-sort-nan-first",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-nan-first.xpath",
+      "expected": "1,2,NaN",
+      "baselineExpected": "1,2,NaN"
+    },
+    {
+      "id": "order-contract-sort-node-identity",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/sort-node-identity.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "order-contract-merge-empty-map-options",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-empty-map-options.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "order-contract-merge-reject-without-duplicate",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-reject-without-duplicate.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "order-contract-merge-combine-empty-values",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-combine-empty-values.xpath",
+      "expected": "true:0",
+      "baselineExpected": "true:0"
+    },
+    {
+      "id": "order-contract-merge-option-many",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-option-many.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "order-contract-merge-option-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-option-empty.xpath",
+      "error": "FOJS0005",
+      "baselineError": "FOJS0005"
+    },
+    {
+      "id": "order-contract-merge-numeric-key",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/merge-numeric-key.xpath",
+      "expected": "first,second",
+      "baselineExpected": "first,second"
+    },
+    {
+      "id": "order-contract-report-normal-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/report-normal-31.xpath",
+      "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+    },
+    {
+      "id": "order-contract-report-normal-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/report-normal-40.xpath",
+      "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2",
+      "baselineExpected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+    },
+    {
+      "id": "order-contract-report-empty-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/report-empty-31.xpath",
+      "expected": "offers=0;rank=;rows=;range=none;P=0"
+    },
+    {
+      "id": "order-contract-report-empty-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/report-empty-40.xpath",
+      "expected": "offers=0;rank=;rows=;range=none;P=0",
+      "baselineExpected": "offers=0;rank=;rows=;range=none;P=0"
+    },
+    {
+      "id": "order-contract-report-reordered-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/report-reordered-31.xpath",
+      "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+    },
+    {
+      "id": "order-contract-report-reordered-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "order-contracts/report-reordered-40.xpath",
+      "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2",
+      "baselineExpected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+    },
+    {
+      "id": "order-contract-sort-keyword-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/sort-keyword-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-sort-keyword-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/sort-keyword-mode-experimental.xpath",
+      "expected": "1,2,3",
+      "baselineError": "XPST0003",
+      "frozenExpected": "1,2,3"
+    },
+    {
+      "id": "order-contract-min-keyword-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/min-keyword-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-min-keyword-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/min-keyword-mode-experimental.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-keyword-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/max-keyword-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-keyword-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/max-keyword-mode-experimental.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-array-sort-keyword-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/array-sort-keyword-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-array-sort-keyword-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/array-sort-keyword-mode-experimental.xpath",
+      "expected": "1,2,3",
+      "baselineError": "XPST0003",
+      "frozenExpected": "1,2,3"
+    },
+    {
+      "id": "order-contract-merge-keyword-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/merge-keyword-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-merge-keyword-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/merge-keyword-mode-experimental.xpath",
+      "expected": "1",
+      "baselineError": "XPST0003",
+      "frozenExpected": "1"
+    },
+    {
+      "id": "order-contract-min-keyword-values-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/min-keyword-values-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-min-keyword-values-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/min-keyword-values-mode-experimental.xpath",
+      "expected": "1",
+      "baselineError": "XPST0003",
+      "frozenExpected": "1"
+    },
+    {
+      "id": "order-contract-min-key-not-a-parameter-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/min-key-not-a-parameter-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-min-key-not-a-parameter-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/min-key-not-a-parameter-mode-experimental.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-keyword-values-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/max-keyword-values-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-keyword-values-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/max-keyword-values-mode-experimental.xpath",
+      "expected": "3",
+      "baselineError": "XPST0003",
+      "frozenExpected": "3"
+    },
+    {
+      "id": "order-contract-max-key-not-a-parameter-mode-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "order-contracts/max-key-not-a-parameter-mode-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "order-contract-max-key-not-a-parameter-mode-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "order-contracts/max-key-not-a-parameter-mode-experimental.xpath",
+      "error": "XPST0017",
+      "baselineError": "XPST0003"
+    }
+  ]
+}

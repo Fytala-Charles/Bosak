@@ -1,0 +1,1 @@
+let $d := parse-xml('<offers><o id="A" price="10"/><o id="B" price="7"/></offers>') return sort($d/offers/o,(),function($o){xs:integer($o/@price)})[1] is $d/offers/o[2]

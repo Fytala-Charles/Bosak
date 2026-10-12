@@ -2265,7 +2265,38 @@
           "fixture": "changed31-contracts/inventory-array-sort-3.xpath"
         }
       ],
-      "contextBoundary": null
+      "contextBoundary": null,
+      "orderDefaultReview": {
+        "file": "audit-order-default-contracts.json",
+        "date": "2026-10-12",
+        "cases": [
+          "order-contract-array-sort-basic",
+          "order-contract-array-sort-empty",
+          "order-contract-array-sort-members",
+          "order-contract-array-sort-empty-collation",
+          "order-contract-array-sort-explicit-key",
+          "order-contract-array-sort-empty-key",
+          "order-contract-array-sort-bad-key",
+          "order-contract-array-sort-empty-bad-key",
+          "order-contract-array-sort-wrong-arity",
+          "order-contract-array-sort-bad-collation",
+          "order-contract-array-sort-multi-key",
+          "order-contract-array-sort-keyword",
+          "order-contract-array-sort-reference",
+          "order-contract-array-sort-bad-collation-two",
+          "order-contract-array-sort-empty-key-empty-input",
+          "order-contract-array-sort-bad-collation-strings",
+          "order-contract-report-normal-31",
+          "order-contract-report-normal-40",
+          "order-contract-report-empty-31",
+          "order-contract-report-empty-40",
+          "order-contract-report-reordered-31",
+          "order-contract-report-reordered-40",
+          "order-contract-array-sort-keyword-mode-31",
+          "order-contract-array-sort-keyword-mode-experimental"
+        ],
+        "assessment": "Targeted defaults/key/options evidence supplied. Empty-key/options, sort NaN/unknown-collation and non-map merge input boundaries remain engine follow-ups; not complete conformance."
+      }
     },
     {
       "name": "array:subarray",
@@ -16549,7 +16580,47 @@
           "fixture": "changed31-contracts/inventory-fn-max-2.xpath"
         }
       ],
-      "contextBoundary": null
+      "contextBoundary": null,
+      "orderDefaultReview": {
+        "file": "audit-order-default-contracts.json",
+        "date": "2026-10-12",
+        "cases": [
+          "order-contract-max-basic",
+          "order-contract-max-empty",
+          "order-contract-max-empty-collation",
+          "order-contract-max-codepoint",
+          "order-contract-max-case-insensitive",
+          "order-contract-max-bad-collation",
+          "order-contract-max-mixed",
+          "order-contract-max-nan",
+          "order-contract-max-untyped",
+          "order-contract-max-array-atomization",
+          "order-contract-max-keyword",
+          "order-contract-max-lookup3",
+          "order-contract-max-keyword-values",
+          "order-contract-max-key-not-a-parameter",
+          "order-contract-max-reference2",
+          "order-contract-max-numeric-node",
+          "order-contract-max-invalid-untyped",
+          "order-contract-max-empty-bad-collation",
+          "order-contract-max-case-order",
+          "order-contract-max-codepoint-order",
+          "order-contract-max-decimal-result-type",
+          "order-contract-report-normal-31",
+          "order-contract-report-normal-40",
+          "order-contract-report-empty-31",
+          "order-contract-report-empty-40",
+          "order-contract-report-reordered-31",
+          "order-contract-report-reordered-40",
+          "order-contract-max-keyword-mode-31",
+          "order-contract-max-keyword-mode-experimental",
+          "order-contract-max-keyword-values-mode-31",
+          "order-contract-max-keyword-values-mode-experimental",
+          "order-contract-max-key-not-a-parameter-mode-31",
+          "order-contract-max-key-not-a-parameter-mode-experimental"
+        ],
+        "assessment": "Targeted defaults/key/options evidence supplied. Empty-key/options, sort NaN/unknown-collation and non-map merge input boundaries remain engine follow-ups; not complete conformance."
+      }
     },
     {
       "name": "fn:min",
@@ -16745,7 +16816,47 @@
           "fixture": "changed31-contracts/inventory-fn-min-2.xpath"
         }
       ],
-      "contextBoundary": null
+      "contextBoundary": null,
+      "orderDefaultReview": {
+        "file": "audit-order-default-contracts.json",
+        "date": "2026-10-12",
+        "cases": [
+          "order-contract-min-basic",
+          "order-contract-min-empty",
+          "order-contract-min-empty-collation",
+          "order-contract-min-codepoint",
+          "order-contract-min-case-insensitive",
+          "order-contract-min-bad-collation",
+          "order-contract-min-mixed",
+          "order-contract-min-nan",
+          "order-contract-min-untyped",
+          "order-contract-min-array-atomization",
+          "order-contract-min-keyword",
+          "order-contract-min-lookup3",
+          "order-contract-min-keyword-values",
+          "order-contract-min-key-not-a-parameter",
+          "order-contract-min-reference2",
+          "order-contract-min-numeric-node",
+          "order-contract-min-invalid-untyped",
+          "order-contract-min-empty-bad-collation",
+          "order-contract-min-case-order",
+          "order-contract-min-codepoint-order",
+          "order-contract-min-decimal-result-type",
+          "order-contract-report-normal-31",
+          "order-contract-report-normal-40",
+          "order-contract-report-empty-31",
+          "order-contract-report-empty-40",
+          "order-contract-report-reordered-31",
+          "order-contract-report-reordered-40",
+          "order-contract-min-keyword-mode-31",
+          "order-contract-min-keyword-mode-experimental",
+          "order-contract-min-keyword-values-mode-31",
+          "order-contract-min-keyword-values-mode-experimental",
+          "order-contract-min-key-not-a-parameter-mode-31",
+          "order-contract-min-key-not-a-parameter-mode-experimental"
+        ],
+        "assessment": "Targeted defaults/key/options evidence supplied. Empty-key/options, sort NaN/unknown-collation and non-map merge input boundaries remain engine follow-ups; not complete conformance."
+      }
     },
     {
       "name": "fn:minutes-from-dateTime",
@@ -22692,7 +22803,51 @@
           "fixture": "changed31-contracts/inventory-fn-sort-3.xpath"
         }
       ],
-      "contextBoundary": null
+      "contextBoundary": null,
+      "orderDefaultReview": {
+        "file": "audit-order-default-contracts.json",
+        "date": "2026-10-12",
+        "cases": [
+          "order-contract-sort-basic",
+          "order-contract-sort-empty",
+          "order-contract-sort-empty-collation",
+          "order-contract-sort-codepoint",
+          "order-contract-sort-case-insensitive",
+          "order-contract-sort-bad-collation",
+          "order-contract-sort-mixed",
+          "order-contract-sort-nan",
+          "order-contract-sort-untyped",
+          "order-contract-sort-array-atomization",
+          "order-contract-sort-empty-key",
+          "order-contract-sort-explicit-key",
+          "order-contract-sort-multi-key",
+          "order-contract-sort-bad-key",
+          "order-contract-sort-empty-bad-key",
+          "order-contract-sort-wrong-arity",
+          "order-contract-sort-keyword",
+          "order-contract-sort-lookup3",
+          "order-contract-sort-reference3",
+          "order-contract-sort-bad-collation-two",
+          "order-contract-sort-empty-key-empty-input",
+          "order-contract-sort-case-order",
+          "order-contract-sort-codepoint-order",
+          "order-contract-sort-bad-collation-strings",
+          "order-contract-sort-empty-key-results",
+          "order-contract-sort-two-argument-callback",
+          "order-contract-sort-stable-ties",
+          "order-contract-sort-nan-first",
+          "order-contract-sort-node-identity",
+          "order-contract-report-normal-31",
+          "order-contract-report-normal-40",
+          "order-contract-report-empty-31",
+          "order-contract-report-empty-40",
+          "order-contract-report-reordered-31",
+          "order-contract-report-reordered-40",
+          "order-contract-sort-keyword-mode-31",
+          "order-contract-sort-keyword-mode-experimental"
+        ],
+        "assessment": "Targeted defaults/key/options evidence supplied. Empty-key/options, sort NaN/unknown-collation and non-map merge input boundaries remain engine follow-ups; not complete conformance."
+      }
     },
     {
       "name": "fn:starts-with",
@@ -28534,7 +28689,43 @@
           "fixture": "changed31-contracts/inventory-map-merge-2.xpath"
         }
       ],
-      "contextBoundary": null
+      "contextBoundary": null,
+      "orderDefaultReview": {
+        "file": "audit-order-default-contracts.json",
+        "date": "2026-10-12",
+        "cases": [
+          "order-contract-merge-basic",
+          "order-contract-merge-empty",
+          "order-contract-merge-empty-options",
+          "order-contract-merge-empty-input-options",
+          "order-contract-merge-use-first",
+          "order-contract-merge-use-last",
+          "order-contract-merge-combine",
+          "order-contract-merge-reject",
+          "order-contract-merge-bad-option",
+          "order-contract-merge-bad-option-type",
+          "order-contract-merge-unknown-option",
+          "order-contract-merge-bad-input",
+          "order-contract-merge-empty-value",
+          "order-contract-merge-keyword",
+          "order-contract-merge-reference",
+          "order-contract-merge-empty-map-options",
+          "order-contract-merge-reject-without-duplicate",
+          "order-contract-merge-combine-empty-values",
+          "order-contract-merge-option-many",
+          "order-contract-merge-option-empty",
+          "order-contract-merge-numeric-key",
+          "order-contract-report-normal-31",
+          "order-contract-report-normal-40",
+          "order-contract-report-empty-31",
+          "order-contract-report-empty-40",
+          "order-contract-report-reordered-31",
+          "order-contract-report-reordered-40",
+          "order-contract-merge-keyword-mode-31",
+          "order-contract-merge-keyword-mode-experimental"
+        ],
+        "assessment": "Targeted defaults/key/options evidence supplied. Empty-key/options, sort NaN/unknown-collation and non-map merge input boundaries remain engine follow-ups; not complete conformance."
+      }
     },
     {
       "name": "map:put",
