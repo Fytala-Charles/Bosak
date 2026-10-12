@@ -16,7 +16,7 @@ Validation: Release solution build passed (12 existing warnings, zero errors); *
 
 Next review the final five absent-keyword families: build-uri, decode-from-uri, collation-available, identity and is-NaN, with validated import/link diagnostics. Targeted review does not supply missing metadata or close full defaults/types/options. Exhaustive changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain. Retain earlier keyword/text/sequence/predicate/selection/hash/map-filter follow-ups and these date/time conversion/cardinality/precision boundaries. REQ-126 stays In Progress; no release or Braid action.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `edf2ea63291db8ebf22af6b79cea5d625a110de2`, [PR #195](https://github.com/Fytala-Charles/Bosak/pull/195), pushed on `docs/req126-date-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the next D2 slice.
 
 # Map/array container contracts — 2026-10-12
 
