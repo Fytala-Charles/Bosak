@@ -1,3 +1,23 @@
+# XSLT 4.0 new-element priority queue — 2026-10-12
+
+Main baseline: `cc5eb4be485c6d6f68ea985fa55b96504a9b6e81`; PR #199 merged after successful CI run 38287949458. Bosak branch: `docs/xslt40-contribution-priority-queue`. Version **1.1.3**. Previous queues below are historical.
+
+## What was built
+
+The [contribution priority queue](XSLT40_CONTRIBUTION_QUEUE.md) now starts with new XSLT 4.0 elements: array/member, select, switch, named item types and named records. Likely use is estimated, not measured; structural stylesheet counts are not semantic coverage. Next: N01 native array-case audit and a small nonduplicate order-export/member batch. Schema-awareness and inherited JSON findings remain secondary triage. Version 1.1.3; REQ-126 In Progress; no engine change or upstream submission.
+
+Added human-readable queue and raw ordered JSON with exact file footprints, source SHA-256/pins, ranking rationale, candidate-gap limits and targeted probe outcomes. Pinned spec e7ee4ab8, suite 6205faf9; array/member 35 distinct files, select 36, switch 12, item-type 24, record-type/field one. These are parseable stylesheet mentions, not test/coverage totals. Corrected the candidate meaning of xsl:select: body XPath expression for readability/escaping, not the inherited select attribute.
+
+switch-001 passes; array-004 grouped members passes; array-001 fails XTSE0740 on unqualified helper function, while two substring-selected square-array cases pass. Results do not establish full family readiness. New upstream branch bosak/array-member-review is clean at the baseline; prior schema branch retained.
+
+Validation: Queue/source SHA-256 and section anchors, five ordered families, exact distinct-file inventories, three recorded Bosak probe counts, clean upstream revision, local links/code fences and rendered queue/setup/canonical documents verified. PR #199 baseline CI passed 6,806 tests; source, adapter and test implementation are unchanged, so the full suite/manual engine gates were not repeated for this planning/documentation-only step. Probe failures remain visible rather than reclassified as passes.
+
+## Resume here
+
+N01: audit existing array/member tests and precise rules for empty/no-emission/grouped/nested members and order/identity, then prepare a small native upstream order-export test batch without duplicating array-004. Record source clauses, genuine gaps and normative assertions before implementing. User explicitly prioritizes new 4.0 elements likely to be used frequently; schema-awareness and inherited JSON triage are now secondary. No external submission/message yet. Keep prior REQ-126 D2/D3/D4, metadata, provenance and AC-03 limits.
+
+Preserve scratch directories, ignored upstream checkout and local receipts. Delivery commit/PR will be recorded after push.
+
 # Upstream XSLT 4.0 adapter setup — 2026-10-12
 
 Main baseline: `3658b53849c6583bc72f75fdefd5df7a3d395695`; PR #198 merged after successful CI run 38286066449. Bosak branch: `test/xslt40-upstream-adapter`; public/source version **1.1.3**. Earlier queues below are historical.
