@@ -16,7 +16,7 @@ Validation: Release solution build passed (one warning, zero errors); **5,308 te
 
 Next: D2, reconcile the 68 non-constructor registrations against pinned signatures, keywords, defaults and options, plus changed existing 3.1 functions excluded from the name inventory. Build a source-to-contract coverage matrix and choose uncovered forms for realistic success/empty/invalid examples. Keep documentation-first scope; record engine limits. D3 grammar/type/pattern matrix and D4 provenance/drift/acceptance follow. Historical adopted-pin gaps and AC-03 blanket gate applicability remain unresolved. Do not close REQ-126 or release based on sample coverage.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `f792cedc9eb5f5f708f6d27d4639aad9e081f614`, [PR #186](https://github.com/Fytala-Charles/Bosak/pull/186), pushed on `docs/req126-focus-constructor-audit`. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before starting D2.
 
 # Historical catalog close-out review — 2026-10-12
 
