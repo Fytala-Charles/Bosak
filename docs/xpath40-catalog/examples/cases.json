@@ -2102,7 +2102,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/decode-utf8.xpath",
-    "expected": "caf\u00e9"
+    "expected": "café"
   },
   {
     "id": "invoice-api-uris-encode-decode",
@@ -2116,14 +2116,14 @@
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/malformed-escape.xpath",
-    "expected": "\ufffd!"
+    "expected": "�!"
   },
   {
     "id": "invoice-api-uris-invalid-utf8",
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/invalid-utf8.xpath",
-    "expected": "\ufffdA"
+    "expected": "�A"
   },
   {
     "id": "invoice-api-uris-decode-empty",
@@ -2228,14 +2228,14 @@
     "kind": "xpath",
     "mode": "40",
     "file": "customer-text-cleanup/main.xpath",
-    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; graphemes=7; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
+    "expected": "label=[José  🚚]; codepoints=8; graphemes=7; export=[José  🚚..]; separator=—"
   },
   {
     "id": "customer-text-cleanup-baseline",
     "kind": "xpath",
     "mode": "31",
     "file": "customer-text-cleanup/baseline.xpath",
-    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
+    "expected": "label=[José  🚚]; codepoints=8; export=[José  🚚..]; separator=—"
   },
   {
     "id": "customer-text-cleanup-preserve-interior",
@@ -2326,7 +2326,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "customer-text-cleanup/entity-name.xpath",
-    "expected": "\u00e1"
+    "expected": "á"
   },
   {
     "id": "customer-text-cleanup-multi-codepoint-entity",
@@ -4313,5 +4313,222 @@
     "file": "capturing-accumulators/not-applicable.xsl",
     "input": "capturing-accumulators/input.xml",
     "error": "XTDE3362"
+  },
+  {
+    "id": "fn-apply-templates-xpath-31-arity1",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "fn-apply-templates/xpath-31-arity1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "fn-apply-templates-xpath-31-arity2",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "fn-apply-templates/xpath-31-arity2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "fn-apply-templates-lookup-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "fn-apply-templates/lookup-31.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "fn-apply-templates-xpath-40-arity1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "fn-apply-templates/xpath-40-arity1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "fn-apply-templates-xpath-40-arity2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "fn-apply-templates/xpath-40-arity2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "fn-apply-templates-lookup-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "fn-apply-templates/lookup-40.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "fn-apply-templates-xpath-experimental-arity1",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "fn-apply-templates/xpath-experimental-arity1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "fn-apply-templates-xpath-experimental-arity2",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "fn-apply-templates/xpath-experimental-arity2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "fn-apply-templates-call1-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/call1-xslt31.xsl",
+    "error": "XPST0017",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-call2-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/call2-xslt31.xsl",
+    "error": "XPST0017",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-reference-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/reference-xslt31.xsl",
+    "error": "XPST0017",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-availability-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/availability-xslt31.xsl",
+    "expected": "true|false|false",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-call1-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/call1-xslt40.xsl",
+    "error": "XPST0017",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-call2-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/call2-xslt40.xsl",
+    "error": "XPST0017",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-reference-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/reference-xslt40.xsl",
+    "error": "XPST0017",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-availability-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/availability-xslt40.xsl",
+    "expected": "true|false|false",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-instruction-xslt31-input",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/instruction-xslt31-input.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1042/EUR:30.00;BATCH-7/EXPORT/INV-1043/USD:12.00;",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-instruction-xslt31-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/instruction-xslt31-empty.xsl",
+    "expected": "",
+    "input": "fn-apply-templates/empty.xml"
+  },
+  {
+    "id": "fn-apply-templates-instruction-xslt31-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/instruction-xslt31-reordered.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1043/USD:12.00;BATCH-7/EXPORT/INV-1042/EUR:30.00;",
+    "input": "fn-apply-templates/reordered.xml"
+  },
+  {
+    "id": "fn-apply-templates-wrapper-xslt31-input",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/wrapper-xslt31-input.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1042/EUR:30.00;BATCH-7/EXPORT/INV-1043/USD:12.00;",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-wrapper-xslt31-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/wrapper-xslt31-empty.xsl",
+    "expected": "",
+    "input": "fn-apply-templates/empty.xml"
+  },
+  {
+    "id": "fn-apply-templates-wrapper-xslt31-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "fn-apply-templates/wrapper-xslt31-reordered.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1043/USD:12.00;BATCH-7/EXPORT/INV-1042/EUR:30.00;",
+    "input": "fn-apply-templates/reordered.xml"
+  },
+  {
+    "id": "fn-apply-templates-instruction-xslt40-input",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/instruction-xslt40-input.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1042/EUR:30.00;BATCH-7/EXPORT/INV-1043/USD:12.00;",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-instruction-xslt40-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/instruction-xslt40-empty.xsl",
+    "expected": "",
+    "input": "fn-apply-templates/empty.xml"
+  },
+  {
+    "id": "fn-apply-templates-instruction-xslt40-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/instruction-xslt40-reordered.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1043/USD:12.00;BATCH-7/EXPORT/INV-1042/EUR:30.00;",
+    "input": "fn-apply-templates/reordered.xml"
+  },
+  {
+    "id": "fn-apply-templates-wrapper-xslt40-input",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/wrapper-xslt40-input.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1042/EUR:30.00;BATCH-7/EXPORT/INV-1043/USD:12.00;",
+    "input": "fn-apply-templates/input.xml"
+  },
+  {
+    "id": "fn-apply-templates-wrapper-xslt40-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/wrapper-xslt40-empty.xsl",
+    "expected": "",
+    "input": "fn-apply-templates/empty.xml"
+  },
+  {
+    "id": "fn-apply-templates-wrapper-xslt40-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "fn-apply-templates/wrapper-xslt40-reordered.xsl",
+    "expected": "BATCH-7/EXPORT/INV-1043/USD:12.00;BATCH-7/EXPORT/INV-1042/EUR:30.00;",
+    "input": "fn-apply-templates/reordered.xml"
   }
 ]
