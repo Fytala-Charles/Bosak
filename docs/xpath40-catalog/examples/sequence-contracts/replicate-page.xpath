@@ -1,0 +1,1 @@
+string-join(replicate(('A','B'),2), ',')

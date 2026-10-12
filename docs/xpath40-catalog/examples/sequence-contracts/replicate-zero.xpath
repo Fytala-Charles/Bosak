@@ -1,0 +1,1 @@
+count(replicate(('A','B'),0))

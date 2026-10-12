@@ -1,0 +1,1 @@
+string-join(items-at(('A','B','C'),(0,-1,4,2)),',')

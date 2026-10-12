@@ -1,0 +1,1 @@
+let $node := parse-xml('<order id="A"/>')/* return replicate($node,2)[1] is replicate($node,2)[2]

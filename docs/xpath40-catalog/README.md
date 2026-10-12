@@ -111,7 +111,7 @@ now reviewed against 1.1.2. Its
 [function inventory](audit-function-inventory.json) distinguishes registered names
 from fully documented signatures; the catalog remains In Progress.
 
-67 entries now include practical cases or stable alternatives. The [1,556-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
+67 entries now include practical cases or stable alternatives. The [1,621-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
 
 ### Operators and syntax
 
@@ -300,10 +300,13 @@ Measured performance claims in this catalog must cite `benchmarks/Bosak.Benchmar
 **Language/streaming scope review — 2026-10-12:** [Existing APIs and separate 4.0 deltas](deferred/language-streaming-scope.md) adds 28 cases through XQuery, XPath, ordinary XSLT and actual streaming APIs. Corrects stale XPath where exclusion and distinguishes REQ-087 Done from historical residual reports. Full XQuery/Streaming 4.0 remains unclaimed. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
 
 
-Catalog signature audit (2026-10-12): **67 entries, 1,556 feature + 24 chapter checks = 1,580**; four worked chapters and all 117 registered names assigned. REQ-126 remains In Progress, version 1.1.2. The [prioritized review](CLOSEOUT-REVIEW.md) identifies constructor/signature/grammar and acceptance work, with engine follow-ups tracked separately. All 49 focus constructors now have representative lexical/type/context/error checks and paired delivery-import examples. D2 now supplies a first metadata matrix and selected behavior checks; full contracts remain partial. Next: review missing keyword metadata and defaults/options family by family.
+Catalog signature audit (2026-10-12): **67 entries, 1,621 feature + 24 chapter checks = 1,645**; four worked chapters and all 117 registered names assigned. REQ-126 remains In Progress, version 1.1.2. The [prioritized review](CLOSEOUT-REVIEW.md) identifies constructor/signature/grammar and acceptance work, with engine follow-ups tracked separately. All 49 focus constructors now have representative lexical/type/context/error checks and paired delivery-import examples. D2 now supplies a first metadata matrix and selected behavior checks; full contracts remain partial. Next: review missing keyword metadata and defaults/options family by family.
 
 
 The [signature contract audit](SIGNATURE-CONTRACT-AUDIT.md) compares 68 new-name families and 20 selected existing functions, records 148 exact registrations and distinguishes availability from keyword/default/type/option behavior. Its invoice-fingerprint examples reproduce spelling, default and expression-shape boundaries. REQ-126 remains In Progress; no engine or release change.
 
 
 The [text/Unicode contract review](TEXT-CONTRACT-REVIEW.md) adds 83 keyword/default/empty/invalid/option and full import-report checks for eight families. Their keyword metadata remains absent; 29 other absent-metadata families still need targeted review. D2 remains partial. Next: sequence selection/repetition contracts.
+
+
+The [sequence selection/repetition review](SEQUENCE-CONTRACT-REVIEW.md) adds 65 checks and paired normal/empty/reordered batch exports. Five more absent-keyword families are reviewed; 13 of 37 now have targeted review and 24 remain, with metadata unchanged. slice keywords/defaults work in the sampled forms; typed-position/coercion boundaries remain explicit. Next: sequence equality/distinctness/subsequence predicates.

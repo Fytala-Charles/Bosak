@@ -142,3 +142,7 @@ No engine source, public API, harness or gate membership changes in this deliver
 ## Text-family behavior supplied
 
 The [text/Unicode review](TEXT-CONTRACT-REVIEW.md) adds 83 checks for eight absent-keyword families; metadata remains absent. 29 of the original 37 families still need targeted behavioral review. Current coverage is 67 entries, 1,556 feature + 24 chapter checks = 1,580. Default/empty options and collation, typed sources and full portable import reports are verified; coercion/option limits are explicit. D2 remains partial. Next: sequence selection/repetition contracts.
+
+## Sequence-family behavior supplied
+
+The [sequence selection/repetition review](SEQUENCE-CONTRACT-REVIEW.md) adds 65 checks for six families, including five more absent-keyword families and supported slice keywords. 13 of the original 37 absent-metadata families now have targeted review; 24 remain and metadata is unchanged. Current coverage: 67 entries, 1,621 feature + 24 chapter checks = 1,645. D2 stays partial. Next: equality/distinctness/subsequence predicate contracts.
