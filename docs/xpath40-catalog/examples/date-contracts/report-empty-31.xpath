@@ -1,0 +1,8 @@
+let $rows := parse-xml('<receipts/>')/receipts/receipt
+return concat('receipts=',count($rows),';details=',string-join(
+  for $r in $rows return
+    let $start := xs:dateTime('1970-01-01T00:00:00Z') + xs:dayTimeDuration('PT0.001S') * xs:integer($r/@epochMs)
+    return let $duration := xs:dayTimeDuration('PT1S') * xs:decimal($r/@retentionSeconds)
+    return let $first := xs:date($start) - xs:dayTimeDuration("P1D") * (day-from-dateTime($start)-1)
+    return concat($r/@id,':start=',$start,',expires=',$start+$duration,',monthDays=',day-from-date($first + xs:yearMonthDuration("P1M") - xs:dayTimeDuration("P1D")),',seconds=',$duration div xs:dayTimeDuration("PT1S"))
+,'|'))

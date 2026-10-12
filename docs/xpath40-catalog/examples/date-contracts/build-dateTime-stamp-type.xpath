@@ -1,0 +1,1 @@
+build-dateTime(map{'year':2024,'month':2,'day':29,'hours':0,'minutes':0,'seconds':0,'timezone':xs:dayTimeDuration('PT0S')}) instance of xs:dateTimeStamp

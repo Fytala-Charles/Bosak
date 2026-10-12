@@ -100,6 +100,8 @@ rejects them; the comparison uses `Compatibility31`. The existing
 checks exact reports/errors and default-profile refusal for successful 4.0 cases.
 All values are inline and deterministic; no external context or clock is needed.
 
+**Supplementary contract review (2026-10-12):** [Date/time review](../DATE-TIME-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed receipt-retention README](../examples/date-contracts/README.md) supply 108 checks across five families: keywords, Gregorian field sets, offsets, units, empty/default, precision and type/cardinality boundaries, plus complete XPath 3.1/4.0 reports. Keywords remain unavailable. Malformed/multi-item tolerance, record conversion and fractional-component loss remain engine follow-ups. Source/public version is 1.1.3; original delivery/unit/gate and historical adopted-pin limits remain.
+
 ## 13. Sample Code
 
 Complete synthetic receipt input:

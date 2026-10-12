@@ -1,0 +1,1 @@
+string(days-in-month(xs:time('12:00:00')))

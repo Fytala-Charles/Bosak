@@ -1,0 +1,1 @@
+duration-to-seconds(value := xs:dayTimeDuration('PT90S'))
