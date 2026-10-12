@@ -16,7 +16,7 @@ Validation: Release solution build passed (11 warnings, zero errors); **5,813 te
 
 Next continue D2 with map:entries/map:items/map:filter and array:build/array:items/array:empty absent-keyword families. Use a stock-feed normalization workflow with explicit sequence/member/result-shape and callback boundaries. Keep documentation-first scope. Remaining missing metadata, full coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Earlier engine follow-ups, historical adopted pins and AC-03 applicability are unresolved; no closure or release based on sample coverage.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 dossier and registry additions remain uncommitted and must not be silently included or removed. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 dossier and registry additions remain uncommitted and must not be silently included or removed. This block supersedes historical delivery states below. Delivery: `3c230ca641e3bdc51d8ae342a7d452b2f9df48e0`, [PR #191](https://github.com/Fytala-Charles/Bosak/pull/191), pushed on `docs/req126-selection-contracts`. Rebase onto merged main preserved the validated tree. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before the next D2 slice.
 
 # Historical equality/distinctness/subsequence predicate contracts — 2026-10-12
 
