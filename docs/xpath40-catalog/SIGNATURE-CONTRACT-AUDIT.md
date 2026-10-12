@@ -50,15 +50,15 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 | [`fn:atomic-equal`](functions/atomic-equal.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-atomic-equal-2.xpath) |
 | [`fn:atomic-type-annotation`](functions/numeric-import-diagnostics.md) | 1 | 1 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-atomic-type-annotation-1.xpath) |
 | [`fn:build-dateTime`](functions/month-end-cutoffs.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-build-dateTime-1.xpath) / [date/time cases](examples/date-contracts/README.md) |
-| [`fn:build-uri`](functions/invoice-api-uris.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-build-uri-1.xpath) |
+| [`fn:build-uri`](functions/invoice-api-uris.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-build-uri-1.xpath) / [URI/utility cases](examples/utility-contracts/README.md) |
 | [`fn:char`](functions/customer-text-cleanup.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-char-1.xpath) / [text cases](examples/text-contracts/README.md) |
 | [`fn:characters`](functions/customer-text-cleanup.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-characters-1.xpath) / [text cases](examples/text-contracts/README.md) |
-| [`fn:collation-available`](functions/supplier-offer-ranking.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-collation-available-1.xpath) |
+| [`fn:collation-available`](functions/supplier-offer-ranking.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-collation-available-1.xpath) / [URI/utility cases](examples/utility-contracts/README.md) |
 | [`fn:contains-subsequence`](functions/shipment-event-sequences.md) | 2, 3 | 2, 3 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-contains-subsequence-2.xpath) |
 | [`fn:csv-doc`](functions/csv-parsing.md) | 1, 2 | 1, 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-csv-doc-1.xpath) |
 | [`fn:csv-to-xml`](functions/csv-parsing.md) | 1, 2 | 1, 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-csv-to-xml-1.xpath) |
 | [`fn:days-in-month`](functions/month-end-cutoffs.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-days-in-month-1.xpath) / [date/time cases](examples/date-contracts/README.md) |
-| [`fn:decode-from-uri`](functions/invoice-api-uris.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-decode-from-uri-1.xpath) |
+| [`fn:decode-from-uri`](functions/invoice-api-uris.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-decode-from-uri-1.xpath) / [URI/utility cases](examples/utility-contracts/README.md) |
 | [`fn:do-until`](functions/bounded-retries.md) | 3 | 3 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-do-until-3.xpath) |
 | [`fn:drop-while`](functions/ordered-queue-prefix.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-drop-while-2.xpath) |
 | [`fn:duplicate-values`](functions/sequence-distinctness.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-duplicate-values-1.xpath) |
@@ -71,11 +71,11 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 | [`fn:graphemes`](functions/customer-text-cleanup.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-graphemes-1.xpath) / [text cases](examples/text-contracts/README.md) |
 | [`fn:hash`](functions/payload-fingerprints.md) | 1, 2, 3 | 1, 2, 3 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-hash-1.xpath) |
 | [`fn:highest`](functions/supplier-offer-ranking.md) | 1, 2, 3 | 1, 2, 3 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-highest-1.xpath) |
-| [`fn:identity`](functions/configured-label-callbacks.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-identity-1.xpath) |
+| [`fn:identity`](functions/configured-label-callbacks.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-identity-1.xpath) / [URI/utility cases](examples/utility-contracts/README.md) |
 | [`fn:index-of-substring`](functions/import-file-names.md) | 2 | 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-index-of-substring-2.xpath) / [text cases](examples/text-contracts/README.md) |
 | [`fn:index-where`](functions/higher-order-selection.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-index-where-2.xpath) |
 | [`fn:insert-separator`](functions/order-sequence-selection.md) | 2 | 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-insert-separator-2.xpath) |
-| [`fn:is-NaN`](functions/numeric-import-diagnostics.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-is-NaN-1.xpath) |
+| [`fn:is-NaN`](functions/numeric-import-diagnostics.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-is-NaN-1.xpath) / [URI/utility cases](examples/utility-contracts/README.md) |
 | [`fn:items-at`](functions/order-sequence-selection.md) | 2 | 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-items-at-2.xpath) |
 | [`fn:jkey`](data-model/jnode-navigation.md) | 0, 1 | 0, 1 | names match a pinned signature | Different list | [lookup](examples/signature-contracts/fn-jkey-0.xpath) |
 | [`fn:jtree`](data-model/jnode-navigation.md) | 1 | 1 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-jtree-1.xpath) |
@@ -158,3 +158,6 @@ The subsequent [container contract review](CONTAINER-CONTRACT-REVIEW.md) brings 
 
 
 The subsequent [date/time review](DATE-TIME-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 32 of 37 families, with five remaining. Metadata is unchanged. Current catalog: 67 entries, 1,988 feature + 24 chapter checks = 2,012, version 1.1.3. Earlier counts and queues are historical. Next: URI/import utilities; D2 stays partial.
+
+
+The subsequent [URI/import utility review](URI-UTILITY-CONTRACT-REVIEW.md) completes first targeted review for all 37 absent-keyword families, with none remaining unreviewed. All 37 still lack metadata. Current catalog: 67 entries, 2,093 feature + 24 chapter checks = 2,117, version 1.1.3. Earlier counts and queues are historical. Next: exhaustive changed-existing-3.1 contract inventory; D2 stays partial.

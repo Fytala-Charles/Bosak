@@ -1,0 +1,1 @@
+build-uri(map{'path':'/raw%2Fid','query':'q=A+B','fragment':'A+B'})

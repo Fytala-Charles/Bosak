@@ -61,6 +61,8 @@ Compile new functions with CompileOptions.Compatibility40; default 3.1 rejects t
 
 **Supplementary contract review (2026-10-12):** [Comparison/selection review](../SELECTION-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed warehouse README](../examples/selection-contracts/README.md) supply 68 checks: keyword modes, collation/default/key/predicate, atomization, result/cardinality boundaries and complete 3.1/4.0 reports. duplicate-values/highest/lowest keywords remain unavailable; index-where keywords work. Map tolerance and tested extrema NaN results remain explicit engine follow-ups. Extrema return boundary-equal items, not all distinct records sharing its key. Initial delivery/unit/gate and historical adopted-pin limits are unchanged.
 
+**Supplementary contract review (2026-10-12):** [URI/import utility review](../URI-UTILITY-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed import/link README](../examples/utility-contracts/README.md) supply 105 checks across five families: keyword modes, component/options/escaping, one-pass UTF-8 decoding, collation availability, identity, NaN and type/cardinality boundaries, plus complete XPath 3.1/4.0 reports. Keywords remain unavailable. Boolean-option/record tolerance and empty query-map precedence remain follow-ups. All 37 absent-keyword families now have first targeted review, with metadata still absent; this does not close D2. Source/public version is 1.1.3; original delivery/unit/gate and historical adopted-pin limits remain.
+
 ## 13. Sample Code
 
 Complete synthetic input:

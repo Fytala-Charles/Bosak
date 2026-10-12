@@ -1,0 +1,1 @@
+decode-from-uri(xs:untypedAtomic('A%20B'))

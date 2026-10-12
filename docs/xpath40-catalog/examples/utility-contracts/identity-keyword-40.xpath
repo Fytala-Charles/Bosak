@@ -1,0 +1,1 @@
+string-join(identity(input := ('A','B')),',')

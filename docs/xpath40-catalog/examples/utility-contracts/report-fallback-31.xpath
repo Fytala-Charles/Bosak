@@ -1,0 +1,12 @@
+let $source := parse-xml('<imports><item id="R1" rawCode="A/B" encodedCode="A%2FB" quantity="42.5"/><item id="R2" rawCode="C D" encodedCode="C%20D" quantity="unknown"/><item id="R3" rawCode="E" encodedCode="E" quantity="0"/></imports>')/imports/item
+return let $candidate := 'urn:inventory:unknown'
+return let $available := $candidate = ('http://www.w3.org/2005/xpath-functions/collation/codepoint','http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive')
+return let $effective := if ($available) then $candidate else 'http://www.w3.org/2005/xpath-functions/collation/codepoint'
+return let $rows := $source
+return concat('items=',count($rows),';collation=',if ($available) then 'requested' else 'fallback',';details=',string-join(
+  for $r in $rows return
+    let $quantity := number($r/@quantity)
+    return let $code := string($r/@rawCode)
+    return if ($quantity ne $quantity) then concat($r/@id,':invalid-quantity')
+    else concat($r/@id,':quantity=',$quantity,',match=',compare($code,string($r/@rawCode),$effective),',uri=',concat('https://inventory.example/v1/items/',encode-for-uri($code)))
+,'|'))
