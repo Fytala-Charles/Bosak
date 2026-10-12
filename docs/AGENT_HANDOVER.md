@@ -1,3 +1,23 @@
+# URI/import utility contracts — 2026-10-12
+
+Main baseline: `9d7e0b8f93594ff2086c5da321cb3fab88b72897`; [PR #195](https://github.com/Fytala-Charles/Bosak/pull/195) merged after successful [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38277697192). Current branch: `docs/req126-uri-utility-contracts`; public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [five-family URI/import utility review](xpath40-catalog/URI-UTILITY-CONTRACT-REVIEW.md) and [detailed inventory import/link README](xpath40-catalog/examples/utility-contracts/README.md), with complete normal/empty/reordered/fallback XML, paired XPath 3.1/4.0 code and exact outputs. Five raw signature rows link case IDs and baseline; build-uri's original type-ref, fourteen record fields and three boolean option definitions are preserved. Canonical summaries, registry, audits, queue and four family entries synchronized.
+
+105 new checks: 15 keyword/mode refusals, 82 focused URI/option/decoding/collation/identity/NaN checks and eight complete XPath 3.1/4.0 import/link reports. All 37 originally absent-keyword families now have targeted review; zero await that first review, but all 37 still lack metadata. Boolean-option and record-field tolerance, empty query-map precedence and context-dependent collation boundaries remain follow-ups. Current catalog: 67 entries, 2,093 feature + 24 chapter checks = 2,117; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: exhaustively inventory changed existing 3.1 function contracts; the current matrix samples only twenty.
+
+All five keywords refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1. URI defaults/encoding/raw-field precedence/ports/opaque/UNC, decoder replacement/plus/one-pass behavior, typed collation candidates, source node identity, mixed/function values and NaN type/cardinality boundaries verified. Tested string 'false' and multiple boolean options enable omission; malformed parameter values and empty-query-map precedence remain follow-ups. Collation availability depends on context; a fresh no-base probe and explicit fallback business policy are documented. is-NaN does not reject infinity or validate business ranges. The 3.1 business baseline relies on fixture raw code fields and configured collation allowlist, not a general decoder/availability probe.
+
+Validation: Release solution build passed (12 existing warnings, zero errors); **6,321 tests / 0 failures / 0 skips**, ten assemblies including all 2,093 feature checks. Renderer verified 99 catalog pages plus six implementation/canonical pages. Five pinned signatures, URI record/options, 105 exact cases, eight independently computed full reports, complete README expressions/local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. All 37 reviewed rows still report absent metadata. Manual engine gates are not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Next complete D2's exhaustive inventory of changed existing 3.1 function signatures/contracts, using pinned declarations/change notes and the frozen baseline; the current 88-row matrix has 68 new names plus only twenty existing-function samples. Identify omissions, map exact contracts and prioritize further conversion/default/options cases. First targeted review of missing-keyword families is complete; implementation remains missing for all 37. Consolidate these findings for later engine remediation without calling this a feature fix. D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain unresolved. Retain all earlier keyword/text/sequence/predicate/selection/hash/map/date-time follow-ups and these URI record/option/precedence boundaries. REQ-126 stays In Progress; no release or Braid action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery commit/PR will be recorded after push.
+
 # Date/time construction contracts — 2026-10-12
 
 Main baseline: `675d8f96facf1fc72ed3a05cb2781fa493fd1f01`; [PR #194](https://github.com/Fytala-Charles/Bosak/pull/194) merged after successful CI retry. The first CI attempt failed an existing 1ms cancellation-timing test (Valid before cancellation fired); all container checks passed. Current branch: `docs/req126-date-contracts`; public/source version remains **1.1.3**. Earlier states below are historical.

@@ -1,0 +1,1 @@
+identity(function($v){$v+1})(2)

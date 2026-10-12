@@ -1,0 +1,1 @@
+count(identity((1,map{'id':'A'},[1,2])))

@@ -1,0 +1,12 @@
+let $source := parse-xml('<imports/>')/imports/item
+return let $candidate := 'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive'
+return let $available := collation-available($candidate)
+return let $effective := if ($available) then $candidate else 'http://www.w3.org/2005/xpath-functions/collation/codepoint'
+return let $rows := identity($source)
+return concat('items=',count($rows),';collation=',if ($available) then 'requested' else 'fallback',';details=',string-join(
+  for $r in $rows return
+    let $quantity := number($r/@quantity)
+    return let $code := decode-from-uri(string($r/@encodedCode))
+    return if (is-NaN($quantity)) then concat($r/@id,':invalid-quantity')
+    else concat($r/@id,':quantity=',$quantity,',match=',compare($code,string($r/@rawCode),$effective),',uri=',build-uri(map{'scheme':'https','host':'inventory.example','port':443,'path-segments':('','v1','items',$code)},map{'omit-default-ports':true()}))
+,'|'))

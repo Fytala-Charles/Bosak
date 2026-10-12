@@ -1,0 +1,1 @@
+decode-from-uri(parse-xml('<v>A%20B</v>')/v)

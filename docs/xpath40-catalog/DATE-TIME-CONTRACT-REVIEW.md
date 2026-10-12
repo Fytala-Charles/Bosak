@@ -47,3 +47,6 @@ Next review the final five absent-keyword families: build-uri, decode-from-uri, 
 ## Delivery validation
 
 Release solution build passed (12 existing warnings, zero errors); 6,216 tests passed with no failures or skips across ten assemblies. Render checks verified 97 catalog pages and six implementation/canonical pages. Five pinned signatures/record fields, exact case IDs, independent full report outputs, complete README expressions, local links, 67 sixteen-field entries, 241 cached primary links/anchors, 28 historical delivery records and 117 assigned names were checked. No manual engine gates were rerun for this documentation/example scope.
+
+
+The subsequent [URI/import utility review](URI-UTILITY-CONTRACT-REVIEW.md) completes first targeted review for all 37 absent-keyword families, with none remaining unreviewed. All 37 still lack metadata. Current catalog: 67 entries, 2,093 feature + 24 chapter checks = 2,117, version 1.1.3. Earlier counts and queues are historical. Next: exhaustive changed-existing-3.1 contract inventory; D2 stays partial.

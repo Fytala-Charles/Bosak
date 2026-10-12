@@ -1034,12 +1034,123 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative URI/import utility review: explicit keyword modes, options/record/escaping, decoding, collation availability, identity and NaN type/cardinality boundaries. Boolean-option/result-field tolerance and empty query-map precedence remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-build-uri-1",
         "signature-audit-fn-build-uri-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "utilityContractCases": [
+        "utility-contract-build-uri-keyword-31",
+        "utility-contract-build-uri-keyword-40",
+        "utility-contract-build-uri-keyword-experimental",
+        "utility-contract-build-uri-omitted",
+        "utility-contract-build-uri-empty",
+        "utility-contract-build-uri-empty-map",
+        "utility-contract-build-uri-omit-port",
+        "utility-contract-build-uri-string-false",
+        "utility-contract-build-uri-numeric-false",
+        "utility-contract-build-uri-empty-option",
+        "utility-contract-build-uri-multiple-option",
+        "utility-contract-build-uri-unknown-option",
+        "utility-contract-build-uri-wrong-option",
+        "utility-contract-build-uri-empty-parts",
+        "utility-contract-build-uri-empty-record",
+        "utility-contract-build-uri-wrong-array",
+        "utility-contract-build-uri-multiple-records",
+        "utility-contract-build-uri-raw-path-query",
+        "utility-contract-build-uri-segments-over-path",
+        "utility-contract-build-uri-parameters-over-query",
+        "utility-contract-build-uri-empty-parameters",
+        "utility-contract-build-uri-password-default",
+        "utility-contract-build-uri-password-allowed",
+        "utility-contract-build-uri-opaque",
+        "utility-contract-build-uri-unc",
+        "utility-contract-build-uri-unknown-field",
+        "utility-contract-build-uri-port-string",
+        "utility-contract-build-uri-unicode",
+        "utility-contract-build-uri-wrong-parameters",
+        "utility-contract-build-uri-empty-valued-parameters"
+      ],
+      "utilityContractTypeReference": {
+        "name": "uri-structure-record",
+        "occurrence": null,
+        "fields": [
+          {
+            "name": "uri",
+            "type": "xs:string?"
+          },
+          {
+            "name": "scheme",
+            "type": "xs:string?"
+          },
+          {
+            "name": "absolute",
+            "type": "xs:boolean?"
+          },
+          {
+            "name": "hierarchical",
+            "type": "xs:boolean?"
+          },
+          {
+            "name": "authority",
+            "type": "xs:string?"
+          },
+          {
+            "name": "userinfo",
+            "type": "xs:string?"
+          },
+          {
+            "name": "host",
+            "type": "xs:string?"
+          },
+          {
+            "name": "port",
+            "type": "xs:integer?"
+          },
+          {
+            "name": "path",
+            "type": "xs:string?"
+          },
+          {
+            "name": "query",
+            "type": "xs:string?"
+          },
+          {
+            "name": "fragment",
+            "type": "xs:string?"
+          },
+          {
+            "name": "path-segments",
+            "type": "xs:string*"
+          },
+          {
+            "name": "query-parameters",
+            "type": "map(xs:string, xs:string*)?"
+          },
+          {
+            "name": "filepath",
+            "type": "xs:string?"
+          }
+        ]
+      },
+      "utilityContractOptions": [
+        {
+          "key": "allow-deprecated-features",
+          "type": "xs:boolean",
+          "default": "false"
+        },
+        {
+          "key": "omit-default-ports",
+          "type": "xs:boolean",
+          "default": "false"
+        },
+        {
+          "key": "unc-path",
+          "type": "xs:boolean",
+          "default": "false"
+        }
+      ]
     },
     {
       "name": "fn:char",
@@ -1227,11 +1338,30 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative URI/import utility review: explicit keyword modes, options/record/escaping, decoding, collation availability, identity and NaN type/cardinality boundaries. Boolean-option/result-field tolerance and empty query-map precedence remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-collation-available-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "utilityContractCases": [
+        "utility-contract-collation-available-keyword-31",
+        "utility-contract-collation-available-keyword-40",
+        "utility-contract-collation-available-keyword-experimental",
+        "utility-contract-collation-available-codepoint",
+        "utility-contract-collation-available-ascii",
+        "utility-contract-collation-available-uca",
+        "utility-contract-collation-available-fallback",
+        "utility-contract-collation-available-unknown",
+        "utility-contract-collation-available-empty-string",
+        "utility-contract-collation-available-relative",
+        "utility-contract-collation-available-empty",
+        "utility-contract-collation-available-numeric",
+        "utility-contract-collation-available-anyURI",
+        "utility-contract-collation-available-untyped",
+        "utility-contract-collation-available-node",
+        "utility-contract-collation-available-multiple",
+        "utility-contract-collation-available-map"
+      ]
     },
     {
       "name": "fn:contains-subsequence",
@@ -1662,11 +1792,32 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative URI/import utility review: explicit keyword modes, options/record/escaping, decoding, collation availability, identity and NaN type/cardinality boundaries. Boolean-option/result-field tolerance and empty query-map precedence remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-decode-from-uri-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "utilityContractCases": [
+        "utility-contract-decode-from-uri-keyword-31",
+        "utility-contract-decode-from-uri-keyword-40",
+        "utility-contract-decode-from-uri-keyword-experimental",
+        "utility-contract-decode-from-uri-empty",
+        "utility-contract-decode-from-uri-plain",
+        "utility-contract-decode-from-uri-space-plus",
+        "utility-contract-decode-from-uri-unicode",
+        "utility-contract-decode-from-uri-emoji",
+        "utility-contract-decode-from-uri-malformed",
+        "utility-contract-decode-from-uri-incomplete",
+        "utility-contract-decode-from-uri-invalid-utf8",
+        "utility-contract-decode-from-uri-xml-null",
+        "utility-contract-decode-from-uri-one-pass",
+        "utility-contract-decode-from-uri-anyURI",
+        "utility-contract-decode-from-uri-untyped",
+        "utility-contract-decode-from-uri-node",
+        "utility-contract-decode-from-uri-numeric",
+        "utility-contract-decode-from-uri-multiple",
+        "utility-contract-decode-from-uri-map"
+      ]
     },
     {
       "name": "fn:do-until",
@@ -2820,11 +2971,24 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative URI/import utility review: explicit keyword modes, options/record/escaping, decoding, collation availability, identity and NaN type/cardinality boundaries. Boolean-option/result-field tolerance and empty query-map precedence remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-identity-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "utilityContractCases": [
+        "utility-contract-identity-keyword-31",
+        "utility-contract-identity-keyword-40",
+        "utility-contract-identity-keyword-experimental",
+        "utility-contract-identity-empty",
+        "utility-contract-identity-order",
+        "utility-contract-identity-map",
+        "utility-contract-identity-array",
+        "utility-contract-identity-mixed-count",
+        "utility-contract-identity-node-identity",
+        "utility-contract-identity-function",
+        "utility-contract-identity-named-callback"
+      ]
     },
     {
       "name": "fn:index-of-substring",
@@ -3109,11 +3273,33 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative URI/import utility review: explicit keyword modes, options/record/escaping, decoding, collation availability, identity and NaN type/cardinality boundaries. Boolean-option/result-field tolerance and empty query-map precedence remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-is-NaN-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "utilityContractCases": [
+        "utility-contract-is-NaN-keyword-31",
+        "utility-contract-is-NaN-keyword-40",
+        "utility-contract-is-NaN-keyword-experimental",
+        "utility-contract-is-NaN-double",
+        "utility-contract-is-NaN-float",
+        "utility-contract-is-NaN-number-failure",
+        "utility-contract-is-NaN-positive-infinity",
+        "utility-contract-is-NaN-negative-infinity",
+        "utility-contract-is-NaN-integer",
+        "utility-contract-is-NaN-decimal",
+        "utility-contract-is-NaN-string",
+        "utility-contract-is-NaN-untyped",
+        "utility-contract-is-NaN-node",
+        "utility-contract-is-NaN-boolean",
+        "utility-contract-is-NaN-empty",
+        "utility-contract-is-NaN-multiple",
+        "utility-contract-is-NaN-map",
+        "utility-contract-is-NaN-function",
+        "utility-contract-is-NaN-array",
+        "utility-contract-is-NaN-qname"
+      ]
     },
     {
       "name": "fn:items-at",
@@ -8097,8 +8283,8 @@
   "sequenceReviewDate": "2026-10-12",
   "sequenceReviewSourceRevision": "2efcd33a483cb9adb8eae35908a083a661388b1d",
   "sequenceReviewChecks": 65,
-  "targetedAbsentMetadataReviewed": 32,
-  "targetedAbsentMetadataRemaining": 5,
+  "targetedAbsentMetadataReviewed": 37,
+  "targetedAbsentMetadataRemaining": 0,
   "predicateReviewDate": "2026-10-12",
   "predicateReviewSourceRevision": "a151fff80e2ef3d3afc226179df673f66165ab4f",
   "predicateReviewChecks": 102,
@@ -8110,5 +8296,8 @@
   "containerReviewChecks": 89,
   "dateReviewDate": "2026-10-12",
   "dateReviewSourceRevision": "675d8f96facf1fc72ed3a05cb2781fa493fd1f01",
-  "dateReviewChecks": 108
+  "dateReviewChecks": 108,
+  "utilityReviewDate": "2026-10-12",
+  "utilityReviewSourceRevision": "9d7e0b8f93594ff2086c5da321cb3fab88b72897",
+  "utilityReviewChecks": 105
 }

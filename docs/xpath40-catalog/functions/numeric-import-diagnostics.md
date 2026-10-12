@@ -59,6 +59,8 @@ Invalid numeric text is reported rather than poisoning this total. Type reflecti
 
 Compile new functions with CompileOptions.Compatibility40; default 3.1 rejects them. Earlier-version comparisons use Compatibility31. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact text/error markers and default-profile refusal for successful 4.0 cases. All values are inline and deterministic.
 
+**Supplementary contract review (2026-10-12):** [URI/import utility review](../URI-UTILITY-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed import/link README](../examples/utility-contracts/README.md) supply 105 checks across five families: keyword modes, component/options/escaping, one-pass UTF-8 decoding, collation availability, identity, NaN and type/cardinality boundaries, plus complete XPath 3.1/4.0 reports. Keywords remain unavailable. Boolean-option/record tolerance and empty query-map precedence remain follow-ups. All 37 absent-keyword families now have first targeted review, with metadata still absent; this does not close D2. Source/public version is 1.1.3; original delivery/unit/gate and historical adopted-pin limits remain.
+
 ## 13. Sample Code
 
 Complete synthetic input:
