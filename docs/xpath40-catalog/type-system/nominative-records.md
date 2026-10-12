@@ -72,5 +72,9 @@ Executable IDs: `nominative-records-alternative`.  No additional gate promotion 
 
 ## 16. Related Features
 
+[Deferred xsl:record-type declarations](../deferred/xslt-record-type.md) supplies
+complete invoice cases for named type/constructor use and supported alternatives.
+[xsl:item-type](../deferred/xslt-item-type.md) covers aliases separately.
+
 [Catalog index](../README.md), [routing chapter](../worked-examples/order-routing/README.md), [structural records](../type-system/structural-records.md), [experimental scan](../experimental/fn-scan.md).
 

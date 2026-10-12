@@ -1,0 +1,1 @@
+let $i := parse-xml('<invoice id="INV-2048" currency="EUR" amount="125.50"/>')/invoice return let $r := map {'id': string($i/@id), 'currency': string($i/@currency)} cast as record(id as xs:string, currency as enum('EUR', 'USD')) return concat($r?id, '|', $r?currency)

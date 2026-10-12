@@ -78,6 +78,11 @@ Executable example IDs: `structural-records-main`, `structural-records-edge`, `s
 
 ## 16. Related Features
 
+[Deferred xsl:record-type](../deferred/xslt-record-type.md) separates named
+stylesheet declarations from this shipped XPath structural contract. It also
+records the observed XSLT structural-record `@as` conversion boundary and the
+verified cast-in-`select` alternative.
+
 See the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
 
 *Created 2026-10-11: verified practical catalog example and earlier-version baseline.*
