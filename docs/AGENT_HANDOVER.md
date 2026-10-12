@@ -12,6 +12,13 @@ Catalog: **63 entries; 597 feature + 24 chapter checks = 621**. All 117 names as
 
 ## Resume here
 
+Delivery: `ad9556a9500affb45ca8491de7ee87301210bcac`,
+[PR #179](https://github.com/Fytala-Charles/Bosak/pull/179), pushed on
+`docs/req126-capturing-accumulators`. Rebase onto merged main preserved the
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38222394153)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
 Next audit the deferred `fn:apply-templates` function against pinned draft, function registration and XSLT runtime, keeping it separate from supported `xsl:apply-templates` instructions. Keep documentation-only scope unless engine work is requested. Read [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
 
 Capture identity/validation joins existing XSLT structural @as, URI, comparison, extrema, sorting, Unicode, hash and adopted-pin follow-ups. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, PR states and next steps are superseded here.
