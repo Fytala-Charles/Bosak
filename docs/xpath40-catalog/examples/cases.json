@@ -17869,5 +17869,1054 @@
     "file": "changed31-contracts/report-reordered-40.xpath",
     "expected": "rows=3;quantities=A:5,Z:0;selected=C,missing-row",
     "baselineExpected": "rows=3;quantities=A:5,Z:0;selected=C,missing-row"
+  },
+  {
+    "id": "order-contract-sort-basic",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-basic.xpath",
+    "expected": "1,2,3",
+    "baselineExpected": "1,2,3"
+  },
+  {
+    "id": "order-contract-sort-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-empty.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "order-contract-sort-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-empty-collation.xpath",
+    "expected": "A,a,b",
+    "baselineExpected": "A,a,b"
+  },
+  {
+    "id": "order-contract-sort-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-codepoint.xpath",
+    "expected": "A,a,b",
+    "baselineExpected": "A,a,b"
+  },
+  {
+    "id": "order-contract-sort-case-insensitive",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-case-insensitive.xpath",
+    "expected": "A,a,b",
+    "baselineExpected": "A,a,b"
+  },
+  {
+    "id": "order-contract-sort-bad-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-bad-collation.xpath",
+    "expected": "a",
+    "baselineExpected": "a"
+  },
+  {
+    "id": "order-contract-sort-mixed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-mixed.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-sort-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-nan.xpath",
+    "expected": "2,NaN,1",
+    "baselineExpected": "2,NaN,1"
+  },
+  {
+    "id": "order-contract-sort-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-untyped.xpath",
+    "expected": "1,3",
+    "baselineExpected": "1,3"
+  },
+  {
+    "id": "order-contract-sort-array-atomization",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-array-atomization.xpath",
+    "error": "FOTY0014",
+    "baselineError": "FOTY0014"
+  },
+  {
+    "id": "order-contract-sort-empty-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-empty-key.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-sort-explicit-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-explicit-key.xpath",
+    "expected": "3,2,1",
+    "baselineExpected": "3,2,1"
+  },
+  {
+    "id": "order-contract-sort-multi-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-multi-key.xpath",
+    "expected": "1,2,3",
+    "baselineExpected": "1,2,3"
+  },
+  {
+    "id": "order-contract-sort-bad-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-bad-key.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-sort-empty-bad-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-empty-bad-key.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "order-contract-sort-wrong-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-wrong-arity.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-sort-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-keyword.xpath",
+    "expected": "1,2,3",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-sort-lookup3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-lookup3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "order-contract-sort-reference3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-reference3.xpath",
+    "expected": "3,2,1",
+    "baselineExpected": "3,2,1"
+  },
+  {
+    "id": "order-contract-min-basic",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-basic.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "order-contract-min-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-empty.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "order-contract-min-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-empty-collation.xpath",
+    "expected": "A",
+    "baselineExpected": "A"
+  },
+  {
+    "id": "order-contract-min-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-codepoint.xpath",
+    "expected": "A",
+    "baselineExpected": "A"
+  },
+  {
+    "id": "order-contract-min-case-insensitive",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-case-insensitive.xpath",
+    "expected": "A",
+    "baselineExpected": "A"
+  },
+  {
+    "id": "order-contract-min-bad-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-bad-collation.xpath",
+    "error": "FOCH0002",
+    "baselineError": "FOCH0002"
+  },
+  {
+    "id": "order-contract-min-mixed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-mixed.xpath",
+    "error": "FORG0006",
+    "baselineError": "FORG0006"
+  },
+  {
+    "id": "order-contract-min-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-nan.xpath",
+    "expected": "NaN",
+    "baselineExpected": "NaN"
+  },
+  {
+    "id": "order-contract-min-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-untyped.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "order-contract-min-array-atomization",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-array-atomization.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "order-contract-min-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-keyword.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-min-lookup3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-lookup3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "order-contract-max-basic",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-basic.xpath",
+    "expected": "3",
+    "baselineExpected": "3"
+  },
+  {
+    "id": "order-contract-max-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-empty.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "order-contract-max-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-empty-collation.xpath",
+    "expected": "b",
+    "baselineExpected": "b"
+  },
+  {
+    "id": "order-contract-max-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-codepoint.xpath",
+    "expected": "b",
+    "baselineExpected": "b"
+  },
+  {
+    "id": "order-contract-max-case-insensitive",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-case-insensitive.xpath",
+    "expected": "b",
+    "baselineExpected": "b"
+  },
+  {
+    "id": "order-contract-max-bad-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-bad-collation.xpath",
+    "error": "FOCH0002",
+    "baselineError": "FOCH0002"
+  },
+  {
+    "id": "order-contract-max-mixed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-mixed.xpath",
+    "error": "FORG0006",
+    "baselineError": "FORG0006"
+  },
+  {
+    "id": "order-contract-max-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-nan.xpath",
+    "expected": "NaN",
+    "baselineExpected": "NaN"
+  },
+  {
+    "id": "order-contract-max-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-untyped.xpath",
+    "expected": "3",
+    "baselineExpected": "3"
+  },
+  {
+    "id": "order-contract-max-array-atomization",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-array-atomization.xpath",
+    "expected": "3",
+    "baselineExpected": "3"
+  },
+  {
+    "id": "order-contract-max-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-keyword.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-lookup3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-lookup3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "order-contract-array-sort-basic",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-basic.xpath",
+    "expected": "[1]|[2]|[3]",
+    "baselineExpected": "[1]|[2]|[3]"
+  },
+  {
+    "id": "order-contract-array-sort-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-empty.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "order-contract-array-sort-members",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-members.xpath",
+    "expected": "[]|[2]|[3,1]",
+    "baselineExpected": "[]|[2]|[3,1]"
+  },
+  {
+    "id": "order-contract-array-sort-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-empty-collation.xpath",
+    "expected": "[A]|[a]|[b]",
+    "baselineExpected": "[A]|[a]|[b]"
+  },
+  {
+    "id": "order-contract-array-sort-explicit-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-explicit-key.xpath",
+    "expected": "[3]|[2]|[1]",
+    "baselineExpected": "[3]|[2]|[1]"
+  },
+  {
+    "id": "order-contract-array-sort-empty-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-empty-key.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-array-sort-bad-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-bad-key.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-array-sort-empty-bad-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-empty-bad-key.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "order-contract-array-sort-wrong-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-wrong-arity.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-array-sort-bad-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-bad-collation.xpath",
+    "expected": "[a]",
+    "baselineExpected": "[a]"
+  },
+  {
+    "id": "order-contract-array-sort-multi-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-multi-key.xpath",
+    "expected": "[1]|[2]|[3]",
+    "baselineExpected": "[1]|[2]|[3]"
+  },
+  {
+    "id": "order-contract-array-sort-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-keyword.xpath",
+    "expected": "1,2,3",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-array-sort-reference",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-reference.xpath",
+    "expected": "3,2,1",
+    "baselineExpected": "3,2,1"
+  },
+  {
+    "id": "order-contract-merge-basic",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-basic.xpath",
+    "expected": "size=2;A=1;present=true",
+    "baselineExpected": "size=2;A=1;present=true"
+  },
+  {
+    "id": "order-contract-merge-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-empty.xpath",
+    "expected": "size=0;A=;present=false",
+    "baselineExpected": "size=0;A=;present=false"
+  },
+  {
+    "id": "order-contract-merge-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-empty-options.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-merge-empty-input-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-empty-input-options.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-merge-use-first",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-use-first.xpath",
+    "expected": "size=1;A=1;present=true",
+    "baselineExpected": "size=1;A=1;present=true"
+  },
+  {
+    "id": "order-contract-merge-use-last",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-use-last.xpath",
+    "expected": "size=1;A=2;present=true",
+    "baselineExpected": "size=1;A=2;present=true"
+  },
+  {
+    "id": "order-contract-merge-combine",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-combine.xpath",
+    "expected": "size=1;A=1,2;present=true",
+    "baselineExpected": "size=1;A=1,2;present=true"
+  },
+  {
+    "id": "order-contract-merge-reject",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-reject.xpath",
+    "error": "FOJS0003",
+    "baselineError": "FOJS0003"
+  },
+  {
+    "id": "order-contract-merge-bad-option",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-bad-option.xpath",
+    "error": "FOJS0005",
+    "baselineError": "FOJS0005"
+  },
+  {
+    "id": "order-contract-merge-bad-option-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-bad-option-type.xpath",
+    "error": "FOJS0005",
+    "baselineError": "FOJS0005"
+  },
+  {
+    "id": "order-contract-merge-unknown-option",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-unknown-option.xpath",
+    "expected": "size=1;A=1;present=true",
+    "baselineExpected": "size=1;A=1;present=true"
+  },
+  {
+    "id": "order-contract-merge-bad-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-bad-input.xpath",
+    "expected": "size=1;A=1;present=true",
+    "baselineExpected": "size=1;A=1;present=true"
+  },
+  {
+    "id": "order-contract-merge-empty-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-empty-value.xpath",
+    "expected": "size=1;A=;present=true",
+    "baselineExpected": "size=1;A=;present=true"
+  },
+  {
+    "id": "order-contract-merge-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-keyword.xpath",
+    "expected": "1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-merge-reference",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-reference.xpath",
+    "expected": "2",
+    "baselineExpected": "2"
+  },
+  {
+    "id": "order-contract-min-keyword-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-keyword-values.xpath",
+    "expected": "1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-min-key-not-a-parameter",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-key-not-a-parameter.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-min-reference2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-reference2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "order-contract-min-numeric-node",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-numeric-node.xpath",
+    "expected": "7",
+    "baselineExpected": "7"
+  },
+  {
+    "id": "order-contract-min-invalid-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-invalid-untyped.xpath",
+    "error": "FORG0001",
+    "baselineError": "FORG0001"
+  },
+  {
+    "id": "order-contract-min-empty-bad-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-empty-bad-collation.xpath",
+    "expected": "()",
+    "baselineExpected": "()"
+  },
+  {
+    "id": "order-contract-max-keyword-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-keyword-values.xpath",
+    "expected": "3",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-key-not-a-parameter",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-key-not-a-parameter.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-reference2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-reference2.xpath",
+    "expected": "3",
+    "baselineExpected": "3"
+  },
+  {
+    "id": "order-contract-max-numeric-node",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-numeric-node.xpath",
+    "expected": "10",
+    "baselineExpected": "10"
+  },
+  {
+    "id": "order-contract-max-invalid-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-invalid-untyped.xpath",
+    "error": "FORG0001",
+    "baselineError": "FORG0001"
+  },
+  {
+    "id": "order-contract-max-empty-bad-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-empty-bad-collation.xpath",
+    "expected": "()",
+    "baselineExpected": "()"
+  },
+  {
+    "id": "order-contract-sort-bad-collation-two",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-bad-collation-two.xpath",
+    "expected": "2",
+    "baselineExpected": "2"
+  },
+  {
+    "id": "order-contract-sort-empty-key-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-empty-key-empty-input.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "order-contract-array-sort-bad-collation-two",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-bad-collation-two.xpath",
+    "expected": "2",
+    "baselineExpected": "2"
+  },
+  {
+    "id": "order-contract-array-sort-empty-key-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-empty-key-empty-input.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "order-contract-sort-case-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-case-order.xpath",
+    "expected": "a,B",
+    "baselineExpected": "a,B"
+  },
+  {
+    "id": "order-contract-sort-codepoint-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-codepoint-order.xpath",
+    "expected": "B,a",
+    "baselineExpected": "B,a"
+  },
+  {
+    "id": "order-contract-min-case-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-case-order.xpath",
+    "expected": "a",
+    "baselineExpected": "a"
+  },
+  {
+    "id": "order-contract-min-codepoint-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-codepoint-order.xpath",
+    "expected": "B",
+    "baselineExpected": "B"
+  },
+  {
+    "id": "order-contract-max-case-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-case-order.xpath",
+    "expected": "B",
+    "baselineExpected": "B"
+  },
+  {
+    "id": "order-contract-max-codepoint-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-codepoint-order.xpath",
+    "expected": "a",
+    "baselineExpected": "a"
+  },
+  {
+    "id": "order-contract-sort-bad-collation-strings",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-bad-collation-strings.xpath",
+    "expected": "a,b",
+    "baselineExpected": "a,b"
+  },
+  {
+    "id": "order-contract-array-sort-bad-collation-strings",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/array-sort-bad-collation-strings.xpath",
+    "expected": "a,b",
+    "baselineExpected": "a,b"
+  },
+  {
+    "id": "order-contract-sort-empty-key-results",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-empty-key-results.xpath",
+    "expected": "B,A,C",
+    "baselineExpected": "B,A,C"
+  },
+  {
+    "id": "order-contract-sort-two-argument-callback",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-two-argument-callback.xpath",
+    "error": "XPTY0004",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "order-contract-min-decimal-result-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/min-decimal-result-type.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "order-contract-max-decimal-result-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/max-decimal-result-type.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "order-contract-sort-stable-ties",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-stable-ties.xpath",
+    "expected": "B,A,C",
+    "baselineExpected": "B,A,C"
+  },
+  {
+    "id": "order-contract-sort-nan-first",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-nan-first.xpath",
+    "expected": "1,2,NaN",
+    "baselineExpected": "1,2,NaN"
+  },
+  {
+    "id": "order-contract-sort-node-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/sort-node-identity.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "order-contract-merge-empty-map-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-empty-map-options.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "order-contract-merge-reject-without-duplicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-reject-without-duplicate.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "order-contract-merge-combine-empty-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-combine-empty-values.xpath",
+    "expected": "true:0",
+    "baselineExpected": "true:0"
+  },
+  {
+    "id": "order-contract-merge-option-many",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-option-many.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "order-contract-merge-option-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-option-empty.xpath",
+    "error": "FOJS0005",
+    "baselineError": "FOJS0005"
+  },
+  {
+    "id": "order-contract-merge-numeric-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/merge-numeric-key.xpath",
+    "expected": "first,second",
+    "baselineExpected": "first,second"
+  },
+  {
+    "id": "order-contract-report-normal-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/report-normal-31.xpath",
+    "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+  },
+  {
+    "id": "order-contract-report-normal-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/report-normal-40.xpath",
+    "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2",
+    "baselineExpected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+  },
+  {
+    "id": "order-contract-report-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/report-empty-31.xpath",
+    "expected": "offers=0;rank=;rows=;range=none;P=0"
+  },
+  {
+    "id": "order-contract-report-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/report-empty-40.xpath",
+    "expected": "offers=0;rank=;rows=;range=none;P=0",
+    "baselineExpected": "offers=0;rank=;rows=;range=none;P=0"
+  },
+  {
+    "id": "order-contract-report-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/report-reordered-31.xpath",
+    "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+  },
+  {
+    "id": "order-contract-report-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "order-contracts/report-reordered-40.xpath",
+    "expected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2",
+    "baselineExpected": "offers=3;rank=B,C,A;rows=B,C,A;range=7..10;P=2"
+  },
+  {
+    "id": "order-contract-sort-keyword-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/sort-keyword-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-sort-keyword-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/sort-keyword-mode-experimental.xpath",
+    "expected": "1,2,3",
+    "baselineError": "XPST0003",
+    "frozenExpected": "1,2,3"
+  },
+  {
+    "id": "order-contract-min-keyword-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/min-keyword-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-min-keyword-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/min-keyword-mode-experimental.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-keyword-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/max-keyword-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-keyword-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/max-keyword-mode-experimental.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-array-sort-keyword-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/array-sort-keyword-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-array-sort-keyword-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/array-sort-keyword-mode-experimental.xpath",
+    "expected": "1,2,3",
+    "baselineError": "XPST0003",
+    "frozenExpected": "1,2,3"
+  },
+  {
+    "id": "order-contract-merge-keyword-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/merge-keyword-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-merge-keyword-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/merge-keyword-mode-experimental.xpath",
+    "expected": "1",
+    "baselineError": "XPST0003",
+    "frozenExpected": "1"
+  },
+  {
+    "id": "order-contract-min-keyword-values-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/min-keyword-values-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-min-keyword-values-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/min-keyword-values-mode-experimental.xpath",
+    "expected": "1",
+    "baselineError": "XPST0003",
+    "frozenExpected": "1"
+  },
+  {
+    "id": "order-contract-min-key-not-a-parameter-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/min-key-not-a-parameter-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-min-key-not-a-parameter-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/min-key-not-a-parameter-mode-experimental.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-keyword-values-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/max-keyword-values-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-keyword-values-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/max-keyword-values-mode-experimental.xpath",
+    "expected": "3",
+    "baselineError": "XPST0003",
+    "frozenExpected": "3"
+  },
+  {
+    "id": "order-contract-max-key-not-a-parameter-mode-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "order-contracts/max-key-not-a-parameter-mode-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "order-contract-max-key-not-a-parameter-mode-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "order-contracts/max-key-not-a-parameter-mode-experimental.xpath",
+    "error": "XPST0017",
+    "baselineError": "XPST0003"
   }
 ]

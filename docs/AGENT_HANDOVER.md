@@ -1,3 +1,23 @@
+# Ordering/default contracts — 2026-10-12
+
+Main baseline: `28144810a56370d3901ceca5ef35bb1759053b47`; [PR #197](https://github.com/Fytala-Charles/Bosak/pull/197) merged after successful [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38284111686). Branch: `docs/req126-order-default-contracts`. Public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [five-family ordering/default review](xpath40-catalog/ORDER-DEFAULT-CONTRACT-REVIEW.md), raw exact-source/registration/case evidence and [detailed supplier reports](xpath40-catalog/examples/order-contracts/README.md). Complete XML, paired 3.1/4.0 code, exact outputs and all focused fixture links supplied. Linked the complete 197-name inventory to these five reviews; canonical docs, audits, queue and three family entries synchronized.
+
+Targeted review of fn:sort, array:sort, fn:min, fn:max and map:merge adds 132 checks (126 focused, six complete supplier reports), preserving source declarations and exact 3.1/4.0/experimental keyword boundaries. min/max have no key callback parameter. Explicit empty sort keys and merge options, unknown sort collations, NaN ordering and malformed merge input/option cardinality remain engine follow-ups. Supplier rankings use numeric price plus stable ID and explicit duplicate combine; normal/reordered results match. Current catalog: 67 entries, 2,578 feature + 24 chapter checks = 2,602; four worked chapters, 117 assigned names. Version 1.1.3, REQ-126 In Progress, D2 partial. All 37 reviewed keyword families still lack metadata; no engine/API/harness change or release. Next: distinct-values, index-of, deep-equal, compare and contains-token equality/collation contracts. Earlier counts and queues are historical; normative prose impact, D3/D4, historical pins and AC-03 remain open.
+
+Observed both profiles: explicit empty sort keys fail on nonempty input but bypass on empty input; invalid callbacks can bypass empty input. Empty merge options fail even for empty maps input. Unknown sort collations are accepted in tested two-string calls; min/max nonempty strings refuse FOCH0002. NaN sort results vary by input position. map:merge skips tested numeric non-map input and accepts multi-item duplicate-policy values by the tested first item. Keep bounded engine follow-ups; no corrections made. min/max values keyword succeeds, input/key labels refuse, #3 lookup is correctly absent. Original source node identity and grouped array members preserved. Project sorted nodes via simple mapping; path ordering is a consumer semantic distinction.
+
+Validation: Release solution build passed (zero warnings/errors); **6,806 tests / 0 failures / 0 skips**, ten assemblies including all 2,578 feature checks. Renderer verified 103 catalog pages plus six implementation/canonical pages. Five pinned declarations, 132 exact fixtures with explicit version expectations, six independently computed supplier reports, local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. All 37 reviewed keyword families still lack metadata. The first full run exposed five experimental fixtures missing frozenExpected assertions; the corrected final full run passed. No engine/API/harness changes; manual engine gates were not rerun.
+
+## Resume here
+
+Next review fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token equality/collation contracts against the pinned declarations and observed version modes. The exhaustive baseline declaration inventory is supplied; semantic/prose/default/conversion behavior remains partial. Retain all earlier engine follow-ups, all 37 absent metadata families, D3/D4, historical adopted pins and AC-03. No release or Braid action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `acdb3f6267df995dda44a0d8b4e9230da15b396d`, [PR #198](https://github.com/Fytala-Charles/Bosak/pull/198), pushed on `docs/req126-order-default-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the equality/collation review.
+
 # Complete existing-function inventory — 2026-10-12
 
 Main baseline: `21ca1497df93b6c2d7186406be7189ef28b32618`; PR #196 merged after successful CI run 38278858160. Current branch: `docs/req126-changed31-inventory`. Public/source version remains **1.1.3**. Earlier states below are historical.

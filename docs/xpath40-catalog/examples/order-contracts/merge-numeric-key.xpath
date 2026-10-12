@@ -1,0 +1,1 @@
+let $m := map:merge((map{1:'first'},map{xs:decimal('1'):'second'}),map{'duplicates':'combine'}) return string-join($m(1),',')

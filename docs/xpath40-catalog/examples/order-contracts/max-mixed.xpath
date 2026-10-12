@@ -1,0 +1,1 @@
+string-join(max((1,'a')) ! string(.),',')

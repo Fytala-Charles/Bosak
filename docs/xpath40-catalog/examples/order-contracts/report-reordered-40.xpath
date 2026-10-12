@@ -1,0 +1,11 @@
+let $d := parse-xml('<offers><offer id="C" product="Q" price="7"/><offer id="B" product="P" price="7"/><offer id="A" product="P" price="10"/></offers>'),
+    $offers := $d/offers/offer,
+    $rank := sort($offers,(),function($o){(xs:integer($o/@price),string($o/@id))}),
+    $rows := array:sort(array{$offers},(),function($o){(xs:integer($o/@price),string($o/@id))}),
+    $index := map:merge($offers ! map:entry(string(@product),string(@id)),map{'duplicates':'combine'}),
+    $prices := $offers/@price ! xs:integer(.)
+return concat('offers=',count($offers),
+  ';rank=',string-join($rank ! string(@id),','),
+  ';rows=',string-join(for $i in 1 to array:size($rows) return string($rows($i)/@id),','),
+  ';range=',if (exists($prices)) then concat(min($prices),'..',max($prices)) else 'none',
+  ';P=',count($index?P))

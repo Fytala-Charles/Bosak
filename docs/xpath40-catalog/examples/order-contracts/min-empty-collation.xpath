@@ -1,0 +1,1 @@
+string-join(min(('b','A','a'),()) ! string(.),',')

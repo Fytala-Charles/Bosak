@@ -1,0 +1,1 @@
+map:merge((map{'A':1},map{'B':2}),map{'duplicates':'reject'})?A
