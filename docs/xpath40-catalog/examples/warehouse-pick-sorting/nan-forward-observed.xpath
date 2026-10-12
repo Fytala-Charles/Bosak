@@ -1,0 +1,1 @@
+string-join(sort((xs:double('NaN'), 1)) ! string(.), ',')

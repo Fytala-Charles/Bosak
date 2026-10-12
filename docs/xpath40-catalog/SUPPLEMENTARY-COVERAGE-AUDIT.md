@@ -72,7 +72,7 @@ links. These are documentation tasks, not authorization to implement proposals.
 
 ## Next delivery and acceptance
 
-The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. The [batch extrema reference](functions/batch-extrema.md) supplies 29 cases and records numeric promotion/result-type and duration gaps. Next review changed `fn:sort`/`array:sort` contracts before expanding option and grammar inventories. Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
+The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. The [batch extrema reference](functions/batch-extrema.md) supplies 29 cases and records numeric promotion/result-type and duration gaps. The [warehouse sorting reference](functions/warehouse-pick-sorting.md) now supplies 28 cases and records numeric/NaN/default-key/collation limits. Next review URI option contracts and component precedence before expanding grammar inventories. Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
 
 AC-01 through AC-04 remain partial. AC-05 remains met for the current scope.
 Closure requires reviewed contracts and disposition records, executable examples,
@@ -83,4 +83,7 @@ Neither the 117-name milestone nor this registration inventory closes REQ-126.
 Measurement comparison delivery (2026-10-12): coverage was 55 entries and 442 checks (418 feature plus 24 chapter). The opening 54-entry/415-check count records the preceding audit delivery. Registered-name and arity inventories keep their original scopes.
 
 
-Batch extrema follow-up (2026-10-12): coverage is 56 entries and 471 checks (447 feature plus 24 chapter). QName extrema have a 3.1 fold comparison; mixed numeric and plain-duration behavior remain incomplete against the pinned draft. Exact fn-min/fn-max gate assignment is absent.
+Batch extrema delivery (2026-10-12): coverage was 56 entries and 471 checks (447 feature plus 24 chapter). QName extrema have a 3.1 fold comparison; mixed numeric and plain-duration behavior remain incomplete against the pinned draft. Exact fn-min/fn-max gate assignment is absent.
+
+
+Warehouse sorting delivery (2026-10-12): current coverage is 57 entries and 499 checks (475 feature plus 24 chapter). Portable composite-key sorting and array member boundaries are verified; exact numeric and NaN ordering remain incomplete against the pinned draft. Next option review: parse-uri/build-uri allow-deprecated-features, unc-path and component precedence, complementing the existing omit-default-ports examples.

@@ -1,0 +1,1 @@
+let $a := array:sort([('A', 2)], (), function($m) { $m[2] }) return concat(array:size($a), '/', count($a(1)))
