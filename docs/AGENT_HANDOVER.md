@@ -16,7 +16,7 @@ Validation: Release solution build passed (zero warnings/errors); **5,578 tests 
 
 Next continue D2 with sequence selection/repetition: replicate, items-at, foot, trunk, insert-separator and slice. Compare pinned keywords/defaults/sequence types to source, then add realistic batch import/export positional/keyword/default/empty/invalid examples. Keep documentation-first scope; record unavailable/tolerated forms without silently implementing metadata. Other missing families, precise coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Prior keyword spelling, replace arity and two-let hash issues remain separate engine follow-ups. Historical adopted pins and AC-03 gate applicability unresolved; no closure or release based on sample coverage.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `dc4f5bfab6bf033e8aa951788ef32c3a6bf7169f`, [PR #188](https://github.com/Fytala-Charles/Bosak/pull/188), pushed on `docs/req126-text-contracts`. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before continuing D2.
 
 # Historical signature contract matrix — 2026-10-12
 
