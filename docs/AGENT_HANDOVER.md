@@ -10,6 +10,13 @@ Eighteen new fixtures supply complete invoice JSON and Frozen 4.0/portable 3.1 r
 
 ## Resume here
 
+Delivery: `3889d0a00944a19781b1fff7a246f3c7fe2c04b3`,
+[PR #183](https://github.com/Fytala-Charles/Bosak/pull/183), pushed on
+`docs/req126-gnode-jnode-scope`. Rebase onto merged main preserved the validated
+content tree. CI is pending; PR remains open. This handover status commit follows
+the delivery. On resume check CI, merge after it passes, then start the next slice
+on current main.
+
 Next review XQuery 4.0 and XSLT Streaming 4.0 scope against pinned contracts, existing language/streaming implementations and named tests. Keep documentation-only scope unless engine work is requested. Generic-node type/identity gaps join prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization differences and historical adopted-pin limits. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
 
 # Historical external-input function review — 2026-10-12
