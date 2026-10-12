@@ -8299,5 +8299,13 @@
   "dateReviewChecks": 108,
   "utilityReviewDate": "2026-10-12",
   "utilityReviewSourceRevision": "9d7e0b8f93594ff2086c5da321cb3fab88b72897",
-  "utilityReviewChecks": 105
+  "utilityReviewChecks": 105,
+  "changed31Inventory": {
+    "file": "audit-changed31-contracts.json",
+    "reviewDate": "2026-10-12",
+    "sourceRevision": "21ca1497df93b6c2d7186406be7189ef28b32618",
+    "baselineFunctions": 197,
+    "declarationInventoryAssessment": "All dated F&O 3.1 fn/math/map/array names inventoried. Original twenty-function sample retained. Normative semantic impact and complete conversion/default/options behavior remain partial.",
+    "newChecks": 353
+  }
 }

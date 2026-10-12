@@ -1,3 +1,21 @@
+# Complete existing-function inventory — 2026-10-12
+
+Main baseline: `21ca1497df93b6c2d7186406be7189ef28b32618`; PR #196 merged after successful CI run 38278858160. Current branch: `docs/req126-changed31-inventory`. Public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [complete existing-function inventory](xpath40-catalog/CHANGED-31-CONTRACT-INVENTORY.md), raw 197-row source/registration/evidence inventory and [detailed stock-lookup examples](xpath40-catalog/examples/changed31-contracts/README.md). Every dated baseline name is retained, including unchanged signatures and the XSLT-host fn:transform boundary. concat variadic bounds are explicitly preserved. Canonical summaries, audits, two family entries and queue synchronized.
+
+The complete 197-name fn/math/map/array baseline inventory is now supplied, with dated W3C 3.1 declarations, pinned F&O e7ee4ab8 declarations and fresh 3.1/4.0 evidence. Added 353 checks: 320 exact-arity lookups, 17 named-reference refusals, ten focused defaults/behavior checks and six complete stock reports. Thirteen families have positional arity declaration differences; seventeen draft arities are unavailable in the fresh standard context. Type/prose differences remain candidates for semantic review, not certified behavioral changes. Empty substring/subsequence lengths have distinct observed 3.1 and 4.0 results. Empty sort keys and map:merge options refuse XPTY0004. Catalog: 67 entries, 2,446 feature + 24 chapter checks = 2,470; four chapters, 117 assigned names. All 37 reviewed keyword families still lack metadata. REQ-126 stays In Progress, D2 partial; version 1.1.3, no engine/API/harness change or release. Next: fn:sort, array:sort, fn:min, fn:max and map:merge defaults/conversion contracts. Prose classification, D3/D4, historical adoption pins and AC-03 remain open.
+
+Validation: Release solution build passed (zero warnings/errors); **6,674 tests / 0 failures / 0 skips**, ten assemblies including all 2,446 feature checks. Renderer verified 101 catalog pages plus six canonical/implementation pages. All 197 baseline names and both exact source prototype sets/hashes, variadic bounds, 353 new checks, six independently calculated reports, profile differences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. All 37 reviewed keyword rows still lack metadata. Manual engine gates were not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Review fn:sort, array:sort, fn:min, fn:max and map:merge higher-order/default/conversion contracts next. The exhaustive declaration inventory is supplied; normative prose impact and exhaustive behavior remain open. Retain previous engine follow-ups and add the seventeen missing draft arities plus empty sort-key/map:merge-option enforcement. REQ-126 remains In Progress. Preserve `.guard-tmp/` and `.sweep-baselines/`.
+
+Delivery: `7fbff212b2992144dcaa738be74d74a6185f0361`, [PR #197](https://github.com/Fytala-Charles/Bosak/pull/197), pushed on `docs/req126-changed31-inventory`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before reviewing sorting/min/max/map:merge defaults.
+
 # URI/import utility contracts — 2026-10-12
 
 Main baseline: `9d7e0b8f93594ff2086c5da321cb3fab88b72897`; [PR #195](https://github.com/Fytala-Charles/Bosak/pull/195) merged after successful [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38277697192). Current branch: `docs/req126-uri-utility-contracts`; public/source version remains **1.1.3**. Earlier states below are historical.

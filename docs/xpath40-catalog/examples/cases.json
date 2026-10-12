@@ -15070,5 +15070,2804 @@
     "mode": "40",
     "file": "utility-contracts/report-fallback-40.xpath",
     "expected": "items=3;collation=fallback;details=R1:quantity=42.5,match=0,uri=https://inventory.example/v1/items/A%2FB|R2:invalid-quantity|R3:quantity=0,match=0,uri=https://inventory.example/v1/items/E"
+  },
+  {
+    "id": "changed31-inventory-array-append-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-append-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-filter-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-filter-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-flatten-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-flatten-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-fold-left-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-fold-left-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-fold-right-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-fold-right-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-for-each-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-for-each-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-for-each-pair-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-for-each-pair-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-get-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-get-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-get-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-get-3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-array-head-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-head-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-insert-before-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-insert-before-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-join-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-join-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-put-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-put-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-remove-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-remove-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-reverse-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-reverse-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-size-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-size-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-sort-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-sort-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-sort-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-sort-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-sort-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-sort-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-subarray-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-subarray-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-subarray-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-subarray-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-array-tail-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-array-tail-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-QName-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-QName-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-abs-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-abs-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-adjust-date-to-timezone-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-adjust-date-to-timezone-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-adjust-date-to-timezone-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-adjust-date-to-timezone-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-adjust-dateTime-to-timezone-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-adjust-dateTime-to-timezone-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-adjust-dateTime-to-timezone-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-adjust-dateTime-to-timezone-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-adjust-time-to-timezone-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-adjust-time-to-timezone-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-adjust-time-to-timezone-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-adjust-time-to-timezone-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-analyze-string-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-analyze-string-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-analyze-string-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-analyze-string-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-apply-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-apply-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-available-environment-variables-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-available-environment-variables-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-avg-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-avg-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-base-uri-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-base-uri-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-base-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-base-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-boolean-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-boolean-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-ceiling-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-ceiling-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-codepoint-equal-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-codepoint-equal-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-codepoints-to-string-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-codepoints-to-string-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-collation-key-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-collation-key-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-collation-key-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-collation-key-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-collection-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-collection-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-collection-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-collection-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-compare-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-compare-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-compare-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-compare-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-0.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-1.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-4.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-5",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-5.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-6",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-6.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-7",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-7.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-8",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-8.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-9",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-9.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-10",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-10.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-11",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-11.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-12",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-12.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-13",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-13.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-14",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-14.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-15",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-15.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-16",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-16.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-17",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-17.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-18",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-18.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-19",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-19.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-20",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-20.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-21",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-21.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-22",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-22.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-23",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-23.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-24",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-24.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-25",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-25.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-26",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-26.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-27",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-27.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-28",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-28.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-29",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-29.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-30",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-30.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-31",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-31.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-concat-32",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-concat-32.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-contains-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-contains-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-contains-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-contains-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-contains-token-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-contains-token-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-contains-token-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-contains-token-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-count-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-count-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-current-date-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-current-date-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-current-dateTime-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-current-dateTime-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-current-time-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-current-time-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-data-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-data-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-data-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-data-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-dateTime-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-dateTime-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-day-from-date-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-day-from-date-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-day-from-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-day-from-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-days-from-duration-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-days-from-duration-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-deep-equal-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-deep-equal-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-deep-equal-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-deep-equal-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-default-collation-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-default-collation-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-default-language-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-default-language-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-distinct-values-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-distinct-values-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-distinct-values-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-distinct-values-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-doc-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-doc-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-doc-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-doc-2.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-doc-available-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-doc-available-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-doc-available-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-doc-available-2.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-document-uri-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-document-uri-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-document-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-document-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-element-with-id-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-element-with-id-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-element-with-id-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-element-with-id-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-empty-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-empty-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-encode-for-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-encode-for-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-ends-with-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-ends-with-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-ends-with-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-ends-with-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-environment-variable-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-environment-variable-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-error-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-error-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-error-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-error-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-error-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-error-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-error-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-error-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-escape-html-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-escape-html-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-exactly-one-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-exactly-one-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-exists-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-exists-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-false-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-false-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-filter-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-filter-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-floor-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-floor-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-fold-left-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-fold-left-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-fold-right-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-fold-right-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-for-each-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-for-each-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-for-each-pair-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-for-each-pair-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-date-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-date-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-date-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-date-3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-format-date-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-date-4.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-format-date-5",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-date-5.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-dateTime-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-dateTime-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-dateTime-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-dateTime-3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-format-dateTime-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-dateTime-4.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-format-dateTime-5",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-dateTime-5.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-integer-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-integer-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-integer-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-integer-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-number-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-number-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-number-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-number-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-time-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-time-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-format-time-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-time-3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-format-time-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-time-4.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-format-time-5",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-format-time-5.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-function-arity-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-function-arity-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-function-lookup-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-function-lookup-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-function-name-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-function-name-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-generate-id-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-generate-id-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-generate-id-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-generate-id-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-has-children-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-has-children-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-has-children-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-has-children-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-head-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-head-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-hours-from-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-hours-from-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-hours-from-duration-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-hours-from-duration-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-hours-from-time-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-hours-from-time-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-id-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-id-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-id-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-id-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-idref-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-idref-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-idref-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-idref-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-implicit-timezone-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-implicit-timezone-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-in-scope-prefixes-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-in-scope-prefixes-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-index-of-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-index-of-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-index-of-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-index-of-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-innermost-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-innermost-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-insert-before-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-insert-before-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-iri-to-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-iri-to-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-json-doc-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-json-doc-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-json-doc-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-json-doc-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-json-to-xml-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-json-to-xml-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-json-to-xml-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-json-to-xml-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-lang-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-lang-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-lang-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-lang-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-last-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-last-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-load-xquery-module-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-load-xquery-module-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-load-xquery-module-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-load-xquery-module-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-local-name-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-local-name-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-local-name-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-local-name-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-local-name-from-QName-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-local-name-from-QName-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-lower-case-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-lower-case-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-matches-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-matches-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-matches-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-matches-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-max-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-max-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-max-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-max-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-min-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-min-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-min-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-min-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-minutes-from-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-minutes-from-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-minutes-from-duration-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-minutes-from-duration-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-minutes-from-time-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-minutes-from-time-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-month-from-date-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-month-from-date-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-month-from-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-month-from-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-months-from-duration-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-months-from-duration-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-name-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-name-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-name-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-name-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-namespace-uri-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-namespace-uri-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-namespace-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-namespace-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-namespace-uri-for-prefix-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-namespace-uri-for-prefix-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-namespace-uri-from-QName-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-namespace-uri-from-QName-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-nilled-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-nilled-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-nilled-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-nilled-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-node-name-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-node-name-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-node-name-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-node-name-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-normalize-space-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-normalize-space-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-normalize-space-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-normalize-space-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-normalize-unicode-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-normalize-unicode-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-normalize-unicode-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-normalize-unicode-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-not-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-not-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-number-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-number-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-number-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-number-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-one-or-more-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-one-or-more-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-outermost-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-outermost-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-parse-ietf-date-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-parse-ietf-date-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-parse-json-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-parse-json-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-parse-json-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-parse-json-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-parse-xml-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-parse-xml-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-parse-xml-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-parse-xml-2.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-parse-xml-fragment-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-parse-xml-fragment-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-parse-xml-fragment-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-parse-xml-fragment-2.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-path-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-path-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-path-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-path-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-path-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-path-2.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-position-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-position-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-prefix-from-QName-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-prefix-from-QName-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-random-number-generator-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-random-number-generator-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-random-number-generator-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-random-number-generator-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-remove-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-remove-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-replace-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-replace-2.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-replace-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-replace-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-replace-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-replace-4.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-resolve-QName-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-resolve-QName-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-resolve-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-resolve-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-resolve-uri-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-resolve-uri-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-reverse-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-reverse-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-root-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-root-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-root-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-root-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-round-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-round-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-round-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-round-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-round-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-round-3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-round-half-to-even-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-round-half-to-even-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-round-half-to-even-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-round-half-to-even-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-seconds-from-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-seconds-from-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-seconds-from-duration-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-seconds-from-duration-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-seconds-from-time-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-seconds-from-time-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-serialize-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-serialize-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-serialize-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-serialize-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-sort-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-sort-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-sort-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-sort-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-sort-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-sort-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-starts-with-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-starts-with-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-starts-with-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-starts-with-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-static-base-uri-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-static-base-uri-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-string-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-string-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-string-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-string-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-string-join-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-string-join-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-string-join-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-string-join-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-string-length-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-string-length-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-string-length-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-string-length-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-string-to-codepoints-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-string-to-codepoints-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-subsequence-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-subsequence-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-subsequence-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-subsequence-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-substring-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-substring-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-substring-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-substring-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-substring-after-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-substring-after-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-substring-after-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-substring-after-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-substring-before-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-substring-before-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-substring-before-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-substring-before-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-sum-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-sum-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-sum-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-sum-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-tail-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-tail-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-timezone-from-date-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-timezone-from-date-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-timezone-from-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-timezone-from-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-timezone-from-time-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-timezone-from-time-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-tokenize-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-tokenize-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-tokenize-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-tokenize-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-tokenize-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-tokenize-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-trace-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-trace-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-trace-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-trace-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-transform-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-transform-1.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-fn-translate-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-translate-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-true-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-true-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-unordered-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-unordered-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-unparsed-text-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-unparsed-text-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-unparsed-text-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-unparsed-text-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-unparsed-text-available-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-unparsed-text-available-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-unparsed-text-available-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-unparsed-text-available-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-unparsed-text-lines-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-unparsed-text-lines-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-unparsed-text-lines-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-unparsed-text-lines-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-upper-case-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-upper-case-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-uri-collection-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-uri-collection-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-uri-collection-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-uri-collection-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-xml-to-json-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-xml-to-json-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-xml-to-json-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-xml-to-json-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-year-from-date-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-year-from-date-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-year-from-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-year-from-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-years-from-duration-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-years-from-duration-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-fn-zero-or-one-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-fn-zero-or-one-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-contains-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-contains-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-entry-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-entry-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-find-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-find-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-for-each-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-for-each-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-get-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-get-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-get-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-get-3.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-inventory-map-keys-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-keys-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-merge-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-merge-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-merge-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-merge-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-put-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-put-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-remove-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-remove-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-map-size-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-map-size-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-acos-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-acos-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-asin-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-asin-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-atan-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-atan-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-atan2-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-atan2-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-cos-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-cos-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-exp-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-exp-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-exp10-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-exp10-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-log-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-log-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-log10-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-log10-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-pi-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-pi-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-pow-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-pow-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-sin-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-sin-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-sqrt-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-sqrt-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-inventory-math-tan-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/inventory-math-tan-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "changed31-contract-reference-array-get-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-array-get-3.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-concat-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-concat-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-concat-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-concat-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-doc-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-doc-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-doc-available-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-doc-available-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-format-date-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-format-date-3.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-format-date-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-format-date-4.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-format-dateTime-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-format-dateTime-3.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-format-dateTime-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-format-dateTime-4.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-format-time-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-format-time-3.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-format-time-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-format-time-4.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-parse-xml-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-parse-xml-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-parse-xml-fragment-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-parse-xml-fragment-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-path-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-path-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-replace-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-replace-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-fn-round-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-fn-round-3.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-reference-map-get-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/reference-map-get-3.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-concat-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/concat-zero.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-concat-sequence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/concat-sequence.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-replace-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/replace-default.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "changed31-contract-substring-empty-length",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/substring-empty-length.xpath",
+    "expected": "A",
+    "baselineExpected": ""
+  },
+  {
+    "id": "changed31-contract-subsequence-empty-length",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/subsequence-empty-length.xpath",
+    "expected": "B,C",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "changed31-contract-sort-empty-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/sort-empty-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "changed31-contract-map-merge-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/map-merge-empty-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "changed31-contract-get-portable-map-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/get-portable-map-default.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "changed31-contract-get-portable-array-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/get-portable-array-default.xpath",
+    "expected": "missing-row",
+    "baselineExpected": "missing-row"
+  },
+  {
+    "id": "changed31-contract-format-date-full-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/format-date-full-arity.xpath",
+    "expected": "2024-02-29",
+    "baselineExpected": "2024-02-29"
+  },
+  {
+    "id": "changed31-contract-report-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "changed31-contracts/report-31.xpath",
+    "expected": "rows=3;quantities=A:5,Z:0;selected=A,missing-row"
+  },
+  {
+    "id": "changed31-contract-report-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/report-40.xpath",
+    "expected": "rows=3;quantities=A:5,Z:0;selected=A,missing-row",
+    "baselineExpected": "rows=3;quantities=A:5,Z:0;selected=A,missing-row"
+  },
+  {
+    "id": "changed31-contract-report-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "changed31-contracts/report-empty-31.xpath",
+    "expected": "rows=0;quantities=A:0,Z:0;selected=missing-row,missing-row"
+  },
+  {
+    "id": "changed31-contract-report-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/report-empty-40.xpath",
+    "expected": "rows=0;quantities=A:0,Z:0;selected=missing-row,missing-row",
+    "baselineExpected": "rows=0;quantities=A:0,Z:0;selected=missing-row,missing-row"
+  },
+  {
+    "id": "changed31-contract-report-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "changed31-contracts/report-reordered-31.xpath",
+    "expected": "rows=3;quantities=A:5,Z:0;selected=C,missing-row"
+  },
+  {
+    "id": "changed31-contract-report-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "changed31-contracts/report-reordered-40.xpath",
+    "expected": "rows=3;quantities=A:5,Z:0;selected=C,missing-row",
+    "baselineExpected": "rows=3;quantities=A:5,Z:0;selected=C,missing-row"
   }
 ]
