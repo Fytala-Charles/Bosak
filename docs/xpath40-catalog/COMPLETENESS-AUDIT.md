@@ -13,7 +13,7 @@ evidence remain partial; see the [close-out review](CLOSEOUT-REVIEW.md). The ori
 `09e678f3` (1.1.1 publication documentation); published engine 1.1.1 is revision
 `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`.
 
-Current review: **2026-10-12**, source baseline `a151fff80e2ef3d3afc226179df673f66165ab4f`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
+Current review: **2026-10-12**, source baseline `9f656df3edf0a162226c996fbeb939da09c175a6`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
 
 The original audit baseline was 28 entries, 81 catalog cases, three worked chapters, and 13
 chapter checks. All entries have the 16 numbered fields. Field presence does not
@@ -71,7 +71,7 @@ specification revision or establish that Bosak implements the entire proposal.
 |---|---|---|
 | AC-01: landed slices, tiers, spec and delivery links | Partial | All registered names now have entries; supplementary signatures/options and changed existing functions remain partial. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. The wider disposition records are also supplied; source-to-disposition and lifecycle coverage still need systematic validation. |
-| AC-03: verified examples and gate evidence | Partial | 1,747 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. The original audit corrected fn:scan gate status. AC-03 literally asks for qt4tests sets for every entry; XSLT-only and refused/out-of-scope entries require applicable harness evidence and explicit absent-gate status. This does not waive the criterion. |
+| AC-03: verified examples and gate evidence | Partial | 1,815 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. The original audit corrected fn:scan gate status. AC-03 literally asks for qt4tests sets for every entry; XSLT-only and refused/out-of-scope entries require applicable harness evidence and explicit absent-gate status. This does not waive the criterion. |
 | AC-04: structure, retained entries, drift warnings | Partial | 67 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
@@ -401,3 +401,6 @@ Sorting review: retained functions still use the legacy shared comparer rather t
 
 
 **Predicate contract review — 2026-10-12:** [Equality/distinctness/subsequence contracts and complete shipment reports](PREDICATE-CONTRACT-REVIEW.md) add 102 checks: 15 keyword/mode refusals, 79 positional/default/type/callback checks and eight normal/empty/reordered/duplicate-event reports in 3.1/4.0. Targeted absent-keyword review now covers 18 of 37 families, with 19 remaining; metadata remains absent. Map acceptance in atomic-signature equality functions and numeric/empty-string collation processing remain engine follow-ups. Current catalog: 67 entries, 1,723 feature + 24 chapter checks = 1,747. Version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and next-step queues. Next: duplicate-values/highest/lowest/index-where comparison and selection contracts.
+
+
+**Comparison/selection contract review — 2026-10-12:** [Four-family review and detailed warehouse reports](SELECTION-CONTRACT-REVIEW.md) add 68 checks: 12 keyword/mode cases, 50 focused default/type/callback/keyword-validation checks and six complete 3.1/4.0 warehouse reports. Three more absent-keyword families reviewed: 21 of 37 supplied, 16 remaining, metadata unchanged. index-where keywords succeed. Map atomization and extrema NaN ordering remain explicit follow-ups. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815; version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and queues. Next: map:entries/map:items/map:filter and array:build/array:items/array:empty container contracts.

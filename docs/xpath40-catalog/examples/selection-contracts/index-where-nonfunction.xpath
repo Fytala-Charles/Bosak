@@ -1,0 +1,1 @@
+string-join(index-where('A',true()) ! string(.),",")

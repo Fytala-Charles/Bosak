@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 1,723 named checks. Each points to a complete
+The [case manifest](cases.json) contains 1,791 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -140,3 +140,6 @@ The harness also executes `kind: xquery` with XQueryCompiler/XQueryContext. For 
 
 
 **Predicate contract review — 2026-10-12:** [Equality/distinctness/subsequence contracts and complete shipment reports](../PREDICATE-CONTRACT-REVIEW.md) add 102 checks: 15 keyword/mode refusals, 79 positional/default/type/callback checks and eight normal/empty/reordered/duplicate-event reports in 3.1/4.0. Targeted absent-keyword review now covers 18 of 37 families, with 19 remaining; metadata remains absent. Map acceptance in atomic-signature equality functions and numeric/empty-string collation processing remain engine follow-ups. Current catalog: 67 entries, 1,723 feature + 24 chapter checks = 1,747. Version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and next-step queues. Next: duplicate-values/highest/lowest/index-where comparison and selection contracts.
+
+
+**Comparison/selection contract review — 2026-10-12:** [Four-family review and detailed warehouse reports](../SELECTION-CONTRACT-REVIEW.md) add 68 checks: 12 keyword/mode cases, 50 focused default/type/callback/keyword-validation checks and six complete 3.1/4.0 warehouse reports. Three more absent-keyword families reviewed: 21 of 37 supplied, 16 remaining, metadata unchanged. index-where keywords succeed. Map atomization and extrema NaN ordering remain explicit follow-ups. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815; version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and queues. Next: map:entries/map:items/map:filter and array:build/array:items/array:empty container contracts.

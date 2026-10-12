@@ -1,0 +1,1 @@
+let $nodes := parse-xml('<n><v>2</v><v>10</v></n>')/n/v return highest($nodes) is $nodes[2]

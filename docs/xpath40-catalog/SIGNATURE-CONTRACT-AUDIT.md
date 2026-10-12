@@ -149,3 +149,6 @@ The [sequence selection/repetition review](SEQUENCE-CONTRACT-REVIEW.md) adds 65 
 
 
 The subsequent [predicate contract review](PREDICATE-CONTRACT-REVIEW.md) supplies the five equality/distinctness/subsequence families. Current targeted absent-keyword coverage is 18 of 37; 19 remain, with metadata unchanged. Its 102 added checks bring coverage to 67 entries, 1,723 feature + 24 chapter checks = 1,747. Earlier delivery counts above remain historical. Next: duplicate-values/highest/lowest/index-where comparison and selection contracts; D2 remains partial.
+
+
+The subsequent [comparison/selection review](SELECTION-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 21 of 37 families, with 16 remaining. Metadata is unchanged. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815. Earlier delivery counts remain historical. Next: map/array container contracts; D2 stays partial.

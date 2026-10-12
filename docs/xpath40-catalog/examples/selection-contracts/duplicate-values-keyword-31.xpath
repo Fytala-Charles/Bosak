@@ -1,0 +1,1 @@
+string-join(duplicate-values(values := ('A','B','A'), collation := ()),',')

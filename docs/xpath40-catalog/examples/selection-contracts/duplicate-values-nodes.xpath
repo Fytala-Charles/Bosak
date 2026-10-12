@@ -1,0 +1,1 @@
+string-join(duplicate-values(parse-xml('<ids><id>A</id><id>B</id><id>A</id></ids>')/ids/id) ! string(.),",")

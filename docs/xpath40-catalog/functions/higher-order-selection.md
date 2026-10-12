@@ -60,6 +60,8 @@ some/every test whether any/all items satisfy a predicate; index-where returns o
 
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 
+**Supplementary contract review (2026-10-12):** [Comparison/selection review](../SELECTION-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed warehouse README](../examples/selection-contracts/README.md) supply 68 checks: keyword modes, collation/default/key/predicate, atomization, result/cardinality boundaries and complete 3.1/4.0 reports. duplicate-values/highest/lowest keywords remain unavailable; index-where keywords work. Map tolerance and tested extrema NaN results remain explicit engine follow-ups. Extrema return boundary-equal items, not all distinct records sharing its key. Initial delivery/unit/gate and historical adopted-pin limits are unchanged.
+
 ## 13. Sample Code
 
 [main.xpath](../examples/higher-order-selection/main.xpath): returns `2` at mode 40.

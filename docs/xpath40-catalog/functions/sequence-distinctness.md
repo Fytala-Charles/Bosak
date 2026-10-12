@@ -62,6 +62,8 @@ The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExam
 
 **Supplementary contract review (2026-10-12):** [Five-family predicate review](../PREDICATE-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed shipment acceptance README](../examples/predicate-contracts/README.md) add 102 exact checks. They cover explicit keyword modes, collation/defaults, numeric/NaN/node/map boundaries, callback direction/result conversion and eight complete 3.1/4.0 reports. All five keyword families remain unavailable. Equality functions tolerate the tested singleton map despite atomic signatures; numeric and empty-string collation processing remain explicit engine follow-ups. The string-valued workflow uses supported positional forms. Initial delivery/unit/gate evidence and historical adopted-pin limits are unchanged.
 
+**Supplementary contract review (2026-10-12):** [Comparison/selection review](../SELECTION-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed warehouse README](../examples/selection-contracts/README.md) supply 68 checks: keyword modes, collation/default/key/predicate, atomization, result/cardinality boundaries and complete 3.1/4.0 reports. duplicate-values/highest/lowest keywords remain unavailable; index-where keywords work. Map tolerance and tested extrema NaN results remain explicit engine follow-ups. Extrema return boundary-equal items, not all distinct records sharing its key. Initial delivery/unit/gate and historical adopted-pin limits are unchanged.
+
 ## 13. Sample Code
 
 [main.xpath](../examples/sequence-distinctness/main.xpath): returns `false/R1,R2` at mode 40.
