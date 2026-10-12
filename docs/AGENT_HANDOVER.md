@@ -5,6 +5,9 @@ Verified implementation baseline: `52183ca36fbea4e791f66dbfda4635c0b9c851c1` on 
 [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38202856408).
 PRs #170–#172 were also merged after passing CI. Closure documentation delivery
 is on `docs/session-handover-20261012`; review its PR status before resuming.
+Closure delivery: `cef7c62f`, [PR #174](https://github.com/Fytala-Charles/Bosak/pull/174).
+Documentation checks passed; closure PR CI is pending at session close. If it is
+unmerged, read this handover on that branch, merge after CI passes, then use main.
 
 ## Current state
 
