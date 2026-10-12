@@ -10,6 +10,12 @@ Catalog: **58 entries; 503 feature + 24 chapter checks = 527**. All 117 names re
 
 ## Resume here
 
+Implementation/documentation delivery: `9d57f5c9681f430fc402c10c957149a2bb9be9f4`,
+[PR #175](https://github.com/Fytala-Charles/Bosak/pull/175), pushed on
+`docs/req126-uri-options`. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38217926468)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice from current main.
+
 Review wider grammar/disposition provenance in the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md), starting with computed XPath constructors and their classification against immutable draft/source evidence. Keep the next slice documentation-only unless engine work is separately requested. Existing comparison, extrema, sorting, Unicode, hash and provenance limits below remain open; add the two URI gaps above to follow-up reconciliation.
 
 Preserve untracked `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, pending PRs and resume suggestions are superseded by this block.
