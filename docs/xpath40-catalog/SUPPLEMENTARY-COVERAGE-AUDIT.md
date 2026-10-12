@@ -2,8 +2,9 @@
 
 The catalog assigns all 117 registered 4.0-only names, but REQ-126 remains
 **In Progress**. This audit separates registration evidence from documented and
-tested contracts. Coverage remains 54 entries and 415 executable documentation
-checks; this delivery adds no examples or engine behavior.
+tested contracts. At the preceding audit delivery, coverage was 54 entries and
+415 executable documentation checks. The follow-up comparison delivery is
+recorded below; neither delivery changes engine behavior.
 
 Reviewed Bosak baseline: `37457bfd` after PR #169. Published engine: **1.1.2**.
 The accompanying [registration inventory](audit-registration-arities.json) records
@@ -34,7 +35,7 @@ of generated registrations, focus conversion, missing focus and invalid values.
 
 | Priority | Surface | Evidence and remaining work |
 |---|---|---|
-| 1 | Changed existing functions | `fn:compare` already existed in 3.1 and is absent from the 4.0-only name inventory. Tests `Compare40_CrossNumericExact_DoubleVsDecimal`, `Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself`, `Compare40_BooleansAndBinariesAndQName`, `Compare40_MixedIncomparable_RaisesXpty0004` and `Compare40_KeywordFormAndEmptyCollation` establish implementation evidence. Add a real-world reference and executable 3.1/4.0 comparison before claiming catalog coverage. Then inspect min/max, sorting, collation and changed map/array overloads individually. |
+| 1 | Changed existing functions | `fn:compare` already existed in 3.1 and is absent from the 4.0-only name inventory. Tests `Compare40_CrossNumericExact_DoubleVsDecimal`, `Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself`, `Compare40_BooleansAndBinariesAndQName`, `Compare40_MixedIncomparable_RaisesXpty0004` and `Compare40_KeywordFormAndEmptyCollation` establish implementation evidence. The [measurement reference](functions/measurement-comparison.md) now supplies 27 executable cases and a distinct 3.1 normalization policy. This is scoped coverage, not every atomic-family contract. Next inspect min/max, sorting, collation and changed map/array overloads individually. |
 | 2 | Arity, keyword and default contracts | For every registration, reconcile parameter names, sequence types, omitted arguments and keyword calls against the pinned draft. A registered arity alone cannot establish any of these. Add success, empty and invalid-argument examples for uncovered forms. |
 | 2 | Options | `hash#3` accepts an options map, but the implementation currently only validates its shape; named option behavior is not established. Hash examples cover algorithm/default/input cases, not a complete options contract. URI code reads `allow-deprecated-features`, `omit-default-ports` and `unc-path`; reconcile each option and conflicting component precedence against draft rules and published fixtures. Audit sorting records and JSON options separately. |
 | 2 | Constructors and types | One focus-constructor family entry does not verify all 49 names. Reconcile constructor-specific lexical/value constraints and error paths, then structural records, enum/choice coercion and function-signature conversion. |
@@ -71,12 +72,12 @@ links. These are documentation tasks, not authorization to implement proposals.
 
 ## Next delivery and acceptance
 
-Start with a **typed measurement comparison** reference for `fn:compare`: mixed
-numeric inputs, NaN, empty inputs, incompatible types and explicit collation,
-with a scoped XPath 3.1 alternative. This closes a concrete omitted surface
-before expanding option and grammar inventories.
+The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. Next review changed `fn:min`/`fn:max` contracts before expanding option and grammar inventories. Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
 
 AC-01 through AC-04 remain partial. AC-05 remains met for the current scope.
 Closure requires reviewed contracts and disposition records, executable examples,
 exact gate assignments or explicit absence, and feature-specific drift warnings.
 Neither the 117-name milestone nor this registration inventory closes REQ-126.
+
+
+Follow-up delivery (2026-10-12): current coverage is 55 entries and 442 checks (418 feature plus 24 chapter). The opening 54-entry/415-check count records the preceding audit delivery. Registered-name and arity inventories keep their original scopes.

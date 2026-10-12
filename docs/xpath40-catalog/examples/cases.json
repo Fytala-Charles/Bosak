@@ -2754,5 +2754,213 @@
     "mode": "40",
     "file": "supplier-offer-ranking/computed-key-tie-observed.xpath",
     "expected": "B"
+  },
+  {
+    "id": "measurement-comparison-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/main.xpath",
+    "expected": "A=at-limit;B=above;C=below;D=missing;E=missing",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "measurement-comparison/baseline.xpath",
+    "expected": "A=at-limit;B=at-limit;C=below;D=missing;E=missing"
+  },
+  {
+    "id": "measurement-comparison-empty-report",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/empty-report.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "measurement-comparison-double-decimal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/double-decimal.xpath",
+    "expected": "1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-float-decimal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/float-decimal.xpath",
+    "expected": "-1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-equal-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/equal-numeric.xpath",
+    "expected": "0",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-reversed-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/reversed-numeric.xpath",
+    "expected": "-1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-nan-low",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/nan-low.xpath",
+    "expected": "-1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-nan-equal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/nan-equal.xpath",
+    "expected": "0",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-infinity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/infinity.xpath",
+    "expected": "-1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-negative-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/negative-zero.xpath",
+    "expected": "0",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-booleans",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/booleans.xpath",
+    "expected": "-1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-binary-octets",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/binary-octets.xpath",
+    "expected": "0",
+    "baselineExpected": "-1"
+  },
+  {
+    "id": "measurement-comparison-utc-instant",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/utc-instant.xpath",
+    "expected": "0",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-empty-left",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/empty-left.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "measurement-comparison-empty-right",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/empty-right.xpath",
+    "expected": "",
+    "baselineExpected": ""
+  },
+  {
+    "id": "measurement-comparison-promoted-equality",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "measurement-comparison/promoted-equality.xpath",
+    "expected": "true|false"
+  },
+  {
+    "id": "measurement-comparison-ascii-labels",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/ascii-labels.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "measurement-comparison-codepoint-labels",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/codepoint-labels.xpath",
+    "expected": "-1",
+    "baselineExpected": "-1"
+  },
+  {
+    "id": "measurement-comparison-keyword-engine",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/keyword-engine.xpath",
+    "expected": "-1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "measurement-comparison-keyword-draft",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/keyword-draft.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "measurement-comparison-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "measurement-comparison/keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "measurement-comparison-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/empty-collation.xpath",
+    "expected": "-1",
+    "baselineExpected": "-1"
+  },
+  {
+    "id": "measurement-comparison-mixed-family",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/mixed-family.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-multiple-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/multiple-values.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "measurement-comparison-map-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/map-value.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "measurement-comparison-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "measurement-comparison/unknown-collation.xpath",
+    "error": "FOCH0002"
   }
 ]
