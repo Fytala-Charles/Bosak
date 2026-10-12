@@ -1,0 +1,1 @@
+trim-space('Ada', map {'side': 'middle'})

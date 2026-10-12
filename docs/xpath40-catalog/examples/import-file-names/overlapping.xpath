@@ -1,0 +1,1 @@
+concat('before=', substring-before-last('aaa', 'aa'), '; after=[', substring-after-last('aaa', 'aa'), ']; positions=', string-join(index-of-substring('aaa', 'aa') ! string(.), ','))

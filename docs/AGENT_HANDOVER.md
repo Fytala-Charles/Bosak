@@ -1,3 +1,23 @@
+# Agent Handover — 2026-10-12: customer text and import filename references
+
+PR #167 initially failed an existing D_ValidationCancelMidWalk timing test;
+failed-job rerun passed and PR #167 merged. Base `568e9569502d76dbc55e46217db254bbf2575bed`.
+Added customer-text-cleanup (22 cases) and import-file-names (13 cases), assigning
+char/characters/graphemes/pad-string/trim-space and the three substring names.
+Full XML inputs/reports, scoped 3.1 comparisons, codepoint versus grapheme and
+minimum-padding contracts, NBSP/interior-space preservation, overlaps and final
+filename delimiter rules are explicit. Grapheme segmentation is approximate;
+source omits several Unicode classes. No complete Unicode conformance is claimed.
+Coverage: 51 entries, 350 feature plus 24 chapter checks (374 total), and
+109 assigned / 8 unassigned registered names. Source/public remains 1.1.2.
+New eight-function review pin: `e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e`;
+definitions unchanged versus a014e1b4. Inventory-wide review pin remains scoped
+as before. Initial engine deliveries #82/#83 and named tests are linked.
+Only exact fn-characters and fn-index-of-substring gate assignments are claimed.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,372 tests passed across ten assemblies without failures/skips, including 350 catalog cases. Renderer verified 64 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs including text content, and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `bacc9ec3`; [PR #168](https://github.com/Fytala-Charles/Bosak/pull/168). CI pending at handover.
+Next: ranking/numeric diagnostics and remaining utility references.
+
 # Agent Handover — 2026-10-11: invoice API URI reference
 
 PR #166 merged after CI passed. Base `d6156de534f01daa3aea66002e528aaab20ed46e`.
