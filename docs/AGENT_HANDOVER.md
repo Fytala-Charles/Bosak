@@ -14,7 +14,7 @@ Validation: four native catalog schemas pass; exact new cases give 2 pass/6 fail
 
 Check the latest Bosak preservation PR CI before merging. Monitor upstream PRs #22–26, preserve normative expectations and request/record independent verification. Triage Bosak select body dispatch first (seqtor-145/146), then enum aliases (type-alias-023/024), then generated nominative constructors (record-026/027). Keep fixes separate from native contributions; do not mark the queues accepted. Previous catalog/provenance/metadata limits remain. Preserve scratch dirs, ignored native checkout/receipts and all tracked patches/evidence.
 
-Delivery commit/PR pending.
+Delivery: f40443d0 (implementation/evidence preservation commit), [Bosak PR #204](https://github.com/Fytala-Charles/Bosak/pull/204), pushed on test/xslt40-other-element-batches. CI pending; PR open. This subsequent metadata commit records delivery and marks portable mail patches to preserve required context/signature whitespace without editing their bytes. On resume check latest CI before merging, review upstream feedback and begin separate select dispatch triage.
 
 # First upstream XSLT 4.0 submission — 2026-10-12
 
