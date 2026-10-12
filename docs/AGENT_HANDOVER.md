@@ -9,7 +9,7 @@ shape only; no complete options contract is claimed. REQ-126 remains In Progress
 Coverage remains 54 entries, 391 feature plus 24 chapter checks (415 total).
 No engine/API/package/example/gate changes; source/public stays 1.1.2.
 Next: typed measurement comparison reference for fn:compare with 3.1/4.0 cases.
-Validation: Release build passed (12 existing warnings, zero errors); all 4413 tests across 10 assemblies passed without failures/skips. Rendered 68 pages; verified catalog fields, links, inventory/provenance, 391 manifest cases and supplementary local links/68 unique names. Engine conformance gates were not rerun for this documentation-only step. Delivery revision pending commit.
+Validation: Release build passed (12 existing warnings, zero errors); all 4413 tests across 10 assemblies passed without failures/skips. Rendered 68 pages; verified catalog fields, links, inventory/provenance, 391 manifest cases and supplementary local links/68 unique names. Engine conformance gates were not rerun for this documentation-only step. Delivery revision: 24f2ea39; [PR #170](https://github.com/Fytala-Charles/Bosak/pull/170). CI pending at handover.
 
 # Agent Handover — 2026-10-12: ranking, numeric diagnostics and fingerprints
 
