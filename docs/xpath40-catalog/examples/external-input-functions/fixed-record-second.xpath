@@ -1,0 +1,3 @@
+(: Fixed three-field partner record; no quotes, escapes, embedded pipes or grammar parser. :)
+let $record := 'INV-1043|USD|12.00'
+return if ($record eq '') then '' else let $fields := tokenize($record, '\|') return concat($fields[1], '/', $fields[2], ':', format-number(xs:decimal($fields[3]), '0.00'))

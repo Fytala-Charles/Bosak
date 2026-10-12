@@ -4938,5 +4938,395 @@
     "file": "serialization-parameters/xslt-line-ending-text-xslt40.xsl",
     "expected": "INV-1042\nINV-1043",
     "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "external-input-functions-parse-html-31-0",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/parse-html-31-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-parse-html-31-1",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/parse-html-31-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-parse-html-40-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/parse-html-40-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-parse-html-40-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/parse-html-40-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-parse-html-experimental-0",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/parse-html-experimental-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-parse-html-experimental-1",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/parse-html-experimental-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-parse-html-lookup-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/parse-html-lookup-31.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "external-input-functions-parse-html-lookup-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/parse-html-lookup-40.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "external-input-functions-html-doc-31-0",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/html-doc-31-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-html-doc-31-1",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/html-doc-31-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-html-doc-40-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/html-doc-40-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-html-doc-40-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/html-doc-40-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-html-doc-experimental-0",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/html-doc-experimental-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-html-doc-experimental-1",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/html-doc-experimental-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-html-doc-lookup-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/html-doc-lookup-31.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "external-input-functions-html-doc-lookup-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/html-doc-lookup-40.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "external-input-functions-unparsed-binary-31-0",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/unparsed-binary-31-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-unparsed-binary-40-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/unparsed-binary-40-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-unparsed-binary-experimental-0",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/unparsed-binary-experimental-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-unparsed-binary-lookup-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/unparsed-binary-lookup-31.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "external-input-functions-unparsed-binary-lookup-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/unparsed-binary-lookup-40.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-31-0",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invisible-xml-31-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-31-1",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invisible-xml-31-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-31-2",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invisible-xml-31-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-40-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/invisible-xml-40-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-40-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/invisible-xml-40-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-40-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/invisible-xml-40-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-experimental-0",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/invisible-xml-experimental-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-experimental-1",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/invisible-xml-experimental-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-experimental-2",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/invisible-xml-experimental-2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-lookup-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invisible-xml-lookup-31.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "external-input-functions-invisible-xml-lookup-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/invisible-xml-lookup-40.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-31-0",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/xsd-validator-31-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-31-1",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/xsd-validator-31-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-40-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/xsd-validator-40-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-40-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/xsd-validator-40-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-experimental-0",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/xsd-validator-experimental-0.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-experimental-1",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "external-input-functions/xsd-validator-experimental-1.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-lookup-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/xsd-validator-lookup-31.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "external-input-functions-xsd-validator-lookup-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "external-input-functions/xsd-validator-lookup-40.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "external-input-functions-normalized-xml-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/normalized-xml-main.xpath",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00"
+  },
+  {
+    "id": "external-input-functions-normalized-xml-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/normalized-xml-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "external-input-functions-normalized-xml-reordered",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/normalized-xml-reordered.xpath",
+    "expected": "INV-1043/USD:12.00;INV-1042/EUR:30.00"
+  },
+  {
+    "id": "external-input-functions-xml-is-not-html",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/xml-is-not-html.xpath",
+    "error": "FODC0006"
+  },
+  {
+    "id": "external-input-functions-binary-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/binary-main.xpath",
+    "expected": "JVBERi0xLjc="
+  },
+  {
+    "id": "external-input-functions-binary-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/binary-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "external-input-functions-binary-zero-octet",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/binary-zero-octet.xpath",
+    "expected": "AA=="
+  },
+  {
+    "id": "external-input-functions-binary-invalid",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/binary-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "external-input-functions-fixed-record-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/fixed-record-main.xpath",
+    "expected": "INV-1042/EUR:30.00"
+  },
+  {
+    "id": "external-input-functions-fixed-record-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/fixed-record-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "external-input-functions-fixed-record-second",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/fixed-record-second.xpath",
+    "expected": "INV-1043/USD:12.00"
+  },
+  {
+    "id": "external-input-functions-invoice-guard-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invoice-guard-main.xpath",
+    "expected": "INV-1042/EUR:30.00"
+  },
+  {
+    "id": "external-input-functions-invoice-guard-zero",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invoice-guard-zero.xpath",
+    "expected": "INV-1043/USD:0.00"
+  },
+  {
+    "id": "external-input-functions-invoice-guard-invalid",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invoice-guard-invalid.xpath",
+    "error": "INVALID-INVOICE"
+  },
+  {
+    "id": "external-input-functions-invoice-guard-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "external-input-functions/invoice-guard-empty.xpath",
+    "error": "INVALID-INVOICE"
   }
 ]

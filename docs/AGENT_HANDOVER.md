@@ -1,4 +1,25 @@
-# Serialization parameter review — 2026-10-12
+# External-input function review — 2026-10-12
+
+Main baseline: `bce0d9b1e21ce2ed875821e592f64bf2ed69ee55`; [PR #181](https://github.com/Fytala-Charles/Bosak/pull/181) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38225603028). Current branch: `docs/req126-external-input-functions`.
+
+## Current state and what was built
+
+Added [External-input function boundaries](xpath40-catalog/deferred/external-input-functions.md), a 16-field reference for parse-html, html-doc, invisible-xml, unparsed-binary and xsd-validator against pinned QT4CG function catalog e7ee4ab8. All absent in inspected registrations; 30 calls refuse XPST0017 across 3.1/4.0/experimental, ten lookup probes return zero. Per-function dependency/ownership rationale retains the original out-of-scope decision; unparsed-binary does not inherently need a third-party parser, and existing schema machinery does not implement the validator factory contract.
+
+55 fixtures include full normalized invoice XML, fixed three-field partner records, already-acquired binary values and business guards, with empty/reordered/invalid cases. Alternatives do not claim HTML recovery, arbitrary grammar parsing, binary IO or XSD validation. No engine/API/package/harness changes or gate promotions. Catalog: **66 entries; 732 feature + 24 chapter checks = 756**. All 117 registered names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (12 warnings, zero errors); **4,754 tests / 0 failures / 0 skips**, ten assemblies. All 732 focused catalog checks passed. Renderer verified 80 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, four named regression tests, pinned declarations and inspected registration absence, XML/record reports and attachment octets verified. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Delivery: `b88e950d0c90165d0ec6a6ae28f80bde57001ab1`,
+[PR #182](https://github.com/Fytala-Charles/Bosak/pull/182), pushed on
+`docs/req126-external-input-functions`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
+Next reconcile the original full GNode/JNode out-of-scope wording with shipped partial navigation and catalog coverage, using pinned model contracts, source and existing named tests. Keep documentation-only scope unless engine work is requested; no full-model/conformance claim follows from navigation functions. The language-boundary review (XQuery 4.0 / Streaming 4.0) follows. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization path differences and historical adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
+
+# Historical serialization parameter review — 2026-10-12
 
 Main baseline: `232180733358fc4239229267763854fda0fa2791`; [PR #180](https://github.com/Fytala-Charles/Bosak/pull/180) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38224462290). Current branch: `docs/req126-serialization-parameters`.
 
