@@ -16,7 +16,7 @@ Validation: Queue/source SHA-256 and section anchors, five ordered families, exa
 
 N01: audit existing array/member tests and precise rules for empty/no-emission/grouped/nested members and order/identity, then prepare a small native upstream order-export test batch without duplicating array-004. Record source clauses, genuine gaps and normative assertions before implementing. User explicitly prioritizes new 4.0 elements likely to be used frequently; schema-awareness and inherited JSON triage are now secondary. No external submission/message yet. Keep prior REQ-126 D2/D3/D4, metadata, provenance and AC-03 limits.
 
-Preserve scratch directories, ignored upstream checkout and local receipts. Delivery commit/PR will be recorded after push.
+Preserve scratch directories, ignored upstream checkout and local receipts. Delivery: `188fca1ba51e2fce8cb5fd39c1fae72d97db3891`, [Bosak PR #200](https://github.com/Fytala-Charles/Bosak/pull/200), pushed on `docs/xslt40-contribution-priority-queue`. CI pending; PR open. This subsequent metadata commit records delivery. On resume check CI and merge after success, then audit N01 upstream array/member scenarios before preparing the first test batch.
 
 # Upstream XSLT 4.0 adapter setup — 2026-10-12
 
