@@ -1,0 +1,3 @@
+(: Host supplies well-formed invoice XML after acquisition/HTML normalization. :)
+let $batch := parse-xml('<invoices><invoice id="INV-1042" currency="EUR" total="30.00"/><invoice id="INV-1043" currency="USD" total="12.00"/></invoices>')
+return string-join($batch/invoices/invoice ! concat(@id, '/', @currency, ':', format-number(xs:decimal(@total), '0.00')), ';')

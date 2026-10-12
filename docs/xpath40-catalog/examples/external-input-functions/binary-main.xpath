@@ -1,0 +1,2 @@
+(: Bytes already acquired by the host; this cast does not fetch a resource. :)
+string(xs:base64Binary(xs:hexBinary('255044462D312E37')))
