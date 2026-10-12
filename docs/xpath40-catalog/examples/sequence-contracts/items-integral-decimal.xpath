@@ -1,0 +1,1 @@
+string-join(items-at(('A','B'),2.0),',')

@@ -1,0 +1,1 @@
+string-join(slice(('A','B'),parse-xml('<position>2</position>')/*),',')

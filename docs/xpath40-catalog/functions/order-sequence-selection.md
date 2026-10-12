@@ -61,7 +61,9 @@ Out-of-range `items-at` positions are ignored; duplicate requested positions rem
 
 ## 12. Implementation
 
-Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. Source/package version stays 1.1.1. This reference work changes no engine code.
+Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. Source/package version stays 1.1.2. This reference work changes no engine code.
+
+**Supplementary contract review (2026-10-12):** [Six-family review](../SEQUENCE-CONTRACT-REVIEW.md) against F&O e7ee4ab8 and [detailed dispatch-batch README](../examples/sequence-contracts/README.md) supply 65 checks, explicit keyword modes, defaults/empty/direction/types, node identity and complete normal/empty/reordered reports in 3.1/4.0. Five keyword families remain absent; slice keywords work in the tested forms. items-at tolerates integral decimal positions; replicate/slice reject them. Untyped-node positions refuse; precise coercion remains an explicit follow-up, not a conformance claim. Historical delivery/adopted-pin limits are unchanged.
 
 ## 13. Sample Code
 

@@ -11309,5 +11309,461 @@
     "mode": "31",
     "file": "text-contracts/import-empty-31.xpath",
     "expected": "label=[........................];codepoints=0;stem=;extension="
+  },
+  {
+    "id": "sequence-contract-replicate-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/replicate-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "sequence-contract-replicate-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-replicate-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "sequence-contracts/replicate-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-items-at-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/items-at-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "sequence-contract-items-at-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-at-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-items-at-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "sequence-contracts/items-at-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-foot-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/foot-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "sequence-contract-foot-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/foot-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-foot-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "sequence-contracts/foot-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-trunk-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/trunk-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "sequence-contract-trunk-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/trunk-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-trunk-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "sequence-contracts/trunk-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-insert-separator-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/insert-separator-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "sequence-contract-insert-separator-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/insert-separator-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-insert-separator-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "sequence-contracts/insert-separator-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-slice-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/slice-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "sequence-contract-slice-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-keyword-40.xpath",
+    "expected": "C,B,A"
+  },
+  {
+    "id": "sequence-contract-slice-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "sequence-contracts/slice-keyword-experimental.xpath",
+    "expected": "C,B,A",
+    "frozenExpected": "C,B,A"
+  },
+  {
+    "id": "sequence-contract-replicate-page",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-page.xpath",
+    "expected": "A,B,A,B"
+  },
+  {
+    "id": "sequence-contract-replicate-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-zero.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-replicate-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-replicate-negative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-negative.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-replicate-fraction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-fraction.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-replicate-integral-decimal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-integral-decimal.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-replicate-node-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/replicate-node-identity.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "sequence-contract-items-request-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-request-order.xpath",
+    "expected": "C,A,A"
+  },
+  {
+    "id": "sequence-contract-items-out-of-range",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-out-of-range.xpath",
+    "expected": "B"
+  },
+  {
+    "id": "sequence-contract-items-empty-positions",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-empty-positions.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-items-empty-source",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-empty-source.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-items-fraction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-fraction.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-items-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-items-integral-decimal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-integral-decimal.xpath",
+    "expected": "B"
+  },
+  {
+    "id": "sequence-contract-items-node-position",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/items-node-position.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-foot-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/foot-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-foot-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/foot-singleton.xpath",
+    "expected": "A"
+  },
+  {
+    "id": "sequence-contract-foot-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/foot-map.xpath",
+    "expected": "B"
+  },
+  {
+    "id": "sequence-contract-trunk-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/trunk-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-trunk-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/trunk-singleton.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-trunk-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/trunk-maps.xpath",
+    "expected": "A,B"
+  },
+  {
+    "id": "sequence-contract-separator-multi",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/separator-multi.xpath",
+    "expected": "A|/B|/C"
+  },
+  {
+    "id": "sequence-contract-separator-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/separator-empty-input.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-separator-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/separator-singleton.xpath",
+    "expected": "A"
+  },
+  {
+    "id": "sequence-contract-separator-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/separator-empty.xpath",
+    "expected": "A,B"
+  },
+  {
+    "id": "sequence-contract-slice-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-default.xpath",
+    "expected": "A,B,C,D"
+  },
+  {
+    "id": "sequence-contract-slice-empty-defaults",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-empty-defaults.xpath",
+    "expected": "A,B,C,D"
+  },
+  {
+    "id": "sequence-contract-slice-zero-defaults",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-zero-defaults.xpath",
+    "expected": "A,B,C,D"
+  },
+  {
+    "id": "sequence-contract-slice-negative-bounds",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-negative-bounds.xpath",
+    "expected": "B,C,D"
+  },
+  {
+    "id": "sequence-contract-slice-inferred-reverse",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-inferred-reverse.xpath",
+    "expected": "D,C,B"
+  },
+  {
+    "id": "sequence-contract-slice-negative-step",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-negative-step.xpath",
+    "expected": "D,C,B,A"
+  },
+  {
+    "id": "sequence-contract-slice-stride",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-stride.xpath",
+    "expected": "A,C"
+  },
+  {
+    "id": "sequence-contract-slice-mismatched-direction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-mismatched-direction.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-slice-empty-source",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-empty-source.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "sequence-contract-slice-string-bound",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-string-bound.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-slice-decimal-bound",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-decimal-bound.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-slice-fraction-bound",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-fraction-bound.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-slice-node-bound",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-node-bound.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "sequence-contract-slice-reordered-keywords",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-reordered-keywords.xpath",
+    "expected": "B,C"
+  },
+  {
+    "id": "sequence-contract-slice-missing-required",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-missing-required.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-slice-unknown-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/slice-unknown-keyword.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "sequence-contract-export-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/export-40.xpath",
+    "expected": "page=ORD-102,ORD-103,ORD-104;last=ORD-104;body=ORD-102,ORD-103;labels=ORD-102|ORD-103|ORD-104|ORD-102|ORD-103|ORD-104;requested=ORD-105,ORD-102,ORD-102"
+  },
+  {
+    "id": "sequence-contract-export-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/export-31.xpath",
+    "expected": "page=ORD-102,ORD-103,ORD-104;last=ORD-104;body=ORD-102,ORD-103;labels=ORD-102|ORD-103|ORD-104|ORD-102|ORD-103|ORD-104;requested=ORD-105,ORD-102,ORD-102"
+  },
+  {
+    "id": "sequence-contract-export-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/export-empty-40.xpath",
+    "expected": "page=;last=;body=;labels=;requested="
+  },
+  {
+    "id": "sequence-contract-export-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/export-empty-31.xpath",
+    "expected": "page=;last=;body=;labels=;requested="
+  },
+  {
+    "id": "sequence-contract-export-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "sequence-contracts/export-reordered-40.xpath",
+    "expected": "page=ORD-104,ORD-103,ORD-102;last=ORD-102;body=ORD-104,ORD-103;labels=ORD-104|ORD-103|ORD-102|ORD-104|ORD-103|ORD-102;requested=ORD-101,ORD-104,ORD-104"
+  },
+  {
+    "id": "sequence-contract-export-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "sequence-contracts/export-reordered-31.xpath",
+    "expected": "page=ORD-104,ORD-103,ORD-102;last=ORD-102;body=ORD-104,ORD-103;labels=ORD-104|ORD-103|ORD-102|ORD-104|ORD-103|ORD-102;requested=ORD-101,ORD-104,ORD-104"
   }
 ]

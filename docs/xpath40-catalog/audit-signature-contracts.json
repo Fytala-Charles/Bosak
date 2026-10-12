@@ -2153,11 +2153,19 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Sequence-family representative review: keywords by mode, defaults/empty/direction/cardinality/typed-source cases. Complete integer/coercion conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-foot-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "sequenceContractCases": [
+        "sequence-contract-foot-keyword-31",
+        "sequence-contract-foot-keyword-40",
+        "sequence-contract-foot-keyword-experimental",
+        "sequence-contract-foot-empty",
+        "sequence-contract-foot-singleton",
+        "sequence-contract-foot-map"
+      ]
     },
     {
       "name": "fn:graphemes",
@@ -2748,11 +2756,20 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Sequence-family representative review: keywords by mode, defaults/empty/direction/cardinality/typed-source cases. Complete integer/coercion conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-insert-separator-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "sequenceContractCases": [
+        "sequence-contract-insert-separator-keyword-31",
+        "sequence-contract-insert-separator-keyword-40",
+        "sequence-contract-insert-separator-keyword-experimental",
+        "sequence-contract-separator-multi",
+        "sequence-contract-separator-empty-input",
+        "sequence-contract-separator-singleton",
+        "sequence-contract-separator-empty"
+      ]
     },
     {
       "name": "fn:is-NaN",
@@ -2869,11 +2886,24 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Sequence-family representative review: keywords by mode, defaults/empty/direction/cardinality/typed-source cases. Complete integer/coercion conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-items-at-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "sequenceContractCases": [
+        "sequence-contract-items-at-keyword-31",
+        "sequence-contract-items-at-keyword-40",
+        "sequence-contract-items-at-keyword-experimental",
+        "sequence-contract-items-request-order",
+        "sequence-contract-items-out-of-range",
+        "sequence-contract-items-empty-positions",
+        "sequence-contract-items-empty-source",
+        "sequence-contract-items-fraction",
+        "sequence-contract-items-string",
+        "sequence-contract-items-integral-decimal",
+        "sequence-contract-items-node-position"
+      ]
     },
     {
       "name": "fn:jkey",
@@ -3870,11 +3900,23 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Sequence-family representative review: keywords by mode, defaults/empty/direction/cardinality/typed-source cases. Complete integer/coercion conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-replicate-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "sequenceContractCases": [
+        "sequence-contract-replicate-keyword-31",
+        "sequence-contract-replicate-keyword-40",
+        "sequence-contract-replicate-keyword-experimental",
+        "sequence-contract-replicate-page",
+        "sequence-contract-replicate-zero",
+        "sequence-contract-replicate-empty",
+        "sequence-contract-replicate-negative",
+        "sequence-contract-replicate-fraction",
+        "sequence-contract-replicate-integral-decimal",
+        "sequence-contract-replicate-node-identity"
+      ]
     },
     {
       "name": "fn:scan",
@@ -4180,14 +4222,35 @@
       "keywordAssessment": "names match a pinned signature",
       "defaultAssessment": "matches a pinned expression list after literal/empty-map normalization",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Sequence-family representative review: keywords by mode, defaults/empty/direction/cardinality/typed-source cases. Complete integer/coercion conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-slice-1",
         "signature-audit-fn-slice-2",
         "signature-audit-fn-slice-3",
         "signature-audit-fn-slice-4"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "sequenceContractCases": [
+        "sequence-contract-slice-keyword-31",
+        "sequence-contract-slice-keyword-40",
+        "sequence-contract-slice-keyword-experimental",
+        "sequence-contract-slice-default",
+        "sequence-contract-slice-empty-defaults",
+        "sequence-contract-slice-zero-defaults",
+        "sequence-contract-slice-negative-bounds",
+        "sequence-contract-slice-inferred-reverse",
+        "sequence-contract-slice-negative-step",
+        "sequence-contract-slice-stride",
+        "sequence-contract-slice-mismatched-direction",
+        "sequence-contract-slice-empty-source",
+        "sequence-contract-slice-string-bound",
+        "sequence-contract-slice-decimal-bound",
+        "sequence-contract-slice-fraction-bound",
+        "sequence-contract-slice-node-bound",
+        "sequence-contract-slice-reordered-keywords",
+        "sequence-contract-slice-missing-required",
+        "sequence-contract-slice-unknown-keyword"
+      ]
     },
     {
       "name": "fn:some",
@@ -5005,11 +5068,19 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Sequence-family representative review: keywords by mode, defaults/empty/direction/cardinality/typed-source cases. Complete integer/coercion conformance unclaimed.",
       "availabilityCases": [
         "signature-audit-fn-trunk-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "sequenceContractCases": [
+        "sequence-contract-trunk-keyword-31",
+        "sequence-contract-trunk-keyword-40",
+        "sequence-contract-trunk-keyword-experimental",
+        "sequence-contract-trunk-empty",
+        "sequence-contract-trunk-singleton",
+        "sequence-contract-trunk-maps"
+      ]
     },
     {
       "name": "fn:unix-dateTime",
@@ -7607,5 +7678,10 @@
   "comparisonPolicy": "Default expression comparison normalizes only quoted string literals and empty-map spellings; no general semantic/type/option conformance inference.",
   "behaviorReviewDate": "2026-10-12",
   "textReviewSourceRevision": "f53dd8ff9ca055eef36e2cdd69c469653b0a1ae5",
-  "textReviewChecks": 83
+  "textReviewChecks": 83,
+  "sequenceReviewDate": "2026-10-12",
+  "sequenceReviewSourceRevision": "2efcd33a483cb9adb8eae35908a083a661388b1d",
+  "sequenceReviewChecks": 65,
+  "targetedAbsentMetadataReviewed": 13,
+  "targetedAbsentMetadataRemaining": 24
 }

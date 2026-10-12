@@ -6,7 +6,7 @@
 
 ## Scope and outcome
 
-Reviewed 2026-10-12 against Bosak `f53dd8ff9ca055eef36e2cdd69c469653b0a1ae5`, version 1.1.2. Eight functions from the 37 absent-keyword-metadata families now have representative behavioral review. Metadata remains absent: the review does not implement it. **29 absent-metadata families still need this targeted review.** D2 and REQ-126 remain partial/In Progress.
+Reviewed 2026-10-12 against Bosak `f53dd8ff9ca055eef36e2cdd69c469653b0a1ae5`, version 1.1.2. Eight functions from the 37 absent-keyword-metadata families now have representative behavioral review. Metadata remains absent: the review does not implement it. At the text delivery, 29 absent-metadata families still needed targeted review. The subsequent [sequence review](SEQUENCE-CONTRACT-REVIEW.md) brings the current remainder to **24**. D2 and REQ-126 remain partial/In Progress.
 
 83 new executable checks comprise 24 explicit keyword/mode refusals, 55 positional/default/empty/invalid/option cases and four full import reports (3.1/4.0, normal/empty input). Catalog: 67 entries, 1,556 feature + 24 chapter checks = 1,580. No engine/API/harness change or gate promotion.
 
@@ -53,3 +53,6 @@ Tests preserve current observed outcomes. They do not turn tolerated input into 
 The [customer label and filename README](examples/text-contracts/README.md) shows complete source XML, positional 4.0 code, portable nested-let 3.1 code and exact outputs. It separates codepoint-width padding from display columns/graphemes, preserves combining spelling and interior spaces, and extracts only the final extension. No file IO or path authorization is implied.
 
 Next continue D2 with sequence selection/repetition contracts: replicate, items-at, foot, trunk, insert-separator and slice. Review missing keywords, defaults/empty arguments and typed sources using a realistic import/export batch. The remaining changed-3.1 inventory, complete coercion/options coverage, D3 grammar/pattern matrix and D4 provenance/acceptance still prevent closure. Existing source/tests/gates are linked in the two family entries; this documentation slice does not rerun manual engine gates.
+
+
+Sequence selection/repetition review is now supplied. Current targeted absent-keyword coverage is 13 of 37 families; 24 remain. Next: equality/distinctness/subsequence predicate contracts.

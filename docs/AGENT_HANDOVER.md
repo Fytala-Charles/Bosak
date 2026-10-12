@@ -1,4 +1,24 @@
-# Text/Unicode contract review — 2026-10-12
+# Sequence selection/repetition contracts — 2026-10-12
+
+Main baseline: `2efcd33a483cb9adb8eae35908a083a661388b1d`; [PR #188](https://github.com/Fytala-Charles/Bosak/pull/188) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38245747354). Current branch: `docs/req126-sequence-contracts`.
+
+## Current state and what was built
+
+Added [sequence contract review](xpath40-catalog/SEQUENCE-CONTRACT-REVIEW.md) and [detailed dispatch-batch README](xpath40-catalog/examples/sequence-contracts/README.md), extending six raw signature rows with exact case IDs. Pinned F&O e7ee4ab8 contrasts signatures/defaults with observed replicate/items-at/foot/trunk/insert-separator/slice behavior. Updated the family reference, current summaries/queue/audits and prior text-review remainder; its current package wording is now 1.1.2.
+
+65 new checks: 18 explicit keyword/mode cases, 41 focused defaults/typed-source/identity/keyword-validation cases and six full normal/empty/reordered 3.1/4.0 reports. Five families refuse keyword binding at 4.0/experimental; all keyword syntax refuses 3.1 XPST0003. slice keyword defaults/reordering work. Replication preserves node identity and repeats a whole page; requested positions retain order and duplicates. Generic map and separator-sequence boundaries verified. Integral decimal positions work in items-at, but replicate/slice reject them XPTY0004; tested untyped XML position nodes refuse. Full coercion remains an explicit follow-up; no engine behavior changed.
+
+Targeted absent-keyword review: **13 of 37 families supplied, 24 awaiting review**; metadata remains absent. Catalog: **67 entries; 1,621 feature + 24 chapter checks = 1,645**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,643 tests / 0 failures / 0 skips**, ten assemblies, including all 1,621 catalog feature checks. Renderer verified 89 pages. Six pinned contracts, explicit modes, independent six batch reports/stride/typed decimal and node-identity evidence, exact case IDs/local links and scoped inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with all-equal/all-different and contains-/starts-with-/ends-with-subsequence. Compare pinned keywords, optional collation/defaults, comparator/callback forms and empty/typed cases; publish a realistic shipment-event workflow with paired portable reports. Keep documentation-first scope; record unavailable/tolerated forms without silently implementing metadata. Other missing families, precise coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Earlier keyword spelling, replace arity, two-let hash, text option/coercion and sequence integer/atomization issues remain separate engine follow-ups. Historical adopted pins and AC-03 gate applicability unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `0236f62cd1697880930d58406b81db57064344cd`, [PR #189](https://github.com/Fytala-Charles/Bosak/pull/189), pushed on `docs/req126-sequence-contracts`. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before continuing D2.
+
+# Historical text/Unicode contract review — 2026-10-12
 
 Main baseline: `f53dd8ff9ca055eef36e2cdd69c469653b0a1ae5`; [PR #187](https://github.com/Fytala-Charles/Bosak/pull/187) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38233707437). Current branch: `docs/req126-text-contracts`.
 
