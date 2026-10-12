@@ -14,7 +14,7 @@ Validation: Release solution build passed (12 existing warnings, zero errors); *
 
 Review current upstream schema-awareness environments/dependencies for source-document, si-fork and si-map against issue #90, avoiding coverage already supplied. Prepare specification-derived native test changes before proposing submission. Retain JSON -0/-0e0 triage separately; do not change upstream expectation to match Bosak. No fork, upstream push/PR or external message has been sent. Bosak documentation links can accompany a focused contribution note. The equality/collation catalog queue is postponed, not discarded; all previous D2/D3/D4, missing metadata, historical pins and AC-03 limits remain.
 
-Preserve `.guard-tmp/`, `.sweep-baselines/`, `.upstream/` and local receipts under `.artifacts/xslt40/`. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/`, `.sweep-baselines/`, `.upstream/` and local receipts under `.artifacts/xslt40/`. Delivery: `f30142931847825ecdac48973889c9ab3ed08e17`, [Bosak PR #199](https://github.com/Fytala-Charles/Bosak/pull/199), pushed on `test/xslt40-upstream-adapter`. CI pending; PR remains open. This subsequent metadata commit records delivery. On resume check CI and merge after success, then review the upstream schema-awareness contribution candidates. Upstream checkout remains clean and unpublished.
 
 # Ordering/default contracts — 2026-10-12
 
