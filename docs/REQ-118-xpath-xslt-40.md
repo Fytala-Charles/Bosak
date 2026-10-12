@@ -172,6 +172,13 @@ Enum and choice types are small and stable — can precede records.
   XPath cast in `select` plus `as="map(*)"` is the verified workaround.
   The declarations remain Deferred; no tier promotion is included.
 
+  **Enclosing-mode review (2026-10-12):** The
+  [enclosing-mode disposition](xpath40-catalog/deferred/enclosing-modes.md)
+  verifies generic XTSE0260 refusal for nested templates, and supplies complete
+  named-mode export/audit alternatives. Explicit mode, dynamic `#current` and
+  lexical default-mode are distinguished. Ordinary top-level modes do not supply
+  the deferred enclosure/isolation contract; the tier decision is unchanged.
+
 ### Out of scope (recorded, not scheduled)
 
 - **XDM 4.0 GNode/JNode model** (`xnode()`/`jnode()`, `fn:jtree`/`fn:jkey`/`fn:jvalue`,

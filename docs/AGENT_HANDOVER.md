@@ -1,4 +1,22 @@
-# Named XSLT declaration review — 2026-10-12
+# Enclosing-mode review — 2026-10-12
+
+Main baseline: `68183912a16456ba9ab4297e00e2668aac5dba21`; [PR #177](https://github.com/Fytala-Charles/Bosak/pull/177) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38220304749). Current branch: `docs/req126-enclosing-modes`.
+
+## Current state and what was built
+
+Added [Deferred enclosing modes](xpath40-catalog/deferred/enclosing-modes.md), a 16-field reference against pinned QT4CG xslt.xml e7ee4ab8. Bosak requires xsl:mode to be empty and collects top-level template rules; enclosing templates refuse with XTSE0260 at stylesheet versions 3.0 and 4.0. Generic refusal is not the draft enclosure diagnostic matrix.
+
+Full invoice export/audit input, refused stylesheet, portable named-mode alternative and exact outputs accompany 20 fixtures (nine refusals, eleven successful dispatch/ordering cases). Explicit recursive mode and #current retain export dispatch; omitted mode is lexical and selects unnamed rules unless a lexical default is set. Ordinary modes do not provide enclosing-rule isolation. No engine/API/package/harness changes or gate promotions.
+
+Catalog: **62 entries; 581 feature + 24 chapter checks = 605**. All 117 names assigned, source/public **1.1.2**, REQ-126 **In Progress**. Focused catalog tests: 581 passed. Release build passed (one existing warning, zero errors); **4,603 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 581 catalog checks. Renderer verified 76 pages. Entry/index, source/local links, scoped inventories/provenance, inline input/code/output, six named tests, XML validity and eleven independently calculated reports verified. Manual engine gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Next audit capturing accumulators against pinned XSLT draft, source and tests, separate from ordinary accumulators and streaming claims. Keep the slice documentation-only unless engine work is requested. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
+
+Existing structural-record XSLT @as, URI truthiness/empty-query-map, comparison, extrema, sorting, Unicode, hash and historical adopted-pin follow-ups remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; counts, PR states and next steps are superseded here.
+
+# Historical named XSLT declaration review — 2026-10-12
 
 Main baseline: `bb91dea2c31b7cfacb346b1689680517eae56d87`; [PR #176](https://github.com/Fytala-Charles/Bosak/pull/176) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38219107877). Current branch: `docs/req126-xslt-type-declarations`.
 
