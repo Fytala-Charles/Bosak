@@ -1,0 +1,589 @@
+{
+  "auditDate": "2026-10-12",
+  "sourceRevision": "37457bfdd2e6ceca878d130c4c7b9ed868e9c516",
+  "scope": "Literal dictionary registrations for the 68 non-xs names in audit-function-inventory.json; excludes 49 generated focus constructors and changed existing 3.1 functions",
+  "functions": [
+    {
+      "name": "array:build",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "array:empty",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "array:items",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "array:slice",
+      "registeredArities": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "array:sort-with",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/sort-with.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:all-different",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/sequence-distinctness.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:all-equal",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:atomic-equal",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/atomic-equal.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:atomic-type-annotation",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:build-dateTime",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/month-end-cutoffs.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:build-uri",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/invoice-api-uris.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:char",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:characters",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:collation-available",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:contains-subsequence",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:csv-doc",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/csv-parsing.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:csv-to-xml",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/csv-parsing.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:days-in-month",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/month-end-cutoffs.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:decode-from-uri",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/invoice-api-uris.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:do-until",
+      "registeredArities": [
+        3
+      ],
+      "catalogEntry": "functions/bounded-retries.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:drop-while",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/ordered-queue-prefix.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:duplicate-values",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/sequence-distinctness.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:duration-to-seconds",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:element-to-map",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/element-to-map.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:element-to-map-plan",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/element-to-map.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:ends-with-subsequence",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:every",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:foot",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:graphemes",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:hash",
+      "registeredArities": [
+        1,
+        2,
+        3
+      ],
+      "catalogEntry": "functions/payload-fingerprints.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:highest",
+      "registeredArities": [
+        1,
+        2,
+        3
+      ],
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:identity",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/configured-label-callbacks.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:index-of-substring",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/import-file-names.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:index-where",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:insert-separator",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:is-NaN",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:items-at",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:jkey",
+      "registeredArities": [
+        0,
+        1
+      ],
+      "catalogEntry": "data-model/jnode-navigation.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:jtree",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "data-model/jnode-navigation.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:jvalue",
+      "registeredArities": [
+        0,
+        1
+      ],
+      "catalogEntry": "data-model/jnode-navigation.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:lowest",
+      "registeredArities": [
+        1,
+        2,
+        3
+      ],
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:map-to-element",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/map-to-element.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:op",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:pad-string",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:parse-csv",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/csv-parsing.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:parse-uri",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/invoice-api-uris.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:partial-apply",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/configured-label-callbacks.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:partition",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/consecutive-partition.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:replicate",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:scan",
+      "registeredArities": [
+        3
+      ],
+      "catalogEntry": "experimental/fn-scan.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:seconds",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:slice",
+      "registeredArities": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:some",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:sort-by",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:sort-with",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/sort-with.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:starts-with-subsequence",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:substring-after-last",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "catalogEntry": "functions/import-file-names.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:substring-before-last",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "catalogEntry": "functions/import-file-names.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:take-while",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/ordered-queue-prefix.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:transitive-closure",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/product-dependency-closure.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:trim-space",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:trunk",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:unix-dateTime",
+      "registeredArities": [
+        0,
+        1
+      ],
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "fn:while-do",
+      "registeredArities": [
+        3
+      ],
+      "catalogEntry": "functions/bounded-retries.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "map:build",
+      "registeredArities": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "map:entries",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "map:filter",
+      "registeredArities": [
+        2
+      ],
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    },
+    {
+      "name": "map:items",
+      "registeredArities": [
+        1
+      ],
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Registration only; full signature/options coverage not certified"
+    }
+  ]
+}
