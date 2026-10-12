@@ -1,0 +1,1 @@
+let $a := ['A','B'] return if (4 ge 1 and 4 le array:size($a)) then array:get($a,4) else 'missing-row'

@@ -1,0 +1,1 @@
+string-join(subsequence(('A','B','C'),2,()),',')

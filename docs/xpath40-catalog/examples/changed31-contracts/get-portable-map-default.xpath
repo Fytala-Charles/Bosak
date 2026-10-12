@@ -1,0 +1,1 @@
+let $m := map{'A':5} return if (map:contains($m,'Z')) then map:get($m,'Z') else 0
