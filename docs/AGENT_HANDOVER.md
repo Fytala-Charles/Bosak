@@ -1,3 +1,66 @@
+# Session close — 2026-10-12
+
+Verified implementation baseline: `52183ca36fbea4e791f66dbfda4635c0b9c851c1` on `main`.
+[PR #173](https://github.com/Fytala-Charles/Bosak/pull/173) merged after
+[CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38202856408).
+PRs #170–#172 were also merged after passing CI. Closure documentation delivery
+is on `docs/session-handover-20261012`; review its PR status before resuming.
+
+## Current state
+
+- Released and source version: **1.1.2**. No new publication is requested.
+- REQ-126: **In Progress**; AC-01 through AC-04 remain partial, AC-05 met for current scope.
+- Catalog: **57 entries**, **475 feature + 24 chapter checks = 499**.
+- All **117 registered 4.0-only names** assigned. That inventory excludes changed
+  existing functions, full arities/options, grammar and disposition coverage.
+- Last implementation verification: Release build passed (one existing warning);
+  **4,497 tests / 0 failures / 0 skips**, ten assemblies; 71 pages rendered.
+- Manual engine conformance gates were not rerun for these documentation slices.
+  Prior engine gate evidence remains historical; no gate membership changed.
+
+## Resume here
+
+Audit `fn:parse-uri` / `fn:build-uri` option contracts and component precedence,
+specifically `allow-deprecated-features` and `unc-path`, complementing existing
+`omit-default-ports` examples in
+[invoice API URIs](xpath40-catalog/functions/invoice-api-uris.md).
+Read [the supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md)
+and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md) first. Compare
+pinned draft contracts, source and tests; add real input/output and executable
+normal/edge/error cases, then synchronize canonical docs. Keep version 1.1.2
+unless a separately authorized engine/release task changes it.
+
+## Open evidence and engine follow-ups
+
+- Historical adopted specification pins are missing for the 28 baseline entries;
+  current draft reviews do not recover them. Wider grammar/disposition records remain.
+- `fn:compare` keyword drift: engine `comparand1`/`comparand2`, reviewed draft
+  `value1`/`value2`; legacy binary type-validation behavior is recorded.
+- `fn:min`/`fn:max`: mixed numeric promotion/result-type and plain-duration gaps.
+- `fn:sort`/`array:sort`: mixed numeric promotion, input-dependent NaN order,
+  missing explicit-empty key defaults and unknown-collation acceptance.
+  Explicit `data#1` is the verified empty-key workaround.
+- Computed-key boundary ties and approximate Unicode grapheme segmentation remain.
+- Hash lacks draft-required BLAKE3/CRC-32; options are not fully certified.
+- The map entries/items result-shape correction is delivered in 1.1.2.
+
+Observed fixtures document limits; they are not conformance assertions. Update
+their expected results and retain historical notes when engine corrections land.
+No engine/API/package changes, release or Braid work is part of this closure.
+
+## Workspace and verification
+
+All tracked implementation work is committed and pushed. Preserve untracked
+`.guard-tmp/` (verification scripts/logs) and `.sweep-baselines/` (existing artifacts).
+Important evidence: `.guard-tmp/pick-sorting-full.log`, `pick-sorting-build.log`,
+`pick-sorting-focused.log`, and `check-pick-sorting.py`. The catalog's permanent
+manifest/harness is the canonical runnable evidence; temporary scripts are optional.
+Root `AGENTS.md` conventions remain applicable. On resume check the closure PR,
+checkout current main, inspect status and read this block before starting a slice.
+
+Earlier sections below are dated delivery history; their next-step and pending-CI
+notes describe the state at that delivery and are superseded by this block.
+
 # Agent Handover — 2026-10-12: warehouse pick sorting
 
 PR #172 merged after CI passed. Base 0597047aed99851d10445993e2e636f3aeb437f2.
@@ -10,7 +73,7 @@ claims. Legacy numeric promotion, input-dependent NaN order and missing empty-ke
 changes; source/public stays 1.1.2 and REQ-126 remains In Progress.
 Next: URI option contracts (allow-deprecated-features, unc-path) and component
 precedence; keep engine numeric/NaN and prior keyword/duration findings separate.
-Validation: Release build passed (one existing warning, zero errors); all 4,497 tests across ten assemblies passed without failures/skips, including 475 catalog cases. Renderer verified 71 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; pick order/payloads and numeric boundary independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: 81149db4; [PR #173](https://github.com/Fytala-Charles/Bosak/pull/173). CI pending at handover.
+Validation: Release build passed (one existing warning, zero errors); all 4,497 tests across ten assemblies passed without failures/skips, including 475 catalog cases. Renderer verified 71 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; pick order/payloads and numeric boundary independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: 81149db4; [PR #173](https://github.com/Fytala-Charles/Bosak/pull/173). CI passed; merged at 52183ca36fbea4e791f66dbfda4635c0b9c851c1.
 
 # Agent Handover — 2026-10-12: batch extrema and component codes
 
