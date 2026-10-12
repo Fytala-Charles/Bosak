@@ -1,0 +1,1 @@
+min((QName('urn:z', 'p:a'), QName('urn:a', 'q:z'))) eq QName('urn:a', 'x:z')

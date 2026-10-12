@@ -2962,5 +2962,229 @@
     "mode": "40",
     "file": "measurement-comparison/unknown-collation.xpath",
     "error": "FOCH0002"
+  },
+  {
+    "id": "batch-extrema-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/main.xpath",
+    "expected": "accepted=A,B,C; rejected=D,E; min=2.5; max=7.5; first-code=Q{urn:erp:codes}normal; last-code=Q{urn:qa:codes}missing",
+    "baselineError": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "batch-extrema/baseline.xpath",
+    "expected": "accepted=A,B,C; rejected=D,E; min=2.5; max=7.5; first-code=Q{urn:erp:codes}normal; last-code=Q{urn:qa:codes}missing"
+  },
+  {
+    "id": "batch-extrema-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/empty.xpath",
+    "expected": "accepted=; rejected=; min=-; max=-; first-code=-; last-code=-",
+    "baselineExpected": "accepted=; rejected=; min=-; max=-; first-code=-; last-code=-"
+  },
+  {
+    "id": "batch-extrema-all-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/all-invalid.xpath",
+    "expected": "accepted=; rejected=A,B,C,D,E; min=-; max=-; first-code=Q{urn:erp:codes}normal; last-code=Q{urn:qa:codes}missing",
+    "baselineError": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-decimal-range",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/decimal-range.xpath",
+    "expected": "2.5|7.5",
+    "baselineExpected": "2.5|7.5"
+  },
+  {
+    "id": "batch-extrema-mixed-min-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/mixed-min-observed.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "batch-extrema-mixed-max-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/mixed-max-observed.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "batch-extrema-decimal-result-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/decimal-result-observed.xpath",
+    "expected": "true|false",
+    "baselineExpected": "true|false"
+  },
+  {
+    "id": "batch-extrema-nan-min",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/nan-min.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "batch-extrema-nan-max",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/nan-max.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "batch-extrema-untyped-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/untyped-values.xpath",
+    "expected": "2|10",
+    "baselineExpected": "2|10"
+  },
+  {
+    "id": "batch-extrema-string-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/string-values.xpath",
+    "expected": "10|2",
+    "baselineExpected": "10|2"
+  },
+  {
+    "id": "batch-extrema-empty-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/empty-values.xpath",
+    "expected": "[]|[]",
+    "baselineExpected": "[]|[]"
+  },
+  {
+    "id": "batch-extrema-booleans",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/booleans.xpath",
+    "expected": "false|true",
+    "baselineExpected": "false|true"
+  },
+  {
+    "id": "batch-extrema-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/empty-collation.xpath",
+    "expected": "a|b",
+    "baselineExpected": "a|b"
+  },
+  {
+    "id": "batch-extrema-ascii-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/ascii-collation.xpath",
+    "expected": "a|B",
+    "baselineExpected": "a|B"
+  },
+  {
+    "id": "batch-extrema-codepoint-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/codepoint-collation.xpath",
+    "expected": "B|a",
+    "baselineExpected": "B|a"
+  },
+  {
+    "id": "batch-extrema-mixed-order-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/mixed-order-observed.xpath",
+    "expected": "1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "batch-extrema-qname-min",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/qname-min.xpath",
+    "expected": "true",
+    "baselineError": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-qname-max",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/qname-max.xpath",
+    "expected": "true",
+    "baselineError": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-qname-prefix",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/qname-prefix.xpath",
+    "expected": "urn:q",
+    "baselineError": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-keyword-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/keyword-values.xpath",
+    "expected": "1|3",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "batch-extrema-mixed-min",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/mixed-min.xpath",
+    "error": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-mixed-max",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/mixed-max.xpath",
+    "error": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-bad-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/bad-untyped.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "batch-extrema-qname-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/qname-string.xpath",
+    "error": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-plain-duration-min-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/plain-duration-min-observed.xpath",
+    "error": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-plain-duration-max-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/plain-duration-max-observed.xpath",
+    "error": "FORG0006"
+  },
+  {
+    "id": "batch-extrema-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "batch-extrema/unknown-collation.xpath",
+    "error": "FOCH0002"
   }
 ]

@@ -1,3 +1,18 @@
+# Agent Handover — 2026-10-12: batch extrema and component codes
+
+PR #171 merged after CI passed. Base 40a5ff9e47204699fb479400df80b1b3f0dd2f7d.
+Added fn:min/fn:max reference with full batch input/output, explicit decimal
+normalization, QName endpoints, a 3.1 namespace/local-name fold and 29 cases.
+Coverage: 56 entries, 447 feature plus 24 chapter checks (471 total); all
+117 registered names remain assigned. Observed numeric promotion/result-type
+and plain-duration limitations are recorded against the pinned e7ee4ab8 draft.
+QName delivery #114 and MinMax_QNameOrdering_OnlyIn40 are linked. No exact
+fn-min/fn-max gated sets are claimed. No engine/API/package/gate changes;
+source/public stays 1.1.2 and REQ-126 remains In Progress.
+Next: changed fn:sort/array:sort contracts; numeric/duration engine follow-ups
+remain separate, alongside earlier keyword/type-validation findings.
+Validation: Release build passed (one existing warning, zero errors); all 4,469 tests across ten assemblies passed without failures/skips, including 447 catalog cases. Renderer verified 70 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; batch decimal range and QName endpoints independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: dac2e4b9; [PR #172](https://github.com/Fytala-Charles/Bosak/pull/172). CI pending at handover.
+
 # Agent Handover — 2026-10-12: typed measurement comparison
 
 PR #170 merged after CI passed. Base `8008827c5f4282e8345b9542edf5b00c69abd551`.

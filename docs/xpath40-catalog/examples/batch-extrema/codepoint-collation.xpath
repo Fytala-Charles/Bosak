@@ -1,0 +1,1 @@
+let $c := 'http://www.w3.org/2005/xpath-functions/collation/codepoint' return concat(min(('a', 'B'), $c), '|', max(('a', 'B'), $c))
