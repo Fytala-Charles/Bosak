@@ -1,4 +1,29 @@
-# Computed XPath constructor disposition — 2026-10-12
+# Named XSLT declaration review — 2026-10-12
+
+Main baseline: `bb91dea2c31b7cfacb346b1689680517eae56d87`; [PR #176](https://github.com/Fytala-Charles/Bosak/pull/176) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38219107877). Current branch: `docs/req126-xslt-type-declarations`.
+
+## Current state and what was built
+
+Added two 16-field Deferred references: [xsl:item-type](xpath40-catalog/deferred/xslt-item-type.md) and [xsl:record-type](xpath40-catalog/deferred/xslt-record-type.md), reviewed against immutable QT4CG xslt.xml e7ee4ab8. Unused 4.0 declarations are ignored; named aliases/bindings and generated constructors are not implemented. Draft field/name duplicate checks are not established by unused declaration tolerance.
+
+28 fixtures cover unused declarations, actual type/constructor use, inline enum/structural contracts and full invoice alternatives. Portable XSLT 3.0 map validation rejects invalid currency/empty ID. Separate observed gap: structural-record XSLT @as conversion raises XTTE0570; explicit XPath cast in select plus as="map(*)" works. Harness now verifies XSLT error markers from compile exceptions or failed capture, without promising detection stage. Successful captures retain exact bytes/no-secondary assertions. No engine/API/package changes or gate promotions.
+
+Catalog: **61 entries; 561 feature + 24 chapter checks = 585**. All 117 names remain assigned; source/public **1.1.2**, REQ-126 **In Progress**. Focused catalog tests: 561 passed. Release build passed (one existing warning, zero errors); **4,583 tests / 0 failures / 0 skips**, ten assemblies. Renderer verified 75 pages. Entry/index, source/local links, scoped inventories/provenance, all inline inputs/code/results, nine named tests, XML validity and independent portable reports verified. Manual engine gates were not rerun for this documentation/test-harness slice. Delivery status is recorded below.
+
+## Resume here
+
+Delivery: `26b88f30ab90029c24221bfe0b240ca6763ebe42`,
+[PR #177](https://github.com/Fytala-Charles/Bosak/pull/177), pushed on
+`docs/req126-xslt-type-declarations`. Rebase onto merged main preserved the
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38220250789)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
+Next audit enclosing-mode dispositions against immutable XSLT draft, compiler/runtime and tests, separate from ordinary/named modes. Keep the slice documentation-only unless engine work is requested. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
+
+The structural-record XSLT @as gap joins existing URI truthiness/empty-query-map, comparison, extrema, sorting, Unicode, hash and historical adopted-pin follow-ups. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, PR state and next steps are superseded here.
+
+# Historical computed XPath constructor disposition — 2026-10-12
 
 Main baseline: `e99dd76c32101403c7a5b6e6c20f79b2af881a96`; [PR #175](https://github.com/Fytala-Charles/Bosak/pull/175) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38217982422). Current branch: `docs/req126-computed-constructors`.
 

@@ -163,6 +163,15 @@ Enum and choice types are small and stable — can precede records.
 - **Deferred**: `xsl:item-type`/`xsl:record-type` declarations, enclosing modes,
   capturing accumulators, `fn:apply-templates`, Serialization 4.0 parameters.
 
+  **Named declaration review (2026-10-12):** Dedicated
+  [item-type](xpath40-catalog/deferred/xslt-item-type.md) and
+  [record-type](xpath40-catalog/deferred/xslt-record-type.md) disposition records
+  distinguish ignored unused 4.0 declarations from actual named type/constructor
+  support. Portable map validation and anonymous type alternatives are verified.
+  Structural-record XSLT `@as` conversion remains an observed boundary; explicit
+  XPath cast in `select` plus `as="map(*)"` is the verified workaround.
+  The declarations remain Deferred; no tier promotion is included.
+
 ### Out of scope (recorded, not scheduled)
 
 - **XDM 4.0 GNode/JNode model** (`xnode()`/`jnode()`, `fn:jtree`/`fn:jkey`/`fn:jvalue`,

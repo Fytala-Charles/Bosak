@@ -3810,5 +3810,220 @@
     "file": "computed-xpath-constructors/xslt-empty.xsl",
     "expected": "<receipt id=\"INV-EMPTY\"><customer/><total currency=\"EUR\">0.00</total></receipt>",
     "input": "computed-xpath-constructors/empty.xml"
+  },
+  {
+    "id": "xslt-type-declarations-item-unused40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/item-unused40.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "expected": "ready"
+  },
+  {
+    "id": "xslt-type-declarations-item-unused30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xslt-type-declarations/item-unused30.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "xslt-type-declarations-item-used-valid",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/item-used-valid.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XTTE0570"
+  },
+  {
+    "id": "xslt-type-declarations-item-used-invalid-observed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/item-used-invalid-observed.xsl",
+    "input": "xslt-type-declarations/invalid.xml",
+    "error": "XTTE0570"
+  },
+  {
+    "id": "xslt-type-declarations-item-duplicate-unused-observed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/item-duplicate-unused-observed.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "expected": "ready"
+  },
+  {
+    "id": "xslt-type-declarations-item-instance",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/item-instance.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XPST0051"
+  },
+  {
+    "id": "xslt-type-declarations-record-unused40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/record-unused40.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "expected": "ready"
+  },
+  {
+    "id": "xslt-type-declarations-record-unused30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xslt-type-declarations/record-unused30.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "xslt-type-declarations-record-constructor",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/record-constructor.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "xslt-type-declarations-record-no-constructor",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/record-no-constructor.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "xslt-type-declarations-record-duplicate-fields-unused-observed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/record-duplicate-fields-unused-observed.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "expected": "ready"
+  },
+  {
+    "id": "xslt-type-declarations-record-named-as-observed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/record-named-as-observed.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XTTE0570"
+  },
+  {
+    "id": "xslt-type-declarations-portable-valid",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xslt-type-declarations/portable-valid.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "expected": "INV-2048|EUR"
+  },
+  {
+    "id": "xslt-type-declarations-portable-invalid",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xslt-type-declarations/portable-invalid.xsl",
+    "input": "xslt-type-declarations/invalid.xml",
+    "expected": "reject"
+  },
+  {
+    "id": "xslt-type-declarations-portable-empty-id",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "xslt-type-declarations/portable-empty-id.xsl",
+    "input": "xslt-type-declarations/empty.xml",
+    "expected": "reject"
+  },
+  {
+    "id": "xslt-type-declarations-inline-enum40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/inline-enum40.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "expected": "EUR"
+  },
+  {
+    "id": "xslt-type-declarations-inline-enum-invalid40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/inline-enum-invalid40.xsl",
+    "input": "xslt-type-declarations/invalid.xml",
+    "error": "XTTE0570"
+  },
+  {
+    "id": "xslt-type-declarations-inline-record40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/inline-record40.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "error": "XTTE0570"
+  },
+  {
+    "id": "xslt-type-declarations-record-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xslt-type-declarations/record-main.xpath",
+    "expected": "INV-2048|EUR"
+  },
+  {
+    "id": "xslt-type-declarations-plain-map-not-record",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xslt-type-declarations/plain-map-not-record.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "xslt-type-declarations-cast-record",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xslt-type-declarations/cast-record.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "xslt-type-declarations-invalid-record-currency",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xslt-type-declarations/invalid-record-currency.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "xslt-type-declarations-surplus-cast",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xslt-type-declarations/surplus-cast.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "xslt-type-declarations-enum-valid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xslt-type-declarations/enum-valid.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "xslt-type-declarations-enum-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "xslt-type-declarations/enum-invalid.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "xslt-type-declarations-record-default-refusal",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "xslt-type-declarations/record-default-refusal.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "xslt-type-declarations-enum-default-refusal",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "xslt-type-declarations/enum-default-refusal.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "xslt-type-declarations-inline-record-cast40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "xslt-type-declarations/inline-record-cast40.xsl",
+    "input": "xslt-type-declarations/input.xml",
+    "expected": "INV-2048|EUR"
   }
 ]

@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-10-2026     | Creation: exact published catalog examples, edge cases, and version gates.              |
 //                      | Charles Korthout | 0.2   | 12-10-2026     | Verify declared 3.1 outcomes for changed existing-function contracts.                    |
+//                      | Charles Korthout | 0.3   | 12-10-2026     | Verify declared XSLT compile/capture errors for deferred declaration examples.           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -56,11 +57,23 @@ public class CatalogExampleTests
         if (row.GetProperty("kind").GetString() == "xslt")
         {
             var source = XDocument.Load(Path.Combine(Folder, row.GetProperty("input").GetString()!));
-            var result = new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri)
-                .CaptureTransform(new XDocumentNode(source), new XsltCaptureOptions());
-            Assert.True(result.IsSuccess, string.Join("; ", result.Failures.Select(f => f.Message)));
-            Assert.Empty(result.SecondaryOutputs);
-            Assert.Equal(row.GetProperty("expected").GetString(), Encoding.UTF8.GetString(result.Principal!.Bytes.ToArray()));
+            string Transform()
+            {
+                var result = new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri)
+                    .CaptureTransform(new XDocumentNode(source), new XsltCaptureOptions());
+                if (!result.IsSuccess)
+                    throw new InvalidOperationException(string.Join("; ", result.Failures.Select(f => f.Message)));
+                Assert.Empty(result.SecondaryOutputs);
+                return Encoding.UTF8.GetString(result.Principal!.Bytes.ToArray());
+            }
+
+            if (row.TryGetProperty("error", out var xsltError))
+            {
+                var failure = Assert.ThrowsAny<Exception>(() => Transform());
+                Assert.Contains(xsltError.GetString()!, failure.Message);
+            }
+            else
+                Assert.Equal(row.GetProperty("expected").GetString(), Transform());
             return;
         }
 

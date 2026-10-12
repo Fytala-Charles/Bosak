@@ -1,0 +1,1 @@
+map {'id':'INV-2048', 'currency':'XYZ'} cast as record(id as xs:string, currency as enum('EUR', 'USD'))
