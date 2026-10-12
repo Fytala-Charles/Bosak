@@ -16,7 +16,7 @@ Validation: Release solution build passed (11 warnings, zero errors); **5,643 te
 
 Next continue D2 with all-equal/all-different and contains-/starts-with-/ends-with-subsequence. Compare pinned keywords, optional collation/defaults, comparator/callback forms and empty/typed cases; publish a realistic shipment-event workflow with paired portable reports. Keep documentation-first scope; record unavailable/tolerated forms without silently implementing metadata. Other missing families, precise coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Earlier keyword spelling, replace arity, two-let hash, text option/coercion and sequence integer/atomization issues remain separate engine follow-ups. Historical adopted pins and AC-03 gate applicability unresolved; no closure or release based on sample coverage.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `0236f62cd1697880930d58406b81db57064344cd`, [PR #189](https://github.com/Fytala-Charles/Bosak/pull/189), pushed on `docs/req126-sequence-contracts`. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before continuing D2.
 
 # Historical text/Unicode contract review — 2026-10-12
 
