@@ -4185,5 +4185,133 @@
     "file": "enclosing-modes/empty-declaration.xsl",
     "input": "enclosing-modes/input.xml",
     "expected": "ready"
+  },
+  {
+    "id": "capturing-accumulators-main-observed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "capturing-accumulators/main-observed.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-capture-no",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "capturing-accumulators/capture-no.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-capture-absent",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "capturing-accumulators/capture-absent.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-invalid-capture-observed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "capturing-accumulators/invalid-capture-observed.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-start-capture-observed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "capturing-accumulators/start-capture-observed.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-capture31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/capture31.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-capture-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "capturing-accumulators/capture-empty.xsl",
+    "input": "capturing-accumulators/empty.xml",
+    "expected": ""
+  },
+  {
+    "id": "capturing-accumulators-ordinary31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/ordinary31.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-snapshot31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/snapshot31.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:source=false:lines=2;INV-2049:source=false:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-snapshot-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/snapshot-empty.xsl",
+    "input": "capturing-accumulators/empty.xml",
+    "expected": ""
+  },
+  {
+    "id": "capturing-accumulators-snapshot-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/snapshot-reordered.xsl",
+    "input": "capturing-accumulators/reordered.xml",
+    "expected": "INV-2049:source=false:lines=1;INV-2048:source=false:lines=2;"
+  },
+  {
+    "id": "capturing-accumulators-projection31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/projection31.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "INV-2048:lines=2;INV-2049:lines=1;"
+  },
+  {
+    "id": "capturing-accumulators-projection-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/projection-empty.xsl",
+    "input": "capturing-accumulators/empty.xml",
+    "expected": ""
+  },
+  {
+    "id": "capturing-accumulators-ordinary-counter",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/ordinary-counter.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "expected": "3"
+  },
+  {
+    "id": "capturing-accumulators-unknown-accumulator",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/unknown-accumulator.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "error": "XTDE3341"
+  },
+  {
+    "id": "capturing-accumulators-not-applicable",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "capturing-accumulators/not-applicable.xsl",
+    "input": "capturing-accumulators/input.xml",
+    "error": "XTDE3362"
   }
 ]
