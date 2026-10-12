@@ -12,7 +12,7 @@ also accepted there. These observed boundaries are not portable 3.1 guarantees.
 Only exact fn-compare gate membership is claimed; no gate changes or engine
 changes. REQ-126 remains In Progress; source/public version stays 1.1.2.
 Next: changed fn:min/fn:max contracts; separate keyword/type-validation follow-ups.
-Validation: Release build passed (one existing warning, zero errors); all 4,440 tests across ten assemblies passed without failures/skips, including 418 catalog cases. Renderer verified 69 pages. Entry fields/index, local/primary anchors, inventory/provenance, named tests, complete XML inputs and inline report/results verified; numeric boundary values independently checked with Python Fraction/float32. No engine conformance rerun for this documentation/test-harness change. Delivery revision pending commit.
+Validation: Release build passed (one existing warning, zero errors); all 4,440 tests across ten assemblies passed without failures/skips, including 418 catalog cases. Renderer verified 69 pages. Entry fields/index, local/primary anchors, inventory/provenance, named tests, complete XML inputs and inline report/results verified; numeric boundary values independently checked with Python Fraction/float32. No engine conformance rerun for this documentation/test-harness change. Delivery revision: 35a18ccd; [PR #171](https://github.com/Fytala-Charles/Bosak/pull/171). CI pending at handover.
 
 # Agent Handover — 2026-10-12: supplementary coverage audit
 
