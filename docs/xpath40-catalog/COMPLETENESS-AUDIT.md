@@ -13,7 +13,7 @@ examples. The original audit was dated 2026-10-11 against source revision
 `09e678f3` (1.1.1 publication documentation); published engine 1.1.1 is revision
 `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`.
 
-Current review: **2026-10-12**, source baseline `126ac117`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
+Current review: **2026-10-12**, source baseline `37457bfd`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
 
 The original audit baseline was 28 entries, 81 catalog cases, three worked chapters, and 13
 chapter checks. All entries have the 16 numbered fields. Field presence does not
@@ -69,7 +69,7 @@ specification revision or establish that Bosak implements the entire proposal.
 
 | Criterion | Assessment | Evidence and remaining work |
 |---|---|---|
-| AC-01: landed slices, tiers, spec and delivery links | Partial | S1/S2/S5 family coverage remains partial; map/array and positional selection are now supplied. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
+| AC-01: landed slices, tiers, spec and delivery links | Partial | All registered names now have entries; supplementary signatures/options and changed existing functions remain partial. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. Further deferred grammar needs review. |
 | AC-03: verified examples and gate evidence | Partial | 415 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
 | AC-04: structure, retained entries, drift warnings | Partial | 54 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
@@ -85,7 +85,7 @@ pairs, **not function signatures or arities**.
 | Registered category | Names | Catalog assessment |
 |---|---:|---|
 | Frozen `fn:*` | 58 | 58 frozen fn names have family entries; signature and semantic coverage remain partial. |
-| Frozen `map:*` | 4 | All four names map to the product-index family; entries/items result-shape gaps are explicit. Map iteration syntax is a different feature. |
+| Frozen `map:*` | 4 | All four names map to the product-index family; the entries/items result-shape correction shipped in 1.1.2. Supplementary contracts still need review. Map iteration syntax is a different feature. |
 | Frozen `array:*` | 5 | All five names have family entries: four batch functions plus array:sort-with in the sorting family. |
 | Frozen zero-argument `xs:*` constructors | 49 | One constructor-family entry exists, with an integer example; this does not verify all constructor contracts. |
 | Experimental `fn:scan` | 1 | Entry and verified examples exist; gate status was stale. |
@@ -340,3 +340,7 @@ Text definitions were reviewed on 2026-10-12 against immutable QT4CG `e7ee4ab8`;
 ## Ranking and utility review: 2026-10-12
 
 All 117 registered names now map to entries. Supplier ranking records observed full-item boundary matching: lowest returns only B for distinct B/C nodes sharing price 8. The business report explicitly filters all equal-price offers. Pinned draft contextual-equality rules and computed-key examples require reconciliation before broader tie semantics are certified. The observed fixture is implementation evidence, not a conformance promotion. NaN screening is not financial/range validation, type reflection is not schema validation, and hash options/algorithms remain partially covered. The independent SHA-256 reference uses the same declared UTF-8 payload. No engine/package/gate change is included.
+
+## Supplementary review: 2026-10-12
+
+The [supplementary coverage audit](SUPPLEMENTARY-COVERAGE-AUDIT.md) records 68 non-constructor name registration arities, identifies changed `fn:compare` contracts outside the name inventory, and enumerates wider deferred/out-of-scope dossier decisions. Registration metadata is not full signature evidence. All acceptance statuses remain unchanged. The 1.1.2 map result-shape correction is delivered; key-tie semantics and grapheme segmentation remain separate follow-ups. Next delivery: typed measurement comparison before further options/grammar expansion.
