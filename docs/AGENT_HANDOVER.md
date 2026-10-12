@@ -18,7 +18,7 @@ Validation: Release solution build passed (11 warnings, zero errors); **5,495 te
 
 Next continue D2 with a bounded family review among the 37 missing-keyword families: text/Unicode functions are a useful first group (char/characters/graphemes/pad-string/trim-space/substring helpers). Review pinned parameter names, required/default arguments and sequence types, then publish realistic positional/keyword/default/empty/invalid cases. Keep documentation-first scope and record unavailable forms rather than implementing metadata silently. The new spelling, replace and two-let keyword boundaries are separately prioritized engine follow-ups. D3 grammar/type/pattern inventory and D4 provenance/drift/acceptance remain queued; historical adopted pins and AC-03 gate applicability remain unresolved. No closure or release based solely on this matrix.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `76046795662e487ebb35bdae29b360072f80ee95`, [PR #187](https://github.com/Fytala-Charles/Bosak/pull/187), pushed on `docs/req126-signature-contract-audit`. Rebase onto merged main preserved the validated content tree. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before continuing D2.
 
 # Historical focus-constructor audit — 2026-10-12
 
