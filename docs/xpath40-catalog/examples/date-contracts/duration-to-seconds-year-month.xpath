@@ -1,0 +1,1 @@
+string(duration-to-seconds(xs:yearMonthDuration('P1M')))

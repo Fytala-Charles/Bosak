@@ -1,0 +1,1 @@
+string(duration-to-seconds(xs:dayTimeDuration('P1DT0.5S')))

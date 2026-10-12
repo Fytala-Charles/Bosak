@@ -13579,5 +13579,761 @@
     "mode": "40",
     "file": "container-contracts/report-reordered-40.xpath",
     "expected": "batches=3;lines=3;ids=B3,B2,B1;positive=A:5;units=5"
+  },
+  {
+    "id": "date-contract-build-dateTime-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/build-dateTime-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "date-contract-build-dateTime-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-build-dateTime-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "date-contracts/build-dateTime-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-days-in-month-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/days-in-month-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "date-contract-days-in-month-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-days-in-month-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "date-contracts/days-in-month-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-unix-dateTime-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/unix-dateTime-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "date-contract-unix-dateTime-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-unix-dateTime-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "date-contracts/unix-dateTime-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-seconds-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/seconds-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "date-contract-seconds-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-seconds-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "date-contracts/seconds-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/duration-to-seconds-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "date-contracts/duration-to-seconds-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "date-contract-build-dateTime-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "date-contract-build-dateTime-empty-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-empty-map.xpath",
+    "error": "FODT0005"
+  },
+  {
+    "id": "date-contract-build-dateTime-year",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-year.xpath",
+    "expected": "2024"
+  },
+  {
+    "id": "date-contract-build-dateTime-year-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-year-month.xpath",
+    "expected": "2024-02"
+  },
+  {
+    "id": "date-contract-build-dateTime-date",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-date.xpath",
+    "expected": "2024-02-29"
+  },
+  {
+    "id": "date-contract-build-dateTime-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-month.xpath",
+    "expected": "--02"
+  },
+  {
+    "id": "date-contract-build-dateTime-month-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-month-day.xpath",
+    "expected": "--02-29"
+  },
+  {
+    "id": "date-contract-build-dateTime-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-day.xpath",
+    "expected": "---29"
+  },
+  {
+    "id": "date-contract-build-dateTime-time",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-time.xpath",
+    "expected": "12:34:04.267"
+  },
+  {
+    "id": "date-contract-build-dateTime-dateTime",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-dateTime.xpath",
+    "expected": "2024-02-29T12:34:04.25"
+  },
+  {
+    "id": "date-contract-build-dateTime-stamp",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-stamp.xpath",
+    "expected": "2024-02-29T12:34:04.25+02:00"
+  },
+  {
+    "id": "date-contract-build-dateTime-empty-unused",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-empty-unused.xpath",
+    "expected": "12:34:04.25"
+  },
+  {
+    "id": "date-contract-build-dateTime-partial",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-partial.xpath",
+    "error": "FODT0005"
+  },
+  {
+    "id": "date-contract-build-dateTime-invalid-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-invalid-day.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "date-contract-build-dateTime-hour24",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-hour24.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "date-contract-build-dateTime-seconds60",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-seconds60.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "date-contract-build-dateTime-timezone-limit",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-timezone-limit.xpath",
+    "expected": "2024+14:00"
+  },
+  {
+    "id": "date-contract-build-dateTime-timezone-outside",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-timezone-outside.xpath",
+    "error": "FODT0003"
+  },
+  {
+    "id": "date-contract-build-dateTime-timezone-fraction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-timezone-fraction.xpath",
+    "error": "FODT0003"
+  },
+  {
+    "id": "date-contract-build-dateTime-numeric-coercion",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-numeric-coercion.xpath",
+    "expected": "2024-02-29"
+  },
+  {
+    "id": "date-contract-build-dateTime-fractional-field",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-fractional-field.xpath",
+    "expected": "2024-02-01"
+  },
+  {
+    "id": "date-contract-build-dateTime-string-field",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-string-field.xpath",
+    "expected": "2024-02-29"
+  },
+  {
+    "id": "date-contract-build-dateTime-untyped-field",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-untyped-field.xpath",
+    "expected": "2024"
+  },
+  {
+    "id": "date-contract-build-dateTime-unknown-field",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-unknown-field.xpath",
+    "expected": "2024"
+  },
+  {
+    "id": "date-contract-build-dateTime-multiple-field",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-multiple-field.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-build-dateTime-wrong-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-wrong-array.xpath",
+    "expected": ""
+  },
+  {
+    "id": "date-contract-build-dateTime-wrong-integer",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-wrong-integer.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-build-dateTime-year-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-year-zero.xpath",
+    "expected": "0000-02-29"
+  },
+  {
+    "id": "date-contract-build-dateTime-large-year",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-large-year.xpath",
+    "expected": "10000-01-01"
+  },
+  {
+    "id": "date-contract-build-dateTime-stamp-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-stamp-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "date-contract-build-dateTime-no-invented-zone",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-no-invented-zone.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "date-contract-build-dateTime-time-fraction-component",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-time-fraction-component.xpath",
+    "expected": "4.267"
+  },
+  {
+    "id": "date-contract-build-dateTime-dateTime-fraction-component",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-dateTime-fraction-component.xpath",
+    "expected": "4.267"
+  },
+  {
+    "id": "date-contract-build-dateTime-year-zero-dateTime",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-year-zero-dateTime.xpath",
+    "expected": "0000-02-29T00:00:00"
+  },
+  {
+    "id": "date-contract-build-dateTime-nonempty-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/build-dateTime-nonempty-array.xpath",
+    "expected": "2024"
+  },
+  {
+    "id": "date-contract-days-in-month-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "date-contract-days-in-month-leap",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-leap.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-days-in-month-century",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-century.xpath",
+    "expected": "28"
+  },
+  {
+    "id": "date-contract-days-in-month-four-century",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-four-century.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-days-in-month-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-month.xpath",
+    "expected": "30"
+  },
+  {
+    "id": "date-contract-days-in-month-local-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-local-month.xpath",
+    "expected": "31"
+  },
+  {
+    "id": "date-contract-days-in-month-year-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-year-zero.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-days-in-month-negative-year",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-negative-year.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-days-in-month-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-string.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-days-in-month-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-untyped.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-days-in-month-trailing-text",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-trailing-text.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-days-in-month-wrong-time",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-wrong-time.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-days-in-month-wrong-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-wrong-map.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-days-in-month-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/days-in-month-multiple.xpath",
+    "expected": "29"
+  },
+  {
+    "id": "date-contract-unix-dateTime-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-default.xpath",
+    "expected": "1970-01-01T00:00:00Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-empty.xpath",
+    "expected": "1970-01-01T00:00:00Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-zero.xpath",
+    "expected": "1970-01-01T00:00:00Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-millisecond",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-millisecond.xpath",
+    "expected": "1970-01-01T00:00:00.001Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-day.xpath",
+    "expected": "1970-01-02T00:00:00Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-negative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-negative.xpath",
+    "error": "FOCA0002"
+  },
+  {
+    "id": "date-contract-unix-dateTime-decimal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-decimal.xpath",
+    "expected": "1970-01-01T00:00:00.001Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-double",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-double.xpath",
+    "expected": "1970-01-01T00:00:00.001Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-string.xpath",
+    "expected": "1970-01-01T00:00:00.001Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-untyped.xpath",
+    "expected": "1970-01-01T00:00:00.001Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-wrong-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-wrong-map.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "date-contract-unix-dateTime-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-multiple.xpath",
+    "expected": "1970-01-01T00:00:00.001Z"
+  },
+  {
+    "id": "date-contract-unix-dateTime-overflow",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-overflow.xpath",
+    "error": "FODT0001"
+  },
+  {
+    "id": "date-contract-unix-dateTime-stamp-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/unix-dateTime-stamp-type.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "date-contract-seconds-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "date-contract-seconds-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-zero.xpath",
+    "expected": "PT0S"
+  },
+  {
+    "id": "date-contract-seconds-fraction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-fraction.xpath",
+    "expected": "PT0.001S"
+  },
+  {
+    "id": "date-contract-seconds-negative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-negative.xpath",
+    "expected": "-PT1H30M"
+  },
+  {
+    "id": "date-contract-seconds-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-day.xpath",
+    "expected": "P1D"
+  },
+  {
+    "id": "date-contract-seconds-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-seconds-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-untyped.xpath",
+    "expected": "PT1.25S"
+  },
+  {
+    "id": "date-contract-seconds-double",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-double.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-seconds-boolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-boolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-seconds-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-seconds-wrong-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-wrong-map.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-seconds-overflow",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-overflow.xpath",
+    "error": "FODT0002"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "date-contract-duration-to-seconds-minute",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-minute.xpath",
+    "expected": "90"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-day-fraction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-day-fraction.xpath",
+    "expected": "86400.5"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-negative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-negative.xpath",
+    "expected": "-5400"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-year-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-year-month.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-general-month",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-general-month.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-general-day",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-general-day.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-untyped.xpath",
+    "expected": "90"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-duration-to-seconds-wrong-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/duration-to-seconds-wrong-map.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "date-contract-seconds-roundtrip",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/seconds-roundtrip.xpath",
+    "expected": "90.125"
+  },
+  {
+    "id": "date-contract-report-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/report-31.xpath",
+    "expected": "receipts=2;details=R1:start=2024-02-29T00:00:00Z,expires=2024-02-29T00:01:30.5Z,monthDays=29,seconds=90.5|R2:start=2024-02-29T23:59:00Z,expires=2024-03-01T00:01:00Z,monthDays=29,seconds=120"
+  },
+  {
+    "id": "date-contract-report-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/report-40.xpath",
+    "expected": "receipts=2;details=R1:start=2024-02-29T00:00:00Z,expires=2024-02-29T00:01:30.5Z,monthDays=29,seconds=90.5|R2:start=2024-02-29T23:59:00Z,expires=2024-03-01T00:01:00Z,monthDays=29,seconds=120"
+  },
+  {
+    "id": "date-contract-report-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/report-empty-31.xpath",
+    "expected": "receipts=0;details="
+  },
+  {
+    "id": "date-contract-report-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/report-empty-40.xpath",
+    "expected": "receipts=0;details="
+  },
+  {
+    "id": "date-contract-report-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "date-contracts/report-reordered-31.xpath",
+    "expected": "receipts=2;details=R2:start=2024-02-29T23:59:00Z,expires=2024-03-01T00:01:00Z,monthDays=29,seconds=120|R1:start=2024-02-29T00:00:00Z,expires=2024-02-29T00:01:30.5Z,monthDays=29,seconds=90.5"
+  },
+  {
+    "id": "date-contract-report-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "date-contracts/report-reordered-40.xpath",
+    "expected": "receipts=2;details=R2:start=2024-02-29T23:59:00Z,expires=2024-03-01T00:01:00Z,monthDays=29,seconds=120|R1:start=2024-02-29T00:00:00Z,expires=2024-02-29T00:01:30.5Z,monthDays=29,seconds=90.5"
   }
 ]

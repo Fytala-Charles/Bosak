@@ -1,0 +1,1 @@
+seconds-from-time(build-dateTime(map{'hours':12,'minutes':34,'seconds':4.2678}))

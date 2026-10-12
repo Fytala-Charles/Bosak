@@ -1,3 +1,23 @@
+# Date/time construction contracts — 2026-10-12
+
+Main baseline: `675d8f96facf1fc72ed3a05cb2781fa493fd1f01`; [PR #194](https://github.com/Fytala-Charles/Bosak/pull/194) merged after successful CI retry. The first CI attempt failed an existing 1ms cancellation-timing test (Valid before cancellation fired); all container checks passed. Current branch: `docs/req126-date-contracts`; public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [five-family date/time review](xpath40-catalog/DATE-TIME-CONTRACT-REVIEW.md) and [detailed receipt-retention README](xpath40-catalog/examples/date-contracts/README.md), with complete normal/empty/reordered XML, paired XPath 3.1/4.0 code and exact outputs. Five raw signature rows link case IDs, baseline and build-dateTime's original type-ref plus seven record fields. Canonical summaries, registry, audits, queue and two family entries synchronized. Corrected the family entry's and AGENTS.md's obsolete blanket pre-year-1 construction limitation: XPathDateTime stores extended years, while DateTimeOffset conversion and unix-dateTime remain bounded.
+
+108 new checks: 15 keyword/mode refusals, 87 focused Gregorian/timezone/unit/type/cardinality checks and six full XPath 3.1/4.0 receipt-retention reports. Targeted absent-keyword review: 32 of 37 supplied, five remaining; metadata unchanged. Malformed string/multi-item tolerance, record conversion and fractional-component precision remain explicit follow-ups. Current catalog: 67 entries, 1,988 feature + 24 chapter checks = 2,012; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: build-uri, decode-from-uri, collation-available, identity and is-NaN.
+
+All five keywords refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1. Date/timeStamp/no-invented-zone, eight Gregorian shapes, leap/local-month calculations, epoch default/millisecond units, duration totals/sign/fractions and limits verified. Tested days-in-month malformed suffix/two-date input and unix-dateTime first-item behavior remain tolerance follow-ups. Constructed 4.2678 seconds gives component 4.267 in tested time/dateTime forms. Year-zero date/dateTime and year-10000 date work; no universal extended-year claim. Consumer reports use valid integers, UTC and a half-second duration, independently calculated.
+
+Validation: Release solution build passed (12 existing warnings, zero errors); **6,216 tests / 0 failures / 0 skips**, ten assemblies including all 1,988 feature checks. Renderer verified 97 catalog pages plus six implementation/canonical pages. Five pinned signatures and record fields, 108 exact cases, six independently computed full reports, complete README expressions/local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. Manual engine gates are not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Next review the final five absent-keyword families: build-uri, decode-from-uri, collation-available, identity and is-NaN, with validated import/link diagnostics. Targeted review does not supply missing metadata or close full defaults/types/options. Exhaustive changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain. Retain earlier keyword/text/sequence/predicate/selection/hash/map-filter follow-ups and these date/time conversion/cardinality/precision boundaries. REQ-126 stays In Progress; no release or Braid action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery commit/PR will be recorded after push.
+
 # Map/array container contracts — 2026-10-12
 
 Main baseline: `43ed546bd1d61364fe3e61fee736433617473301`; PR #193 publication record merged. Current branch: `docs/req126-container-contracts`. Public/source version remains **1.1.3**. Earlier delivery states below are historical.

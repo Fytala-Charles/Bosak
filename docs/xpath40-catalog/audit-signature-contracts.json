@@ -879,11 +879,85 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative date/time review: keyword modes, Gregorian field sets, timezone/precision, empty/default, unit and type/cardinality boundaries. Tolerated malformed/multi-item inputs and fractional-component precision remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-build-dateTime-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "dateContractCases": [
+        "date-contract-build-dateTime-keyword-31",
+        "date-contract-build-dateTime-keyword-40",
+        "date-contract-build-dateTime-keyword-experimental",
+        "date-contract-build-dateTime-empty",
+        "date-contract-build-dateTime-empty-map",
+        "date-contract-build-dateTime-year",
+        "date-contract-build-dateTime-year-month",
+        "date-contract-build-dateTime-date",
+        "date-contract-build-dateTime-month",
+        "date-contract-build-dateTime-month-day",
+        "date-contract-build-dateTime-day",
+        "date-contract-build-dateTime-time",
+        "date-contract-build-dateTime-dateTime",
+        "date-contract-build-dateTime-stamp",
+        "date-contract-build-dateTime-empty-unused",
+        "date-contract-build-dateTime-partial",
+        "date-contract-build-dateTime-invalid-day",
+        "date-contract-build-dateTime-hour24",
+        "date-contract-build-dateTime-seconds60",
+        "date-contract-build-dateTime-timezone-limit",
+        "date-contract-build-dateTime-timezone-outside",
+        "date-contract-build-dateTime-timezone-fraction",
+        "date-contract-build-dateTime-numeric-coercion",
+        "date-contract-build-dateTime-fractional-field",
+        "date-contract-build-dateTime-string-field",
+        "date-contract-build-dateTime-untyped-field",
+        "date-contract-build-dateTime-unknown-field",
+        "date-contract-build-dateTime-multiple-field",
+        "date-contract-build-dateTime-wrong-array",
+        "date-contract-build-dateTime-wrong-integer",
+        "date-contract-build-dateTime-year-zero",
+        "date-contract-build-dateTime-large-year",
+        "date-contract-build-dateTime-stamp-type",
+        "date-contract-build-dateTime-no-invented-zone",
+        "date-contract-build-dateTime-time-fraction-component",
+        "date-contract-build-dateTime-dateTime-fraction-component",
+        "date-contract-build-dateTime-year-zero-dateTime",
+        "date-contract-build-dateTime-nonempty-array"
+      ],
+      "dateContractTypeReference": {
+        "name": "dateTime-record",
+        "occurrence": "?",
+        "fields": [
+          {
+            "name": "year",
+            "type": "xs:integer?"
+          },
+          {
+            "name": "month",
+            "type": "xs:integer?"
+          },
+          {
+            "name": "day",
+            "type": "xs:integer?"
+          },
+          {
+            "name": "hours",
+            "type": "xs:integer?"
+          },
+          {
+            "name": "minutes",
+            "type": "xs:integer?"
+          },
+          {
+            "name": "seconds",
+            "type": "xs:decimal?"
+          },
+          {
+            "name": "timezone",
+            "type": "xs:dayTimeDuration?"
+          }
+        ]
+      }
     },
     {
       "name": "fn:build-uri",
@@ -1510,11 +1584,30 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative date/time review: keyword modes, Gregorian field sets, timezone/precision, empty/default, unit and type/cardinality boundaries. Tolerated malformed/multi-item inputs and fractional-component precision remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-days-in-month-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "dateContractCases": [
+        "date-contract-days-in-month-keyword-31",
+        "date-contract-days-in-month-keyword-40",
+        "date-contract-days-in-month-keyword-experimental",
+        "date-contract-days-in-month-empty",
+        "date-contract-days-in-month-leap",
+        "date-contract-days-in-month-century",
+        "date-contract-days-in-month-four-century",
+        "date-contract-days-in-month-month",
+        "date-contract-days-in-month-local-month",
+        "date-contract-days-in-month-year-zero",
+        "date-contract-days-in-month-negative-year",
+        "date-contract-days-in-month-string",
+        "date-contract-days-in-month-untyped",
+        "date-contract-days-in-month-trailing-text",
+        "date-contract-days-in-month-wrong-time",
+        "date-contract-days-in-month-wrong-map",
+        "date-contract-days-in-month-multiple"
+      ]
     },
     {
       "name": "fn:decode-from-uri",
@@ -1875,11 +1968,27 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative date/time review: keyword modes, Gregorian field sets, timezone/precision, empty/default, unit and type/cardinality boundaries. Tolerated malformed/multi-item inputs and fractional-component precision remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-duration-to-seconds-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "dateContractCases": [
+        "date-contract-duration-to-seconds-keyword-31",
+        "date-contract-duration-to-seconds-keyword-40",
+        "date-contract-duration-to-seconds-keyword-experimental",
+        "date-contract-duration-to-seconds-empty",
+        "date-contract-duration-to-seconds-minute",
+        "date-contract-duration-to-seconds-day-fraction",
+        "date-contract-duration-to-seconds-negative",
+        "date-contract-duration-to-seconds-year-month",
+        "date-contract-duration-to-seconds-general-month",
+        "date-contract-duration-to-seconds-general-day",
+        "date-contract-duration-to-seconds-string",
+        "date-contract-duration-to-seconds-untyped",
+        "date-contract-duration-to-seconds-multiple",
+        "date-contract-duration-to-seconds-wrong-map"
+      ]
     },
     {
       "name": "fn:element-to-map",
@@ -4247,11 +4356,29 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative date/time review: keyword modes, Gregorian field sets, timezone/precision, empty/default, unit and type/cardinality boundaries. Tolerated malformed/multi-item inputs and fractional-component precision remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-seconds-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "dateContractCases": [
+        "date-contract-seconds-keyword-31",
+        "date-contract-seconds-keyword-40",
+        "date-contract-seconds-keyword-experimental",
+        "date-contract-seconds-empty",
+        "date-contract-seconds-zero",
+        "date-contract-seconds-fraction",
+        "date-contract-seconds-negative",
+        "date-contract-seconds-day",
+        "date-contract-seconds-string",
+        "date-contract-seconds-untyped",
+        "date-contract-seconds-double",
+        "date-contract-seconds-boolean",
+        "date-contract-seconds-multiple",
+        "date-contract-seconds-wrong-map",
+        "date-contract-seconds-overflow",
+        "date-contract-seconds-roundtrip"
+      ]
     },
     {
       "name": "fn:slice",
@@ -5367,12 +5494,31 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative date/time review: keyword modes, Gregorian field sets, timezone/precision, empty/default, unit and type/cardinality boundaries. Tolerated malformed/multi-item inputs and fractional-component precision remain follow-ups; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-unix-dateTime-0",
         "signature-audit-fn-unix-dateTime-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "dateContractCases": [
+        "date-contract-unix-dateTime-keyword-31",
+        "date-contract-unix-dateTime-keyword-40",
+        "date-contract-unix-dateTime-keyword-experimental",
+        "date-contract-unix-dateTime-default",
+        "date-contract-unix-dateTime-empty",
+        "date-contract-unix-dateTime-zero",
+        "date-contract-unix-dateTime-millisecond",
+        "date-contract-unix-dateTime-day",
+        "date-contract-unix-dateTime-negative",
+        "date-contract-unix-dateTime-decimal",
+        "date-contract-unix-dateTime-double",
+        "date-contract-unix-dateTime-string",
+        "date-contract-unix-dateTime-untyped",
+        "date-contract-unix-dateTime-wrong-map",
+        "date-contract-unix-dateTime-multiple",
+        "date-contract-unix-dateTime-overflow",
+        "date-contract-unix-dateTime-stamp-type"
+      ]
     },
     {
       "name": "fn:while-do",
@@ -7951,8 +8097,8 @@
   "sequenceReviewDate": "2026-10-12",
   "sequenceReviewSourceRevision": "2efcd33a483cb9adb8eae35908a083a661388b1d",
   "sequenceReviewChecks": 65,
-  "targetedAbsentMetadataReviewed": 27,
-  "targetedAbsentMetadataRemaining": 10,
+  "targetedAbsentMetadataReviewed": 32,
+  "targetedAbsentMetadataRemaining": 5,
   "predicateReviewDate": "2026-10-12",
   "predicateReviewSourceRevision": "a151fff80e2ef3d3afc226179df673f66165ab4f",
   "predicateReviewChecks": 102,
@@ -7961,5 +8107,8 @@
   "selectionReviewChecks": 68,
   "containerReviewDate": "2026-10-12",
   "containerReviewSourceRevision": "43ed546bd1d61364fe3e61fee736433617473301",
-  "containerReviewChecks": 89
+  "containerReviewChecks": 89,
+  "dateReviewDate": "2026-10-12",
+  "dateReviewSourceRevision": "675d8f96facf1fc72ed3a05cb2781fa493fd1f01",
+  "dateReviewChecks": 108
 }

@@ -49,7 +49,7 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 | [`fn:all-equal`](functions/shipment-event-sequences.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-all-equal-1.xpath) |
 | [`fn:atomic-equal`](functions/atomic-equal.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-atomic-equal-2.xpath) |
 | [`fn:atomic-type-annotation`](functions/numeric-import-diagnostics.md) | 1 | 1 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-atomic-type-annotation-1.xpath) |
-| [`fn:build-dateTime`](functions/month-end-cutoffs.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-build-dateTime-1.xpath) |
+| [`fn:build-dateTime`](functions/month-end-cutoffs.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-build-dateTime-1.xpath) / [date/time cases](examples/date-contracts/README.md) |
 | [`fn:build-uri`](functions/invoice-api-uris.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-build-uri-1.xpath) |
 | [`fn:char`](functions/customer-text-cleanup.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-char-1.xpath) / [text cases](examples/text-contracts/README.md) |
 | [`fn:characters`](functions/customer-text-cleanup.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-characters-1.xpath) / [text cases](examples/text-contracts/README.md) |
@@ -57,12 +57,12 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 | [`fn:contains-subsequence`](functions/shipment-event-sequences.md) | 2, 3 | 2, 3 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-contains-subsequence-2.xpath) |
 | [`fn:csv-doc`](functions/csv-parsing.md) | 1, 2 | 1, 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-csv-doc-1.xpath) |
 | [`fn:csv-to-xml`](functions/csv-parsing.md) | 1, 2 | 1, 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-csv-to-xml-1.xpath) |
-| [`fn:days-in-month`](functions/month-end-cutoffs.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-days-in-month-1.xpath) |
+| [`fn:days-in-month`](functions/month-end-cutoffs.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-days-in-month-1.xpath) / [date/time cases](examples/date-contracts/README.md) |
 | [`fn:decode-from-uri`](functions/invoice-api-uris.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-decode-from-uri-1.xpath) |
 | [`fn:do-until`](functions/bounded-retries.md) | 3 | 3 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-do-until-3.xpath) |
 | [`fn:drop-while`](functions/ordered-queue-prefix.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-drop-while-2.xpath) |
 | [`fn:duplicate-values`](functions/sequence-distinctness.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-duplicate-values-1.xpath) |
-| [`fn:duration-to-seconds`](functions/timestamp-deadlines.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-duration-to-seconds-1.xpath) |
+| [`fn:duration-to-seconds`](functions/timestamp-deadlines.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-duration-to-seconds-1.xpath) / [date/time cases](examples/date-contracts/README.md) |
 | [`fn:element-to-map`](functions/element-to-map.md) | 1, 2 | 1, 2 | names differ from pinned signatures | Same normalized list | [lookup](examples/signature-contracts/fn-element-to-map-1.xpath) |
 | [`fn:element-to-map-plan`](functions/element-to-map.md) | 1 | 1 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-element-to-map-plan-1.xpath) |
 | [`fn:ends-with-subsequence`](functions/shipment-event-sequences.md) | 2, 3 | 2, 3 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-ends-with-subsequence-2.xpath) |
@@ -90,7 +90,7 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 | [`fn:partition`](functions/consecutive-partition.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-partition-2.xpath) |
 | [`fn:replicate`](functions/order-sequence-selection.md) | 2 | 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-replicate-2.xpath) |
 | [`fn:scan`](experimental/fn-scan.md) | 3 | 3 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-scan-3.xpath) |
-| [`fn:seconds`](functions/timestamp-deadlines.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-seconds-1.xpath) |
+| [`fn:seconds`](functions/timestamp-deadlines.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-seconds-1.xpath) / [date/time cases](examples/date-contracts/README.md) |
 | [`fn:slice`](functions/order-sequence-selection.md) | 1, 2, 3, 4 | 1, 2, 3, 4 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-slice-1.xpath) |
 | [`fn:some`](functions/higher-order-selection.md) | 1, 2 | 1, 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-some-1.xpath) |
 | [`fn:sort-by`](functions/supplier-offer-ranking.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-sort-by-2.xpath) |
@@ -102,7 +102,7 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 | [`fn:transitive-closure`](functions/product-dependency-closure.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-transitive-closure-2.xpath) |
 | [`fn:trim-space`](functions/customer-text-cleanup.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-trim-space-1.xpath) / [text cases](examples/text-contracts/README.md) |
 | [`fn:trunk`](functions/order-sequence-selection.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-trunk-1.xpath) |
-| [`fn:unix-dateTime`](functions/timestamp-deadlines.md) | 0, 1 | 0, 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-unix-dateTime-0.xpath) |
+| [`fn:unix-dateTime`](functions/timestamp-deadlines.md) | 0, 1 | 0, 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-unix-dateTime-0.xpath) / [date/time cases](examples/date-contracts/README.md) |
 | [`fn:while-do`](functions/bounded-retries.md) | 3 | 3 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-while-do-3.xpath) |
 | [`map:build`](functions/product-map-index.md) | 1, 2, 3, 4 | 1, 2, 3, 4 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/map-build-1.xpath) |
 | [`map:entries`](functions/product-map-index.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/map-entries-1.xpath) / [container cases](examples/container-contracts/README.md) |
@@ -155,3 +155,6 @@ The subsequent [comparison/selection review](SELECTION-CONTRACT-REVIEW.md) bring
 
 
 The subsequent [container contract review](CONTAINER-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 27 of 37 families, with 10 remaining. Metadata is unchanged. Current catalog: 67 entries, 1,880 feature + 24 chapter checks = 1,904, version 1.1.3. Earlier counts and queues are historical. Next: date/time construction and utilities; D2 stays partial.
+
+
+The subsequent [date/time review](DATE-TIME-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 32 of 37 families, with five remaining. Metadata is unchanged. Current catalog: 67 entries, 1,988 feature + 24 chapter checks = 2,012, version 1.1.3. Earlier counts and queues are historical. Next: URI/import utilities; D2 stays partial.

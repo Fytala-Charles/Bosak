@@ -62,9 +62,10 @@ An offset such as +02:00 is not an IANA timezone and carries no daylight-saving
 rules; the host must resolve a named zone for the scheduled date before supplying
 its offset. No implicit timezone or current clock is used here.
 
-Bosak has implementation limits for Gregorian construction before year 1 and
-very large years. The year-zero case verifies `days-in-month` on a gYearMonth;
-it does not establish dateTime construction support for that year.
+The subsequent 1.1.3 contract review verifies year-zero date/dateTime and
+year-10000 date construction, as well as year-zero month-length lookup. These
+observed forms supersede the earlier blanket construction-limit statement;
+not every extended-year operation or range is certified.
 
 ## 8. Structure
 
@@ -100,6 +101,8 @@ The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExamp
 checks exact text/error markers and default-profile refusal for successful 4.0
 cases. All inputs are inline; no current date, external variables or context
 item are needed.
+
+**Supplementary contract review (2026-10-12):** [Date/time review](../DATE-TIME-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed receipt-retention README](../examples/date-contracts/README.md) supply 108 checks across five families: keywords, Gregorian field sets, offsets, units, empty/default, precision and type/cardinality boundaries, plus complete XPath 3.1/4.0 reports. Keywords remain unavailable. Malformed/multi-item tolerance, record conversion and fractional-component loss remain engine follow-ups. Source/public version is 1.1.3; original delivery/unit/gate and historical adopted-pin limits remain.
 
 ## 13. Sample Code
 
