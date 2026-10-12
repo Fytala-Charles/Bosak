@@ -1,0 +1,1 @@
+every $v in ('P2M' ! xs:yearMonthDuration()) satisfies $v instance of xs:yearMonthDuration

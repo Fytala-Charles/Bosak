@@ -1,0 +1,1 @@
+count(('supplier A', 'supplier A') ! xs:string())

@@ -1,0 +1,1 @@
+count(('P2M', 'P2M') ! xs:yearMonthDuration())

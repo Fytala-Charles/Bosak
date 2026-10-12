@@ -1,0 +1,1 @@
+every $v in ('PART_A' ! xs:ID()) satisfies $v instance of xs:ID

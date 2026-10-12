@@ -1,0 +1,1 @@
+string-join(xs:unsignedByte('12') ! string(.), '|')

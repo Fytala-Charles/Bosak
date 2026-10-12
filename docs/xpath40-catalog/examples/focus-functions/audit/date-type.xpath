@@ -1,0 +1,1 @@
+every $v in ('2026-10-12' ! xs:date()) satisfies $v instance of xs:date

@@ -1,0 +1,1 @@
+string-join(('true' ! xs:boolean()) ! string(.), '|')

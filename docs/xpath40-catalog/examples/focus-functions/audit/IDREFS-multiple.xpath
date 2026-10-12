@@ -1,0 +1,1 @@
+count(('A B', 'A B') ! xs:IDREFS())

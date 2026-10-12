@@ -1,0 +1,1 @@
+string-join(xs:dateTimeStamp('2026-10-12T09:30:00Z') ! string(.), '|')

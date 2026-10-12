@@ -1,0 +1,1 @@
+string-join(xs:decimal('12.50') ! string(.), '|')

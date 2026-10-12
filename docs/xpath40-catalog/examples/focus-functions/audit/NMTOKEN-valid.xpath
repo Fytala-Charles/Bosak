@@ -1,0 +1,1 @@
+string-join(('PART_A' ! xs:NMTOKEN()) ! string(.), '|')

@@ -1,0 +1,1 @@
+string-join(xs:byte('12') ! string(.), '|')

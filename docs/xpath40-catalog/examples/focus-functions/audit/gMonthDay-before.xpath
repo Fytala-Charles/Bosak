@@ -1,0 +1,1 @@
+string-join(xs:gMonthDay('--10-12') ! string(.), '|')

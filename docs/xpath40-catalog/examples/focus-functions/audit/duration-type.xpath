@@ -1,0 +1,1 @@
+every $v in ('P1DT2H' ! xs:duration()) satisfies $v instance of xs:duration

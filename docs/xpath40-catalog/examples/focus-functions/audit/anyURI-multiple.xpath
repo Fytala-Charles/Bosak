@@ -1,0 +1,1 @@
+count(('https://supplier.example/invoice/42', 'https://supplier.example/invoice/42') ! xs:anyURI())

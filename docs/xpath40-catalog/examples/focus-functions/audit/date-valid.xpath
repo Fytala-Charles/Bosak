@@ -1,0 +1,1 @@
+string-join(('2026-10-12' ! xs:date()) ! string(.), '|')

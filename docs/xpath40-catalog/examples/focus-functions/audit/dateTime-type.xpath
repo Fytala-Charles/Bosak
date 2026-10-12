@@ -1,0 +1,1 @@
+every $v in ('2026-10-12T09:30:00Z' ! xs:dateTime()) satisfies $v instance of xs:dateTime
