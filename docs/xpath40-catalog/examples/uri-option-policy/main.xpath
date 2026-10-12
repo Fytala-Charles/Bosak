@@ -1,0 +1,5 @@
+let $r := parse-xml('<routes><archive server="files.example.test" folder="invoices" leaf="October 2026" value="//files.example.test/invoices/October%202026"/><partner host="api.example.test" value="https://demo:placeholder@api.example.test:443/legacy"/></routes>')/routes
+return let $archive := parse-uri(string($r/archive/@value), map {'unc-path': true()})
+return let $api := parse-uri(string($r/partner/@value), map {'omit-default-ports': true()})
+return let $target := build-uri(map {'scheme': $api?scheme, 'host': $api?host, 'port': $api?port, 'authority': 'ignored.example.test:8443', 'path': '/ignored', 'path-segments': ('', 'v2', 'invoices', 'INV/2048'), 'query': 'ignored=1', 'query-parameters': map {'status': 'ready now'}})
+return concat('archive-scheme=', $archive?scheme, '; archive=', $archive?filepath, '; partner=', $target, '; userinfo=', exists($api?userinfo))

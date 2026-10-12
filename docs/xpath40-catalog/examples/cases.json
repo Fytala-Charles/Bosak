@@ -3402,5 +3402,201 @@
     "file": "warehouse-pick-sorting/explicit-data-key.xpath",
     "expected": "1,2,3|1,2,3",
     "baselineExpected": "1,2,3|1,2,3"
+  },
+  {
+    "id": "uri-option-policy-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/main.xpath",
+    "expected": "archive-scheme=file; archive=//files.example.test/invoices/October 2026; partner=https://api.example.test/v2/invoices/INV%2F2048?status=ready%20now; userinfo=false"
+  },
+  {
+    "id": "uri-option-policy-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "uri-option-policy/baseline.xpath",
+    "expected": "archive=//files.example.test/invoices/October 2026; partner=https://api.example.test/v2/invoices/INV%2F2048?status=ready%20now"
+  },
+  {
+    "id": "uri-option-policy-unc-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/unc-default.xpath",
+    "expected": "scheme=; host=server; path=/share"
+  },
+  {
+    "id": "uri-option-policy-unc-enabled",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/unc-enabled.xpath",
+    "expected": "file|//server/share|false"
+  },
+  {
+    "id": "uri-option-policy-unc-build",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/unc-build.xpath",
+    "expected": "file://///server/share"
+  },
+  {
+    "id": "uri-option-policy-unc-build-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/unc-build-default.xpath",
+    "expected": "file:///server/share"
+  },
+  {
+    "id": "uri-option-policy-parse-password-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/parse-password-default.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "uri-option-policy-parse-password-allow",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/parse-password-allow.xpath",
+    "expected": "demo:placeholder"
+  },
+  {
+    "id": "uri-option-policy-build-password-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/build-password-default.xpath",
+    "expected": "https://host/path"
+  },
+  {
+    "id": "uri-option-policy-build-password-allow",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/build-password-allow.xpath",
+    "expected": "https://demo:placeholder@host/path"
+  },
+  {
+    "id": "uri-option-policy-raw-authority-bypass",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/raw-authority-bypass.xpath",
+    "expected": "https://demo:placeholder@host:443/path"
+  },
+  {
+    "id": "uri-option-policy-component-precedence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/component-precedence.xpath",
+    "expected": "https://new.example.test/new?key=new"
+  },
+  {
+    "id": "uri-option-policy-empty-segments-fallback",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/empty-segments-fallback.xpath",
+    "expected": "https://host/raw"
+  },
+  {
+    "id": "uri-option-policy-empty-string-segment",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/empty-string-segment.xpath",
+    "expected": "https://host"
+  },
+  {
+    "id": "uri-option-policy-empty-query-map-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/empty-query-map-observed.xpath",
+    "expected": "https://host?raw=1"
+  },
+  {
+    "id": "uri-option-policy-query-map-override",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/query-map-override.xpath",
+    "expected": "https://host?q=A%2BB"
+  },
+  {
+    "id": "uri-option-policy-omit-default-port",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/omit-default-port.xpath",
+    "expected": "https://host"
+  },
+  {
+    "id": "uri-option-policy-retain-nondefault-port",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/retain-nondefault-port.xpath",
+    "expected": "https://host:8443"
+  },
+  {
+    "id": "uri-option-policy-empty-password",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/empty-password.xpath",
+    "expected": "demo:"
+  },
+  {
+    "id": "uri-option-policy-nonboolean-parse-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/nonboolean-parse-observed.xpath",
+    "expected": "demo:placeholder"
+  },
+  {
+    "id": "uri-option-policy-nonboolean-build-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/nonboolean-build-observed.xpath",
+    "expected": "https://demo:placeholder@host"
+  },
+  {
+    "id": "uri-option-policy-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/empty-options.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "uri-option-policy-invalid-ipv6",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/invalid-ipv6.xpath",
+    "error": "FOUR0001"
+  },
+  {
+    "id": "uri-option-policy-parse-nonmap-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/parse-nonmap-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "uri-option-policy-build-nonmap-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/build-nonmap-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "uri-option-policy-empty-input-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/empty-input-invalid-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "uri-option-policy-keyword-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/keyword-options.xpath",
+    "expected": "host"
+  },
+  {
+    "id": "uri-option-policy-nonboolean-unc-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "uri-option-policy/nonboolean-unc-observed.xpath",
+    "expected": "file"
   }
 ]

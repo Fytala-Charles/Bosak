@@ -1,0 +1,1 @@
+build-uri(map {'scheme': 'https', 'authority': 'demo:placeholder@host:443', 'path': '/path'}, map {'omit-default-ports': true(), 'allow-deprecated-features': false()})

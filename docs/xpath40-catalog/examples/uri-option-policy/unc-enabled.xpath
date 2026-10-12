@@ -1,0 +1,1 @@
+let $p := parse-uri('//server/share', map {'unc-path': true()}) return concat($p?scheme, '|', $p?path, '|', exists($p?host))

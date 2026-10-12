@@ -247,6 +247,10 @@ membership changes are included.
 
 ## 16. Related Features
 
+[Archive and partner URI policy](uri-option-policy.md) extends this reference
+with Boolean option contracts, UNC interpretation and raw/structured component
+precedence, including observed option-validation and empty-query-map limits.
+
 [Configured label callbacks](configured-label-callbacks.md) covers reusable
 configuration values. [Timestamp deadlines](timestamp-deadlines.md) covers
 other integration-unit conversions. [The completeness audit](../COMPLETENESS-AUDIT.md)
