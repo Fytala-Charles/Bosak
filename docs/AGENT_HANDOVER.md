@@ -12,6 +12,13 @@ Catalog: **62 entries; 581 feature + 24 chapter checks = 605**. All 117 names as
 
 ## Resume here
 
+Delivery: `6e256666f1ac9117613266cdbf0294dcae2731f5`,
+[PR #178](https://github.com/Fytala-Charles/Bosak/pull/178), pushed on
+`docs/req126-enclosing-modes`. Rebase onto merged main preserved the validated
+content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38221517047)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
 Next audit capturing accumulators against pinned XSLT draft, source and tests, separate from ordinary accumulators and streaming claims. Keep the slice documentation-only unless engine work is requested. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
 
 Existing structural-record XSLT @as, URI truthiness/empty-query-map, comparison, extrema, sorting, Unicode, hash and historical adopted-pin follow-ups remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; counts, PR states and next steps are superseded here.
