@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-12",
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "1c9fe01d149a0e576587c50d69a607f04a0f7b78",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "6fcc3766cf64d9dbaab59f4057fec7e4f904b486c4b4749c8533e480f33a80f9",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "e006dc19cbd28487e8ab78b6843de32ec5ea0ce965f67b3b5293a570ec0fecbb",
+    "src/Bosak.Xslt/Stylesheet/StreamabilityAnalyzer.cs": "9debf469dbbb8d7c5fac16349ee0baf64056f8c710f9c2a41b76f5eab212dae1",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1",
+    "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs": "2c797f0825ec9cbd05fdbf0878028a6103591ff809e4148d8656c8d1ba5ef424"
+  },
+  "exactContributionCases": [
+    {
+      "id": "seqtor-145",
+      "outcome": "pass",
+      "suiteRevision": "5f3296d12cf7aa5ad76554ea95f95f990629e04f",
+      "runnerExitCode": 0
+    },
+    {
+      "id": "seqtor-146",
+      "outcome": "pass",
+      "suiteRevision": "5f3296d12cf7aa5ad76554ea95f95f990629e04f",
+      "runnerExitCode": 0
+    }
+  ],
+  "nativeSeqtorFamily": {
+    "passed": 78,
+    "failed": 5,
+    "skipped": 9,
+    "remainingFailures": [
+      "seqtor-140",
+      "seqtor-141",
+      "seqtor-142",
+      "seqtor-143",
+      "seqtor-144"
+    ],
+    "limitation": "XPath expression-body namespace declarations are not supported by this slice."
+  },
+  "focusedTests": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/23",
+  "validation": {
+    "releaseBuild": "Pass; zero errors",
+    "unitTests": {
+      "passed": 6825,
+      "failed": 0,
+      "skipped": 0,
+      "assemblies": 10
+    },
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894,
+      "gatedFailures": 0
+    },
+    "documentation": "Canonical/setup/queue/contribution pages rendered; local links, tested source hashes and unchanged native patch verified"
+  }
+}

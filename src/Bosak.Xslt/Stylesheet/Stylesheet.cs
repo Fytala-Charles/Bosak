@@ -290,6 +290,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.131 | 11-10-2026     | Apply effective-version XPath profiles to static expression compilation.                |
+//                      | Charles Korthout | 2.132 | 12-10-2026     | Recognize xsl:select and validate expression-text/fallback structure.                     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -3801,6 +3802,24 @@ internal sealed class Stylesheet
                             continue;
                         if (node is XElement || (node is XText t4 && !string.IsNullOrWhiteSpace(t4.Value)))
                             throw new InvalidOperationException($"XTSE3185: xsl:{localName} under xsl:switch must not have both a select attribute and sequence-constructor content.");
+                    }
+                }
+
+                if (localName == "select")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes("as"), IsForwardsCompatibleElement(elem));
+                    bool expressionSeen = false;
+                    foreach (var node in elem.Nodes())
+                    {
+                        if (node is XText text && !string.IsNullOrWhiteSpace(text.Value))
+                            expressionSeen = true;
+                        else if (node is XElement child)
+                        {
+                            if (child.Name == XName.Get("note", XslNamespace))
+                                continue;
+                            if (child.Name != XName.Get("fallback", XslNamespace) || expressionSeen)
+                                throw new InvalidOperationException("XTSE0010: xsl:select permits only fallback children before its expression text.");
+                        }
                     }
                 }
 
@@ -9451,7 +9470,7 @@ internal sealed class Stylesheet
         "value-of", "text", "element", "attribute", "namespace", "copy", "copy-of",
         "comment", "processing-instruction", "document", "result-document",
         "for-each", "for-each-group", "sort", "if", "choose", "when", "otherwise",
-        "fallback", "message", "number", "sequence", "perform-sort",
+        "fallback", "message", "number", "sequence", "select", "perform-sort",
         "analyze-string", "matching-substring", "non-matching-substring",
         "merge", "merge-source", "merge-key", "merge-action",
         "map", "map-entry", "array", "array-member", "switch",
