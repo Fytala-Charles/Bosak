@@ -10,6 +10,13 @@ Added [Serialization 4.0 parameter dispositions](xpath40-catalog/deferred/serial
 
 ## Resume here
 
+Delivery: `bb41445ad4287d5b4351132d35d27f7315670aaa`,
+[PR #181](https://github.com/Fytala-Charles/Bosak/pull/181), pushed on
+`docs/req126-serialization-parameters`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
 Next review the original out-of-scope external-input functions `parse-html`, `html-doc`, `invisible-xml`, `unparsed-binary` and `xsd-validator`: verify actual registrations, pinned contracts, dependencies and supported consumer alternatives before recording dispositions. Keep documentation-only scope unless engine work is requested. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash and historical adopted-pin limits remain open; serialization path differences join the follow-up list. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain their original delivery states; this block supersedes them.
 
 # Historical fn:apply-templates review — 2026-10-12
