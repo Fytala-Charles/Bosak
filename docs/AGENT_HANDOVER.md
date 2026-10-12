@@ -10,6 +10,13 @@ Added [XQuery and streaming scope](xpath40-catalog/deferred/language-streaming-s
 
 ## Resume here
 
+Delivery: `d500ab3aa6fb6c25cdea37ed595fba334e228813`,
+[PR #184](https://github.com/Fytala-Charles/Bosak/pull/184), pushed on
+`docs/req126-language-streaming-scope`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
 Next perform catalog close-out and prioritized follow-up review: check the mandatory completeness criteria and remaining evidence gaps, consolidate concrete engine issues with consumers/tests, and distinguish documentary completion from full conformance. Do not mark REQ-126 Done or bump/release solely because inventory is assigned. Existing generic-node, capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization and adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
 
 # Historical GNode/JNode scope review — 2026-10-12
