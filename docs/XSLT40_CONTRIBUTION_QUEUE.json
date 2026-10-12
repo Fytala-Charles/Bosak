@@ -27,7 +27,7 @@
       "businessScenario": "JSON API responses, ordered line items and nested batches",
       "specSection": "array-construction",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction",
-      "status": "Audit next",
+      "status": "Patch drafted; Bosak five pass / one failure recorded",
       "candidateScenarios": "Mixed empty/grouped members, nested arrays/maps, source-order and node-identity preservation; compare against existing array cases before adding tests.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "array",
@@ -69,7 +69,23 @@
         "tests/type/type-alias/type-alias-050.xsl"
       ],
       "structuralStylesheetCount": 35,
-      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown.",
+      "batchEvidence": {
+        "file": "../contributions/xslt40/array-member-boundaries/evidence.json",
+        "suiteCommit": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+        "cases": [
+          "array-027",
+          "array-028",
+          "array-029",
+          "array-030",
+          "array-031",
+          "array-032"
+        ],
+        "passed": 5,
+        "failed": 1,
+        "upstreamSubmission": null,
+        "independentConfirmation": "Outstanding"
+      }
     },
     {
       "id": "N02",

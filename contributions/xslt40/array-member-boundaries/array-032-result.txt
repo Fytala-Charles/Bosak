@@ -1,0 +1,3 @@
+  FAIL array-032: Result mismatch
+    Expected: error XTTE4060
+    Got:      <?xml version="1.0" encoding="UTF-8"?><out>A|B</out>
