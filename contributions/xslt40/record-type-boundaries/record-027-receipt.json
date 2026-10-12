@@ -1,0 +1,15 @@
+{
+  "suiteRevision": "024e11f3525c1753ccda92561adc220bf584f1f0",
+  "bosakRevision": "1a046bde984355279ab179f6c2f71fa42b82aa06",
+  "testSet": "record",
+  "testCase": "record-027",
+  "runnerExitCode": 1,
+  "counts": {
+    "Passed": 0,
+    "Skipped": 64,
+    "Failed": 1,
+    "Total": 65
+  },
+  "exactCaseOutcome": "fail",
+  "scope": "Runner totals may include substring matches; batch tally uses exact case IDs."
+}

@@ -104,7 +104,7 @@
       "businessScenario": "Readable multiline JSON/map expressions in stylesheet content without XML attribute escaping",
       "specSection": "select-instruction",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#select-instruction",
-      "status": "Queued",
+      "status": "First batch submitted as xslt40-test PR #23; review and independent confirmation pending",
       "candidateScenarios": "Expression text, whitespace and escaping, current focus, result cardinality/as enforcement, and static errors; distinguish the instruction from the inherited select attribute.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "seqtor",
@@ -147,7 +147,19 @@
         "tests/type/type-alias/type-alias-016.xsl"
       ],
       "structuralStylesheetCount": 36,
-      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown.",
+      "batchEvidence": {
+        "file": "../contributions/xslt40/select-boundaries/evidence.json",
+        "suiteCommit": "5f3296d12cf7aa5ad76554ea95f95f990629e04f",
+        "cases": [
+          "seqtor-145",
+          "seqtor-146"
+        ],
+        "passed": 0,
+        "failed": 2,
+        "upstreamSubmission": "https://github.com/qt4cg/xslt40-test/pull/23",
+        "independentConfirmation": "Outstanding; reviewer cross-check requested"
+      }
     },
     {
       "id": "N03",
@@ -162,7 +174,7 @@
       "businessScenario": "Status routing, category mapping and dispatch tables",
       "specSection": "xsl-switch",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch",
-      "status": "Queued",
+      "status": "First batch submitted as xslt40-test PR #24; review and independent confirmation pending",
       "candidateScenarios": "First matching branch, otherwise/no match, operand cardinality/type and branch evaluation; first audit ten existing switch cases.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "switch",
@@ -181,7 +193,19 @@
         "tests/insn/switch/switch-902.xsl"
       ],
       "structuralStylesheetCount": 12,
-      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown.",
+      "batchEvidence": {
+        "file": "../contributions/xslt40/switch-boundaries/evidence.json",
+        "suiteCommit": "b91f75a45dccd6cf6653bfe00f95ae2e2aa49603",
+        "cases": [
+          "switch-008",
+          "switch-009"
+        ],
+        "passed": 2,
+        "failed": 0,
+        "upstreamSubmission": "https://github.com/qt4cg/xslt40-test/pull/24",
+        "independentConfirmation": "Outstanding; reviewer cross-check requested"
+      }
     },
     {
       "id": "N04",
@@ -196,7 +220,7 @@
       "businessScenario": "Reusable payload and callback contracts across modules",
       "specSection": "named-item-types",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
-      "status": "Queued",
+      "status": "First batch submitted as xslt40-test PR #25; review and independent confirmation pending",
       "candidateScenarios": "Named type visibility, reuse, unknown names and type mismatches; avoid duplicating the type-alias test set.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "type-alias",
@@ -227,7 +251,19 @@
         "tests/type/type-alias/type-alias-022a.xsl"
       ],
       "structuralStylesheetCount": 24,
-      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown.",
+      "batchEvidence": {
+        "file": "../contributions/xslt40/item-type-boundaries/evidence.json",
+        "suiteCommit": "4ddcad8cfc0604f3a0a2cbec7d00032c7e8e0c5a",
+        "cases": [
+          "type-alias-023",
+          "type-alias-024"
+        ],
+        "passed": 0,
+        "failed": 2,
+        "upstreamSubmission": "https://github.com/qt4cg/xslt40-test/pull/25",
+        "independentConfirmation": "Outstanding; reviewer cross-check requested"
+      }
     },
     {
       "id": "N05",
@@ -243,7 +279,7 @@
       "businessScenario": "Typed customer/order records and constructor validation",
       "specSection": "named-record-types",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-record-types",
-      "status": "Draft alignment first",
+      "status": "First batch submitted as xslt40-test PR #26; review and independent confirmation pending",
       "candidateScenarios": "Current declarations, required fields/coercion/constructors versus older optional-field and xsl:record scenarios; establish current draft semantics before proposing changes.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "record",
@@ -251,7 +287,19 @@
         "tests/type/record/record-023.xsl"
       ],
       "structuralStylesheetCount": 1,
-      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown.",
+      "batchEvidence": {
+        "file": "../contributions/xslt40/record-type-boundaries/evidence.json",
+        "suiteCommit": "024e11f3525c1753ccda92561adc220bf584f1f0",
+        "cases": [
+          "record-026",
+          "record-027"
+        ],
+        "passed": 0,
+        "failed": 2,
+        "upstreamSubmission": "https://github.com/qt4cg/xslt40-test/pull/26",
+        "independentConfirmation": "Outstanding; reviewer cross-check requested"
+      }
     }
   ],
   "secondaryLanes": [

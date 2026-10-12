@@ -1,0 +1,74 @@
+From b91f75a45dccd6cf6653bfe00f95ae2e2aa49603 Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Mon, 12 Oct 2026 21:20:38 +0200
+Subject: [PATCH] Add switch focused boundary tests
+
+---
+ tests/insn/switch/_switch-test-set.xml | 14 ++++++++++++++
+ tests/insn/switch/switch-008.xsl       | 11 +++++++++++
+ tests/insn/switch/switch-009.xsl       | 12 ++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 tests/insn/switch/switch-008.xsl
+ create mode 100644 tests/insn/switch/switch-009.xsl
+
+diff --git a/tests/insn/switch/_switch-test-set.xml b/tests/insn/switch/_switch-test-set.xml
+index 49ff1de9..ee0b32bc 100644
+--- a/tests/insn/switch/_switch-test-set.xml
++++ b/tests/insn/switch/_switch-test-set.xml
+@@ -146,4 +146,18 @@
+       </result>
+    </test-case>
+ 
++   <test-case name="switch-008">
++      <description>Overlapping status alternatives select the first match and do not evaluate later tests.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-008.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>first</out>]]></assert-xml></result>
++   </test-case>
++   <test-case name="switch-009">
++      <description>A matching empty-result branch ends selection instead of falling through.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-009.xsl"/></test>
++      <result><assert-xml><![CDATA[<out count="0"/>]]></assert-xml></result>
++   </test-case>
+ </test-set>
+diff --git a/tests/insn/switch/switch-008.xsl b/tests/insn/switch/switch-008.xsl
+new file mode 100644
+index 00000000..689ae91e
+--- /dev/null
++++ b/tests/insn/switch/switch-008.xsl
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="urn:order-types"
++ xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all">
++<!-- Overlapping status alternatives select the first match and do not evaluate later tests. -->
++<xsl:template name="xsl:initial-template"><out><xsl:switch select="'ready'">
++<xsl:when test="('ready','queued')" select="'first'"/>
++<xsl:when test="error()" select="'later'"/>
++<xsl:otherwise select="error()"/>
++</xsl:switch></out></xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-009.xsl b/tests/insn/switch/switch-009.xsl
+new file mode 100644
+index 00000000..a6a19f38
+--- /dev/null
++++ b/tests/insn/switch/switch-009.xsl
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="urn:order-types"
++ xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all">
++<!-- A matching empty-result branch ends selection instead of falling through. -->
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="v" as="item()*"><xsl:switch select="'omit'">
++<xsl:when test="()" select="error()"/><xsl:when test="'omit'" select="()"/>
++<xsl:when test="'omit'" select="error()"/><xsl:otherwise select="error()"/>
++</xsl:switch></xsl:variable><out count="{count($v)}"/>
++</xsl:template>
++</xsl:stylesheet>
+-- 
+2.54.0.windows.1
+

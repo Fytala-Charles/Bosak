@@ -1,0 +1,3 @@
+  FAIL seqtor-146: Result mismatch
+    Expected: <out><row value="A|1|3"/><row value="B|2|3"/><row value="C|3|3"/></out>
+    Got:      <?xml version="1.0" encoding="UTF-8"?><out><row value=""/><row value=""/><row value=""/></out>
