@@ -1,4 +1,18 @@
-# Capturing-accumulator review — 2026-10-12
+# fn:apply-templates review — 2026-10-12
+
+Main baseline: `7758c568612a19781c36bb1ca30c01e973a6246a`; [PR #179](https://github.com/Fytala-Charles/Bosak/pull/179) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38222446627). Current branch: `docs/req126-apply-templates-function`.
+
+## Current state and what was built
+
+Added [Deferred fn:apply-templates](xpath40-catalog/deferred/fn-apply-templates.md), a 16-field reference against QT4CG XSLT sources e7ee4ab8. Calls/references refuse XPST0017; instruction availability does not establish function registration. The draft's dynamic options, public-mode validation and package/error contracts remain deferred. The pin's omitted-mode prose/table difference is recorded for implementation review.
+
+28 fixtures verify refusal/availability, full invoice input/output, instruction and stylesheet-function wrapper alternatives, ordinary/tunnel parameters, empty/reordered selections and explicit atomic joining. No engine/API/package/harness changes or gate promotions. Catalog: **64 entries; 625 feature + 24 chapter checks = 649**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (zero warnings/errors); **4,647 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 625 focused checks. Renderer verified 78 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, three named regression tests, XML validity and twelve independent report calculations verified. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Next audit Serialization 4.0 parameter dispositions against pinned sources, Bosak serialization and existing tests; keep documentation-only scope unless engine work is requested. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash and historical adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks below retain their original delivery states; this block supersedes them.
+
+# Historical capturing-accumulator review — 2026-10-12
 
 Main baseline: `3abb40f27f39cb8a8696fbb1eb8abfdeff69dc17`; [PR #178](https://github.com/Fytala-Charles/Bosak/pull/178) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38221562384). Current branch: `docs/req126-capturing-accumulators`.
 

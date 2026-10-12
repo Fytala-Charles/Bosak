@@ -1,0 +1,1 @@
+<invoices><invoice id="INV-1042" currency="EUR"><line sku="FILTER" quantity="2" price="12.50"/><line sku="BLUE" quantity="1" price="5"/></invoice><invoice id="INV-1043" currency="USD"><line sku="SEAL" quantity="3" price="4"/></invoice></invoices>

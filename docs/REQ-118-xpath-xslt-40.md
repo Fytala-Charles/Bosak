@@ -286,3 +286,5 @@ gathering window; 4.0-S1 scheduling is an owner call after that soak reads out.
 against the live QT4CG drafts (section numbers as of the 15 Sept 2026 WG Review
 Draft); stability tiers from the per-section change-history blocks, not memory.
 Next action: owner decisions §5.1–§5.2, then sub-REQ 4.0-S1 after the v1.0.0 tag.*
+
+**REQ-126 review (2026-10-12):** The tier-4 fn:apply-templates deferral now has a [dedicated catalog disposition](xpath40-catalog/deferred/fn-apply-templates.md), with 28 refusal/availability and supported invoice alternative fixtures. This supplies evidence and consumer guidance without promoting the function to implemented.
