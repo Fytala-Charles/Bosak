@@ -16,7 +16,7 @@ Validation: Release solution build passed (11 existing warnings, zero errors); *
 
 Next review build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds with a realistic timestamp/retention workflow. Remaining five absent families after that group: build-uri, decode-from-uri, collation-available, identity and is-NaN. Full coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain unresolved. Earlier keyword/text/sequence/predicate/selection/hash engine follow-ups remain; add map:filter boolean-result enforcement. REQ-126 stays In Progress; no release or Braid adoption action.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `0f39a1d98b8dd28504eaf01fb1a07c69512c5dec`, [PR #194](https://github.com/Fytala-Charles/Bosak/pull/194), pushed on `docs/req126-container-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the next D2 slice.
 
 # Bosak 1.1.3 published — 2026-10-12
 
