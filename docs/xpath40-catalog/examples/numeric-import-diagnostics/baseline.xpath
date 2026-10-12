@@ -1,0 +1,5 @@
+let $rows := parse-xml('<readings><reading id="A" value="12.5"/><reading id="B" value="invalid"/><reading id="C" value="7.5"/></readings>')/readings/reading
+return let $valid := $rows[number(@value) eq number(@value)]
+return let $invalid := $rows[not(number(@value) eq number(@value))]
+return let $total := fold-left($valid/@value ! number(.), 0e0, function($x, $y) { $x + $y })
+return concat('accepted=', string-join($valid/@id, ','), '; rejected=', string-join($invalid/@id, ','), '; total=', $total, '; double=', $total instance of xs:double)

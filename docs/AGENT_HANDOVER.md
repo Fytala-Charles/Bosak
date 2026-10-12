@@ -1,3 +1,25 @@
+# Agent Handover — 2026-10-12: ranking, numeric diagnostics and fingerprints
+
+PR #168 merged after CI passed. Base `126ac117b46fc914f1ad3fcf193477fb9616fbc8`.
+Added supplier-offer-ranking (16 cases), numeric-import-diagnostics (15) and
+payload-fingerprints (10). All eight remaining registered names gain entries.
+Coverage: 54 entries, 391 feature plus 24 chapter checks (415 total), and all
+117 registered names assigned. Name assignment is complete, not REQ-126:
+signatures/options, grammar/disposition provenance and conformance remain partial.
+The ranking example explicitly filters all equal-price offers because Bosak
+boundary selection compares full items; computed-key tie semantics need follow-up
+against the pinned specification rules/examples. An observed B-only tie fixture
+records the limit. Simple-map projection preserves sorted node order.
+Numeric diagnostics screen NaN only; hash uses a declared UTF-8 payload and
+SHA-256, independently checked with hashlib. No 3.1 hash equivalent is claimed.
+Spec review pin `e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e`. Original deliveries
+#83/#102/#112/#114 and named tests are linked. Only exact fn-op and
+fn-collation-available gate assignments are claimed. Source/public stays 1.1.2.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,413 tests across ten assemblies passed without failures/skips, including 391 catalog cases. Renderer verified 67 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs and inline expressions/results verified; payload SHA-256 independently computed with hashlib. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `740ee5bf`; [PR #169](https://github.com/Fytala-Charles/Bosak/pull/169). CI pending at handover.
+Next: supplementary signature/options and grammar/disposition audit, then engine
+follow-ups for boundary computed-key ties and Unicode grapheme segmentation.
+
 # Agent Handover — 2026-10-12: customer text and import filename references
 
 PR #167 initially failed an existing D_ValidationCancelMidWalk timing test;

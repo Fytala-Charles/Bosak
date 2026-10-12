@@ -1,6 +1,6 @@
 {
   "auditDate": "2026-10-12",
-  "sourceRevision": "568e9569502d76dbc55e46217db254bbf2575bed",
+  "sourceRevision": "126ac117b46fc914f1ad3fcf193477fb9616fbc8",
   "enginePackageVersion": "1.1.2",
   "engineRevision": "3aebf76a24b28af7d40aa42e6eaf714b3a596838",
   "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
@@ -73,8 +73,8 @@
       "name": "fn:atomic-type-annotation",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -113,8 +113,8 @@
       "name": "fn:collation-available",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-collation-available"
     },
     {
@@ -241,16 +241,16 @@
       "name": "fn:hash",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/payload-fingerprints.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
       "name": "fn:highest",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -289,8 +289,8 @@
       "name": "fn:is-NaN",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -329,8 +329,8 @@
       "name": "fn:lowest",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {
@@ -345,8 +345,8 @@
       "name": "fn:op",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": "fn-op"
     },
     {
@@ -433,8 +433,8 @@
       "name": "fn:sort-by",
       "namespace": "http://www.w3.org/2005/xpath-functions",
       "tier": "Frozen 4.0",
-      "catalogEntry": null,
-      "assessment": "No dedicated family entry",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
       "matchingGatedSet": null
     },
     {

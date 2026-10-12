@@ -1,0 +1,1 @@
+highest(parse-xml('<r price="invalid"/>')/r/@price)

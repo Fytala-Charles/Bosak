@@ -1,0 +1,6 @@
+let $offers := parse-xml('<offers><offer id="A" price="10" score="90"/><offer id="B" price="8" score="90"/><offer id="C" price="8" score="85"/><offer id="D" price="12" score="92"/></offers>')/offers/offer
+return let $cheap := min($offers/@price ! xs:decimal(.))
+return let $best := max($offers/@score ! xs:decimal(.))
+return let $byScore := sort($offers, (), function($o) { -xs:decimal($o/@score) })
+return let $ranked := sort($byScore, (), function($o) { xs:decimal($o/@price) })
+return concat('cheapest=', string-join($offers[xs:decimal(@price) eq $cheap]/@id, ','), '; bestScore=', string-join($offers[xs:decimal(@score) eq $best]/@id, ','), '; ranked=', string-join($ranked ! string(@id), ','))

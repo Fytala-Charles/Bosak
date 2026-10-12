@@ -1,0 +1,1 @@
+string-join(sort-by(('B', 'A', 'C'), map {'key': string-length#1}), ',')

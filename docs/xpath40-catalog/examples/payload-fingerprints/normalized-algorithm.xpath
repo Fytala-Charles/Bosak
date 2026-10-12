@@ -1,0 +1,1 @@
+hash('abc', '  sha-256 ') eq hash('abc', 'SHA-256')
