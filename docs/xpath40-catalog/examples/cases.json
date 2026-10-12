@@ -4025,5 +4025,165 @@
     "file": "xslt-type-declarations/inline-record-cast40.xsl",
     "input": "xslt-type-declarations/input.xml",
     "expected": "INV-2048|EUR"
+  },
+  {
+    "id": "enclosing-modes-main-refusal4",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/main-refusal4.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-main-refusal3",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/main-refusal3.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-unnamed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/unnamed.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-named-child",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/named-child.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-explicit-child-mode",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/explicit-child-mode.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-missing-child-match",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/missing-child-match.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-default-conflict",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/default-conflict.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-external-rule",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/external-rule.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-duplicate",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/duplicate.xsl",
+    "input": "enclosing-modes/input.xml",
+    "error": "XTSE0260"
+  },
+  {
+    "id": "enclosing-modes-portable3",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/portable3.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "INV-2048:EUR:P100/P200/;INV-2049:USD:P300/;"
+  },
+  {
+    "id": "enclosing-modes-portable4",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/portable4.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "INV-2048:EUR:P100/P200/;INV-2049:USD:P300/;"
+  },
+  {
+    "id": "enclosing-modes-portable-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/portable-empty.xsl",
+    "input": "enclosing-modes/empty.xml",
+    "expected": ""
+  },
+  {
+    "id": "enclosing-modes-portable-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/portable-reordered.xsl",
+    "input": "enclosing-modes/reordered.xml",
+    "expected": "INV-2049:USD:P300/;INV-2048:EUR:P200/P100/;"
+  },
+  {
+    "id": "enclosing-modes-portable-reverse",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/portable-reverse.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "INV-2049:USD:P300/;INV-2048:EUR:P100/P200/;"
+  },
+  {
+    "id": "enclosing-modes-audit",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/audit.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "audit:INV-2048:2;audit:INV-2049:1;"
+  },
+  {
+    "id": "enclosing-modes-current-mode",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/current-mode.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "INV-2048:EUR:P100/P200/;INV-2049:USD:P300/;"
+  },
+  {
+    "id": "enclosing-modes-omitted-recursion-mode",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/omitted-recursion-mode.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "INV-2048:EUR:wrong/wrong/;INV-2049:USD:wrong/;"
+  },
+  {
+    "id": "enclosing-modes-lexical-default-mode",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/lexical-default-mode.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "INV-2048:EUR:P100/P200/;INV-2049:USD:P300/;"
+  },
+  {
+    "id": "enclosing-modes-namespace-alias",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "enclosing-modes/namespace-alias.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "INV-2048:EUR:P100/P200/;INV-2049:USD:P300/;"
+  },
+  {
+    "id": "enclosing-modes-empty-declaration",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "enclosing-modes/empty-declaration.xsl",
+    "input": "enclosing-modes/input.xml",
+    "expected": "ready"
   }
 ]
