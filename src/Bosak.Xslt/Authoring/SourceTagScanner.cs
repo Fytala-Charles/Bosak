@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 12-10-2026     | REQ-127 retain immediate child markup after exclusive start-tag end                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -60,7 +61,8 @@ internal static class SourceTagScanner
         }
 
         var depth = 1;
-        i++; // past the start tag's '>'
+        // ScanTagInterior already returned the exclusive end, immediately after '>'.
+        // Advancing again would skip an adjacent child's '<' and lose its nesting depth.
         while (i < text.Length)
         {
             if (text[i] != '<')

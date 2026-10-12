@@ -10,7 +10,7 @@
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
 > **Last updated:** 12 October 2026
-> **Bosak baseline:** 3,945 unit tests passed / 0 failed / 0 skipped
+> **Bosak baseline:** 6,019 solution tests passed / 0 failed / 0 skipped (source 1.1.3, unpublished)
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
 > **XSLT baseline:** `package` cluster **159 passed / 1 failed / 3 skipped**; `accept` cluster **50 passed / 0 failed / 0 skipped**; `expose` cluster **42 passed / 0 failed / 0 skipped**; `use-package` cluster **53 passed / 0 failed / 1 skipped**; `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; full W3C XSLT 3.0 strict sweep (last full run) **11,054 passed / 1 failed / 3,546 skipped** — 99.6% pass rate among runnable tests (the single failure is type-functions-0401, a documented platform limitation)
@@ -2871,3 +2871,9 @@ The [sequence selection/repetition review](xpath40-catalog/SEQUENCE-CONTRACT-REV
 
 
 **Comparison/selection contract review — 2026-10-12:** [Four-family review and detailed warehouse reports](xpath40-catalog/SELECTION-CONTRACT-REVIEW.md) add 68 checks: 12 keyword/mode cases, 50 focused default/type/callback/keyword-validation checks and six complete 3.1/4.0 warehouse reports. Three more absent-keyword families reviewed: 21 of 37 supplied, 16 remaining, metadata unchanged. index-where keywords succeed. Map atomization and extrema NaN ordering remain explicit follow-ups. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815; version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and queues. Next: map:entries/map:items/map:filter and array:build/array:items/array:empty container contracts.
+
+
+**REQ-127 compact authoring inspection — 2026-10-12:** source **1.1.3, unpublished** corrects lexical extent calculation for immediately nested elements and compact siblings. Inspection retains exact original bytes, encoding/BOM and URI; no source normalization or new API/edit capability is introduced. 206 regressions cover layout/encoding/ranges/mixed content and isolated middle-sibling Expression edits. Verification passed: 6,019 full tests, QT3 31,142/0/679, zero qt4 gated failures. Delivery CI/Braid adoption remain pending. See [criterion-level evidence and Braid adoption](REQ-127-compact-source-inspection.md) and [patch notes](RELEASE-NOTES-1.1.3.md). Published packages remain 1.1.2 until a separate release. REQ-126 stays In Progress; its next catalog slice is deferred behind this consumer defect.
+
+
+**1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.

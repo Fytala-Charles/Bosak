@@ -1,3 +1,21 @@
+# REQ-127 compact source inspection correction — 2026-10-12
+
+Main baseline: `ea3b9454cabb83c8d5a015faa54d022bfbfe5c86`; [PR #191](https://github.com/Fytala-Charles/Bosak/pull/191) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38263494090). Current branch: `fix/req127-compact-source-inspection`.
+
+## Current state and what was built
+
+User prioritized Braid's REQ-127 over the next REQ-126 catalog slice. Fixed SourceTagScanner.FindElementEnd: ScanTagInterior returns the exclusive offset after `>`, so the extra increment skipped immediate nested opening markup and computed premature ranges. Child scanning now starts at that offset. No public API/capability/profile, decoding or retained-byte change.
+
+Added CompactSourceInspectionTests: 206 checks (192 layout/encoding/count combinations, four mixed-content/alias/entity cases, four isolated middle-sibling Expression edits, five direct scanner cases and one malformed/refusal case). Before fix: 155 failures/51 passes; after: 206 passes. Byte/URI fidelity, unique IDs/containment/order, exact group/nested/value-of/slot ranges and independent line/column expectations verified. Source version bumped to **1.1.3 (unpublished)**; public packages remain 1.1.2. Dossier, registry, README, architecture, integration and new patch notes synchronized. Prior REQ-127 uncommitted request is now included in the authorized implementation scope.
+
+Validation: Release solution build passed (12 warnings, zero errors); **6,019 tests / 0 failures / 0 skips** across ten assemblies. QT3 stays exactly **31,142/0/679**. qt4 gated-only run: **8,278/0/1,894**, zero gated failures; no gate promotion. All 206 REQ-127 regressions pass. All 24 current-runtime reproduction probes now succeed and direct scanner extents match expected ends. Renderer verified 93 catalog pages plus six implementation/canonical pages; local links, source headers and unpublished 1.1.3 version checked.
+
+## Resume here
+
+Commit/push through normal PR workflow and record immutable delivery for Braid's separate adoption. REQ-127 is Implemented in source, with delivery CI/Braid adoption pending. No publication, Braid pin update or external message has been requested. Source 1.1.3 is prepared but unpublished. After this consumer correction, resume D2 map/array container contracts. REQ-126 remains In Progress: 67 entries, 1,791 feature + 24 chapter checks = 1,815; targeted absent-keyword review 21/37 supplied, 16 remaining; historical pins and AC-03 applicability unresolved.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Implementation revision: `5bab4799783569d538cec9b03d37a57454f0eebc`, [PR #192](https://github.com/Fytala-Charles/Bosak/pull/192), pushed on `fix/req127-compact-source-inspection`. CI pending; PR remains open. This subsequent documentation commit records delivery. On resume check CI and merge after success. Source 1.1.3 remains unpublished; Braid adoption is separate.
+
 # Comparison/selection contracts — 2026-10-12
 
 Main baseline: `9f656df3edf0a162226c996fbeb939da09c175a6`; [PR #190](https://github.com/Fytala-Charles/Bosak/pull/190) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38261968897). Current branch: `docs/req126-selection-contracts`.
@@ -11,6 +29,10 @@ Added [comparison/selection review](xpath40-catalog/SELECTION-CONTRACT-REVIEW.md
 Targeted absent-keyword review: **21 of 37 families supplied, 16 remaining**, metadata unchanged. Catalog: **67 entries; 1,791 feature + 24 chapter checks = 1,815**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
 
 Validation: Release solution build passed (11 warnings, zero errors); **5,813 tests / 0 failures / 0 skips**, ten assemblies including all 1,791 feature checks. Renderer verified 93 pages. Four pinned signatures, exact case IDs/keyword modes, six independently computed full report outputs, node identity, complete README expressions/local links, 67 sixteen-field entries, 241 cached primary links/anchors and inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## REQ-127 triage — 2026-10-12
+
+User requested review of Braid's REQ-127. The [dossier](REQ-127-compact-source-inspection.md) and registry now include current-checkout reproduction and recommended implementation tasks. 24 no-compilation inspection probes: eight compact 2/80-group failures across UTF-8, UTF-8 BOM, UTF-16 LE/BE; all original bytes retained, no snapshot on failure. One compact group and indented forms inspect successfully but range fidelity remains unverified. Direct scanner probe proves premature end 32 versus expected 40 for immediate non-self-closing nested content: FindElementEnd increments an already-exclusive start-tag end, skipping the child's opening `<`. Fix this offset and add precise range/encoding/Expression-edit/negative regressions, then full tests/QT3/qt4 gates and canonical sync. Prioritize this consumer blocker over the next catalog slice; proposed patch 1.1.3, status still Pending. No engine fix, commit/push, release or Braid adoption in this review. Dossier, registry and this handover triage remain uncommitted. Diagnostic program/results are under `.guard-tmp/req127-probe` and `.guard-tmp/req127-results.jsonl`.
 
 ## Resume here
 
@@ -15058,3 +15080,6 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 ---
 
 
+
+
+**1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.
