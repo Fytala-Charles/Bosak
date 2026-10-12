@@ -1,0 +1,1 @@
+min((xs:duration('P1M'), xs:duration('P100D')))

@@ -1,0 +1,1 @@
+concat(min((false(), true())), '|', max((false(), true())))

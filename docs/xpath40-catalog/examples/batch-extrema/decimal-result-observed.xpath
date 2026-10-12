@@ -1,0 +1,1 @@
+let $v := max((xs:integer(5), xs:decimal('4.5'))) return concat($v instance of xs:decimal, '|', $v instance of xs:integer)

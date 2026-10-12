@@ -1,0 +1,1 @@
+min(('a', 'b'), 'urn:example:unknown-collation')
