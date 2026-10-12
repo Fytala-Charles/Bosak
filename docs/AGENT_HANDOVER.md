@@ -16,7 +16,7 @@ Validation: Release solution build passed (zero warnings/errors); **6,806 tests 
 
 Next review fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token equality/collation contracts against the pinned declarations and observed version modes. The exhaustive baseline declaration inventory is supplied; semantic/prose/default/conversion behavior remains partial. Retain all earlier engine follow-ups, all 37 absent metadata families, D3/D4, historical adopted pins and AC-03. No release or Braid action.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `acdb3f6267df995dda44a0d8b4e9230da15b396d`, [PR #198](https://github.com/Fytala-Charles/Bosak/pull/198), pushed on `docs/req126-order-default-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the equality/collation review.
 
 # Complete existing-function inventory — 2026-10-12
 
