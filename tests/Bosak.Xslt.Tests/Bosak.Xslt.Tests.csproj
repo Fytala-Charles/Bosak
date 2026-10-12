@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Bosak.XQuery\Bosak.XQuery.csproj" />
     <ProjectReference Include="..\..\src\Bosak.Xslt\Bosak.Xslt.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
     <ProjectReference Include="..\..\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />

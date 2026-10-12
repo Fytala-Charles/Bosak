@@ -198,11 +198,13 @@ Enum and choice types are small and stable — can precede records.
   the known Cloudflare-challenge environment lesson applies. Owner decision needed.
 - **`fn:invisible-xml`** (17.6), **`fn:unparsed-binary`**, **`fn:xsd-validator`** —
   external dependency or schema-validator machinery.
-- **XQuery 4.0-only deltas** (direct constructors already exist; full FLWOR `where`/
-  `order by`/`group by` in XPath is *not* in the grammar — XQuery-only, tracked under
-  the XQuery project's own REQ if ever requested).
-- **XSLT Streaming 4.0** deltas until the streaming conformance tail (REQ-087
-  residuals) is closed.
+- **XQuery 4.0-only deltas** — existing XQuery 3.1 already supports full FLWOR.
+  The [language scope review](xpath40-catalog/deferred/language-streaming-scope.md)
+  verifies rejection of a 4.0 version declaration. XPath accepts the tested simple
+  where extension but rejects tested order-by/group-by forms; blanket where exclusion is stale.
+- **XSLT Streaming 4.0 deltas** — existing streamed XML APIs are available.
+  REQ-087 Phase D is Done; its residual reports are dated historical evidence, not
+  a current failure count. Complete Streaming 4.0 contracts require a separate scope/gate review.
 
 ## 3. Version gating (design decision, needs owner sign-off)
 

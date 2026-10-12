@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 11-10-2026     | Creation: exact published catalog examples, edge cases, and version gates.              |
 //                      | Charles Korthout | 0.2   | 12-10-2026     | Verify declared 3.1 outcomes for changed existing-function contracts.                    |
 //                      | Charles Korthout | 0.3   | 12-10-2026     | Verify declared XSLT compile/capture errors for deferred declaration examples.           |
+//                      | Charles Korthout | 0.4   | 12-10-2026     | Execute XQuery and actual streaming catalog paths with exact results or errors.         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -25,6 +26,7 @@ using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Api;
 using Bosak.Xslt.Capture;
+using Bosak.XQuery.Api;
 using Xunit;
 
 namespace Bosak.Xslt.Tests.Documentation;
@@ -54,11 +56,28 @@ public class CatalogExampleTests
         var row = doc.RootElement.EnumerateArray().Single(r => r.GetProperty("id").GetString() == id);
         var file = Path.Combine(Folder, row.GetProperty("file").GetString()!);
         var code = File.ReadAllText(file);
+        if (row.GetProperty("kind").GetString() == "xquery")
+        {
+            string EvaluateQuery() => new XQueryCompiler().Compile(code).Evaluate(new XQueryContext()).ToString();
+            if (row.TryGetProperty("error", out var queryError))
+            {
+                var failure = Assert.ThrowsAny<Exception>(() => EvaluateQuery());
+                Assert.Contains(queryError.GetString()!, failure.Message);
+            }
+            else
+                Assert.Equal(row.GetProperty("expected").GetString(), EvaluateQuery());
+            return;
+        }
         if (row.GetProperty("kind").GetString() == "xslt")
         {
             var source = XDocument.Load(Path.Combine(Folder, row.GetProperty("input").GetString()!));
             string Transform()
             {
+                if (row.GetProperty("mode").GetString() is "stream31" or "stream40")
+                {
+                    using var stream = File.OpenRead(Path.Combine(Folder, row.GetProperty("input").GetString()!));
+                    return new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri).TransformStreamingToString(stream);
+                }
                 var result = new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri)
                     .CaptureTransform(new XDocumentNode(source), new XsltCaptureOptions());
                 if (!result.IsSuccess)
@@ -108,7 +127,10 @@ public class CatalogExampleTests
             }
             else if (mode != "31")
                 Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code));
-            if (mode == "experimental")
+            if (mode == "experimental" && row.TryGetProperty("frozenExpected", out var frozenExpected))
+                Assert.Equal(frozenExpected.GetString(), XPath31Expression.Compile(code,
+                    new CompileOptions { Compatibility = XPathCompatibility.XPath40 }).Evaluate(new EvaluationContext()).ToString());
+            else if (mode == "experimental")
                 Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code,
                     new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
         }

@@ -5454,5 +5454,216 @@
     "mode": "40",
     "file": "jnode-scope/wrong-jvalue.xpath",
     "error": "XPTY0004"
+  },
+  {
+    "id": "language-streaming-scope-xquery-main",
+    "kind": "xquery",
+    "mode": "xquery31",
+    "file": "language-streaming-scope/xquery-main.xq",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00"
+  },
+  {
+    "id": "language-streaming-scope-portable-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "language-streaming-scope/portable-main.xpath",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00"
+  },
+  {
+    "id": "language-streaming-scope-xquery-empty",
+    "kind": "xquery",
+    "mode": "xquery31",
+    "file": "language-streaming-scope/xquery-empty.xq",
+    "expected": ""
+  },
+  {
+    "id": "language-streaming-scope-portable-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "language-streaming-scope/portable-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "language-streaming-scope-xquery-reordered",
+    "kind": "xquery",
+    "mode": "xquery31",
+    "file": "language-streaming-scope/xquery-reordered.xq",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00"
+  },
+  {
+    "id": "language-streaming-scope-portable-reordered",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "language-streaming-scope/portable-reordered.xpath",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00"
+  },
+  {
+    "id": "language-streaming-scope-xquery-version40",
+    "kind": "xquery",
+    "mode": "xquery40",
+    "file": "language-streaming-scope/xquery-version40.xq",
+    "error": "XQST0031"
+  },
+  {
+    "id": "language-streaming-scope-xpath-where-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "language-streaming-scope/xpath-where-31.xpath",
+    "expected": "3|2"
+  },
+  {
+    "id": "language-streaming-scope-xpath-where-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "language-streaming-scope/xpath-where-40.xpath",
+    "expected": "3|2",
+    "baselineExpected": "3|2"
+  },
+  {
+    "id": "language-streaming-scope-xpath-where-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "language-streaming-scope/xpath-where-experimental.xpath",
+    "expected": "3|2",
+    "baselineExpected": "3|2",
+    "frozenExpected": "3|2"
+  },
+  {
+    "id": "language-streaming-scope-xpath-order-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "language-streaming-scope/xpath-order-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "language-streaming-scope-xpath-order-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "language-streaming-scope/xpath-order-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "language-streaming-scope-xpath-order-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "language-streaming-scope/xpath-order-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "language-streaming-scope-xpath-group-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "language-streaming-scope/xpath-group-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "language-streaming-scope-xpath-group-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "language-streaming-scope/xpath-group-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "language-streaming-scope-xpath-group-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "language-streaming-scope/xpath-group-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "language-streaming-scope-report-xslt31-main",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "language-streaming-scope/report-xslt31-main.xsl",
+    "expected": "INV-1043/USD:12.00;INV-1042/EUR:30.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/main.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-stream31-main",
+    "kind": "xslt",
+    "mode": "stream31",
+    "file": "language-streaming-scope/report-stream31-main.xsl",
+    "expected": "INV-1043/USD:12.00;INV-1042/EUR:30.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/main.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-xslt31-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "language-streaming-scope/report-xslt31-empty.xsl",
+    "expected": "",
+    "input": "language-streaming-scope/empty.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-stream31-empty",
+    "kind": "xslt",
+    "mode": "stream31",
+    "file": "language-streaming-scope/report-stream31-empty.xsl",
+    "expected": "",
+    "input": "language-streaming-scope/empty.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-xslt31-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "language-streaming-scope/report-xslt31-reordered.xsl",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/reordered.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-stream31-reordered",
+    "kind": "xslt",
+    "mode": "stream31",
+    "file": "language-streaming-scope/report-stream31-reordered.xsl",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/reordered.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-xslt40-main",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "language-streaming-scope/report-xslt40-main.xsl",
+    "expected": "INV-1043/USD:12.00;INV-1042/EUR:30.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/main.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-stream40-main",
+    "kind": "xslt",
+    "mode": "stream40",
+    "file": "language-streaming-scope/report-stream40-main.xsl",
+    "expected": "INV-1043/USD:12.00;INV-1042/EUR:30.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/main.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-xslt40-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "language-streaming-scope/report-xslt40-empty.xsl",
+    "expected": "",
+    "input": "language-streaming-scope/empty.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-stream40-empty",
+    "kind": "xslt",
+    "mode": "stream40",
+    "file": "language-streaming-scope/report-stream40-empty.xsl",
+    "expected": "",
+    "input": "language-streaming-scope/empty.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-xslt40-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "language-streaming-scope/report-xslt40-reordered.xsl",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/reordered.xml"
+  },
+  {
+    "id": "language-streaming-scope-report-stream40-reordered",
+    "kind": "xslt",
+    "mode": "stream40",
+    "file": "language-streaming-scope/report-stream40-reordered.xsl",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00;INV-1044/EUR:0.00;",
+    "input": "language-streaming-scope/reordered.xml"
   }
 ]

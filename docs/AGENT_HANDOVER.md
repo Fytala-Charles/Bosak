@@ -1,4 +1,25 @@
-# GNode/JNode scope review — 2026-10-12
+# XQuery/streaming scope review — 2026-10-12
+
+Main baseline: `2184e9200394ca2e06f720bb9cdb95afd927aa51`; [PR #183](https://github.com/Fytala-Charles/Bosak/pull/183) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38227449888). Current branch: `docs/req126-language-streaming-scope`.
+
+## Current state and what was built
+
+Added [XQuery and streaming scope](xpath40-catalog/deferred/language-streaming-scope.md), a 16-field reference against pinned query prolog/streaming sources e7ee4ab8. Existing XQuery 3.1 and actual streaming input APIs are distinct from complete 4.0 claims. Corrected REQ-118: XPath accepts tested simple where clauses across modes, while tested order-by/group-by refuse XPST0003. XQuery version 4.0 refuses XQST0031. REQ-087 Phase D is Done; residual sweep figures remain historical, not newly certified current counts.
+
+28 fixtures supply full invoice XML/query/portable/stylesheet reports, empty/reordered input, clause/version boundaries and ordinary-versus-actual-streaming parity at stylesheet versions 3.0/4.0. Harness now handles xquery rows and stream31/stream40, plus explicit frozenExpected for a pre-existing experimental/frozen outcome. Tests project references XQuery; no engine/API/package implementation change or gate promotion. Catalog: **67 entries; 778 feature + 24 chapter checks = 802**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (10 warnings, zero errors); **4,800 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 778 focused checks. Renderer verified 81 pages. Source/local links, scoped inventories/provenance, full inline inputs/code/output, six named regression tests, pinned sections and eighteen independently calculated reports verified. Manual engine gates were not rerun for this documentation/test-harness slice. Delivery will be recorded below.
+
+## Resume here
+
+Delivery: `d500ab3aa6fb6c25cdea37ed595fba334e228813`,
+[PR #184](https://github.com/Fytala-Charles/Bosak/pull/184), pushed on
+`docs/req126-language-streaming-scope`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
+Next perform catalog close-out and prioritized follow-up review: check the mandatory completeness criteria and remaining evidence gaps, consolidate concrete engine issues with consumers/tests, and distinguish documentary completion from full conformance. Do not mark REQ-126 Done or bump/release solely because inventory is assigned. Existing generic-node, capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization and adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
+
+# Historical GNode/JNode scope review — 2026-10-12
 
 Main baseline: `3c0bd5994baf4fa85b1db5805fc5c081d63c50ee`; [PR #182](https://github.com/Fytala-Charles/Bosak/pull/182) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38226566196). Current branch: `docs/req126-gnode-jnode-scope`.
 
