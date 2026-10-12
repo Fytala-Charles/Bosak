@@ -1,0 +1,1 @@
+all-different(parse-xml('<ids><id>A</id><id>A</id></ids>')/ids/id)
