@@ -1,0 +1,1 @@
+serialize(('INV-1042', 'EUR', 30), map{'method':'csv', 'csv-header':true()}) eq serialize(('INV-1042', 'EUR', 30), map{'method':'xml'})

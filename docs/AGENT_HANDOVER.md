@@ -1,4 +1,18 @@
-# fn:apply-templates review — 2026-10-12
+# Serialization parameter review — 2026-10-12
+
+Main baseline: `232180733358fc4239229267763854fda0fa2791`; [PR #180](https://github.com/Fytala-Charles/Bosak/pull/180) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38224462290). Current branch: `docs/req126-serialization-parameters`.
+
+## Current state and what was built
+
+Added [Serialization 4.0 parameter dispositions](xpath40-catalog/deferred/serialization-parameters.md), a 16-field reference to nine additions against pinned QT4CG serialization XML e7ee4ab8. XSLT JSON escape-solidus yes/no works; fn option handling ignores all nine new keys. JSON Lines/canonical/layout/CSV controls remain deferred. Source and fixtures separate missing handling from non-applicable-method tolerance and draft-permitted optional formatting.
+
+52 fixtures provide complete invoice JSON Lines input/output, empty/reordered selections, ignored/invalid options, solidus controls, XML canonical counterexamples, LF retained despite requested CRLF, fn JSON cardinality error, XSLT JSON sequence-as-array and fn CSV fallback versus XSLT refusal. No engine/API/package/harness changes or gate promotions. Catalog: **65 entries; 677 feature + 24 chapter checks = 701**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (zero warnings/errors); **4,699 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 677 focused checks. Renderer verified 79 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, two named regression tests, XML validity and independently decoded JSON Lines verified. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Next review the original out-of-scope external-input functions `parse-html`, `html-doc`, `invisible-xml`, `unparsed-binary` and `xsd-validator`: verify actual registrations, pinned contracts, dependencies and supported consumer alternatives before recording dispositions. Keep documentation-only scope unless engine work is requested. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash and historical adopted-pin limits remain open; serialization path differences join the follow-up list. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain their original delivery states; this block supersedes them.
+
+# Historical fn:apply-templates review — 2026-10-12
 
 Main baseline: `7758c568612a19781c36bb1ca30c01e973a6246a`; [PR #179](https://github.com/Fytala-Charles/Bosak/pull/179) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38222446627). Current branch: `docs/req126-apply-templates-function`.
 

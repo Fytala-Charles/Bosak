@@ -1,0 +1,3 @@
+(: Complete invoice batch; serialize each record separately and join with LF. :)
+let $batch := parse-json('{"invoices":[]}')
+return string-join($batch?invoices?* ! serialize(., map{'method':'json'}), codepoints-to-string(10))

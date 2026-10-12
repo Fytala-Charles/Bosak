@@ -288,3 +288,5 @@ Draft); stability tiers from the per-section change-history blocks, not memory.
 Next action: owner decisions §5.1–§5.2, then sub-REQ 4.0-S1 after the v1.0.0 tag.*
 
 **REQ-126 review (2026-10-12):** The tier-4 fn:apply-templates deferral now has a [dedicated catalog disposition](xpath40-catalog/deferred/fn-apply-templates.md), with 28 refusal/availability and supported invoice alternative fixtures. This supplies evidence and consumer guidance without promoting the function to implemented.
+
+**REQ-126 serialization review (2026-10-12):** The [nine-parameter catalog disposition](xpath40-catalog/deferred/serialization-parameters.md) supplies pinned draft/source evidence and 52 checks. Existing XSLT JSON solidus control is supported in the verified paths; the wider Serialization 4.0 additions remain deferred. This does not promote the tier-4 item or claim complete Serialization 4.0 conformance.

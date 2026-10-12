@@ -4530,5 +4530,413 @@
     "file": "fn-apply-templates/wrapper-xslt40-reordered.xsl",
     "expected": "BATCH-7/EXPORT/INV-1043/USD:12.00;BATCH-7/EXPORT/INV-1042/EUR:30.00;",
     "input": "fn-apply-templates/reordered.xml"
+  },
+  {
+    "id": "serialization-parameters-fn-canonical",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-canonical.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-canonical",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-canonical.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-json-lines",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-json-lines.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-json-lines",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-json-lines.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-escape-solidus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-escape-solidus.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-escape-solidus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-escape-solidus.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-indent-unit",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-indent-unit.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-indent-unit",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-indent-unit.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-indent-attributes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-indent-attributes.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-indent-attributes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-indent-attributes.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-line-ending",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-line-ending.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-line-ending",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-line-ending.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-csv-separator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-csv-separator.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-csv-separator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-csv-separator.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-csv-quote-character",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-csv-quote-character.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-csv-quote-character",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-csv-quote-character.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-csv-header",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-csv-header.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-invalid-csv-header",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "serialization-parameters/fn-invalid-csv-header.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-solidus-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/fn-solidus-main.xpath",
+    "expected": "{\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1042\"}"
+  },
+  {
+    "id": "serialization-parameters-fn-json-lines-multiple",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/fn-json-lines-multiple.xpath",
+    "error": "SERE0023"
+  },
+  {
+    "id": "serialization-parameters-fn-csv-method",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/fn-csv-method.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "serialization-parameters-fn-canonical-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/fn-canonical-main.xpath",
+    "expected": "<invoice z=\"30\" a=\"EUR\"><line/></invoice>"
+  },
+  {
+    "id": "serialization-parameters-portable-json-lines-input",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/portable-json-lines-input.xpath",
+    "expected": "{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1042\"}\n{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1043\"}"
+  },
+  {
+    "id": "serialization-parameters-portable-json-lines-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/portable-json-lines-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "serialization-parameters-portable-json-lines-reordered",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/portable-json-lines-reordered.xpath",
+    "expected": "{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1043\"}\n{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1042\"}"
+  },
+  {
+    "id": "serialization-parameters-xslt-solidus-yes-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-solidus-yes-xslt31.xsl",
+    "expected": "\"https:\\/\\/partner.example\\/invoices\\/1042\"",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-solidus-no-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-solidus-no-xslt31.xsl",
+    "expected": "\"https://partner.example/invoices/1042\"",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-canonical-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-canonical-xslt31.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-indent-unit-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-indent-unit-xslt31.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-indent-attributes-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-indent-attributes-xslt31.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-line-ending-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-line-ending-xslt31.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-separator-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-csv-separator-xslt31.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-quote-character-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-csv-quote-character-xslt31.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-header-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-csv-header-xslt31.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-json-lines-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-json-lines-xslt31.xsl",
+    "input": "serialization-parameters/input.xml",
+    "expected": "[\"INV-1042\",\"INV-1043\"]"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-csv-xslt31.xsl",
+    "error": "XTSE1570",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-solidus-yes-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-solidus-yes-xslt40.xsl",
+    "expected": "\"https:\\/\\/partner.example\\/invoices\\/1042\"",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-solidus-no-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-solidus-no-xslt40.xsl",
+    "expected": "\"https://partner.example/invoices/1042\"",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-canonical-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-canonical-xslt40.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-indent-unit-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-indent-unit-xslt40.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-indent-attributes-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-indent-attributes-xslt40.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-line-ending-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-line-ending-xslt40.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-separator-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-csv-separator-xslt40.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-quote-character-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-csv-quote-character-xslt40.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-header-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-csv-header-xslt40.xsl",
+    "expected": "INV-1042|INV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-json-lines-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-json-lines-xslt40.xsl",
+    "input": "serialization-parameters/input.xml",
+    "expected": "[\"INV-1042\",\"INV-1043\"]"
+  },
+  {
+    "id": "serialization-parameters-xslt-csv-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-csv-xslt40.xsl",
+    "error": "XTSE1570",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-fn-solidus-false",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "serialization-parameters/fn-solidus-false.xpath",
+    "expected": "{\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1042\"}"
+  },
+  {
+    "id": "serialization-parameters-xslt-canonical-xml-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-canonical-xml-xslt31.xsl",
+    "expected": "<invoice z=\"30\" a=\"EUR\"><line/></invoice>",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-line-ending-text-xslt31",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "serialization-parameters/xslt-line-ending-text-xslt31.xsl",
+    "expected": "INV-1042\nINV-1043",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-canonical-xml-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-canonical-xml-xslt40.xsl",
+    "expected": "<invoice z=\"30\" a=\"EUR\"><line/></invoice>",
+    "input": "serialization-parameters/input.xml"
+  },
+  {
+    "id": "serialization-parameters-xslt-line-ending-text-xslt40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "serialization-parameters/xslt-line-ending-text-xslt40.xsl",
+    "expected": "INV-1042\nINV-1043",
+    "input": "serialization-parameters/input.xml"
   }
 ]
