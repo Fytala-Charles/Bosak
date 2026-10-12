@@ -64,5 +64,7 @@
       "gatedFailures": 0
     },
     "documentation": "Canonical/setup/queue/contribution pages rendered; local links, tested source hashes and unchanged native patch verified"
-  }
+  },
+  "testedImplementationCommit": "69a7cfd3c84e405c037be41786464950d1c06696",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/205"
 }

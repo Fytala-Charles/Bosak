@@ -16,7 +16,7 @@ Validation: focused 14/0/0; exact new native cases 2/0; broader seqtor 78/5/9 wi
 
 Check latest Bosak fix PR CI before merging. Continue N04 enumeration alias triage, then N05 generated nominative constructors; body namespace declarations are a separate select follow-up. Monitor upstream PRs #22–26 and retain expected outputs until a specification-based correction is justified. N01–N05 and REQ-126 remain In Progress. No release/tag/publication; source Minor bump reflects the newly supported instruction. Preserve all scratch dirs, native branches/receipts and original tracked patch/evidence.
 
-Delivery commit/PR pending.
+Delivery: 69a7cfd3c84e405c037be41786464950d1c06696, [Bosak PR #205](https://github.com/Fytala-Charles/Bosak/pull/205), pushed on fix/xslt-select-body-evaluation. CI run 38304867902 pending; PR open. This subsequent metadata commit records delivery. On resume check latest CI before merging, then continue the enum-alias slice; retain namespace-declaration failures as a separate follow-up.
 
 # Remaining priority XSLT 4.0 contributions — 2026-10-12
 
