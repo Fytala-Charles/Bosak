@@ -1,0 +1,3 @@
+(: XPath 3.1: predicate filtering plus explicit sort key. :)
+let $batch := parse-xml('<invoices><invoice id="INV-1042" currency="EUR" total="30"/><invoice id="INV-1043" currency="USD" total="12"/><invoice id="INV-1044" currency="EUR" total="0"/></invoices>')
+return string-join(sort($batch/invoices/invoice[xs:decimal(@total) gt 0], (), function($invoice){concat($invoice/@currency, '/', $invoice/@id)}) ! concat(@id, '/', @currency, ':', format-number(xs:decimal(@total), '0.00')), ';')
