@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-12",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/22",
+  "status": "Open; review pending",
+  "headRepository": "Fytala-Charles/xslt40-test",
+  "headBranch": "bosak/array-member-review",
+  "headCommit": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+  "baseBranch": "master",
+  "baseCommitAtSubmission": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+  "exactCases": {
+    "passed": 6,
+    "failed": 0
+  },
+  "independentProcessorConfirmation": "Outstanding; requested in PR body",
+  "bosakBaseline": "0e806a351f422d9d4725b1581f2008cd867c76ba",
+  "bosakFixPr": "https://github.com/Fytala-Charles/Bosak/pull/202",
+  "bosakFixCi": 38295568498
+}

@@ -133,3 +133,8 @@ Queue N01 remains in progress; do not move it to upstream accepted. Source/publi
 ## Post-fix candidate review
 
 The [assertion review](ASSERTION_REVIEW.md) documents the expected-output derivations and engine correction. [Post-fix results](POST_FIX_RESULTS.json) record six exact passes against the unchanged native commit. Earlier outcomes above are preserved as the before-fix record. Source candidate 1.1.4 is unpublished; independent processor confirmation and upstream submission remain outstanding.
+
+
+## Submission update
+
+[Upstream PR #22](https://github.com/qt4cg/xslt40-test/pull/22) is open. See [submission details](SUBMISSION.md). Earlier no-submission statements describe the pre-submission state; independent confirmation remains outstanding.
