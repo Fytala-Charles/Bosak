@@ -1,3 +1,21 @@
+# Upstream XSLT 4.0 adapter setup — 2026-10-12
+
+Main baseline: `3658b53849c6583bc72f75fdefd5df7a3d395695`; PR #198 merged after successful CI run 38286066449. Bosak branch: `test/xslt40-upstream-adapter`; public/source version **1.1.3**. Earlier queues below are historical.
+
+## What was built
+
+Upstream XSLT 4.0 contribution setup now takes priority over the next equality/collation catalog slice. Independent ignored xslt40-test checkout at pin 6205faf9f32ace6338ac245c41f8eb9a1447926f retains native catalogs/schema/tests; Bosak supplies an explicit --xslt40 adapter mode, bounded runner with revision/status receipts and failure/zero-execution exit status, catalog validator and four adapter controls. Initial upstream select evidence: 157/0/1. Existing XSLT40+ JSON case executes and fails (-0 versus expected -0e0); it remains a visible finding. No upstream tests or expected results changed, no upstream PR/message and no release. Version 1.1.3; REQ-126 In Progress, prior D2/D3/D4 and provenance/metadata limits retained.
+
+[Setup and commands](XSLT40_UPSTREAM_TESTING.md). Local upstream branch `bosak/schema-awareness-review`, remote `upstream`, clean at the recorded pin. The checkout lives under `.upstream/xslt40-test` and is separate Git history; contributions belong in its native tests structure. Bosak-owned launch/validation/control scripts and tests/xslt40-adapter.json record the setup. Only the conformance adapter changes; engine/API behavior unchanged. Actual stylesheet versions are retained, and XSLT30-only dependencies skip in the 4.0 profile.
+
+Validation: Release solution build passed (12 existing warnings, zero errors); **6,806 tests / 0 failures / 0 skips** across ten assemblies. Four adapter controls passed; upstream select 157/0/1, genuine XSLT40+ JSON case 0/1/161 with exit 1, zero selection exit 1, upstream catalog/select and local control schema validation passed. Setup guide and six canonical/implementation documents rendered; local links/code fences and JSON run receipt counts/status verified. Manual engine gates were not rerun for adapter-only changes; engine/API unchanged.
+
+## Resume here
+
+Review current upstream schema-awareness environments/dependencies for source-document, si-fork and si-map against issue #90, avoiding coverage already supplied. Prepare specification-derived native test changes before proposing submission. Retain JSON -0/-0e0 triage separately; do not change upstream expectation to match Bosak. No fork, upstream push/PR or external message has been sent. Bosak documentation links can accompany a focused contribution note. The equality/collation catalog queue is postponed, not discarded; all previous D2/D3/D4, missing metadata, historical pins and AC-03 limits remain.
+
+Preserve `.guard-tmp/`, `.sweep-baselines/`, `.upstream/` and local receipts under `.artifacts/xslt40/`. Delivery: `f30142931847825ecdac48973889c9ab3ed08e17`, [Bosak PR #199](https://github.com/Fytala-Charles/Bosak/pull/199), pushed on `test/xslt40-upstream-adapter`. CI pending; PR remains open. This subsequent metadata commit records delivery. On resume check CI and merge after success, then review the upstream schema-awareness contribution candidates. Upstream checkout remains clean and unpublished.
+
 # Ordering/default contracts — 2026-10-12
 
 Main baseline: `28144810a56370d3901ceca5ef35bb1759053b47`; [PR #197](https://github.com/Fytala-Charles/Bosak/pull/197) merged after successful [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38284111686). Branch: `docs/req126-order-default-contracts`. Public/source version remains **1.1.3**. Earlier states below are historical.
