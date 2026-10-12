@@ -189,9 +189,11 @@ Enum and choice types are small and stable — can precede records.
 
 ### Out of scope (recorded, not scheduled)
 
-- **XDM 4.0 GNode/JNode model** (`xnode()`/`jnode()`, `fn:jtree`/`fn:jkey`/`fn:jvalue`,
-  JSONPath comparisons §4.7.9) — a parallel node model touching every layer; revisit
-  only if the drafts freeze and a customer need appears.
+- **Full XDM 4.0 GNode/JNode remainder** — the original exclusion was partly superseded
+  by REQ-123's shipped JNode wrappers, jtree/jkey/jvalue, jnode type tests and navigation.
+  The [reconciled model boundary](xpath40-catalog/data-model/jnode-template-boundary.md)
+  records node()/xnode()/identity gaps and uncertified generic-model/XSLT contracts.
+  The remainder stays outside this implementation schedule; shipped navigation remains available.
 - **`fn:parse-html` / `fn:html-doc`** (17.3) — requires an HTML5 parser dependency;
   the known Cloudflare-challenge environment lesson applies. Owner decision needed.
 - **`fn:invisible-xml`** (17.6), **`fn:unparsed-binary`**, **`fn:xsd-validator`** —

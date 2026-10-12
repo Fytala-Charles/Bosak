@@ -1,0 +1,3 @@
+(: Portable 3.1: plain map/array lookup, without JNode identity or parent context. :)
+let $batch := parse-json('{"invoices":[{"id":"INV-1042","currency":"EUR","total":30},{"id":"INV-1043","currency":"USD","total":12}]}')
+return string-join($batch?invoices?* ! concat(?id, '/', ?currency, ':', format-number(?total, '0.00')), ';')
