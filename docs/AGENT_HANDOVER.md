@@ -1,3 +1,23 @@
+# First native upstream array/member batch — 2026-10-12
+
+Main baseline: `01969ab37f946ff67325cfb547fc859f0c832f3e`; PR #200 merged after successful CI run 38291879106. Bosak branch: `docs/xslt40-array-member-first-batch`. Version **1.1.3**. Prior queues below are historical.
+
+## What was built
+
+N01 now has a [six-case native array/member batch](../contributions/xslt40/array-member-boundaries/README.md), committed locally on bosak/array-member-review at e72f1b0e8511f78478e66c112201317cfe7b7ad1. Five exact new cases pass; array-032 exposes missing XTTE4060 enforcement and returns A|B. Normative expectations are retained. A portable mail patch, source/expected-outcome mapping, clean-commit receipts and an upstream PR draft preserve the work; no upstream submission or independent processor confirmation yet. Version 1.1.3, REQ-126 In Progress, no Bosak engine/API/adapter change. Next: independent assertion review and separate error triage before submission.
+
+Native suite base 6205faf9, spec e7ee4ab8. Added array-027 through -032 and array-member-orders.xml to the existing array group; native test-set grows 31→37, root catalog unchanged. Reviewed existing grouped/nested/map/JNode scenarios; this is a focused additional-boundary audit, not exhaustive absence-of-duplicates certification. Cases cover empty/no-emission, empty content/grouped tail, retained nested containers, original nodes/order, per-item focus/empty results and mixed JNode/non-JNode type error.
+
+Native commit is clean and local, with a source-preserving mail patch and portable evidence under contributions/xslt40/array-member-boundaries. Git identity was copied from Bosak's configured identity into the nested repo only. No fork/push/PR or external message. Current source node identity/order and five shape assertions pass; JNode representation/conformance as a whole remains unclaimed.
+
+Validation: native catalog schema passes and six clean-commit reruns give 5 pass/1 gap. Patch reproduces the native commit tree exactly; hashes, unchanged baseline cases, exact case receipts and documentation rendering verified. Independent processor confirmation remains outstanding. Unchanged Bosak implementation baseline CI passes 6,806 tests; native contribution tests are separate from that total.
+
+## Resume here
+
+Review/assert independent confirmation for this first batch and triage the missing XTTE4060 check separately; retain the required error expectation. Prepare upstream submission only with honest source/run evidence. No existing expectations changed. Substring filters also run inherited square-array tests; use exact case outcomes for the 5/1 tally. N01 stays in progress, N02–N05 queued; previous schema/JSON and catalog D2/D3/D4/provenance/metadata follow-ups remain.
+
+Preserve scratch dirs, ignored upstream checkout/receipts and tracked contribution patch/evidence. Delivery commit/PR will be recorded after push.
+
 # XSLT 4.0 new-element priority queue — 2026-10-12
 
 Main baseline: `cc5eb4be485c6d6f68ea985fa55b96504a9b6e81`; PR #199 merged after successful CI run 38287949458. Bosak branch: `docs/xslt40-contribution-priority-queue`. Version **1.1.3**. Previous queues below are historical.

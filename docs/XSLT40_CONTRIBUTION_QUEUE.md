@@ -78,3 +78,6 @@ No engine/API/adapter changes, release or upstream submission in this queue step
 ## Queue validation
 
 Queue/source SHA-256 and section anchors, five ordered families, exact distinct-file inventories, three recorded Bosak probe counts, clean upstream revision, local links/code fences and rendered queue/setup/canonical documents verified. PR #199 baseline CI passed 6,806 tests; source, adapter and test implementation are unchanged, so the full suite/manual engine gates were not repeated for this planning/documentation-only step. Probe failures remain visible rather than reclassified as passes.
+
+
+**First upstream test batch — 2026-10-12:** N01 now has a [six-case native array/member batch](../contributions/xslt40/array-member-boundaries/README.md), committed locally on bosak/array-member-review at e72f1b0e8511f78478e66c112201317cfe7b7ad1. Five exact new cases pass; array-032 exposes missing XTTE4060 enforcement and returns A|B. Normative expectations are retained. A portable mail patch, source/expected-outcome mapping, clean-commit receipts and an upstream PR draft preserve the work; no upstream submission or independent processor confirmation yet. Version 1.1.3, REQ-126 In Progress, no Bosak engine/API/adapter change. Next: independent assertion review and separate error triage before submission.
