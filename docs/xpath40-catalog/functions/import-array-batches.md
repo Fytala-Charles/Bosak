@@ -61,6 +61,8 @@ Each callback result is one array member. `array:items` loses those boundaries, 
 
 Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. Source/package version stays 1.1.1. This reference work changes no engine code.
 
+**Supplementary contract review (2026-10-12):** [Container review](../CONTAINER-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed stock-feed README](../examples/container-contracts/README.md) supply 89 checks covering six families: keyword modes, empty/default/member/item shapes, nested values, node identity, callback arity/results and complete XPath 3.1/4.0 reports. Keywords remain unavailable. map:filter boolean-result enforcement remains an engine follow-up. Source/public version is 1.1.3; original delivery/unit/gate evidence and historical adopted-pin limits are unchanged. The map result-shape corrections already shipped in 1.1.2.
+
 ## 13. Sample Code
 
 Input is declared inside each expression: reduced order/product records, no document focus, external variables or resource access. Namespace prefixes `map` and `array` use the standard public API bindings. Outputs are exact text projections of XDM results, not serialized supplier or ERP formats.

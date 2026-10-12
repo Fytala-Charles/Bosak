@@ -79,12 +79,31 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative container review: keyword modes, empty/default/member/item shapes, callback arity/results, nested values and node identity. map:filter boolean-result enforcement remains an engine follow-up; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-array-build-1",
         "signature-audit-array-build-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "containerContractCases": [
+        "container-contract-array-build-keyword-31",
+        "container-contract-array-build-keyword-40",
+        "container-contract-array-build-keyword-experimental",
+        "container-contract-array-build-empty",
+        "container-contract-array-build-identity",
+        "container-contract-array-build-empty-default",
+        "container-contract-array-build-one-argument-action",
+        "container-contract-array-build-position",
+        "container-contract-array-build-empty-members",
+        "container-contract-array-build-grouped-members",
+        "container-contract-array-build-nested-array",
+        "container-contract-array-build-nested-map",
+        "container-contract-array-build-node-identity",
+        "container-contract-array-build-wrong-arity",
+        "container-contract-array-build-zero-arity",
+        "container-contract-array-build-nonfunction",
+        "container-contract-array-build-empty-nonfunction"
+      ]
     },
     {
       "name": "array:empty",
@@ -137,11 +156,24 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative container review: keyword modes, empty/default/member/item shapes, callback arity/results, nested values and node identity. map:filter boolean-result enforcement remains an engine follow-up; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-array-empty-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "containerContractCases": [
+        "container-contract-array-empty-keyword-31",
+        "container-contract-array-empty-keyword-40",
+        "container-contract-array-empty-keyword-experimental",
+        "container-contract-array-empty-no-members",
+        "container-contract-array-empty-empty-member",
+        "container-contract-array-empty-nested-empty",
+        "container-contract-array-empty-values",
+        "container-contract-array-empty-wrong-integer",
+        "container-contract-array-empty-wrong-map",
+        "container-contract-array-empty-wrong-empty",
+        "container-contract-array-empty-wrong-multiple"
+      ]
     },
     {
       "name": "array:items",
@@ -194,11 +226,24 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative container review: keyword modes, empty/default/member/item shapes, callback arity/results, nested values and node identity. map:filter boolean-result enforcement remains an engine follow-up; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-array-items-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "containerContractCases": [
+        "container-contract-array-items-keyword-31",
+        "container-contract-array-items-keyword-40",
+        "container-contract-array-items-keyword-experimental",
+        "container-contract-array-items-no-members",
+        "container-contract-array-items-empty-member",
+        "container-contract-array-items-nested-empty",
+        "container-contract-array-items-values",
+        "container-contract-array-items-wrong-integer",
+        "container-contract-array-items-wrong-map",
+        "container-contract-array-items-wrong-empty",
+        "container-contract-array-items-wrong-multiple"
+      ]
     },
     {
       "name": "array:slice",
@@ -5634,11 +5679,26 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative container review: keyword modes, empty/default/member/item shapes, callback arity/results, nested values and node identity. map:filter boolean-result enforcement remains an engine follow-up; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-map-entries-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "containerContractCases": [
+        "container-contract-map-entries-keyword-31",
+        "container-contract-map-entries-keyword-40",
+        "container-contract-map-entries-keyword-experimental",
+        "container-contract-map-entries-empty",
+        "container-contract-map-entries-empty-value",
+        "container-contract-map-entries-grouped",
+        "container-contract-map-entries-nested",
+        "container-contract-map-entries-singletons",
+        "container-contract-map-entries-retained-value",
+        "container-contract-map-entries-wrong-integer",
+        "container-contract-map-entries-wrong-array",
+        "container-contract-map-entries-wrong-empty",
+        "container-contract-map-entries-wrong-multiple"
+      ]
     },
     {
       "name": "map:filter",
@@ -5698,11 +5758,30 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative container review: keyword modes, empty/default/member/item shapes, callback arity/results, nested values and node identity. map:filter boolean-result enforcement remains an engine follow-up; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-map-filter-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "containerContractCases": [
+        "container-contract-map-filter-keyword-31",
+        "container-contract-map-filter-keyword-40",
+        "container-contract-map-filter-keyword-experimental",
+        "container-contract-map-filter-key",
+        "container-contract-map-filter-value",
+        "container-contract-map-filter-position",
+        "container-contract-map-filter-empty-result",
+        "container-contract-map-filter-string-result",
+        "container-contract-map-filter-numeric-result",
+        "container-contract-map-filter-multiple-result",
+        "container-contract-map-filter-untyped-result",
+        "container-contract-map-filter-arity-four",
+        "container-contract-map-filter-zero-arity",
+        "container-contract-map-filter-nonfunction",
+        "container-contract-map-filter-empty",
+        "container-contract-map-filter-empty-nonfunction",
+        "container-contract-map-filter-retains-empty"
+      ]
     },
     {
       "name": "map:items",
@@ -5755,11 +5834,27 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative container review: keyword modes, empty/default/member/item shapes, callback arity/results, nested values and node identity. map:filter boolean-result enforcement remains an engine follow-up; no full conformance claim.",
       "availabilityCases": [
         "signature-audit-map-items-1"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "containerContractCases": [
+        "container-contract-map-items-keyword-31",
+        "container-contract-map-items-keyword-40",
+        "container-contract-map-items-keyword-experimental",
+        "container-contract-map-items-empty",
+        "container-contract-map-items-empty-value",
+        "container-contract-map-items-grouped",
+        "container-contract-map-items-nested",
+        "container-contract-map-items-nested-array",
+        "container-contract-map-items-nested-map",
+        "container-contract-map-items-node-identity",
+        "container-contract-map-items-wrong-integer",
+        "container-contract-map-items-wrong-array",
+        "container-contract-map-items-wrong-empty",
+        "container-contract-map-items-wrong-multiple"
+      ]
     },
     {
       "name": "fn:compare",
@@ -7856,12 +7951,15 @@
   "sequenceReviewDate": "2026-10-12",
   "sequenceReviewSourceRevision": "2efcd33a483cb9adb8eae35908a083a661388b1d",
   "sequenceReviewChecks": 65,
-  "targetedAbsentMetadataReviewed": 21,
-  "targetedAbsentMetadataRemaining": 16,
+  "targetedAbsentMetadataReviewed": 27,
+  "targetedAbsentMetadataRemaining": 10,
   "predicateReviewDate": "2026-10-12",
   "predicateReviewSourceRevision": "a151fff80e2ef3d3afc226179df673f66165ab4f",
   "predicateReviewChecks": 102,
   "selectionReviewDate": "2026-10-12",
   "selectionReviewSourceRevision": "211ba1ce88ad62b4a5bfb2cfbb1b91c0b8c09cb7",
-  "selectionReviewChecks": 68
+  "selectionReviewChecks": 68,
+  "containerReviewDate": "2026-10-12",
+  "containerReviewSourceRevision": "43ed546bd1d61364fe3e61fee736433617473301",
+  "containerReviewChecks": 89
 }

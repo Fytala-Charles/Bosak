@@ -1,0 +1,1 @@
+string-join(array:items(array:build((1,2),function(){7})) ! string(.),",")
