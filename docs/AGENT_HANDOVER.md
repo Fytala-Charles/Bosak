@@ -10,6 +10,13 @@ Complete invoice input, refused XPath, portable 3.1 report and XSLT receipt cons
 
 ## Resume here
 
+Delivery: `21eda38017feba3ab3b44d86eac00e9672e689ce`,
+[PR #176](https://github.com/Fytala-Charles/Bosak/pull/176), pushed on
+`docs/req126-computed-constructors`. Rebase onto merged main preserved the exact
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38219052945)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
 Next document `xsl:item-type` / `xsl:record-type` dispositions against pinned draft, compiler and tests, keeping them separate from shipped XPath structural types. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md). Keep this documentation-only unless engine work is separately requested.
 
 Existing URI option truthiness/empty-query-map gaps, comparison, extrema, sorting, Unicode, hash and historical provenance limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, pending PRs and next steps are superseded here.
