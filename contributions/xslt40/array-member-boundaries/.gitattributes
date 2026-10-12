@@ -1,0 +1,2 @@
+# Preserve the mail patch bytes and its recorded SHA-256 on every platform.
+*.patch -text

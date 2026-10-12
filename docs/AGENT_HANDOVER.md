@@ -16,7 +16,7 @@ Validation: native catalog schema passes and six clean-commit reruns give 5 pass
 
 Review/assert independent confirmation for this first batch and triage the missing XTTE4060 check separately; retain the required error expectation. Prepare upstream submission only with honest source/run evidence. No existing expectations changed. Substring filters also run inherited square-array tests; use exact case outcomes for the 5/1 tally. N01 stays in progress, N02–N05 queued; previous schema/JSON and catalog D2/D3/D4/provenance/metadata follow-ups remain.
 
-Preserve scratch dirs, ignored upstream checkout/receipts and tracked contribution patch/evidence. Delivery commit/PR will be recorded after push.
+Preserve scratch dirs, ignored upstream checkout/receipts and tracked contribution patch/evidence. Delivery: ed5a47d0a42b9a6fe42771cbac3692f6c45e6115, [Bosak PR #201](https://github.com/Fytala-Charles/Bosak/pull/201), pushed on docs/xslt40-array-member-first-batch. CI run 38294287371 pending; PR open. This subsequent metadata commit records delivery and preserves patch bytes with a local .gitattributes rule. On resume check the latest CI before merging, then independently review the assertions and triage XTTE4060.
 
 # XSLT 4.0 new-element priority queue — 2026-10-12
 
