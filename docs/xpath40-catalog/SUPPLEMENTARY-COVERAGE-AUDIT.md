@@ -62,7 +62,7 @@ links. These are documentation tasks, not authorization to implement proposals.
 
 | Dossier scope | Recorded decision | Evidence needed before catalog completion |
 |---|---|---|
-| Computed XPath node constructors | Deferred in tier 2 | Separate XPath refusal/partial support from existing XQuery constructors; pin draft production and test evidence. |
+| Computed XPath node constructors | [Deferred record supplied](deferred/computed-node-constructors.md) | Current pinned draft includes them; Bosak refuses the seven braced-name forms at 31/40/experimental. Existing XQuery 3.1 named tests and complete XSLT receipt alternative provide separate evidence. Historical adopted pin remains unavailable. |
 | `xsl:item-type` / `xsl:record-type` | Deferred in tier 4 | Separate XSLT declarations from shipped XPath structural types. |
 | Enclosing modes; capturing accumulators; `fn:apply-templates` | Deferred in tier 4 | Individual scope and rationale records, compiler/runtime evidence and supported alternatives. |
 | Serialization 4.0 parameters | Deferred in tier 4 | Parameter-by-parameter boundary against existing serialization behavior. |
@@ -86,7 +86,9 @@ Measurement comparison delivery (2026-10-12): coverage was 55 entries and 442 ch
 Batch extrema delivery (2026-10-12): coverage was 56 entries and 471 checks (447 feature plus 24 chapter). QName extrema have a 3.1 fold comparison; mixed numeric and plain-duration behavior remain incomplete against the pinned draft. Exact fn-min/fn-max gate assignment is absent.
 
 
-Warehouse sorting delivery (2026-10-12): current coverage is 58 entries and 527 checks (503 feature plus 24 chapter). Portable composite-key sorting and array member boundaries are verified; exact numeric and NaN ordering remain incomplete against the pinned draft. Next option review: parse-uri/build-uri allow-deprecated-features, unc-path and component precedence, complementing the existing omit-default-ports examples.
+Historical warehouse sorting delivery (2026-10-12): coverage was 57 entries and 499 checks (475 feature plus 24 chapter). Portable composite-key sorting and array member boundaries were verified; exact numeric and NaN ordering remain incomplete against the pinned draft. The subsequent URI option review is supplied below.
 
 
-**URI option review — 2026-10-12:** [Archive and partner URI policy](functions/uri-option-policy.md) adds complete input/output, a scoped 3.1 comparison and 28 executable cases. Boolean options, UNC spelling, raw/structured authority and path/query precedence are explicit. Non-Boolean option truthiness and empty-query-map fallback remain observed draft gaps. Coverage: 58 entries, 503 feature plus 24 chapter checks (527 total); all 117 names remain assigned. REQ-126 stays In Progress; source/public version remains 1.1.2. Next: wider grammar/disposition provenance.
+**URI option review — 2026-10-12:** [Archive and partner URI policy](functions/uri-option-policy.md) adds complete input/output, a scoped 3.1 comparison and 28 executable cases. Boolean options, UNC spelling, raw/structured authority and path/query precedence are explicit. Non-Boolean option truthiness and empty-query-map fallback remain observed draft gaps. Coverage: 59 entries, 533 feature plus 24 chapter checks (557 total); all 117 names remain assigned. REQ-126 stays In Progress; source/public version remains 1.1.2. Next: XSLT type-declaration dispositions.
+
+**Computed XPath constructor disposition — 2026-10-12:** [Deferred node construction](deferred/computed-node-constructors.md) separates the draft XPath feature from Bosak XQuery 3.1 support. Complete invoice input, refused XPath, 3.1 report and XSLT receipt output accompany 30 executable checks: 25 refusals across compatibility modes, three reports and two XML outputs. Current coverage: 59 entries, 533 feature plus 24 chapter checks (557 total); all 117 names remain assigned. Version stays 1.1.2; REQ-126 remains In Progress. Next: `xsl:item-type` / `xsl:record-type` disposition records.

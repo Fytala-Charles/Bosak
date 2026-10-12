@@ -1,0 +1,1 @@
+let $i := parse-xml('<invoice id="INV-SPECIAL"><customer>A &lt; B &amp; C</customer><amount currency="EUR">7.00</amount></invoice>')/invoice return concat('id=', $i/@id, '; customer=', $i/customer, '; total=', $i/amount, ' ', $i/amount/@currency)

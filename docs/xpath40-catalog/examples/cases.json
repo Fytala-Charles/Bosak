@@ -3598,5 +3598,217 @@
     "mode": "40",
     "file": "uri-option-policy/nonboolean-unc-observed.xpath",
     "expected": "file"
+  },
+  {
+    "id": "computed-xpath-constructors-element-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/element-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-element-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/element-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-element-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/element-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-attribute-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/attribute-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-attribute-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/attribute-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-attribute-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/attribute-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-document-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/document-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-document-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/document-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-document-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/document-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-text-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/text-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-text-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/text-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-text-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/text-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-comment-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/comment-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-comment-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/comment-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-comment-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/comment-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-processing-instruction-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/processing-instruction-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-processing-instruction-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/processing-instruction-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-processing-instruction-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/processing-instruction-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-namespace-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/namespace-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-namespace-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/namespace-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-namespace-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/namespace-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-direct-element-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/direct-element-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-direct-element-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/direct-element-40.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-direct-element-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "computed-xpath-constructors/direct-element-experimental.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-main-refusal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "computed-xpath-constructors/main-refusal.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "computed-xpath-constructors-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/baseline.xpath",
+    "expected": "id=INV-2048; customer=Ada & Co; total=125.50 EUR"
+  },
+  {
+    "id": "computed-xpath-constructors-baseline-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/baseline-empty.xpath",
+    "expected": "id=INV-EMPTY; customer=; total=0.00 EUR"
+  },
+  {
+    "id": "computed-xpath-constructors-baseline-escaped",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "computed-xpath-constructors/baseline-escaped.xpath",
+    "expected": "id=INV-SPECIAL; customer=A < B & C; total=7.00 EUR"
+  },
+  {
+    "id": "computed-xpath-constructors-xslt-main",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "computed-xpath-constructors/xslt-main.xsl",
+    "expected": "<receipt id=\"INV-2048\"><customer>Ada &amp; Co</customer><total currency=\"EUR\">125.50</total></receipt>",
+    "input": "computed-xpath-constructors/input.xml"
+  },
+  {
+    "id": "computed-xpath-constructors-xslt-empty",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "computed-xpath-constructors/xslt-empty.xsl",
+    "expected": "<receipt id=\"INV-EMPTY\"><customer/><total currency=\"EUR\">0.00</total></receipt>",
+    "input": "computed-xpath-constructors/empty.xml"
   }
 ]

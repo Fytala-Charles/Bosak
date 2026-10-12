@@ -1,0 +1,2 @@
+let $i := parse-xml('<invoice id="INV-2048"><customer>Ada &amp; Co</customer><amount currency="EUR">125.50</amount></invoice>')/invoice
+return element { 'receipt' } { attribute { 'id' } { string($i/@id) }, element { 'customer' } { string($i/customer) }, element { 'total' } { attribute { 'currency' } { string($i/amount/@currency) }, string($i/amount) } }

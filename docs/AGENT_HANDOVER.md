@@ -1,4 +1,20 @@
-# URI option review — 2026-10-12
+# Computed XPath constructor disposition — 2026-10-12
+
+Main baseline: `e99dd76c32101403c7a5b6e6c20f79b2af881a96`; [PR #175](https://github.com/Fytala-Charles/Bosak/pull/175) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38217982422). Current branch: `docs/req126-computed-constructors`.
+
+## Current state and what was built
+
+Added [computed XPath node constructors](xpath40-catalog/deferred/computed-node-constructors.md), a 16-field Deferred disposition record with immutable draft review pin e7ee4ab8. The draft includes computed XPath constructors; Bosak retains its tier-2 deferral. Parser recognition is limited to the XQuery host flag. Existing XQuery 3.1 construction is not XPath support or full XQuery 4.0 certification.
+
+Complete invoice input, refused XPath, portable 3.1 report and XSLT receipt construction accompany 30 fixtures: 25 XPath refusals, three reports and two XML outputs. XSLT files document context, projection/escaping and empty-content boundaries. Catalog: **59 entries; 533 feature + 24 chapter checks = 557**. All 117 names remain assigned; REQ-126 **In Progress**, source/public **1.1.2**. No engine/API/package changes or gate promotions. Focused catalog tests: 533 passed. Release solution build passed (one existing warning, zero errors); **4,555 tests / 0 failures / 0 skips**, ten assemblies. Renderer verified 73 pages. Entry/index, primary/local links, scoped provenance/inventories, all fixture input/code/results, ten XQuery named tests and independent receipt projections verified. Manual engine gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Next document `xsl:item-type` / `xsl:record-type` dispositions against pinned draft, compiler and tests, keeping them separate from shipped XPath structural types. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md). Keep this documentation-only unless engine work is separately requested.
+
+Existing URI option truthiness/empty-query-map gaps, comparison, extrema, sorting, Unicode, hash and historical provenance limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, pending PRs and next steps are superseded here.
+
+# Historical URI option review — 2026-10-12
 
 Main baseline: `21c8a888e690f1b8d14e22e15c19111e5c158616`; PR #174 merged after CI passed. Current delivery branch: `docs/req126-uri-options`.
 
