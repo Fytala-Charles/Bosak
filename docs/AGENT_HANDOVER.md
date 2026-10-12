@@ -10,6 +10,13 @@ Added [Deferred fn:apply-templates](xpath40-catalog/deferred/fn-apply-templates.
 
 ## Resume here
 
+Delivery: `09ff052eec8ecafef3865ba220f6555dce0c1155`,
+[PR #180](https://github.com/Fytala-Charles/Bosak/pull/180), pushed on
+`docs/req126-apply-templates-function`. Rebase onto merged main preserved the
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38224401480)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
 Next audit Serialization 4.0 parameter dispositions against pinned sources, Bosak serialization and existing tests; keep documentation-only scope unless engine work is requested. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash and historical adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks below retain their original delivery states; this block supersedes them.
 
 # Historical capturing-accumulator review — 2026-10-12
