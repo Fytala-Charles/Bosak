@@ -1,0 +1,1 @@
+contains-subsequence(input := ('A','B'), subsequence := 'A', compare := ())

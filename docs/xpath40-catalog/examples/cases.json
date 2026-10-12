@@ -11765,5 +11765,719 @@
     "mode": "31",
     "file": "sequence-contracts/export-reordered-31.xpath",
     "expected": "page=ORD-104,ORD-103,ORD-102;last=ORD-102;body=ORD-104,ORD-103;labels=ORD-104|ORD-103|ORD-102|ORD-104|ORD-103|ORD-102;requested=ORD-101,ORD-104,ORD-104"
+  },
+  {
+    "id": "predicate-contract-all-equal-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/all-equal-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "predicate-contract-all-equal-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-all-equal-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "predicate-contracts/all-equal-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-all-equal-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-empty.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-singleton.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-same",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-same.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-different",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-different.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-equal-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-numeric.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-nan.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-incomparable",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-incomparable.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-equal-nodes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-nodes.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-map.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-empty-collation.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-equal-case-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-case-collation.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-equal-invalid-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-invalid-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "predicate-contract-all-equal-string-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-string-empty-collation.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-equal-numeric-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-equal-numeric-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "predicate-contract-all-different-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/all-different-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "predicate-contract-all-different-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-all-different-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "predicate-contracts/all-different-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-all-different-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-empty.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-different-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-singleton.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-different-same",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-same.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-different-different",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-different.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-different-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-numeric.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-different-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-nan.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-different-incomparable",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-incomparable.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-different-nodes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-nodes.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-different-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-map.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-different-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-empty-collation.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-different-case-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-case-collation.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-all-different-invalid-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-invalid-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "predicate-contract-all-different-string-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-string-empty-collation.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-all-different-numeric-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/all-different-numeric-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/contains-subsequence-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "predicate-contracts/contains-subsequence-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-empty-both",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-empty-both.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-empty-pattern",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-empty-pattern.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-empty-input.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-long-pattern",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-long-pattern.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-exact",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-exact.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-gaps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-gaps.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-empty-comparator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-empty-comparator.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-deep-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-deep-maps.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-projected-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-projected-maps.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-asymmetric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-asymmetric.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-asymmetric-reversed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-asymmetric-reversed.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-callback-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-callback-empty.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-callback-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-callback-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-callback-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-callback-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-callback-wrong-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-callback-wrong-arity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-callback-not-function",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-callback-not-function.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-contains-subsequence-callback-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/contains-subsequence-callback-untyped.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/starts-with-subsequence-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "predicate-contracts/starts-with-subsequence-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-empty-both",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-empty-both.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-empty-pattern",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-empty-pattern.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-empty-input.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-long-pattern",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-long-pattern.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-exact",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-exact.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-gaps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-gaps.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-empty-comparator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-empty-comparator.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-deep-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-deep-maps.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-projected-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-projected-maps.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-asymmetric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-asymmetric.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-asymmetric-reversed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-asymmetric-reversed.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-callback-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-callback-empty.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-callback-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-callback-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-callback-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-callback-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-callback-wrong-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-callback-wrong-arity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-callback-not-function",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-callback-not-function.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-starts-with-subsequence-callback-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/starts-with-subsequence-callback-untyped.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/ends-with-subsequence-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "predicate-contracts/ends-with-subsequence-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-empty-both",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-empty-both.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-empty-pattern",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-empty-pattern.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-empty-input.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-long-pattern",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-long-pattern.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-exact",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-exact.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-gaps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-gaps.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-empty-comparator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-empty-comparator.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-deep-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-deep-maps.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-projected-maps",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-projected-maps.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-asymmetric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-asymmetric.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-asymmetric-reversed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-asymmetric-reversed.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-callback-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-callback-empty.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-callback-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-callback-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-callback-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-callback-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-callback-wrong-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-callback-wrong-arity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-callback-not-function",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-callback-not-function.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "predicate-contract-ends-with-subsequence-callback-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/ends-with-subsequence-callback-untyped.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "predicate-contract-report-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/report-40.xpath",
+    "expected": "shipment=SHIP-42;events=4;consistent=true;unique=true;complete=true;ready=true"
+  },
+  {
+    "id": "predicate-contract-report-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/report-31.xpath",
+    "expected": "shipment=SHIP-42;events=4;consistent=true;unique=true;complete=true;ready=true"
+  },
+  {
+    "id": "predicate-contract-report-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/report-empty-40.xpath",
+    "expected": "shipment=SHIP-42;events=0;consistent=false;unique=true;complete=false;ready=false"
+  },
+  {
+    "id": "predicate-contract-report-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/report-empty-31.xpath",
+    "expected": "shipment=SHIP-42;events=0;consistent=false;unique=true;complete=false;ready=false"
+  },
+  {
+    "id": "predicate-contract-report-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/report-reordered-40.xpath",
+    "expected": "shipment=SHIP-42;events=4;consistent=true;unique=true;complete=false;ready=false"
+  },
+  {
+    "id": "predicate-contract-report-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/report-reordered-31.xpath",
+    "expected": "shipment=SHIP-42;events=4;consistent=true;unique=true;complete=false;ready=false"
+  },
+  {
+    "id": "predicate-contract-report-duplicate-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "predicate-contracts/report-duplicate-40.xpath",
+    "expected": "shipment=SHIP-42;events=4;consistent=true;unique=false;complete=true;ready=false"
+  },
+  {
+    "id": "predicate-contract-report-duplicate-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "predicate-contracts/report-duplicate-31.xpath",
+    "expected": "shipment=SHIP-42;events=4;consistent=true;unique=false;complete=true;ready=false"
   }
 ]

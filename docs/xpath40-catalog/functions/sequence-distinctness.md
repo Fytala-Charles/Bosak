@@ -60,6 +60,8 @@ all-different reports whether atomic values are pairwise distinct. duplicate-val
 
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 
+**Supplementary contract review (2026-10-12):** [Five-family predicate review](../PREDICATE-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed shipment acceptance README](../examples/predicate-contracts/README.md) add 102 exact checks. They cover explicit keyword modes, collation/defaults, numeric/NaN/node/map boundaries, callback direction/result conversion and eight complete 3.1/4.0 reports. All five keyword families remain unavailable. Equality functions tolerate the tested singleton map despite atomic signatures; numeric and empty-string collation processing remain explicit engine follow-ups. The string-valued workflow uses supported positional forms. Initial delivery/unit/gate evidence and historical adopted-pin limits are unchanged.
+
 ## 13. Sample Code
 
 [main.xpath](../examples/sequence-distinctness/main.xpath): returns `false/R1,R2` at mode 40.

@@ -1,0 +1,1 @@
+contains-subsequence(('A','B'),('A','B'))

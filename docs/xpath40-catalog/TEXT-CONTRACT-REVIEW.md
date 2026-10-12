@@ -56,3 +56,6 @@ Next continue D2 with sequence selection/repetition contracts: replicate, items-
 
 
 Sequence selection/repetition review is now supplied. Current targeted absent-keyword coverage is 13 of 37 families; 24 remain. Next: equality/distinctness/subsequence predicate contracts.
+
+
+The subsequent [predicate contract review](PREDICATE-CONTRACT-REVIEW.md) supplies the five equality/distinctness/subsequence families. Current targeted absent-keyword coverage is 18 of 37; 19 remain, with metadata unchanged. Its 102 added checks bring coverage to 67 entries, 1,723 feature + 24 chapter checks = 1,747. Earlier delivery counts above remain historical. Next: duplicate-values/highest/lowest/index-where comparison and selection contracts; D2 remains partial.

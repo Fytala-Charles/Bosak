@@ -1,4 +1,24 @@
-# Sequence selection/repetition contracts — 2026-10-12
+# Equality/distinctness/subsequence predicate contracts — 2026-10-12
+
+Main baseline: `a151fff80e2ef3d3afc226179df673f66165ab4f`; [PR #189](https://github.com/Fytala-Charles/Bosak/pull/189) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38259813618). Current branch: `docs/req126-predicate-contracts`.
+
+## Current state and what was built
+
+Added [predicate contract review](xpath40-catalog/PREDICATE-CONTRACT-REVIEW.md) and [detailed shipment acceptance README](xpath40-catalog/examples/predicate-contracts/README.md), extending five raw signature rows with exact case IDs. Pinned F&O e7ee4ab8 compared against observed all-equal/all-different and contains-/starts-with-/ends-with-subsequence behavior. Updated two family entries, canonical summaries, audits and delivery queue.
+
+102 new checks: 15 explicit keyword/mode refusals, 79 positional/default/type/callback checks and eight complete normal/empty/reordered/duplicate-event reports in 3.1/4.0. All five keyword families refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1 grammar. Empty/default/collation, numeric/NaN/node comparisons, map projection versus deep equality, asymmetric callback direction, empty/result cardinality/type/arity boundaries verified. Equality predicates accept a singleton map despite atomic signatures; numeric and empty-string collation processing remain explicit engine follow-ups. No engine behavior changed.
+
+Targeted absent-keyword review: **18 of 37 families supplied, 19 awaiting review**, metadata unchanged. Catalog: **67 entries; 1,723 feature + 24 chapter checks = 1,747**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,745 tests / 0 failures / 0 skips**, ten assemblies, including all 1,723 catalog feature checks. Renderer verified 91 pages. Five pinned signatures, exact keyword errors/case IDs, eight independent XML report outputs, complete README expressions/local links, 67 sixteen-field entries, 241 cached primary links/anchors and scoped inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with duplicate-values/highest/lowest and index-where comparison/selection contracts. The first three remain absent-keyword families; index-where already has metadata and needs supported-keyword/default/key/predicate behavior review. Use a warehouse exception-selection workflow with collation, callbacks, typed and empty cases. Other missing families, complete coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Map/collation boundaries join prior keyword spelling, replace arity, two-let hash, text options/coercion and sequence integer/atomization engine follow-ups. Historical adopted pins and AC-03 gate applicability remain unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 edits appeared during this step: `docs/REQ-127-compact-source-inspection.md` and its registry additions. They are preserved unstaged and were not part of this predicate review. Do not remove or silently commit them. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+
+# Historical sequence selection/repetition contracts — 2026-10-12
 
 Main baseline: `2efcd33a483cb9adb8eae35908a083a661388b1d`; [PR #188](https://github.com/Fytala-Charles/Bosak/pull/188) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38245747354). Current branch: `docs/req126-sequence-contracts`.
 
