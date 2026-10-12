@@ -291,6 +291,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.131 | 11-10-2026     | Apply effective-version XPath profiles to static expression compilation.                |
 //                      | Charles Korthout | 2.132 | 12-10-2026     | Recognize xsl:select and validate expression-text/fallback structure.                     |
+//                      | Charles Korthout | 2.133 | 12-10-2026     | Collect enumeration item-type declarations by expanded name and precedence
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -797,10 +798,86 @@ internal sealed class Stylesheet
         // OwningPackage identifies the package root that owns this module. A package root
         // owns itself; imports and includes inherit the package of the module that contains them.
         OwningPackage = IsPackage ? this : owningPackage;
+        if (ReferenceEquals(_rootStylesheet, this))
+            GetEnumerationItemTypes();
     }
 
     /// <summary>The root element of the stylesheet (xsl:stylesheet or xsl:transform).</summary>
     public XElement Root => _document.Root!;
+
+    private IReadOnlyDictionary<string, string>? _enumerationItemTypes;
+
+    internal IReadOnlyDictionary<string, string> GetEnumerationItemTypes()
+    {
+        if (_enumerationItemTypes is not null)
+            return _enumerationItemTypes;
+        var declarations = new Dictionary<string, List<(int Precedence, XElement Element)>>(StringComparer.Ordinal);
+        void Collect(Stylesheet module)
+        {
+            foreach (var child in module.Imports.Concat(module.Includes))
+                Collect(child);
+            foreach (var element in module.Root.Elements(XName.Get("item-type", XslNamespace)))
+            {
+                if (GetXPathCompatibility(element) < XPathCompatibility.XPath40)
+                    continue;
+                var name = element.Attribute("name")?.Value.Trim();
+                var type = element.Attribute("as")?.Value.Trim();
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(type))
+                    throw new InvalidOperationException("XTSE0010: xsl:item-type requires name and as attributes.");
+                var key = ExpandItemTypeName(name, element);
+                var uri = key[2..key.IndexOf('}')];
+                if (uri is XslNamespace or "http://www.w3.org/2001/XMLSchema" or "http://www.w3.org/2005/xpath-functions")
+                    throw new InvalidOperationException("XTSE4030: Reserved namespace in item-type name.");
+                if (!declarations.TryGetValue(key, out var definitions))
+                    declarations[key] = definitions = new();
+                definitions.Add((module.ImportPrecedence, element));
+            }
+        }
+        Collect(this);
+        var result = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var (name, definitions) in declarations)
+        {
+            var precedence = definitions.Min(d => d.Precedence);
+            var winners = definitions.Where(d => d.Precedence == precedence).ToList();
+            if (winners.Count != 1)
+                throw new InvalidOperationException("XTSE4030: Duplicate item-type declarations at the same import precedence.");
+            var definition = winners[0].Element.Attribute("as")!.Value.Trim();
+            // This initial slice registers enumeration definitions only. Structural aliases,
+            // recursive alias expansion and package exposure remain separate work.
+            if (!definition.StartsWith("enum(", StringComparison.Ordinal))
+                continue;
+            if (!definition.EndsWith(')'))
+                throw new InvalidOperationException("XTSE0020: xsl:item-type as must denote an item type without an occurrence indicator.");
+            XPath31Expression.Compile("() instance of " + definition, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+            result[name] = definition;
+        }
+        return _enumerationItemTypes = result;
+    }
+
+    private static string ExpandItemTypeName(string name, XElement element)
+    {
+        if (name.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var close = name.IndexOf('}');
+            if (close < 2 || close == name.Length - 1)
+                throw new InvalidOperationException("XTSE0020: Invalid item-type EQName.");
+            System.Xml.XmlConvert.VerifyNCName(name[(close + 1)..]);
+            return name;
+        }
+        var colon = name.IndexOf(':');
+        var local = colon < 0 ? name : name[(colon + 1)..];
+        System.Xml.XmlConvert.VerifyNCName(local);
+        string ns;
+        if (colon >= 0)
+        {
+            System.Xml.XmlConvert.VerifyNCName(name[..colon]);
+            ns = element.GetNamespaceOfPrefix(name[..colon])?.NamespaceName
+                ?? throw new InvalidOperationException("XTSE0280: Undeclared item-type namespace prefix.");
+        }
+        else
+            ns = element.AncestorsAndSelf().Attributes("xpath-default-namespace").FirstOrDefault()?.Value ?? string.Empty;
+        return $"Q{{{ns}}}{local}";
+    }
 
     /// <summary>The base URI of this stylesheet, used for resolving relative xml:base values.</summary>
     public string? BaseUri => _baseUri;
@@ -3805,6 +3882,15 @@ internal sealed class Stylesheet
                     }
                 }
 
+                if (localName == "item-type")
+                {
+                    if (GetEffectiveVersion(elem) < 4.0)
+                        throw new InvalidOperationException("XTSE0010: xsl:item-type requires XSLT 4.0.");
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes("name", "as", "visibility"), IsForwardsCompatibleElement(elem));
+                    if (elem.Attribute("name") is null || elem.Attribute("as") is null)
+                        throw new InvalidOperationException("XTSE0010: xsl:item-type requires name and as attributes.");
+                }
+
                 if (localName == "select")
                 {
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes("as"), IsForwardsCompatibleElement(elem));
@@ -5287,7 +5373,7 @@ internal sealed class Stylesheet
         "stylesheet", "transform", "package",
         "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
         "attribute-set", "decimal-format", "key", "mode", "accumulator", "template", "function",
-        "global-context-item", "import-schema",
+        "global-context-item", "import-schema", "item-type",
         "use-package", "expose", "accept", "override"
     };
 
@@ -5301,7 +5387,7 @@ internal sealed class Stylesheet
         "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
         "attribute-set", "character-map", "decimal-format", "key", "mode", "accumulator", "param", "variable",
         "template", "function", "global-context-item", "use-package", "package", "expose",
-        "import-schema"
+        "import-schema", "item-type"
     };
 
     private static bool IsValidMergeSourceName(string name)
@@ -9465,7 +9551,7 @@ internal sealed class Stylesheet
         "output", "namespace-alias", "attribute-set", "decimal-format", "key", "mode",
         "accumulator", "accumulator-rule", "variable", "param", "with-param", "template", "function",
         "global-context-item", "context-item", "use-package", "package", "expose", "accept", "override",
-        "import-schema", "note",
+        "import-schema", "note", "item-type",
         "apply-templates", "apply-imports", "call-template", "next-match",
         "value-of", "text", "element", "attribute", "namespace", "copy", "copy-of",
         "comment", "processing-instruction", "document", "result-document",
@@ -9490,7 +9576,7 @@ internal sealed class Stylesheet
         "include", "import", "strip-space", "preserve-space", "output",
         "namespace-alias", "decimal-format", "output-character",
         "copy-of", "mode", "expose", "accept",
-        "global-context-item", "context-item"
+        "global-context-item", "context-item", "item-type"
     };
 
     /// <summary>

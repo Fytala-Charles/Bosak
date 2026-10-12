@@ -1,3 +1,21 @@
+# Enumeration item-type aliases — 2026-10-12
+
+Branch: feat/xslt-item-type-enumerations; main baseline 0842dc037f00d9939626004cf020d3d8b87c156d. PR #205 merged after CI 38304922055 passed. Source 1.2.0 unpublished; public release 1.1.3.
+
+## What was built
+
+Bosak source candidate 1.2.0 (unpublished) now resolves xsl:item-type enumeration aliases in XPath instance-of and treat expressions, including AVTs, namespace rebinding, EQNames and occurrence indicators. Both unchanged native cases type-alias-023/024 pass; broader type-alias-filter run is 3 pass/29 fail/0 skip (includes inherited related cases). Other alias types, named XSLT @as conversion, package exposure and complete recursive/schema-collision validation remain unsupported. Duplicate winning declarations raise XTSE4030; lower-precedence definitions remain overridable. Original failure receipts are preserved; upstream PR #25 review and independent confirmation are pending. N04 and REQ-126 remain In Progress; public release remains 1.1.3. Next: generated nominative record constructors, with wider alias support and select namespace declarations tracked separately.
+
+CompileOptions.EnumerationItemTypes supplies expanded-name enumeration definitions for XPath type tests. AST resolution preserves literals and occurrence indicators. Stylesheet collection respects import/include precedence, validates duplicate winners and declaration content, and excludes used-package aliases. Both expression and AVT compilation receive the package-local dictionary. EQName URI prefix validation corrected. Seven focused regressions added with required headers/XML comments; two existing catalog outcome metadata rows updated to current source behavior. Other named @as cases retain XTTE0570; no broad alias support is claimed.
+
+Validation: final Release build zero warnings/errors; focused 7/0/0; 6832 unit tests across ten assemblies, zero failures/skips, including XSLT 3965/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native exact two cases pass; filtered family 3/29/0 retains wider gaps. Twelve pages rendered; source hashes and original portable patch trees/receipts verified. Initial full test run exposed stale catalog outcomes; final outcomes and 3.0 refusal verified by the passing rerun. Original upstream native branches, expectations, commits and patches unchanged; checkout clean on bosak/item-type-boundaries. No publication or external contribution edits.
+
+## Resume here
+
+Check latest Bosak PR CI before merging; continue N05 nominative record constructors. Wider aliases/package visibility/typed declaration conversion and select body namespace declarations remain separate work. Monitor upstream PRs #22–26. Preserve ignored scratch dirs, native checkout and historical receipts.
+
+Delivery pending.
+
 # Select body evaluation — 2026-10-12
 
 Branch: fix/xslt-select-body-evaluation; main baseline 1c9fe01d149a0e576587c50d69a607f04a0f7b78 (PR #204 merged after CI 38297641680 passed). Source 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical, including 1.1.4 as the previous unreleased candidate.
