@@ -1,3 +1,23 @@
+# Select body evaluation — 2026-10-12
+
+Branch: fix/xslt-select-body-evaluation; main baseline 1c9fe01d149a0e576587c50d69a607f04a0f7b78 (PR #204 merged after CI 38297641680 passed). Source 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical, including 1.1.4 as the previous unreleased candidate.
+
+## What was built
+
+Bosak now recognizes and evaluates xsl:select body XPath in template, function, simple-content and accumulator-rule paths, preserving literal newlines/CDATA and current focus without TVT expansion. Declared result coercion, collation restoration, fallback/content validation and streamed-body analysis are covered by 14 focused regressions. Both unchanged native contribution cases pass; [post-fix evidence](../contributions/xslt40/select-boundaries/POST_FIX_RESULTS.json) retains the broader seqtor result 78/5/9. The five remaining failures concern expression-body namespace declarations, so complete select conformance is not claimed. Original failed receipts and upstream PR #23 remain unchanged; independent confirmation/acceptance are pending. Source candidate is 1.2.0 under the Minor-for-new-features convention, unpublished; public release remains 1.1.3. N02 and REQ-126 stay In Progress.
+
+Root cause: select was absent from KnownXsltElementNames and runtime dispatch, so forward-compatible unknown-element handling produced no result. Added cached body expression evaluation with declared-type conversion (XPTY0004), effective collation save/restore, raw placeholders, simple content and accumulator context support. Streamability examines body text as XPath without traversing fallback or expanding TVTs. Static validation rejects non-fallback children and text preceding fallback. Existing header histories bumped; new test file has required header and public XML comments.
+
+Native checkout is clean on bosak/select-boundaries; contributed commit/patch/expectations unchanged. Independent processor and upstream review outstanding. No external PR/comment/message or package publication in this implementation step.
+
+Validation: focused 14/0/0; exact new native cases 2/0; broader seqtor 78/5/9 with namespace-declaration failures 140–144 retained. Final Release build passed, zero errors; 6825 unit tests across ten assemblies, zero failures/skips (XSLT 3958/0/0). QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Canonical/setup/queue/contribution pages rendered; source hashes, exact outcomes, native clean commit/patch, links and new file header verified. An earlier rebuild overlapped an active test host and hit a DLL lock; that host completed and the subsequent final rebuild passed. Do not use initial 11-test run as final evidence.
+
+## Resume here
+
+Check latest Bosak fix PR CI before merging. Continue N04 enumeration alias triage, then N05 generated nominative constructors; body namespace declarations are a separate select follow-up. Monitor upstream PRs #22–26 and retain expected outputs until a specification-based correction is justified. N01–N05 and REQ-126 remain In Progress. No release/tag/publication; source Minor bump reflects the newly supported instruction. Preserve all scratch dirs, native branches/receipts and original tracked patch/evidence.
+
+Delivery: 69a7cfd3c84e405c037be41786464950d1c06696, [Bosak PR #205](https://github.com/Fytala-Charles/Bosak/pull/205), pushed on fix/xslt-select-body-evaluation. CI run 38304867902 pending; PR open. This subsequent metadata commit records delivery. On resume check latest CI before merging, then continue the enum-alias slice; retain namespace-declaration failures as a separate follow-up.
+
 # Remaining priority XSLT 4.0 contributions — 2026-10-12
 
 Branch: test/xslt40-other-element-batches; branch base 1a046bde984355279ab179f6c2f71fa42b82aa06 includes PR #203, now merged after CI 38296575892 passed. Source 1.1.4 unpublished; public release 1.1.3. Earlier sections are historical.

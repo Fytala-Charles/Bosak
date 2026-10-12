@@ -82,3 +82,8 @@ Build Bosak first if the local binary is absent. Failed cases exit 1; retain the
 ## Follow-up
 
 Monitor the upstream review and requested independent cross-check. Record Bosak engine gaps separately; this contribution does not fix them or claim they are upstream defects. Source 1.1.4 remains unpublished, public release 1.1.3.
+
+
+## Post-fix candidate
+
+Both original native cases now pass after the Bosak select instruction implementation. [Post-fix results](POST_FIX_RESULTS.json) record tested source hashes and the broader family result 78/5/9. Original failures above remain the before-fix record. Expression-body namespace declarations remain unsupported in this slice. Source candidate 1.2.0 is unpublished; upstream review and independent confirmation remain pending.

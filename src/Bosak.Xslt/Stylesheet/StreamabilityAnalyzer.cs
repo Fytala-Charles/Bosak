@@ -34,6 +34,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13  | 08-10-2026     | REQ-118 4.0-S8: xsl:array (@for-each/@select + constructor), xsl:array-member and     |
 //                      |                  |       |                | xsl:switch streamability cases                                                          |
+//                      | Charles Korthout | 0.14  | 12-10-2026     | Analyze xsl:select body text as XPath, with no TVT or fallback traversal.                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1385,6 +1386,9 @@ internal static class StreamabilityAnalyzer
                     return;
                 }
 
+                case "select":
+                    CheckUnit(el, env, SelectLikeAttributes(el));
+                    return;
                 case "evaluate":
                 case "perform-sort":
                 {
@@ -1769,9 +1773,15 @@ internal static class StreamabilityAnalyzer
         // XPath surfaces and per-unit counting (R3)
         // ------------------------------------------------------------------
 
-        /// <summary>XPath-bearing attributes of an element (select/test/group keys).</summary>
+        /// <summary>XPath-bearing attributes and xsl:select expression text.</summary>
         private static IEnumerable<string> SelectLikeAttributes(XElement el, params string[] extra)
         {
+            if (el.Name == XName.Get("select", Stylesheet.XslNamespace))
+            {
+                var body = string.Concat(el.Nodes().OfType<XText>().Select(text => text.Value));
+                if (!string.IsNullOrWhiteSpace(body))
+                    yield return body;
+            }
             foreach (var name in new[] { "select", "test", "group-by", "group-adjacent" }.Concat(extra))
             {
                 var value = el.Attribute(name)?.Value;

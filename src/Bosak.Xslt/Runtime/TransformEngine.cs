@@ -524,6 +524,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 7.09  | 11-10-2026     | Apply effective-version XPath profiles to expression compilation.                       |
 //                      | Charles Korthout | 7.10  | 12-10-2026     | Preserve array-member JNodes and enforce for-each XTTE4060 before unwrapping.             |
+//                      | Charles Korthout | 7.11  | 12-10-2026     | Evaluate xsl:select body expressions with focus and declared result coercion.              |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -2952,6 +2953,35 @@ internal sealed class TransformEngine
     // every execution — the dominant per-node cost on row/cell-heavy stylesheets.
     private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<XElement, System.Collections.Concurrent.ConcurrentDictionary<string, XPath31Expression>> CompiledXPathCache = new();
 
+    /// <summary>Evaluates body XPath text without TVT expansion and coerces the declared result type.</summary>
+    private XdmValue EvaluateSelectInstruction(XElement instruction, EvaluationContext? context = null)
+    {
+        var expression = new StringBuilder();
+        foreach (var node in instruction.Nodes())
+        {
+            if (node is XText text)
+                expression.Append(text.Value);
+            else if (node is XElement element && element.Name == XName.Get("fallback", Stylesheet.Stylesheet.XslNamespace))
+                expression.Clear();
+        }
+        var textValue = expression.ToString();
+        var evaluationContext = context ?? _context;
+        var savedCollation = evaluationContext.DefaultCollation;
+        evaluationContext.DefaultCollation = GetEffectiveDefaultCollation(instruction);
+        try
+        {
+            var value = string.IsNullOrWhiteSpace(textValue)
+                ? XdmValue.FromSequence(XdmSequence.Empty)
+                : CompileXPath(textValue, instruction).Evaluate(evaluationContext);
+            return ConvertVariableValue(value, instruction.Attribute("as")?.Value,
+                context: evaluationContext, errorCodeOverride: "XPTY0004", declaration: instruction);
+        }
+        finally
+        {
+            evaluationContext.DefaultCollation = savedCollation;
+        }
+    }
+
     private XPath31Expression CompileXPath(string expression, XElement instruction)
     {
         var cache = CompiledXPathCache.GetValue(instruction,
@@ -3989,6 +4019,9 @@ internal sealed class TransformEngine
                             ctx.WithVariable(name, CompileXPath(select, child).Evaluate(ctx));
                         break;
                     }
+                case "select":
+                    items.Add(EvaluateSelectInstruction(child, ctx));
+                    break;
                 case "sequence":
                     {
                         var select = child.Attribute("select")?.Value;
@@ -5103,6 +5136,9 @@ internal sealed class TransformEngine
         {
             switch (instruction.Name.LocalName)
             {
+                case "select":
+                    FlattenToList(EvaluateSelectInstruction(instruction), results);
+                    break;
                 case "sequence":
                     {
                         var select = instruction.Attribute("select")?.Value;
@@ -8606,6 +8642,19 @@ internal sealed class TransformEngine
                     break;
                 }
 
+            case "select":
+                {
+                    var value = EvaluateSelectInstruction(instruction);
+                    if (_sequenceAccumulator != null)
+                    {
+                        var items = new List<XdmValue>();
+                        FlattenToList(value, items, preserveUndefined: true);
+                        AddSequencePlaceholder(_currentContainer, items);
+                    }
+                    else
+                        CopyToResult(value, separateAtomicsWithSpace: true);
+                    break;
+                }
             case "sequence":
                 {
                     var select = instruction.Attribute("select")?.Value;
@@ -17933,6 +17982,9 @@ internal sealed class TransformEngine
         var name = instruction.Name.LocalName;
         switch (name)
         {
+            case "select":
+                FlattenToList(EvaluateSelectInstruction(instruction), items);
+                break;
             case "sequence":
                 {
                     var seqSelect = instruction.Attribute("select")?.Value;
