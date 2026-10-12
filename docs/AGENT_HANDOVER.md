@@ -1,4 +1,22 @@
-# XQuery/streaming scope review — 2026-10-12
+# Catalog close-out review — 2026-10-12
+
+Main baseline: `fb2e20a2f05d29b7c5e66ba5d561a39804248e48`; [PR #184](https://github.com/Fytala-Charles/Bosak/pull/184) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38228857439). Current branch: `docs/req126-closeout-review`.
+
+## Current state and what was built
+
+Added [catalog close-out review](xpath40-catalog/CLOSEOUT-REVIEW.md), with criterion-by-criterion evidence, four concrete documentation deliveries and a separate prioritized engine follow-up table. Corrected stale 38-entry/104-case living summaries and stale claims that supplied disposition records were missing. Historical evidence retains its original counts. Synchronized README, architecture, registry, integration, catalog and both audits.
+
+Catalog remains **67 entries; 778 feature + 24 chapter checks = 802**, four worked chapters, all 117 names assigned. REQ-126 **In Progress**, version **1.1.2**. AC-01–04 remain partial; AC-05 met for current scope. Literal AC-03 gate applicability and 28 missing historical adopted pins remain explicit, without waiver or invented evidence. No engine/API/fixture changes or release.
+
+Validation: Release solution build succeeded (12 warnings, zero errors); **4,800 tests / 0 failures / 0 skips**, ten assemblies. Catalog inventory/provenance/source checks passed; 82 pages rendered. Manual engine gates were not rerun for this documentation-only slice.
+
+## Resume here
+
+Next: D1, audit all 49 focus constructors with a realistic typed import, per-name source/contracts, valid/invalid/missing-focus outcomes and explicit mode evidence. Keep this next slice documentation-first; record engine limits. D2 signatures/defaults/options, D3 grammar/type/pattern inventory, D4 provenance/drift/acceptance follow. Do not close REQ-126 or release because names are assigned. Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below.
+
+Delivery: `06b44c6f7594ef883159306f59e11d363ca8da67`, [PR #185](https://github.com/Fytala-Charles/Bosak/pull/185), pushed on `docs/req126-closeout-review`. Rebase onto merged main preserved the validated content tree. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before starting D1.
+
+# Historical XQuery/streaming scope review — 2026-10-12
 
 Main baseline: `2184e9200394ca2e06f720bb9cdb95afd927aa51`; [PR #183](https://github.com/Fytala-Charles/Bosak/pull/183) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38227449888). Current branch: `docs/req126-language-streaming-scope`.
 

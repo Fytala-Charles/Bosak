@@ -6,7 +6,7 @@ tested contracts. At the preceding audit delivery, coverage was 54 entries and
 415 executable documentation checks. The follow-up comparison delivery is
 recorded below; neither delivery changes engine behavior.
 
-Reviewed Bosak baseline: `37457bfd` after PR #169. Published engine: **1.1.2**.
+Historical audit baseline: `37457bfd` after PR #169. Published engine: **1.1.2**.
 The accompanying [registration inventory](audit-registration-arities.json) records
 literal dictionary registrations for the 68 non-constructor names. Its arities
 are implementation metadata, not proof of full draft signatures or conformance.
@@ -35,7 +35,7 @@ of generated registrations, focus conversion, missing focus and invalid values.
 
 | Priority | Surface | Evidence and remaining work |
 |---|---|---|
-| 1 | Changed existing functions | `fn:compare` already existed in 3.1 and is absent from the 4.0-only name inventory. Tests `Compare40_CrossNumericExact_DoubleVsDecimal`, `Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself`, `Compare40_BooleansAndBinariesAndQName`, `Compare40_MixedIncomparable_RaisesXpty0004` and `Compare40_KeywordFormAndEmptyCollation` establish implementation evidence. The [measurement reference](functions/measurement-comparison.md) now supplies 27 executable cases and a distinct 3.1 normalization policy. This is scoped coverage, not every atomic-family contract. Next inspect min/max, sorting, collation and changed map/array overloads individually. |
+| 1 | Changed existing functions | `fn:compare` already existed in 3.1 and is absent from the 4.0-only name inventory. Tests `Compare40_CrossNumericExact_DoubleVsDecimal`, `Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself`, `Compare40_BooleansAndBinariesAndQName`, `Compare40_MixedIncomparable_RaisesXpty0004` and `Compare40_KeywordFormAndEmptyCollation` establish implementation evidence. The [measurement reference](functions/measurement-comparison.md) now supplies 27 executable cases and a distinct 3.1 normalization policy. This is scoped coverage, not every atomic-family contract. Min/max, sorting and URI reviews are now supplied. Remaining atomic-family, collation and changed map/array overload contracts still require systematic verification. |
 | 2 | Arity, keyword and default contracts | For every registration, reconcile parameter names, sequence types, omitted arguments and keyword calls against the pinned draft. A registered arity alone cannot establish any of these. Add success, empty and invalid-argument examples for uncovered forms. |
 | 2 | Options | `hash#3` accepts an options map, but the implementation currently only validates its shape; named option behavior is not established. Hash examples cover algorithm/default/input cases, not a complete options contract. [URI option policy](functions/uri-option-policy.md) now documents `allow-deprecated-features`, `omit-default-ports` and `unc-path`, raw/structured component precedence and 28 fixtures. Non-Boolean option truthiness and empty-query-map fallback remain observed draft gaps; raw-authority bypass is draft-defined. Audit sorting records and JSON options separately. |
 | 2 | Constructors and types | One focus-constructor family entry does not verify all 49 names. Reconcile constructor-specific lexical/value constraints and error paths, then structural records, enum/choice coercion and function-signature conversion. |
@@ -56,9 +56,9 @@ establish complete hash conformance.
 
 The section-1.2 decisions already have dedicated records in the
 [completeness audit](COMPLETENESS-AUDIT.md#deferred-and-rejected-decisions).
-The following wider dossier decisions still need dedicated records with exact
-scope, rationale, delivery/refusal evidence where available, alternatives and
-links. These are documentation tasks, not authorization to implement proposals.
+The following wider dossier decisions now have dedicated records with scoped
+rationale, delivery/refusal evidence and alternatives. Validate source-to-record
+coverage and lifecycle before closure. Deferred implementation remains separate.
 
 | Dossier scope | Recorded decision | Evidence needed before catalog completion |
 |---|---|---|
@@ -74,7 +74,7 @@ links. These are documentation tasks, not authorization to implement proposals.
 
 ## Next delivery and acceptance
 
-The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. The [batch extrema reference](functions/batch-extrema.md) supplies 29 cases and records numeric promotion/result-type and duration gaps. The [warehouse sorting reference](functions/warehouse-pick-sorting.md) now supplies 28 cases and records numeric/NaN/default-key/collation limits. Next review URI option contracts and component precedence before expanding grammar inventories. Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
+The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. The [batch extrema reference](functions/batch-extrema.md) supplies 29 cases and records numeric promotion/result-type and duration gaps. The [warehouse sorting reference](functions/warehouse-pick-sorting.md) now supplies 28 cases and records numeric/NaN/default-key/collation limits. The URI option review is supplied. Next audit all 49 focus constructors, followed by the signature and grammar inventories in the [close-out queue](CLOSEOUT-REVIEW.md). Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
 
 AC-01 through AC-04 remain partial. AC-05 remains met for the current scope.
 Closure requires reviewed contracts and disposition records, executable examples,
@@ -110,3 +110,6 @@ Historical warehouse sorting delivery (2026-10-12): coverage was 57 entries and 
 **GNode/JNode scope review — 2026-10-12:** [Partial model and invoice navigation](data-model/jnode-template-boundary.md) replaces blanket exclusion with shipped JNode support and a deferred remainder. Eighteen added checks verify full invoice navigation/portable reports and broader node()/xnode()/identity gaps. Full generic-model and stylesheet built-in behavior remain uncertified. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 registered names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
 
 **Language/streaming scope review — 2026-10-12:** [Existing APIs and separate 4.0 deltas](deferred/language-streaming-scope.md) adds 28 cases through XQuery, XPath, ordinary XSLT and actual streaming APIs. Corrects stale XPath where exclusion and distinguishes REQ-087 Done from historical residual reports. Full XQuery/Streaming 4.0 remains unclaimed. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+
+Catalog close-out review (2026-10-12): **67 entries, 778 feature + 24 chapter checks = 802**; four worked chapters and all 117 registered names assigned. REQ-126 remains In Progress, version 1.1.2. The [prioritized review](CLOSEOUT-REVIEW.md) identifies constructor/signature/grammar and acceptance work, with engine follow-ups tracked separately. Next: audit all 49 focus constructors.
