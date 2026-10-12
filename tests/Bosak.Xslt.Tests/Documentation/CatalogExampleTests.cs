@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 11-10-2026     | Creation: exact published catalog examples, edge cases, and version gates.              |
+//                      | Charles Korthout | 0.2   | 12-10-2026     | Verify declared 3.1 outcomes for changed existing-function contracts.                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -81,7 +82,18 @@ public class CatalogExampleTests
         else
         {
             Assert.Equal(row.GetProperty("expected").GetString(), Evaluate());
-            if (mode != "31")
+            if (mode != "31" && row.TryGetProperty("baselineError", out var baselineError))
+            {
+                var failure = Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code)
+                    .Evaluate(new EvaluationContext()).ToString());
+                Assert.Contains(baselineError.GetString()!, failure.Message);
+            }
+            else if (mode != "31" && row.TryGetProperty("baselineExpected", out var baselineExpected))
+            {
+                Assert.Equal(baselineExpected.GetString(), XPath31Expression.Compile(code)
+                    .Evaluate(new EvaluationContext()).ToString());
+            }
+            else if (mode != "31")
                 Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code));
             if (mode == "experimental")
                 Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code,

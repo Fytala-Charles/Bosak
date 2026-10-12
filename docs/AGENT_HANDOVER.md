@@ -1,3 +1,19 @@
+# Agent Handover — 2026-10-12: typed measurement comparison
+
+PR #170 merged after CI passed. Base `8008827c5f4282e8345b9542edf5b00c69abd551`.
+Added changed-function fn:compare reference with complete input/output, a distinct
+3.1 double-normalization policy and 27 executable cases. Coverage: 55 entries,
+418 feature plus 24 chapter checks (442 total); all 117 names remain assigned.
+The catalog harness now supports explicit baselineError/baselineExpected for
+changed existing functions; existing compile-refusal checks remain the default.
+Verified keyword drift: Bosak comparand1/comparand2, reviewed draft value1/value2.
+Legacy binary comparison orders lexical spellings in 3.1; empty collation is
+also accepted there. These observed boundaries are not portable 3.1 guarantees.
+Only exact fn-compare gate membership is claimed; no gate changes or engine
+changes. REQ-126 remains In Progress; source/public version stays 1.1.2.
+Next: changed fn:min/fn:max contracts; separate keyword/type-validation follow-ups.
+Validation: Release build passed (one existing warning, zero errors); all 4,440 tests across ten assemblies passed without failures/skips, including 418 catalog cases. Renderer verified 69 pages. Entry fields/index, local/primary anchors, inventory/provenance, named tests, complete XML inputs and inline report/results verified; numeric boundary values independently checked with Python Fraction/float32. No engine conformance rerun for this documentation/test-harness change. Delivery revision pending commit.
+
 # Agent Handover — 2026-10-12: supplementary coverage audit
 
 PR #169 merged after CI passed. Base `37457bfd`. Added supplementary coverage audit
