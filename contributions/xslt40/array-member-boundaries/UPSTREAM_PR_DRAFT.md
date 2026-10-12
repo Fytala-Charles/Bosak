@@ -7,3 +7,6 @@ Bosak adapter evidence on clean contribution commit: five new cases pass; array-
 These scenarios arose from Bosak's XSLT 4.0 contribution review. [Bosak](https://github.com/Fytala-Charles/Bosak) provides a catalog adapter and documented specification/consumer examples, including [the contribution queue](https://github.com/Fytala-Charles/Bosak/blob/main/docs/XSLT40_CONTRIBUTION_QUEUE.md). Bosak currently has partial 4.0 coverage; the failure above is recorded explicitly.
 
 This text is a local draft; no upstream PR or maintainer message has been sent.
+
+
+Candidate update: the Bosak JNode array/member correction now passes all six unchanged cases. The earlier five-pass/one-failure evidence is the before-fix run. See ASSERTION_REVIEW.md and POST_FIX_RESULTS.json. Independent processor confirmation remains outstanding; this draft has not been submitted.

@@ -523,6 +523,7 @@
 //                      |                  |       |                | apply-templates entries; gate inherited from the evaluation context (null = no-op)      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 7.09  | 11-10-2026     | Apply effective-version XPath profiles to expression compilation.                       |
+//                      | Charles Korthout | 7.10  | 12-10-2026     | Preserve array-member JNodes and enforce for-each XTTE4060 before unwrapping.             |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -4926,7 +4927,13 @@ internal sealed class TransformEngine
                     {
                         _context.WithFocus(focusItems[i], i + 1, focusItems.Count);
                         _context.WithCurrentItem(focusItems[i]);
-                        array.Add(EvaluateArrayMemberSource(arrayInstruction, contextItem));
+                        var member = EvaluateArrayMemberSource(arrayInstruction, contextItem);
+                        var memberItems = EnumerateItems(member).ToList();
+                        if (memberItems.Count > 1 && memberItems.Any(item => item.IsJNode))
+                            throw new XsltRuntimeException("XTTE4060",
+                                "A for-each array member cannot mix a JNode with other items.", XdmValue.Undefined);
+                        array.Add(memberItems.Count == 1 && memberItems[0].IsJNode
+                            ? memberItems[0].JNodeValue.Value : member);
                     }
                     finally
                     {
@@ -4945,7 +4952,7 @@ internal sealed class TransformEngine
         if (!string.IsNullOrEmpty(selectAttr))
         {
             foreach (var item in EnumerateItems(CompileXPath(selectAttr, arrayInstruction).Evaluate(_context)))
-                array.Add(item);
+                array.Add(item.IsJNode ? item.JNodeValue.Value : item);
             return XdmValue.FromArray(array);
         }
 
@@ -4963,7 +4970,7 @@ internal sealed class TransformEngine
             var tempItems = new List<XdmValue>();
             ProcessFunctionBodyNode(childNode, tempItems, contextItem);
             foreach (var item in tempItems)
-                array.Add(item);
+                array.Add(item.IsJNode ? item.JNodeValue.Value : item);
         }
         return XdmValue.FromArray(array);
     }
@@ -4994,9 +5001,22 @@ internal sealed class TransformEngine
     {
         var selectAttr = memberInstruction.Attribute("select")?.Value;
         if (!string.IsNullOrEmpty(selectAttr))
-            return CompileXPath(selectAttr, memberInstruction).Evaluate(_context);
+            return UnwrapArrayMemberJNodes(CompileXPath(selectAttr, memberInstruction).Evaluate(_context));
 
         var items = EvaluateSequenceConstructorToItems(memberInstruction, contextItem);
+        return UnwrapArrayMemberJNodes(MaterializeItemList(items));
+    }
+
+    /// <summary>Recursively replaces JNode items with their values when constructing a member.</summary>
+    private static XdmValue UnwrapArrayMemberJNodes(XdmValue value)
+    {
+        if (value.IsJNode)
+            return UnwrapArrayMemberJNodes(value.JNodeValue.Value);
+        if (!value.IsSequence)
+            return value;
+        var items = new List<XdmValue>();
+        foreach (var item in EnumerateItems(value))
+            items.AddRange(EnumerateItems(UnwrapArrayMemberJNodes(item)));
         return MaterializeItemList(items);
     }
 
@@ -5949,10 +5969,9 @@ internal sealed class TransformEngine
                     }
                 case "array-member":
                     {
-                        // A standalone xsl:array-member contributes one sequence-valued
-                        // item (Bosak has no JNode wrapper; XdmArray members hold
-                        // sequences natively).
-                        results.Add(EvaluateArrayMemberSequence(instruction, contextItem));
+                        // Preserve the wrapper until an array constructor consumes it.
+                        results.Add(XdmValue.FromJNode(new XdmJNode(
+                            EvaluateArrayMemberSequence(instruction, contextItem))));
                         break;
                     }
                 case "iterate":
@@ -9296,7 +9315,8 @@ internal sealed class TransformEngine
 
             case "array-member":
                 {
-                    var memberValue = EvaluateArrayMemberSequence(instruction, contextItem);
+                    var memberValue = XdmValue.FromJNode(new XdmJNode(
+                        EvaluateArrayMemberSequence(instruction, contextItem)));
                     if (_sequenceAccumulator != null)
                     {
                         _sequenceAccumulator.Add(memberValue);

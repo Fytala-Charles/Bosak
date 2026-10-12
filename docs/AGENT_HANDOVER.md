@@ -1,3 +1,21 @@
+# Array/member JNode correction — 2026-10-12
+
+Branch: fix/xslt-array-member-jnode; implementation base c1c3fa708aadda0970b81d5302b79701c275e388. PR #201 merged after CI 38294339193 passed. Source version 1.1.4, unpublished; public release remains 1.1.3. Earlier sections are historical.
+
+## What was built
+
+The [array/member assertion review](../contributions/xslt40/array-member-boundaries/ASSERTION_REVIEW.md) confirms the six native expectations. Bosak now preserves existing core JNode wrappers in both XSLT evaluation paths, unwraps member values at array construction, and raises XTTE4060 for multi-item per-focus results containing a JNode. All six unchanged native cases pass; the original five-pass/one-failure receipts remain historical. Five additional regression checks cover direct, empty, conditional and variable-carried errors plus valid grouped/nested wrappers. Source candidate 1.1.4 is unpublished; 1.1.3 remains the published version. N01 and REQ-126 stay In Progress; independent processor confirmation and upstream submission remain outstanding.
+
+The array-member evaluator's stale no-JNode assumption was replaced with the existing XdmJNode core type, without adding public APIs. Construction performs recursive item-level unwrapping without flattening containers. The for-each constructor checks wrapper cardinality before unwrapping. Four mixed-result checks and one successful grouped/nested-wrapper check added to Xslt40ArraySwitchTests; file history rows bumped. Native branch e72f1b0e and its patch are unchanged and clean.
+
+Validation: final Release build passed (12 existing warnings, zero errors); 6811 unit tests across ten assemblies, zero failures/skips, including XSLT 3944/0/0. Focused array/switch 36/0/0; six exact native cases pass after the final build. Contribution hashes/tree, exact outcomes and tested source hashes checked; canonical/setup/queue/contribution pages rendered and newly added local links verified. Frozen QT3 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Specification review is complete; independent processor execution remains outstanding.
+
+## Resume here
+
+Check the latest fix PR CI before merging. Confirm the native assertions with another XSLT 4.0 processor, then prepare upstream submission; the PR draft has not been sent. Do not change the original expectations or classify original failed receipts as passes. N01 and REQ-126 remain In Progress; subsequent queue families and previous catalog/provenance/metadata limits remain. No release/tag/package publication authorized in this step.
+
+Preserve scratch directories, ignored checkout/receipts and tracked original patch/evidence. Delivery commit/PR pending.
+
 # First native upstream array/member batch — 2026-10-12
 
 Main baseline: `01969ab37f946ff67325cfb547fc859f0c832f3e`; PR #200 merged after successful CI run 38291879106. Bosak branch: `docs/xslt40-array-member-first-batch`. Version **1.1.3**. Prior queues below are historical.
