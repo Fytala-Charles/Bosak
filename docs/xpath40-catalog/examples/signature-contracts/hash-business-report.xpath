@@ -1,0 +1,1 @@
+let $invoice := parse-xml('<invoice id="INV-42" currency="EUR"><total>125.00</total></invoice>')/invoice let $payload := string-join(($invoice/@id, $invoice/@currency, $invoice/total), '|') return concat($payload, ';SHA-256=', hash(value := $payload, algorithm := 'SHA-256', options := map{}))

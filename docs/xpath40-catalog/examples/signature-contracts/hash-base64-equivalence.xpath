@@ -1,0 +1,1 @@
+hash('abc','SHA-256',map{}) eq hash(xs:base64Binary('YWJj'),'SHA-256',map{})

@@ -1,4 +1,26 @@
-# Focus-constructor audit — 2026-10-12
+# Signature contract matrix — 2026-10-12
+
+Main baseline: `3a078fa4cb8b17233837670d41e0ef951da86cd1`; [PR #186](https://github.com/Fytala-Charles/Bosak/pull/186) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38231726134). Current branch: `docs/req126-signature-contract-audit`.
+
+## Current state and what was built
+
+Added [signature contract audit](xpath40-catalog/SIGNATURE-CONTRACT-AUDIT.md), [raw comparison JSON](xpath40-catalog/audit-signature-contracts.json) and [invoice fingerprint README](xpath40-catalog/examples/signature-contracts/README.md). Compared all 68 non-constructor 4.0-only names and 20 selected existing functions with live registration/keyword metadata and pinned F&O e7ee4ab8. 148 exact registrations; 37 absent keyword metadata, 47 matching lists, four differing lists. Of the 51 metadata-bearing families, 48 default-expression lists match after only literal/empty-map normalization; jkey/jvalue/node-name differ. Their arity-zero registrations remain present, so metadata differences alone do not establish behavioral failures.
+
+187 new published checks: 148 exact lookup/visibility probes and 39 behavior cases. Independent SHA-256/MD5 results, full invoice input/output, empty/invalid options and keyword/default boundaries verified. New observed follow-ups: element-to-map input versus element, map-to-element input versus map, parse-uri uri versus value; compare spelling already documented. replace positional/reference #2 refuses while keyword defaults work; lookup is zero. Tested hash keyword calls after two let bindings refuse hash#0; one-let/concat-only probes succeed and positional business report succeeds. Root cause not diagnosed; engine remains unchanged.
+
+Clarified hash extension options: pinned contract leaves additional parameters implementation-defined; arbitrary opaque-key tolerance is not a missing standardized option. Mandatory BLAKE3/CRC-32 remain unsupported FOHA0001. Updated relevant entries and canonical docs/audits/queue. No engine/API/harness change or gate promotion.
+
+Catalog: **67 entries; 1,473 feature + 24 chapter checks = 1,497**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**; D2 first matrix supplied, behavioral/type/option and exhaustive changed-3.1 coverage still partial. Historical snapshots retain original counts.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,495 tests / 0 failures / 0 skips**, ten assemblies, including all 1,473 catalog checks. Renderer verified 85 pages. All 88 matrix rows independently matched to live/pinned metadata, exact case-ID links, local/source/provenance inventories and independent digest vectors checked. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with a bounded family review among the 37 missing-keyword families: text/Unicode functions are a useful first group (char/characters/graphemes/pad-string/trim-space/substring helpers). Review pinned parameter names, required/default arguments and sequence types, then publish realistic positional/keyword/default/empty/invalid cases. Keep documentation-first scope and record unavailable forms rather than implementing metadata silently. The new spelling, replace and two-let keyword boundaries are separately prioritized engine follow-ups. D3 grammar/type/pattern inventory and D4 provenance/drift/acceptance remain queued; historical adopted pins and AC-03 gate applicability remain unresolved. No closure or release based solely on this matrix.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+
+# Historical focus-constructor audit — 2026-10-12
 
 Main baseline: `b76be1776a5e3c86164772dcf91d682de218da1c`; [PR #185](https://github.com/Fytala-Charles/Bosak/pull/185) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38229658392). Current branch: `docs/req126-focus-constructor-audit`.
 

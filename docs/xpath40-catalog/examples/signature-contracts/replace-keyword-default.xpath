@@ -1,0 +1,1 @@
+replace(value := 'INV-42', pattern := 'INV-')

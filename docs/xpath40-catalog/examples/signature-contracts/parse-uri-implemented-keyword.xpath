@@ -1,0 +1,1 @@
+parse-uri(uri := 'https://partner.example/INV-42', options := map{})?scheme

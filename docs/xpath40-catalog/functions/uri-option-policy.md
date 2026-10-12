@@ -68,6 +68,8 @@ UNC construction uses a literal `:////` prefix after `file`. The tested leading 
 
 See [FunctionLibrary](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs): `UriBooleanOption`, `ParseUri` and `BuildUri`. The empty-query-map branch and option truthiness are observed implementation limits. Public function conversion rejects non-map options with `XPTY0004`, including empty parse input; unmatched bracket authority raises `FOUR0001`. No engine changes are included here.
 
+**Supplementary contract review (2026-10-12):** Keyword drift: implemented uri differs from pinned value; the [signature audit](../SIGNATURE-CONTRACT-AUDIT.md) publishes paired success/refusal files. Existing positional option-policy examples remain valid.
+
 ## 13. Sample Code
 
 Complete synthetic input:

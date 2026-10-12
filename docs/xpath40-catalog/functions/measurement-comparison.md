@@ -113,6 +113,8 @@ existing compile-refusal check when neither field is supplied. These declaration
 let an existing function's changed semantics be tested without falsely asserting
 that the function itself is unavailable in 3.1.
 
+**Supplementary contract review (2026-10-12):** The [signature audit](../SIGNATURE-CONTRACT-AUDIT.md) now records this keyword drift alongside conversion/URI differences and selected defaults/options; it does not fix comparison semantics.
+
 ## 13. Sample Code
 
 Complete synthetic input:

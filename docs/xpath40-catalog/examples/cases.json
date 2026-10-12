@@ -9269,5 +9269,1464 @@
     "mode": "40",
     "file": "focus-functions/audit/boolean-wrong-type.xpath",
     "error": "XPTY0004"
+  },
+  {
+    "id": "signature-audit-array-build-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-build-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-build-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-build-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-empty-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-empty-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-items-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-items-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-slice-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-slice-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-slice-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-slice-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-slice-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-slice-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-slice-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-slice-4.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-array-sort-with-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-sort-with-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-all-different-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-all-different-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-all-different-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-all-different-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-all-equal-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-all-equal-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-all-equal-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-all-equal-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-atomic-equal-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-atomic-equal-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-atomic-type-annotation-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-atomic-type-annotation-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-build-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-build-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-build-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-build-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-build-uri-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-build-uri-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-char-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-char-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-characters-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-characters-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-collation-available-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-collation-available-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-contains-subsequence-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-contains-subsequence-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-contains-subsequence-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-contains-subsequence-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-csv-doc-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-csv-doc-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-csv-doc-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-csv-doc-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-csv-to-xml-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-csv-to-xml-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-csv-to-xml-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-csv-to-xml-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-days-in-month-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-days-in-month-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-decode-from-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-decode-from-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-do-until-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-do-until-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-drop-while-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-drop-while-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-duplicate-values-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-duplicate-values-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-duplicate-values-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-duplicate-values-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-duration-to-seconds-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-duration-to-seconds-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-element-to-map-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-element-to-map-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-element-to-map-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-element-to-map-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-element-to-map-plan-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-element-to-map-plan-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-ends-with-subsequence-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-ends-with-subsequence-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-ends-with-subsequence-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-ends-with-subsequence-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-every-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-every-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-every-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-every-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-foot-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-foot-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-graphemes-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-graphemes-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-hash-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-hash-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-hash-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-hash-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-hash-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-hash-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-highest-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-highest-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-highest-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-highest-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-highest-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-highest-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-identity-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-identity-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-index-of-substring-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-index-of-substring-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-index-where-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-index-where-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-insert-separator-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-insert-separator-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-is-NaN-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-is-NaN-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-items-at-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-items-at-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-jkey-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-jkey-0.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-jkey-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-jkey-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-jtree-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-jtree-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-jvalue-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-jvalue-0.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-jvalue-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-jvalue-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-lowest-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-lowest-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-lowest-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-lowest-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-lowest-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-lowest-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-map-to-element-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-map-to-element-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-map-to-element-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-map-to-element-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-op-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-op-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-pad-string-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-pad-string-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-pad-string-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-pad-string-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-parse-csv-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-parse-csv-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-parse-csv-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-parse-csv-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-parse-uri-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-parse-uri-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-parse-uri-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-parse-uri-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-partial-apply-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-partial-apply-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-partition-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-partition-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-replicate-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-replicate-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-scan-3",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "signature-contracts/fn-scan-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0",
+    "frozenExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-seconds-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-seconds-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-slice-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-slice-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-slice-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-slice-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-slice-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-slice-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-slice-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-slice-4.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-some-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-some-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-some-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-some-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-sort-by-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-sort-by-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-sort-with-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-sort-with-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-starts-with-subsequence-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-starts-with-subsequence-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-starts-with-subsequence-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-starts-with-subsequence-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-substring-after-last-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-substring-after-last-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-substring-after-last-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-substring-after-last-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-substring-before-last-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-substring-before-last-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-substring-before-last-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-substring-before-last-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-take-while-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-take-while-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-transitive-closure-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-transitive-closure-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-trim-space-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-trim-space-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-trim-space-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-trim-space-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-trunk-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-trunk-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-unix-dateTime-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-unix-dateTime-0.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-unix-dateTime-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-unix-dateTime-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-while-do-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-while-do-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-map-build-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-build-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-map-build-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-build-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-map-build-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-build-3.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-map-build-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-build-4.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-map-entries-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-entries-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-map-filter-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-filter-2.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-map-items-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-items-1.xpath",
+    "expected": "1",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-audit-fn-compare-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-compare-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-compare-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-compare-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-min-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-min-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-min-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-min-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-max-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-max-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-max-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-max-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-sort-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-sort-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-sort-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-sort-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-sort-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-sort-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-array-sort-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-sort-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-array-sort-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-sort-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-array-sort-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/array-sort-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-serialize-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-serialize-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-serialize-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-serialize-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-map-merge-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-merge-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-map-merge-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-merge-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-replace-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-replace-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-replace-4",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-replace-4.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-subsequence-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-subsequence-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-subsequence-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-subsequence-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-substring-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-substring-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-substring-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-substring-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-string-join-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-string-join-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-string-join-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-string-join-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-contains-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-contains-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-contains-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-contains-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-starts-with-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-starts-with-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-starts-with-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-starts-with-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-ends-with-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-ends-with-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-ends-with-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-ends-with-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-index-of-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-index-of-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-index-of-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-index-of-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-collation-key-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-collation-key-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-collation-key-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-collation-key-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-contains-token-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-contains-token-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-contains-token-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-contains-token-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-node-name-0",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-node-name-0.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-node-name-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-node-name-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-lang-1",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-lang-1.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-lang-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-lang-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-matches-2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-matches-2.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-audit-fn-matches-3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/fn-matches-3.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "signature-contract-hash-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-default.xpath",
+    "expected": "900150983CD24FB0D6963F7D28E17F72"
+  },
+  {
+    "id": "signature-contract-hash-empty-algorithm",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-empty-algorithm.xpath",
+    "expected": "900150983CD24FB0D6963F7D28E17F72"
+  },
+  {
+    "id": "signature-contract-hash-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-empty-options.xpath",
+    "expected": "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
+  },
+  {
+    "id": "signature-contract-hash-map-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-map-options.xpath",
+    "expected": "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
+  },
+  {
+    "id": "signature-contract-hash-unknown-option",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-unknown-option.xpath",
+    "expected": "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
+  },
+  {
+    "id": "signature-contract-hash-keyword-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-keyword-options.xpath",
+    "expected": "900150983CD24FB0D6963F7D28E17F72"
+  },
+  {
+    "id": "signature-contract-hash-keyword-reordered",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-keyword-reordered.xpath",
+    "expected": "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
+  },
+  {
+    "id": "signature-contract-hash-empty-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-empty-value.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "signature-contract-hash-empty-text",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-empty-text.xpath",
+    "expected": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "id": "signature-contract-hash-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-invalid-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "signature-contract-hash-invalid-options-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-invalid-options-empty.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "signature-contract-hash-invalid-algorithm",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-invalid-algorithm.xpath",
+    "error": "FOHA0001"
+  },
+  {
+    "id": "signature-contract-hash-blake3",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-blake3.xpath",
+    "error": "FOHA0001"
+  },
+  {
+    "id": "signature-contract-hash-crc32",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-crc32.xpath",
+    "error": "FOHA0001"
+  },
+  {
+    "id": "signature-contract-hash-binary-equivalence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-binary-equivalence.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "signature-contract-hash-base64-equivalence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-base64-equivalence.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "signature-contract-parse-uri-implemented-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/parse-uri-implemented-keyword.xpath",
+    "expected": "https"
+  },
+  {
+    "id": "signature-contract-parse-uri-draft-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/parse-uri-draft-keyword.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-element-map-implemented-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/element-map-implemented-keyword.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "signature-contract-element-map-draft-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/element-map-draft-keyword.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-map-element-implemented-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-element-implemented-keyword.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "signature-contract-map-element-draft-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/map-element-draft-keyword.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-compare-implemented-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/compare-implemented-keyword.xpath",
+    "expected": "-1"
+  },
+  {
+    "id": "signature-contract-compare-draft-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/compare-draft-keyword.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-char-no-keyword-metadata",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/char-no-keyword-metadata.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-char-positional",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/char-positional.xpath",
+    "expected": "A"
+  },
+  {
+    "id": "signature-contract-hash-missing-required",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-missing-required.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-hash-unknown-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-unknown-keyword.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-hash-duplicate-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-duplicate-keyword.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-hash-business-report",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-business-report.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-hash-business-positional",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-business-positional.xpath",
+    "expected": "INV-42|EUR|125.00;SHA-256=8D8F32B72196A44EF9860012FA1B67B3BC651435F52D9AC9C9BF3EA5A11A5176"
+  },
+  {
+    "id": "signature-contract-hash-keyword-let",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-keyword-let.xpath",
+    "expected": "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
+  },
+  {
+    "id": "signature-contract-hash-keyword-concat",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-keyword-concat.xpath",
+    "expected": "sha256=BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD"
+  },
+  {
+    "id": "signature-contract-hash-business-keyword-binding",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/hash-business-keyword-binding.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-replace-positional-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/replace-positional-default.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-replace-keyword-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/replace-keyword-default.xpath",
+    "expected": "42"
+  },
+  {
+    "id": "signature-contract-replace-reference2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/replace-reference2.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "signature-contract-replace-lookup2",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/replace-lookup2.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "signature-contract-two-let-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "signature-contracts/two-let-keyword.xpath",
+    "error": "XPST0017"
   }
 ]

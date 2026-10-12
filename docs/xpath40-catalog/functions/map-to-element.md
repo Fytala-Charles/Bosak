@@ -62,6 +62,8 @@ Benefit: Convert an agreed map shape back into XML and inspect its text value. T
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
+**Supplementary contract review (2026-10-12):** Keyword drift: implemented input differs from pinned map; the [signature audit](../SIGNATURE-CONTRACT-AUDIT.md) publishes paired success/refusal files. Positional conversion remains separate evidence.
+
 ## 13. Sample Code
 
 Input is synthetic and declared directly in the complete expression. The [complete expression](../examples/map-to-element/main.xpath) yields `FILTER-A`. The [edge case](../examples/map-to-element/edge.xpath) yields `0`. No external resources or application variables are required. See the [example runner](../examples/README.md) for commands and host context.
