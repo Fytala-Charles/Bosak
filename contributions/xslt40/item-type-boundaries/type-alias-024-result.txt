@@ -1,0 +1,1 @@
+  FAIL type-alias-024: XPST0051

@@ -1,0 +1,40 @@
+{
+  "family": "record-type",
+  "queueId": "N05",
+  "testSet": "record",
+  "folder": "tests/type/record",
+  "branch": "bosak/record-type-boundaries",
+  "base": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+  "commit": "024e11f3525c1753ccda92561adc220bf584f1f0",
+  "baselineCases": 45,
+  "cases": [
+    {
+      "id": "record-026",
+      "description": "Named record constructor uses declared field order and retains an explicit empty field.",
+      "expected": "<out sku=\"A\" quantity=\"2\" note=\"true\" empty=\"true\" typed=\"true\"/>",
+      "status": "fail",
+      "actual": "FAIL record-026: XPST0017: Function {urn:order-types}line#3 not found.",
+      "stylesheetSha256": "5ab2af85052a5a83aac80975733dd9d8b1ccbb4d590a7fb27c5ae066816df5e3"
+    },
+    {
+      "id": "record-027",
+      "description": "Static field initialization is excluded from constructor parameters and is retained in the record.",
+      "expected": "<out sku=\"B\" kind=\"line\" quantity=\"3\" fields=\"3\"/>",
+      "status": "fail",
+      "actual": "FAIL record-027: XPST0017: Function {urn:order-types}line#2 not found.",
+      "stylesheetSha256": "6263df8afb63631a3631be87e1887a70ba9c96882efdf4f18476924f9edc5141"
+    }
+  ],
+  "patchSha256": "6ec9e6859a33a4f25e7d80b4701b8a93e23d0e780c6a3128a7df4d87246d50aa",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+  "specSection": "named-record-types",
+  "audit": "Existing record-001\u2013025 and subtype cases primarily use structural record syntax; the only scanned xsl:record-type occurrence is an older atomic-set package using extensible forms. New cases target current nominative declarations with constructor=yes, explicit empty fields, and static initialization excluded from constructor arguments. They do not change old structural/optional-field expectations or certify all nominative semantics.",
+  "independentConfirmation": "Outstanding; reviewer cross-check requested",
+  "passed": 0,
+  "failed": 2,
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/26",
+  "upstreamStatus": "Open; acceptance/review and independent confirmation pending",
+  "bosakImplementationBaseline": "7cee697575742d8d9a1ed2bd3ebd56e7c47c3b82",
+  "publishedVersion": "1.1.3",
+  "sourceVersion": "1.1.4 (unpublished)"
+}

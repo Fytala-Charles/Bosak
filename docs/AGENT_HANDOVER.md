@@ -1,3 +1,21 @@
+# Remaining priority XSLT 4.0 contributions — 2026-10-12
+
+Branch: test/xslt40-other-element-batches; branch base 1a046bde984355279ab179f6c2f71fa42b82aa06 includes PR #203, now merged after CI 38296575892 passed. Source 1.1.4 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Four additional native batches are submitted: [select PR #23](https://github.com/qt4cg/xslt40-test/pull/23), [switch PR #24](https://github.com/qt4cg/xslt40-test/pull/24), [item-type PR #25](https://github.com/qt4cg/xslt40-test/pull/25), [record-type PR #26](https://github.com/qt4cg/xslt40-test/pull/26). Eight new cases validate against native catalog schemas: switch 2 pass; select 2 fail (empty select results), item-type 2 fail (XPST0051), record-type/field 2 fail (constructor XPST0017). Normative outputs are retained, with [portable patches and detailed example/evidence pages](../contributions/xslt40/README.md). No independent processor was run; reviewer cross-check requested in each PR. These are initial priority-family contributions, not complete XSLT 4.0 coverage. N02–N05 and REQ-126 stay In Progress while upstream review and engine triage are pending. Source 1.1.4 remains unpublished; public release 1.1.3.
+
+Independent native branches bosak/select-boundaries, bosak/switch-boundaries, bosak/item-type-boundaries and bosak/record-type-boundaries each contain two new cases and one existing test-set edit, based on 6205faf9. Each was pushed to the fork and submitted separately as upstream PRs #23–26. Native current branch is record-type-boundaries, clean. Original array branch/patch and PR #22 preserved. No existing native cases/expected results or root catalog changed. No engine/API/adapter change, no release or external messages beyond the four authorized contribution PRs.
+
+Validation: four native catalog schemas pass; exact new cases give 2 pass/6 failures, all run on clean committed native branches. Existing cases compare unchanged; all four portable patches reproduce their native commit trees exactly; hashes, three-file scopes, exact outcomes/receipts and queue mappings checked. Canonical/setup/queue and four detailed example pages rendered; contribution links/code fences verified. Source implementation is unchanged from PR #202 with 6811 tests passing and required gates clear; PR #203 CI also passed. Do not repeat full engine checks for test-catalog/evidence-only changes. New conformance failures remain exploratory findings, not unit-test results.
+
+## Resume here
+
+Check the latest Bosak preservation PR CI before merging. Monitor upstream PRs #22–26, preserve normative expectations and request/record independent verification. Triage Bosak select body dispatch first (seqtor-145/146), then enum aliases (type-alias-023/024), then generated nominative constructors (record-026/027). Keep fixes separate from native contributions; do not mark the queues accepted. Previous catalog/provenance/metadata limits remain. Preserve scratch dirs, ignored native checkout/receipts and all tracked patches/evidence.
+
+Delivery: f40443d0 (implementation/evidence preservation commit), [Bosak PR #204](https://github.com/Fytala-Charles/Bosak/pull/204), pushed on test/xslt40-other-element-batches. CI pending; PR open. This subsequent metadata commit records delivery and marks portable mail patches to preserve required context/signature whitespace without editing their bytes. On resume check latest CI before merging, review upstream feedback and begin separate select dispatch triage.
+
 # First upstream XSLT 4.0 submission — 2026-10-12
 
 Baseline: 0e806a351f422d9d4725b1581f2008cd867c76ba (PR #202 merged after CI 38295568498 success). Branch: docs/xslt40-first-upstream-submission. Source 1.1.4 unpublished; public release 1.1.3. Earlier sections are historical.

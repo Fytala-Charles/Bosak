@@ -1,0 +1,15 @@
+{
+  "suiteRevision": "b91f75a45dccd6cf6653bfe00f95ae2e2aa49603",
+  "bosakRevision": "1a046bde984355279ab179f6c2f71fa42b82aa06",
+  "testSet": "switch",
+  "testCase": "switch-009",
+  "runnerExitCode": 0,
+  "counts": {
+    "Total": 12,
+    "Passed": 1,
+    "Skipped": 11,
+    "Failed": 0
+  },
+  "exactCaseOutcome": "pass",
+  "scope": "Runner totals may include substring matches; batch tally uses exact case IDs."
+}

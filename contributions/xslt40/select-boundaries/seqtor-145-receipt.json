@@ -1,0 +1,15 @@
+{
+  "suiteRevision": "5f3296d12cf7aa5ad76554ea95f95f990629e04f",
+  "bosakRevision": "1a046bde984355279ab179f6c2f71fa42b82aa06",
+  "testSet": "seqtor",
+  "testCase": "seqtor-145",
+  "runnerExitCode": 1,
+  "counts": {
+    "Failed": 1,
+    "Skipped": 91,
+    "Passed": 0,
+    "Total": 92
+  },
+  "exactCaseOutcome": "fail",
+  "scope": "Runner totals may include substring matches; batch tally uses exact case IDs."
+}

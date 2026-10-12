@@ -1,0 +1,69 @@
+From 4ddcad8cfc0604f3a0a2cbec7d00032c7e8e0c5a Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Mon, 12 Oct 2026 21:20:38 +0200
+Subject: [PATCH] Add item-type focused boundary tests
+
+---
+ tests/type/type-alias/_type-alias-test-set.xml | 14 ++++++++++++++
+ tests/type/type-alias/type-alias-023.xsl       |  8 ++++++++
+ tests/type/type-alias/type-alias-024.xsl       |  9 +++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 tests/type/type-alias/type-alias-023.xsl
+ create mode 100644 tests/type/type-alias/type-alias-024.xsl
+
+diff --git a/tests/type/type-alias/_type-alias-test-set.xml b/tests/type/type-alias/_type-alias-test-set.xml
+index cac95e05..95549384 100644
+--- a/tests/type/type-alias/_type-alias-test-set.xml
++++ b/tests/type/type-alias/_type-alias-test-set.xml
+@@ -519,4 +519,18 @@
+    
+    
+  
++   <test-case name="type-alias-023">
++      <description>An enumeration alias accepts status strings and rejects unknown strings and integers.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="type-alias-023.xsl"/></test>
++      <result><assert-xml><![CDATA[<out ready="true" unknown="false" numeric="false"/>]]></assert-xml></result>
++   </test-case>
++   <test-case name="type-alias-024">
++      <description>Enumeration aliases with the same local name but distinct expanded names remain distinct.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="type-alias-024.xsl"/></test>
++      <result><assert-xml><![CDATA[<out primary="true" other="true" crossed="false"/>]]></assert-xml></result>
++   </test-case>
+ </test-set>
+\ No newline at end of file
+diff --git a/tests/type/type-alias/type-alias-023.xsl b/tests/type/type-alias/type-alias-023.xsl
+new file mode 100644
+index 00000000..a244ec72
+--- /dev/null
++++ b/tests/type/type-alias/type-alias-023.xsl
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="urn:order-types"
++ xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all">
++<!-- An enumeration alias accepts status strings and rejects unknown strings and integers. -->
++<xsl:item-type name="t:status" as="enum('ready','queued')"/>
++<xsl:template name="xsl:initial-template"><out ready="{'ready' instance of t:status}" unknown="{'lost' instance of t:status}" numeric="{1 instance of t:status}"/></xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/type/type-alias/type-alias-024.xsl b/tests/type/type-alias/type-alias-024.xsl
+new file mode 100644
+index 00000000..6e1cfd61
+--- /dev/null
++++ b/tests/type/type-alias/type-alias-024.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="urn:order-types"
++ xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all">
++<!-- Enumeration aliases with the same local name but distinct expanded names remain distinct. -->
++<xsl:item-type name="t:status" as="enum('ready')"/>
++<xsl:item-type xmlns:t="urn:other-status" name="t:status" as="enum('queued')"/>
++<xsl:template xmlns:u="urn:other-status" name="xsl:initial-template"><out primary="{'ready' instance of t:status}" other="{'queued' instance of u:status}" crossed="{'ready' instance of u:status}"/></xsl:template>
++</xsl:stylesheet>
+-- 
+2.54.0.windows.1
+
