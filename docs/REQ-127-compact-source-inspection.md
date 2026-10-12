@@ -105,7 +105,7 @@ Release and consumer adoption remain separate. No NuGet publication, release tag
 
 Release solution build passed (12 warnings, zero errors); **6,019 tests / 0 failures / 0 skips** across ten assemblies. QT3 stays exactly **31,142/0/679**. qt4 gated-only run: **8,278/0/1,894**, zero gated failures; no gate promotion. All 206 REQ-127 regressions pass. All 24 original current-runtime reproduction probes now succeed, retaining exact bytes; all direct scanner extent probes match their expected ends. Local links/source headers/version checked; 93 catalog and six implementation/canonical pages rendered successfully. Current catalog coverage remains 67 entries, 1,791 feature + 24 chapter checks = 1,815; REQ-126 stays In Progress. Published packages remain 1.1.2.
 
-Delivery commit/PR will be recorded after push. Braid must separately adopt that revision and rerun its graph/source/edit acceptance suite.
+Implementation revision: `5bab4799783569d538cec9b03d37a57454f0eebc`, [PR #192](https://github.com/Fytala-Charles/Bosak/pull/192), pushed on `fix/req127-compact-source-inspection`. CI pending; PR remains open. This subsequent documentation commit records delivery. On resume check CI and merge after success. Source 1.1.3 remains unpublished; Braid adoption is separate. Braid must separately adopt that revision and rerun its graph/source/edit acceptance suite.
 
 Verification commands (Release):
 

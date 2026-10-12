@@ -14,7 +14,7 @@ Validation: Release solution build passed (12 warnings, zero errors); **6,019 te
 
 Commit/push through normal PR workflow and record immutable delivery for Braid's separate adoption. REQ-127 is Implemented in source, with delivery CI/Braid adoption pending. No publication, Braid pin update or external message has been requested. Source 1.1.3 is prepared but unpublished. After this consumer correction, resume D2 map/array container contracts. REQ-126 remains In Progress: 67 entries, 1,791 feature + 24 chapter checks = 1,815; targeted absent-keyword review 21/37 supplied, 16 remaining; historical pins and AC-03 applicability unresolved.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Implementation revision: `5bab4799783569d538cec9b03d37a57454f0eebc`, [PR #192](https://github.com/Fytala-Charles/Bosak/pull/192), pushed on `fix/req127-compact-source-inspection`. CI pending; PR remains open. This subsequent documentation commit records delivery. On resume check CI and merge after success. Source 1.1.3 remains unpublished; Braid adoption is separate.
 
 # Comparison/selection contracts — 2026-10-12
 

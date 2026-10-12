@@ -13,3 +13,6 @@ The scanner now uses the already-exclusive start-tag end directly. Original sour
 206 new regression checks cover 1/2/80 sibling groups, no/space/LF/CRLF separators and nested layout, supported UTF-8/BOM and UTF-16 LE/BE, exact element/slot byte ranges and line/column coordinates, mixed content, repeated/empty elements, namespace aliases, malformed-source refusal and isolated middle-sibling Expression edits. Release solution build passed (12 warnings, zero errors); **6,019 tests / 0 failures / 0 skips** across ten assemblies. QT3 stays exactly **31,142/0/679**. qt4 gated-only run: **8,278/0/1,894**, zero gated failures; no gate promotion. All 206 REQ-127 regressions pass.
 
 Consumers should re-inspect original compact documents after adopting the delivered version; descriptor identities remain snapshot-scoped. Braid's source pin and acceptance tests are updated in its own adoption step. No release tag, NuGet publication or Braid adoption is claimed here. REQ-126 remains In Progress; no catalog closure or gate promotion is included.
+
+
+Implementation: [`5bab4799783569d538cec9b03d37a57454f0eebc`](https://github.com/Fytala-Charles/Bosak/commit/5bab4799783569d538cec9b03d37a57454f0eebc), [PR #192](https://github.com/Fytala-Charles/Bosak/pull/192). Delivery CI pending; source 1.1.3 remains unpublished.
