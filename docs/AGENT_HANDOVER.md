@@ -14,7 +14,7 @@ Validation: Release solution build succeeded (12 warnings, zero errors); **4,800
 
 Next: D1, audit all 49 focus constructors with a realistic typed import, per-name source/contracts, valid/invalid/missing-focus outcomes and explicit mode evidence. Keep this next slice documentation-first; record engine limits. D2 signatures/defaults/options, D3 grammar/type/pattern inventory, D4 provenance/drift/acceptance follow. Do not close REQ-126 or release because names are assigned. Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below.
 
-Delivery commit/PR will be recorded after push.
+Delivery: `06b44c6f7594ef883159306f59e11d363ca8da67`, [PR #185](https://github.com/Fytala-Charles/Bosak/pull/185), pushed on `docs/req126-closeout-review`. Rebase onto merged main preserved the validated content tree. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before starting D1.
 
 # Historical XQuery/streaming scope review — 2026-10-12
 
