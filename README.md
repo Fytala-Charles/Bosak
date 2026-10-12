@@ -468,3 +468,6 @@ The [sequence selection/repetition review](docs/xpath40-catalog/SEQUENCE-CONTRAC
 
 
 **REQ-127 compact authoring inspection — 2026-10-12:** source **1.1.3, unpublished** corrects lexical extent calculation for immediately nested elements and compact siblings. Inspection retains exact original bytes, encoding/BOM and URI; no source normalization or new API/edit capability is introduced. 206 regressions cover layout/encoding/ranges/mixed content and isolated middle-sibling Expression edits. Verification passed: 6,019 full tests, QT3 31,142/0/679, zero qt4 gated failures. Delivery CI/Braid adoption remain pending. See [criterion-level evidence and Braid adoption](docs/REQ-127-compact-source-inspection.md) and [patch notes](docs/RELEASE-NOTES-1.1.3.md). Published packages remain 1.1.2 until a separate release. REQ-126 stays In Progress; its next catalog slice is deferred behind this consumer defect.
+
+
+**1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.

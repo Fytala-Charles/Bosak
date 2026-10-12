@@ -1,6 +1,6 @@
 # REQ-127: Source-Preserving Inspection of Compact Sibling Elements
 
-> Requesting application: Bosak.Braid. Submitted 2026-10-12. Status: Implemented in source (delivery CI and Braid adoption pending). Owner: Charles Korthout. Target: 1.1.3.
+> Requesting application: Bosak.Braid. Submitted 2026-10-12. Status: Implemented; Braid verification reported by user, publication authorized. Owner: Charles Korthout. Target: 1.1.3.
 
 ## Problem and Ownership
 
@@ -116,3 +116,6 @@ dotnet run --project tests/Bosak.XPath.Conformance -c Release --no-build
 $env:BOSAK_QT4_GATE_ONLY = '1'
 dotnet run --project tests/Bosak.XPath.Conformance40 -c Release --no-build -- tests/qt4tests
 ```
+
+
+**1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.

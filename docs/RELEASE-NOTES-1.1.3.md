@@ -16,3 +16,6 @@ Consumers should re-inspect original compact documents after adopting the delive
 
 
 Implementation: [`5bab4799783569d538cec9b03d37a57454f0eebc`](https://github.com/Fytala-Charles/Bosak/commit/5bab4799783569d538cec9b03d37a57454f0eebc), [PR #192](https://github.com/Fytala-Charles/Bosak/pull/192). Delivery CI pending; source 1.1.3 remains unpublished.
+
+
+**1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.
