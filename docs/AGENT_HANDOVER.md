@@ -10,7 +10,7 @@ claims. Legacy numeric promotion, input-dependent NaN order and missing empty-ke
 changes; source/public stays 1.1.2 and REQ-126 remains In Progress.
 Next: URI option contracts (allow-deprecated-features, unc-path) and component
 precedence; keep engine numeric/NaN and prior keyword/duration findings separate.
-Validation: Release build passed (one existing warning, zero errors); all 4,497 tests across ten assemblies passed without failures/skips, including 475 catalog cases. Renderer verified 71 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; pick order/payloads and numeric boundary independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision pending commit.
+Validation: Release build passed (one existing warning, zero errors); all 4,497 tests across ten assemblies passed without failures/skips, including 475 catalog cases. Renderer verified 71 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; pick order/payloads and numeric boundary independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: 81149db4; [PR #173](https://github.com/Fytala-Charles/Bosak/pull/173). CI pending at handover.
 
 # Agent Handover — 2026-10-12: batch extrema and component codes
 
