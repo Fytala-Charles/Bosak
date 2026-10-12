@@ -12,7 +12,7 @@ Local Release build passed (12 existing warnings, zero errors); full solution **
 
 Resume REQ-126 D2 map:entries/map:items/map:filter and array:build/array:items/array:empty contract review using a stock-feed normalization workflow. Catalog remains 67 entries, 1,791 feature + 24 chapter checks = 1,815; four worked chapters; 117 names assigned; 21/37 absent-keyword families reviewed, 16 remaining. Full conversion/options and changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance and AC-03 applicability remain unresolved. REQ-126 stays In Progress; no further release is authorized by this record.
 
-README, architecture, integration, registry, REQ-127 dossier, patch notes and audit are synchronized. Earlier pending/unpublished states below are historical. Preserve `.guard-tmp/` and `.sweep-baselines/`. Publication-record commit/PR will be recorded after push.
+README, architecture, integration, registry, REQ-127 dossier, patch notes and audit are synchronized. Earlier pending/unpublished states below are historical. Preserve `.guard-tmp/` and `.sweep-baselines/`. Publication record: `f6a16281e14e7c6c6897e098793f7f73fe51605c`, [PR #193](https://github.com/Fytala-Charles/Bosak/pull/193), pushed on `docs/release-1.1.3-record`. This subsequent metadata commit records that delivery. Resume the D2 map/array review from the published 1.1.3 baseline.
 
 # REQ-127 compact source inspection correction — 2026-10-12
 
