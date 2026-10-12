@@ -26,3 +26,8 @@ A syntax-only check for an array-member child would miss wrappers supplied by va
 This correction covers array/member construction. It does not certify all JTree navigation, templates, type matching or serialization. The detailed construction algorithm also rejects multiple JNodes in one per-focus result; its error prose emphasizes mixing with non-JNodes. Preserve this distinction when proposing additional edge cases upstream.
 
 Run another processor against the six native cases before presenting the batch as independently confirmed. The upstream PR remains a local draft. N01 stays in progress until review and submission are complete.
+
+
+## Submission update
+
+[Upstream PR #22](https://github.com/qt4cg/xslt40-test/pull/22) is open. See [submission details](SUBMISSION.md). Earlier no-submission statements describe the pre-submission state; independent confirmation remains outstanding.

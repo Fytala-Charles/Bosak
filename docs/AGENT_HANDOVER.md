@@ -1,3 +1,21 @@
+# First upstream XSLT 4.0 submission — 2026-10-12
+
+Baseline: 0e806a351f422d9d4725b1581f2008cd867c76ba (PR #202 merged after CI 38295568498 success). Branch: docs/xslt40-first-upstream-submission. Source 1.1.4 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+The first six-case native array/member batch is [submitted as xslt40-test PR #22](https://github.com/qt4cg/xslt40-test/pull/22). All six exact cases pass with Bosak; specification review is recorded. No second processor was run: independent cross-check was requested in the PR. [Submission details](../contributions/xslt40/array-member-boundaries/SUBMISSION.md) explain the Saxon PE/EE and partial-for-each limitation and the decision to seek upstream review without making local independent execution a prerequisite. Review/acceptance remain pending; N01 and REQ-126 stay In Progress. Bosak fix PR #202 merged after CI 38295568498 passed (6811 unit tests); source 1.1.4 remains unpublished, public release 1.1.3 unchanged.
+
+Fork Fytala-Charles/xslt40-test created; native origin points to it, upstream remains qt4cg/xslt40-test. Native branch bosak/array-member-review pushed clean at e72f1b0e; upstream/master was still 6205faf9 at submission. No renumbering/rebase or native content changes. Schema revalidated and portable patch hashes/tree checked. SUBMISSION.md/json and the retained UPSTREAM_PR_DRAFT.md filename record the actual submitted body/status. No additional issue/comment/email sent; no alternate processor/license installation or release.
+
+Validation: unchanged implementation baseline CI passes 6811 tests; manual gates and six exact native passes recorded in the prior section. Canonical/setup/queue/contribution/submission documentation rendered and added local links checked. Upstream PR head/base and exact eight-file scope verified for this submission-only step. Do not repeat implementation tests for documentation/status-only changes.
+
+## Resume here
+
+Check upstream PR #22 for review/independent results and respond within the user's contribution scope. N01 remains In Progress, submitted but unaccepted; independent confirmation is outstanding. N02 xsl:select focused gap audit is the next separate batch while review is pending. Preserve original failing receipts, post-fix evidence, ignored checkout/artifacts and scratch dirs. No package publication in this step; previous catalog/provenance/metadata and REQ-125/127 limits remain.
+
+Bosak preservation delivery: 87a467d829108cfa5e48f5acb0f727b2af91ed33, [PR #203](https://github.com/Fytala-Charles/Bosak/pull/203), pushed on docs/xslt40-first-upstream-submission. CI run 38296530533 pending; PR open. This subsequent documentation commit records delivery. On resume check latest Bosak CI before merging, monitor upstream PR #22 and proceed with the separate N02 audit while review is pending.
+
 # Array/member JNode correction — 2026-10-12
 
 Branch: fix/xslt-array-member-jnode; implementation base c1c3fa708aadda0970b81d5302b79701c275e388. PR #201 merged after CI 38294339193 passed. Source version 1.1.4, unpublished; public release remains 1.1.3. Earlier sections are historical.

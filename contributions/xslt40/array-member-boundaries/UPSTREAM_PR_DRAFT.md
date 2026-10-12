@@ -1,12 +1,22 @@
-Adds six cases to the native array test set covering empty-member/no-emission distinction, empty sequence-constructor members, retained map/array containers, original source-node identity and order, for-each focus with empty members, and the XTTE4060 mixed JNode/non-JNode rule.
+# Submitted upstream PR text
 
-Expected results follow the array-construction rules in XSLT source e7ee4ab8. Existing grouped/nested/JNode cases were reviewed; no established expected result was changed. Catalog additions validate against the suite schema.
+Submitted as [xslt40-test PR #22](https://github.com/qt4cg/xslt40-test/pull/22) on 2026-10-12. The historical filename is retained for existing links. Review/acceptance and independent processor confirmation are pending.
 
-Bosak adapter evidence on clean contribution commit: five new cases pass; array-032 fails because Bosak returns <out>A|B</out> instead of raising XTTE4060. The required error expectation is retained. Independent processor confirmation remains outstanding. Aggregate runner counts also contain inherited substring matches, so reported batch counts use the exact six case IDs.
+Adds six cases to the existing native array test set:
 
-These scenarios arose from Bosak's XSLT 4.0 contribution review. [Bosak](https://github.com/Fytala-Charles/Bosak) provides a catalog adapter and documented specification/consumer examples, including [the contribution queue](https://github.com/Fytala-Charles/Bosak/blob/main/docs/XSLT40_CONTRIBUTION_QUEUE.md). Bosak currently has partial 4.0 coverage; the failure above is recorded explicitly.
+| Case | Boundary |
+|---|---|
+| array-027 | Explicit empty member versus an empty sequence that emits no member |
+| array-028 | Empty sequence-constructor member and a grouped two-item member |
+| array-029 | Retained map, nested array and empty-array values |
+| array-030 | Original source-node identity and deliberately reordered grouped nodes |
+| array-031 | for-each focus (item, position, size) and preserved empty result slots |
+| array-032 | Required XTTE4060 for a per-focus result mixing an array-member JNode with an ordinary item |
 
-This text is a local draft; no upstream PR or maintainer message has been sent.
+Expected outcomes derive from the [array-construction rules](https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction), reviewed against [specification source revision e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml). Existing grouped/nested/map/JNode cases were reviewed before adding these boundaries. No established test, expected result or root catalog registration is changed.
 
+Validation: the native test-set catalog validates against the suite schema. All six new cases pass using the Bosak XSLT 4.0 catalog adapter. array-032 initially exposed missing error enforcement in Bosak; that implementation was corrected without changing this test's expected error. Exact case outcomes are used because Bosak's substring filters also select inherited square-array cases.
 
-Candidate update: the Bosak JNode array/member correction now passes all six unchanged cases. The earlier five-pass/one-failure evidence is the before-fix run. See ASSERTION_REVIEW.md and POST_FIX_RESULTS.json. Independent processor confirmation remains outstanding; this draft has not been submitted.
+I do not have an independent XSLT 4.0 processor available. These assertions have been checked against the specification, but have not been confirmed by a second implementation. A reviewer cross-check would be welcome, especially for the for-each focus/empty-result and XTTE4060 cases.
+
+The tests use the suite's native catalog/environment structure; there are no Bosak dependencies in the contributed files. [Bosak](https://github.com/Fytala-Charles/Bosak) provides the adapter and [documented specification/consumer examples](https://github.com/Fytala-Charles/Bosak/blob/main/docs/XSLT40_CONTRIBUTION_QUEUE.md), with partial XSLT 4.0 coverage. [Assertion review and execution evidence](https://github.com/Fytala-Charles/Bosak/tree/main/contributions/xslt40/array-member-boundaries) are available for reference.
