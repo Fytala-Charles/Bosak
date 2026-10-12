@@ -14,7 +14,7 @@ Validation: Release solution build passed (zero warnings/errors); **6,674 tests 
 
 Review fn:sort, array:sort, fn:min, fn:max and map:merge higher-order/default/conversion contracts next. The exhaustive declaration inventory is supplied; normative prose impact and exhaustive behavior remain open. Retain previous engine follow-ups and add the seventeen missing draft arities plus empty sort-key/map:merge-option enforcement. REQ-126 remains In Progress. Preserve `.guard-tmp/` and `.sweep-baselines/`.
 
-Delivery commit/PR will be recorded after push.
+Delivery: `7fbff212b2992144dcaa738be74d74a6185f0361`, [PR #197](https://github.com/Fytala-Charles/Bosak/pull/197), pushed on `docs/req126-changed31-inventory`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before reviewing sorting/min/max/map:merge defaults.
 
 # URI/import utility contracts — 2026-10-12
 

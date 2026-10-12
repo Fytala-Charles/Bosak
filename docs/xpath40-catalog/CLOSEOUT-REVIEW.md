@@ -26,7 +26,7 @@ A current immutable review pin can describe today's comparison, but cannot recon
 
 Current next slice: fn:sort, array:sort, fn:min, fn:max and map:merge higher-order/default/conversion contracts. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
 
-Current next slice: fn:sort, array:sort, fn:min, fn:max and map:merge higher-order/default/conversion contracts. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
+
 
 | Order | Deliverable | Reviewable completion evidence |
 |---|---|---|
