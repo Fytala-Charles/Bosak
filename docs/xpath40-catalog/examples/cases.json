@@ -2467,5 +2467,292 @@
     "mode": "40",
     "file": "import-file-names/multi-item-source.xpath",
     "error": "XPTY0004"
+  },
+  {
+    "id": "supplier-offer-ranking-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/main.xpath",
+    "expected": "cheapest=B,C; bestScore=D; ranked=B,C,A,D; collationAvailable=true"
+  },
+  {
+    "id": "supplier-offer-ranking-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "supplier-offer-ranking/baseline.xpath",
+    "expected": "cheapest=B,C; bestScore=D; ranked=B,C,A,D"
+  },
+  {
+    "id": "supplier-offer-ranking-empty-offers",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/empty-offers.xpath",
+    "expected": "cheapest=; bestScore=; ranked=; collationAvailable=true"
+  },
+  {
+    "id": "supplier-offer-ranking-stable-ties",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/stable-ties.xpath",
+    "expected": "B,A,C"
+  },
+  {
+    "id": "supplier-offer-ranking-all-boundary-ties",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/all-boundary-ties.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "supplier-offer-ranking-default-sort",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/default-sort.xpath",
+    "expected": "1,2,3"
+  },
+  {
+    "id": "supplier-offer-ranking-descending",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/descending.xpath",
+    "expected": "3,2,1"
+  },
+  {
+    "id": "supplier-offer-ranking-numeric-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/numeric-untyped.xpath",
+    "expected": "a"
+  },
+  {
+    "id": "supplier-offer-ranking-string-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/string-key.xpath",
+    "expected": "b"
+  },
+  {
+    "id": "supplier-offer-ranking-available-ascii",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/available-ascii.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "supplier-offer-ranking-unavailable",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/unavailable.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "supplier-offer-ranking-fallback",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/fallback.xpath",
+    "expected": "A,b"
+  },
+  {
+    "id": "supplier-offer-ranking-invalid-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/invalid-order.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "supplier-offer-ranking-invalid-record",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/invalid-record.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "supplier-offer-ranking-bad-untyped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/bad-untyped.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "numeric-import-diagnostics-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/main.xpath",
+    "expected": "accepted=A,C; rejected=B; total=20; type=double"
+  },
+  {
+    "id": "numeric-import-diagnostics-baseline",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "numeric-import-diagnostics/baseline.xpath",
+    "expected": "accepted=A,C; rejected=B; total=20; double=true"
+  },
+  {
+    "id": "numeric-import-diagnostics-all-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/all-invalid.xpath",
+    "expected": "accepted=; rejected=A,B,C; total=0; type=double"
+  },
+  {
+    "id": "numeric-import-diagnostics-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/empty.xpath",
+    "expected": "accepted=; rejected=; total=0; type=double"
+  },
+  {
+    "id": "numeric-import-diagnostics-nan-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/nan-number.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "numeric-import-diagnostics-nan-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/nan-string.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "numeric-import-diagnostics-ordinary-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/ordinary-number.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "numeric-import-diagnostics-type-not-validator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/type-not-validator.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "numeric-import-diagnostics-derived-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/derived-type.xpath",
+    "expected": "duration"
+  },
+  {
+    "id": "numeric-import-diagnostics-operator-pairs",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/operator-pairs.xpath",
+    "expected": "11,22"
+  },
+  {
+    "id": "numeric-import-diagnostics-operator-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/operator-arity.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "numeric-import-diagnostics-empty-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/empty-nan.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "numeric-import-diagnostics-map-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/map-nan.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "numeric-import-diagnostics-division-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/division-zero.xpath",
+    "error": "FOAR0001"
+  },
+  {
+    "id": "numeric-import-diagnostics-unknown-operator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-import-diagnostics/unknown-operator.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "payload-fingerprints-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/main.xpath",
+    "expected": "sha256=612D86BAC9C1A9654CA5BFF669CB9B2C4CF8F5C077FB024FF443589AD02D5BF4; hexCharacters=64; hexBinary=true"
+  },
+  {
+    "id": "payload-fingerprints-binary-equivalent",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/binary-equivalent.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "payload-fingerprints-changed-payload",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/changed-payload.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "payload-fingerprints-whitespace-matters",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/whitespace-matters.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "payload-fingerprints-normalized-algorithm",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/normalized-algorithm.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "payload-fingerprints-empty-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/empty-string.xpath",
+    "expected": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+  },
+  {
+    "id": "payload-fingerprints-empty-sequence",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/empty-sequence.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "payload-fingerprints-default-md5",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/default-md5.xpath",
+    "expected": "900150983CD24FB0D6963F7D28E17F72"
+  },
+  {
+    "id": "payload-fingerprints-unsupported",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/unsupported.xpath",
+    "error": "FOHA0001"
+  },
+  {
+    "id": "payload-fingerprints-nonstring",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "payload-fingerprints/nonstring.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "supplier-offer-ranking-computed-key-tie-observed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "supplier-offer-ranking/computed-key-tie-observed.xpath",
+    "expected": "B"
   }
 ]

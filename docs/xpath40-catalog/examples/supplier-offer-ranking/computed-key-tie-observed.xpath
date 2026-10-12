@@ -1,0 +1,2 @@
+let $offers := parse-xml('<offers><offer id="B" price="8"/><offer id="C" price="8"/></offers>')/offers/offer
+return string-join(lowest($offers, (), function($o) { xs:decimal($o/@price) }) ! string(@id), ',')

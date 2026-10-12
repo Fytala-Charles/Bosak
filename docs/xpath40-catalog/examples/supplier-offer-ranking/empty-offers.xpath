@@ -1,0 +1,7 @@
+let $offers := parse-xml('<offers/>')/offers/offer
+let $price := function($o) { xs:decimal($o/@price) }
+let $score := function($o) { xs:decimal($o/@score) }
+let $boundary := lowest($offers, (), $price)
+let $cheapest := if (empty($boundary)) then () else $offers[$price(.) eq $price($boundary[1])]
+let $collation := 'http://www.w3.org/2005/xpath-functions/collation/codepoint'
+return concat('cheapest=', string-join($cheapest/@id, ','), '; bestScore=', string-join(highest($offers, (), $score)/@id, ','), '; ranked=', string-join(sort-by($offers, (map {'key': $price}, map {'key': $score, 'order': 'descending'})) ! string(@id), ','), '; collationAvailable=', collation-available($collation))

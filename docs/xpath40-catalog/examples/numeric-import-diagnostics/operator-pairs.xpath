@@ -1,0 +1,1 @@
+string-join(for-each-pair((10, 20), (1, 2), op('+')) ! string(.), ',')

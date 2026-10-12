@@ -1,0 +1,5 @@
+let $rows := parse-xml('<readings><reading id="A" value="12.5"/><reading id="B" value="invalid"/><reading id="C" value="7.5"/></readings>')/readings/reading
+let $valid := $rows[not(is-NaN(number(@value)))]
+let $invalid := $rows[is-NaN(number(@value))]
+let $total := fold-left($valid/@value ! number(.), 0e0, op('+'))
+return concat('accepted=', string-join($valid/@id, ','), '; rejected=', string-join($invalid/@id, ','), '; total=', $total, '; type=', local-name-from-QName(atomic-type-annotation($total)?name))
