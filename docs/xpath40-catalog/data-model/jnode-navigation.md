@@ -81,3 +81,5 @@ Executable example IDs: `jnode-navigation-main`, `jnode-navigation-edge`, `jnode
 See the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
 
 *Created 2026-10-11: verified practical catalog example and earlier-version baseline.*
+
+**Scope review — 2026-10-12:** The [partial-model disposition](jnode-template-boundary.md) reconciles the original full-model exclusion with this shipped navigation. Eighteen additional checks supply full invoice input/output and explicit node()/xnode()/identity boundaries; navigation does not certify the complete generic model or stylesheet built-ins.

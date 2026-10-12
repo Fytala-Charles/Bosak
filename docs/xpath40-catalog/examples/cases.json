@@ -5328,5 +5328,131 @@
     "mode": "31",
     "file": "external-input-functions/invoice-guard-empty.xpath",
     "error": "INVALID-INVOICE"
+  },
+  {
+    "id": "jnode-scope-navigation-main",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/navigation-main.xpath",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00"
+  },
+  {
+    "id": "jnode-scope-portable-main",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "jnode-scope/portable-main.xpath",
+    "expected": "INV-1042/EUR:30.00;INV-1043/USD:12.00"
+  },
+  {
+    "id": "jnode-scope-navigation-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/navigation-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "jnode-scope-portable-empty",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "jnode-scope/portable-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "jnode-scope-navigation-reordered",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/navigation-reordered.xpath",
+    "expected": "INV-1043/USD:12.00;INV-1042/EUR:30.00"
+  },
+  {
+    "id": "jnode-scope-portable-reordered",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "jnode-scope/portable-reordered.xpath",
+    "expected": "INV-1043/USD:12.00;INV-1042/EUR:30.00"
+  },
+  {
+    "id": "jnode-scope-array-keys",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/array-keys.xpath",
+    "expected": "1|2"
+  },
+  {
+    "id": "jnode-scope-parent-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/parent-value.xpath",
+    "expected": "INV-1042"
+  },
+  {
+    "id": "jnode-scope-root-parent",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/root-parent.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "jnode-scope-missing-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/missing-key.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "jnode-scope-type-jnode",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/type-jnode.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "jnode-scope-type-node",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/type-node.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "jnode-scope-attribute-axis",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/attribute-axis.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "jnode-scope-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/identity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "jnode-scope-xnode-type-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "jnode-scope/xnode-type-31.xpath",
+    "error": "XPST0051"
+  },
+  {
+    "id": "jnode-scope-xnode-type-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/xnode-type-40.xpath",
+    "error": "XPST0051"
+  },
+  {
+    "id": "jnode-scope-xnode-type-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "jnode-scope/xnode-type-experimental.xpath",
+    "error": "XPST0051"
+  },
+  {
+    "id": "jnode-scope-wrong-jvalue",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "jnode-scope/wrong-jvalue.xpath",
+    "error": "XPTY0004"
   }
 ]

@@ -1,0 +1,1 @@
+string-join(jtree(['INV-1042','INV-1043']) / * ! string(jkey(.)), '|')

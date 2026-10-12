@@ -1,0 +1,1 @@
+let $tree := jtree(map{'id':'INV-1042'}) return $tree is $tree

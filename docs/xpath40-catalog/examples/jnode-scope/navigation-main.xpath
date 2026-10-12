@@ -1,0 +1,3 @@
+(: Partner invoice batch: navigate JNodes, unwrap each invoice map for reporting. :)
+let $tree := jtree(parse-json('{"invoices":[{"id":"INV-1042","currency":"EUR","total":30},{"id":"INV-1043","currency":"USD","total":12}]}'))
+return string-join($tree / invoices / * ! (let $invoice := jvalue(.) return concat($invoice?id, '/', $invoice?currency, ':', format-number($invoice?total, '0.00'))), ';')

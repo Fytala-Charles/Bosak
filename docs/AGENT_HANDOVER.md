@@ -1,4 +1,18 @@
-# External-input function review — 2026-10-12
+# GNode/JNode scope review — 2026-10-12
+
+Main baseline: `3c0bd5994baf4fa85b1db5805fc5c081d63c50ee`; [PR #182](https://github.com/Fytala-Charles/Bosak/pull/182) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38226566196). Current branch: `docs/req126-gnode-jnode-scope`.
+
+## Current state and what was built
+
+Expanded [JNode model and template boundary](xpath40-catalog/data-model/jnode-template-boundary.md) against pinned XDM/function/XSLT sources e7ee4ab8. Updated REQ-118's original blanket exclusion to acknowledge delivered REQ-123 navigation; the full model/template remainder stays deferred. Retained original PR #116 delivery provenance and missing adopted-pin limitation.
+
+Eighteen new fixtures supply complete invoice JSON and Frozen 4.0/portable 3.1 reports, empty/reordered input, positional keys, parent/root/missing/attribute navigation, types and wrong unwrapping. Confirmed gaps: node() returns false for the tested JNode; xnode() reports XPST0051; same-JNode is comparison reports XPTY0004. These fixtures do not certify generic ordering, mixed-model operations or XSLT JNode built-ins. No engine/API/package/harness changes or gate promotions. Catalog: **66 entries; 750 feature + 24 chapter checks = 774**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (zero warnings/errors); **4,772 tests / 0 failures / 0 skips**, ten assemblies. All 750 focused catalog checks passed. Renderer verified 80 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, four named regression tests, pinned generic-node source, existing gate references and six independently calculated invoice reports verified. Identity evidence comes from executable refusal. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Next review XQuery 4.0 and XSLT Streaming 4.0 scope against pinned contracts, existing language/streaming implementations and named tests. Keep documentation-only scope unless engine work is requested. Generic-node type/identity gaps join prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization differences and historical adopted-pin limits. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
+
+# Historical external-input function review — 2026-10-12
 
 Main baseline: `bce0d9b1e21ce2ed875821e592f64bf2ed69ee55`; [PR #181](https://github.com/Fytala-Charles/Bosak/pull/181) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38225603028). Current branch: `docs/req126-external-input-functions`.
 
