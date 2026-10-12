@@ -14,7 +14,7 @@ Validation: unchanged implementation baseline CI passes 6811 tests; manual gates
 
 Check upstream PR #22 for review/independent results and respond within the user's contribution scope. N01 remains In Progress, submitted but unaccepted; independent confirmation is outstanding. N02 xsl:select focused gap audit is the next separate batch while review is pending. Preserve original failing receipts, post-fix evidence, ignored checkout/artifacts and scratch dirs. No package publication in this step; previous catalog/provenance/metadata and REQ-125/127 limits remain.
 
-Bosak preservation PR/commit pending.
+Bosak preservation delivery: 87a467d829108cfa5e48f5acb0f727b2af91ed33, [PR #203](https://github.com/Fytala-Charles/Bosak/pull/203), pushed on docs/xslt40-first-upstream-submission. CI run 38296530533 pending; PR open. This subsequent documentation commit records delivery. On resume check latest Bosak CI before merging, monitor upstream PR #22 and proceed with the separate N02 audit while review is pending.
 
 # Array/member JNode correction — 2026-10-12
 
