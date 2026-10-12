@@ -13,7 +13,7 @@ examples. The original audit was dated 2026-10-11 against source revision
 `09e678f3` (1.1.1 publication documentation); published engine 1.1.1 is revision
 `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`.
 
-Current review: **2026-10-12**, source baseline `37457bfd`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
+Current review: **2026-10-12**, source baseline `52183ca36fbea4e791f66dbfda4635c0b9c851c1`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
 
 The original audit baseline was 28 entries, 81 catalog cases, three worked chapters, and 13
 chapter checks. All entries have the 16 numbered fields. Field presence does not
@@ -71,7 +71,7 @@ specification revision or establish that Bosak implements the entire proposal.
 |---|---|---|
 | AC-01: landed slices, tiers, spec and delivery links | Partial | All registered names now have entries; supplementary signatures/options and changed existing functions remain partial. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
 | AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. Further deferred grammar needs review. |
-| AC-03: verified examples and gate evidence | Partial | 498 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
+| AC-03: verified examples and gate evidence | Partial | 499 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
 | AC-04: structure, retained entries, drift warnings | Partial | 57 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
@@ -362,3 +362,5 @@ Min/max follow-up findings: QName ordering is supplied, but shared numeric promo
 Sorting review: retained functions still use the legacy shared comparer rather than the pinned exact numeric key rules. Mixed decimal/double keys retain input ties, and two-item NaN ordering is input-dependent. These documentation fixtures preserve observed limits; no engine correction or gate promotion is claimed.
 
 **Warehouse sorting delivery verification (2026-10-12):** Validation: Release build passed (one existing warning, zero errors); all 4,497 tests across ten assemblies passed without failures/skips, including 475 catalog cases. Renderer verified 71 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; pick order/payloads and numeric boundary independently computed with Python. No engine conformance rerun for this documentation-only delivery.
+
+**Session close (2026-10-12):** PR #173 merged after CI passed. Current reference coverage is 57 entries and 499 documentation checks (475 feature plus 24 chapter); all 117 registered names are assigned. Latest implementation validation: 4,497 tests passed across ten assemblies. REQ-126 remains In Progress; released/source version remains 1.1.2. Resume with URI options and component precedence; see [the handover](../AGENT_HANDOVER.md).
