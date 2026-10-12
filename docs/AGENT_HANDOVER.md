@@ -10,6 +10,13 @@ Added [External-input function boundaries](xpath40-catalog/deferred/external-inp
 
 ## Resume here
 
+Delivery: `b88e950d0c90165d0ec6a6ae28f80bde57001ab1`,
+[PR #182](https://github.com/Fytala-Charles/Bosak/pull/182), pushed on
+`docs/req126-external-input-functions`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
 Next reconcile the original full GNode/JNode out-of-scope wording with shipped partial navigation and catalog coverage, using pinned model contracts, source and existing named tests. Keep documentation-only scope unless engine work is requested; no full-model/conformance claim follows from navigation functions. The language-boundary review (XQuery 4.0 / Streaming 4.0) follows. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization path differences and historical adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
 
 # Historical serialization parameter review — 2026-10-12
