@@ -1,3 +1,23 @@
+# Map/array container contracts — 2026-10-12
+
+Main baseline: `43ed546bd1d61364fe3e61fee736433617473301`; PR #193 publication record merged. Current branch: `docs/req126-container-contracts`. Public/source version remains **1.1.3**. Earlier delivery states below are historical.
+
+## What was built
+
+Added [six-family container review](xpath40-catalog/CONTAINER-CONTRACT-REVIEW.md) and [detailed stock-feed README](xpath40-catalog/examples/container-contracts/README.md), with complete normal/empty/reordered XML, paired XPath 3.1/4.0 code and exact outputs. Six raw signature rows link exact case IDs and immutable source baseline. Canonical summaries, registry, audits, queue and two existing family entries synchronized.
+
+89 new checks: 18 keyword/mode refusals, 65 focused member/item/default/type/callback checks and six complete XPath 3.1/4.0 stock-feed reports. Targeted absent-keyword review: 27 of 37 families supplied, 10 remaining; metadata unchanged. map:filter accepts tested string/numeric predicate results despite its boolean result signature; dedicated conversion/enforcement review remains. Current catalog: 67 entries, 1,880 feature + 24 chapter checks = 1,904; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds contracts.
+
+All six keyword families refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1 grammar. Empty/grouped array members, retained nested maps/arrays, source node identity, one-based callbacks, single-entry map sequences and positive-stock aggregation verified. Empty-input nonfunction callbacks return empty containers in tested forms; zero-argument callbacks adapt. These are observed boundaries, not a complete function-conversion claim. Earlier map result-shape fixes remain shipped.
+
+Validation: Release solution build passed (11 existing warnings, zero errors); **6,108 tests / 0 failures / 0 skips**, ten assemblies including all 1,880 feature checks. Renderer verified 95 catalog pages plus six implementation/canonical pages. Six pinned signatures, 89 exact cases, six independently computed full reports, node identity, local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. Manual engine gates are not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Next review build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds with a realistic timestamp/retention workflow. Remaining five absent families after that group: build-uri, decode-from-uri, collation-available, identity and is-NaN. Full coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain unresolved. Earlier keyword/text/sequence/predicate/selection/hash engine follow-ups remain; add map:filter boolean-result enforcement. REQ-126 stays In Progress; no release or Braid adoption action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `0f39a1d98b8dd28504eaf01fb1a07c69512c5dec`, [PR #194](https://github.com/Fytala-Charles/Bosak/pull/194), pushed on `docs/req126-container-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the next D2 slice.
+
 # Bosak 1.1.3 published — 2026-10-12
 
 **Release revision:** `636a2f4d64c757a1f3c00bcf7ec1387416530ccc`, tag [v1.1.3](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.3); PR #192 merged after CI success. User reported Braid verification and explicitly authorized publication. [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38271538007) passed. All ten public packages and 29 fresh-cache consumer checks verified. Public/source version is **1.1.3**.

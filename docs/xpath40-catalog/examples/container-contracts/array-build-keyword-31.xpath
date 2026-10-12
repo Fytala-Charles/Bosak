@@ -1,0 +1,1 @@
+array:size(array:build(input := (1,2), action := ()))

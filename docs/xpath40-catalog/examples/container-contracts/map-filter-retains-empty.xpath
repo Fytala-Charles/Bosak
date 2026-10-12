@@ -1,0 +1,1 @@
+map:contains(map:filter(map{'A':()},function($k,$v){empty($v)}),'A')

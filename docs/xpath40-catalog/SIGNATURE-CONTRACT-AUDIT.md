@@ -40,9 +40,9 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 
 | Function | Exact registrations | Pinned call arities | Keyword names | Default expressions | Evidence |
 |---|---|---|---|---|---|
-| [`array:build`](functions/import-array-batches.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/array-build-1.xpath) |
-| [`array:empty`](functions/import-array-batches.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/array-empty-1.xpath) |
-| [`array:items`](functions/import-array-batches.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/array-items-1.xpath) |
+| [`array:build`](functions/import-array-batches.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/array-build-1.xpath) / [container cases](examples/container-contracts/README.md) |
+| [`array:empty`](functions/import-array-batches.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/array-empty-1.xpath) / [container cases](examples/container-contracts/README.md) |
+| [`array:items`](functions/import-array-batches.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/array-items-1.xpath) / [container cases](examples/container-contracts/README.md) |
 | [`array:slice`](functions/import-array-batches.md) | 1, 2, 3, 4 | 1, 2, 3, 4 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/array-slice-1.xpath) |
 | [`array:sort-with`](functions/sort-with.md) | 2 | 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/array-sort-with-2.xpath) |
 | [`fn:all-different`](functions/sequence-distinctness.md) | 1, 2 | 1, 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-all-different-1.xpath) |
@@ -105,9 +105,9 @@ The first 68 rows correspond to the scoped name/arity inventory; the final 20 ar
 | [`fn:unix-dateTime`](functions/timestamp-deadlines.md) | 0, 1 | 0, 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/fn-unix-dateTime-0.xpath) |
 | [`fn:while-do`](functions/bounded-retries.md) | 3 | 3 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-while-do-3.xpath) |
 | [`map:build`](functions/product-map-index.md) | 1, 2, 3, 4 | 1, 2, 3, 4 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/map-build-1.xpath) |
-| [`map:entries`](functions/product-map-index.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/map-entries-1.xpath) |
-| [`map:filter`](functions/product-map-index.md) | 2 | 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/map-filter-2.xpath) |
-| [`map:items`](functions/product-map-index.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/map-items-1.xpath) |
+| [`map:entries`](functions/product-map-index.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/map-entries-1.xpath) / [container cases](examples/container-contracts/README.md) |
+| [`map:filter`](functions/product-map-index.md) | 2 | 2 | absent metadata | No metadata | [lookup](examples/signature-contracts/map-filter-2.xpath) / [container cases](examples/container-contracts/README.md) |
+| [`map:items`](functions/product-map-index.md) | 1 | 1 | absent metadata | No metadata | [lookup](examples/signature-contracts/map-items-1.xpath) / [container cases](examples/container-contracts/README.md) |
 | `fn:compare` | 2, 3 | 2, 3 | names differ from pinned signatures | Same normalized list | [lookup](examples/signature-contracts/fn-compare-2.xpath) |
 | `fn:min` | 1, 2 | 1, 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-min-1.xpath) |
 | `fn:max` | 1, 2 | 1, 2 | names match a pinned signature | Same normalized list | [lookup](examples/signature-contracts/fn-max-1.xpath) |
@@ -152,3 +152,6 @@ The subsequent [predicate contract review](PREDICATE-CONTRACT-REVIEW.md) supplie
 
 
 The subsequent [comparison/selection review](SELECTION-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 21 of 37 families, with 16 remaining. Metadata is unchanged. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815. Earlier delivery counts remain historical. Next: map/array container contracts; D2 stays partial.
+
+
+The subsequent [container contract review](CONTAINER-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 27 of 37 families, with 10 remaining. Metadata is unchanged. Current catalog: 67 entries, 1,880 feature + 24 chapter checks = 1,904, version 1.1.3. Earlier counts and queues are historical. Next: date/time construction and utilities; D2 stays partial.

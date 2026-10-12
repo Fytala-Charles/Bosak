@@ -40,3 +40,6 @@ index-where returns ascending one-based positions, accepts item-only and item/po
 The [detailed warehouse README](examples/selection-contracts/README.md) supplies complete XML, paired code, exact outputs and every focused fixture. Existing [sequence identity](functions/sequence-distinctness.md), [supplier ranking](functions/supplier-offer-ranking.md) and [higher-order selection](functions/higher-order-selection.md) entries retain their unit/gate and historical delivery evidence. These diagnostic examples do not create another worked chapter.
 
 Next review absent-keyword map/array container families: map:entries/map:items/map:filter and array:build/array:items/array:empty. Use a stock-feed normalization example with explicit sequence/member/result-shape and callback cases. Other missing metadata, complete coercion/options, exhaustive changed-3.1 inventory and D3/D4 acceptance remain. Historical pins and AC-03 applicability are unresolved; no closure or release based on sample coverage.
+
+
+The subsequent [container contract review](CONTAINER-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 27 of 37 families, with 10 remaining. Metadata is unchanged. Current catalog: 67 entries, 1,880 feature + 24 chapter checks = 1,904, version 1.1.3. Earlier counts and queues are historical. Next: date/time construction and utilities; D2 stays partial.

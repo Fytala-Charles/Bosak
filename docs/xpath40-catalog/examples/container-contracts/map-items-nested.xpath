@@ -1,0 +1,1 @@
+count(map:items(map{'A':[1,2],'B':map{'x':3}}))

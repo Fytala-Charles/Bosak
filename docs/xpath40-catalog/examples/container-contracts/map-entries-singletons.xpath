@@ -1,0 +1,1 @@
+every $m in map:entries(map{'A':(1,2),'B':()}) satisfies map:size($m) eq 1

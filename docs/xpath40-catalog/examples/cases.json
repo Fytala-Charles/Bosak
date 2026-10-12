@@ -12956,5 +12956,628 @@
     "mode": "40",
     "file": "selection-contracts/highest-node-identity.xpath",
     "expected": "true"
+  },
+  {
+    "id": "container-contract-array-build-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/array-build-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "container-contract-array-build-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-array-build-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "container-contracts/array-build-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-array-empty-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/array-empty-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "container-contract-array-empty-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-array-empty-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "container-contracts/array-empty-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-array-items-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/array-items-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "container-contract-array-items-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-array-items-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "container-contracts/array-items-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-map-entries-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/map-entries-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "container-contract-map-entries-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-map-entries-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "container-contracts/map-entries-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-map-filter-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/map-filter-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "container-contract-map-filter-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-map-filter-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "container-contracts/map-filter-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-map-items-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/map-items-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "container-contract-map-items-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-map-items-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "container-contracts/map-items-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "container-contract-array-build-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-array-build-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-identity.xpath",
+    "expected": "3,1,3"
+  },
+  {
+    "id": "container-contract-array-build-empty-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-empty-default.xpath",
+    "expected": "3,1"
+  },
+  {
+    "id": "container-contract-array-build-one-argument-action",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-one-argument-action.xpath",
+    "expected": "4,6"
+  },
+  {
+    "id": "container-contract-array-build-position",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-position.xpath",
+    "expected": "1,2"
+  },
+  {
+    "id": "container-contract-array-build-empty-members",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-empty-members.xpath",
+    "expected": "2/0"
+  },
+  {
+    "id": "container-contract-array-build-grouped-members",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-grouped-members.xpath",
+    "expected": "2/2/4"
+  },
+  {
+    "id": "container-contract-array-build-nested-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-nested-array.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-array-build-nested-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-nested-map.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-array-build-node-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-node-identity.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-array-build-wrong-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-wrong-arity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-build-zero-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-zero-arity.xpath",
+    "expected": "7,7"
+  },
+  {
+    "id": "container-contract-array-build-nonfunction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-nonfunction.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-build-empty-nonfunction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-build-empty-nonfunction.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-array-empty-no-members",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-no-members.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-array-items-no-members",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-no-members.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-array-empty-empty-member",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-empty-member.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "container-contract-array-items-empty-member",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-empty-member.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-array-empty-nested-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-nested-empty.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "container-contract-array-items-nested-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-nested-empty.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "container-contract-array-empty-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-values.xpath",
+    "expected": "false"
+  },
+  {
+    "id": "container-contract-array-items-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-values.xpath",
+    "expected": "3"
+  },
+  {
+    "id": "container-contract-array-empty-wrong-integer",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-wrong-integer.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-items-wrong-integer",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-wrong-integer.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-empty-wrong-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-wrong-map.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-items-wrong-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-wrong-map.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-empty-wrong-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-wrong-empty.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-items-wrong-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-wrong-empty.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-empty-wrong-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-empty-wrong-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-array-items-wrong-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/array-items-wrong-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-entries-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-map-items-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-map-entries-empty-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-empty-value.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "container-contract-map-items-empty-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-empty-value.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-map-entries-grouped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-grouped.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "container-contract-map-items-grouped",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-grouped.xpath",
+    "expected": "3"
+  },
+  {
+    "id": "container-contract-map-entries-nested",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-nested.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "container-contract-map-items-nested",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-nested.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "container-contract-map-entries-singletons",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-singletons.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-map-entries-retained-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-retained-value.xpath",
+    "expected": "1,2"
+  },
+  {
+    "id": "container-contract-map-items-nested-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-nested-array.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-map-items-nested-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-nested-map.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-map-items-node-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-node-identity.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-map-filter-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-key.xpath",
+    "expected": "B"
+  },
+  {
+    "id": "container-contract-map-filter-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-value.xpath",
+    "expected": "A"
+  },
+  {
+    "id": "container-contract-map-filter-position",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-position.xpath",
+    "expected": "B"
+  },
+  {
+    "id": "container-contract-map-filter-empty-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-empty-result.xpath",
+    "expected": ""
+  },
+  {
+    "id": "container-contract-map-filter-string-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-string-result.xpath",
+    "expected": "A,B"
+  },
+  {
+    "id": "container-contract-map-filter-numeric-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-numeric-result.xpath",
+    "expected": "A,B"
+  },
+  {
+    "id": "container-contract-map-filter-multiple-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-multiple-result.xpath",
+    "error": "FORG0006"
+  },
+  {
+    "id": "container-contract-map-filter-untyped-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-untyped-result.xpath",
+    "expected": "A,B"
+  },
+  {
+    "id": "container-contract-map-filter-arity-four",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-arity-four.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-filter-zero-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-zero-arity.xpath",
+    "expected": "A,B"
+  },
+  {
+    "id": "container-contract-map-filter-nonfunction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-nonfunction.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-filter-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-map-filter-empty-nonfunction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-empty-nonfunction.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "container-contract-map-filter-retains-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-filter-retains-empty.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "container-contract-map-entries-wrong-integer",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-wrong-integer.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-entries-wrong-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-wrong-array.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-entries-wrong-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-wrong-empty.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-entries-wrong-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-entries-wrong-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-items-wrong-integer",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-wrong-integer.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-items-wrong-array",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-wrong-array.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-items-wrong-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-wrong-empty.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-map-items-wrong-multiple",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/map-items-wrong-multiple.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "container-contract-report-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/report-31.xpath",
+    "expected": "batches=3;lines=3;ids=B1,B2,B3;positive=A:5;units=5"
+  },
+  {
+    "id": "container-contract-report-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/report-40.xpath",
+    "expected": "batches=3;lines=3;ids=B1,B2,B3;positive=A:5;units=5"
+  },
+  {
+    "id": "container-contract-report-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/report-empty-31.xpath",
+    "expected": "batches=0;lines=0;ids=;positive=;units=0"
+  },
+  {
+    "id": "container-contract-report-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/report-empty-40.xpath",
+    "expected": "batches=0;lines=0;ids=;positive=;units=0"
+  },
+  {
+    "id": "container-contract-report-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "container-contracts/report-reordered-31.xpath",
+    "expected": "batches=3;lines=3;ids=B3,B2,B1;positive=A:5;units=5"
+  },
+  {
+    "id": "container-contract-report-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "container-contracts/report-reordered-40.xpath",
+    "expected": "batches=3;lines=3;ids=B3,B2,B1;positive=A:5;units=5"
   }
 ]
