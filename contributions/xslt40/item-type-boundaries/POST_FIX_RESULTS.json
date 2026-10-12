@@ -107,5 +107,7 @@
     "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
     "log": "D:\\Development\\Bosak\\.artifacts\\xslt40\\20261012T211930901Z.log"
   },
-  "postFullSuiteChange": "Comment-only history version correction to 0.20; rebuilt and focused tests rerun, no behavioral changes."
+  "postFullSuiteChange": "Comment-only history version correction to 0.20; rebuilt and focused tests rerun, no behavioral changes.",
+  "testedImplementationCommit": "f53bc80f4270a04e12cc0c88a32d4a087373b3d3",
+  "bosakPr": "https://github.com/Fytala-Charles/Bosak/pull/206"
 }

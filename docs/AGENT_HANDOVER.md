@@ -14,7 +14,7 @@ Validation: final Release build zero warnings/errors; focused 7/0/0; 6832 unit t
 
 Check latest Bosak PR CI before merging; continue N05 nominative record constructors. Wider aliases/package visibility/typed declaration conversion and select body namespace declarations remain separate work. Monitor upstream PRs #22–26. Preserve ignored scratch dirs, native checkout and historical receipts.
 
-Delivery pending.
+Delivery: f53bc80f4270a04e12cc0c88a32d4a087373b3d3, [Bosak PR #206](https://github.com/Fytala-Charles/Bosak/pull/206), pushed on feat/xslt-item-type-enumerations. CI pending; check latest run before merging. This metadata commit records delivery. No release/tag/package publication. The only post-full-suite source change was a comment-only header version correction (0.20); final build and focused tests rerun.
 
 # Select body evaluation — 2026-10-12
 
