@@ -179,6 +179,14 @@ Enum and choice types are small and stable — can precede records.
   lexical default-mode are distinguished. Ordinary top-level modes do not supply
   the deferred enclosure/isolation contract; the tier decision is unchanged.
 
+  **Capturing-accumulator review (2026-10-12):** The
+  [capture disposition](xpath40-catalog/deferred/capturing-accumulators.md)
+  verifies that accepted capture attributes retain source-node identity, rather
+  than creating the draft-required copy. Complete in-memory ordinary accumulator,
+  snapshot and projection alternatives are supplied. Streaming and the capture
+  rule's special annotation-copy behavior remain separate, unverified contracts;
+  the feature remains Deferred.
+
 ### Out of scope (recorded, not scheduled)
 
 - **XDM 4.0 GNode/JNode model** (`xnode()`/`jnode()`, `fn:jtree`/`fn:jkey`/`fn:jvalue`,

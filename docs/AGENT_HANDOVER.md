@@ -1,4 +1,29 @@
-# Enclosing-mode review — 2026-10-12
+# Capturing-accumulator review — 2026-10-12
+
+Main baseline: `3abb40f27f39cb8a8696fbb1eb8abfdeff69dc17`; [PR #178](https://github.com/Fytala-Charles/Bosak/pull/178) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38221562384). Current branch: `docs/req126-capturing-accumulators`.
+
+## Current state and what was built
+
+Added [Deferred capturing accumulators](xpath40-catalog/deferred/capturing-accumulators.md), a 16-field reference against QT4CG xslt.xml e7ee4ab8. Capture=yes is accepted at versions 3.0/4.0 but does not create a snapshot: identity stays the source node. Invalid capture and start-phase capture are tolerated in tested 4.0 forms. This is a documented deferred implementation/validation boundary, not conformance.
+
+16 in-memory fixtures verify capture identity, ordinary accumulators, explicit snapshot/projection alternatives, empty/reordered input and access errors. Explicit snapshot creates a new node but does not certify the capture rule's no-accumulator-values exception. No streaming execution or bounded-memory claim follows from these catalog checks. Existing streaming unit tests remain separate evidence. No engine/API/package/harness changes or gate promotions.
+
+Catalog: **63 entries; 597 feature + 24 chapter checks = 621**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Focused catalog tests: 597 passed. Release build passed (one existing warning, zero errors); **4,619 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 597 catalog checks. Renderer verified 77 pages. Entry/index, source/local links, scoped inventories/provenance, full input/code/output, six named tests, XML validity and fourteen report calculations verified; node-identity evidence is from executable fixtures. Manual engine gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Delivery: `ad9556a9500affb45ca8491de7ee87301210bcac`,
+[PR #179](https://github.com/Fytala-Charles/Bosak/pull/179), pushed on
+`docs/req126-capturing-accumulators`. Rebase onto merged main preserved the
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38222394153)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
+Next audit the deferred `fn:apply-templates` function against pinned draft, function registration and XSLT runtime, keeping it separate from supported `xsl:apply-templates` instructions. Keep documentation-only scope unless engine work is requested. Read [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
+
+Capture identity/validation joins existing XSLT structural @as, URI, comparison, extrema, sorting, Unicode, hash and adopted-pin follow-ups. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, PR states and next steps are superseded here.
+
+# Historical enclosing-mode review — 2026-10-12
 
 Main baseline: `68183912a16456ba9ab4297e00e2668aac5dba21`; [PR #177](https://github.com/Fytala-Charles/Bosak/pull/177) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38220304749). Current branch: `docs/req126-enclosing-modes`.
 
