@@ -135,6 +135,13 @@ independent commits.
 - **Deferred within tier**: method-call `=?>` (June 2026 churn), computed node
   constructors in XPath (§4.13 — Feb 2026, overlaps XQuery-only territory).
 
+  **Constructor review (2026-10-12):** The pinned current draft includes computed
+  XPath constructors, while Bosak retains this deferral. The
+  [constructor disposition record](xpath40-catalog/deferred/computed-node-constructors.md)
+  verifies refusal in XPath31, XPath40 and XPath40Experimental, separates existing
+  XQuery 3.1 support, and supplies a complete portable XSLT receipt alternative.
+  This review documents the boundary; it does not promote the feature.
+
 ### Tier 3 — Item-type system: enums, choices, (structural) records
 
 `Xdm` type representation + `ItemType` parsing + function-signature coercion. Records
