@@ -16,7 +16,7 @@ Validation: Release solution build passed (12 existing warnings, zero errors); *
 
 Next complete D2's exhaustive inventory of changed existing 3.1 function signatures/contracts, using pinned declarations/change notes and the frozen baseline; the current 88-row matrix has 68 new names plus only twenty existing-function samples. Identify omissions, map exact contracts and prioritize further conversion/default/options cases. First targeted review of missing-keyword families is complete; implementation remains missing for all 37. Consolidate these findings for later engine remediation without calling this a feature fix. D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain unresolved. Retain all earlier keyword/text/sequence/predicate/selection/hash/map/date-time follow-ups and these URI record/option/precedence boundaries. REQ-126 stays In Progress; no release or Braid action.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery commit/PR will be recorded after push.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `ff2329db23fcb2d3a6ffb8e611c24266286a439b`, [PR #196](https://github.com/Fytala-Charles/Bosak/pull/196), pushed on `docs/req126-uri-utility-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the next D2 slice.
 
 # Date/time construction contracts — 2026-10-12
 
