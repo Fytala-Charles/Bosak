@@ -1,0 +1,1 @@
+string-join(index-where(('A','B'),function($v){()}) ! string(.),",")

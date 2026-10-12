@@ -1,4 +1,24 @@
-# Equality/distinctness/subsequence predicate contracts — 2026-10-12
+# Comparison/selection contracts — 2026-10-12
+
+Main baseline: `9f656df3edf0a162226c996fbeb939da09c175a6`; [PR #190](https://github.com/Fytala-Charles/Bosak/pull/190) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38261968897). Current branch: `docs/req126-selection-contracts`.
+
+## Current state and what was built
+
+Added [comparison/selection review](xpath40-catalog/SELECTION-CONTRACT-REVIEW.md) and [detailed warehouse README](xpath40-catalog/examples/selection-contracts/README.md), extending four raw signature rows with exact case IDs. Pinned F&O e7ee4ab8 compared with duplicate-values/highest/lowest/index-where behavior; canonical summaries, audits, queue and three family entries synchronized. Corrected an escaped control character in the prior handover delivery hash.
+
+68 new checks: 12 keyword/mode cases, 50 focused defaults/types/callback/keyword-validation cases and six full normal/empty/reordered warehouse reports in 3.1/4.0. Three absent-keyword families refuse XPST0017 at 4.0/experimental, while index-where keywords work; all keyword syntax refuses XPST0003 at 3.1. Second-occurrence order, collation/defaults, untyped numeric keys, node identity, boundary-equal records versus equal keys, predicate positions/results verified. duplicate-values accepts the tested two maps and returns count zero despite its atomic signature. highest/lowest over (1,NaN,2) produce 1/2; dedicated NaN/sort-order review remains. No engine behavior changed.
+
+Targeted absent-keyword review: **21 of 37 families supplied, 16 remaining**, metadata unchanged. Catalog: **67 entries; 1,791 feature + 24 chapter checks = 1,815**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,813 tests / 0 failures / 0 skips**, ten assemblies including all 1,791 feature checks. Renderer verified 93 pages. Four pinned signatures, exact case IDs/keyword modes, six independently computed full report outputs, node identity, complete README expressions/local links, 67 sixteen-field entries, 241 cached primary links/anchors and inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with map:entries/map:items/map:filter and array:build/array:items/array:empty absent-keyword families. Use a stock-feed normalization workflow with explicit sequence/member/result-shape and callback boundaries. Keep documentation-first scope. Remaining missing metadata, full coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Earlier engine follow-ups, historical adopted pins and AC-03 applicability are unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 dossier and registry additions remain uncommitted and must not be silently included or removed. This block supersedes historical delivery states below. Delivery commit/PR will be recorded after push.
+
+# Historical equality/distinctness/subsequence predicate contracts — 2026-10-12
 
 Main baseline: `a151fff80e2ef3d3afc226179df673f66165ab4f`; [PR #189](https://github.com/Fytala-Charles/Bosak/pull/189) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38259813618). Current branch: `docs/req126-predicate-contracts`.
 
@@ -16,7 +36,7 @@ Validation: Release solution build passed (11 warnings, zero errors); **5,745 te
 
 Next continue D2 with duplicate-values/highest/lowest and index-where comparison/selection contracts. The first three remain absent-keyword families; index-where already has metadata and needs supported-keyword/default/key/predicate behavior review. Use a warehouse exception-selection workflow with collation, callbacks, typed and empty cases. Other missing families, complete coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Map/collation boundaries join prior keyword spelling, replace arity, two-let hash, text options/coercion and sequence integer/atomization engine follow-ups. Historical adopted pins and AC-03 gate applicability remain unresolved; no closure or release based on sample coverage.
 
-Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 edits appeared during this step: `docs/REQ-127-compact-source-inspection.md` and its registry additions. They are preserved unstaged and were not part of this predicate review. Do not remove or silently commit them. This block supersedes historical delivery states below. Delivery: 06fbc3da9291db927073a1254948e7d0688a10d, [PR #190](https://github.com/Fytala-Charles/Bosak/pull/190), pushed on docs/req126-predicate-contracts. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before the next D2 slice.
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 edits appeared during this step: `docs/REQ-127-compact-source-inspection.md` and its registry additions. They are preserved unstaged and were not part of this predicate review. Do not remove or silently commit them. This block supersedes historical delivery states below. Delivery: `a06fbc3da9291db927073a1254948e7d0688a10d`, [PR #190](https://github.com/Fytala-Charles/Bosak/pull/190), pushed on docs/req126-predicate-contracts. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before the next D2 slice.
 
 # Historical sequence selection/repetition contracts — 2026-10-12
 

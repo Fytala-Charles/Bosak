@@ -1,0 +1,1 @@
+string-join(index-where('A',function($v){xs:untypedAtomic('true')}) ! string(.),",")

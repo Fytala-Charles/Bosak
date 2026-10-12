@@ -12479,5 +12479,482 @@
     "mode": "31",
     "file": "predicate-contracts/report-duplicate-31.xpath",
     "expected": "shipment=SHIP-42;events=4;consistent=true;unique=false;complete=true;ready=false"
+  },
+  {
+    "id": "selection-contract-duplicate-values-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "selection-contracts/duplicate-values-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "selection-contract-duplicate-values-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "selection-contract-duplicate-values-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "selection-contracts/duplicate-values-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "selection-contract-highest-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "selection-contracts/highest-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "selection-contract-highest-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "selection-contract-highest-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "selection-contracts/highest-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "selection-contract-lowest-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "selection-contracts/lowest-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "selection-contract-lowest-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "selection-contract-lowest-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "selection-contracts/lowest-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "selection-contract-index-where-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "selection-contracts/index-where-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "selection-contract-index-where-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-keyword-40.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-index-where-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "selection-contracts/index-where-keyword-experimental.xpath",
+    "expected": "2",
+    "frozenExpected": "2"
+  },
+  {
+    "id": "selection-contract-duplicate-values-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-duplicate-values-singleton",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-singleton.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-duplicate-values-second-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-second-order.xpath",
+    "expected": "B,A"
+  },
+  {
+    "id": "selection-contract-duplicate-values-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-numeric.xpath",
+    "expected": "1,2"
+  },
+  {
+    "id": "selection-contract-duplicate-values-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-nan.xpath",
+    "expected": "NaN"
+  },
+  {
+    "id": "selection-contract-duplicate-values-nodes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-nodes.xpath",
+    "expected": "A"
+  },
+  {
+    "id": "selection-contract-duplicate-values-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-empty-collation.xpath",
+    "expected": "A"
+  },
+  {
+    "id": "selection-contract-duplicate-values-case-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-case-collation.xpath",
+    "expected": "a,b"
+  },
+  {
+    "id": "selection-contract-duplicate-values-invalid-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-invalid-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "selection-contract-duplicate-values-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-map.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-highest-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-highest-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-numeric.xpath",
+    "expected": "9,9"
+  },
+  {
+    "id": "selection-contract-highest-empty-defaults",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-empty-defaults.xpath",
+    "expected": "9"
+  },
+  {
+    "id": "selection-contract-highest-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-nan.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "selection-contract-highest-nodes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-nodes.xpath",
+    "expected": "10"
+  },
+  {
+    "id": "selection-contract-highest-bad-node",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-bad-node.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "selection-contract-highest-case-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-case-collation.xpath",
+    "expected": "A,a"
+  },
+  {
+    "id": "selection-contract-highest-invalid-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-invalid-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "selection-contract-highest-empty-invalid-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-empty-invalid-collation.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-highest-wrong-key-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-wrong-key-arity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-highest-nonfunction-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-nonfunction-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-highest-empty-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-empty-key.xpath",
+    "expected": "9"
+  },
+  {
+    "id": "selection-contract-highest-tuple-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-tuple-key.xpath",
+    "expected": "9"
+  },
+  {
+    "id": "selection-contract-highest-map-boundary",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-map-boundary.xpath",
+    "expected": "B"
+  },
+  {
+    "id": "selection-contract-lowest-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-lowest-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-numeric.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-lowest-empty-defaults",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-empty-defaults.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-lowest-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-nan.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-lowest-nodes",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-nodes.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-lowest-bad-node",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-bad-node.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "selection-contract-lowest-case-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-case-collation.xpath",
+    "expected": "A,a"
+  },
+  {
+    "id": "selection-contract-lowest-invalid-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-invalid-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "selection-contract-lowest-empty-invalid-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-empty-invalid-collation.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-lowest-wrong-key-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-wrong-key-arity.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-lowest-nonfunction-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-nonfunction-key.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-lowest-empty-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-empty-key.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-lowest-tuple-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-tuple-key.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-lowest-map-boundary",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/lowest-map-boundary.xpath",
+    "expected": "C"
+  },
+  {
+    "id": "selection-contract-index-where-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-empty.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-index-where-position",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-position.xpath",
+    "expected": "1,3"
+  },
+  {
+    "id": "selection-contract-index-where-empty-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-empty-result.xpath",
+    "expected": ""
+  },
+  {
+    "id": "selection-contract-index-where-string-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-string-result.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-index-where-multiple-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-multiple-result.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-index-where-untyped-result",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-untyped-result.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "selection-contract-index-where-nonfunction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-nonfunction.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-index-where-arity-three",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-arity-three.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "selection-contract-index-where-reordered-keywords",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-reordered-keywords.xpath",
+    "expected": "2"
+  },
+  {
+    "id": "selection-contract-index-where-missing-predicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/index-where-missing-predicate.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "selection-contract-report-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/report-40.xpath",
+    "expected": "lots=4;repeated=A;high=10,10;low=1;lowPositions=1,4"
+  },
+  {
+    "id": "selection-contract-report-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "selection-contracts/report-31.xpath",
+    "expected": "lots=4;repeated=A;high=10,10;low=1;lowPositions=1,4"
+  },
+  {
+    "id": "selection-contract-report-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/report-empty-40.xpath",
+    "expected": "lots=0;repeated=;high=;low=;lowPositions="
+  },
+  {
+    "id": "selection-contract-report-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "selection-contracts/report-empty-31.xpath",
+    "expected": "lots=0;repeated=;high=;low=;lowPositions="
+  },
+  {
+    "id": "selection-contract-report-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/report-reordered-40.xpath",
+    "expected": "lots=4;repeated=A;high=10,10;low=1;lowPositions=1,4"
+  },
+  {
+    "id": "selection-contract-report-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "selection-contracts/report-reordered-31.xpath",
+    "expected": "lots=4;repeated=A;high=10,10;low=1;lowPositions=1,4"
+  },
+  {
+    "id": "selection-contract-duplicate-values-map-count",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/duplicate-values-map-count.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "selection-contract-highest-node-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "selection-contracts/highest-node-identity.xpath",
+    "expected": "true"
   }
 ]

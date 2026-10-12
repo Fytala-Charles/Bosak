@@ -1,0 +1,1 @@
+string-join(index-where(input := (2,9,3), predicate := function($v){$v gt 5}) ! string(.),',')

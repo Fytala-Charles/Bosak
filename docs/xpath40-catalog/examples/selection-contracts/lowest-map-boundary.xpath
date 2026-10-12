@@ -1,0 +1,1 @@
+string-join(lowest((map{'id':'A','score':9},map{'id':'B','score':9},map{'id':'C','score':2}),(),function($r){$r?score})?id,',')

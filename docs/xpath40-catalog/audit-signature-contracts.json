@@ -1754,12 +1754,28 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative selection review: explicit keyword modes, collation/default/key/predicate, typed and empty cases. Map acceptance and NaN ordering require further engine review; no complete conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-duplicate-values-1",
         "signature-audit-fn-duplicate-values-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "selectionContractCases": [
+        "selection-contract-duplicate-values-keyword-31",
+        "selection-contract-duplicate-values-keyword-40",
+        "selection-contract-duplicate-values-keyword-experimental",
+        "selection-contract-duplicate-values-empty",
+        "selection-contract-duplicate-values-singleton",
+        "selection-contract-duplicate-values-second-order",
+        "selection-contract-duplicate-values-numeric",
+        "selection-contract-duplicate-values-nan",
+        "selection-contract-duplicate-values-nodes",
+        "selection-contract-duplicate-values-empty-collation",
+        "selection-contract-duplicate-values-case-collation",
+        "selection-contract-duplicate-values-invalid-collation",
+        "selection-contract-duplicate-values-map",
+        "selection-contract-duplicate-values-map-count"
+      ]
     },
     {
       "name": "fn:duration-to-seconds",
@@ -2571,13 +2587,33 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative selection review: explicit keyword modes, collation/default/key/predicate, typed and empty cases. Map acceptance and NaN ordering require further engine review; no complete conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-highest-1",
         "signature-audit-fn-highest-2",
         "signature-audit-fn-highest-3"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "selectionContractCases": [
+        "selection-contract-highest-keyword-31",
+        "selection-contract-highest-keyword-40",
+        "selection-contract-highest-keyword-experimental",
+        "selection-contract-highest-empty",
+        "selection-contract-highest-numeric",
+        "selection-contract-highest-empty-defaults",
+        "selection-contract-highest-nan",
+        "selection-contract-highest-nodes",
+        "selection-contract-highest-bad-node",
+        "selection-contract-highest-case-collation",
+        "selection-contract-highest-invalid-collation",
+        "selection-contract-highest-empty-invalid-collation",
+        "selection-contract-highest-wrong-key-arity",
+        "selection-contract-highest-nonfunction-key",
+        "selection-contract-highest-empty-key",
+        "selection-contract-highest-tuple-key",
+        "selection-contract-highest-map-boundary",
+        "selection-contract-highest-node-identity"
+      ]
     },
     {
       "name": "fn:identity",
@@ -2774,11 +2810,26 @@
       "keywordAssessment": "names match a pinned signature",
       "defaultAssessment": "matches a pinned expression list after literal/empty-map normalization",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative selection review: explicit keyword modes, collation/default/key/predicate, typed and empty cases. Map acceptance and NaN ordering require further engine review; no complete conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-index-where-2"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "selectionContractCases": [
+        "selection-contract-index-where-keyword-31",
+        "selection-contract-index-where-keyword-40",
+        "selection-contract-index-where-keyword-experimental",
+        "selection-contract-index-where-empty",
+        "selection-contract-index-where-position",
+        "selection-contract-index-where-empty-result",
+        "selection-contract-index-where-string-result",
+        "selection-contract-index-where-multiple-result",
+        "selection-contract-index-where-untyped-result",
+        "selection-contract-index-where-nonfunction",
+        "selection-contract-index-where-arity-three",
+        "selection-contract-index-where-reordered-keywords",
+        "selection-contract-index-where-missing-predicate"
+      ]
     },
     {
       "name": "fn:insert-separator",
@@ -3310,13 +3361,32 @@
       "keywordAssessment": "absent metadata",
       "defaultAssessment": "No keyword metadata",
       "typeAssessment": "Coarse dispatch kinds and optional sequence-type metadata recorded; enforcement and complete draft sequence types unverified",
-      "behaviorAssessment": "Existing linked family examples are scoped evidence; full overload/option contract not certified",
+      "behaviorAssessment": "Representative selection review: explicit keyword modes, collation/default/key/predicate, typed and empty cases. Map acceptance and NaN ordering require further engine review; no complete conformance claim.",
       "availabilityCases": [
         "signature-audit-fn-lowest-1",
         "signature-audit-fn-lowest-2",
         "signature-audit-fn-lowest-3"
       ],
-      "behaviorCases": []
+      "behaviorCases": [],
+      "selectionContractCases": [
+        "selection-contract-lowest-keyword-31",
+        "selection-contract-lowest-keyword-40",
+        "selection-contract-lowest-keyword-experimental",
+        "selection-contract-lowest-empty",
+        "selection-contract-lowest-numeric",
+        "selection-contract-lowest-empty-defaults",
+        "selection-contract-lowest-nan",
+        "selection-contract-lowest-nodes",
+        "selection-contract-lowest-bad-node",
+        "selection-contract-lowest-case-collation",
+        "selection-contract-lowest-invalid-collation",
+        "selection-contract-lowest-empty-invalid-collation",
+        "selection-contract-lowest-wrong-key-arity",
+        "selection-contract-lowest-nonfunction-key",
+        "selection-contract-lowest-empty-key",
+        "selection-contract-lowest-tuple-key",
+        "selection-contract-lowest-map-boundary"
+      ]
     },
     {
       "name": "fn:map-to-element",
@@ -7786,9 +7856,12 @@
   "sequenceReviewDate": "2026-10-12",
   "sequenceReviewSourceRevision": "2efcd33a483cb9adb8eae35908a083a661388b1d",
   "sequenceReviewChecks": 65,
-  "targetedAbsentMetadataReviewed": 18,
-  "targetedAbsentMetadataRemaining": 19,
+  "targetedAbsentMetadataReviewed": 21,
+  "targetedAbsentMetadataRemaining": 16,
   "predicateReviewDate": "2026-10-12",
   "predicateReviewSourceRevision": "a151fff80e2ef3d3afc226179df673f66165ab4f",
-  "predicateReviewChecks": 102
+  "predicateReviewChecks": 102,
+  "selectionReviewDate": "2026-10-12",
+  "selectionReviewSourceRevision": "211ba1ce88ad62b4a5bfb2cfbb1b91c0b8c09cb7",
+  "selectionReviewChecks": 68
 }

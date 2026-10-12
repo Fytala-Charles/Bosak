@@ -49,3 +49,6 @@ An empty callback argument selects the default; an empty callback result means f
 The [shipment acceptance README](examples/predicate-contracts/README.md) gives full XML, paired complete expressions, exact outputs and every focused fixture. [Shipment-event sequences](functions/shipment-event-sequences.md) and [sequence identity checks](functions/sequence-distinctness.md) retain their initial delivery, unit and gate evidence. These supplementary checks do not create another worked chapter or certify new gate sets.
 
 Next review the remaining absent-keyword comparison/selection families: duplicate-values, highest, lowest and index-where. Use a warehouse exception-selection example with explicit collation/default/key/predicate and typed cases. Other missing families, full conversion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. The map/collation boundaries join the existing engine follow-ups; no silent fixes or closure based on sample coverage.
+
+
+The subsequent [comparison/selection review](SELECTION-CONTRACT-REVIEW.md) brings targeted absent-keyword review to 21 of 37 families, with 16 remaining. Metadata is unchanged. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815. Earlier delivery counts remain historical. Next: map/array container contracts; D2 stays partial.
