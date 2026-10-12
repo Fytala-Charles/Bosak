@@ -1,0 +1,1 @@
+pad-string('INV-42',11,map{'side':'both','padding':'.'})

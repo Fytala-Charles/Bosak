@@ -1,0 +1,1 @@
+substring-after-last('invoice.batch.XML','.', 'urn:missing-collation')

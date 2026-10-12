@@ -10728,5 +10728,586 @@
     "mode": "40",
     "file": "signature-contracts/two-let-keyword.xpath",
     "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-char-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/char-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-char-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/char-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-char-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/char-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-characters-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/characters-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-characters-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/characters-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-characters-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/characters-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-graphemes-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/graphemes-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-graphemes-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/graphemes-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-graphemes-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/graphemes-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-pad-string-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/pad-string-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-pad-string-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-string-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-pad-string-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/pad-string-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-trim-space-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/trim-space-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-trim-space-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-space-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-trim-space-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/trim-space-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-index-of-substring-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/index-of-substring-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-index-of-substring-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/index-of-substring-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-index-of-substring-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/index-of-substring-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-substring-before-last-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/substring-before-last-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-substring-before-last-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/substring-before-last-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-substring-before-last-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/substring-before-last-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-substring-after-last-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/substring-after-last-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "text-contract-substring-after-last-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/substring-after-last-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-substring-after-last-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "text-contracts/substring-after-last-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "text-contract-char-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/char-codepoint.xpath",
+    "expected": "\u2014"
+  },
+  {
+    "id": "text-contract-char-entity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/char-entity.xpath",
+    "expected": "&"
+  },
+  {
+    "id": "text-contract-char-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/char-empty.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-char-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/char-zero.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-char-unknown",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/char-unknown.xpath",
+    "error": "FOCH0005"
+  },
+  {
+    "id": "text-contract-characters-codepoints",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/characters-codepoints.xpath",
+    "expected": "C|a|f|e|\u0301|\ud83d\ude00"
+  },
+  {
+    "id": "text-contract-characters-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/characters-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "text-contract-characters-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/characters-number.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-graphemes-clusters",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/graphemes-clusters.xpath",
+    "expected": "C|a|f|e\u0301|\ud83d\ude00"
+  },
+  {
+    "id": "text-contract-graphemes-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/graphemes-empty.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "text-contract-graphemes-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/graphemes-number.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-pad-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-default.xpath",
+    "expected": "[INV-42    ]"
+  },
+  {
+    "id": "text-contract-pad-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-empty-options.xpath",
+    "expected": "[INV-42    ]"
+  },
+  {
+    "id": "text-contract-pad-map-defaults",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-map-defaults.xpath",
+    "expected": "[INV-42    ]"
+  },
+  {
+    "id": "text-contract-pad-both",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-both.xpath",
+    "expected": "..INV-42..."
+  },
+  {
+    "id": "text-contract-pad-start-repeat",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-start-repeat.xpath",
+    "expected": "ababaINV"
+  },
+  {
+    "id": "text-contract-pad-no-truncation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-no-truncation.xpath",
+    "expected": "invoice"
+  },
+  {
+    "id": "text-contract-pad-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-empty-input.xpath",
+    "expected": "..."
+  },
+  {
+    "id": "text-contract-pad-integer-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-integer-input.xpath",
+    "expected": "00042"
+  },
+  {
+    "id": "text-contract-pad-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-invalid-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-pad-empty-padding",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-empty-padding.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "text-contract-pad-invalid-side",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-invalid-side.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "text-contract-pad-invalid-side-not-needed",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-invalid-side-not-needed.xpath",
+    "expected": "invoice"
+  },
+  {
+    "id": "text-contract-pad-padding-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-padding-number.xpath",
+    "expected": "INV77"
+  },
+  {
+    "id": "text-contract-pad-length-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-length-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-trim-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-default.xpath",
+    "expected": "[INV  42]"
+  },
+  {
+    "id": "text-contract-trim-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-empty-options.xpath",
+    "expected": "[INV  42]"
+  },
+  {
+    "id": "text-contract-trim-start",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-start.xpath",
+    "expected": "[INV  42  ]"
+  },
+  {
+    "id": "text-contract-trim-end",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-end.xpath",
+    "expected": "[  INV  42]"
+  },
+  {
+    "id": "text-contract-trim-empty-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-empty-value.xpath",
+    "expected": "[]"
+  },
+  {
+    "id": "text-contract-trim-integer",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-integer.xpath",
+    "expected": "42"
+  },
+  {
+    "id": "text-contract-trim-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-invalid-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-trim-invalid-side",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-invalid-side.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "text-contract-trim-map-source",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-map-source.xpath",
+    "error": "FOTY0013"
+  },
+  {
+    "id": "text-contract-index-overlap",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/index-overlap.xpath",
+    "expected": "1,2,3"
+  },
+  {
+    "id": "text-contract-index-empty-needle",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/index-empty-needle.xpath",
+    "expected": "1,2,3,4"
+  },
+  {
+    "id": "text-contract-index-empty-source",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/index-empty-source.xpath",
+    "expected": "0"
+  },
+  {
+    "id": "text-contract-index-both-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/index-both-empty.xpath",
+    "expected": "1"
+  },
+  {
+    "id": "text-contract-index-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/index-number.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "text-contract-before-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/before-default.xpath",
+    "expected": "invoice.batch"
+  },
+  {
+    "id": "text-contract-before-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/before-codepoint.xpath",
+    "expected": "invoice.batch"
+  },
+  {
+    "id": "text-contract-before-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/before-empty-collation.xpath",
+    "expected": "invoice.batch"
+  },
+  {
+    "id": "text-contract-before-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/before-unknown-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "text-contract-before-empty-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/before-empty-value.xpath",
+    "expected": "[]"
+  },
+  {
+    "id": "text-contract-before-empty-needle",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/before-empty-needle.xpath",
+    "expected": "INV"
+  },
+  {
+    "id": "text-contract-before-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/before-number.xpath",
+    "expected": "42"
+  },
+  {
+    "id": "text-contract-after-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/after-default.xpath",
+    "expected": "XML"
+  },
+  {
+    "id": "text-contract-after-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/after-codepoint.xpath",
+    "expected": "XML"
+  },
+  {
+    "id": "text-contract-after-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/after-empty-collation.xpath",
+    "expected": "XML"
+  },
+  {
+    "id": "text-contract-after-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/after-unknown-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "text-contract-after-empty-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/after-empty-value.xpath",
+    "expected": "[]"
+  },
+  {
+    "id": "text-contract-after-empty-needle",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/after-empty-needle.xpath",
+    "expected": "[]"
+  },
+  {
+    "id": "text-contract-after-number",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/after-number.xpath",
+    "expected": ""
+  },
+  {
+    "id": "text-contract-pad-unknown-option",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/pad-unknown-option.xpath",
+    "expected": "INV  "
+  },
+  {
+    "id": "text-contract-trim-unknown-option",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/trim-unknown-option.xpath",
+    "expected": "INV"
+  },
+  {
+    "id": "text-contract-import-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/import-40.xpath",
+    "expected": "label=[Cafe\u0301  Supplies.........];codepoints=15;stem=invoice.batch;extension=XML"
+  },
+  {
+    "id": "text-contract-import-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/import-31.xpath",
+    "expected": "label=[Cafe\u0301  Supplies.........];codepoints=15;stem=invoice.batch;extension=XML"
+  },
+  {
+    "id": "text-contract-import-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "text-contracts/import-empty-40.xpath",
+    "expected": "label=[........................];codepoints=0;stem=;extension="
+  },
+  {
+    "id": "text-contract-import-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "text-contracts/import-empty-31.xpath",
+    "expected": "label=[........................];codepoints=0;stem=;extension="
   }
 ]

@@ -1,0 +1,1 @@
+concat('[',trim-space('  INV  42  ',map{'side':'end'}),']')

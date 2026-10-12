@@ -12,7 +12,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 1,473 named checks. Each points to a complete
+The [case manifest](cases.json) contains 1,556 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.
@@ -131,3 +131,6 @@ The harness also executes `kind: xquery` with XQueryCompiler/XQueryContext. For 
 
 
 **Signature contract review — 2026-10-12:** [Metadata matrix and consumer boundaries](../SIGNATURE-CONTRACT-AUDIT.md) supplies 68 new-name families plus 20 selected existing functions, 148 exact registration checks and 39 behavior cases (187 new checks). 37 families lack keyword metadata; four keyword-name differences and three default-expression differences are recorded. Replace arity/default and two-let hash keyword failures have reproducible cases. Hash extension options are implementation-defined; missing mandatory algorithms remain distinct. Catalog: 67 entries, 1,473 feature + 24 chapter checks = 1,497; version 1.1.2, REQ-126 In Progress. D2 remains partial. This snapshot supersedes earlier delivery counts; next review missing metadata/defaults/options family by family.
+
+
+**Text/Unicode contract review — 2026-10-12:** [Eight-family review and full label/filename reports](../TEXT-CONTRACT-REVIEW.md) adds 83 checks: 24 keyword/mode refusals, 55 positional/default/empty/invalid/option cases and four normal/empty 3.1/4.0 reports. Metadata remains absent; eight of 37 such families are reviewed and 29 remain. Empty-source/empty-needle boundary wording corrected; coercion/option-validation follow-ups remain explicit. Current catalog: 67 entries, 1,556 feature + 24 chapter checks = 1,580; version 1.1.2, REQ-126 In Progress. This snapshot supersedes earlier delivery counts. Next: sequence selection/repetition contracts, keeping D2 partial.
