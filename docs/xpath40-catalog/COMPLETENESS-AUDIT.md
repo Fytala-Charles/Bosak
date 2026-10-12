@@ -404,3 +404,6 @@ Sorting review: retained functions still use the legacy shared comparer rather t
 
 
 **Comparison/selection contract review — 2026-10-12:** [Four-family review and detailed warehouse reports](SELECTION-CONTRACT-REVIEW.md) add 68 checks: 12 keyword/mode cases, 50 focused default/type/callback/keyword-validation checks and six complete 3.1/4.0 warehouse reports. Three more absent-keyword families reviewed: 21 of 37 supplied, 16 remaining, metadata unchanged. index-where keywords succeed. Map atomization and extrema NaN ordering remain explicit follow-ups. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815; version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and queues. Next: map:entries/map:items/map:filter and array:build/array:items/array:empty container contracts.
+
+
+**1.1.3 authoring patch published — 2026-10-12:** [REQ-127](../REQ-127-compact-source-inspection.md) is published with verified public artifacts. Catalog semantics/gate membership are unchanged: 67 entries, 1,791 feature + 24 chapter checks = 1,815. REQ-126 remains In Progress, D2 partial (21/37 absent-keyword families reviewed; 16 remain). Next: map/array container contracts.

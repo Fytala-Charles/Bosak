@@ -1,6 +1,6 @@
 # REQ-127: Source-Preserving Inspection of Compact Sibling Elements
 
-> Requesting application: Bosak.Braid. Submitted 2026-10-12. Status: Implemented; Braid verification reported by user, publication authorized. Owner: Charles Korthout. Target: 1.1.3.
+> Requesting application: Bosak.Braid. Submitted 2026-10-12. Status: Implemented; 1.1.3 published and verified; Braid verification reported by user. Owner: Charles Korthout. Target: 1.1.3.
 
 ## Problem and Ownership
 
@@ -85,7 +85,7 @@ The request is a reproducible Bosak correctness defect and its eight criteria ar
 
 ## Bosak Implementation — 2026-10-12
 
-Source version: **1.1.3 (unpublished)**. The scanner now begins child scanning at ScanTagInterior's exclusive end without incrementing it again. Immediate nested opening markup is counted, so each group/nested/value-of extent terminates at its own closing markup and the next sibling starts at the correct source position. Source decoding, XML parsing, original-byte retention and public APIs are unchanged.
+Published version: **1.1.3**. The scanner now begins child scanning at ScanTagInterior's exclusive end without incrementing it again. Immediate nested opening markup is counted, so each group/nested/value-of extent terminates at its own closing markup and the next sibling starts at the correct source position. Source decoding, XML parsing, original-byte retention and public APIs are unchanged.
 
 Regression file: [CompactSourceInspectionTests](../tests/Bosak.Xslt.Tests/Authoring/CompactSourceInspectionTests.cs). Before the correction, 155 of its 206 checks failed; after it, all 206 passed. This also covers successful inspections with formerly incorrect extents, not just the reported alignment refusal.
 
@@ -119,3 +119,10 @@ dotnet run --project tests/Bosak.XPath.Conformance40 -c Release --no-build -- te
 
 
 **1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.
+
+
+## Publication and consumer verification — 2026-10-12
+
+Published [1.1.3](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.3) on 2026-10-12 from `636a2f4d64c757a1f3c00bcf7ec1387416530ccc`. [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38271538007) passed. All ten public .NET 10 packages were downloaded and verified for version, internal dependencies, net10 DLLs, README/license and SHA-256 records. A fresh-cache consumer restored only from nuget.org and passed 29 compact-inspection/source-range/encoding, isolated sibling-edit and malformed-refusal checks. Braid verification was reported by the user; its exact adopted pin and consumer test totals were not supplied.
+
+REQ-127 is implemented and the reported Braid verification is recorded. No additional Braid pin change or external message was performed in this session. Earlier pending/unpublished statements above are historical.
