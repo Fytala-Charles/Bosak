@@ -16,7 +16,7 @@ Spec review pin `e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e`. Original deliveries
 #83/#102/#112/#114 and named tests are linked. Only exact fn-op and
 fn-collation-available gate assignments are claimed. Source/public stays 1.1.2.
 No engine/API/package/gate changes. REQ-126 remains In Progress.
-Validation: Release build passed; all 4,413 tests across ten assemblies passed without failures/skips, including 391 catalog cases. Renderer verified 67 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs and inline expressions/results verified; payload SHA-256 independently computed with hashlib. Engine conformance gates were not rerun for this documentation-only change. Delivery revision will be recorded after commit.
+Validation: Release build passed; all 4,413 tests across ten assemblies passed without failures/skips, including 391 catalog cases. Renderer verified 67 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs and inline expressions/results verified; payload SHA-256 independently computed with hashlib. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `740ee5bf`; [PR #169](https://github.com/Fytala-Charles/Bosak/pull/169). CI pending at handover.
 Next: supplementary signature/options and grammar/disposition audit, then engine
 follow-ups for boundary computed-key ties and Unicode grapheme segmentation.
 
