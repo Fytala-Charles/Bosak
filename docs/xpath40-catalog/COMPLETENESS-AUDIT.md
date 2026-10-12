@@ -7,13 +7,13 @@
 ## Finding and scope
 
 **REQ-126 is not ready to close.** Four worked chapters are supplied, but
-the catalog does not yet cover every landed feature or record every deferred and
-rejected decision. Existing entries also need more precise provenance and broader
-examples. The original audit was dated 2026-10-11 against source revision
+registered names and reviewed section-1.2/wider dispositions now have records.
+Constructor/signature/grammar coverage, feature-specific drift and acceptance
+evidence remain partial; see the [close-out review](CLOSEOUT-REVIEW.md). The original audit was dated 2026-10-11 against source revision
 `09e678f3` (1.1.1 publication documentation); published engine 1.1.1 is revision
 `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`.
 
-Current review: **2026-10-12**, source baseline `2184e9200394ca2e06f720bb9cdb95afd927aa51`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
+Current review: **2026-10-12**, source baseline `fb2e20a2f05d29b7c5e66ba5d561a39804248e48`, public engine **1.1.2** (`3aebf76a`). All **117 registered namespace/local-name pairs** now have entries. This is a name-inventory milestone, not proof of exhaustive signatures, grammar, dispositions or conformance.
 
 The original audit baseline was 28 entries, 81 catalog cases, three worked chapters, and 13
 chapter checks. All entries have the 16 numbered fields. Field presence does not
@@ -70,8 +70,8 @@ specification revision or establish that Bosak implements the entire proposal.
 | Criterion | Assessment | Evidence and remaining work |
 |---|---|---|
 | AC-01: landed slices, tiers, spec and delivery links | Partial | All registered names now have entries; supplementary signatures/options and changed existing functions remain partial. The 28 baseline entries now link exact Bosak delivery revisions and named tests. Immutable adopted specification revisions were not retained historically and remain explicit gaps. |
-| AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. Further deferred grammar needs review. |
-| AC-03: verified examples and gate evidence | Partial | 802 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. One concrete stale claim, fn:scan gate status, is corrected with this audit. |
+| AC-02: deferred/rejected decisions | Partial | Method-call and renamed mapping-arrow entries exist; dedicated records now cover the missing section 1.2 decisions, including shipped collection-sequence iteration and the partial JNode boundary. The wider disposition records are also supplied; source-to-disposition and lifecycle coverage still need systematic validation. |
+| AC-03: verified examples and gate evidence | Partial | 802 executable documentation checks pass. Baseline entries now carry named implementation evidence and explicit assigned-set or unassigned status. The original audit corrected fn:scan gate status. AC-03 literally asks for qt4tests sets for every entry; XSLT-only and refused/out-of-scope entries require applicable harness evidence and explicit absent-gate status. This does not waive the criterion. |
 | AC-04: structure, retained entries, drift warnings | Partial | 67 entries have all numbered fields and index links. No entry is removed by this audit. Generic prior-art disclaimers do not replace feature-specific drift explanations; supplementary forms and historical lifecycle need review. |
 | AC-05: discoverability and canonical links | Met for current scope | README roadmap/catalog links, integration, and the REQ-118 reference companion exist; registry and index remain In Progress. This does not close other criteria. |
 
@@ -165,39 +165,24 @@ that historical dossier numbers still match the live draft.
 | XPath switch expression | [XPath rejection](rejected/xpath-switch-expression.md) | Exact grammar refusal plus a 3.1 conditional alternative; XQuery and XSLT remain separate. |
 | Extensible map types | [Proposal disposition](rejected/extensible-map-types.md) | Supplied cast/coercion examples pin surplus-field behavior; maps themselves remain supported. |
 
-Computed XPath constructors now have the dedicated record above. XSLT type declarations now also have dedicated records above. Enclosing modes now have a dedicated record as well. Capturing accumulators now have a dedicated disposition as well. fn:apply-templates now has a dedicated disposition; the wider dossier still defers its implementation,
-Serialization 4.0 changes, external-parser/validator functions, and XQuery/
-streaming deltas. Include them in the broader decision inventory after the
-section-1.2 acceptance scope is covered. Do not implement a deferred shape merely
-because its documentation is missing.
+The section-1.2 and wider disposition records listed above are supplied. Their recorded deferred/out-of-scope implementations remain separate from documentary completion. Source-to-record coverage and historical lifecycle evidence still require validation.
 
 ## Prioritized deliveries
 
+The [close-out review](CLOSEOUT-REVIEW.md) defines the current queue and completion evidence:
+
 | Priority | Concrete delivery | Completion evidence |
 |---|---|---|
-| P1 | Repair evidence for the 28 existing entries | Exact adopted spec revision/section, delivery PR/revision, named tests, named conformance sets and actual gate status; retain explicit gaps. |
-| P1 | Add the missing decision records | Cover the moving/rejected matrix, with alternatives and refusal evidence; resolve historical deferrals superseded by shipped features. |
-| P2 | Add sequence and higher-order function chapters/entries | Real document cases, normal/edge inputs and results, complete code, earlier-version comparison where meaningful, exact compatibility refusals. |
-| P2 | Add map/array, Unicode, URI/date, operator/type families | All 117 names are assigned. Audit supplementary arities, options and changed signatures; name assignment alone is not acceptance. |
-| P2 | Expand syntax and changed-3.1 semantics | Literals, focus functions, guarded expressions, record updates, comparisons/collations, patterns, and supplementary forms. |
-| P3 | Reconcile acceptance and publish the complete reference | Zero unassigned adopted features/decisions, accurate index/tier links, verified examples, and explicit exceptions to conformance evidence rules. |
+| D1 | Audit all 49 focus constructors | Per-name registrations, valid/invalid lexical values, missing focus, empty/multiple focus and explicit mode outcomes. |
+| D2 | Complete signatures and changed existing functions | Reconcile 68 non-constructor registrations, keywords/defaults/options and changed 3.1 contracts against pinned sources; verify uncovered forms. |
+| D3 | Build grammar/type/pattern inventory | Map delivered productions and version gates to entries, parser/compiler tests and realistic fixtures. |
+| D4 | Reconcile provenance, drift and acceptance | Validate decision lifecycle, retain 28 unavailable historical adopted pins, and resolve the literal AC-03 gate requirement without invented evidence. |
 
-**Recommended next step:** audit supplementary signatures/options and grammar/
-parser/type/pattern forms against acceptance criteria, then reconcile disposition
-provenance. Track computed-key boundary ties and approximate Unicode grapheme
-segmentation as explicit engine/specification follow-ups. Registered-name
-assignment is complete; REQ-126 remains In Progress.
-The baseline provenance repair, section-1.2 decision records and first sequence/HOF
-routing chapter are supplied below. Immutable historical specification snapshots
-remain an explicit gap. No engine work or conformance-set promotion is required
-for the next documentation slice.
+Registered-name assignment and disposition authoring are delivered milestones. REQ-126 remains In Progress. Engine gaps are tracked separately in the review; this queue does not authorize deferred feature implementation.
 
-For XPath entries, distinguish named qt4 sets from unit/example checks. XSLT-only
-instructions need XSLT test evidence; do not invent qt4 expression sets for them.
-Record the applicable harness and any unavailable 4.0 conformance evidence
-explicitly when reconciling AC-03.
+## Historical audit method and current review
 
-## Audit method and verification
+The original method below describes the initial audit. The 2026-10-12 close-out review reconciles the current 67 entries, 778 feature checks, 24 chapter checks and supplied disposition records; inventory scopes remain unchanged.
 
 1. Read the five REQ-126 criteria, REQ-118 section-1.2 decisions and S0-S8 plan,
    post-1.0 delivery history, 28 entries, and published example manifest.
