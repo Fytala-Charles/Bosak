@@ -1,3 +1,19 @@
+# Bosak 1.1.3 published — 2026-10-12
+
+**Release revision:** `636a2f4d64c757a1f3c00bcf7ec1387416530ccc`, tag [v1.1.3](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.3); PR #192 merged after CI success. User reported Braid verification and explicitly authorized publication. [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38271538007) passed. All ten public packages and 29 fresh-cache consumer checks verified. Public/source version is **1.1.3**.
+
+## What shipped and verification
+
+REQ-127: SourceTagScanner uses the exclusive start-tag end directly, preserving immediate child markup/nesting and correct compact-sibling extents without source rewriting. No public API/capability or validation/execution profile changes. 206 regressions cover 1/2/80 groups, layout/Unicode/BOM combinations, exact ranges/coordinates/containment, mixed content/entities/aliases, isolated middle-sibling Expression edits and malformed refusal. Before fix: 155 failures/51 passes; after: all 206 pass. Braid verification is user-reported; do not invent its exact adopted pin or test totals.
+
+Local Release build passed (12 existing warnings, zero errors); full solution **6,019/0/0**, ten assemblies. QT3 exactly **31,142/0/679**; qt4 gated-only **8,278/0/1,894**, zero gated failures, no promotion. Final fix CI and Release workflow passed. All ten public nupkgs verified version/internal dependencies/net10 DLLs/README/license/SHA-256; records `.guard-tmp/release113-published/verification.json`. Fresh-cache nuget.org-only smoke **29/0**: 24 compact/indented count/encoding inspections with exact group/slot ranges and original bytes, four isolated sibling edits and one malformed refusal. No complete XSLT sweep newly claimed.
+
+## Resume here
+
+Resume REQ-126 D2 map:entries/map:items/map:filter and array:build/array:items/array:empty contract review using a stock-feed normalization workflow. Catalog remains 67 entries, 1,791 feature + 24 chapter checks = 1,815; four worked chapters; 117 names assigned; 21/37 absent-keyword families reviewed, 16 remaining. Full conversion/options and changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance and AC-03 applicability remain unresolved. REQ-126 stays In Progress; no further release is authorized by this record.
+
+README, architecture, integration, registry, REQ-127 dossier, patch notes and audit are synchronized. Earlier pending/unpublished states below are historical. Preserve `.guard-tmp/` and `.sweep-baselines/`. Publication-record commit/PR will be recorded after push.
+
 # REQ-127 compact source inspection correction — 2026-10-12
 
 Main baseline: `ea3b9454cabb83c8d5a015faa54d022bfbfe5c86`; [PR #191](https://github.com/Fytala-Charles/Bosak/pull/191) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38263494090). Current branch: `fix/req127-compact-source-inspection`.
