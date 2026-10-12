@@ -1,0 +1,291 @@
+{
+  "reviewDate": "2026-10-12",
+  "bosakBaseline": "cc5eb4be485c6d6f68ea985fa55b96504a9b6e81",
+  "suiteRevision": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+  "specRevision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+  "specSha256": "e69cc409987baa7eebff3bf62a1ddb890007f4883962c11bf71be23f2d253bda",
+  "orderingPolicy": [
+    "New-element lane first; changed attributes/shared XPath and inherited regressions are separate.",
+    "Estimated breadth of everyday transformations, contribution clarity and implementation risk.",
+    "Confirm upstream gap and draft alignment before preparing a test; low structural count is not proof of a gap.",
+    "Bosak readiness is evidence, not a reason to redefine expected results or exclude important unimplemented contracts."
+  ],
+  "scanScope": "Namespace-aware occurrence scan of parseable *.xsl files under upstream tests; counts are distinct stylesheet files, not cases, eligible 4.0 cases, runs, missing tests or completeness. Unparseable/embedded/non-xsl content is outside this scan.",
+  "queue": [
+    {
+      "id": "N01",
+      "rank": 1,
+      "lane": "new-xslt40-elements",
+      "elements": [
+        "xsl:array",
+        "xsl:array-member"
+      ],
+      "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
+      "estimatedReach": "High",
+      "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
+      "businessScenario": "JSON API responses, ordered line items and nested batches",
+      "specSection": "array-construction",
+      "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction",
+      "status": "Audit next",
+      "candidateScenarios": "Mixed empty/grouped members, nested arrays/maps, source-order and node-identity preservation; compare against existing array cases before adding tests.",
+      "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
+      "nativeTestSetHint": "array",
+      "structuralStylesheetFiles": [
+        "tests/attr/mode/mode-4001.xsl",
+        "tests/decl/output/output-0732.xsl",
+        "tests/decl/output/output-0850.xsl",
+        "tests/decl/output/output-0851.xsl",
+        "tests/decl/variable/variable-4903.xsl",
+        "tests/insn/array/array-001.xsl",
+        "tests/insn/array/array-002.xsl",
+        "tests/insn/array/array-003.xsl",
+        "tests/insn/array/array-004.xsl",
+        "tests/insn/array/array-005.xsl",
+        "tests/insn/array/array-006.xsl",
+        "tests/insn/array/array-007.xsl",
+        "tests/insn/array/array-010.xsl",
+        "tests/insn/array/array-011.xsl",
+        "tests/insn/array/array-012.xsl",
+        "tests/insn/array/array-013.xsl",
+        "tests/insn/array/array-014.xsl",
+        "tests/insn/array/array-015.xsl",
+        "tests/insn/array/array-016.xsl",
+        "tests/insn/array/array-017.xsl",
+        "tests/insn/array/array-018.xsl",
+        "tests/insn/array/array-025.xsl",
+        "tests/insn/array/array-026.xsl",
+        "tests/insn/copy/copy-5401.xsl",
+        "tests/insn/copy/copy-5402.xsl",
+        "tests/insn/copy/copy-5403.xsl",
+        "tests/insn/copy/copy-5404.xsl",
+        "tests/insn/copy/copy-5503.xsl",
+        "tests/insn/copy/copy-5505.xsl",
+        "tests/insn/result-document/result-document-1701.xsl",
+        "tests/type/arrays/arrays-001.xsl",
+        "tests/type/arrays/arrays-002.xsl",
+        "tests/type/arrays/arrays-003.xsl",
+        "tests/type/arrays/arrays-007.xsl",
+        "tests/type/type-alias/type-alias-050.xsl"
+      ],
+      "structuralStylesheetCount": 35,
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+    },
+    {
+      "id": "N02",
+      "rank": 2,
+      "lane": "new-xslt40-elements",
+      "elements": [
+        "xsl:select"
+      ],
+      "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
+      "estimatedReach": "High",
+      "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
+      "businessScenario": "Readable multiline JSON/map expressions in stylesheet content without XML attribute escaping",
+      "specSection": "select-instruction",
+      "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#select-instruction",
+      "status": "Queued",
+      "candidateScenarios": "Expression text, whitespace and escaping, current focus, result cardinality/as enforcement, and static errors; distinguish the instruction from the inherited select attribute.",
+      "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
+      "nativeTestSetHint": "seqtor",
+      "structuralStylesheetFiles": [
+        "tests/attr/match/match-409.xsl",
+        "tests/attr/match/match-410.xsl",
+        "tests/attr/match/match-411.xsl",
+        "tests/decl/function/function-40-018.xsl",
+        "tests/decl/function/function-40-019.xsl",
+        "tests/decl/function/function-40-020.xsl",
+        "tests/decl/function/function-40-021.xsl",
+        "tests/decl/output/output-0852.xsl",
+        "tests/decl/variable/variable-4903.xsl",
+        "tests/fn/apply-templates-fn/fn-apply-templates-005.xsl",
+        "tests/fn/document/document-4001.xsl",
+        "tests/fn/document/document-4061.xsl",
+        "tests/fn/function-available/function-available-1020.xsl",
+        "tests/insn/copy/copy-5405.xsl",
+        "tests/insn/copy/copy-5505.xsl",
+        "tests/insn/copy/copy-5506.xsl",
+        "tests/insn/result-document/result-document-1702.xsl",
+        "tests/misc/seqtor/seqtor-113.xsl",
+        "tests/misc/seqtor/seqtor-114.xsl",
+        "tests/misc/seqtor/seqtor-124.xsl",
+        "tests/misc/seqtor/seqtor-125.xsl",
+        "tests/misc/seqtor/seqtor-126.xsl",
+        "tests/misc/seqtor/seqtor-127.xsl",
+        "tests/misc/seqtor/seqtor-128.xsl",
+        "tests/misc/seqtor/seqtor-129.xsl",
+        "tests/misc/seqtor/seqtor-130.xsl",
+        "tests/misc/seqtor/seqtor-131.xsl",
+        "tests/misc/seqtor/seqtor-132.xsl",
+        "tests/misc/seqtor/seqtor-133.xsl",
+        "tests/misc/seqtor/seqtor-134.xsl",
+        "tests/misc/seqtor/seqtor-140.xsl",
+        "tests/misc/seqtor/seqtor-141.xsl",
+        "tests/misc/seqtor/seqtor-142.xsl",
+        "tests/misc/seqtor/seqtor-143.xsl",
+        "tests/misc/seqtor/seqtor-144.xsl",
+        "tests/type/type-alias/type-alias-016.xsl"
+      ],
+      "structuralStylesheetCount": 36,
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+    },
+    {
+      "id": "N03",
+      "rank": 3,
+      "lane": "new-xslt40-elements",
+      "elements": [
+        "xsl:switch"
+      ],
+      "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
+      "estimatedReach": "High",
+      "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
+      "businessScenario": "Status routing, category mapping and dispatch tables",
+      "specSection": "xsl-switch",
+      "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch",
+      "status": "Queued",
+      "candidateScenarios": "First matching branch, otherwise/no match, operand cardinality/type and branch evaluation; first audit ten existing switch cases.",
+      "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
+      "nativeTestSetHint": "switch",
+      "structuralStylesheetFiles": [
+        "tests/insn/iterate/iterate-401.xsl",
+        "tests/insn/iterate/iterate-402.xsl",
+        "tests/insn/iterate/iterate-403.xsl",
+        "tests/insn/switch/switch-001.xsl",
+        "tests/insn/switch/switch-002.xsl",
+        "tests/insn/switch/switch-003.xsl",
+        "tests/insn/switch/switch-004.xsl",
+        "tests/insn/switch/switch-005.xsl",
+        "tests/insn/switch/switch-006.xsl",
+        "tests/insn/switch/switch-007.xsl",
+        "tests/insn/switch/switch-901.xsl",
+        "tests/insn/switch/switch-902.xsl"
+      ],
+      "structuralStylesheetCount": 12,
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+    },
+    {
+      "id": "N04",
+      "rank": 4,
+      "lane": "new-xslt40-elements",
+      "elements": [
+        "xsl:item-type"
+      ],
+      "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
+      "estimatedReach": "Medium\u2013high",
+      "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
+      "businessScenario": "Reusable payload and callback contracts across modules",
+      "specSection": "named-item-types",
+      "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
+      "status": "Queued",
+      "candidateScenarios": "Named type visibility, reuse, unknown names and type mismatches; avoid duplicating the type-alias test set.",
+      "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
+      "nativeTestSetHint": "type-alias",
+      "structuralStylesheetFiles": [
+        "tests/type/record/record-100.xsl",
+        "tests/type/record/record-150.xsl",
+        "tests/type/type-alias/type-alias-001.xsl",
+        "tests/type/type-alias/type-alias-002.xsl",
+        "tests/type/type-alias/type-alias-003.xsl",
+        "tests/type/type-alias/type-alias-004.xsl",
+        "tests/type/type-alias/type-alias-005.xsl",
+        "tests/type/type-alias/type-alias-006.xsl",
+        "tests/type/type-alias/type-alias-007.xsl",
+        "tests/type/type-alias/type-alias-008.xsl",
+        "tests/type/type-alias/type-alias-009.xsl",
+        "tests/type/type-alias/type-alias-010.xsl",
+        "tests/type/type-alias/type-alias-011.xsl",
+        "tests/type/type-alias/type-alias-013.xsl",
+        "tests/type/type-alias/type-alias-014.xsl",
+        "tests/type/type-alias/type-alias-015.xsl",
+        "tests/type/type-alias/type-alias-016.xsl",
+        "tests/type/type-alias/type-alias-017.xsl",
+        "tests/type/type-alias/type-alias-017a.xsl",
+        "tests/type/type-alias/type-alias-018a.xsl",
+        "tests/type/type-alias/type-alias-019a.xsl",
+        "tests/type/type-alias/type-alias-020.xsl",
+        "tests/type/type-alias/type-alias-021.xsl",
+        "tests/type/type-alias/type-alias-022a.xsl"
+      ],
+      "structuralStylesheetCount": 24,
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+    },
+    {
+      "id": "N05",
+      "rank": 5,
+      "lane": "new-xslt40-elements",
+      "elements": [
+        "xsl:record-type",
+        "xsl:field"
+      ],
+      "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
+      "estimatedReach": "Medium\u2013high",
+      "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
+      "businessScenario": "Typed customer/order records and constructor validation",
+      "specSection": "named-record-types",
+      "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-record-types",
+      "status": "Draft alignment first",
+      "candidateScenarios": "Current declarations, required fields/coercion/constructors versus older optional-field and xsl:record scenarios; establish current draft semantics before proposing changes.",
+      "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
+      "nativeTestSetHint": "record",
+      "structuralStylesheetFiles": [
+        "tests/type/record/record-023.xsl"
+      ],
+      "structuralStylesheetCount": 1,
+      "bosakReadiness": "Only recorded targeted probes are verified; unprobed forms remain unknown."
+    }
+  ],
+  "secondaryLanes": [
+    {
+      "lane": "new-contract-on-existing-element",
+      "features": [
+        "xsl:map select/duplicates",
+        "xsl:if then/else",
+        "instruction separator attributes"
+      ],
+      "status": "Later targeted 4.0-delta review; original element existed before 4.0."
+    },
+    {
+      "lane": "shared-xpath40-in-stylesheets",
+      "features": [
+        "keyword/default arguments",
+        "record/map/array expressions",
+        "new selection/mapping expressions"
+      ],
+      "status": "Cross-layer tests after new instruction batch; coordinate with qt4tests coverage."
+    },
+    {
+      "lane": "inherited-infrastructure-and-regressions",
+      "features": [
+        "schema-awareness dependencies from issue #90",
+        "existing JSON -0 versus -0e0 finding"
+      ],
+      "status": "Retained triage; not ahead of the requested new-element lane."
+    }
+  ],
+  "probes": [
+    {
+      "testSet": "switch",
+      "testCase": "switch-001",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 9,
+      "scope": "Selected existing case only."
+    },
+    {
+      "testSet": "array",
+      "testCase": "array-001",
+      "passed": 2,
+      "failed": 1,
+      "skipped": 171,
+      "scope": "Substring filters also select inherited square-array tests; actual array-001 fails XTSE0740 on unqualified function name. Not proof array instruction fails."
+    },
+    {
+      "testSet": "array",
+      "testCase": "array-004",
+      "scope": "See receipt for exact counts; grouped-member scenario already exists.",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 173
+    }
+  ]
+}

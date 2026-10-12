@@ -73,7 +73,7 @@ Four controls verify a version-4.0 keyword stylesheet and exact unknown-function
 
 The JSON case is existing upstream evidence, not a new contribution or permission to change its expected result. Triage whether a difference is in Bosak, its adapter, the test or draft alignment, using the exact source revision. No full-suite sweep or conformance percentage is claimed.
 
-## First contribution track
+## Initial schema-awareness track (now secondary)
 
 Review schema-awareness dependencies/environments in the current 4.0 suite, starting with the source-document and si-fork/si-map scenarios behind [issue #90](https://github.com/w3c/xslt30-test/issues/90). Michael confirmed that an environment schema element implies schema-awareness and [recommended focusing contributions on 4.0](https://github.com/w3c/xslt30-test/issues/90#issuecomment-5993508731). Check what has already changed before proposing metadata or new tests.
 
@@ -93,3 +93,8 @@ The REQ-126 equality/collation catalog queue remains recorded, but upstream cont
 ## Setup validation
 
 Release solution build passed (12 existing warnings, zero errors); **6,806 tests / 0 failures / 0 skips** across ten assemblies. Four adapter controls passed; upstream select 157/0/1, genuine XSLT40+ JSON case 0/1/161 with exit 1, zero selection exit 1, upstream catalog/select and local control schema validation passed. Setup guide and six canonical/implementation documents rendered; local links/code fences and JSON run receipt counts/status verified. Manual engine gates were not rerun for adapter-only changes; engine/API unchanged.
+
+
+## Current contribution priority
+
+The [contribution priority queue](XSLT40_CONTRIBUTION_QUEUE.md) now starts with new XSLT 4.0 elements: array/member, select, switch, named item types and named records. Likely use is estimated, not measured; structural stylesheet counts are not semantic coverage. Next: N01 native array-case audit and a small nonduplicate order-export/member batch. Schema-awareness and inherited JSON findings remain secondary triage. Version 1.1.3; REQ-126 In Progress; no engine change or upstream submission. The current clean upstream branch is bosak/array-member-review; the earlier schema-awareness-review branch remains available. Earlier setup evidence stays historical.
