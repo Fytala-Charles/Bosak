@@ -404,6 +404,7 @@
 //                      | Charles Korthout | 2.177 | 13-10-2026     | Apply XPath 4.0 array member coercion without atomizing the outer array
 //                      | Charles Korthout | 2.178 | 13-10-2026     | Coerce XPath 4.0 typed map keys and values with collision checks and entry order
 //                      | Charles Korthout | 2.179 | 13-10-2026     | Use cardinality-aware function type matching for XPath 4.0 instance-of operands
+//                      | Charles Korthout | 2.180 | 13-10-2026     | Apply sequence-aware nominative record coercion through the host callback
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -13955,6 +13956,30 @@ internal static class VmEngine
     /// <exception cref="InvalidOperationException">No function conversion rule applies (XPTY0004).</exception>
     public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
     {
+        var nominalText = targetType.Trim();
+        var nominalSuffix = nominalText.Length > 0 && nominalText[^1] is '?' or '*' or '+' ? nominalText[^1] : '\0';
+        var nominalName = nominalSuffix == '\0' ? nominalText : nominalText[..^1].TrimEnd();
+        if (context is not null && context.TryResolveNamedRecordType(nominalName, context.DefaultElementNamespace, out var nominalType))
+        {
+            var nominalItems = new List<XdmValue>();
+            if (value.IsSequence)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue!)) nominalItems.Add(item);
+            }
+            else if (!value.IsUndefined) nominalItems.Add(value);
+            if ((nominalItems.Count == 0 && nominalSuffix is not ('?' or '*')) || (nominalItems.Count > 1 && nominalSuffix is not ('*' or '+')))
+                throw new InvalidOperationException($"XPTY0004: Cardinality does not match {targetType}.");
+            var nominalConverted = new List<XdmValue>(nominalItems.Count);
+            foreach (var item in nominalItems)
+            {
+                if (!item.IsMap) throw new InvalidOperationException($"XPTY0004: A map is required for {targetType}.");
+                if (ReferenceEquals(item.MapValue.RecordType, nominalType)) nominalConverted.Add(item);
+                else if (context.NamedRecordCoercion is { } coerce) nominalConverted.Add(XdmValue.FromMap(coerce(nominalType!, item.MapValue)));
+                else throw new InvalidOperationException($"XPTY0004: No host coercion is registered for {targetType}.");
+            }
+            return nominalConverted.Count == 0 ? XdmValue.Undefined : nominalConverted.Count == 1 ? nominalConverted[0]
+                : XdmValue.FromSequence(MaterializedSequence.FromList(nominalConverted));
+        }
         // XPath 4.0 §3.4.2 rule 10 (record coercion): a record type text is structural
         // and is not a legal QName conversion target, so it is handled before the
         // syntactic parse of the target below. The occurrence indicator applies to the

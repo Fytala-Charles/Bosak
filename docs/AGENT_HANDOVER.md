@@ -1,3 +1,21 @@
+# Nominative record coercion — 2026-10-13
+
+Branch: feat/xslt-nominative-record-coercion; main baseline b7645389456d4ea16eb28cc1b16c50e7c19f700c. PR #214 merged after CI 38350739038 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now coerces maps to package-local nominative xsl:record-type declarations at variable and function boundaries. Conversion applies field types, missing-field defaults and static initializers, rejects surplus keys and supplied static fields, preserves declaration order and annotates the result with the target identity. Existing matching records are retained. Type checks still reject plain maps and distinguish same-shaped declarations. Nine new regressions cover sensor defaults, function references, cardinality, invalid bindings and identity; the previous valid-map refusal test now rejects surplus fields. Named casts, recursive named records, nested named-type/static namespace resolution and complete package exposure remain follow-ups. N04/REQ-126 remain In Progress; published version remains 1.1.3.
+
+EvaluationContext stores the host record coercion callback; VmEngine applies cardinalities and delegates to it. TransformEngine handles field initialization/conversion and restores the callback at package exit. Existing matching records retain their identity. No public API, gate promotion, native assertion change or publication. The catalogue named-record plain-map expectation now records INV-2048; fixture behavior is unchanged.
+
+Validation: Final Release build passes with zero warnings/errors; all 6974 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4088/0/0. Focused record run passes 25 tests, including nine new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native record family remains 12/52/1 on the record contribution branch; unchanged 026/027 pass. Broader failures retained, runner exit 1. Fourteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: named record cast and nested type resolution boundaries. N04/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
+
+Delivery pending.
+
 # Structural-record aliases — 2026-10-13
 
 Branch: feat/xslt-structural-record-aliases; main baseline a519a13e14add2bb5ecdc22126a50227e19cdda1. PR #213 merged after CI 38347679974 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.

@@ -3905,7 +3905,7 @@
     "mode": "xslt40",
     "file": "xslt-type-declarations/record-named-as-observed.xsl",
     "input": "xslt-type-declarations/input.xml",
-    "error": "XTTE0570"
+    "expected": "INV-2048"
   },
   {
     "id": "xslt-type-declarations-portable-valid",

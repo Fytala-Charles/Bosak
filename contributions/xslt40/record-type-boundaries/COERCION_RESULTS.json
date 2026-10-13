@@ -1,0 +1,51 @@
+{
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "specification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+    "section": "named-item-types",
+    "sha256": "e69cc409987baa7eebff3bf62a1ddb890007f4883962c11bf71be23f2d253bda"
+  },
+  "coercionSpecification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xquery-40/src/expressions.xml",
+    "section": "id-coercion-rules",
+    "sha256": "38e5cd7b32ff3bac7752dd917259790fd1d101e7b5de58595527cbb7824fbc3d"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "date": "2026-10-13",
+  "candidateParentRevision": "b7645389456d4ea16eb28cc1b16c50e7c19f700c",
+  "scope": "Source candidate 1.2.0 (unpublished) now coerces maps to package-local nominative xsl:record-type declarations at variable and function boundaries. Conversion applies field types, missing-field defaults and static initializers, rejects surplus keys and supplied static fields, preserves declaration order and annotates the result with the target identity. Existing matching records are retained. Type checks still reject plain maps and distinguish same-shaped declarations. Nine new regressions cover sensor defaults, function references, cardinality, invalid bindings and identity; the previous valid-map refusal test now rejects surplus fields. Named casts, recursive named records, nested named-type/static namespace resolution and complete package exposure remain follow-ups. N04/REQ-126 remain In Progress; published version remains 1.1.3.",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/26",
+  "previousImplementationEvidence": "POST_FIX_RESULTS.json (preserved)",
+  "validation": "Final Release build passes with zero warnings/errors; all 6974 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4088/0/0. Focused record run passes 25 tests, including nine new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native record family remains 12/52/1 on the record contribution branch; unchanged 026/027 pass. Broader failures retained, runner exit 1. Fourteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.",
+  "nativeFilteredRun": {
+    "passed": 12,
+    "failed": 52,
+    "skipped": 1,
+    "scope": "Unchanged record contribution branch; broader failures retained"
+  },
+  "exactContributionCases": [
+    {
+      "id": "record-026",
+      "outcome": "pass"
+    },
+    {
+      "id": "record-027",
+      "outcome": "pass"
+    }
+  ],
+  "nativeReceipt": ".artifacts/xslt40/20261013T052839012Z.json",
+  "correctedVerificationNote": "The initial record sweep used the item-type contribution branch and excluded record-026/027 (10/52/1). Final native verification uses the unchanged record contribution branch (12/52/1). The initial full unit run exposed the catalogue plain-map refusal expectation; its implemented success outcome is now INV-2048 and the final full suite is green.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "bf87aa986ac83207a99533bc87d28d1d9cd7733422a57251d92e89d09cc18aa1",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "7ad03c34f0e98a5f4270261a380ee1d66ee11807ff13cf1a4001b08c3506c127",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "d7b9d29748afed481a5134fb0bfc2f1fe10bd2aad3d133a8de622a621b59da1a",
+    "tests/Bosak.Xslt.Tests/Xslt40RecordConstructorTests.cs": "6d9c4e195ba71c607ed5b0d84589d19696c0dccdb8cfdebf47404117f63f0c4a",
+    "tests/Bosak.Xslt.Tests/Xslt40NominativeRecordCoercionTests.cs": "a9c8590968b8630c76ce4b81885be2012a029eb0ef81a354cf5a3e678115b516",
+    "docs/xpath40-catalog/examples/cases.json": "f8b6fe6f6d9db28ffc788e1c87e4264f12f0398cd0c79acc50d9991f01ad9249",
+    "docs/xpath40-catalog/examples/xslt-type-declarations/record-named-as-observed.xsl": "7d986a78fe3ae54f0a07565f799f725a91e3fc926ac743fdc1bcfab7afe2b761",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  }
+}

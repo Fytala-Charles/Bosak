@@ -364,3 +364,31 @@ Binding conversion atomizes the XML attribute, converts it to a double and creat
 Aliases also work in inline `record(value as t:number)`, nested record fields and callback signatures. Type tests do not convert maps: the original plain map fails a record type test. Structural records describe field contracts; a nominative `xsl:record-type` additionally has named identity and constructors, whose remaining coercion work is separate.
 
 See [structural-record alias evidence](../../../contributions/xslt40/item-type-boundaries/RECORD_ALIAS_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), [XPath record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-types), and [item coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). Pinned specification sources and native results are recorded in the evidence; independent processor confirmation remains outstanding.
+
+
+## Nominative record coercion — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) now coerces maps to package-local nominative xsl:record-type declarations at variable and function boundaries. Conversion applies field types, missing-field defaults and static initializers, rejects surplus keys and supplied static fields, preserves declaration order and annotates the result with the target identity. Existing matching records are retained. Type checks still reject plain maps and distinguish same-shaped declarations. Nine new regressions cover sensor defaults, function references, cardinality, invalid bindings and identity; the previous valid-map refusal test now rejects surplus fields. Named casts, recursive named records, nested named-type/static namespace resolution and complete package exposure remain follow-ups. N04/REQ-126 remain In Progress; published version remains 1.1.3.
+
+A sensor record can add consistent metadata while normalizing an XML reading. Input `<root value="21"/>` produces `<reading value="21" label="sensor" kind="reading" typed="true"/>`:
+
+```xml
+<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="urn:types" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
+  <xsl:record-type name="t:reading">
+    <xsl:field name="value" as="xs:double"/>
+    <xsl:field name="label" as="xs:string" select="'sensor'"/>
+    <xsl:field name="kind" static="yes" as="xs:string" select="'reading'"/>
+  </xsl:record-type>
+  <xsl:template match="/">
+    <xsl:variable name="r" as="t:reading" select="map{'value':root/@value}"/>
+    <reading value="{$r?value}" label="{$r?label}" kind="{$r?kind}" typed="{$r instance of t:reading}"/>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+Conversion atomizes the required XML attribute and promotes it to a double. Missing label uses its initializer; kind is initialized by the declaration and cannot be supplied by the incoming map. The example assumes a present numeric attribute and is verified by `NominalCoercion_SensorExample`. It adds no catalogue manifest case.
+
+The resulting record has the declaration's identity. An original plain map does not match the named type, and a record created for another same-shaped declaration does not match it without explicit conversion. Surplus fields, non-maps, missing required values and invalid cardinalities fail binding conversion. Function parameters/results and named function references use the same path. Defaults do not imply that arbitrary string values are cast to numbers.
+
+See [coercion evidence](../../../contributions/xslt40/record-type-boundaries/COERCION_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), [XPath nominative record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-nominative-record-types), and [item coercion rule 11](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). Independent processor confirmation remains outstanding.

@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Reject surplus map fields now that valid maps support nominative coercion                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -140,7 +141,7 @@ public class Xslt40RecordConstructorTests
     [Theory]
     [InlineData("t:line('bad')", "XPTY0004")]
     [InlineData("t:line()", "XPST0017")]
-    [InlineData("map {'id':1}", "XTTE0570")]
+    [InlineData("map {'id':1,'extra':2}", "XTTE0570")]
     public void Constructor_InvalidCallOrBinding(string expression, string code)
     {
         var error = Assert.ThrowsAny<Exception>(() => Run("<xsl:record-type name='t:line' constructor='yes'><xsl:field name='id' as='xs:integer'/></xsl:record-type><xsl:template match='/'><xsl:variable name='r' as='t:line' select=\"" + expression + "\"/><xsl:sequence select='$r'/></xsl:template>"));
