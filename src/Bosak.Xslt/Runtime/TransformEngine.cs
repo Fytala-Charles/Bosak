@@ -543,6 +543,7 @@
 //                      | Charles Korthout | 7.27 | 13-10-2026     | Use fixed namespaces in XPath compilation and named type binding resolution
 //                      | Charles Korthout | 7.28 | 13-10-2026     | Coerce direct structural record bindings through the XPath 4.0 converter
 //                      | Charles Korthout | 7.29  | 13-10-2026     | Share variable QName expansion with stylesheet compilation                             |
+//                      | Charles Korthout | 7.30  | 13-10-2026     | Share XSLT 4.0 mode QName expansion for dispatch and scoped defaults.                    |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -6923,6 +6924,14 @@ internal sealed class TransformEngine
     /// </summary>
     private static string ExpandModeName(string mode, XElement instruction)
     {
+        if (Stylesheet.Stylesheet.UsesXPath40Namespaces(instruction))
+        {
+            // Consumer-supplied initial modes may already use the internal Clark notation.
+            if (mode.StartsWith('{'))
+                return Stylesheet.Stylesheet.ExpandModeQName(instruction, "Q" + mode);
+            return Stylesheet.Stylesheet.ExpandModeName(mode, instruction);
+        }
+
         if (mode == "#current" || mode == "#default" || mode == "#all" || mode == "#unnamed")
             return mode;
 

@@ -312,6 +312,7 @@
 //                      | Charles Korthout | 2.151 | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 //                      | Charles Korthout | 2.152 | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      | Charles Korthout | 2.153 | 13-10-2026     | Preserve parent precedence when collecting included named types.                         |
+//                      | Charles Korthout | 2.154 | 13-10-2026     | Align mode names, membership and defaults with applicable namespaces.                    |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2036,6 +2037,11 @@ internal sealed class Stylesheet
         {
             DefaultMode = ""; // the unnamed mode
         }
+        else if (UsesXPath40Namespaces(root) && !string.IsNullOrEmpty(defaultModeAttr)
+            && defaultModeAttr is not ("#current" or "#all"))
+        {
+            DefaultMode = ExpandModeQName(root, defaultModeAttr);
+        }
         else if (!string.IsNullOrEmpty(defaultModeAttr) && defaultModeAttr != "#current" && defaultModeAttr != "#all")
         {
             int colon = defaultModeAttr.IndexOf(':');
@@ -3029,6 +3035,13 @@ internal sealed class Stylesheet
 
             bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
             var localName = elem.Name.LocalName;
+
+            if (UsesXPath40Namespaces(elem))
+            {
+                var defaultMode = elem.Attribute(isXsltElement ? XName.Get("default-mode") : XName.Get("default-mode", XslNamespace));
+                if (defaultMode is not null)
+                    ValidateModeReference(elem, "default-mode", defaultMode.Value);
+            }
 
             // XTSE0260: XSLT elements that must be empty must not contain text nodes
             // or element children; comments and processing instructions are allowed.
@@ -4646,7 +4659,7 @@ internal sealed class Stylesheet
                         if (!IsValidModeValue(modeVal))
                             throw new InvalidOperationException($"XTSE0020: Invalid mode value '{modeVal}' on xsl:apply-templates.");
                         if (modeVal is not ("#current" or "#default" or "#unnamed" or "#all"))
-                            ValidateXsltName(elem, modeVal, "xsl:apply-templates/@mode");
+                            ValidateXsltName(elem, modeVal, "xsl:apply-templates/@mode", useApplicableNamespaces: true);
                     }
                 }
 
@@ -5921,7 +5934,7 @@ internal sealed class Stylesheet
     /// if the list is empty, contains duplicates, contains an invalid token, or
     /// contains <c>#all</c> together with any other value.
     /// </summary>
-    private static void ValidateTemplateModeAttribute(XElement element, string value)
+    internal static void ValidateTemplateModeAttribute(XElement element, string value)
     {
         var trimmed = value.Trim();
         if (string.IsNullOrEmpty(trimmed))
@@ -5958,7 +5971,7 @@ internal sealed class Stylesheet
             else
             {
                 // QName/EQName mode token: ensure any prefix is declared (XTSE0280).
-                ValidateXsltName(element, token, "xsl:template/@mode");
+                ValidateXsltName(element, token, "xsl:template/@mode", useApplicableNamespaces: true);
             }
 
             if (!seen.Add(token))
@@ -6095,6 +6108,32 @@ internal sealed class Stylesheet
     internal static string? GetComponentNamespace(XElement element, string prefix)
         => UsesXPath40Namespaces(element) ? GetApplicableStaticNamespaces(element).GetValueOrDefault(prefix)
             : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
+
+    /// <summary>Expands XSLT 4.0 mode references while retaining special mode tokens.</summary>
+    internal static string ExpandModeName(string mode, XElement element)
+        => mode is "#current" or "#default" or "#all" or "#unnamed" ? mode : ExpandModeQName(element, mode);
+
+    /// <summary>Expands a mode QName using applicable namespaces and the mode identity format.</summary>
+    internal static string ExpandModeQName(XElement element, string name)
+    {
+        var (local, uri) = ValidateXsltName(element, name, "mode name", useApplicableNamespaces: true);
+        return uri.Length == 0 ? local : $"{{{uri}}}{local}";
+    }
+
+    /// <summary>Checks literal mode references while preserving existing keyword rules.</summary>
+    internal static void ValidateModeReference(XElement element, string attribute, string value)
+    {
+        if (attribute == "mode" && element.Name == XName.Get("template", XslNamespace))
+        {
+            ValidateTemplateModeAttribute(element, value);
+            return;
+        }
+        var token = value.Trim();
+        if (!IsValidModeValue(token))
+            throw new InvalidOperationException($"XTSE0020: Invalid mode value '{token}'.");
+        if (token is not ("#current" or "#default" or "#unnamed" or "#all"))
+            ValidateXsltName(element, token, "mode reference", useApplicableNamespaces: true);
+    }
 
     /// <summary>Expands a variable/parameter QName using the applicable declaration context.</summary>
     internal static (string LocalName, string NamespaceUri) ExpandVariableName(XElement element, string name)
@@ -7994,6 +8033,9 @@ internal sealed class Stylesheet
     /// </summary>
     private static string ExpandModeNameForExpose(string name, XElement context)
     {
+        if (UsesXPath40Namespaces(context))
+            return ExpandModeQName(context, name);
+
         if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
         {
             int closeBrace = name.IndexOf('}');
@@ -9298,6 +9340,10 @@ internal sealed class Stylesheet
         if (mode == "#current" || mode == "#default" || mode == "#all" || mode == "#unnamed")
         {
             expanded = mode;
+        }
+        else if (UsesXPath40Namespaces(element))
+        {
+            expanded = ExpandModeQName(element, mode);
         }
         else
         {
