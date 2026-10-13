@@ -14,7 +14,7 @@ Validation: final Release build zero warnings/errors; 19 API and 18 select-body 
 
 Check latest Bosak PR CI before merging. Next: named item-type conversion and remaining record coercion gaps. N02/REQ-126 remain In Progress pending review/independent confirmation; monitor upstream PRs #22–26. Nine seqtor harness skips remain. Preserve .guard-tmp/, .sweep-baselines/, .upstream/ and historical receipts. Native checkout is clean on bosak/select-boundaries. No release/tag/package publication.
 
-Delivery pending.
+Delivery: 8ce138d3c93654346662d34949261bb17313e7d7, [Bosak review PR](https://github.com/Fytala-Charles/Bosak/pull/208), pushed on feat/xslt-select-namespaces. CI pending; check the latest run before merging. This metadata commit records delivery. Native checkout remains clean on bosak/select-boundaries. No release/tag/package publication.
 
 # Named record constructors — 2026-10-13
 

@@ -148,5 +148,7 @@
     "success": true,
     "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
     "log": "D:\\Development\\Bosak\\.artifacts\\xslt40\\20261013T031703597Z.log"
-  }
+  },
+  "testedImplementationCommit": "8ce138d3c93654346662d34949261bb17313e7d7",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/208"
 }
