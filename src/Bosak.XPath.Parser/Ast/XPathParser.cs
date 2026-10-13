@@ -167,6 +167,7 @@
 //                      |                  |       |                | and whole-pattern type declarations (XPST0003 in 3.1); 'as' allowed in simple let      |
 //                      |                  |       |                | bindings at XPath 4.0                                                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.75  | 13-10-2026     | Parse XPath 4.0 inline namespace declarations
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -259,6 +260,8 @@ internal sealed class XPathParser
     /// <exception cref="XPathParseException">The expression is not syntactically valid.</exception>
     public static XPathAstNode Parse(string xpath, bool allowFullFlwor = false, bool xml11LineEndings = false, bool boundarySpaceStrip = true, bool schemaAware = false, bool xpath40 = false)
     {
+        if (xpath40 && !allowFullFlwor)
+            xpath = ExtractNamespaceDeclarations(xpath, xpath40: true).Expression;
         var lexer = new XPathLexer(xpath.AsSpan(), allowConstructors: allowFullFlwor, xpath40: xpath40);
         var tokens = new List<Token>();
         Token tok;
@@ -295,6 +298,63 @@ internal sealed class XPathParser
         if (!parser.IsAtEnd)
             throw new XPathParseException($"XPST0003: Unexpected token {parser.Current.Kind} after the expression.", parser.Current.Start);
         return result;
+    }
+
+    /// <summary>Reads XPath 4.0 namespace declarations without changing expression offsets.</summary>
+    internal static (string Expression, Dictionary<string, string> Namespaces, string? DefaultNamespace) ExtractNamespaceDeclarations(string source, bool xpath40)
+    {
+        var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (!xpath40)
+            return (source, namespaces, null);
+        var lexer = new XPathLexer(source.AsSpan(), xpath40: true);
+        var tokens = new List<Token>();
+        Token token;
+        while ((token = lexer.NextToken()).Kind != TokenKind.Eof)
+            tokens.Add(token);
+        var parser = new XPathParser(tokens.ToArray(), source) { _xpath40 = true };
+        bool Is(string word, int offset = 0) => parser.Peek(offset).Kind != TokenKind.Eof && parser.GetString(parser.Peek(offset)) == word;
+        void Require(string word)
+        {
+            if (!Is(word))
+                throw new XPathParseException($"XPST0003: Expected '{word}' in namespace declaration.", parser.Current.Start);
+            parser.Advance();
+        }
+        string? defaultNamespace = null;
+        while (!parser.IsAtEnd && Is("declare") && (Is("namespace", 1) || Is("default", 1)))
+        {
+            parser.Advance();
+            bool isDefault = Is("default");
+            string? prefix = null;
+            if (isDefault)
+            {
+                if (defaultNamespace is not null || namespaces.Count != 0)
+                    throw new XPathParseException("XPST0003: The default namespace declaration must occur once, before prefix declarations.", parser.Current.Start);
+                Require("default"); Require("element"); Require("namespace");
+            }
+            else
+            {
+                Require("namespace");
+                prefix = parser.GetString(parser.ExpectName());
+                if (prefix.Contains(':') || prefix.StartsWith("Q{", StringComparison.Ordinal))
+                    throw new XPathParseException("XPST0003: Namespace prefix must be an NCName.", parser.Current.Start);
+                parser.Expect(TokenKind.Equal);
+            }
+            var uri = parser.Unquote(parser.GetString(parser.Expect(TokenKind.StringLiteral)));
+            parser.Expect(TokenKind.Semicolon);
+            if (prefix is "xml" or "xmlns" || uri is "http://www.w3.org/XML/1998/namespace" or "http://www.w3.org/2000/xmlns/")
+                throw new InvalidOperationException("XQST0070: Reserved namespace prefix or URI in namespace declaration.");
+            if (isDefault)
+                defaultNamespace = uri;
+            else if (!namespaces.TryAdd(prefix!, uri))
+                throw new InvalidOperationException($"XQST0033: Duplicate namespace declaration for prefix '{prefix}'.");
+        }
+        if (parser.End == 0)
+            return (source, namespaces, defaultNamespace);
+        // Keep line numbers and spans stable for diagnostics and streamability analysis.
+        var chars = source.ToCharArray();
+        for (int i = 0; i < parser.End; i++)
+            if (chars[i] is not ('\r' or '\n')) chars[i] = ' ';
+        return (new string(chars), namespaces, defaultNamespace);
     }
 
     // ------------------------------------------------------------------
@@ -2083,7 +2143,7 @@ internal sealed class XPathParser
             if (!string.IsNullOrEmpty(nsUri))
                 return new NodeTest(NameTestKind.QName, local, nsUri);
             if (prefix is null)
-                return new NodeTest(NameTestKind.LocalName, local);
+                return new NodeTest(NameTestKind.LocalName, local, nsUri);
 
             // The xml prefix is predefined in every XML document. Resolve it to the
             // standard XML namespace so node tests such as @xml:lang match attributes

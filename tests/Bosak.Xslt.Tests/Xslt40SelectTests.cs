@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 12-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Cover inline namespaces, default wildcards and streamed body restrictions
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -154,5 +155,58 @@ public class Xslt40SelectTests
         var error = Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(
             Wrap("<xsl:template match='/'><out>" + instruction + "</out></xsl:template>"), "file:///select-test.xsl"));
         Assert.Contains("XTSE0010", error.Message);
+    }
+
+    /// <summary>Resolves function and variable aliases in a body while keeping subsequent expressions isolated.</summary>
+    [Fact]
+    public void Select_InlineNamespaces_ResolveAndRestore()
+    {
+        var output = XElement.Parse(Run("""
+            <xsl:variable name='f:global' select='40'/>
+            <xsl:function name='f:add'><xsl:param name='n'/><xsl:sequence select='$n + 1'/></xsl:function>
+            <xsl:template match='/'><xsl:variable name='f:local' select='2'/><out>
+              <first><xsl:select>declare namespace v='urn:functions'; (: ignored:prefix (: nested:prefix :) :) v:add($v:global + $v:local)</xsl:select></first>
+              <second><xsl:select>$f:global</xsl:select></second>
+            </out></xsl:template>
+            """));
+        Assert.Equal("43", output.Element("first")!.Value);
+        Assert.Equal("40", output.Element("second")!.Value);
+    }
+
+    /// <summary>Matches documents from different vocabulary namespaces and resolves local variables.</summary>
+    [Fact]
+    public void Select_DefaultAnyNamespace_RealWorldVocabularyVersions()
+    {
+        var output = XElement.Parse(Run("""
+            <xsl:variable name='f:doc'><doc><chap xmlns='urn:version1'/><chap xmlns='urn:version2'/></doc></xsl:variable>
+            <xsl:template match='/'><xsl:variable name='f:offset' select='42'/><out>
+              <xsl:select>declare default element namespace '##any'; declare namespace v='urn:functions'; count($v:doc//chap) + $v:offset</xsl:select>
+            </out></xsl:template>
+            """));
+        Assert.Equal("44", output.Value);
+    }
+
+    /// <summary>Prevents an undeclared prefix from accidentally reading an unprefixed global variable.</summary>
+    [Fact]
+    public void Select_UndeclaredVariableNamespace_XPST0008()
+    {
+        var error = Assert.ThrowsAny<Exception>(() => Run("""
+            <xsl:variable name='global' select='142'/><xsl:template match='/'><out>
+              <xsl:select>declare namespace f=''; $f:global</xsl:select>
+            </out></xsl:template>
+            """));
+        Assert.Contains("XPST0008", error.Message);
+    }
+
+    /// <summary>Does not allow namespace declarations to hide a forbidden streamed last call.</summary>
+    [Fact]
+    public void Select_InlineNamespaces_StreamedLast_XTSE3430()
+    {
+        var error = Assert.ThrowsAny<Exception>(() => new Api.XsltCompiler().Compile(Wrap("""
+            <xsl:mode streamable='yes'/><xsl:template match='/'><out>
+              <xsl:select>declare namespace z='http://www.w3.org/2005/xpath-functions'; z:last()</xsl:select>
+            </out></xsl:template>
+            """), "file:///select-test.xsl"));
+        Assert.Contains("XTSE3430", error.Message);
     }
 }

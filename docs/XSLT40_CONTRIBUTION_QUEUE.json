@@ -104,7 +104,7 @@
       "businessScenario": "Readable multiline JSON/map expressions in stylesheet content without XML attribute escaping",
       "specSection": "select-instruction",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#select-instruction",
-      "status": "First batch submitted; Bosak two cases pass after implementation; broader namespace-declaration failures and review pending",
+      "status": "First batch submitted; select body and namespace cases pass in Bosak; nine harness skips, independent confirmation and review pending",
       "candidateScenarios": "Expression text, whitespace and escaping, current focus, result cardinality/as enforcement, and static errors; distinguish the instruction from the inherited select attribute.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "seqtor",
@@ -163,10 +163,11 @@
         "postFixPassed": 2,
         "postFixFailed": 0,
         "broaderFamily": {
-          "passed": 78,
-          "failed": 5,
+          "passed": 83,
+          "failed": 0,
           "skipped": 9
-        }
+        },
+        "namespaceFollowUpEvidence": "../contributions/xslt40/select-boundaries/NAMESPACE_RESULTS.json"
       }
     },
     {

@@ -87,3 +87,26 @@ Monitor the upstream review and requested independent cross-check. Record Bosak 
 ## Post-fix candidate
 
 Both original native cases now pass after the Bosak select instruction implementation. [Post-fix results](POST_FIX_RESULTS.json) record tested source hashes and the broader family result 78/5/9. Original failures above remain the before-fix record. Expression-body namespace declarations remain unsupported in this slice. Source candidate 1.2.0 is unpublished; upstream review and independent confirmation remain pending.
+
+
+**Select namespace follow-up — 2026-10-13:** Source candidate 1.2.0 (unpublished) now supports expression-local XPath 4.0 namespace declarations in the XPath API and xsl:select bodies. Prefix bindings override host bindings; an optional default element namespace must come first. Default ##any matches unprefixed element axis name tests across namespaces while preserving attribute/kind-test boundaries and XML Schema item type resolution. Namespace contexts restore after success or failure. All unchanged native seqtor-140–146 cases pass; the broader seqtor-filter run is 83 pass/0 fail/9 skip. The nine known harness skips, independent confirmation and upstream PR #23 acceptance remain outstanding, so this does not establish complete XSLT 4.0 conformance. N02 and REQ-126 remain In Progress; public release remains 1.1.3. See [current namespace evidence](NAMESPACE_RESULTS.json) and the [pinned XPath namespace declaration source](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xquery-40/src/expressions.xml). Twenty-three regressions were added; catalogue entry/check counts are unchanged. Next: named item-type conversion and remaining record coercion gaps, after this slice passes CI. Earlier select counts are historical.
+
+
+### Namespace example: vocabulary migration
+
+Input fragment:
+
+```xml
+<doc><chap xmlns="urn:version1"/><chap xmlns="urn:version2"/></doc>
+```
+
+Inside a template whose source contains this document, the following body accepts either vocabulary version:
+
+```xml
+<out><xsl:select xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  declare default element namespace "##any";
+  count(//chap)
+</xsl:select></out>
+```
+
+Output: `<out>2</out>`. The test selects elements by local name, so choose a fixed URI when other vocabularies could contain unrelated `chap` elements. [Focused host tests](../../../tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs) also cover global/local variable aliases, function aliases, namespace isolation, undeclaration and forbidden streamed `last()` calls. [API tests](../../../tests/Bosak.XPath.Api.Tests/NamespaceDeclarationTests.cs) cover comments, escaped URI quotes, exact static error codes, context restoration after errors and attribute/kind-test/type boundaries. No native test expectations or upstream patch bytes changed.
