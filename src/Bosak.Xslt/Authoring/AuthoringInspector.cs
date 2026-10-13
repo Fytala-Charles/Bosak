@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: retain effective resolver/options on the snapshot for re-inspection     |
 //                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-124 review finding 4: compile-time resolution bridged through the inspection resolver|
 //                      | Charles Korthout | 0.4   | 10-10-2026     | REQ-124 acceptance F1: bridge extracted to shared AuthoringModuleUriResolverBridge       |
+//                      | Charles Korthout | 0.5   | 13-10-2026     | Capture applicable static namespace bindings during inspection                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -172,7 +173,7 @@ public sealed class AuthoringInspector
             for (var i = 0; i < ordered.Count; i++)
             {
                 var state = ordered[i];
-                var builder = new DescriptorBuilder(state, nodeIds);
+                var builder = new DescriptorBuilder(state, nodeIds, resolver);
                 var root = builder.BuildDocument(state.Document);
                 var version = DetectVersion(state.Document);
                 var descriptor = new AuthoringModuleDescriptor(
@@ -456,9 +457,12 @@ public sealed class AuthoringInspector
         private readonly string _text;
         private readonly Dictionary<XObject, int> _nodeIds;
         private int _nextId;
+        private readonly AuthoringModuleUriResolverBridge _namespaceResolver;
+        private string? _staticNamespaceError;
 
-        public DescriptorBuilder(ModuleState state, Dictionary<XObject, int> nodeIds)
+        public DescriptorBuilder(ModuleState state, Dictionary<XObject, int> nodeIds, IAuthoringModuleResolver resolver)
         {
+            _namespaceResolver = new AuthoringModuleUriResolverBridge(resolver);
             _state = state;
             _map = state.Source.CoordinateMap;
             _text = _map.Text;
@@ -653,13 +657,32 @@ public sealed class AuthoringInspector
                 version ??= (current.Attribute("version") ?? current.Attribute(XsltNs + "version"))?.Value;
             }
 
+            IReadOnlyDictionary<string, string>? staticNamespaces = null;
+            if (double.TryParse(version, System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.InvariantCulture, out var effectiveVersion) && effectiveVersion >= 4.0)
+            {
+                try
+                {
+                    if (_staticNamespaceError is null)
+                        staticNamespaces = Stylesheet.Stylesheet.GetApplicableStaticNamespaces(
+                            element, _namespaceResolver, _state.Source.BaseUri.AbsoluteUri);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Preserve inspection/source descriptors; validation reports the static error.
+                    _staticNamespaceError = ex.Message;
+                }
+            }
+
             return new ExpressionSlotContext(
                 SplitRawName(elementNameAsWritten, element.Name.NamespaceName, element.Name.LocalName),
                 attributeName,
                 bindings,
                 xpathDefaultNamespace,
                 baseUri,
-                version ?? "3.0");
+                version ?? "3.0",
+                staticNamespaces,
+                effectiveVersion >= 4.0 ? _staticNamespaceError : null);
         }
 
         private AuthoringNodeDescriptor BuildText(XText text, ref int cursor)

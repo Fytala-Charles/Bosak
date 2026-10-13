@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "implementationRevision": "df513959e04549ee8769e1e3a8f5a6ffbaf37b45",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Authoring expression, AVT and pattern slots use compiler-applicable static namespaces captured during inspection",
+  "baselineFocused": {
+    "passed": 2,
+    "failed": 12,
+    "skipped": 0,
+    "cases": 14
+  },
+  "finalFocused": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7694,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4808
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Native XML descriptor bindings remain unchanged. Namespace documents use the caller-controlled resolver during inspection; snapshot validation performs no new resolution. Earlier-profile host behavior is retained. QName declaration resolution, authoring type registration, full eager pattern compilation and string-template interpolation checks remain follow-ups.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "7e91696b27d291987beff2a4b255323a308867131e3aa3a83788dcf3b724cc79",
+    "focused": "401271ee26615c48d903c2affae2b6be3e46da02db9e35d156b8812545a888ed",
+    "unit": "80ad47a9b064e2f965690e552bc7c32e05736a5faa14028408d50add63770e38",
+    "qt3": "6e93edf1947f4633b4b6eb6651ed6514643d5f9a6fd5dd311899e761efd3c372",
+    "qt4": "0cdf909d240a6806b4c85fe291dd5eb0c1b47da05d9b593d27975016c41e4fb8"
+  }
+}

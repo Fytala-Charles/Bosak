@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Retain internal applicable namespace bindings and static errors                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -51,6 +52,9 @@ public sealed record AuthoringNamespaceBinding(string Prefix, string Uri);
 /// <remarks>
 /// A context is valid for the lifetime of the <see cref="AuthoringSnapshot"/> that produced it. It
 /// holds no unmanaged resources, needs no disposal and is safe to share across threads.
+/// <para>Native XML bindings remain available through <see cref="InScopeNamespaces"/>.
+/// Validation additionally retains applicable XSLT 4.0 fixed namespace bindings internally,
+/// including caller-resolved namespace documents captured during inspection.</para>
 /// </remarks>
 public sealed class ExpressionSlotContext
 {
@@ -60,7 +64,9 @@ public sealed class ExpressionSlotContext
         IReadOnlyList<AuthoringNamespaceBinding> inScopeNamespaces,
         string? xpathDefaultNamespace,
         Uri baseUri,
-        string effectiveVersion)
+        string effectiveVersion,
+        IReadOnlyDictionary<string, string>? staticNamespaces = null,
+        string? staticNamespaceError = null)
     {
         OwningElement = owningElement;
         AttributeName = attributeName;
@@ -68,7 +74,13 @@ public sealed class ExpressionSlotContext
         XpathDefaultNamespace = xpathDefaultNamespace;
         BaseUri = baseUri;
         EffectiveVersion = effectiveVersion;
+        StaticNamespaces = staticNamespaces;
+        StaticNamespaceError = staticNamespaceError;
     }
+
+    internal IReadOnlyDictionary<string, string>? StaticNamespaces { get; }
+
+    internal string? StaticNamespaceError { get; }
 
     /// <summary>Gets the qualified name of the element owning the slot.</summary>
     public AuthoringQName OwningElement { get; }
