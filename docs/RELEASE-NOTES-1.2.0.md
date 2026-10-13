@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.2.0 release preparation notes">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.2.0 release notes">
   <br><br><h1>Bosak 1.2.0</h1>
   <p>XSLT 4.0 construction, named types and template-pattern improvements</p>
 </div>
 
 ## Release scope
 
-**Prepared candidate; unpublished.** Scope frozen by the user on 2026-10-13 through source revision `8a5164b4123c04836b1c06da9ab3963dbaa39c57` (PR #246). Version 1.1.3 remains the public release. This is a coordinated minor release of the ten public .NET 10 libraries. Existing compatibility profiles continue to govern 4.0 features; the release does not imply complete draft conformance.
+**Published 2026-10-13.** Scope frozen by the user on 2026-10-13 through source revision `8a5164b4123c04836b1c06da9ab3963dbaa39c57` (PR #246). [Version 1.2.0](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) is the public release at `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`. This is a coordinated minor release of the ten public .NET 10 libraries. Existing compatibility profiles continue to govern 4.0 features; the release does not imply complete draft conformance.
 
 The release preparation also enables XML API documentation generation for the coordinated packages, matching the repository convention. It stabilizes an existing validation-cancellation regression by triggering cancellation between walked elements instead of relying on a 1 ms timer; production cancellation behavior is unchanged.
 
@@ -23,6 +23,8 @@ The completed slices provide:
 
 ## Verification
 
+Published-package verification: all ten immutable 1.2.0 packages were downloaded from nuget.org and checked for version, exact internal dependency versions, .NET 10 assemblies, XML documentation and package assets. A separate fresh-cache consumer restored only from nuget.org passes all 45 checks, with all ten assembly versions verified as 1.2.0.0. [The release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38416626883) passes all 7,676 unit tests with zero failures/skips. The following preparation checks are historical evidence.
+
 The initial Release build and packing succeed with zero errors and 71 warnings, including existing XML comment issues exposed by documentation generation. All ten local packages pass metadata/content/hash verification; 45 fresh-cache package-only consumer checks pass and all ten assembly versions are 1.2.0.0. All 7,676 unit tests pass with zero failures/skips, including 4,790 XSLT tests. Final candidate CI passed on `d6316237`; the merged tree is identical. The documentation integration receipt triggers the final main-based CI check before tagging. The source baseline has 7,676 passing unit tests across ten assemblies, frozen QT3 31,142/0/679 and qt4 gate-only 8,278/0/1,894 with zero gated failures. No test sets are promoted for this release.
 
 Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0. These filtered runners retain known exploratory failures and exit 1. The original five contribution batches' sample cases pass in recorded evidence; upstream review and independent-processor confirmation are separate from Bosak release readiness.
@@ -37,8 +39,8 @@ REQ-126 remains In Progress. Upstream contribution review or a second processor'
 
 After publication, resume focused implementation slices and select a new batch of XSLT 4.0 test areas based on specification gaps and practical consumer benefit. Retain independent assertion review, unchanged normative expectations, source-pinned evidence and the frozen 3.1 gate.
 
-## Publication procedure
+## Publication record
 
-After the preparation PR is integrated and main CI is green, the final release revision is ready for approval. Creating the `v1.2.0` tag triggers the existing Trusted Publishing workflow. Publication is followed by downloading all ten public packages, checking their metadata and hashes, and repeating the consumer against nuget.org with a new cache. Publication has not been authorized by the scope-freeze decision alone. The VS Code Marketplace release is a separate workflow and is outside this package release.
+The user explicitly authorized publication on 2026-10-13 after preparation and REQ-125 reconciliation passed CI. Tag `v1.2.0` pins `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`. Trusted Publishing uploaded all ten packages successfully; public downloads, metadata/content/hash checks and the fresh-cache nuget.org-only consumer passed. The VS Code Marketplace release is a separate workflow and is outside this package release.
 
 REQ-125 acceptance is included: Slice A corrections and acceptance were already integrated before this candidate, and the consumer review summary has been reconciled with that decision. Whole-request acceptance and immutable consumer adoption were recorded for 1.1.0; [delivery evidence](REQ-125-END-TO-END-CONSUMER-REVIEW.md#8-immutable-delivery) defines the accepted coverage.
