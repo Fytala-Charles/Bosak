@@ -1,3 +1,15 @@
+# Module fixed bindings across local grammar - 2026-10-13
+
+Branch: fix/xslt40-local-profile-namespace-contexts; base main `ba35a02fe79b1548d2316997c3618fa72194d821` (PR #264 merged); implementation `022303aeac0d6f4821ab95e788dd2aada98338ad`.
+
+What was built: module fixed namespaces are independent of a slot's local grammar. HasModuleFixedNamespaces shares the existing root binding policy; inspection captures applicable maps/errors even for local earlier slots. Expression/AVT validation and edit preflight use retained maps and lexical prefix checks after lower-profile compilation. Runtime template match expansion/compilation also keeps module bindings under earlier profiles. Local grammar and keyword/type gates remain unchanged. The PR #264 expression/edit/pattern boundary is resolved; its two earlier native-binding expectations are corrected. No public API or gate membership changes. Original bytes, native descriptors, local version, default element namespace, base URI, splice ownership and resolver policy are retained.
+
+Verification: 40 new regressions; corrected initial 27-case baseline 15 pass/12 fail (two invalid earlier-root fixtures corrected and rerun against the unchanged base); 173 focused checks; Release solution build 0 errors/two existing warnings; 8,053 full unit tests including XSLT 5,167/0/0; QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894; unchanged native namespace family 16/0/0 at suite `2c6664329b4951f0122bd4c82e6de78460cc9411`. Evidence: XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json and post-local-profile native log/receipt. Current specification source pin remains 72f22292; module binding rules were rechecked in the 10 October draft.
+
+Upstream milestone: Michael Kay (`michaelhkay`) merged all six xslt40-test PRs #22–27 between 20:21 and 20:26 UTC on 2026-10-13: fourteen cases across the original five batches and three fixed-namespace cases, 17 accepted cases. Acceptance metadata is recorded in contributions/xslt40/UPSTREAM_ACCEPTANCE.json; overview, family READMEs, queue and canonical docs are synchronized. Independent execution receipts remain pending; accepted batches do not complete broad REQ-126/N01–N05 scope. No external message was sent. Published version remains 1.2.0; candidate 1.2.1 remains unpublished.
+
+Delivery: merge after CI. Next: audit locally earlier-profile variable/parameter component declaration/reference QNames using module fixed bindings. Other component/type names, optional/default execution, broader keyword/package linkage, pattern/AVT replacement and named-type edit compilation remain separate slices. Earlier records below are historical.
+
 # Expression edit static contexts - 2026-10-13
 
 Branch: fix/xslt40-expression-edit-contexts; base main `8b4c317170aa122c75ae8a4fbbbf0f16face3623` (PR #263 merged); implementation `a34b0672660dd47a0e47d09c268d971badd6c410`.

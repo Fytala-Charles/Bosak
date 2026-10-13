@@ -4,6 +4,8 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+**Upstream acceptance — 2026-10-13:** Michael Kay (`michaelhkay`) merged xslt40-test PRs #22–27: fourteen cases across the original five areas plus three fixed-namespace cases, **17 accepted cases**. Independent processor execution confirmation remains pending. Published Bosak version is 1.2.0; source candidate 1.2.1 remains unpublished. [Merge records](../contributions/xslt40/UPSTREAM_ACCEPTANCE.json). N01–N05 keep their broader coverage work; submission/acceptance milestones are complete. Older queue entries below retain their original dates and evidence.
+
 ## Decision and ranking
 
 Start with **N01: xsl:array / xsl:array-member**, then xsl:select and xsl:switch. These are new element forms in XSLT 4.0. Array construction already existed as XPath expressions in 3.1; a new instruction does not mean the outcome was impossible in earlier releases. The requested first lane covers new elements, while additions to existing elements and inherited regression work stay in separate lanes.
@@ -354,3 +356,8 @@ The bounded host keyword contract now validates in authoring expression/AVT slot
 ## Expression edit context follow-up - 2026-10-13
 
 Expression edits now use retained applicable namespaces and bounded host keyword signatures: 39 new regressions, 112 focused checks and unchanged native namespace results 16/0/0. No new contribution cases are added. Next: review and align module fixed bindings versus locally downgraded authoring namespace policy, then optional/default and broader keyword boundaries. Original N01-N05 and upstream acceptance states are unchanged; candidate 1.2.1 remains unpublished. See [verification evidence and limits](XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json).
+
+
+## Module bindings across locally earlier grammar - 2026-10-13
+
+The expression/edit/pattern mismatch is resolved with 40 new regressions and 173 focused checks; native namespaces remain 16/0/0. No new contribution cases are added. Next: audit locally earlier-profile variable/parameter component QNames, followed by optional/default and broader keyword boundaries. Candidate 1.2.1 remains unpublished. See [verification evidence](XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).

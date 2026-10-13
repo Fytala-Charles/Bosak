@@ -5,7 +5,9 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
-**1.2.0 published — 2026-10-13:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) from `56486e96`. All ten .NET 10 packages are available on nuget.org; the release workflow passes 7,676 tests with zero failures/skips, and a fresh-cache consumer restored exclusively from nuget.org passes 45 checks. REQ-125 acceptance is included. See [release notes](RELEASE-NOTES-1.2.0.md). Earlier preparation and slice entries below are historical. Additional focused fixes, authoring-context alignment and a new XSLT 4.0 contribution-area batch follow this release; REQ-126 and independent contribution acceptance retain their recorded status.
+**Upstream acceptance — 2026-10-13:** Michael Kay (`michaelhkay`) merged xslt40-test PRs #22–27: fourteen cases across the original five areas plus three fixed-namespace cases, **17 accepted cases**. Independent processor execution confirmation remains pending. Published Bosak version is 1.2.0; source candidate 1.2.1 remains unpublished. [Merge records](../contributions/xslt40/UPSTREAM_ACCEPTANCE.json).
+
+**1.2.0 published — 2026-10-13:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) from `56486e96`. All ten .NET 10 packages are available on nuget.org; the release workflow passes 7,676 tests with zero failures/skips, and a fresh-cache consumer restored exclusively from nuget.org passes 45 checks. REQ-125 acceptance is included. See [release notes](RELEASE-NOTES-1.2.0.md). Earlier preparation and slice entries below are historical. Additional focused fixes, authoring-context alignment and a new XSLT 4.0 contribution-area batch follow this release; Broader REQ-126 coverage and independent processor execution confirmation remain outstanding; upstream acceptance is recorded in the current milestone.
 
 
 ---
@@ -1208,4 +1210,9 @@ Source candidate 1.2.1 (unpublished) validates exact-arity XSLT function keyword
 
 ExpressionEditPipeline now copies retained applicable bindings for effective XPath 4.0 and supplies the immutable snapshot host-signature callback for non-static expression slots. It rejects captured namespace errors before compiling or splicing. Deferred signatures use SlotNotEditable; unavailable prefixes retain RequiresParentChange and start-tag ownership. Preflight performs no resource resolution. Successful candidate re-inspection and compilation retain the existing resolver contract. No public members or gate membership change. See [verification evidence and limits](XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json).
 
-Known boundary: locally earlier-profile authoring currently retains native bindings within a 4.0 module, while runtime uses that module's fixed set. Acceptance of such an edit is not proof of executable namespace parity; review and alignment of this policy is the next slice.
+Resolved on 2026-10-13: the expression/edit/pattern local-version namespace boundary is corrected by the module binding policy described below. The earlier verification receipt remains historical.
+
+
+## Module fixed bindings and local grammar - 2026-10-13
+
+The shared HasModuleFixedNamespaces helper separates module binding policy from local grammar selection. Inspection captures module bindings/errors for locally earlier slots; validation and edit preflight use those retained contexts and check lexical prefixes after lower-profile compilation. TemplateRule expands and compiles lower-profile match patterns with the declaring module fixed set. XPath compatibility and 4.0 type/keyword feature gates remain local. No public API or gate membership changes. See [verification evidence and boundaries](XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).
