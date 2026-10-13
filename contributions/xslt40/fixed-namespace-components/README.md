@@ -1,5 +1,9 @@
 # Fixed namespace component boundaries
 
+**Current status — 2026-10-13:** [Upstream PR #27](https://github.com/qt4cg/xslt40-test/pull/27) was merged by Michael Kay (`michaelhkay`) at `2026-10-13T20:21:07Z`; 3 new cases are accepted. Independent processor execution confirmation remains pending. [Merge record](../UPSTREAM_ACCEPTANCE.json). Earlier submission and verification entries below are historical; their original receipts are preserved.
+
+## Original submission evidence
+
 Three specification-derived native tests complement the original five contribution areas. They target existing XSLT 4.0 attributes/components. All three pass in Bosak source `32916981`; published version is 1.2.0 and candidate 1.2.1 remains unpublished. [Submitted as upstream PR #27](https://github.com/qt4cg/xslt40-test/pull/27); upstream acceptance and independent processor confirmation are pending.
 
 **Keyword follow-up - 2026-10-13:** All 16 unchanged native cases now pass at Bosak implementation `96f24e0a`. The initial wider 11/5 results below remain historical. See [post-fix evidence](POST_KEYWORD_RESULTS.json), [exact family log](post-keyword-result.txt) and [receipt](post-keyword-receipt.json). Published version remains 1.2.0; candidate 1.2.1 is unpublished.
@@ -124,3 +128,8 @@ The unchanged native family remains 16/0/0 at implementation `7caa9f4d`. A separ
 ## Expression edit context follow-up - 2026-10-13
 
 The unchanged native family remains 16/0/0 at implementation `a34b0672`. The separate 39-case expression-edit slice adds no contribution cases. See [verification and boundaries](../../../docs/XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json), [native log](post-edit-context-result.txt) and [receipt](post-edit-context-receipt.json). Original submissions, failure receipts and assertions are retained; candidate 1.2.1 remains unpublished.
+
+
+## Local grammar namespace follow-up - 2026-10-13
+
+The unchanged native family remains 16/0/0 at implementation `022303ae`. A separate 40-case slice aligns expression/AVT/pattern validation, edits and template matching with module fixed bindings under local earlier grammar. See [verification and boundaries](../../../docs/XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json), [native log](post-local-profile-result.txt) and [receipt](post-local-profile-receipt.json). No native cases or assertions change; candidate 1.2.1 remains unpublished.

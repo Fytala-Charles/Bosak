@@ -5,7 +5,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
-**1.2.0 published — 2026-10-13:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) from `56486e96`. All ten .NET 10 packages are available on nuget.org; the release workflow passes 7,676 tests with zero failures/skips, and a fresh-cache consumer restored exclusively from nuget.org passes 45 checks. REQ-125 acceptance is included. See [release notes](RELEASE-NOTES-1.2.0.md). Earlier preparation and slice entries below are historical. Additional focused fixes, authoring-context alignment and a new XSLT 4.0 contribution-area batch follow this release; REQ-126 and independent contribution acceptance retain their recorded status.
+**Upstream acceptance — 2026-10-13:** Michael Kay (`michaelhkay`) merged xslt40-test PRs #22–27: fourteen cases across the original five areas plus three fixed-namespace cases, **17 accepted cases**. Independent processor execution confirmation remains pending. Published Bosak version is 1.2.0; source candidate 1.2.1 remains unpublished. [Merge records](../contributions/xslt40/UPSTREAM_ACCEPTANCE.json).
+
+**1.2.0 published — 2026-10-13:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) from `56486e96`. All ten .NET 10 packages are available on nuget.org; the release workflow passes 7,676 tests with zero failures/skips, and a fresh-cache consumer restored exclusively from nuget.org passes 45 checks. REQ-125 acceptance is included. See [release notes](RELEASE-NOTES-1.2.0.md). Earlier preparation and slice entries below are historical. Additional focused fixes, authoring-context alignment and a new XSLT 4.0 contribution-area batch follow this release; Broader REQ-126 coverage and independent processor execution confirmation remain outstanding; upstream acceptance is recorded in the current milestone.
 
 
 <!-- Bosak XPath / XSLT — General Integration Guide -->
@@ -3287,4 +3289,9 @@ Source candidate 1.2.1 (unpublished) validates exact-arity XSLT function keyword
 
 ProposeExpressionEdit accepts exact-arity XSLT 4.0 function keyword calls with every argument supplied, including fixed-only namespaces, EQNames, overloads and imported declarations. Unavailable prefixes return RequiresParentChange; invalid calls or captured namespace errors return ExpressionParseError; unavailable signature coverage returns SlotNotEditable. Refusals preserve the original bytes and make no additional resource requests. Accepted candidates still re-inspect with the existing resolver/options and splice only the attribute value. Pattern and AVT replacement capabilities are unchanged. See [verification evidence and limits](XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json).
 
-Known boundary: locally earlier-profile authoring currently retains native bindings within a 4.0 module, while runtime uses that module's fixed set. Acceptance of such an edit is not proof of executable namespace parity; review and alignment of this policy is the next slice.
+Resolved on 2026-10-13: the expression/edit/pattern local-version namespace boundary is corrected by the module binding policy described below. The earlier verification receipt remains historical.
+
+
+## Module fixed bindings and local grammar - 2026-10-13
+
+A fixed-namespaces attribute on a 4.0 module controls expression, AVT and pattern bindings even when a local version selects earlier XPath grammar. Fixed-only prefixes remain usable; omitted native prefixes remain unavailable and fixed bindings override local XML rebinding. ProposeExpressionEdit now applies this rule before splicing: unavailable prefixes return RequiresParentChange and captured namespace errors ExpressionParseError, with no resource retries. Earlier keyword syntax remains rejected. Original bytes, public native descriptors, local effective version, default element namespace and base URI are preserved. See [verification evidence and boundaries](XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).

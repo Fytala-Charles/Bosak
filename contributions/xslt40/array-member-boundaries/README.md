@@ -1,5 +1,9 @@
 # First upstream batch: array-member boundaries
 
+**Current status — 2026-10-13:** [Upstream PR #22](https://github.com/qt4cg/xslt40-test/pull/22) was merged by Michael Kay (`michaelhkay`) at `2026-10-13T20:26:24Z`; 6 new cases are accepted. Independent processor execution confirmation remains pending. [Merge record](../UPSTREAM_ACCEPTANCE.json). Earlier submission and verification entries below are historical; their original receipts are preserved.
+
+## Original submission evidence
+
 Six native tests are committed locally on bosak/array-member-review at upstream contribution revision `e72f1b0e8511f78478e66c112201317cfe7b7ad1`, based on xslt40-test `6205faf9f32ace6338ac245c41f8eb9a1447926f`. [Portable patch](0001-array-member-boundaries.patch), [exact evidence](evidence.json), and [upstream description draft](UPSTREAM_PR_DRAFT.md) preserve the work outside the ignored checkout. No upstream push/PR or maintainer message has been sent.
 
 ## Source and audit

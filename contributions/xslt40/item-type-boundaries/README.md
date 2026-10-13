@@ -1,5 +1,9 @@
 # Native item-type boundary batch
 
+**Current status — 2026-10-13:** [Upstream PR #25](https://github.com/qt4cg/xslt40-test/pull/25) was merged by Michael Kay (`michaelhkay`) at `2026-10-13T20:23:14Z`; 2 new cases are accepted. Independent processor execution confirmation remains pending. [Merge record](../UPSTREAM_ACCEPTANCE.json). Earlier submission and verification entries below are historical; their original receipts are preserved.
+
+## Original submission evidence
+
 Submitted as [xslt40-test PR #25](https://github.com/qt4cg/xslt40-test/pull/25). Two native cases, 0 pass / 2 fail with Bosak. Acceptance and independent processor confirmation are pending.
 
 ## Source and existing coverage

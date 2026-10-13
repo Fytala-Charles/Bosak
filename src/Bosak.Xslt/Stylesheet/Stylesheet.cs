@@ -314,6 +314,7 @@
 //                      | Charles Korthout | 2.153 | 13-10-2026     | Preserve parent precedence when collecting included named types.                         |
 //                      | Charles Korthout | 2.154 | 13-10-2026     | Align mode names, membership and defaults with applicable namespaces.                    |
 //                      | Charles Korthout | 2.155 | 13-10-2026     | Use applicable key declaration bindings and share NCName validation.                     |
+//                      | Charles Korthout | 2.156 | 13-10-2026     | Share module fixed-binding policy independently of local expression grammar.              |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1064,11 +1065,22 @@ internal sealed class Stylesheet
     private sealed record StaticNamespaceResolver(IXsltUriResolver? Resolver, string? BaseUri);
     private sealed record FixedNamespaceBindings(Dictionary<string, string> Bindings);
 
+    /// <summary>Gets whether the module enables fixed bindings independently of local XPath grammar.</summary>
+    /// <param name="element">An element in the declaring stylesheet module.</param>
+    /// <returns>Whether a 4.0-or-later module root declares fixed namespace bindings.</returns>
+    internal static bool HasModuleFixedNamespaces(XElement element)
+    {
+        var root = element.AncestorsAndSelf().Last();
+        return root.Attribute("fixed-namespaces") is not null
+            && double.TryParse(root.Attribute("version")?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var version)
+            && version >= 4.0;
+    }
+
     internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element, IXsltUriResolver? resolver = null, string? baseUri = null)
     {
         var root = element.AncestorsAndSelf().Last();
         var fixedAttribute = root.Attribute("fixed-namespaces");
-        if (fixedAttribute is null || (!double.TryParse(root.Attribute("version")?.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var version) || version < 4.0))
+        if (!HasModuleFixedNamespaces(root))
             return NativeNamespaces(element);
         if (root.Annotation<FixedNamespaceBindings>() is { } cached)
             return new Dictionary<string, string>(cached.Bindings, StringComparer.Ordinal);
@@ -1093,7 +1105,7 @@ internal sealed class Stylesheet
                 throw new InvalidOperationException("XTSE0122: Invalid fixed namespace binding.");
             if (prefix.Length > 0) result[prefix] = uri;
         }
-        foreach (var token in fixedAttribute.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
+        foreach (var token in fixedAttribute!.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
         {
             if (token == "#standard")
             {

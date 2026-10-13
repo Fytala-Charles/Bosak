@@ -5,7 +5,9 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
-**1.2.0 published — 2026-10-13:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) from `56486e96`. All ten .NET 10 packages are available on nuget.org; the release workflow passes 7,676 tests with zero failures/skips, and a fresh-cache consumer restored exclusively from nuget.org passes 45 checks. REQ-125 acceptance is included. See [release notes](docs/RELEASE-NOTES-1.2.0.md). Earlier preparation and slice entries below are historical. Additional focused fixes, authoring-context alignment and a new XSLT 4.0 contribution-area batch follow this release; REQ-126 and independent contribution acceptance retain their recorded status.
+**Upstream acceptance — 2026-10-13:** Michael Kay (`michaelhkay`) merged xslt40-test PRs #22–27: fourteen cases across the original five areas plus three fixed-namespace cases, **17 accepted cases**. Independent processor execution confirmation remains pending. Published Bosak version is 1.2.0; source candidate 1.2.1 remains unpublished. [Merge records](contributions/xslt40/UPSTREAM_ACCEPTANCE.json).
+
+**1.2.0 published — 2026-10-13:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) from `56486e96`. All ten .NET 10 packages are available on nuget.org; the release workflow passes 7,676 tests with zero failures/skips, and a fresh-cache consumer restored exclusively from nuget.org passes 45 checks. REQ-125 acceptance is included. See [release notes](docs/RELEASE-NOTES-1.2.0.md). Earlier preparation and slice entries below are historical. Additional focused fixes, authoring-context alignment and a new XSLT 4.0 contribution-area batch follow this release; Broader REQ-126 coverage and independent processor execution confirmation remain outstanding; upstream acceptance is recorded in the current milestone.
 
 
 <div align="center">
@@ -828,3 +830,8 @@ Source candidate 1.2.1 (unpublished) validates exact-arity XSLT function keyword
 ## Expression edit static contexts - 2026-10-13
 
 Unpublished source candidate 1.2.1 accepts supported XSLT 4.0 function keyword calls in expression edits and uses the applicable namespace bindings captured during inspection. Edits preserve every byte outside the owned attribute value. All 39 new regressions and 8,013 unit tests pass; conformance gates retain their counts. Published version remains 1.2.0. See [verification evidence and limits](docs/XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json).
+
+
+## Module fixed bindings and local grammar - 2026-10-13
+
+Unpublished source candidate 1.2.1 retains module fixed bindings when local versions select earlier XPath grammar. Authoring validation, expression edits and template match execution now agree for the verified expression/AVT/pattern cases. The 40 new regressions and all 8,053 unit tests pass; conformance gates retain their counts. Published version remains 1.2.0. See [verification evidence and boundaries](docs/XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).

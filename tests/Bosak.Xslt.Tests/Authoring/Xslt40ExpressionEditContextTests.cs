@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Cover malformed contexts, overloads, local profiles and chained revisions.                 |
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Resolve the local profile boundary using module fixed bindings.                            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -245,18 +246,14 @@ public class Xslt40ExpressionEditContextTests
     public void MalformedFixedBindingsRefuseBeforeSplicing(string bindings)
         => AssertRefused(Inspect(Sheet(Output(), bindings)), "'new'", AuthoringEditFailureKind.ExpressionParseError, "XTSE0122");
 
-    /// <summary>Edit preflight retains native bindings in a locally earlier profile, matching authoring validation.</summary>
+    /// <summary>Edit preflight retains module fixed bindings independently of local grammar.</summary>
     [Fact]
-    public void LocalEarlierProfileRetainsNativeBindings()
+    public void LocalEarlierProfileRetainsModuleFixedBindings()
     {
-        // Execution of native prefixes omitted from a 4.0 module's fixed set is a separate runtime
-        // profile boundary; this assertion covers the retained authoring context and edit ownership.
         var text = Sheet(Output("version='3.0'"), "#standard");
         var snapshot = Inspect(text);
-        var result = Edit(snapshot, "string(/root/p:value)");
-        Assert.True(result.IsSuccess, result.Failure?.ToString());
-        Assert.Equal(XsltValidationOutcome.Valid, XsltValidation.Validate(result.Candidate!.Snapshot).Outcome);
-        Assert.Equal(Encoding.UTF8.GetBytes(text), snapshot.ExportOriginal(MainUri));
+        AssertRefused(snapshot, "string(/root/p:value)", AuthoringEditFailureKind.RequiresParentChange, "XPST0081");
+        AssertAccepted(Sheet(Output("version='3.0'")), "string(/root/q:value)", "fixed", input: "<root xmlns:q='urn:fixed'><q:value>fixed</q:value></root>");
         AssertRefused(snapshot, "substring(value := 'XA', start := 2)", AuthoringEditFailureKind.ExpressionParseError, "XPST0003");
     }
 

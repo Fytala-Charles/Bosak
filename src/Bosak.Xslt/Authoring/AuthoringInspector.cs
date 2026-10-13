@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 0.12  | 13-10-2026     | Capture internal contexts for mode names, lists and default-mode references.             |
 //                      | Charles Korthout | 0.13  | 13-10-2026     | Capture key declaration namespaces without changing public metadata.                     |
 //                      | Charles Korthout | 0.14  | 13-10-2026     | Capture keyword signatures from retained declaration contexts.                           |
+//                      | Charles Korthout | 0.15  | 13-10-2026     | Retain module fixed bindings across locally earlier expression profiles.                  |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -712,8 +713,11 @@ public sealed class AuthoringInspector
             }
 
             IReadOnlyDictionary<string, string>? staticNamespaces = null;
-            if (double.TryParse(version, System.Globalization.NumberStyles.Any,
-                System.Globalization.CultureInfo.InvariantCulture, out var effectiveVersion) && effectiveVersion >= 4.0)
+            // A local version selects expression grammar; fixed bindings belong to the module.
+            var capturesApplicableNamespaces = Stylesheet.Stylesheet.GetXPathCompatibility(version ?? "3.0")
+                >= Bosak.XPath.Api.XPathCompatibility.XPath40
+                || Stylesheet.Stylesheet.HasModuleFixedNamespaces(element);
+            if (capturesApplicableNamespaces)
             {
                 try
                 {
@@ -736,7 +740,7 @@ public sealed class AuthoringInspector
                 baseUri,
                 version ?? "3.0",
                 staticNamespaces,
-                effectiveVersion >= 4.0 ? _staticNamespaceError : null);
+                capturesApplicableNamespaces ? _staticNamespaceError : null);
         }
 
         private AuthoringNodeDescriptor BuildText(XText text, ref int cursor)

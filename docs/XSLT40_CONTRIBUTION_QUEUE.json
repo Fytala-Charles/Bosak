@@ -27,7 +27,7 @@
       "businessScenario": "JSON API responses, ordered line items and nested batches",
       "specSection": "array-construction",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction",
-      "status": "First batch submitted as xslt40-test PR #22; review and independent confirmation pending",
+      "status": "First batch accepted upstream as xslt40-test PR #22; broader feature coverage and independent execution confirmation remain pending",
       "candidateScenarios": "Mixed empty/grouped members, nested arrays/maps, source-order and node-identity preservation; compare against existing array cases before adding tests.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "array",
@@ -88,7 +88,16 @@
         "postFixEvidence": "../contributions/xslt40/array-member-boundaries/POST_FIX_RESULTS.json",
         "postFixPassed": 6,
         "postFixFailed": 0,
-        "submissionEvidence": "../contributions/xslt40/array-member-boundaries/SUBMISSION.json"
+        "submissionEvidence": "../contributions/xslt40/array-member-boundaries/SUBMISSION.json",
+        "upstreamAcceptance": {
+          "number": 22,
+          "url": "https://github.com/qt4cg/xslt40-test/pull/22",
+          "state": "MERGED",
+          "mergedAt": "2026-10-13T20:26:24Z",
+          "mergeCommit": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+          "mergedBy": "michaelhkay",
+          "exactNewCases": 6
+        }
       }
     },
     {
@@ -104,7 +113,7 @@
       "businessScenario": "Readable multiline JSON/map expressions in stylesheet content without XML attribute escaping",
       "specSection": "select-instruction",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#select-instruction",
-      "status": "First batch submitted; select body and namespace cases pass in Bosak; nine harness skips, independent confirmation and review pending",
+      "status": "First batch accepted upstream as xslt40-test PR #23; broader feature coverage and independent execution confirmation remain pending",
       "candidateScenarios": "Expression text, whitespace and escaping, current focus, result cardinality/as enforcement, and static errors; distinguish the instruction from the inherited select attribute.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "seqtor",
@@ -167,7 +176,16 @@
           "failed": 0,
           "skipped": 9
         },
-        "namespaceFollowUpEvidence": "../contributions/xslt40/select-boundaries/NAMESPACE_RESULTS.json"
+        "namespaceFollowUpEvidence": "../contributions/xslt40/select-boundaries/NAMESPACE_RESULTS.json",
+        "upstreamAcceptance": {
+          "number": 23,
+          "url": "https://github.com/qt4cg/xslt40-test/pull/23",
+          "state": "MERGED",
+          "mergedAt": "2026-10-13T20:24:49Z",
+          "mergeCommit": "ec5f5abae22c2408db9c1138afc1c7fcd3a3cb1d",
+          "mergedBy": "michaelhkay",
+          "exactNewCases": 2
+        }
       }
     },
     {
@@ -183,7 +201,7 @@
       "businessScenario": "Status routing, category mapping and dispatch tables",
       "specSection": "xsl-switch",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch",
-      "status": "First batch submitted as xslt40-test PR #24; review and independent confirmation pending",
+      "status": "First batch accepted upstream as xslt40-test PR #24; broader feature coverage and independent execution confirmation remain pending",
       "candidateScenarios": "First matching branch, otherwise/no match, operand cardinality/type and branch evaluation; first audit ten existing switch cases.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "switch",
@@ -213,7 +231,16 @@
         "passed": 2,
         "failed": 0,
         "upstreamSubmission": "https://github.com/qt4cg/xslt40-test/pull/24",
-        "independentConfirmation": "Outstanding; reviewer cross-check requested"
+        "independentConfirmation": "Outstanding; reviewer cross-check requested",
+        "upstreamAcceptance": {
+          "number": 24,
+          "url": "https://github.com/qt4cg/xslt40-test/pull/24",
+          "state": "MERGED",
+          "mergedAt": "2026-10-13T20:23:59Z",
+          "mergeCommit": "0601fdd103c6a590a3e12baf133db3e2610de793",
+          "mergedBy": "michaelhkay",
+          "exactNewCases": 2
+        }
       }
     },
     {
@@ -229,7 +256,7 @@
       "businessScenario": "Reusable payload and callback contracts across modules",
       "specSection": "named-item-types",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
-      "status": "First batch submitted; supported host expression and declaration static names pass locally; grammar/schema/package gaps and independent confirmation pending",
+      "status": "First batch accepted upstream as xslt40-test PR #25; broader feature coverage and independent execution confirmation remain pending",
       "candidateScenarios": "Named type visibility, reuse, unknown names and type mismatches; avoid duplicating the type-alias test set.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "type-alias",
@@ -314,7 +341,16 @@
         "setPatternAssociativityFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_ASSOCIATIVITY_RESULTS.json",
         "setPatternAxisFocusFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_AXIS_FOCUS_RESULTS.json",
         "patternFixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_FIXED_NAMESPACE_RESULTS.json",
-        "patternPrefixDiagnosticFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_PREFIX_DIAGNOSTIC_RESULTS.json"
+        "patternPrefixDiagnosticFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_PREFIX_DIAGNOSTIC_RESULTS.json",
+        "upstreamAcceptance": {
+          "number": 25,
+          "url": "https://github.com/qt4cg/xslt40-test/pull/25",
+          "state": "MERGED",
+          "mergedAt": "2026-10-13T20:23:14Z",
+          "mergeCommit": "cfff3d07ef67503444a632f23799c46678a3617f",
+          "mergedBy": "michaelhkay",
+          "exactNewCases": 2
+        }
       }
     },
     {
@@ -331,7 +367,7 @@
       "businessScenario": "Typed customer/order records and constructor validation",
       "specSection": "named-record-types",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-record-types",
-      "status": "First batch submitted; named coercion/casts, finite recursive records and container casts pass in Bosak; alias cast/static diagnostics/package gaps and independent confirmation pending",
+      "status": "First batch accepted upstream as xslt40-test PR #26; broader feature coverage and independent execution confirmation remain pending",
       "candidateScenarios": "Current declarations, required fields/coercion/constructors versus older optional-field and xsl:record scenarios; establish current draft semantics before proposing changes.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "record",
@@ -388,7 +424,16 @@
         "setPatternAssociativityFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_ASSOCIATIVITY_RESULTS.json",
         "setPatternAxisFocusFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_AXIS_FOCUS_RESULTS.json",
         "patternFixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_FIXED_NAMESPACE_RESULTS.json",
-        "patternPrefixDiagnosticFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_PREFIX_DIAGNOSTIC_RESULTS.json"
+        "patternPrefixDiagnosticFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_PREFIX_DIAGNOSTIC_RESULTS.json",
+        "upstreamAcceptance": {
+          "number": 26,
+          "url": "https://github.com/qt4cg/xslt40-test/pull/26",
+          "state": "MERGED",
+          "mergedAt": "2026-10-13T20:22:16Z",
+          "mergeCommit": "2e210479dfc32b3fda37cb9e14e1f16144dccef9",
+          "mergedBy": "michaelhkay",
+          "exactNewCases": 2
+        }
       }
     }
   ],
@@ -463,7 +508,7 @@
       "passed": 3,
       "failed": 0,
       "evidence": "../contributions/xslt40/fixed-namespace-components/evidence.json",
-      "status": "Open; upstream acceptance and independent confirmation pending",
+      "status": "Accepted upstream; independent execution confirmation pending",
       "lane": "Existing attribute/component boundaries; separate from N01-N05",
       "postFix": {
         "implementation": "96f24e0a7c5191bd158679d57258fc37f02cdf6d",
@@ -488,7 +533,26 @@
         "familyFailed": 0,
         "evidence": "XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json",
         "next": "Review and align module fixed-binding policy for locally downgraded expressions."
+      },
+      "upstreamAcceptance": {
+        "number": 27,
+        "url": "https://github.com/qt4cg/xslt40-test/pull/27",
+        "state": "MERGED",
+        "mergedAt": "2026-10-13T20:21:07Z",
+        "mergeCommit": "c5dbb02cf0a63133e7229e532f9618f266a8d98d",
+        "mergedBy": "michaelhkay",
+        "exactNewCases": 3
+      },
+      "localGrammarFollowUp": {
+        "implementation": "022303aeac0d6f4821ab95e788dd2aada98338ad",
+        "newRegressions": 40,
+        "focusedPassed": 173,
+        "familyPassed": 16,
+        "familyFailed": 0,
+        "evidence": "XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json",
+        "next": "Audit variable/parameter component QNames under local earlier versions."
       }
     }
-  ]
+  ],
+  "upstreamAcceptanceEvidence": "../contributions/xslt40/UPSTREAM_ACCEPTANCE.json"
 }

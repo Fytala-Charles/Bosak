@@ -1,0 +1,62 @@
+{
+  "checkedAtUtc": "2026-10-13T20:36:42Z",
+  "upstream": "https://github.com/qt4cg/xslt40-test",
+  "exactNewCases": 17,
+  "independentProcessorConfirmation": "Pending; upstream merge is acceptance, not an independent execution receipt",
+  "pullRequests": [
+    {
+      "number": 22,
+      "url": "https://github.com/qt4cg/xslt40-test/pull/22",
+      "state": "MERGED",
+      "mergedAt": "2026-10-13T20:26:24Z",
+      "mergeCommit": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+      "mergedBy": "michaelhkay",
+      "exactNewCases": 6
+    },
+    {
+      "number": 23,
+      "url": "https://github.com/qt4cg/xslt40-test/pull/23",
+      "state": "MERGED",
+      "mergedAt": "2026-10-13T20:24:49Z",
+      "mergeCommit": "ec5f5abae22c2408db9c1138afc1c7fcd3a3cb1d",
+      "mergedBy": "michaelhkay",
+      "exactNewCases": 2
+    },
+    {
+      "number": 24,
+      "url": "https://github.com/qt4cg/xslt40-test/pull/24",
+      "state": "MERGED",
+      "mergedAt": "2026-10-13T20:23:59Z",
+      "mergeCommit": "0601fdd103c6a590a3e12baf133db3e2610de793",
+      "mergedBy": "michaelhkay",
+      "exactNewCases": 2
+    },
+    {
+      "number": 25,
+      "url": "https://github.com/qt4cg/xslt40-test/pull/25",
+      "state": "MERGED",
+      "mergedAt": "2026-10-13T20:23:14Z",
+      "mergeCommit": "cfff3d07ef67503444a632f23799c46678a3617f",
+      "mergedBy": "michaelhkay",
+      "exactNewCases": 2
+    },
+    {
+      "number": 26,
+      "url": "https://github.com/qt4cg/xslt40-test/pull/26",
+      "state": "MERGED",
+      "mergedAt": "2026-10-13T20:22:16Z",
+      "mergeCommit": "2e210479dfc32b3fda37cb9e14e1f16144dccef9",
+      "mergedBy": "michaelhkay",
+      "exactNewCases": 2
+    },
+    {
+      "number": 27,
+      "url": "https://github.com/qt4cg/xslt40-test/pull/27",
+      "state": "MERGED",
+      "mergedAt": "2026-10-13T20:21:07Z",
+      "mergeCommit": "c5dbb02cf0a63133e7229e532f9618f266a8d98d",
+      "mergedBy": "michaelhkay",
+      "exactNewCases": 3
+    }
+  ]
+}

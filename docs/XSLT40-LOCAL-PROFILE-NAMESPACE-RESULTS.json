@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-13",
+  "base": "ba35a02fe79b1548d2316997c3618fa72194d821",
+  "implementation": "022303aeac0d6f4821ab95e788dd2aada98338ad",
+  "publishedVersion": "1.2.0",
+  "sourceVersion": "1.2.1 (unpublished)",
+  "scope": "Module fixed namespaces in locally earlier expression/AVT/pattern validation, expression edits and template matching.",
+  "baseline": {
+    "correctedInitialTests": 27,
+    "passed": 15,
+    "failed": 12,
+    "skipped": 0,
+    "note": "Initial two earlier-root fixtures used disallowed fixed-namespaces attributes; corrected fixtures were rerun against unchanged base implementation."
+  },
+  "verification": {
+    "newTestsPassed": 40,
+    "focusedPassed": 173,
+    "fullUnitPassed": 8053,
+    "xsltUnitPassed": 5167,
+    "failed": 0,
+    "skipped": 0,
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894
+    },
+    "nativeFamily": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "build": "Release solution: 0 errors, 2 existing warnings"
+  },
+  "architecture": "HasModuleFixedNamespaces shares the existing module-root policy; inspection retains applicable bindings/errors independent of local grammar. Lower-profile preflight checks lexical prefixes after grammar compilation. Template match expansion/compilation retains module bindings without enabling 4.0 aliases or grammar.",
+  "ownership": "Original bytes, native namespace descriptors, slot effective version, default element namespace, base URI, attribute-only splice and node correspondence remain retained. Repeated validation and refused edits make no additional resolver requests; successful candidate re-inspection retains existing resource policy.",
+  "resolvedBoundary": "The local earlier-profile expression/edit/pattern mismatch recorded in PR #264 is resolved for this scope; the old restricted preflight-only regression now includes executable fixed-binding parity.",
+  "boundaries": [
+    "Component declaration/reference QName behavior under local version changes remains a separate audit, starting with variables and parameters.",
+    "Optional/default execution, broader host keyword/package linkage, pattern/AVT replacement and named-type edit compilation remain separate."
+  ],
+  "nativeSuiteRevision": "2c6664329b4951f0122bd4c82e6de78460cc9411",
+  "nativeReceiptSha256": "165e976c798c74ed59a0bce1163c6435c63274e6b04c53d057aec31e483bbe43",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/72f222929768b411d8e88d96a1a8740483290078/specifications/xslt-40/src/xslt.xml",
+  "specSha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+  "upstream": "PRs #22-27 merged by michaelhkay on 2026-10-13; 17 new cases accepted. Independent processor execution receipts remain pending. No upstream cases or assertions changed in this slice."
+}
