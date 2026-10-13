@@ -14,7 +14,7 @@ Validation: final Release build zero warnings/errors; 16 focused regressions pas
 
 Check latest Bosak PR CI before merging. Next: structural item-type aliases, then remaining named-record conversion/coercion. Keep broader type-alias 3/29/0 limitations explicit; N04/REQ-126 remain In Progress. Monitor upstream PRs #22–26, pending review and independent confirmation. Preserve scratch dirs, native commits/expectations, original patches and before-fix receipts. Native checkout clean on bosak/item-type-boundaries. No release/tag/package publication.
 
-Delivery pending.
+Delivery: c91184eeb2e6f83272b0b8f7e82808f780e5ca0c, [Bosak review PR](https://github.com/Fytala-Charles/Bosak/pull/209), pushed on feat/xslt-enum-bindings. CI pending; check the latest run before merging. This metadata commit records delivery. Native checkout remains clean on bosak/item-type-boundaries. No release/tag/package publication.
 
 # Select namespace declarations — 2026-10-13
 
