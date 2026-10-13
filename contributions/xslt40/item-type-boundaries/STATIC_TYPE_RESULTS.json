@@ -59,5 +59,7 @@
       "id": "record-027",
       "outcome": "pass"
     }
-  ]
+  ],
+  "testedImplementationCommit": "31afbbb35d14a23be062109672d47b2690601031",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/220"
 }
